@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <string name="start_searching_title">Start searching…</string>
+    <string name="start_searching_subtitle">Search for chats and messages</string>
+    <string name="search_section_chats">Chats</string>
+    <string name="search_from_your_messages_header">From your messages</string>
+    <string name="search_section_messages">Messages</string>
+    <string name="search_no_results_title">No results</string>
+    <string name="search_no_results_subtitle">There are no results for “%1$s”. Try a new search term.</string>
+</resources>

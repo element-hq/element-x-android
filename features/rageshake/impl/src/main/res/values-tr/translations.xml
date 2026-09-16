@@ -13,5 +13,7 @@
   <string name="screen_bug_report_include_screenshot">"Ekran görüntüsü gönder"</string>
   <string name="screen_bug_report_logs_description">"Her şeyin düzgün çalıştığından emin olmak için günlükler mesajınıza dahil edilecektir. Mesajınızı kayıt tutmadan göndermek için bu ayarı kapatın."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s son kullanıldığında çöktü. Bizimle bir çökme raporu paylaşmak ister misiniz?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Bildirimlerle ilgili sorun yaşıyorsanız, bildirim ayarlarını göndermek sorunun kaynağını bulmamıza yardımcı olabilir. Bu ayarların, görünen adınız veya bildirim almak istediğiniz anahtar kelimeler gibi özel bilgiler içerebileceğini unutmayın."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Bildirim ayarlarını gönder"</string>
   <string name="screen_bug_report_view_logs">"Günlükleri görüntüle"</string>
 </resources>

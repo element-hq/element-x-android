@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 
 data class NotificationData(
@@ -30,11 +31,13 @@ data class NotificationData(
     val roomDisplayName: String?,
     val isDirect: Boolean,
     val isDm: Boolean,
+    val isSpace: Boolean,
     val isEncrypted: Boolean,
     val isNoisy: Boolean,
     val timestamp: Long,
     val content: NotificationContent,
     val hasMention: Boolean,
+    val roomJoinRule: JoinRule?,
 ) {
     fun getDisambiguatedDisplayName(userId: UserId): String = when {
         senderDisplayName.isNullOrBlank() -> userId.value
@@ -53,6 +56,7 @@ sealed interface NotificationContent {
         data class RtcNotification(
             val senderId: UserId,
             val type: RtcNotificationType,
+            val callIntent: CallIntent,
             val expirationTimestampMillis: Long
         ) : MessageLike
 
@@ -85,13 +89,14 @@ sealed interface NotificationContent {
             val senderId: UserId,
             val question: String,
         ) : MessageLike
+
+        data object Beacon : MessageLike
     }
 
     sealed interface StateEvent : NotificationContent {
         data object PolicyRuleRoom : StateEvent
         data object PolicyRuleServer : StateEvent
         data object PolicyRuleUser : StateEvent
-        data object RoomAliases : StateEvent
         data object RoomAvatar : StateEvent
         data object RoomCanonicalAlias : StateEvent
         data object RoomCreate : StateEvent
@@ -113,6 +118,7 @@ sealed interface NotificationContent {
         data class RoomTopic(val topic: String) : StateEvent
         data object SpaceChild : StateEvent
         data object SpaceParent : StateEvent
+        data class BeaconInfo(val senderId: UserId) : StateEvent
     }
 
     data class Invite(
@@ -123,4 +129,9 @@ sealed interface NotificationContent {
 enum class RtcNotificationType {
     RING,
     NOTIFY
+}
+
+enum class CallIntent {
+    AUDIO,
+    VIDEO
 }

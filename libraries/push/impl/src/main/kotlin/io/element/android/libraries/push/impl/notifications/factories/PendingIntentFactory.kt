@@ -11,6 +11,7 @@ package io.element.android.libraries.push.impl.notifications.factories
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -31,20 +32,20 @@ class PendingIntentFactory(
     private val clock: SystemClock,
     private val actionIds: NotificationActionIds,
 ) {
-    fun createOpenSessionPendingIntent(sessionId: SessionId): PendingIntent? {
-        return createRoomPendingIntent(sessionId = sessionId, roomId = null, eventId = null, threadId = null)
+    fun createOpenSessionPendingIntent(sessionId: SessionId, extras: Bundle? = null): PendingIntent? {
+        return createRoomPendingIntent(sessionId = sessionId, roomId = null, eventId = null, threadId = null, extras = extras)
     }
 
-    fun createOpenRoomPendingIntent(sessionId: SessionId, roomId: RoomId, eventId: EventId?): PendingIntent? {
-        return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, eventId = eventId, threadId = null)
+    fun createOpenRoomPendingIntent(sessionId: SessionId, roomId: RoomId, eventId: EventId?, extras: Bundle? = null): PendingIntent? {
+        return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, eventId = eventId, threadId = null, extras = extras)
     }
 
-    fun createOpenThreadPendingIntent(sessionId: SessionId, roomId: RoomId, eventId: EventId?, threadId: ThreadId): PendingIntent? {
-        return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, eventId = eventId, threadId = threadId)
+    fun createOpenThreadPendingIntent(sessionId: SessionId, roomId: RoomId, eventId: EventId?, threadId: ThreadId, extras: Bundle? = null): PendingIntent? {
+        return createRoomPendingIntent(sessionId = sessionId, roomId = roomId, eventId = eventId, threadId = threadId, extras = extras)
     }
 
-    private fun createRoomPendingIntent(sessionId: SessionId, roomId: RoomId?, eventId: EventId?, threadId: ThreadId?): PendingIntent? {
-        val intent = intentProvider.getViewRoomIntent(sessionId = sessionId, roomId = roomId, eventId = eventId, threadId = threadId)
+    private fun createRoomPendingIntent(sessionId: SessionId, roomId: RoomId?, eventId: EventId?, threadId: ThreadId?, extras: Bundle? = null): PendingIntent? {
+        val intent = intentProvider.getViewRoomIntent(sessionId = sessionId, roomId = roomId, eventId = eventId, threadId = threadId, extras = extras)
         return PendingIntent.getActivity(
             context,
             clock.epochMillis().toInt(),

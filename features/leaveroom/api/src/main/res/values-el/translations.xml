@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Είσαι σίγουρος ότι θέλεις να αποχωρήσεις από αυτή τη συζήτηση; Αυτή η συνομιλία δεν είναι δημόσια και δεν θα μπορείς να συμμετάσχεις ξανά χωρίς πρόσκληση."</string>
   <string name="leave_room_alert_empty_subtitle">"Είστε σίγουροι ότι θέλετε να αποχωρήσετε από αυτή την αίθουσα; Είστε το μόνο άτομο εδώ. Αν αποχωρήσετε, κανείς δεν θα μπορεί να ενταχθεί στο μέλλον, ούτε εσείς."</string>
   <string name="leave_room_alert_private_subtitle">"Είστε σίγουροι ότι θέλετε να αποχωρήσετε από αυτήν την αίθουσα; Αυτή η αίθουσα δεν είναι δημόσια και δεν θα μπορέσετε να επανενταχτείτε χωρίς πρόσκληση."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Επιλέξτε ιδιοκτήτες"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Είστε ο μόνος ιδιοκτήτης αυτής της αίθουσας. Πρέπει να μεταβιβάσετε την ιδιοκτησία σε κάποιον άλλο πριν φύγετε από την αίθουσα."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Μεταβίβαση ιδιοκτησίας"</string>
   <string name="leave_room_alert_subtitle">"Είστε σίγουροι ότι θέλετε να αποχωρήσετε από την αίθουσα;"</string>
 </resources>

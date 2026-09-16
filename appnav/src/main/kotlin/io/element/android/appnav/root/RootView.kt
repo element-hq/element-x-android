@@ -15,14 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
+import io.element.android.features.rageshake.api.crash.CrashDetectionEvent
 import io.element.android.features.rageshake.api.crash.CrashDetectionView
-import io.element.android.features.rageshake.api.detection.RageshakeDetectionEvents
+import io.element.android.features.rageshake.api.detection.RageshakeDetectionEvent
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.services.apperror.impl.AppErrorView
+import io.element.android.services.apperror.api.AppErrorView
 
 @Composable
 fun RootView(
@@ -39,8 +39,8 @@ fun RootView(
         children()
 
         fun onOpenBugReport() {
-            state.crashDetectionState.eventSink(CrashDetectionEvents.ResetAppHasCrashed)
-            state.rageshakeDetectionState.eventSink(RageshakeDetectionEvents.Dismiss)
+            state.crashDetectionState.eventSink(CrashDetectionEvent.ResetAppHasCrashed)
+            state.rageshakeDetectionState.eventSink(RageshakeDetectionEvent.Dismiss)
             onOpenBugReport.invoke()
         }
 
@@ -60,7 +60,7 @@ fun RootView(
 
 @PreviewsDayNight
 @Composable
-internal fun RootViewPreview(@PreviewParameter(RootStateProvider::class) rootState: RootState) = ElementPreview {
+internal fun RootViewPreview(@PreviewParameter(RootStatePreviewParam::class) rootState: RootState) = ElementPreview {
     RootView(
         state = rootState,
         onOpenBugReport = {},

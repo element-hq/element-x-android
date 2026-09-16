@@ -27,6 +27,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.SPACE_NAME
 
 /**
  * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=3643-2048&m=dev
@@ -72,7 +73,7 @@ internal fun OrganizationHeaderPreview() = ElementPreview {
             url = "anUrl",
             size = AvatarSize.OrganizationHeader,
         ),
-        name = "Space name",
+        name = SPACE_NAME,
         numberOfSpaces = 9,
         numberOfRooms = 88,
     )

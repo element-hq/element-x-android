@@ -20,6 +20,8 @@ class DefaultAppForegroundStateService : AppForegroundStateService {
     override val isSyncingNotificationEvent = MutableStateFlow(false)
     override val hasRingingCall = MutableStateFlow(false)
 
+    override val isSharingLiveLocation = MutableStateFlow<Boolean>(false)
+
     private val appLifecycle: Lifecycle by lazy { ProcessLifecycleOwner.get().lifecycle }
 
     override fun startObservingForeground() {
@@ -36,6 +38,10 @@ class DefaultAppForegroundStateService : AppForegroundStateService {
 
     override fun updateIsSyncingNotificationEvent(isSyncingNotificationEvent: Boolean) {
         this.isSyncingNotificationEvent.value = isSyncingNotificationEvent
+    }
+
+    override fun updateIsSharingLiveLocation(isSharingLiveLocation: Boolean) {
+        this.isSharingLiveLocation.value = isSharingLiveLocation
     }
 
     private val lifecycleObserver = LifecycleEventObserver { _, _ -> isInForeground.value = getCurrentState() }

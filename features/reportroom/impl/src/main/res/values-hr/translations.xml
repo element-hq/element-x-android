@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_message">"Vaša je prijava uspješno poslana, ali naišli smo na problem prilikom pokušaja napuštanja sobe. Pokušajte ponovno."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Sobu nije moguće napustiti"</string>
+  <string name="screen_report_room_reason_footer">"Prijavi ovu sobu svom administratoru. Ako su poruke šifrirane, vaš administrator neće ih moći pročitati."</string>
+  <string name="screen_report_room_reason_placeholder">"Navedite razlog prijave…"</string>
+  <string name="screen_report_room_title">"Prijavi sobu"</string>
+</resources>

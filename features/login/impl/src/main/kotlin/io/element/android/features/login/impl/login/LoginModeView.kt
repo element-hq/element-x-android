@@ -24,7 +24,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
-import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -32,9 +32,8 @@ fun LoginModeView(
     loginMode: AsyncData<LoginMode>,
     onClearError: () -> Unit,
     onLearnMoreClick: () -> Unit,
-    onOidcDetails: (OidcDetails) -> Unit,
+    onOAuthDetails: (OAuthDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
-    onCreateAccountContinue: (url: String) -> Unit
 ) {
     val context = LocalContext.current
     when (loginMode) {
@@ -118,9 +117,8 @@ fun LoginModeView(
         is AsyncData.Loading -> Unit // The Continue button shows the loading state
         is AsyncData.Success -> {
             when (val loginModeData = loginMode.data) {
-                is LoginMode.Oidc -> onOidcDetails(loginModeData.oidcDetails)
+                is LoginMode.OAuth -> onOAuthDetails(loginModeData.oAuthDetails)
                 LoginMode.PasswordLogin -> onNeedLoginPassword()
-                is LoginMode.AccountCreation -> onCreateAccountContinue(loginModeData.url)
             }
             // Also clear the data, to let the next screen be able to go back
             onClearError()
@@ -131,15 +129,14 @@ fun LoginModeView(
 
 @PreviewsDayNight
 @Composable
-internal fun LoginModeViewPreview(@PreviewParameter(LoginModeViewErrorProvider::class) error: Throwable) {
+internal fun LoginModeViewPreview(@PreviewParameter(LoginModeViewErrorPreviewParam::class) error: Throwable) {
     ElementPreview {
         LoginModeView(
             loginMode = AsyncData.Failure(error),
             onClearError = {},
             onLearnMoreClick = {},
-            onOidcDetails = {},
+            onOAuthDetails = {},
             onNeedLoginPassword = {},
-            onCreateAccountContinue = {}
         )
     }
 }

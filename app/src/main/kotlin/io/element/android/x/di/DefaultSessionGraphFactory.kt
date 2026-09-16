@@ -15,7 +15,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 
 @ContributesBinding(AppScope::class)
 class DefaultSessionGraphFactory(
-    private val appGraph: AppGraph
+    private val appGraph: AppGraph,
 ) : SessionGraphFactory {
     override fun create(client: MatrixClient): Any {
         return appGraph.sessionGraphFactory.create(client)

@@ -14,7 +14,7 @@ import io.element.android.features.rolesandpermissions.api.RolesAndPermissionsEn
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeRolesAndPermissionsEntryPoint : RolesAndPermissionsEntryPoint {
-    override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
+    override fun createNode(parentNode: Node, buildContext: BuildContext, callback: RolesAndPermissionsEntryPoint.Callback): Node {
         lambdaError()
     }
 }

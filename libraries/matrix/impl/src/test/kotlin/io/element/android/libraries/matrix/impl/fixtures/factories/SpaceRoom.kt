@@ -16,9 +16,10 @@ import org.matrix.rustcomponents.sdk.RoomHero
 import org.matrix.rustcomponents.sdk.RoomType
 import org.matrix.rustcomponents.sdk.SpaceRoom
 
-fun aRustSpaceRoom(
+internal fun aRustSpaceRoom(
     roomId: RoomId = A_ROOM_ID,
     isDirect: Boolean = false,
+    isDm: Boolean = false,
     canonicalAlias: String? = null,
     rawName: String? = null,
     displayName: String = "",
@@ -35,6 +36,7 @@ fun aRustSpaceRoom(
 ) = SpaceRoom(
     roomId = roomId.value,
     isDirect = isDirect,
+    isDm = isDm,
     canonicalAlias = canonicalAlias,
     rawName = rawName,
     displayName = displayName,
@@ -48,5 +50,5 @@ fun aRustSpaceRoom(
     childrenCount = childrenCount,
     state = state,
     heroes = heroes,
-    via = emptyList()
+    via = emptyList(),
 )

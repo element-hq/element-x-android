@@ -59,15 +59,15 @@ class SecureBackupRootPresenter(
             }
         }
 
-        fun handleEvent(event: SecureBackupRootEvents) {
+        fun handleEvent(event: SecureBackupRootEvent) {
             when (event) {
-                SecureBackupRootEvents.RetryKeyBackupState -> localCoroutineScope.getKeyBackupStatus(doesBackupExistOnServerAction)
-                SecureBackupRootEvents.EnableKeyStorage -> localCoroutineScope.enableBackup(enableAction)
-                SecureBackupRootEvents.DismissDialog -> {
+                SecureBackupRootEvent.RetryKeyBackupState -> localCoroutineScope.getKeyBackupStatus(doesBackupExistOnServerAction)
+                SecureBackupRootEvent.EnableKeyStorage -> localCoroutineScope.enableBackup(enableAction)
+                SecureBackupRootEvent.DismissDialog -> {
                     enableAction.value = AsyncAction.Uninitialized
                     displayKeyStorageDisabledError = false
                 }
-                SecureBackupRootEvents.DisplayKeyStorageDisabledError -> displayKeyStorageDisabledError = true
+                SecureBackupRootEvent.DisplayKeyStorageDisabledError -> displayKeyStorageDisabledError = true
             }
         }
 

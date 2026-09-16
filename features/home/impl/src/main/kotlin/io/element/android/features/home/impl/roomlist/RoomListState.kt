@@ -11,7 +11,9 @@ package io.element.android.features.home.impl.roomlist
 import androidx.compose.runtime.Immutable
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.model.RoomListRoomSummary
+import io.element.android.features.home.impl.search.GlobalSearchState
 import io.element.android.features.home.impl.search.RoomListSearchState
+import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
@@ -26,11 +28,13 @@ data class RoomListState(
     val leaveRoomState: LeaveRoomState,
     val filtersState: RoomListFiltersState,
     val searchState: RoomListSearchState,
+    val globalSearchState: GlobalSearchState,
+    val spaceFiltersState: SpaceFiltersState,
     val contentState: RoomListContentState,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val hideInvitesAvatars: Boolean,
     val canReportRoom: Boolean,
-    val eventSink: (RoomListEvents) -> Unit,
+    val eventSink: (RoomListEvent) -> Unit,
 ) {
     val displayFilters = contentState is RoomListContentState.Rooms
 
@@ -42,7 +46,6 @@ data class RoomListState(
             val isDm: Boolean,
             val isFavorite: Boolean,
             val hasNewContent: Boolean,
-            val displayClearRoomCacheAction: Boolean,
         ) : ContextMenu
     }
 
@@ -70,6 +73,7 @@ sealed interface RoomListContentState {
         val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
         val batteryOptimizationState: BatteryOptimizationState,
         val showNewNotificationSoundBanner: Boolean,
+        val showUnreadCount: Boolean,
         val summaries: ImmutableList<RoomListRoomSummary>,
         val seenRoomInvites: ImmutableSet<RoomId>,
     ) : RoomListContentState

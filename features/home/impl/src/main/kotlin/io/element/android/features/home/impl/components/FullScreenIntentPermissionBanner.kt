@@ -16,7 +16,7 @@ import io.element.android.libraries.designsystem.components.Announcement
 import io.element.android.libraries.designsystem.components.AnnouncementType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvents
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvent
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -31,8 +31,8 @@ fun FullScreenIntentPermissionBanner(
         description = stringResource(R.string.full_screen_intent_banner_message),
         type = AnnouncementType.Actionable(
             actionText = stringResource(CommonStrings.action_continue),
-            onDismissClick = { state.eventSink(FullScreenIntentPermissionsEvents.Dismiss) },
-            onActionClick = { state.eventSink(FullScreenIntentPermissionsEvents.OpenSettings) },
+            onDismissClick = { state.eventSink(FullScreenIntentPermissionsEvent.Dismiss) },
+            onActionClick = { state.eventSink(FullScreenIntentPermissionsEvent.OpenSettings) },
         ),
         modifier = modifier.roomListBannerPadding(),
     )

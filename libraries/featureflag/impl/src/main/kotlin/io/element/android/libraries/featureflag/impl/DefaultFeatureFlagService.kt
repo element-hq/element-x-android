@@ -14,6 +14,7 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeaturesProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -22,13 +23,17 @@ import kotlinx.coroutines.flow.flowOf
 class DefaultFeatureFlagService(
     private val providers: Set<@JvmSuppressWildcards FeatureFlagProvider>,
     private val buildMeta: BuildMeta,
-    private val featuresProvider: FeaturesProvider,
+    private val featuresProviders: Set<FeaturesProvider>,
 ) : FeatureFlagService {
     override fun isFeatureEnabledFlow(feature: Feature): Flow<Boolean> {
-        return providers.filter { it.hasFeature(feature) }
-            .maxByOrNull(FeatureFlagProvider::priority)
-            ?.isFeatureEnabledFlow(feature)
-            ?: flowOf(feature.defaultValue(buildMeta))
+        return if (feature.isFinished) {
+            flowOf(feature.defaultValue(buildMeta))
+        } else {
+            providers.filter { it.hasFeature(feature) }
+                .maxByOrNull(FeatureFlagProvider::priority)
+                ?.isFeatureEnabledFlow(feature)
+                ?: flowOf(feature.defaultValue(buildMeta))
+        }
     }
 
     override suspend fun setFeatureEnabled(feature: Feature, enabled: Boolean): Boolean {
@@ -43,7 +48,7 @@ class DefaultFeatureFlagService(
         includeFinishedFeatures: Boolean,
         isInLabs: Boolean,
     ): List<Feature> {
-        return featuresProvider.provide().filter { flag ->
+        return featuresProviders.flatMap { provider -> provider.provide() }.filter { flag ->
             (includeFinishedFeatures || !flag.isFinished) &&
                 flag.isInLabs == isInLabs
         }

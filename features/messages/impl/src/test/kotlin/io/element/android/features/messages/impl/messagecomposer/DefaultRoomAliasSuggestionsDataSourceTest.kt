@@ -15,6 +15,7 @@ import io.element.android.features.messages.impl.messagecomposer.suggestions.Roo
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.room.aRoomSummary
+import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -22,7 +23,10 @@ import org.junit.Test
 class DefaultRoomAliasSuggestionsDataSourceTest {
     @Test
     fun `getAllRoomAliasSuggestions must emit a list of room alias suggestions`() = runTest {
-        val roomListService = FakeRoomListService()
+        val roomList = FakeDynamicRoomList()
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
         val sut = DefaultRoomAliasSuggestionsDataSource(
             roomListService
         )
@@ -31,7 +35,7 @@ class DefaultRoomAliasSuggestionsDataSourceTest {
         )
         sut.getAllRoomAliasSuggestions().test {
             assertThat(awaitItem()).isEmpty()
-            roomListService.postAllRooms(
+            roomList.summaries.emit(
                 listOf(
                     aRoomSummary(roomId = A_ROOM_ID_2, canonicalAlias = null),
                     aRoomSummaryWithAnAlias,

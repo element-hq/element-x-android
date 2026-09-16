@@ -9,7 +9,6 @@
 package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -25,7 +24,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 @ContributesIntoSet(SessionScope::class)
-@Inject
 class UnifiedPushMatrixGatewayTest(
     private val sessionId: SessionId,
     private val unifiedPushApiFactory: UnifiedPushApiFactory,

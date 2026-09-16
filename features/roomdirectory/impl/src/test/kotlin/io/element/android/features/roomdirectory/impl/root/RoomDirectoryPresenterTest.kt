@@ -91,7 +91,7 @@ class RoomDirectoryPresenterTest {
         val presenter = createRoomDirectoryPresenter(roomDirectoryService = roomDirectoryService)
         presenter.test {
             awaitItem().also { state ->
-                state.eventSink(RoomDirectoryEvents.Search("test"))
+                state.eventSink(RoomDirectoryEvent.Search("test"))
             }
             awaitItem().also { state ->
                 assertThat(state.query).isEqualTo("test")
@@ -112,7 +112,7 @@ class RoomDirectoryPresenterTest {
         val presenter = createRoomDirectoryPresenter(roomDirectoryService = roomDirectoryService)
         presenter.test {
             awaitItem().also { state ->
-                state.eventSink(RoomDirectoryEvents.LoadMore)
+                state.eventSink(RoomDirectoryEvent.LoadMore)
             }
             advanceUntilIdle()
             cancelAndIgnoreRemainingEvents()

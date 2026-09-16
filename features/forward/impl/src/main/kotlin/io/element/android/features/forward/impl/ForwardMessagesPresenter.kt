@@ -48,9 +48,9 @@ class ForwardMessagesPresenter(
 
     @Composable
     override fun present(): ForwardMessagesState {
-        fun handleEvent(event: ForwardMessagesEvents) {
+        fun handleEvent(event: ForwardMessagesEvent) {
             when (event) {
-                ForwardMessagesEvents.ClearError -> forwardingActionState.value = AsyncAction.Uninitialized
+                ForwardMessagesEvent.ClearError -> forwardingActionState.value = AsyncAction.Uninitialized
             }
         }
 

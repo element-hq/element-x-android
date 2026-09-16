@@ -38,6 +38,7 @@ class PlatformInitializer : Initializer<Unit> {
             logLevel = logLevel,
             extraTargets = listOf(ELEMENT_X_TARGET),
             traceLogPacks = runBlocking { preferencesStore.getTracingLogPacksFlow().first() },
+            sdkSentryDsn = appBindings.sentrySdkDsn()?.value?.takeIf { it.isNotBlank() },
         )
         bugReporter.setCurrentTracingLogLevel(logLevel.name)
         platformService.init(tracingConfiguration)

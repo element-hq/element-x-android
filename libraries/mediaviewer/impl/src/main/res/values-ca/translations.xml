@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"L\'arxiu s\'eliminarà de la sala i el membres no en tindran accés."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Eliminar el document?"</string>
+  <string name="screen_media_browser_download_error_message">"Comprova la connexió a internet i torna-ho a provar."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Els documents, àudios i missatges de veu que s\'hagin penjat a la sala es mostraran aquí."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Encara no s\'han pujat documents"</string>
+  <string name="screen_media_browser_list_loading_files">"Carregant documents…"</string>
+  <string name="screen_media_browser_list_loading_media">"Carregant multimèdia…"</string>
+  <string name="screen_media_browser_list_mode_files">"Documents"</string>
+  <string name="screen_media_browser_list_mode_media">"Multimèdia"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Les imatges i vídeos penjats a la sala es mostraran aquí."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Encara no s\'ha pujat multimèdia"</string>
+  <string name="screen_media_browser_title">"Multimèdia i documents"</string>
+  <string name="screen_media_details_file_format">"Format del document"</string>
+  <string name="screen_media_details_filename">"Nom del document"</string>
+  <string name="screen_media_details_no_more_files_to_show">"No hi ha més fitxers a mostrar"</string>
+  <string name="screen_media_details_no_more_media_to_show">"No hi ha més multimèdia a mostrar"</string>
+  <string name="screen_media_details_uploaded_by">"Pujat per"</string>
+  <string name="screen_media_details_uploaded_on">"Pujat el"</string>
+</resources>

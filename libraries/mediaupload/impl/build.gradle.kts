@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
+    implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.services.toolbox.api)
     implementation(libs.androidx.exifinterface)

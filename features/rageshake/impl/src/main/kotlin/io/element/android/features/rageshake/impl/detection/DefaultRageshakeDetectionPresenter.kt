@@ -12,15 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.rageshake.api.detection.RageshakeDetectionEvents
+import io.element.android.features.rageshake.api.detection.RageshakeDetectionEvent
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionPresenter
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionState
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvents
+import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvent
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.api.screenshot.ImageResult
 import io.element.android.features.rageshake.impl.rageshake.RageShake
@@ -49,27 +48,17 @@ class DefaultRageshakeDetectionPresenter(
             mutableStateOf(false)
         }
 
-        fun handleEvent(event: RageshakeDetectionEvents) {
+        fun handleEvent(event: RageshakeDetectionEvent) {
             when (event) {
-                RageshakeDetectionEvents.Disable -> {
-                    preferencesState.eventSink(RageshakePreferencesEvents.SetIsEnabled(false))
+                RageshakeDetectionEvent.Disable -> {
+                    preferencesState.eventSink(RageshakePreferencesEvent.SetIsEnabled(false))
                     showDialog.value = false
                 }
-                RageshakeDetectionEvents.StartDetection -> isStarted.value = true
-                RageshakeDetectionEvents.StopDetection -> isStarted.value = false
-                is RageshakeDetectionEvents.ProcessScreenshot -> localCoroutineScope.processScreenshot(takeScreenshot, showDialog, event.imageResult)
-                RageshakeDetectionEvents.Dismiss -> showDialog.value = false
+                RageshakeDetectionEvent.StartDetection -> isStarted.value = true
+                RageshakeDetectionEvent.StopDetection -> isStarted.value = false
+                is RageshakeDetectionEvent.ProcessScreenshot -> localCoroutineScope.processScreenshot(takeScreenshot, showDialog, event.imageResult)
+                RageshakeDetectionEvent.Dismiss -> showDialog.value = false
             }
-        }
-
-        val state = remember(preferencesState, isStarted.value, takeScreenshot.value, showDialog.value) {
-            RageshakeDetectionState(
-                isStarted = isStarted.value,
-                takeScreenshot = takeScreenshot.value,
-                showDialog = showDialog.value,
-                preferenceState = preferencesState,
-                eventSink = ::handleEvent,
-            )
         }
 
         LaunchedEffect(preferencesState.sensitivity) {
@@ -83,14 +72,25 @@ class DefaultRageshakeDetectionPresenter(
             !showDialog.value
 
         LaunchedEffect(shouldStart) {
-            handleRageShake(shouldStart, state, takeScreenshot)
+            handleRageShake(
+                start = shouldStart,
+                sensitivity = preferencesState.sensitivity,
+                takeScreenshot = takeScreenshot,
+            )
         }
-        return state
+
+        return RageshakeDetectionState(
+            isStarted = isStarted.value,
+            takeScreenshot = takeScreenshot.value,
+            showDialog = showDialog.value,
+            preferenceState = preferencesState,
+            eventSink = ::handleEvent,
+        )
     }
 
-    private fun handleRageShake(start: Boolean, state: RageshakeDetectionState, takeScreenshot: MutableState<Boolean>) {
+    private fun handleRageShake(start: Boolean, sensitivity: Float, takeScreenshot: MutableState<Boolean>) {
         if (start) {
-            rageShake.start(state.preferenceState.sensitivity)
+            rageShake.start(sensitivity)
             rageShake.setInterceptor {
                 takeScreenshot.value = true
             }

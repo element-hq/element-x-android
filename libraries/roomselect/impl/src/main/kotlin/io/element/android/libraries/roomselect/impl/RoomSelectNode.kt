@@ -9,6 +9,8 @@
 package io.element.android.libraries.roomselect.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -17,6 +19,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
@@ -32,15 +35,20 @@ class RoomSelectNode(
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(
         val mode: RoomSelectMode,
+        val maxNumberOfRooms: Int,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    private val presenter = presenterFactory.create(inputs.mode)
+    private val presenter = presenterFactory.create(
+        mode = inputs.mode,
+        maxNumberOfRooms = inputs.maxNumberOfRooms,
+    )
+    private val stateFlow = launchMolecule { presenter.present() }
     private val callback: RoomSelectEntryPoint.Callback = callback()
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
+        val state by stateFlow.collectAsState()
         RoomSelectView(
             state = state,
             onDismiss = callback::onCancel,

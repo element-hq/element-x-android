@@ -19,12 +19,15 @@ object RoomPowerLevelsValuesMapper {
             ban = values.ban,
             invite = values.invite,
             kick = values.kick,
-            sendEvents = values.eventsDefault,
+            eventsDefault = values.eventsDefault,
+            stateDefault = values.stateDefault,
             redactEvents = values.redact,
             roomName = values.roomName,
             roomAvatar = values.roomAvatar,
             roomTopic = values.roomTopic,
             spaceChild = values.spaceChild,
+            beacon = values.beacon,
+            beaconInfo = values.beaconInfo,
         )
     }
 }

@@ -8,17 +8,20 @@
 
 package io.element.android.libraries.roomselect.impl
 
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
+import io.element.android.libraries.matrix.api.roomlist.updateVisibleRange
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.toSelectRoomInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -30,18 +33,24 @@ private const val PAGE_SIZE = 30
  * DataSource for RoomSummaryDetails that can be filtered by a search query,
  * and which only includes rooms the user has joined.
  */
-@Inject
+@AssistedInject
 class RoomSelectSearchDataSource(
+    @Assisted coroutineScope: CoroutineScope,
     roomListService: RoomListService,
     coroutineDispatchers: CoroutineDispatchers,
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(coroutineScope: CoroutineScope): RoomSelectSearchDataSource
+    }
+
     private val roomList = roomListService.createRoomList(
         pageSize = PAGE_SIZE,
-        initialFilter = RoomListFilter.all(),
         source = RoomList.Source.All,
+        coroutineScope = coroutineScope
     )
 
-    val roomInfoList: Flow<ImmutableList<SelectRoomInfo>> = roomList.filteredSummaries
+    val roomInfoList: Flow<ImmutableList<SelectRoomInfo>> = roomList.summaries
         .map { roomSummaries ->
             roomSummaries
                 .filter { it.info.currentUserMembership == CurrentUserMembership.JOINED }
@@ -51,8 +60,8 @@ class RoomSelectSearchDataSource(
         }
         .flowOn(coroutineDispatchers.computation)
 
-    suspend fun load() = coroutineScope {
-        roomList.loadAllIncrementally(this)
+    suspend fun updateVisibleRange(visibleRange: IntRange) {
+        roomList.updateVisibleRange(visibleRange)
     }
 
     suspend fun setSearchQuery(searchQuery: String) = coroutineScope {

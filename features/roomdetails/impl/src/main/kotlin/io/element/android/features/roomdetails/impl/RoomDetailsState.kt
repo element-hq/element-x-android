@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -30,7 +31,7 @@ data class RoomDetailsState(
     val memberCount: Long,
     val isEncrypted: Boolean,
     val roomType: RoomDetailsType,
-    val roomMemberDetailsState: UserProfileState?,
+    val dmOtherMemberDetailsState: UserProfileState?,
     val canEdit: Boolean,
     val canInvite: Boolean,
     val roomCallState: RoomCallState,
@@ -50,6 +51,8 @@ data class RoomDetailsState(
     val isTombstoned: Boolean,
     val showDebugInfo: Boolean,
     val roomVersion: String?,
+    val roomHistoryVisibility: RoomHistoryVisibility,
+    val hasNewContent: Boolean,
     val eventSink: (RoomDetailsEvent) -> Unit
 ) {
     val roomBadges = buildList {
@@ -61,16 +64,21 @@ data class RoomDetailsState(
         if (isPublic) {
             add(RoomBadge.PUBLIC)
         }
+        if (isEncrypted) {
+            when (roomHistoryVisibility) {
+                RoomHistoryVisibility.Invited, RoomHistoryVisibility.Joined -> add(RoomBadge.SHARED_HISTORY_HIDDEN)
+                RoomHistoryVisibility.Shared -> add(RoomBadge.SHARED_HISTORY_SHARED)
+                RoomHistoryVisibility.WorldReadable -> add(RoomBadge.SHARED_HISTORY_WORLD_READABLE)
+                else -> {}
+            }
+        }
     }.toImmutableList()
 }
 
 @Immutable
 sealed interface RoomDetailsType {
     data object Room : RoomDetailsType
-    data class Dm(
-        val me: RoomMember,
-        val otherMember: RoomMember,
-    ) : RoomDetailsType
+    data class Dm(val otherMember: RoomMember) : RoomDetailsType
 }
 
 @Immutable
@@ -84,4 +92,7 @@ enum class RoomBadge {
     ENCRYPTED,
     NOT_ENCRYPTED,
     PUBLIC,
+    SHARED_HISTORY_HIDDEN,
+    SHARED_HISTORY_SHARED,
+    SHARED_HISTORY_WORLD_READABLE
 }

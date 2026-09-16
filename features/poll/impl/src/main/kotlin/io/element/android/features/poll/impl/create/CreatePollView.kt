@@ -11,11 +11,13 @@ package io.element.android.features.poll.impl.create
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -25,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -32,6 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.poll.impl.R
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -62,20 +67,21 @@ fun CreatePollView(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val navBack = { state.eventSink(CreatePollEvents.ConfirmNavBack) }
+    val navBack = { state.eventSink(CreatePollEvent.ConfirmNavBack) }
     BackHandler(onBack = navBack)
     if (state.showBackConfirmation) {
         SaveChangesDialog(
-            onSubmitClick = { state.eventSink(CreatePollEvents.NavBack) },
-            onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
+            onSaveClick = { state.eventSink(CreatePollEvent.Save) },
+            onDiscardClick = { state.eventSink(CreatePollEvent.NavBack) },
+            onDismiss = { state.eventSink(CreatePollEvent.HideConfirmation) },
         )
     }
     if (state.showDeleteConfirmation) {
         ConfirmationDialog(
             title = stringResource(id = R.string.screen_edit_poll_delete_confirmation_title),
             content = stringResource(id = R.string.screen_edit_poll_delete_confirmation),
-            onSubmitClick = { state.eventSink(CreatePollEvents.Delete(confirmed = true)) },
-            onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
+            onSubmitClick = { state.eventSink(CreatePollEvent.Delete(confirmed = true)) },
+            onDismiss = { state.eventSink(CreatePollEvent.HideConfirmation) }
         )
     }
     val questionFocusRequester = remember { FocusRequester() }
@@ -90,7 +96,7 @@ fun CreatePollView(
                 mode = state.mode,
                 saveEnabled = state.canSave,
                 onBackClick = navBack,
-                onSaveClick = { state.eventSink(CreatePollEvents.Save) }
+                onSaveClick = { state.eventSink(CreatePollEvent.Save) }
             )
         },
     ) { paddingValues ->
@@ -106,12 +112,12 @@ fun CreatePollView(
             item {
                 Column {
                     ListItem(
-                        headlineContent = {
+                        content = {
                             TextField(
                                 label = stringResource(id = R.string.screen_create_poll_question_desc),
                                 value = state.question,
                                 onValueChange = {
-                                    state.eventSink(CreatePollEvents.SetQuestion(it))
+                                    state.eventSink(CreatePollEvent.SetQuestion(it))
                                 },
                                 modifier = Modifier
                                     .focusRequester(questionFocusRequester)
@@ -126,11 +132,11 @@ fun CreatePollView(
             itemsIndexed(state.answers) { index, answer ->
                 val isLastItem = index == state.answers.size - 1
                 ListItem(
-                    headlineContent = {
+                    content = {
                         TextField(
                             value = answer.text,
                             onValueChange = {
-                                state.eventSink(CreatePollEvents.SetAnswer(index, it))
+                                state.eventSink(CreatePollEvent.SetAnswer(index, it))
                             },
                             modifier = Modifier
                                 .then(if (isLastItem) Modifier.focusRequester(answerFocusRequester) else Modifier)
@@ -144,7 +150,7 @@ fun CreatePollView(
                             imageVector = CompoundIcons.Delete(),
                             contentDescription = stringResource(R.string.screen_create_poll_delete_option_a11y, answer.text),
                             modifier = Modifier.clickable(answer.canDelete) {
-                                state.eventSink(CreatePollEvents.RemoveAnswer(index))
+                                state.eventSink(CreatePollEvent.RemoveAnswer(index))
                             },
                         )
                     },
@@ -154,13 +160,13 @@ fun CreatePollView(
             if (state.canAddAnswer) {
                 item {
                     ListItem(
-                        headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_add_option_btn)) },
+                        content = { Text(text = stringResource(id = R.string.screen_create_poll_add_option_btn)) },
                         leadingContent = ListItemContent.Icon(
                             iconSource = IconSource.Vector(CompoundIcons.Plus()),
                         ),
                         style = ListItemStyle.Primary,
                         onClick = {
-                            state.eventSink(CreatePollEvents.AddAnswer)
+                            state.eventSink(CreatePollEvent.AddAnswer)
                             coroutineScope.launch(Dispatchers.Main) {
                                 lazyListState.animateScrollToItem(state.answers.size + 1)
                                 answerFocusRequester.requestFocus()
@@ -173,14 +179,25 @@ fun CreatePollView(
                 Column {
                     HorizontalDivider()
                     ListItem(
-                        headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
+                        content = { Text(text = stringResource(id = R.string.screen_create_poll_max_selections_headline)) },
+                        trailingContent = ListItemContent.Custom {
+                            MaxSelectionsStepper(
+                                current = state.maxSelections,
+                                max = state.maxAllowedSelections,
+                                onDecrement = { state.eventSink(CreatePollEvent.SetMaxSelections(state.maxSelections - 1)) },
+                                onIncrement = { state.eventSink(CreatePollEvent.SetMaxSelections(state.maxSelections + 1)) },
+                            )
+                        },
+                    )
+                    ListItem(
+                        content = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
                         supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
                         trailingContent = ListItemContent.Switch(
                             checked = state.pollKind == PollKind.Undisclosed,
                         ),
                         onClick = {
                             state.eventSink(
-                                CreatePollEvents.SetPollKind(
+                                CreatePollEvent.SetPollKind(
                                     if (state.pollKind == PollKind.Disclosed) PollKind.Undisclosed else PollKind.Disclosed
                                 )
                             )
@@ -188,9 +205,9 @@ fun CreatePollView(
                     )
                     if (state.canDelete) {
                         ListItem(
-                            headlineContent = { Text(text = stringResource(id = CommonStrings.action_delete_poll)) },
+                            content = { Text(text = stringResource(id = CommonStrings.action_delete_poll)) },
                             style = ListItemStyle.Destructive,
-                            onClick = { state.eventSink(CreatePollEvents.Delete(confirmed = false)) },
+                            onClick = { state.eventSink(CreatePollEvent.Delete(confirmed = false)) },
                         )
                     }
                 }
@@ -228,10 +245,56 @@ private fun CreatePollTopAppBar(
     )
 }
 
+@Composable
+private fun MaxSelectionsStepper(
+    current: Int,
+    max: Int,
+    onDecrement: () -> Unit,
+    onIncrement: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = CompoundIcons.Minus(),
+            contentDescription = stringResource(id = CommonStrings.a11y_create_poll_votes_allowed_decrease),
+            modifier = Modifier
+                .clickable(enabled = current > 1) { onDecrement() }
+                .size(32.dp)
+                .padding(4.dp),
+            tint = if (current > 1) {
+                ElementTheme.colors.bgAccentRest
+            } else {
+                ElementTheme.colors.iconDisabled
+            },
+        )
+        Text(
+            text = current.toString(),
+            modifier = Modifier.padding(horizontal = 12.dp),
+            style = ElementTheme.typography.fontBodyLgRegular,
+        )
+        Icon(
+            imageVector = CompoundIcons.Plus(),
+            contentDescription = stringResource(id = CommonStrings.a11y_create_poll_votes_allowed_increase),
+            modifier = Modifier
+                .clickable(enabled = current < max) { onIncrement() }
+                .size(32.dp)
+                .padding(4.dp),
+            tint = if (current < max) {
+                ElementTheme.colors.bgAccentRest
+            } else {
+                ElementTheme.colors.iconDisabled
+            },
+        )
+    }
+}
+
 @PreviewsDayNight
 @Composable
 internal fun CreatePollViewPreview(
-    @PreviewParameter(CreatePollStateProvider::class) state: CreatePollState
+    @PreviewParameter(CreatePollStatePreviewParam::class) state: CreatePollState
 ) = ElementPreview {
     CreatePollView(
         state = state,

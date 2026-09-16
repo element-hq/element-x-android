@@ -9,6 +9,7 @@
 package io.element.android.features.home.impl.datasource
 
 import dev.zacsweers.metro.Inject
+import io.element.android.features.home.impl.model.LatestEvent
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.libraries.core.extensions.orEmpty
@@ -16,9 +17,12 @@ import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
+import io.element.android.libraries.matrix.api.room.CallIntentConsensus
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.RoomInfo
+import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.libraries.matrix.ui.model.dmUserStatus
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.toInviteSender
 import kotlinx.collections.immutable.toImmutableList
@@ -44,10 +48,15 @@ class RoomListRoomSummaryFactory(
                 mode = DateFormatterMode.TimeOrDate,
                 useRelative = true,
             ),
-            latestEvent = roomLatestEventFormatter.format(roomSummary.latestEvent, roomInfo.isDm).orEmpty(),
+            latestEvent = computeLatestEvent(roomSummary.latestEvent, roomInfo.hasOnlyTwoMembers()),
             avatarData = avatarData,
             userDefinedNotificationMode = roomInfo.userDefinedNotificationMode,
             hasRoomCall = roomInfo.hasRoomCall,
+            activeCallIntent = when (val consensus = roomInfo.activeCallIntentConsensus) {
+                is CallIntentConsensus.Full -> consensus.callIntent
+                is CallIntentConsensus.Partial -> consensus.callIntent
+                CallIntentConsensus.None -> null
+            },
             isDirect = roomInfo.isDirect,
             isFavorite = roomInfo.isFavorite,
             inviteSender = roomInfo.inviter?.toInviteSender(),
@@ -69,6 +78,36 @@ class RoomListRoomSummaryFactory(
             }.toImmutableList(),
             isTombstoned = roomInfo.successorRoom != null,
             isSpace = roomInfo.isSpace,
+            dmUserStatus = roomInfo.dmUserStatus(),
         )
+    }
+
+    private fun RoomInfo.hasOnlyTwoMembers(): Boolean {
+        return isDm || activeMembersCount <= 2
+    }
+
+    private fun computeLatestEvent(latestEvent: LatestEventValue, dm: Boolean): LatestEvent {
+        return when (latestEvent) {
+            is LatestEventValue.None -> {
+                LatestEvent.None
+            }
+            is LatestEventValue.Local -> {
+                if (latestEvent.isSending) {
+                    val content = roomLatestEventFormatter.format(latestEvent, dm).orEmpty()
+                    LatestEvent.Sending(
+                        content = content,
+                    )
+                } else {
+                    LatestEvent.Error
+                }
+            }
+            is LatestEventValue.Remote -> {
+                val content = roomLatestEventFormatter.format(latestEvent, dm).orEmpty()
+                LatestEvent.Synced(
+                    content = content,
+                )
+            }
+            is LatestEventValue.RoomInvite -> LatestEvent.None
+        }
     }
 }

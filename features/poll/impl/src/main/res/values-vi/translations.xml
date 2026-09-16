@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Thêm lựa chọn"</string>
+  <string name="screen_create_poll_anonymous_desc">"Chỉ hiển thị kết quả sau khi cuộc thăm dò kết thúc"</string>
+  <string name="screen_create_poll_anonymous_headline">"Ẩn phiếu"</string>
+  <string name="screen_create_poll_answer_hint">"Lựa chọn %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Các thay đổi của bạn chưa được lưu. Bạn có chắc muốn quay lại không?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Tùy chọn xóa %1$s"</string>
+  <string name="screen_create_poll_question_desc">"Câu hỏi hoặc chủ đề"</string>
+  <string name="screen_create_poll_question_hint">"Cuộc thăm dò này về vấn đề gì?"</string>
+  <string name="screen_create_poll_title">"Tạo Cuộc thăm dò ý kiến"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Bạn có chắc chắn muốn xóa cuộc thăm dò này không?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Xóa cuộc thăm dò"</string>
+  <string name="screen_edit_poll_title">"Sửa cuộc thăm dò"</string>
+  <string name="screen_polls_history_empty_ongoing">"Không tìm thấy bất kỳ cuộc thăm dò nào đang diễn ra."</string>
+  <string name="screen_polls_history_empty_past">"Không tìm thấy bất kỳ cuộc thăm dò nào trước đây."</string>
+  <string name="screen_polls_history_filter_ongoing">"Đang diễn ra"</string>
+  <string name="screen_polls_history_filter_past">"Quá khứ"</string>
+  <string name="screen_polls_history_title">"Cuộc thăm dò ý kiến"</string>
+</resources>

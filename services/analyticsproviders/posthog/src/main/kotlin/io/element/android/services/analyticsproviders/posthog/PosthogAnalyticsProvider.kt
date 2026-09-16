@@ -11,7 +11,6 @@ package io.element.android.services.analyticsproviders.posthog
 import com.posthog.PostHogInterface
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.SuperProperties
@@ -25,7 +24,6 @@ import timber.log.Timber
 // private val IGNORED_OPTIONS: Options? = null
 
 @ContributesIntoSet(AppScope::class)
-@Inject
 class PosthogAnalyticsProvider(
     private val postHogFactory: PostHogFactory,
 ) : AnalyticsProvider {
@@ -124,7 +122,7 @@ class PosthogAnalyticsProvider(
         return withSuperProperties.takeIf { it.isEmpty().not() }
     }
 
-    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction? = null
+    override fun startTransaction(name: String, operation: String?, description: String?): AnalyticsTransaction? = null
 }
 
 private fun Map<String, Any?>.keepOnlyNonNullValues(): Map<String, Any> {

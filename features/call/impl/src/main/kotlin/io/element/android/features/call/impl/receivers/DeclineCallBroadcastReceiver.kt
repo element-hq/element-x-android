@@ -13,7 +13,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.IntentCompat
 import dev.zacsweers.metro.Inject
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.di.CallBindings
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.utils.ActiveCallManager
@@ -29,6 +29,7 @@ class DeclineCallBroadcastReceiver : BroadcastReceiver() {
     companion object {
         const val EXTRA_NOTIFICATION_DATA = "EXTRA_NOTIFICATION_DATA"
     }
+
     @Inject
     lateinit var activeCallManager: ActiveCallManager
 
@@ -40,7 +41,13 @@ class DeclineCallBroadcastReceiver : BroadcastReceiver() {
             ?: return
         context.bindings<CallBindings>().inject(this)
         appCoroutineScope.launch {
-            activeCallManager.hungUpCall(callType = CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
+            activeCallManager.hangUpCall(
+                callData = CallData(
+                    sessionId = notificationData.sessionId,
+                    roomId = notificationData.roomId,
+                    isAudioCall = notificationData.audioOnly
+                )
+            )
         }
     }
 }

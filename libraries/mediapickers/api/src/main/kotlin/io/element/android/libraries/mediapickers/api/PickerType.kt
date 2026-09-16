@@ -15,6 +15,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.core.mimetype.MimeTypes
 
+// As per MSC4274, the recommended item cap is 60.
+private const val MAX_GALLERY_ITEMS = 60
+
 @Immutable
 sealed interface PickerType<Input, Output> {
     fun getContract(): ActivityResultContract<Input, Output>
@@ -29,6 +32,13 @@ sealed interface PickerType<Input, Output> {
 
     data object ImageAndVideo : PickerType<PickVisualMediaRequest, Uri?> {
         override fun getContract() = ActivityResultContracts.PickVisualMedia()
+        override fun getDefaultRequest(): PickVisualMediaRequest {
+            return PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
+        }
+    }
+
+    data object ImageAndVideoMulti : PickerType<PickVisualMediaRequest, List<Uri>> {
+        override fun getContract() = ActivityResultContracts.PickMultipleVisualMedia(MAX_GALLERY_ITEMS)
         override fun getDefaultRequest(): PickVisualMediaRequest {
             return PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo)
         }
@@ -54,6 +64,15 @@ sealed interface PickerType<Input, Output> {
         override fun getContract() = ActivityResultContracts.GetContent()
         override fun getDefaultRequest(): String {
             return mimeType
+        }
+    }
+
+    data class FileMulti(val mimeType: String = MimeTypes.Any) : PickerType<Array<String>, List<Uri>> {
+        override fun getContract(): ActivityResultContract<Array<String>, List<Uri>> {
+            return ActivityResultContracts.OpenMultipleDocuments()
+        }
+        override fun getDefaultRequest(): Array<String> {
+            return arrayOf(mimeType)
         }
     }
 }

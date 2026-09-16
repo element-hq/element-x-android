@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Nova soba"</string>
+  <string name="screen_create_room_add_people_title">"Pozovi osobe"</string>
+  <string name="screen_create_room_error_creating_room">"Došlo je do pogreške prilikom stvaranja sobe"</string>
+  <string name="screen_create_room_error_creating_space">"Prostor nije moguće stvoriti zbog nepoznate pogreške. Pokušajte ponovno kasnije."</string>
+  <string name="screen_create_room_name_placeholder">"Dodaj ime…"</string>
+  <string name="screen_create_room_new_room_title">"Nova soba"</string>
+  <string name="screen_create_room_new_space_title">"Novi prostor"</string>
+  <string name="screen_create_room_private_option_description">"Samo pozvane osobe mogu se pridružiti."</string>
+  <string name="screen_create_room_private_option_title">"Privatno"</string>
+  <string name="screen_create_room_public_option_description">"Svatko može pronaći ovu sobu.
+To možete u svakom trenutku promijeniti u postavkama sobe."</string>
+  <string name="screen_create_room_public_option_short_description">"Svatko se može pridružiti."</string>
+  <string name="screen_create_room_public_option_title">"Javno"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Svatko može zatražiti pridruživanje sobi, ali administrator ili moderator morat će prihvatiti zahtjev."</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Dopusti traženje pridruživanja"</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_description">"Svatko u %1$s može se pridružiti, ali svi ostali moraju zatražiti pristup."</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Zatraži pridruživanje"</string>
+  <string name="screen_create_room_room_access_section_private_option_description">"Samo pozvane osobe mogu pristupiti ovoj sobi. Sve su poruke sveobuhvatno šifrirane."</string>
+  <string name="screen_create_room_room_access_section_private_option_title">"Privatno"</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Svatko se može pridružiti."</string>
+  <string name="screen_create_room_room_access_section_public_option_title">"Javno"</string>
+  <string name="screen_create_room_room_access_section_restricted_option_description">"Svatko u %1$s može se pridružiti."</string>
+  <string name="screen_create_room_room_access_section_restricted_option_title">"Standard"</string>
+  <string name="screen_create_room_room_access_section_title">"Tko ima pristup"</string>
+  <string name="screen_create_room_room_address_section_footer">"Da bi ova soba bila vidljiva u javnom direktoriju soba, trebat će vam adresa sobe."</string>
+  <string name="screen_create_room_room_address_section_title">"Adresa"</string>
+  <string name="screen_create_room_room_visibility_section_title">"Vidljivost sobe"</string>
+  <string name="screen_create_room_space_selection_no_space_description">"(bez razmaka)"</string>
+  <string name="screen_create_room_space_selection_no_space_option">"Ne dodavaj u prostor"</string>
+  <string name="screen_create_room_space_selection_no_space_title">"Nije odabran nijedan prostor"</string>
+  <string name="screen_create_room_space_selection_sheet_title">"Dodaj u prostor"</string>
+  <string name="screen_create_room_topic_label">"Tema (neobavezno)"</string>
+  <string name="screen_create_room_topic_placeholder">"Dodaj opis…"</string>
+</resources>

@@ -11,7 +11,7 @@ package io.element.android.libraries.matrix.impl.fixtures.factories
 import org.matrix.rustcomponents.sdk.RoomNotificationMode
 import org.matrix.rustcomponents.sdk.RoomNotificationSettings
 
-fun aRustRoomNotificationSettings(
+internal fun aRustRoomNotificationSettings(
     mode: RoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
     isDefault: Boolean = true,
 ) = RoomNotificationSettings(

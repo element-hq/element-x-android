@@ -3,5 +3,6 @@
   <plurals name="a11y_polls_percent_of_total">
     <item quantity="other">"%1$d persen dari total suara"</item>
   </plurals>
+  <string name="a11y_polls_will_remove_selection">"Akan menghapus pilihan"</string>
   <string name="a11y_polls_winning_answer">"Ini adalah jawaban yang menang"</string>
 </resources>

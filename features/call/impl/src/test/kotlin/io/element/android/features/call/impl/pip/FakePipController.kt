@@ -12,10 +12,13 @@ import io.element.android.features.call.impl.utils.PipController
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakePipController(
+    private val setupPipCallbacksResult: () -> Unit = { lambdaError() },
     private val canEnterPipResult: () -> Boolean = { lambdaError() },
     private val enterPipResult: () -> Unit = { lambdaError() },
     private val exitPipResult: () -> Unit = { lambdaError() },
 ) : PipController {
+    override fun setupPipCallbacks() = setupPipCallbacksResult()
+
     override suspend fun canEnterPip(): Boolean = canEnterPipResult()
 
     override fun enterPip() = enterPipResult()

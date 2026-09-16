@@ -15,7 +15,7 @@ sealed interface WriteToFilesConfiguration {
         val filenamePrefix: String,
         val numberOfFiles: Int?,
     ) : WriteToFilesConfiguration {
-        // DO NOT CHANGE: suffix *MUST* be "log" for the rageshake server to not rename the file to something generic
-        val filenameSuffix = "log"
+        // DO NOT CHANGE: suffix *MUST* be ".log" for the rageshake server to not rename the file to something generic
+        val filenameSuffix = ".log"
     }
 }

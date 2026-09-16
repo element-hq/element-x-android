@@ -24,12 +24,15 @@ class AndroidFileSizeFormatter(
     override fun format(fileSize: Long, useShortFormat: Boolean): String {
         // Since Android O, the system considers that 1kB = 1000 bytes instead of 1024 bytes.
         // We want to avoid that.
+        // Sadly we do not have access to the flags values Formatter.FLAG_IEC_UNITS and Formatter.FLAG_SHORTER
+        // nor the method Formatter.formatFileSize with the flags parameter.
+        // So for Android 0 and more, first convert the fileSize to MB/GB/TB ourselves
         val normalizedSize = if (sdkIntProvider.get() <= Build.VERSION_CODES.N) {
             fileSize
         } else {
             // First convert the size
             when {
-                fileSize < 1024 -> fileSize
+                fileSize <= 1 -> fileSize
                 fileSize < 1024 * 1024 -> fileSize * 1000 / 1024
                 fileSize < 1024 * 1024 * 1024 -> fileSize * 1000 / 1024 * 1000 / 1024
                 else -> fileSize * 1000 / 1024 * 1000 / 1024 * 1000 / 1024
@@ -40,6 +43,6 @@ class AndroidFileSizeFormatter(
             Formatter.formatShortFileSize(context, normalizedSize)
         } else {
             Formatter.formatFileSize(context, normalizedSize)
-        }
+        }.replace("kB", "KB")
     }
 }

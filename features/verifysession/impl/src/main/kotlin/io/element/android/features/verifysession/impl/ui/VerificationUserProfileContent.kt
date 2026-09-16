@@ -29,6 +29,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.UserId
@@ -86,7 +87,7 @@ internal fun VerificationUserProfileContentPreview() = ElementPreview(
     VerificationUserProfileContent(
         user = MatrixUser(
             userId = UserId("@alice:example.com"),
-            displayName = "Alice",
+            displayName = USER_NAME_ALICE,
             avatarUrl = "https://example.com/avatar.png",
         )
     )

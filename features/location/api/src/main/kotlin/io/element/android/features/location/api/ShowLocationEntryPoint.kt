@@ -15,8 +15,7 @@ import io.element.android.libraries.architecture.NodeInputs
 
 interface ShowLocationEntryPoint : FeatureEntryPoint {
     data class Inputs(
-        val location: Location,
-        val description: String?,
+        val mode: ShowLocationMode,
     ) : NodeInputs
 
     fun createNode(

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_poll_add_option_btn">"Dodaj mogućnost"</string>
+  <string name="screen_create_poll_anonymous_desc">"Prikaži rezultate tek nakon završetka ankete"</string>
+  <string name="screen_create_poll_anonymous_headline">"Sakrij glasove"</string>
+  <string name="screen_create_poll_answer_hint">"Mogućnost %1$d"</string>
+  <string name="screen_create_poll_cancel_confirmation_content_android">"Vaše promjene nisu spremljene. Jeste li sigurni da se želite vratiti?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Izbriši mogućnost %1$s"</string>
+  <string name="screen_create_poll_question_desc">"Pitanje ili tema"</string>
+  <string name="screen_create_poll_question_hint">"O čemu se radi u anketi?"</string>
+  <string name="screen_create_poll_title">"Izradi anketu"</string>
+  <string name="screen_edit_poll_delete_confirmation">"Jeste li sigurni da želite izbrisati ovu anketu?"</string>
+  <string name="screen_edit_poll_delete_confirmation_title">"Izbriši anketu"</string>
+  <string name="screen_edit_poll_title">"Uredi anketu"</string>
+  <string name="screen_polls_history_empty_ongoing">"Ne mogu pronaći nijednu tekuću anketu."</string>
+  <string name="screen_polls_history_empty_past">"Ne mogu pronaći nijednu prijašnju anketu."</string>
+  <string name="screen_polls_history_filter_ongoing">"Tekuće"</string>
+  <string name="screen_polls_history_filter_past">"Prijašnje"</string>
+  <string name="screen_polls_history_title">"Ankete"</string>
+</resources>

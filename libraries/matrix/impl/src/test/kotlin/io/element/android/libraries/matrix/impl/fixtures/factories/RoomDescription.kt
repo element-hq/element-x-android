@@ -22,15 +22,13 @@ internal fun aRustRoomDescription(
     joinRule: PublicRoomJoinRule = PublicRoomJoinRule.PUBLIC,
     isWorldReadable: Boolean = true,
     joinedMembers: ULong = 2u,
-): RoomDescription {
-    return RoomDescription(
-        roomId = roomId,
-        name = name,
-        topic = topic,
-        alias = alias,
-        avatarUrl = avatarUrl,
-        joinRule = joinRule,
-        isWorldReadable = isWorldReadable,
-        joinedMembers = joinedMembers,
-    )
-}
+) = RoomDescription(
+    roomId = roomId,
+    name = name,
+    topic = topic,
+    alias = alias,
+    avatarUrl = avatarUrl,
+    joinRule = joinRule,
+    isWorldReadable = isWorldReadable,
+    joinedMembers = joinedMembers,
+)

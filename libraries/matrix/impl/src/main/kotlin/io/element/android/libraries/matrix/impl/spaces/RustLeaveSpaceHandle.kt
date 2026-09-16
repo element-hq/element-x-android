@@ -40,7 +40,8 @@ class RustLeaveSpaceHandle(
         inner.await().rooms().map { leaveSpaceRoom ->
             LeaveSpaceRoom(
                 spaceRoom = spaceRoomMapper.map(leaveSpaceRoom.spaceRoom),
-                isLastAdmin = leaveSpaceRoom.isLastAdmin,
+                isLastOwner = leaveSpaceRoom.isLastOwner,
+                areCreatorsPrivileged = leaveSpaceRoom.areCreatorsPrivileged,
             )
         }
     }

@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.androidx.biometric)
 
     testCommonDependencies(libs, true)
+    testImplementation(projects.features.lockscreen.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.cryptography.test)
     testImplementation(projects.libraries.cryptography.impl)

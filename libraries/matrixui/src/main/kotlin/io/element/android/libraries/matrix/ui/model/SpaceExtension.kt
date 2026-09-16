@@ -32,7 +32,7 @@ val SpaceRoomVisibility.icon: ImageVector
         return when (this) {
             SpaceRoomVisibility.Private -> CompoundIcons.LockSolid()
             SpaceRoomVisibility.Public -> CompoundIcons.Public()
-            SpaceRoomVisibility.Restricted -> CompoundIcons.Workspace()
+            SpaceRoomVisibility.SpaceMembers -> CompoundIcons.Space()
         }
     }
 
@@ -41,8 +41,8 @@ val SpaceRoomVisibility.label: String
     @ReadOnlyComposable
     get() {
         return when (this) {
-            SpaceRoomVisibility.Private -> stringResource(CommonStrings.common_private_space)
-            SpaceRoomVisibility.Public -> stringResource(CommonStrings.common_public_space)
-            SpaceRoomVisibility.Restricted -> stringResource(CommonStrings.common_shared_space)
+            SpaceRoomVisibility.Private -> stringResource(CommonStrings.common_private)
+            SpaceRoomVisibility.Public -> stringResource(CommonStrings.common_public)
+            SpaceRoomVisibility.SpaceMembers -> stringResource(CommonStrings.common_space_members)
         }
     }

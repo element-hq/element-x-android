@@ -12,7 +12,10 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.binding
 import io.element.android.features.messages.impl.timeline.di.LiveTimeline
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.annotations.RoomCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
@@ -23,7 +26,6 @@ import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,8 +49,10 @@ import java.util.Optional
 class TimelineController(
     private val room: JoinedRoom,
     @LiveTimeline private val liveTimeline: Timeline,
+    @RoomCoroutineScope private val roomCoroutineScope: CoroutineScope,
+    dispatchers: CoroutineDispatchers,
 ) : Closeable, TimelineProvider {
-    private val coroutineScope = CoroutineScope(SupervisorJob())
+    private val coroutineScope = roomCoroutineScope.childScope(dispatchers.computation, "TimelineController")
 
     private val liveTimelineFlow = flowOf(liveTimeline)
     private val detachedTimelineFlow = MutableStateFlow<Optional<Timeline>>(Optional.empty())

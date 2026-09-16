@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Δραστηριότητες"</string>
+  <string name="emoji_picker_category_flags">"Σημαίες"</string>
+  <string name="emoji_picker_category_foods">"Φαγητό &amp; Ποτό"</string>
+  <string name="emoji_picker_category_nature">"Ζώα &amp; Φύση"</string>
+  <string name="emoji_picker_category_objects">"Αντικείμενα"</string>
+  <string name="emoji_picker_category_people">"Φατσούλες &amp; Άνθρωποι"</string>
+  <string name="emoji_picker_category_places">"Ταξίδια &amp; Μέρη"</string>
+  <string name="emoji_picker_category_recent">"Πρόσφατα emoji"</string>
+  <string name="emoji_picker_category_symbols">"Σύμβολα"</string>
+  <string name="emoji_picker_search_placeholder">"Αναζήτηση emoji"</string>
+</resources>

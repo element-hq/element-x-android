@@ -10,12 +10,15 @@ package io.element.android.appnav.room
 
 import android.os.Parcelable
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 sealed interface RoomNavigationTarget : Parcelable {
     @Parcelize
     data class Root(
         val eventId: EventId? = null,
+        @IgnoredOnParcel val joinedRoom: JoinedRoom? = null,
     ) : RoomNavigationTarget
 
     @Parcelize

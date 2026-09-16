@@ -45,7 +45,7 @@ fun TopAppBarScrollBehaviorLayout(
                 val contentHeight = placeable.height.toFloat()
                 scrollBehavior.state.heightOffsetLimit = -contentHeight
                 val heightOffset = scrollBehavior.state.heightOffset
-                val layoutHeight = (contentHeight + heightOffset).toInt()
+                val layoutHeight = (contentHeight + heightOffset).toInt().coerceAtLeast(0)
                 layout(placeable.width, layoutHeight) {
                     placeable.place(0, heightOffset.toInt())
                 }

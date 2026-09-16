@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_link_new_device_desktop_scanning_title">"Skanna QR-koden"</string>
+  <string name="screen_link_new_device_desktop_step3">"Skanna QR-koden med den här enheten"</string>
+  <string name="screen_link_new_device_desktop_submit">"Redo att skanna"</string>
+  <string name="screen_link_new_device_error_app_not_supported_subtitle">"Din kontoleverantör stöder inte %1$s."</string>
+  <string name="screen_link_new_device_error_app_not_supported_title">"%1$s stöds inte"</string>
+  <string name="screen_link_new_device_error_not_supported_title">"QR-kod stöds inte"</string>
+  <string name="screen_link_new_device_error_request_cancelled_subtitle">"Inloggningen avbröts på den andra enheten."</string>
+  <string name="screen_link_new_device_error_request_cancelled_title">"Inloggningsförfrågan avbröts"</string>
+  <string name="screen_link_new_device_error_request_timeout_subtitle">"Inloggningen har löpt ut. Vänligen försök igen."</string>
+  <string name="screen_link_new_device_error_request_timeout_title">"Inloggningen slutfördes inte i tid"</string>
+  <string name="screen_link_new_device_mobile_step2">"Välj %1$s"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_description">"En säker anslutning kunde inte göras till den nya enheten. Dina befintliga enheter är fortfarande säkra och du behöver inte oroa dig för dem."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Nu då?"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Pröva att logga in igen med en QR-kod ifall detta skulle vara ett nätverksproblem"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Om du stöter på samma problem, prova ett annat wifi-nätverk eller använd din mobildata istället för wifi"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Om det inte fungerar, logga in manuellt"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_title">"Anslutningen är inte säker"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Du kommer att bli ombedd att ange de två siffrorna som visas på den här enheten."</string>
+  <string name="screen_qr_code_login_device_code_title">"Ange numret nedan på din andra enhet"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"Inloggningen avbröts på den andra enheten."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Inloggningsförfrågan avbröts"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"Inloggningen avvisades på den andra enheten."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Inloggning avvisad"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"Inloggningen har löpt ut. Vänligen försök igen."</string>
+  <string name="screen_qr_code_login_error_expired_title">"Inloggningen slutfördes inte i tid"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Din andra enhet stöder inte inloggning i %s med en QR-kod.
+
+Prova att logga in manuellt eller skanna QR-koden med en annan enhet."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"QR-kod stöds inte"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Din kontoleverantör stöder inte %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s stöds inte"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_description">"Använd QR-koden som visas på den andra enheten."</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Försök igen"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Fel QR-kod"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"Du måste ge tillstånd för %1$s att använda enhetens kamera för att kunna fortsätta."</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_title">"Tillåt kameraåtkomst för att skanna QR-koden"</string>
+  <string name="screen_qr_code_login_unknown_error_description">"Ett oväntat fel inträffade. Vänligen försök igen."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Väntar på din andra enhet"</string>
+</resources>

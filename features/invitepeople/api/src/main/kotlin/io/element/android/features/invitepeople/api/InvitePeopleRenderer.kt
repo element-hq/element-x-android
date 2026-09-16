@@ -11,7 +11,16 @@ package io.element.android.features.invitepeople.api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
+/**
+ * Renders the invite people UI, so that other screens can embed it without depending on its implementation.
+ */
 interface InvitePeopleRenderer {
+    /**
+     * Draws the invite list and its search field.
+     *
+     * @param state the state produced by [InvitePeoplePresenter].
+     * @param modifier layout modifier for the container.
+     */
     @Composable
     fun Render(
         state: InvitePeopleState,

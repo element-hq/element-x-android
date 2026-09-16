@@ -54,6 +54,7 @@
   <string name="push_distributor_background_sync_android">"پس منظر مطابقت پذیری"</string>
   <string name="push_distributor_firebase_android">"گوگل سروسز"</string>
   <string name="push_no_valid_google_play_services_apk_android">"کوئی درست گوگل پلے سروسز نہیں ملی۔ ہو سکتا ہے اطلاعات ٹھیک سے کام نہ کریں۔"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"مسدود صارفین"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"موجودہ فراہم کنندہ کا نام حاصل کریں۔"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"کوئی دھکا فراہم کنندہ منتخب نہیں کیا گیا"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"موجودہ دھکا فراہم کنندہ: %1$s۔"</string>

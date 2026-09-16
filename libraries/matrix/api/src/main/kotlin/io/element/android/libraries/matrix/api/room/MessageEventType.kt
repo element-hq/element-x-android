@@ -12,10 +12,21 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 sealed interface MessageEventType {
+    data object Audio : MessageEventType
+    data object Beacon : MessageEventType
     data object CallAnswer : MessageEventType
+    data object CallCandidates : MessageEventType
     data object CallInvite : MessageEventType
     data object CallHangup : MessageEventType
-    data object CallCandidates : MessageEventType
+    data object CallNegotiate : MessageEventType
+    data object CallNotify : MessageEventType
+    data object CallReject : MessageEventType
+    data object CallSdpStreamMetadataChanged : MessageEventType
+    data object CallSelectAnswer : MessageEventType
+    data object Emote : MessageEventType
+    data object Encrypted : MessageEventType
+    data object File : MessageEventType
+    data object Image : MessageEventType
     data object RtcNotification : MessageEventType
     data object KeyVerificationReady : MessageEventType
     data object KeyVerificationStart : MessageEventType
@@ -24,10 +35,13 @@ sealed interface MessageEventType {
     data object KeyVerificationKey : MessageEventType
     data object KeyVerificationMac : MessageEventType
     data object KeyVerificationDone : MessageEventType
+    data object Location : MessageEventType
+    data object Message : MessageEventType
     data object Reaction : MessageEventType
     data object RoomEncrypted : MessageEventType
     data object RoomMessage : MessageEventType
     data object RoomRedaction : MessageEventType
+    data object RtcDecline : MessageEventType
     data object Sticker : MessageEventType
     data object PollEnd : MessageEventType
     data object PollResponse : MessageEventType
@@ -35,5 +49,7 @@ sealed interface MessageEventType {
     data object UnstablePollEnd : MessageEventType
     data object UnstablePollResponse : MessageEventType
     data object UnstablePollStart : MessageEventType
+    data object Video : MessageEventType
+    data object Voice : MessageEventType
     data class Other(val type: String) : MessageEventType
 }

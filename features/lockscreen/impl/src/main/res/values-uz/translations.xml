@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"biometrik autentifikatsiya"</string>
   <string name="screen_app_lock_biometric_unlock">"biometrik qulf ochish"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Biometrik bilan qulfni oching"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Biometrikni tasdiqlang"</string>
   <string name="screen_app_lock_forgot_pin">"PIN kodni unutdingizmi?"</string>
   <string name="screen_app_lock_settings_change_pin">"PIN kodni o\'zgartirish"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Biometrik qulfni ochishga ruxsat bering"</string>
@@ -22,7 +23,7 @@ Esda qoladigan biror narsani tanlang. Agar ushbu PIN kodni unutib qolsangiz, das
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Iltimos, bir xil PIN kodni ikkita marta kiriting"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN kodlar bir-biriga mos kelmadi"</string>
   <string name="screen_app_lock_signout_alert_message">"Davom etish uchun qayta kirishingiz va yangi PIN yaratishingiz kerak boʻladi."</string>
-  <string name="screen_app_lock_signout_alert_title">"Siz tizimdan chiqmoqdasiz"</string>
+  <string name="screen_app_lock_signout_alert_title">"Bu qurilma olib tashlanmoqda"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Sizda %1$d ta ochishga urinish mavjud"</item>
     <item quantity="other">"Sizda %1$d ta ochishga urinish mavjud"</item>

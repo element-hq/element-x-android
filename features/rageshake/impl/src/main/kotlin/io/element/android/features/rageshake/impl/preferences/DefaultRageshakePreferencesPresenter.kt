@@ -19,7 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvents
+import io.element.android.features.rageshake.api.preferences.RageshakePreferencesEvent
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesPresenter
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 import io.element.android.features.rageshake.impl.rageshake.RageShake
@@ -48,10 +48,10 @@ class DefaultRageshakePreferencesPresenter(
             rageshakeDataStore.sensitivity()
         }.collectAsState(initial = 0f)
 
-        fun handleEvent(event: RageshakePreferencesEvents) {
+        fun handleEvent(event: RageshakePreferencesEvent) {
             when (event) {
-                is RageshakePreferencesEvents.SetIsEnabled -> localCoroutineScope.setIsEnabled(event.isEnabled)
-                is RageshakePreferencesEvents.SetSensitivity -> localCoroutineScope.setSensitivity(event.sensitivity)
+                is RageshakePreferencesEvent.SetIsEnabled -> localCoroutineScope.setIsEnabled(event.isEnabled)
+                is RageshakePreferencesEvent.SetSensitivity -> localCoroutineScope.setSensitivity(event.sensitivity)
             }
         }
 

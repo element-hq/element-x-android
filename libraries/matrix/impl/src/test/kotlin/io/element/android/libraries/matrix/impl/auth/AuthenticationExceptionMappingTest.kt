@@ -13,7 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.ClientBuildException
-import org.matrix.rustcomponents.sdk.OidcException
+import org.matrix.rustcomponents.sdk.OAuthException
 
 class AuthenticationExceptionMappingTest {
     @Test
@@ -28,6 +28,13 @@ class AuthenticationExceptionMappingTest {
         val exception = Exception("Generic exception")
         val mappedException = exception.mapAuthenticationException()
         assertThat(mappedException).isException<AuthenticationException.Generic>("Generic exception")
+    }
+
+    @Test
+    fun `mapping a WellKnownDeserializationException returns a InvalidServerName AuthenticationException`() {
+        val exception = ClientBuildException.WellKnownDeserializationException("WellKnown Deserialization")
+        val mappedException = exception.mapAuthenticationException()
+        assertThat(mappedException).isException<AuthenticationException.InvalidServerName>("WellKnown Deserialization")
     }
 
     @Test
@@ -50,8 +57,6 @@ class AuthenticationExceptionMappingTest {
             .isException<AuthenticationException.ServerUnreachable>("Server unreachable")
         assertThat(ClientBuildException.SlidingSync("Sliding Sync").mapAuthenticationException())
             .isException<AuthenticationException.Generic>("Sliding Sync")
-        assertThat(ClientBuildException.WellKnownDeserializationException("WellKnown Deserialization").mapAuthenticationException())
-            .isException<AuthenticationException.Generic>("WellKnown Deserialization")
         assertThat(ClientBuildException.WellKnownLookupFailed("WellKnown Lookup Failed").mapAuthenticationException())
             .isException<AuthenticationException.Generic>("WellKnown Lookup Failed")
         assertThat(ClientBuildException.EventCache("EventCache error").mapAuthenticationException())
@@ -59,17 +64,17 @@ class AuthenticationExceptionMappingTest {
     }
 
     @Test
-    fun `mapping Oidc exceptions map to the Oidc Kotlin`() {
-        assertThat(OidcException.Generic("Generic").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("Generic")
-        assertThat(OidcException.CallbackUrlInvalid("CallbackUrlInvalid").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("CallbackUrlInvalid")
-        assertThat(OidcException.Cancelled("Cancelled").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("Cancelled")
-        assertThat(OidcException.MetadataInvalid("MetadataInvalid").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("MetadataInvalid")
-        assertThat(OidcException.NotSupported("NotSupported").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("NotSupported")
+    fun `mapping Oidc exceptions map to the OAuth Kotlin`() {
+        assertThat(OAuthException.Generic("Generic").mapAuthenticationException())
+            .isException<AuthenticationException.OAuth>("Generic")
+        assertThat(OAuthException.CallbackUrlInvalid("CallbackUrlInvalid").mapAuthenticationException())
+            .isException<AuthenticationException.OAuth>("CallbackUrlInvalid")
+        assertThat(OAuthException.Cancelled("Cancelled").mapAuthenticationException())
+            .isException<AuthenticationException.OAuth>("Cancelled")
+        assertThat(OAuthException.MetadataInvalid("MetadataInvalid").mapAuthenticationException())
+            .isException<AuthenticationException.OAuth>("MetadataInvalid")
+        assertThat(OAuthException.NotSupported("NotSupported").mapAuthenticationException())
+            .isException<AuthenticationException.OAuth>("NotSupported")
     }
 
     private inline fun <reified T> ThrowableSubject.isException(message: String) {

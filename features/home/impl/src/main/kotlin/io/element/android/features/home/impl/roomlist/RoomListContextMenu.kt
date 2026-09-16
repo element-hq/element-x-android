@@ -11,6 +11,8 @@ package io.element.android.features.home.impl.roomlist
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -37,41 +39,38 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun RoomListContextMenu(
     contextMenu: RoomListState.ContextMenu.Shown,
     canReportRoom: Boolean,
-    eventSink: (RoomListEvents.ContextMenuEvents) -> Unit,
+    eventSink: (RoomListEvent.ContextMenuEvent) -> Unit,
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onReportRoomClick: (roomId: RoomId) -> Unit
 ) {
     ModalBottomSheet(
-        onDismissRequest = { eventSink(RoomListEvents.HideContextMenu) },
+        onDismissRequest = { eventSink(RoomListEvent.HideContextMenu) },
+        scrollable = false,
     ) {
         RoomListModalBottomSheetContent(
             contextMenu = contextMenu,
             canReportRoom = canReportRoom,
             onRoomMarkReadClick = {
-                eventSink(RoomListEvents.HideContextMenu)
-                eventSink(RoomListEvents.MarkAsRead(contextMenu.roomId))
+                eventSink(RoomListEvent.HideContextMenu)
+                eventSink(RoomListEvent.MarkAsRead(contextMenu.roomId))
             },
             onRoomMarkUnreadClick = {
-                eventSink(RoomListEvents.HideContextMenu)
-                eventSink(RoomListEvents.MarkAsUnread(contextMenu.roomId))
+                eventSink(RoomListEvent.HideContextMenu)
+                eventSink(RoomListEvent.MarkAsUnread(contextMenu.roomId))
             },
             onRoomSettingsClick = {
-                eventSink(RoomListEvents.HideContextMenu)
+                eventSink(RoomListEvent.HideContextMenu)
                 onRoomSettingsClick(contextMenu.roomId)
             },
             onLeaveRoomClick = {
-                eventSink(RoomListEvents.HideContextMenu)
-                eventSink(RoomListEvents.LeaveRoom(contextMenu.roomId, needsConfirmation = true))
+                eventSink(RoomListEvent.HideContextMenu)
+                eventSink(RoomListEvent.LeaveRoom(contextMenu.roomId, needsConfirmation = true))
             },
             onFavoriteChange = { isFavorite ->
-                eventSink(RoomListEvents.SetRoomIsFavorite(contextMenu.roomId, isFavorite))
-            },
-            onClearCacheRoomClick = {
-                eventSink(RoomListEvents.HideContextMenu)
-                eventSink(RoomListEvents.ClearCacheOfRoom(contextMenu.roomId))
+                eventSink(RoomListEvent.SetRoomIsFavorite(contextMenu.roomId, isFavorite))
             },
             onReportRoomClick = {
-                eventSink(RoomListEvents.HideContextMenu)
+                eventSink(RoomListEvent.HideContextMenu)
                 onReportRoomClick(contextMenu.roomId)
             },
         )
@@ -87,14 +86,15 @@ private fun RoomListModalBottomSheetContent(
     onFavoriteChange: (isFavorite: Boolean) -> Unit,
     onRoomMarkReadClick: () -> Unit,
     onRoomMarkUnreadClick: () -> Unit,
-    onClearCacheRoomClick: () -> Unit,
     onReportRoomClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
     ) {
         ListItem(
-            headlineContent = {
+            content = {
                 Text(
                     text = contextMenu.roomName ?: stringResource(id = CommonStrings.common_no_room_name),
                     style = ElementTheme.typography.fontBodyLgMedium,
@@ -104,9 +104,9 @@ private fun RoomListModalBottomSheetContent(
         )
         if (contextMenu.hasNewContent) {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(
-                        text = stringResource(id = R.string.screen_roomlist_mark_as_read),
+                        text = stringResource(id = CommonStrings.action_mark_as_read),
                         style = MaterialTheme.typography.bodyLarge,
                     )
                 },
@@ -114,11 +114,10 @@ private fun RoomListModalBottomSheetContent(
                 leadingContent = ListItemContent.Icon(
                     iconSource = IconSource.Vector(CompoundIcons.MarkAsRead())
                 ),
-                style = ListItemStyle.Primary,
             )
         } else {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(
                         text = stringResource(id = R.string.screen_roomlist_mark_as_unread),
                         style = MaterialTheme.typography.bodyLarge,
@@ -128,19 +127,23 @@ private fun RoomListModalBottomSheetContent(
                 leadingContent = ListItemContent.Icon(
                     iconSource = IconSource.Vector(CompoundIcons.MarkAsUnread())
                 ),
-                style = ListItemStyle.Primary,
             )
         }
+        val (textResId, icon) = if (contextMenu.isFavorite) {
+            CommonStrings.common_favourited to CompoundIcons.FavouriteSolid()
+        } else {
+            CommonStrings.common_favourite to CompoundIcons.Favourite()
+        }
         ListItem(
-            headlineContent = {
+            content = {
                 Text(
-                    text = stringResource(id = CommonStrings.common_favourite),
+                    text = stringResource(id = textResId),
                     style = MaterialTheme.typography.bodyLarge,
                 )
             },
             leadingContent = ListItemContent.Icon(
                 iconSource = IconSource.Vector(
-                    CompoundIcons.Favourite(),
+                    icon,
                 )
             ),
             trailingContent = ListItemContent.Switch(
@@ -149,10 +152,9 @@ private fun RoomListModalBottomSheetContent(
             onClick = {
                 onFavoriteChange(!contextMenu.isFavorite)
             },
-            style = ListItemStyle.Primary,
         )
         ListItem(
-            headlineContent = {
+            content = {
                 Text(
                     text = stringResource(id = CommonStrings.common_settings),
                     style = MaterialTheme.typography.bodyLarge,
@@ -164,11 +166,10 @@ private fun RoomListModalBottomSheetContent(
                     CompoundIcons.Settings(),
                 )
             ),
-            style = ListItemStyle.Primary,
         )
         if (canReportRoom) {
             ListItem(
-                headlineContent = {
+                content = {
                     Text(text = stringResource(CommonStrings.action_report_room))
                 },
                 modifier = Modifier.clickable { onReportRoomClick() },
@@ -181,7 +182,7 @@ private fun RoomListModalBottomSheetContent(
             )
         }
         ListItem(
-            headlineContent = {
+            content = {
                 Text(text = stringResource(CommonStrings.action_leave_room))
             },
             modifier = Modifier.clickable { onLeaveRoomClick() },
@@ -192,38 +193,19 @@ private fun RoomListModalBottomSheetContent(
             ),
             style = ListItemStyle.Destructive,
         )
-        if (contextMenu.displayClearRoomCacheAction) {
-            ListItem(
-                headlineContent = {
-                    Text(text = "Clear cache for this room")
-                },
-                modifier = Modifier.clickable { onClearCacheRoomClick() },
-                leadingContent = ListItemContent.Icon(
-                    iconSource = IconSource.Vector(CompoundIcons.Delete())
-                ),
-                style = ListItemStyle.Primary,
-            )
-        }
     }
 }
 
-// TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
-// see: https://issuetracker.google.com/issues/283843380
-// Remove this preview when the issue is fixed.
 @PreviewsDayNight
 @Composable
-internal fun RoomListModalBottomSheetContentPreview(
-    @PreviewParameter(RoomListStateContextMenuShownProvider::class) contextMenu: RoomListState.ContextMenu.Shown
-) = ElementPreview {
-    RoomListModalBottomSheetContent(
+internal fun RoomListContextMenuPreview(
+    @PreviewParameter(RoomListStateContextMenuShownPreviewParam::class) contextMenu: RoomListState.ContextMenu.Shown
+) = ElementPreview(fillMaxSize = true) {
+    RoomListContextMenu(
         contextMenu = contextMenu,
         canReportRoom = true,
-        onRoomMarkReadClick = {},
-        onRoomMarkUnreadClick = {},
         onRoomSettingsClick = {},
-        onLeaveRoomClick = {},
-        onFavoriteChange = {},
-        onClearCacheRoomClick = {},
         onReportRoomClick = {},
+        eventSink = {},
     )
 }

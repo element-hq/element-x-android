@@ -34,7 +34,7 @@ suspend fun awaitWithLatch(timeout: Duration = 300.milliseconds, block: (Complet
         withTimeout(timeout) {
             latch.also(block).await()
         }
-    } catch (exception: TimeoutCancellationException) {
+    } catch (_: TimeoutCancellationException) {
         latch.complete(Unit)
     }
 }

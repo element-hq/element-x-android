@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
@@ -60,29 +61,44 @@ interface BaseRoom : Closeable {
      */
     fun info(): RoomInfo = roomInfoFlow.value
 
+    /**
+     * Returns whether the [BaseRoom] is a DM, with an updated state from the latest [RoomInfo].
+     */
+    fun isDm() = roomInfoFlow.value.isDm
+
+    /**
+     * The room this one replaced when it was upgraded, or `null` if this room has no predecessor.
+     * Errors are swallowed and reported as `null`.
+     */
     fun predecessorRoom(): PredecessorRoom?
 
     /**
-     * A one-to-one is a room with exactly 2 members.
-     * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
-     */
-    val isOneToOne: Boolean get() = info().activeMembersCount == 2L
-
-    /**
      * Try to load the room members and update the membersFlow.
+     * The first call may serve members from the local cache before the server response arrives; later calls always go to the server.
      */
     suspend fun updateMembers()
 
     /**
      * Get the members of the room. Note: generally this should not be used, please use
      * [membersStateFlow] and [updateMembers] instead.
+     *
+     * @param limit the maximum number of members to return.
      */
     suspend fun getMembers(limit: Int = 5): Result<List<RoomMember>>
 
     /**
      * Will return an updated member or an error.
+     *
+     * @param userId the member to fetch.
      */
     suspend fun getUpdatedMember(userId: UserId): Result<RoomMember>
+
+    /**
+     * Gets the direct room member, if any.
+     * This is a convenience method for getting the other member in a direct message room.
+     * Returns null if the room is not a dm or if the member cannot be found.
+     */
+    suspend fun getDirectRoomMember(): RoomMember?
 
     /**
      * Adds the room to the sync subscription list.
@@ -96,16 +112,27 @@ interface BaseRoom : Closeable {
 
     /**
      * Gets the role of the user with the provided [userId] in the room.
+     *
+     * @param userId the member whose role is requested.
      */
     suspend fun userRole(userId: UserId): Result<RoomMember.Role>
 
     /**
+     * Gets the permissions of the room.
+     */
+    suspend fun roomPermissions(): Result<RoomPermissions>
+
+    /**
      * Gets the display name of the user with the provided [userId] in the room.
+     *
+     * @param userId the member whose room specific display name is requested.
      */
     suspend fun userDisplayName(userId: UserId): Result<String?>
 
     /**
      * Gets the avatar of the user with the provided [userId] in the room.
+     *
+     * @param userId the member whose room specific avatar is requested.
      */
     suspend fun userAvatarUrl(userId: UserId): Result<String?>
 
@@ -125,58 +152,9 @@ interface BaseRoom : Closeable {
     suspend fun forget(): Result<Unit>
 
     /**
-     * Returns `true` if the user with the provided [userId] can invite other users to the room.
-     */
-    suspend fun canUserInvite(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can kick other users from the room.
-     */
-    suspend fun canUserKick(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can ban other users from the room.
-     */
-    suspend fun canUserBan(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can redact their own messages.
-     */
-    suspend fun canUserRedactOwn(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can redact messages from other users.
-     */
-    suspend fun canUserRedactOther(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can send state events.
-     */
-    suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can send messages.
-     */
-    suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can trigger an `@room` notification.
-     */
-    suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can pin or unpin messages.
-     */
-    suspend fun canUserPinUnpin(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can join or starts calls.
-     */
-    suspend fun canUserJoinCall(userId: UserId): Result<Boolean> =
-        canUserSendState(userId, StateEventType.CALL_MEMBER)
-
-    /**
      * Sets the room as favorite or not, based on the [isFavorite] parameter.
+     *
+     * @param isFavorite true to mark the room as favorite, false to remove the flag.
      */
     suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit>
 
@@ -197,11 +175,6 @@ interface BaseRoom : Closeable {
     suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit>
 
     /**
-     * Clear the event cache storage for the current room.
-     */
-    suspend fun clearEventCacheStorage(): Result<Unit>
-
-    /**
      * Get the permalink for the room.
      */
     suspend fun getPermalink(): Result<String>
@@ -220,22 +193,29 @@ interface BaseRoom : Closeable {
     suspend fun getRoomVisibility(): Result<RoomVisibility>
 
     /**
-     * Returns the visibility for this room in the room directory, fetching it from the homeserver if needed.
+     * Returns whether this room is encrypted, based on the latest encryption state known to the SDK rather than on the cached [RoomInfo].
      */
     suspend fun getUpdatedIsEncrypted(): Result<Boolean>
 
     /**
      * Store the given `ComposerDraft` in the state store of this room.
+     *
+     * @param composerDraft the unsent message content to remember.
+     * @param threadRoot the thread the draft belongs to, or `null` for the main timeline.
      */
     suspend fun saveComposerDraft(composerDraft: ComposerDraft, threadRoot: ThreadId?): Result<Unit>
 
     /**
      * Retrieve the `ComposerDraft` stored in the state store for this room.
+     *
+     * @param threadRoot the thread whose draft is requested, or `null` for the main timeline.
      */
     suspend fun loadComposerDraft(threadRoot: ThreadId?): Result<ComposerDraft?>
 
     /**
      * Clear the `ComposerDraft` stored in the state store for this room.
+     *
+     * @param threadRoot the thread whose draft should be cleared, or `null` for the main timeline.
      */
     suspend fun clearComposerDraft(threadRoot: ThreadId?): Result<Unit>
 
@@ -246,10 +226,27 @@ interface BaseRoom : Closeable {
      */
     suspend fun reportRoom(reason: String?): Result<Unit>
 
+    /**
+     * Declines the incoming call advertised by the given notification, letting the other devices of the room know.
+     *
+     * @param notificationEventId the id of the call notification event being declined.
+     */
     suspend fun declineCall(notificationEventId: EventId): Result<Unit>
 
+    /**
+     * Emits the id of each user who declines the call advertised by the given notification.
+     * Used to stop ringing once the callee has declined from another device.
+     *
+     * @param notificationEventId the id of the call notification event to watch.
+     */
     suspend fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId>
 
+    /**
+     * Returns the id of the thread the given event belongs to, fetching the event from the server if it is not cached locally.
+     *
+     * @param eventId the event whose thread is requested.
+     * @return the thread root id, or `null` if the event is not part of a thread.
+     */
     suspend fun threadRootIdForEvent(eventId: EventId): Result<ThreadId?>
 
     /**
@@ -257,5 +254,6 @@ interface BaseRoom : Closeable {
      */
     fun destroy()
 
+    /** Same as [destroy], so that a room can be used with `use { }`. */
     override fun close() = destroy()
 }

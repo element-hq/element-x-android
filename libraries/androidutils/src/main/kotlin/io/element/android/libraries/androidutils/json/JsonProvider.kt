@@ -10,18 +10,26 @@ package io.element.android.libraries.androidutils.json
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.json.Json
 
 /**
  * Provides a Json instance configured to ignore unknown keys.
  */
-fun interface JsonProvider : Provider<Json>
+fun interface JsonProvider {
+    operator fun invoke(): Json
+}
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class DefaultJsonProvider : JsonProvider {
-    private val json: Json by lazy { Json { ignoreUnknownKeys = true } }
+    private val json: Json by lazy {
+        Json {
+            ignoreUnknownKeys = true
+            allowComments = true
+            allowTrailingComma = true
+        }
+    }
+
     override fun invoke() = json
 }

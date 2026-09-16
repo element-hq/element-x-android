@@ -11,15 +11,19 @@
 package io.element.android.features.messages.impl.attachments
 
 import android.net.Uri
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
+import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewEvents
+import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewEvent
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
 import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEditor
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEdits
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.EditedLocalMedia
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.NormalizedCropRect
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.assertIsSimilarTo
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.impl.attachments.video.VideoCompressionPresetSelector
 import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.features.messages.test.attachments.video.FakeMediaOptimizationSelectorPresenterFactory
@@ -29,6 +33,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.GalleryItemInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -44,9 +49,11 @@ import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSenderFactory
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.impl.DefaultMediaSender
+import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
+import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
@@ -58,11 +65,13 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -70,13 +79,10 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.io.File
+import kotlin.io.path.createTempFile
 
-@Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class AttachmentsPreviewPresenterTest {
+class AttachmentsPreviewPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -87,6 +93,7 @@ class AttachmentsPreviewPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         createAttachmentsPreviewPresenter().test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
         }
@@ -110,16 +117,15 @@ class AttachmentsPreviewPresenterTest {
             mediaPreProcessor = mediaPreProcessor,
             onDoneListener = { onDoneListener() },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = true))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo)))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(listOf(mediaUploadInfo)))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
@@ -146,18 +152,17 @@ class AttachmentsPreviewPresenterTest {
             mediaPreProcessor = mediaPreProcessor,
             onDoneListener = { onDoneListener() },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             // Pre-processing finishes
             processLatch.complete(Unit)
             advanceUntilIdle()
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
+            initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo)))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(listOf(mediaUploadInfo)))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
@@ -184,18 +189,17 @@ class AttachmentsPreviewPresenterTest {
             mediaPreProcessor = mediaPreProcessor,
             onDoneListener = { onDoneListener() },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
             // Pre-processing finishes
             processLatch.complete(Unit)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = true))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo)))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(listOf(mediaUploadInfo)))
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             sendFileResult.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
@@ -215,12 +219,11 @@ class AttachmentsPreviewPresenterTest {
             },
             onDoneListener = { onDoneListener() },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             // Pre-processing finishes
             processLatch.complete(Unit)
@@ -240,15 +243,14 @@ class AttachmentsPreviewPresenterTest {
             },
             onDoneListener = { onDoneListener() },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             // Pre-processing finishes
             processLatch.complete(Unit)
             advanceUntilIdle()
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Failure::class.java)
         }
@@ -264,12 +266,11 @@ class AttachmentsPreviewPresenterTest {
             temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
             onDoneListener = { onDoneListener() },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
-            initialState.eventSink(AttachmentsPreviewEvents.CancelAndDismiss)
+            initialState.eventSink(AttachmentsPreviewEvent.CancelAndDismiss)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Done)
             deleteCallback.assertions().isCalledOnce()
             onDoneListener.assertions().isCalledOnce()
@@ -297,13 +298,12 @@ class AttachmentsPreviewPresenterTest {
             mediaPreProcessor = mediaPreProcessor,
             onDoneListener = { onDoneListener() },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.textEditorState.setMarkdown(A_CAPTION)
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.ReadyToUpload::class.java)
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.Uploading::class.java)
@@ -340,13 +340,12 @@ class AttachmentsPreviewPresenterTest {
             mediaPreProcessor = mediaPreProcessor,
             onDoneListener = { onDoneListener() },
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.textEditorState.setMarkdown(A_CAPTION)
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.ReadyToUpload::class.java)
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.Uploading::class.java)
@@ -384,10 +383,11 @@ class AttachmentsPreviewPresenterTest {
             onDoneListener = { onDoneListener() },
         )
         presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
             initialState.textEditorState.setMarkdown(A_CAPTION)
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.ReadyToUpload::class.java)
             assertThat(awaitItem().sendActionState).isInstanceOf(SendActionState.Sending.Uploading::class.java)
@@ -417,25 +417,20 @@ class AttachmentsPreviewPresenterTest {
             },
         )
         val presenter = createAttachmentsPreviewPresenter(room = room, onDoneListener = onDoneListenerResult)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
-
-            // Check that the onDoneListener is called so the screen would be dismissed
-            onDoneListenerResult.assertions().isCalledOnce()
-
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo)))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(listOf(mediaUploadInfo)))
             val failureState = awaitItem()
-            assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure, mediaUploadInfo))
+            assertThat(failureState.sendActionState).isEqualTo(SendActionState.Failure(failure, listOf(mediaUploadInfo)))
             sendFileResult.assertions().isCalledOnce()
-            failureState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
+            failureState.eventSink(AttachmentsPreviewEvent.CancelAndClearSendState)
             val clearedState = awaitLastSequentialItem()
-            assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
+            assertThat(clearedState.sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo)))
         }
     }
 
@@ -452,22 +447,18 @@ class AttachmentsPreviewPresenterTest {
             ),
             onDoneListener = onDoneListenerResult,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.sendActionState).isEqualTo(SendActionState.Idle)
-            initialState.eventSink(AttachmentsPreviewEvents.SendAttachment)
+            initialState.eventSink(AttachmentsPreviewEvent.SendAttachment)
             assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Processing(displayProgress = false))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(mediaUploadInfo))
-            initialState.eventSink(AttachmentsPreviewEvents.CancelAndClearSendState)
-            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(mediaUploadInfo))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo)))
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.Uploading(listOf(mediaUploadInfo)))
+            initialState.eventSink(AttachmentsPreviewEvent.CancelAndClearSendState)
+            assertThat(awaitItem().sendActionState).isEqualTo(SendActionState.Sending.ReadyToUpload(listOf(mediaUploadInfo)))
             // The sending is cancelled and the state is kept at ReadyToUpload
             ensureAllEventsConsumed()
-
-            // Check that the onDoneListener is called so the screen would be dismissed
-            onDoneListenerResult.assertions().isCalledOnce()
         }
     }
 
@@ -479,7 +470,7 @@ class AttachmentsPreviewPresenterTest {
         val maxUploadSize = 999L // Set a max upload size smaller than the file size
 
         val presenter = createAttachmentsPreviewPresenter(
-            localMedia = localMedia,
+            attachments = listOf(Attachment.Media(localMedia)),
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
                     sendFileLambda = { _, _, _, _, _ ->
@@ -490,6 +481,7 @@ class AttachmentsPreviewPresenterTest {
             onDoneListener = onDoneListenerResult,
             mediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory {
                 MediaOptimizationSelectorState(
+                    index = 0,
                     // Set a max upload size smaller than the file size
                     maxUploadSize = AsyncData.Success(maxUploadSize),
                     videoSizeEstimations = AsyncData.Uninitialized,
@@ -502,9 +494,7 @@ class AttachmentsPreviewPresenterTest {
             }
         )
 
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             assertThat(localMedia.info.fileSize).isGreaterThan(maxUploadSize)
 
             consumeItemsUntilPredicate { it.mediaOptimizationSelectorState.maxUploadSize.isSuccess() }
@@ -520,7 +510,7 @@ class AttachmentsPreviewPresenterTest {
         val localMedia = aLocalMedia(uri = Uri.EMPTY, mediaInfo = aVideoMediaInfo())
 
         val presenter = createAttachmentsPreviewPresenter(
-            localMedia = localMedia,
+            attachments = listOf(Attachment.Media(localMedia)),
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
                     sendFileLambda = { _, _, _, _, _ ->
@@ -531,6 +521,7 @@ class AttachmentsPreviewPresenterTest {
             onDoneListener = onDoneListenerResult,
             mediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory {
                 MediaOptimizationSelectorState(
+                    index = 0,
                     // Set a max upload size smaller than the file size
                     maxUploadSize = AsyncData.Success(Long.MAX_VALUE),
                     videoSizeEstimations = AsyncData.Success(
@@ -562,9 +553,7 @@ class AttachmentsPreviewPresenterTest {
             }
         )
 
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             consumeItemsUntilPredicate {
                 it.mediaOptimizationSelectorState.maxUploadSize.isSuccess() &&
                     it.mediaOptimizationSelectorState.videoSizeEstimations.dataOrNull()?.isNotEmpty() == true
@@ -574,9 +563,382 @@ class AttachmentsPreviewPresenterTest {
         }
     }
 
-    private fun TestScope.createAttachmentsPreviewPresenter(
-        localMedia: LocalMedia = aLocalMedia(
+    @Test
+    fun `present - applying image edits updates the attachment`() = runTest {
+        val editedUri = Uri.parse("file:///tmp/edited.jpeg")
+        val presenter = createAttachmentsPreviewPresenter(
+            displayMediaQualitySelectorViews = true,
+            attachmentImageEditor = FakeAttachmentImageEditor {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = aLocalMedia(uri = editedUri),
+                        file = File("/tmp/edited.jpeg"),
+                    )
+                )
+            }
+        )
+
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = awaitItem()
+            assertThat(editorState.imageEditorState).isNotNull()
+
+            editorState.eventSink(AttachmentsPreviewEvent.RotateImageToTheLeft)
+            val rotatedState = awaitItem()
+            assertThat(rotatedState.imageEditorState?.edits?.rotationQuarterTurns).isEqualTo(3)
+
+            rotatedState.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
+            assertThat(awaitItem().isApplyingImageEdits).isTrue()
+
+            val appliedState = awaitItem()
+            assertThat((appliedState.attachments.first() as Attachment.Media).localMedia.uri).isEqualTo(editedUri)
+            assertThat(appliedState.imageEditorState).isNull()
+            assertThat(appliedState.isApplyingImageEdits).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - reopening image editor keeps original media and previous edits`() = runTest {
+        val editedUri = Uri.parse("file:///tmp/edited.jpeg")
+        val originalLocalMedia = aLocalMedia(uri = mockMediaUrl)
+        val cropRect = NormalizedCropRect(
+            left = 0.2f,
+            top = 0.15f,
+            right = 0.85f,
+            bottom = 0.9f,
+        )
+        val presenter = createAttachmentsPreviewPresenter(
+            attachments = listOf(Attachment.Media(originalLocalMedia)),
+            displayMediaQualitySelectorViews = true,
+            attachmentImageEditor = FakeAttachmentImageEditor {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = aLocalMedia(uri = editedUri),
+                        file = File("/tmp/edited.jpeg"),
+                    )
+                )
+            }
+        )
+
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+
+            editorState.eventSink(AttachmentsPreviewEvent.UpdateImageCropRect(cropRect))
+            val croppedState = awaitItem()
+            croppedState.eventSink(AttachmentsPreviewEvent.RotateImageToTheLeft)
+            val rotatedState = awaitItem()
+            rotatedState.eventSink(AttachmentsPreviewEvent.FlipImageHorizontally)
+            val flippedHorizontallyState = awaitItem()
+            flippedHorizontallyState.eventSink(AttachmentsPreviewEvent.FlipImageVertically)
+            val flippedState = awaitItem()
+            flippedState.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
+
+            val appliedState = consumeItemsUntilPredicate { !it.isApplyingImageEdits && it.imageEditorState == null }.last()
+            assertThat((appliedState.attachments.first() as Attachment.Media).localMedia.uri).isEqualTo(editedUri)
+
+            appliedState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val reopenedState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+            assertThat(reopenedState.imageEditorState!!.localMedia.uri).isEqualTo(originalLocalMedia.uri)
+            val rotatedCropRect = NormalizedCropRect(
+                left = cropRect.top,
+                top = 1f - cropRect.right,
+                right = cropRect.bottom,
+                bottom = 1f - cropRect.left,
+            )
+            val flippedCropRect = NormalizedCropRect(
+                left = 1f - rotatedCropRect.right,
+                top = 1f - rotatedCropRect.bottom,
+                right = 1f - rotatedCropRect.left,
+                bottom = 1f - rotatedCropRect.top,
+            )
+            reopenedState.imageEditorState.edits.cropRect.assertIsSimilarTo(flippedCropRect)
+            assertThat(reopenedState.imageEditorState.edits.rotationQuarterTurns).isEqualTo(3)
+            assertThat(reopenedState.imageEditorState.edits.rotationDegrees).isEqualTo(270)
+            assertThat(reopenedState.imageEditorState.edits.isFlippedHorizontally).isTrue()
+            assertThat(reopenedState.imageEditorState.edits.isFlippedVertically).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - image editor flip events update edits`() = runTest {
+        val presenter = createAttachmentsPreviewPresenter(displayMediaQualitySelectorViews = true)
+
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+
+            editorState.eventSink(AttachmentsPreviewEvent.FlipImageHorizontally)
+            val flippedHorizontallyState = awaitItem()
+            assertThat(flippedHorizontallyState.imageEditorState?.edits?.isFlippedHorizontally).isTrue()
+
+            flippedHorizontallyState.eventSink(AttachmentsPreviewEvent.FlipImageVertically)
+            val flippedState = awaitItem()
+            assertThat(flippedState.imageEditorState?.edits?.isFlippedVertically).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - sendAsFile attachment is pre-processed without image compression`() = runTest {
+        // Even though the user has enabled "Optimize media quality" globally, picking the file
+        // through the Files picker (sendAsFile = true) must skip compression. Regression test
+        // for https://github.com/element-hq/element-x-android/issues/6365
+        val mediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = createAttachmentsPreviewPresenter(
+            attachments = listOf(
+                Attachment.Media(
+                    localMedia = aLocalMedia(mockMediaUrl, anImageMediaInfo()),
+                    sendAsFile = true,
+                )
+            ),
+            mediaPreProcessor = mediaPreProcessor,
+            // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
+            displayMediaQualitySelectorViews = false,
+            mediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(
+                config = MediaOptimizationConfig(
+                    compressImages = false,
+                    videoCompressionPreset = VideoCompressionPreset.HIGH,
+                )
+            ),
+        )
+
+        presenter.test {
+            consumeItemsUntilPredicate { mediaPreProcessor.processCallCount > 0 }
+            assertThat(mediaPreProcessor.lastMediaOptimizationConfig).isEqualTo(
+                MediaOptimizationConfig(
+                    compressImages = false,
+                    videoCompressionPreset = VideoCompressionPreset.HIGH,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - sending edited media keeps the edited file available until upload starts`() = runTest {
+        val editedFile = createTempFile(suffix = ".jpeg").toFile().apply {
+            writeText("edited-media")
+        }
+        val sendFileResult =
+            lambdaRecorder<File, FileInfo, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { file, _, _, _, _ ->
+                assertThat(file.exists()).isTrue()
+                Result.success(FakeMediaUploadHandler())
+            }
+        val room = FakeJoinedRoom(
+            liveTimeline = FakeTimeline().apply {
+                sendFileLambda = sendFileResult
+            },
+        )
+        val presenter = createAttachmentsPreviewPresenter(
+            room = room,
+            displayMediaQualitySelectorViews = true,
+            onDoneListener = OnDoneListener {},
+            mediaPreProcessor = FakeMediaPreProcessor().apply {
+                givenResult(
+                    Result.success(
+                        MediaUploadInfo.AnyFile(
+                            file = editedFile,
+                            fileInfo = FileInfo(
+                                mimetype = MimeTypes.Jpeg,
+                                size = editedFile.length(),
+                                thumbnailInfo = null,
+                                thumbnailSource = null,
+                            )
+                        )
+                    )
+                )
+            },
+            attachmentImageEditor = FakeAttachmentImageEditor {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = aLocalMedia(uri = editedFile.toUri()),
+                        file = editedFile,
+                    )
+                )
+            }
+        )
+
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+
+            editorState.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
+            val appliedState = consumeItemsUntilPredicate { !it.isApplyingImageEdits && it.imageEditorState == null }.last()
+
+            appliedState.eventSink(AttachmentsPreviewEvent.SendAttachment)
+            consumeItemsUntilPredicate { it.sendActionState == SendActionState.Done }
+
+            sendFileResult.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - image with generic mime type and png extension is still editable`() = runTest {
+        val localMedia = aLocalMedia(
             uri = mockMediaUrl,
+            mediaInfo = anImageMediaInfo().copy(
+                mimeType = MimeTypes.OctetStream,
+                filename = "Screenshot.png",
+                fileExtension = "png",
+            ),
+        )
+        val presenter = createAttachmentsPreviewPresenter(
+            attachments = listOf(Attachment.Media(localMedia)),
+        )
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.canEditImage).isTrue()
+
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+            assertThat(editorState.imageEditorState).isNotNull()
+        }
+    }
+
+    @Test
+    fun `present - image can still be edited when editor can decode it despite generic media info`() = runTest {
+        val localMedia = aLocalMedia(
+            uri = mockMediaUrl,
+            mediaInfo = anImageMediaInfo().copy(
+                mimeType = MimeTypes.OctetStream,
+                filename = "",
+                fileExtension = "",
+            ),
+        )
+        val presenter = createAttachmentsPreviewPresenter(
+            attachments = listOf(Attachment.Media(localMedia)),
+            attachmentImageEditor = FakeAttachmentImageEditor(
+                canEditResult = true,
+            ) {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = localMedia.copy(uri = Uri.parse("file:///tmp/decoded.jpeg")),
+                        file = File("/tmp/decoded.jpeg"),
+                    )
+                )
+            }
+        )
+
+        presenter.test {
+            val initialState = consumeItemsUntilPredicate { it.canEditImage }.last()
+            assertThat(initialState.canEditImage).isTrue()
+
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+            assertThat(editorState.imageEditorState).isNotNull()
+        }
+    }
+
+    @Test
+    fun `present - sendAsFile video is pre-processed with best fitting preset`() = runTest {
+        val mediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = createAttachmentsPreviewPresenter(
+            attachments = listOf(
+                Attachment.Media(
+                    localMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
+                    sendAsFile = true,
+                )
+            ),
+            mediaPreProcessor = mediaPreProcessor,
+            // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
+            displayMediaQualitySelectorViews = false,
+            mediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory {
+                MediaOptimizationSelectorState(
+                    index = 0,
+                    maxUploadSize = AsyncData.Success(250_000_000L),
+                    videoSizeEstimations = AsyncData.Success(
+                        persistentListOf(
+                            VideoUploadEstimation(VideoCompressionPreset.HIGH, sizeInBytes = 513_216_000L, canUpload = false),
+                            VideoUploadEstimation(VideoCompressionPreset.STANDARD, sizeInBytes = 228_096_000L, canUpload = true),
+                            VideoUploadEstimation(VideoCompressionPreset.LOW, sizeInBytes = 57_024_000L, canUpload = true),
+                        )
+                    ),
+                    isImageOptimizationEnabled = false,
+                    selectedVideoPreset = VideoCompressionPreset.STANDARD,
+                    displayMediaSelectorViews = false,
+                    displayVideoPresetSelectorDialog = false,
+                    eventSink = {},
+                )
+            },
+            mediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(
+                config = MediaOptimizationConfig(
+                    compressImages = true,
+                    videoCompressionPreset = VideoCompressionPreset.LOW,
+                )
+            ),
+        )
+
+        presenter.test {
+            consumeItemsUntilPredicate { mediaPreProcessor.processCallCount > 0 }
+            assertThat(mediaPreProcessor.lastMediaOptimizationConfig).isEqualTo(
+                MediaOptimizationConfig(
+                    compressImages = false,
+                    videoCompressionPreset = VideoCompressionPreset.STANDARD,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - sending gallery after image edits restarts preprocessing`() = runTest {
+        val sendGalleryResult =
+            lambdaRecorder<List<GalleryItemInfo>, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { _, _, _, _ ->
+                Result.success(FakeMediaUploadHandler())
+            }
+        val firstLocalMedia = aLocalMedia(uri = Uri.parse("file:///tmp/original-1.jpeg"))
+        val secondLocalMedia = aLocalMedia(uri = Uri.parse("file:///tmp/original-2.jpeg"))
+        val editedUri = Uri.parse("file:///tmp/edited-1.jpeg")
+        val onDoneListener = lambdaRecorder<Unit> { }
+        val presenter = createAttachmentsPreviewPresenter(
+            room = FakeJoinedRoom(
+                liveTimeline = FakeTimeline().apply {
+                    sendGalleryLambda = sendGalleryResult
+                },
+            ),
+            attachments = persistentListOf(
+                aMediaAttachment(firstLocalMedia),
+                aMediaAttachment(secondLocalMedia),
+            ),
+            displayMediaQualitySelectorViews = false,
+            attachmentImageEditor = FakeAttachmentImageEditor {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = firstLocalMedia.copy(uri = editedUri),
+                        file = File("/tmp/edited-1.jpeg"),
+                    )
+                )
+            },
+            onDoneListener = OnDoneListener { onDoneListener() },
+        )
+
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+
+            editorState.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
+            val appliedState = consumeItemsUntilPredicate { !it.isApplyingImageEdits && it.imageEditorState == null }.last()
+
+            appliedState.eventSink(AttachmentsPreviewEvent.SendAttachment)
+            consumeItemsUntilPredicate { it.sendActionState == SendActionState.Done }
+
+            sendGalleryResult.assertions().isCalledOnce()
+            onDoneListener.assertions().isCalledOnce()
+        }
+    }
+
+    private fun TestScope.createAttachmentsPreviewPresenter(
+        attachments: List<Attachment> = listOf(
+            aMediaAttachment(
+                aLocalMedia(
+                    uri = mockMediaUrl,
+                )
+            ),
         ),
         room: JoinedRoom = FakeJoinedRoom(),
         timelineMode: Timeline.Mode = Timeline.Mode.Live,
@@ -588,6 +950,7 @@ class AttachmentsPreviewPresenterTest {
         mediaOptimizationSelectorPresenterFactory: FakeMediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory(
             fakePresenter = {
                 MediaOptimizationSelectorState(
+                    index = 0,
                     maxUploadSize = AsyncData.Uninitialized,
                     videoSizeEstimations = AsyncData.Uninitialized,
                     isImageOptimizationEnabled = null,
@@ -598,9 +961,24 @@ class AttachmentsPreviewPresenterTest {
                 )
             }
         ),
+        mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+        attachmentImageEditor: AttachmentImageEditor = FakeAttachmentImageEditor {
+            val localMediaResult = (attachments.first() as? Attachment.Media)?.localMedia?.copy(uri = Uri.parse("file:///tmp/default-edited.jpeg"))
+            if (localMediaResult != null) {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = localMediaResult,
+                        file = File("/tmp/default-edited.jpeg"),
+                    )
+                )
+            } else {
+                Result.failure(IllegalStateException("Check test values"))
+            }
+        },
+        videoCompressionPresetSelector: VideoCompressionPresetSelector = VideoCompressionPresetSelector(),
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
-            attachment = aMediaAttachment(localMedia),
+            attachments = attachments.toImmutableList(),
             onDoneListener = onDoneListener,
             mediaSenderFactory = MediaSenderFactory { timelineMode ->
                 DefaultMediaSender(
@@ -614,12 +992,31 @@ class AttachmentsPreviewPresenterTest {
             },
             permalinkBuilder = permalinkBuilder,
             temporaryUriDeleter = temporaryUriDeleter,
+            attachmentImageEditor = attachmentImageEditor,
             sessionCoroutineScope = this,
             dispatchers = testCoroutineDispatchers(),
             mediaOptimizationSelectorPresenterFactory = mediaOptimizationSelectorPresenterFactory,
+            videoCompressionPresetSelector = videoCompressionPresetSelector,
             timelineMode = timelineMode,
             inReplyToEventId = null,
+            mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         )
+    }
+
+    private class FakeAttachmentImageEditor(
+        private val canEditResult: Boolean = true,
+        private val result: () -> Result<EditedLocalMedia>,
+    ) : AttachmentImageEditor {
+        override suspend fun canEdit(localMedia: LocalMedia): Boolean {
+            return canEditResult
+        }
+
+        override suspend fun exportEdits(
+            localMedia: LocalMedia,
+            edits: AttachmentImageEdits,
+        ): Result<EditedLocalMedia> {
+            return result()
+        }
     }
 
     private val mediaUploadInfo = MediaUploadInfo.AnyFile(

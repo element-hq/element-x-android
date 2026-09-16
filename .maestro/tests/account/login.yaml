@@ -3,35 +3,19 @@ appId: ${MAESTRO_APP_ID}
 - tapOn: "Sign in manually"
 - runFlow: ../assertions/assertLoginDisplayed.yaml
 - takeScreenshot: build/maestro/100-SignIn
-- runFlow: changeServer.yaml
-- runFlow: ../assertions/assertLoginDisplayed.yaml
+# The account provider field defaults to matrix.org, so continue straight to the MAS login.
 - tapOn:
     id: "login-continue"
 ## MAS page
-## Conditional workflow to pass the Chrome first launch welcome page.
-- runFlow:
-    when:
-      visible: 'Use without an account'
+- retry:
+    maxRetries: 3
     commands:
-      - tapOn: "Use without an account"
-## For older chrome versions
-- runFlow:
-    when:
-      visible: 'Accept & continue'
-    commands:
-      - tapOn: "Accept & continue"
-- runFlow:
-    when:
-      visible: 'No thanks'
-    commands:
-      - tapOn: "No thanks"
-## Working when running Maestro locally, but not on the CI yet.
-- extendedWaitUntil:
-      visible:
-        id: "form-1"
-      timeout: 10000
+      - extendedWaitUntil:
+          visible:
+            id: "form-1"
+          timeout: 10000
 - tapOn:
-   id: "form-1"
+    id: "form-1"
 - inputText: ${MAESTRO_USERNAME}
 - pressKey: Enter
 - tapOn:

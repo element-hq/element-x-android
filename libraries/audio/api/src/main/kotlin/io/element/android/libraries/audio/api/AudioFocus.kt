@@ -11,9 +11,13 @@ package io.element.android.libraries.audio.api
 enum class AudioFocusRequester {
     ElementCall,
     VoiceMessage,
+    RecordVoiceMessage,
     MediaViewer,
 }
 
+/**
+ * Claims and releases system audio focus, so that the app's own players do not talk over each other or over other apps.
+ */
 interface AudioFocus {
     /**
      * Request audio focus for the given requester.

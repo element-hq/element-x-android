@@ -25,7 +25,7 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvents
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvent
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
@@ -64,12 +64,12 @@ class FullScreenIntentPermissionsPresenter(
         val isGranted = notificationManagerCompat.canUseFullScreenIntent()
         val isBannerDismissed by isFullScreenIntentBannerDismissed.collectAsState(initial = true)
 
-        fun handleEvent(event: FullScreenIntentPermissionsEvents) {
+        fun handleEvent(event: FullScreenIntentPermissionsEvent) {
             when (event) {
-                FullScreenIntentPermissionsEvents.Dismiss -> coroutineScope.launch {
+                FullScreenIntentPermissionsEvent.Dismiss -> coroutineScope.launch {
                     dismissFullScreenIntentBanner()
                 }
-                FullScreenIntentPermissionsEvents.OpenSettings -> openFullScreenIntentSettings()
+                FullScreenIntentPermissionsEvent.OpenSettings -> openFullScreenIntentSettings()
             }
         }
 
@@ -88,7 +88,7 @@ class FullScreenIntentPermissionsPresenter(
                     "package:${buildMeta.applicationId}".toUri()
                 )
                 externalIntentLauncher.launch(intent)
-            } catch (e: ActivityNotFoundException) {
+            } catch (_: ActivityNotFoundException) {
                 val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                     .putExtra(Settings.EXTRA_APP_PACKAGE, buildMeta.applicationId)
                 externalIntentLauncher.launch(intent)

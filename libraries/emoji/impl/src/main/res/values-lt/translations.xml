@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Veikla"</string>
+  <string name="emoji_picker_category_flags">"Vėliavos"</string>
+  <string name="emoji_picker_category_foods">"Maistas ir Gėrimai"</string>
+  <string name="emoji_picker_category_nature">"Gyvūnai ir Gamta"</string>
+  <string name="emoji_picker_category_objects">"Objektai"</string>
+  <string name="emoji_picker_category_people">"Šypsenėlės ir Žmonės"</string>
+  <string name="emoji_picker_category_places">"Kelionės ir Vietovės"</string>
+  <string name="emoji_picker_category_symbols">"Simboliai"</string>
+</resources>

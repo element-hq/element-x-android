@@ -16,10 +16,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -96,9 +101,10 @@ private fun PinnedMessagesBannerRow(
                 if (state is PinnedMessagesBannerState.Loaded) {
                     analyticsService.captureInteraction(Interaction.Name.PinnedMessageBannerClick)
                     onClick(state.currentPinnedMessage.eventId)
-                    state.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
+                    state.eventSink(PinnedMessagesBannerEvent.MoveToNextPinned)
                 }
-            },
+            }
+            .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Spacer(modifier = Modifier.width(26.dp))
@@ -288,7 +294,9 @@ private class ExitOnScrollBehavior : PinnedMessagesBannerViewScrollBehavior {
 
 @PreviewsDayNight
 @Composable
-internal fun PinnedMessagesBannerViewPreview(@PreviewParameter(PinnedMessagesBannerStateProvider::class) state: PinnedMessagesBannerState) = ElementPreview {
+internal fun PinnedMessagesBannerViewPreview(@PreviewParameter(
+    PinnedMessagesBannerStatePreviewParam::class
+) state: PinnedMessagesBannerState) = ElementPreview {
     PinnedMessagesBannerView(
         state = state,
         onClick = {},

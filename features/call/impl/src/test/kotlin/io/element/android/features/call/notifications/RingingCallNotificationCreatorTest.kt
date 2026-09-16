@@ -23,13 +23,11 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class RingingCallNotificationCreatorTest {
+class RingingCallNotificationCreatorTest : RobolectricTest() {
     @Test
     fun `createNotification - with no associated MatrixClient does nothing`() = runTest {
         val notificationCreator = createRingingCallNotificationCreator(
@@ -65,7 +63,33 @@ class RingingCallNotificationCreatorTest {
         getUserIconLambda.assertions().isCalledOnce()
     }
 
-    private suspend fun RingingCallNotificationCreator.createTestNotification() = createNotification(
+    @Test
+    fun `createNotification - use the correct style for video call`() = runTest {
+        val notificationCreator = createRingingCallNotificationCreator(
+            matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(FakeMatrixClient()) }),
+        )
+
+        val notification = notificationCreator.createTestNotification()
+        assertThat(notification?.category).isEqualTo("call")
+
+        val acceptAction = notification?.actions?.get(1)
+        assertThat(acceptAction?.title?.toString()).isEqualTo("Video")
+    }
+
+    @Test
+    fun `createNotification - use the correct style for audio call`() = runTest {
+        val notificationCreator = createRingingCallNotificationCreator(
+            matrixClientProvider = FakeMatrixClientProvider(getClient = { Result.success(FakeMatrixClient()) }),
+        )
+
+        val notification = notificationCreator.createTestNotification(audioOnly = true)
+        assertThat(notification?.category).isEqualTo("call")
+
+        val acceptAction = notification?.actions?.get(1)
+        assertThat(acceptAction?.title?.toString()).isEqualTo("Answer")
+    }
+
+    private suspend fun RingingCallNotificationCreator.createTestNotification(audioOnly: Boolean = false) = createNotification(
         sessionId = A_SESSION_ID,
         roomId = A_ROOM_ID,
         eventId = AN_EVENT_ID,
@@ -77,6 +101,7 @@ class RingingCallNotificationCreatorTest {
         timestamp = 0L,
         expirationTimestamp = 20L,
         textContent = "textContent",
+        audioOnly = audioOnly
     )
 
     private fun createRingingCallNotificationCreator(

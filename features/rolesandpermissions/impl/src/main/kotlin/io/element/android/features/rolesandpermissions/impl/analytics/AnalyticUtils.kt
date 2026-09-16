@@ -34,8 +34,8 @@ internal fun AnalyticsService.trackPermissionChangeAnalytics(initial: RoomPowerL
     if (updated.kick != initial?.kick) {
         capture(RoomModeration(RoomModeration.Action.ChangePermissionsKickMembers, analyticsMemberRoleForPowerLevel(updated.kick)))
     }
-    if (updated.sendEvents != initial?.sendEvents) {
-        capture(RoomModeration(RoomModeration.Action.ChangePermissionsSendMessages, analyticsMemberRoleForPowerLevel(updated.sendEvents)))
+    if (updated.eventsDefault != initial?.eventsDefault) {
+        capture(RoomModeration(RoomModeration.Action.ChangePermissionsSendMessages, analyticsMemberRoleForPowerLevel(updated.eventsDefault)))
     }
     if (updated.redactEvents != initial?.redactEvents) {
         capture(RoomModeration(RoomModeration.Action.ChangePermissionsRedactMessages, analyticsMemberRoleForPowerLevel(updated.redactEvents)))

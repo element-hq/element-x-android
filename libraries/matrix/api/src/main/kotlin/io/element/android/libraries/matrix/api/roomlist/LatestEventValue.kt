@@ -28,4 +28,10 @@ sealed interface LatestEventValue {
         val senderProfile: ProfileDetails,
         val isSending: Boolean,
     ) : LatestEventValue
+
+    data class RoomInvite(
+        val timestamp: Long,
+        val inviterId: UserId?,
+        val invitedProfile: ProfileDetails,
+    ) : LatestEventValue
 }

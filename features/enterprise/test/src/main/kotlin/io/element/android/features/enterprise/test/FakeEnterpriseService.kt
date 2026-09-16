@@ -12,6 +12,8 @@ import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
@@ -20,15 +22,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class FakeEnterpriseService(
-    override val isEnterpriseBuild: Boolean = false,
     private val isEnterpriseUserResult: (SessionId) -> Boolean = { lambdaError() },
-    private val defaultHomeserverListResult: () -> List<String> = { emptyList() },
-    private val isAllowedToConnectToHomeserverResult: (String) -> Boolean = { lambdaError() },
+    private val accountProviderAllowListResult: () -> List<AccountProvider> = { emptyList() },
+    private val canConnectToAnyAccountProviderResult: () -> Boolean = { true },
+    private val isAllowedToConnectToAccountProviderResult: (AccountProvider) -> Boolean = { lambdaError() },
     initialSemanticColors: SemanticColorsLightDark = SemanticColorsLightDark.default,
     initialBrandColor: Color? = null,
     private val overrideBrandColorResult: (SessionId?, String?) -> Unit = { _, _ -> lambdaError() },
     private val firebasePushGatewayResult: () -> String? = { lambdaError() },
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
+    private val getNoisyNotificationChannelIdResult: (SessionId?) -> String? = { lambdaError() },
+    private val tweakMasUrlResult: (String, ClientUrlContentFetcher) -> String = { _, _ -> lambdaError() },
+    private val isElementProEnforcedResult: (String) -> Boolean = { lambdaError() },
 ) : EnterpriseService {
     private val brandColorState = MutableStateFlow(initialBrandColor)
     private val semanticColorsState = MutableStateFlow(initialSemanticColors)
@@ -37,12 +42,24 @@ class FakeEnterpriseService(
         isEnterpriseUserResult(sessionId)
     }
 
-    override fun defaultHomeserverList(): List<String> {
-        return defaultHomeserverListResult()
+    override suspend fun tweakMasUrl(url: String, urlContentFetcher: ClientUrlContentFetcher): String = simulateLongTask {
+        tweakMasUrlResult(url, urlContentFetcher)
     }
 
-    override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean = simulateLongTask {
-        isAllowedToConnectToHomeserverResult(homeserverUrl)
+    override fun accountProviderAllowList(): List<AccountProvider> {
+        return accountProviderAllowListResult()
+    }
+
+    override fun canConnectToAnyAccountProvider(): Boolean {
+        return canConnectToAnyAccountProviderResult()
+    }
+
+    override suspend fun isAllowedToConnectToAccountProvider(accountProvider: AccountProvider): Boolean = simulateLongTask {
+        isAllowedToConnectToAccountProviderResult(accountProvider)
+    }
+
+    override suspend fun isElementProEnforced(serverName: String): Boolean = simulateLongTask {
+        isElementProEnforcedResult(serverName)
     }
 
     override suspend fun overrideBrandColor(sessionId: SessionId?, brandColor: String?) = simulateLongTask {
@@ -68,5 +85,9 @@ class FakeEnterpriseService(
     val bugReportUrlMutableFlow = MutableStateFlow<BugReportUrl>(BugReportUrl.UseDefault)
     override fun bugReportUrlFlow(sessionId: SessionId?): Flow<BugReportUrl> {
         return bugReportUrlMutableFlow.asStateFlow()
+    }
+
+    override fun getNoisyNotificationChannelId(sessionId: SessionId): String? {
+        return getNoisyNotificationChannelIdResult(sessionId)
     }
 }

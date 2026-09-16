@@ -1,0 +1,6 @@
+Main changes in this version: 
+- Improve the room security and privacy screens. 
+- Better room list sorting.
+- Fixed crashes when recording long voice messages.
+- Improved the UX when opening a room from the room list.
+Full changelog: https://github.com/element-hq/element-x-android/releases

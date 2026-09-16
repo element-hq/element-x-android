@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="emoji_picker_category_activity">"Activités"</string>
-  <string name="emoji_picker_category_flags">"Drapeaux"</string>
-  <string name="emoji_picker_category_foods">"Nourriture et boissons"</string>
-  <string name="emoji_picker_category_nature">"Animaux et nature"</string>
-  <string name="emoji_picker_category_objects">"Objets"</string>
-  <string name="emoji_picker_category_people">"Émoticônes et personnes"</string>
-  <string name="emoji_picker_category_places">"Voyages &amp; lieux"</string>
-  <string name="emoji_picker_category_recent">"Emojis récents"</string>
-  <string name="emoji_picker_category_symbols">"Symboles"</string>
+  <string name="crypto_event_authenticity_mismatched_sender">"L’expéditeur de ce message ne correspond pas au propriétaire de l’appareil qui l’a envoyé."</string>
+  <string name="crypto_event_authenticity_not_guaranteed">"L’authenticité de ce message chiffré ne peut être garantie sur cet appareil."</string>
+  <string name="crypto_event_authenticity_previously_verified">"Chiffré par un utilisateur précédemment vérifié."</string>
+  <string name="crypto_event_authenticity_sent_in_clear">"Non chiffré."</string>
+  <string name="crypto_event_authenticity_unknown_device">"Chiffré par un appareil inconnu ou supprimé."</string>
+  <string name="crypto_event_authenticity_unsigned_device">"Chiffré par un appareil non vérifié par son propriétaire."</string>
+  <string name="crypto_event_authenticity_unverified_identity">"Chiffré par un utilisateur non vérifié."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Type MIME invalide : %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Contenu multimédia manquant"</string>
+  <string name="error_sending_failure_other">"Détails de l’erreur : %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Envoi depuis un appareil non vérifié"</string>
+  <string name="error_sending_failure_unknown">"Erreur inconnue"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Retourner l’image horizontalement"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Retournée horizontalement"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Originale"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Retourner l’image verticalement"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Retournée verticalement"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Originale"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Pivoter l’image vers la gauche"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d degré"</item>
+    <item quantity="other">"%1$d degrés"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Modifier la photo"</string>
   <string name="screen_media_upload_preview_caption_warning">"Les légendes peuvent ne pas être visibles pour les utilisateurs d’anciennes applications."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Cliquez pour modifier la qualité d’envoi de la vidéo"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Le fichier n’a pas pu être envoyé."</string>
@@ -19,6 +34,7 @@
   <string name="screen_media_upload_preview_item_count">"Élément %1$d sur %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimiser la qualité de l’image"</string>
   <string name="screen_media_upload_preview_processing">"Traitement en cours…"</string>
+  <string name="screen_media_upload_preview_title">"Ajouter un média"</string>
   <string name="screen_report_content_block_user">"Bloquer l’utilisateur"</string>
   <string name="screen_report_content_block_user_hint">"Cochez si vous souhaitez masquer tous les messages actuels et futurs de cet utilisateur."</string>
   <string name="screen_report_content_explanation">"Ce message sera signalé à l’administrateur de votre serveur d’accueil. Il ne pourra lire aucun message chiffré."</string>
@@ -28,7 +44,7 @@
   <string name="screen_room_attachment_source_camera_video">"Enregistrer une vidéo"</string>
   <string name="screen_room_attachment_source_files">"Pièce jointe"</string>
   <string name="screen_room_attachment_source_gallery">"Galerie Photo et Vidéo"</string>
-  <string name="screen_room_attachment_source_location">"Position"</string>
+  <string name="screen_room_attachment_source_location">"Partager votre position"</string>
   <string name="screen_room_attachment_source_poll">"Sondage"</string>
   <string name="screen_room_attachment_text_formatting">"Formatage du texte"</string>
   <string name="screen_room_encrypted_history_banner">"L’historique des messages n’est actuellement pas disponible dans ce salon"</string>
@@ -59,6 +75,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Afficher plus"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Afficher le résumé des réactions"</string>
   <string name="screen_room_timeline_read_marker_title">"Nouveau"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d message supprimé"</item>
+    <item quantity="other">"%1$d messages supprimés"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d changement dans le salon"</item>
     <item quantity="other">"%1$d changements dans le salon"</item>

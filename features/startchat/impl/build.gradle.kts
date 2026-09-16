@@ -38,11 +38,12 @@ dependencies {
     implementation(projects.libraries.mediapickers.api)
     implementation(projects.libraries.mediaupload.api)
     implementation(projects.libraries.permissions.api)
-    implementation(projects.libraries.usersearch.impl)
+    implementation(projects.libraries.usersearch.api)
     implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.features.createroom.api)
+    implementation(projects.features.enterprise.api)
     api(projects.features.startchat.api)
 
     testCommonDependencies(libs, true)
@@ -55,4 +56,5 @@ dependencies {
     testImplementation(projects.features.createroom.test)
     testImplementation(projects.features.startchat.test)
     testImplementation(projects.libraries.featureflag.test)
+    testImplementation(projects.features.enterprise.test)
 }

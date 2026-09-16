@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"Beste gailuaren zain…"</string>
   <string name="screen_notification_optin_subtitle">"Geroago alda ditzakezu ezarpenak."</string>
   <string name="screen_notification_optin_title">"Baimendu jakinarazpenak eta ez galdu inoiz mezurik"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Sartu berreskuratze-gakoa"</string>
 </resources>

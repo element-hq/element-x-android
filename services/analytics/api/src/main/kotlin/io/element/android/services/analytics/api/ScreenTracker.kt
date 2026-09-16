@@ -11,7 +11,15 @@ package io.element.android.services.analytics.api
 import androidx.compose.runtime.Composable
 import im.vector.app.features.analytics.plan.MobileScreen
 
+/**
+ * Reports screen views to analytics from Composable code.
+ */
 interface ScreenTracker {
+    /**
+     * Records a view of [screen] when this enters composition, so it is called once per appearance rather than on every recomposition.
+     *
+     * @param screen the screen being shown.
+     */
     @Composable
     fun TrackScreen(
         screen: MobileScreen.ScreenName,

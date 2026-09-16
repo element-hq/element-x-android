@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"Siz bu foydalanuvchidan hech qanday xabar yoki xonaga taklif ko‘rmaysiz"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Foydalanuvchini bloklash"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Bu xona haqida hisobingiz provayderiga xabar bering."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Xabar berish sababini tushuntiring…"</string>
   <string name="screen_decline_and_block_title">"Rad etish va bloklash"</string>
   <string name="screen_invites_decline_chat_message">"Haqiqatan ham qo\'shilish taklifini rad qilmoqchimisiz%1$s ?"</string>
   <string name="screen_invites_decline_chat_title">"Taklifni rad etish"</string>
@@ -8,5 +11,8 @@
   <string name="screen_invites_decline_direct_chat_title">"Chatni rad etish"</string>
   <string name="screen_invites_empty_list">"Takliflar yo\'q"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s ) sizni taklif qildi"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Ha, rad etish va bloklash"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Ushbu xonaga qo‘shilish taklifini rad etishga ishonchingiz komilmi? Bu %1$sning siz bilan bog‘lanishiga yoki sizni xonalarga taklif qilishiga ham to‘sqinlik qiladi."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Taklifni rad etish va bloklash"</string>
   <string name="screen_join_room_decline_and_block_button_title">"Rad etish va bloklash"</string>
 </resources>

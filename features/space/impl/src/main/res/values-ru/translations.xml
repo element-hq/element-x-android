@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"Назначить владельцев"</string>
   <string name="screen_leave_space_last_admin_info">"%1$s (Администратор)"</string>
   <plurals name="screen_leave_space_submit">
     <item quantity="one">"Покинуть %1$d комнату и пространство"</item>
@@ -8,9 +9,21 @@
   </plurals>
   <string name="screen_leave_space_subtitle">"Выберите комнаты, которые вы хотите покинуть и в которых вы не являетесь единственным администратором:"</string>
   <string name="screen_leave_space_subtitle_last_admin">"Прежде чем покинуть это пространство, вам необходимо назначить другого администратора."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"Вы — единственный владелец %1$s. Перед тем как покинуть, вам нужно передать право владения кому-то другому."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"Вы не будете удалены из следующих комнат, поскольку вы являетесь единственным администратором:"</string>
   <string name="screen_leave_space_title">"Выйти из %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Вы единственный администратор для %1$s"</string>
+  <string name="screen_leave_space_title_last_owner">"Передача владения"</string>
+  <string name="screen_space_add_room_action">"Комната"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Добавление комнаты не повлияет на доступ к ней. Чтобы изменить доступ к комнате, перейдите в Настройки &gt; Безопасность и конфиденциальность."</string>
+  <string name="screen_space_empty_state_title">"Добавьте свою первую комнату"</string>
+  <string name="screen_space_menu_action_members">"Просмотреть участников"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Удаление комнаты не повлияет на доступ к ней. Чтобы изменить доступ, перейдите в раздел «Информация о комнате &gt; Конфиденциальность и безопасность."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Удалить %1$d комнату из %2$s"</item>
+    <item quantity="few">"Удалить %1$d комнаты из %2$s"</item>
+    <item quantity="many">"Удалить %1$d комнат из %2$s"</item>
+  </plurals>
   <string name="screen_space_settings_leave_space">"Покинуть пространство"</string>
   <string name="screen_space_settings_roles_and_permissions">"Роли и разрешения"</string>
   <string name="screen_space_settings_security_and_privacy">"Безопасность и конфиденциальность"</string>

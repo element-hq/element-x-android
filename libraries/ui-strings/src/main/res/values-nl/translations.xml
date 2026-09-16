@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Reactie toevoegen: %1$s"</string>
-  <string name="a11y_avatar">"Afbeelding"</string>
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Verwijderen"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d cijfer ingevoerd"</item>
     <item quantity="other">"%1$d cijfers ingevoerd"</item>
   </plurals>
-  <string name="a11y_edit_avatar">"Afbeelding bewerken"</string>
+  <string name="a11y_edit_avatar">"Avatar bewerken"</string>
   <string name="a11y_edit_room_address_hint">"Het volledige adres wordt %1$s"</string>
   <string name="a11y_hide_password">"Wachtwoord verbergen"</string>
   <string name="a11y_join_call">"Deelnemen aan gesprek"</string>
@@ -34,7 +34,6 @@
     <item quantity="other">"Gelezen door %1$s en %2$d anderen"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Gelezen door %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tik om alles weer te geven"</string>
   <string name="a11y_remove_reaction">"Verwijder reactie met %1$s"</string>
   <string name="a11y_remove_reaction_with">"Reactie met %1$s verwijderen"</string>
   <string name="a11y_room_avatar">"Kamerafbeelding"</string>
@@ -69,7 +68,7 @@
   <string name="action_copy_link_to_message">"Kopieer link naar bericht"</string>
   <string name="action_copy_text">"Tekst kopiëren"</string>
   <string name="action_create">"Aanmaken"</string>
-  <string name="action_create_a_room">"Creëer een kamer"</string>
+  <string name="action_create_room">"Creëer een kamer"</string>
   <string name="action_deactivate">"Sluiten"</string>
   <string name="action_deactivate_account">"Account sluiten"</string>
   <string name="action_decline">"Weigeren"</string>
@@ -85,6 +84,7 @@
   <string name="action_enable">"Activeren"</string>
   <string name="action_end_poll">"Peiling beëindigen"</string>
   <string name="action_enter_pin">"Voer pincode in"</string>
+  <string name="action_explore_public_spaces">"Ontdek openbare spaces"</string>
   <string name="action_forgot_password">"Wachtwoord vergeten?"</string>
   <string name="action_forward">"Doorsturen"</string>
   <string name="action_go_back">"Terug"</string>
@@ -118,7 +118,7 @@
   <string name="action_remove_caption">"Bijschrift verwijderen"</string>
   <string name="action_remove_message">"Bericht verwijderen"</string>
   <string name="action_reply">"Antwoorden"</string>
-  <string name="action_reply_in_thread">"Antwoord in subchat"</string>
+  <string name="action_reply_in_thread">"Antwoord in gesprek"</string>
   <string name="action_report">"Melden"</string>
   <string name="action_report_bug">"Probleem melden"</string>
   <string name="action_report_content">"Inhoud melden"</string>
@@ -140,6 +140,7 @@
   <string name="action_skip">"Overslaan"</string>
   <string name="action_start">"Starten"</string>
   <string name="action_start_chat">"Chat starten"</string>
+  <string name="action_start_over">"Opnieuw beginnen"</string>
   <string name="action_start_verification">"Verificatie starten"</string>
   <string name="action_static_map_load">"Tik om kaart te laden"</string>
   <string name="action_take_photo">"Foto maken"</string>
@@ -158,6 +159,7 @@
   <string name="common_adding_caption">"Bijschrift toevoegen"</string>
   <string name="common_advanced_settings">"Geavanceerde instellingen"</string>
   <string name="common_analytics">"Gebruiksgegevens"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Je hebt de kamer verlaten"</string>
   <string name="common_appearance">"Weergave"</string>
   <string name="common_audio">"Geluid"</string>
   <string name="common_blocked_users">"Geblokkeerde gebruikers"</string>
@@ -169,7 +171,6 @@
   <string name="common_creating_room">"Kamer maken…"</string>
   <string name="common_current_user_left_room">"Heeft de kamer verlaten"</string>
   <string name="common_current_user_rejected_invite">"Uitnodiging geweigerd"</string>
-  <string name="common_dark">"Donker"</string>
   <string name="common_decryption_error">"Decryptie fout"</string>
   <string name="common_developer_options">"Ontwikkelaarsopties"</string>
   <string name="common_device_id">"Apparaat-ID"</string>
@@ -197,7 +198,6 @@ Reden: %1$s."</string>
   <string name="common_install_apk_android">"APK installeren"</string>
   <string name="common_invite_unknown_profile">"Deze Matrix-ID kan niet worden gevonden, dus de uitnodiging is mogelijk niet ontvangen."</string>
   <string name="common_leaving_room">"De kamer verlaten"</string>
-  <string name="common_light">"Licht"</string>
   <string name="common_link_copied_to_clipboard">"Link gekopieerd naar klembord"</string>
   <string name="common_loading">"Laden…"</string>
   <plurals name="common_many_members">
@@ -234,14 +234,19 @@ Reden: %1$s."</string>
     <item quantity="other">"%d stemmen"</item>
   </plurals>
   <string name="common_privacy_policy">"Privacybeleid"</string>
+  <string name="common_private">"Privé"</string>
   <string name="common_private_room">"Privé kamer"</string>
+  <string name="common_public">"Openbaar"</string>
   <string name="common_public_room">"Openbare kamer"</string>
   <string name="common_reaction">"Reactie"</string>
   <string name="common_reactions">"Reacties"</string>
   <string name="common_recovery_key">"Herstelsleutel"</string>
   <string name="common_refreshing">"Verversen…"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d antwoord"</item>
+    <item quantity="other">"%1$d antwoorden"</item>
+  </plurals>
   <string name="common_replying_to">"Reageren op %1$s"</string>
-  <string name="common_report_a_bug">"Een fout melden"</string>
   <string name="common_report_a_problem">"Meld een probleem"</string>
   <string name="common_report_submitted">"Melding ingediend"</string>
   <string name="common_rich_text_editor">"Uitgebreide tekstverwerker"</string>
@@ -270,10 +275,9 @@ Reden: %1$s."</string>
   <string name="common_success">"Geslaagd"</string>
   <string name="common_suggestions">"Suggesties"</string>
   <string name="common_syncing">"Synchroniseren"</string>
-  <string name="common_system">"Systeem"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Kennisgevingen van derden"</string>
-  <string name="common_thread">"Subchat"</string>
+  <string name="common_thread">"Gesprek"</string>
   <string name="common_topic">"Onderwerp"</string>
   <string name="common_topic_placeholder">"Waar gaat deze kamer over?"</string>
   <string name="common_unable_to_decrypt">"Kan niet ontsleutelen"</string>
@@ -300,6 +304,7 @@ Reden: %1$s."</string>
   <string name="dialog_title_error">"Fout"</string>
   <string name="dialog_title_success">"Geslaagd"</string>
   <string name="dialog_title_warning">"Waarschuwing"</string>
+  <string name="dialog_unsaved_changes_description">"Je hebt niet-opgeslagen wijzigingen"</string>
   <string name="dialog_unsaved_changes_description_android">"Je wijzigingen zijn niet opgeslagen. Weet je zeker dat je terug wilt gaan?"</string>
   <string name="dialog_unsaved_changes_title">"Wijzigingen opslaan?"</string>
   <string name="error_account_creation_not_possible">"Je homeserver moet worden geüpgraded om de Matrix Authentication Service en het aanmaken van accounts te ondersteunen."</string>
@@ -314,12 +319,6 @@ Reden: %1$s."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s heeft geen toegang tot je microfoon. Schakel toegang in om een spraakbericht op te nemen."</string>
   <string name="error_some_messages_have_not_been_sent">"Sommige berichten zijn niet verzonden"</string>
   <string name="error_unknown">"Sorry, er is een fout opgetreden"</string>
-  <string name="event_shield_reason_authenticity_not_guaranteed">"De echtheid van dit versleutelde bericht kan op dit apparaat niet worden gegarandeerd."</string>
-  <string name="event_shield_reason_previously_verified">"Versleuteld door een eerder geverifieerde gebruiker."</string>
-  <string name="event_shield_reason_sent_in_clear">"Niet versleuteld."</string>
-  <string name="event_shield_reason_unknown_device">"Versleuteld door een onbekend of verwijderd apparaat."</string>
-  <string name="event_shield_reason_unsigned_device">"Versleuteld door een apparaat dat niet is geverifieerd door de eigenaar."</string>
-  <string name="event_shield_reason_unverified_identity">"Versleuteld door een niet-geverifieerde gebruiker."</string>
   <string name="invite_friends_rich_title">"🔐️ Sluit je bij mij aan op %1$s"</string>
   <string name="invite_friends_text">"Hé, praat met me op %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>

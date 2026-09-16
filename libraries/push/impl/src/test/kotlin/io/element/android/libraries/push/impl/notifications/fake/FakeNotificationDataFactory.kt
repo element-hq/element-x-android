@@ -19,7 +19,7 @@ import io.element.android.libraries.push.impl.notifications.model.FallbackNotifi
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
-import io.element.android.tests.testutils.lambda.LambdaFiveParamsRecorder
+import io.element.android.tests.testutils.lambda.LambdaFourParamsRecorder
 import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import io.element.android.tests.testutils.lambda.LambdaThreeParamsRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -28,18 +28,17 @@ class FakeNotificationDataFactory(
     var messageEventToNotificationsResult: LambdaThreeParamsRecorder<
         List<NotifiableMessageEvent>, ImageLoader, NotificationAccountParams, List<RoomNotification>
         > = lambdaRecorder { _, _, _ -> emptyList() },
-    var summaryToNotificationsResult: LambdaFiveParamsRecorder<
+    var summaryToNotificationsResult: LambdaFourParamsRecorder<
         List<RoomNotification>,
-        List<OneShotNotification>,
         List<OneShotNotification>,
         List<OneShotNotification>,
         NotificationAccountParams,
         SummaryNotification
-        > = lambdaRecorder { _, _, _, _, _ -> SummaryNotification.Update(A_NOTIFICATION) },
+        > = lambdaRecorder { _, _, _, _ -> SummaryNotification.Update(A_NOTIFICATION) },
     var inviteToNotificationsResult: LambdaOneParamRecorder<List<InviteNotifiableEvent>, List<OneShotNotification>> = lambdaRecorder { _ -> emptyList() },
     var simpleEventToNotificationsResult: LambdaOneParamRecorder<List<SimpleNotifiableEvent>, List<OneShotNotification>> = lambdaRecorder { _ -> emptyList() },
-    var fallbackEventToNotificationsResult: LambdaOneParamRecorder<List<FallbackNotifiableEvent>, List<OneShotNotification>> =
-        lambdaRecorder { _ -> emptyList() },
+    var fallbackEventToNotificationsResult: LambdaOneParamRecorder<List<FallbackNotifiableEvent>, OneShotNotification?> =
+        lambdaRecorder { _ -> null },
 ) : NotificationDataFactory {
     override suspend fun toNotifications(
         messages: List<NotifiableMessageEvent>,
@@ -69,10 +68,10 @@ class FakeNotificationDataFactory(
 
     @JvmName("toNotificationFallbackEvents")
     @Suppress("INAPPLICABLE_JVM_NAME")
-    override fun toNotifications(
+    override fun toNotification(
         fallback: List<FallbackNotifiableEvent>,
         notificationAccountParams: NotificationAccountParams,
-    ): List<OneShotNotification> {
+    ): OneShotNotification? {
         return fallbackEventToNotificationsResult(fallback)
     }
 
@@ -80,14 +79,12 @@ class FakeNotificationDataFactory(
         roomNotifications: List<RoomNotification>,
         invitationNotifications: List<OneShotNotification>,
         simpleNotifications: List<OneShotNotification>,
-        fallbackNotifications: List<OneShotNotification>,
         notificationAccountParams: NotificationAccountParams,
     ): SummaryNotification {
         return summaryToNotificationsResult(
             roomNotifications,
             invitationNotifications,
             simpleNotifications,
-            fallbackNotifications,
             notificationAccountParams,
         )
     }

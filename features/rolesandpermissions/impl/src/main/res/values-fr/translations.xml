@@ -2,9 +2,13 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_room_change_permissions_administrators">"Administrateurs"</string>
   <string name="screen_room_change_permissions_ban_people">"Bannir des participants"</string>
+  <string name="screen_room_change_permissions_change_settings">"Changer les paramètres"</string>
   <string name="screen_room_change_permissions_delete_messages">"Supprimer des messages"</string>
   <string name="screen_room_change_permissions_everyone">"Membre"</string>
   <string name="screen_room_change_permissions_invite_people">"Inviter des personnes"</string>
+  <string name="screen_room_change_permissions_live_location">"Partager la position en continu"</string>
+  <string name="screen_room_change_permissions_manage_space">"Gérer l’espace"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Gérer les salons"</string>
   <string name="screen_room_change_permissions_member_moderation">"Gérer les membres"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Messages et contenus"</string>
   <string name="screen_room_change_permissions_moderators">"Modérateurs"</string>
@@ -14,6 +18,7 @@
   <string name="screen_room_change_permissions_room_name">"Changer le nom du salon"</string>
   <string name="screen_room_change_permissions_room_topic">"Changer le sujet du salon"</string>
   <string name="screen_room_change_permissions_send_messages">"Envoyer des messages"</string>
+  <string name="screen_room_change_permissions_title">"Autorisations"</string>
   <string name="screen_room_change_role_administrators_title">"Modifier les administrateurs"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Vous ne pourrez pas annuler cette action. Vous êtes en train de promouvoir l’utilisateur pour qu’il ait le même niveau que vous."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Ajouter un administrateur ?"</string>
@@ -27,16 +32,22 @@
   <string name="screen_room_change_role_moderators_admin_section_footer">"Les administrateurs ont automatiquement les privilèges des modérateurs"</string>
   <string name="screen_room_change_role_moderators_owner_section_footer">"Les propriétaires disposent automatiquement des privilèges des administrateurs."</string>
   <string name="screen_room_change_role_moderators_title">"Modifier les modérateurs"</string>
-  <string name="screen_room_change_role_owners_title">"Choisissez les propriétaires"</string>
+  <string name="screen_room_change_role_owners_title">"Choisir les propriétaires"</string>
   <string name="screen_room_change_role_section_administrators">"Administrateurs"</string>
   <string name="screen_room_change_role_section_moderators">"Modérateurs"</string>
   <string name="screen_room_change_role_section_users">"Membres"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Vous avez des modifications non-enregistrées."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Enregistrer les changements ?"</string>
   <string name="screen_room_member_list_banned_empty">"Il n’y a pas d’utilisateur banni."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d Banni(e)"</item>
+    <item quantity="other">"%1$d Banni(e)s"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Vérifiez la saisie ou effectuez une nouvelle recherche"</string>
+  <string name="screen_room_member_list_empty_search_title">"Aucun résultat pour «%1$s»"</string>
   <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"%1$d personne"</item>
-    <item quantity="other">"%1$d personnes"</item>
+    <item quantity="one">"%1$d Personne"</item>
+    <item quantity="other">"%1$d Personnes"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Bannir du salon"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Retirer le membre uniquement"</string>
@@ -45,6 +56,11 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Débannir du salon"</string>
   <string name="screen_room_member_list_mode_banned">"Bannis"</string>
   <string name="screen_room_member_list_mode_members">"Membres"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d Invité(e)"</item>
+    <item quantity="other">"%1$d Invité(e)s"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"En attente"</string>
   <string name="screen_room_member_list_role_administrator">"Administrateurs"</string>
   <string name="screen_room_member_list_role_moderator">"Modérateurs"</string>
   <string name="screen_room_member_list_role_owner">"Propriétaire"</string>

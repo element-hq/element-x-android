@@ -31,15 +31,18 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
-import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.media.getMediaPreviewValue
+import io.element.android.libraries.matrix.api.media.isPreviewEnabled
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
@@ -49,11 +52,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
-import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import timber.log.Timber
@@ -63,10 +67,10 @@ private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.No
 /**
  * Result of resolving a batch of push events.
  * The outermost [Result] indicates whether the setup to resolve the events was successful.
- * The results for each push notification will be a map of [NotificationEventRequest] to [Result] of [ResolvedPushEvent].
+ * The results for each push notification will be a map of [PushRequest] to [Result] of [ResolvedPushEvent].
  * If the resolution of a specific event fails, the innermost [Result] will contain an exception.
  */
-typealias ResolvePushEventsResult = Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>
+typealias ResolvePushEventsResult = Result<Map<PushRequest, Result<ResolvedPushEvent>>>
 
 /**
  * The notifiable event resolver is able to create a NotifiableEvent (view model for notifications) from an sdk Event.
@@ -77,7 +81,7 @@ typealias ResolvePushEventsResult = Result<Map<NotificationEventRequest, Result<
 interface NotifiableEventResolver {
     suspend fun resolveEvents(
         sessionId: SessionId,
-        notificationEventRequests: List<NotificationEventRequest>
+        notificationEventRequests: List<PushRequest>
     ): ResolvePushEventsResult
 }
 
@@ -92,18 +96,19 @@ class DefaultNotifiableEventResolver(
     private val callNotificationEventResolver: CallNotificationEventResolver,
     private val fallbackNotificationFactory: FallbackNotificationFactory,
     private val featureFlagService: FeatureFlagService,
+    private val sessionStore: SessionStore,
 ) : NotifiableEventResolver {
     override suspend fun resolveEvents(
         sessionId: SessionId,
-        notificationEventRequests: List<NotificationEventRequest>
+        notificationEventRequests: List<PushRequest>
     ): ResolvePushEventsResult {
         Timber.d("Queueing notifications: $notificationEventRequests")
         val client = matrixClientProvider.getOrRestore(sessionId).getOrElse {
-            return Result.failure(IllegalStateException("Couldn't get or restore client for session $sessionId"))
+            return Result.failure(it)
         }
-        val ids = notificationEventRequests.groupBy { it.roomId }
+        val ids = notificationEventRequests.groupBy { RoomId(it.roomId) }
             .mapValues { (_, requests) ->
-                requests.map { it.eventId }
+                requests.map { EventId(it.eventId) }
             }
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
@@ -115,16 +120,21 @@ class DefaultNotifiableEventResolver(
             return Result.failure(exception ?: NotificationResolverException.UnknownError("Unknown error while fetching notifications"))
         }
 
+        val otherSessionUserIds = sessionStore.getAllSessions()
+            .map { UserId(it.userId) }
+            .minus(sessionId)
+            .toSet()
+
         // The null check is done above
         val notificationDataMap = notificationsResult.getOrNull()!!.mapValues { (_, notificationData) ->
             notificationData.flatMap { data ->
-                data.asNotifiableEvent(client, sessionId)
+                data.asNotifiableEvent(client, sessionId, otherSessionUserIds)
             }
         }
 
         return Result.success(
             notificationEventRequests.associate { request ->
-                val notificationDataResult = notificationDataMap[request.eventId]
+                val notificationDataResult = notificationDataMap[EventId(request.eventId)]
                 if (notificationDataResult == null) {
                     request to Result.failure(NotificationResolverException.UnknownError("No notification data for ${request.roomId} - ${request.eventId}"))
                 } else {
@@ -134,16 +144,43 @@ class DefaultNotifiableEventResolver(
         )
     }
 
+    private fun NotificationContent.senderIdOrNull(): UserId? = when (this) {
+        is NotificationContent.MessageLike.RoomMessage -> senderId
+        is NotificationContent.MessageLike.Poll -> senderId
+        is NotificationContent.MessageLike.CallInvite -> senderId
+        is NotificationContent.MessageLike.RtcNotification -> senderId
+        is NotificationContent.Invite -> senderId
+        else -> null
+    }
+
     private suspend fun NotificationData.asNotifiableEvent(
         client: MatrixClient,
         userId: SessionId,
+        otherSessionUserIds: Set<UserId>,
     ): Result<ResolvedPushEvent> = runCatchingExceptions {
+        if (content.senderIdOrNull() in otherSessionUserIds) {
+            throw NotificationResolverException.EventFilteredOut
+        }
         when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
-                val showMediaPreview = client.mediaPreviewService.getMediaPreviewValue() == MediaPreviewValue.On
+                val showMediaPreview = client.mediaPreviewService.getMediaPreviewValue().isPreviewEnabled(roomJoinRule)
                 val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
-                val imageMimeType = if (showMediaPreview) content.getImageMimetype() else null
-                val imageUriString = imageMimeType?.let { content.fetchImageIfPresent(client, imageMimeType)?.toString() }
+                val imageMimeType = content.getImageMimetype()
+                val imageUriString = if (showMediaPreview && imageMimeType != null) {
+                    content.fetchImageIfPresent(client, imageMimeType)?.toString()
+                } else {
+                    null
+                }
+
+                val isPublicRoom = roomJoinRule == null || roomJoinRule == JoinRule.Public
+                if (imageMimeType != null && !showMediaPreview && isPublicRoom) {
+                    Timber.tag(loggerTag.value)
+                        .d("We should only display media previews for private rooms and the current room is public. Ignoring image uri.")
+                } else if (showMediaPreview && content.messageType is ImageMessageType && imageUriString == null) {
+                    Timber.tag(loggerTag.value)
+                        .w("No image uri returned for message with an image and previews enabled. Something went wrong.")
+                }
+
                 val messageBody = descriptionFromMessageContent(
                     content = content,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
@@ -183,7 +220,11 @@ class DefaultNotifiableEventResolver(
                     soundName = null,
                     isRedacted = false,
                     isUpdated = false,
-                    description = descriptionFromRoomMembershipInvite(senderDisambiguatedDisplayName, isDirect),
+                    description = descriptionFromRoomMembershipInvite(
+                        senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
+                        isDirectRoom = isDirect,
+                        isSpace = isSpace
+                    ),
                     // TODO check if type is needed anymore
                     type = null,
                     // TODO check if title is needed anymore
@@ -257,6 +298,7 @@ class DefaultNotifiableEventResolver(
                     roomId = roomId,
                     eventId = eventId,
                     cause = "Unable to decrypt event content",
+                    noisy = isNoisy,
                 )
                 ResolvedPushEvent.Event(fallbackNotifiableEvent)
             }
@@ -264,8 +306,8 @@ class DefaultNotifiableEventResolver(
                 // Note: this case will be handled below
                 val redactedEventId = content.redactedEventId
                 if (redactedEventId == null) {
-                    Timber.tag(loggerTag.value).d("redactedEventId is null.")
-                    throw NotificationResolverException.UnknownError("redactedEventId is null")
+                    Timber.tag(loggerTag.value).w("Ignoring redaction notification with no redactedEventId.")
+                    throw NotificationResolverException.EventFilteredOut
                 } else {
                     ResolvedPushEvent.Redaction(
                         sessionId = userId,
@@ -279,11 +321,54 @@ class DefaultNotifiableEventResolver(
                 Timber.tag(loggerTag.value).d("Ignoring notification for sticker")
                 throw NotificationResolverException.EventFilteredOut
             }
-            is NotificationContent.StateEvent.RoomMemberContent,
+            is NotificationContent.StateEvent.RoomMemberContent -> {
+                // MSC4506: the homeserver pushes knocks to users who can act on them.
+                if (content.membershipState == RoomMembershipState.KNOCK) {
+                    val notifiableMessageEvent = buildNotifiableMessageEvent(
+                        sessionId = userId,
+                        senderId = content.userId,
+                        roomId = roomId,
+                        eventId = eventId,
+                        noisy = isNoisy,
+                        timestamp = this.timestamp,
+                        senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.userId),
+                        body = stringProvider.getString(R.string.notification_knock_request_body),
+                        roomName = roomDisplayName,
+                        roomIsDm = isDm,
+                        roomAvatarPath = roomAvatarUrl,
+                        senderAvatarPath = senderAvatarUrl,
+                    )
+                    ResolvedPushEvent.Event(notifiableMessageEvent)
+                } else {
+                    Timber.tag(loggerTag.value).d("Ignoring notification for membership ${content.membershipState}")
+                    throw NotificationResolverException.EventFilteredOut
+                }
+            }
+            NotificationContent.MessageLike.Beacon -> {
+                Timber.tag(loggerTag.value).d("Ignoring notification for beacon")
+                throw NotificationResolverException.EventFilteredOut
+            }
+            is NotificationContent.StateEvent.BeaconInfo -> {
+                val notifiableEventMessage = buildNotifiableMessageEvent(
+                    sessionId = userId,
+                    senderId = content.senderId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    noisy = isNoisy,
+                    timestamp = this.timestamp,
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                    body = stringProvider.getString(R.string.notification_live_location_started_body),
+                    imageUriString = null,
+                    roomName = roomDisplayName,
+                    roomIsDm = isDm,
+                    roomAvatarPath = roomAvatarUrl,
+                    senderAvatarPath = senderAvatarUrl,
+                )
+                ResolvedPushEvent.Event(notifiableEventMessage)
+            }
             NotificationContent.StateEvent.PolicyRuleRoom,
             NotificationContent.StateEvent.PolicyRuleServer,
             NotificationContent.StateEvent.PolicyRuleUser,
-            NotificationContent.StateEvent.RoomAliases,
             NotificationContent.StateEvent.RoomAvatar,
             NotificationContent.StateEvent.RoomCanonicalAlias,
             NotificationContent.StateEvent.RoomCreate,
@@ -326,18 +411,26 @@ class DefaultNotifiableEventResolver(
             is TextMessageType -> messageType.toPlainText(permalinkParser = permalinkParser)
             is VideoMessageType -> messageType.bestDescription
             is LocationMessageType -> messageType.body
+            is GalleryMessageType -> messageType.body
             is OtherMessageType -> messageType.body
         }
     }
 
     private fun descriptionFromRoomMembershipInvite(
         senderDisambiguatedDisplayName: String,
-        isDirectRoom: Boolean
+        isDirectRoom: Boolean,
+        isSpace: Boolean,
     ): String {
-        return if (isDirectRoom) {
-            stringProvider.getString(R.string.notification_invite_body_with_sender, senderDisambiguatedDisplayName)
-        } else {
-            stringProvider.getString(R.string.notification_room_invite_body_with_sender, senderDisambiguatedDisplayName)
+        return when {
+            isDirectRoom -> {
+                stringProvider.getString(R.string.notification_invite_body_with_sender, senderDisambiguatedDisplayName)
+            }
+            isSpace -> {
+                stringProvider.getString(R.string.notification_space_invite_body_with_sender, senderDisambiguatedDisplayName)
+            }
+            else -> {
+                stringProvider.getString(R.string.notification_room_invite_body_with_sender, senderDisambiguatedDisplayName)
+            }
         }
     }
 

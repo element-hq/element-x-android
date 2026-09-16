@@ -12,32 +12,17 @@ import androidx.compose.runtime.Composable
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.Binds
-import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.IntoMap
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.mediaviewer.impl.gallery.di.MediaItemEventContentKey
 import io.element.android.libraries.mediaviewer.impl.gallery.di.MediaItemPresenterFactory
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.voiceplayer.api.VoiceMessagePresenterFactory
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import kotlin.time.Duration
 
-@BindingContainer
-@ContributesTo(RoomScope::class)
-interface VoiceMessagePresenterModule {
-    @Binds
-    @IntoMap
-    @MediaItemEventContentKey(MediaItem.Voice::class)
-    fun bindVoiceMessagePresenterFactory(factory: VoiceMessagePresenter.Factory): MediaItemPresenterFactory<*, *>
-}
-
 @AssistedInject
 class VoiceMessagePresenter(
     voiceMessagePresenterFactory: VoiceMessagePresenterFactory,
-    @Assisted private val item: MediaItem.Voice,
+    @Assisted private val content: MediaItem.Voice,
 ) : Presenter<VoiceMessageState> {
     @AssistedFactory
     fun interface Factory : MediaItemPresenterFactory<MediaItem.Voice, VoiceMessageState> {
@@ -45,10 +30,10 @@ class VoiceMessagePresenter(
     }
 
     private val presenter = voiceMessagePresenterFactory.createVoiceMessagePresenter(
-        eventId = item.eventId,
-        mediaSource = item.mediaSource,
-        mimeType = item.mediaInfo.mimeType,
-        filename = item.mediaInfo.filename,
+        eventId = content.eventId,
+        mediaSource = content.mediaSource,
+        mimeType = content.mediaInfo.mimeType,
+        filename = content.mediaInfo.filename,
         // TODO Get the duration for the fallback?
         duration = Duration.ZERO,
     )

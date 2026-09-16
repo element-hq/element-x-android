@@ -50,6 +50,9 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"სისტემის პარამეტრები"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"სისტემის შეტყობინებები გამორთულია"</string>
   <string name="screen_notification_settings_title">"შეტყობინებები"</string>
+  <string name="theme_dark">"მუქი"</string>
+  <string name="theme_light">"ღია"</string>
+  <string name="theme_system">"სისტემა"</string>
   <string name="troubleshoot_notifications_entry_point_section">"პრობლემების გადაჭრა"</string>
   <string name="troubleshoot_notifications_entry_point_title">"პრობლემების გადაჭრის შეტყობინებები"</string>
 </resources>

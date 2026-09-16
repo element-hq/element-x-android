@@ -3,5 +3,6 @@
   <string name="call_foreground_service_channel_title_android">"Devam eden çağrı"</string>
   <string name="call_foreground_service_message_android">"Aramaya geri dönmek için dokunun"</string>
   <string name="call_foreground_service_title_android">"☎️ Çağrı devam ediyor"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element Araması, bu Android sürümünde Bluetooth ses cihazlarını desteklemiyor. Lütfen farklı bir ses cihazı seçin."</string>
   <string name="screen_incoming_call_subtitle_android">"Gelen Element Call"</string>
 </resources>

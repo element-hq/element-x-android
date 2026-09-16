@@ -14,6 +14,7 @@ import io.element.android.libraries.eventformatter.test.FakePinnedMessagesBanner
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
@@ -24,6 +25,7 @@ import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.flowOf
@@ -91,6 +93,46 @@ class PinnedMessagesBannerPresenterTest {
     }
 
     @Test
+    fun `present - loaded state - events which cannot be displayed are not rendered`() = runTest {
+        val messageContent = aMessageContent("A message")
+        val pinnedEventsTimeline = FakeTimeline(
+            timelineItems = flowOf(
+                listOf(
+                    MatrixTimelineItem.Event(
+                        uniqueId = A_UNIQUE_ID,
+                        event = anEventTimelineItem(
+                            eventId = AN_EVENT_ID,
+                            content = messageContent,
+                        ),
+                    ),
+                    MatrixTimelineItem.Event(
+                        uniqueId = A_UNIQUE_ID_2,
+                        event = anEventTimelineItem(
+                            eventId = AN_EVENT_ID_2,
+                            content = UnknownContent,
+                        ),
+                    )
+                )
+            )
+        )
+        val room = FakeJoinedRoom(
+            createTimelineResult = { Result.success(pinnedEventsTimeline) }
+        ).apply {
+            givenRoomInfo(aRoomInfo(pinnedEventIds = listOf(AN_EVENT_ID, AN_EVENT_ID_2)))
+        }
+        val presenter = createPinnedMessagesBannerPresenter(room = room)
+        presenter.test {
+            val loadedState = consumeItemsUntilPredicate { state ->
+                state is PinnedMessagesBannerState.Loaded
+            }.last() as PinnedMessagesBannerState.Loaded
+            assertThat(loadedState.loadedPinnedMessagesCount).isEqualTo(1)
+            assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(0)
+            assertThat(loadedState.currentPinnedMessage.formatted.text).isEqualTo(messageContent.toString())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - loaded state - multiple pinned messages`() = runTest {
         val messageContent1 = aMessageContent("A message")
         val messageContent2 = aMessageContent("Another message")
@@ -127,7 +169,7 @@ class PinnedMessagesBannerPresenterTest {
                 assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(1)
                 assertThat(loadedState.loadedPinnedMessagesCount).isEqualTo(2)
                 assertThat(loadedState.currentPinnedMessage.formatted.text).isEqualTo(messageContent2.toString())
-                loadedState.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
+                loadedState.eventSink(PinnedMessagesBannerEvent.MoveToNextPinned)
             }
 
             awaitItem().also { loadedState ->
@@ -135,7 +177,7 @@ class PinnedMessagesBannerPresenterTest {
                 assertThat(loadedState.currentPinnedMessageIndex).isEqualTo(0)
                 assertThat(loadedState.loadedPinnedMessagesCount).isEqualTo(2)
                 assertThat(loadedState.currentPinnedMessage.formatted.text).isEqualTo(messageContent1.toString())
-                loadedState.eventSink(PinnedMessagesBannerEvents.MoveToNextPinned)
+                loadedState.eventSink(PinnedMessagesBannerEvent.MoveToNextPinned)
             }
 
             awaitItem().also { loadedState ->

@@ -18,7 +18,7 @@ data class BugReportState(
     val screenshotUri: String?,
     val sendingProgress: Float,
     val sending: AsyncAction<Unit>,
-    val eventSink: (BugReportEvents) -> Unit
+    val eventSink: (BugReportEvent) -> Unit
 ) {
     val submitEnabled = sending !is AsyncAction.Loading
     val isDescriptionInError = sending is AsyncAction.Failure &&
@@ -32,6 +32,7 @@ data class BugReportFormState(
     val canContact: Boolean,
     val sendScreenshot: Boolean,
     val sendPushRules: Boolean,
+    val ghIssueNumber: Int?,
 ) : Parcelable {
     companion object {
         val Default = BugReportFormState(
@@ -40,6 +41,7 @@ data class BugReportFormState(
             canContact = false,
             sendScreenshot = false,
             sendPushRules = false,
+            ghIssueNumber = null,
         )
     }
 }

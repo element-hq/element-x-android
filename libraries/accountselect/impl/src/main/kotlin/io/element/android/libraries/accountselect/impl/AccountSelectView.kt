@@ -80,7 +80,7 @@ fun AccountSelectView(
 
 @PreviewsDayNight
 @Composable
-internal fun AccountSelectViewPreview(@PreviewParameter(AccountSelectStateProvider::class) state: AccountSelectState) = ElementPreview {
+internal fun AccountSelectViewPreview(@PreviewParameter(AccountSelectStatePreviewParam::class) state: AccountSelectState) = ElementPreview {
     AccountSelectView(
         state = state,
         onSelectAccount = {},

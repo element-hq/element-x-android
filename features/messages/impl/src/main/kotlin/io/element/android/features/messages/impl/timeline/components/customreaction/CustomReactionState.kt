@@ -8,23 +8,21 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction
 
-import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.libraries.emoji.api.picker.EmojiPickerState
 import kotlinx.collections.immutable.ImmutableSet
 
 data class CustomReactionState(
     val target: Target,
     val selectedEmoji: ImmutableSet<String>,
-    val recentEmojis: ImmutableList<String>,
-    val eventSink: (CustomReactionEvents) -> Unit,
+    val eventSink: (CustomReactionEvent) -> Unit,
 ) {
     sealed interface Target {
         data object None : Target
         data class Loading(val event: TimelineItem.Event) : Target
         data class Success(
             val event: TimelineItem.Event,
-            val emojibaseStore: EmojibaseStore,
+            val emojiPickerState: EmojiPickerState,
         ) : Target
     }
 }

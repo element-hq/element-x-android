@@ -12,7 +12,9 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 interface HomeEntryPoint : FeatureEntryPoint {
     fun createNode(
@@ -22,8 +24,9 @@ interface HomeEntryPoint : FeatureEntryPoint {
     ): Node
 
     interface Callback : Plugin {
-        fun navigateToRoom(roomId: RoomId)
+        fun navigateToRoom(roomId: RoomId, eventId: EventId?, joinedRoom: JoinedRoom?)
         fun navigateToCreateRoom()
+        fun navigateToCreateSpace()
         fun navigateToSettings()
         fun navigateToSetUpRecovery()
         fun navigateToEnterRecoveryKey()

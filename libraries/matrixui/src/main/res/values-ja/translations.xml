@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"招待を送信"</string>
+  <string name="screen_bottom_sheet_create_dm_message">"%1$s とチャットを始めますか？"</string>
+  <string name="screen_bottom_sheet_create_dm_title">"招待を送信しますか？"</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_content">"この人物とのチャットがありません。はじめに、招待の状況を確認してください。"</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_title">"この新しい連絡先と新規にチャットを開始しますか？"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) があなたを招待しました"</string>
+</resources>

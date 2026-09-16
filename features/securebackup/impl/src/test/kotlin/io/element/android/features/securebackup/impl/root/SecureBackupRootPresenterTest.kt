@@ -66,7 +66,7 @@ class SecureBackupRootPresenterTest {
             val errorState = awaitItem()
             assertThat(errorState.doesBackupExistOnServer).isEqualTo(AsyncData.Failure<Boolean>(AN_EXCEPTION))
             encryptionService.givenDoesBackupExistOnServerResult(Result.success(false))
-            errorState.eventSink.invoke(SecureBackupRootEvents.RetryKeyBackupState)
+            errorState.eventSink.invoke(SecureBackupRootEvent.RetryKeyBackupState)
             val loadingState2 = awaitItem()
             assertThat(loadingState2.doesBackupExistOnServer).isInstanceOf(AsyncData.Loading::class.java)
             val finalState = awaitItem()
@@ -82,9 +82,9 @@ class SecureBackupRootPresenterTest {
         }.test {
             skipItems(2)
             val initialState = awaitItem()
-            initialState.eventSink(SecureBackupRootEvents.DisplayKeyStorageDisabledError)
+            initialState.eventSink(SecureBackupRootEvent.DisplayKeyStorageDisabledError)
             assertThat(awaitItem().displayKeyStorageDisabledError).isTrue()
-            initialState.eventSink(SecureBackupRootEvents.DismissDialog)
+            initialState.eventSink(SecureBackupRootEvent.DismissDialog)
             assertThat(awaitItem().displayKeyStorageDisabledError).isFalse()
         }
     }
@@ -97,7 +97,7 @@ class SecureBackupRootPresenterTest {
         }.test {
             skipItems(2)
             val initialState = awaitItem()
-            initialState.eventSink(SecureBackupRootEvents.EnableKeyStorage)
+            initialState.eventSink(SecureBackupRootEvent.EnableKeyStorage)
             assertThat(awaitItem().enableAction.isLoading()).isTrue()
             assertThat(awaitItem().enableAction.isSuccess()).isTrue()
         }

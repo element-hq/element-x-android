@@ -8,7 +8,9 @@
 
 package io.element.android.appnav.room.joined
 
+import android.app.Activity
 import android.os.Parcelable
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
@@ -45,6 +47,9 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadJoinedRoomFlow
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -66,6 +71,7 @@ class JoinedRoomLoadedFlowNode(
     private val sessionCoroutineScope: CoroutineScope,
     private val matrixClient: MatrixClient,
     private val activeRoomsHolder: ActiveRoomsHolder,
+    private val analyticsService: AnalyticsService,
     roomGraphFactory: RoomGraphFactory,
 ) : BaseFlowNode<JoinedRoomLoadedFlowNode.NavTarget>(
     backstack = BackStack(
@@ -76,9 +82,11 @@ class JoinedRoomLoadedFlowNode(
     plugins = plugins,
 ), DependencyInjectionGraphOwner {
     interface Callback : Plugin {
-        fun navigateToRoom(roomId: RoomId, serverNames: List<String>)
+        fun onDone()
+        fun navigateToRoom(roomId: RoomId, serverNames: List<String>, clearBackStack: Boolean = false)
         fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun navigateToGlobalNotificationSettings()
+        fun navigateToDeveloperSettings()
     }
 
     data class Inputs(
@@ -90,24 +98,36 @@ class JoinedRoomLoadedFlowNode(
     private val callback: Callback = callback()
     override val graph = roomGraphFactory.create(inputs.room)
 
+    private val sendMessageWatcher = (graph as? TimelineBindings)?.analyticsSendMessageWatcher
+
+    // This is an ugly hack to check activity recreation
+    private var currentActivity: Activity? = null
+
     init {
         lifecycle.subscribe(
             onCreate = {
                 Timber.v("OnCreate => ${inputs.room.roomId}")
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 activeRoomsHolder.addRoom(inputs.room)
+                sendMessageWatcher?.start()
                 fetchRoomMembers()
                 trackVisitedRoom()
             },
             onResume = {
+                analyticsService.finishLongRunningTransaction(LoadJoinedRoomFlow)
                 sessionCoroutineScope.launch {
                     inputs.room.subscribeToSync()
                 }
             },
             onDestroy = {
                 Timber.v("OnDestroy")
-                activeRoomsHolder.removeRoom(inputs.room.sessionId, inputs.room.roomId)
-                inputs.room.destroy()
+                sendMessageWatcher?.stop()
+                // If we're just going through an activity recreation there's no need to destroy the Room object
+                // Destroying it would actually cause an issue where its methods can no longer be called
+                if (currentActivity?.isChangingConfigurations != true) {
+                    activeRoomsHolder.removeRoom(inputs.room.sessionId, inputs.room.roomId)
+                    inputs.room.destroy()
+                }
                 appNavigationStateService.onLeavingRoom(id)
             }
         )
@@ -123,11 +143,19 @@ class JoinedRoomLoadedFlowNode(
 
     private fun createRoomDetailsNode(buildContext: BuildContext, initialTarget: RoomDetailsEntryPoint.InitialTarget): Node {
         val callback = object : RoomDetailsEntryPoint.Callback {
+            override fun onDone() {
+                callback.onDone()
+            }
+
             override fun navigateToGlobalNotificationSettings() {
                 callback.navigateToGlobalNotificationSettings()
             }
 
-            override fun navigateToRoom(roomId: RoomId, serverNames: List<String>) {
+            override fun navigateToDeveloperSettings() {
+                callback.navigateToDeveloperSettings()
+            }
+
+            override fun navigateToRoom(roomId: RoomId, serverNames: List<String>, clearBackStack: Boolean) {
                 callback.navigateToRoom(roomId, serverNames)
             }
 
@@ -234,6 +262,10 @@ class JoinedRoomLoadedFlowNode(
             override fun navigateToRoom(roomId: RoomId) {
                 callback.navigateToRoom(roomId, emptyList())
             }
+
+            override fun navigateToDeveloperSettings() {
+                callback.navigateToDeveloperSettings()
+            }
         }
         val params = MessagesEntryPoint.Params(
             MessagesEntryPoint.InitialTarget.Messages(navTarget.focusedEventId)
@@ -280,6 +312,8 @@ class JoinedRoomLoadedFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
+        currentActivity = LocalActivity.current
+
         BackstackView()
     }
 }

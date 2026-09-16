@@ -41,6 +41,6 @@ sealed interface PinnedMessagesBannerState {
         val currentPinnedMessage: PinnedMessagesBannerItem,
         val currentPinnedMessageIndex: Int,
         val loadedPinnedMessagesCount: Int,
-        val eventSink: (PinnedMessagesBannerEvents) -> Unit
+        val eventSink: (PinnedMessagesBannerEvent) -> Unit
     ) : Visible
 }

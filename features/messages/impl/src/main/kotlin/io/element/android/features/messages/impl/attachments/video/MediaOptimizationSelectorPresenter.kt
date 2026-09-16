@@ -14,7 +14,9 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 fun interface MediaOptimizationSelectorPresenter : Presenter<MediaOptimizationSelectorState> {
     interface Factory {
         fun create(
+            index: Int,
             localMedia: LocalMedia,
+            sendAsFile: Boolean,
         ): MediaOptimizationSelectorPresenter
     }
 }

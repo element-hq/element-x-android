@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_decline_and_block_block_user_option_description">"لن ترى أي رسائل أو دعوات إلى غرف من هذا المستخدم"</string>
+  <string name="screen_decline_and_block_block_user_option_title">"حظر المستخدم"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"أبلغ موفّر حسابك عن هذه الغرفة."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"صِف سبب الإبلاغ…"</string>
+  <string name="screen_decline_and_block_title">"رفض وحظر"</string>
+  <string name="screen_invites_decline_chat_message">"أمتأكد من رغبتك برفض دعوة للانضمام إلى %1$s؟"</string>
+  <string name="screen_invites_decline_chat_title">"رفض الدعوة"</string>
+  <string name="screen_invites_decline_direct_chat_message">"أمتأكد من رغبتك برفض المحادثة الخاصة مع %1$s؟"</string>
+  <string name="screen_invites_decline_direct_chat_title">"رفض المحادثة"</string>
+  <string name="screen_invites_empty_list">"لا دعوات"</string>
+  <string name="screen_invites_invited_you">"دعاك %1$s (%2$s)"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"نعم، ارفض واحظر"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"هل أنت متأكد من رغبتك في رفض الدعوة للانضمام إلى هذه الغرفة؟ سيمنع هذا أيضًا %1$s من التواصل معك أو دعوتك إلى غرف."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"رفض الدعوة والحظر"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"رفض وحظر"</string>
+</resources>

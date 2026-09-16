@@ -10,6 +10,7 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL inválido, certifica-te de que incluis o protocolo (http/https) e o endereço correto."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Ocultar avatares nos pedidos de acesso a salas"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Ocultar pré-visualizações de multimédia na cronologia"</string>
+  <string name="screen_advanced_settings_labs">"Experiências"</string>
   <string name="screen_advanced_settings_media_compression_description">"Carrega fotos e vídeos mais rapidamente e reduz a utilização de dados"</string>
   <string name="screen_advanced_settings_media_compression_title">"Otimiza a qualidade da mídia"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderação e Segurança"</string>
@@ -43,6 +44,11 @@
   <string name="screen_edit_profile_error_title">"Não foi possível atualizar o perfil"</string>
   <string name="screen_edit_profile_title">"Editar perfil"</string>
   <string name="screen_edit_profile_updating_details">"A atualizar o perfil…"</string>
+  <string name="screen_labs_enable_threads">"Ativar respostas em tópicos"</string>
+  <string name="screen_labs_enable_threads_description">"A aplicação será reiniciada para aplicar esta alteração."</string>
+  <string name="screen_labs_header_description">"Experimenta as nossas mais recentes ideias ainda em desenvolvimento. Estas funcionalidades não estão finalizadas e por isso podem ser instáveis ou acabarem alteradas."</string>
+  <string name="screen_labs_header_title">"E que tal umas experiências?"</string>
+  <string name="screen_labs_title">"Experiências"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Configurações adicionais"</string>
   <string name="screen_notification_settings_calls_label">"Chamadas de áudio e vídeo"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Incompatibilidade de configuração"</string>
@@ -70,6 +76,9 @@ Se prosseguires, algumas delas podem ser alteradas."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"configurações do sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificações do sistema desativadas"</string>
   <string name="screen_notification_settings_title">"Notificações"</string>
+  <string name="theme_dark">"Escuro"</string>
+  <string name="theme_light">"Claro"</string>
+  <string name="theme_system">"Sistema"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Histórico de push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Resolução de problemas"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Corrigir notificações"</string>

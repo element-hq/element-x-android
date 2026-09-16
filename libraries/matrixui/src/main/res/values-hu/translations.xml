@@ -3,5 +3,7 @@
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Meghívó küldése"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Csevegést kezd vele: %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Meghívó küldése?"</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Még nem beszélgetett ezzel a személlyel. Folytatás előtt erősítse meg a meghívást."</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Csevegést kezdeményez ezzel az új felhasználóval?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) meghívta"</string>
 </resources>

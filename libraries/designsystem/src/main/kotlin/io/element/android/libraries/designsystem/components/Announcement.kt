@@ -24,6 +24,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -148,7 +150,11 @@ private fun TitleAndDescription(
                 text = title,
                 style = ElementTheme.typography.fontBodyLgMedium,
                 color = titleColor,
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .semantics {
+                        heading()
+                    },
             )
             if (trailingContent != null) {
                 Spacer(Modifier.width(12.dp))

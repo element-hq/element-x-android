@@ -12,9 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 
 class FakeBiometricAuthenticatorManager(
-    override var isDeviceSecured: Boolean = true,
-    override var hasAvailableAuthenticator: Boolean = false,
+    override val isDeviceSecured: Boolean = true,
+    override val canUseDeviceUnlock: Boolean = true,
+    override val hasAvailableAuthenticator: Boolean = false,
     private val createBiometricAuthenticator: () -> BiometricAuthenticator = { FakeBiometricAuthenticator() },
+    private val disableLambda: suspend () -> Unit = { },
 ) : BiometricAuthenticatorManager {
     override fun addCallback(callback: BiometricAuthenticator.Callback) {
         // no-op
@@ -27,7 +29,14 @@ class FakeBiometricAuthenticatorManager(
     @Composable
     override fun rememberUnlockBiometricAuthenticator(): BiometricAuthenticator {
         return remember {
-           createBiometricAuthenticator()
+            createBiometricAuthenticator()
+        }
+    }
+
+    @Composable
+    override fun rememberUnlockDeviceBiometricAuthenticator(): BiometricAuthenticator {
+        return remember {
+            createBiometricAuthenticator()
         }
     }
 
@@ -36,5 +45,9 @@ class FakeBiometricAuthenticatorManager(
         return remember {
             createBiometricAuthenticator()
         }
+    }
+
+    override suspend fun disable() {
+        disableLambda()
     }
 }

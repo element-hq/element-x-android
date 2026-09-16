@@ -8,6 +8,16 @@
 
 package io.element.android.features.login.api.accesscontrol
 
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
+
+/**
+ * Enforces the restriction an enterprise deployment can put on which account providers the user may sign in to.
+ */
 interface AccountProviderAccessControl {
-    suspend fun isAllowedToConnectToAccountProvider(accountProviderUrl: String): Boolean
+    /**
+     * Whether sign-in to this provider is permitted; `true` on a build with no such restriction.
+     *
+     * @param accountProvider the account provider the user is trying to use.
+     */
+    suspend fun isAllowedToConnectToAccountProvider(accountProvider: AccountProvider): Boolean
 }

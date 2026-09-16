@@ -10,14 +10,18 @@ package io.element.android.libraries.matrix.ui.messages.reply
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryItemType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -32,6 +36,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToMetadata.Text
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToMetadata.Thumbnail
+import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
@@ -60,7 +67,7 @@ internal sealed interface InReplyToMetadata {
 @Composable
 internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetadata? = when (eventContent) {
     is MessageContent -> when (val type = eventContent.type) {
-        is ImageMessageType -> InReplyToMetadata.Thumbnail(
+        is ImageMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 thumbnailSource = (type.info?.thumbnailSource ?: type.source).takeUnless { hideImage },
                 textContent = eventContent.body,
@@ -68,7 +75,7 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
                 blurHash = type.info?.blurhash,
             )
         )
-        is VideoMessageType -> InReplyToMetadata.Thumbnail(
+        is VideoMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
                 textContent = eventContent.body,
@@ -76,34 +83,80 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
                 blurHash = type.info?.blurhash,
             )
         )
-        is FileMessageType -> InReplyToMetadata.Thumbnail(
+        is FileMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.File,
             )
         )
-        is LocationMessageType -> InReplyToMetadata.Thumbnail(
+        is LocationMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 textContent = stringResource(CommonStrings.common_shared_location),
                 type = AttachmentThumbnailType.Location,
             )
         )
-        is AudioMessageType -> InReplyToMetadata.Thumbnail(
+        is AudioMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.Audio,
             )
         )
-        is VoiceMessageType -> InReplyToMetadata.Thumbnail(
+        is VoiceMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 textContent = stringResource(CommonStrings.common_voice_message),
                 type = AttachmentThumbnailType.Voice,
             )
         )
-        else -> InReplyToMetadata.Text(textContent ?: eventContent.body)
+        is GalleryMessageType -> {
+            val caption = textContent?.takeIf { it.isNotBlank() }
+            val isMediaGallery = type.items.all { it is GalleryItemType.Image || it is GalleryItemType.Video }
+            if (isMediaGallery) {
+                val text = caption ?: pluralStringResource(
+                    CommonPlurals.common_gallery_reply_media_items,
+                    type.items.size,
+                    type.items.size,
+                )
+                val firstMediaItem = type.items.firstOrNull { it is GalleryItemType.Image || it is GalleryItemType.Video }
+                val thumbnailSource = when (firstMediaItem) {
+                    is GalleryItemType.Image -> (firstMediaItem.content.info?.thumbnailSource ?: firstMediaItem.content.source).takeUnless { hideImage }
+                    is GalleryItemType.Video -> firstMediaItem.content.info?.thumbnailSource?.takeUnless { hideImage }
+                    else -> null
+                }
+                val blurHash = when (firstMediaItem) {
+                    is GalleryItemType.Image -> firstMediaItem.content.info?.blurhash
+                    is GalleryItemType.Video -> firstMediaItem.content.info?.blurhash
+                    else -> null
+                }
+                val type = when (firstMediaItem) {
+                    is GalleryItemType.Video -> AttachmentThumbnailType.Video
+                    else -> AttachmentThumbnailType.Image
+                }
+                Thumbnail(
+                    AttachmentThumbnailInfo(
+                        thumbnailSource = thumbnailSource,
+                        textContent = text,
+                        type = type,
+                        blurHash = blurHash,
+                    )
+                )
+            } else {
+                val text = caption ?: pluralStringResource(
+                    CommonPlurals.common_gallery_reply_attachments,
+                    type.items.size,
+                    type.items.size,
+                )
+                Thumbnail(
+                    AttachmentThumbnailInfo(
+                        textContent = text,
+                        type = AttachmentThumbnailType.File,
+                    )
+                )
+            }
+        }
+        else -> Text(textContent ?: eventContent.body)
     }
-    is StickerContent -> InReplyToMetadata.Thumbnail(
+    is StickerContent -> Thumbnail(
         AttachmentThumbnailInfo(
             thumbnailSource = eventContent.source.takeUnless { hideImage },
             textContent = eventContent.body,
@@ -111,7 +164,7 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
             blurHash = eventContent.info.blurhash,
         )
     )
-    is PollContent -> InReplyToMetadata.Thumbnail(
+    is PollContent -> Thumbnail(
         AttachmentThumbnailInfo(
             textContent = eventContent.question,
             type = AttachmentThumbnailType.Poll,
@@ -127,5 +180,6 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
     UnknownContent,
     is LegacyCallInviteContent,
     is CallNotifyContent,
+    is LiveLocationContent,
     null -> null
 }

@@ -13,21 +13,25 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
@@ -35,14 +39,15 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.components.RoomSummaryRow
 import io.element.android.features.home.impl.contentType
 import io.element.android.features.home.impl.model.RoomListRoomSummary
-import io.element.android.features.home.impl.roomlist.RoomListEvents
+import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -51,6 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -58,12 +64,12 @@ import io.element.android.libraries.ui.strings.CommonStrings
 internal fun RoomListSearchView(
     state: RoomListSearchState,
     hideInvitesAvatars: Boolean,
-    eventSink: (RoomListEvents) -> Unit,
+    eventSink: (RoomListEvent) -> Unit,
     onRoomClick: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BackHandler(enabled = state.isSearchActive) {
-        state.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
+        state.eventSink(RoomListSearchEvent.ToggleSearchVisibility)
     }
 
     AnimatedVisibility(
@@ -87,13 +93,13 @@ internal fun RoomListSearchView(
 private fun RoomListSearchContent(
     state: RoomListSearchState,
     hideInvitesAvatars: Boolean,
-    eventSink: (RoomListEvents) -> Unit,
+    eventSink: (RoomListEvent) -> Unit,
     onRoomClick: (RoomId) -> Unit,
 ) {
     val borderColor = MaterialTheme.colorScheme.tertiary
     val strokeWidth = 1.dp
     fun onBackButtonClick() {
-        state.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
+        state.eventSink(RoomListSearchEvent.ToggleSearchVisibility)
     }
 
     fun onRoomClick(room: RoomListRoomSummary) {
@@ -112,23 +118,16 @@ private fun RoomListSearchContent(
                 },
                 navigationIcon = { BackButton(onClick = ::onBackButtonClick) },
                 title = {
-                    // TODO replace `state.query` with TextFieldState when it's available for M3 TextField
                     // The stateSaver will keep the selection state when returning to this UI
-                    var value by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(state.query))
-                    }
-
                     val focusRequester = remember { FocusRequester() }
+                    val searchLabel = stringResource(CommonStrings.action_search)
                     FilledTextField(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .focusRequester(focusRequester),
-                        value = value,
-                        singleLine = true,
-                        onValueChange = {
-                            value = it
-                            state.eventSink(RoomListSearchEvents.QueryChanged(it.text))
-                        },
+                            .focusRequester(focusRequester)
+                            .semantics { contentDescription = searchLabel },
+                        state = state.query,
+                        lineLimits = TextFieldLineLimits.SingleLine,
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
@@ -138,20 +137,18 @@ private fun RoomListSearchContent(
                             disabledIndicatorColor = Color.Transparent,
                             errorIndicatorColor = Color.Transparent,
                         ),
-                        trailingIcon = {
-                            if (value.text.isNotEmpty()) {
-                                IconButton(onClick = {
-                                    state.eventSink(RoomListSearchEvents.ClearQuery)
-                                    // Clear local state too
-                                    value = value.copy(text = "")
-                                }) {
+                        trailingIcon = if (state.query.text.isNotEmpty()) {
+                            @Composable {
+                                IconButton(onClick = { state.eventSink(RoomListSearchEvent.ClearQuery) }) {
                                     Icon(
                                         imageVector = CompoundIcons.Close(),
-                                        contentDescription = stringResource(CommonStrings.action_cancel)
+                                        contentDescription = stringResource(CommonStrings.a11y_clear_search_field)
                                     )
                                 }
                             }
-                        }
+                        } else {
+                            null
+                        },
                     )
 
                     LaunchedEffect(Unit) {
@@ -162,15 +159,22 @@ private fun RoomListSearchContent(
                     }
                 },
             )
-        }
+        },
+        contentWindowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom),
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .consumeWindowInsets(padding)
         ) {
+            val lazyListState = rememberLazyListState()
+            OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
+                state.eventSink(RoomListSearchEvent.UpdateVisibleRange(visibleRange))
+            }
             LazyColumn(
+                state = lazyListState,
                 modifier = Modifier.weight(1f),
+                contentPadding = WindowInsets.navigationBars.asPaddingValues(),
             ) {
                 items(
                     items = state.results,
@@ -192,7 +196,7 @@ private fun RoomListSearchContent(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomListSearchContentPreview(@PreviewParameter(RoomListSearchStateProvider::class) state: RoomListSearchState) = ElementPreview {
+internal fun RoomListSearchContentPreview(@PreviewParameter(RoomListSearchStatePreviewParam::class) state: RoomListSearchState) = ElementPreview {
     RoomListSearchContent(
         state = state,
         hideInvitesAvatars = false,

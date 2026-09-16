@@ -12,6 +12,7 @@ import android.content.Intent
 import android.net.Uri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.androidutils.text.urlDecoded
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.deeplink.api.DeeplinkParser
 import io.element.android.libraries.matrix.api.core.EventId
@@ -31,7 +32,7 @@ class DefaultDeeplinkParser : DeeplinkParser {
     private fun Uri.toDeeplinkData(): DeeplinkData? {
         if (scheme != SCHEME) return null
         if (host != HOST) return null
-        val pathBits = path.orEmpty().split("/").drop(1)
+        val pathBits = encodedPath.orEmpty().split("/").drop(1).map { it.urlDecoded() }
         val sessionId = pathBits.elementAtOrNull(0)?.let(::SessionId) ?: return null
 
         return when (val screenPathComponent = pathBits.elementAtOrNull(1)) {

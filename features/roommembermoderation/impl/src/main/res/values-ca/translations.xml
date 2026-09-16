@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Bandeja de la sala"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Bandeja"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"No podrà tornar a unir-se a aquesta sala encara que se\'l convidi."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Segur que vols bandejar aquest membre?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Bandejant %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Elimina"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Podran tornar a unir-se a aquesta sala si se\'ls convida."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Segur que vols eliminar aquest membre?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Veure perfil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Elimina de la sala"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Vols eliminar l\'usuari i prohibir-li l\'accés en el futur?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Eliminant %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Readmet usuari"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Desbandeja"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Podrà tornar a unir-se a través d\'una invitació"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Segur que vols readmetre aquest membre?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Readmetent %1$s"</string>
+</resources>

@@ -8,6 +8,9 @@
 
 package io.element.android.libraries.matrix.api.room.history
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed interface RoomHistoryVisibility {
     /**
      * Previous events are accessible to newly joined members from the point

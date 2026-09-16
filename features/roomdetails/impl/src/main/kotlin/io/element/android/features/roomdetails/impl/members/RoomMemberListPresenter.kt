@@ -8,6 +8,7 @@
 
 package io.element.android.features.roomdetails.impl.members
 
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -16,10 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents.ShowActionsForUser
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent.ShowActionsForUser
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -32,11 +32,12 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.ui.room.PowerLevelRoomMemberComparator
-import io.element.android.libraries.matrix.ui.room.canInviteAsState
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
@@ -56,10 +57,10 @@ class RoomMemberListPresenter(
 
     @Composable
     override fun present(): RoomMemberListState {
-        var searchQuery by rememberSaveable { mutableStateOf("") }
+        val searchQuery = rememberTextFieldState()
         val membersState by room.membersStateFlow.collectAsState()
-        val syncUpdateFlow = room.syncUpdateFlow.collectAsState()
-        val canInvite by room.canInviteAsState(syncUpdateFlow.value)
+        val roomInfo by room.roomInfoFlow.collectAsState()
+        val canInvite by room.permissionsAsState(false) { perms -> perms.canOwnUserInvite() }
         val roomModerationState = roomMembersModerationPresenter.present()
 
         val roomMemberIdentityStates by produceState(persistentMapOf()) {
@@ -73,13 +74,18 @@ class RoomMemberListPresenter(
         var selectedSection by remember { mutableStateOf(SelectedSection.MEMBERS) }
         var roomMembers: AsyncData<RoomMembers> by remember { mutableStateOf(AsyncData.Loading()) }
         var filteredRoomMembers: AsyncData<RoomMembers> by remember { mutableStateOf(AsyncData.Loading()) }
+        val activeCallParticipants = roomInfo.activeRoomCallParticipants
+
+        val comparator = remember(activeCallParticipants) {
+            roomMemberListComparator(activeCallParticipants)
+        }
 
         // Update the room members when the screen is loaded
         LaunchedEffect(Unit) {
             room.updateMembers()
         }
 
-        LaunchedEffect(membersState, roomMemberIdentityStates) {
+        LaunchedEffect(membersState, roomMemberIdentityStates, activeCallParticipants) {
             if (membersState is RoomMembersState.Unknown) {
                 return@LaunchedEffect
             }
@@ -91,23 +97,23 @@ class RoomMemberListPresenter(
             }
             withContext(coroutineDispatchers.io) {
                 val members = membersState.roomMembers().orEmpty().groupBy { it.membership }
-                val info = room.info()
-                if (members.getOrDefault(RoomMembershipState.JOIN, emptyList()).size < info.joinedMembersCount / 2) {
+                if (members.getOrDefault(RoomMembershipState.JOIN, emptyList()).size < roomInfo.joinedMembersCount / 2) {
                     // Don't display initial room member list if we have less than half of the joined members:
-                    // This result will come from the timeline loading membership events and it'll be wrong.
+                    // This result will come from the timeline loading membership events, and it'll be wrong.
                     return@withContext
                 }
                 val result = RoomMembers(
                     invited = members.getOrDefault(RoomMembershipState.INVITE, emptyList())
-                        .map { it.withIdentityState(roomMemberIdentityStates) }
+                        .map { it.withIdentityState(roomMemberIdentityStates, activeCallParticipants) }
                         .toImmutableList(),
                     joined = members.getOrDefault(RoomMembershipState.JOIN, emptyList())
-                        .sortedWith(powerLevelRoomMemberComparator)
-                        .map { it.withIdentityState(roomMemberIdentityStates) }
+                        .sortedWith(comparator)
+                        // .sortedWith(powerLevelRoomMemberComparator)
+                        .map { it.withIdentityState(roomMemberIdentityStates, activeCallParticipants) }
                         .toImmutableList(),
                     banned = members.getOrDefault(RoomMembershipState.BAN, emptyList())
                         .sortedBy { it.userId.value }
-                        .map { it.withIdentityState(roomMemberIdentityStates) }
+                        .map { it.withIdentityState(roomMemberIdentityStates, activeCallParticipants) }
                         .toImmutableList(),
                 )
                 roomMembers = if (membersState is RoomMembersState.Pending) {
@@ -118,20 +124,19 @@ class RoomMemberListPresenter(
             }
         }
 
-        LaunchedEffect(searchQuery, roomMembers) {
+        LaunchedEffect(searchQuery.text, roomMembers) {
             filteredRoomMembers = roomMembers.map { members ->
                 withContext(coroutineDispatchers.io) {
-                    members.filter(searchQuery)
+                    members.filter(searchQuery.text.toString())
                 }
             }
         }
 
-        fun handleEvent(event: RoomMemberListEvents) {
+        fun handleEvent(event: RoomMemberListEvent) {
             when (event) {
-                is RoomMemberListEvents.UpdateSearchQuery -> searchQuery = event.query
-                is RoomMemberListEvents.RoomMemberSelected ->
+                is RoomMemberListEvent.RoomMemberSelected ->
                     roomModerationState.eventSink(ShowActionsForUser(event.roomMember.toMatrixUser()))
-                is RoomMemberListEvents.ChangeSelectedSection -> selectedSection = event.section
+                is RoomMemberListEvent.ChangeSelectedSection -> selectedSection = event.section
             }
         }
 
@@ -152,12 +157,29 @@ class RoomMemberListPresenter(
         return state
     }
 
-    private suspend fun RoomMember.withIdentityState(identityStates: ImmutableMap<UserId, IdentityState>): RoomMemberWithIdentityState {
+    private suspend fun RoomMember.withIdentityState(
+        identityStates: ImmutableMap<UserId, IdentityState>,
+        activeCallParticipants: ImmutableList<UserId>
+    ): RoomMemberWithIdentityState {
         return if (room.info().isEncrypted != true) {
-            RoomMemberWithIdentityState(this, null)
+            RoomMemberWithIdentityState(this, null, userId in activeCallParticipants)
         } else {
             val identityState = identityStates[userId] ?: encryptionService.getUserIdentity(userId, fallbackToServer = false).getOrNull()
-            RoomMemberWithIdentityState(this, identityState)
+            RoomMemberWithIdentityState(this, identityState, userId in activeCallParticipants)
         }
     }
+
+    private fun roomMemberListComparator(
+        activeCallParticipants: List<UserId>,
+    ): Comparator<RoomMember> =
+        Comparator { a, b ->
+            val aInCall = a.userId in activeCallParticipants
+            val bInCall = b.userId in activeCallParticipants
+
+            when {
+                aInCall && !bInCall -> -1
+                !aInCall && bInCall -> 1
+                else -> powerLevelRoomMemberComparator.compare(a, b)
+            }
+        }
 }

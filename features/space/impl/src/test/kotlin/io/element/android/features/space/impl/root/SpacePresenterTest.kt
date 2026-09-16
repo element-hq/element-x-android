@@ -11,8 +11,11 @@
 package io.element.android.features.space.impl.root
 
 import com.google.common.truth.Truth.assertThat
+import com.google.testing.junit.testparameterinjector.KotlinTestParameters.namedTestValues
+import com.google.testing.junit.testparameterinjector.TestParameter
+import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.invite.api.toInviteData
@@ -20,41 +23,51 @@ import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
+import io.element.android.libraries.matrix.test.A_ROOM_ID_3
+import io.element.android.libraries.matrix.test.A_ROOM_ID_4
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceRoomList
+import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
 import io.element.android.libraries.previewutils.room.aSpaceRoom
 import io.element.android.tests.testutils.EventsRecorder
+import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.junit.runner.RunWith
 import im.vector.app.features.analytics.plan.JoinedRoom as AnalyticsJoinedRoom
 
+@RunWith(TestParameterInjector::class)
 class SpacePresenterTest {
     @Test
     fun `present - initial state`() = runTest {
-        val paginateResult = lambdaRecorder<Result<Unit>> {
-            Result.success(Unit)
-        }
-        val spaceRoomList = FakeSpaceRoomList(paginateResult = paginateResult)
+        val spaceRoomList = FakeSpaceRoomList(
+            paginateResult = { Result.success(Unit) }
+        )
         val presenter = createSpacePresenter(spaceRoomList = spaceRoomList)
         presenter.test {
             val state = awaitItem()
-            assertThat(state.currentSpace).isNull()
+            assertThat(state.spaceInfo).isNotNull()
             assertThat(state.children).isEmpty()
             assertThat(state.seenSpaceInvites).isEmpty()
             assertThat(state.hideInvitesAvatar).isFalse()
@@ -62,25 +75,39 @@ class SpacePresenterTest {
             assertThat(state.joinActions).isEmpty()
             assertThat(state.acceptDeclineInviteState).isEqualTo(anAcceptDeclineInviteState())
             assertThat(state.topicViewerState).isEqualTo(TopicViewerState.Hidden)
-            advanceUntilIdle()
-            paginateResult.assertions().isCalledOnce()
+            assertThat(state.canAccessSpaceSettings).isFalse()
         }
     }
 
     @Test
-    fun `present - load more`() = runTest {
-        val paginateResult = lambdaRecorder<Result<Unit>> {
-            Result.success(Unit)
+    fun `present - canAccessSpaceSettings true when has permissions`() = runTest {
+        val room = FakeBaseRoom(
+            roomPermissions = FakeRoomPermissions(
+                canSendState = { true }
+            )
+        )
+        val presenter = createSpacePresenter(
+            room = room,
+        )
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.canAccessSpaceSettings).isTrue()
         }
-        val spaceRoomList = FakeSpaceRoomList(paginateResult = paginateResult)
+    }
+
+    @Test
+    fun `present - load more does nothing`() = runTest {
+        // LoadMore event is a no-op as pagination is handled automatically for now as backend is slow.
+        val spaceRoomList = FakeSpaceRoomList(
+            paginateResult = { Result.success(Unit) }
+        )
         val presenter = createSpacePresenter(spaceRoomList = spaceRoomList)
         presenter.test {
             val state = awaitItem()
-            advanceUntilIdle()
-            paginateResult.assertions().isCalledOnce()
-            state.eventSink(SpaceEvents.LoadMore)
-            advanceUntilIdle()
-            paginateResult.assertions().isCalledExactly(2)
+            // LoadMore event should not cause any state change
+            state.eventSink(SpaceEvent.LoadMore)
+            expectNoEvents()
         }
     }
 
@@ -103,23 +130,6 @@ class SpacePresenterTest {
                 SpaceRoomList.PaginationStatus.Idle(hasMoreToLoad = true)
             )
             assertThat(awaitItem().hasMoreToLoad).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - current space value`() = runTest {
-        val paginateResult = lambdaRecorder<Result<Unit>> {
-            Result.success(Unit)
-        }
-        val spaceRoomList = FakeSpaceRoomList(paginateResult = paginateResult)
-        val presenter = createSpacePresenter(spaceRoomList = spaceRoomList)
-        presenter.test {
-            val state = awaitItem()
-            advanceUntilIdle()
-            assertThat(state.currentSpace).isNull()
-            val aSpace = aSpaceRoom()
-            spaceRoomList.emitCurrentSpace(aSpace)
-            assertThat(awaitItem().currentSpace).isEqualTo(aSpace)
         }
     }
 
@@ -171,12 +181,11 @@ class SpacePresenterTest {
             skipItems(1)
             val state = awaitItem()
             assertThat(state.joinActions[A_ROOM_ID_2]).isNull()
-            state.eventSink(SpaceEvents.Join(aNotJoinedRoom))
+            state.eventSink(SpaceEvent.Join(aNotJoinedRoom))
             val joiningState = awaitItem()
             assertThat(joiningState.joinActions[A_ROOM_ID_2]).isEqualTo(AsyncAction.Loading)
             // Let the joinRoom call complete
             advanceUntilIdle()
-            runCurrent()
             // The room is joined
             fakeSpaceRoomList.emitSpaceRooms(
                 listOf(
@@ -191,7 +200,7 @@ class SpacePresenterTest {
             val joinedState = awaitItem()
             // Joined room is removed from the join actions
             assertThat(joinedState.joinActions).doesNotContainKey(A_ROOM_ID_2)
-            joinRoom.assertions().isCalledOnce().with(
+            assert(joinRoom).isCalledOnce().with(
                 value(A_ROOM_ID_2.toRoomIdOrAlias()),
                 value(serverNames),
                 value(AnalyticsJoinedRoom.Trigger.SpaceHierarchy),
@@ -225,14 +234,14 @@ class SpacePresenterTest {
             skipItems(1)
             val state = awaitItem()
             assertThat(state.joinActions[A_ROOM_ID_2]).isNull()
-            state.eventSink(SpaceEvents.Join(aNotJoinedRoom))
+            state.eventSink(SpaceEvent.Join(aNotJoinedRoom))
             val joiningState = awaitItem()
             assertThat(joiningState.joinActions[A_ROOM_ID_2]).isEqualTo(AsyncAction.Loading)
             val errorState = awaitItem()
             // Joined room is removed from the join actions
             assertThat(errorState.joinActions[A_ROOM_ID_2]!!.isFailure()).isTrue()
             // Clear error
-            errorState.eventSink(SpaceEvents.ClearFailures)
+            errorState.eventSink(SpaceEvent.ClearFailures)
             val clearedState = awaitItem()
             assertThat(clearedState.joinActions[A_ROOM_ID_2]).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -249,31 +258,21 @@ class SpacePresenterTest {
             val state = awaitItem()
             assertThat(state.topicViewerState).isEqualTo(TopicViewerState.Hidden)
             advanceUntilIdle()
-            state.eventSink(SpaceEvents.ShowTopicViewer("topic"))
+            state.eventSink(SpaceEvent.ShowTopicViewer("topic"))
             assertThat(awaitItem().topicViewerState).isEqualTo(TopicViewerState.Shown("topic"))
-            state.eventSink(SpaceEvents.HideTopicViewer)
+            state.eventSink(SpaceEvent.HideTopicViewer)
             assertThat(awaitItem().topicViewerState).isEqualTo(TopicViewerState.Hidden)
         }
     }
 
     @Test
-    fun `present - accept invite is transmitted to acceptDeclineInviteState`() {
-        `invite action is transmitted to acceptDeclineInviteState`(
-            acceptInvite = true,
-        )
-    }
-
-    @Test
-    fun `present - decline invite is transmitted to acceptDeclineInviteState`() {
-        `invite action is transmitted to acceptDeclineInviteState`(
-            acceptInvite = false,
-        )
-    }
-
-    private fun `invite action is transmitted to acceptDeclineInviteState`(
-        acceptInvite: Boolean,
+    fun `present - invite action is transmitted to acceptDeclineInviteState`(
+        @TestParameter acceptInvite: Boolean = namedTestValues(
+            "accept" to true,
+            "decline" to false,
+        ),
     ) = runTest {
-        val eventRecorder = EventsRecorder<AcceptDeclineInviteEvents>()
+        val eventRecorder = EventsRecorder<AcceptDeclineInviteEvent>()
         val anInvitedRoom = aSpaceRoom(
             roomId = A_ROOM_ID_2,
             state = CurrentUserMembership.INVITED,
@@ -301,16 +300,16 @@ class SpacePresenterTest {
             val state = awaitItem()
             assertThat(state.joinActions[A_ROOM_ID_2]).isNull()
             if (acceptInvite) {
-                state.eventSink(SpaceEvents.AcceptInvite(anInvitedRoom))
+                state.eventSink(SpaceEvent.AcceptInvite(anInvitedRoom))
                 eventRecorder.assertSingle(
-                    AcceptDeclineInviteEvents.AcceptInvite(
+                    AcceptDeclineInviteEvent.AcceptInvite(
                         invite = anInvitedRoom.toInviteData(),
                     )
                 )
             } else {
-                state.eventSink(SpaceEvents.DeclineInvite(anInvitedRoom))
+                state.eventSink(SpaceEvent.DeclineInvite(anInvitedRoom))
                 eventRecorder.assertSingle(
-                    AcceptDeclineInviteEvents.DeclineInvite(
+                    AcceptDeclineInviteEvent.DeclineInvite(
                         invite = anInvitedRoom.toInviteData(),
                         shouldConfirm = true,
                         blockUser = false,
@@ -320,22 +319,382 @@ class SpacePresenterTest {
         }
     }
 
+    @Test
+    fun `present - enter manage mode`() = runTest {
+        val presenter = createSpacePresenter()
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.isManageMode).isFalse()
+            state.eventSink(SpaceEvent.EnterManageMode)
+            val manageModeState = awaitItem()
+            assertThat(manageModeState.isManageMode).isTrue()
+            assertThat(manageModeState.selectedRoomIds).isEmpty()
+        }
+    }
+
+    @Test
+    fun `present - exit manage mode without removals does not call reset`() = runTest {
+        val resetResult = lambdaRecorder<Result<Unit>>(ensureNeverCalled = true) { Result.success(Unit) }
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            paginateResult = { Result.success(Unit) },
+            resetResult = resetResult,
+        )
+        val presenter = createSpacePresenter(spaceRoomList = fakeSpaceRoomList)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(SpaceEvent.EnterManageMode)
+            initialState.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            initialState.eventSink(SpaceEvent.ExitManageMode)
+            advanceUntilIdle()
+            val finalState = expectMostRecentItem()
+            assertThat(finalState.isManageMode).isFalse()
+            assertThat(finalState.selectedRoomIds).isEmpty()
+            // reset should NOT be called since no rooms were actually removed
+            assert(resetResult).isNeverCalled()
+        }
+    }
+
+    @Test
+    fun `present - toggle room selection`() = runTest {
+        val presenter = createSpacePresenter()
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(SpaceEvent.EnterManageMode)
+            // Select a room
+            initialState.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            var latestState = expectMostRecentItem()
+            assertThat(latestState.selectedRoomIds).containsExactly(A_ROOM_ID)
+            // Deselect the room
+            latestState.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            latestState = expectMostRecentItem()
+            assertThat(latestState.selectedRoomIds).isEmpty()
+        }
+    }
+
+    @Test
+    fun `present - remove rooms success`() = runTest {
+        val removeChildFromSpaceResult = lambdaRecorder<RoomId, RoomId, Result<Unit>> { _, _ ->
+            Result.success(Unit)
+        }
+        val resetResult = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val aRoom = aSpaceRoom(
+            roomId = A_ROOM_ID,
+            roomType = RoomType.Room,
+        )
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            initialSpaceRoomsValue = listOf(aRoom),
+            paginateResult = { Result.success(Unit) },
+            resetResult = resetResult,
+        )
+        val presenter = createSpacePresenter(
+            spaceRoomList = fakeSpaceRoomList,
+            spaceService = FakeSpaceService(
+                removeChildFromSpaceResult = removeChildFromSpaceResult,
+            ),
+        )
+        presenter.test {
+            awaitItem() // Initial empty state
+            advanceUntilIdle()
+            val stateWithChildren = awaitItem()
+            assertThat(stateWithChildren.children).hasSize(1)
+            stateWithChildren.eventSink(SpaceEvent.EnterManageMode)
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            stateWithChildren.eventSink(SpaceEvent.RemoveSelectedRooms)
+            stateWithChildren.eventSink(SpaceEvent.ConfirmRoomRemoval)
+            advanceUntilIdle()
+            val successState = expectMostRecentItem()
+            assertThat(successState.removeRoomsAction).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(successState.isManageMode).isFalse()
+            assert(removeChildFromSpaceResult).isCalledOnce()
+            assert(resetResult).isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - remove rooms partial failure`() = runTest {
+        val aRoom1 = aSpaceRoom(
+            roomId = A_ROOM_ID,
+            roomType = RoomType.Room,
+        )
+        val aRoom2 = aSpaceRoom(
+            roomId = A_ROOM_ID_2,
+            roomType = RoomType.Room,
+        )
+        val removeChildFromSpaceResult = lambdaRecorder<RoomId, RoomId, Result<Unit>> { _, childId ->
+            if (childId == A_ROOM_ID_2) {
+                Result.failure(AN_EXCEPTION)
+            } else {
+                Result.success(Unit)
+            }
+        }
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            initialSpaceRoomsValue = listOf(aRoom1, aRoom2),
+            paginateResult = { Result.success(Unit) },
+        )
+        val presenter = createSpacePresenter(
+            spaceRoomList = fakeSpaceRoomList,
+            spaceService = FakeSpaceService(
+                removeChildFromSpaceResult = removeChildFromSpaceResult,
+            ),
+        )
+        presenter.test {
+            awaitItem() // Initial empty state
+            advanceUntilIdle()
+            val stateWithChildren = awaitItem()
+            assertThat(stateWithChildren.children).hasSize(2)
+            stateWithChildren.eventSink(SpaceEvent.EnterManageMode)
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID_2))
+            stateWithChildren.eventSink(SpaceEvent.RemoveSelectedRooms)
+            stateWithChildren.eventSink(SpaceEvent.ConfirmRoomRemoval)
+            advanceUntilIdle()
+            val failureState = expectMostRecentItem()
+            assertThat(failureState.removeRoomsAction.isFailure()).isTrue()
+            // Successfully removed room should be filtered out
+            assertThat(failureState.children.map { it.roomId }).doesNotContain(A_ROOM_ID)
+            // Failed room should still be present
+            assertThat(failureState.children.map { it.roomId }).contains(A_ROOM_ID_2)
+            assert(removeChildFromSpaceResult).isCalledExactly(2)
+        }
+    }
+
+    @Test
+    fun `present - exit manage mode after partial failure calls reset`() = runTest {
+        val aRoom1 = aSpaceRoom(
+            roomId = A_ROOM_ID,
+            roomType = RoomType.Room,
+        )
+        val aRoom2 = aSpaceRoom(
+            roomId = A_ROOM_ID_2,
+            roomType = RoomType.Room,
+        )
+        // Room 1 succeeds, Room 2 fails
+        val removeChildFromSpaceResult = lambdaRecorder<RoomId, RoomId, Result<Unit>> { _, childId ->
+            if (childId == A_ROOM_ID_2) {
+                Result.failure(AN_EXCEPTION)
+            } else {
+                Result.success(Unit)
+            }
+        }
+        val resetResult = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            initialSpaceRoomsValue = listOf(aRoom1, aRoom2),
+            paginateResult = { Result.success(Unit) },
+            resetResult = resetResult,
+        )
+        val presenter = createSpacePresenter(
+            spaceRoomList = fakeSpaceRoomList,
+            spaceService = FakeSpaceService(
+                removeChildFromSpaceResult = removeChildFromSpaceResult,
+            ),
+        )
+        presenter.test {
+            awaitItem() // Initial empty state
+            advanceUntilIdle()
+            val stateWithChildren = awaitItem()
+            stateWithChildren.eventSink(SpaceEvent.EnterManageMode)
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID_2))
+            stateWithChildren.eventSink(SpaceEvent.RemoveSelectedRooms)
+            stateWithChildren.eventSink(SpaceEvent.ConfirmRoomRemoval)
+            advanceUntilIdle()
+            val failureState = expectMostRecentItem()
+            assertThat(failureState.removeRoomsAction.isFailure()).isTrue()
+            // Exit manage mode after partial failure - reset should be called
+            failureState.eventSink(SpaceEvent.ExitManageMode)
+            advanceUntilIdle()
+            expectMostRecentItem()
+            assert(resetResult).isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - children filtered in manage mode shows only rooms`() = runTest {
+        val aRoom = aSpaceRoom(
+            roomId = A_ROOM_ID,
+            roomType = RoomType.Room,
+        )
+        val aSubSpace = aSpaceRoom(
+            roomId = A_ROOM_ID_2,
+            roomType = RoomType.Space,
+        )
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            initialSpaceRoomsValue = listOf(aRoom, aSubSpace),
+            paginateResult = { Result.success(Unit) },
+        )
+        val presenter = createSpacePresenter(spaceRoomList = fakeSpaceRoomList)
+        presenter.test {
+            awaitItem() // Initial empty state
+            advanceUntilIdle()
+            val stateWithChildren = awaitItem()
+            // Both room and space visible initially
+            assertThat(stateWithChildren.children).hasSize(2)
+            assertThat(stateWithChildren.isManageMode).isFalse()
+            stateWithChildren.eventSink(SpaceEvent.EnterManageMode)
+            val manageModeState = expectMostRecentItem()
+            // Only rooms visible in manage mode
+            assertThat(manageModeState.children).hasSize(1)
+            assertThat(manageModeState.children.first().roomId).isEqualTo(A_ROOM_ID)
+            assertThat(manageModeState.children.first().isSpace).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - left children which can only be joined by invitation are filtered out`() = runTest {
+        val leftInviteOnlyRoom = aSpaceRoom(
+            roomId = A_ROOM_ID,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.LEFT,
+            joinRule = JoinRule.Invite,
+        )
+        val leftPublicRoom = aSpaceRoom(
+            roomId = A_ROOM_ID_2,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.LEFT,
+            joinRule = JoinRule.Public,
+        )
+        val leftKnockRoom = aSpaceRoom(
+            roomId = A_ROOM_ID_3,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.LEFT,
+            joinRule = JoinRule.Knock,
+        )
+        val leftRoomWithUnknownJoinRule = aSpaceRoom(
+            roomId = A_ROOM_ID_4,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.LEFT,
+            joinRule = null,
+        )
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            initialSpaceRoomsValue = listOf(leftInviteOnlyRoom, leftPublicRoom, leftKnockRoom, leftRoomWithUnknownJoinRule),
+            paginateResult = { Result.success(Unit) },
+        )
+        val presenter = createSpacePresenter(spaceRoomList = fakeSpaceRoomList)
+        presenter.test {
+            awaitItem()
+            advanceUntilIdle()
+            val stateWithChildren = expectMostRecentItem()
+            assertThat(stateWithChildren.children).containsExactly(leftPublicRoom, leftKnockRoom, leftRoomWithUnknownJoinRule)
+        }
+    }
+
+    @Test
+    fun `present - children which can only be joined by invitation are kept when not left`() = runTest {
+        val joinedRoom = aSpaceRoom(
+            roomId = A_ROOM_ID,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.JOINED,
+            joinRule = JoinRule.Invite,
+        )
+        val invitedRoom = aSpaceRoom(
+            roomId = A_ROOM_ID_2,
+            roomType = RoomType.Room,
+            state = CurrentUserMembership.INVITED,
+            joinRule = JoinRule.Invite,
+        )
+        val roomWithUnknownMembership = aSpaceRoom(
+            roomId = A_ROOM_ID_3,
+            roomType = RoomType.Room,
+            state = null,
+            joinRule = JoinRule.Invite,
+        )
+        val fakeSpaceRoomList = FakeSpaceRoomList(
+            initialSpaceRoomsValue = listOf(joinedRoom, invitedRoom, roomWithUnknownMembership),
+            paginateResult = { Result.success(Unit) },
+        )
+        val presenter = createSpacePresenter(spaceRoomList = fakeSpaceRoomList)
+        presenter.test {
+            awaitItem()
+            advanceUntilIdle()
+            val stateWithChildren = expectMostRecentItem()
+            assertThat(stateWithChildren.children).containsExactly(joinedRoom, invitedRoom, roomWithUnknownMembership)
+        }
+    }
+
+    @Test
+    fun `present - removed rooms persist after flow update on partial failure`() = runTest {
+        // On partial failure, successfully removed rooms should stay filtered even after flow updates
+        val aRoom1 = aSpaceRoom(
+            roomId = A_ROOM_ID,
+            roomType = RoomType.Room,
+        )
+        val aRoom2 = aSpaceRoom(
+            roomId = A_ROOM_ID_2,
+            roomType = RoomType.Room,
+        )
+        val aRoom3 = aSpaceRoom(
+            roomId = A_ROOM_ID_3,
+            roomType = RoomType.Room,
+        )
+        // Room 1 succeeds, Room 2 fails
+        val removeChildFromSpaceResult = lambdaRecorder<RoomId, RoomId, Result<Unit>> { _, childId ->
+            if (childId == A_ROOM_ID_2) {
+                Result.failure(AN_EXCEPTION)
+            } else {
+                Result.success(Unit)
+            }
+        }
+        val spaceRoomList = FakeSpaceRoomList(
+            initialSpaceRoomsValue = listOf(aRoom1, aRoom2),
+            paginateResult = { Result.success(Unit) },
+        )
+        val presenter = createSpacePresenter(
+            spaceRoomList = spaceRoomList,
+            spaceService = FakeSpaceService(
+                removeChildFromSpaceResult = removeChildFromSpaceResult,
+            ),
+        )
+        presenter.test {
+            awaitItem() // Initial empty state
+            advanceUntilIdle()
+            val stateWithChildren = awaitItem()
+            stateWithChildren.eventSink(SpaceEvent.EnterManageMode)
+            // Select both rooms for removal
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID_2))
+            stateWithChildren.eventSink(SpaceEvent.RemoveSelectedRooms)
+            stateWithChildren.eventSink(SpaceEvent.ConfirmRoomRemoval)
+            advanceUntilIdle()
+            val failureState = expectMostRecentItem()
+            assertThat(failureState.removeRoomsAction.isFailure()).isTrue()
+            // Successfully removed room should be filtered out
+            assertThat(failureState.children.map { it.roomId }).doesNotContain(A_ROOM_ID)
+            // Failed room should still be present
+            assertThat(failureState.children.map { it.roomId }).contains(A_ROOM_ID_2)
+            // Emit new flow update with a new room added (simulating server refresh)
+            spaceRoomList.emitSpaceRooms(listOf(aRoom1, aRoom2, aRoom3))
+            advanceUntilIdle()
+            val afterFlowUpdate = awaitItem()
+            // A_ROOM_ID should still be filtered out even though it's in the new emission
+            assertThat(afterFlowUpdate.children.map { it.roomId }).doesNotContain(A_ROOM_ID)
+            // But the other rooms should be present
+            assertThat(afterFlowUpdate.children.map { it.roomId }).contains(A_ROOM_ID_2)
+            assertThat(afterFlowUpdate.children.map { it.roomId }).contains(A_ROOM_ID_3)
+        }
+    }
+
     private fun TestScope.createSpacePresenter(
         client: MatrixClient = FakeMatrixClient(),
-        spaceRoomList: SpaceRoomList = FakeSpaceRoomList(),
+        room: BaseRoom = FakeBaseRoom(),
+        spaceRoomList: SpaceRoomList = FakeSpaceRoomList(
+            paginateResult = { Result.success(Unit) }
+        ),
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
         joinRoom: JoinRoom = FakeJoinRoom(
             lambda = { _, _, _ -> Result.success(Unit) },
         ),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
+        spaceService: FakeSpaceService = FakeSpaceService(),
     ): SpacePresenter {
         return SpacePresenter(
             client = client,
+            room = room,
             spaceRoomList = spaceRoomList,
             seenInvitesStore = seenInvitesStore,
             joinRoom = joinRoom,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
-            sessionCoroutineScope = backgroundScope,
+            sessionCoroutineScope = this,
+            spaceService = spaceService,
         )
     }
 }

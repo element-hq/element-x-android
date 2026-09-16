@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Ange återställningsnyckel"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Din nyckellagring är för närvarande osynkroniserad."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Ställ in återställning"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Få tillgång till dina krypterade meddelanden om du tappar bort alla dina enheter eller blir utloggad ur %1$s överallt."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Öppna %1$s på en skrivbordsenhet"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Logga in på ditt konto igen"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"När du ombeds att verifiera din enhet, välj %1$s"</string>

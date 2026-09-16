@@ -48,6 +48,12 @@ interface MediaPlayer : AutoCloseable {
     fun seekTo(positionMs: Long)
 
     /**
+     * Sets the playback speed.
+     * @param speed The playback speed (e.g., 0.5f for half speed, 1.0f for normal, 2.0f for double speed)
+     */
+    fun setPlaybackSpeed(speed: Float)
+
+    /**
      * Releases any resources associated with this player.
      */
     override fun close()

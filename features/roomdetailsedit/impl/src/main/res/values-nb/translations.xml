@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"Rediger detaljer"</string>
+  <string name="screen_room_details_edition_error">"Det oppstod en ukjent feil, og informasjonen kunne ikke endres."</string>
+  <string name="screen_room_details_edition_error_title">"Kan ikke oppdatere rommet"</string>
+  <string name="screen_room_details_updating_room">"Oppdaterer rommet …"</string>
+</resources>

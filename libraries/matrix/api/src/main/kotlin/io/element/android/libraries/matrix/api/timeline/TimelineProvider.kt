@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.first
  * By default, the active timeline is the live timeline.
  */
 fun interface TimelineProvider {
+    /** The timeline currently in use, or `null` while none is available yet; see [getActiveTimeline] to await a non-null value. */
     fun activeTimelineFlow(): StateFlow<Timeline?>
 }
 

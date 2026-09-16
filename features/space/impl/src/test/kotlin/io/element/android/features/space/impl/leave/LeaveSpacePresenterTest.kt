@@ -29,11 +29,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class LeaveSpacePresenterTest {
-    private val aSpace = aSpaceRoom(
-        roomId = A_SPACE_ID,
-        displayName = A_SPACE_NAME,
-    )
-
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createLeaveSpacePresenter(
@@ -44,7 +39,7 @@ class LeaveSpacePresenterTest {
         presenter.test {
             val state = awaitItem()
             assertThat(state.spaceName).isNull()
-            assertThat(state.isLastAdmin).isFalse()
+            assertThat(state.needsOwnerChange).isFalse()
             assertThat(state.selectableSpaceRooms.isLoading()).isTrue()
             assertThat(state.leaveSpaceAction).isEqualTo(AsyncAction.Uninitialized)
             cancelAndIgnoreRemainingEvents()
@@ -66,7 +61,7 @@ class LeaveSpacePresenterTest {
             val stateError = awaitItem()
             assertThat(stateError.selectableSpaceRooms.isFailure()).isTrue()
             // Retry
-            stateError.eventSink(LeaveSpaceEvents.Retry)
+            stateError.eventSink(LeaveSpaceEvent.Retry)
             skipItems(1)
             val stateLoadingAgain = awaitItem()
             assertThat(stateLoadingAgain.selectableSpaceRooms.isLoading()).isTrue()
@@ -78,7 +73,7 @@ class LeaveSpacePresenterTest {
     fun `present - current space name and is last admin`() = runTest {
         val presenter = createLeaveSpacePresenter(
             leaveSpaceHandle = FakeLeaveSpaceHandle(
-                roomsResult = { Result.success(listOf(aLeaveSpaceRoom(spaceRoom = aSpace, isLastAdmin = true))) },
+                roomsResult = { Result.success(listOf(aLeaveSpaceRoom(spaceRoom = aSpace, isLastOwner = true))) },
             )
         )
         presenter.test {
@@ -87,7 +82,7 @@ class LeaveSpacePresenterTest {
             skipItems(2)
             val finalState = awaitItem()
             assertThat(finalState.spaceName).isEqualTo(A_SPACE_NAME)
-            assertThat(finalState.isLastAdmin).isTrue()
+            assertThat(finalState.needsOwnerChange).isTrue()
             // The current state is not in the sub room list
             assertThat(finalState.selectableSpaceRooms.dataOrNull()!!).isEmpty()
         }
@@ -103,13 +98,13 @@ class LeaveSpacePresenterTest {
                         listOf(
                             aLeaveSpaceRoom(spaceRoom = aSpace),
                             aLeaveSpaceRoom(
-                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID, isDirect = false)
+                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID, isDm = false)
                             ),
                             aLeaveSpaceRoom(
-                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_2, isDirect = true)
+                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_2, isDm = true)
                             ),
                             aLeaveSpaceRoom(
-                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_3, isDirect = null)
+                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_3, isDm = null)
                             ),
                         )
                     )
@@ -126,7 +121,7 @@ class LeaveSpacePresenterTest {
             assertThat(finalState.selectableSpaceRooms.dataOrNull()!!.map { it.spaceRoom.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_3)
             assertThat(finalState.selectedRoomsCount).isEqualTo(2)
             // Leaving the space will not include the DM
-            finalState.eventSink(LeaveSpaceEvents.LeaveSpace)
+            finalState.eventSink(LeaveSpaceEvent.LeaveSpace)
             val stateLeaving = awaitItem()
             assertThat(stateLeaving.leaveSpaceAction).isEqualTo(AsyncAction.Loading)
             val stateLeft = awaitItem()
@@ -145,8 +140,8 @@ class LeaveSpacePresenterTest {
                 roomsResult = {
                     Result.success(
                         listOf(
-                            LeaveSpaceRoom(aSpaceRoom(roomId = A_ROOM_ID), isLastAdmin = false),
-                            LeaveSpaceRoom(aSpaceRoom(roomId = A_ROOM_ID_2), isLastAdmin = true),
+                            LeaveSpaceRoom(aSpaceRoom(roomId = A_ROOM_ID), isLastOwner = false, areCreatorsPrivileged = false),
+                            LeaveSpaceRoom(aSpaceRoom(roomId = A_ROOM_ID_2), isLastOwner = true, areCreatorsPrivileged = false),
                         )
                     )
                 },
@@ -157,45 +152,45 @@ class LeaveSpacePresenterTest {
             skipItems(3)
             val state = awaitItem()
             assertThat(state.spaceName).isNull()
-            assertThat(state.isLastAdmin).isFalse()
+            assertThat(state.needsOwnerChange).isFalse()
             val data = state.selectableSpaceRooms.dataOrNull()!!
             assertThat(data.size).isEqualTo(2)
             // Only one room is selectable as the user is the last admin in the other one
             val room1 = data[0]
             assertThat(room1.spaceRoom.roomId).isEqualTo(A_ROOM_ID)
             assertThat(room1.isSelected).isTrue()
-            assertThat(room1.isLastAdmin).isFalse()
+            assertThat(room1.isLastOwner).isFalse()
             val room2 = data[1]
             assertThat(room2.spaceRoom.roomId).isEqualTo(A_ROOM_ID_2)
             assertThat(room2.isSelected).isFalse()
-            assertThat(room2.isLastAdmin).isTrue()
+            assertThat(room2.isLastOwner).isTrue()
             // Deselect all
-            state.eventSink(LeaveSpaceEvents.DeselectAllRooms)
+            state.eventSink(LeaveSpaceEvent.DeselectAllRooms)
             skipItems(1)
             val stateAllDeselected = awaitItem()
             val dataAllDeselected = stateAllDeselected.selectableSpaceRooms.dataOrNull()!!
             assertThat(dataAllDeselected.any { it.isSelected }).isFalse()
             // Select all
-            stateAllDeselected.eventSink(LeaveSpaceEvents.SelectAllRooms)
+            stateAllDeselected.eventSink(LeaveSpaceEvent.SelectAllRooms)
             skipItems(1)
             val stateAllSelected = awaitItem()
             val dataAllSelected = stateAllSelected.selectableSpaceRooms.dataOrNull()!!
             // The last admin room should not be selected
             assertThat(dataAllSelected.count { it.isSelected }).isEqualTo(1)
             // Toggle selection of the first room
-            stateAllSelected.eventSink(LeaveSpaceEvents.ToggleRoomSelection(A_ROOM_ID))
+            stateAllSelected.eventSink(LeaveSpaceEvent.ToggleRoomSelection(A_ROOM_ID))
             skipItems(1)
             val stateOneDeselected = awaitItem()
             val dataOneDeselected = stateOneDeselected.selectableSpaceRooms.dataOrNull()!!
             assertThat(dataOneDeselected[0].isSelected).isFalse()
             // Toggle selection of the first room
-            stateOneDeselected.eventSink(LeaveSpaceEvents.ToggleRoomSelection(A_ROOM_ID))
+            stateOneDeselected.eventSink(LeaveSpaceEvent.ToggleRoomSelection(A_ROOM_ID))
             skipItems(1)
             val stateOneSelected = awaitItem()
             val dataOneSelected = stateOneSelected.selectableSpaceRooms.dataOrNull()!!
             assertThat(dataOneSelected[0].isSelected).isTrue()
             // Leave space
-            stateOneSelected.eventSink(LeaveSpaceEvents.LeaveSpace)
+            stateOneSelected.eventSink(LeaveSpaceEvent.LeaveSpace)
             val stateLeaving = awaitItem()
             assertThat(stateLeaving.leaveSpaceAction).isEqualTo(AsyncAction.Loading)
             val stateLeft = awaitItem()
@@ -220,15 +215,29 @@ class LeaveSpacePresenterTest {
         presenter.test {
             skipItems(3)
             val state = awaitItem()
-            state.eventSink(LeaveSpaceEvents.LeaveSpace)
+            state.eventSink(LeaveSpaceEvent.LeaveSpace)
             val stateLeaving = awaitItem()
             assertThat(stateLeaving.leaveSpaceAction).isEqualTo(AsyncAction.Loading)
             val stateError = awaitItem()
             assertThat(stateError.leaveSpaceAction.isFailure()).isTrue()
             // Close error
-            stateError.eventSink(LeaveSpaceEvents.CloseError)
+            stateError.eventSink(LeaveSpaceEvent.CloseError)
             val stateErrorClosed = awaitItem()
             assertThat(stateErrorClosed.leaveSpaceAction).isEqualTo(AsyncAction.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - needsOwnerChange is false if user is the last joined member`() = runTest {
+        val presenter = createLeaveSpacePresenter(
+            leaveSpaceHandle = FakeLeaveSpaceHandle(
+                roomsResult = { Result.success(listOf(aLeaveSpaceRoom(spaceRoom = aSpaceRoom(numJoinedMembers = 1), isLastOwner = true))) },
+            )
+        )
+        presenter.test {
+            skipItems(3)
+            val state = awaitItem()
+            assertThat(state.needsOwnerChange).isFalse()
         }
     }
 
@@ -241,13 +250,18 @@ class LeaveSpacePresenterTest {
     }
 }
 
+private val aSpace = aSpaceRoom(
+    roomId = A_SPACE_ID,
+    displayName = A_SPACE_NAME,
+    numJoinedMembers = 2,
+)
+
 private fun aLeaveSpaceRoom(
-    spaceRoom: SpaceRoom = aSpaceRoom(
-        roomId = A_SPACE_ID,
-        displayName = A_SPACE_NAME,
-    ),
-    isLastAdmin: Boolean = false,
+    spaceRoom: SpaceRoom = aSpace,
+    isLastOwner: Boolean = false,
+    areCreatorsPrivileged: Boolean = false,
 ) = LeaveSpaceRoom(
     spaceRoom = spaceRoom,
-    isLastAdmin = isLastAdmin,
+    isLastOwner = isLastOwner,
+    areCreatorsPrivileged = areCreatorsPrivileged,
 )

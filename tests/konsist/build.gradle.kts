@@ -29,6 +29,11 @@ dependencies {
 // - Add every single module as a dependency of this one.
 // - Move the Konsist tests to the `app` module, but the `app` module does not need to know about Konsist.
 tasks.withType<Test>().configureEach {
+    // Disable parallel tests: every time we run a test class in parallel a new JVM is started, and the `KoScope` contents can't be shared between them.
+    // This scope can take 1-2min to load, so having several instances of this happening is a terrible idea.
+    // It's actually faster to run the tests sequentially, at least locally.
+    maxParallelForks = 1
+
     val isNotCheckTask = gradle.startParameter.taskNames.any { it.contains("check", ignoreCase = true).not() }
     outputs.upToDateWhen { isNotCheckTask }
 }

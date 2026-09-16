@@ -20,23 +20,22 @@ import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotif
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeRoomGroupMessageCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeSummaryGroupMessageCreator
+import io.element.android.libraries.push.impl.notifications.fixtures.aFallbackNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
-import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
 private val MY_AVATAR_URL: String? = null
 
 private val AN_INVITATION_EVENT = anInviteNotifiableEvent(roomId = A_ROOM_ID)
 private val A_SIMPLE_EVENT = aSimpleNotifiableEvent(eventId = AN_EVENT_ID)
 private val A_MESSAGE_EVENT = aNotifiableMessageEvent(eventId = AN_EVENT_ID, roomId = A_ROOM_ID)
+private val A_FALLBACK_EVENT = aFallbackNotifiableEvent()
 
-@RunWith(RobolectricTestRunner::class)
-class NotificationDataFactoryTest {
+class NotificationDataFactoryTest : RobolectricTest() {
     private val notificationCreator = FakeNotificationCreator()
     private val fakeRoomGroupMessageCreator = FakeRoomGroupMessageCreator()
     private val fakeSummaryGroupMessageCreator = FakeSummaryGroupMessageCreator()
@@ -47,7 +46,6 @@ class NotificationDataFactoryTest {
         roomGroupMessageCreator = fakeRoomGroupMessageCreator,
         summaryGroupMessageCreator = fakeSummaryGroupMessageCreator,
         activeNotificationsProvider = activeNotificationsProvider,
-        stringProvider = FakeStringProvider(),
     )
 
     @Test
@@ -64,10 +62,28 @@ class NotificationDataFactoryTest {
                 OneShotNotification(
                     notification = expectedNotification,
                     tag = A_ROOM_ID.value,
-                    summaryLine = AN_INVITATION_EVENT.description,
                     isNoisy = AN_INVITATION_EVENT.noisy,
                     timestamp = AN_INVITATION_EVENT.timestamp
                 )
+            )
+        )
+    }
+
+    @Test
+    fun `given a fallback invitation when mapping to notification then it's added`() = testWith(notificationDataFactory) {
+        val fallbackEvents = listOf(A_FALLBACK_EVENT)
+        val expectedNotification = notificationCreator.createFallbackNotificationResult(
+            null,
+            aNotificationAccountParams(),
+            fallbackEvents,
+        )
+        val result = toNotification(fallbackEvents, aNotificationAccountParams())
+        assertThat(result).isEqualTo(
+            OneShotNotification(
+                notification = expectedNotification,
+                tag = "FALLBACK",
+                isNoisy = false,
+                timestamp = A_FALLBACK_EVENT.timestamp
             )
         )
     }
@@ -83,7 +99,6 @@ class NotificationDataFactoryTest {
             OneShotNotification(
                 notification = expectedNotification,
                 tag = AN_EVENT_ID.value,
-                summaryLine = A_SIMPLE_EVENT.description,
                 isNoisy = A_SIMPLE_EVENT.noisy,
                 timestamp = AN_INVITATION_EVENT.timestamp
             )
@@ -105,7 +120,6 @@ class NotificationDataFactoryTest {
                 existingNotification = null,
             ),
             roomId = A_ROOM_ID,
-            summaryLine = "A room name: Bob Hello world!",
             messageCount = events.size,
             latestTimestamp = events.maxOf { it.timestamp },
             shouldBing = events.any { it.noisy },
@@ -161,7 +175,6 @@ class NotificationDataFactoryTest {
                 existingNotification = null,
             ),
             roomId = A_ROOM_ID,
-            summaryLine = "A room name: Bob Hello world!",
             messageCount = withRedactedRemoved.size,
             latestTimestamp = withRedactedRemoved.maxOf { it.timestamp },
             shouldBing = withRedactedRemoved.any { it.noisy },

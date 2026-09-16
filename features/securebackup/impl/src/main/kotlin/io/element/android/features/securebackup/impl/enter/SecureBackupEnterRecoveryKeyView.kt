@@ -9,22 +9,10 @@
 package io.element.android.features.securebackup.impl.enter
 
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.relocation.BringIntoViewRequester
-import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -34,13 +22,11 @@ import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
+import io.element.android.libraries.designsystem.modifiers.bringIntoViewOnImeVisible
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun SecureBackupEnterRecoveryKeyView(
@@ -55,7 +41,7 @@ fun SecureBackupEnterRecoveryKeyView(
         progressDialog = { },
         errorTitle = { stringResource(id = R.string.screen_recovery_key_confirm_error_title) },
         errorMessage = { stringResource(id = R.string.screen_recovery_key_confirm_error_content) },
-        onErrorDismiss = { state.eventSink(SecureBackupEnterRecoveryKeyEvents.ClearDialog) },
+        onErrorDismiss = { state.eventSink(SecureBackupEnterRecoveryKeyEvent.ClearDialog) },
     )
 
     FlowStepPage(
@@ -71,40 +57,24 @@ fun SecureBackupEnterRecoveryKeyView(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun Content(
     state: SecureBackupEnterRecoveryKeyState,
 ) {
-    val bringIntoViewRequester = remember { BringIntoViewRequester() }
-    var isFocused by remember { mutableStateOf(false) }
-    val isImeVisible = WindowInsets.isImeVisible
-    val coroutineScope = rememberCoroutineScope()
-    LaunchedEffect(isImeVisible, isFocused) {
-        // When the keyboard is shown, we want to scroll the text field into view
-        if (isImeVisible && isFocused) {
-            coroutineScope.launch {
-                // Delay to ensure the keyboard is fully shown
-                delay(100.milliseconds)
-                bringIntoViewRequester.bringIntoView()
-            }
-        }
-    }
     RecoveryKeyView(
         modifier = Modifier
-            .onFocusChanged { isFocused = it.isFocused }
-            .bringIntoViewRequester(bringIntoViewRequester)
+            .bringIntoViewOnImeVisible()
             .padding(top = 52.dp, bottom = 32.dp),
         state = state.recoveryKeyViewState,
         onClick = null,
         onChange = {
-            state.eventSink.invoke(SecureBackupEnterRecoveryKeyEvents.OnRecoveryKeyChange(it))
+            state.eventSink.invoke(SecureBackupEnterRecoveryKeyEvent.OnRecoveryKeyChange(it))
         },
         onSubmit = {
-            state.eventSink.invoke(SecureBackupEnterRecoveryKeyEvents.Submit)
+            state.eventSink.invoke(SecureBackupEnterRecoveryKeyEvent.Submit)
         },
         toggleRecoveryKeyVisibility = {
-            state.eventSink(SecureBackupEnterRecoveryKeyEvents.ChangeRecoveryKeyFieldContentsVisibility(it))
+            state.eventSink(SecureBackupEnterRecoveryKeyEvent.ChangeRecoveryKeyFieldContentsVisibility(it))
         }
     )
 }
@@ -119,7 +89,7 @@ private fun ColumnScope.Buttons(
         showProgress = state.submitAction.isLoading(),
         modifier = Modifier.fillMaxWidth(),
         onClick = {
-            state.eventSink.invoke(SecureBackupEnterRecoveryKeyEvents.Submit)
+            state.eventSink.invoke(SecureBackupEnterRecoveryKeyEvent.Submit)
         }
     )
 }
@@ -127,7 +97,7 @@ private fun ColumnScope.Buttons(
 @PreviewsDayNight
 @Composable
 internal fun SecureBackupEnterRecoveryKeyViewPreview(
-    @PreviewParameter(SecureBackupEnterRecoveryKeyStateProvider::class) state: SecureBackupEnterRecoveryKeyState
+    @PreviewParameter(SecureBackupEnterRecoveryKeyStatePreviewParam::class) state: SecureBackupEnterRecoveryKeyState
 ) = ElementPreview {
     SecureBackupEnterRecoveryKeyView(
         state = state,

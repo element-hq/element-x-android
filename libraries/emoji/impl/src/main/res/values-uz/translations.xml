@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Faoliyatlar"</string>
+  <string name="emoji_picker_category_flags">"Bayroqlar"</string>
+  <string name="emoji_picker_category_foods">"Oziq-ovqat va ichimliklar"</string>
+  <string name="emoji_picker_category_nature">"Hayvonlar va tabiat"</string>
+  <string name="emoji_picker_category_objects">"Ob\'ektlar"</string>
+  <string name="emoji_picker_category_people">"Smayllar va odamlar"</string>
+  <string name="emoji_picker_category_places">"Sayohat va Joylar"</string>
+  <string name="emoji_picker_category_recent">"Oxirgi kulgichlar"</string>
+  <string name="emoji_picker_category_symbols">"Belgilar"</string>
+  <string name="emoji_picker_search_placeholder">"Emojilarni qidiring"</string>
+</resources>

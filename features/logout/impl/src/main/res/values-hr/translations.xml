@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Jeste li sigurni da želite ukloniti ovaj uređaj?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Ukloni ovaj uređaj"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Ukloni ovaj uređaj"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Uklanjanje uređaja…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Ovo je vaš jedini uređaj. Ako ga uklonite, trebat će vam ključ za oporavak kako biste potvrdili svoj digitalni identitet i vratili šifrirane razgovore sljedeći put kada se prijavite."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Izgubiti ćete pristup svojim šifriranim chatovima"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Vaši su se ključevi još uvijek sigurnosno kopirali kada ste se isključili iz mreže. Ponovno se povežite kako bi se vaši ključevi mogli sigurnosno kopirati prije nego što se odjavite."</string>
+  <string name="screen_signout_key_backup_offline_title">"Vaši se ključevi još uvijek sigurnosno kopiraju"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Pričekajte da se ovo završi prije uklanjanja ovog uređaja."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Vaši se ključevi još uvijek sigurnosno kopiraju"</string>
+  <string name="screen_signout_preference_item">"Ukloni ovaj uređaj"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Ovo je vaš jedini uređaj. Ako ga uklonite, trebat će vam ključ za oporavak kako biste potvrdili svoj digitalni identitet i vratili šifrirane razgovore sljedeći put kada se prijavite."</string>
+  <string name="screen_signout_recovery_disabled_title">"Izgubit ćete pristup svojim šifriranim chatovima"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Ovo je vaš jedini uređaj. Ako ga uklonite, trebat će vam ključ za oporavak kako biste potvrdili svoj digitalni identitet i vratili šifrirane razgovore sljedeći put kada se prijavite."</string>
+  <string name="screen_signout_save_recovery_key_title">"Prije uklanjanja ovog uređaja provjerite imate li pristup ključu za oporavak"</string>
+</resources>

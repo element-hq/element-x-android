@@ -15,12 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 private const val DEFAULT_REMAINING_ATTEMPTS = 3
 
 class InMemoryLockScreenStore : LockScreenStore {
-    private val hasPinCode = MutableStateFlow(false)
     private var pinCode: String? = null
-        set(value) {
-            field = value
-            hasPinCode.value = value != null
-        }
     private var remainingAttempts: Int = DEFAULT_REMAINING_ATTEMPTS
     private var isBiometricUnlockAllowed = MutableStateFlow(false)
 
@@ -46,10 +41,6 @@ class InMemoryLockScreenStore : LockScreenStore {
 
     override suspend fun deleteEncryptedPinCode() {
         pinCode = null
-    }
-
-    override fun hasPinCode(): Flow<Boolean> {
-        return hasPinCode
     }
 
     override fun isBiometricUnlockAllowed(): Flow<Boolean> {

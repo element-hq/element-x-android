@@ -12,6 +12,18 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class FakeNetworkMonitor(initialStatus: NetworkStatus = NetworkStatus.Connected) : NetworkMonitor {
+class FakeNetworkMonitor(
+    initialStatus: NetworkStatus = NetworkStatus.Connected,
+) : NetworkMonitor {
     override val connectivity = MutableStateFlow(initialStatus)
+    override val isNetworkBlocked = MutableStateFlow(false)
+    override val isInAirGappedEnvironment = MutableStateFlow(false)
+
+    fun givenNetworkBlocked(isBlocked: Boolean) {
+        isNetworkBlocked.value = isBlocked
+    }
+
+    fun givenIsInAirGappedEnvironment(isInAirGapped: Boolean) {
+        isInAirGappedEnvironment.value = isInAirGapped
+    }
 }

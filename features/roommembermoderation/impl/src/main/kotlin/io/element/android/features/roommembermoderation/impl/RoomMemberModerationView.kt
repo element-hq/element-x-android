@@ -8,17 +8,21 @@
 
 package io.element.android.features.roommembermoderation.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -52,6 +56,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.matrix.ui.model.toText
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
@@ -61,6 +66,7 @@ import timber.log.Timber
 fun RoomMemberModerationView(
     state: InternalRoomMemberModerationState,
     onSelectAction: (ModerationAction, MatrixUser) -> Unit,
+    onAvatarClick: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -70,7 +76,8 @@ fun RoomMemberModerationView(
                 user = selectedUser,
                 actions = state.actions,
                 onSelectAction = onSelectAction,
-                onDismiss = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
+                onAvatarClick = onAvatarClick,
+                onDismiss = { state.eventSink(InternalRoomMemberModerationEvent.Reset) },
             )
         }
         RoomMemberAsyncActions(state = state)
@@ -95,9 +102,9 @@ private fun RoomMemberAsyncActions(
                     destructiveSubmit = true,
                     minLines = 2,
                     onSubmit = { reason ->
-                        state.eventSink(InternalRoomMemberModerationEvents.DoKickUser(reason = reason))
+                        state.eventSink(InternalRoomMemberModerationEvent.DoKickUser(reason = reason))
                     },
-                    onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
+                    onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvent.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
                     content = stringResource(R.string.screen_bottom_sheet_manage_room_member_kick_member_confirmation_description),
                     value = "",
@@ -135,9 +142,9 @@ private fun RoomMemberAsyncActions(
                     destructiveSubmit = true,
                     minLines = 2,
                     onSubmit = { reason ->
-                        state.eventSink(InternalRoomMemberModerationEvents.DoBanUser(reason = reason))
+                        state.eventSink(InternalRoomMemberModerationEvent.DoBanUser(reason = reason))
                     },
-                    onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
+                    onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvent.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
                     content = stringResource(R.string.screen_bottom_sheet_manage_room_member_ban_member_confirmation_description),
                     value = "",
@@ -178,9 +185,9 @@ private fun RoomMemberAsyncActions(
                         asyncIndicatorState.enqueue {
                             AsyncIndicator.Loading(text = stringResource(R.string.screen_bottom_sheet_manage_room_member_unbanning_user, userDisplayName))
                         }
-                        state.eventSink(InternalRoomMemberModerationEvents.DoUnbanUser(reason = reason))
+                        state.eventSink(InternalRoomMemberModerationEvent.DoUnbanUser(reason = reason))
                     },
-                    onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
+                    onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvent.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
                     content = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_description),
                     value = "",
@@ -211,12 +218,16 @@ private fun RoomMemberActionsBottomSheet(
     user: MatrixUser,
     actions: ImmutableList<ModerationActionState>,
     onSelectAction: (ModerationAction, MatrixUser) -> Unit,
+    onAvatarClick: (MatrixUser) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val bottomSheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+    )
     ModalBottomSheet(
-        modifier = Modifier.systemBarsPadding(),
+        modifier = Modifier.statusBarsPadding(),
         sheetState = bottomSheetState,
         onDismissRequest = {
             coroutineScope.launch {
@@ -224,9 +235,12 @@ private fun RoomMemberActionsBottomSheet(
                 onDismiss()
             }
         },
+        scrollable = false,
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Avatar(
                 avatarData = user.getAvatarData(size = AvatarSize.RoomListManageUser),
@@ -234,6 +248,13 @@ private fun RoomMemberActionsBottomSheet(
                 modifier = Modifier
                     .padding(bottom = 24.dp)
                     .align(Alignment.CenterHorizontally)
+                    .clickable(enabled = user.avatarUrl != null) {
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                            onAvatarClick(user)
+                            onDismiss()
+                        }
+                    }
             )
             val bestName = user.getBestName()
             Text(
@@ -243,9 +264,23 @@ private fun RoomMemberActionsBottomSheet(
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
                     .fillMaxWidth()
             )
+            val userStatus = user.displayedStatus?.toText()
+            if (userStatus != null) {
+                Text(
+                    text = userStatus,
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    maxLines = 1,
+                    color = ElementTheme.colors.textSecondary,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                        .fillMaxWidth()
+                )
+            }
             // Show user ID only if it's different from the display name
             if (bestName != user.userId.value) {
                 Text(
@@ -266,13 +301,12 @@ private fun RoomMemberActionsBottomSheet(
                 when (val action = actionState.action) {
                     is ModerationAction.DisplayProfile -> {
                         ListItem(
-                            style = ListItemStyle.Primary,
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_member_user_info)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_member_user_info)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
                             onClick = {
                                 coroutineScope.launch {
-                                    onSelectAction(action, user)
                                     bottomSheetState.hide()
+                                    onSelectAction(action, user)
                                 }
                             },
                             enabled = actionState.isEnabled
@@ -280,7 +314,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.KickUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_remove)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_remove)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Close())),
                             style = ListItemStyle.Destructive,
                             onClick = {
@@ -294,7 +328,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.BanUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_ban)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_ban)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
                             style = ListItemStyle.Destructive,
                             onClick = {
@@ -308,7 +342,7 @@ private fun RoomMemberActionsBottomSheet(
                     }
                     is ModerationAction.UnbanUser -> {
                         ListItem(
-                            headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_unban)) },
+                            content = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_unban)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Restart())),
                             style = ListItemStyle.Destructive,
                             onClick = {
@@ -328,17 +362,19 @@ private fun RoomMemberActionsBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomMemberModerationViewPreview(@PreviewParameter(InternalRoomMemberModerationStateProvider::class) state: InternalRoomMemberModerationState) {
+internal fun RoomMemberModerationViewPreview(@PreviewParameter(InternalRoomMemberModerationStatePreviewParam::class) state: InternalRoomMemberModerationState) {
+    val isDoingAction = listOf(state.kickUserAsyncAction, state.banUserAsyncAction, state.unbanUserAsyncAction).any { it is AsyncAction.Loading }
+    val modifier = if (isDoingAction) {
+        Modifier.fillMaxWidth().heightIn(min = 64.dp)
+    } else {
+        Modifier.fillMaxSize()
+    }
     ElementPreview {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 64.dp)
-        ) {
+        Box(modifier) {
             RoomMemberModerationView(
                 state = state,
-                onSelectAction = { _, _ ->
-                },
+                onSelectAction = { _, _ -> },
+                onAvatarClick = {},
             )
         }
     }

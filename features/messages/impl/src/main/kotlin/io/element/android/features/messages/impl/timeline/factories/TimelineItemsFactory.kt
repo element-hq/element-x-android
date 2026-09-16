@@ -21,6 +21,9 @@ import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
@@ -64,22 +67,24 @@ class TimelineItemsFactory(
     suspend fun replaceWith(
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,
+        renderReadReceipts: Boolean,
     ) = withContext(dispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(timelineItems)
-            buildAndEmitTimelineItemStates(timelineItems, roomMembers)
+            buildAndEmitTimelineItemStates(timelineItems, roomMembers, renderReadReceipts)
         }
     }
 
     private suspend fun buildAndEmitTimelineItemStates(
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,
+        renderReadReceipts: Boolean,
     ) {
         val newTimelineItemStates = ArrayList<TimelineItem>()
         for (index in diffCache.indices().reversed()) {
             val cacheItem = diffCache.get(index)
             if (cacheItem == null) {
-                buildAndCacheItem(timelineItems, index, roomMembers)?.also { timelineItemState ->
+                buildAndCacheItem(timelineItems, index, roomMembers, renderReadReceipts)?.also { timelineItemState ->
                     newTimelineItemStates.add(timelineItemState)
                 }
             } else {
@@ -87,7 +92,8 @@ class TimelineItemsFactory(
                     eventItemFactory.update(
                         timelineItem = cacheItem,
                         receivedMatrixTimelineItem = timelineItems[index] as MatrixTimelineItem.Event,
-                        roomMembers = roomMembers
+                        roomMembers = roomMembers,
+                        renderReadReceipts = renderReadReceipts,
                     )
                 } else {
                     cacheItem
@@ -103,14 +109,24 @@ class TimelineItemsFactory(
         timelineItems: List<MatrixTimelineItem>,
         index: Int,
         roomMembers: List<RoomMember>,
+        renderReadReceipts: Boolean,
     ): TimelineItem? {
         val timelineItem =
             when (val currentTimelineItem = timelineItems[index]) {
-                is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers)
+                is MatrixTimelineItem.Event -> if (currentTimelineItem.event.isKeyVerificationRequest()) {
+                    null
+                } else {
+                    eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers, renderReadReceipts)
+                }
                 is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
                 MatrixTimelineItem.Other -> null
             }
         diffCache[index] = timelineItem
         return timelineItem
     }
+}
+
+private fun EventTimelineItem.isKeyVerificationRequest(): Boolean {
+    val messageType = (content as? MessageContent)?.type
+    return messageType is OtherMessageType && messageType.isKeyVerificationRequest
 }

@@ -13,6 +13,7 @@
     <item quantity="one">"%d notificação"</item>
     <item quantity="other">"%d notificações"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Não foi possível registar o distribuidor de UnifiedPush, pelo que deixarás de receber notificações. Por favor, verifica as configurações de notificação na aplicação."</string>
   <string name="notification_fallback_content">"Tens novas mensagens."</string>
   <string name="notification_incoming_call">"📹 A receber chamada"</string>
   <string name="notification_inline_reply_failed">"** Falha no envio - por favor abre a sala"</string>
@@ -38,6 +39,7 @@
   <string name="notification_sender_me">"Eu"</string>
   <string name="notification_sender_mention_reply">"%1$s mencionou ou respondeu"</string>
   <string name="notification_test_push_notification_content">"Estás a ver a notificação! Clica em mim!"</string>
+  <string name="notification_thread_in_room">"Tópico em %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -64,7 +66,10 @@
   <string name="troubleshoot_notifications_test_blocked_users_title">"Utilizadores bloqueados"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Obtém o nome do fornecedor atual."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nenhum fornecedor de envio selecionado."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Fornecedor de envio atual: %1$s e distribuidor atual: %2$s. Mas o distribuidor %3$s não foi encontrado. Talvez a aplicação tenha sido desinstalada?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Fornecedor de envio atual: %1$s, mas nenhum distribuidor foi configurado."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Fornecedor de envio atual: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Fornecedor de envio atual: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Fornecedor de envio atual"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Certifica que a aplicação tem pelo menos um fornecedor de envio."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nenhum fornecedor de envio encontrado."</string>

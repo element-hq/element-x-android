@@ -14,16 +14,16 @@ import kotlin.reflect.KClass
  * Adds Node to the specified component graph.
  * Equivalent to the following declaration:
  *
+ * ```
  * @BindingContainer
  * @ContributesTo(Scope::class)
- * abstract class YourNodeModule {
-
- *  @Binds
- *  @IntoMap
- *  @NodeKey(YourNode::class)
- *  abstract fun bindYourNodeFactory(factory: YourNode.Factory): AssistedNodeFactory<*>
- *}
-
+ * interface YourNodeBindingContainer {
+ *     @Binds
+ *     @IntoMap
+ *     @NodeKey(YourNode::class)
+ *     fun bindYourNodeAssistedFactory(factory: YourNodeAssistedFactory): AssistedNodeFactory<*>
+ * }
+ * ```
  */
 @Target(AnnotationTarget.CLASS)
 annotation class ContributesNode(

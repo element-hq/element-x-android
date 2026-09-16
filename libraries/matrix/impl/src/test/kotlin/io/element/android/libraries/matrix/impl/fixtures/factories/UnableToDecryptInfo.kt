@@ -19,14 +19,12 @@ internal fun aRustUnableToDecryptInfo(
     userTrustsOwnIdentity: Boolean = false,
     senderHomeserver: String = "",
     ownHomeserver: String = "",
-): UnableToDecryptInfo {
-    return UnableToDecryptInfo(
-        eventId = eventId,
-        timeToDecryptMs = timeToDecryptMs,
-        cause = cause,
-        eventLocalAgeMillis = eventLocalAgeMillis,
-        userTrustsOwnIdentity = userTrustsOwnIdentity,
-        senderHomeserver = senderHomeserver,
-        ownHomeserver = ownHomeserver,
-    )
-}
+) = UnableToDecryptInfo(
+    eventId = eventId,
+    timeToDecryptMs = timeToDecryptMs,
+    cause = cause,
+    eventLocalAgeMillis = eventLocalAgeMillis,
+    userTrustsOwnIdentity = userTrustsOwnIdentity,
+    senderHomeserver = senderHomeserver,
+    ownHomeserver = ownHomeserver,
+)

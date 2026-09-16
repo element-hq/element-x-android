@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"نعم، قبول الكل"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"هل أنت متأكد من رغبتك في قبول جميع طلبات الانضمام؟"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"قبول جميع الطلبات"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"قبول الكل"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"تعذّر قبول جميع الطلبات. هل ترغب في المحاولة مرة أخرى؟"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"فشل قبول جميع الطلبات"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"جارٍ قبول جميع طلبات الانضمام"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"تعذّر قبول هذا الطلب. هل ترغب في المحاولة مرة أخرى؟"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"فشل قبول الطلب"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"جارٍ قبول طلب الانضمام"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"نعم، ارفض واحظر"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"هل أنت متأكد من رغبتك في رفض %1$s وحظره؟ لن يتمكن هذا المستخدم من طلب الوصول للانضمام إلى هذه الغرفة مرة أخرى."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"رفض الوصول والحظر"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"جارٍ رفض الوصول وحظره"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"نعم، ارفض"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"هل أنت متأكد من رغبتك في رفض طلب %1$s للانضمام إلى هذه الغرفة؟"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"رفض الوصول"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"رفض وحظر"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"تعذّر رفض هذا الطلب. هل ترغب في المحاولة مرة أخرى؟"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"فشل رفض الطلب"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"جارٍ رفض طلب الانضمام"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"عندما يطلب أحدهم الانضمام إلى الغرفة، ستتمكن من رؤية طلبه هنا."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"لا توجد طلبات انضمام معلّقة"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"جارٍ تحميل طلبات الانضمام…"</string>
+  <string name="screen_knock_requests_list_title">"طلبات الانضمام"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="zero">"%1$s يريد الانضمام إلى هذه الغرفة"</item>
+    <item quantity="one">"%1$s +%2$d آخر يريدان الانضمام إلى هذه الغرفة"</item>
+    <item quantity="two">"%1$s +%2$d آخران يريدون الانضمام إلى هذه الغرفة"</item>
+    <item quantity="few">"%1$s +%2$d آخرون يريدون الانضمام إلى هذه الغرفة"</item>
+    <item quantity="many">"%1$s +%2$d آخرين يريدون الانضمام إلى هذه الغرفة"</item>
+    <item quantity="other">"%1$s +%2$d آخرين يريدون الانضمام إلى هذه الغرفة"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"عرض الكل"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"قبول"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s يريد الانضمام إلى هذه الغرفة"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"عرض"</string>
+</resources>

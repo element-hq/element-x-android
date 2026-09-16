@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="state_event_avatar_changed_too">"(taip pat buvo pakeistas ir avataras)"</string>
-  <string name="state_event_avatar_url_changed">"%1$s pakeitė savo avatarą"</string>
-  <string name="state_event_avatar_url_changed_by_you">"Jūs pakeitėte savo avatarą"</string>
+  <string name="state_event_avatar_url_changed">"%1$s pakeitė savo pseudoportretą"</string>
+  <string name="state_event_avatar_url_changed_by_you">"Jūs pakeitėte savo pseudoportretą"</string>
   <string name="state_event_display_name_changed_from">"%1$s pakeitė savo slapyvardį iš %2$s į %3$s"</string>
   <string name="state_event_display_name_changed_from_by_you">"Jūs pakeitėte savo slapyvardį iš %1$s į %2$s"</string>
   <string name="state_event_display_name_removed">"%1$s pašalino savo slapyvardį (jis buvo %2$s)"</string>
   <string name="state_event_display_name_removed_by_you">"Jūs pašalinote savo slapyvardį (jis buvo %1$s)"</string>
-  <string name="state_event_display_name_set">"%1$s pakeitė savo slapyvardį į %2$s"</string>
+  <string name="state_event_display_name_set">"%1$s nustatė savo rodomą vardą į %2$s"</string>
   <string name="state_event_display_name_set_by_you">"Jūs nustatėte savo slapyvardį į %1$s"</string>
   <string name="state_event_room_avatar_changed">"%1$s pakeitė kambario avatarą"</string>
   <string name="state_event_room_avatar_changed_by_you">"Jūs pakeitėte kambario avatarą"</string>
@@ -21,7 +21,7 @@
   <string name="state_event_room_invite_accepted">"%1$s priėmė kvietimą"</string>
   <string name="state_event_room_invite_accepted_by_you">"Priėmėte kvietimą"</string>
   <string name="state_event_room_invite_by_you">"Jūs pakvietėte %1$s"</string>
-  <string name="state_event_room_invite_you">"%1$s pakvietė Jus"</string>
+  <string name="state_event_room_invite_you">"%1$s pakvietė jus"</string>
   <string name="state_event_room_join">"%1$s prisijungė prie kambario"</string>
   <string name="state_event_room_join_by_you">"Jūs prisijungėte prie kambario"</string>
   <string name="state_event_room_knock">"%1$s prašo prisijungti"</string>

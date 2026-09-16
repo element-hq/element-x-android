@@ -23,7 +23,7 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"PIN을 두 번 입력하세요."</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN이 일치하지 않습니다"</string>
   <string name="screen_app_lock_signout_alert_message">"계속하려면 다시 로그인하고 새로운 PIN을 생성해야 합니다"</string>
-  <string name="screen_app_lock_signout_alert_title">"로그아웃 중입니다"</string>
+  <string name="screen_app_lock_signout_alert_title">"이 기기를 제거하는 중입니다"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="other">"당신은 %1$d 회 잠금 해제 시도를 가지고 있습니다"</item>
   </plurals>
@@ -32,5 +32,5 @@
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"생체 인증 사용"</string>
   <string name="screen_app_lock_use_pin_android">"PIN 사용"</string>
-  <string name="screen_signout_in_progress_dialog_content">"로그아웃 중…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"기기를 제거하는 중…"</string>
 </resources>

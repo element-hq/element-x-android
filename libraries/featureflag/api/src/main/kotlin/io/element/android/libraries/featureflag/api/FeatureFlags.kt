@@ -22,13 +22,6 @@ enum class FeatureFlags(
     override val isFinished: Boolean,
     override val isInLabs: Boolean = false,
 ) : Feature {
-    RoomDirectorySearch(
-        key = "feature.roomdirectorysearch",
-        title = "Room directory search",
-        description = "Allow user to search for public rooms in their homeserver",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     ShowBlockedUsersDetails(
         key = "feature.showBlockedUsersDetails",
         title = "Show blocked users details",
@@ -50,30 +43,6 @@ enum class FeatureFlags(
             " Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners." +
             " You'll have to stop and re-open the app manually for that setting to take effect.",
         defaultValue = { false },
-        isFinished = false,
-    ),
-    EnableKeyShareOnInvite(
-        key = "feature.enableKeyShareOnInvite",
-        title = "Share encrypted history with new members",
-        description = "When inviting a user to an encrypted room that has history visibility set to \"shared\"," +
-            " share encrypted history with that user, and accept encrypted history when you are invited to such a room." +
-            "\nRequires an app restart to take effect." +
-            "\n\nWARNING: this feature is EXPERIMENTAL and not all security precautions are implemented." +
-            " Do not enable on production accounts.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
-    Knock(
-        key = "feature.knock",
-        title = "Ask to join",
-        description = "Allow creating rooms which users can request access to.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
-    Space(
-        key = "feature.space",
-        title = "Spaces",
-        defaultValue = { true },
         isFinished = false,
     ),
     PrintLogsToLogcat(
@@ -110,12 +79,86 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    SyncNotificationsWithWorkManager(
-        key = "feature.sync_notifications_with_workmanager",
-        title = "Sync notifications with WorkManager",
-        description = "Use WorkManager to schedule notification sync tasks when a push is received." +
-            " This should improve reliability and battery usage.",
+    QrCodeLogin(
+        key = "feature.qr_code_login",
+        title = "QR Code Login",
+        description = "Allow logging in on other devices using a QR code.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    AllowBlackTheme(
+        key = "feature.allow_black_theme",
+        title = "Black theme",
+        description = "Allow selecting the black appearance theme for battery saving on OLED.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    ValidateNetworkWhenSchedulingNotificationFetching(
+        key = "feature.validate_network_when_scheduling_notification_fetching",
+        title = "Validate internet connectivity when scheduling notification fetching",
+        description = "Only fetch events for push notifications when the device has internet connectivity. " +
+            "Enabling this can be problematic in air-gapped environments.",
         defaultValue = { true },
+        isFinished = false,
+    ),
+    JumpToUnread(
+        key = "feature.jump_to_unread",
+        title = "Jump to unread messages",
+        description = "Show a button to jump to the read marker, plus a count badge on the scroll-to-bottom button " +
+            "when new messages arrive while scrolled away.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    SlashCommand(
+        key = "feature.slash_command",
+        title = "Parse slash commands in the message composer",
+        description = "Allow parsing slash commands in the message composer and perform action.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    RoomThreadList(
+        key = "feature.room_thread_list",
+        title = "Add a list of threads in a room",
+        description = "Add a new screen with a list of threads in a room.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    AutomaticBackPagination(
+        key = "feature.automatic_back_pagination",
+        title = "Automatic back pagination of rooms",
+        description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
+            "\nRequires an app restart to take effect.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    UnreadIndicatorCount(
+        key = "feature.unread_indicator_count",
+        title = "Unread indicator count",
+        description = "Show the number of unread messages on the unread indicator in the room list.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    SendGalleryMessages(
+        key = "feature.send_gallery_messages",
+        title = "Send gallery messages",
+        description = "Allow sending multiple media items in a single message.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = true,
+    ),
+    Knock(
+        key = "feature.knock",
+        title = "Ask to join",
+        description = "Allow creating rooms which users can request access to.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = true,
+    ),
+    MessageSearch(
+        key = "feature.message_search",
+        title = "Message search",
+        description = "Index messages locally so they can be searched. Only messages received while enabled are indexed.",
+        defaultValue = { false },
         isFinished = false,
     ),
 }

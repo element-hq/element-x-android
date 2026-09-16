@@ -14,7 +14,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class ReactionSummaryState(
     val target: Summary?,
-    val eventSink: (ReactionSummaryEvents) -> Unit
+    val eventSink: (ReactionSummaryEvent) -> Unit
 ) {
     data class Summary(
         val reactions: ImmutableList<AggregatedReaction>,

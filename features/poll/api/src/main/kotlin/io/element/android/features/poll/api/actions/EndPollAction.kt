@@ -11,6 +11,13 @@ package io.element.android.features.poll.api.actions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 
+/**
+ * Closes a poll so no further answers are accepted, wrapping the timeline call so the analytics are captured in one place.
+ */
 interface EndPollAction {
+    /**
+     * @param timeline the timeline the poll lives in.
+     * @param pollStartId the poll start event to close.
+     */
     suspend fun execute(timeline: Timeline, pollStartId: EventId): Result<Unit>
 }

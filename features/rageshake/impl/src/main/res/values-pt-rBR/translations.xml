@@ -14,5 +14,7 @@
   <string name="screen_bug_report_include_screenshot">"Enviar captura de tela"</string>
   <string name="screen_bug_report_logs_description">"Os registros serão incluídos com sua mensagem para garantir que tudo esteja funcionando corretamente. Para enviar sua mensagem sem registros, desative essa configuração."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s falhou inesperadamente na última vez que foi usado. Gostaria de compartilhar um relatório de falhas conosco?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Se estiver enfrentando problemas com as notificações, enviar as regras de notificações push pode ajudar-nos a descobrir o que está errado. Observe que as regras podem conter informações privadas, como o seu nome de exibição ou palavras chaves de notificação."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Enviar configurações de notificação"</string>
   <string name="screen_bug_report_view_logs">"Ver registros"</string>
 </resources>

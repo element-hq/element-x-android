@@ -11,7 +11,6 @@ package io.element.android.features.rolesandpermissions.impl.root
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -20,14 +19,6 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.matrix.api.room.BaseRoom
-import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.ui.model.roleOf
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.launch
 
 @ContributesNode(RoomScope::class)
 @AssistedInject
@@ -35,13 +26,8 @@ class RolesAndPermissionsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RolesAndPermissionsPresenter,
-    private val room: BaseRoom,
-) : Node(buildContext, plugins = plugins), RolesAndPermissionsNavigator {
+) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin, RolesAndPermissionsNavigator {
-        override fun openAdminList()
-        override fun openModeratorList()
-        override fun openEditPermissions()
-
         override fun onBackClick() {}
     }
 
@@ -51,22 +37,6 @@ class RolesAndPermissionsNode(
     private val navigator = object : RolesAndPermissionsNavigator by callback {
         override fun onBackClick() {
             navigateUp()
-        }
-    }
-
-    override fun onBuilt() {
-        super.onBuilt()
-
-        // If the user is not an admin anymore, exit this section since they won't have permissions to use it
-        lifecycleScope.launch {
-            room.roomInfoFlow
-                .filter { info ->
-                    val role = info.roleOf(room.sessionId)
-                    role != RoomMember.Role.Admin && role !is RoomMember.Role.Owner
-                }
-                .take(1)
-                .onEach { navigateUp() }
-                .collect()
         }
     }
 
@@ -82,8 +52,8 @@ class RolesAndPermissionsNode(
 }
 
 interface RolesAndPermissionsNavigator {
-    fun onBackClick() {}
-    fun openAdminList() {}
-    fun openModeratorList() {}
-    fun openEditPermissions() {}
+    fun onBackClick()
+    fun openAdminList()
+    fun openModeratorList()
+    fun openEditPermissions()
 }

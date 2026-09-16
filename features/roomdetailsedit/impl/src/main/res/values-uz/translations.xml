@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"Tafsilotlarni tahrirlash"</string>
+  <string name="screen_room_details_edition_error">"Nomaʼlum xatolik yuz berdi va maʼlumotni oʻzgartirib boʻlmadi."</string>
+  <string name="screen_room_details_edition_error_title">"Xonani yangilab bo‘lmadi"</string>
+  <string name="screen_room_details_updating_room">"Xona yangilanmoqda…"</string>
+</resources>

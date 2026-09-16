@@ -54,12 +54,12 @@ class ReportMessagePresenter(
         var blockUser by rememberSaveable { mutableStateOf(false) }
         var result: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvent(event: ReportMessageEvents) {
+        fun handleEvent(event: ReportMessageEvent) {
             when (event) {
-                is ReportMessageEvents.UpdateReason -> reason = event.reason
-                ReportMessageEvents.ToggleBlockUser -> blockUser = !blockUser
-                ReportMessageEvents.Report -> coroutineScope.report(inputs.eventId, inputs.senderId, reason, blockUser, result)
-                ReportMessageEvents.ClearError -> result.value = AsyncAction.Uninitialized
+                is ReportMessageEvent.UpdateReason -> reason = event.reason
+                ReportMessageEvent.ToggleBlockUser -> blockUser = !blockUser
+                ReportMessageEvent.Report -> coroutineScope.report(inputs.eventId, inputs.senderId, reason, blockUser, result)
+                ReportMessageEvent.ClearError -> result.value = AsyncAction.Uninitialized
             }
         }
 

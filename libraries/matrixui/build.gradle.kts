@@ -36,7 +36,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.testtags)
     implementation(libs.coil.compose)
-    implementation(libs.jsoup)
+    implementation(libs.matrix.richtexteditor)
     implementation(projects.libraries.previewutils)
 
     testCommonDependencies(libs, true)

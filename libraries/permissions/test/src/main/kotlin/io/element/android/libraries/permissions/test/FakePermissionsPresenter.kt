@@ -10,7 +10,7 @@ package io.element.android.libraries.permissions.test
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.aPermissionsState
@@ -18,11 +18,12 @@ import io.element.android.libraries.permissions.api.aPermissionsState
 class FakePermissionsPresenter(
     private val initialState: PermissionsState = aPermissionsState(showDialog = false),
 ) : PermissionsPresenter {
-    private fun handleEvent(event: PermissionsEvents) {
+    private fun handleEvent(event: PermissionsEvent) {
         when (event) {
-            PermissionsEvents.RequestPermissions -> state.value = state.value.copy(showDialog = true, permissionAlreadyAsked = true)
-            PermissionsEvents.CloseDialog -> state.value = state.value.copy(showDialog = false)
-            PermissionsEvents.OpenSystemSettingAndCloseDialog -> state.value = state.value.copy(showDialog = false)
+            PermissionsEvent.RequestPermissions -> state.value = state.value.copy(showDialog = true, permissionAlreadyAsked = true)
+            PermissionsEvent.ForceRequestPermissions -> state.value = state.value.copy(permissionAlreadyAsked = true)
+            PermissionsEvent.CloseDialog -> state.value = state.value.copy(showDialog = false)
+            PermissionsEvent.OpenSystemSettingAndCloseDialog -> state.value = state.value.copy(showDialog = false)
         }
     }
 

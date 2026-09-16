@@ -11,7 +11,7 @@ package io.element.android.appnav.root
 import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.core.state.SavedStateMap
 import dev.zacsweers.metro.Inject
-import io.element.android.appnav.di.MatrixSessionCache
+import io.element.android.appnav.session.MatrixSessionCache
 import io.element.android.features.preferences.api.CacheService
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory

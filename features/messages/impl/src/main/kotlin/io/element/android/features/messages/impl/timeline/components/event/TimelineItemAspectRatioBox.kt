@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 const val MIN_HEIGHT_IN_DP = 100
 const val MAX_HEIGHT_IN_DP = 360
 const val DEFAULT_ASPECT_RATIO = 1.33f
+const val MIN_ASPECT_RATIO = 0.001f
+const val MAX_ASPECT_RATIO = 10f
 
 @Composable
 fun TimelineItemAspectRatioBox(
@@ -30,7 +32,8 @@ fun TimelineItemAspectRatioBox(
     maxHeight: Int = MAX_HEIGHT_IN_DP,
     content: @Composable (BoxScope.() -> Unit),
 ) {
-    val safeAspectRatio = aspectRatio ?: DEFAULT_ASPECT_RATIO
+    // Make sure the aspect ratio is not extremely large, otherwise the resulting size can crash Compose
+    val safeAspectRatio = aspectRatio?.coerceIn(MIN_ASPECT_RATIO, MAX_ASPECT_RATIO) ?: DEFAULT_ASPECT_RATIO
     Box(
         modifier = modifier
             .heightIn(min = minHeight.dp, max = maxHeight.dp)

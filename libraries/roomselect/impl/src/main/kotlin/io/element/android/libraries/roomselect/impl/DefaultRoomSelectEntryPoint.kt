@@ -26,7 +26,10 @@ class DefaultRoomSelectEntryPoint : RoomSelectEntryPoint {
         return parentNode.createNode<RoomSelectNode>(
             buildContext = buildContext,
             plugins = listOf(
-                RoomSelectNode.Inputs(mode = params.mode),
+                RoomSelectNode.Inputs(
+                    mode = params.mode,
+                    maxNumberOfRooms = params.maxNumberOfRooms,
+                ),
                 callback,
             )
         )

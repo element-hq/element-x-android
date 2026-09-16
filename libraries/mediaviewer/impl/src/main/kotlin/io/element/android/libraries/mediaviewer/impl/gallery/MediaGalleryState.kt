@@ -20,7 +20,7 @@ data class MediaGalleryState(
     val groupedMediaItems: AsyncData<GroupedMediaItems>,
     val mediaBottomSheetState: MediaBottomSheetState,
     val snackbarMessage: SnackbarMessage?,
-    val eventSink: (MediaGalleryEvents) -> Unit,
+    val eventSink: (MediaGalleryEvent) -> Unit,
 )
 
 enum class MediaGalleryMode(val stringResource: Int) {

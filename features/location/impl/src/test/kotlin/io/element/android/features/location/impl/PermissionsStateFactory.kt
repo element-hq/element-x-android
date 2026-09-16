@@ -13,10 +13,12 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 fun aPermissionsState(
     permissions: PermissionsState.Permissions = PermissionsState.Permissions.NoneGranted,
     shouldShowRationale: Boolean = false,
+    permissionsRequested: Boolean = false,
 ): PermissionsState {
     return PermissionsState(
         permissions = permissions,
         shouldShowRationale = shouldShowRationale,
+        permissionsAlreadyRequested = permissionsRequested,
         eventSink = {},
     )
 }

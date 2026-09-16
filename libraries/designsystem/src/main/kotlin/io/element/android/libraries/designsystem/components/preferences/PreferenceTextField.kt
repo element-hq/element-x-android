@@ -42,7 +42,7 @@ fun PreferenceTextField(
 
     ListItem(
         modifier = modifier,
-        headlineContent = { Text(headline) },
+        content = { Text(headline) },
         supportingContent = valueToDisplay?.let { @Composable { Text(it) } },
         trailingContent = trailingContent,
         style = style,

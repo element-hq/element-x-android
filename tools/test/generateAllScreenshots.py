@@ -167,6 +167,7 @@ def generateJavascriptFile():
 
     with open("screenshots/html/data.js", "w") as f:
         f.write("// Generated file, do not edit\n")
+        f.write("export const buildDate = %d;\n" % int(time.time()))
         f.write("export const screenshots = [\n")
         for line in data:
             f.write("[")

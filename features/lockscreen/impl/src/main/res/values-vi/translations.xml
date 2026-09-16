@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"xác thực sinh trắc học"</string>
+  <string name="screen_app_lock_biometric_unlock">"mở khóa sinh trắc học"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Mở khóa bằng sinh trắc học"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Xác nhận sinh trắc học"</string>
+  <string name="screen_app_lock_forgot_pin">"Quên mã PIN rồi à?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Thay đổi mã PIN"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Cho phép mở khóa bằng sinh trắc học"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Xóa mã PIN"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Bạn có chắc chắn muốn xóa mã PIN không?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Xóa mã PIN?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Cho phép %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Tôi thích dùng mã PIN hơn."</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Dùng %1$s để mở khóa ứng dụng nhanh hơn."</string>
+  <string name="screen_app_lock_setup_choose_pin">"Chọn mã PIN"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Xác nhận mã PIN"</string>
+  <string name="screen_app_lock_setup_pin_context">"Khóa %1$s để tăng cường bảo mật cho các cuộc trò chuyện của bạn.
+
+Chọn một mã dễ nhớ. Nếu quên PIN này, bạn sẽ bị đăng xuất khỏi ứng dụng."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Vì lý do bảo mật, bạn không thể chọn mã này làm mã PIN của mình."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Chọn mã PIN khác"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Vui lòng nhập cùng một mã PIN hai lần."</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Mã PIN không khớp"</string>
+  <string name="screen_app_lock_signout_alert_message">"Đăng nhập lại và tạo PIN mới để tiếp tục."</string>
+  <string name="screen_app_lock_signout_alert_title">"Thiết bị này đang được gỡ bỏ"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="other">"Bạn còn %1$d lần thử để mở khóa"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="other">"PIN không đúng. Còn %1$d lần thử"</item>
+  </plurals>
+  <string name="screen_app_lock_use_biometric_android">"Sử dụng sinh trắc học"</string>
+  <string name="screen_app_lock_use_pin_android">"Sử dụng mã PIN"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Đang gỡ thiết bị…"</string>
+</resources>

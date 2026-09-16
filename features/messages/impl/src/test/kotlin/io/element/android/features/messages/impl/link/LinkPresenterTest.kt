@@ -45,7 +45,7 @@ class LinkPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.linkClick).isEqualTo(AsyncAction.Uninitialized)
-            initialState.eventSink(LinkEvents.OnLinkClick(aLink))
+            initialState.eventSink(LinkEvent.OnLinkClick(aLink))
             assertThat(awaitItem().linkClick).isEqualTo(AsyncAction.Loading)
             val state = awaitItem()
             assertThat(state.linkClick).isEqualTo(AsyncAction.Success(aLink))
@@ -61,11 +61,11 @@ class LinkPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.linkClick).isEqualTo(AsyncAction.Uninitialized)
-            initialState.eventSink(LinkEvents.OnLinkClick(aLink))
+            initialState.eventSink(LinkEvent.OnLinkClick(aLink))
             assertThat(awaitItem().linkClick).isEqualTo(AsyncAction.Loading)
             val state = awaitItem()
             assertThat(state.linkClick).isEqualTo(ConfirmingLinkClick(aLink))
-            state.eventSink(LinkEvents.Cancel)
+            state.eventSink(LinkEvent.Cancel)
             val finalState = awaitItem()
             assertThat(finalState.linkClick).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -79,11 +79,11 @@ class LinkPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.linkClick).isEqualTo(AsyncAction.Uninitialized)
-            initialState.eventSink(LinkEvents.OnLinkClick(aLink))
+            initialState.eventSink(LinkEvent.OnLinkClick(aLink))
             assertThat(awaitItem().linkClick).isEqualTo(AsyncAction.Loading)
             val state = awaitItem()
             assertThat(state.linkClick).isEqualTo(ConfirmingLinkClick(aLink))
-            state.eventSink(LinkEvents.Confirm)
+            state.eventSink(LinkEvent.Confirm)
             val finalState = awaitItem()
             assertThat(finalState.linkClick).isEqualTo(AsyncAction.Success(aLink))
         }

@@ -47,6 +47,7 @@
   <string name="push_distributor_background_sync_android">"ფონის სინქრონიზაცია"</string>
   <string name="push_distributor_firebase_android">"Google სერვისები"</string>
   <string name="push_no_valid_google_play_services_apk_android">"მოქმედი Google Play სერვისები ვერ მოიძებნა. შეტყობინებები შეიძლება ვერ იმუშაოს სწორად."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"დაბლოკილი მომხმარებლები"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"მიმდინარე პროვაიდერის სახელის გაგება"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"push პროვაიდერები არაა არჩეული."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"მიმდინარე push პროვაიდერი: %1$s."</string>

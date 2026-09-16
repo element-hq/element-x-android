@@ -6,71 +6,68 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.verifysession.impl.incoming
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.verifysession.impl.R
 import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificationData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.pressBackKey
-import org.junit.Rule
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.rules.TestRule
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class IncomingVerificationViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
+class IncomingVerificationViewTest : RobolectricTest() {
     // region step Initial
     @Test
-    fun `back key pressed - ignore the verification`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `back key pressed - ignore the verification`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = aStepInitial(),
                 eventSink = eventsRecorder
             ),
         )
-        rule.pressBackKey()
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.GoBack)
+        pressBackKey()
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.GoBack)
     }
 
     @Test
-    fun `ignore incoming verification emits the expected event`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `ignore incoming verification emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = aStepInitial(),
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(CommonStrings.action_ignore)
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.IgnoreVerification)
+        clickOn(CommonStrings.action_ignore)
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.IgnoreVerification)
     }
 
     @Test
-    fun `start incoming verification emits the expected event`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `start incoming verification emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = aStepInitial(),
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(CommonStrings.action_start_verification)
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.StartVerification)
+        clickOn(CommonStrings.action_start_verification)
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.StartVerification)
     }
 
     @Test
-    fun `back key pressed - when awaiting response cancels the verification`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `back key pressed - when awaiting response cancels the verification`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = aStepInitial(
                     isWaiting = true,
@@ -78,16 +75,16 @@ class IncomingVerificationViewTest {
                 eventSink = eventsRecorder
             ),
         )
-        rule.pressBackKey()
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.GoBack)
+        pressBackKey()
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.GoBack)
     }
     // endregion step Initial
 
     // region step Verifying
     @Test
-    fun `back key pressed - when ready to verify cancels the verification`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `back key pressed - when ready to verify cancels the verification`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = IncomingVerificationState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
@@ -96,14 +93,14 @@ class IncomingVerificationViewTest {
                 eventSink = eventsRecorder
             ),
         )
-        rule.pressBackKey()
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.GoBack)
+        pressBackKey()
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.GoBack)
     }
 
     @Test
-    fun `back key pressed - when verifying and loading emits the expected event`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `back key pressed - when verifying and loading emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = IncomingVerificationState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
@@ -112,14 +109,14 @@ class IncomingVerificationViewTest {
                 eventSink = eventsRecorder
             ),
         )
-        rule.pressBackKey()
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.GoBack)
+        pressBackKey()
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.GoBack)
     }
 
     @Test
-    fun `clicking on they do not match emits the expected event`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `clicking on they do not match emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = IncomingVerificationState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
@@ -128,14 +125,14 @@ class IncomingVerificationViewTest {
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(R.string.screen_session_verification_they_dont_match)
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.DeclineVerification)
+        clickOn(R.string.screen_session_verification_they_dont_match)
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.DeclineVerification)
     }
 
     @Test
-    fun `clicking on they match emits the expected event`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `clicking on they match emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = IncomingVerificationState.Step.Verifying(
                     data = aEmojisSessionVerificationData(),
@@ -144,69 +141,69 @@ class IncomingVerificationViewTest {
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(R.string.screen_session_verification_they_match)
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.ConfirmVerification)
+        clickOn(R.string.screen_session_verification_they_match)
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.ConfirmVerification)
     }
     // endregion
 
     // region step Failure
     @Test
-    fun `back key pressed - when failure resets the flow`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `back key pressed - when failure resets the flow`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = IncomingVerificationState.Step.Failure,
                 eventSink = eventsRecorder
             ),
         )
-        rule.pressBackKey()
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.GoBack)
+        pressBackKey()
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.GoBack)
     }
 
     @Test
-    fun `click on done - when failure resets the flow`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `click on done - when failure resets the flow`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = IncomingVerificationState.Step.Failure,
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(CommonStrings.action_done)
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.GoBack)
+        clickOn(CommonStrings.action_done)
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.GoBack)
     }
 
     // endregion
 
     // region step Completed
     @Test
-    fun `back key pressed - on Completed step emits the expected event`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `back key pressed - on Completed step emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = IncomingVerificationState.Step.Completed,
                 eventSink = eventsRecorder
             ),
         )
-        rule.pressBackKey()
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.GoBack)
+        pressBackKey()
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.GoBack)
     }
 
     @Test
-    fun `when flow is completed and the user clicks on the done button, the expected event is emitted`() {
-        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvents>()
-        rule.setIncomingVerificationView(
+    fun `when flow is completed and the user clicks on the done button, the expected event is emitted`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
+        setIncomingVerificationView(
             anIncomingVerificationState(
                 step = IncomingVerificationState.Step.Completed,
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(CommonStrings.action_done)
-        eventsRecorder.assertSingle(IncomingVerificationViewEvents.GoBack)
+        clickOn(CommonStrings.action_done)
+        eventsRecorder.assertSingle(IncomingVerificationViewEvent.GoBack)
     }
     // endregion
 
-    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setIncomingVerificationView(
+    private fun AndroidComposeUiTest<ComponentActivity>.setIncomingVerificationView(
         state: IncomingVerificationState,
     ) {
         setContent {

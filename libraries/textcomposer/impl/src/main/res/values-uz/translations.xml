@@ -5,11 +5,17 @@
   <string name="rich_text_editor_close_formatting_options">"Formatlash parametrlarini yoping"</string>
   <string name="rich_text_editor_code_block">"Kod blokini almashtirish"</string>
   <string name="rich_text_editor_composer_caption_placeholder">"Taglavha kiritish"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Shifrlangan xabar…"</string>
   <string name="rich_text_editor_composer_placeholder">"Xabar…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Shifrlanmagan xabar…"</string>
   <string name="rich_text_editor_create_link">"Havola yarating"</string>
   <string name="rich_text_editor_edit_link">"Havolani tahrirlash"</string>
+  <string name="rich_text_editor_format_action">"%1$s, holat: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Qalin formatni qo\'llang"</string>
   <string name="rich_text_editor_format_italic">"Kursiv formatini qo\'llang"</string>
+  <string name="rich_text_editor_format_state_disabled">"oʻchirilgan"</string>
+  <string name="rich_text_editor_format_state_off">"o\'chiq"</string>
+  <string name="rich_text_editor_format_state_on">"yoniq"</string>
   <string name="rich_text_editor_format_strikethrough">"Chizilgan formatni qo\'llash"</string>
   <string name="rich_text_editor_format_underline">"Pastki chiziq formatini qo\'llang"</string>
   <string name="rich_text_editor_full_screen_toggle">"Toʻliq ekran rejimiga oʻtish"</string>
@@ -22,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"Havolani olib tashlang"</string>
   <string name="rich_text_editor_unindent">"Paragrafni bekor qilish"</string>
   <string name="rich_text_editor_url_placeholder">"Havola"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Taglavhalar eski ilovalardan foydalanuvchilarga ko‘rinmasligi mumkin."</string>
   <string name="screen_room_voice_message_tooltip">"Yozib olish uchun bosib turing"</string>
 </resources>

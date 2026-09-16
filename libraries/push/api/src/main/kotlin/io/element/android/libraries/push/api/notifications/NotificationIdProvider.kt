@@ -53,4 +53,5 @@ object NotificationIdProvider {
 enum class ForegroundServiceType {
     INCOMING_CALL,
     ONGOING_CALL,
+    LIVE_LOCATION,
 }

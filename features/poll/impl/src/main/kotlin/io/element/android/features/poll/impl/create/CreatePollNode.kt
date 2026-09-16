@@ -41,7 +41,7 @@ class CreatePollNode(
     private var isNavigatingUp = AtomicBoolean(false)
 
     private val presenter = presenterFactory.create(
-        backNavigator = {
+        navigateUp = {
             if (isNavigatingUp.compareAndSet(false, true)) {
                 navigateUp()
             }

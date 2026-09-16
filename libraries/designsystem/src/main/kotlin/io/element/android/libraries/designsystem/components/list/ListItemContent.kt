@@ -85,7 +85,7 @@ sealed interface ListItemContent {
     data class Text(val text: String) : ListItemContent
 
     /** Displays any custom content. */
-    data class Custom(val content: @Composable () -> Unit) : ListItemContent
+    data class Custom(val content: @Composable (enabled: Boolean) -> Unit) : ListItemContent
 
     /** Displays a badge. */
     data object Badge : ListItemContent
@@ -131,7 +131,7 @@ sealed interface ListItemContent {
             is Counter -> {
                 CounterAtom(count = count)
             }
-            is Custom -> content()
+            is Custom -> content(isItemEnabled)
         }
     }
 }

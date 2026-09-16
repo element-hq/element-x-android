@@ -17,10 +17,7 @@ import kotlin.coroutines.CoroutineContext
  * It does filter through the already known members, it doesn't perform additional requests.
  */
 suspend fun BaseRoom.filterMembers(query: String, coroutineContext: CoroutineContext): List<RoomMember> = withContext(coroutineContext) {
-    val roomMembersState = membersStateFlow.value
-    val activeRoomMembers = roomMembersState.roomMembers()
-        ?.filter { it.membership.isActive() }
-        .orEmpty()
+    val activeRoomMembers = membersStateFlow.value.activeRoomMembers()
     val filteredMembers = if (query.isBlank()) {
         activeRoomMembers
     } else {

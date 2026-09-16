@@ -10,6 +10,9 @@ package io.element.android.features.call.api
 
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * Tracks the call the user is currently in on this device, so unrelated parts of the app can react to it.
+ */
 interface CurrentCallService {
     /**
      * The current call state flow, which will be updated when the active call changes.

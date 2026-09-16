@@ -13,5 +13,5 @@ import io.element.android.wysiwyg.link.Link
 
 data class LinkState(
     val linkClick: AsyncAction<Link>,
-    val eventSink: (LinkEvents) -> Unit,
+    val eventSink: (LinkEvent) -> Unit,
 )

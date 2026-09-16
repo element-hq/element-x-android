@@ -8,7 +8,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"بازیابی کلید درج کریں"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"آپ کا کلیدی ذخیرہ فی الحال غیر ہم وقت ساز ہے۔"</string>
   <string name="screen_chat_backup_recovery_action_setup">"بازیابی مرتب کریں"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"اگر آپ اپنے تمام آلات کھو دیتے ہیں یا ہر جگہ %1$s سے خارج ہیں تو اپنے مرموز کردہ پیغامات تک رسائی حاصل کریں۔"</string>
   <string name="screen_create_new_recovery_key_list_item_1">"%1$s کو برمیز آلے میں کھولیں"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"اپنے کھاتہ میں چوبارہ داخل ہوں"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"جب اپنے آلے کی توثیق کا کہا جائے، %1$s منتخب کریں"</string>

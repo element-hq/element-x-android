@@ -10,8 +10,11 @@ package io.element.android.libraries.architecture
 
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 
 inline fun <reified I : Plugin> Node.callback(): I {
-    return requireNotNull(plugins<I>().singleOrNull()) { "Make sure to actually pass a Callback plugin to your node" }
+    return plugins.callback()
+}
+
+inline fun <reified I : Plugin> List<Plugin>.callback(): I {
+    return requireNotNull(filterIsInstance<I>().singleOrNull()) { "Make sure to actually pass a Callback plugin to your node" }
 }

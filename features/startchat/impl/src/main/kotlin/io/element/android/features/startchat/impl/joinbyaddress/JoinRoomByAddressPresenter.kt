@@ -49,16 +49,16 @@ class JoinRoomByAddressPresenter(
         var internalAddressState by remember { mutableStateOf<RoomAddressState>(RoomAddressState.Unknown) }
         var validateAddress: Boolean by remember { mutableStateOf(false) }
 
-        fun handleEvent(event: JoinRoomByAddressEvents) {
+        fun handleEvent(event: JoinRoomByAddressEvent) {
             when (event) {
-                JoinRoomByAddressEvents.Continue -> {
+                JoinRoomByAddressEvent.Continue -> {
                     when (val currentState = internalAddressState) {
                         is RoomAddressState.RoomFound -> onRoomFound(currentState)
                         else -> validateAddress = true
                     }
                 }
-                JoinRoomByAddressEvents.Dismiss -> navigator.onDismissJoinRoomByAddress()
-                is JoinRoomByAddressEvents.UpdateAddress -> {
+                JoinRoomByAddressEvent.Dismiss -> navigator.onDismissJoinRoomByAddress()
+                is JoinRoomByAddressEvent.UpdateAddress -> {
                     validateAddress = false
                     address = event.address.trim()
                 }
@@ -113,7 +113,7 @@ class JoinRoomByAddressPresenter(
             // debounce the room address resolution
             delay(300)
             val roomAlias = tryOrNull { RoomAlias(fullAddress) }
-            if (roomAlias != null && roomAliasHelper.isRoomAliasValid(roomAlias)) {
+            if (roomAlias != null) {
                 onChange(RoomAddressState.Resolving)
                 onChange(client.resolveRoomAddress(roomAlias))
             } else {
@@ -130,11 +130,21 @@ class JoinRoomByAddressPresenter(
                         if (resolved.isPresent) {
                             RoomAddressState.RoomFound(resolved.get())
                         } else {
-                            RoomAddressState.RoomNotFound
+                            roomAlias.toInvalidOrNotFound()
                         }
                     },
-                    onFailure = { _ -> RoomAddressState.RoomNotFound }
+                    onFailure = { _ ->
+                        roomAlias.toInvalidOrNotFound()
+                    }
                 )
         } ?: RoomAddressState.RoomNotFound
+    }
+
+    private fun RoomAlias.toInvalidOrNotFound(): RoomAddressState {
+        return if (roomAliasHelper.isRoomAliasValid(this)) {
+            RoomAddressState.RoomNotFound
+        } else {
+            RoomAddressState.Invalid
+        }
     }
 }

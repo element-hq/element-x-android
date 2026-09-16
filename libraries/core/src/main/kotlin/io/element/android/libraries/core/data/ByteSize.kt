@@ -15,9 +15,26 @@ enum class ByteUnit(val bitShift: Int) {
 }
 
 class ByteSize internal constructor(val value: Long, val unit: ByteUnit) {
-    fun to(dest: ByteUnit): Long {
+    fun into(dest: ByteUnit): Long {
         if (unit == dest) return value
         return value shl unit.bitShift shr dest.bitShift
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ByteSize) return false
+
+        return value == other.value && unit == other.unit
+    }
+
+    override fun hashCode(): Int {
+        var result = value.hashCode()
+        result = 31 * result + unit.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "$value $unit"
     }
 }
 
@@ -25,3 +42,9 @@ val Number.gigaBytes get() = ByteSize(toLong(), ByteUnit.GB)
 val Number.megaBytes get() = ByteSize(toLong(), ByteUnit.MB)
 val Number.kiloBytes get() = ByteSize(toLong(), ByteUnit.KB)
 val Number.bytes get() = ByteSize(toLong(), ByteUnit.BYTES)
+
+// For the SDK values
+val ULong.gigaBytes get() = ByteSize(toLong(), ByteUnit.GB)
+val ULong.megaBytes get() = ByteSize(toLong(), ByteUnit.MB)
+val ULong.kiloBytes get() = ByteSize(toLong(), ByteUnit.KB)
+val ULong.bytes get() = ByteSize(toLong(), ByteUnit.BYTES)

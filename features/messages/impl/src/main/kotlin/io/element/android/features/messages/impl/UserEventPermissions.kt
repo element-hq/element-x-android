@@ -8,6 +8,9 @@
 
 package io.element.android.features.messages.impl
 
+import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
+
 /**
  * Represents the permissions a user has in a room.
  * It's dependent of the user's power level in the room.
@@ -28,4 +31,14 @@ data class UserEventPermissions(
             canPinUnpin = false
         )
     }
+}
+
+fun RoomPermissions.userEventPermissions(): UserEventPermissions {
+    return UserEventPermissions(
+        canRedactOwn = canOwnUserRedactOwn(),
+        canRedactOther = canOwnUserRedactOther(),
+        canSendMessage = canOwnUserSendMessage(MessageEventType.RoomMessage),
+        canSendReaction = canOwnUserSendMessage(MessageEventType.Reaction),
+        canPinUnpin = canOwnUserPinUnpin()
+    )
 }

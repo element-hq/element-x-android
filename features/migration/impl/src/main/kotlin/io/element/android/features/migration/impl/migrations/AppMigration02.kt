@@ -10,7 +10,6 @@ package io.element.android.features.migration.impl.migrations
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -21,7 +20,6 @@ import kotlinx.coroutines.coroutineScope
  * This way we don't force existing users to verify their session again.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
 class AppMigration02(
     private val sessionStore: SessionStore,
     private val sessionPreferenceStoreFactory: SessionPreferencesStoreFactory,

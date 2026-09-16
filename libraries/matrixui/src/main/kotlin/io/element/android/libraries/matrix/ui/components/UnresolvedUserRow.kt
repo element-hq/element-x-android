@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -45,8 +44,7 @@ fun UnresolvedUserRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 56.dp)
-            .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
+            .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Avatar(

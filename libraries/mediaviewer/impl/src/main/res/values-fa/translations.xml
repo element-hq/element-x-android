@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"این فایل از اتاق حذف خواهد شد و اعضا به آن دسترسی نخواهند داشت."</string>
   <string name="screen_media_browser_delete_confirmation_title">"حذف پرونده؟"</string>
   <string name="screen_media_browser_download_error_message">"بررسی اتّصال اینترنتیتان و تلاش دوباره."</string>
   <string name="screen_media_browser_files_empty_state_subtitle">"سندها، پرونده‌ها و پیام‌های صوتی بار گذاشته در این اتاق این‌جا نشان داده خواهند شد."</string>
@@ -13,6 +14,9 @@
   <string name="screen_media_browser_title">"رسانه‌ها و پرونده‌ها"</string>
   <string name="screen_media_details_file_format">"قالب پرونده"</string>
   <string name="screen_media_details_filename">"نام پرونده"</string>
+  <string name="screen_media_details_no_more_files_to_show">"فایل بیشتری برای نمایش وجود ندارد"</string>
+  <string name="screen_media_details_no_more_media_to_show">"رسانه دیگری برای نمایش وجود ندارد"</string>
+  <string name="screen_media_details_title">"اطلاعات فایل"</string>
   <string name="screen_media_details_uploaded_by">"بارگذاشته به دست"</string>
   <string name="screen_media_details_uploaded_on">"بارگذاشته در"</string>
 </resources>

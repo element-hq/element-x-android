@@ -17,7 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
-import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileEvent
 import io.element.android.features.userprofile.api.UserProfilePresenterFactory
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
@@ -112,12 +112,12 @@ class RoomMemberDetailsPresenter(
             }
         }
 
-        fun handleEvent(event: UserProfileEvents) {
+        fun handleEvent(event: UserProfileEvent) {
             when (event) {
-                UserProfileEvents.WithdrawVerification -> coroutineScope.launch {
+                UserProfileEvent.WithdrawVerification -> coroutineScope.launch {
                     encryptionService.withdrawVerification(roomMemberId)
                 }
-                is UserProfileEvents.CopyToClipboard -> {
+                is UserProfileEvent.CopyToClipboard -> {
                     clipboardHelper.copyPlainText(event.text)
                     snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
                 }
@@ -128,6 +128,7 @@ class RoomMemberDetailsPresenter(
         return userProfileState.copy(
             userName = roomUserName ?: userProfileState.userName,
             avatarUrl = roomUserAvatar ?: userProfileState.avatarUrl,
+            displayedStatus = roomMember?.displayedStatus ?: userProfileState.displayedStatus,
             verificationState = verificationState,
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvent,

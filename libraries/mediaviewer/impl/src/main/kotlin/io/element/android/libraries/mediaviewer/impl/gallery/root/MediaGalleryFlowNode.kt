@@ -34,6 +34,7 @@ import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.impl.gallery.MediaGalleryNode
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.blurHash
 import io.element.android.libraries.mediaviewer.impl.model.eventId
 import io.element.android.libraries.mediaviewer.impl.model.mediaInfo
 import io.element.android.libraries.mediaviewer.impl.model.mediaSource
@@ -68,6 +69,7 @@ class MediaGalleryFlowNode(
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
             val thumbnailSource: MediaSource?,
+            val blurHash: String?,
         ) : NavTarget
     }
 
@@ -104,6 +106,7 @@ class MediaGalleryFlowNode(
                                 mediaInfo = item.mediaInfo(),
                                 mediaSource = item.mediaSource(),
                                 thumbnailSource = item.thumbnailSource(),
+                                blurHash = item.blurHash(),
                             )
                         )
                     }
@@ -128,13 +131,13 @@ class MediaGalleryFlowNode(
                 mediaViewerEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
-                    params = MediaViewerEntryPoint.Params(
+                    params = MediaViewerEntryPoint.Params.RoomMedia(
                         mode = navTarget.mode,
                         eventId = navTarget.eventId,
                         mediaInfo = navTarget.mediaInfo,
                         mediaSource = navTarget.mediaSource,
                         thumbnailSource = navTarget.thumbnailSource,
-                        canShowInfo = true,
+                        blurHash = navTarget.blurHash,
                     ),
                     callback = callback,
                 )

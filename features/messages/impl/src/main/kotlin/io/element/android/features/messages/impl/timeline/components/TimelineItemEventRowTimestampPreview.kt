@@ -20,7 +20,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemEventRowTimestampPreview(
-    @PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event
+    @PreviewParameter(TimelineItemEventForTimestampViewPreviewParam::class) event: TimelineItem.Event
 ) = ElementPreview {
     Column {
         when (event.content) {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signed_out_reason_1">"Promijenili ste zaporku u drugoj sesiji"</string>
+  <string name="screen_signed_out_reason_2">"Izbrisali ste sesiju iz druge sesije"</string>
+  <string name="screen_signed_out_reason_3">"Administrator vašeg poslužitelja poništio je vaš pristup"</string>
+  <string name="screen_signed_out_subtitle">"Možda ste odjavljeni iz jednog od razloga navedenih u nastavku. Ponovno se prijavite kako biste nastavili koristiti %s."</string>
+  <string name="screen_signed_out_title">"Odjavljeni ste"</string>
+</resources>

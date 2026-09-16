@@ -24,7 +24,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.usersWithRole
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import kotlinx.coroutines.CoroutineScope
@@ -61,7 +60,13 @@ class LeaveRoomPresenter(
         roomId: RoomId,
         leaveAction: MutableState<AsyncAction<Unit>>,
     ) = launch(dispatchers.io) {
-        client.getRoom(roomId)?.use { room ->
+        val room = client.getRoom(roomId)
+        if (room == null) {
+            Timber.e("Unable to find room $roomId to leave it")
+            leaveAction.value = AsyncAction.Failure(RoomNotFoundException(roomId))
+            return@launch
+        }
+        room.use {
             val roomInfo = room.roomInfoFlow.first()
             leaveAction.value = when {
                 roomInfo.isDm -> Confirmation.Dm(roomId)
@@ -79,7 +84,8 @@ class LeaveRoomPresenter(
         leaveAction: MutableState<AsyncAction<Unit>>,
     ) = launch(dispatchers.io) {
         leaveAction.runCatchingUpdatingState {
-            client.getRoom(roomId)!!.use { room ->
+            val room = client.getRoom(roomId) ?: throw RoomNotFoundException(roomId)
+            room.use {
                 room
                     .leave()
                     .onSuccess { notificationConversationService.onLeftRoom(client.sessionId, roomId) }
@@ -96,11 +102,10 @@ class LeaveRoomPresenter(
         } else {
             val hasPrivilegedCreatorRole = roomInfoFlow.value.privilegedCreatorRole
             if (!hasPrivilegedCreatorRole) return false
-
-            val creators = usersWithRole(RoomMember.Role.Owner(isCreator = true)).first()
-            val superAdmins = usersWithRole(RoomMember.Role.Owner(isCreator = false)).first()
-            val owners = creators + superAdmins
+            val owners = usersWithRole { role -> role is RoomMember.Role.Owner }.first()
             return owners.size == 1 && owners.first().userId == sessionId
         }
     }
 }
+
+internal class RoomNotFoundException(roomId: RoomId) : IllegalStateException("Room $roomId not found")

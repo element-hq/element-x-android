@@ -46,12 +46,15 @@ class SpaceNode(
         fun navigateToSpaceSettings()
         fun navigateToRoomMemberList()
         fun startLeaveSpaceFlow()
+        fun navigateToAddRoom()
+
+        fun onCreateRoom()
     }
 
     private val callback: Callback = callback()
 
     private fun onShareRoom(context: Context) = lifecycleScope.launch {
-        matrixClient.getRoom(spaceRoomList.roomId)?.use { room ->
+        matrixClient.getRoom(spaceRoomList.spaceId)?.use { room ->
             room.getPermalink()
                 .onSuccess { permalink ->
                     context.startSharePlainTextIntent(
@@ -80,7 +83,7 @@ class SpaceNode(
             onRoomClick = { spaceRoom ->
                 callback.navigateToRoom(spaceRoom.roomId, spaceRoom.via)
             },
-            onDetailsClick = {
+            onSettingsClick = {
                 callback.navigateToSpaceSettings()
             },
             onShareSpace = {
@@ -88,6 +91,9 @@ class SpaceNode(
             },
             onViewMembersClick = {
                 callback.navigateToRoomMemberList()
+            },
+            onAddRoomClick = {
+                callback.navigateToAddRoom()
             },
             acceptDeclineInviteView = {
                 acceptDeclineInviteView.Render(
@@ -101,6 +107,7 @@ class SpaceNode(
                     modifier = Modifier
                 )
             },
+            onCreateRoomClick = callback::onCreateRoom,
             modifier = modifier
         )
     }

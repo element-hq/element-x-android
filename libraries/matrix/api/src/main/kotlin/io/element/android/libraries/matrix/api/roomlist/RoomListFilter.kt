@@ -8,7 +8,7 @@
 
 package io.element.android.libraries.matrix.api.roomlist
 
-import io.element.android.libraries.core.extensions.withoutAccents
+import io.element.android.libraries.matrix.api.core.RoomId
 
 sealed interface RoomListFilter {
     companion object {
@@ -43,10 +43,19 @@ sealed interface RoomListFilter {
         val filters: List<RoomListFilter>
     ) : RoomListFilter
 
+    data class Identifiers(
+        val values: List<RoomId>,
+    ) : RoomListFilter
+
     /**
-     * A filter that matches rooms that are unread.
+     * A filter that matches rooms that has unread notifications.
      */
     data object Unread : RoomListFilter
+
+    /**
+     * A filter that matches rooms that have unread mentions.
+     */
+    data object Mentions : RoomListFilter
 
     /**
      * A filter that matches rooms that are marked as favorite.
@@ -57,6 +66,11 @@ sealed interface RoomListFilter {
      * A filter that matches rooms with Invited membership.
      */
     data object Invite : RoomListFilter
+
+    /**
+     * A filter that matches rooms with Joined membership.
+     */
+    data object Joined : RoomListFilter
 
     /**
      * A filter that matches either Group,People rooms or Space.
@@ -77,7 +91,5 @@ sealed interface RoomListFilter {
      */
     data class NormalizedMatchRoomName(
         val pattern: String
-    ) : RoomListFilter {
-        val normalizedPattern: String = pattern.withoutAccents()
-    }
+    ) : RoomListFilter
 }

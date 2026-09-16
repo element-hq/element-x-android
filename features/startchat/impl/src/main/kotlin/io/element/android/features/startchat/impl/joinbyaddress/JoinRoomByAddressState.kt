@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 data class JoinRoomByAddressState(
     val address: String,
     val addressState: RoomAddressState,
-    val eventSink: (JoinRoomByAddressEvents) -> Unit
+    val eventSink: (JoinRoomByAddressEvent) -> Unit
 )
 
 @Immutable

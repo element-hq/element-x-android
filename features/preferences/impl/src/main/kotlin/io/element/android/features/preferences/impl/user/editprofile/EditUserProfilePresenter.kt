@@ -15,6 +15,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -35,7 +36,7 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -103,6 +104,14 @@ class EditUserProfilePresenter(
             }
         }
 
+        val homeserverCapabilities = matrixClient.homeserverCapabilities()
+        val canChangeDisplayName = produceState(true) {
+            value = homeserverCapabilities.canChangeDisplayName().getOrDefault(true)
+        }
+        val canChangeAvatar = produceState(true) {
+            value = homeserverCapabilities.canChangeAvatarUrl().getOrDefault(true)
+        }
+
         val saveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
 
@@ -112,22 +121,22 @@ class EditUserProfilePresenter(
             !userDisplayName.isNullOrBlank() && hasProfileChanged
         }
 
-        fun handleEvent(event: EditUserProfileEvents) {
+        fun handleEvent(event: EditUserProfileEvent) {
             when (event) {
-                is EditUserProfileEvents.Save -> localCoroutineScope.saveChanges(
+                is EditUserProfileEvent.Save -> localCoroutineScope.saveChanges(
                     name = userDisplayName,
                     avatarUri = userAvatarUri?.toUri(),
                     currentUser = matrixUser,
                     action = saveAction,
                 )
-                is EditUserProfileEvents.HandleAvatarAction -> {
+                is EditUserProfileEvent.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
                         AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
                             cameraPhotoPicker.launch()
                         } else {
                             pendingPermissionRequest = true
-                            cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
+                            cameraPermissionState.eventSink(PermissionsEvent.RequestPermissions)
                         }
                         AvatarAction.Remove -> {
                             temporaryUriDeleter.delete(userAvatarUri?.toUri())
@@ -135,8 +144,8 @@ class EditUserProfilePresenter(
                         }
                     }
                 }
-                is EditUserProfileEvents.UpdateDisplayName -> userDisplayName = event.name
-                EditUserProfileEvents.Exit -> {
+                is EditUserProfileEvent.UpdateDisplayName -> userDisplayName = event.name
+                EditUserProfileEvent.Exit -> {
                     when (saveAction.value) {
                         is AsyncAction.Confirming -> {
                             // Close the dialog right now
@@ -157,7 +166,7 @@ class EditUserProfilePresenter(
                         }
                     }
                 }
-                EditUserProfileEvents.CloseDialog -> saveAction.value = AsyncAction.Uninitialized
+                EditUserProfileEvent.CloseDialog -> saveAction.value = AsyncAction.Uninitialized
             }
         }
 
@@ -169,6 +178,8 @@ class EditUserProfilePresenter(
             saveButtonEnabled = canSave && saveAction.value !is AsyncAction.Loading,
             saveAction = saveAction.value,
             cameraPermissionState = cameraPermissionState,
+            canChangeDisplayName = canChangeDisplayName.value,
+            canChangeAvatarUrl = canChangeAvatar.value,
             eventSink = ::handleEvent,
         )
     }

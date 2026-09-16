@@ -36,23 +36,32 @@ class PictureInPicturePresenter(
         var isInPictureInPicture by remember { mutableStateOf(false) }
         var pipController by remember { mutableStateOf<PipController?>(null) }
 
-        fun handleEvent(event: PictureInPictureEvents) {
+        fun handleEvent(event: PictureInPictureEvent) {
             when (event) {
-                is PictureInPictureEvents.SetPipController -> {
+                is PictureInPictureEvent.OnCallStarted -> {
+                    pipController?.setupPipCallbacks()
+                }
+                is PictureInPictureEvent.SetPipController -> {
                     pipController = event.pipController
                 }
-                PictureInPictureEvents.EnterPictureInPicture -> {
+                PictureInPictureEvent.EnterPictureInPicture -> {
                     coroutineScope.launch {
                         switchToPip(pipController)
                     }
                 }
-                is PictureInPictureEvents.OnPictureInPictureModeChanged -> {
+                is PictureInPictureEvent.OnPictureInPictureModeChanged -> {
                     Timber.tag(loggerTag.value).d("onPictureInPictureModeChanged: ${event.isInPip}")
                     isInPictureInPicture = event.isInPip
                     if (event.isInPip) {
                         pipController?.enterPip()
                     } else {
                         pipController?.exitPip()
+                    }
+                }
+                is PictureInPictureEvent.SetPipOrientation -> {
+                    Timber.tag(loggerTag.value).d("onOrientationChange: ${event.orientation}")
+                    if (isPipSupported) {
+                        pipView?.setPipOrientation(event.orientation)
                     }
                 }
             }

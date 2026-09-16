@@ -18,7 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
-import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
+import io.element.android.features.rageshake.api.crash.CrashDetectionEvent
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
 import io.element.android.features.rageshake.api.crash.CrashDetectionState
 import io.element.android.libraries.core.meta.BuildMeta
@@ -48,10 +48,10 @@ class DefaultCrashDetectionPresenter(
                 }
         }.collectAsState(false)
 
-        fun handleEvent(event: CrashDetectionEvents) {
+        fun handleEvent(event: CrashDetectionEvent) {
             when (event) {
-                CrashDetectionEvents.ResetAllCrashData -> localCoroutineScope.resetAll()
-                CrashDetectionEvents.ResetAppHasCrashed -> localCoroutineScope.resetAppHasCrashed()
+                CrashDetectionEvent.ResetAllCrashData -> localCoroutineScope.resetAll()
+                CrashDetectionEvent.ResetAppHasCrashed -> localCoroutineScope.resetAppHasCrashed()
             }
         }
 

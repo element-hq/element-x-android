@@ -17,6 +17,8 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -48,6 +50,9 @@ fun ListSectionHeader(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
+                modifier = Modifier.semantics {
+                    heading()
+                },
                 text = title,
                 style = ElementTheme.typography.fontBodyLgMedium,
                 color = ElementTheme.colors.textPrimary,

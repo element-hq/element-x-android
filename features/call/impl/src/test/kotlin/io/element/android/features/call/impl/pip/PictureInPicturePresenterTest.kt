@@ -8,11 +8,9 @@
 
 package io.element.android.features.call.impl.pip
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -20,9 +18,7 @@ class PictureInPicturePresenterTest {
     @Test
     fun `when pip is not supported, the state value supportPip is false`() = runTest {
         val presenter = createPictureInPicturePresenter(supportPip = false)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.supportPip).isFalse()
         }
@@ -35,9 +31,7 @@ class PictureInPicturePresenterTest {
             supportPip = true,
             pipView = FakePipView(setPipParamsResult = { }),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.supportPip).isTrue()
         }
@@ -53,18 +47,16 @@ class PictureInPicturePresenterTest {
                 enterPipModeResult = enterPipModeResult,
             ),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.isInPictureInPicture).isFalse()
-            initialState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
+            initialState.eventSink(PictureInPictureEvent.EnterPictureInPicture)
             enterPipModeResult.assertions().isCalledOnce()
-            initialState.eventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(true))
+            initialState.eventSink(PictureInPictureEvent.OnPictureInPictureModeChanged(true))
             val pipState = awaitItem()
             assertThat(pipState.isInPictureInPicture).isTrue()
             // User stops pip
-            initialState.eventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(false))
+            initialState.eventSink(PictureInPictureEvent.OnPictureInPictureModeChanged(false))
             val finalState = awaitItem()
             assertThat(finalState.isInPictureInPicture).isFalse()
         }
@@ -80,12 +72,10 @@ class PictureInPicturePresenterTest {
                 handUpResult = handUpResult
             ),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(PictureInPictureEvents.SetPipController(FakePipController(canEnterPipResult = { false })))
-            initialState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
+            initialState.eventSink(PictureInPictureEvent.SetPipController(FakePipController(canEnterPipResult = { false })))
+            initialState.eventSink(PictureInPictureEvent.EnterPictureInPicture)
             handUpResult.assertions().isCalledOnce()
         }
     }
@@ -102,12 +92,10 @@ class PictureInPicturePresenterTest {
                 enterPipModeResult = enterPipModeResult
             ),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(
-                PictureInPictureEvents.SetPipController(
+                PictureInPictureEvent.SetPipController(
                     FakePipController(
                         canEnterPipResult = { true },
                         enterPipResult = enterPipResult,
@@ -115,16 +103,16 @@ class PictureInPicturePresenterTest {
                     )
                 )
             )
-            initialState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
+            initialState.eventSink(PictureInPictureEvent.EnterPictureInPicture)
             enterPipModeResult.assertions().isCalledOnce()
             enterPipResult.assertions().isNeverCalled()
-            initialState.eventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(true))
+            initialState.eventSink(PictureInPictureEvent.OnPictureInPictureModeChanged(true))
             val pipState = awaitItem()
             assertThat(pipState.isInPictureInPicture).isTrue()
             enterPipResult.assertions().isCalledOnce()
             // User stops pip
             exitPipResult.assertions().isNeverCalled()
-            initialState.eventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(false))
+            initialState.eventSink(PictureInPictureEvent.OnPictureInPictureModeChanged(false))
             val finalState = awaitItem()
             assertThat(finalState.isInPictureInPicture).isFalse()
             exitPipResult.assertions().isCalledOnce()

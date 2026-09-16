@@ -40,7 +40,7 @@ import io.element.android.libraries.designsystem.theme.components.DropdownMenuIt
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.toEnabledColor
+import io.element.android.libraries.designsystem.toIconSecondaryEnabledColor
 import io.element.android.libraries.designsystem.toSecondaryEnabledColor
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -64,15 +64,13 @@ fun <T : DropdownOption> PreferenceDropdown(
         leadingContent = preferenceIcon(
             icon = icon,
             iconResourceId = iconResourceId,
-            enabled = enabled,
             showIconAreaIfNoIcon = showIconAreaIfNoIcon,
         ),
-        headlineContent = {
+        content = {
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,
                 modifier = Modifier.fillMaxWidth(),
                 text = title,
-                color = enabled.toEnabledColor(),
             )
         },
         supportingContent = supportingText?.let {
@@ -80,22 +78,23 @@ fun <T : DropdownOption> PreferenceDropdown(
                 Text(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     text = it,
-                    color = enabled.toSecondaryEnabledColor(),
                 )
             }
         },
         trailingContent = ListItemContent.Custom(
-            content = {
+            content = { enabled ->
                 DropdownTrailingContent(
                     selectedOption = selectedOption,
                     options = options,
                     onSelectOption = onSelectOption,
                     expanded = isDropdownExpanded,
                     onExpandedChange = { isDropdownExpanded = it },
+                    enabled = enabled,
                     modifier = Modifier.fillMaxSize(0.3f)
                 )
             }
         ),
+        enabled = enabled,
         onClick = { isDropdownExpanded = true }.takeIf { !isDropdownExpanded },
     )
 }
@@ -118,6 +117,7 @@ private fun <T : DropdownOption> DropdownTrailingContent(
     expanded: Boolean,
     onExpandedChange: (Boolean) -> Unit,
     onSelectOption: (T) -> Unit,
+    enabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -129,7 +129,7 @@ private fun <T : DropdownOption> DropdownTrailingContent(
             text = selectedOption?.getText().orEmpty(),
             maxLines = 1,
             style = ElementTheme.typography.fontBodyMdRegular,
-            color = ElementTheme.colors.textSecondary,
+            color = enabled.toSecondaryEnabledColor(),
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f),
@@ -137,7 +137,7 @@ private fun <T : DropdownOption> DropdownTrailingContent(
         Icon(
             imageVector = CompoundIcons.ChevronDown(),
             contentDescription = null,
-            tint = ElementTheme.colors.iconSecondary,
+            tint = enabled.toIconSecondaryEnabledColor(),
         )
         DropdownMenu(
             expanded = expanded,
@@ -146,6 +146,7 @@ private fun <T : DropdownOption> DropdownTrailingContent(
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
+                    enabled = enabled,
                     text = {
                         Text(
                             text = option.getText(),
@@ -205,6 +206,15 @@ internal fun PreferenceDropdownPreview() = ElementThemedPreview {
             selectedOption = options.first(),
             options = options,
             onSelectOption = {},
+        )
+        PreferenceDropdown(
+            title = "Dropdown",
+            supportingText = "Options for dropdown",
+            icon = CompoundIcons.Threads(),
+            selectedOption = options.first(),
+            options = options,
+            onSelectOption = {},
+            enabled = false
         )
     }
 }

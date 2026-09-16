@@ -11,6 +11,8 @@ package io.element.android.libraries.matrix.impl.timeline.item.event
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
+import io.element.android.libraries.matrix.api.room.location.LiveLocationInfo
 import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
@@ -19,6 +21,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -33,9 +36,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
 import io.element.android.libraries.matrix.impl.room.join.map
+import io.element.android.libraries.matrix.impl.room.location.into
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import org.matrix.rustcomponents.sdk.BeaconInfo
 import org.matrix.rustcomponents.sdk.EmbeddedEventDetails
+import org.matrix.rustcomponents.sdk.MsgLikeContent
 import org.matrix.rustcomponents.sdk.MsgLikeKind
 import org.matrix.rustcomponents.sdk.TimelineItemContent
 import org.matrix.rustcomponents.sdk.use
@@ -68,40 +74,14 @@ class TimelineEventContentMapper(
                     when (val kind = it.content.kind) {
                         is MsgLikeKind.Message -> {
                             val inReplyTo = it.content.inReplyTo
-                            val threadSummary = it.content.threadSummary?.use { summary ->
-                                val numberOfReplies = summary.numReplies().toLong()
-                                val latestEvent = summary.latestEvent()
-                                val details = when (latestEvent) {
-                                    is EmbeddedEventDetails.Unavailable -> AsyncData.Uninitialized
-                                    is EmbeddedEventDetails.Pending -> AsyncData.Loading()
-                                    is EmbeddedEventDetails.Error -> AsyncData.Failure(IllegalStateException(latestEvent.message))
-                                    is EmbeddedEventDetails.Ready -> {
-                                        AsyncData.Success(
-                                            EmbeddedEventInfo(
-                                                eventOrTransactionId = latestEvent.eventOrTransactionId.map(),
-                                                content = map(latestEvent.content),
-                                                senderId = UserId(latestEvent.sender),
-                                                senderProfile = latestEvent.senderProfile.map(),
-                                                timestamp = latestEvent.timestamp.toLong(),
-                                            )
-                                        )
-                                    }
-                                }
-                                ThreadSummary(
-                                    latestEvent = details,
-                                    numberOfReplies = numberOfReplies,
-                                )
-                            }
-                            val threadRootId = it.content.threadRoot?.let(::ThreadId)
-                            val threadInfo = when {
-                                threadSummary != null -> EventThreadInfo.ThreadRoot(threadSummary)
-                                threadRootId != null -> EventThreadInfo.ThreadResponse(threadRootId)
-                                else -> null
-                            }
-                            eventMessageMapper.map(kind, inReplyTo, threadInfo)
+                            eventMessageMapper.map(
+                                message = kind,
+                                inReplyTo = inReplyTo,
+                                threadInfo = extractThreadInfo(it.content)
+                            )
                         }
                         is MsgLikeKind.Redacted -> {
-                            RedactedContent
+                            RedactedContent(threadInfo = extractThreadInfo(it.content))
                         }
                         is MsgLikeKind.Poll -> {
                             PollContent(
@@ -114,11 +94,13 @@ class TimelineEventContentMapper(
                                 }.toImmutableMap(),
                                 endTime = kind.endTime,
                                 isEdited = kind.hasBeenEdited,
+                                threadInfo = extractThreadInfo(it.content),
                             )
                         }
                         is MsgLikeKind.UnableToDecrypt -> {
                             UnableToDecryptContent(
-                                data = kind.msg.map()
+                                data = kind.msg.map(),
+                                threadInfo = extractThreadInfo(it.content),
                             )
                         }
                         is MsgLikeKind.Sticker -> {
@@ -127,6 +109,17 @@ class TimelineEventContentMapper(
                                 body = null,
                                 info = kind.info.map(),
                                 source = kind.source.map(),
+                                threadInfo = extractThreadInfo(it.content),
+                            )
+                        }
+                        is MsgLikeKind.LiveLocation -> {
+                            LiveLocationContent(
+                                isLive = kind.content.isLive,
+                                startTimestamp = kind.content.ts.toLong(),
+                                description = kind.content.description,
+                                timeout = kind.content.timeoutMs.toLong(),
+                                assetType = kind.content.assetType.into(),
+                                locations = kind.content.locations.map { location -> location.map() }
                             )
                         }
                         is MsgLikeKind.Other -> UnknownContent
@@ -155,8 +148,55 @@ class TimelineEventContentMapper(
                     )
                 }
                 is TimelineItemContent.CallInvite -> LegacyCallInviteContent
-                is TimelineItemContent.RtcNotification -> CallNotifyContent
+                is TimelineItemContent.RtcNotification -> CallNotifyContent(
+                    callIntent = if (it.callIntent == "audio") {
+                        CallIntent.AUDIO
+                    } else {
+                        CallIntent.VIDEO
+                    },
+                    declinedBy = it.declinedBy.map(::UserId),
+                    activeMembers = it.activeMembers.map(::UserId),
+                    callStartTsMillis = it.callStartTsMillis?.toLong(),
+                    isJoined = it.isJoined
+                )
             }
+        }
+    }
+
+    private fun extractThreadInfo(content: MsgLikeContent): EventThreadInfo? {
+        val threadSummary = extractThreadSummary(content.threadSummary)
+        val threadRootId = content.threadRoot?.let(::ThreadId)
+        return when {
+            threadSummary != null -> EventThreadInfo.ThreadRoot(threadSummary)
+            threadRootId != null -> EventThreadInfo.ThreadResponse(threadRootId)
+            else -> null
+        }
+    }
+
+    private fun extractThreadSummary(threadSummary: org.matrix.rustcomponents.sdk.ThreadSummary?): ThreadSummary? {
+        return threadSummary?.use { summary ->
+            val numberOfReplies = summary.numReplies().toLong()
+            val latestEvent = summary.latestEvent()
+            val details = when (latestEvent) {
+                is EmbeddedEventDetails.Unavailable -> AsyncData.Uninitialized
+                is EmbeddedEventDetails.Pending -> AsyncData.Loading()
+                is EmbeddedEventDetails.Error -> AsyncData.Failure(IllegalStateException(latestEvent.message))
+                is EmbeddedEventDetails.Ready -> {
+                    AsyncData.Success(
+                        EmbeddedEventInfo(
+                            eventOrTransactionId = latestEvent.eventOrTransactionId.map(),
+                            content = map(latestEvent.content),
+                            senderId = UserId(latestEvent.sender),
+                            senderProfile = latestEvent.senderProfile.map(),
+                            timestamp = latestEvent.timestamp.toLong(),
+                        )
+                    )
+                }
+            }
+            ThreadSummary(
+                latestEvent = details,
+                numberOfReplies = numberOfReplies,
+            )
         }
     }
 }
@@ -204,7 +244,6 @@ private fun RustOtherState.map(): OtherState {
         RustOtherState.PolicyRuleRoom -> OtherState.PolicyRuleRoom
         RustOtherState.PolicyRuleServer -> OtherState.PolicyRuleServer
         RustOtherState.PolicyRuleUser -> OtherState.PolicyRuleUser
-        RustOtherState.RoomAliases -> OtherState.RoomAliases
         is RustOtherState.RoomAvatar -> OtherState.RoomAvatar(url)
         RustOtherState.RoomCanonicalAlias -> OtherState.RoomCanonicalAlias
         RustOtherState.RoomCreate -> OtherState.RoomCreate
@@ -240,4 +279,12 @@ private fun RustEncryptedMessage.map(): UnableToDecryptContent.Data {
         is RustEncryptedMessage.OlmV1Curve25519AesSha2 -> UnableToDecryptContent.Data.OlmV1Curve25519AesSha2(senderKey)
         RustEncryptedMessage.Unknown -> UnableToDecryptContent.Data.Unknown
     }
+}
+
+private fun BeaconInfo.map(): LiveLocationInfo {
+    return LiveLocationInfo(
+        description = description,
+        geoUri = geoUri,
+        timestamp = ts.toLong(),
+    )
 }

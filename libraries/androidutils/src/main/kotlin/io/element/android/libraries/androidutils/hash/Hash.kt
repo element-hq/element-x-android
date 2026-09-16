@@ -20,7 +20,7 @@ fun String.hash() = try {
     digest.digest()
         .joinToString("") { String.format(Locale.ROOT, "%02X", it) }
         .lowercase(Locale.ROOT)
-} catch (exc: Exception) {
+} catch (_: Exception) {
     // Should not happen, but just in case
     hashCode().toString()
 }

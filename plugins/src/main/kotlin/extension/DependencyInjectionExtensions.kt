@@ -31,9 +31,6 @@ fun Project.setupDependencyInjection(
     // Apply Metro plugin and configure it
     applyPluginIfNeeded(libs.plugins.metro)
 
-    val metroExtension = extensions.getByName("metro") as MetroPluginExtension
-    metroExtension.contributesAsInject.value(true)
-
     if (generateNodeFactories) {
         applyPluginIfNeeded(libs.plugins.ksp)
 

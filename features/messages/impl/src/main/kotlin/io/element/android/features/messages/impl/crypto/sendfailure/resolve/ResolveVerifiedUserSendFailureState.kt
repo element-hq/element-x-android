@@ -15,5 +15,5 @@ data class ResolveVerifiedUserSendFailureState(
     val verifiedUserSendFailure: VerifiedUserSendFailure,
     val resolveAction: AsyncAction<Unit>,
     val retryAction: AsyncAction<Unit>,
-    val eventSink: (ResolveVerifiedUserSendFailureEvents) -> Unit
+    val eventSink: (ResolveVerifiedUserSendFailureEvent) -> Unit
 )

@@ -23,7 +23,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.startchat.api.StartDMAction
-import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileEvent
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileState.ConfirmationDialog
 import io.element.android.features.userprofile.api.UserProfileVerificationState
@@ -34,6 +34,8 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.powerlevels.canCall
+import io.element.android.libraries.matrix.api.room.powerlevels.use
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -56,7 +58,7 @@ class UserProfilePresenter(
 
     @Composable
     private fun getDmRoomId(): State<RoomId?> {
-        return produceState<RoomId?>(initialValue = null) {
+        return produceState(initialValue = null) {
             value = client.findDM(userId).getOrNull()
         }
     }
@@ -66,7 +68,6 @@ class UserProfilePresenter(
         val isElementCallAvailable by produceState(initialValue = false, roomId) {
             value = sessionEnterpriseService.isElementCallAvailable()
         }
-
         return produceState(initialValue = false, isElementCallAvailable, roomId) {
             value = when {
                 isElementCallAvailable.not() -> false
@@ -75,7 +76,7 @@ class UserProfilePresenter(
                     roomId
                         ?.let { client.getRoom(it) }
                         ?.use { room ->
-                            room.canUserJoinCall(client.sessionId).getOrNull()
+                            room.roomPermissions().use(false) { perms -> perms.canCall() }
                         }
                         .orFalse()
             }
@@ -100,9 +101,9 @@ class UserProfilePresenter(
         }
         val userProfile by produceState<MatrixUser?>(null) { value = client.getProfile(userId).getOrNull() }
 
-        fun handleEvent(event: UserProfileEvents) {
+        fun handleEvent(event: UserProfileEvent) {
             when (event) {
-                is UserProfileEvents.BlockUser -> {
+                is UserProfileEvent.BlockUser -> {
                     if (event.needsConfirmation) {
                         confirmationDialog = ConfirmationDialog.Block
                     } else {
@@ -110,7 +111,7 @@ class UserProfilePresenter(
                         coroutineScope.blockUser(isBlocked)
                     }
                 }
-                is UserProfileEvents.UnblockUser -> {
+                is UserProfileEvent.UnblockUser -> {
                     if (event.needsConfirmation) {
                         confirmationDialog = ConfirmationDialog.Unblock
                     } else {
@@ -118,11 +119,11 @@ class UserProfilePresenter(
                         coroutineScope.unblockUser(isBlocked)
                     }
                 }
-                UserProfileEvents.ClearConfirmationDialog -> confirmationDialog = null
-                UserProfileEvents.ClearBlockUserError -> {
+                UserProfileEvent.ClearConfirmationDialog -> confirmationDialog = null
+                UserProfileEvent.ClearBlockUserError -> {
                     isBlocked.value = AsyncData.Success(isBlocked.value.dataOrNull().orFalse())
                 }
-                UserProfileEvents.StartDM -> {
+                UserProfileEvent.StartDM -> {
                     coroutineScope.launch {
                         startDMAction.execute(
                             matrixUser = userProfile ?: MatrixUser(userId),
@@ -131,12 +132,12 @@ class UserProfilePresenter(
                         )
                     }
                 }
-                UserProfileEvents.ClearStartDMState -> {
+                UserProfileEvent.ClearStartDMState -> {
                     startDmActionState.value = AsyncAction.Uninitialized
                 }
                 // Do nothing for other event as they are handled by the RoomMemberDetailsPresenter if needed
-                UserProfileEvents.WithdrawVerification,
-                is UserProfileEvents.CopyToClipboard -> Unit
+                UserProfileEvent.WithdrawVerification,
+                is UserProfileEvent.CopyToClipboard -> Unit
             }
         }
 
@@ -144,6 +145,7 @@ class UserProfilePresenter(
             userId = userId,
             userName = userProfile?.displayName,
             avatarUrl = userProfile?.avatarUrl,
+            displayedStatus = userProfile?.displayedStatus,
             isBlocked = isBlocked.value,
             verificationState = UserProfileVerificationState.UNKNOWN,
             startDmActionState = startDmActionState.value,

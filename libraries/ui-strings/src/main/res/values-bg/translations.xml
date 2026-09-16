@@ -53,7 +53,7 @@
   <string name="action_copy_link_to_message">"Копиране на връзката към съобщението"</string>
   <string name="action_copy_text">"Копиране на текста"</string>
   <string name="action_create">"Създаване"</string>
-  <string name="action_create_a_room">"Създаване на стая"</string>
+  <string name="action_create_room">"Създаване на стая"</string>
   <string name="action_deactivate">"Деактивиране"</string>
   <string name="action_deactivate_account">"Деактивиране на акаунта"</string>
   <string name="action_decline">"Отхвърляне"</string>
@@ -134,7 +134,7 @@
   <string name="common_advanced_settings">"Разширени настройки"</string>
   <string name="common_an_image">"изображение"</string>
   <string name="common_analytics">"Статистика"</string>
-  <string name="common_android_shortcuts_remove_reason_left_room">"Напуснахте стаята"</string>
+  <string name="common_android_shortcuts_remove_reason_left_room">"Вие напуснахте стаята"</string>
   <string name="common_appearance">"Облик"</string>
   <string name="common_audio">"Аудио"</string>
   <string name="common_blocked_users">"Блокирани потребители"</string>
@@ -145,7 +145,6 @@
   <string name="common_creating_room">"Създаване на стая…"</string>
   <string name="common_current_user_left_room">"Стаята е напусната"</string>
   <string name="common_current_user_left_space">"Пространството е напуснато"</string>
-  <string name="common_dark">"Тъмен"</string>
   <string name="common_decryption_error">"Грешка при разшифроване"</string>
   <string name="common_description">"Описание"</string>
   <string name="common_developer_options">"Опции за разработчици"</string>
@@ -176,7 +175,6 @@
   <string name="common_invite_unknown_profile">"Този Matrix ID не може да бъде намерен, така че поканата може да не бъде получена."</string>
   <string name="common_leaving_room">"Стаята се напуска"</string>
   <string name="common_leaving_space">"Пространството се напуска"</string>
-  <string name="common_light">"Светъл"</string>
   <string name="common_link_copied_to_clipboard">"Връзката е копирана в клипборда"</string>
   <string name="common_loading">"Зарежда се…"</string>
   <string name="common_loading_more">"Зарежда се още…"</string>
@@ -231,7 +229,6 @@
     <item quantity="other">"%1$d отговора"</item>
   </plurals>
   <string name="common_replying_to">"В отговор на %1$s"</string>
-  <string name="common_report_a_bug">"Съобщаване за грешка"</string>
   <string name="common_report_a_problem">"Съобщаване за проблем"</string>
   <string name="common_report_submitted">"Докладът е изпратен"</string>
   <string name="common_rich_text_editor">"Редактор на богат текст"</string>
@@ -270,12 +267,11 @@
   <string name="common_success">"Успешно"</string>
   <string name="common_suggestions">"Предложения"</string>
   <string name="common_syncing">"Синхронизиране"</string>
-  <string name="common_system">"Система"</string>
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Уведомления от трети страни"</string>
   <string name="common_thread">"Нишка"</string>
   <string name="common_topic">"Тема"</string>
-  <string name="common_topic_placeholder">"За какво се отнася тази стая?"</string>
+  <string name="common_topic_placeholder">"За какво е тази стая?"</string>
   <string name="common_unable_to_decrypt">"Не може да се разшифрова"</string>
   <string name="common_unable_to_decrypt_no_access">"Нямате достъп до това съобщение"</string>
   <string name="common_unable_to_invite_message">"Поканите не можаха да бъдат изпратени до един или повече потребители."</string>
@@ -311,7 +307,6 @@
   <string name="error_missing_location_rationale_android">"%1$s няма разрешение за достъп до вашето местоположение. Активирайте достъпа по-долу."</string>
   <string name="error_some_messages_have_not_been_sent">"Някои съобщения не са изпратени"</string>
   <string name="error_unknown">"Съжаляваме, възникна грешка"</string>
-  <string name="event_shield_reason_sent_in_clear">"Без шифроване"</string>
   <string name="invite_friends_rich_title">"🔐️ Присъединете се към мен в %1$s"</string>
   <string name="invite_friends_text">"Хей, говорете с мен в %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
@@ -333,7 +328,6 @@
   <string name="screen_share_this_location_action">"Споделяне на това местоположение"</string>
   <string name="screen_space_list_parent_space">"%1$s пространство"</string>
   <string name="screen_space_list_title">"Пространства"</string>
-  <string name="screen_space_menu_action_members">"Преглед на членовете"</string>
   <string name="screen_view_location_title">"Местоположение"</string>
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"bg"</string>

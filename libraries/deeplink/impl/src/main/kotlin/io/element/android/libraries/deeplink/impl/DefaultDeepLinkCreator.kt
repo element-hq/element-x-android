@@ -10,6 +10,7 @@ package io.element.android.libraries.deeplink.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.androidutils.text.urlEncoded
 import io.element.android.libraries.deeplink.api.DeepLinkCreator
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -21,13 +22,13 @@ class DefaultDeepLinkCreator : DeepLinkCreator {
     override fun create(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?, eventId: EventId?): String {
         return buildString {
             append("$SCHEME://$HOST/")
-            append(sessionId.value)
+            append(sessionId.value.urlEncoded())
             append("/")
-            append(roomId?.value.orEmpty())
+            append(roomId?.value?.urlEncoded().orEmpty())
             append("/")
-            append(threadId?.value.orEmpty())
+            append(threadId?.value?.urlEncoded().orEmpty())
             append("/")
-            append(eventId?.value.orEmpty())
+            append(eventId?.value?.urlEncoded().orEmpty())
         }
             // Remove all possible trailing '/' characters:
             // No event id

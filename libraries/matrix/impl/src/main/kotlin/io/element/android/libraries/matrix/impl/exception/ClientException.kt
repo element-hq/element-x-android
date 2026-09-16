@@ -9,21 +9,27 @@
 package io.element.android.libraries.matrix.impl.exception
 
 import io.element.android.libraries.matrix.api.exception.ClientException
+import io.element.android.libraries.matrix.api.exception.ContentScannerErrorReason
 import org.matrix.rustcomponents.sdk.ClientException as RustClientException
 
 fun Throwable.mapClientException(): ClientException {
     return when (this) {
         is RustClientException -> {
             when (this) {
-                is RustClientException.Generic -> ClientException.Generic(msg, details)
+                is RustClientException.Generic -> ClientException.Generic(message = msg, details = details, cause = this)
                 is RustClientException.MatrixApi -> ClientException.MatrixApi(
                     kind = kind.map(),
                     code = code,
                     message = msg,
                     details = details,
+                    cause = this,
+                )
+                is RustClientException.ContentScanner -> ClientException.ContentScanner(
+                    message = message,
+                    reason = ContentScannerErrorReason.fromRust(reason),
                 )
             }
         }
-        else -> ClientException.Other(message ?: "Unknown error")
+        else -> ClientException.Other(message ?: "Unknown error", this)
     }
 }

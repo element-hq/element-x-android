@@ -32,6 +32,7 @@ import androidx.core.content.PermissionChecker
 import androidx.core.net.toFile
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.androidutils.file.saveWithUniqueFileName
 import io.element.android.libraries.androidutils.system.startInstallFromSourceIntent
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -44,6 +45,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 
 @ContributesBinding(AppScope::class)
@@ -100,7 +102,11 @@ class AndroidLocalMediaActions(
     override suspend fun share(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
         runCatchingExceptions {
-            val shareableUri = localMedia.toShareableUri()
+            // Make a copy of the shared file in the cache directory, otherwise the original file will be gone once this screen is dismissed
+            // and will prevent sharing the media to another room inside the app.
+            val copiedFile = localMedia.uri.toFile()
+                .copyTo(File(context.cacheDir, "temp/media/" + (localMedia.uri.lastPathSegment ?: "shared_file")), true)
+            val shareableUri = copiedFile.toShareableUri()
             val shareMediaIntent = Intent(Intent.ACTION_SEND)
                 .setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 .putExtra(Intent.EXTRA_STREAM, shareableUri)
@@ -157,26 +163,29 @@ class AndroidLocalMediaActions(
         }
     }
 
-    private fun LocalMedia.toShareableUri(): Uri {
-        val mediaAsFile = this.toFile()
+    private fun File.toShareableUri(): Uri {
         val authority = "${buildMeta.applicationId}.fileprovider"
-        return FileProvider.getUriForFile(context, authority, mediaAsFile).normalizeScheme()
+        return FileProvider.getUriForFile(context, authority, this).normalizeScheme()
+    }
+
+    private fun LocalMedia.toShareableUri(): Uri {
+        return this.toFile().toShareableUri()
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun saveOnDiskUsingMediaStore(localMedia: LocalMedia) {
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, localMedia.info.filename)
-            put(MediaStore.MediaColumns.MIME_TYPE, localMedia.info.mimeType)
-            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-        }
         val resolver = context.contentResolver
-        val outputUri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-        if (outputUri != null) {
-            localMedia.openStream()?.use { input ->
-                resolver.openOutputStream(outputUri).use { output ->
-                    input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
-                }
+        val outputUri = saveWithUniqueFileName(localMedia.info.filename) { displayName ->
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, displayName)
+                put(MediaStore.MediaColumns.MIME_TYPE, localMedia.info.mimeType)
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+            resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+        } ?: throw IOException("Unable to create the destination file")
+        localMedia.openStream()?.use { input ->
+            resolver.openOutputStream(outputUri).use { output ->
+                input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
             }
         }
     }

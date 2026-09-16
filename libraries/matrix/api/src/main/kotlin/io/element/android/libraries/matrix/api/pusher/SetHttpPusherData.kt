@@ -17,4 +17,5 @@ data class SetHttpPusherData(
     val profileTag: String?,
     val lang: String,
     val defaultPayload: String,
+    val append: Boolean,
 )

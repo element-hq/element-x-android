@@ -9,7 +9,7 @@
   <string name="rich_text_editor_composer_placeholder">"Kirim pesan…"</string>
   <string name="rich_text_editor_composer_unencrypted_placeholder">"Pesan tidak terenkripsi…"</string>
   <string name="rich_text_editor_create_link">"Buat tautan"</string>
-  <string name="rich_text_editor_edit_link">"Sunting tautan"</string>
+  <string name="rich_text_editor_edit_link">"Edit tautan"</string>
   <string name="rich_text_editor_format_action">"%1$s, keadaan: %2$s"</string>
   <string name="rich_text_editor_format_bold">"Terapkan format tebal"</string>
   <string name="rich_text_editor_format_italic">"Terapkan format miring"</string>

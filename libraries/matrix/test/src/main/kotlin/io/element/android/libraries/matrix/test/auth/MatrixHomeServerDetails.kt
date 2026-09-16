@@ -14,9 +14,9 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 fun aMatrixHomeServerDetails(
     url: String = A_HOMESERVER_URL,
     supportsPasswordLogin: Boolean = false,
-    supportsOidcLogin: Boolean = false,
+    supportsOAuthLogin: Boolean = false,
 ) = MatrixHomeServerDetails(
     url = url,
     supportsPasswordLogin = supportsPasswordLogin,
-    supportsOidcLogin = supportsOidcLogin,
+    supportsOAuthLogin = supportsOAuthLogin,
 )

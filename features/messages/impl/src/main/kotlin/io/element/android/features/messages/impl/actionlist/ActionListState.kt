@@ -16,7 +16,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 data class ActionListState(
     val target: Target,
-    val eventSink: (ActionListEvents) -> Unit,
+    val eventSink: (ActionListEvent) -> Unit,
 ) {
     @Immutable
     sealed interface Target {

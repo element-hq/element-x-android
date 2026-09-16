@@ -23,7 +23,7 @@ Escolhe algo memorável. Se te esqueceres deste PIN, a tua sessão será termina
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Insere o mesmo PIN duas vezes"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Os PINs não coincidem"</string>
   <string name="screen_app_lock_signout_alert_message">"Terás de voltar a iniciar sessão e criar um novo PIN para continuar"</string>
-  <string name="screen_app_lock_signout_alert_title">"Estás a terminar a sessão"</string>
+  <string name="screen_app_lock_signout_alert_title">"O teu dispositivo está a ser removido"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Tens %1$d tentativa de desbloqueio"</item>
     <item quantity="other">"Tens %1$d tentativas de desbloqueio"</item>
@@ -34,5 +34,5 @@ Escolhe algo memorável. Se te esqueceres deste PIN, a tua sessão será termina
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Utilizar biometria"</string>
   <string name="screen_app_lock_use_pin_android">"Utilizar PIN"</string>
-  <string name="screen_signout_in_progress_dialog_content">"A terminar sessão…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"A remover dispositivo…"</string>
 </resources>

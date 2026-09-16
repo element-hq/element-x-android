@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s đã bị lỗi ở lần sử dụng gần nhất. Bạn có muốn chia sẻ báo cáo lỗi với chúng tôi không?"</string>
+  <string name="rageshake_detection_dialog_content">"Có vẻ như bạn đang lắc điện thoại vì bực bội. Bạn có muốn mở màn hình báo cáo lỗi không?"</string>
+  <string name="settings_rageshake">"Lắc điện thoại"</string>
+  <string name="settings_rageshake_detection_threshold">"Ngưỡng phát hiện"</string>
+</resources>

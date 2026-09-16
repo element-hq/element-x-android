@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Có, chấp nhận tất cả"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Bạn có chắc chắn muốn chấp nhận tất cả các yêu cầu tham gia không?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Chấp nhận tất cả các yêu cầu"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Chấp nhận tất cả"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Không thể chấp nhận tất cả yêu cầu. Bạn có muốn thử lại không?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Chấp nhận tất cả yêu cầu thất bại"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Đang duyệt tất cả yêu cầu tham gia"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Không thể chấp nhận yêu cầu này. Bạn có muốn thử lại không?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Chấp nhận yêu cầu thất bại"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Đang duyệt yêu cầu tham gia"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Có, từ chối và cấm"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Bạn có chắc muốn từ chối và cấm %1$s không? Người dùng này sẽ không thể yêu cầu tham gia phòng này nữa"</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Từ chối và cấm truy cập"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Đang từ chối và chặn truy cập"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Có, từ chối"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Bạn có chắc muốn từ chối yêu cầu tham gia phòng của %1$s không?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Từ chối truy cập"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Từ chối và chặn"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Không thể từ chối yêu cầu. Bạn có muốn thử lại không?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Từ chối yêu cầu thất bại"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Đang từ chối yêu cầu tham gia"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Khi ai đó xin vào phòng, bạn sẽ thấy yêu cầu ở đây."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Không có yêu cầu tham gia nào đang chờ xử lý"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Đang tải các yêu cầu tham gia…"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="other">"%1$s + %2$d người khác muốn tham gia phòng này"</item>
+  </plurals>
+  <string name="screen_room_single_knock_request_accept_button_title">"Đồng ý"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Xem"</string>
+</resources>

@@ -8,6 +8,8 @@
   <string name="screen_bug_report_editor_placeholder">"Descrieți problema…"</string>
   <string name="screen_bug_report_editor_supporting">"Dacă posibil, vă rugăm să scrieți descrierea în engleză."</string>
   <string name="screen_bug_report_error_description_too_short">"Descrierea este prea scurtă, vă rugăm să oferiți mai multe detalii despre ceea ce s-a întâmplat. Vă mulțumim!"</string>
+  <string name="screen_bug_report_github_issue_description">"Puteți introduce numărul unui tichet GitHub asociat, dacă există."</string>
+  <string name="screen_bug_report_github_issue_label">"Tichet GitHub"</string>
   <string name="screen_bug_report_include_crash_logs">"Trimiteți log-uri"</string>
   <string name="screen_bug_report_include_logs">"Permiteți log-uri"</string>
   <string name="screen_bug_report_include_logs_error">"Jurnalele dumneavoastră sunt prea mari și nu pot fi incluse în acest raport. Vă rugăm să ni le trimiteți prin altă metodă."</string>

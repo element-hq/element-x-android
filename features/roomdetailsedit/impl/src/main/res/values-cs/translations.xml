@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"Upravit podrobnosti"</string>
+  <string name="screen_room_details_edition_error">"Došlo k neznámé chybě a informace nebylo možné změnit."</string>
+  <string name="screen_room_details_edition_error_title">"Nelze aktualizovat místnost"</string>
+  <string name="screen_room_details_updating_room">"Aktualizace místnosti…"</string>
+</resources>

@@ -10,5 +10,4 @@
   <string name="screen_deactivate_account_list_item_2">"Te remover de todas as salas de conversa."</string>
   <string name="screen_deactivate_account_list_item_3">"Apague as informações da sua conta do nosso servidor de identidade."</string>
   <string name="screen_deactivate_account_list_item_4">"Suas mensagens ainda estarão visíveis para os usuários registrados, mas não estarão disponíveis para usuários novos ou não registrados se você optar por apagá-las."</string>
-  <string name="screen_deactivate_account_title">"Desativar conta"</string>
 </resources>

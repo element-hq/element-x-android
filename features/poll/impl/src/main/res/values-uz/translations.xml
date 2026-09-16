@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Ovozlarni yashirish"</string>
   <string name="screen_create_poll_answer_hint">"Variant%1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Oʻzgarishlar saqlanmadi. Haqiqatan ham orqaga qaytmoqchimisiz?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"%1$s variantini o‘chirish"</string>
   <string name="screen_create_poll_question_desc">"Savol yoki mavzu"</string>
   <string name="screen_create_poll_question_hint">"So\'rovnoma nima haqida?"</string>
   <string name="screen_create_poll_title">"So‘rovnoma yaratish"</string>

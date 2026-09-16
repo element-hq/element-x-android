@@ -8,7 +8,6 @@
 
 package io.element.android.features.logout.impl
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,17 +48,18 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.deactivation.impl.R
 import io.element.android.features.logout.impl.ui.AccountDeactivationActionDialog
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.components.list.SwitchListItem
+import io.element.android.libraries.designsystem.components.visuallist.VisualList
+import io.element.android.libraries.designsystem.components.visuallist.VisualListItemData
 import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.PasswordVisibilityToggle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
@@ -102,14 +102,14 @@ fun AccountDeactivationView(
             Content(
                 state = state,
                 onSubmitClick = {
-                    eventSink(AccountDeactivationEvents.DeactivateAccount(isRetry = false))
+                    eventSink(AccountDeactivationEvent.DeactivateAccount(isRetry = false))
                 }
             )
             Spacer(modifier = Modifier.height(32.dp))
             Buttons(
                 state = state,
                 onSubmitClick = {
-                    eventSink(AccountDeactivationEvents.DeactivateAccount(isRetry = false))
+                    eventSink(AccountDeactivationEvent.DeactivateAccount(isRetry = false))
                 }
             )
         }
@@ -117,13 +117,13 @@ fun AccountDeactivationView(
     AccountDeactivationActionDialog(
         state.accountDeactivationAction,
         onConfirmClick = {
-            eventSink(AccountDeactivationEvents.DeactivateAccount(isRetry = false))
+            eventSink(AccountDeactivationEvent.DeactivateAccount(isRetry = false))
         },
         onRetryClick = {
-            eventSink(AccountDeactivationEvents.DeactivateAccount(isRetry = true))
+            eventSink(AccountDeactivationEvent.DeactivateAccount(isRetry = true))
         },
         onDismissDialog = {
-            eventSink(AccountDeactivationEvents.CloseDialogs)
+            eventSink(AccountDeactivationEvent.CloseDialogs)
         },
     )
 }
@@ -135,7 +135,7 @@ private fun ColumnScope.Buttons(
 ) {
     val logoutAction = state.accountDeactivationAction
     Button(
-        text = stringResource(CommonStrings.action_deactivate),
+        text = stringResource(CommonStrings.action_delete),
         showProgress = logoutAction is AsyncAction.Loading,
         destructive = true,
         enabled = state.submitEnabled,
@@ -175,9 +175,9 @@ private fun Content(
             style = ElementTheme.typography.fontBodyMdRegular,
             color = ElementTheme.colors.textSecondary,
         )
-        InfoListOrganism(
+        VisualList(
             items = persistentListOf(
-                InfoListItem(
+                VisualListItemData(
                     message = buildAnnotatedStringWithStyledPart(
                         R.string.screen_deactivate_account_list_item_1,
                         R.string.screen_deactivate_account_list_item_1_bold_part,
@@ -194,7 +194,7 @@ private fun Content(
                         )
                     },
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(R.string.screen_deactivate_account_list_item_2),
                     iconComposable = {
                         Icon(
@@ -205,7 +205,7 @@ private fun Content(
                         )
                     },
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(R.string.screen_deactivate_account_list_item_3),
                     iconComposable = {
                         Icon(
@@ -216,7 +216,7 @@ private fun Content(
                         )
                     },
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(R.string.screen_deactivate_account_list_item_4),
                     iconComposable = {
                         Icon(
@@ -239,7 +239,7 @@ private fun Content(
                 headline = stringResource(R.string.screen_deactivate_account_delete_all_messages),
                 value = eraseData,
                 onChange = {
-                    eventSink(AccountDeactivationEvents.SetEraseData(it))
+                    eventSink(AccountDeactivationEvent.SetEraseData(it))
                 },
                 enabled = !isLoading,
             )
@@ -275,19 +275,15 @@ private fun Content(
                 onValueChange = {
                     val sanitized = it.sanitize()
                     passwordFieldState = sanitized
-                    eventSink(AccountDeactivationEvents.SetPassword(sanitized))
+                    eventSink(AccountDeactivationEvent.SetPassword(sanitized))
                 },
                 placeholder = stringResource(CommonStrings.common_password),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    val image =
-                        if (passwordVisible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
-                    val description =
-                        if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
-
-                    Box(modifier = Modifier.clickable { passwordVisible = !passwordVisible }) {
-                        Icon(imageVector = image, description)
-                    }
+                    PasswordVisibilityToggle(
+                        visible = passwordVisible,
+                        onToggle = { passwordVisible = !passwordVisible },
+                    )
                 },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,
@@ -303,16 +299,16 @@ private fun Content(
 }
 
 /**
- * Ensure that the string does not contain any new line characters, which can happen when pasting values.
+ * Ensure that the string does not contain any line separator, which can happen when pasting values.
  */
 private fun String.sanitize(): String {
-    return replace("\n", "")
+    return filterNot { it == '\n' || it == '\r' }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun AccountDeactivationViewPreview(
-    @PreviewParameter(AccountDeactivationStateProvider::class) state: AccountDeactivationState,
+    @PreviewParameter(AccountDeactivationStatePreviewParam::class) state: AccountDeactivationState,
 ) = ElementPreview {
     AccountDeactivationView(
         state,

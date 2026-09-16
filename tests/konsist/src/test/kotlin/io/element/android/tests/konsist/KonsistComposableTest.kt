@@ -28,6 +28,7 @@ class KonsistComposableTest {
             .functions()
             .withTopLevel()
             .withoutModifier(KoModifier.PRIVATE)
+            .withoutModifier(KoModifier.INTERNAL)
             .withoutNameEndingWith("Preview")
             .withAllAnnotationsOf(Composable::class)
             .withoutReceiverType()
@@ -46,6 +47,9 @@ class KonsistComposableTest {
                 "CompoundSemanticColorsLightHc",
                 "CompoundSemanticColorsDark",
                 "CompoundSemanticColorsDarkHc",
+                "HorizontalFloatingToolbarItem",
+                "HorizontalFloatingToolbarSeparator",
+                "DebugNavStateNodeHost",
             )
             .assertTrue(
                 additionalMessage =

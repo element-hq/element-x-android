@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Tylko administratorzy"</string>
+  <string name="screen_room_change_permissions_administrators">"Administrator"</string>
   <string name="screen_room_change_permissions_ban_people">"Banowanie osób"</string>
+  <string name="screen_room_change_permissions_change_settings">"Zmień ustawienia"</string>
   <string name="screen_room_change_permissions_delete_messages">"Usuń wiadomości"</string>
-  <string name="screen_room_change_permissions_invite_people">"Zapraszanie osób i akceptowanie próśb o dołączenie"</string>
+  <string name="screen_room_change_permissions_everyone">"Członek"</string>
+  <string name="screen_room_change_permissions_invite_people">"Zaproś osoby"</string>
+  <string name="screen_room_change_permissions_live_location">"Udostępnij lokalizację na żywo"</string>
+  <string name="screen_room_change_permissions_manage_space">"Zarządzaj przestrzeniami"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Zarządzaj pokojami"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Zarządzaj członkami"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Wiadomości i zawartość"</string>
-  <string name="screen_room_change_permissions_moderators">"Administratorzy i moderatorzy"</string>
-  <string name="screen_room_change_permissions_remove_people">"Usuwanie osób i odrzucanie próśb o dołączenie"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderator"</string>
+  <string name="screen_room_change_permissions_remove_people">"Usuń osoby"</string>
   <string name="screen_room_change_permissions_room_avatar">"Zmień awatar pokoju"</string>
-  <string name="screen_room_change_permissions_room_details">"Edytuj pokój"</string>
+  <string name="screen_room_change_permissions_room_details">"Edytuj szczegóły"</string>
   <string name="screen_room_change_permissions_room_name">"Zmień nazwę pokoju"</string>
   <string name="screen_room_change_permissions_room_topic">"Zmień temat pokoju"</string>
   <string name="screen_room_change_permissions_send_messages">"Wysyłanie wiadomości"</string>
+  <string name="screen_room_change_permissions_title">"Uprawnienia"</string>
   <string name="screen_room_change_role_administrators_title">"Edytuj administratorów"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Tej akcji nie będzie można cofnąć. Promujesz użytkownika, który będzie posiadał takie same uprawnienia jak Ty."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Dodać administratora?"</string>
@@ -21,7 +28,7 @@
   <string name="screen_room_change_role_confirm_demote_self_description">"Nie będzie można cofnąć tej zmiany, jeśli się zdegradujesz. Jeśli jesteś ostatnim uprzywilejowanym użytkownikiem w pokoju, nie będziesz w stanie odzyskać uprawnień."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Zdegradować siebie?"</string>
   <string name="screen_room_change_role_invited_member_name">"%1$s (Oczekujące)"</string>
-  <string name="screen_room_change_role_invited_member_name_android">"(Oczekujący)"</string>
+  <string name="screen_room_change_role_invited_member_name_android">"(Oczekujące)"</string>
   <string name="screen_room_change_role_moderators_admin_section_footer">"Administratorzy automatycznie mają uprawnienia moderatora"</string>
   <string name="screen_room_change_role_moderators_owner_section_footer">"Właściciele automatycznie mają uprawnienia administratora."</string>
   <string name="screen_room_change_role_moderators_title">"Edytuj moderatorów"</string>
@@ -31,7 +38,14 @@
   <string name="screen_room_change_role_section_users">"Członków"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Masz niezapisane zmiany."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Zapisać zmiany?"</string>
-  <string name="screen_room_member_list_banned_empty">"W tym pokoju nie ma zbanowanych użytkowników."</string>
+  <string name="screen_room_member_list_banned_empty">"Nie ma zbanowanych użytkowników."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d zbanowany"</item>
+    <item quantity="few">"%1$d zbanowanych"</item>
+    <item quantity="many">"%1$d zbanowanych"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Sprawdź pisownię lub wyszukaj ponownie"</string>
+  <string name="screen_room_member_list_empty_search_title">"Brak wyników dla “%1$s”"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d osoba"</item>
     <item quantity="few">"%1$d osoby"</item>
@@ -44,8 +58,14 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Odbanuj z pokoju"</string>
   <string name="screen_room_member_list_mode_banned">"Zbanowanych"</string>
   <string name="screen_room_member_list_mode_members">"Członków"</string>
-  <string name="screen_room_member_list_role_administrator">"Tylko administratorzy"</string>
-  <string name="screen_room_member_list_role_moderator">"Administratorzy i moderatorzy"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d zaproszony"</item>
+    <item quantity="few">"%1$d zaproszonych"</item>
+    <item quantity="many">"%1$d zaproszonych"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Oczekuje"</string>
+  <string name="screen_room_member_list_role_administrator">"Administrator"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_role_owner">"Właściciel"</string>
   <string name="screen_room_member_list_room_members_header_title">"Członkowie pokoju"</string>
   <string name="screen_room_member_list_unbanning_user">"Odbanowanie %1$s"</string>
@@ -58,10 +78,12 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Wiadomości i zawartość"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorzy"</string>
   <string name="screen_room_roles_and_permissions_owners">"Właściciele"</string>
-  <string name="screen_room_roles_and_permissions_reset">"Resetuj uprawnienia"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Uprawnienia"</string>
+  <string name="screen_room_roles_and_permissions_reset">"Zresetuj uprawnienia"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Po zresetowaniu uprawnień utracisz bieżące ustawienia."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Zresetować uprawnienia?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Role"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Szczegóły pokoju"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Szczegóły przestrzeni"</string>
   <string name="screen_room_roles_and_permissions_title">"Role i uprawnienia"</string>
 </resources>

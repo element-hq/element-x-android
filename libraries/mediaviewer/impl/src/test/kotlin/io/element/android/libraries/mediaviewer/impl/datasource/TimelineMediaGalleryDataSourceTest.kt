@@ -34,9 +34,12 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopEventContentValidationCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.aMediaItemImage
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -80,7 +83,7 @@ class TimelineMediaGalleryDataSourceTest {
                     roomCoroutineScope = backgroundScope,
                 )
             )
-            sut.start()
+            sut.start(backgroundScope)
             assertThat(sut.getLastData()).isEqualTo(AsyncData.Uninitialized)
             sut.groupedMediaItemsFlow().test {
                 assertThat(awaitItem().isLoading()).isTrue()
@@ -95,7 +98,7 @@ class TimelineMediaGalleryDataSourceTest {
                 )
                 assertThat(sut.getLastData().isSuccess()).isTrue()
                 // Also test that starting again should have no effect
-                sut.start()
+                sut.start(backgroundScope)
             }
         }
         // Ensure that the timeline has been closed on flow completion
@@ -117,7 +120,7 @@ class TimelineMediaGalleryDataSourceTest {
                 roomCoroutineScope = backgroundScope,
             )
         )
-        sut.start()
+        sut.start(backgroundScope)
         sut.groupedMediaItemsFlow().test {
             skipItems(2)
             sut.loadMore(Timeline.PaginationDirection.BACKWARDS)
@@ -140,7 +143,7 @@ class TimelineMediaGalleryDataSourceTest {
                 roomCoroutineScope = backgroundScope,
             )
         )
-        sut.start()
+        sut.start(backgroundScope)
         sut.groupedMediaItemsFlow().test {
             skipItems(2)
             sut.deleteItem(AN_EVENT_ID)
@@ -159,7 +162,7 @@ class TimelineMediaGalleryDataSourceTest {
                 roomCoroutineScope = backgroundScope,
             )
         )
-        sut.start()
+        sut.start(backgroundScope)
         sut.groupedMediaItemsFlow().test {
             assertThat(awaitItem().isLoading()).isTrue()
             assertThat(sut.getLastData().isLoading()).isTrue()
@@ -167,6 +170,32 @@ class TimelineMediaGalleryDataSourceTest {
                 AsyncData.Failure<GroupedMediaItems>(AN_EXCEPTION)
             )
         }
+    }
+
+    @Test
+    fun `test - failing to load a focused timeline keeps the item that was opened`() = runTest {
+        val room = FakeJoinedRoom(
+            createTimelineResult = { Result.failure(AN_EXCEPTION) },
+            roomCoroutineScope = backgroundScope,
+        )
+        val initialMediaItem = aMediaItemImage()
+        val sut = createTimelineMediaGalleryDataSource(
+            room = room,
+            mediaTimeline = FocusedMediaTimeline(
+                room = room,
+                eventId = AN_EVENT_ID,
+                onlyPinnedEvents = false,
+                initialMediaItem = initialMediaItem,
+            ),
+        )
+        sut.start(backgroundScope)
+        sut.groupedMediaItemsFlow().test {
+            val item = awaitItem()
+            assertThat(item.isSuccess()).isTrue()
+            assertThat(item.dataOrNull()?.imageAndVideoItems).contains(initialMediaItem)
+            expectNoEvents()
+        }
+        assertThat(sut.getLastData().isFailure()).isFalse()
     }
 
     @Test
@@ -181,7 +210,7 @@ class TimelineMediaGalleryDataSourceTest {
                 roomCoroutineScope = backgroundScope,
             )
         )
-        sut.start()
+        sut.start(backgroundScope)
         sut.groupedMediaItemsFlow().test {
             assertThat(awaitItem().isLoading()).isTrue()
             assertThat(sut.getLastData().isLoading()).isTrue()
@@ -235,6 +264,7 @@ class TimelineMediaGalleryDataSourceTest {
                                     filename = "body.jpg",
                                     fileSize = 888L,
                                     caption = "body.jpg caption",
+                                    formattedCaption = "formatted",
                                     mimeType = MimeTypes.Jpeg,
                                     formattedFileSize = "888 Bytes",
                                     fileExtension = "jpg",
@@ -248,6 +278,8 @@ class TimelineMediaGalleryDataSourceTest {
                                 ),
                                 mediaSource = MediaSource("url"),
                                 thumbnailSource = MediaSource("url_thumbnail"),
+                                blurHash = A_BLUR_HASH,
+                                validationState = noopValidationState,
                             )
                         ),
                         fileItems = persistentListOf()
@@ -258,14 +290,17 @@ class TimelineMediaGalleryDataSourceTest {
     }
 }
 
+private val noopValidationState = NoopContentValidationState()
+
 internal fun TestScope.createTimelineMediaGalleryDataSource(
     room: JoinedRoom = FakeJoinedRoom(
         liveTimeline = FakeTimeline(),
     ),
+    mediaTimeline: MediaTimeline? = null,
 ): TimelineMediaGalleryDataSource {
     return TimelineMediaGalleryDataSource(
         room = room,
-        mediaTimeline = LiveMediaTimeline(room),
+        mediaTimeline = mediaTimeline ?: LiveMediaTimeline(room),
         timelineMediaItemsFactory = createTimelineMediaItemsFactory(),
         mediaItemsPostProcessor = MediaItemsPostProcessor(),
     )
@@ -280,5 +315,6 @@ fun TestScope.createTimelineMediaItemsFactory() = TimelineMediaItemsFactory(
         fileSizeFormatter = FakeFileSizeFormatter(),
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
         dateFormatter = FakeDateFormatter(),
-    ),
+        contentValidationCache = NoopEventContentValidationCache(noopValidationState),
+    )
 )

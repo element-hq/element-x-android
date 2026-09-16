@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.ui.media
 import coil3.ImageLoader
 import coil3.fetch.Fetcher
 import coil3.request.Options
+import coil3.toUri
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 
@@ -21,10 +22,19 @@ internal class AvatarDataFetcherFactory(
         data: AvatarData,
         options: Options,
         imageLoader: ImageLoader
-    ): Fetcher {
-        return CoilMediaFetcher(
-            mediaLoader = matrixMediaLoader,
-            mediaData = data.toMediaRequestData(),
-        )
+    ): Fetcher? {
+        return when {
+            data.url == null -> null
+            data.url?.startsWith("mxc") == true -> CoilMediaFetcher(
+                mediaLoader = matrixMediaLoader,
+                mediaData = data.toMediaRequestData(),
+            )
+            else -> {
+                // If the URL does not use the mxc scheme, it might be a local one using `content://`, try using a fallback fetcher
+                data.url?.toUri()?.let { uri ->
+                    imageLoader.components.newFetcher(uri, options, imageLoader)
+                }?.first
+            }
+        }
     }
 }

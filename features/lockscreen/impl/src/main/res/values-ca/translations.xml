@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"l\'autenticació biomètrica"</string>
+  <string name="screen_app_lock_biometric_unlock">"desbloqueig biomètric"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"Desbloqueja amb biometria"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Confirma biometria"</string>
+  <string name="screen_app_lock_forgot_pin">"Has oblidat el PIN?"</string>
+  <string name="screen_app_lock_settings_change_pin">"Canvia codi PIN"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"Permet desbloqueig biomètric"</string>
+  <string name="screen_app_lock_settings_remove_pin">"Elimina PIN"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"Segur que vols eliminar el PIN?"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"Vols eliminar el PIN?"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Permet %1$s"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Prefereixo utilitzar el PIN"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Estalvia\'t temps i utilitza %1$s per desbloquejar l\'aplicació"</string>
+  <string name="screen_app_lock_setup_choose_pin">"Escull el PIN"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"Confirma PIN"</string>
+  <string name="screen_app_lock_setup_pin_context">"Bloqueja %1$s per afegir més seguretat als teus xats.
+
+Escull alguna cosa que recordis. Si oblides aquest PIN, es tancarà sessió a l\'aplicació."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Per motius de seguretat no pots utilitzar aquest codi PIN"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Escull un PIN diferent"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Introdueix el mateix PIN dues vegades"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Els codis PIN no coincideixen"</string>
+  <string name="screen_app_lock_signout_alert_message">"Hauràs de tornar a iniciar sessió i crear un nou PIN per continuar."</string>
+  <string name="screen_app_lock_signout_alert_title">"S\'està tancant la sessió"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"Tens %1$d intent per desbloquejar"</item>
+    <item quantity="other">"Tens %1$d intents per desbloquejar"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"PIN incorrecte. Tens %1$d intent més"</item>
+    <item quantity="other">"PIN incorrecte. Tens %1$d intents més"</item>
+  </plurals>
+  <string name="screen_app_lock_use_biometric_android">"Utilitza biometria"</string>
+  <string name="screen_app_lock_use_pin_android">"Utilitza PIN"</string>
+  <string name="screen_signout_in_progress_dialog_content">"S\'està tancant la sessió…"</string>
+</resources>

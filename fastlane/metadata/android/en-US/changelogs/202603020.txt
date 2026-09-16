@@ -1,0 +1,2 @@
+Main changes in this version: fixed an issue that could cause a crash when instantiating the cryptographic database.
+Full changelog: https://github.com/element-hq/element-x-android/releases

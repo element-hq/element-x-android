@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Само администратори"</string>
+  <string name="screen_room_change_permissions_administrators">"Администратор"</string>
   <string name="screen_room_change_permissions_delete_messages">"Премахване на съобщения"</string>
-  <string name="screen_room_change_permissions_invite_people">"Поканване на хора и приемане на заявки за присъединяване"</string>
+  <string name="screen_room_change_permissions_invite_people">"Поканване на хора"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Съобщения и съдържание"</string>
-  <string name="screen_room_change_permissions_moderators">"Администратори и модератори"</string>
-  <string name="screen_room_change_permissions_remove_people">"Премахване на хора и отхвърляне на заявки за присъединяване"</string>
-  <string name="screen_room_change_permissions_room_details">"Редактиране на стаята"</string>
+  <string name="screen_room_change_permissions_moderators">"Модератор"</string>
+  <string name="screen_room_change_permissions_remove_people">"Премахване на хора"</string>
+  <string name="screen_room_change_permissions_room_details">"Редактиране на подробностите"</string>
   <string name="screen_room_change_permissions_room_name">"Промяна на името на стаята"</string>
   <string name="screen_room_change_permissions_room_topic">"Промяна на темата на стаята"</string>
   <string name="screen_room_change_permissions_send_messages">"Изпращане на съобщения"</string>
@@ -22,8 +22,8 @@
     <item quantity="other">"%1$d души"</item>
   </plurals>
   <string name="screen_room_member_list_mode_members">"Членове"</string>
-  <string name="screen_room_member_list_role_administrator">"Само администратори"</string>
-  <string name="screen_room_member_list_role_moderator">"Администратори и модератори"</string>
+  <string name="screen_room_member_list_role_administrator">"Администратор"</string>
+  <string name="screen_room_member_list_role_moderator">"Модератор"</string>
   <string name="screen_room_member_list_room_members_header_title">"Членове на стаята"</string>
   <string name="screen_room_roles_and_permissions_admins">"Администратори"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Промяна на моята роля"</string>

@@ -14,5 +14,5 @@ data class ReportMessageState(
     val reason: String,
     val blockUser: Boolean,
     val result: AsyncAction<Unit>,
-    val eventSink: (ReportMessageEvents) -> Unit
+    val eventSink: (ReportMessageEvent) -> Unit
 )

@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Már tag"</string>
   <string name="screen_invite_users_already_invited">"Már meghívták"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Jelenleg nincsenek csevegései ezekkel a kapcsolatokkal. Mielőtt továbbmenne, erősítse meg, hogy meghívja őket ebbe a szobába."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Jelenleg nincsenek beszélgetései ezzel a személlyel. A folytatás előtt erősítse meg, hogy meghívja ebbe a szobába."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Új személyeket hív meg ebbe a szobába?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Új személyt hív meg ebbe a szobába?"</string>
 </resources>

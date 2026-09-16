@@ -14,10 +14,10 @@ import timber.log.Timber
 fun logError(throwable: Throwable) {
     when (throwable) {
         is ClientException.Generic -> {
-            Timber.e("Error ${throwable.msg}", throwable)
+            Timber.e(throwable, "Error ${throwable.msg}")
         }
         else -> {
-            Timber.e("Error", throwable)
+            Timber.e(throwable, "Error")
         }
     }
 }

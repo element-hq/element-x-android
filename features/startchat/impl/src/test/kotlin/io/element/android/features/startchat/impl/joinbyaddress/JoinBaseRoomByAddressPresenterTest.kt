@@ -21,6 +21,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import java.util.Optional
 
 class JoinBaseRoomByAddressPresenterTest {
     @Test
@@ -43,16 +44,117 @@ class JoinBaseRoomByAddressPresenterTest {
         )
         presenter.test {
             with(awaitItem()) {
-                eventSink(JoinRoomByAddressEvents.UpdateAddress("invalid_address"))
+                eventSink(JoinRoomByAddressEvent.UpdateAddress("invalid_address"))
             }
             with(awaitItem()) {
                 assertThat(address).isEqualTo("invalid_address")
                 assertThat(addressState).isEqualTo(RoomAddressState.Unknown)
-                eventSink(JoinRoomByAddressEvents.Continue)
+                eventSink(JoinRoomByAddressEvent.Continue)
             }
             // The address should be marked as invalid only after the user tries to continue
             with(awaitItem()) {
                 assertThat(address).isEqualTo("invalid_address")
+                assertThat(addressState).isEqualTo(RoomAddressState.Invalid)
+            }
+        }
+    }
+
+    @Test
+    fun `present - invalid address - but room exists`() = runTest {
+        val presenter = createJoinRoomByAddressPresenter(
+            roomAliasHelper = FakeRoomAliasHelper(
+                isRoomAliasValidLambda = {
+                    // The SDK still return false, but we have a room for this alias
+                    false
+                }
+            )
+        )
+        presenter.test {
+            with(awaitItem()) {
+                eventSink(JoinRoomByAddressEvent.UpdateAddress("#ö:invalid.org"))
+            }
+            with(awaitItem()) {
+                assertThat(address).isEqualTo("#ö:invalid.org")
+                assertThat(addressState).isEqualTo(RoomAddressState.Unknown)
+                eventSink(JoinRoomByAddressEvent.Continue)
+            }
+            // The address should not be marked as valid
+            with(awaitItem()) {
+                assertThat(address).isEqualTo("#ö:invalid.org")
+                assertThat(addressState).isEqualTo(RoomAddressState.Resolving)
+            }
+            with(awaitItem()) {
+                assertThat(address).isEqualTo("#ö:invalid.org")
+                assertThat(addressState).isInstanceOf(RoomAddressState.RoomFound::class.java)
+            }
+        }
+    }
+
+    @Test
+    fun `present - invalid address - room does not exist`() = runTest {
+        val presenter = createJoinRoomByAddressPresenter(
+            roomAliasHelper = FakeRoomAliasHelper(
+                isRoomAliasValidLambda = {
+                    // The SDK return false
+                    false
+                }
+            ),
+            matrixClient = FakeMatrixClient(
+                resolveRoomAliasResult = {
+                    Result.success(Optional.empty())
+                }
+            )
+        )
+        presenter.test {
+            with(awaitItem()) {
+                eventSink(JoinRoomByAddressEvent.UpdateAddress("#ö:invalid.org"))
+            }
+            with(awaitItem()) {
+                assertThat(address).isEqualTo("#ö:invalid.org")
+                assertThat(addressState).isEqualTo(RoomAddressState.Unknown)
+                eventSink(JoinRoomByAddressEvent.Continue)
+            }
+            // The address should not be marked as valid
+            with(awaitItem()) {
+                assertThat(address).isEqualTo("#ö:invalid.org")
+                assertThat(addressState).isEqualTo(RoomAddressState.Resolving)
+            }
+            with(awaitItem()) {
+                assertThat(address).isEqualTo("#ö:invalid.org")
+                assertThat(addressState).isEqualTo(RoomAddressState.Invalid)
+            }
+        }
+    }
+
+    @Test
+    fun `present - invalid address - failure to resolve the room`() = runTest {
+        val presenter = createJoinRoomByAddressPresenter(
+            roomAliasHelper = FakeRoomAliasHelper(
+                isRoomAliasValidLambda = {
+                    // The SDK still return false, but we have a room for this alias
+                    false
+                }
+            ),
+            matrixClient = FakeMatrixClient(
+                resolveRoomAliasResult = { Result.failure(RuntimeException()) }
+            )
+        )
+        presenter.test {
+            with(awaitItem()) {
+                eventSink(JoinRoomByAddressEvent.UpdateAddress("#ö:invalid.org"))
+            }
+            with(awaitItem()) {
+                assertThat(address).isEqualTo("#ö:invalid.org")
+                assertThat(addressState).isEqualTo(RoomAddressState.Unknown)
+                eventSink(JoinRoomByAddressEvent.Continue)
+            }
+            // The address should not be marked as valid
+            with(awaitItem()) {
+                assertThat(address).isEqualTo("#ö:invalid.org")
+                assertThat(addressState).isEqualTo(RoomAddressState.Resolving)
+            }
+            with(awaitItem()) {
+                assertThat(address).isEqualTo("#ö:invalid.org")
                 assertThat(addressState).isEqualTo(RoomAddressState.Invalid)
             }
         }
@@ -69,7 +171,7 @@ class JoinBaseRoomByAddressPresenterTest {
         val presenter = createJoinRoomByAddressPresenter(navigator = navigator)
         presenter.test {
             with(awaitItem()) {
-                eventSink(JoinRoomByAddressEvents.UpdateAddress("#room_found:matrix.org"))
+                eventSink(JoinRoomByAddressEvent.UpdateAddress("#room_found:matrix.org"))
             }
             with(awaitItem()) {
                 assertThat(address).isEqualTo("#room_found:matrix.org")
@@ -78,7 +180,7 @@ class JoinBaseRoomByAddressPresenterTest {
             with(awaitItem()) {
                 assertThat(address).isEqualTo("#room_found:matrix.org")
                 assertThat(addressState).isInstanceOf(RoomAddressState.RoomFound::class.java)
-                eventSink(JoinRoomByAddressEvents.Continue)
+                eventSink(JoinRoomByAddressEvent.Continue)
             }
             assert(openRoomLambda).isCalledOnce()
             assert(dismissJoinRoomByAddressLambda).isCalledOnce()
@@ -94,12 +196,12 @@ class JoinBaseRoomByAddressPresenterTest {
         )
         presenter.test {
             with(awaitItem()) {
-                eventSink(JoinRoomByAddressEvents.UpdateAddress("#room_not_found:matrix.org"))
+                eventSink(JoinRoomByAddressEvent.UpdateAddress("#room_not_found:matrix.org"))
             }
             with(awaitItem()) {
                 assertThat(address).isEqualTo("#room_not_found:matrix.org")
                 assertThat(addressState).isEqualTo(RoomAddressState.Unknown)
-                eventSink(JoinRoomByAddressEvents.Continue)
+                eventSink(JoinRoomByAddressEvent.Continue)
             }
             with(awaitItem()) {
                 assertThat(address).isEqualTo("#room_not_found:matrix.org")
@@ -121,7 +223,7 @@ class JoinBaseRoomByAddressPresenterTest {
         val presenter = createJoinRoomByAddressPresenter(navigator = navigator)
         presenter.test {
             with(awaitItem()) {
-                eventSink(JoinRoomByAddressEvents.Dismiss)
+                eventSink(JoinRoomByAddressEvent.Dismiss)
             }
             assert(dismissJoinRoomByAddressLambda).isCalledOnce()
         }

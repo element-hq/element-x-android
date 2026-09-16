@@ -14,7 +14,6 @@ import kotlinx.collections.immutable.ImmutableList
 @Immutable
 sealed interface JoinRule {
     data object Public : JoinRule
-    data object Private : JoinRule
     data object Knock : JoinRule
     data object Invite : JoinRule
     data class Restricted(val rules: ImmutableList<AllowRule>) : JoinRule

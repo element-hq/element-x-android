@@ -9,13 +9,18 @@
 package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewAliasAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAtom
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
@@ -26,6 +31,12 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.SPACE_NAME
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
+import io.element.android.libraries.designsystem.preview.USER_NAME_CHARLIE
+import io.element.android.libraries.designsystem.preview.USER_NAME_DAVID
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomVisibility
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -39,6 +50,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun SpaceHeaderView(
     avatarData: AvatarData,
     name: String?,
+    alias: RoomAlias?,
     topic: String?,
     visibility: SpaceRoomVisibility,
     heroes: ImmutableList<MatrixUser>,
@@ -57,16 +69,28 @@ fun SpaceHeaderView(
         },
         title = {
             if (name != null) {
-                RoomPreviewTitleAtom(title = name)
+                RoomPreviewTitleAtom(
+                    title = name,
+                    style = ElementTheme.typography.fontHeadingMdBold,
+                )
             } else {
                 RoomPreviewTitleAtom(
                     title = stringResource(id = CommonStrings.common_no_space_name),
-                    fontStyle = FontStyle.Italic
+                    fontStyle = FontStyle.Italic,
+                    style = ElementTheme.typography.fontHeadingMdBold,
                 )
             }
         },
         subtitle = {
-            SpaceInfoRow(visibility = visibility)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                if (alias != null) {
+                    RoomPreviewAliasAtom(alias = alias.value)
+                }
+                SpaceInfoRow(visibility = visibility)
+            }
         },
         description = if (topic.isNullOrBlank()) {
             null
@@ -100,15 +124,16 @@ internal fun SpaceHeaderViewPreview() = ElementPreview {
             url = "anUrl",
             size = AvatarSize.SpaceHeader,
         ),
-        name = "Space name",
+        alias = RoomAlias("#spaceAlias:matrix.org"),
+        name = SPACE_NAME,
         topic = "Space topic: " + LoremIpsum(40).values.first(),
         topicMaxLines = 2,
         visibility = SpaceRoomVisibility.Public,
         heroes = persistentListOf(
-            aMatrixUser(id = "@1:d", displayName = "Alice", avatarUrl = "aUrl"),
-            aMatrixUser(id = "@2:d", displayName = "Bob"),
-            aMatrixUser(id = "@3:d", displayName = "Charlie", avatarUrl = "aUrl"),
-            aMatrixUser(id = "@4:d", displayName = "Dave"),
+            aMatrixUser(id = "@1:d", displayName = USER_NAME_ALICE, avatarUrl = "aUrl"),
+            aMatrixUser(id = "@2:d", displayName = USER_NAME_BOB),
+            aMatrixUser(id = "@3:d", displayName = USER_NAME_CHARLIE, avatarUrl = "aUrl"),
+            aMatrixUser(id = "@4:d", displayName = USER_NAME_DAVID),
         ),
         numberOfMembers = 999,
     )

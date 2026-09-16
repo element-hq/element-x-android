@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"لقد حظرك %1$s."</string>
+  <string name="screen_join_room_ban_message">"تم حظرك"</string>
+  <string name="screen_join_room_ban_reason">"السبب: %1$s."</string>
+  <string name="screen_join_room_cancel_knock_action">"إلغاء الطلب"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"نعم، ألغِ"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"هل أنت متأكد من رغبتك في إلغاء طلبك للانضمام إلى هذه الغرفة؟"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"إلغاء طلب الانضمام"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"نعم، ارفض واحظر"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"هل أنت متأكد من رغبتك في رفض الدعوة للانضمام إلى هذه الغرفة؟ سيمنع هذا أيضًا %1$s من التواصل معك أو دعوتك إلى غرف."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"رفض الدعوة والحظر"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"رفض وحظر"</string>
+  <string name="screen_join_room_fail_message">"فشل الانضمام"</string>
+  <string name="screen_join_room_fail_reason">"إما أنك تحتاج إلى دعوة للانضمام، أو قد توجد قيود على الوصول."</string>
+  <string name="screen_join_room_forget_action">"نسيان"</string>
+  <string name="screen_join_room_invite_required_message">"تحتاج إلى دعوة للانضمام"</string>
+  <string name="screen_join_room_invited_by">"بدعوة من"</string>
+  <string name="screen_join_room_join_action">"إنضمام"</string>
+  <string name="screen_join_room_join_restricted_message">"قد تحتاج إلى دعوة أو إلى أن تكون عضوًا في مساحة لتتمكن من الانضمام."</string>
+  <string name="screen_join_room_knock_action">"إرسال طلب الانضمام"</string>
+  <string name="screen_join_room_knock_message_characters_count">"الأحرف المسموح بها: %1$d من %2$d"</string>
+  <string name="screen_join_room_knock_message_description">"رسالة (اختيارية)"</string>
+  <string name="screen_join_room_knock_sent_description">"ستتلقى دعوة للانضمام إلى الغرفة إذا تم قبول طلبك."</string>
+  <string name="screen_join_room_knock_sent_title">"تم إرسال طلب الانضمام"</string>
+  <string name="screen_join_room_loading_alert_message">"تعذّر عرض معاينة الغرفة. قد يكون ذلك بسبب مشكلات في الشبكة أو الخادم."</string>
+  <string name="screen_join_room_loading_alert_title">"تعذّر عرض معاينة هذه الغرفة"</string>
+  <string name="screen_join_room_space_not_supported_description">"لا يدعم %1$s المساحات بعد. يمكنك الوصول إلى المساحات عبر الويب."</string>
+  <string name="screen_join_room_space_not_supported_title">"المساحات غير مدعومة بعد"</string>
+  <string name="screen_join_room_subtitle_knock">"انقر على الزر أدناه وسيتم إشعار مسؤول الغرفة. ستتمكن من الانضمام إلى المحادثة بعد الموافقة."</string>
+  <string name="screen_join_room_subtitle_no_preview">"يجب أن تكون عضوًا في هذه الغرفة لعرض سجل الرسائل."</string>
+  <string name="screen_join_room_title_knock">"هل تريد الانضمام إلى هذه الغرفة؟"</string>
+  <string name="screen_join_room_title_no_preview">"المعاينة غير متاحة"</string>
+</resources>

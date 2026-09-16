@@ -7,4 +7,4 @@
 # Please see LICENSE files in the repository root for full details.
 
 adb shell am start -a android.intent.action.VIEW \
-   -d "element://room/%23element-android%3Amatrix.org"
+   -d "https://matrix.to/#/#matrix:matrix.org"

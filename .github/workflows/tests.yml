@@ -7,10 +7,12 @@ on:
   push:
     branches: [ main, develop ]
 
+permissions: {}
+
 # Enrich gradle.properties for CI/CD
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx7g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options=-Xmx2g -XX:+UseG1GC
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true --no-configuration-cache
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace -Dsonar.gradle.skipCompile=true --no-configuration-cache
 
 jobs:
   tests:
@@ -22,6 +24,20 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
+        with:
+          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
+          tool-cache: true
+          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
+          android: false
+          dotnet: true
+          haskell: true
+          # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
+          large-packages: false
+          docker-images: true
+          swap-storage: false
+
       # Increase swapfile size to prevent screenshot tests getting terminated
       # https://github.com/actions/runner-images/discussions/7188#discussioncomment-6750749
       - name: 💽 Increase swapfile size
@@ -33,13 +49,13 @@ jobs:
           sudo swapon /mnt/swapfile
           sudo swapon --show
       - name: ⏬ Checkout with LFS
-        uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 # v1.2.3
+        uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Add SSH private keys for submodule repositories
-        uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         with:
           ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
@@ -47,25 +63,34 @@ jobs:
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
         run: git submodule update --init --recursive
       - name: ☕️ Use JDK 21
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6.0.0
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
-      - name: ⚙️ Check coverage for debug variant (includes unit & screenshot tests)
-        run: ./gradlew testDebugUnitTest :tests:uitests:verifyPaparazziDebug :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug :app:koverVerifyAll $CI_GRADLE_ARG_PROPERTIES
+      - name: ⚙️ Run unit tests
+        run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
+
+      - name: ⚙️ Run screenshot tests
+        run: ./gradlew :tests:uitests:verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
+
+      - name: ⚙️ Run Compound screenshot tests
+        run: ./gradlew :libraries:compound:verifyRoborazziDebug $CI_GRADLE_ARG_PROPERTIES
+
+      - name: ⚙️ Generate kover coverage report
+        run: ./gradlew :koverXmlReportMerged :koverHtmlReportMerged :koverVerifyAll -x testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: kover-error-report
           path: |
-            app/build/reports/kover
+            build/reports/kover
 
       - name: ✅ Upload kover report (disabled)
         if: always()
@@ -73,7 +98,7 @@ jobs:
 
       - name: 🚫 Upload test results on error
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: tests-and-screenshot-tests-results
           path: |
@@ -81,11 +106,20 @@ jobs:
             **/build/roborazzi/failures/
             **/build/reports/tests/*UnitTest/
 
+      - name: 🚫 Modify summary on error
+        if: failure()
+        run: |
+          echo """## Tests failed!
+          
+          """ >> $GITHUB_STEP_SUMMARY
+          python3 .github/workflows/scripts/parse_test_failures.py . >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: app/build/reports/kover/reportGplayDebug.xml
+          files: build/reports/kover/reportMerged.xml
           verbose: true

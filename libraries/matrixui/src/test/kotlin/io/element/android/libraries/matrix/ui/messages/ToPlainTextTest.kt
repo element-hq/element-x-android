@@ -13,13 +13,11 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.jsoup.Jsoup
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class ToPlainTextTest {
+class ToPlainTextTest : RobolectricTest() {
     @Test
     fun `Document toPlainText - returns a plain text version of the document`() {
         val document = Jsoup.parse(
@@ -45,7 +43,7 @@ class ToPlainTextTest {
         val formattedBody = FormattedBody(
             format = MessageFormat.HTML,
             body = """
-                Hello world
+                Hello <strong>formatted</strong> <em>world</em>
                 <ul><li>This is an unordered list.</li></ul>
                 <ol><li>This is an ordered list.</li></ol>
                 <br />
@@ -53,7 +51,7 @@ class ToPlainTextTest {
         )
         assertThat(formattedBody.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo(
             """
-            Hello world 
+            Hello formatted world 
             • This is an unordered list.
             1. This is an ordered list.
             """.trimIndent()
@@ -135,5 +133,32 @@ class ToPlainTextTest {
             )
         )
         assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("This is the fallback text")
+    }
+
+    @Test
+    fun `TextMessageType toPlainText - ignores mx-reply element`() {
+        val messageType = TextMessageType(
+            body = "This is the fallback text",
+            formatted = FormattedBody(
+                format = MessageFormat.HTML,
+                body = """
+                    <mx-reply>In reply to...</mx-reply>
+                    This is the message content.
+                """.trimIndent()
+            )
+        )
+        assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("This is the message content.")
+    }
+
+    @Test
+    fun `TextMessageType toPlainText - returns the body if the formatted one only contains an image`() {
+        val messageType = TextMessageType(
+            body = "\uD83D\uDE1C",
+            formatted = FormattedBody(
+                format = MessageFormat.HTML,
+                body = "<img data-mx-emoticon src=\"mxc://matrix.org/anImage\" height=\"32\" width=\"32\" alt=\"\uD83D\uDE1C\" />"
+            )
+        )
+        assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("\uD83D\uDE1C")
     }
 }

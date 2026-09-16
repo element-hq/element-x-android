@@ -17,7 +17,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @PreviewsDayNight
 @Composable
 internal fun SecureBackupSetupViewChangePreview(
-    @PreviewParameter(SecureBackupSetupStateProvider::class) state: SecureBackupSetupState
+    @PreviewParameter(SecureBackupSetupStatePreviewParam::class) state: SecureBackupSetupState
 ) = ElementPreview {
     SecureBackupSetupView(
         state = state.copy(

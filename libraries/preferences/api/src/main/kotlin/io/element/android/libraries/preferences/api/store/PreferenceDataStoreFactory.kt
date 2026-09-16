@@ -17,5 +17,10 @@ import androidx.datastore.preferences.core.Preferences
  * It's a wrapper around AndroidX's `PreferenceDataStoreFactory` to make testing easier.
  */
 interface PreferenceDataStoreFactory {
+    /**
+     * Creates or opens the preference store with the given name.
+     *
+     * @param name the store name, which also determines the file it is persisted to.
+     */
     fun create(name: String): DataStore<Preferences>
 }

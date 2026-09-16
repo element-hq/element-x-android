@@ -22,12 +22,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 class FakeSessionVerificationService(
     initialSessionVerifiedStatus: SessionVerifiedStatus = SessionVerifiedStatus.Unknown,
-    private val requestCurrentSessionVerificationLambda: () -> Unit = { lambdaError() },
+    private val requestDeviceVerificationLambda: () -> Unit = { lambdaError() },
     private val requestUserVerificationLambda: (UserId) -> Unit = { lambdaError() },
     private val cancelVerificationLambda: () -> Unit = { lambdaError() },
     private val approveVerificationLambda: () -> Unit = { lambdaError() },
     private val declineVerificationLambda: () -> Unit = { lambdaError() },
-    private val startVerificationLambda: () -> Unit = { lambdaError() },
+    private val startSasVerificationLambda: () -> Unit = { lambdaError() },
     private val resetLambda: (Boolean) -> Unit = { lambdaError() },
     private val acknowledgeVerificationRequestLambda: (VerificationRequest.Incoming) -> Unit = { lambdaError() },
     private val acceptVerificationRequestLambda: () -> Unit = { lambdaError() },
@@ -40,31 +40,31 @@ class FakeSessionVerificationService(
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus
     override val needsSessionVerification: Flow<Boolean> = _needsSessionVerification
 
-    override suspend fun requestCurrentSessionVerification() {
-        requestCurrentSessionVerificationLambda()
+    override suspend fun requestDeviceVerification() = simulateLongTask {
+        requestDeviceVerificationLambda()
     }
 
-    override suspend fun requestUserVerification(userId: UserId) {
+    override suspend fun requestUserVerification(userId: UserId) = simulateLongTask {
         requestUserVerificationLambda(userId)
     }
 
-    override suspend fun cancelVerification() {
+    override suspend fun cancelVerification() = simulateLongTask {
         cancelVerificationLambda()
     }
 
-    override suspend fun approveVerification() {
+    override suspend fun approveVerification() = simulateLongTask {
         approveVerificationLambda()
     }
 
-    override suspend fun declineVerification() {
+    override suspend fun declineVerification() = simulateLongTask {
         declineVerificationLambda()
     }
 
-    override suspend fun startVerification() {
-        startVerificationLambda()
+    override suspend fun startSasVerification() = simulateLongTask {
+        startSasVerificationLambda()
     }
 
-    override suspend fun reset(cancelAnyPendingVerificationAttempt: Boolean) {
+    override suspend fun reset(cancelAnyPendingVerificationAttempt: Boolean) = simulateLongTask {
         resetLambda(cancelAnyPendingVerificationAttempt)
     }
 
@@ -75,7 +75,7 @@ class FakeSessionVerificationService(
         this.listener = listener
     }
 
-    override suspend fun acknowledgeVerificationRequest(verificationRequest: VerificationRequest.Incoming) {
+    override suspend fun acknowledgeVerificationRequest(verificationRequest: VerificationRequest.Incoming) = simulateLongTask {
         acknowledgeVerificationRequestLambda(verificationRequest)
     }
 

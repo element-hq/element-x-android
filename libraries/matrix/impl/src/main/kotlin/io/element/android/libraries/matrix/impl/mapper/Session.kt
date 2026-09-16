@@ -8,8 +8,7 @@
 
 package io.element.android.libraries.matrix.impl.mapper
 
-import io.element.android.libraries.matrix.api.auth.external.ExternalSession
-import io.element.android.libraries.matrix.impl.paths.SessionPaths
+import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 import org.matrix.rustcomponents.sdk.Session
@@ -27,7 +26,7 @@ internal fun Session.toSessionData(
     accessToken = accessToken,
     refreshToken = refreshToken,
     homeserverUrl = homeserverUrl ?: this.homeserverUrl,
-    oidcData = oidcData,
+    oAuthData = oauthData,
     loginTimestamp = Date(),
     isTokenValid = isTokenValid,
     loginType = loginType,
@@ -35,30 +34,6 @@ internal fun Session.toSessionData(
     sessionPath = sessionPaths.fileDirectory.absolutePath,
     cachePath = sessionPaths.cacheDirectory.absolutePath,
     // Note: position and lastUsageIndex will be set by the SessionStore when adding the session
-    position = 0,
-    lastUsageIndex = 0,
-    userDisplayName = null,
-    userAvatarUrl = null,
-)
-
-internal fun ExternalSession.toSessionData(
-    isTokenValid: Boolean,
-    loginType: LoginType,
-    passphrase: String?,
-    sessionPaths: SessionPaths,
-) = SessionData(
-    userId = userId,
-    deviceId = deviceId,
-    accessToken = accessToken,
-    refreshToken = refreshToken,
-    homeserverUrl = homeserverUrl,
-    oidcData = null,
-    loginTimestamp = Date(),
-    isTokenValid = isTokenValid,
-    loginType = loginType,
-    passphrase = passphrase,
-    sessionPath = sessionPaths.fileDirectory.absolutePath,
-    cachePath = sessionPaths.cacheDirectory.absolutePath,
     position = 0,
     lastUsageIndex = 0,
     userDisplayName = null,

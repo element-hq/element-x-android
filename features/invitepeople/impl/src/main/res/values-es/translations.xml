@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_invite_users_already_a_member">"Ya eres miembro"</string>
+  <string name="screen_invite_users_already_a_member">"Ya es miembro"</string>
   <string name="screen_invite_users_already_invited">"Ya estás invitado"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"De momento no tienes ningún chat con estos contactos. Confirma que quieres invitarlos a esta sala antes de continuar."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"De momento no tienes ningún chat con este contacto. Confirma que quieres invitarlo a esta sala antes de continuar."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"¿Invitar contactos nuevos a esta sala?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"¿Invitar contacto nuevo a esta sala?"</string>
 </resources>

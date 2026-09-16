@@ -11,7 +11,14 @@
         <item name="windowSplashScreenBackground">@color/splashscreen_bg_dark</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/transparent</item>
         <item name="postSplashScreenTheme">@style/Theme.ElementX</item>
+        <item name="android:windowBackground">@color/splashscreen_bg_dark</item>
+        <item name="android:statusBarColor">@color/splashscreen_bg_dark</item>
+        <item name="android:navigationBarColor">@color/splashscreen_bg_dark</item>
     </style>
 
-    <style name="Theme.ElementX" parent="Theme.Material3.Dark.NoActionBar" />
+    <style name="Theme.ElementX" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:windowBackground">@color/splashscreen_bg_dark</item>
+        <item name="android:statusBarColor">@color/splashscreen_bg_dark</item>
+        <item name="android:navigationBarColor">@color/splashscreen_bg_dark</item>
+    </style>
 </resources>

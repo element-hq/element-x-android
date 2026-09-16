@@ -9,6 +9,7 @@
 package io.element.android.features.call.impl.utils
 
 interface PipController {
+    fun setupPipCallbacks()
     suspend fun canEnterPip(): Boolean
     fun enterPip()
     fun exitPip()

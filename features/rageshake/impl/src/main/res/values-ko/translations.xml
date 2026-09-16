@@ -8,11 +8,15 @@
   <string name="screen_bug_report_editor_placeholder">"문제를 설명해 주세요…"</string>
   <string name="screen_bug_report_editor_supporting">"가능하다면 영어로 설명을 작성해 주십시오."</string>
   <string name="screen_bug_report_error_description_too_short">"설명 내용이 너무 짧습니다. 발생한 상황에 대해 더 자세한 내용을 제공해 주시기 바랍니다. 감사합니다!"</string>
+  <string name="screen_bug_report_github_issue_description">"연관된 GitHub 이슈 번호가 있다면 입력할 수 있습니다."</string>
+  <string name="screen_bug_report_github_issue_label">"GitHub 이슈"</string>
   <string name="screen_bug_report_include_crash_logs">"충돌 로그 보내기"</string>
   <string name="screen_bug_report_include_logs">"로그 허용"</string>
   <string name="screen_bug_report_include_logs_error">"귀하의 로그가 너무 커서 이 보고서에 포함할 수 없습니다. 다른 방법으로 보내주시기 바랍니다."</string>
   <string name="screen_bug_report_include_screenshot">"스크린샷 전송"</string>
   <string name="screen_bug_report_logs_description">"모든 기능이 제대로 작동하는지 확인하기 위해 로그애 메시지가 포함됩니다. 로그 없이 메시지를 보내려면 이 설정을 해제하세요."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s이(가) 이전에 마지막으로 사용할 때 충돌했습니다. 충돌 보고서를 공유해주실 수 있나요?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"알림에 문제가 있는 경우, 푸시 알림 규칙을 업로드하면 근본 원인을 파악하는 데 도움이 됩니다. 단, 이 규칙에는 표시 이름이나 알림 키워드와 같은 개인정보가 포함될 수 있으니 주의해 주세요."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"알림 설정 전송"</string>
   <string name="screen_bug_report_view_logs">"로그 보기"</string>
 </resources>

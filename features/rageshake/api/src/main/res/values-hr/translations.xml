@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s neočekivano je prestao s radom prilikom posljednjeg korištenja. Želite li s nama podijeliti izvješće o padu?"</string>
+  <string name="rageshake_detection_dialog_content">"Čini se da ljutito treseš telefon. Želiš li otvoriti zaslon s izvješćem o pogrešci?"</string>
+  <string name="settings_rageshake">"Snažno protresi"</string>
+  <string name="settings_rageshake_detection_threshold">"Prag detekcije"</string>
+</resources>

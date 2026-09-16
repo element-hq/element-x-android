@@ -73,13 +73,14 @@ private fun LineRow(
     colorationMode: ColorationMode,
 ) {
     val context = LocalContext.current
+    val toastMessage = stringResource(CommonStrings.common_line_copied_to_clipboard)
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = {
                 context.copyToClipboard(
                     text = line,
-                    toastMessage = context.getString(CommonStrings.common_line_copied_to_clipboard),
+                    toastMessage = toastMessage,
                 )
             })
     ) {

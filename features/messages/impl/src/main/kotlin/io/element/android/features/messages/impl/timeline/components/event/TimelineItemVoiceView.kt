@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -41,7 +42,8 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentPreviewParam
+import io.element.android.libraries.designsystem.atomic.atoms.PlaybackSpeedButton
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -49,11 +51,12 @@ import io.element.android.libraries.designsystem.theme.components.CircularProgre
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
-import io.element.android.libraries.voiceplayer.api.VoiceMessageEvents
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
+import io.element.android.libraries.voiceplayer.api.VoiceMessageEvent
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
-import io.element.android.libraries.voiceplayer.api.VoiceMessageStateProvider
+import io.element.android.libraries.voiceplayer.api.VoiceMessageStatePreviewParam
 import kotlinx.coroutines.delay
 
 @Composable
@@ -61,29 +64,30 @@ fun TimelineItemVoiceView(
     state: VoiceMessageState,
     content: TimelineItemVoiceContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+    contentValidationValue: ContentValidationValue,
     modifier: Modifier = Modifier,
 ) {
     fun playPause() {
-        state.eventSink(VoiceMessageEvents.PlayPause)
+        state.eventSink(VoiceMessageEvent.PlayPause)
     }
 
     val a11y = stringResource(CommonStrings.common_voice_message)
     val a11yActionLabel = stringResource(
-        when (state.button) {
-            VoiceMessageState.Button.Play -> CommonStrings.a11y_play
-            VoiceMessageState.Button.Pause -> CommonStrings.a11y_pause
-            VoiceMessageState.Button.Downloading -> CommonStrings.common_downloading
-            VoiceMessageState.Button.Retry -> CommonStrings.action_retry
-            VoiceMessageState.Button.Disabled -> CommonStrings.error_unknown
+        when (state.buttonType) {
+            VoiceMessageState.ButtonType.Play -> CommonStrings.a11y_play
+            VoiceMessageState.ButtonType.Pause -> CommonStrings.a11y_pause
+            VoiceMessageState.ButtonType.Downloading -> CommonStrings.common_downloading
+            VoiceMessageState.ButtonType.Retry -> CommonStrings.action_retry
+            VoiceMessageState.ButtonType.Disabled -> CommonStrings.error_unknown
         }
     )
     Row(
         modifier = modifier
             .clearAndSetSemantics {
                 contentDescription = a11y
-                if (state.button == VoiceMessageState.Button.Disabled) {
+                if (state.buttonType == VoiceMessageState.ButtonType.Disabled) {
                     disabled()
-                } else if (state.button in listOf(VoiceMessageState.Button.Play, VoiceMessageState.Button.Pause)) {
+                } else if (state.buttonType in listOf(VoiceMessageState.ButtonType.Play, VoiceMessageState.ButtonType.Pause)) {
                     onClick(label = a11yActionLabel) {
                         playPause()
                         true
@@ -101,30 +105,45 @@ fun TimelineItemVoiceView(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (!isTalkbackActive()) {
-            when (state.button) {
-                VoiceMessageState.Button.Play -> PlayButton(onClick = ::playPause)
-                VoiceMessageState.Button.Pause -> PauseButton(onClick = ::playPause)
-                VoiceMessageState.Button.Downloading -> ProgressButton()
-                VoiceMessageState.Button.Retry -> RetryButton(onClick = ::playPause)
-                VoiceMessageState.Button.Disabled -> PlayButton(onClick = {}, enabled = false)
+            if (contentValidationValue.isValid()) {
+                when (state.buttonType) {
+                    VoiceMessageState.ButtonType.Play -> PlayButton(onClick = ::playPause)
+                    VoiceMessageState.ButtonType.Pause -> PauseButton(onClick = ::playPause)
+                    VoiceMessageState.ButtonType.Downloading -> ProgressButton()
+                    VoiceMessageState.ButtonType.Retry -> RetryButton(onClick = ::playPause)
+                    VoiceMessageState.ButtonType.Disabled -> PlayButton(onClick = {}, enabled = false)
+                }
+            } else {
+                ProgressButton(displayImmediately = true)
             }
         }
         Spacer(Modifier.width(8.dp))
-        Text(
-            text = state.time,
-            color = ElementTheme.colors.textSecondary,
-            style = ElementTheme.typography.fontBodySmMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            PlaybackSpeedButton(
+                speed = state.playbackSpeed,
+                onClick = { state.eventSink(VoiceMessageEvent.ChangePlaybackSpeed) },
+            )
+            Text(
+                text = state.time,
+                color = ElementTheme.colors.textSecondary,
+                style = ElementTheme.typography.fontBodySmMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
         Spacer(Modifier.width(8.dp))
         WaveformPlaybackView(
             showCursor = state.showCursor,
             playbackProgress = state.progress,
             waveform = content.waveform,
-            modifier = Modifier.height(34.dp),
+            modifier = Modifier
+                .weight(1f)
+                .height(34.dp),
             seekEnabled = !isTalkbackActive(),
-            onSeek = { state.eventSink(VoiceMessageEvents.Seek(it)) },
+            onSeek = { state.eventSink(VoiceMessageEvent.Seek(it)) },
         )
     }
 }
@@ -242,9 +261,9 @@ private fun CustomIconButton(
     )
 }
 
-open class TimelineItemVoiceViewParametersProvider : PreviewParameterProvider<TimelineItemVoiceViewParameters> {
-    private val voiceMessageStateProvider = VoiceMessageStateProvider()
-    private val timelineItemVoiceContentProvider = TimelineItemVoiceContentProvider()
+open class TimelineItemVoiceViewParametersPreviewParam : PreviewParameterProvider<TimelineItemVoiceViewParameters> {
+    private val voiceMessageStateProvider = VoiceMessageStatePreviewParam()
+    private val timelineItemVoiceContentProvider = TimelineItemVoiceContentPreviewParam()
     override val values: Sequence<TimelineItemVoiceViewParameters>
         get() = timelineItemVoiceContentProvider.values.flatMap { content ->
             voiceMessageStateProvider.values.map { state ->
@@ -264,25 +283,27 @@ data class TimelineItemVoiceViewParameters(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemVoiceViewPreview(
-    @PreviewParameter(TimelineItemVoiceViewParametersProvider::class) timelineItemVoiceViewParameters: TimelineItemVoiceViewParameters,
+    @PreviewParameter(TimelineItemVoiceViewParametersPreviewParam::class) timelineItemVoiceViewParameters: TimelineItemVoiceViewParameters,
 ) = ElementPreview {
     TimelineItemVoiceView(
         state = timelineItemVoiceViewParameters.state,
         content = timelineItemVoiceViewParameters.content,
         onContentLayoutChange = {},
+        contentValidationValue = ContentValidationValue.Valid,
     )
 }
 
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemVoiceViewUnifiedPreview() = ElementPreview {
-    val timelineItemVoiceViewParametersProvider = TimelineItemVoiceViewParametersProvider()
+    val timelineItemVoiceViewParametersProvider = TimelineItemVoiceViewParametersPreviewParam()
     Column {
         timelineItemVoiceViewParametersProvider.values.forEach {
             TimelineItemVoiceView(
                 state = it.state,
                 content = it.content,
                 onContentLayoutChange = {},
+                contentValidationValue = ContentValidationValue.Valid,
             )
         }
     }

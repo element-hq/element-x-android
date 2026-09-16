@@ -30,6 +30,8 @@ class RoomPowerLevelsValuesMapperTest {
                     roomAvatar = 9,
                     roomTopic = 10,
                     spaceChild = 11,
+                    beacon = 12,
+                    beaconInfo = 13,
                 )
             )
         ).isEqualTo(
@@ -37,12 +39,15 @@ class RoomPowerLevelsValuesMapperTest {
                 ban = 1,
                 invite = 2,
                 kick = 3,
-                sendEvents = 5,
                 redactEvents = 4,
+                eventsDefault = 5,
+                stateDefault = 6,
                 roomName = 8,
                 roomAvatar = 9,
                 roomTopic = 10,
                 spaceChild = 11,
+                beacon = 12,
+                beaconInfo = 13,
             )
         )
     }

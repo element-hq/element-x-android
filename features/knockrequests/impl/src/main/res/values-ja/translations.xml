@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"すべて承認"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"本当にすべての参加リクエストを承認しますか？"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"すべてのリクエストを承認"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"すべて承認"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"リクエストの一部を承認できませんでした。もう一度試しますか？"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"リクエストの承認に一部失敗"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"すべてのリクエストを承認中"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"リクエストを承認できませんでした。もう一度試しますか？"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"リクエストの承認に失敗"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"リクエストを承認中"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"拒否して追放する"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"本当に %1$s を拒否して追放しますか？このユーザーが再度リクエストを送信することはできなくなります。"</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"拒否してアクセスから追放"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"拒否してアクセスから追放中"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"拒否する"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"本当に %1$s の参加リクエストを拒否しますか？"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"アクセスを拒否"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"拒否と追放"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"このリクエストを拒否できません。もう一度試しますか？"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"リクエストの拒否に失敗"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"参加リクエストを拒否中"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"ルームへの参加リクエストがある場合は、ここに表示されます。"</string>
+  <string name="screen_knock_requests_list_empty_state_title">"参加リクエストがありません"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"参加リクエストを読み込み中"</string>
+  <string name="screen_knock_requests_list_title">"参加のリクエスト"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="other">"%1$s 他 %2$d 人がルーム参加を希望"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"すべて表示"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"承諾"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s がこのルームの参加を要求しています"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"表示"</string>
+</resources>

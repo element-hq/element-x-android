@@ -15,5 +15,5 @@ data class QrCodeIntroState(
     val desktopAppName: String,
     val cameraPermissionState: PermissionsState,
     val canContinue: Boolean,
-    val eventSink: (QrCodeIntroEvents) -> Unit
+    val eventSink: (QrCodeIntroEvent) -> Unit
 )

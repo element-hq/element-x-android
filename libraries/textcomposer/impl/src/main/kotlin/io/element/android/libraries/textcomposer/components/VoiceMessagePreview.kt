@@ -67,22 +67,12 @@ internal fun VoiceMessagePreview(
             .heightIn(26.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (isPlaying) {
-            PlayerButton(
-                type = PlayerButtonType.Pause,
-                onClick = onPauseClick,
-                enabled = isInteractive,
-            )
-        } else {
-            PlayerButton(
-                type = PlayerButtonType.Play,
-                onClick = onPlayClick,
-                enabled = isInteractive
-            )
-        }
-
+        PlayerButton(
+            type = if (isPlaying) PlayerButtonType.Pause else PlayerButtonType.Play,
+            onClick = if (isPlaying) onPauseClick else onPlayClick,
+            enabled = isInteractive,
+        )
         Spacer(modifier = Modifier.width(8.dp))
-
         Text(
             text = time.formatShort(),
             color = ElementTheme.colors.textSecondary,
@@ -90,9 +80,7 @@ internal fun VoiceMessagePreview(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
-
         Spacer(modifier = Modifier.width(12.dp))
-
         WaveformPlaybackView(
             modifier = Modifier
                 .weight(1f)

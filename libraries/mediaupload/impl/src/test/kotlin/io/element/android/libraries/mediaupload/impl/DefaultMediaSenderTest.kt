@@ -25,18 +25,16 @@ import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.io.File
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultMediaSenderTest {
+class DefaultMediaSenderTest : RobolectricTest() {
     private val mediaOptimizationConfig = MediaOptimizationConfig(
         compressImages = true,
         videoCompressionPreset = VideoCompressionPreset.STANDARD,

@@ -11,6 +11,11 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application>
+        <service android:name=".push.FetchPushForegroundService"
+            android:foregroundServiceType="shortService"
+            android:exported="false"
+            android:enabled="true" />
+
         <receiver
             android:name=".notifications.TestNotificationReceiver"
             android:exported="false" />

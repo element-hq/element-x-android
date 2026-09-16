@@ -200,9 +200,13 @@ internal fun WaveformPlaybackViewPreview() = ElementPreview {
     }
 }
 
-private fun ImmutableList<Float>.normalisedData(maxSamplesCount: Int): ImmutableList<Float> {
+internal fun ImmutableList<Float>.normalisedData(maxSamplesCount: Int): ImmutableList<Float> {
     if (maxSamplesCount <= 0) {
         return persistentListOf()
+    }
+
+    if (isEmpty()) {
+        return List(maxSamplesCount) { 0f }.toImmutableList()
     }
 
     // Filter the data to keep only the expected number of samples

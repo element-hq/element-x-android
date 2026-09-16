@@ -9,52 +9,63 @@
 package io.element.android.features.preferences.impl.developer
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
-import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
-import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
+import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsView
+import io.element.android.libraries.androidutils.system.copyToClipboard
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
-import io.element.android.libraries.designsystem.components.preferences.PreferenceDropdown
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
-import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.components.preferences.PreferenceTextField
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.featureflag.ui.FeatureListView
-import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
-import io.element.android.libraries.matrix.api.tracing.TraceLogPack
+import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.mhssn.colorpicker.ColorPickerDialog
 import io.mhssn.colorpicker.ColorPickerType
-import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DeveloperSettingsView(
     state: DeveloperSettingsState,
-    onOpenShowkase: () -> Unit,
     onPushHistoryClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    extraOptions: @Composable () -> Unit = {},
 ) {
     if (state.showLoader) {
         ProgressDialog()
+    }
+    if (state.markAllRoomsAsReadAction.isConfirming()) {
+        ConfirmationDialog(
+            title = "Are you sure you want to mark all the rooms as read?",
+            content = "",
+            submitText = stringResource(CommonStrings.action_yes),
+            onSubmitClick = { state.eventSink(DeveloperSettingsEvent.MarkAllRoomsAsRead(needsConfirmation = false)) },
+            onDismiss = { state.eventSink(DeveloperSettingsEvent.DismissMarkAllRoomsAsReadConfirmation) },
+        )
+    }
+    (state.pushRulesAction as? AsyncAction.Failure)?.let { failure ->
+        ErrorDialog(
+            content = failure.error.message ?: stringResource(CommonStrings.error_unknown),
+            onSubmit = { state.eventSink(DeveloperSettingsEvent.DismissPushRulesError) },
+        )
     }
     BackHandler(
         enabled = !state.showLoader,
@@ -70,84 +81,70 @@ fun DeveloperSettingsView(
         title = stringResource(id = CommonStrings.common_developer_options)
     ) {
         // Note: this is OK to hardcode strings in this debug screen.
-        PreferenceCategory(
-            title = "Feature flags",
-        ) {
-            FeatureListContent(state)
-        }
-        NotificationCategory(onPushHistoryClick)
-        ElementCallCategory(state = state)
-
-        PreferenceCategory(title = "Rust SDK") {
-            PreferenceDropdown(
-                title = "Tracing log level",
-                supportingText = "Requires app reboot",
-                selectedOption = state.tracingLogLevel.dataOrNull(),
-                options = LogLevelItem.entries.toImmutableList(),
-                onSelectOption = { logLevel ->
-                    state.eventSink(DeveloperSettingsEvents.SetTracingLogLevel(logLevel))
-                }
-            )
-        }
-        PreferenceCategory(title = "Enable trace logs per SDK feature") {
-            Text(
-                text = "Requires app reboot",
-                style = ElementTheme.typography.fontBodyMdRegular,
-                color = ElementTheme.colors.textSecondary,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-            )
-            for (logPack in TraceLogPack.entries) {
-                PreferenceSwitch(
-                    title = logPack.title,
-                    isChecked = state.tracingLogPacks.contains(logPack),
-                    onCheckedChange = { isChecked -> state.eventSink(DeveloperSettingsEvents.ToggleTracingLogPack(logPack, isChecked)) }
-                )
-            }
-        }
-
-        PreferenceCategory(title = "Showkase") {
-            ListItem(
-                headlineContent = {
-                    Text("Open Showkase browser")
-                },
-                onClick = onOpenShowkase
-            )
-        }
-        RageshakePreferencesView(
-            state = state.rageshakeState,
+        AppDeveloperSettingsView(
+            state = state.appDeveloperSettingsState,
         )
+        SessionCategory(deviceId = state.deviceId)
+        NotificationCategory(
+            onPushRulesClick = { state.eventSink(DeveloperSettingsEvent.OpenPushRules) },
+            onPushHistoryClick = onPushHistoryClick,
+        )
+        MarkAllRoomsAsReadCategory(state)
+
         if (state.isEnterpriseBuild) {
             PreferenceCategory(title = "Theme") {
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text("Change brand color")
                     },
                     onClick = {
-                        state.eventSink(DeveloperSettingsEvents.SetShowColorPicker(true))
+                        state.eventSink(DeveloperSettingsEvent.SetShowColorPicker(true))
                     }
                 )
                 ListItem(
-                    headlineContent = {
+                    content = {
                         Text("Reset brand color")
                     },
                     onClick = {
-                        state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(null))
+                        state.eventSink(DeveloperSettingsEvent.ChangeBrandColor(null))
                     }
                 )
             }
         }
-        PreferenceCategory(title = "Crash") {
-            ListItem(
-                headlineContent = {
-                    Text("Crash the app 💥")
-                },
-                onClick = { error("This crash is a test.") }
-            )
-        }
+
+        extraOptions()
+
         val cache = state.cacheSize
         PreferenceCategory(title = "Cache") {
             ListItem(
-                headlineContent = {
+                content = { Text("Database sizes") },
+                supportingContent = {
+                    if (state.databaseSizes.isLoading()) {
+                        Text("Computing...")
+                    } else {
+                        val dbSizes = state.databaseSizes.dataOrNull()
+                        if (dbSizes != null && dbSizes.isNotEmpty()) {
+                            Column {
+                                for ((dbName, size) in dbSizes) {
+                                    Text("$dbName: $size")
+                                }
+                            }
+                        } else {
+                            Text("Unknown")
+                        }
+                    }
+                }
+            )
+            ListItem(
+                content = {
+                    Text("Vacuum stores")
+                },
+                onClick = {
+                    state.eventSink(DeveloperSettingsEvent.VacuumStores)
+                }
+            )
+            ListItem(
+                content = {
                     Text("Clear cache")
                 },
                 trailingContent = if (state.cacheSize.isLoading() || state.clearCacheAction.isLoading()) {
@@ -164,7 +161,7 @@ fun DeveloperSettingsView(
                 },
                 onClick = {
                     if (state.clearCacheAction.isLoading().not()) {
-                        state.eventSink(DeveloperSettingsEvents.ClearCache)
+                        state.eventSink(DeveloperSettingsEvent.ClearCache)
                     }
                 }
             )
@@ -176,45 +173,72 @@ fun DeveloperSettingsView(
             showAlphaBar = false,
         ),
         onDismissRequest = {
-            state.eventSink(DeveloperSettingsEvents.SetShowColorPicker(false))
+            state.eventSink(DeveloperSettingsEvent.SetShowColorPicker(false))
         },
         onPickedColor = {
-            state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(it))
+            state.eventSink(DeveloperSettingsEvent.ChangeBrandColor(it))
         },
     )
 }
 
 @Composable
-private fun ElementCallCategory(
-    state: DeveloperSettingsState,
-) {
-    PreferenceCategory(title = "Element Call") {
-        val callUrlState = state.customElementCallBaseUrlState
-
-        val supportingText = if (callUrlState.baseUrl.isNullOrEmpty()) {
-            stringResource(R.string.screen_advanced_settings_element_call_base_url_description)
-        } else {
-            callUrlState.baseUrl
-        }
-        PreferenceTextField(
-            headline = stringResource(R.string.screen_advanced_settings_element_call_base_url),
-            value = callUrlState.baseUrl,
-            placeholder = "https://.../room",
-            supportingText = supportingText,
-            validation = callUrlState.validator,
-            onValidationErrorMessage = stringResource(R.string.screen_advanced_settings_element_call_base_url_validation_error),
-            displayValue = { value -> !value.isNullOrEmpty() },
-            keyboardOptions = KeyboardOptions.Default.copy(autoCorrectEnabled = false, keyboardType = KeyboardType.Uri),
-            onChange = { state.eventSink(DeveloperSettingsEvents.SetCustomElementCallBaseUrl(it)) }
+private fun SessionCategory(deviceId: DeviceId) {
+    PreferenceCategory(title = "Session") {
+        val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
+        val context = LocalContext.current
+        ListItem(
+            content = { Text("DeviceId") },
+            supportingContent = { Text(text = deviceId.value) },
+            onClick = {
+                context.copyToClipboard(
+                    text = deviceId.value,
+                    toastMessage = toastMessage,
+                )
+            }
         )
     }
 }
 
 @Composable
-private fun NotificationCategory(onPushHistoryClick: () -> Unit) {
+private fun MarkAllRoomsAsReadCategory(state: DeveloperSettingsState) {
+    PreferenceCategory(title = "Room list") {
+        ListItem(
+            content = {
+                Text("Mark all rooms as read")
+            },
+            supportingContent = {
+                Text(
+                    text = """
+                        This will send a private read receipt and a read marker in every room you are part of. 
+                        It's a long running operation that might get rate limited.
+                        It will run in the background but the app must be alive for it to finish.
+                        """.trimIndent(),
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
+            enabled = !state.showLoader,
+            onClick = {
+                state.eventSink(DeveloperSettingsEvent.MarkAllRoomsAsRead(needsConfirmation = true))
+            },
+        )
+    }
+}
+
+@Composable
+private fun NotificationCategory(
+    onPushRulesClick: () -> Unit,
+    onPushHistoryClick: () -> Unit,
+) {
     PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_title)) {
         ListItem(
-            headlineContent = {
+            content = {
+                Text("Push rules")
+            },
+            onClick = onPushRulesClick,
+        )
+        ListItem(
+            content = {
                 Text(stringResource(R.string.troubleshoot_notifications_entry_point_push_history_title))
             },
             onClick = onPushHistoryClick,
@@ -222,29 +246,14 @@ private fun NotificationCategory(onPushHistoryClick: () -> Unit) {
     }
 }
 
-@Composable
-private fun FeatureListContent(
-    state: DeveloperSettingsState,
-) {
-    fun onFeatureEnabled(feature: FeatureUiModel, isEnabled: Boolean) {
-        state.eventSink(DeveloperSettingsEvents.UpdateEnabledFeature(feature, isEnabled))
-    }
-
-    FeatureListView(
-        features = state.features,
-        onCheckedChange = ::onFeatureEnabled,
-    )
-}
-
 @PreviewsDayNight
 @Composable
 internal fun DeveloperSettingsViewPreview(
-    @PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState
+    @PreviewParameter(DeveloperSettingsStatePreviewParam::class) state: DeveloperSettingsState
 ) = ElementPreview {
     DeveloperSettingsView(
         state = state,
-        onOpenShowkase = {},
         onPushHistoryClick = {},
-        onBackClick = {}
+        onBackClick = {},
     )
 }

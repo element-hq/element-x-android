@@ -8,14 +8,12 @@
 
 package io.element.android.libraries.permissions.impl.action
 
-class FakePermissionActions(
-    val openSettingsAction: () -> Unit = {}
-) : PermissionActions {
-    var openSettingsCalled = false
-        private set
+import io.element.android.tests.testutils.lambda.lambdaError
 
-    override fun openSettings() {
-        openSettingsAction()
-        openSettingsCalled = true
+class FakePermissionActions(
+    val openSettingsAction: (String) -> Unit = { lambdaError() }
+) : PermissionActions {
+    override fun openSettings(permission: String) {
+        openSettingsAction(permission)
     }
 }

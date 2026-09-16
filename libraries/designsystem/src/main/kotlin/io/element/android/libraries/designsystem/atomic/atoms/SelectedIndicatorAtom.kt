@@ -34,7 +34,7 @@ fun SelectedIndicatorAtom(
         Icon(
             modifier = modifier.toggleable(
                 value = true,
-                role = Role.Companion.Checkbox,
+                role = Role.Checkbox,
                 enabled = enabled,
                 onValueChange = {},
             ),

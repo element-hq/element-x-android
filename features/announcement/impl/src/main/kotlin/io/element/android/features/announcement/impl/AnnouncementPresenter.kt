@@ -12,12 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.impl.store.AnnouncementStatus
 import io.element.android.features.announcement.impl.store.AnnouncementStore
 import io.element.android.libraries.architecture.Presenter
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @Inject
 class AnnouncementPresenter(
@@ -25,13 +29,39 @@ class AnnouncementPresenter(
 ) : Presenter<AnnouncementState> {
     @Composable
     override fun present(): AnnouncementState {
-        val showSpaceAnnouncement by remember {
-            announcementStore.announcementStatusFlow(Announcement.Space).map {
-                it == AnnouncementStatus.Show
+        val coroutineScope = rememberCoroutineScope()
+
+        val fullscreenAnnouncementToShow by remember {
+            combine(
+                flowOf(Unit),
+                announcementStore.announcementStatusFlow(Announcement.Fullscreen.Space).map {
+                    it == AnnouncementStatus.Show
+                },
+                // Add other announcements here when needed
+            ) { _, showFullscreenSpace ->
+                when {
+                    showFullscreenSpace -> Announcement.Fullscreen.Space
+                    else -> {
+                        null
+                    }
+                }
             }
-        }.collectAsState(false)
+        }.collectAsState(null)
+
+        fun handle(event: AnnouncementEvent) {
+            when (event) {
+                is AnnouncementEvent.Continue -> coroutineScope.launch {
+                    announcementStore.setAnnouncementStatus(
+                        announcement = event.announcement,
+                        status = AnnouncementStatus.Shown,
+                    )
+                }
+            }
+        }
+
         return AnnouncementState(
-            showSpaceAnnouncement = showSpaceAnnouncement,
+            announcement = fullscreenAnnouncementToShow,
+            eventSink = ::handle,
         )
     }
 }

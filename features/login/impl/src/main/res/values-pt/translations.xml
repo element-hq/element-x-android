@@ -28,11 +28,11 @@
   <string name="screen_change_server_subtitle">"Qual é o endereço do teu servidor?"</string>
   <string name="screen_change_server_title">"Seleciona o teu servidor"</string>
   <string name="screen_create_account_title">"Criar conta"</string>
-  <string name="screen_login_error_deactivated_account">"Esta conta foi desativada."</string>
+  <string name="screen_login_error_deactivated_account">"Esta conta foi eliminada."</string>
   <string name="screen_login_error_invalid_credentials">"Nome de utilizador ou senha incorretos"</string>
   <string name="screen_login_error_invalid_user_id">"Identificador de utilizador inválido. Formato esperado: ‘@utilizador:servidor.org’"</string>
   <string name="screen_login_error_refresh_tokens">"Este servidor está configurado para utilizar \"tokens\" de atualização. Estes não são suportados quando utilizas o início de sessão por senha."</string>
-  <string name="screen_login_error_unsupported_authentication">"O servidor selecionado não suporta início de sessão por senha nem por OIDC. Por favor, contacta o teu administrador ou escolhe outro servidor."</string>
+  <string name="screen_login_error_unsupported_authentication">"O servidor selecionado não suporta início de sessão por senha nem por OAuth. Por favor, contacta o teu administrador ou escolhe outro servidor."</string>
   <string name="screen_login_form_header">"Insere o teus detalhes"</string>
   <string name="screen_login_subtitle">"A Matrix é uma rede aberta de comunicação descentralizada e segura."</string>
   <string name="screen_login_title">"Bem-vindo(a) de volta!"</string>

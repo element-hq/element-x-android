@@ -9,6 +9,8 @@
 package io.element.android.libraries.matrix.impl.room
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.notification.CallIntent
+import io.element.android.libraries.matrix.api.room.CallIntentConsensus
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -32,15 +34,15 @@ import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevelValues
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
-import org.junit.Ignore
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Membership
+import org.matrix.rustcomponents.sdk.RtcCallIntent
+import org.matrix.rustcomponents.sdk.RtcCallIntentConsensus
 import uniffi.matrix_sdk_base.EncryptionState
 import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
 import org.matrix.rustcomponents.sdk.RoomHistoryVisibility as RustRoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.RoomNotificationMode as RustRoomNotificationMode
 
-@Ignore("JNA direct mapping has broken unit tests with FFI fakes")
 class RoomInfoMapperTest {
     @Test
     fun `mapping of RustRoomInfo should map all the fields`() {
@@ -82,6 +84,10 @@ class RoomInfoMapperTest {
                     historyVisibility = RustRoomHistoryVisibility.Joined,
                     roomVersion = "12",
                     privilegedCreatorsRole = true,
+                    isLowPriority = true,
+                    activeRoomCallConsensusIntent = RtcCallIntentConsensus.Full(RtcCallIntent.AUDIO),
+                    isDm = true,
+                    fullyReadEventId = AN_EVENT_ID.value,
                 )
             )
         ).isEqualTo(
@@ -130,6 +136,10 @@ class RoomInfoMapperTest {
                 successorRoom = null,
                 roomVersion = "12",
                 privilegedCreatorRole = true,
+                isLowPriority = true,
+                activeCallIntentConsensus = CallIntentConsensus.Full(CallIntent.AUDIO),
+                isDm = true,
+                fullyReadEventId = AN_EVENT_ID,
             )
         )
     }
@@ -173,6 +183,10 @@ class RoomInfoMapperTest {
                     roomCreators = null,
                     roomVersion = "12",
                     privilegedCreatorsRole = true,
+                    isLowPriority = true,
+                    activeRoomCallConsensusIntent = RtcCallIntentConsensus.None,
+                    isDm = false,
+                    fullyReadEventId = AN_EVENT_ID.value,
                 )
             )
         ).isEqualTo(
@@ -215,6 +229,10 @@ class RoomInfoMapperTest {
                 historyVisibility = RoomHistoryVisibility.Joined,
                 roomVersion = "12",
                 privilegedCreatorRole = true,
+                isLowPriority = true,
+                activeCallIntentConsensus = CallIntentConsensus.None,
+                isDm = false,
+                fullyReadEventId = AN_EVENT_ID,
             )
         )
     }

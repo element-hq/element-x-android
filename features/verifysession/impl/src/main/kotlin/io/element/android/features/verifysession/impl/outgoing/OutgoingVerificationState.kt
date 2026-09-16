@@ -16,7 +16,7 @@ import io.element.android.libraries.matrix.api.verification.VerificationRequest
 data class OutgoingVerificationState(
     val step: Step,
     val request: VerificationRequest.Outgoing,
-    val eventSink: (OutgoingVerificationViewEvents) -> Unit,
+    val eventSink: (OutgoingVerificationViewEvent) -> Unit,
 ) {
     @Stable
     sealed interface Step {

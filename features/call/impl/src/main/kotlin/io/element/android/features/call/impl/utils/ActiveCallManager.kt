@@ -20,7 +20,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.ElementCallConfig
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
@@ -72,17 +72,21 @@ interface ActiveCallManager {
     suspend fun registerIncomingCall(notificationData: CallNotificationData)
 
     /**
-     * Called when the active call has been hung up. It will remove any existing UI and the active call.
-     * @param callType The type of call that the user hung up, either an external url one or a room one.
+     * Called to hang up the active call. It will hang up the call and remove any existing UI and the active call.
+     * @param callData The data about the call.
+     * @param notificationData The data for the incoming call notification.
      */
-    suspend fun hungUpCall(callType: CallType)
+    suspend fun hangUpCall(
+        callData: CallData,
+        notificationData: CallNotificationData? = null,
+    )
 
     /**
      * Called after the user joined a call. It will remove any existing UI and set the call state as [CallState.InCall].
      *
-     * @param callType The type of call that the user joined, either an external url one or a room one.
+     * @param callData The data about the call.
      */
-    suspend fun joinedCall(callType: CallType)
+    suspend fun joinedCall(callData: CallData)
 }
 
 @SingleIn(AppScope::class)
@@ -139,9 +143,10 @@ class DefaultActiveCallManager(
                 return
             }
             activeCall.value = ActiveCall(
-                callType = CallType.RoomCall(
+                callData = CallData(
                     sessionId = notificationData.sessionId,
                     roomId = notificationData.roomId,
+                    isAudioCall = notificationData.audioOnly,
                 ),
                 callState = CallState.Ringing(notificationData),
             )
@@ -177,8 +182,8 @@ class DefaultActiveCallManager(
     suspend fun incomingCallTimedOut(displayMissedCallNotification: Boolean) = mutex.withLock {
         Timber.tag(tag).d("Incoming call timed out")
 
-        val previousActiveCall = activeCall.value ?: return
-        val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
+        val previousActiveCall = activeCall.value ?: return@withLock
+        val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return@withLock
         activeCall.value = null
         if (activeWakeLock?.isHeld == true) {
             Timber.tag(tag).d("Releasing partial wakelock after timeout")
@@ -192,15 +197,31 @@ class DefaultActiveCallManager(
         }
     }
 
-    override suspend fun hungUpCall(callType: CallType) = mutex.withLock {
-        Timber.tag(tag).d("Hung up call: $callType")
+    override suspend fun hangUpCall(
+        callData: CallData,
+        notificationData: CallNotificationData?,
+    ) = mutex.withLock {
+        Timber.tag(tag).d("Hang up call: $callData")
+        cancelIncomingCallNotification()
         val currentActiveCall = activeCall.value ?: run {
+            // activeCall.value can be null if the application has been killed while the call was ringing
+            // Build a currentActiveCall with the provided parameters.
+            notificationData?.let {
+                ActiveCall(
+                    callData = callData,
+                    callState = CallState.Ringing(
+                        notificationData = notificationData,
+                    )
+                )
+            }
+        } ?: run {
             Timber.tag(tag).w("No active call, ignoring hang up")
-            return
+            return@withLock
         }
-        if (currentActiveCall.callType != callType) {
-            Timber.tag(tag).w("Call type $callType does not match the active call type, ignoring")
-            return
+
+        if (currentActiveCall.callData != callData) {
+            Timber.tag(tag).w("Call type $callData does not match the active call type, ignoring")
+            return@withLock
         }
         if (currentActiveCall.callState is CallState.Ringing) {
             // Decline the call
@@ -208,9 +229,13 @@ class DefaultActiveCallManager(
             matrixClientProvider.getOrRestore(notificationData.sessionId).getOrNull()
                 ?.getRoom(notificationData.roomId)
                 ?.declineCall(notificationData.eventId)
+                ?.onFailure {
+                    Timber.e(it, "Failed to decline incoming call")
+                }
+                ?: run {
+                    Timber.tag(tag).d("Couldn't find session or room to decline call for incoming call")
+                }
         }
-
-        cancelIncomingCallNotification()
         if (activeWakeLock?.isHeld == true) {
             Timber.tag(tag).d("Releasing partial wakelock after hang up")
             activeWakeLock.release()
@@ -219,9 +244,8 @@ class DefaultActiveCallManager(
         activeCall.value = null
     }
 
-    override suspend fun joinedCall(callType: CallType) = mutex.withLock {
-        Timber.tag(tag).d("Joined call: $callType")
-
+    override suspend fun joinedCall(callData: CallData) = mutex.withLock {
+        Timber.tag(tag).d("Joined call: $callData")
         cancelIncomingCallNotification()
         if (activeWakeLock?.isHeld == true) {
             Timber.tag(tag).d("Releasing partial wakelock after joining call")
@@ -230,7 +254,7 @@ class DefaultActiveCallManager(
         timedOutCallJob?.cancel()
 
         activeCall.value = ActiveCall(
-            callType = callType,
+            callData = callData,
             callState = CallState.InCall,
         )
     }
@@ -250,6 +274,7 @@ class DefaultActiveCallManager(
             timestamp = notificationData.timestamp,
             textContent = notificationData.textContent,
             expirationTimestamp = notificationData.expirationTimestamp,
+            audioOnly = notificationData.audioOnly,
         ) ?: return
         runCatchingExceptions {
             notificationManagerCompat.notify(
@@ -282,15 +307,15 @@ class DefaultActiveCallManager(
     private fun observeRingingCall() {
         activeCall
             .filterNotNull()
-            .filter { it.callState is CallState.Ringing && it.callType is CallType.RoomCall }
+            .filter { it.callState is CallState.Ringing }
             .flatMapLatest { activeCall ->
-                val callType = activeCall.callType as CallType.RoomCall
+                val callData = activeCall.callData
                 val ringingInfo = activeCall.callState as CallState.Ringing
-                val client = matrixClientProvider.getOrRestore(callType.sessionId).getOrNull() ?: run {
+                val client = matrixClientProvider.getOrRestore(callData.sessionId).getOrNull() ?: run {
                     Timber.tag(tag).d("Couldn't find session for incoming call: $activeCall")
                     return@flatMapLatest flowOf()
                 }
-                val room = client.getRoom(callType.roomId) ?: run {
+                val room = client.getRoom(callData.roomId) ?: run {
                     Timber.tag(tag).d("Couldn't find room for incoming call: $activeCall")
                     return@flatMapLatest flowOf()
                 }
@@ -321,17 +346,17 @@ class DefaultActiveCallManager(
         // has joined the call from another session.
         activeCall
             .filterNotNull()
-            .filter { it.callState is CallState.Ringing && it.callType is CallType.RoomCall }
+            .filter { it.callState is CallState.Ringing }
             .flatMapLatest { activeCall ->
-                val callType = activeCall.callType as CallType.RoomCall
+                val callData = activeCall.callData
                 // Get a flow of updated `hasRoomCall` and `activeRoomCallParticipants` values for the room
-                val room = matrixClientProvider.getOrRestore(callType.sessionId).getOrNull()?.getRoom(callType.roomId) ?: run {
+                val room = matrixClientProvider.getOrRestore(callData.sessionId).getOrNull()?.getRoom(callData.roomId) ?: run {
                     Timber.tag(tag).d("Couldn't find room for incoming call: $activeCall")
                     return@flatMapLatest flowOf()
                 }
                 room.roomInfoFlow.map {
                     Timber.tag(tag).d("Has room call status changed for ringing call: ${it.hasRoomCall}")
-                    it.hasRoomCall to (callType.sessionId in it.activeRoomCallParticipants)
+                    it.hasRoomCall to (callData.sessionId in it.activeRoomCallParticipants)
                 }
             }
             // We only want to check if the room active call status changes
@@ -363,10 +388,7 @@ class DefaultActiveCallManager(
                             // Nothing to do
                         }
                         is CallState.InCall -> {
-                            when (val callType = value.callType) {
-                                is CallType.ExternalUrl -> defaultCurrentCallService.onCallStarted(CurrentCall.ExternalUrl(callType.url))
-                                is CallType.RoomCall -> defaultCurrentCallService.onCallStarted(CurrentCall.RoomCall(callType.roomId))
-                            }
+                            defaultCurrentCallService.onCallStarted(CurrentCall.RoomCall(value.callData.roomId))
                         }
                     }
                 }
@@ -379,7 +401,7 @@ class DefaultActiveCallManager(
  * Represents an active call.
  */
 data class ActiveCall(
-    val callType: CallType,
+    val callData: CallData,
     val callState: CallState,
 )
 

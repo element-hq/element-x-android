@@ -24,7 +24,6 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.PollCreation
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.features.poll.api.create.CreatePollMode
-import io.element.android.features.poll.impl.PollConstants.MAX_SELECTIONS
 import io.element.android.features.poll.impl.data.PollRepository
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.poll.PollAnswer
@@ -50,7 +49,7 @@ class CreatePollPresenter(
     fun interface Factory {
         fun create(
             timelineMode: Timeline.Mode,
-            backNavigator: () -> Unit,
+            navigateUp: () -> Unit,
             mode: CreatePollMode
         ): CreatePollPresenter
     }
@@ -81,6 +80,7 @@ class CreatePollPresenter(
                         question = it.question,
                         answers = it.answers.map(PollAnswer::text).toImmutableList(),
                         isDisclosed = it.kind.isDisclosed,
+                        maxSelections = it.maxSelections.toInt(),
                     )
                     initialPoll = loadedPoll
                     poll = loadedPoll
@@ -97,9 +97,9 @@ class CreatePollPresenter(
 
         val scope = rememberCoroutineScope()
 
-        fun handleEvent(event: CreatePollEvents) {
+        fun handleEvent(event: CreatePollEvent) {
             when (event) {
-                is CreatePollEvents.Save -> scope.launch {
+                is CreatePollEvent.Save -> scope.launch {
                     if (canSave) {
                         repository.savePoll(
                             existingPollId = when (mode) {
@@ -109,7 +109,7 @@ class CreatePollPresenter(
                             question = poll.question,
                             answers = poll.answers,
                             pollKind = poll.pollKind,
-                            maxSelections = MAX_SELECTIONS,
+                            maxSelections = poll.maxSelections,
                         ).onSuccess {
                             analyticsService.capturePollSaved(
                                 isUndisclosed = poll.pollKind == PollKind.Undisclosed,
@@ -123,7 +123,7 @@ class CreatePollPresenter(
                         Timber.d("Cannot create poll")
                     }
                 }
-                is CreatePollEvents.Delete -> {
+                is CreatePollEvent.Delete -> {
                     if (mode !is CreatePollMode.EditPoll) {
                         return
                     }
@@ -139,25 +139,28 @@ class CreatePollPresenter(
                         navigateUp()
                     }
                 }
-                is CreatePollEvents.AddAnswer -> {
+                is CreatePollEvent.AddAnswer -> {
                     poll = poll.withNewAnswer()
                 }
-                is CreatePollEvents.RemoveAnswer -> {
+                is CreatePollEvent.RemoveAnswer -> {
                     poll = poll.withAnswerRemoved(event.index)
                 }
-                is CreatePollEvents.SetAnswer -> {
+                is CreatePollEvent.SetAnswer -> {
                     poll = poll.withAnswerChanged(event.index, event.text)
                 }
-                is CreatePollEvents.SetPollKind -> {
+                is CreatePollEvent.SetPollKind -> {
                     poll = poll.copy(isDisclosed = event.pollKind.isDisclosed)
                 }
-                is CreatePollEvents.SetQuestion -> {
+                is CreatePollEvent.SetMaxSelections -> {
+                    poll = poll.copy(maxSelections = event.maxSelections)
+                }
+                is CreatePollEvent.SetQuestion -> {
                     poll = poll.copy(question = event.question)
                 }
-                is CreatePollEvents.NavBack -> {
+                is CreatePollEvent.NavBack -> {
                     navigateUp()
                 }
-                CreatePollEvents.ConfirmNavBack -> {
+                CreatePollEvent.ConfirmNavBack -> {
                     val shouldConfirm = isDirty
                     if (shouldConfirm) {
                         showBackConfirmation = true
@@ -165,7 +168,7 @@ class CreatePollPresenter(
                         navigateUp()
                     }
                 }
-                is CreatePollEvents.HideConfirmation -> {
+                is CreatePollEvent.HideConfirmation -> {
                     showBackConfirmation = false
                     showDeleteConfirmation = false
                 }
@@ -182,6 +185,8 @@ class CreatePollPresenter(
             question = poll.question,
             answers = immutableAnswers,
             pollKind = poll.pollKind,
+            maxSelections = poll.maxSelections,
+            maxAllowedSelections = poll.answers.size,
             showBackConfirmation = showBackConfirmation,
             showDeleteConfirmation = showDeleteConfirmation,
             eventSink = ::handleEvent,

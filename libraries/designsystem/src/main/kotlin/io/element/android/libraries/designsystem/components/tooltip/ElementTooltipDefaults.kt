@@ -9,6 +9,7 @@
 package io.element.android.libraries.designsystem.components.tooltip
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -41,8 +42,9 @@ object ElementTooltipDefaults {
         windowPadding: Dp = 12.dp,
     ): PopupPositionProvider {
         val windowPaddingPx = with(LocalDensity.current) { windowPadding.roundToPx() }
-        val plainTooltipPositionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(
-            spacingBetweenTooltipAndAnchor = spacingBetweenTooltipAndAnchor,
+        val plainTooltipPositionProvider = TooltipDefaults.rememberTooltipPositionProvider(
+            positioning = TooltipAnchorPosition.Above,
+            spacingBetweenTooltipAndAnchor = spacingBetweenTooltipAndAnchor
         )
         return remember(windowPaddingPx, plainTooltipPositionProvider) {
             object : PopupPositionProvider {

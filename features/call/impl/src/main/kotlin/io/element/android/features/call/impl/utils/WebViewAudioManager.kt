@@ -18,6 +18,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -64,6 +65,11 @@ class WebViewAudioManager(
     private val isWebViewAudioEnabled = AtomicBoolean(true)
 
     /**
+     * Store the device id requested by EC, and re-set it if something try to switch (only android S+).
+     */
+    private var ecRequestedDeviceId: String? = null
+
+    /**
      * The list of device types that are considered as communication devices, sorted by likelihood of it being used for communication.
      */
     private val wantedDeviceTypes = listOf(
@@ -81,6 +87,13 @@ class WebViewAudioManager(
         // The built-in earpiece of the device
         AudioDeviceInfo.TYPE_BUILTIN_EARPIECE,
     )
+
+    private val audioDeviceComparator = Comparator<AudioDeviceInfo> { a, b ->
+        // If the device type is not in the wantedDeviceTypes list, we give it a high index, (i.e. low priority)
+        val indexOfA = wantedDeviceTypes.indexOf(a.type).let { if (it == -1) Int.MAX_VALUE else it }
+        val indexOfB = wantedDeviceTypes.indexOf(b.type).let { if (it == -1) Int.MAX_VALUE else it }
+        indexOfA.compareTo(indexOfB)
+    }
 
     private val audioManager = webView.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -105,22 +118,12 @@ class WebViewAudioManager(
     @get:RequiresApi(Build.VERSION_CODES.S)
     private val commsDeviceChangedListener by lazy {
         AudioManager.OnCommunicationDeviceChangedListener { device ->
-            if (device != null && device.id == expectedNewCommunicationDeviceId) {
-                expectedNewCommunicationDeviceId = null
-                Timber.d("Audio device changed, type: ${device.type}")
-                updateSelectedAudioDeviceInWebView(device.id.toString())
-            } else if (device != null && device.id != expectedNewCommunicationDeviceId) {
-                // We were expecting a device change but it didn't happen, so we should retry
-                val expectedDeviceId = expectedNewCommunicationDeviceId
-                if (expectedDeviceId != null) {
-                    // Remove the expected id so we only retry once
-                    expectedNewCommunicationDeviceId = null
-                    audioManager.selectAudioDevice(expectedDeviceId.toString())
-                }
-            } else {
-                Timber.d("Audio device cleared")
-                expectedNewCommunicationDeviceId = null
-                audioManager.selectAudioDevice(null)
+            Timber.d("Audio device changed, type: ${device?.id}")
+            val wantedDevice = this.ecRequestedDeviceId
+            if (wantedDevice != null && this.ecRequestedDeviceId != device?.id?.toString()) {
+                // We want to ensure that we stick to what EC selected even if it was changed outside
+                Timber.d("Audio device changed to unwanted device ${device?.id}, enforce using the expected device $wantedDevice")
+                audioManager.selectAudioDevice(wantedDevice)
             }
         }
     }
@@ -134,41 +137,16 @@ class WebViewAudioManager(
             if (validNewDevices.isEmpty()) return
 
             // We need to calculate the available devices ourselves, since calling `listAudioDevices` will return an outdated list
-            val audioDevices = (listAudioDevices() + validNewDevices).distinctBy { it.id }
+            val audioDevices = (listAudioDevices() + validNewDevices).distinctBy { it.id }.sortedWith(audioDeviceComparator)
             setAvailableAudioDevices(audioDevices.map(SerializableAudioDevice::fromAudioDeviceInfo))
-            // This should automatically switch to a new device if it has a higher priority than the current one
-            selectDefaultAudioDevice(audioDevices)
         }
 
         override fun onAudioDevicesRemoved(removedDevices: Array<out AudioDeviceInfo>?) {
             // Update the available devices
+            // Element Call will then decide to switch devices if needed
             setAvailableAudioDevices()
-
-            // Unless the removed device is the current one, we don't need to do anything else
-            val removedCurrentDevice = removedDevices.orEmpty().any { it.id == currentDeviceId }
-            if (!removedCurrentDevice) return
-
-            val previousDevice = previousSelectedDevice
-            if (previousDevice != null) {
-                previousSelectedDevice = null
-                // If we have a previous device, we should select it again
-                audioManager.selectAudioDevice(previousDevice.id.toString())
-            } else {
-                // If we don't have a previous device, we should select the default one
-                selectDefaultAudioDevice()
-            }
         }
     }
-
-    /**
-     * The currently used audio device id.
-     */
-    private var currentDeviceId: Int? = null
-
-    /**
-     * When a new audio device is selected but not yet set as the communication device by the OS, this id is used to check if the device is the expected one.
-     */
-    private var expectedNewCommunicationDeviceId: Int? = null
 
     /**
      * Previously selected device, used to restore the selection when the selected device is removed.
@@ -223,16 +201,12 @@ class WebViewAudioManager(
             return
         }
 
-        coroutineScope.launch {
-            proximitySensorMutex.withLock {
-                if (proximitySensorWakeLock?.isHeld == true) {
-                    proximitySensorWakeLock?.release()
-                }
-            }
+        // Since this should run when the call is no longer running, it should be OK to not use the mutex here
+        if (proximitySensorWakeLock?.isHeld == true) {
+            proximitySensorWakeLock?.release()
         }
 
         audioManager.mode = AudioManager.MODE_NORMAL
-
         if (!hasRegisteredCallbacks) {
             Timber.w("Audio: tried to disable webview in-call audio mode without registering callbacks")
             return
@@ -255,6 +229,7 @@ class WebViewAudioManager(
         val webViewAudioDeviceSelectedCallback = AndroidWebViewAudioBridge(
             onAudioDeviceSelected = { selectedDeviceId ->
                 previousSelectedDevice = listAudioDevices().find { it.id.toString() == selectedDeviceId }
+                this.ecRequestedDeviceId = selectedDeviceId
                 audioManager.selectAudioDevice(selectedDeviceId)
             },
             onAudioPlaybackStarted = {
@@ -275,7 +250,7 @@ class WebViewAudioManager(
 
                     hasRegisteredCallbacks = true
                 }
-            }
+            },
         )
         Timber.d("Setting androidNativeBridge javascript interface in webview")
         webView.addJavascriptInterface(webViewAudioDeviceSelectedCallback, "androidNativeBridge")
@@ -289,12 +264,12 @@ class WebViewAudioManager(
     private fun setWebViewAndroidNativeBridge() {
         Timber.d("Adding callback in controls.onAudioPlaybackStarted")
         webView.evaluateJavascript("controls.onAudioPlaybackStarted = () => { androidNativeBridge.onTrackReady(); };", null)
-        Timber.d("Adding callback in controls.onOutputDeviceSelect")
-        webView.evaluateJavascript("controls.onOutputDeviceSelect = (id) => { androidNativeBridge.setOutputDevice(id); };", null)
+        Timber.d("Adding callback in controls.onAudioDeviceSelect")
+        webView.evaluateJavascript("controls.onAudioDeviceSelect = (id) => { androidNativeBridge.setAudioDevice(id); };", null)
     }
 
     /**
-     * Returns the list of available audio devices.
+     * Returns the list of available audio devices, sorted by likelihood of it being used for communication.
      *
      * On Android 11 ([Build.VERSION_CODES.R]) and lower, it returns the list of output devices as a fallback.
      */
@@ -304,7 +279,7 @@ class WebViewAudioManager(
         } else {
             val rawAudioDevices = audioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
             rawAudioDevices.filter { it.type in wantedDeviceTypes && it.isSink }
-        }
+        }.sortedWith(audioDeviceComparator)
     }
 
     /**
@@ -317,44 +292,9 @@ class WebViewAudioManager(
     ) {
         Timber.d("Updating available audio devices")
         val deviceList = json.encodeToString(devices)
-        webView.evaluateJavascript("controls.setAvailableOutputDevices($deviceList);", {
-            Timber.d("Audio: setAvailableOutputDevices result: $it")
+        webView.evaluateJavascript("controls.setAvailableAudioDevices($deviceList);", {
+            Timber.d("Audio: setAvailableAudioDevices result: $it")
         })
-    }
-
-    /**
-     * Selects the default audio device based on the available devices.
-     *
-     * @param availableDevices The list of available audio devices to select from. If not provided, it will use the current list of audio devices.
-     */
-    private fun selectDefaultAudioDevice(availableDevices: List<AudioDeviceInfo> = listAudioDevices()) {
-        val selectedDevice = availableDevices
-            .minByOrNull {
-                wantedDeviceTypes.indexOf(it.type).let { index ->
-                    // If the device type is not in the wantedDeviceTypes list, we give it a low priority
-                    if (index == -1) Int.MAX_VALUE else index
-                }
-            }
-
-        expectedNewCommunicationDeviceId = selectedDevice?.id
-        audioManager.selectAudioDevice(selectedDevice)
-
-        selectedDevice?.let {
-            updateSelectedAudioDeviceInWebView(it.id.toString())
-        } ?: run {
-            Timber.w("Audio: unable to select default audio device")
-        }
-    }
-
-    /**
-     * Updates the WebView's UI to reflect the selected audio device.
-     *
-     * @param deviceId The id of the selected audio device.
-     */
-    private fun updateSelectedAudioDeviceInWebView(deviceId: String) {
-        coroutineScope.launch(Dispatchers.Main) {
-            webView.evaluateJavascript("controls.setOutputDevice('$deviceId');", null)
-        }
     }
 
     /**
@@ -380,19 +320,28 @@ class WebViewAudioManager(
      *
      * @param device The info of the audio device to select, or none to clear the selected device.
      */
-    @Suppress("DEPRECATION")
     private fun AudioManager.selectAudioDevice(device: AudioDeviceInfo?) {
-        currentDeviceId = device?.id
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (device != null) {
-                Timber.d("Setting communication device: ${device.id} - ${deviceName(device.type, device.productName.toString())}")
-                setCommunicationDevice(device)
+                runCatchingExceptions {
+                    Timber.d("Setting communication device: ${device.id} - ${deviceName(device.type, device.productName.toString())}")
+                    if (!setCommunicationDevice(device)) {
+                        Timber.w("Failed to setCommunication device")
+                    }
+                }.onFailure {
+                    Timber.e(it, "Could not set communication device.")
+                }
             } else {
-                audioManager.clearCommunicationDevice()
+                runCatchingExceptions {
+                    clearCommunicationDevice()
+                }.onFailure {
+                    Timber.e(it, "Could not clear communication device.")
+                }
             }
         } else {
             // On Android 11 and lower, we don't have the concept of communication devices
             // We have to call the right methods based on the device type
+            @Suppress("DEPRECATION")
             if (device != null) {
                 if (device.type == AudioDeviceInfo.TYPE_BLUETOOTH_SCO && disableBluetoothAudioDevices) {
                     Timber.w("Bluetooth audio devices are disabled on this Android version")
@@ -409,14 +358,14 @@ class WebViewAudioManager(
             }
         }
 
-        expectedNewCommunicationDeviceId = null
-
         coroutineScope.launch {
             proximitySensorMutex.withLock {
                 @Suppress("WakeLock", "WakeLockTimeout")
-                if (device?.type == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE && proximitySensorWakeLock?.isHeld == false) {
-                    // If the device is the built-in earpiece, we need to acquire the proximity sensor wake lock
-                    proximitySensorWakeLock?.acquire()
+                if (device?.type == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE) {
+                    if (proximitySensorWakeLock?.isHeld == false) {
+                        // If the device is the built-in earpiece, we need to acquire the proximity sensor wake lock
+                        proximitySensorWakeLock?.acquire()
+                    }
                 } else if (proximitySensorWakeLock?.isHeld == true) {
                     // If the device is no longer the earpiece, we need to release the wake lock
                     proximitySensorWakeLock?.release()
@@ -448,7 +397,7 @@ private class AndroidWebViewAudioBridge(
     private val onAudioPlaybackStarted: () -> Unit,
 ) {
     @JavascriptInterface
-    fun setOutputDevice(id: String) {
+    fun setAudioDevice(id: String) {
         Timber.d("Audio device selected in webview, id: $id")
         onAudioDeviceSelected(id)
     }

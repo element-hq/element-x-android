@@ -8,9 +8,6 @@
 
 package io.element.android.features.lockscreen.impl.setup.biometric
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticator
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
@@ -18,6 +15,7 @@ import io.element.android.features.lockscreen.impl.biometric.FakeBiometricAuthen
 import io.element.android.features.lockscreen.impl.biometric.FakeBiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.pin.storage.InMemoryLockScreenStore
 import io.element.android.features.lockscreen.impl.storage.LockScreenStore
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -30,12 +28,10 @@ class SetupBiometricPresenterTest {
             FakeBiometricAuthenticator(authenticateLambda = { BiometricAuthenticator.AuthenticationResult.Success })
         })
         val presenter = createSetupBiometricPresenter(lockScreenStore, fakeBiometricAuthenticatorManager)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitItem().also { state ->
                 assertThat(state.isBiometricSetupDone).isFalse()
-                state.eventSink(SetupBiometricEvents.AllowBiometric)
+                state.eventSink(SetupBiometricEvent.AllowBiometric)
             }
             awaitItem().also { state ->
                 assertThat(state.isBiometricSetupDone).isTrue()
@@ -51,12 +47,10 @@ class SetupBiometricPresenterTest {
             FakeBiometricAuthenticator(authenticateLambda = { BiometricAuthenticator.AuthenticationResult.Failure() })
         })
         val presenter = createSetupBiometricPresenter(lockScreenStore, fakeBiometricAuthenticatorManager)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitItem().also { state ->
                 assertThat(state.isBiometricSetupDone).isFalse()
-                state.eventSink(SetupBiometricEvents.AllowBiometric)
+                state.eventSink(SetupBiometricEvent.AllowBiometric)
             }
         }
         assertThat(lockScreenStore.isBiometricUnlockAllowed().first()).isFalse()
@@ -66,12 +60,10 @@ class SetupBiometricPresenterTest {
     fun `present - skip flow`() = runTest {
         val lockScreenStore = InMemoryLockScreenStore()
         val presenter = createSetupBiometricPresenter(lockScreenStore)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitItem().also { state ->
                 assertThat(state.isBiometricSetupDone).isFalse()
-                state.eventSink(SetupBiometricEvents.UsePin)
+                state.eventSink(SetupBiometricEvent.UsePin)
             }
             awaitItem().also { state ->
                 assertThat(state.isBiometricSetupDone).isTrue()

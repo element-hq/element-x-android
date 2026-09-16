@@ -23,11 +23,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -46,15 +42,18 @@ import io.element.android.features.home.impl.filters.selection.FilterSelectionSt
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.features.home.impl.roomlist.RoomListContentState
-import io.element.android.features.home.impl.roomlist.RoomListContentStateProvider
-import io.element.android.features.home.impl.roomlist.RoomListEvents
+import io.element.android.features.home.impl.roomlist.RoomListContentStatePreviewParam
+import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.features.home.impl.roomlist.SecurityBannerState
+import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
+import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFiltersState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -62,9 +61,10 @@ import kotlinx.collections.immutable.ImmutableList
 fun RoomListContentView(
     contentState: RoomListContentState,
     filtersState: RoomListFiltersState,
+    spaceFiltersState: SpaceFiltersState,
     lazyListState: LazyListState,
     hideInvitesAvatars: Boolean,
-    eventSink: (RoomListEvents) -> Unit,
+    eventSink: (RoomListEvent) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
@@ -96,6 +96,7 @@ fun RoomListContentView(
                 state = contentState,
                 hideInvitesAvatars = hideInvitesAvatars,
                 filtersState = filtersState,
+                spaceFiltersState = spaceFiltersState,
                 eventSink = eventSink,
                 onSetUpRecoveryClick = onSetUpRecoveryClick,
                 onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
@@ -131,7 +132,7 @@ private fun SkeletonView(
 @Composable
 private fun EmptyView(
     state: RoomListContentState.Empty,
-    eventSink: (RoomListEvents) -> Unit,
+    eventSink: (RoomListEvent) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onCreateRoomClick: () -> Unit,
@@ -155,13 +156,13 @@ private fun EmptyView(
                 SecurityBannerState.SetUpRecovery -> {
                     SetUpRecoveryKeyBanner(
                         onContinueClick = onSetUpRecoveryClick,
-                        onDismissClick = { eventSink(RoomListEvents.DismissBanner) },
+                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
                     )
                 }
                 SecurityBannerState.RecoveryKeyConfirmation -> {
                     ConfirmRecoveryKeyBanner(
                         onContinueClick = onConfirmRecoveryKeyClick,
-                        onDismissClick = { eventSink(RoomListEvents.DismissBanner) },
+                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
                     )
                 }
                 SecurityBannerState.None -> Unit
@@ -175,7 +176,8 @@ private fun RoomsView(
     state: RoomListContentState.Rooms,
     hideInvitesAvatars: Boolean,
     filtersState: RoomListFiltersState,
-    eventSink: (RoomListEvents) -> Unit,
+    spaceFiltersState: SpaceFiltersState,
+    eventSink: (RoomListEvent) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
@@ -183,9 +185,12 @@ private fun RoomsView(
     lazyListState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
-    if (state.summaries.isEmpty() && filtersState.hasAnyFilterSelected) {
+    val isSpaceFilterSelected = spaceFiltersState is SpaceFiltersState.Selected
+    val hasAnyFilterSelected = filtersState.hasAnyFilterSelected || isSpaceFilterSelected
+    if (state.summaries.isEmpty() && hasAnyFilterSelected) {
         EmptyViewForFilterStates(
             selectedFilters = filtersState.selectedFilters(),
+            isSpaceFilterSelected = isSpaceFilterSelected,
             modifier = modifier.fillMaxSize()
         )
     } else {
@@ -207,7 +212,7 @@ private fun RoomsView(
 private fun RoomsViewList(
     state: RoomListContentState.Rooms,
     hideInvitesAvatars: Boolean,
-    eventSink: (RoomListEvents) -> Unit,
+    eventSink: (RoomListEvent) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
@@ -215,17 +220,8 @@ private fun RoomsViewList(
     lazyListState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
-    val visibleRange by remember {
-        derivedStateOf {
-            val layoutInfo = lazyListState.layoutInfo
-            val firstItemIndex = layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: 0
-            val size = layoutInfo.visibleItemsInfo.size
-            firstItemIndex until firstItemIndex + size
-        }
-    }
-    val updatedEventSink by rememberUpdatedState(newValue = eventSink)
-    LaunchedEffect(visibleRange) {
-        updatedEventSink(RoomListEvents.UpdateVisibleRange(visibleRange))
+    OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
+        eventSink(RoomListEvent.UpdateVisibleRange(visibleRange))
     }
     LazyColumn(
         state = lazyListState,
@@ -237,7 +233,7 @@ private fun RoomsViewList(
                 item {
                     SetUpRecoveryKeyBanner(
                         onContinueClick = onSetUpRecoveryClick,
-                        onDismissClick = { updatedEventSink(RoomListEvents.DismissBanner) },
+                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
                     )
                 }
             }
@@ -245,23 +241,29 @@ private fun RoomsViewList(
                 item {
                     ConfirmRecoveryKeyBanner(
                         onContinueClick = onConfirmRecoveryKeyClick,
-                        onDismissClick = { updatedEventSink(RoomListEvents.DismissBanner) },
+                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
                     )
                 }
             }
-            SecurityBannerState.None -> if (state.fullScreenIntentPermissionsState.shouldDisplayBanner) {
-                item {
-                    FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
+            // Banner precedence (top-to-bottom): full-screen-intent > battery-optimization >
+            // new-notification-sound > sound-unavailable. At most one renders at a time.
+            SecurityBannerState.None -> when {
+                state.fullScreenIntentPermissionsState.shouldDisplayBanner -> {
+                    item {
+                        FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
+                    }
                 }
-            } else if (state.batteryOptimizationState.shouldDisplayBanner) {
-                item {
-                    BatteryOptimizationBanner(state = state.batteryOptimizationState)
+                state.batteryOptimizationState.shouldDisplayBanner -> {
+                    item {
+                        BatteryOptimizationBanner(state = state.batteryOptimizationState)
+                    }
                 }
-            } else if (state.showNewNotificationSoundBanner) {
-                item {
-                    NewNotificationSoundBanner(
-                        onDismissClick = { updatedEventSink(RoomListEvents.DismissNewNotificationSoundBanner) },
-                    )
+                state.showNewNotificationSoundBanner -> {
+                    item {
+                        NewNotificationSoundBanner(
+                            onDismissClick = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
+                        )
+                    }
                 }
             }
         }
@@ -277,6 +279,7 @@ private fun RoomsViewList(
                 hideInviteAvatars = hideInvitesAvatars,
                 isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
                     state.seenRoomInvites.contains(room.roomId),
+                showUnreadCount = state.showUnreadCount,
                 onClick = onRoomClick,
                 eventSink = eventSink,
             )
@@ -290,9 +293,10 @@ private fun RoomsViewList(
 @Composable
 private fun EmptyViewForFilterStates(
     selectedFilters: ImmutableList<RoomListFilter>,
+    isSpaceFilterSelected: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val emptyStateResources = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters) ?: return
+    val emptyStateResources = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters, isSpaceFilterSelected) ?: return
     EmptyScaffold(
         title = emptyStateResources.title,
         subtitle = emptyStateResources.subtitle,
@@ -332,7 +336,7 @@ private fun EmptyScaffold(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStateProvider::class) state: RoomListContentState) = ElementPreview {
+internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePreviewParam::class) state: RoomListContentState) = ElementPreview {
     RoomListContentView(
         contentState = state,
         filtersState = aRoomListFiltersState(
@@ -343,6 +347,7 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
                 )
             }
         ),
+        spaceFiltersState = anUnselectedSpaceFiltersState(),
         hideInvitesAvatars = false,
         eventSink = {},
         onSetUpRecoveryClick = {},

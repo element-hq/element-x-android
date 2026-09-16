@@ -9,19 +9,24 @@
 package io.element.android.features.login.impl.screens.loginpassword
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.appconfig.AuthenticationConfig
-import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.accountprovider.SaveAccountProviderToHistory
+import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.matrixOrgAccountProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_PASSWORD
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.A_USER_NAME_2
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -34,10 +39,24 @@ class LoginPasswordPresenterTest {
     fun `present - initial state`() = runTest {
         createLoginPasswordPresenter().test {
             val initialState = awaitItem()
-            assertThat(initialState.accountProvider.url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+            assertThat(initialState.accountProvider).isEqualTo(matrixOrgAccountProvider)
             assertThat(initialState.formState).isEqualTo(LoginFormState.Default)
             assertThat(initialState.loginAction).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.submitEnabled).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - initial login is in the first state and can be modified`() = runTest {
+        createLoginPasswordPresenter(
+            initialLogin = A_USER_NAME,
+        ).test {
+            val initialState = awaitItem()
+            assertThat(initialState.formState.login).isEqualTo(A_USER_NAME)
+            // Login can be changed
+            initialState.eventSink.invoke(LoginPasswordEvent.SetLogin(A_USER_NAME_2))
+            val loginChangedState = awaitItem()
+            assertThat(loginChangedState.formState.login).isEqualTo(A_USER_NAME_2)
         }
     }
 
@@ -52,11 +71,11 @@ class LoginPasswordPresenterTest {
             authenticationService = authenticationService,
         ).test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(LoginPasswordEvents.SetLogin(A_USER_NAME))
+            initialState.eventSink.invoke(LoginPasswordEvent.SetLogin(A_USER_NAME))
             val loginState = awaitItem()
             assertThat(loginState.formState).isEqualTo(LoginFormState(login = A_USER_NAME, password = ""))
             assertThat(loginState.submitEnabled).isFalse()
-            initialState.eventSink.invoke(LoginPasswordEvents.SetPassword(A_PASSWORD))
+            initialState.eventSink.invoke(LoginPasswordEvent.SetPassword(A_PASSWORD))
             val loginAndPasswordState = awaitItem()
             assertThat(loginAndPasswordState.formState).isEqualTo(LoginFormState(login = A_USER_NAME, password = A_PASSWORD))
             assertThat(loginAndPasswordState.submitEnabled).isTrue()
@@ -74,15 +93,41 @@ class LoginPasswordPresenterTest {
             authenticationService = authenticationService,
         ).test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(LoginPasswordEvents.SetLogin(A_USER_NAME))
-            initialState.eventSink.invoke(LoginPasswordEvents.SetPassword(A_PASSWORD))
+            initialState.eventSink.invoke(LoginPasswordEvent.SetLogin(A_USER_NAME))
+            initialState.eventSink.invoke(LoginPasswordEvent.SetPassword(A_PASSWORD))
             skipItems(1)
             val loginAndPasswordState = awaitItem()
-            loginAndPasswordState.eventSink.invoke(LoginPasswordEvents.Submit)
+            loginAndPasswordState.eventSink.invoke(LoginPasswordEvent.Submit)
             val submitState = awaitItem()
             assertThat(submitState.loginAction).isInstanceOf(AsyncData.Loading::class.java)
             val loggedInState = awaitItem()
             assertThat(loggedInState.loginAction).isEqualTo(AsyncData.Success(A_SESSION_ID))
+        }
+    }
+
+    @Test
+    fun `present - successful login saves the account provider to history`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = {
+                Result.success(aMatrixHomeServerDetails())
+            },
+        )
+        val appPreferencesStore = InMemoryAppPreferencesStore()
+        createLoginPasswordPresenter(
+            authenticationService = authenticationService,
+            appPreferencesStore = appPreferencesStore,
+        ).test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(LoginPasswordEvent.SetLogin(A_USER_NAME))
+            initialState.eventSink.invoke(LoginPasswordEvent.SetPassword(A_PASSWORD))
+            skipItems(1)
+            val loginAndPasswordState = awaitItem()
+            loginAndPasswordState.eventSink.invoke(LoginPasswordEvent.Submit)
+            skipItems(1)
+            val loggedInState = awaitItem()
+            assertThat(loggedInState.loginAction).isEqualTo(AsyncData.Success(A_SESSION_ID))
+            assertThat(appPreferencesStore.getHomeserverHistoryFlow().first())
+                .containsExactly(matrixOrgAccountProvider.serverName)
         }
     }
 
@@ -97,12 +142,12 @@ class LoginPasswordPresenterTest {
             authenticationService = authenticationService,
         ).test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(LoginPasswordEvents.SetLogin(A_USER_NAME))
-            initialState.eventSink.invoke(LoginPasswordEvents.SetPassword(A_PASSWORD))
+            initialState.eventSink.invoke(LoginPasswordEvent.SetLogin(A_USER_NAME))
+            initialState.eventSink.invoke(LoginPasswordEvent.SetPassword(A_PASSWORD))
             skipItems(1)
             val loginAndPasswordState = awaitItem()
             authenticationService.givenLoginError(AN_EXCEPTION)
-            loginAndPasswordState.eventSink.invoke(LoginPasswordEvents.Submit)
+            loginAndPasswordState.eventSink.invoke(LoginPasswordEvent.Submit)
             val submitState = awaitItem()
             assertThat(submitState.loginAction).isInstanceOf(AsyncData.Loading::class.java)
             val loggedInState = awaitItem()
@@ -121,29 +166,33 @@ class LoginPasswordPresenterTest {
             authenticationService = authenticationService,
         ).test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(LoginPasswordEvents.SetLogin(A_USER_NAME))
-            initialState.eventSink.invoke(LoginPasswordEvents.SetPassword(A_PASSWORD))
+            initialState.eventSink.invoke(LoginPasswordEvent.SetLogin(A_USER_NAME))
+            initialState.eventSink.invoke(LoginPasswordEvent.SetPassword(A_PASSWORD))
             skipItems(1)
             val loginAndPasswordState = awaitItem()
             authenticationService.givenLoginError(AN_EXCEPTION)
-            loginAndPasswordState.eventSink.invoke(LoginPasswordEvents.Submit)
+            loginAndPasswordState.eventSink.invoke(LoginPasswordEvent.Submit)
             val submitState = awaitItem()
             assertThat(submitState.loginAction).isInstanceOf(AsyncData.Loading::class.java)
             val loggedInState = awaitItem()
             // Check an error was returned
             assertThat(loggedInState.loginAction).isEqualTo(AsyncData.Failure<SessionId>(AN_EXCEPTION))
             // Assert the error is then cleared
-            loggedInState.eventSink(LoginPasswordEvents.ClearError)
+            loggedInState.eventSink(LoginPasswordEvent.ClearError)
             val clearedState = awaitItem()
             assertThat(clearedState.loginAction).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
     private fun createLoginPasswordPresenter(
+        initialLogin: String = "",
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
-        accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+        accountProviderDataSource: AccountProviderDataSource = anAccountProviderDataSource(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
     ): LoginPasswordPresenter = LoginPasswordPresenter(
+        initialLogin = initialLogin,
         authenticationService = authenticationService,
         accountProviderDataSource = accountProviderDataSource,
+        saveAccountProviderToHistory = SaveAccountProviderToHistory(accountProviderDataSource, appPreferencesStore),
     )
 }

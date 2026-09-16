@@ -17,12 +17,13 @@ import io.element.android.features.call.test.FakeElementCallEntryPoint
 import io.element.android.features.forward.test.FakeForwardEntryPoint
 import io.element.android.features.knockrequests.test.FakeKnockRequestsListEntryPoint
 import io.element.android.features.location.test.FakeLocationService
-import io.element.android.features.location.test.FakeSendLocationEntryPoint
+import io.element.android.features.location.test.FakeShareLocationEntryPoint
 import io.element.android.features.location.test.FakeShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.pinned.banner.createPinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.createTimelineController
 import io.element.android.features.poll.test.create.FakeCreatePollEntryPoint
+import io.element.android.libraries.androidutils.system.DeviceHasVulkanSupport
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -42,6 +43,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -62,7 +64,7 @@ class DefaultMessagesEntryPointTest {
                 plugins = plugins,
                 roomListService = FakeRoomListService(),
                 sessionId = A_SESSION_ID,
-                sendLocationEntryPoint = FakeSendLocationEntryPoint(),
+                shareLocationEntryPoint = FakeShareLocationEntryPoint(),
                 showLocationEntryPoint = FakeShowLocationEntryPoint(),
                 createPollEntryPoint = FakeCreatePollEntryPoint(),
                 elementCallEntryPoint = FakeElementCallEntryPoint(),
@@ -85,6 +87,7 @@ class DefaultMessagesEntryPointTest {
                 knockRequestsListEntryPoint = FakeKnockRequestsListEntryPoint(),
                 dateFormatter = FakeDateFormatter(),
                 coroutineDispatchers = testCoroutineDispatchers(),
+                hasVulkanSupport = DeviceHasVulkanSupport(mockk(relaxed = true))
             )
         }
         val callback = object : MessagesEntryPoint.Callback {
@@ -93,6 +96,7 @@ class DefaultMessagesEntryPointTest {
             override fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean) = lambdaError()
             override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) = lambdaError()
             override fun navigateToRoom(roomId: RoomId) = lambdaError()
+            override fun navigateToDeveloperSettings() = lambdaError()
         }
         val initialTarget = MessagesEntryPoint.InitialTarget.Messages(focusedEventId = AN_EVENT_ID)
         val params = MessagesEntryPoint.Params(initialTarget)

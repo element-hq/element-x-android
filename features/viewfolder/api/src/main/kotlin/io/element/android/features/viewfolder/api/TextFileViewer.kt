@@ -12,7 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import kotlinx.collections.immutable.ImmutableList
 
+/**
+ * Renders the contents of a text file, used by the log viewer in the developer options.
+ */
 fun interface TextFileViewer {
+    /**
+     * Draws the file, one row per line.
+     *
+     * @param lines the already-read contents of the file.
+     * @param modifier layout modifier for the container.
+     */
     @Composable
     fun Render(
         lines: ImmutableList<String>,

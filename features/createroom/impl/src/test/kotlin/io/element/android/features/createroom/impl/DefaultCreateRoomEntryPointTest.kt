@@ -14,6 +14,7 @@ import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import org.junit.Rule
@@ -36,14 +37,16 @@ class DefaultCreateRoomEntryPointTest {
                 plugins = plugins,
             )
         }
+        val buildContext = BuildContext.root(null)
+
         val callback = object : CreateRoomEntryPoint.Callback {
             override fun onRoomCreated(roomId: RoomId) = lambdaError()
         }
-        val result = entryPoint.createNode(
-            parentNode = parentNode,
-            buildContext = BuildContext.root(null),
-            callback = callback,
-        )
+        val result = entryPoint
+            .builder(parentNode, buildContext, callback)
+            .setIsSpace(true)
+            .setParentSpace(A_ROOM_ID)
+            .build()
         assertThat(result.plugins).contains(callback)
     }
 }

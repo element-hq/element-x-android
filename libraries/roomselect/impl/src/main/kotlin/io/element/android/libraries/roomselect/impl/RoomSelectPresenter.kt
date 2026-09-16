@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.roomselect.impl
 
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -16,6 +17,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
@@ -27,27 +29,32 @@ import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
 
 @AssistedInject
 class RoomSelectPresenter(
     @Assisted private val mode: RoomSelectMode,
-    private val dataSource: RoomSelectSearchDataSource,
+    @Assisted private val maxNumberOfRooms: Int,
+    private val dataSourceFactory: RoomSelectSearchDataSource.Factory,
 ) : Presenter<RoomSelectState> {
     @AssistedFactory
     fun interface Factory {
-        fun create(mode: RoomSelectMode): RoomSelectPresenter
+        fun create(
+            mode: RoomSelectMode,
+            maxNumberOfRooms: Int,
+        ): RoomSelectPresenter
     }
 
     @Composable
     override fun present(): RoomSelectState {
         var selectedRooms by remember { mutableStateOf(persistentListOf<SelectRoomInfo>()) }
-        var searchQuery by remember { mutableStateOf("") }
+        val queryState = rememberTextFieldState()
         var isSearchActive by remember { mutableStateOf(false) }
 
-        LaunchedEffect(Unit) {
-            dataSource.load()
-        }
+        val coroutineScope = rememberCoroutineScope()
+        val dataSource = remember { dataSourceFactory.create(coroutineScope) }
 
+        val searchQuery = queryState.text.toString()
         LaunchedEffect(searchQuery) {
             dataSource.setSearchQuery(searchQuery)
         }
@@ -58,34 +65,34 @@ class RoomSelectPresenter(
             derivedStateOf {
                 when {
                     roomSummaryDetailsList.isNotEmpty() -> SearchBarResultState.Results(roomSummaryDetailsList.toImmutableList())
-                    isSearchActive -> SearchBarResultState.NoResultsFound()
-                    else -> SearchBarResultState.Initial()
+                    isSearchActive -> SearchBarResultState.NoResultsFound
+                    else -> SearchBarResultState.Initial
                 }
             }
         }
 
-        fun handleEvent(event: RoomSelectEvents) {
+        fun handleEvent(event: RoomSelectEvent) {
             when (event) {
-                is RoomSelectEvents.SetSelectedRoom -> {
-                    selectedRooms = persistentListOf(event.room)
-                    // Restore for multi-selection
-//                    val index = selectedRooms.indexOfFirst { it.roomId == event.room.roomId }
-//                    selectedRooms = if (index >= 0) {
-//                        selectedRooms.removeAt(index)
-//                    } else {
-//                        selectedRooms.add(event.room)
-//                    }
+                is RoomSelectEvent.ToggleSelectedRoom -> {
+                    val index = selectedRooms.indexOfFirst { it.roomId == event.room.roomId }
+                    selectedRooms = if (index >= 0) {
+                        selectedRooms.removingAt(index)
+                    } else {
+                        selectedRooms.adding(event.room)
+                    }
                 }
-                RoomSelectEvents.RemoveSelectedRoom -> selectedRooms = persistentListOf()
-                is RoomSelectEvents.UpdateQuery -> searchQuery = event.query
-                RoomSelectEvents.ToggleSearchActive -> isSearchActive = !isSearchActive
+                RoomSelectEvent.ToggleSearchActive -> isSearchActive = !isSearchActive
+                is RoomSelectEvent.UpdateVisibleRange -> coroutineScope.launch {
+                    dataSource.updateVisibleRange(event.range)
+                }
             }
         }
 
         return RoomSelectState(
             mode = mode,
+            maxNumberOfRooms = maxNumberOfRooms,
             resultState = searchResults,
-            query = searchQuery,
+            searchQuery = queryState,
             isSearchActive = isSearchActive,
             selectedRooms = selectedRooms,
             eventSink = ::handleEvent,

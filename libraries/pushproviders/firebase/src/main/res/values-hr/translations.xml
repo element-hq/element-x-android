@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="troubleshoot_notifications_test_firebase_availability_description">"Provjerite je li Firebase dostupan."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_failure">"Firebase nije dostupan."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_success">"Firebase je dostupan."</string>
+  <string name="troubleshoot_notifications_test_firebase_availability_title">"Provjeri Firebase"</string>
+  <string name="troubleshoot_notifications_test_firebase_token_description">"Provjerite je li Firebaseov token dostupan."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_failure">"Firebaseov token nije poznat."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_success">"Firebaseov token: %1$s."</string>
+  <string name="troubleshoot_notifications_test_firebase_token_title">"Provjeri Firebaseov token"</string>
+</resources>

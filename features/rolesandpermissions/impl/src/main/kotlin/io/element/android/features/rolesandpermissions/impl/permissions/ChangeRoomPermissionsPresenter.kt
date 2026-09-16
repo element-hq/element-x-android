@@ -10,6 +10,7 @@ package io.element.android.features.rolesandpermissions.impl.permissions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,9 +21,11 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.rolesandpermissions.impl.analytics.trackPermissionChangeAnalytics
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
+import io.element.android.libraries.matrix.ui.model.powerLevelOf
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableMap
@@ -36,8 +39,7 @@ class ChangeRoomPermissionsPresenter(
 ) : Presenter<ChangeRoomPermissionsState> {
     companion object {
         private fun itemsForSection(section: RoomPermissionsSection) = when (section) {
-            RoomPermissionsSection.SpaceDetails,
-            RoomPermissionsSection.RoomDetails -> persistentListOf(
+            RoomPermissionsSection.EditDetails -> persistentListOf(
                 RoomPermissionType.ROOM_NAME,
                 RoomPermissionType.ROOM_AVATAR,
                 RoomPermissionType.ROOM_TOPIC,
@@ -45,20 +47,24 @@ class ChangeRoomPermissionsPresenter(
             RoomPermissionsSection.MessagesAndContent -> persistentListOf(
                 RoomPermissionType.SEND_EVENTS,
                 RoomPermissionType.REDACT_EVENTS,
+                RoomPermissionType.SHARE_LIVE_LOCATION,
             )
-            RoomPermissionsSection.MembershipModeration -> persistentListOf(
+            RoomPermissionsSection.ManageMembers -> persistentListOf(
                 RoomPermissionType.INVITE,
                 RoomPermissionType.KICK,
                 RoomPermissionType.BAN,
+            )
+            RoomPermissionsSection.ManageSpace -> persistentListOf(
+                RoomPermissionType.SPACE_MANAGE_ROOMS,
             )
         }
 
         private fun RoomPermissionsSection.shouldShow(isSpace: Boolean): Boolean {
             return when (this) {
-                RoomPermissionsSection.RoomDetails -> !isSpace
-                RoomPermissionsSection.MembershipModeration -> true
+                RoomPermissionsSection.EditDetails -> true
+                RoomPermissionsSection.ManageMembers -> true
                 RoomPermissionsSection.MessagesAndContent -> !isSpace
-                RoomPermissionsSection.SpaceDetails -> isSpace
+                RoomPermissionsSection.ManageSpace -> isSpace
             }
         }
 
@@ -73,8 +79,7 @@ class ChangeRoomPermissionsPresenter(
 
     private var initialPermissions by mutableStateOf<RoomPowerLevelsValues?>(null)
     private var currentPermissions by mutableStateOf<RoomPowerLevelsValues?>(null)
-    private var saveAction by mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
-    private var confirmExitAction by mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+    private var saveAction by mutableStateOf<AsyncAction<Boolean>>(AsyncAction.Uninitialized)
 
     @Composable
     override fun present(): ChangeRoomPermissionsState {
@@ -88,6 +93,10 @@ class ChangeRoomPermissionsPresenter(
             derivedStateOf { initialPermissions != currentPermissions }
         }
 
+        val ownPowerLevel by remember {
+            room.roomInfoFlow.mapState { it.powerLevelOf(room.sessionId) }
+        }.collectAsState()
+
         fun handleEvent(event: ChangeRoomPermissionsEvent) {
             when (event) {
                 is ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction -> {
@@ -100,33 +109,34 @@ class ChangeRoomPermissionsPresenter(
                         RoomPermissionType.BAN -> currentPermissions?.copy(ban = powerLevel)
                         RoomPermissionType.INVITE -> currentPermissions?.copy(invite = powerLevel)
                         RoomPermissionType.KICK -> currentPermissions?.copy(kick = powerLevel)
-                        RoomPermissionType.SEND_EVENTS -> currentPermissions?.copy(sendEvents = powerLevel)
+                        RoomPermissionType.SEND_EVENTS -> currentPermissions?.copy(eventsDefault = powerLevel)
                         RoomPermissionType.REDACT_EVENTS -> currentPermissions?.copy(redactEvents = powerLevel)
                         RoomPermissionType.ROOM_NAME -> currentPermissions?.copy(roomName = powerLevel)
                         RoomPermissionType.ROOM_AVATAR -> currentPermissions?.copy(roomAvatar = powerLevel)
                         RoomPermissionType.ROOM_TOPIC -> currentPermissions?.copy(roomTopic = powerLevel)
+                        RoomPermissionType.SPACE_MANAGE_ROOMS -> currentPermissions?.copy(spaceChild = powerLevel)
+                        RoomPermissionType.SHARE_LIVE_LOCATION -> currentPermissions?.copy(beaconInfo = powerLevel, beacon = powerLevel)
                     }
                 }
                 is ChangeRoomPermissionsEvent.Save -> coroutineScope.save()
                 is ChangeRoomPermissionsEvent.Exit -> {
-                    confirmExitAction = if (!hasChanges || confirmExitAction.isConfirming()) {
-                        AsyncAction.Success(Unit)
+                    saveAction = if (!hasChanges || saveAction == AsyncAction.ConfirmingCancellation) {
+                        AsyncAction.Success(false)
                     } else {
-                        AsyncAction.ConfirmingNoParams
+                        AsyncAction.ConfirmingCancellation
                     }
                 }
                 is ChangeRoomPermissionsEvent.ResetPendingActions -> {
                     saveAction = AsyncAction.Uninitialized
-                    confirmExitAction = AsyncAction.Uninitialized
                 }
             }
         }
         return ChangeRoomPermissionsState(
+            ownPowerLevel = ownPowerLevel,
             currentPermissions = currentPermissions,
             itemsBySection = itemsBySection,
             hasChanges = hasChanges,
             saveAction = saveAction,
-            confirmExitAction = confirmExitAction,
             eventSink = ::handleEvent,
         )
     }
@@ -147,7 +157,7 @@ class ChangeRoomPermissionsPresenter(
             .onSuccess {
                 analyticsService.trackPermissionChangeAnalytics(initialPermissions, updatedRoomPowerLevels)
                 initialPermissions = currentPermissions
-                saveAction = AsyncAction.Success(Unit)
+                saveAction = AsyncAction.Success(true)
             }
             .onFailure {
                 saveAction = AsyncAction.Failure(it)

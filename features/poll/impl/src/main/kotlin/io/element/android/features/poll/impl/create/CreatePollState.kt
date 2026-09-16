@@ -18,9 +18,11 @@ data class CreatePollState(
     val question: String,
     val answers: ImmutableList<Answer>,
     val pollKind: PollKind,
+    val maxSelections: Int,
+    val maxAllowedSelections: Int,
     val showBackConfirmation: Boolean,
     val showDeleteConfirmation: Boolean,
-    val eventSink: (CreatePollEvents) -> Unit,
+    val eventSink: (CreatePollEvent) -> Unit,
 ) {
     enum class Mode {
         New,

@@ -9,10 +9,12 @@
 package io.element.android.features.messages.impl.pinned.list
 
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 
 interface PinnedMessagesListNavigator {
     fun viewInTimeline(eventId: EventId)
     fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
     fun forwardEvent(eventId: EventId)
+    fun navigateToThread(threadRootId: ThreadId)
 }

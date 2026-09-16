@@ -11,7 +11,9 @@ package io.element.android.features.invite.impl.declineandblock
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.invite.api.declineandblock.DeclineInviteAndBlockEntryPoint
 import io.element.android.features.invite.test.anInviteData
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import org.junit.Rule
 import org.junit.Test
@@ -31,12 +33,17 @@ class DefaultDeclineAndBlockEntryPointTest {
             )
         }
         val inviteData = anInviteData()
+        val callback = object : DeclineInviteAndBlockEntryPoint.Callback {
+            override fun onDeclineSuccess() = lambdaError()
+        }
         val result = entryPoint.createNode(
             parentNode = parentNode,
             buildContext = BuildContext.root(null),
-            inviteData = inviteData
+            inviteData = inviteData,
+            callback = callback,
         )
         assertThat(result).isInstanceOf(DeclineAndBlockNode::class.java)
         assertThat(result.plugins).contains(DeclineAndBlockNode.Inputs(inviteData))
+        assertThat(result.plugins).contains(callback)
     }
 }

@@ -12,6 +12,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_UNIQUE_ID
@@ -20,8 +21,10 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -34,7 +37,10 @@ class TimelineControllerTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
-        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
+        val sut = createTimelineController(
+            room = joinedRoom,
+            liveTimeline = liveTimeline,
+        )
 
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->
@@ -73,7 +79,10 @@ class TimelineControllerTest {
                 }
             }
         )
-        val sut = TimelineController(joinedRoom, liveTimeline)
+        val sut = createTimelineController(
+            room = joinedRoom,
+            liveTimeline = liveTimeline,
+        )
 
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->
@@ -101,7 +110,10 @@ class TimelineControllerTest {
         val joinedRoom = FakeJoinedRoom(
             liveTimeline = liveTimeline
         )
-        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
+        val sut = createTimelineController(
+            room = joinedRoom,
+            liveTimeline = liveTimeline,
+        )
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
@@ -120,7 +132,10 @@ class TimelineControllerTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
-        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
+        val sut = createTimelineController(
+            room = joinedRoom,
+            liveTimeline = liveTimeline,
+        )
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)
@@ -148,16 +163,19 @@ class TimelineControllerTest {
         val joinedRoom = FakeJoinedRoom(
             liveTimeline = liveTimeline
         )
-        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
+        val sut = createTimelineController(
+            room = joinedRoom,
+            liveTimeline = liveTimeline,
+        )
         assertThat(sut.timelineItems().first()).hasSize(1)
     }
 
     @Test
     fun `test invokeOnCurrentTimeline use the detached timeline and not the live timeline`() = runTest {
-        val lambdaForDetached = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention> ->
+        val lambdaForDetached = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention>, _: MsgType, _: Boolean ->
             Result.success(Unit)
         }
-        val lambdaForLive = lambdaRecorder(ensureNeverCalled = true) { _: String, _: String?, _: List<IntentionalMention> ->
+        val lambdaForLive = lambdaRecorder(ensureNeverCalled = true) { _: String, _: String?, _: List<IntentionalMention>, _: MsgType, _: Boolean ->
             Result.success(Unit)
         }
         val liveTimeline = FakeTimeline(name = "live").apply {
@@ -170,7 +188,10 @@ class TimelineControllerTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
-        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
+        val sut = createTimelineController(
+            room = joinedRoom,
+            liveTimeline = liveTimeline,
+        )
         sut.activeTimelineFlow().test {
             sut.focusOnEvent(AN_EVENT_ID, null)
             awaitItem().also { state ->
@@ -195,7 +216,10 @@ class TimelineControllerTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) }
         )
-        val sut = TimelineController(room = joinedRoom, liveTimeline = liveTimeline)
+        val sut = createTimelineController(
+            room = joinedRoom,
+            liveTimeline = liveTimeline,
+        )
 
         sut.activeTimelineFlow().test {
             awaitItem().also { state ->
@@ -219,12 +243,14 @@ class TimelineControllerTest {
     }
 }
 
-internal fun createTimelineController(
+internal fun TestScope.createTimelineController(
     room: FakeJoinedRoom = FakeJoinedRoom(liveTimeline = FakeTimeline()),
     liveTimeline: Timeline = FakeTimeline(name = "live"),
 ): TimelineController {
     return TimelineController(
         room = room,
-        liveTimeline = liveTimeline
+        liveTimeline = liveTimeline,
+        roomCoroutineScope = backgroundScope,
+        dispatchers = testCoroutineDispatchers(),
     )
 }

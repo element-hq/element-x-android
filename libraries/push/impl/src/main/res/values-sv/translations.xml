@@ -54,6 +54,7 @@
   <string name="push_distributor_background_sync_android">"Bakgrundssynkronisering"</string>
   <string name="push_distributor_firebase_android">"Google-tjänster"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Inga giltiga Google Play-tjänster hittades. Aviseringar kanske inte fungerar korrekt."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Blockerade användare"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Hämta namnet på den nuvarande leverantören."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Inga push-leverantörer valda."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Nuvarande push-leverantör: %1$s."</string>

@@ -8,7 +8,17 @@
 
 package io.element.android.libraries.dateformatter.api
 
+/**
+ * Formats timestamps for display, in the user's locale and time zone.
+ */
 interface DateFormatter {
+    /**
+     * Formats a timestamp according to [mode].
+     *
+     * @param timestamp milliseconds since the epoch; a `null` value yields an empty string, so callers need no null check of their own.
+     * @param mode how much of the date and time to include; see [DateFormatterMode] for examples of each.
+     * @param useRelative true to prefer wording relative to today, such as "Today" or "This month", where the mode allows it.
+     */
     fun format(
         timestamp: Long?,
         mode: DateFormatterMode = DateFormatterMode.Full,

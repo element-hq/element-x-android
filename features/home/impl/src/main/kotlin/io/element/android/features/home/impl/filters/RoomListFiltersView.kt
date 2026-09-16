@@ -60,11 +60,11 @@ fun RoomListFiltersView(
     modifier: Modifier = Modifier
 ) {
     fun onClearFiltersClick() {
-        state.eventSink(RoomListFiltersEvents.ClearSelectedFilters)
+        state.eventSink(RoomListFiltersEvent.ClearSelectedFilters)
     }
 
     fun onToggleFilter(filter: RoomListFilter) {
-        state.eventSink(RoomListFiltersEvents.ToggleFilter(filter))
+        state.eventSink(RoomListFiltersEvent.ToggleFilter(filter))
     }
 
     var scrollToStart by remember { mutableIntStateOf(0) }
@@ -212,7 +212,7 @@ private fun RoomListFilterView(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomListFiltersViewPreview(@PreviewParameter(RoomListFiltersStateProvider::class) state: RoomListFiltersState) = ElementPreview {
+internal fun RoomListFiltersViewPreview(@PreviewParameter(RoomListFiltersStatePreviewParam::class) state: RoomListFiltersState) = ElementPreview {
     RoomListFiltersView(
         modifier = Modifier.padding(vertical = 4.dp),
         state = state,

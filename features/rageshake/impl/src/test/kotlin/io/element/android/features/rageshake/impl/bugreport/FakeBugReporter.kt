@@ -28,6 +28,7 @@ class FakeBugReporter(val mode: Mode = Mode.Success) : BugReporter {
         problemDescription: String,
         canContact: Boolean,
         sendPushRules: Boolean,
+        ghIssueNumber: Int?,
         listener: BugReporterListener,
     ) {
         delay(100)

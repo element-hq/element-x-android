@@ -31,6 +31,7 @@ class QrCodeErrorNode(
 ) : Node(buildContext = buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun onRetry()
+        fun onCancel()
     }
 
     private val callback: Callback = callback()
@@ -43,6 +44,7 @@ class QrCodeErrorNode(
             errorScreenType = qrCodeErrorScreenType,
             appName = buildMeta.productionApplicationName,
             onRetry = callback::onRetry,
+            onCancel = callback::onCancel,
         )
     }
 }

@@ -26,6 +26,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.services.analytics.api.AnalyticsService
 
@@ -67,8 +68,8 @@ class RoomMemberDetailsNode(
             callback.navigateToRoom(roomId)
         }
 
-        fun onStartCall(roomId: RoomId) {
-            callback.startCall(roomId)
+        fun onStartCall(roomId: RoomId, callIntent: CallIntent) {
+            callback.startCall(roomId, callIntent)
         }
 
         val state = presenter.present()

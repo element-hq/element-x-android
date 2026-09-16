@@ -21,15 +21,18 @@ setupDependencyInjection()
 dependencies {
     api(projects.libraries.voiceplayer.api)
 
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.audio.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.mediaplayer.api)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.uiUtils)
     implementation(projects.services.analytics.api)
 
     implementation(libs.androidx.annotationjvm)
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.coroutines.core)
 
     testCommonDependencies(libs)
