@@ -47,16 +47,17 @@ private val documentNode = DocumentNode(
 )
 
 @Composable
-private fun TimestampView() {
+private fun FakeTimestampView() {
     Text(text = "12:34", modifier = Modifier.background(Color.LightGray).padding(start = 12.dp))
 }
 
+@Suppress("UnusedPrivateMember")
 @Preview(showBackground = true)
 @Composable
-internal fun ContentAvoidingLayoutPreview() {
+private fun ContentAvoidingLayoutHtmlMessageContentPreview() {
     Box(modifier = Modifier.padding(WindowInsets.safeContent.asPaddingValues())) {
         ContentAvoidingLayout(
-            overlay = { TimestampView() },
+            overlay = { FakeTimestampView() },
             content = {
                 HtmlMessageContent(
                     modifier = Modifier.background(Color.Red),
