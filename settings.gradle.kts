@@ -23,9 +23,23 @@ dependencyResolutionManagement {
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
                 // Required transitively by androidx.media3:media3-exoplayer-midi for MIDI playback.
                 includeModule("com.github.philburk", "jsyn")
+                // This is a fork of Konsist that skips hidden folders and files, which otherwise can cause performance issues.
+                includeModule("com.github.jmartinesp", "konsist")
             }
         }
-        google()
+        // Check for official Android-related packages only in Google's maven repo
+        exclusiveContent {
+            forRepository {
+                google()
+            }
+            filter {
+                includeGroupByRegex("android\\..*")
+                includeGroupByRegex("androidx\\..*")
+                includeGroupByRegex("com\\.android\\.tools.*")
+                includeGroupByRegex("com\\.google\\.firebase.*")
+                includeGroupByRegex("com\\.google\\.android.*")
+            }
+        }
         mavenCentral()
         maven {
             url = uri("https://repo1.maven.org/maven2/")

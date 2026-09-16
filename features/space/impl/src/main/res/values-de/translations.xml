@@ -6,18 +6,18 @@
     <item quantity="one">"%1$d Chat und Space verlassen"</item>
     <item quantity="other">"%1$d Chats und Space verlassen"</item>
   </plurals>
-  <string name="screen_leave_space_subtitle">"Dadurch wirst du auch aus allen Chats in diesem Space entfernt."</string>
-  <string name="screen_leave_space_subtitle_last_admin">"Du musst einen anderen Admin für diesen Space zuweisen, bevor du ihn verlassen kannst."</string>
+  <string name="screen_leave_space_subtitle">"Wähle die Chats aus, die du verlassen möchtest und in denen du nicht die einzige Administration bist:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Du musst eine andere Administration für diesen Space zuweisen, bevor du ihn verlassen kannst."</string>
   <string name="screen_leave_space_subtitle_last_owner">"Du bist der einzige Eigentümer von %1$s. Du musst die Eigentumsrechte an jemand anderen übertragen, bevor du den Space verlässt."</string>
-  <string name="screen_leave_space_subtitle_only_last_admin">"Du wirst aus den folgenden Chats nicht entfernt, weil du der einzige Admin bist:"</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Du wirst aus den folgenden Chats nicht entfernt, weil du die einzige Administration bist:"</string>
   <string name="screen_leave_space_title">"%1$s verlassen?"</string>
   <string name="screen_leave_space_title_last_admin">"Du bist der einzige Administrator für %1$s"</string>
   <string name="screen_leave_space_title_last_owner">"Eigentumsrechte übertragen"</string>
   <string name="screen_space_add_room_action">"Chat"</string>
-  <string name="screen_space_add_rooms_room_access_description">"Das Hinzufügen eines Chats hat keinen Einfluss auf die Beitrittsregeln. Um die Regeln zu ändern, gehe zu \"Raum Info\" und dann zu \"Datenschutz und Sicherheit\""</string>
+  <string name="screen_space_add_rooms_room_access_description">"Das Hinzufügen eines Chats hat keinen Einfluss auf den Zugang. Um den Zugang zu ändern, gehe zu „Informationen“ &gt; „Sicherheit &amp; Datenschutz“."</string>
   <string name="screen_space_empty_state_title">"Füge deinen ersten Chat hinzu"</string>
   <string name="screen_space_menu_action_members">"Mitglieder anzeigen"</string>
-  <string name="screen_space_remove_rooms_confirmation_content">"Das Entfernen eines Chats hat keinen Einfluss auf die Beitrittsregeln. Um die Regeln zu ändern, gehe zu \"Raum Info\" und dann zu \"Datenschutz und Sicherheit\""</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Das Entfernen eines Chats hat keinen Einfluss auf den Zugang. Um den Zugang zu ändern, gehe zu „Informationen“ &gt; „Sicherheit &amp; Datenschutz“."</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">
     <item quantity="one">"%1$d chat aus %2$s entfernen"</item>
     <item quantity="other">"%1$d chats aus %2$s entfernen"</item>

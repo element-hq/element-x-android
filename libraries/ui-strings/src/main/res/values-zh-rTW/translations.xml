@@ -18,6 +18,14 @@
   <string name="a11y_edit_room_address_hint">"完整地址為 %1$s"</string>
   <string name="a11y_encryption_details">"加密詳細資訊"</string>
   <string name="a11y_expand_message_text_field">"展開訊息文字欄位"</string>
+  <string name="a11y_gallery_attachment">"圖庫，附件 %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"圖庫，掃描失敗 %1$d"</string>
+  <string name="a11y_gallery_image">"圖庫，影像 %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="other">"圖庫，還有 %1$d 項媒體內容"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"圖庫，正在掃描 %1$d"</string>
+  <string name="a11y_gallery_video">"圖庫，影片 %1$d"</string>
   <string name="a11y_hide_password">"隱藏密碼"</string>
   <string name="a11y_info">"資訊"</string>
   <string name="a11y_join_call">"加入通話"</string>

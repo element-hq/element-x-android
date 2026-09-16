@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -102,7 +102,7 @@ private fun InvitePeopleContentView(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         fun toggleUser(user: MatrixUser) {
-            state.eventSink(DefaultInvitePeopleEvents.ToggleUser(user))
+            state.eventSink(DefaultInvitePeopleEvent.ToggleUser(user))
         }
 
         InvitePeopleSearchBar(
@@ -114,7 +114,7 @@ private fun InvitePeopleContentView(
             active = state.isSearchActive,
             onActiveChange = {
                 state.eventSink(
-                    DefaultInvitePeopleEvents.OnSearchActiveChanged(
+                    DefaultInvitePeopleEvent.OnSearchActiveChanged(
                         it
                     )
                 )
@@ -144,7 +144,7 @@ private fun InvitePeopleContentView(
                         CheckableUserRow(
                             checked = invitableUser.isSelected,
                             onCheckedChange = {
-                                state.eventSink(DefaultInvitePeopleEvents.ToggleUser(invitableUser.matrixUser))
+                                state.eventSink(DefaultInvitePeopleEvent.ToggleUser(invitableUser.matrixUser))
                             },
                             data = CheckableUserRowData.Resolved(
                                 avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.UserListItem),
@@ -163,9 +163,9 @@ private fun InvitePeopleContentView(
         if (state.sendInvitesAction is ConfirmingUnknownUserInvitation) {
             InvitePeopleConfirmModal(
                 users = state.sendInvitesAction.users,
-                onDismiss = { state.eventSink.invoke(DefaultInvitePeopleEvents.DismissUnknownUsersModal) },
-                onInvite = { state.eventSink.invoke(InvitePeopleEvents.SendInvites) },
-                onRemove = { state.eventSink.invoke(DefaultInvitePeopleEvents.RemoveUnknownUsers) }
+                onDismiss = { state.eventSink.invoke(DefaultInvitePeopleEvent.DismissUnknownUsersModal) },
+                onInvite = { state.eventSink.invoke(InvitePeopleEvent.SendInvites) },
+                onRemove = { state.eventSink.invoke(DefaultInvitePeopleEvent.RemoveUnknownUsers) }
             )
         }
     }
@@ -316,7 +316,7 @@ private fun InvitePeopleConfirmModal(
 
 @PreviewsDayNight
 @Composable
-internal fun InvitePeopleViewPreview(@PreviewParameter(DefaultInvitePeopleStateProvider::class) state: DefaultInvitePeopleState) =
+internal fun InvitePeopleViewPreview(@PreviewParameter(DefaultInvitePeopleStatePreviewParam::class) state: DefaultInvitePeopleState) =
     ElementPreview {
         InvitePeopleView(state = state)
     }

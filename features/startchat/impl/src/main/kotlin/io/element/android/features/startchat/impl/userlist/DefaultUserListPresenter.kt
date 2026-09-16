@@ -85,11 +85,11 @@ class DefaultUserListPresenter(
             }.launchIn(this)
         }
 
-        fun handleEvent(event: UserListEvents) {
+        fun handleEvent(event: UserListEvent) {
             when (event) {
-                is UserListEvents.OnSearchActiveChanged -> isSearchActive = event.active
-                is UserListEvents.AddToSelection -> userListDataStore.selectUser(event.matrixUser)
-                is UserListEvents.RemoveFromSelection -> userListDataStore.removeUserFromSelection(event.matrixUser)
+                is UserListEvent.OnSearchActiveChanged -> isSearchActive = event.active
+                is UserListEvent.AddToSelection -> userListDataStore.selectUser(event.matrixUser)
+                is UserListEvent.RemoveFromSelection -> userListDataStore.removeUserFromSelection(event.matrixUser)
             }
         }
 

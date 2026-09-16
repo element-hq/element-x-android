@@ -14,6 +14,7 @@ data class TimelineItemAttachmentsContent(
     val body: String,
     val caption: String?,
     val formattedCaption: CharSequence?,
+    val htmlCaption: String? = null,
     override val isEdited: Boolean,
     val attachments: ImmutableList<AttachmentItem>,
 ) : TimelineItemEventContent, TimelineItemEventMutableContent {

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Tambahkan avatar"</string>
   <string name="a11y_add_reaction">"Tambahkan reaksi: %1$s"</string>
   <string name="a11y_address">"Alamat"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_clear_search_field">"Hapus kolom pencarian"</string>
   <string name="a11y_collapse_message_text_field">"Minimalkan bidang teks message"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"Mengurangi jumlah suara yang diperbolehkan per orang."</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"Meningkatkan jumlah suara yang diperbolehkan per orang"</string>
+  <string name="a11y_custom_emoji">"Emoji kustom"</string>
   <string name="a11y_delete">"Hapus"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"%1$d digit dimasukkan"</item>
@@ -13,11 +18,19 @@
   <string name="a11y_edit_room_address_hint">"Alamat lengkapnya adalah%1$s"</string>
   <string name="a11y_encryption_details">"Detail enkripsi"</string>
   <string name="a11y_expand_message_text_field">"Perluas kolom teks pesan"</string>
+  <string name="a11y_gallery_attachment">"Galeri, lampiran %1$d"</string>
+  <string name="a11y_gallery_image">"Galeri, gambar %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="other">"Galeri, %1$d media lainnya"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galeri, memindai %1$d"</string>
+  <string name="a11y_gallery_video">"Galeri, video %1$d"</string>
   <string name="a11y_hide_password">"Sembunyikan kata sandi"</string>
   <string name="a11y_info">"Informasi"</string>
   <string name="a11y_join_call">"Bergabung dalam panggilan"</string>
   <string name="a11y_jump_to_bottom">"Lompat ke bawah"</string>
   <string name="a11y_jump_to_unread">"Lompat ke pesan yang belum dibaca"</string>
+  <string name="a11y_jump_to_unread_messages">"Pergi ke pesan pertama yang belum dibaca."</string>
   <string name="a11y_move_the_map_to_my_location">"Geser peta ke lokasi saya"</string>
   <string name="a11y_notifications_mentions_only">"Hanya sebutan"</string>
   <string name="a11y_notifications_muted">"Dibisukan"</string>
@@ -28,6 +41,7 @@
   <string name="a11y_page_n">"Halaman %1$d"</string>
   <string name="a11y_pause">"Jeda"</string>
   <string name="a11y_paused_voice_message">"Pesan suara, durasi: %1$s, posisi saat ini: %2$s"</string>
+  <string name="a11y_photo_preview">"Preview Foto"</string>
   <string name="a11y_pin_field">"Kolom PIN"</string>
   <string name="a11y_pinned_location">"Lokasi yang ditandai"</string>
   <string name="a11y_play">"Putar"</string>
@@ -43,6 +57,7 @@
     <item quantity="other">"Pesan sebelumnya telah dibaca oleh %1$s dan %2$d orang lainnya"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Pesan sebelumnya dibaca oleh %1$s"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"sampilkan semua tanda dibaca"</string>
   <string name="a11y_remove_reaction">"Hapus reaksi dengan %1$s"</string>
   <string name="a11y_remove_reaction_with">"Hapus reaksi dengan %1$s"</string>
   <string name="a11y_room_avatar">"Avatar ruangan"</string>
@@ -55,11 +70,13 @@
   <string name="a11y_start_call">"Mulai panggilan"</string>
   <string name="a11y_start_video_call">"Mulai panggilan video"</string>
   <string name="a11y_start_voice_call">"Mulai panggilan suara"</string>
+  <string name="a11y_status">"Status"</string>
   <string name="a11y_thread_in_room">"Diskusi di %1$s"</string>
   <string name="a11y_threads_in_room">"Utas di %1$s"</string>
   <string name="a11y_tombstoned_room">"Ruangan yang ditandai"</string>
   <string name="a11y_user_avatar">"Avatar pengguna"</string>
   <string name="a11y_user_menu">"Menu pengguna"</string>
+  <string name="a11y_video_preview">"Preview video"</string>
   <string name="a11y_view_avatar">"Lihat avatar"</string>
   <string name="a11y_view_details">"Lihat detail"</string>
   <string name="a11y_voice_message">"Pesan suara, durasi: %1$s"</string>
@@ -96,6 +113,7 @@
   <string name="action_decline_and_block">"Tolak dan blokir"</string>
   <string name="action_delete">"Hapus"</string>
   <string name="action_delete_account">"Hapus akun"</string>
+  <string name="action_delete_file">"Hapus file"</string>
   <string name="action_delete_poll">"Hapus jajak pendapat"</string>
   <string name="action_deselect_all">"Batalkan semua pilihan"</string>
   <string name="action_disable">"Nonaktifkan"</string>
@@ -133,6 +151,7 @@
   <string name="action_manage_account_and_devices">"Kelola akun &amp;amp; perangkat"</string>
   <string name="action_manage_devices">"Kelola perangkat"</string>
   <string name="action_manage_rooms">"Kelola ruangan"</string>
+  <string name="action_mark_as_read">"Tandai sudah dibaca"</string>
   <string name="action_message">"Kirim pesan"</string>
   <string name="action_minimize">"Perkecil"</string>
   <string name="action_next">"Berikutnya"</string>
@@ -187,9 +206,11 @@
   <string name="action_translate">"Terjemahkan"</string>
   <string name="action_try_again">"Coba lagi"</string>
   <string name="action_unpin">"Lepaskan sematan"</string>
+  <string name="action_video_call">"Panggilan video"</string>
   <string name="action_view">"Lihat"</string>
   <string name="action_view_in_timeline">"Lihat di lini masa"</string>
   <string name="action_view_source">"Tampilkan sumber"</string>
+  <string name="action_voice_call">"Panggilan suara"</string>
   <string name="action_yes">"Ya"</string>
   <string name="action_yes_try_again">"Ya, coba lagi"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Server Anda kini mendukung protokol baru yang lebih cepat. Keluar dan masuk lagi untuk memperbarui sekarang. Melakukan hal ini sekarang akan membantu Anda menghindari keluar paksa saat protokol lama dihapus nantinya."</string>
@@ -210,6 +231,7 @@
   <string name="common_blocked_users">"Pengguna yang diblokir"</string>
   <string name="common_bubbles">"Gelembung"</string>
   <string name="common_call_declined">"Panggilan ditolak"</string>
+  <string name="common_call_in_progress">"Panggilan sedang berlangsung"</string>
   <string name="common_call_started">"Panggilan dimulai"</string>
   <string name="common_call_you_declined">"Anda menolak panggilan"</string>
   <string name="common_chat_backup">"Pencadangan percakapan"</string>
@@ -253,7 +275,15 @@ Alasan: %1$s."</string>
   <string name="common_file_saved_on_disk_android">"Berkas disimpan ke Unduhan"</string>
   <string name="common_forward_message">"Teruskan pesan"</string>
   <string name="common_frequently_used">"Sering digunakan"</string>
+  <string name="common_gallery">"Galeri"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="other">"%1$d lampiran…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="other">"%1$d item media…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Panggilan grup sedang berlangsung"</string>
   <string name="common_image">"Gambar"</string>
   <string name="common_in_reply_to">"Membalas kepada %1$s"</string>
   <string name="common_install_apk_android">"Pasang APK"</string>
@@ -287,6 +317,7 @@ Alasan: %1$s."</string>
   <string name="common_no_space_name">"Tidak ada nama ruang"</string>
   <string name="common_not_encrypted">"Tidak terenkripsi"</string>
   <string name="common_offline">"Luring"</string>
+  <string name="common_on_a_call">"Sedang menelepon"</string>
   <string name="common_open_source_licenses">"Lisensi sumber terbuka"</string>
   <string name="common_or">"atau"</string>
   <string name="common_other_options">"Pilihan lain"</string>
@@ -299,6 +330,7 @@ Alasan: %1$s."</string>
   <string name="common_please_wait">"Mohon tunggu…"</string>
   <string name="common_poll_end_confirmation">"Apakah Anda yakin ingin mengakhiri jajak pendapat ini?"</string>
   <string name="common_poll_summary">"Jajak pendapat: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Polling"</string>
   <string name="common_poll_total_votes">"Total suara: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Hasil akan terlihat setelah jajak pendapat berakhir."</string>
   <plurals name="common_poll_votes_count">
@@ -388,6 +420,7 @@ Alasan: %1$s."</string>
   <string name="common_unmute">"Bunyikan"</string>
   <string name="common_unsupported_call">"Panggilan tidak didukung"</string>
   <string name="common_unsupported_event">"Peristiwa tidak didukung"</string>
+  <string name="common_user_started_a_call">"%1$s memulai panggilan"</string>
   <string name="common_username">"Nama pengguna"</string>
   <string name="common_verification_cancelled">"Verifikasi dibatalkan"</string>
   <string name="common_verification_complete">"Verifikasi selesai"</string>
@@ -409,6 +442,11 @@ Alasan: %1$s."</string>
   <string name="common_waiting_live_location">"Menunggu lokasi real-time…"</string>
   <string name="common_world_readable_history">"Siapa pun dapat melihat riwayat"</string>
   <string name="common_you">"Anda"</string>
+  <string name="content_scanner_not_found">"Unduhan tidak tersedia."</string>
+  <string name="content_scanner_not_found_title">"File tidak ditemukan"</string>
+  <string name="content_scanner_scanning">"Memindai…"</string>
+  <string name="content_scanner_unsafe_message">"Fitur pratinjau dan unduh telah dinonaktifkan."</string>
+  <string name="content_scanner_unsafe_title">"File ini tidak aman"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) membagikan pesan ini karena Anda tidak berada di ruangan saat pesan ini dikirim."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s membagikan pesan ini karena Anda tidak berada di ruangan saat pesan ini dikirim."</string>
   <string name="crypto_history_visible">"Ruangan ini telah dikonfigurasi agar anggota baru dapat membaca riwayat. %1$s"</string>
@@ -469,12 +507,14 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="screen_create_poll_options_section_title">"Opsi"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Hapus %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Pengaturan"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Jumlah suara yang diperbolehkan per orang"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Tidak ada yang membagikan lokasinya"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Berbagi lokasi secara langsung"</string>
   <plurals name="screen_live_location_sheet_subtitle">
     <item quantity="other">"%1$d orang"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"Di peta"</string>
+  <string name="screen_local_network_opt_in_title">"Izinkan akses ke jaringan lokal"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Tekan pesan dan pilih “%1$s” untuk disertakan di sini."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Sematkan pesan penting agar mudah ditemukan"</string>
@@ -519,6 +559,9 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="screen_space_list_title">"Space"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Dibagikan %1$s"</string>
   <string name="screen_static_location_sheet_title">"Di peta"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="other">"%1$d bergabung"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Pesan tidak terkirim karena identitas terverifikasi %1$s telah diatur ulang."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Pesan tidak terkirim karena %1$s belum memverifikasi semua perangkat."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Pesan tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda."</string>
@@ -530,4 +573,6 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Anda tidak memiliki akses ke pesan ini"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Tidak dapat mendekripsi pesan"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Pesan ini diblokir karena Anda tidak memverifikasi perangkat Anda atau karena pengirim perlu memverifikasi identitas Anda."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Perangkat Anda terlalu lama, diperlukan perangkat dengan Android 8 atau yang lebih baru."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Rendering peta tidak didukung."</string>
 </resources>

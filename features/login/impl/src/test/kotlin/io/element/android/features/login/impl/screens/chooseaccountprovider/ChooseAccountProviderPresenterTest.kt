@@ -11,14 +11,13 @@ package io.element.android.features.login.impl.screens.chooseaccountprovider
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.login.LoginModePresenter
 import io.element.android.features.login.impl.screens.onboarding.createLoginModePresenter
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_3
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.accountprovider.anAccountProviderManaged
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
@@ -33,18 +32,8 @@ class ChooseAccountProviderPresenterTest {
     companion object {
         private const val ACCOUNT_PROVIDER_FROM_CONFIG_1 = AN_ACCOUNT_PROVIDER_2
         private const val ACCOUNT_PROVIDER_FROM_CONFIG_2 = AN_ACCOUNT_PROVIDER_3
-        val accountProvider1 = AccountProvider(
-            url = ACCOUNT_PROVIDER_FROM_CONFIG_1.ensureProtocol(),
-            subtitle = null,
-            isPublic = false,
-            isMatrixOrg = false,
-        )
-        val accountProvider2 = AccountProvider(
-            url = ACCOUNT_PROVIDER_FROM_CONFIG_2.ensureProtocol(),
-            subtitle = null,
-            isPublic = false,
-            isMatrixOrg = false,
-        )
+        val accountProvider1 = anAccountProviderManaged(serverName = ACCOUNT_PROVIDER_FROM_CONFIG_1)
+        val accountProvider2 = anAccountProviderManaged(serverName = ACCOUNT_PROVIDER_FROM_CONFIG_2)
     }
 
     @Test
@@ -61,7 +50,7 @@ class ChooseAccountProviderPresenterTest {
     fun `present - initial state`() = runTest {
         val presenter = createPresenter(
             enterpriseService = FakeEnterpriseService(
-                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG_1, ACCOUNT_PROVIDER_FROM_CONFIG_2) },
+                accountProviderAllowListResult = { listOf(accountProvider1, accountProvider2) },
             ),
         )
         presenter.test {
@@ -79,7 +68,7 @@ class ChooseAccountProviderPresenterTest {
         val authenticationService = FakeMatrixAuthenticationService()
         val presenter = createPresenter(
             enterpriseService = FakeEnterpriseService(
-                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG_1, ACCOUNT_PROVIDER_FROM_CONFIG_2) },
+                accountProviderAllowListResult = { listOf(accountProvider1, accountProvider2) },
             ),
             loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
@@ -88,7 +77,7 @@ class ChooseAccountProviderPresenterTest {
         presenter.test {
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isNull()
-                it.eventSink(ChooseAccountProviderEvents.Continue)
+                it.eventSink(ChooseAccountProviderEvent.Continue)
                 expectNoEvents()
             }
         }
@@ -103,7 +92,7 @@ class ChooseAccountProviderPresenterTest {
         )
         val presenter = createPresenter(
             enterpriseService = FakeEnterpriseService(
-                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG_1, ACCOUNT_PROVIDER_FROM_CONFIG_2) },
+                accountProviderAllowListResult = { listOf(accountProvider1, accountProvider2) },
             ),
             loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
@@ -112,11 +101,11 @@ class ChooseAccountProviderPresenterTest {
         presenter.test {
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isNull()
-                it.eventSink(ChooseAccountProviderEvents.SelectAccountProvider(accountProvider1))
+                it.eventSink(ChooseAccountProviderEvent.SelectAccountProvider(accountProvider1))
             }
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isEqualTo(accountProvider1)
-                it.eventSink(ChooseAccountProviderEvents.Continue)
+                it.eventSink(ChooseAccountProviderEvent.Continue)
                 skipItems(1) // Loading
 
                 // Check an error was returned
@@ -124,7 +113,7 @@ class ChooseAccountProviderPresenterTest {
                 assertThat(submittedState.loginModeState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
 
                 // Assert the error is then cleared
-                submittedState.eventSink(ChooseAccountProviderEvents.ClearError)
+                submittedState.eventSink(ChooseAccountProviderEvent.ClearError)
                 val clearedState = awaitItem()
                 assertThat(clearedState.loginModeState.loginMode).isEqualTo(AsyncData.Uninitialized)
             }
@@ -136,7 +125,7 @@ class ChooseAccountProviderPresenterTest {
         val authenticationService = FakeMatrixAuthenticationService()
         val presenter = createPresenter(
             enterpriseService = FakeEnterpriseService(
-                defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG_1, ACCOUNT_PROVIDER_FROM_CONFIG_2) },
+                accountProviderAllowListResult = { listOf(accountProvider1, accountProvider2) },
             ),
             loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
@@ -145,15 +134,15 @@ class ChooseAccountProviderPresenterTest {
         presenter.test {
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isNull()
-                it.eventSink(ChooseAccountProviderEvents.SelectAccountProvider(accountProvider1))
+                it.eventSink(ChooseAccountProviderEvent.SelectAccountProvider(accountProvider1))
             }
             awaitItem().also {
                 assertThat(it.selectedAccountProvider).isEqualTo(accountProvider1)
-                it.eventSink(ChooseAccountProviderEvents.Continue)
+                it.eventSink(ChooseAccountProviderEvent.Continue)
             }
             awaitItem().also {
                 assertThat(it.loginModeState.loginMode.isLoading()).isTrue()
-                it.eventSink(ChooseAccountProviderEvents.SelectAccountProvider(accountProvider2))
+                it.eventSink(ChooseAccountProviderEvent.SelectAccountProvider(accountProvider2))
             }
             expectNoEvents()
         }

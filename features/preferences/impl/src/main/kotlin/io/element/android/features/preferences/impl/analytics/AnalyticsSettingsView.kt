@@ -37,7 +37,7 @@ fun AnalyticsSettingsView(
 
 @PreviewsDayNight
 @Composable
-internal fun AnalyticsSettingsViewPreview(@PreviewParameter(AnalyticsSettingsStateProvider::class) state: AnalyticsSettingsState) = ElementPreview {
+internal fun AnalyticsSettingsViewPreview(@PreviewParameter(AnalyticsSettingsStatePreviewParam::class) state: AnalyticsSettingsState) = ElementPreview {
     AnalyticsSettingsView(
         state = state,
         onBackClick = {},

@@ -132,7 +132,7 @@ data class AttachmentThumbnailInfo(
 
 @PreviewsDayNight
 @Composable
-internal fun AttachmentThumbnailPreview(@PreviewParameter(AttachmentThumbnailInfoProvider::class) data: AttachmentThumbnailInfo) = ElementPreview {
+internal fun AttachmentThumbnailPreview(@PreviewParameter(AttachmentThumbnailInfoPreviewParam::class) data: AttachmentThumbnailInfo) = ElementPreview {
     AttachmentThumbnail(
         info = data,
         modifier = Modifier

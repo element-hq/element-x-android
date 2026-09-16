@@ -81,6 +81,7 @@
       "name" : ":features:verifysession:impl",
       "includeRegex" : [
         "screen_session_verification_.*",
+        "screen\\.session_verification\\..*",
         "screen_signout_in_progress_dialog_content",
         "screen_identity_.*"
       ]
@@ -173,6 +174,7 @@
       "includeRegex" : [
         "screen_onboarding_.*",
         "screen\\.onboarding\\..*",
+        "screen\\.change_server\\..*",
         "screen\\.missing_key_backup\\..*",
         "screen_login_.*",
         "screen_server_confirmation_.*",
@@ -271,6 +273,7 @@
         "screen_room_retry.*",
         "screen_room_timeline.*",
         "screen\\.room\\.timeline.*",
+        "error\\.sending_failure\\..*",
         "screen\\.room_timeline.*",
         "screen_room_typing.*",
         "screen\\.image_edition\\..*",

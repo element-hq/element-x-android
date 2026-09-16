@@ -137,7 +137,7 @@ private fun RoomAddressField(
 @PreviewsDayNight
 @Composable
 internal fun JoinRoomByAddressViewPreview(
-    @PreviewParameter(JoinRoomByAddressStateProvider::class) state: JoinRoomByAddressState
+    @PreviewParameter(JoinRoomByAddressStatePreviewParam::class) state: JoinRoomByAddressState
 ) = ElementPreview {
     JoinRoomByAddressView(state = state)
 }

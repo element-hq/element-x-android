@@ -39,6 +39,7 @@
   </plurals>
   <string name="notification_invite_body">"Zaprosił Cię do czatu"</string>
   <string name="notification_invite_body_with_sender">"%1$s zaprosił Cię do czatu"</string>
+  <string name="notification_knock_request_body">"Poprosił o dołączenie"</string>
   <string name="notification_live_location_started_body">"Rozpoczął udostępnianie swojej lokalizacji"</string>
   <string name="notification_mentioned_you_body">"Wspomniano o Tobie: %1$s"</string>
   <string name="notification_new_messages">"Nowe wiadomości"</string>
@@ -56,7 +57,7 @@
   <string name="notification_sender_mention_reply">"%1$s wspomniał lub odpowiedział"</string>
   <string name="notification_space_invite_body">"Zaprosił Cię do dołączenia do przestrzeni"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s zaprosił Cię do dołączenia do przestrzeni"</string>
-  <string name="notification_test_push_notification_content">"Wyświetlasz powiadomienie! Kliknij mnie!"</string>
+  <string name="notification_test_push_notification_content">"Oto powiadomienie! Dotknij mnie!"</string>
   <string name="notification_thread_in_room">"Wątek w %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -106,12 +107,13 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Nie można wyświetlić powiadomienia."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Powiadomienie zostało kliknięte!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Wyświetl powiadomienie"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Kliknij powiadomienie, aby kontynuować test."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Dotknij powiadomienia, aby kontynuować test."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Upewnij się, że aplikacja otrzymuje powiadomienie push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Błąd: pusher odrzucił żądanie."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Błąd: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Błąd, nie można przetestować push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Błąd, upłynął limit czasu powiadomienia push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Błąd: bramka push posiada ograniczenie ilości powiadomień, co sprawi że mogą nie działać prawidłowo. Prosimy o ustawienie innej bramki push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Pętla powrotna push zajęła %1$d ms."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Przetestuj pętlę Push back"</string>
 </resources>

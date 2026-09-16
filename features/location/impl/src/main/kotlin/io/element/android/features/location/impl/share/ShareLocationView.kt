@@ -107,6 +107,7 @@ fun ShareLocationView(
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(
             initialValue = SheetValue.Expanded,
+            enabledValues = setOf(SheetValue.PartiallyExpanded, SheetValue.Expanded),
         )
     )
     val cameraState = rememberCameraState(firstPosition = MapDefaults.defaultCameraPosition)
@@ -332,7 +333,7 @@ private fun LiveLocationDurationDialog(
 @PreviewsDayNight
 @Composable
 internal fun ShareLocationViewPreview(
-    @PreviewParameter(ShareLocationStateProvider::class) state: ShareLocationState
+    @PreviewParameter(ShareLocationStatePreviewParam::class) state: ShareLocationState
 ) = ElementPreview {
     ShareLocationView(
         state = state,

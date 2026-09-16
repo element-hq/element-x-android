@@ -19,7 +19,7 @@ interface RoomMemberModerationState {
     val permissions: RoomMemberModerationPermissions
 
     /** Where the host screen sends its events to open the actions of a member or run one of them. */
-    val eventSink: (RoomMemberModerationEvents) -> Unit
+    val eventSink: (RoomMemberModerationEvent) -> Unit
 }
 
 data class ModerationActionState(

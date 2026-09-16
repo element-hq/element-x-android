@@ -15,7 +15,7 @@ import com.google.testing.junit.testparameterinjector.KotlinTestParameters.named
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.invite.api.toInviteData
@@ -106,7 +106,7 @@ class SpacePresenterTest {
         presenter.test {
             val state = awaitItem()
             // LoadMore event should not cause any state change
-            state.eventSink(SpaceEvents.LoadMore)
+            state.eventSink(SpaceEvent.LoadMore)
             expectNoEvents()
         }
     }
@@ -181,7 +181,7 @@ class SpacePresenterTest {
             skipItems(1)
             val state = awaitItem()
             assertThat(state.joinActions[A_ROOM_ID_2]).isNull()
-            state.eventSink(SpaceEvents.Join(aNotJoinedRoom))
+            state.eventSink(SpaceEvent.Join(aNotJoinedRoom))
             val joiningState = awaitItem()
             assertThat(joiningState.joinActions[A_ROOM_ID_2]).isEqualTo(AsyncAction.Loading)
             // Let the joinRoom call complete
@@ -234,14 +234,14 @@ class SpacePresenterTest {
             skipItems(1)
             val state = awaitItem()
             assertThat(state.joinActions[A_ROOM_ID_2]).isNull()
-            state.eventSink(SpaceEvents.Join(aNotJoinedRoom))
+            state.eventSink(SpaceEvent.Join(aNotJoinedRoom))
             val joiningState = awaitItem()
             assertThat(joiningState.joinActions[A_ROOM_ID_2]).isEqualTo(AsyncAction.Loading)
             val errorState = awaitItem()
             // Joined room is removed from the join actions
             assertThat(errorState.joinActions[A_ROOM_ID_2]!!.isFailure()).isTrue()
             // Clear error
-            errorState.eventSink(SpaceEvents.ClearFailures)
+            errorState.eventSink(SpaceEvent.ClearFailures)
             val clearedState = awaitItem()
             assertThat(clearedState.joinActions[A_ROOM_ID_2]).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -258,9 +258,9 @@ class SpacePresenterTest {
             val state = awaitItem()
             assertThat(state.topicViewerState).isEqualTo(TopicViewerState.Hidden)
             advanceUntilIdle()
-            state.eventSink(SpaceEvents.ShowTopicViewer("topic"))
+            state.eventSink(SpaceEvent.ShowTopicViewer("topic"))
             assertThat(awaitItem().topicViewerState).isEqualTo(TopicViewerState.Shown("topic"))
-            state.eventSink(SpaceEvents.HideTopicViewer)
+            state.eventSink(SpaceEvent.HideTopicViewer)
             assertThat(awaitItem().topicViewerState).isEqualTo(TopicViewerState.Hidden)
         }
     }
@@ -272,7 +272,7 @@ class SpacePresenterTest {
             "decline" to false,
         ),
     ) = runTest {
-        val eventRecorder = EventsRecorder<AcceptDeclineInviteEvents>()
+        val eventRecorder = EventsRecorder<AcceptDeclineInviteEvent>()
         val anInvitedRoom = aSpaceRoom(
             roomId = A_ROOM_ID_2,
             state = CurrentUserMembership.INVITED,
@@ -300,16 +300,16 @@ class SpacePresenterTest {
             val state = awaitItem()
             assertThat(state.joinActions[A_ROOM_ID_2]).isNull()
             if (acceptInvite) {
-                state.eventSink(SpaceEvents.AcceptInvite(anInvitedRoom))
+                state.eventSink(SpaceEvent.AcceptInvite(anInvitedRoom))
                 eventRecorder.assertSingle(
-                    AcceptDeclineInviteEvents.AcceptInvite(
+                    AcceptDeclineInviteEvent.AcceptInvite(
                         invite = anInvitedRoom.toInviteData(),
                     )
                 )
             } else {
-                state.eventSink(SpaceEvents.DeclineInvite(anInvitedRoom))
+                state.eventSink(SpaceEvent.DeclineInvite(anInvitedRoom))
                 eventRecorder.assertSingle(
-                    AcceptDeclineInviteEvents.DeclineInvite(
+                    AcceptDeclineInviteEvent.DeclineInvite(
                         invite = anInvitedRoom.toInviteData(),
                         shouldConfirm = true,
                         blockUser = false,
@@ -325,7 +325,7 @@ class SpacePresenterTest {
         presenter.test {
             val state = awaitItem()
             assertThat(state.isManageMode).isFalse()
-            state.eventSink(SpaceEvents.EnterManageMode)
+            state.eventSink(SpaceEvent.EnterManageMode)
             val manageModeState = awaitItem()
             assertThat(manageModeState.isManageMode).isTrue()
             assertThat(manageModeState.selectedRoomIds).isEmpty()
@@ -342,9 +342,9 @@ class SpacePresenterTest {
         val presenter = createSpacePresenter(spaceRoomList = fakeSpaceRoomList)
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(SpaceEvents.EnterManageMode)
-            initialState.eventSink(SpaceEvents.ToggleRoomSelection(A_ROOM_ID))
-            initialState.eventSink(SpaceEvents.ExitManageMode)
+            initialState.eventSink(SpaceEvent.EnterManageMode)
+            initialState.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            initialState.eventSink(SpaceEvent.ExitManageMode)
             advanceUntilIdle()
             val finalState = expectMostRecentItem()
             assertThat(finalState.isManageMode).isFalse()
@@ -359,13 +359,13 @@ class SpacePresenterTest {
         val presenter = createSpacePresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(SpaceEvents.EnterManageMode)
+            initialState.eventSink(SpaceEvent.EnterManageMode)
             // Select a room
-            initialState.eventSink(SpaceEvents.ToggleRoomSelection(A_ROOM_ID))
+            initialState.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
             var latestState = expectMostRecentItem()
             assertThat(latestState.selectedRoomIds).containsExactly(A_ROOM_ID)
             // Deselect the room
-            latestState.eventSink(SpaceEvents.ToggleRoomSelection(A_ROOM_ID))
+            latestState.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
             latestState = expectMostRecentItem()
             assertThat(latestState.selectedRoomIds).isEmpty()
         }
@@ -397,10 +397,10 @@ class SpacePresenterTest {
             advanceUntilIdle()
             val stateWithChildren = awaitItem()
             assertThat(stateWithChildren.children).hasSize(1)
-            stateWithChildren.eventSink(SpaceEvents.EnterManageMode)
-            stateWithChildren.eventSink(SpaceEvents.ToggleRoomSelection(A_ROOM_ID))
-            stateWithChildren.eventSink(SpaceEvents.RemoveSelectedRooms)
-            stateWithChildren.eventSink(SpaceEvents.ConfirmRoomRemoval)
+            stateWithChildren.eventSink(SpaceEvent.EnterManageMode)
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            stateWithChildren.eventSink(SpaceEvent.RemoveSelectedRooms)
+            stateWithChildren.eventSink(SpaceEvent.ConfirmRoomRemoval)
             advanceUntilIdle()
             val successState = expectMostRecentItem()
             assertThat(successState.removeRoomsAction).isEqualTo(AsyncAction.Success(Unit))
@@ -442,11 +442,11 @@ class SpacePresenterTest {
             advanceUntilIdle()
             val stateWithChildren = awaitItem()
             assertThat(stateWithChildren.children).hasSize(2)
-            stateWithChildren.eventSink(SpaceEvents.EnterManageMode)
-            stateWithChildren.eventSink(SpaceEvents.ToggleRoomSelection(A_ROOM_ID))
-            stateWithChildren.eventSink(SpaceEvents.ToggleRoomSelection(A_ROOM_ID_2))
-            stateWithChildren.eventSink(SpaceEvents.RemoveSelectedRooms)
-            stateWithChildren.eventSink(SpaceEvents.ConfirmRoomRemoval)
+            stateWithChildren.eventSink(SpaceEvent.EnterManageMode)
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID_2))
+            stateWithChildren.eventSink(SpaceEvent.RemoveSelectedRooms)
+            stateWithChildren.eventSink(SpaceEvent.ConfirmRoomRemoval)
             advanceUntilIdle()
             val failureState = expectMostRecentItem()
             assertThat(failureState.removeRoomsAction.isFailure()).isTrue()
@@ -492,16 +492,16 @@ class SpacePresenterTest {
             awaitItem() // Initial empty state
             advanceUntilIdle()
             val stateWithChildren = awaitItem()
-            stateWithChildren.eventSink(SpaceEvents.EnterManageMode)
-            stateWithChildren.eventSink(SpaceEvents.ToggleRoomSelection(A_ROOM_ID))
-            stateWithChildren.eventSink(SpaceEvents.ToggleRoomSelection(A_ROOM_ID_2))
-            stateWithChildren.eventSink(SpaceEvents.RemoveSelectedRooms)
-            stateWithChildren.eventSink(SpaceEvents.ConfirmRoomRemoval)
+            stateWithChildren.eventSink(SpaceEvent.EnterManageMode)
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID_2))
+            stateWithChildren.eventSink(SpaceEvent.RemoveSelectedRooms)
+            stateWithChildren.eventSink(SpaceEvent.ConfirmRoomRemoval)
             advanceUntilIdle()
             val failureState = expectMostRecentItem()
             assertThat(failureState.removeRoomsAction.isFailure()).isTrue()
             // Exit manage mode after partial failure - reset should be called
-            failureState.eventSink(SpaceEvents.ExitManageMode)
+            failureState.eventSink(SpaceEvent.ExitManageMode)
             advanceUntilIdle()
             expectMostRecentItem()
             assert(resetResult).isCalledOnce()
@@ -530,7 +530,7 @@ class SpacePresenterTest {
             // Both room and space visible initially
             assertThat(stateWithChildren.children).hasSize(2)
             assertThat(stateWithChildren.isManageMode).isFalse()
-            stateWithChildren.eventSink(SpaceEvents.EnterManageMode)
+            stateWithChildren.eventSink(SpaceEvent.EnterManageMode)
             val manageModeState = expectMostRecentItem()
             // Only rooms visible in manage mode
             assertThat(manageModeState.children).hasSize(1)
@@ -648,12 +648,12 @@ class SpacePresenterTest {
             awaitItem() // Initial empty state
             advanceUntilIdle()
             val stateWithChildren = awaitItem()
-            stateWithChildren.eventSink(SpaceEvents.EnterManageMode)
+            stateWithChildren.eventSink(SpaceEvent.EnterManageMode)
             // Select both rooms for removal
-            stateWithChildren.eventSink(SpaceEvents.ToggleRoomSelection(A_ROOM_ID))
-            stateWithChildren.eventSink(SpaceEvents.ToggleRoomSelection(A_ROOM_ID_2))
-            stateWithChildren.eventSink(SpaceEvents.RemoveSelectedRooms)
-            stateWithChildren.eventSink(SpaceEvents.ConfirmRoomRemoval)
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
+            stateWithChildren.eventSink(SpaceEvent.ToggleRoomSelection(A_ROOM_ID_2))
+            stateWithChildren.eventSink(SpaceEvent.RemoveSelectedRooms)
+            stateWithChildren.eventSink(SpaceEvent.ConfirmRoomRemoval)
             advanceUntilIdle()
             val failureState = expectMostRecentItem()
             assertThat(failureState.removeRoomsAction.isFailure()).isTrue()

@@ -168,7 +168,7 @@ private fun MediaRow(
 @PreviewsDayNight
 @Composable
 internal fun MediaDeleteConfirmationBottomSheetPreview(
-    @PreviewParameter(provider = MediaBottomSheetStateDeleteConfirmationProvider::class) state: MediaBottomSheetState.DeleteConfirmation,
+    @PreviewParameter(provider = MediaBottomSheetStateDeleteConfirmationPreviewParam::class) state: MediaBottomSheetState.DeleteConfirmation,
 ) = ElementPreview(fillMaxSize = true) {
     MediaDeleteConfirmationBottomSheet(
         state = state,

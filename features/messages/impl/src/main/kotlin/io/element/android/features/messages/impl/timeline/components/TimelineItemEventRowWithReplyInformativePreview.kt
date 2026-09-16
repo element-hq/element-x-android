@@ -13,12 +13,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
-import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsInformativeProvider
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsInformativePreviewParam
 
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemEventRowWithReplyInformativePreview(
-    @PreviewParameter(InReplyToDetailsInformativeProvider::class) inReplyToDetails: InReplyToDetails,
+    @PreviewParameter(InReplyToDetailsInformativePreviewParam::class) inReplyToDetails: InReplyToDetails,
 ) = ElementPreview {
     TimelineItemEventRowWithReplyContentToPreview(inReplyToDetails)
 }

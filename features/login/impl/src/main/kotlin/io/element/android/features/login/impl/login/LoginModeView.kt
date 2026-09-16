@@ -129,7 +129,7 @@ fun LoginModeView(
 
 @PreviewsDayNight
 @Composable
-internal fun LoginModeViewPreview(@PreviewParameter(LoginModeViewErrorProvider::class) error: Throwable) {
+internal fun LoginModeViewPreview(@PreviewParameter(LoginModeViewErrorPreviewParam::class) error: Throwable) {
     ElementPreview {
         LoginModeView(
             loginMode = AsyncData.Failure(error),

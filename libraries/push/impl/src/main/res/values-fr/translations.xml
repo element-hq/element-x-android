@@ -34,6 +34,7 @@
   </plurals>
   <string name="notification_invite_body">"Vous a invité(e) à discuter"</string>
   <string name="notification_invite_body_with_sender">"%1$s vous a invité à discuter"</string>
+  <string name="notification_knock_request_body">"A demandé à rejoindre"</string>
   <string name="notification_live_location_started_body">"A commencé à partager sa position en direct"</string>
   <string name="notification_mentioned_you_body">"Mentionné(e) : %1$s"</string>
   <string name="notification_new_messages">"Nouveaux messages"</string>
@@ -102,6 +103,7 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Erreur :%1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Erreur, impossible de tester les Push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Erreur, le délai d’attente du Push est dépassé."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Erreur : la passerelle de notification push limite le nombre de push: les notifications ne seront donc pas fiables. Veuillez configurer une autre passerelle de notification push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"La demande d’envoi de Push et sa réception ont pris %1$d ms."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Tester la réception des Push"</string>
 </resources>

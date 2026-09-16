@@ -10,6 +10,8 @@ package io.element.android.features.messages.impl.pinned.list
 
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.PinUnpinAction
+import io.element.android.features.messages.impl.aCustomReactionState
+import io.element.android.features.messages.impl.aReactionSummaryState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
@@ -400,6 +402,8 @@ class PinnedMessagesListPresenterTest {
             snackbarDispatcher = SnackbarDispatcher(),
             actionListPresenter = { anActionListState() },
             linkPresenter = { aLinkState() },
+            customReactionPresenter = { aCustomReactionState() },
+            reactionSummaryPresenter = { aReactionSummaryState() },
             analyticsService = analyticsService,
             featureFlagService = featureFlagService,
             sessionCoroutineScope = this,

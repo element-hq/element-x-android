@@ -146,7 +146,7 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 @Suppress("LargeClass")
 class RustMatrixClient(
     override val sessionPaths: SessionPaths,
-    private val innerClient: Client,
+    val innerClient: Client,
     private val sessionStore: SessionStore,
     private val sessionDelegate: RustClientSessionDelegate,
     private val innerSyncService: ClientSyncService,

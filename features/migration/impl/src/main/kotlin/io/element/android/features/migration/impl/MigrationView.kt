@@ -49,7 +49,7 @@ fun MigrationView(
 @PreviewsDayNight
 @Composable
 internal fun MigrationViewPreview(
-    @PreviewParameter(MigrationStateProvider::class) state: MigrationState,
+    @PreviewParameter(MigrationStatePreviewParam::class) state: MigrationState,
 ) = ElementPreview {
     MigrationView(
         migrationState = state,

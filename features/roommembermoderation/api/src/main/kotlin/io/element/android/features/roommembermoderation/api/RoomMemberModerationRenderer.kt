@@ -21,14 +21,14 @@ interface RoomMemberModerationRenderer {
      *
      * @param state the state produced by the moderation presenter.
      * @param onSelectAction called when the user picks an action, so the host screen can navigate if that action needs its own screen.
-     * @param onAvatarClick called when the user taps the member's avatar, or `null` to make it non-interactive.
+     * @param onAvatarClick called when the user taps the member's avatar, only if the user has an avatar.
      * @param modifier layout modifier for the container.
      */
     @Composable
     fun Render(
         state: RoomMemberModerationState,
         onSelectAction: (ModerationAction, MatrixUser) -> Unit,
-        onAvatarClick: ((MatrixUser) -> Unit)?,
+        onAvatarClick: (MatrixUser) -> Unit,
         modifier: Modifier,
     )
 }

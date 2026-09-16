@@ -105,6 +105,14 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"إعدادات النظام"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"إشعارات النظام مُطفأة"</string>
   <string name="screen_notification_settings_title">"الإشعارات"</string>
+  <string name="screen_settings_user_status_away">"بعيد"</string>
+  <string name="screen_settings_user_status_be_right_back">"سأعود حالاً"</string>
+  <string name="screen_settings_user_status_custom">"مخصص…"</string>
+  <string name="screen_settings_user_status_custom_hint">"حالة مخصصة…"</string>
+  <string name="screen_settings_user_status_focus_time">"وقت التركيز"</string>
+  <string name="screen_settings_user_status_in_a_meeting">"في اجتماع"</string>
+  <string name="screen_settings_user_status_on_the_road">"في الطريق"</string>
+  <string name="screen_settings_user_status_placeholder">"ما هي حالتك؟"</string>
   <string name="theme_black">"أسود"</string>
   <string name="theme_dark">"داكن"</string>
   <string name="theme_light">"فاتح"</string>

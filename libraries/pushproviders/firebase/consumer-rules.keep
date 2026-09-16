@@ -1,0 +1,4 @@
+# firebase-messaging references AnalyticsConnector, but we exclude firebase-analytics and
+# firebase-measurement-connector from its dependencies (see build.gradle.kts), so R8 reports it as a
+# missing class.
+-dontwarn com.google.firebase.analytics.connector.AnalyticsConnector

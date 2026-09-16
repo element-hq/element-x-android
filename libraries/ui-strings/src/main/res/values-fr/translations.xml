@@ -491,7 +491,7 @@ Raison : %1$s."</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Sélectionnez la qualité des vidéos que vous souhaitez envoyer."</string>
   <string name="dialog_video_quality_selector_title">"Sélectionnez la qualité d’envoi des vidéos"</string>
   <string name="error_account_already_logged_in">"Vous êtes déjà connecté sur cet appareil en tant que %1$s."</string>
-  <string name="error_account_creation_not_possible">"Votre serveur d’accueil doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
+  <string name="error_account_creation_not_possible">"Votre fournisseur de compte doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
   <string name="error_failed_loading_messages">"Échec du chargement des messages"</string>
@@ -516,14 +516,6 @@ Raison : %1$s."</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
   <string name="screen_bug_report_a11y_screenshot">"Capture d’écran"</string>
-  <string name="screen_change_server_navigation_title_login">"Se connecter"</string>
-  <string name="screen_change_server_navigation_title_register">"Créer un compte"</string>
-  <string name="screen_change_server_textfield_footer_login">"Si votre fournisseur de compte est fourni par votre entreprise ou une communauté, veuillez le saisir ici (exemple : monentreprise.com)."</string>
-  <string name="screen_change_server_textfield_footer_register">"Créez un compte sur matrix.org gratuitement. Si vous souhaitez créer un compte auprès d’un autre fournisseur, veuillez modifier l’adresse ici (exemple : monassociation.org)."</string>
-  <string name="screen_change_server_textfield_header">"Fournisseur de compte"</string>
-  <string name="screen_change_server_textfield_placeholder">"exemple.com"</string>
-  <string name="screen_change_server_title_login">"Saisissez votre fournisseur de compte"</string>
-  <string name="screen_change_server_title_register">"Choisissez un fournisseur de compte"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Supprimer %1$s"</string>

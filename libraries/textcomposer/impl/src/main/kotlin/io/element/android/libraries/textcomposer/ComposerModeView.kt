@@ -192,7 +192,7 @@ private fun ReplyToModeView(
 @PreviewsDayNight
 @Composable
 internal fun ComposerModeViewPreview(
-    @PreviewParameter(MessageComposerModeSpecialProvider::class) mode: MessageComposerMode.Special
+    @PreviewParameter(MessageComposerModeSpecialPreviewParam::class) mode: MessageComposerMode.Special
 ) = ElementPreview {
     ComposerModeView(
         composerMode = mode,

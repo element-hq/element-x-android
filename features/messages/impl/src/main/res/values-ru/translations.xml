@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"Зашифровано неизвестным или удаленным устройством."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Зашифровано устройством, не проверенным его владельцем."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Зашифровано непроверенным пользователем."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Неверный тип MIME: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Отсутствует медиаконтент"</string>
+  <string name="error_sending_failure_other">"Подробности ошибки: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Отправка с непроверенного устройства"</string>
+  <string name="error_sending_failure_unknown">"Неизвестная ошибка"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Перевернуть изображение по горизонтали"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Перевернуто по горизонтали"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Оригинал"</string>
@@ -33,7 +38,7 @@
   <string name="screen_media_upload_preview_title">"Добавить медиа"</string>
   <string name="screen_report_content_block_user">"Заблокировать пользователя"</string>
   <string name="screen_report_content_block_user_hint">"Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя"</string>
-  <string name="screen_report_content_explanation">"Это сообщение будет передано администратору вашего домашнего сервера. Они не смогут прочитать зашифрованные сообщения."</string>
+  <string name="screen_report_content_explanation">"Это сообщение будет передано администратору Вашего сервера. Они не смогут прочитать зашифрованные сообщения."</string>
   <string name="screen_report_content_hint">"Причина жалобы"</string>
   <string name="screen_room_attachment_source_camera">"Камера"</string>
   <string name="screen_room_attachment_source_camera_photo">"Сделать фото"</string>
@@ -73,6 +78,11 @@
   <string name="screen_room_timeline_reactions_show_more">"Показать больше"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Показать сводку реакций"</string>
   <string name="screen_room_timeline_read_marker_title">"Новое"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d удалённое сообщение"</item>
+    <item quantity="few">"%1$d удалённых сообщения"</item>
+    <item quantity="many">"%1$d удалённых сообщений"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d изменение в комнате"</item>
     <item quantity="few">"%1$d изменения в комнате"</item>

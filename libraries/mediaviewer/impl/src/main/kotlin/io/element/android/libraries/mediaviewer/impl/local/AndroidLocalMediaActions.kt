@@ -32,6 +32,7 @@ import androidx.core.content.PermissionChecker
 import androidx.core.net.toFile
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.androidutils.file.saveWithUniqueFileName
 import io.element.android.libraries.androidutils.system.startInstallFromSourceIntent
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -44,6 +45,7 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 import java.io.InputStream
 
 @ContributesBinding(AppScope::class)
@@ -172,18 +174,18 @@ class AndroidLocalMediaActions(
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun saveOnDiskUsingMediaStore(localMedia: LocalMedia) {
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, localMedia.info.filename)
-            put(MediaStore.MediaColumns.MIME_TYPE, localMedia.info.mimeType)
-            put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-        }
         val resolver = context.contentResolver
-        val outputUri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-        if (outputUri != null) {
-            localMedia.openStream()?.use { input ->
-                resolver.openOutputStream(outputUri).use { output ->
-                    input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
-                }
+        val outputUri = saveWithUniqueFileName(localMedia.info.filename) { displayName ->
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, displayName)
+                put(MediaStore.MediaColumns.MIME_TYPE, localMedia.info.mimeType)
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+            resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+        } ?: throw IOException("Unable to create the destination file")
+        localMedia.openStream()?.use { input ->
+            resolver.openOutputStream(outputUri).use { output ->
+                input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
             }
         }
     }

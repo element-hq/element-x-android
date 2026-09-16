@@ -22,7 +22,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.JoinedRoom.Trigger
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.toInviteData
 import io.element.android.libraries.architecture.AsyncAction
@@ -150,51 +150,51 @@ class SpacePresenter(
             }
         }
 
-        fun handleEvent(event: SpaceEvents) {
+        fun handleEvent(event: SpaceEvent) {
             when (event) {
                 // SpaceRoomList is loaded automatically as backend is really slow. Event is kept for future.
-                SpaceEvents.LoadMore -> Unit
-                is SpaceEvents.Join -> {
+                SpaceEvent.LoadMore -> Unit
+                is SpaceEvent.Join -> {
                     sessionCoroutineScope.joinRoom(event.spaceRoom, joinActions, setJoinActions)
                 }
-                SpaceEvents.ClearFailures -> {
+                SpaceEvent.ClearFailures -> {
                     val failedActions = joinActions
                         .filterValues { it is AsyncAction.Failure }
                         .mapValues { AsyncAction.Uninitialized }
                     setJoinActions(joinActions + failedActions)
                 }
-                is SpaceEvents.AcceptInvite -> {
+                is SpaceEvent.AcceptInvite -> {
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.AcceptInvite(event.spaceRoom.toInviteData())
+                        AcceptDeclineInviteEvent.AcceptInvite(event.spaceRoom.toInviteData())
                     )
                 }
-                is SpaceEvents.DeclineInvite -> {
+                is SpaceEvent.DeclineInvite -> {
                     acceptDeclineInviteState.eventSink(
-                        AcceptDeclineInviteEvents.DeclineInvite(invite = event.spaceRoom.toInviteData(), shouldConfirm = true, blockUser = false)
+                        AcceptDeclineInviteEvent.DeclineInvite(invite = event.spaceRoom.toInviteData(), shouldConfirm = true, blockUser = false)
                     )
                 }
-                SpaceEvents.HideTopicViewer -> topicViewerState = TopicViewerState.Hidden
-                is SpaceEvents.ShowTopicViewer -> topicViewerState = TopicViewerState.Shown(event.topic)
+                SpaceEvent.HideTopicViewer -> topicViewerState = TopicViewerState.Hidden
+                is SpaceEvent.ShowTopicViewer -> topicViewerState = TopicViewerState.Shown(event.topic)
 
                 // Manage mode events
-                SpaceEvents.EnterManageMode -> {
+                SpaceEvent.EnterManageMode -> {
                     isManageMode = true
                     selectedRoomIds = emptySet()
                 }
-                SpaceEvents.ExitManageMode -> {
+                SpaceEvent.ExitManageMode -> {
                     localCoroutineScope.launch { exitManageMode(shouldReset = removedRoomIds.isNotEmpty()) }
                 }
-                is SpaceEvents.ToggleRoomSelection -> {
+                is SpaceEvent.ToggleRoomSelection -> {
                     selectedRoomIds = if (event.roomId in selectedRoomIds) {
                         selectedRoomIds - event.roomId
                     } else {
                         selectedRoomIds + event.roomId
                     }
                 }
-                SpaceEvents.RemoveSelectedRooms -> {
+                SpaceEvent.RemoveSelectedRooms -> {
                     removeRoomsAction = AsyncAction.ConfirmingNoParams
                 }
-                SpaceEvents.ConfirmRoomRemoval -> {
+                SpaceEvent.ConfirmRoomRemoval -> {
                     localCoroutineScope.launch {
                         removeRoomsAction = AsyncAction.Loading
                         val spaceId = spaceRoomList.spaceId
@@ -219,7 +219,7 @@ class SpacePresenter(
                         }
                     }
                 }
-                SpaceEvents.ClearRemoveAction -> {
+                SpaceEvent.ClearRemoveAction -> {
                     removeRoomsAction = AsyncAction.Uninitialized
                 }
             }

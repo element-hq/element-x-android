@@ -51,9 +51,9 @@ class BugReportPresenterTest {
         val presenter = createPresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_SHORT_DESCRIPTION))
+            initialState.eventSink.invoke(BugReportEvent.SetDescription(A_SHORT_DESCRIPTION))
             assertThat(awaitItem().submitEnabled).isTrue()
-            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
+            initialState.eventSink.invoke(BugReportEvent.SetDescription(A_LONG_DESCRIPTION))
             assertThat(awaitItem().submitEnabled).isTrue()
         }
     }
@@ -63,9 +63,9 @@ class BugReportPresenterTest {
         val presenter = createPresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(BugReportEvents.SetCanContact(true))
+            initialState.eventSink.invoke(BugReportEvent.SetCanContact(true))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(canContact = true))
-            initialState.eventSink.invoke(BugReportEvents.SetCanContact(false))
+            initialState.eventSink.invoke(BugReportEvent.SetCanContact(false))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(canContact = false))
         }
     }
@@ -76,9 +76,9 @@ class BugReportPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             // Since this is true by default, start by disabling
-            initialState.eventSink.invoke(BugReportEvents.SetSendLog(false))
+            initialState.eventSink.invoke(BugReportEvent.SetSendLog(false))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendLogs = false))
-            initialState.eventSink.invoke(BugReportEvents.SetSendLog(true))
+            initialState.eventSink.invoke(BugReportEvent.SetSendLog(true))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendLogs = true))
         }
     }
@@ -88,9 +88,9 @@ class BugReportPresenterTest {
         val presenter = createPresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(BugReportEvents.SetSendScreenshot(true))
+            initialState.eventSink.invoke(BugReportEvent.SetSendScreenshot(true))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendScreenshot = true))
-            initialState.eventSink.invoke(BugReportEvents.SetSendScreenshot(false))
+            initialState.eventSink.invoke(BugReportEvent.SetSendScreenshot(false))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendScreenshot = false))
         }
     }
@@ -100,9 +100,9 @@ class BugReportPresenterTest {
         val presenter = createPresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(BugReportEvents.SetSendPushRules(true))
+            initialState.eventSink.invoke(BugReportEvent.SetSendPushRules(true))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendPushRules = true))
-            initialState.eventSink.invoke(BugReportEvents.SetSendPushRules(false))
+            initialState.eventSink.invoke(BugReportEvent.SetSendPushRules(false))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendPushRules = false))
         }
     }
@@ -112,9 +112,9 @@ class BugReportPresenterTest {
         val presenter = createPresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(BugReportEvents.SetGhIssueNumber(1))
+            initialState.eventSink.invoke(BugReportEvent.SetGhIssueNumber(1))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(ghIssueNumber = 1))
-            initialState.eventSink.invoke(BugReportEvents.SetGhIssueNumber(null))
+            initialState.eventSink.invoke(BugReportEvent.SetGhIssueNumber(null))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(ghIssueNumber = null))
         }
     }
@@ -130,7 +130,7 @@ class BugReportPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.hasCrashLogs).isTrue()
             assertThat(initialState.screenshotUri).isEqualTo(A_SCREENSHOT_URI)
-            initialState.eventSink.invoke(BugReportEvents.ResetAll)
+            initialState.eventSink.invoke(BugReportEvent.ResetAll)
             val resetState = awaitItem()
             assertThat(resetState.hasCrashLogs).isFalse()
             // TODO Make it live assertThat(resetState.screenshotUri).isNull()
@@ -146,9 +146,9 @@ class BugReportPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
+            initialState.eventSink.invoke(BugReportEvent.SetDescription(A_LONG_DESCRIPTION))
             skipItems(1)
-            initialState.eventSink.invoke(BugReportEvents.SendBugReport)
+            initialState.eventSink.invoke(BugReportEvent.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
             assertThat(progressState.sending).isEqualTo(AsyncAction.Loading)
@@ -170,9 +170,9 @@ class BugReportPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
+            initialState.eventSink.invoke(BugReportEvent.SetDescription(A_LONG_DESCRIPTION))
             skipItems(1)
-            initialState.eventSink.invoke(BugReportEvents.SendBugReport)
+            initialState.eventSink.invoke(BugReportEvent.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
             assertThat(progressState.sending).isEqualTo(AsyncAction.Loading)
@@ -182,7 +182,7 @@ class BugReportPresenterTest {
             assertThat(awaitItem().sendingProgress).isEqualTo(0f)
             assertThat((awaitItem().sending as AsyncAction.Failure).error.message).isEqualTo(A_FAILURE_REASON)
             // Reset failure
-            initialState.eventSink.invoke(BugReportEvents.ClearError)
+            initialState.eventSink.invoke(BugReportEvent.ClearError)
             val lastItem = awaitItem()
             assertThat(lastItem.sendingProgress).isEqualTo(0f)
             assertThat(lastItem.sending).isInstanceOf(AsyncAction.Uninitialized::class.java)
@@ -194,13 +194,13 @@ class BugReportPresenterTest {
         val presenter = createPresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_SHORT_DESCRIPTION))
+            initialState.eventSink.invoke(BugReportEvent.SetDescription(A_SHORT_DESCRIPTION))
             skipItems(1)
-            initialState.eventSink.invoke(BugReportEvents.SendBugReport)
+            initialState.eventSink.invoke(BugReportEvent.SendBugReport)
             val errorState = awaitItem()
             assertThat(errorState.sending).isEqualTo(AsyncAction.Failure(BugReportFormError.DescriptionTooShort))
             // Reset failure
-            initialState.eventSink.invoke(BugReportEvents.ClearError)
+            initialState.eventSink.invoke(BugReportEvent.ClearError)
             val lastItem = awaitItem()
             assertThat(lastItem.sending).isInstanceOf(AsyncAction.Uninitialized::class.java)
         }
@@ -215,9 +215,9 @@ class BugReportPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
+            initialState.eventSink.invoke(BugReportEvent.SetDescription(A_LONG_DESCRIPTION))
             skipItems(1)
-            initialState.eventSink.invoke(BugReportEvents.SendBugReport)
+            initialState.eventSink.invoke(BugReportEvent.SendBugReport)
             skipItems(1)
             val progressState = awaitItem()
             assertThat(progressState.sending).isEqualTo(AsyncAction.Loading)

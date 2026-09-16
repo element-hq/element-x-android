@@ -28,5 +28,5 @@ interface InvitePeopleState {
     val createRoomFromDmAction: AsyncAction<RoomId>
 
     /** Where the UI sends its events. */
-    val eventSink: (InvitePeopleEvents) -> Unit
+    val eventSink: (InvitePeopleEvent) -> Unit
 }

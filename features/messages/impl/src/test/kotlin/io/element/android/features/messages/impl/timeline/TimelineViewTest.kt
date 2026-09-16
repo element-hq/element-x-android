@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.timeline.protection.aTimelinePr
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -176,6 +177,46 @@ class TimelineViewTest : RobolectricTest() {
 
         clickOn(CommonStrings.action_ok)
         eventsRecorder.assertSingle(TimelineEvent.HideShieldDialog)
+    }
+
+    @Test
+    fun `clicking on the send failure indicator emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
+        val timelineItem = aTimelineItemEvent(
+            content = aTimelineItemTextContent(),
+            sendState = LocalEventSendState.Failed.Unknown("Error"),
+        )
+        setTimelineView(
+            state = aTimelineState(
+                timelineItems = persistentListOf(timelineItem),
+                eventSink = eventsRecorder,
+            ),
+        )
+        eventsRecorder.clear()
+
+        val contentDescription = activity!!.getString(CommonStrings.common_sending_failed)
+        onNodeWithContentDescription(contentDescription).performClick()
+        eventsRecorder.assertSingle(TimelineEvent.ShowSendFailureDialog(timelineItem))
+    }
+
+    @Test
+    fun `clicking on the send failure indicator of a verified user failure emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
+        val timelineItem = aTimelineItemEvent(
+            content = aTimelineItemTextContent(),
+            sendState = LocalEventSendState.Failed.VerifiedUserChangedIdentity(users = listOf(A_USER_ID)),
+        )
+        setTimelineView(
+            state = aTimelineState(
+                timelineItems = persistentListOf(timelineItem),
+                eventSink = eventsRecorder,
+            ),
+        )
+        eventsRecorder.clear()
+
+        val contentDescription = activity!!.getString(CommonStrings.common_sending_failed)
+        onNodeWithContentDescription(contentDescription).performClick()
+        eventsRecorder.assertSingle(TimelineEvent.ShowSendFailureDialog(timelineItem))
     }
 
     @Test

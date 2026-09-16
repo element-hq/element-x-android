@@ -53,8 +53,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -80,7 +78,7 @@ import io.element.android.libraries.designsystem.modifiers.backgroundVerticalGra
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.text.AdaptativeTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -141,15 +139,21 @@ fun HomeTopBar(
                             else -> stringResource(selectedNavigationItem.labelRes)
                         }
                     }
-                    HomeNavigationBarItem.Spaces -> stringResource(selectedNavigationItem.labelRes)
+                    HomeNavigationBarItem.Spaces -> null
                 }
-                Text(
-                    modifier = Modifier.semantics {
-                        heading()
-                    },
-                    style = ElementTheme.typography.aliasScreenTitle,
-                    text = displayTitle,
-                )
+                displayTitle?.let {
+                    val style = when (spaceFiltersState) {
+                        // Space name
+                        is SpaceFiltersState.Selected -> ElementTheme.typography.fontHeadingSmMedium
+                        // "Chats"
+                        else -> ElementTheme.typography.fontHeadingLgBold
+                    }
+                    AdaptativeTitle(
+                        title = displayTitle,
+                        style = style,
+                        twoLinesStyle = ElementTheme.typography.fontHeadingSmMedium,
+                    )
+                }
             },
             navigationIcon = {
                 NavigationIcon(
@@ -179,7 +183,9 @@ fun HomeTopBar(
             TopAppBarScrollBehaviorLayout(scrollBehavior = scrollBehavior) {
                 RoomListFiltersView(
                     state = filtersState,
-                    modifier = Modifier.padding(bottom = 16.dp).padding(contentPadding)
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .padding(contentPadding)
                 )
             }
         }
@@ -348,45 +354,45 @@ private fun AccountIcon(
             ),
         contentAlignment = Alignment.Center,
     ) {
-            val avatarData by remember(matrixUser) {
-                derivedStateOf {
-                    matrixUser.getAvatarData(size = AvatarSize.CurrentUserTopBar)
-                }
+        val avatarData by remember(matrixUser) {
+            derivedStateOf {
+                matrixUser.getAvatarData(size = AvatarSize.CurrentUserTopBar)
             }
-            val statusEmoji = matrixUser.displayedStatus?.toEmojiText()
-            val avatarModifier = if (statusEmoji != null) {
-                Modifier.eraseStatusEmojiBackground(
-                    parentSize = AvatarSize.CurrentUserTopBar.dp,
-                    layoutDirection = LocalLayoutDirection.current,
-                )
-            } else {
-                Modifier
-            }
-            Avatar(
-                avatarData = avatarData,
-                avatarType = AvatarType.User,
-                modifier = avatarModifier,
-                contentDescription = if (isCurrentAccount) {
-                    if (showAvatarIndicator) {
-                        stringResource(CommonStrings.a11y_settings_with_required_action)
-                    } else {
-                        stringResource(CommonStrings.common_settings)
-                    }
-                } else {
-                    null
-                },
+        }
+        val statusEmoji = matrixUser.displayedStatus?.toEmojiText()
+        val avatarModifier = if (statusEmoji != null) {
+            Modifier.eraseStatusEmojiBackground(
+                parentSize = AvatarSize.CurrentUserTopBar.dp,
+                layoutDirection = LocalLayoutDirection.current,
             )
-            if (statusEmoji != null) {
-                StatusEmojiBadge(
-                    emoji = statusEmoji,
-                    modifier = Modifier.align(Alignment.BottomEnd),
-                )
-            }
-            if (showAvatarIndicator) {
-                RedIndicatorAtom(
-                    modifier = Modifier.align(Alignment.TopEnd)
-                )
-            }
+        } else {
+            Modifier
+        }
+        Avatar(
+            avatarData = avatarData,
+            avatarType = AvatarType.User,
+            modifier = avatarModifier,
+            contentDescription = if (isCurrentAccount) {
+                if (showAvatarIndicator) {
+                    stringResource(CommonStrings.a11y_settings_with_required_action)
+                } else {
+                    stringResource(CommonStrings.common_settings)
+                }
+            } else {
+                null
+            },
+        )
+        if (statusEmoji != null) {
+            StatusEmojiBadge(
+                emoji = statusEmoji,
+                modifier = Modifier.align(Alignment.BottomEnd),
+            )
+        }
+        if (showAvatarIndicator) {
+            RedIndicatorAtom(
+                modifier = Modifier.align(Alignment.TopEnd)
+            )
+        }
     }
 }
 

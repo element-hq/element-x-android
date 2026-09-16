@@ -393,7 +393,7 @@ private fun AudioInfoView(
 @PreviewsDayNight
 @Composable
 internal fun MediaAudioViewPreview(
-    @PreviewParameter(MediaInfoAudioProvider::class) info: MediaInfo
+    @PreviewParameter(MediaInfoAudioPreviewParam::class) info: MediaInfo
 ) = ElementPreview {
     MediaAudioView(
         modifier = Modifier.fillMaxSize(),

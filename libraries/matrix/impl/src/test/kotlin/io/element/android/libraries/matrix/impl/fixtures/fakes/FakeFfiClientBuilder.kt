@@ -27,6 +27,7 @@ class FakeFfiClientBuilder(
     override fun addRootCertificates(certificates: List<ByteArray>) = this
     override fun autoEnableBackups(autoEnableBackups: Boolean) = this
     override fun autoEnableCrossSigning(autoEnableCrossSigning: Boolean) = this
+    override fun enableAutomaticBackPagination(enableAutomaticBackPagination: Boolean): ClientBuilder = this
     override fun backupDownloadStrategy(backupDownloadStrategy: BackupDownloadStrategy) = this
     override fun disableAutomaticTokenRefresh() = this
     override fun disableBuiltInRootCertificates() = this
@@ -42,7 +43,7 @@ class FakeFfiClientBuilder(
     override fun setSessionDelegate(sessionDelegate: ClientSessionDelegate) = this
     override fun slidingSyncVersionBuilder(versionBuilder: SlidingSyncVersionBuilder) = this
     override fun userAgent(userAgent: String) = this
-    override fun username(username: String) = this
+    override fun serverNameFromUserId(userId: String): ClientBuilder = this
     override fun enableShareHistoryOnInvite(enableShareHistoryOnInvite: Boolean): ClientBuilder = this
     override fun threadsEnabled(enabled: Boolean, threadSubscriptions: Boolean): ClientBuilder = this
     override fun sqliteStore(config: SqliteStoreBuilder): ClientBuilder = this

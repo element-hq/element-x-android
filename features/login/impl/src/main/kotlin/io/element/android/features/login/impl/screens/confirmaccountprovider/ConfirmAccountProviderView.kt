@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.changeserver.ChangeServerView
 import io.element.android.features.login.impl.login.LoginModeEvent
 import io.element.android.features.login.impl.login.LoginModeView
@@ -98,7 +99,7 @@ fun ConfirmAccountProviderView(
         // Dismiss the keyboard and release focus while the account provider is being validated.
         focusManager.clearFocus(force = true)
         // Submit the exact field text (plus any accepted suggestion).
-        eventSink(ConfirmAccountProviderEvents.Continue(accountProviderToSubmit))
+        eventSink(ConfirmAccountProviderEvent.Continue(accountProviderToSubmit))
     }
 
     // Once a validation / login error has been dismissed, return focus and the keyboard to the field so
@@ -114,15 +115,18 @@ fun ConfirmAccountProviderView(
 
     HeaderFooterPage(
         modifier = modifier,
+        // Let the header and content scroll so the supporting text is not clipped by the footer when the
+        // keyboard is visible and vertical space is reduced.
+        isScrollable = true,
         header = {
             IconTitleSubtitleMolecule(
                 modifier = Modifier.padding(top = 60.dp),
                 iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
                 title = stringResource(
                     id = if (state.isAccountCreation) {
-                        CommonStrings.screen_change_server_title_register
+                        R.string.screen_change_server_title_register
                     } else {
-                        CommonStrings.screen_change_server_title_login
+                        R.string.screen_change_server_title_login
                     }
                 ),
                 subTitle = null,
@@ -150,20 +154,20 @@ fun ConfirmAccountProviderView(
             value = input,
             onValueChange = {
                 input = it
-                eventSink(ConfirmAccountProviderEvents.UserInputChanged(it))
+                eventSink(ConfirmAccountProviderEvent.UserInputChanged(it))
             },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 40.dp)
                 .focusRequester(focusRequester)
                 .testTag(TestTags.changeServerServer),
-            label = stringResource(id = CommonStrings.screen_change_server_textfield_header),
-            placeholder = stringResource(id = CommonStrings.screen_change_server_textfield_placeholder),
+            label = stringResource(id = R.string.screen_change_server_textfield_header),
+            placeholder = stringResource(id = R.string.screen_change_server_textfield_placeholder),
             supportingText = stringResource(
                 id = if (state.isAccountCreation) {
-                    CommonStrings.screen_change_server_textfield_footer_register
+                    R.string.screen_change_server_textfield_footer_register
                 } else {
-                    CommonStrings.screen_change_server_textfield_footer_login
+                    R.string.screen_change_server_textfield_footer_login
                 }
             ),
             visualTransformation = ghostTransformation,
@@ -180,7 +184,7 @@ fun ConfirmAccountProviderView(
                         // showing, Done submits directly.
                         val accepted = input + suggestionSuffix
                         input = accepted
-                        eventSink(ConfirmAccountProviderEvents.UserInputChanged(accepted))
+                        eventSink(ConfirmAccountProviderEvent.UserInputChanged(accepted))
                         focusManager.clearFocus(force = true)
                     } else {
                         submit()
@@ -196,7 +200,7 @@ fun ConfirmAccountProviderView(
                             role = Role.Button,
                         ) {
                             input = ""
-                            eventSink(ConfirmAccountProviderEvents.UserInputChanged(""))
+                            eventSink(ConfirmAccountProviderEvent.UserInputChanged(""))
                         }
                     ) {
                         Icon(
@@ -221,7 +225,7 @@ fun ConfirmAccountProviderView(
 
     LoginModeView(
         loginMode = state.loginModeState.loginMode,
-        onClearError = { eventSink(ConfirmAccountProviderEvents.ClearError) },
+        onClearError = { eventSink(ConfirmAccountProviderEvent.ClearError) },
         onLearnMoreClick = onLearnMoreClick,
         onOAuthDetails = onOAuthDetails,
         onNeedLoginPassword = onNeedLoginPassword,
@@ -264,7 +268,7 @@ private class GhostSuffixVisualTransformation(
 @PreviewsDayNight
 @Composable
 internal fun ConfirmAccountProviderViewPreview(
-    @PreviewParameter(ConfirmAccountProviderStateProvider::class) state: ConfirmAccountProviderState
+    @PreviewParameter(ConfirmAccountProviderStatePreviewParam::class) state: ConfirmAccountProviderState
 ) = ElementPreview {
     ConfirmAccountProviderView(
         state = state,

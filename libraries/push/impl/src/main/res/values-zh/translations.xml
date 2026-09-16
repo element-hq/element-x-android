@@ -42,7 +42,7 @@
   <string name="notification_room_invite_body">"邀请你加入房间"</string>
   <string name="notification_room_invite_body_with_sender">"%1$s 已邀请你加入房间"</string>
   <string name="notification_sender_me">"我"</string>
-  <string name="notification_sender_mention_reply">"%1$s 个提及或回复"</string>
+  <string name="notification_sender_mention_reply">"你被 %1$s 提及或回复"</string>
   <string name="notification_space_invite_body">"已邀请你加入空间"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s 邀请你加入空间"</string>
   <string name="notification_test_push_notification_content">"你正在查看通知！点击我！"</string>

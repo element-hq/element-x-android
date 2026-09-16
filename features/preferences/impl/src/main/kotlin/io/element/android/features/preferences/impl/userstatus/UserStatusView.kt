@@ -354,7 +354,7 @@ private fun EmojiPickerBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun UserStatusViewPreview(@PreviewParameter(UserStatusStateProvider::class) state: UserStatusState) = ElementPreview {
+internal fun UserStatusViewPreview(@PreviewParameter(UserStatusStatePreviewParam::class) state: UserStatusState) = ElementPreview {
     UserStatusView(
         state = state,
         emojiPickerRenderer = NoOpEmojiPickerRenderer,

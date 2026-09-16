@@ -106,7 +106,7 @@ private fun Content(text: String, onTextChange: (String) -> Unit, hasError: Bool
 
 @PreviewsDayNight
 @Composable
-internal fun ResetIdentityPasswordViewPreview(@PreviewParameter(ResetIdentityPasswordStateProvider::class) state: ResetIdentityPasswordState) {
+internal fun ResetIdentityPasswordViewPreview(@PreviewParameter(ResetIdentityPasswordStatePreviewParam::class) state: ResetIdentityPasswordState) {
     ElementPreview {
         ResetIdentityPasswordView(
             state = state,

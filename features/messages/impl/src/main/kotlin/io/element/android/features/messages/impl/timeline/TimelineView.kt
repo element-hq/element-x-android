@@ -90,7 +90,7 @@ import io.element.android.features.messages.impl.timeline.focus.FocusRequestStat
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentPreviewParam
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.androidutils.system.copyToClipboard
@@ -587,7 +587,7 @@ private fun JumpToPositionButton(
 @PreviewsDayNight
 @Composable
 internal fun TimelineViewPreview(
-    @PreviewParameter(TimelineItemEventContentProvider::class) content: TimelineItemEventContent
+    @PreviewParameter(TimelineItemEventContentPreviewParam::class) content: TimelineItemEventContent
 ) = ElementPreview {
     val timelineItems = aTimelineItemList(content)
     val timelineEvents = timelineItems.filterIsInstance<TimelineItem.Event>()

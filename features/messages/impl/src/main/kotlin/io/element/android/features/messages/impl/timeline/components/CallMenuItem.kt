@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomcall.api.RoomCallState
-import io.element.android.features.roomcall.api.RoomCallStateProvider
+import io.element.android.features.roomcall.api.RoomCallStatePreviewParam
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -133,7 +133,7 @@ private fun OnGoingCallMenuItem(
 @PreviewsDayNight
 @Composable
 internal fun CallMenuItemPreview(
-    @PreviewParameter(RoomCallStateProvider::class) roomCallState: RoomCallState
+    @PreviewParameter(RoomCallStatePreviewParam::class) roomCallState: RoomCallState
 ) = ElementPreview {
     CallMenuItem(
         roomCallState = roomCallState,

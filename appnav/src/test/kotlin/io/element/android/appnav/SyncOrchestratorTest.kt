@@ -8,7 +8,7 @@
 
 package io.element.android.appnav
 
-import io.element.android.appnav.di.SyncOrchestrator
+import io.element.android.appnav.session.SyncOrchestrator
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.sync.SyncState

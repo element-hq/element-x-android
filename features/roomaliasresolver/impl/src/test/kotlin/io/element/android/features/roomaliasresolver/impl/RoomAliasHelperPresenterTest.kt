@@ -91,7 +91,7 @@ class RoomAliasHelperPresenterTest {
             assertThat(awaitItem().resolveState.isLoading()).isTrue()
             val resultState = awaitItem()
             assertThat(resultState.resolveState.errorOrNull()).isEqualTo(AN_EXCEPTION)
-            resultState.eventSink(RoomAliasResolverEvents.Retry)
+            resultState.eventSink(RoomAliasResolverEvent.Retry)
             val retryLoadingState = awaitItem()
             assertThat(retryLoadingState.resolveState.isLoading()).isTrue()
             val retryState = awaitItem()

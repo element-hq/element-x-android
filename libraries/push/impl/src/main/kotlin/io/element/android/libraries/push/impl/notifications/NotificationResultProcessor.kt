@@ -170,6 +170,7 @@ class DefaultNotificationResultProcessor(
                                 roomId = RoomId(request.roomId),
                                 eventId = EventId(request.eventId),
                                 cause = exception.message,
+                                noisy = false,
                             )
                         )
                     }
