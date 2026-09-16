@@ -67,6 +67,7 @@ class KonsistClassNameTest {
                 "LoginModeViewErrorPreviewParam",
                 "OverlapRatioPreviewParam",
                 "TextFileContentPreviewParam",
+                "HtmlMessageContentPreviewParam",
             )
             .also {
                 // Check that classes are actually found

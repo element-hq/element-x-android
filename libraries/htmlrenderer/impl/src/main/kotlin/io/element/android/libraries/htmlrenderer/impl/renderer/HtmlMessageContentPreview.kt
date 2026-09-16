@@ -42,7 +42,7 @@ import kotlinx.collections.immutable.toImmutableList
 @PreviewsDayNight
 @Composable
 internal fun HtmlMessageContentPreview(
-    @PreviewParameter(HtmlMessageContentProvider::class) node: DocumentNode,
+    @PreviewParameter(HtmlMessageContentPreviewParam::class) node: DocumentNode,
 ) = ElementPreview {
     HtmlMessageContent(
         node = node,
@@ -51,7 +51,7 @@ internal fun HtmlMessageContentPreview(
     )
 }
 
-internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNode> {
+internal class HtmlMessageContentPreviewParam : PreviewParameterProvider<DocumentNode> {
     override val values: Sequence<DocumentNode>
         get() = sequenceOf(
             richParagraph(),
@@ -99,7 +99,9 @@ internal class HtmlMessageContentProvider : PreviewParameterProvider<DocumentNod
                 buildAnnotatedString {
                     append("Trying ")
                     val start = length
-                    withStyle(SpanStyle(fontFamily = FontFamily.Monospace)) { append("inline code when it needs to be wrapped in several lines, just to check what it looks like") }
+                    withStyle(
+                        SpanStyle(fontFamily = FontFamily.Monospace)
+                    ) { append("inline code when it needs to be wrapped in several lines, just to check what it looks like") }
                     addStringAnnotation(INLINE_CODE_ANNOTATION_TAG, "", start, length)
                     append(", is it good?")
                 }
