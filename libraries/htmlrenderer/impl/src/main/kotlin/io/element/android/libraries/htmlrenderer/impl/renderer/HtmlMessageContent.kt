@@ -126,7 +126,7 @@ private data class RenderContext(
 internal fun BlockNode.lastBlockNode(): BlockNode? = when (this) {
     is ParagraphNode -> this
     is DocumentNode -> children.lastOrNull()?.lastBlockNode()
-    is ListNode -> items.lastOrNull()?.children?.lastOrNull()?.lastBlockNode()
+    is ListNode -> this
     is QuoteNode -> this
     is CodeBlockNode -> this
 }
