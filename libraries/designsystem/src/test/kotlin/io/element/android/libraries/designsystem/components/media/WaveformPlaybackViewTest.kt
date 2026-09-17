@@ -12,7 +12,7 @@ package io.element.android.libraries.designsystem.components.media
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -34,7 +34,7 @@ class WaveformPlaybackViewTest : RobolectricTest() {
 
     @Test
     fun `a paused cursor follows a new player sample`() = runAndroidComposeUiTest {
-        val playbackProgress = mutableStateOf(0.2f)
+        val playbackProgress = mutableFloatStateOf(0.2f)
         setWaveformPlaybackView(playbackProgress = { playbackProgress.value })
         playbackProgress.value = 0.8f
         waitForIdle()
@@ -72,7 +72,7 @@ class WaveformPlaybackViewTest : RobolectricTest() {
 
     @Test
     fun `playing cursor keeps interpolating when the player is only slightly ahead`() = runAndroidComposeUiTest {
-        val playbackProgress = mutableStateOf(0.2f)
+        val playbackProgress = mutableFloatStateOf(0.2f)
         setWaveformPlaybackView(
             playbackProgress = { playbackProgress.value },
             isPlaying = true,

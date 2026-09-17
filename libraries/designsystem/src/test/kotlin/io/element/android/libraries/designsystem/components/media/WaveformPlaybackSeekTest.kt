@@ -16,7 +16,7 @@ class WaveformPlaybackSeekTest {
     fun `a down event inside the waveform starts a seek`() {
         val result = handleEvent(action = MotionEvent.ACTION_DOWN, x = 40f)
         assertThat(result.consumed).isTrue()
-        assertThat(result.disallowParentIntercept).isEqualTo(true)
+        assertThat(result.disallowParentIntercept).isTrue()
         assertThat(result.seekProgress).isEqualTo(0.4f)
         assertThat(result.committedSeek).isNull()
     }
@@ -51,7 +51,7 @@ class WaveformPlaybackSeekTest {
             currentSeekProgress = 0.6f,
         )
         assertThat(result.consumed).isTrue()
-        assertThat(result.disallowParentIntercept).isEqualTo(false)
+        assertThat(result.disallowParentIntercept).isFalse()
         assertThat(result.committedSeek).isEqualTo(0.6f)
         assertThat(result.seekProgress).isNull()
         assertThat(result.clearedSeekProgress).isTrue()
@@ -72,7 +72,7 @@ class WaveformPlaybackSeekTest {
             currentSeekProgress = 0.6f,
         )
         assertThat(result.consumed).isTrue()
-        assertThat(result.disallowParentIntercept).isEqualTo(false)
+        assertThat(result.disallowParentIntercept).isFalse()
         assertThat(result.committedSeek).isNull()
         assertThat(result.clearedSeekProgress).isTrue()
     }
