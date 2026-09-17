@@ -29,6 +29,7 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -152,7 +153,7 @@ private fun BlockNodeView(
     modifier: Modifier = Modifier,
 ) {
     if (node === context.lastBlockNode && node !is ParagraphNode) {
-        context.onContentLayoutChange(ContentAvoidingLayoutData.NotOverlapping)
+        SideEffect { context.onContentLayoutChange(ContentAvoidingLayoutData.NotOverlapping) }
     }
 
     when (node) {
