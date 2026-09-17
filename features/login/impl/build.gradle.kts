@@ -77,6 +77,7 @@ dependencies {
     implementation(projects.libraries.oauth.api)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.uiUtils)
+    implementation(projects.services.toolbox.api)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.webkit)
     api(projects.features.login.api)
