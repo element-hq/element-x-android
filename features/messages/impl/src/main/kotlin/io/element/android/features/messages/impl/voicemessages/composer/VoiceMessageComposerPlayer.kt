@@ -190,7 +190,7 @@ class VoiceMessageComposerPlayer(
         val playState: PlayState,
         val currentPosition: Long,
         val progress: Float,
-        val durationMs: Long? = null,
+        val durationMs: Long?,
     ) {
         companion object {
             val Initial = State(
