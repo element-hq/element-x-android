@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -109,7 +108,7 @@ private fun InviteProgressDialog() {
         Text(
             text = stringResource(R.string.screen_room_details_invite_people_dont_close),
             color = ElementTheme.colors.textSecondary,
-            style = MaterialTheme.typography.bodyMedium,
+            style = ElementTheme.typography.fontBodyMdRegular,
         )
     }
 }

@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -107,7 +106,7 @@ private fun RoomListModalBottomSheetContent(
                 content = {
                     Text(
                         text = stringResource(id = CommonStrings.action_mark_as_read),
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = ElementTheme.typography.fontBodyLgRegular,
                     )
                 },
                 onClick = onRoomMarkReadClick,
@@ -120,7 +119,7 @@ private fun RoomListModalBottomSheetContent(
                 content = {
                     Text(
                         text = stringResource(id = R.string.screen_roomlist_mark_as_unread),
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = ElementTheme.typography.fontBodyLgRegular,
                     )
                 },
                 onClick = onRoomMarkUnreadClick,
@@ -138,7 +137,7 @@ private fun RoomListModalBottomSheetContent(
             content = {
                 Text(
                     text = stringResource(id = textResId),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = ElementTheme.typography.fontBodyLgRegular,
                 )
             },
             leadingContent = ListItemContent.Icon(
@@ -157,7 +156,7 @@ private fun RoomListModalBottomSheetContent(
             content = {
                 Text(
                     text = stringResource(id = CommonStrings.common_settings),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = ElementTheme.typography.fontBodyLgRegular,
                 )
             },
             modifier = Modifier.clickable { onRoomSettingsClick() },

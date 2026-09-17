@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -118,7 +117,7 @@ fun SelectedItem(
                 text = text,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = maxLines,
-                style = MaterialTheme.typography.bodyMedium,
+                style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,
                 textAlign = TextAlign.Center,
             )

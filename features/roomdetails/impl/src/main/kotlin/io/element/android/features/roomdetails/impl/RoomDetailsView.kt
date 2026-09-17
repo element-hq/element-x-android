@@ -205,7 +205,7 @@ fun RoomDetailsView(
                         content = {
                             Text(
                                 text = stringResource(id = R.string.screen_roomlist_mark_as_read),
-                                style = MaterialTheme.typography.bodyLarge,
+                                style = ElementTheme.typography.fontBodyLgRegular,
                             )
                         },
                         onClick = {
@@ -668,7 +668,7 @@ private fun TopicSection(
                 text = roomTopic.topic,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
                 interactionSource = remember { MutableInteractionSource() },
-                style = MaterialTheme.typography.bodyMedium.copy(
+                style = ElementTheme.typography.fontBodyMdRegular.copy(
                     color = MaterialTheme.colorScheme.tertiary,
                 ),
             )

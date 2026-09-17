@@ -179,7 +179,7 @@ internal fun ProgressDialogWithContentPreview() = ElementPreview {
         Text(
             text = "Subtext",
             color = ElementTheme.colors.textSecondary,
-            style = MaterialTheme.typography.bodyMedium,
+            style = ElementTheme.typography.fontBodyMdRegular,
         )
     }
 }
