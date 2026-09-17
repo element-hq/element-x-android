@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.designsystem.components.media
 
-import android.view.MotionEvent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.LinearEasing
@@ -144,42 +143,22 @@ fun WaveformPlaybackView(
             .let {
                 if (!seekEnabled) return@let it
                 it.pointerInteropFilter(requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent) { e ->
-                    return@pointerInteropFilter when (e.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            if (e.x in 0F..waveformWidthPx) {
-                                requestDisallowInterceptTouchEvent.invoke(true)
-                                seekProgress.value = e.x / waveformWidthPx
-                                true
-                            } else {
-                                false
+                    handleWaveformPointerEvent(
+                        action = e.action,
+                        x = e.x,
+                        waveformWidthPx = waveformWidthPx,
+                        currentSeekProgress = seekProgress.value,
+                        onDisallowParentIntercept = { requestDisallowInterceptTouchEvent.invoke(it) },
+                        onUpdateSeekProgress = { seekProgress.value = it },
+                        onCommitSeek = { seek ->
+                            pendingSeek = seek
+                            onSeek(seek)
+                            coroutineScope.launch {
+                                progressAnimated.snapTo(seek)
+                                seekGeneration++
                             }
-                        }
-                        MotionEvent.ACTION_MOVE -> {
-                            if (e.x in 0F..waveformWidthPx) {
-                                seekProgress.value = e.x / waveformWidthPx
-                            }
-                            true
-                        }
-                        MotionEvent.ACTION_UP -> {
-                            requestDisallowInterceptTouchEvent.invoke(false)
-                            seekProgress.value?.let { seek ->
-                                pendingSeek = seek
-                                onSeek(seek)
-                                coroutineScope.launch {
-                                    progressAnimated.snapTo(seek)
-                                    seekGeneration++
-                                }
-                            }
-                            seekProgress.value = null
-                            true
-                        }
-                        MotionEvent.ACTION_CANCEL -> {
-                            requestDisallowInterceptTouchEvent.invoke(false)
-                            seekProgress.value = null
-                            true
-                        }
-                        else -> false
-                    }
+                        },
+                    )
                 }
             }
             .then(modifier)
@@ -301,10 +280,11 @@ private fun AnimateCursorWhilePlaying(
 ) {
     LaunchedEffect(isPlaying, durationMs, playbackSpeed, seekGeneration) {
         if (isPlaying && durationMs > 0L) {
-            val remainingProgress = (1f - progressAnimated.value).coerceAtLeast(0f)
-            val remainingMs = (remainingProgress * durationMs / playbackSpeed.coerceAtLeast(0.01f))
-                .roundToInt()
-                .coerceAtLeast(0)
+            val remainingMs = remainingPlaybackAnimationMs(
+                progress = progressAnimated.value,
+                durationMs = durationMs,
+                playbackSpeed = playbackSpeed,
+            )
             if (remainingMs == 0) {
                 progressAnimated.snapTo(1f)
             } else {

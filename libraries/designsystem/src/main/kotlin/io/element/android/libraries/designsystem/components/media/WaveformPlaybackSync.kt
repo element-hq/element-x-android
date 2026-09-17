@@ -8,6 +8,7 @@
 package io.element.android.libraries.designsystem.components.media
 
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 /**
  * Maximum gap, in wall-clock milliseconds, between two progress values that we still treat as
@@ -134,4 +135,25 @@ private fun isPlaybackRestart(
     animatedProgress: Float,
 ): Boolean {
     return playbackProgress <= RESTART_PROGRESS_EPSILON && animatedProgress >= RESTART_ANIMATED_PROGRESS
+}
+
+/**
+ * Remaining wall-clock milliseconds to tween the cursor from [progress] to the end of the media.
+ *
+ * Used to time the linear playback animation between infrequent player samples. A result of `0`
+ * means the cursor is already at (or past) the end and should snap rather than tween.
+ *
+ * @param progress Current cursor progress, from 0 to 1.
+ * @param durationMs Total media duration in milliseconds.
+ * @param playbackSpeed Current playback rate (`1` = realtime). Faster speeds shorten the result.
+ */
+internal fun remainingPlaybackAnimationMs(
+    progress: Float,
+    durationMs: Long,
+    playbackSpeed: Float,
+): Int {
+    val remainingProgress = (1f - progress).coerceAtLeast(0f)
+    return (remainingProgress * durationMs / playbackSpeed.coerceAtLeast(0.01f))
+        .roundToInt()
+        .coerceAtLeast(0)
 }
