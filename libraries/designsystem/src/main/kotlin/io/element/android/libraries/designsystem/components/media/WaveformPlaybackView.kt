@@ -26,6 +26,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -106,8 +107,8 @@ fun WaveformPlaybackView(
         pendingSeek = pendingSeek,
         seekProgress = seekProgress,
         progressAnimated = progressAnimated,
-        onPendingSeekAcknowledged = { pendingSeek = null },
-        onCursorSnapped = { seekGeneration++ },
+        onAcknowledgePendingSeek = { pendingSeek = null },
+        onCursorSnap = { seekGeneration++ },
     )
 
     AnimateCursorWhilePlaying(
@@ -234,8 +235,8 @@ fun WaveformPlaybackView(
  * @param pendingSeek Target progress of an in-flight user seek, or `null` if none.
  * @param seekProgress Progress while the user is dragging the cursor; non-null means a drag is in progress.
  * @param progressAnimated Animated cursor progress.
- * @param onPendingSeekAcknowledged Called when a player sample has caught up to [pendingSeek].
- * @param onCursorSnapped Called after the cursor jumps, so the playing animation can restart from the new position.
+ * @param onAcknowledgePendingSeek Called when a player sample has caught up to [pendingSeek].
+ * @param onCursorSnap Called after the cursor jumps, so the playing animation can restart from the new position.
  */
 @Composable
 private fun ApplyPlayerProgressToCursor(
@@ -246,9 +247,11 @@ private fun ApplyPlayerProgressToCursor(
     pendingSeek: Float?,
     seekProgress: State<Float?>,
     progressAnimated: Animatable<Float, AnimationVector1D>,
-    onPendingSeekAcknowledged: () -> Unit,
-    onCursorSnapped: () -> Unit,
+    onAcknowledgePendingSeek: () -> Unit,
+    onCursorSnap: () -> Unit,
 ) {
+    val latestOnAcknowledgePendingSeek by rememberUpdatedState(onAcknowledgePendingSeek)
+    val latestOnCursorSnap by rememberUpdatedState(onCursorSnap)
     LaunchedEffect(playbackProgress, isPlaying, durationMs, playbackSpeed, pendingSeek) {
         if (seekProgress.value != null) return@LaunchedEffect
         if (!shouldApplyPlayerProgress(
@@ -260,7 +263,7 @@ private fun ApplyPlayerProgressToCursor(
         ) {
             return@LaunchedEffect
         }
-        onPendingSeekAcknowledged()
+        latestOnAcknowledgePendingSeek()
         if (shouldSnapToPlayer(
                 playbackProgress = playbackProgress,
                 animatedProgress = progressAnimated.value,
@@ -270,7 +273,7 @@ private fun ApplyPlayerProgressToCursor(
             )
         ) {
             progressAnimated.snapTo(playbackProgress)
-            onCursorSnapped()
+            latestOnCursorSnap()
         }
     }
 }
