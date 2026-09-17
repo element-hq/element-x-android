@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2026 New Vector Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <!-- %1$d is the number of selected messages -->
+    <plurals name="screen_room_timeline_selection_title">
+        <item quantity="one">%1$d selected</item>
+        <item quantity="other">%1$d selected</item>
+    </plurals>
+    <string name="screen_room_timeline_selection_limit_reached">You can select up to 30 messages</string>
+</resources>

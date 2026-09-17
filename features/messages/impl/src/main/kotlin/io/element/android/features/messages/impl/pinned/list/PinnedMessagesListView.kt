@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.link.LinkEvent
 import io.element.android.features.messages.impl.link.LinkView
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
+import io.element.android.features.messages.impl.timeline.components.TimelineItemSelectionData
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
@@ -291,6 +292,7 @@ private fun PinnedMessagesListLoaded(
                         onContentLayoutChange = onContentLayoutChange
                     )
                 },
+                selectionData = TimelineItemSelectionData(),
             )
         }
     }

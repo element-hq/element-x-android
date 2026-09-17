@@ -27,6 +27,7 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailureFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
+import io.element.android.features.messages.impl.timeline.model.canBeSelected
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
@@ -109,6 +110,7 @@ class DefaultActionListPresenter(
         }.collectAsState(initial = persistentListOf())
 
         val isThreadsEnabled = featureFlagService.isFeatureEnabledFlow(FeatureFlags.Threads).collectAsState(false)
+        val isMultiSelectEnabled = featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageMultiSelect).collectAsState(false)
 
         fun handleEvent(event: ActionListEvent) {
             when (event) {
@@ -120,6 +122,7 @@ class DefaultActionListPresenter(
                     pinnedEventIds = pinnedEventIds,
                     target = target,
                     isThreadsEnabled = isThreadsEnabled.value,
+                    isMultiSelectEnabled = isMultiSelectEnabled.value,
                 )
             }
         }
@@ -137,6 +140,7 @@ class DefaultActionListPresenter(
         pinnedEventIds: ImmutableList<EventId>,
         target: MutableState<ActionListState.Target>,
         isThreadsEnabled: Boolean,
+        isMultiSelectEnabled: Boolean,
     ) = launch {
         target.value = ActionListState.Target.Loading(timelineItem)
 
@@ -146,6 +150,7 @@ class DefaultActionListPresenter(
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isEventPinned = pinnedEventIds.contains(timelineItem.eventId),
             isThreadsEnabled = isThreadsEnabled,
+            isMultiSelectEnabled = isMultiSelectEnabled,
         )
 
         val verifiedUserSendFailure = userSendFailureFactory.create(timelineItem.localSendState)
@@ -179,6 +184,7 @@ class DefaultActionListPresenter(
         isDeveloperModeEnabled: Boolean,
         isEventPinned: Boolean,
         isThreadsEnabled: Boolean,
+        isMultiSelectEnabled: Boolean,
     ): List<TimelineItemAction> {
         val canRedact = timelineItem.isMine && usersEventPermissions.canRedactOwn || !timelineItem.isMine && usersEventPermissions.canRedactOther
         return buildSet {
@@ -199,6 +205,9 @@ class DefaultActionListPresenter(
             }
             if (timelineItem.isRemote && timelineItem.content.canBeForwarded()) {
                 add(TimelineItemAction.Forward)
+            }
+            if (isMultiSelectEnabled && timelineItem.canBeSelected()) {
+                add(TimelineItemAction.Select)
             }
             if (timelineItem.isEditable && usersEventPermissions.canSendMessage) {
                 if (timelineItem.content is TimelineItemEventContentWithAttachment ||

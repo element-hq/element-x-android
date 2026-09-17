@@ -20,6 +20,7 @@ enum class TimelineItemAction(
 ) {
     ViewInTimeline(CommonStrings.action_view_in_timeline, CompoundDrawables.ic_compound_visibility_on),
     Forward(CommonStrings.action_forward, CompoundDrawables.ic_compound_forward),
+    Select(CommonStrings.action_select, CompoundDrawables.ic_compound_check),
     CopyText(CommonStrings.action_copy_text, CompoundDrawables.ic_compound_copy),
     CopyCaption(CommonStrings.action_copy_caption, CompoundDrawables.ic_compound_copy),
     CopyLink(CommonStrings.action_copy_link_to_message, CompoundDrawables.ic_compound_link),

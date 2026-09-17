@@ -402,6 +402,10 @@ class MessagesPresenter(
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
             TimelineItemAction.RetrySending -> handleRetrySending(targetEvent)
+            TimelineItemAction.Select -> {
+                val eventId = targetEvent.eventId ?: return@launch
+                timelineState.eventSink(TimelineEvent.EnterSelectionMode(eventId))
+            }
         }
     }
 

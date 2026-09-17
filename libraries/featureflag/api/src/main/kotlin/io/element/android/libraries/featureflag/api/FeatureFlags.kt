@@ -161,4 +161,11 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    MessageMultiSelect(
+        key = "feature.message_multi_select",
+        title = "Multi-select messages",
+        description = "Adds a Select action to the message menu to pick several messages at once.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }

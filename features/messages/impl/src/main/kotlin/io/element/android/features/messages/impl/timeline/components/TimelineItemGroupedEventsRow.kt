@@ -190,6 +190,7 @@ private fun TimelineItemGroupedEventsRowContent(
                         onSwipeToReply = {},
                         eventSink = eventSink,
                         eventContentView = eventContentView,
+                        selectionData = TimelineItemSelectionData(),
                     )
                 }
             }

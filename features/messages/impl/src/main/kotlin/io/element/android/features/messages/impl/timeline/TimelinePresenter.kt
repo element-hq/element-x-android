@@ -25,6 +25,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.messages.impl.MessagesNavigator
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureEvent
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
@@ -33,6 +34,7 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.canBeSelected
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
@@ -46,6 +48,8 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -68,7 +72,9 @@ import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsUserData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
@@ -100,6 +106,7 @@ class TimelinePresenter(
     private val typingNotificationPresenter: Presenter<TypingNotificationState>,
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val featureFlagService: FeatureFlagService,
+    private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
     private val markAsFullyRead: MarkAsFullyRead,
@@ -162,6 +169,18 @@ class TimelinePresenter(
         }
         val displayJumpToUnread by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.JumpToUnread)
+        }
+
+        val isMultiSelectEnabled by produceState(false) {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageMultiSelect).collect { value = it }
+        }
+        var selectionState by remember { mutableStateOf<SelectionState>(SelectionState.Disabled) }
+
+        // When the feature flag is turned off, clear any active selection.
+        LaunchedEffect(isMultiSelectEnabled) {
+            if (!isMultiSelectEnabled) {
+                selectionState = SelectionState.Disabled
+            }
         }
 
         val timelineProtectionState = timelineProtectionPresenter.present()
@@ -243,6 +262,28 @@ class TimelinePresenter(
                 }
                 is TimelineEvent.JumpToLive -> {
                     timelineController.focusOnLive()
+                }
+                is TimelineEvent.EnterSelectionMode -> {
+                    if (!isMultiSelectEnabled) return
+                    selectionState = SelectionState.Active(persistentSetOf(event.eventId))
+                }
+                is TimelineEvent.ToggleSelection -> {
+                    val current = selectionState as? SelectionState.Active ?: return
+                    val selected = current.selectedEventIds
+                    selectionState = when {
+                        event.eventId in selected -> {
+                            val next = (selected - event.eventId).toPersistentSet()
+                            if (next.isEmpty()) SelectionState.Disabled else SelectionState.Active(next)
+                        }
+                        selected.size >= MAX_SELECTION_COUNT -> {
+                            snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_selection_limit_reached))
+                            current
+                        }
+                        else -> SelectionState.Active((selected + event.eventId).toPersistentSet())
+                    }
+                }
+                is TimelineEvent.ExitSelectionMode -> {
+                    selectionState = SelectionState.Disabled
                 }
                 TimelineEvent.HideShieldDialog -> messageShieldDialogData.value = null
                 TimelineEvent.MarkAllAsRead -> sessionCoroutineScope.launch {
@@ -351,6 +392,23 @@ class TimelinePresenter(
 
         LaunchedEffect(timelineItems.size) {
             computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
+        }
+
+        // Reconcile the selection when the items change: drop any selected event that is no longer
+        // present or no longer selectable, and exit selection mode if nothing remains selected.
+        LaunchedEffect(timelineItems.map { it.identifier() }) {
+            val active = selectionState as? SelectionState.Active ?: return@LaunchedEffect
+            val stillSelectable = timelineItems
+                .filterIsInstance<TimelineItem.Event>()
+                .filter { it.canBeSelected() }
+                .mapNotNull { it.eventId }
+                .toSet()
+            val reconciled = active.selectedEventIds.filter { it in stillSelectable }.toPersistentSet()
+            selectionState = when {
+                reconciled.isEmpty() -> SelectionState.Disabled
+                reconciled.size != active.selectedEventIds.size -> SelectionState.Active(reconciled)
+                else -> active
+            }
         }
 
         // Keyed on the full [timelineItems] reference (not just .size) so we re-scan when the
@@ -463,6 +521,7 @@ class TimelinePresenter(
             displayThreadSummaries = displayThreadSummaries,
             displayJumpToUnread = displayJumpToUnread,
             jumpToUnread = jumpToUnread.value,
+            selectionState = selectionState,
             eventSink = ::handleEvent,
         )
     }

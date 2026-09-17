@@ -37,6 +37,7 @@ data class TimelineState(
     val displayThreadSummaries: Boolean,
     val displayJumpToUnread: Boolean,
     val jumpToUnread: JumpToUnreadState,
+    val selectionState: SelectionState,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
@@ -99,4 +100,15 @@ sealed interface JumpToUnreadState {
 
     /** The read marker event is older than the loaded window — load it via focused-event navigation. */
     data class OutOfWindow(val eventId: EventId) : JumpToUnreadState
+}
+
+val TimelineState.isSelectionModeActive: Boolean
+    get() = selectionState is SelectionState.Active
+
+val TimelineState.selectedCount: Int
+    get() = (selectionState as? SelectionState.Active)?.selectedEventIds?.size ?: 0
+
+fun TimelineState.isSelected(eventId: EventId?): Boolean {
+    if (eventId == null) return false
+    return (selectionState as? SelectionState.Active)?.selectedEventIds?.contains(eventId) == true
 }

@@ -10,6 +10,8 @@ package io.element.android.features.messages.impl
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -89,12 +91,15 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheet
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvent
+import io.element.android.features.messages.impl.timeline.isSelectionModeActive
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.selectedCount
 import io.element.android.features.messages.impl.timeline.sendfailure.SendFailureDialogView
 import io.element.android.features.messages.impl.topbars.MessagesViewTopBar
+import io.element.android.features.messages.impl.topbars.SelectionModeTopBar
 import io.element.android.features.messages.impl.topbars.ThreadTopBar
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
@@ -177,6 +182,14 @@ fun MessagesView(
         block()
     }
 
+    // Entering selection mode collapses the composer, so dismiss the keyboard too. hideKeyboard
+    // triggers the IME hide animation, keeping it in sync with the composer collapse.
+    LaunchedEffect(state.timelineState.isSelectionModeActive) {
+        if (state.timelineState.isSelectionModeActive) {
+            localView.hideKeyboard()
+        }
+    }
+
     fun onContentClick(event: TimelineItem.Event) {
         Timber.v("onMessageClick= ${event.id}")
         val eventId = event.eventId
@@ -233,34 +246,45 @@ fun MessagesView(
             Scaffold(
                 contentWindowInsets = scaffoldScrollableContentInsets,
                 topBar = {
-                    if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
-                        ThreadTopBar(
-                            roomName = state.roomName,
-                            roomAvatarData = state.roomAvatar,
-                            heroes = state.heroes,
-                            isTombstoned = state.isTombstoned,
-                            onBackClick = onBackClick,
-                        )
-                    } else {
-                        MessagesViewTopBar(
-                            roomName = state.roomName,
-                            roomAvatar = state.roomAvatar,
-                            isTombstoned = state.isTombstoned,
-                            heroes = state.heroes,
-                            dmUserIdentityState = state.dmUserVerificationState,
-                            sharedHistoryIcon = state.topBarSharedHistoryIcon,
-                            dmUserStatus = state.dmUserStatus,
-                            onBackClick = { hidingKeyboard { onBackClick() } },
-                            onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
-                            menuActions = {
-                                MessagesMenuActions(
-                                    displayThreads = state.timelineState.timelineMode !is Timeline.Mode.Thread && state.threads.hasThreads,
-                                    roomCallState = state.roomCallState,
-                                    onJoinCallClick = onJoinCallClick,
-                                    onThreadsListClick = onThreadsListClick
-                                )
-                            }
-                        )
+                    when {
+                        state.timelineState.isSelectionModeActive -> {
+                            SelectionModeTopBar(
+                                selectedCount = state.timelineState.selectedCount,
+                                onCancelClick = {
+                                    state.timelineState.eventSink(TimelineEvent.ExitSelectionMode)
+                                },
+                            )
+                        }
+                        state.timelineState.timelineMode is Timeline.Mode.Thread -> {
+                            ThreadTopBar(
+                                roomName = state.roomName,
+                                roomAvatarData = state.roomAvatar,
+                                heroes = state.heroes,
+                                isTombstoned = state.isTombstoned,
+                                onBackClick = onBackClick,
+                            )
+                        }
+                        else -> {
+                            MessagesViewTopBar(
+                                roomName = state.roomName,
+                                roomAvatar = state.roomAvatar,
+                                isTombstoned = state.isTombstoned,
+                                heroes = state.heroes,
+                                dmUserIdentityState = state.dmUserVerificationState,
+                                sharedHistoryIcon = state.topBarSharedHistoryIcon,
+                                dmUserStatus = state.dmUserStatus,
+                                onBackClick = { hidingKeyboard { onBackClick() } },
+                                onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
+                                menuActions = {
+                                    MessagesMenuActions(
+                                        displayThreads = state.timelineState.timelineMode !is Timeline.Mode.Thread && state.threads.hasThreads,
+                                        roomCallState = state.roomCallState,
+                                        onJoinCallClick = onJoinCallClick,
+                                        onThreadsListClick = onThreadsListClick
+                                    )
+                                }
+                            )
+                        }
                     }
                 },
                 content = { padding ->
