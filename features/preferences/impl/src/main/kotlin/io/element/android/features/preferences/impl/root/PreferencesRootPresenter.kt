@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
@@ -57,6 +58,7 @@ class PreferencesRootPresenter(
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val featureFlagService: FeatureFlagService,
     private val sessionStore: SessionStore,
+    private val appPreferencesStore: AppPreferencesStore,
     private val sessionEnterpriseService: SessionEnterpriseService,
     private val userStatusPresenter: Presenter<UserStatusState>,
 ) : Presenter<PreferencesRootState> {
@@ -71,6 +73,9 @@ class PreferencesRootPresenter(
         val isMultiAccountEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.MultiAccount)
         }.collectAsState(initial = false)
+        val isOtherAccountsSectionExpanded by remember {
+            appPreferencesStore.isOtherAccountsExpandedFlow()
+        }.collectAsState(initial = true)
         val showLinkNewDevice by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.QrCodeLogin)
         }.collectAsState(initial = false)
@@ -138,6 +143,9 @@ class PreferencesRootPresenter(
                 is PreferencesRootEvent.SwitchToSession -> coroutineScope.launch {
                     sessionStore.setLatestSession(event.sessionId.value)
                 }
+                PreferencesRootEvent.ToggleOtherAccountsExpanded -> coroutineScope.launch {
+                    appPreferencesStore.setOtherAccountsExpanded(!isOtherAccountsSectionExpanded)
+                }
             }
         }
 
@@ -146,6 +154,7 @@ class PreferencesRootPresenter(
             userStatusState = userStatusState,
             version = remember { versionFormatter.get() },
             isMultiAccountEnabled = isMultiAccountEnabled,
+            isOtherAccountsSectionExpanded = isOtherAccountsSectionExpanded,
             otherSessions = otherSessions,
             showSecureBackup = !canVerifyUserSession,
             showSecureBackupBadge = showSecureBackupIndicator,

@@ -45,6 +45,14 @@ interface AppPreferencesStore {
     fun getThemeFlow(): Flow<String?>
 
     /**
+     * @param expanded true to expand the other accounts section.
+     */
+    suspend fun setOtherAccountsExpanded(expanded: Boolean)
+
+    /** Whether the other accounts section is expanded; defaults to `true`. */
+    fun isOtherAccountsExpandedFlow(): Flow<Boolean>
+
+    /**
      * @param value the distance in metres the user must move before a new live location is published.
      */
     suspend fun setLiveLocationMinimumDistanceInMetersUpdate(value: Int)

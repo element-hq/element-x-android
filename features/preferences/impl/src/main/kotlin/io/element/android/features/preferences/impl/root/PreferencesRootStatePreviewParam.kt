@@ -47,6 +47,7 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
             ),
             aPreferencesRootState(
                 isMultiAccountEnabled = true,
+                isOtherAccountsSectionExpanded = true,
                 otherSessions = aMatrixUserList().drop(1).take(3),
                 accountManagementUrl = "aUrl",
                 showSecureBackup = true,
@@ -74,6 +75,7 @@ fun aPreferencesRootState(
     myUser: MatrixUser = aMatrixUser(),
     version: String = "Version 1.1 (1)",
     isMultiAccountEnabled: Boolean = false,
+    isOtherAccountsSectionExpanded: Boolean = false,
     otherSessions: List<MatrixUser> = emptyList(),
     showSecureBackup: Boolean = false,
     showSecureBackupBadge: Boolean = false,
@@ -93,6 +95,7 @@ fun aPreferencesRootState(
     myUser = myUser,
     version = version,
     isMultiAccountEnabled = isMultiAccountEnabled,
+    isOtherAccountsSectionExpanded = isOtherAccountsSectionExpanded,
     otherSessions = otherSessions.toImmutableList(),
     showSecureBackup = showSecureBackup,
     showSecureBackupBadge = showSecureBackupBadge,
