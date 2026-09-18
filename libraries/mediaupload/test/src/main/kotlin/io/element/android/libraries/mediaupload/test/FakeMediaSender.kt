@@ -21,6 +21,7 @@ class FakeMediaSender(
     private val sendVoiceMessageResult: () -> Result<Unit> = { lambdaError() },
     private val sendGalleryResult: () -> Result<Unit> = { lambdaError() },
     private val cleanUpResult: () -> Unit = { lambdaError() },
+    private val cancelOngoingUploadsResult: () -> Unit = { lambdaError() },
 ) : MediaSender {
     override suspend fun preProcessMedia(
         uri: Uri,
@@ -66,6 +67,10 @@ class FakeMediaSender(
         inReplyToEventId: EventId?,
     ): Result<Unit> {
         return sendGalleryResult()
+    }
+
+    override fun cancelOngoingUploads() {
+        cancelOngoingUploadsResult()
     }
 
     override fun cleanUp() {

@@ -17,7 +17,14 @@ class FakeMediaUploadHandler(
 ) : MediaUploadHandler {
     override suspend fun await(): Result<Unit> = simulateLongTask { result }
 
+    private var isCancelled = false
+
     override fun cancel() {
+        isCancelled = true
         result = Result.failure(CancellationException())
+    }
+
+    fun assertCancelled() {
+        check(isCancelled) { "Upload should be cancelled" }
     }
 }
