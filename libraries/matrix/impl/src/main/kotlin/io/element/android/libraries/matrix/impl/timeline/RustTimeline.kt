@@ -413,6 +413,7 @@ class RustTimeline(
         caption: String?,
         formattedCaption: String?,
         inReplyToEventId: EventId?,
+        circle: Boolean,
     ): Result<MediaUploadHandler> {
         Timber.tag(loggerTag).d("Sending video ${file.path.hash()}")
         return sendAttachment(listOfNotNull(file, thumbnailFile)) {
@@ -427,7 +428,7 @@ class RustTimeline(
                     inReplyTo = inReplyToEventId?.value,
                 ),
                 thumbnailSource = thumbnailFile?.path?.let(UploadSource::File),
-                videoInfo = videoInfo.map(),
+                videoInfo = videoInfo.map(circle = circle.takeIf { it }),
             )
         }
     }

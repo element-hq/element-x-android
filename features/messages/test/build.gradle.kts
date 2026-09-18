@@ -25,6 +25,7 @@ dependencies {
     implementation(projects.libraries.permissions.test)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.voicerecorder.test)
+    implementation(projects.libraries.circlerecorder.test)
     implementation(projects.services.analytics.test)
     implementation(projects.tests.testutils)
     implementation(projects.libraries.mediaupload.api)

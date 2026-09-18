@@ -18,6 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.messages.api.timeline.circlemessages.composer.CircleMessageComposerEvent
+import io.element.android.features.messages.api.timeline.circlemessages.composer.CircleMessageComposerState
+import io.element.android.features.messages.api.timeline.circlemessages.composer.aCircleMessageComposerState
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerStatePreviewParam
@@ -26,6 +29,7 @@ import io.element.android.libraries.designsystem.components.async.AsyncActionVie
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.TextComposer
+import io.element.android.libraries.textcomposer.model.ComposerMediaMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
@@ -35,6 +39,9 @@ import kotlinx.coroutines.launch
 internal fun MessageComposerView(
     state: MessageComposerState,
     voiceMessageState: VoiceMessageComposerState,
+    circleMessageState: CircleMessageComposerState,
+    composerMediaMode: ComposerMediaMode,
+    onComposerMediaModeChange: (ComposerMediaMode) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val view = LocalView.current
@@ -79,7 +86,16 @@ internal fun MessageComposerView(
     }
 
     val onVoiceRecorderEvent = { press: VoiceMessageRecorderEvent ->
-        voiceMessageState.eventSink(VoiceMessageComposerEvent.RecorderEvent(press))
+        val useCircle = composerMediaMode == ComposerMediaMode.Circle || circleMessageState.isRecording
+        if (useCircle) {
+            when (press) {
+                VoiceMessageRecorderEvent.Start -> circleMessageState.eventSink(CircleMessageComposerEvent.Start)
+                VoiceMessageRecorderEvent.Stop -> circleMessageState.eventSink(CircleMessageComposerEvent.Stop)
+                VoiceMessageRecorderEvent.Cancel -> circleMessageState.eventSink(CircleMessageComposerEvent.Cancel)
+            }
+        } else {
+            voiceMessageState.eventSink(VoiceMessageComposerEvent.RecorderEvent(press))
+        }
     }
 
     val onSendVoiceMessage = {
@@ -117,6 +133,9 @@ internal fun MessageComposerView(
         onError = ::onError,
         onTyping = ::onTyping,
         onSelectRichContent = ::sendUri,
+        composerMediaMode = composerMediaMode,
+        onComposerMediaModeChange = onComposerMediaModeChange,
+        isCircleRecording = circleMessageState.isRecording,
     )
 
     AsyncActionView(
@@ -136,11 +155,17 @@ internal fun MessageComposerViewPreview(
             modifier = Modifier.height(IntrinsicSize.Min),
             state = state,
             voiceMessageState = aVoiceMessageComposerState(),
+            circleMessageState = aCircleMessageComposerState(),
+            composerMediaMode = ComposerMediaMode.Voice,
+            onComposerMediaModeChange = {},
         )
         MessageComposerView(
             modifier = Modifier.height(200.dp),
             state = state,
             voiceMessageState = aVoiceMessageComposerState(),
+            circleMessageState = aCircleMessageComposerState(),
+            composerMediaMode = ComposerMediaMode.Circle,
+            onComposerMediaModeChange = {},
         )
         DisabledComposerView()
     }
@@ -156,6 +181,9 @@ internal fun MessageComposerViewVoicePreview(
             modifier = Modifier.height(IntrinsicSize.Min),
             state = aMessageComposerState(),
             voiceMessageState = state,
+            circleMessageState = aCircleMessageComposerState(),
+            composerMediaMode = ComposerMediaMode.Voice,
+            onComposerMediaModeChange = {},
         )
     }
 }

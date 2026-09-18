@@ -15,6 +15,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.eventformatter.api.PinnedMessagesBannerFormatter
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -101,6 +102,13 @@ class DefaultPinnedMessagesBannerFormatter(
                     .takeIf { it.isNotEmpty() }
                     ?.prefixWith(sp.getString(CommonStrings.common_voice_message))
                     ?: sp.getString(CommonStrings.common_voice_message)
+            }
+            is CircleMessageType -> {
+                messageType
+                    .toPlainText(permalinkParser, "")
+                    .takeIf { it.isNotEmpty() }
+                    ?.prefixWith(sp.getString(CommonStrings.common_circle_message))
+                    ?: sp.getString(CommonStrings.common_circle_message)
             }
             is OtherMessageType -> {
                 messageType.body

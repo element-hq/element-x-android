@@ -151,6 +151,7 @@ fun MessageContent.mediaSources(): List<MediaSource> {
         is MessageTypeWithAttachment -> when (messageType) {
             is ImageMessageType -> listOfNotNull(messageType.source, messageType.info?.thumbnailSource)
             is VideoMessageType -> listOfNotNull(messageType.source, messageType.info?.thumbnailSource)
+            is CircleMessageType -> listOfNotNull(messageType.source, messageType.info?.thumbnailSource)
             is AudioMessageType -> listOf(messageType.source)
             is VoiceMessageType -> listOf(messageType.source)
             is FileMessageType -> listOfNotNull(messageType.source, messageType.info?.thumbnailSource)

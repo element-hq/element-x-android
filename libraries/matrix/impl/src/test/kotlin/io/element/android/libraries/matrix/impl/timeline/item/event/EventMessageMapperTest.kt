@@ -11,6 +11,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.GalleryItemType
@@ -165,6 +166,21 @@ class EventMessageMapperTest {
                 info = null,
             )
         )
+    }
+
+    @Test
+    fun `mapMessageType with circle video returns CircleMessageType`() {
+        val result = sut.mapMessageType(
+            MessageType.Video(
+                content = aRustVideoMessageContent(
+                    filename = "circle.mp4",
+                    circle = true,
+                )
+            )
+        )
+        assertThat(result).isInstanceOf(CircleMessageType::class.java)
+        val circle = result as CircleMessageType
+        assertThat(circle.filename).isEqualTo("circle.mp4")
     }
 
     @Test

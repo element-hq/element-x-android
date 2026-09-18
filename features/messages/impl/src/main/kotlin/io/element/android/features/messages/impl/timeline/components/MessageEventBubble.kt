@@ -68,6 +68,7 @@ fun MessageEventBubble(
     modifier: Modifier = Modifier,
     customBackgroundColor: Color? = null,
     borderColor: Color? = null,
+    showRipple: Boolean = true,
     content: @Composable BoxScope.() -> Unit = {},
 ) {
     val clickableModifier = if (isTalkbackActive()) {
@@ -77,7 +78,7 @@ fun MessageEventBubble(
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick,
-                indication = ripple(),
+                indication = ripple().takeIf { showRipple },
                 interactionSource = interactionSource
             )
             .onKeyboardContextMenuAction(onLongClick)

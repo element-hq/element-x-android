@@ -33,6 +33,7 @@ import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.MessagesState.Threads
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.circlemessages.composer.DefaultCircleMessageComposerPresenter
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
@@ -90,6 +91,8 @@ import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.dmUserStatus
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.textcomposer.model.ComposerMediaMode
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
@@ -109,6 +112,7 @@ class MessagesPresenter(
     private val room: JoinedRoom,
     @Assisted private val composerPresenter: Presenter<MessageComposerState>,
     voiceMessageComposerPresenterFactory: DefaultVoiceMessageComposerPresenter.Factory,
+    circleMessageComposerPresenterFactory: DefaultCircleMessageComposerPresenter.Factory,
     @Assisted private val timelinePresenter: Presenter<TimelineState>,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val identityChangeStatePresenter: Presenter<IdentityChangeState>,
@@ -133,6 +137,7 @@ class MessagesPresenter(
     private val addRecentEmoji: AddRecentEmoji,
     private val markAsFullyRead: MarkAsFullyRead,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
+    private val appPreferencesStore: AppPreferencesStore,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<MessagesState> {
     @AssistedFactory
@@ -149,6 +154,9 @@ class MessagesPresenter(
     private val voiceMessageComposerPresenter = voiceMessageComposerPresenterFactory.create(
         timelineMode = timelineController.mainTimelineMode()
     )
+    private val circleMessageComposerPresenter = circleMessageComposerPresenterFactory.create(
+        timelineMode = timelineController.mainTimelineMode()
+    )
 
     private val markingAsReadAndExiting = AtomicBoolean(false)
 
@@ -161,6 +169,9 @@ class MessagesPresenter(
         val localCoroutineScope = rememberCoroutineScope()
         val composerState = composerPresenter.present()
         val voiceMessageComposerState = voiceMessageComposerPresenter.present()
+        val circleMessageComposerState = circleMessageComposerPresenter.present()
+        val composerMediaModeValue by appPreferencesStore.getLastComposerMediaModeFlow().collectAsState(initial = "voice")
+        val composerMediaMode = if (composerMediaModeValue == "circle") ComposerMediaMode.Circle else ComposerMediaMode.Voice
         val timelineState = timelinePresenter.present()
         val timelineProtectionState = timelineProtectionPresenter.present()
         val identityChangeState = identityChangeStatePresenter.present()
@@ -295,6 +306,16 @@ class MessagesPresenter(
                 MessagesEvent.ShowLiveLocationShare -> {
                     navigator.navigateToCurrentLiveLocation()
                 }
+                is MessagesEvent.SetComposerMediaMode -> {
+                    localCoroutineScope.launch {
+                        appPreferencesStore.setLastComposerMediaMode(
+                            when (event.mode) {
+                                ComposerMediaMode.Voice -> "voice"
+                                ComposerMediaMode.Circle -> "circle"
+                            }
+                        )
+                    }
+                }
                 is MessagesEvent.MarkAsFullyReadAndExit -> if (!markingAsReadAndExiting.getAndSet(true)) {
                     coroutineScope.launch {
                         val latestEventId = room.liveTimeline.getLatestEventId().getOrElse {
@@ -322,6 +343,8 @@ class MessagesPresenter(
             userEventPermissions = userEventPermissions,
             composerState = composerState,
             voiceMessageComposerState = voiceMessageComposerState,
+            circleMessageComposerState = circleMessageComposerState,
+            composerMediaMode = composerMediaMode,
             timelineState = timelineState,
             timelineProtectionState = timelineProtectionState,
             identityChangeState = identityChangeState,

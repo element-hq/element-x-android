@@ -12,6 +12,7 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.textcomposer.model.ComposerMediaMode
 
 sealed interface MessagesEvent {
     data class HandleAction(val action: TimelineItemAction, val event: TimelineItem.Event) : MessagesEvent
@@ -22,6 +23,7 @@ sealed interface MessagesEvent {
     data object CancelRedact : MessagesEvent
     data object StopLiveLocationShare : MessagesEvent
     data object ShowLiveLocationShare : MessagesEvent
+    data class SetComposerMediaMode(val mode: ComposerMediaMode) : MessagesEvent
     data object MarkAsFullyReadAndExit : MessagesEvent
 }
 

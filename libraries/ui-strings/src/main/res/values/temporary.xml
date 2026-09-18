@@ -10,4 +10,12 @@
     <string name="a11y_state_collapsed">"Collapsed"</string>
     <string name="a11y_active">Active</string>
     <string name="a11y_inactive">Inactive</string>
+    <string name="a11y_circle_message_record">Record circle message.</string>
+    <string name="a11y_circle_message_stop_recording">Stop recording circle message</string>
+    <string name="a11y_circle_message_switch_camera">Switch camera</string>
+    <string name="screen_room_circle_message">Circle message</string>
+    <string name="common_circle_message">Circle</string>
+    <string name="error_missing_camera_circle_rationale_android">To record a circle message, please grant %1$s access to your camera.</string>
+    <string name="error_missing_microphone_circle_rationale_android">To record a circle message, please grant %1$s access to your microphone.</string>
+    <string name="error_failed_uploading_circle_message">Failed to upload your circle message.</string>
 </resources>

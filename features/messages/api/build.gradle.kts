@@ -21,5 +21,6 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.mediaviewer.api)
     implementation(projects.libraries.preferences.api)
+    implementation(libs.androidx.camera.view)
     api(projects.libraries.textcomposer.impl)
 }

@@ -13,6 +13,7 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,6 +28,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.VerticalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -38,10 +41,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
@@ -88,6 +93,7 @@ import io.element.android.libraries.textcomposer.components.VoiceMessageRecorder
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
 import io.element.android.libraries.textcomposer.components.markdown.MarkdownTextInput
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
+import io.element.android.libraries.textcomposer.model.ComposerMediaMode
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.TextEditorState
@@ -102,8 +108,10 @@ import io.element.android.wysiwyg.compose.RichTextEditor
 import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import uniffi.wysiwyg_composer.MenuAction
+import kotlin.math.abs
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -132,6 +140,9 @@ fun TextComposer(
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     isInThreadTimeline: Boolean = false,
+    composerMediaMode: ComposerMediaMode = ComposerMediaMode.Voice,
+    onComposerMediaModeChange: (ComposerMediaMode) -> Unit = {},
+    isCircleRecording: Boolean = false,
 ) {
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
@@ -243,6 +254,8 @@ fun TextComposer(
         composerMode.isEditing,
         voiceMessageState.endButtonKey(),
         canSendTextMessage,
+        composerMediaMode,
+        isCircleRecording,
     ) {
         when {
             composerMode.isEditing -> EndButtonParams(
@@ -260,21 +273,13 @@ fun TextComposer(
                 },
             )
             !canSendTextMessage ->
-                when (voiceMessageState) {
-                    VoiceMessageState.Idle -> EndButtonParams(
-                        endButtonContentDescriptionResId = CommonStrings.a11y_voice_message_record,
-                        endButtonClick = {
-                            performHapticFeedback()
-                            onVoiceRecorderEvent.invoke(VoiceMessageRecorderEvent.Start)
+                when {
+                    isCircleRecording || voiceMessageState is VoiceMessageState.Recording -> EndButtonParams(
+                        endButtonContentDescriptionResId = if (isCircleRecording) {
+                            CommonStrings.a11y_circle_message_stop_recording
+                        } else {
+                            CommonStrings.a11y_voice_message_stop_recording
                         },
-                        endButtonContent = @Composable {
-                            VoiceMessageRecorderButtonIcon(
-                                isRecording = false,
-                            )
-                        }
-                    )
-                    is VoiceMessageState.Recording -> EndButtonParams(
-                        endButtonContentDescriptionResId = CommonStrings.a11y_voice_message_stop_recording,
                         endButtonClick = {
                             performHapticFeedback()
                             onVoiceRecorderEvent.invoke(VoiceMessageRecorderEvent.Stop)
@@ -285,7 +290,7 @@ fun TextComposer(
                             )
                         }
                     )
-                    is VoiceMessageState.Preview -> if (voiceMessageState.isSending) {
+                    voiceMessageState is VoiceMessageState.Preview -> if (voiceMessageState.isSending) {
                         EndButtonParams(
                             endButtonContentDescriptionResId = CommonStrings.common_sending,
                             endButtonClick = {},
@@ -309,6 +314,24 @@ fun TextComposer(
                             },
                         )
                     }
+                    else -> EndButtonParams(
+                        endButtonContentDescriptionResId = if (composerMediaMode == ComposerMediaMode.Circle) {
+                            CommonStrings.a11y_circle_message_record
+                        } else {
+                            CommonStrings.a11y_voice_message_record
+                        },
+                        endButtonClick = {
+                            performHapticFeedback()
+                            onVoiceRecorderEvent.invoke(VoiceMessageRecorderEvent.Start)
+                        },
+                        endButtonContent = @Composable {
+                            ComposerMediaModePager(
+                                composerMediaMode = composerMediaMode,
+                                enabled = true,
+                                onComposerMediaModeChange = onComposerMediaModeChange,
+                            )
+                        }
+                    )
                 }
             else -> EndButtonParams(
                 endButtonContentDescriptionResId = CommonStrings.action_send_message,
@@ -405,6 +428,7 @@ fun TextComposer(
         StandardLayout(
             composerMode = composerMode,
             voiceMessageState = voiceMessageState,
+            isCircleRecording = isCircleRecording,
             isRoomEncrypted = state.isRoomEncrypted,
             modifier = layoutModifier,
             textInput = textInput,
@@ -456,6 +480,7 @@ private data class EndButtonParams(
 private fun StandardLayout(
     composerMode: MessageComposerMode,
     voiceMessageState: VoiceMessageState,
+    isCircleRecording: Boolean,
     isRoomEncrypted: Boolean?,
     textInput: @Composable () -> Unit,
     voiceRecording: @Composable () -> Unit,
@@ -481,27 +506,28 @@ private fun StandardLayout(
                     Spacer(modifier = Modifier.width(19.dp))
                 }
                 else -> {
-                    val endPadding = if (voiceMessageState is VoiceMessageState.Idle) 0.dp else 3.dp
+                    val isRecording = voiceMessageState is VoiceMessageState.Recording || isCircleRecording
+                    val endPadding = if (voiceMessageState is VoiceMessageState.Idle && !isCircleRecording) 0.dp else 3.dp
                     // To avoid loosing keyboard focus, the IconButton has to be defined here and has to be always enabled.
                     IconButton(
                         modifier = Modifier
                             .padding(top = 5.dp, bottom = 5.dp, start = 3.dp, end = endPadding)
                             .size(48.dp),
                         onClick = {
-                            if (voiceMessageState is VoiceMessageState.Idle) {
+                            if (voiceMessageState is VoiceMessageState.Idle && !isCircleRecording) {
                                 onAddAttachment()
                             } else {
-                                when (voiceMessageState) {
-                                    is VoiceMessageState.Preview -> if (!voiceMessageState.isSending) {
+                                when {
+                                    voiceMessageState is VoiceMessageState.Preview -> if (!voiceMessageState.isSending) {
                                         onDeleteVoiceMessage()
                                     }
-                                    is VoiceMessageState.Recording ->
+                                    isRecording ->
                                         onVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel)
                                 }
                             }
                         },
                     ) {
-                        if (voiceMessageState is VoiceMessageState.Idle) {
+                        if (voiceMessageState is VoiceMessageState.Idle && !isCircleRecording) {
                             Icon(
                                 modifier = Modifier
                                     .clip(CircleShape)
@@ -513,10 +539,10 @@ private fun StandardLayout(
                                 tint = ElementTheme.colors.iconOnSolidPrimary
                             )
                         } else {
-                            when (voiceMessageState) {
-                                is VoiceMessageState.Preview ->
+                            when {
+                                voiceMessageState is VoiceMessageState.Preview ->
                                     VoiceMessageDeleteButtonIcon(enabled = !voiceMessageState.isSending)
-                                is VoiceMessageState.Recording ->
+                                isRecording ->
                                     VoiceMessageDeleteButtonIcon(enabled = true)
                             }
                         }
@@ -529,7 +555,7 @@ private fun StandardLayout(
                     .weight(1f)
             ) {
                 val movableVoiceRecording = remember { movableContentOf { voiceRecording() } }
-                if (voiceMessageState is VoiceMessageState.Idle) {
+                if (voiceMessageState is VoiceMessageState.Idle && !isCircleRecording) {
                     textInput()
                 } else if (composerMode is MessageComposerMode.Special) {
                     TextInputBox(
@@ -702,6 +728,94 @@ private fun VoiceMessageState.endButtonKey() = when (this) {
     is VoiceMessageState.Idle -> "Idle"
     is VoiceMessageState.Preview -> "Preview_$isSending"
     is VoiceMessageState.Recording -> "Recording"
+}
+
+private const val COMPOSER_MEDIA_PAGER_PAGE_COUNT = 48
+private const val COMPOSER_MEDIA_MODE_SWIPE_THRESHOLD_PX = 12f
+
+private fun composerMediaModeForPage(page: Int): ComposerMediaMode {
+    return if (page % 2 == 0) ComposerMediaMode.Voice else ComposerMediaMode.Circle
+}
+
+@Composable
+private fun ComposerMediaModePager(
+    composerMediaMode: ComposerMediaMode,
+    enabled: Boolean,
+    onComposerMediaModeChange: (ComposerMediaMode) -> Unit,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val initialPage = remember {
+        val center = COMPOSER_MEDIA_PAGER_PAGE_COUNT / 2
+        if (composerMediaModeForPage(center) == composerMediaMode) center else center + 1
+    }
+    val pagerState = rememberPagerState(initialPage = initialPage) { COMPOSER_MEDIA_PAGER_PAGE_COUNT }
+    val latestOnChange by rememberUpdatedState(onComposerMediaModeChange)
+    val latestMode by rememberUpdatedState(composerMediaMode)
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.settledPage }
+            .distinctUntilChanged()
+            .collect { page ->
+                val selected = composerMediaModeForPage(page)
+                if (selected != latestMode) {
+                    latestOnChange(selected)
+                }
+            }
+    }
+    LaunchedEffect(composerMediaMode) {
+        if (composerMediaModeForPage(pagerState.currentPage) != composerMediaMode) {
+            val next = pagerState.currentPage + 1
+            val previous = pagerState.currentPage - 1
+            val target = when {
+                next < COMPOSER_MEDIA_PAGER_PAGE_COUNT && composerMediaModeForPage(next) == composerMediaMode -> next
+                previous >= 0 && composerMediaModeForPage(previous) == composerMediaMode -> previous
+                else -> initialPage
+            }
+            pagerState.scrollToPage(target)
+        }
+    }
+    VerticalPager(
+        state = pagerState,
+        userScrollEnabled = false,
+        modifier = Modifier
+            .size(24.dp)
+            .pointerInput(enabled) {
+                if (!enabled) return@pointerInput
+                var totalDrag = 0f
+                var switched = false
+                detectVerticalDragGestures(
+                    onDragStart = {
+                        totalDrag = 0f
+                        switched = false
+                    },
+                    onVerticalDrag = { change, dragAmount ->
+                        change.consume()
+                        if (switched) return@detectVerticalDragGestures
+                        totalDrag += dragAmount
+                        if (abs(totalDrag) < COMPOSER_MEDIA_MODE_SWIPE_THRESHOLD_PX) return@detectVerticalDragGestures
+                        switched = true
+                        val currentPage = pagerState.currentPage
+                        val targetPage = if (totalDrag < 0) currentPage + 1 else currentPage - 1
+                        if (targetPage in 0 until COMPOSER_MEDIA_PAGER_PAGE_COUNT) {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(targetPage)
+                            }
+                        }
+                    },
+                )
+            },
+    ) { page ->
+        val mode = composerMediaModeForPage(page)
+        Icon(
+            modifier = Modifier.size(24.dp),
+            imageVector = if (mode == ComposerMediaMode.Circle) {
+                CompoundIcons.VideoCallSolid()
+            } else {
+                CompoundIcons.MicOnSolid()
+            },
+            contentDescription = null,
+            tint = ElementTheme.colors.iconSecondary,
+        )
+    }
 }
 
 private fun aTextEditorStateMarkdownList(isRoomEncrypted: Boolean? = null) = persistentListOf(

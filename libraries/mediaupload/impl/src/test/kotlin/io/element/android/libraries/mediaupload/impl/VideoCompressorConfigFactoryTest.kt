@@ -137,6 +137,36 @@ class VideoCompressorConfigFactoryTest : RobolectricTest() {
         assertIsNotResized(videoCompressorConfig, 1920)
     }
 
+    @Test
+    fun `square crop bitrate is based on the output square not the letterboxed source`() {
+        val metadata = VideoFileMetadata(width = 1920, height = 1080, bitrate = 8_000_000, frameRate = 30, rotation = 0)
+
+        val config = VideoCompressorConfigFactory.create(
+            metadata = metadata,
+            preset = VideoCompressionPreset.STANDARD,
+            squareCropTo = 512,
+        )
+
+        // 512 * 512 * 0.1 * 30
+        assertThat(config.newBitRate).isEqualTo(786_432)
+        assertThat(config.videoCompressorHelper.maxSize).isEqualTo(512)
+    }
+
+    @Test
+    fun `square crop smaller than the cap keeps the cropped side and does not upscale bitrate`() {
+        val metadata = VideoFileMetadata(width = 640, height = 480, bitrate = 2_000_000, frameRate = 30, rotation = 0)
+
+        val config = VideoCompressorConfigFactory.create(
+            metadata = metadata,
+            preset = VideoCompressionPreset.STANDARD,
+            squareCropTo = 512,
+        )
+
+        // 480 * 480 * 0.1 * 30
+        assertThat(config.newBitRate).isEqualTo(691_200)
+        assertThat(config.videoCompressorHelper.maxSize).isEqualTo(480)
+    }
+
     private inline fun assertIsResized(videoCompressorConfig: VideoCompressorConfig, referenceSize: Int) {
         assertThat(videoCompressorConfig.videoCompressorHelper.maxSize).isNotEqualTo(referenceSize)
     }

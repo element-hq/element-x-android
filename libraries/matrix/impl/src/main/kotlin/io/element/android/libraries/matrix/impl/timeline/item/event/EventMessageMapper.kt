@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.timeline.item.event
 
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
@@ -104,13 +105,24 @@ class EventMessageMapper {
             EmoteMessageType(type.content.body, type.content.formatted?.map())
         }
         is RustMessageType.Video -> {
-            VideoMessageType(
-                filename = type.content.filename,
-                caption = type.content.caption,
-                formattedCaption = type.content.formattedCaption?.map(),
-                source = type.content.source.map(),
-                info = type.content.info?.map(),
-            )
+            val mappedInfo = type.content.info?.map()
+            if (type.content.circle == true) {
+                CircleMessageType(
+                    filename = type.content.filename,
+                    caption = type.content.caption,
+                    formattedCaption = type.content.formattedCaption?.map(),
+                    source = type.content.source.map(),
+                    info = mappedInfo,
+                )
+            } else {
+                VideoMessageType(
+                    filename = type.content.filename,
+                    caption = type.content.caption,
+                    formattedCaption = type.content.formattedCaption?.map(),
+                    source = type.content.source.map(),
+                    info = mappedInfo,
+                )
+            }
         }
         is RustMessageType.Location -> {
             LocationMessageType(

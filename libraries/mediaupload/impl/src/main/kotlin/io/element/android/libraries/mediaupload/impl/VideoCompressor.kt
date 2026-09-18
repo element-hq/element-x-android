@@ -14,6 +14,7 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.util.Size
 import androidx.annotation.OptIn
+import androidx.media3.common.Effect
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
@@ -51,22 +52,33 @@ class VideoCompressor(
     @ApplicationContext private val context: Context,
 ) {
     @OptIn(UnstableApi::class)
-    fun compress(uri: Uri, videoCompressionPreset: VideoCompressionPreset): Flow<VideoTranscodingEvent> = callbackFlow {
+    fun compress(
+        uri: Uri,
+        videoCompressionPreset: VideoCompressionPreset,
+        squareCropTo: Int? = null,
+    ): Flow<VideoTranscodingEvent> = callbackFlow {
         val metadata = getVideoMetadata(uri)
 
         val videoCompressorConfig = VideoCompressorConfigFactory.create(
             metadata = metadata,
             preset = videoCompressionPreset,
+            squareCropTo = squareCropTo,
         )
 
         val tmpFile = context.createTmpFile(extension = "mp4")
 
         val width = metadata?.width ?: Int.MAX_VALUE
         val height = metadata?.height ?: Int.MAX_VALUE
+        val rotation = metadata?.rotation ?: 0
 
-        val videoResizeEffect = run {
+        val videoEffects: List<Effect> = if (squareCropTo != null) {
+            squareCropEffects(
+                maxSide = squareCropTo,
+                croppedSide = croppedSquareSide(width, height, rotation),
+            )
+        } else {
             val outputSize = videoCompressorConfig.videoCompressorHelper.getOutputSize(Size(width, height))
-            if (metadata?.rotation == 90 || metadata?.rotation == 270) {
+            val presentation = if (rotation == 90 || rotation == 270) {
                 // If the video is rotated, we need to swap width and height
                 Presentation.createForWidthAndHeight(
                     outputSize.height,
@@ -74,13 +86,13 @@ class VideoCompressor(
                     Presentation.LAYOUT_SCALE_TO_FIT,
                 )
             } else {
-                // Otherwise, we can use the original width and height
                 Presentation.createForWidthAndHeight(
                     outputSize.width,
                     outputSize.height,
                     Presentation.LAYOUT_SCALE_TO_FIT,
                 )
             }
+            listOf(presentation)
         }
 
         // If we are resizing, we also want to reduce set frame rate to the default value (30fps)
@@ -96,7 +108,7 @@ class VideoCompressor(
         val inputMediaItem = MediaItem.fromUri(uri)
         val outputMediaItem = EditedMediaItem.Builder(inputMediaItem)
             .setFrameRate(newFrameRate)
-            .setEffects(Effects(emptyList(), listOf(videoResizeEffect)))
+            .setEffects(Effects(emptyList(), videoEffects))
             .build()
 
         val encoderFactory = DefaultEncoderFactory.Builder(context)

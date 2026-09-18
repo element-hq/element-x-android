@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -140,6 +141,7 @@ class DefaultPinnedMessagesBannerFormatterTest : RobolectricTest() {
             VideoMessageType(body, null, null, MediaSource("url"), null),
             AudioMessageType(body, null, null, MediaSource("url"), null),
             VoiceMessageType(body, null, null, MediaSource("url"), null, null),
+            CircleMessageType(body, null, null, MediaSource("url"), null),
             ImageMessageType(body, null, null, MediaSource("url"), null),
             GalleryMessageType(body, null, emptyList()),
             StickerMessageType(body, null, null, MediaSource("url"), null),
@@ -169,6 +171,7 @@ class DefaultPinnedMessagesBannerFormatterTest : RobolectricTest() {
                 is FileMessageType,
                 is LocationMessageType -> AnnotatedString::class.java
                 is VoiceMessageType,
+                is CircleMessageType,
                 is EmoteMessageType,
                 is TextMessageType,
                 is NoticeMessageType,
@@ -182,6 +185,7 @@ class DefaultPinnedMessagesBannerFormatterTest : RobolectricTest() {
                 is VideoMessageType -> "Video: Shared body"
                 is AudioMessageType -> "Audio: Shared body"
                 is VoiceMessageType -> "Voice message"
+                is CircleMessageType -> "Circle"
                 is ImageMessageType -> "Image: Shared body"
                 is GalleryMessageType -> "Gallery: Shared body"
                 is StickerMessageType -> "Sticker: Shared body"

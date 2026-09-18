@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
@@ -211,6 +212,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
             VideoMessageType(body, null, null, MediaSource("url"), null),
             AudioMessageType(body, null, null, MediaSource("url"), null),
             VoiceMessageType(body, null, null, MediaSource("url"), null, null),
+            CircleMessageType(body, null, null, MediaSource("url"), null),
             ImageMessageType(body, null, null, MediaSource("url"), null),
             GalleryMessageType(body, null, emptyList()),
             StickerMessageType(body, null, null, MediaSource("url"), null),
@@ -244,6 +246,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
                 is VideoMessageType -> "Video: Shared body"
                 is AudioMessageType -> "Audio: Shared body"
                 is VoiceMessageType -> "Voice message"
+                is CircleMessageType -> "Circle"
                 is ImageMessageType -> "Image: Shared body"
                 is GalleryMessageType -> "Gallery: Shared body"
                 is StickerMessageType -> "Sticker: Shared body"
@@ -258,6 +261,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
                 is VideoMessageType -> true
                 is AudioMessageType -> true
                 is VoiceMessageType -> false
+                is CircleMessageType -> false
                 is ImageMessageType -> true
                 is StickerMessageType -> true
                 is FileMessageType -> true
@@ -283,6 +287,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
                 is VideoMessageType -> "$expectedPrefix: Video: Shared body"
                 is AudioMessageType -> "$expectedPrefix: Audio: Shared body"
                 is VoiceMessageType -> "$expectedPrefix: Voice message"
+                is CircleMessageType -> "$expectedPrefix: Circle"
                 is ImageMessageType -> "$expectedPrefix: Image: Shared body"
                 is GalleryMessageType -> "$expectedPrefix: Gallery: Shared body"
                 is StickerMessageType -> "$expectedPrefix: Sticker: Shared body"
@@ -297,6 +302,7 @@ class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
                 is VideoMessageType -> true
                 is AudioMessageType -> true
                 is VoiceMessageType -> true
+                is CircleMessageType -> true
                 is ImageMessageType -> true
                 is StickerMessageType -> true
                 is FileMessageType -> true

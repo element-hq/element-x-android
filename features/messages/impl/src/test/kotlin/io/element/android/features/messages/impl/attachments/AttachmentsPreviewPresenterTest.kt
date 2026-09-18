@@ -323,7 +323,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
     @Test
     fun `present - send video with caption success scenario`() = runTest {
         val sendVideoResult =
-            lambdaRecorder { _: File, _: File?, _: VideoInfo, _: String?, _: String?, _: EventId? ->
+            lambdaRecorder { _: File, _: File?, _: VideoInfo, _: String?, _: String?, _: EventId?, _: Boolean ->
                 Result.success(FakeMediaUploadHandler())
             }
         val mediaPreProcessor = FakeMediaPreProcessor().apply {
@@ -355,6 +355,7 @@ class AttachmentsPreviewPresenterTest : RobolectricTest() {
                 any(),
                 any(),
                 value(A_CAPTION),
+                any(),
                 any(),
                 any(),
             )

@@ -44,6 +44,8 @@ private val messageSoundDisplayNameKey = stringPreferencesKey("notificationMessa
 private val callRingtoneUriKey = stringPreferencesKey("notificationCallRingtoneUri")
 private val callRingtoneChannelVersionKey = intPreferencesKey("notificationCallRingtoneChannelVersion")
 private val callRingtoneDisplayNameKey = stringPreferencesKey("notificationCallRingtoneDisplayName")
+private val lastComposerMediaModeKey = stringPreferencesKey("lastComposerMediaMode")
+private const val DEFAULT_COMPOSER_MEDIA_MODE = "voice"
 
 // URLs never contain a newline, so it is a safe delimiter to persist an ordered list in a single String.
 private const val HOMESERVER_HISTORY_DELIMITER = "\n"
@@ -255,6 +257,18 @@ class DefaultAppPreferencesStore(
             callRingtoneVersion = prefs[callRingtoneChannelVersionKey] ?: 0,
             callRingtoneDisplayName = prefs[callRingtoneDisplayNameKey],
         )
+    }
+
+    override suspend fun setLastComposerMediaMode(value: String) {
+        store.edit { prefs ->
+            prefs[lastComposerMediaModeKey] = value
+        }
+    }
+
+    override fun getLastComposerMediaModeFlow(): Flow<String> {
+        return store.data.map { prefs ->
+            prefs[lastComposerMediaModeKey] ?: DEFAULT_COMPOSER_MEDIA_MODE
+        }
     }
 
     override suspend fun reset() {

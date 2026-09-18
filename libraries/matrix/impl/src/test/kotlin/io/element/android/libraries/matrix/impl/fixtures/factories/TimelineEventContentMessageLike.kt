@@ -126,12 +126,14 @@ internal fun aRustVideoMessageContent(
     formattedCaption: FormattedBody? = null,
     source: MediaSource = FakeFfiMediaSource("mxc://server/video"),
     info: VideoInfo? = null,
+    circle: Boolean? = null,
 ) = VideoMessageContent(
     filename = filename,
     caption = caption,
     formattedCaption = formattedCaption,
     source = source,
     info = info,
+    circle = circle,
 )
 
 internal fun aRustFileMessageContent(

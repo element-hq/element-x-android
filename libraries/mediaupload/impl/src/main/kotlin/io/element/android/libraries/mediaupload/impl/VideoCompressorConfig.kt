@@ -23,18 +23,26 @@ internal object VideoCompressorConfigFactory {
     fun create(
         metadata: VideoFileMetadata?,
         preset: VideoCompressionPreset,
+        squareCropTo: Int? = null,
     ): VideoCompressorConfig {
         val width = metadata?.width?.takeIf { it >= 0 } ?: Int.MAX_VALUE
         val height = metadata?.height?.takeIf { it >= 0 } ?: Int.MAX_VALUE
+        val rotation = metadata?.rotation ?: 0
         val originalFrameRate = metadata?.frameRate?.takeIf { it >= 0 } ?: DEFAULT_FRAME_RATE
 
-        val resizer = preset.compressorHelper()
+        val outputSize = if (squareCropTo != null) {
+            val outputSide = min(croppedSquareSide(width, height, rotation), squareCropTo)
+            Size(outputSide, outputSide)
+        } else {
+            Size(width, height)
+        }
+        val resizer = squareCropTo?.let { VideoCompressorHelper(min(it, outputSize.width)) } ?: preset.compressorHelper()
 
         // If we are resizing, we also want to reduce the frame rate to the default value (30fps)
         val newFrameRate = min(originalFrameRate, DEFAULT_FRAME_RATE)
 
         // If we need to resize the video, we also want to recalculate the bitrate
-        val optimalBitrate = resizer.calculateOptimalBitrate(Size(width, height), newFrameRate).toInt()
+        val optimalBitrate = resizer.calculateOptimalBitrate(outputSize, newFrameRate).toInt()
 
         val sourceBitrate = metadata?.bitrate?.takeIf { it > 0 }
         val newBitrate = sourceBitrate?.let { min(optimalBitrate.toLong(), it).toInt() } ?: optimalBitrate
