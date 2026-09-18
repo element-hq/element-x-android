@@ -20,6 +20,17 @@ import org.junit.runners.model.Statement
  * Paparazzi's PaparazziLogger collects background thread errors and re-throws them via
  * assertNoErrors(). This Statement wrapper catches the known NoSuchMethodError so the test
  * can pass despite the LayoutLib bug.
+ *
+ * Note: forcing layoutlib >= 16.2.3 ourselves does not work, and this is not just a matter of
+ * declaring the version. The `setThreadNiceness` fix and the removal of `Bridge.prepareThread()`,
+ * which Paparazzi 2.0.0-alpha05 still calls, both landed in 16.2.3, so every screenshot test fails
+ * with `NoSuchMethodError: Bridge.prepareThread()`. 16.2.2 is the last compatible release and it does
+ * not have the fix. We have to wait for a Paparazzi release.
+ *
+ * Swallowing the error is not harmless: HandlerThread.run() publishes its Looper and then dies
+ * before Looper.loop(), on a background thread racing the render, so a screenshot can be recorded
+ * from a partially rendered frame. That is why previews with animations or a bottom sheet flip
+ * between two results (sometimes an entirely blank image) on every recording.
  */
 class LayoutLibErrorFilterStatement : TestRule {
     override fun apply(base: Statement, description: Description): Statement {
