@@ -90,6 +90,18 @@ class ToHtmlDocumentTest : RobolectricTest() {
     }
 
     @Test
+    fun `toHtmlDocument - keeps the language class of a code block`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = """<pre><code class="language-bash">echo "hi"</code></pre>"""
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+
+        assertThat(document?.selectFirst("pre > code")?.className()).isEqualTo("language-bash")
+    }
+
+    @Test
     fun `toHtmlDocument - if a link is not a mention, nothing will be done for it`() {
         val body = FormattedBody(
             format = MessageFormat.HTML,
