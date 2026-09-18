@@ -32,6 +32,7 @@ import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetSta
 import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDeleteConfirmation
 import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.MutableStateFlow
 
 private const val LONG_CAPTION = "This is a very long caption that should be scrollable in the media viewer. " +
     "It contains multiple lines of text to demonstrate the scrolling behavior. " +
@@ -322,6 +323,7 @@ fun aMediaViewerPageDataLoading(
 
 fun aMediaViewerPageData(
     downloadedMedia: AsyncData<LocalMedia> = AsyncData.Uninitialized,
+    downloadProgress: Int? = null,
     mediaInfo: MediaInfo = anImageMediaInfo(),
     mediaSource: MediaSource = MediaSource(""),
     validationState: ContentValidationState = NoopContentValidationState(),
@@ -331,6 +333,7 @@ fun aMediaViewerPageData(
     mediaSource = mediaSource,
     thumbnailSource = null,
     downloadedMedia = mutableStateOf(downloadedMedia),
+    downloadProgress = MutableStateFlow(downloadProgress),
     pagerKey = 0L,
     validationState = validationState,
 )
