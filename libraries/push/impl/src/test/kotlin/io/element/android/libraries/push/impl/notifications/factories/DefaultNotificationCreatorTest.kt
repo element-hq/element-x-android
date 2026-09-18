@@ -29,6 +29,8 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoader
 import io.element.android.libraries.matrix.ui.media.test.FakeInitialsAvatarBitmapGenerator
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
@@ -327,6 +329,37 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
     }
 
     @Test
+    fun `test createMessagesListNotification carries a shortcut id, unless conversation notifications are off`() = runTest {
+        suspend fun notificationWith(conversationNotificationsEnabled: Boolean): Notification {
+            return createNotificationCreator(
+                appPreferencesStore = InMemoryAppPreferencesStore(
+                    isConversationNotificationsEnabled = conversationNotificationsEnabled,
+                ),
+            ).createMessagesListNotification(
+                notificationAccountParams = aNotificationAccountParams(),
+                roomInfo = RoomEventGroupInfo(
+                    sessionId = A_SESSION_ID,
+                    roomId = A_ROOM_ID,
+                    roomDisplayName = "roomDisplayName",
+                    hasSmartReplyError = false,
+                    shouldBing = false,
+                    customSound = null,
+                    isUpdated = false,
+                ),
+                threadId = null,
+                largeIcon = null,
+                lastMessageTimestamp = 123_456L,
+                tickerText = "tickerText",
+                existingNotification = null,
+                imageLoader = FakeImageLoader(),
+                events = listOf(aNotifiableMessageEvent()),
+            )
+        }
+        assertThat(notificationWith(conversationNotificationsEnabled = true).shortcutId).isNotNull()
+        assertThat(notificationWith(conversationNotificationsEnabled = false).shortcutId).isNull()
+    }
+
+    @Test
     fun `test createMessagesListNotification should bing and thread`() = runTest {
         val sut = createNotificationCreator(
             enterpriseService = FakeEnterpriseService(
@@ -457,6 +490,7 @@ fun createNotificationCreator(
         sdkIntProvider = FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.R),
         initialsAvatarBitmapGenerator = FakeInitialsAvatarBitmapGenerator(),
     ),
+    appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
 ): NotificationCreator {
     return DefaultNotificationCreator(
         context = context,
@@ -494,6 +528,7 @@ fun createNotificationCreator(
             stringProvider = FakeStringProvider(REJECT_INVITATION_ACTION_TITLE),
             clock = FakeSystemClock(),
         ),
+        appPreferencesStore = appPreferencesStore,
     )
 }
 

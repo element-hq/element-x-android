@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
@@ -47,6 +48,7 @@ import io.element.android.libraries.push.impl.notifications.shortcut.createShort
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import io.element.android.services.toolbox.api.strings.StringProvider
+import kotlinx.coroutines.flow.first
 
 interface NotificationCreator {
     /**
@@ -121,6 +123,7 @@ class DefaultNotificationCreator(
     private val quickReplyActionFactory: QuickReplyActionFactory,
     private val bitmapLoader: NotificationBitmapLoader,
     private val acceptInvitationActionFactory: AcceptInvitationActionFactory,
+    private val appPreferencesStore: AppPreferencesStore,
     private val rejectInvitationActionFactory: RejectInvitationActionFactory,
 ) : NotificationCreator {
     /**
@@ -177,7 +180,7 @@ class DefaultNotificationCreator(
                 // for the notification to appear as a "Conversation":
                 // https://developer.android.com/develop/ui/views/notifications/conversations
                 .apply {
-                    if (threadId == null) {
+                    if (threadId == null && appPreferencesStore.isConversationNotificationsEnabledFlow().first()) {
                         setShortcutId(createShortcutId(roomInfo.sessionId, roomInfo.roomId))
                     }
                 }

@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.updateAndGet
 
 class InMemoryAppPreferencesStore(
     isDeveloperModeEnabled: Boolean = false,
+    isConversationNotificationsEnabled: Boolean = true,
     customElementCallBaseUrl: String? = null,
     hideInviteAvatars: Boolean? = null,
     timelineMediaPreviewValue: MediaPreviewValue? = null,
@@ -37,6 +38,7 @@ class InMemoryAppPreferencesStore(
     callRingtoneDisplayName: String? = null,
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
+    private val isConversationNotificationsEnabled = MutableStateFlow(isConversationNotificationsEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
     private val liveLocationMinimumDistanceUpdate = MutableStateFlow(liveLocationMinimumDistanceUpdate)
@@ -58,6 +60,14 @@ class InMemoryAppPreferencesStore(
 
     override fun isDeveloperModeEnabledFlow(): Flow<Boolean> {
         return isDeveloperModeEnabled
+    }
+
+    override suspend fun setConversationNotificationsEnabled(enabled: Boolean) {
+        isConversationNotificationsEnabled.value = enabled
+    }
+
+    override fun isConversationNotificationsEnabledFlow(): Flow<Boolean> {
+        return isConversationNotificationsEnabled
     }
 
     override suspend fun setCustomElementCallBaseUrl(string: String?) {
