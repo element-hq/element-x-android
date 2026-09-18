@@ -105,8 +105,8 @@ class DefaultVoiceRecorder(
                         lock.withLock {
                             levels.add(audioLevel)
                             _state.emit(VoiceRecorderState.Recording(elapsedTime, levels.toList()))
+                            encoder.encode(audio.buffer, audio.readSize)
                         }
-                        encoder.encode(audio.buffer, audio.readSize)
                     }
                     is Audio.Error -> {
                         Timber.e("Voice message error: code=${audio.audioRecordErrorCode}")
@@ -124,7 +124,7 @@ class DefaultVoiceRecorder(
      */
     override suspend fun stopRecord(
         cancelled: Boolean
-    ) {
+    ) = lock.withLock {
         recordingJob?.cancel()?.also {
             Timber.i("Voice recorder stopped recording")
         }
@@ -134,33 +134,35 @@ class DefaultVoiceRecorder(
         audioReader = null
         encoder.release()
 
-        lock.withLock {
-            if (cancelled) {
-                deleteRecording()
-                levels.clear()
-            }
-
-            _state.emit(
-                when (val file = outputFile) {
-                    null -> VoiceRecorderState.Idle
-                    else -> {
-                        val duration = (state.value as? VoiceRecorderState.Recording)?.elapsedTime
-                        VoiceRecorderState.Finished(
-                            file = file,
-                            mimeType = fileConfig.mimeType,
-                            waveform = levels.resample(100),
-                            duration = duration ?: 0.milliseconds
-                        )
-                    }
-                }
-            )
+        if (cancelled) {
+            deleteRecordingUnderLock()
+            levels.clear()
         }
+
+        _state.emit(
+            when (val file = outputFile) {
+                null -> VoiceRecorderState.Idle
+                else -> {
+                    val duration = (state.value as? VoiceRecorderState.Recording)?.elapsedTime
+                    VoiceRecorderState.Finished(
+                        file = file,
+                        mimeType = fileConfig.mimeType,
+                        waveform = levels.resample(100),
+                        duration = duration ?: 0.milliseconds
+                    )
+                }
+            }
+        )
     }
 
     /**
      * Stop the current recording and delete the output file.
      */
-    override suspend fun deleteRecording() {
+    override suspend fun deleteRecording() = lock.withLock {
+        deleteRecordingUnderLock()
+    }
+
+    private suspend fun deleteRecordingUnderLock() {
         outputFile?.let(fileManager::deleteFile)?.also {
             Timber.i("Voice recorder deleted recording")
         }
