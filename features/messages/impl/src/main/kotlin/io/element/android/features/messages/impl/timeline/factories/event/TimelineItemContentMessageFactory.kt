@@ -33,6 +33,7 @@ import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -71,6 +72,7 @@ class TimelineItemContentMessageFactory(
     private val htmlConverterProvider: HtmlConverterProvider,
     private val permalinkParser: PermalinkParser,
     private val textPillificationHelper: TextPillificationHelper,
+    private val htmlMessageParser: HtmlMessageParser,
 ) {
     fun create(
         content: MessageContent,
@@ -93,6 +95,7 @@ class TimelineItemContentMessageFactory(
                     htmlDocument = dom,
                     formattedBody = formattedBody,
                     isEdited = content.isEdited,
+                    messageTree = dom?.let(htmlMessageParser::parse),
                 )
             }
             is ImageMessageType -> {
@@ -260,6 +263,7 @@ class TimelineItemContentMessageFactory(
                     htmlDocument = htmlDocument,
                     formattedBody = formattedBody,
                     isEdited = content.isEdited,
+                    messageTree = htmlDocument?.let(htmlMessageParser::parse),
                 )
             }
             is TextMessageType -> {
@@ -273,6 +277,7 @@ class TimelineItemContentMessageFactory(
                     htmlDocument = htmlDocument,
                     formattedBody = formattedBody,
                     isEdited = content.isEdited,
+                    messageTree = htmlDocument?.let(htmlMessageParser::parse),
                 )
             }
             is GalleryMessageType -> {

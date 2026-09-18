@@ -163,6 +163,9 @@ class TimelinePresenter(
         val displayJumpToUnread by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.JumpToUnread)
         }
+        val useNewTimelineEventRenderer by produceState(false) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)
+        }
 
         val timelineProtectionState = timelineProtectionPresenter.present()
 
@@ -434,6 +437,7 @@ class TimelinePresenter(
         val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo) {
             derivedStateOf {
                 TimelineRoomInfo(
+                    currentUserId = room.sessionId,
                     name = roomInfo.name,
                     isDm = roomInfo.isDm,
                     userHasPermissionToSendMessage = userEventPermissions.canSendMessage,
@@ -463,6 +467,7 @@ class TimelinePresenter(
             displayThreadSummaries = displayThreadSummaries,
             displayJumpToUnread = displayJumpToUnread,
             jumpToUnread = jumpToUnread.value,
+            useNewTimelineEventRenderer = useNewTimelineEventRenderer,
             eventSink = ::handleEvent,
         )
     }
