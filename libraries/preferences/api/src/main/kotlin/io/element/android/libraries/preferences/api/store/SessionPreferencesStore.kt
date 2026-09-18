@@ -66,6 +66,14 @@ interface SessionPreferencesStore {
     fun isSessionVerificationSkipped(): Flow<Boolean>
 
     /**
+     * @param dismissed true to remember that the user dismissed the banner recommending to set up recovery.
+     */
+    suspend fun setRecoveryBannerDismissed(dismissed: Boolean)
+
+    /** Whether the user dismissed the banner recommending to set up recovery; defaults to `false`. */
+    fun isRecoveryBannerDismissed(): Flow<Boolean>
+
+    /**
      * @param compress true to downscale images before uploading them.
      */
     suspend fun setOptimizeImages(compress: Boolean)
