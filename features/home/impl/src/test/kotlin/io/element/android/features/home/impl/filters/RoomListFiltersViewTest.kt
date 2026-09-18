@@ -11,7 +11,12 @@
 package io.element.android.features.home.impl.filters
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.filters.selection.FilterSelectionState
@@ -56,5 +61,20 @@ class RoomListFiltersViewTest : RobolectricTest() {
                 RoomListFiltersEvent.ClearSelectedFilters,
             )
         )
+    }
+
+    @Test
+    fun `clear filters is exposed as a button`() = runAndroidComposeUiTest<ComponentActivity> {
+        val eventsRecorder = EventsRecorder<RoomListFiltersEvent>(expectEvents = false)
+        setContent {
+            RoomListFiltersView(
+                state = aRoomListFiltersState(
+                    filterSelectionStates = RoomListFilter.entries.map { FilterSelectionState(it, isSelected = true) },
+                    eventSink = eventsRecorder
+                ),
+            )
+        }
+        onNodeWithTag(TestTags.homeScreenClearFilters.value)
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.Role, Role.Button))
     }
 }
