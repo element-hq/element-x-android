@@ -18,24 +18,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.previews.ColorPreview
-import io.element.android.compound.screenshot.utils.screenshotFile
+import io.element.android.compound.screenshot.utils.createPaparazziRule
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.LinkColor
 import io.element.android.compound.theme.SnackBarLabelColorDark
 import io.element.android.compound.theme.SnackBarLabelColorLight
-import io.element.android.tests.testutils.robolectric.RobolectricTest
+import org.junit.Rule
 import org.junit.Test
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
-class LegacyColorsTest : RobolectricTest() {
+class LegacyColorsTest {
+    @get:Rule
+    val paparazzi = createPaparazziRule()
+
     @Test
-    @Config(sdk = [35], qualifiers = "xxhdpi")
     fun screenshots() {
-        captureRoboImage(file = screenshotFile("Legacy Colors.png")) {
+        paparazzi.snapshot(name = "Legacy Colors") {
             ElementTheme {
                 Surface {
                     Column(modifier = Modifier.padding(16.dp)) {

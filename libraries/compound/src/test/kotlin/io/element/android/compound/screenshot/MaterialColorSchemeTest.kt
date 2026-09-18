@@ -18,24 +18,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.takahirom.roborazzi.captureRoboImage
-import io.element.android.compound.screenshot.utils.screenshotFile
+import io.element.android.compound.screenshot.utils.createPaparazziRule
 import io.element.android.compound.theme.ColorsSchemeDarkHcPreview
 import io.element.android.compound.theme.ColorsSchemeDarkPreview
 import io.element.android.compound.theme.ColorsSchemeLightHcPreview
 import io.element.android.compound.theme.ColorsSchemeLightPreview
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.tests.testutils.robolectric.RobolectricTest
+import org.junit.Rule
 import org.junit.Test
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
-class MaterialColorSchemeTest : RobolectricTest() {
+class MaterialColorSchemeTest {
+    @get:Rule
+    val paparazzi = createPaparazziRule()
+
     @Test
-    @Config(sdk = [35], qualifiers = "h2048dp-xhdpi")
     fun screenshots() {
-        captureRoboImage(file = screenshotFile("Material3 Colors - Light.png")) {
+        paparazzi.snapshot(name = "Material3 Colors - Light") {
             ElementTheme {
                 Surface {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -49,7 +47,7 @@ class MaterialColorSchemeTest : RobolectricTest() {
                 }
             }
         }
-        captureRoboImage(file = screenshotFile("Material3 Colors - Light HC.png")) {
+        paparazzi.snapshot(name = "Material3 Colors - Light HC") {
             ElementTheme {
                 Surface {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -63,7 +61,7 @@ class MaterialColorSchemeTest : RobolectricTest() {
                 }
             }
         }
-        captureRoboImage(file = screenshotFile("Material3 Colors - Dark.png")) {
+        paparazzi.snapshot(name = "Material3 Colors - Dark") {
             ElementTheme {
                 Surface {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -77,7 +75,7 @@ class MaterialColorSchemeTest : RobolectricTest() {
                 }
             }
         }
-        captureRoboImage(file = screenshotFile("Material3 Colors - Dark HC.png")) {
+        paparazzi.snapshot(name = "Material3 Colors - Dark HC") {
             ElementTheme {
                 Surface {
                     Column(modifier = Modifier.padding(16.dp)) {

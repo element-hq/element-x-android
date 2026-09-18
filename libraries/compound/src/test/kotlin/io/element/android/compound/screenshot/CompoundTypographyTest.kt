@@ -8,20 +8,18 @@
 
 package io.element.android.compound.screenshot
 
-import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.previews.CompoundTypographyPreview
-import io.element.android.compound.screenshot.utils.screenshotFile
-import io.element.android.tests.testutils.robolectric.RobolectricTest
+import io.element.android.compound.screenshot.utils.createPaparazziRule
+import org.junit.Rule
 import org.junit.Test
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
-class CompoundTypographyTest : RobolectricTest() {
+class CompoundTypographyTest {
+    @get:Rule
+    val paparazzi = createPaparazziRule()
+
     @Test
-    @Config(sdk = [35], qualifiers = "h2048dp-xxhdpi")
     fun screenshots() {
-        captureRoboImage(file = screenshotFile("Compound Typography.png")) {
+        paparazzi.snapshot(name = "Compound Typography") {
             CompoundTypographyPreview()
         }
     }

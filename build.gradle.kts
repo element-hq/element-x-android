@@ -18,7 +18,6 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.dependencycheck) apply false
-    alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.dependencyanalysis)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
@@ -153,7 +152,6 @@ allprojects {
         maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
 
         val isScreenshotTest = project.gradle.startParameter.taskNames.any { it.contains("paparazzi", ignoreCase = true) }
-        val isRoborazziTest = project.gradle.startParameter.taskNames.any { it.contains("roborazzi", ignoreCase = true) }
         if (isScreenshotTest) {
             // Paparazzi tests benefit from parallelisation, so we can use half the available cores to run them in parallel.
             maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
@@ -178,12 +176,10 @@ allprojects {
             // Disable screenshot tests by default
             exclude("ui/*.class")
             exclude("translations/*.class")
-            if (isRoborazziTest.not()) {
-                // Roborazzi screenshot tests (:libraries:compound) live in a `screenshot` package, which
-                // the two patterns above do not match, so they used to run on every plain unit test run.
-                // They are verified by the dedicated `verifyRoborazziDebug` task instead.
-                exclude("**/screenshot/**")
-            }
+            // The Compound screenshot tests (:libraries:compound) live in a `screenshot` package, which
+            // the two patterns above do not match, so they would otherwise run on every plain unit test run.
+            // They are verified by the dedicated `verifyPaparazziDebug` task instead.
+            exclude("**/screenshot/**")
         }
     }
 }
@@ -228,21 +224,6 @@ subprojects {
     tasks.findByName("recordPaparazzi")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziDebug")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziRelease")?.dependsOn(removeOldScreenshotsTask)
-}
-
-// Make sure to delete old snapshot before recording new ones
-subprojects {
-    val screenshotsDir = File("${project.projectDir}/screenshots")
-    val removeOldScreenshotsTask = tasks.register("removeOldScreenshots") {
-        onlyIf { screenshotsDir.exists() }
-        doFirst {
-            println("Delete previous screenshots located at $screenshotsDir\n")
-            screenshotsDir.deleteRecursively()
-        }
-    }
-    tasks.findByName("recordRoborazzi")?.dependsOn(removeOldScreenshotsTask)
-    tasks.findByName("recordRoborazziDebug")?.dependsOn(removeOldScreenshotsTask)
-    tasks.findByName("recordRoborazziRelease")?.dependsOn(removeOldScreenshotsTask)
 }
 
 subprojects {
