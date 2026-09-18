@@ -104,6 +104,7 @@ object TestTags {
      * Timeline jump-to-position buttons (long-press exposes "Mark as read").
      */
     val jumpToUnreadButton = TestTag("jump-to-unread-button")
+    val jumpBackButton = TestTag("jump-back-button")
     val jumpToBottomButton = TestTag("jump-to-bottom-button")
 
     /**
