@@ -18,6 +18,9 @@ appId: ${MAESTRO_APP_ID}
     commands:
       - tapOn: 'Send invite'
 - takeScreenshot: build/maestro/330-createAndDeleteDM
+- extendedWaitUntil:
+    visible: 'maestroelement2'
+    timeout: 60000
 - tapOn: "maestroelement2"
 - scroll
 - tapOn: "Leave room"
