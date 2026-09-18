@@ -236,8 +236,16 @@ subprojects {
 // compare against, every screenshot is rewritten unconditionally, so renderer noise far below the
 // threshold `verifyPaparazziDebug` accepts still rewrites the Git LFS blob of every affected screenshot.
 //
-// Instead, let the record task keep the existing screenshots, then prune using the list of previews
-// Paparazzi reports it has just rendered.
+// Instead, let the record task keep the existing screenshots, then prune the ones belonging to a
+// preview that Paparazzi did not render at all.
+//
+// Pruning per preview, and not per screenshot, is deliberate: a preview that fails to render is absent
+// from the run report in exactly the same way as a preview that was deleted, and LayoutLib does fail to
+// render a preview now and then (see LayoutLibErrorFilterStatement). Matching whole previews means such
+// a failure leaves the other screenshots of that preview in place, so it cannot silently delete a
+// screenshot that is still in use. The cost is that dropping one value from a PreviewParameterProvider
+// leaves its last screenshot behind, since the preview itself still renders. Run `removeOldSnapshots`
+// and record again to clean those up.
 subprojects {
     val projectDir = project.projectDir
     val pruneObsoleteSnapshots = tasks.register("pruneObsoleteSnapshots") {
@@ -254,31 +262,29 @@ subprojects {
                 "No Paparazzi run report found under $reportsDir, so there is no way to tell which " +
                     "screenshots are still in use. Refusing to delete anything."
             }
-            val reports = runFiles.map { it.readText() }
-            // `Snapshot.toFileName` appends a lowercased label when the snapshot has a name. Nothing here
-            // names its snapshots (see ScreenshotTest.runTest), so the label is always empty. Moshi omits
-            // null values, so a "name" key showing up means that assumption no longer holds.
-            check(reports.none { it.contains("\"name\"") }) {
-                "A Paparazzi snapshot in $reportsDir has a name, which changes the screenshot file name. " +
-                    "Update pruneObsoleteSnapshots to append the label, as `Snapshot.toFileName` does."
-            }
-            // `testName` is serialised as "<package>.<class>#<method>", the screenshot file is "<package>_<class>_<method>.png".
-            val testNameRegex = """"testName"\s*:\s*"(.*)\.([^.]*)#([^."]*)"""".toRegex()
-            val expected = reports.flatMap { report ->
-                testNameRegex.findAll(report).map { match ->
-                    val (packageName, className, methodName) = match.destructured
-                    "${packageName}_${className}_$methodName.png"
+            // `testName` is serialised as "<package>.<class>#<method>" and the screenshot file is named
+            // "<package>_<class>_<method>.png". Only the package and the class are used here, they identify
+            // the preview. Do not be tempted to rebuild the whole file name from the method: it has to be
+            // normalised exactly as `Snapshot.toFileName` does, which replaces whitespace with the
+            // delimiter, so a preview named "List item - Simple" does not read as its own file name.
+            val testNameRegex = """"testName"\s*:\s*"(.*)\.([^.]*)#""".toRegex()
+            val renderedPreviews = runFiles.flatMap { runFile ->
+                testNameRegex.findAll(runFile.readText()).map { match ->
+                    val (packageName, className) = match.destructured
+                    // Keep the trailing delimiter, so that `Foo_` does not also match `FooBar_…`.
+                    "${packageName}_${className}_"
                 }
             }.toSet()
-            check(expected.isNotEmpty()) {
+            check(renderedPreviews.isNotEmpty()) {
                 "Could not read any snapshot name out of the Paparazzi run reports in $reportsDir. " +
                     "The report format has probably changed. Refusing to delete anything."
             }
 
             val existing = imagesDir.listFiles { file -> file.extension == "png" }.orEmpty()
-            val obsolete = existing.filterNot { it.name in expected }
-            // Deleting a screenshot is a tracked file deletion, and a bad `expected` set would wipe thousands
-            // of them. Anything beyond a trickle means something is wrong rather than a few deleted previews.
+            val obsolete = existing.filter { file -> renderedPreviews.none { file.name.startsWith(it) } }
+            // Deleting a screenshot is a tracked file deletion, and a bad `renderedPreviews` set would wipe
+            // thousands of them. Anything beyond a trickle means something is wrong rather than a few
+            // deleted previews.
             check(obsolete.size <= existing.size / 10) {
                 "pruneObsoleteSnapshots would delete ${obsolete.size} of ${existing.size} screenshots in " +
                     "$imagesDir, which looks like a bug rather than deleted previews. Refusing to delete " +
