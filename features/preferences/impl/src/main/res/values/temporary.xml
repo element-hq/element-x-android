@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
+  <string name="screen_advanced_settings_hide_space_rooms_title">"Hide rooms in Spaces"</string>
+  <string name="screen_advanced_settings_hide_space_rooms_description">"Rooms that belong to a Space are only shown when you open that Space."</string>
+</resources>

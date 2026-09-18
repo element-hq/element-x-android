@@ -46,6 +46,9 @@ class AdvancedSettingsPresenter(
         val isSharePresenceEnabled by remember {
             sessionPreferencesStore.isSharePresenceEnabled()
         }.collectAsState(initial = true)
+        val hideSpaceRooms by remember {
+            appPreferencesStore.hideSpaceRoomsFlow()
+        }.collectAsState(initial = false)
         val isBlackThemeAllowed by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.AllowBlackTheme)
         }.collectAsState(initial = false)
@@ -108,6 +111,9 @@ class AdvancedSettingsPresenter(
                 is AdvancedSettingsEvent.SetSharePresenceEnabled -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setSharePresence(event.enabled)
                 }
+                is AdvancedSettingsEvent.SetHideSpaceRooms -> sessionCoroutineScope.launch {
+                    appPreferencesStore.setHideSpaceRooms(event.hide)
+                }
                 is AdvancedSettingsEvent.SetCompressMedia -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setOptimizeImages(event.compress)
                 }
@@ -136,6 +142,7 @@ class AdvancedSettingsPresenter(
         return AdvancedSettingsState(
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
+            hideSpaceRooms = hideSpaceRooms,
             mediaOptimizationState = mediaOptimizationState,
             theme = themeOption,
             availableThemeOptions = availableThemeOptions,

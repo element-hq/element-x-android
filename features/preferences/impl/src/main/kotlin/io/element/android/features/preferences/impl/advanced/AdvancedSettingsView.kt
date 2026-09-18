@@ -202,6 +202,19 @@ fun AdvancedSettingsView(
             }
         }
 
+        ListItem(
+            content = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_hide_space_rooms_title))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_hide_space_rooms_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.hideSpaceRooms,
+            ),
+            onClick = { state.eventSink(AdvancedSettingsEvent.SetHideSpaceRooms(!state.hideSpaceRooms)) }
+        )
+
         ModerationAndSafety(state)
         if (state.liveLocationMinimumDistanceUpdate != null) {
             LiveLocationUpdatesSection(
