@@ -11,6 +11,8 @@ package io.element.android.features.home.impl.filters
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.impl.filters.selection.DefaultFilterSelectionStrategy
 import io.element.android.features.home.impl.filters.selection.FilterSelectionState
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -131,6 +133,35 @@ class RoomListFiltersPresenterTest {
             }
         }
     }
+
+    @Test
+    fun `present - the filters selected last time are restored`() = runTest {
+        val presenter = createRoomListFiltersPresenter(
+            sessionPreferencesStore = InMemorySessionPreferencesStore(
+                selectedRoomListFilters = setOf(RoomListFilter.Favourites.name),
+            ),
+        )
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.filterSelectionStates).contains(
+                filterSelectionState(RoomListFilter.Favourites, selected = true)
+            )
+        }
+    }
+
+    @Test
+    fun `present - an unknown stored filter is ignored`() = runTest {
+        val presenter = createRoomListFiltersPresenter(
+            sessionPreferencesStore = InMemorySessionPreferencesStore(
+                selectedRoomListFilters = setOf("NotAFilter"),
+            ),
+        )
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.hasAnyFilterSelected).isFalse()
+        }
+    }
 }
 
 private fun filterSelectionState(filter: RoomListFilter, selected: Boolean) = FilterSelectionState(
@@ -138,8 +169,13 @@ private fun filterSelectionState(filter: RoomListFilter, selected: Boolean) = Fi
     isSelected = selected,
 )
 
-private fun TestScope.createRoomListFiltersPresenter(): RoomListFiltersPresenter {
+private fun TestScope.createRoomListFiltersPresenter(
+    sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
+): RoomListFiltersPresenter {
     return RoomListFiltersPresenter(
-        filterSelectionStrategy = DefaultFilterSelectionStrategy(),
+        filterSelectionStrategy = DefaultFilterSelectionStrategy(
+            sessionPreferencesStore = sessionPreferencesStore,
+            sessionCoroutineScope = backgroundScope,
+        ),
     )
 }

@@ -14,6 +14,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
@@ -47,6 +48,7 @@ class DefaultSessionPreferencesStore(
     private val skipSessionVerification = booleanPreferencesKey("skipSessionVerification")
     private val compressImages = booleanPreferencesKey("compressMedia")
     private val compressMediaPreset = stringPreferencesKey("compressMediaPreset")
+    private val selectedRoomListFilters = stringSetPreferencesKey("selectedRoomListFilters")
 
     private val dataStoreFile = storeFile(context, sessionId)
     private val store = PreferenceDataStoreFactory.create(
@@ -93,6 +95,9 @@ class DefaultSessionPreferencesStore(
     override suspend fun setVideoCompressionPreset(preset: VideoCompressionPreset) = update(compressMediaPreset, preset.name)
     override fun getVideoCompressionPreset(): Flow<VideoCompressionPreset> = get(compressMediaPreset) { VideoCompressionPreset.STANDARD.name }
         .map { tryOrNull { VideoCompressionPreset.valueOf(it) } ?: VideoCompressionPreset.STANDARD }
+
+    override suspend fun setSelectedRoomListFilters(filters: Set<String>) = update(selectedRoomListFilters, filters)
+    override fun getSelectedRoomListFilters(): Flow<Set<String>> = get(selectedRoomListFilters) { emptySet() }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()

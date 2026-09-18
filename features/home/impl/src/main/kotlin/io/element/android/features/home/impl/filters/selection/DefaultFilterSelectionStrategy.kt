@@ -10,26 +10,43 @@ package io.element.android.features.home.impl.filters.selection
 
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.home.impl.filters.RoomListFilter
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 @ContributesBinding(SessionScope::class)
-class DefaultFilterSelectionStrategy : FilterSelectionStrategy {
+class DefaultFilterSelectionStrategy(
+    private val sessionPreferencesStore: SessionPreferencesStore,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
+) : FilterSelectionStrategy {
     private val selectedFilters = LinkedHashSet<RoomListFilter>()
     private val availableFilters
         get() = RoomListFilter.entries.toSet()
 
     override val filterSelectionStates = MutableStateFlow(buildFilters())
 
+    init {
+        sessionCoroutineScope.launch {
+            sessionPreferencesStore.getSelectedRoomListFilters().first()
+                .mapNotNull { name -> tryOrNull { RoomListFilter.valueOf(name) } }
+                .forEach { filter -> select(filter) }
+        }
+    }
+
     override fun select(filter: RoomListFilter) {
         if (selectedFilters.any { it in filter.incompatibleFilters }) return
         selectedFilters.add(filter)
-        filterSelectionStates.value = buildFilters()
+        onSelectionChanged()
     }
 
     override fun deselect(filter: RoomListFilter) {
         selectedFilters.remove(filter)
-        filterSelectionStates.value = buildFilters()
+        onSelectionChanged()
     }
 
     override fun isSelected(filter: RoomListFilter): Boolean {
@@ -38,7 +55,15 @@ class DefaultFilterSelectionStrategy : FilterSelectionStrategy {
 
     override fun clear() {
         selectedFilters.clear()
+        onSelectionChanged()
+    }
+
+    private fun onSelectionChanged() {
         filterSelectionStates.value = buildFilters()
+        val names = selectedFilters.map { it.name }.toSet()
+        sessionCoroutineScope.launch {
+            sessionPreferencesStore.setSelectedRoomListFilters(names)
+        }
     }
 
     private fun buildFilters(): Set<FilterSelectionState> {
