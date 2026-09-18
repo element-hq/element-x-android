@@ -229,6 +229,7 @@ class PinnedMessagesListPresenter(
                             timelineItems = items.keepDisplayablePinnedEvents(),
                             roomMembers = membersState.roomMembers().orEmpty(),
                             renderReadReceipts = false,
+                            renderRedactedMessages = true,
                         )
                     }.launchIn(this)
 

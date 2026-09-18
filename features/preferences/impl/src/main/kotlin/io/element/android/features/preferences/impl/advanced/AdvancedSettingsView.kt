@@ -116,6 +116,18 @@ fun AdvancedSettingsView(
             ),
             onClick = { state.eventSink(AdvancedSettingsEvent.SetSharePresenceEnabled(!state.isSharePresenceEnabled)) }
         )
+        ListItem(
+            content = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_show_removed_messages))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_show_removed_messages_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.isRenderRedactedMessagesEnabled,
+            ),
+            onClick = { state.eventSink(AdvancedSettingsEvent.SetRenderRedactedMessagesEnabled(!state.isRenderRedactedMessagesEnabled)) }
+        )
         val compressImages = state.mediaOptimizationState?.shouldCompressImages
 
         when (state.mediaOptimizationState) {

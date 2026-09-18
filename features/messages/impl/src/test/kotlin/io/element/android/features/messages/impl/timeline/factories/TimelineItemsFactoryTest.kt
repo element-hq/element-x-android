@@ -278,6 +278,47 @@ class TimelineItemsFactoryTest {
         }
     }
 
+
+    @Test
+    fun `removed messages are left out when the user has turned them off`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(
+                computeReadReceipts = false,
+                computeReactions = false,
+            )
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    content = aRedactedContent(),
+                ),
+            ),
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-1"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    content = aMessageContent(body = "A regular message"),
+                ),
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(
+                timelineItems = items,
+                roomMembers = emptyList(),
+                renderReadReceipts = false,
+                renderRedactedMessages = false,
+            )
+            val contents = awaitItem()
+                .filterIsInstance<TimelineItem.Event>()
+                .map { it.content }
+            assertThat(contents).hasSize(1)
+            assertThat(contents.first()).isInstanceOf(TimelineItemTextContent::class.java)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private suspend fun TestScope.groupPositionsOf(timestamps: List<Long>): List<TimelineItemGroupPosition> {
         val factory = aTimelineItemsFactory(
             config = TimelineItemsFactoryConfig(

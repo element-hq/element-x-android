@@ -14,6 +14,7 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 sealed interface AdvancedSettingsEvent {
     data class SetDeveloperModeEnabled(val enabled: Boolean) : AdvancedSettingsEvent
     data class SetSharePresenceEnabled(val enabled: Boolean) : AdvancedSettingsEvent
+    data class SetRenderRedactedMessagesEnabled(val enabled: Boolean) : AdvancedSettingsEvent
     data class SetCompressMedia(val compress: Boolean) : AdvancedSettingsEvent
     data class SetCompressImages(val compress: Boolean) : AdvancedSettingsEvent
     data class SetVideoUploadQuality(val videoPreset: VideoCompressionPreset) : AdvancedSettingsEvent

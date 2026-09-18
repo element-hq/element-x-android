@@ -17,6 +17,7 @@ class InMemorySessionPreferencesStore(
     isSharePresenceEnabled: Boolean = true,
     isSendPublicReadReceiptsEnabled: Boolean = true,
     isRenderReadReceiptsEnabled: Boolean = true,
+    isRenderRedactedMessagesEnabled: Boolean = true,
     isSendTypingNotificationsEnabled: Boolean = true,
     isRenderTypingNotificationsEnabled: Boolean = true,
     isSessionVerificationSkipped: Boolean = false,
@@ -26,6 +27,7 @@ class InMemorySessionPreferencesStore(
     private val isSharePresenceEnabled = MutableStateFlow(isSharePresenceEnabled)
     private val isSendPublicReadReceiptsEnabled = MutableStateFlow(isSendPublicReadReceiptsEnabled)
     private val isRenderReadReceiptsEnabled = MutableStateFlow(isRenderReadReceiptsEnabled)
+    private val isRenderRedactedMessagesEnabled = MutableStateFlow(isRenderRedactedMessagesEnabled)
     private val isSendTypingNotificationsEnabled = MutableStateFlow(isSendTypingNotificationsEnabled)
     private val isRenderTypingNotificationsEnabled = MutableStateFlow(isRenderTypingNotificationsEnabled)
     private val isSessionVerificationSkipped = MutableStateFlow(isSessionVerificationSkipped)
@@ -51,6 +53,12 @@ class InMemorySessionPreferencesStore(
     }
 
     override fun isRenderReadReceiptsEnabled(): Flow<Boolean> = isRenderReadReceiptsEnabled
+
+    override suspend fun setRenderRedactedMessages(enabled: Boolean) {
+        isRenderRedactedMessagesEnabled.tryEmit(enabled)
+    }
+
+    override fun isRenderRedactedMessagesEnabled(): Flow<Boolean> = isRenderRedactedMessagesEnabled
 
     override suspend fun setSendTypingNotifications(enabled: Boolean) {
         isSendTypingNotificationsEnabled.tryEmit(enabled)

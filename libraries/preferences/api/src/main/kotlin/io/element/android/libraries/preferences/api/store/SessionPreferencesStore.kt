@@ -58,6 +58,14 @@ interface SessionPreferencesStore {
     fun isRenderTypingNotificationsEnabled(): Flow<Boolean>
 
     /**
+     * @param enabled true to display messages that have been removed in the timeline.
+     */
+    suspend fun setRenderRedactedMessages(enabled: Boolean)
+
+    /** Whether removed messages are displayed in the timeline; defaults to `true`. */
+    fun isRenderRedactedMessagesEnabled(): Flow<Boolean>
+
+    /**
      * @param skip true to remember that the user dismissed the session verification prompt.
      */
     suspend fun setSkipSessionVerification(skip: Boolean)
