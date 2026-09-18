@@ -19,8 +19,8 @@ private const val DENSITY_SCALE = 2
 
 // Upper bounds for self-sizing screenshots, in dp. Large enough to fit the tallest and widest
 // Compound preview; `RenderingMode.SHRINK` then crops each image down to its actual content.
-private const val MAX_WIDTH_DP = 1024
-private const val MAX_HEIGHT_DP = 2400
+private const val MAX_WIDTH_DP = 2048
+private const val MAX_HEIGHT_DP = 4800
 
 /**
  * Creates a [Paparazzi] rule for the Compound screenshot tests.
