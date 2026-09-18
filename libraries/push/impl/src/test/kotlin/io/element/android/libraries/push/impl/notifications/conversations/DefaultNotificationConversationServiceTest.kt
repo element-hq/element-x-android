@@ -37,11 +37,11 @@ import org.robolectric.annotation.Config
 @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
 class DefaultNotificationConversationServiceTest : RobolectricTest() {
     @Test
-    fun `onSendMessage adds a shortcut`() = runTest {
+    fun `onMessageInRoom adds a shortcut`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val service = createService(context)
 
-        service.onSendMessage(
+        service.onMessageInRoom(
             sessionId = A_SESSION_ID,
             roomId = A_ROOM_ID,
             roomName = "Room title",
