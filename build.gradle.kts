@@ -215,19 +215,93 @@ tasks.register("generateDocsToc", Exec::class.java) {
     commandLine("python3", "tools/docs/generate_toc.py", *inputs.files.map { it.path }.toTypedArray())
 }
 
-// Make sure to delete old screenshots before recording new ones
+// Delete all the screenshots. Not hooked to the record tasks on purpose, see `pruneObsoleteSnapshots`
+// below. Run it by hand (or use Paparazzi's own `cleanRecordPaparazziDebug`) to record from scratch.
 subprojects {
     val snapshotsDir = File("${project.projectDir}/src/test/snapshots")
-    val removeOldScreenshotsTask = tasks.register("removeOldSnapshots") {
+    tasks.register("removeOldSnapshots") {
         onlyIf { snapshotsDir.exists() }
         doFirst {
             println("Delete previous screenshots located at $snapshotsDir\n")
             snapshotsDir.deleteRecursively()
         }
     }
-    tasks.findByName("recordPaparazzi")?.dependsOn(removeOldScreenshotsTask)
-    tasks.findByName("recordPaparazziDebug")?.dependsOn(removeOldScreenshotsTask)
-    tasks.findByName("recordPaparazziRelease")?.dependsOn(removeOldScreenshotsTask)
+}
+
+// Delete the screenshots of previews that no longer exist, *after* recording.
+//
+// Wiping the whole snapshots directory before recording used to be how stale screenshots were removed,
+// but it also removes the reference image Paparazzi needs to honour
+// `app.cash.paparazzi.overwriteOnMaxPercentDifference` (see gradle.properties): with no existing file to
+// compare against, every screenshot is rewritten unconditionally, so renderer noise far below the
+// threshold `verifyPaparazziDebug` accepts still rewrites the Git LFS blob of every affected screenshot.
+//
+// Instead, let the record task keep the existing screenshots, then prune the ones belonging to a
+// preview that Paparazzi did not render at all.
+//
+// Pruning per preview, and not per screenshot, is deliberate: a preview that fails to render is absent
+// from the run report in exactly the same way as a preview that was deleted, and LayoutLib does fail to
+// render a preview now and then (see LayoutLibErrorFilterStatement). Matching whole previews means such
+// a failure leaves the other screenshots of that preview in place, so it cannot silently delete a
+// screenshot that is still in use. The cost is that dropping one value from a PreviewParameterProvider
+// leaves its last screenshot behind, since the preview itself still renders. Run `removeOldSnapshots`
+// and record again to clean those up.
+subprojects {
+    val projectDir = project.projectDir
+    val pruneObsoleteSnapshots = tasks.register("pruneObsoleteSnapshots") {
+        description = "Delete the recorded screenshots of previews that no longer exist"
+        val imagesDir = File(projectDir, "src/test/snapshots/images")
+        val reportsDir = File(projectDir, "build/reports/paparazzi")
+        onlyIf { imagesDir.exists() }
+        doLast {
+            // One `runs/<runName>.js` per forked test JVM, each holding `window.runs[...] = [ ...snapshots... ];`.
+            val runFiles = reportsDir.walkTopDown()
+                .filter { it.isFile && it.extension == "js" && it.parentFile.name == "runs" }
+                .toList()
+            check(runFiles.isNotEmpty()) {
+                "No Paparazzi run report found under $reportsDir, so there is no way to tell which " +
+                    "screenshots are still in use. Refusing to delete anything."
+            }
+            // `testName` is serialised as "<package>.<class>#<method>" and the screenshot file is named
+            // "<package>_<class>_<method>.png". Only the package and the class are used here, they identify
+            // the preview. Do not be tempted to rebuild the whole file name from the method: it has to be
+            // normalised exactly as `Snapshot.toFileName` does, which replaces whitespace with the
+            // delimiter, so a preview named "List item - Simple" does not read as its own file name.
+            val testNameRegex = """"testName"\s*:\s*"(.*)\.([^.]*)#""".toRegex()
+            val renderedPreviews = runFiles.flatMap { runFile ->
+                testNameRegex.findAll(runFile.readText()).map { match ->
+                    val (packageName, className) = match.destructured
+                    // Keep the trailing delimiter, so that `Foo_` does not also match `FooBar_…`.
+                    "${packageName}_${className}_"
+                }
+            }.toSet()
+            check(renderedPreviews.isNotEmpty()) {
+                "Could not read any snapshot name out of the Paparazzi run reports in $reportsDir. " +
+                    "The report format has probably changed. Refusing to delete anything."
+            }
+
+            val existing = imagesDir.listFiles { file -> file.extension == "png" }.orEmpty()
+            val obsolete = existing.filter { file -> renderedPreviews.none { file.name.startsWith(it) } }
+            // Deleting a screenshot is a tracked file deletion, and a bad `renderedPreviews` set would wipe
+            // thousands of them. Anything beyond a trickle means something is wrong rather than a few
+            // deleted previews.
+            check(obsolete.size <= existing.size / 10) {
+                "pruneObsoleteSnapshots would delete ${obsolete.size} of ${existing.size} screenshots in " +
+                    "$imagesDir, which looks like a bug rather than deleted previews. Refusing to delete " +
+                    "anything. If the deletions are expected, run `removeOldSnapshots` and record again."
+            }
+            obsolete.forEach {
+                println("Delete obsolete screenshot ${it.name}")
+                it.delete()
+            }
+            println("Pruned ${obsolete.size} obsolete screenshot(s), kept ${existing.size - obsolete.size}.\n")
+        }
+    }
+    // `configureEach` on a live filtered collection, and not `findByName`, because the Paparazzi plugin
+    // registers its record tasks per variant, long after this block runs.
+    tasks.matching { it.name.startsWith("recordPaparazzi") }.configureEach {
+        finalizedBy(pruneObsoleteSnapshots)
+    }
 }
 
 // Make sure to delete old snapshot before recording new ones
