@@ -9,6 +9,9 @@ appId: ${MAESTRO_APP_ID}
 - inputText: "aRoomTopic"
 - tapOn: "Create"
 - takeScreenshot: build/maestro/320-createAndDeleteRoom
+- extendedWaitUntil:
+    visible: 'Search for someone'
+    timeout: 60000
 - tapOn: "Search for someone"
 - inputText: ${MAESTRO_INVITEE1_MXID}
 - tapOn:
