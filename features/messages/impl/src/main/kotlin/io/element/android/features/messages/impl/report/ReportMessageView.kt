@@ -83,6 +83,7 @@ fun ReportMessageView(
             Spacer(modifier = Modifier.height(20.dp))
 
             TextField(
+                label = stringResource(R.string.screen_report_content_hint),
                 value = state.reason,
                 onValueChange = { state.eventSink(ReportMessageEvent.UpdateReason(it)) },
                 placeholder = stringResource(R.string.screen_report_content_hint),
