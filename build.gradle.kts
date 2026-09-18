@@ -215,19 +215,87 @@ tasks.register("generateDocsToc", Exec::class.java) {
     commandLine("python3", "tools/docs/generate_toc.py", *inputs.files.map { it.path }.toTypedArray())
 }
 
-// Make sure to delete old screenshots before recording new ones
+// Delete all the screenshots. Not hooked to the record tasks on purpose, see `pruneObsoleteSnapshots`
+// below. Run it by hand (or use Paparazzi's own `cleanRecordPaparazziDebug`) to record from scratch.
 subprojects {
     val snapshotsDir = File("${project.projectDir}/src/test/snapshots")
-    val removeOldScreenshotsTask = tasks.register("removeOldSnapshots") {
+    tasks.register("removeOldSnapshots") {
         onlyIf { snapshotsDir.exists() }
         doFirst {
             println("Delete previous screenshots located at $snapshotsDir\n")
             snapshotsDir.deleteRecursively()
         }
     }
-    tasks.findByName("recordPaparazzi")?.dependsOn(removeOldScreenshotsTask)
-    tasks.findByName("recordPaparazziDebug")?.dependsOn(removeOldScreenshotsTask)
-    tasks.findByName("recordPaparazziRelease")?.dependsOn(removeOldScreenshotsTask)
+}
+
+// Delete the screenshots of previews that no longer exist, *after* recording.
+//
+// Wiping the whole snapshots directory before recording used to be how stale screenshots were removed,
+// but it also removes the reference image Paparazzi needs to honour
+// `app.cash.paparazzi.overwriteOnMaxPercentDifference` (see gradle.properties): with no existing file to
+// compare against, every screenshot is rewritten unconditionally, so renderer noise far below the
+// threshold `verifyPaparazziDebug` accepts still rewrites the Git LFS blob of every affected screenshot.
+//
+// Instead, let the record task keep the existing screenshots, then prune using the list of previews
+// Paparazzi reports it has just rendered.
+subprojects {
+    val projectDir = project.projectDir
+    val pruneObsoleteSnapshots = tasks.register("pruneObsoleteSnapshots") {
+        description = "Delete the recorded screenshots of previews that no longer exist"
+        val imagesDir = File(projectDir, "src/test/snapshots/images")
+        val reportsDir = File(projectDir, "build/reports/paparazzi")
+        onlyIf { imagesDir.exists() }
+        doLast {
+            // One `runs/<runName>.js` per forked test JVM, each holding `window.runs[...] = [ ...snapshots... ];`.
+            val runFiles = reportsDir.walkTopDown()
+                .filter { it.isFile && it.extension == "js" && it.parentFile.name == "runs" }
+                .toList()
+            check(runFiles.isNotEmpty()) {
+                "No Paparazzi run report found under $reportsDir, so there is no way to tell which " +
+                    "screenshots are still in use. Refusing to delete anything."
+            }
+            val reports = runFiles.map { it.readText() }
+            // `Snapshot.toFileName` appends a lowercased label when the snapshot has a name. Nothing here
+            // names its snapshots (see ScreenshotTest.runTest), so the label is always empty. Moshi omits
+            // null values, so a "name" key showing up means that assumption no longer holds.
+            check(reports.none { it.contains("\"name\"") }) {
+                "A Paparazzi snapshot in $reportsDir has a name, which changes the screenshot file name. " +
+                    "Update pruneObsoleteSnapshots to append the label, as `Snapshot.toFileName` does."
+            }
+            // `testName` is serialised as "<package>.<class>#<method>", the screenshot file is "<package>_<class>_<method>.png".
+            val testNameRegex = """"testName"\s*:\s*"(.*)\.([^.]*)#([^."]*)"""".toRegex()
+            val expected = reports.flatMap { report ->
+                testNameRegex.findAll(report).map { match ->
+                    val (packageName, className, methodName) = match.destructured
+                    "${packageName}_${className}_$methodName.png"
+                }
+            }.toSet()
+            check(expected.isNotEmpty()) {
+                "Could not read any snapshot name out of the Paparazzi run reports in $reportsDir. " +
+                    "The report format has probably changed. Refusing to delete anything."
+            }
+
+            val existing = imagesDir.listFiles { file -> file.extension == "png" }.orEmpty()
+            val obsolete = existing.filterNot { it.name in expected }
+            // Deleting a screenshot is a tracked file deletion, and a bad `expected` set would wipe thousands
+            // of them. Anything beyond a trickle means something is wrong rather than a few deleted previews.
+            check(obsolete.size <= existing.size / 10) {
+                "pruneObsoleteSnapshots would delete ${obsolete.size} of ${existing.size} screenshots in " +
+                    "$imagesDir, which looks like a bug rather than deleted previews. Refusing to delete " +
+                    "anything. If the deletions are expected, run `removeOldSnapshots` and record again."
+            }
+            obsolete.forEach {
+                println("Delete obsolete screenshot ${it.name}")
+                it.delete()
+            }
+            println("Pruned ${obsolete.size} obsolete screenshot(s), kept ${existing.size - obsolete.size}.\n")
+        }
+    }
+    // `configureEach` on a live filtered collection, and not `findByName`, because the Paparazzi plugin
+    // registers its record tasks per variant, long after this block runs.
+    tasks.matching { it.name.startsWith("recordPaparazzi") }.configureEach {
+        finalizedBy(pruneObsoleteSnapshots)
+    }
 }
 
 // Make sure to delete old snapshot before recording new ones
