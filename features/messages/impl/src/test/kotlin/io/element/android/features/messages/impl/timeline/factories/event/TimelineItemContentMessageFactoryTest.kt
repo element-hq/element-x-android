@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.model.event.Attachment
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCircleContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
@@ -48,6 +49,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
@@ -459,6 +461,33 @@ class TimelineItemContentMessageFactoryTest : RobolectricTest() {
             waveform = persistentListOf(1f, 2f),
             fileExtension = "ogg",
             formattedFileSize = "123 Bytes",
+        )
+        assertThat(result).isEqualTo(expected)
+    }
+
+    @Test
+    fun `test create CircleMessageType`() = runTest {
+        val sut = createTimelineItemContentMessageFactory()
+        val result = sut.create(
+            content = createMessageContent(type = CircleMessageType("filename", null, null, MediaSource("url"), null)),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        val expected = TimelineItemCircleContent(
+            filename = "filename",
+            fileSize = 0L,
+            eventId = AN_EVENT_ID,
+            caption = null,
+            formattedCaption = null,
+            isEdited = false,
+            duration = Duration.ZERO,
+            mediaSource = MediaSource(url = "url", json = null),
+            thumbnailSource = null,
+            blurHash = null,
+            mimeType = MimeTypes.OctetStream,
+            fileExtension = "",
+            formattedFileSize = "0 Bytes",
         )
         assertThat(result).isEqualTo(expected)
     }

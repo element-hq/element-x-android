@@ -19,6 +19,7 @@ class FakeMediaSender(
     private val sendPreProcessedMediaResult: () -> Result<Unit> = { lambdaError() },
     private val sendMediaResult: () -> Result<Unit> = { lambdaError() },
     private val sendVoiceMessageResult: () -> Result<Unit> = { lambdaError() },
+    private val sendCircleMessageResult: suspend () -> Result<Unit> = { lambdaError() },
     private val sendGalleryResult: () -> Result<Unit> = { lambdaError() },
     private val cleanUpResult: () -> Unit = { lambdaError() },
 ) : MediaSender {
@@ -57,6 +58,14 @@ class FakeMediaSender(
         inReplyToEventId: EventId?,
     ): Result<Unit> {
         return sendVoiceMessageResult()
+    }
+
+    override suspend fun sendCircleMessage(
+        uri: Uri,
+        mimeType: String,
+        inReplyToEventId: EventId?,
+    ): Result<Unit> {
+        return sendCircleMessageResult()
     }
 
     override suspend fun sendGallery(

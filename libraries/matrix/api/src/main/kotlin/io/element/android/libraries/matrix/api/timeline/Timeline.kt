@@ -203,6 +203,7 @@ interface Timeline : AutoCloseable {
      * @param caption the text shown along with the video, or `null` for none.
      * @param formattedCaption the caption as HTML, or `null` to send it unformatted.
      * @param inReplyToEventId the event this message replies to, or `null` if it is not a reply.
+     * @param circle `true` to mark the video as a circle video (`org.interferolog.circle`).
      */
     suspend fun sendVideo(
         file: File,
@@ -211,6 +212,7 @@ interface Timeline : AutoCloseable {
         caption: String?,
         formattedCaption: String?,
         inReplyToEventId: EventId?,
+        circle: Boolean = false,
     ): Result<MediaUploadHandler>
 
     /**

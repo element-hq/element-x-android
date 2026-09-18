@@ -76,6 +76,14 @@ data class VoiceMessageType(
     val details: AudioDetails?,
 ) : MessageTypeWithAttachment
 
+data class CircleMessageType(
+    override val filename: String,
+    override val caption: String?,
+    override val formattedCaption: FormattedBody?,
+    val source: MediaSource,
+    val info: VideoInfo?,
+) : MessageTypeWithAttachment
+
 data class VideoMessageType(
     override val filename: String,
     override val caption: String?,

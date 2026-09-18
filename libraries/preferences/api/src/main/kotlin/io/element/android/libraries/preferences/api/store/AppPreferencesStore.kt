@@ -140,6 +140,14 @@ interface AppPreferencesStore {
     /** Single-snapshot read of all sound prefs; used at boot to seed channels without N reads. */
     suspend fun getNotificationSoundChannelConfig(): NotificationSoundChannelConfig
 
+    /**
+     * Persist the last used empty-composer end-button mode: `"voice"` or `"circle"`.
+     */
+    suspend fun setLastComposerMediaMode(value: String)
+
+    /** The last used composer media mode; defaults to `"voice"`. */
+    fun getLastComposerMediaModeFlow(): Flow<String>
+
     /** Erases every app preference, so they all fall back to their defaults. */
     suspend fun reset()
 }

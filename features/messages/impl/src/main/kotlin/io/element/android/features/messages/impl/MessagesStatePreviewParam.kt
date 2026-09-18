@@ -9,6 +9,8 @@
 package io.element.android.features.messages.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.messages.api.timeline.circlemessages.composer.CircleMessageComposerState
+import io.element.android.features.messages.api.timeline.circlemessages.composer.aCircleMessageComposerState
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.api.timeline.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.features.messages.api.timeline.voicemessages.composer.aVoiceMessagePreviewState
@@ -53,6 +55,7 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.textcomposer.model.ComposerMediaMode
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
@@ -108,6 +111,8 @@ fun aMessagesState(
         mode = MessageComposerMode.Normal,
     ),
     voiceMessageComposerState: VoiceMessageComposerState = aVoiceMessageComposerState(),
+    circleMessageComposerState: CircleMessageComposerState = aCircleMessageComposerState(),
+    composerMediaMode: ComposerMediaMode = ComposerMediaMode.Voice,
     timelineState: TimelineState = aTimelineState(
         timelineItems = aTimelineItemList(aTimelineItemTextContent()),
         // Render a focused event for an event with sender information displayed
@@ -143,6 +148,8 @@ fun aMessagesState(
     userEventPermissions = userEventPermissions,
     composerState = composerState,
     voiceMessageComposerState = voiceMessageComposerState,
+    circleMessageComposerState = circleMessageComposerState,
+    composerMediaMode = composerMediaMode,
     timelineProtectionState = timelineProtectionState,
     identityChangeState = identityChangeState,
     linkState = linkState,

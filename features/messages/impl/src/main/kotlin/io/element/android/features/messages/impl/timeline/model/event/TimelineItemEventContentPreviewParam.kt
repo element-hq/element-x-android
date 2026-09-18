@@ -29,6 +29,7 @@ class TimelineItemEventContentPreviewParam : PreviewParameterProvider<TimelineIt
         aTimelineItemAudioContent(),
         aTimelineItemAudioContent("An even bigger bigger bigger bigger bigger bigger bigger sound name which doesn't fit .mp3"),
         aTimelineItemVoiceContent(),
+        aTimelineItemCircleContent(),
         aTimelineItemLocationContent(mode = aStaticLocationMode()),
         aTimelineItemPollContent(),
         aTimelineItemNoticeContent(),

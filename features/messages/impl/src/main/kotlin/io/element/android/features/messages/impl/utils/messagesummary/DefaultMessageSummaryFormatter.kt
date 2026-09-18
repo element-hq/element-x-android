@@ -13,6 +13,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCircleContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -52,6 +53,7 @@ class DefaultMessageSummaryFormatter(
             is TimelineItemRedactedContent -> context.getString(CommonStrings.common_message_removed)
             is TimelineItemPollContent -> content.question
             is TimelineItemVoiceContent -> context.getString(CommonStrings.common_voice_message)
+            is TimelineItemCircleContent -> context.getString(CommonStrings.common_circle_message)
             is TimelineItemUnknownContent -> context.getString(CommonStrings.common_unsupported_event)
             is TimelineItemImageContent -> context.getString(CommonStrings.common_image)
             is TimelineItemStickerContent -> context.getString(CommonStrings.common_sticker)

@@ -62,6 +62,7 @@ fun TimelineItemEventContent.canBeForwarded(): Boolean =
         is TimelineItemAudioContent,
         is TimelineItemVideoContent,
         is TimelineItemVoiceContent,
+        is TimelineItemCircleContent,
         is TimelineItemGalleryContent,
         is TimelineItemAttachmentsContent -> true
         // Live location shares can't be forwarded, the SDK rejects them, so we only show the option for static locations
@@ -88,6 +89,7 @@ fun TimelineItemEventContent.canReact(): Boolean =
         is TimelineItemLocationContent,
         is TimelineItemPollContent,
         is TimelineItemVoiceContent,
+        is TimelineItemCircleContent,
         is TimelineItemVideoContent,
         is TimelineItemGalleryContent,
         is TimelineItemAttachmentsContent -> true
@@ -142,6 +144,7 @@ fun TimelineItemEventContentWithAttachment.duration(): Duration? {
         is TimelineItemAudioContent -> duration
         is TimelineItemVideoContent -> duration
         is TimelineItemVoiceContent -> duration
+        is TimelineItemCircleContent -> duration
         else -> null
     }
 }
@@ -150,6 +153,7 @@ fun TimelineItemEventContentWithAttachment.blurHash(): String? {
     return when (this) {
         is TimelineItemImageContent -> blurhash
         is TimelineItemVideoContent -> blurHash
+        is TimelineItemCircleContent -> blurHash
         is TimelineItemStickerContent -> blurhash
         else -> null
     }

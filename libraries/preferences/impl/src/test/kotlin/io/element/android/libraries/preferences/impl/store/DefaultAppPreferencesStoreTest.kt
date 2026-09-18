@@ -120,6 +120,19 @@ class DefaultAppPreferencesStoreTest {
         assertThat(history.last()).isEqualTo("https://server5.org")
     }
 
+    @Test
+    fun `composer media mode defaults to voice`() = runTest {
+        val store = createStore()
+        assertThat(store.getLastComposerMediaModeFlow().first()).isEqualTo("voice")
+    }
+
+    @Test
+    fun `composer media mode persists updates`() = runTest {
+        val store = createStore()
+        store.setLastComposerMediaMode("circle")
+        assertThat(store.getLastComposerMediaModeFlow().first()).isEqualTo("circle")
+    }
+
     private fun createStore() = DefaultAppPreferencesStore(
         buildMeta = buildMeta,
         preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),

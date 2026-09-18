@@ -41,6 +41,7 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
+import io.element.android.features.messages.test.timeline.circlemessages.composer.FakeDefaultCircleMessageComposerPresenterFactory
 import io.element.android.features.messages.test.timeline.voicemessages.composer.FakeDefaultVoiceMessageComposerPresenterFactory
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
@@ -100,6 +101,7 @@ import io.element.android.libraries.matrix.test.room.threads.FakeThreadsListServ
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aTimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
@@ -1543,6 +1545,7 @@ class MessagesPresenterTest {
             room = joinedRoom,
             composerPresenter = messageComposerPresenter,
             voiceMessageComposerPresenterFactory = FakeDefaultVoiceMessageComposerPresenterFactory(backgroundScope),
+            circleMessageComposerPresenterFactory = FakeDefaultCircleMessageComposerPresenterFactory(backgroundScope),
             timelinePresenter = { aTimelineState(eventSink = timelineEventSink) },
             timelineProtectionPresenter = { aTimelineProtectionState() },
             identityChangeStatePresenter = { anIdentityChangeState() },
@@ -1572,6 +1575,7 @@ class MessagesPresenterTest {
             addRecentEmoji = addRecentEmoji,
             markAsFullyRead = markAsFullyRead,
             liveLocationShareManager = liveLocationShareManager,
+            appPreferencesStore = InMemoryAppPreferencesStore(),
             sessionCoroutineScope = backgroundScope,
         )
     }

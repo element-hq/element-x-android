@@ -39,6 +39,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -399,6 +400,7 @@ class DefaultNotifiableEventResolver(
         return when (val messageType = content.messageType) {
             is AudioMessageType -> messageType.bestDescription
             is VoiceMessageType -> stringProvider.getString(CommonStrings.common_voice_message)
+            is CircleMessageType -> stringProvider.getString(CommonStrings.common_circle_message)
             is EmoteMessageType -> "* $senderDisambiguatedDisplayName ${messageType.body}"
             is FileMessageType -> messageType.bestDescription
             is ImageMessageType -> if (hasImageUri) {

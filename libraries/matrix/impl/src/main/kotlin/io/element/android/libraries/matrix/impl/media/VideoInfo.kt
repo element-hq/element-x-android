@@ -24,7 +24,7 @@ fun RustVideoInfo.map(): VideoInfo = VideoInfo(
     blurhash = blurhash
 )
 
-fun VideoInfo.map(): RustVideoInfo = RustVideoInfo(
+fun VideoInfo.map(circle: Boolean? = null): RustVideoInfo = RustVideoInfo(
     duration = duration?.toJavaDuration(),
     height = height?.toULong(),
     width = width?.toULong(),
@@ -32,5 +32,6 @@ fun VideoInfo.map(): RustVideoInfo = RustVideoInfo(
     size = size?.toULong(),
     thumbnailInfo = thumbnailInfo?.map(),
     thumbnailSource = null,
-    blurhash = blurhash
+    blurhash = blurhash,
+    circle = circle,
 )

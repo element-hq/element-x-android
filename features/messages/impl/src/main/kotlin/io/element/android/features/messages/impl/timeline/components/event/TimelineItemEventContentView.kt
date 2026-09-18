@@ -23,11 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.circlemessages.timeline.CircleMessageState
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.rememberPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCircleContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -97,7 +99,10 @@ fun TimelineItemEventContentView(
     }
 
     val caption = content.captionOrNull()
-    val showCaption = caption != null && content !is TimelineItemStickerContent && content !is TimelineItemVoiceContent
+    val showCaption = caption != null &&
+        content !is TimelineItemStickerContent &&
+        content !is TimelineItemVoiceContent &&
+        content !is TimelineItemCircleContent
     // If a caption is added, it will be used to get the free space for the overlay, so we don't need to add onContentLayoutChange to the actual content
     val calculatedOnContentLayoutChange = remember(onContentLayoutChange, showCaption) {
         if (showCaption) {
@@ -227,6 +232,13 @@ fun TimelineItemEventContentView(
                         contentValidationValue = overallValidationState,
                     )
                 }
+                is TimelineItemCircleContent -> {
+                    val presenter: Presenter<CircleMessageState> = presenterFactories.rememberPresenter(content)
+                    TimelineItemCircleView(
+                        state = presenter.present(),
+                        content = content,
+                    )
+                }
                 is TimelineItemRtcNotificationContent -> error("This shouldn't be rendered as the content of a bubble")
             }
         }
@@ -299,6 +311,7 @@ private fun ValidateMediaHelper(
         is TimelineItemFileContent -> listOfNotNull(content.thumbnailSource, content.mediaSource)
         is TimelineItemAudioContent -> listOf(content.mediaSource)
         is TimelineItemVoiceContent -> listOf(content.mediaSource)
+        is TimelineItemCircleContent -> listOfNotNull(content.thumbnailSource, content.mediaSource)
         is TimelineItemGalleryContent -> content.items.flatMap { listOfNotNull(it.thumbnailSource, it.mediaSource) }
         is TimelineItemAttachmentsContent -> content.attachments.flatMap { listOfNotNull(it.thumbnailSource, it.mediaSource) }
         else -> return

@@ -35,6 +35,7 @@ class InMemoryAppPreferencesStore(
     callRingtone: NotificationSound = NotificationSound.SystemDefault,
     callRingtoneChannelVersion: Int = 0,
     callRingtoneDisplayName: String? = null,
+    lastComposerMediaMode: String = "voice",
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
@@ -51,6 +52,7 @@ class InMemoryAppPreferencesStore(
     private val callRingtone = MutableStateFlow(callRingtone)
     private val callRingtoneChannelVersion = MutableStateFlow(callRingtoneChannelVersion)
     private val callRingtoneDisplayName = MutableStateFlow(callRingtoneDisplayName)
+    private val lastComposerMediaMode = MutableStateFlow(lastComposerMediaMode)
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         isDeveloperModeEnabled.value = enabled
@@ -169,6 +171,14 @@ class InMemoryAppPreferencesStore(
             callRingtoneVersion = callRingtoneChannelVersion.value,
             callRingtoneDisplayName = callRingtoneDisplayName.value,
         )
+    }
+
+    override suspend fun setLastComposerMediaMode(value: String) {
+        lastComposerMediaMode.value = value
+    }
+
+    override fun getLastComposerMediaModeFlow(): Flow<String> {
+        return lastComposerMediaMode
     }
 
     override suspend fun reset() {

@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl
 
+import io.element.android.features.messages.api.timeline.circlemessages.composer.CircleMessageComposerState
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
@@ -30,6 +31,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.textcomposer.model.ComposerMediaMode
 import kotlinx.collections.immutable.ImmutableList
 
 data class MessagesState(
@@ -40,6 +42,8 @@ data class MessagesState(
     val userEventPermissions: UserEventPermissions,
     val composerState: MessageComposerState,
     val voiceMessageComposerState: VoiceMessageComposerState,
+    val circleMessageComposerState: CircleMessageComposerState,
+    val composerMediaMode: ComposerMediaMode,
     val timelineState: TimelineState,
     val timelineProtectionState: TimelineProtectionState,
     val identityChangeState: IdentityChangeState,

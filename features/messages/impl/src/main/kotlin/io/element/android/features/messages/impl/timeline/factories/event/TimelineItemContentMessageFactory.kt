@@ -18,6 +18,7 @@ import io.element.android.features.messages.impl.timeline.model.event.Attachment
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCircleContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
@@ -37,6 +38,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.GalleryItemType
@@ -228,6 +230,27 @@ class TimelineItemContentMessageFactory(
                     waveform = messageType.details?.waveform?.toImmutableList() ?: persistentListOf(),
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
                     fileExtension = fileExtensionExtractor.extractFromName(messageType.filename)
+                )
+            }
+            is CircleMessageType -> {
+                val dom = messageType.formattedCaption?.toHtmlDocument(permalinkParser = permalinkParser)
+                val formattedCaption = dom?.let(::parseHtml)
+                    ?: messageType.caption?.withLinks()
+                TimelineItemCircleContent(
+                    eventId = eventId,
+                    filename = messageType.filename,
+                    fileSize = messageType.info?.size ?: 0,
+                    caption = messageType.caption?.trimEnd(),
+                    formattedCaption = formattedCaption,
+                    htmlCaption = messageType.formattedCaption?.body,
+                    isEdited = content.isEdited,
+                    duration = messageType.info?.duration ?: Duration.ZERO,
+                    mediaSource = messageType.source,
+                    thumbnailSource = messageType.info?.thumbnailSource,
+                    blurHash = messageType.info?.blurhash,
+                    mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
+                    formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
+                    fileExtension = fileExtensionExtractor.extractFromName(messageType.filename),
                 )
             }
             is FileMessageType -> {

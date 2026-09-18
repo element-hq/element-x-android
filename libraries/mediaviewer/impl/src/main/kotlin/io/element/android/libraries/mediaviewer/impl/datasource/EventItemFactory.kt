@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
@@ -283,6 +284,30 @@ class EventItemFactory(
                         validationState = validationState,
                     ))
                     is VideoMessageType -> listOf(MediaItem.Video(
+                        id = currentTimelineItem.uniqueId,
+                        eventId = currentTimelineItem.eventId,
+                        mediaInfo = MediaInfo(
+                            filename = type.filename,
+                            fileSize = type.info?.size,
+                            caption = type.caption,
+                            formattedCaption = type.formattedCaption?.body,
+                            mimeType = type.info?.mimetype.orEmpty(),
+                            formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
+                            fileExtension = fileExtensionExtractor.extractFromName(type.filename),
+                            senderId = event.sender,
+                            senderName = event.senderProfile.getDisambiguatedDisplayName(event.sender),
+                            senderAvatar = event.senderProfile.getAvatarUrl(),
+                            dateSent = dateSent,
+                            dateSentFull = dateSentFull,
+                            waveform = null,
+                            duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
+                        ),
+                        mediaSource = type.source,
+                        thumbnailSource = type.info?.thumbnailSource,
+                        blurHash = type.info?.blurhash,
+                        validationState = validationState,
+                    ))
+                    is CircleMessageType -> listOf(MediaItem.Video(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(

@@ -91,7 +91,12 @@ class AndroidMediaPreProcessor(
                     val shouldBeCompressed = mediaOptimizationConfig.compressImages && imageMimeType !in notCompressibleImageTypes
                     processImage(uri, imageMimeType, shouldBeCompressed)
                 }
-                resolvedMimeType.isMimeTypeVideo() -> processVideo(uri, resolvedMimeType, mediaOptimizationConfig.videoCompressionPreset)
+                resolvedMimeType.isMimeTypeVideo() -> processVideo(
+                    uri = uri,
+                    mimeType = resolvedMimeType,
+                    videoCompressionPreset = mediaOptimizationConfig.videoCompressionPreset,
+                    squareCropTo = mediaOptimizationConfig.squareCropTo,
+                )
                 resolvedMimeType.isMimeTypeAudio() -> processAudio(uri, resolvedMimeType)
                 else -> processFile(uri, resolvedMimeType)
             }
@@ -256,10 +261,15 @@ class AndroidMediaPreProcessor(
         )
     }
 
-    private suspend fun processVideo(uri: Uri, mimeType: String?, videoCompressionPreset: VideoCompressionPreset): MediaUploadInfo {
+    private suspend fun processVideo(
+        uri: Uri,
+        mimeType: String?,
+        videoCompressionPreset: VideoCompressionPreset,
+        squareCropTo: Int?,
+    ): MediaUploadInfo {
         Timber.d("Processing video ${uri.path.orEmpty().hash()}")
         val resultFile = runCatchingExceptions {
-            videoCompressor.compress(uri, videoCompressionPreset)
+            videoCompressor.compress(uri, videoCompressionPreset, squareCropTo)
                 .onEach {
                     if (it is VideoTranscodingEvent.Progress) {
                         Timber.d("Video compression progress: ${it.value}%")

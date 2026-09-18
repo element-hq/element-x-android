@@ -14,6 +14,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -79,6 +80,14 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
             AttachmentThumbnailInfo(
                 thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
                 textContent = eventContent.body,
+                type = AttachmentThumbnailType.Video,
+                blurHash = type.info?.blurhash,
+            )
+        )
+        is CircleMessageType -> Thumbnail(
+            AttachmentThumbnailInfo(
+                thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
+                textContent = stringResource(CommonStrings.common_circle_message),
                 type = AttachmentThumbnailType.Video,
                 blurHash = type.info?.blurhash,
             )

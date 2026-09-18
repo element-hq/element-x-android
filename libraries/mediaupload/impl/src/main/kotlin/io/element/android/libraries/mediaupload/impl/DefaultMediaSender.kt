@@ -168,6 +168,39 @@ class DefaultMediaSender(
             .handleSendResult(mediaId(uri))
     }
 
+    override suspend fun sendCircleMessage(
+        uri: Uri,
+        mimeType: String,
+        inReplyToEventId: EventId?,
+    ): Result<Unit> {
+        return preProcessor
+            .process(
+                uri = uri,
+                mimeType = mimeType,
+                deleteOriginal = true,
+                mediaOptimizationConfig = mediaOptimizationConfigProvider.get().copy(
+                    squareCropTo = CIRCLE_VIDEO_SIZE,
+                ),
+            )
+            .flatMapCatching { info ->
+                val videoInfo = info as MediaUploadInfo.Video
+                getTimeline().getOrThrow().sendVideo(
+                    file = videoInfo.file,
+                    thumbnailFile = videoInfo.thumbnailFile,
+                    videoInfo = videoInfo.videoInfo,
+                    caption = null,
+                    formattedCaption = null,
+                    inReplyToEventId = inReplyToEventId,
+                    circle = true,
+                ).flatMapCatching { uploadHandler ->
+                    Timber.d("Added ongoing upload job, total: ${ongoingUploadJobs.size + 1}")
+                    ongoingUploadJobs[Job] = uploadHandler
+                    uploadHandler.await()
+                }
+            }
+            .handleSendResult(mediaId(uri))
+    }
+
     override suspend fun sendGallery(
         mediaUploadInfos: List<MediaUploadInfo>,
         caption: String?,
@@ -286,3 +319,5 @@ class DefaultMediaSender(
 
 private fun mediaId(uri: Uri?): String = uri?.path.orEmpty().hash()
 private fun mediaId(file: File): String = file.path.orEmpty().hash()
+
+private const val CIRCLE_VIDEO_SIZE = 512

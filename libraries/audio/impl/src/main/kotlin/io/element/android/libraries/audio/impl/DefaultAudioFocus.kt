@@ -60,7 +60,9 @@ class DefaultAudioFocus(
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(requester.toAudioUsage())
                 .build()
-            val focusGain = if (requester == AudioFocusRequester.RecordVoiceMessage) {
+            val focusGain = if (requester == AudioFocusRequester.RecordVoiceMessage ||
+                requester == AudioFocusRequester.RecordCircleMessage
+            ) {
                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE
             } else {
                 AudioManager.AUDIOFOCUS_GAIN
@@ -95,8 +97,10 @@ class DefaultAudioFocus(
 private fun AudioFocusRequester.toAudioUsage(): Int {
     return when (this) {
         AudioFocusRequester.ElementCall,
-        AudioFocusRequester.RecordVoiceMessage -> AudioAttributes.USAGE_VOICE_COMMUNICATION
+        AudioFocusRequester.RecordVoiceMessage,
+        AudioFocusRequester.RecordCircleMessage -> AudioAttributes.USAGE_VOICE_COMMUNICATION
         AudioFocusRequester.VoiceMessage,
+        AudioFocusRequester.CircleMessage,
         AudioFocusRequester.MediaViewer -> AudioAttributes.USAGE_MEDIA
     }
 }
@@ -104,8 +108,10 @@ private fun AudioFocusRequester.toAudioUsage(): Int {
 private fun AudioFocusRequester.toAudioStream(): Int {
     return when (this) {
         AudioFocusRequester.ElementCall,
-        AudioFocusRequester.RecordVoiceMessage -> AudioManager.STREAM_VOICE_CALL
+        AudioFocusRequester.RecordVoiceMessage,
+        AudioFocusRequester.RecordCircleMessage -> AudioManager.STREAM_VOICE_CALL
         AudioFocusRequester.VoiceMessage,
+        AudioFocusRequester.CircleMessage,
         AudioFocusRequester.MediaViewer -> AudioManager.STREAM_MUSIC
     }
 }
@@ -114,7 +120,9 @@ private fun AudioFocusRequester.pausesOnTransientFocusLoss(): Boolean {
     return when (this) {
         // The AudioRecord API keeps capturing regardless.
         AudioFocusRequester.RecordVoiceMessage,
-        AudioFocusRequester.VoiceMessage -> false
+        AudioFocusRequester.RecordCircleMessage,
+        AudioFocusRequester.VoiceMessage,
+        AudioFocusRequester.CircleMessage -> false
         AudioFocusRequester.ElementCall,
         AudioFocusRequester.MediaViewer -> true
     }
@@ -125,7 +133,9 @@ private fun AudioFocusRequester.willPausedWhenDucked(): Boolean {
         // (note that for Element Call, there is no action when the focus is lost)
         AudioFocusRequester.ElementCall,
         AudioFocusRequester.VoiceMessage,
-        AudioFocusRequester.RecordVoiceMessage -> true
+        AudioFocusRequester.CircleMessage,
+        AudioFocusRequester.RecordVoiceMessage,
+        AudioFocusRequester.RecordCircleMessage -> true
         // For the MediaViewer, we let the system automatically handle the ducking
         // https://developer.android.com/media/optimize/audio-focus#automatic-ducking
         AudioFocusRequester.MediaViewer -> false

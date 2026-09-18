@@ -12,6 +12,8 @@ enum class AudioFocusRequester {
     ElementCall,
     VoiceMessage,
     RecordVoiceMessage,
+    CircleMessage,
+    RecordCircleMessage,
     MediaViewer,
 }
 

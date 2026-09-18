@@ -80,6 +80,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemCircleContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -560,8 +561,10 @@ private fun TimelineItemEventRowContent(
             interactionSource = interactionSource,
             onClick = onContentClick,
             onLongClick = onLongClick,
-            customBackgroundColor = dangerousContentBubbleColor,
+            customBackgroundColor = dangerousContentBubbleColor
+                ?: Color.Transparent.takeIf { event.content is TimelineItemCircleContent },
             borderColor = borderColor,
+            showRipple = event.content !is TimelineItemCircleContent,
         ) {
             MessageEventBubbleContent(
                 event = event,
@@ -909,6 +912,7 @@ private fun MessageEventBubbleContent(
             is TimelineItemGalleryContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Below
             is TimelineItemAttachmentsContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Below
             is TimelineItemStickerContent -> TimestampPosition.Overlay
+            is TimelineItemCircleContent -> TimestampPosition.Overlay
             is TimelineItemLocationContent -> {
                 val content = content.ensureActiveLiveLocation()
                 val shouldHide = content.mode is TimelineItemLocationContent.Mode.Live &&
@@ -930,6 +934,7 @@ private fun MessageEventBubbleContent(
             is TimelineItemGalleryContent -> ContentPadding.CaptionedMedia
             is TimelineItemAttachmentsContent -> ContentPadding.CaptionedMedia
             is TimelineItemStickerContent,
+            is TimelineItemCircleContent,
             is TimelineItemLocationContent -> ContentPadding.Media
             else -> ContentPadding.Textual
         }
@@ -939,7 +944,7 @@ private fun MessageEventBubbleContent(
         timestampPosition = timestampPosition,
         paddingBehaviour = paddingBehaviour,
         inReplyToDetails = event.inReplyTo,
-        canShrinkContent = event.content is TimelineItemVoiceContent,
+        canShrinkContent = event.content is TimelineItemVoiceContent || event.content is TimelineItemCircleContent,
         modifier = bubbleModifier,
     )
 }

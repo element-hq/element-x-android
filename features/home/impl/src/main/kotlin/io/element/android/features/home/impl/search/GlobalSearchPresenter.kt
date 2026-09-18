@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.search.MessageSearchPaginationSta
 import io.element.android.libraries.matrix.api.search.MessageSearchResult
 import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.CircleMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
@@ -256,6 +257,7 @@ class GlobalSearchPresenter(
         val thumbnailType = when (messageType) {
             is ImageMessageType -> AttachmentThumbnailType.Image
             is VideoMessageType -> AttachmentThumbnailType.Video
+            is CircleMessageType -> AttachmentThumbnailType.Video
             is AudioMessageType -> AttachmentThumbnailType.Audio
             is VoiceMessageType -> AttachmentThumbnailType.Voice
             is FileMessageType -> AttachmentThumbnailType.File
@@ -264,6 +266,7 @@ class GlobalSearchPresenter(
         val thumbnailSource = when (messageType) {
             is ImageMessageType -> messageType.info?.thumbnailSource ?: messageType.source
             is VideoMessageType -> messageType.info?.thumbnailSource
+            is CircleMessageType -> messageType.info?.thumbnailSource
             is AudioMessageType -> null
             is VoiceMessageType -> null
             is FileMessageType -> null
@@ -272,6 +275,7 @@ class GlobalSearchPresenter(
         val blurhash = when (messageType) {
             is ImageMessageType -> messageType.info?.blurhash
             is VideoMessageType -> messageType.info?.blurhash
+            is CircleMessageType -> messageType.info?.blurhash
             is AudioMessageType -> null
             is VoiceMessageType -> null
             is FileMessageType -> null
@@ -282,6 +286,7 @@ class GlobalSearchPresenter(
         val formattedSize = when (messageType) {
             is ImageMessageType -> messageType.info?.size
             is VideoMessageType -> messageType.info?.size
+            is CircleMessageType -> messageType.info?.size
             is AudioMessageType -> messageType.info?.size
             is VoiceMessageType -> messageType.info?.size
             is FileMessageType -> messageType.info?.size

@@ -58,13 +58,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.location.api.LiveLocationSharingBanner
+import io.element.android.features.messages.api.timeline.circlemessages.composer.CircleMessageComposerEvent
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.circlemessages.composer.CircleMessageAudioPermissionRationaleDialog
+import io.element.android.features.messages.impl.circlemessages.composer.CircleMessageCameraPermissionRationaleDialog
+import io.element.android.features.messages.impl.circlemessages.composer.CircleMessageRecordingOverlay
+import io.element.android.features.messages.impl.circlemessages.composer.CircleMessageSendingFailedDialog
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStateView
 import io.element.android.features.messages.impl.link.LinkEvent
 import io.element.android.features.messages.impl.link.LinkView
@@ -160,9 +166,10 @@ fun MessagesView(
 
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.LifecycleEvent(event))
+        state.circleMessageComposerState.eventSink(CircleMessageComposerEvent.LifecycleEvent(event))
     }
 
-    KeepScreenOn(state.voiceMessageComposerState.keepScreenOn)
+    KeepScreenOn(state.voiceMessageComposerState.keepScreenOn || state.circleMessageComposerState.keepScreenOn)
 
     HideKeyboardWhenDisposed()
 
@@ -231,6 +238,7 @@ fun MessagesView(
                 maxComposerHeightPx = (size.height * 0.5f).toInt()
             },
         content = {
+            Box(modifier = Modifier.fillMaxSize()) {
             Scaffold(
                 contentWindowInsets = scaffoldScrollableContentInsets,
                 topBar = {
@@ -337,6 +345,13 @@ fun MessagesView(
                     )
                 },
             )
+            if (state.circleMessageComposerState.isRecording) {
+                CircleMessageRecordingOverlay(
+                    modifier = Modifier.zIndex(1f),
+                    state = state.circleMessageComposerState,
+                )
+            }
+            }
         },
         bottomSheetContent = {
             MessagesViewComposerBottomSheetContents(
@@ -558,6 +573,33 @@ private fun MessagesViewContent(
                 onDismiss = { state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.DismissSendFailureDialog) },
             )
         }
+        if (state.circleMessageComposerState.showCameraPermissionRationaleDialog) {
+            CircleMessageCameraPermissionRationaleDialog(
+                onContinue = {
+                    state.circleMessageComposerState.eventSink(CircleMessageComposerEvent.AcceptCameraPermissionRationale)
+                },
+                onDismiss = {
+                    state.circleMessageComposerState.eventSink(CircleMessageComposerEvent.DismissCameraPermissionRationale)
+                },
+                appName = state.appName,
+            )
+        }
+        if (state.circleMessageComposerState.showAudioPermissionRationaleDialog) {
+            CircleMessageAudioPermissionRationaleDialog(
+                onContinue = {
+                    state.circleMessageComposerState.eventSink(CircleMessageComposerEvent.AcceptAudioPermissionRationale)
+                },
+                onDismiss = {
+                    state.circleMessageComposerState.eventSink(CircleMessageComposerEvent.DismissAudioPermissionRationale)
+                },
+                appName = state.appName,
+            )
+        }
+        if (state.circleMessageComposerState.showSendFailureDialog) {
+            CircleMessageSendingFailedDialog(
+                onDismiss = { state.circleMessageComposerState.eventSink(CircleMessageComposerEvent.DismissSendFailureDialog) },
+            )
+        }
 
         Box {
             val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
@@ -661,6 +703,11 @@ private fun MessagesViewComposerBottomSheetContents(
                     MessageComposerView(
                         state = state.composerState,
                         voiceMessageState = state.voiceMessageComposerState,
+                        circleMessageState = state.circleMessageComposerState,
+                        composerMediaMode = state.composerMediaMode,
+                        onComposerMediaModeChange = { mode ->
+                            state.eventSink(MessagesEvent.SetComposerMediaMode(mode))
+                        },
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }

@@ -111,6 +111,20 @@ interface MediaSender {
     ): Result<Unit>
 
     /**
+     * Pre-processes and sends a circle video: square-cropped to 512×512, with `org.interferolog.circle` on the event.
+     * The original [uri] is deleted after processing.
+     *
+     * @param uri the recorded video file.
+     * @param mimeType the MIME type of that recording.
+     * @param inReplyToEventId the event this message replies to, or `null` if it is not a reply.
+     */
+    suspend fun sendCircleMessage(
+        uri: Uri,
+        mimeType: String,
+        inReplyToEventId: EventId? = null,
+    ): Result<Unit>
+
+    /**
      * Sends several already pre-processed media items as a single gallery message.
      *
      * @param mediaUploadInfos the pre-processed items, in the order they should appear.

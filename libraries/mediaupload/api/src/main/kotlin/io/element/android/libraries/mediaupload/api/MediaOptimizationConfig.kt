@@ -14,6 +14,10 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 data class MediaOptimizationConfig(
     val compressImages: Boolean,
     val videoCompressionPreset: VideoCompressionPreset,
+    /**
+     * When set, videos are square-cropped and scaled to this size instead of using [videoCompressionPreset].
+     */
+    val squareCropTo: Int? = null,
 )
 
 fun VideoCompressionPreset.compressorHelper(): VideoCompressorHelper = when (this) {
