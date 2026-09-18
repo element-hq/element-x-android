@@ -245,12 +245,16 @@ class DefaultVoiceMessageComposerPresenter(
         val playerTime by remember(playerState, recorderState) { derivedStateOf { displayTime(playerState, recorderState) } }
         val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
 
+        val recorderDuration = (recorderState as VoiceRecorderState.Finished).duration
+        val duration = playerState.durationMs?.milliseconds ?: recorderDuration
+
         return VoiceMessageState.Preview(
             isSending = isSending,
             isPlaying = playerState.isPlaying,
             showCursor = showCursor,
             playbackProgress = playerState.progress,
             time = playerTime,
+            duration = duration,
             waveform = waveform,
         )
     }

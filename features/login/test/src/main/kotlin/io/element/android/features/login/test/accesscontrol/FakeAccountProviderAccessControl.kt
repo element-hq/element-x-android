@@ -8,12 +8,13 @@
 package io.element.android.features.login.test.accesscontrol
 
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeAccountProviderAccessControl(
-    private val isAllowedToConnectToAccountProviderResult: (String) -> Boolean = { lambdaError() },
+    private val isAllowedToConnectToAccountProviderResult: (AccountProvider) -> Boolean = { lambdaError() },
 ) : AccountProviderAccessControl {
-    override suspend fun isAllowedToConnectToAccountProvider(accountProviderUrl: String): Boolean {
-        return isAllowedToConnectToAccountProviderResult(accountProviderUrl)
+    override suspend fun isAllowedToConnectToAccountProvider(accountProvider: AccountProvider): Boolean {
+        return isAllowedToConnectToAccountProviderResult(accountProvider)
     }
 }

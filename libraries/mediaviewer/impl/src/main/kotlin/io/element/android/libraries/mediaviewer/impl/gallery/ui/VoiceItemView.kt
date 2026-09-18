@@ -153,6 +153,9 @@ private fun VoiceInfoRow(
             onSeek = {
                 state.eventSink(VoiceMessageEvent.Seek(it))
             },
+            isPlaying = state.isPlaying,
+            durationMs = state.durationMs,
+            playbackSpeed = state.playbackSpeed,
             seekEnabled = !isValidating,
         )
     }

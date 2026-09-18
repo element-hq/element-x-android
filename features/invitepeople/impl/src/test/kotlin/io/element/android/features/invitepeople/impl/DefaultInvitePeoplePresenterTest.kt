@@ -59,7 +59,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-@Suppress("LargeClass")
 internal class DefaultInvitePeoplePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()

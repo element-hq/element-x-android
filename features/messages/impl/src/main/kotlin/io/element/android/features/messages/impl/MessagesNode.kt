@@ -51,6 +51,7 @@ import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -103,6 +104,7 @@ class MessagesNode(
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
     private val eventContentValidationCache: EventContentValidationCache,
     private val emojiPickerRenderer: EmojiPickerRenderer,
+    private val dispatchers: CoroutineDispatchers,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     data class Inputs(
         val focusedEventId: EventId?,
@@ -111,7 +113,12 @@ class MessagesNode(
     private val inputs = inputs<Inputs>()
     private val callback: Callback = callback()
 
-    private val timelineController = TimelineController(room, room.liveTimeline)
+    private val timelineController = TimelineController(
+        room = room,
+        liveTimeline = room.liveTimeline,
+        roomCoroutineScope = room.roomCoroutineScope,
+        dispatchers = dispatchers,
+    )
     private val presenter = presenterFactory.create(
         navigator = this,
         composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = null),

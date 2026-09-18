@@ -6,7 +6,7 @@
 android_gradle_plugin = "9.3.2"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
 kotlin = "2.4.10"
-kotlinpoet = "2.3.0"
+kotlinpoet = "2.4.0"
 ksp = "2.3.11"
 firebaseAppDistribution = "5.3.0"
 
@@ -32,7 +32,7 @@ accompanist = "0.37.3"
 
 # Test
 test_core = "1.7.0"
-roborazzi = "1.73.0"
+roborazzi = "1.74.0"
 
 # Jetbrain
 datetime = "0.8.0"
@@ -53,7 +53,7 @@ maplibre-compose = "0.15.0"
 dependencyAnalysis = "3.19.1"
 
 # DI
-metro = "1.4.2"
+metro = "1.4.3"
 
 # Auto service
 autoservice = "1.1.1"
@@ -168,7 +168,7 @@ test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.7.0"
 test_mockk = "io.mockk:mockk:1.14.11"
-test_konsist = "com.lemonappdev:konsist:0.17.3"
+test_konsist = "com.github.jmartinesp:konsist:0.18.0"
 test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.22"
@@ -205,7 +205,7 @@ matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose",
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:sqlcipher-android:4.18.0"
+sqlcipher = "net.zetetic:sqlcipher-android:4.19.0"
 sqlite = "androidx.sqlite:sqlite-ktx:2.7.0"
 unifiedpush = "org.unifiedpush.android:connector:3.3.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
@@ -238,7 +238,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.25.0"
+element_call_embedded = "io.element.android:element-call-embedded:0.26.0"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
@@ -272,7 +272,7 @@ paparazzi = "app.cash.paparazzi:2.0.0-alpha05"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
-sonarqube = "org.sonarqube:7.4.0.8496"
+sonarqube = "org.sonarqube:7.5.0.8588"
 licensee = "app.cash.licensee:1.14.1"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 gms_google_services = { id = "com.google.gms.google-services", version = "4.5.0" }
