@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
@@ -35,7 +36,7 @@ class MaterialColorSchemeTest {
     fun screenshots() {
         paparazzi.snapshot(name = "Material3 Colors - Light") {
             ElementTheme {
-                Surface {
+                Surface(Modifier.width(300.dp)) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = "M3 Light colors",
@@ -49,7 +50,7 @@ class MaterialColorSchemeTest {
         }
         paparazzi.snapshot(name = "Material3 Colors - Light HC") {
             ElementTheme {
-                Surface {
+                Surface(Modifier.width(300.dp)) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = "M3 Light HC colors",
@@ -63,7 +64,7 @@ class MaterialColorSchemeTest {
         }
         paparazzi.snapshot(name = "Material3 Colors - Dark") {
             ElementTheme {
-                Surface {
+                Surface(Modifier.width(300.dp)) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = "M3 Dark colors",
@@ -77,7 +78,7 @@ class MaterialColorSchemeTest {
         }
         paparazzi.snapshot(name = "Material3 Colors - Dark HC") {
             ElementTheme {
-                Surface {
+                Surface(Modifier.width(300.dp)) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = "M3 Dark HC colors",
