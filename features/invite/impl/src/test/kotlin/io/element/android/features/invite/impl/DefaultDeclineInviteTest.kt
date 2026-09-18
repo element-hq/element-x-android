@@ -13,6 +13,8 @@ import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.exception.ClientException
+import io.element.android.libraries.matrix.api.exception.ErrorKind
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
@@ -41,12 +43,66 @@ class DefaultDeclineInviteTest {
     private val successReportRoomLambda =
         lambdaRecorder<String?, Result<Unit>> { _ -> Result.success(Unit) }
 
+    private val invalidInviteLeaveRoomLambda = lambdaRecorder<Result<Unit>> {
+        Result.failure(ClientException.MatrixApi(ErrorKind.Unknown, "M_UNKNOWN", "Unknown", null))
+    }
+
     private val failureLeaveRoomLambda =
         lambdaRecorder<Result<Unit>> { Result.failure(Exception("Leave room error")) }
     private val failureIgnoreUserLambda =
         lambdaRecorder<UserId, Result<Unit>> { _ -> Result.failure(Exception("Ignore user error")) }
     private val failureReportRoomLambda =
         lambdaRecorder<String?, Result<Unit>> { _ -> Result.failure(Exception("Report room error")) }
+
+    @Test
+    fun `decline invite, the invite is no longer valid, the room is forgotten`() = runTest {
+        val forgetRoomLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val room = FakeBaseRoom(
+            roomId = roomId,
+            leaveRoomLambda = invalidInviteLeaveRoomLambda,
+            forgetResult = forgetRoomLambda,
+        )
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(roomId, room)
+        }
+
+        val declineInvite = DefaultDeclineInvite(
+            client = client,
+            notificationCleaner = notificationCleaner,
+            seenInvitesStore = seenInvitesStore
+        )
+
+        val result = declineInvite(roomId, blockUser = false, reportRoom = false, reportReason = null)
+
+        assertThat(result.isSuccess).isTrue()
+        assert(forgetRoomLambda).isCalledOnce()
+        assert(clearMembershipNotificationForRoomLambda)
+            .isCalledOnce()
+            .with(value(client.sessionId), value(roomId))
+        assertThat(seenInvitesStore.seenRoomIds().first()).isEmpty()
+    }
+
+    @Test
+    fun `decline invite, the invite is no longer valid and cannot be forgotten`() = runTest {
+        val room = FakeBaseRoom(
+            roomId = roomId,
+            leaveRoomLambda = invalidInviteLeaveRoomLambda,
+            forgetResult = { Result.failure(Exception("Forget room error")) },
+        )
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(roomId, room)
+        }
+
+        val declineInvite = DefaultDeclineInvite(
+            client = client,
+            notificationCleaner = notificationCleaner,
+            seenInvitesStore = seenInvitesStore
+        )
+
+        val result = declineInvite(roomId, blockUser = false, reportRoom = false, reportReason = null)
+
+        assertThat(result.exceptionOrNull()).isEqualTo(DeclineInvite.Exception.InvalidInvite)
+    }
 
     @Test
     fun `decline invite, block=false, report=false, all success`() = runTest {

@@ -18,6 +18,7 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteE
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
 import io.element.android.features.invite.impl.AcceptInvite
+import io.element.android.features.invite.impl.DeclineInvite
 import io.element.android.features.invite.impl.R
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -66,8 +67,12 @@ fun AcceptDeclineInviteView(
             errorTitle = {
                 stringResource(CommonStrings.common_something_went_wrong)
             },
-            errorMessage = {
-                stringResource(CommonStrings.error_network_or_server_issue)
+            errorMessage = { error ->
+                if (error is DeclineInvite.Exception.InvalidInvite) {
+                    stringResource(CommonStrings.error_invalid_invite)
+                } else {
+                    stringResource(CommonStrings.error_network_or_server_issue)
+                }
             },
             confirmationDialog = { confirming ->
                 // Note: confirming will always be of type ConfirmingDeclineInvite.
