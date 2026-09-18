@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.htmlrenderer.api
 
+import io.element.android.libraries.designsystem.components.LINK_TAG
 import org.jsoup.nodes.Document
 
 /**
@@ -28,7 +29,7 @@ interface HtmlMessageParser {
          * Tag used for the string annotation attached to link (`<a href>`) text ranges in a
          * [ParagraphNode.text]. The annotation value is the link target URL.
          */
-        const val LINK_ANNOTATION_TAG = "url"
+        const val LINK_ANNOTATION_TAG = LINK_TAG
 
         /**
          * Tag used for the string annotation attached to inline code (`<code>`) text ranges in a
