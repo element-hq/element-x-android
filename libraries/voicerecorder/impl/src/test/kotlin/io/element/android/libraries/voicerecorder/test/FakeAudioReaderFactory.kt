@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.voicerecorder.test
 
+import android.content.Context
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.voicerecorder.impl.audio.Audio
 import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
@@ -16,11 +17,7 @@ import io.element.android.libraries.voicerecorder.impl.audio.AudioReader
 class FakeAudioReaderFactory(
     private val audio: List<Audio>
 ) : AudioReader.Factory {
-    var createdCount: Int = 0
-        private set
-
-    override fun create(config: AudioConfig, dispatchers: CoroutineDispatchers): AudioReader {
-        createdCount++
+    override fun create(context: Context, config: AudioConfig, dispatchers: CoroutineDispatchers): AudioReader {
         return FakeAudioReader(dispatchers, audio)
     }
 }
