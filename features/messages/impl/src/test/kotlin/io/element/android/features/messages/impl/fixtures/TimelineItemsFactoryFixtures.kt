@@ -108,7 +108,7 @@ internal fun TestScope.aTimelineItemsFactory(
 internal fun aTimelineEventFormatter(): TimelineEventFormatter {
     return object : TimelineEventFormatter {
         override fun format(content: EventContent, isOutgoing: Boolean, sender: UserId, senderDisambiguatedDisplayName: String): CharSequence? {
-            return ""
+            return "a formatted event"
         }
     }
 }
