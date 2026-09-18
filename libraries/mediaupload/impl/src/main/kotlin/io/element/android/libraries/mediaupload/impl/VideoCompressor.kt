@@ -102,8 +102,10 @@ class VideoCompressor(
         val encoderFactory = DefaultEncoderFactory.Builder(context)
             .setRequestedVideoEncoderSettings(
                 VideoEncoderSettings.Builder()
-                    // Use VBR which is generally better for quality and compatibility, although slightly worse for file size
-                    .setBitrateMode(MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_VBR)
+                    // Use CBR so the requested bitrate is treated as a hard target rather than an average.
+                    // VBR lets many hardware encoders spend significantly more bits than requested on complex
+                    // footage, which made the resulting file size unpredictable (and much larger than estimated).
+                    .setBitrateMode(MediaCodecInfo.EncoderCapabilities.BITRATE_MODE_CBR)
                     .setBitrate(newBitrate)
                     .build()
             )
@@ -117,6 +119,15 @@ class VideoCompressor(
             .setMuxerFactory(removeMetadataMuxer)
             .addListener(object : Transformer.Listener {
                 override fun onCompleted(composition: Composition, exportResult: ExportResult) {
+                    // Useful for tuning the audio-bitrate assumption used in the upload size estimate
+                    // (DefaultMediaOptimizationSelectorPresenter.ASSUMED_AUDIO_BITRATE), since Media3 doesn't
+                    // expose a public way to pin the audio encoder's bitrate up front.
+                    Timber.d(
+                        "Video transcoding completed. durationMs=${exportResult.durationMs} " +
+                            "fileSizeBytes=${exportResult.fileSizeBytes} " +
+                            "videoEncoderName=${exportResult.videoEncoderName} " +
+                            "averageAudioBitrate=${exportResult.averageAudioBitrate}"
+                    )
                     trySend(VideoTranscodingEvent.Completed(tmpFile))
                     close()
                 }
@@ -131,7 +142,15 @@ class VideoCompressor(
                     composition: Composition,
                     originalTransformationRequest: TransformationRequest,
                     fallbackTransformationRequest: TransformationRequest
-                ) = Unit
+                ) {
+                    // The requested transformation (bitrate/mode/resolution/etc.) could not be honored by the
+                    // device's encoder, and Media3 substituted different settings. Log this so we can tell when
+                    // the actual output diverges from what we planned for (e.g. size estimates becoming inaccurate).
+                    Timber.w(
+                        "Video transcoding fallback applied. Requested: $originalTransformationRequest, " +
+                            "actual: $fallbackTransformationRequest"
+                    )
+                }
             })
             .build()
 
