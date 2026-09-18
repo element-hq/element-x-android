@@ -31,6 +31,7 @@ class PreferencesLockScreenStore(
     private val pinCodeKey = stringPreferencesKey("encoded_pin_code")
     private val remainingAttemptsKey = intPreferencesKey("remaining_pin_code_attempts")
     private val biometricUnlockKey = booleanPreferencesKey("biometric_unlock_enabled")
+    private val shuffledKeypadKey = booleanPreferencesKey("shuffled_pin_keypad")
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return dataStore.data.map { preferences ->
@@ -79,6 +80,18 @@ class PreferencesLockScreenStore(
     override suspend fun setIsBiometricUnlockAllowed(isAllowed: Boolean) {
         dataStore.edit { preferences ->
             preferences[biometricUnlockKey] = isAllowed
+        }
+    }
+
+    override fun isPinKeypadShuffled(): Flow<Boolean> {
+        return dataStore.data.map { preferences ->
+            preferences[shuffledKeypadKey] ?: false
+        }
+    }
+
+    override suspend fun setIsPinKeypadShuffled(isShuffled: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[shuffledKeypadKey] = isShuffled
         }
     }
 

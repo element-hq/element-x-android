@@ -65,6 +65,15 @@ fun LockScreenSettingsView(
                     }
                 )
             }
+            PreferenceDivider()
+            PreferenceSwitch(
+                title = stringResource(id = R.string.screen_app_lock_settings_shuffle_pin_keypad),
+                subtitle = stringResource(id = R.string.screen_app_lock_settings_shuffle_pin_keypad_subtitle),
+                isChecked = state.isPinKeypadShuffled,
+                onCheckedChange = {
+                    state.eventSink(LockScreenSettingsEvent.TogglePinKeypadShuffled)
+                }
+            )
         }
     }
     if (state.showRemovePinConfirmation) {

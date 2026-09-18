@@ -45,6 +45,9 @@ class LockScreenSettingsPresenter(
         val isBiometricEnabled by remember {
             lockScreenStore.isBiometricUnlockAllowed()
         }.collectAsState(initial = false)
+        val isPinKeypadShuffled by remember {
+            lockScreenStore.isPinKeypadShuffled()
+        }.collectAsState(initial = false)
         var showRemovePinConfirmation by remember {
             mutableStateOf(false)
         }
@@ -76,6 +79,11 @@ class LockScreenSettingsPresenter(
                         }
                     }
                 }
+                LockScreenSettingsEvent.TogglePinKeypadShuffled -> {
+                    coroutineScope.launch {
+                        lockScreenStore.setIsPinKeypadShuffled(!isPinKeypadShuffled)
+                    }
+                }
             }
         }
 
@@ -84,6 +92,7 @@ class LockScreenSettingsPresenter(
             isBiometricEnabled = isBiometricEnabled,
             showRemovePinConfirmation = showRemovePinConfirmation,
             showToggleBiometric = biometricAuthenticatorManager.isDeviceSecured,
+            isPinKeypadShuffled = isPinKeypadShuffled,
             eventSink = ::handleEvent,
         )
     }
