@@ -16,6 +16,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -65,6 +66,7 @@ internal class HtmlMessageContentPreviewParam : PreviewParameterProvider<Documen
             mentionOwn(),
             nestedList(),
             nestedListWithComplexContents(),
+            linkifiedParagraph(),
         )
 
     private fun richParagraph() = document(
@@ -79,6 +81,28 @@ internal class HtmlMessageContentPreviewParam : PreviewParameterProvider<Documen
                 append("link")
                 addStringAnnotation(LINK_ANNOTATION_TAG, "https://element.io", start, length)
             }
+        ),
+    )
+
+    private fun linkifiedParagraph() = document(
+        paragraph(
+            buildAnnotatedString {
+                append("Hello me@matrix.org, check out element.io and and call +1 234 567 8900, then get in touch with ")
+                appendInlineContent(MENTION_ID, "@alice:example.org")
+                append(".\n\n")
+                append("Also, ignore this link: ")
+                val start = length
+                append("https://matrix.org")
+                addStringAnnotation(LINK_ANNOTATION_TAG, "https://matrix.org", start, length)
+                append(" and this one: ")
+                withAnnotation(INLINE_CODE_ANNOTATION_TAG, "") {
+                    append("https://element.io")
+                }
+                append(".")
+            },
+            inlineContent = persistentMapOf(
+                MENTION_ID to MentionNodeContent.User(displayText = "@alice", userId = UserId("@alice:example.org")),
+            ),
         ),
     )
 
