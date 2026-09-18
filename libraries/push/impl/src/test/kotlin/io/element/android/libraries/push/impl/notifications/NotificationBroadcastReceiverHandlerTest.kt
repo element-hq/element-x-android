@@ -325,6 +325,7 @@ class NotificationBroadcastReceiverHandlerTest : RobolectricTest() {
         leaveRoom.assertions()
             .isCalledOnce()
             .with()
+        joinedRoom.baseRoom.assertDestroyed()
     }
 
     @Test
@@ -384,6 +385,41 @@ class NotificationBroadcastReceiverHandlerTest : RobolectricTest() {
             .isCalledOnce()
         replyMessage.assertions()
             .isNeverCalled()
+        joinedRoom.baseRoom.assertDestroyed()
+    }
+
+    @Test
+    fun `Test send reply with an active room does not destroy it`() = runTest {
+        val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, MsgType, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
+        val liveTimeline = FakeTimeline().apply {
+            sendMessageLambda = sendMessage
+        }
+        val joinedRoom = FakeJoinedRoom(
+            liveTimeline = liveTimeline,
+            baseRoom = FakeBaseRoom(getUpdatedMemberResult = { Result.success(aRoomMember()) }),
+        ).apply {
+            givenRoomInfo(
+                aRoomInfo(
+                    isDirect = true,
+                    activeMembersCount = 2,
+                )
+            )
+        }
+        val sut = createNotificationBroadcastReceiverHandler(
+            joinedRoom = joinedRoom,
+            onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventsReceivedResult = { }),
+            replyMessageExtractor = FakeReplyMessageExtractor(A_MESSAGE),
+            activeRoomsHolder = DefaultActiveRoomsHolder().apply { addRoom(joinedRoom) },
+        )
+        sut.onReceive(
+            createIntent(
+                action = actionIds.smartReply,
+                roomId = A_ROOM_ID,
+            ),
+        )
+        advanceUntilIdle()
+        sendMessage.assertions().isCalledOnce()
+        joinedRoom.baseRoom.assertNotDestroyed()
     }
 
     @Test
