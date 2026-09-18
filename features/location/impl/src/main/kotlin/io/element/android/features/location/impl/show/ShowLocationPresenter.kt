@@ -38,7 +38,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.userlocation.UserLocationState
-import io.element.android.features.location.impl.common.userlocation.asMapLibreLocation
+import io.element.android.features.location.impl.common.userlocation.toLocationMeasurement
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
@@ -215,7 +215,7 @@ class ShowLocationPresenter(
         val hideUserLocationPuck = mode is ShowLocationMode.Live && isCurrentlySharing
         val userLocationState = if (hideUserLocationPuck) {
             // When sharing with this device, use the user LocationShareItem as source of data instead of the device.
-            val ownLocationShare by remember { derivedStateOf { updatedLocationShares.find { it.isOwnUser }?.location?.asMapLibreLocation() } }
+            val ownLocationShare by remember { derivedStateOf { updatedLocationShares.find { it.isOwnUser }?.location?.toLocationMeasurement() } }
             UserLocationState(ownLocationShare)
         } else {
             userLocationStateFactory.create(hasLocationPermission = permissionsState.isAnyGranted)
