@@ -31,6 +31,8 @@ import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 
 class TimelineItemsFactoryTest {
     @Test
@@ -274,6 +276,59 @@ class TimelineItemsFactoryTest {
             )
             val event = awaitItem().filterIsInstance<TimelineItem.Event>().single()
             assertThat(event.senderProfile).isEqualTo(ProfileDetails.Unavailable)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+
+    @Test
+    fun `a custom state event is not emitted and does not split the group around it`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(
+                computeReadReceipts = false,
+                computeReactions = false,
+            )
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    timestamp = 0L,
+                    content = aMessageContent(body = "Message 0"),
+                ),
+            ),
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("custom"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    timestamp = 30 * 1000L,
+                    content = StateContent(stateKey = "", content = OtherState.Custom("com.example.custom")),
+                ),
+            ),
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-1"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    timestamp = ONE_MINUTE,
+                    content = aMessageContent(body = "Message 1"),
+                ),
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(
+                timelineItems = items,
+                roomMembers = emptyList(),
+                renderReadReceipts = false,
+            )
+            val positions = awaitItem()
+                .filterIsInstance<TimelineItem.Event>()
+                .map { it.groupPosition }
+                .reversed()
+            assertThat(positions).containsExactly(
+                TimelineItemGroupPosition.First,
+                TimelineItemGroupPosition.Last,
+            ).inOrder()
             cancelAndIgnoreRemainingEvents()
         }
     }

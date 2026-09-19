@@ -70,8 +70,9 @@ class TimelineItemsFactory(
         renderReadReceipts: Boolean,
     ) = withContext(dispatchers.computation) {
         lock.withLock {
-            diffCacheUpdater.updateWith(timelineItems)
-            buildAndEmitTimelineItemStates(timelineItems, roomMembers, renderReadReceipts)
+            val displayableItems = timelineItems.keepDisplayableTimelineEvents()
+            diffCacheUpdater.updateWith(displayableItems)
+            buildAndEmitTimelineItemStates(displayableItems, roomMembers, renderReadReceipts)
         }
     }
 
