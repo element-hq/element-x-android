@@ -189,6 +189,7 @@
   <string name="action_retry_decryption">"Повторити спробу розшифрування"</string>
   <string name="action_save">"Зберегти"</string>
   <string name="action_search">"Шукати"</string>
+  <string name="action_select">"Вибрати"</string>
   <string name="action_select_all">"Вибрати все"</string>
   <string name="action_send">"Надіслати"</string>
   <string name="action_send_edited_message">"Надіслати змінене повідомлення"</string>
@@ -563,17 +564,29 @@
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Один або кілька ваших пристроїв не підтверджено. Ви можете відправити повідомлення в будь-якому випадку, або ж скасувати відправку і спробувати пізніше, коли перевірите всі свої пристрої."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше повідомлення не було надіслано, оскільки ви не підтвердили один або декілька своїх пристроїв"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Змінити адміністраторів або власників"</string>
+  <string name="screen_room_confirm_removal_message">"Ви впевнені, що хочете вилучити це повідомлення?"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Причина (необов\'язково)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Ввести…"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder_android">"Причина…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Необов\'язково)"</string>
+  <string name="screen_room_confirm_removal_title">"Підтвердити вилучення"</string>
   <string name="screen_room_error_failed_processing_media">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не вдалося отримати дані користувача"</string>
   <string name="screen_room_event_pill">"Повідомлення в %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Розгорнути"</string>
   <string name="screen_room_grouped_state_events_reduce">"Згорнути"</string>
   <string name="screen_room_live_location_banner">"Спільний доступ до місцезнаходження у реальному часі"</string>
+  <string name="screen_room_maximum_messages_selected">"Вибрано максимальну кількість повідомлень"</string>
   <string name="screen_room_permalink_same_room_android">"Уже переглядаєте цю кімнату!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s із %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s закріплених повідомлень"</string>
   <string name="screen_room_pinned_banner_loading_description">"Завантаження повідомлення…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Переглянути всі"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"Вибрано %1$d повідомлення"</item>
+    <item quantity="few">"Вибрано %1$d повідомлення"</item>
+    <item quantity="many">"Вибрано %1$d повідомлень"</item>
+  </plurals>
   <string name="screen_room_title">"Бесіда"</string>
   <string name="screen_share_location_title">"Поділитися розташуванням"</string>
   <string name="screen_share_my_location_action">"Поділитися моїм розташуванням"</string>

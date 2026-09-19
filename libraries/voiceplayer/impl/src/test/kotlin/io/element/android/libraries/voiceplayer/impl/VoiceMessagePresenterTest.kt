@@ -34,6 +34,8 @@ class VoiceMessagePresenterTest {
                 assertThat(it.buttonType).isEqualTo(VoiceMessageState.ButtonType.Play)
                 assertThat(it.progress).isEqualTo(0f)
                 assertThat(it.time).isEqualTo("1:01")
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.durationMs).isEqualTo(61_000)
             }
         }
     }

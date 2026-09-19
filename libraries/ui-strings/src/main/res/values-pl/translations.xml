@@ -567,6 +567,8 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="screen_room_confirm_removal_message">"Czy na pewno chcesz usunąć wiadomość?"</string>
   <string name="screen_room_confirm_removal_reason_label">"Powód (opcjonalne)"</string>
   <string name="screen_room_confirm_removal_reason_placeholder">"Powód…"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder_android">"Powód…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Opcjonalne)"</string>
   <string name="screen_room_confirm_removal_title">"Potwierdź usunięcie"</string>
   <string name="screen_room_error_failed_processing_media">"Przetwarzanie multimediów do przesłania nie powiodło się, spróbuj ponownie."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nie można pobrać danych użytkownika"</string>

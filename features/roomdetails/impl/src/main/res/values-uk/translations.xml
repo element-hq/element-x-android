@@ -151,7 +151,7 @@
   <string name="screen_security_and_privacy_encryption_section_footer">"Після ввімкнення шифрування неможливо вимкнути."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Шифрування"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Увімкнути наскрізне шифрування"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Будь-хто може приєднатися."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Приєднатися може будь-хто, у тому числі й особи, які не належать до вашої організації."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Будь-хто"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Виберіть, учасники яких просторів можуть приєднатися до цієї кімнати без запрошення. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Керувати просторами"</string>

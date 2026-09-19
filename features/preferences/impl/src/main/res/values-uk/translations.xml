@@ -53,6 +53,10 @@
   <string name="screen_edit_profile_error_title">"Неможливо оновити профіль"</string>
   <string name="screen_edit_profile_title">"Редагувати профіль"</string>
   <string name="screen_edit_profile_updating_details">"Оновлення профілю…"</string>
+  <string name="screen_labs_enable_gallery">"Галерея повідомлень"</string>
+  <string name="screen_labs_enable_gallery_description">"Одночасне надсилання кількох зображень або відео. Функція працює стабільно на мобільних пристроях, але поки що не підтримується у вебверсії."</string>
+  <string name="screen_labs_enable_knocking">"Запит на приєднання"</string>
+  <string name="screen_labs_enable_knocking_description">"Користувачі можуть подати запит на доступ до кімнати, яка не відкрита для загального доступу. Стабільна робота на мобільних пристроях; вебверсія існує, але перебуває на експериментальній стадії."</string>
   <string name="screen_labs_enable_threads">"Увімкнути відповіді в гілках"</string>
   <string name="screen_labs_enable_threads_description">"Застосунок перезапуститься, щоб застосувати цю зміну."</string>
   <string name="screen_labs_header_description">"Випробуйте найновіші ідеї наших розробників. Ці функції ще не завершені, вони можуть бути нестабільними та змінюватись."</string>

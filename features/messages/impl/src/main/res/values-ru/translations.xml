@@ -48,6 +48,10 @@
   <string name="screen_room_attachment_source_location">"Поделиться местоположением"</string>
   <string name="screen_room_attachment_source_poll">"Опрос"</string>
   <string name="screen_room_attachment_text_formatting">"Форматирование текста"</string>
+  <string name="screen_room_confirm_removal_message">"Вы уверены, что хотите удалить это сообщение?"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Причина (необязательно)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Введите…"</string>
+  <string name="screen_room_confirm_removal_title">"Подтвердите удаление"</string>
   <string name="screen_room_encrypted_history_banner">"В настоящее время история сообщений недоступна в этой комнате."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"История сообщений в этой комнате недоступна. Проверьте это устройство, чтобы увидеть историю сообщений."</string>
   <string name="screen_room_invite_again_alert_message">"Хотите пригласить их снова?"</string>

@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"公開ディレクトリで自分を見つけられるようにするには、アドレスが必要です。"</string>
   <string name="screen_edit_room_address_title">"アドレスの編集"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"通知設定の更新中に問題が発生しました。"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"暗号化されたルームでは、この機能にホームサーバーが対応しないため、一部のルームから通知が届かない可能性があります。"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"暗号化されたルームにおいてこの機能にアカウント提供元が対応しないため、このルームからの一部の通知を受信できない可能性があります。"</string>
   <string name="screen_polls_history_title">"投票"</string>
   <string name="screen_room_change_permissions_administrators">"管理者"</string>
   <string name="screen_room_change_permissions_ban_people">"ユーザーの追放"</string>
@@ -109,7 +109,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"通知設定の読み込み中に問題が発生しました。"</string>
   <string name="screen_room_notification_settings_error_restoring_default">"デフォルトの復元に失敗しました。再試行してください。"</string>
   <string name="screen_room_notification_settings_error_setting_mode">"設定に失敗しました。再試行してください。"</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"暗号化されたルームでは、この機能にホームサーバーが対応しないため、このルームからの通知を受信できません。"</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"暗号化されたルームにおいてこの機能にアカウント提供元が対応しないため、このルームからの通知は受信することができません。"</string>
   <string name="screen_room_notification_settings_mode_all_messages">"すべてのメッセージ"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"メンションと返信のみ"</string>
   <string name="screen_room_notification_settings_mode_mute">"ミュート"</string>
@@ -145,7 +145,7 @@
   <string name="screen_security_and_privacy_encryption_section_footer">"一度有効にすると元に戻すことはできません。"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"暗号化"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"エンドツーエンド暗号化を有効にする"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"誰でも参加できます"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"あなたの組織外のユーザーを含め誰でも参加できます。"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"全員"</string>
   <string name="screen_security_and_privacy_room_access_footer">"招待無しで参加できるユーザーが所属するルームを選択してください。%1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"スペースを管理"</string>
