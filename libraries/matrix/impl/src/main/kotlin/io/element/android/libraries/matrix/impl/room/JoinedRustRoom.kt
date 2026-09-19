@@ -157,7 +157,6 @@ class JoinedRustRoom(
     override val threadsListService: ThreadsListService = RustThreadsListService(
         inner = innerRoom.threadListService(),
         contentMapper = TimelineEventContentMapper(),
-        roomCoroutineScope = roomCoroutineScope,
     )
 
     override val syncUpdateFlow = flow {
