@@ -34,6 +34,8 @@ open class VoiceMessageStatePreviewParam : PreviewParameterProvider<VoiceMessage
                 progress = 0.2f,
                 time = "10:00",
                 showCursor = true,
+                isPlaying = true,
+                durationMs = 0,
             ),
             aVoiceMessageState(
                 VoiceMessageState.ButtonType.Disabled,
@@ -48,12 +50,16 @@ fun aVoiceMessageState(
     progress: Float = 0f,
     time: String = "1:00",
     showCursor: Boolean = false,
+    isPlaying: Boolean = false,
     playbackSpeed: Float = 1.0f,
+    durationMs: Long = 60_000,
 ) = VoiceMessageState(
     buttonType = buttonType,
     progress = progress,
     time = time,
     showCursor = showCursor,
+    isPlaying = isPlaying,
     playbackSpeed = playbackSpeed,
+    durationMs = durationMs,
     eventSink = {},
 )

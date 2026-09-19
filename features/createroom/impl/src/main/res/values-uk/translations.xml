@@ -11,7 +11,7 @@
   <string name="screen_create_room_private_option_title">"Приватний"</string>
   <string name="screen_create_room_public_option_description">"Будь-хто може знайти цю кімнату. 
 Ви можете змінити це в будь-який час у налаштуваннях кімнати."</string>
-  <string name="screen_create_room_public_option_short_description">"Приєднатися може будь-хто."</string>
+  <string name="screen_create_room_public_option_short_description">"Приєднатися може будь-хто, у тому числі й особи, які не належать до вашої організації."</string>
   <string name="screen_create_room_public_option_title">"Публічний"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Будь-хто може подати запит на приєднання, але адміністратор або модератор повинен схвалити запит."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Дозволити запит на приєднання"</string>
@@ -19,7 +19,7 @@
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Запит на приєднання"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Приєднатися можуть лише запрошені особи."</string>
   <string name="screen_create_room_room_access_section_private_option_title">"Приватний"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"Приєднатися може будь-хто."</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Приєднатися може будь-хто, у тому числі й особи, які не належать до вашої організації."</string>
   <string name="screen_create_room_room_access_section_public_option_title">"Публічний"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"Приєднатися може будь-хто з %1$s."</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"Стандартний"</string>

@@ -53,7 +53,7 @@ maplibre-compose = "0.15.0"
 dependencyAnalysis = "3.19.1"
 
 # DI
-metro = "1.4.2"
+metro = "1.4.3"
 
 # Auto service
 autoservice = "1.1.1"
@@ -168,7 +168,7 @@ test_arch_core = "androidx.arch.core:core-testing:2.2.0"
 test_junit = "junit:junit:4.13.2"
 test_runner = "androidx.test:runner:1.7.0"
 test_mockk = "io.mockk:mockk:1.14.11"
-test_konsist = "com.lemonappdev:konsist:0.17.3"
+test_konsist = "com.github.jmartinesp:konsist:0.18.0"
 test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.22"
@@ -205,7 +205,7 @@ matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose",
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:sqlcipher-android:4.18.0"
+sqlcipher = "net.zetetic:sqlcipher-android:4.19.0"
 sqlite = "androidx.sqlite:sqlite-ktx:2.7.0"
 unifiedpush = "org.unifiedpush.android:connector:3.3.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"

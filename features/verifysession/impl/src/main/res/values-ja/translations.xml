@@ -38,6 +38,8 @@
   <string name="screen_session_verification_request_title">"検証をリクエスト済み"</string>
   <string name="screen_session_verification_they_dont_match">"一致しません"</string>
   <string name="screen_session_verification_they_match">"一致します"</string>
+  <string name="screen_session_verification_unavailable_subtitle">"他の端末または回復鍵を使用してください。"</string>
+  <string name="screen_session_verification_unavailable_title">"現在この端末で検証をすることはできません"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"検証を開始する前に、他の端末でアプリケーションを開いてください。"</string>
   <string name="screen_session_verification_use_another_device_title">"検証済みの他の端末でアプリケーションを開いてください"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"安全性を高めるために、絵文字の組み合わせを使用してこのユーザーを検証してください。これにより安全にやり取りを行うことができるようになります。"</string>

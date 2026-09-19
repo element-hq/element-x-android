@@ -48,6 +48,10 @@
   <string name="screen_room_attachment_source_location">"Udostępnij lokalizację"</string>
   <string name="screen_room_attachment_source_poll">"Ankieta"</string>
   <string name="screen_room_attachment_text_formatting">"Formatowanie tekstu"</string>
+  <string name="screen_room_confirm_removal_message">"Czy na pewno chcesz usunąć wiadomość?"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Powód (opcjonalne)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Powód…"</string>
+  <string name="screen_room_confirm_removal_title">"Potwierdź usunięcie"</string>
   <string name="screen_room_encrypted_history_banner">"Historia wiadomości jest obecnie niedostępna."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Historia wiadomości jest niedostępna w tym pokoju. Zweryfikuj to urządzenie, aby zobaczyć historię wiadomości."</string>
   <string name="screen_room_invite_again_alert_message">"Czy chcesz zaprosić ich z powrotem?"</string>

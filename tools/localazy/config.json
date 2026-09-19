@@ -275,6 +275,7 @@
         "screen\\.room\\.timeline.*",
         "error\\.sending_failure\\..*",
         "screen\\.room_timeline.*",
+        "screen\\.room\\.confirm_removal.*",
         "screen_room_typing.*",
         "screen\\.image_edition\\..*",
         "screen\\.media_upload.*"
