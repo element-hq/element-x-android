@@ -287,7 +287,7 @@ private fun LazyListScope.searchHistory(
     item {
         Text(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
-            text = "Recent searches",
+            text = stringResource(R.string.search_recent_searches_section_title),
             style = ElementTheme.typography.fontBodyLgMedium,
             color = ElementTheme.colors.textPrimary,
         )
@@ -345,7 +345,8 @@ private fun LazyListScope.searchHistory(
                         )
 
                         if (result.roomInfo.isDm) {
-                            result.roomInfo.heroes.firstOrNull()?.userId?.let { userId ->
+                            val dmUserId = result.roomInfo.heroes.firstOrNull()?.userId
+                            dmUserId?.let { userId ->
                                 Text(
                                     text = userId.value,
                                     maxLines = 1,
