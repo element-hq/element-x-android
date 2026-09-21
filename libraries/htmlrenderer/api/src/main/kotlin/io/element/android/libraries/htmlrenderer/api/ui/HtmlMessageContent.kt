@@ -261,7 +261,7 @@ private fun CodeBlockView(
         if (LocalInspectionMode.current.not()) {
             val progress by remember {
                 derivedStateOf {
-                    scrollState.value.toFloat() / scrollState.maxValue
+                    scrollState.value.toFloat() / scrollState.maxValue.coerceAtLeast(1)
                 }
             }
 
