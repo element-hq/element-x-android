@@ -12,6 +12,7 @@ import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 
 sealed interface AppDeveloperSettingsEvent {
+    data class SetDeveloperModeEnabled(val enabled: Boolean) : AppDeveloperSettingsEvent
     data class UpdateEnabledFeature(val feature: FeatureUiModel, val isEnabled: Boolean) : AppDeveloperSettingsEvent
     data class SetCustomElementCallBaseUrl(val baseUrl: String?) : AppDeveloperSettingsEvent
     data class SetTracingLogLevel(val logLevel: LogLevelItem) : AppDeveloperSettingsEvent

@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.preferences.impl.advanced
+package io.element.android.features.preferences.impl.moderation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf

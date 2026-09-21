@@ -10,57 +10,48 @@ package io.element.android.features.preferences.impl.root
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import io.element.android.features.enterprise.api.SessionEnterpriseService
-import io.element.android.features.logout.api.direct.DirectLogoutState
+import io.element.android.compound.theme.Theme
+import io.element.android.compound.theme.mapToTheme
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
-import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @Inject
 class PreferencesRootPresenter(
     private val matrixClient: MatrixClient,
-    private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,
     private val versionFormatter: VersionFormatter,
     private val snackbarDispatcher: SnackbarDispatcher,
-    private val indicatorService: IndicatorService,
-    private val directLogoutPresenter: Presenter<DirectLogoutState>,
     private val showDeveloperSettingsProvider: ShowDeveloperSettingsProvider,
-    private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val featureFlagService: FeatureFlagService,
     private val sessionStore: SessionStore,
     private val appPreferencesStore: AppPreferencesStore,
-    private val sessionEnterpriseService: SessionEnterpriseService,
     private val userStatusPresenter: Presenter<UserStatusState>,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
@@ -76,14 +67,16 @@ class PreferencesRootPresenter(
         val isOtherAccountsSectionExpanded by remember {
             appPreferencesStore.isOtherAccountsExpandedFlow()
         }.collectAsState(initial = true)
-        val showLinkNewDevice by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.QrCodeLogin)
-        }.collectAsState(initial = false)
-
         val isUserStatusSupported by produceState(false) {
             value = matrixClient.isUserStatusSupported().getOrDefault(false)
         }
         val userStatusState = if (isUserStatusSupported) userStatusPresenter.present() else null
+        val isBlackThemeAllowed by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.AllowBlackTheme)
+        }.collectAsState(initial = false)
+        val theme = remember(isBlackThemeAllowed) {
+            appPreferencesStore.getThemeFlow().mapToTheme(isBlackThemeAllowed)
+        }.collectAsState(initial = Theme.System)
 
         val otherSessions by remember {
             sessionStore.sessionsFlow().map { list ->
@@ -100,38 +93,29 @@ class PreferencesRootPresenter(
             }
         }.collectAsState(initial = persistentListOf())
 
+        val themeOption by remember {
+            derivedStateOf {
+                when (theme.value) {
+                    Theme.System -> ThemeOption.System
+                    Theme.Dark -> ThemeOption.Dark
+                    Theme.Black -> ThemeOption.Black
+                    Theme.Light -> ThemeOption.Light
+                }
+            }
+        }
+
+        val availableThemeOptions = remember(isBlackThemeAllowed) {
+            if (isBlackThemeAllowed) {
+                ThemeOption.entries
+            } else {
+                ThemeOption.entries.filterNot { it == ThemeOption.Black }
+            }.toImmutableList()
+        }
+
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         val hasAnalyticsProviders = remember { analyticsService.getAvailableAnalyticsProviders().isNotEmpty() }
 
-        // We should display the 'complete verification' option if the current session can be verified
-        val canVerifyUserSession by sessionVerificationService.needsSessionVerification.collectAsState(false)
-
-        val showSecureBackupIndicator by indicatorService.showSettingChatBackupIndicator()
-
-        val accountManagementUrl: MutableState<String?> = remember {
-            mutableStateOf(null)
-        }
-        var canDeactivateAccount by remember {
-            mutableStateOf(false)
-        }
-        val canReportBug by remember { rageshakeFeatureAvailability.isAvailable() }.collectAsState(false)
-        LaunchedEffect(Unit) {
-            canDeactivateAccount = matrixClient.canDeactivateAccount()
-        }
-
-        val nbOfBlockedUsers by produceState(initialValue = 0) {
-            matrixClient.ignoredUsersFlow
-                .onEach { value = it.size }
-                .launchIn(this)
-        }
-
         val showLabsItem = remember { featureFlagService.getAvailableFeatures(isInLabs = true).isNotEmpty() }
-
-        val directLogoutState = directLogoutPresenter.present()
-
-        LaunchedEffect(Unit) {
-            initAccountManagementUrl(accountManagementUrl)
-        }
 
         val showDeveloperSettings by showDeveloperSettingsProvider.showDeveloperSettings.collectAsState()
 
@@ -146,39 +130,31 @@ class PreferencesRootPresenter(
                 PreferencesRootEvent.ToggleOtherAccountsExpanded -> coroutineScope.launch {
                     appPreferencesStore.setOtherAccountsExpanded(!isOtherAccountsSectionExpanded)
                 }
+                is PreferencesRootEvent.SetTheme -> sessionCoroutineScope.launch {
+                    when (event.theme) {
+                        ThemeOption.System -> appPreferencesStore.setTheme(Theme.System.name)
+                        ThemeOption.Dark -> appPreferencesStore.setTheme(Theme.Dark.name)
+                        ThemeOption.Black -> appPreferencesStore.setTheme(Theme.Black.name)
+                        ThemeOption.Light -> appPreferencesStore.setTheme(Theme.Light.name)
+                    }
+                }
             }
         }
 
         return PreferencesRootState(
             myUser = matrixUser.value,
             userStatusState = userStatusState,
+            theme = themeOption,
+            availableThemeOptions = availableThemeOptions,
             version = remember { versionFormatter.get() },
             isMultiAccountEnabled = isMultiAccountEnabled,
             isOtherAccountsSectionExpanded = isOtherAccountsSectionExpanded,
             otherSessions = otherSessions,
-            showSecureBackup = !canVerifyUserSession,
-            showSecureBackupBadge = showSecureBackupIndicator,
-            accountManagementUrl = accountManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
-            canReportBug = canReportBug,
-            showLinkNewDevice = showLinkNewDevice,
             showDeveloperSettings = showDeveloperSettings,
-            canDeactivateAccount = canDeactivateAccount,
-            nbOfBlockedUsers = nbOfBlockedUsers,
             showLabsItem = showLabsItem,
-            directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvent,
         )
-    }
-
-    private fun CoroutineScope.initAccountManagementUrl(
-        accountManagementUrl: MutableState<String?>,
-    ) = launch {
-        accountManagementUrl.value = matrixClient.getAccountManagementUrl(null)
-            .getOrNull()
-            ?.let {
-                sessionEnterpriseService.tweakMasUrl(it)
-            }
     }
 }

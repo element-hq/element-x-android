@@ -108,6 +108,7 @@
   <string name="action_copy_link">"Copy link"</string>
   <string name="action_copy_link_to_message">"Copy link to message"</string>
   <string name="action_copy_text">"Copy text"</string>
+  <string name="action_copy_to_clipboard">"Copy to clipboard"</string>
   <string name="action_create">"Create"</string>
   <string name="action_create_room">"Create room"</string>
   <string name="action_create_space">"Create space"</string>
@@ -222,6 +223,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade available"</string>
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
+  <string name="common_account_settings">"Account settings"</string>
   <string name="common_add_account">"Add an account"</string>
   <string name="common_add_another_account">"Add account"</string>
   <string name="common_adding_caption">"Adding caption"</string>
@@ -230,6 +232,7 @@
   <string name="common_analytics">"Analytics"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"You left the room"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"You were logged out of the session"</string>
+  <string name="common_app_settings">"App settings"</string>
   <string name="common_appearance">"Appearance"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_beta">"Beta"</string>
@@ -240,6 +243,7 @@
   <string name="common_call_started">"Call started"</string>
   <string name="common_call_you_declined">"You declined a call"</string>
   <string name="common_chat_backup">"Chat backup"</string>
+  <string name="common_code_block">"Code block"</string>
   <string name="common_copied_to_clipboard">"Copied to clipboard"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creating room…"</string>
@@ -304,10 +308,12 @@ Reason: %1$s."</string>
   <string name="common_live_location_ended">"Live location ended"</string>
   <string name="common_loading">"Loading…"</string>
   <string name="common_loading_more">"Loading more…"</string>
+  <string name="common_location_sharing">"Location sharing"</string>
   <plurals name="common_many_members">
     <item quantity="one">"%d other"</item>
     <item quantity="other">"%d others"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Media upload quality"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d Member"</item>
     <item quantity="other">"%1$d Members"</item>
@@ -317,6 +323,7 @@ Reason: %1$s."</string>
   <string name="common_message_failed_to_send">"Message failed to send"</string>
   <string name="common_message_layout">"Message layout"</string>
   <string name="common_message_removed">"Message removed"</string>
+  <string name="common_moderation_and_safety">"Moderation &amp; safety"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Mute"</string>
   <string name="common_name">"Name"</string>
@@ -417,6 +424,7 @@ Reason: %1$s."</string>
   <string name="common_success">"Success"</string>
   <string name="common_suggested">"Suggested"</string>
   <string name="common_suggestions">"Suggestions"</string>
+  <string name="common_switch_accounts">"Switch accounts"</string>
   <string name="common_syncing">"Syncing"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Third-party notices"</string>
@@ -456,6 +464,7 @@ Reason: %1$s."</string>
   <string name="common_waiting_live_location">"Waiting for live location…"</string>
   <string name="common_world_readable_history">"Anyone can see history"</string>
   <string name="common_you">"You"</string>
+  <string name="common_your_account">"Your account"</string>
   <string name="content_scanner_not_found">"Download not available."</string>
   <string name="content_scanner_not_found_title">"Something went wrong"</string>
   <string name="content_scanner_scanning">"Scanning…"</string>
@@ -550,12 +559,6 @@ Are you sure you want to continue?"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"One or more of your devices are unverified. You can send the message anyway, or you can cancel for now and try again later after you have verified all of your devices."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Your message was not sent because you have not verified one or more of your devices"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Edit Admins or Owners"</string>
-  <string name="screen_room_confirm_removal_message">"Are you sure you wish to remove this message?"</string>
-  <string name="screen_room_confirm_removal_reason_label">"Reason (optional)"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder">"Enter…"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder_android">"Reason…"</string>
-  <string name="screen_room_confirm_removal_reason_supporting_text">"(Optional)"</string>
-  <string name="screen_room_confirm_removal_title">"Confirm removal"</string>
   <string name="screen_room_error_failed_processing_media">"Failed processing media to upload, please try again."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Could not retrieve user details"</string>
   <string name="screen_room_event_pill">"Message in %1$s"</string>
