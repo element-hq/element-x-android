@@ -69,12 +69,14 @@ import kotlin.math.roundToInt
  * - Updating camera position padding based on sheet height
  * - Rendering the MaplibreMap with proper ornament positioning
  *
+ * @param mapState The map state (camera, style and layer content) for the map. `null` in
+ *   inspection/preview mode, where the native map cannot initialize and a placeholder is shown.
  * @param isReady Used to gate rendering until the map should be displayed
  * @param modifier Modifier for the root layout
  * @param scaffoldState State for the bottom sheet scaffold
- * @param mapState The map state (camera, style and layer content) for the map, created with
- *   [rememberLocationMapState]. `null` in inspection/preview mode, where a placeholder is shown.
  * @param renderOptions The options to configure the map rendering
+ * @param interactions The gestures and camera interactions allowed on the map
+ * @param uiOptions The map UI options (gestures, scrolling, keys, first-frame behaviour)
  * @param sheetPeekHeight The height of the sheet when collapsed
  * @param sheetDragHandle Optional drag handle for the sheet
  * @param sheetSwipeEnabled Whether the sheet can be swiped
