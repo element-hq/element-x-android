@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.preferences.impl.advanced
+package io.element.android.features.preferences.impl.media
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -71,11 +71,11 @@ class AdvancedSettingsPresenterTest {
 
             with(awaitItem()) {
                 assertThat(isDeveloperModeEnabled).isFalse()
-                eventSink(AdvancedSettingsEvent.SetDeveloperModeEnabled(true))
+                eventSink(MediaSettingsEvent.SetDeveloperModeEnabled(true))
             }
             with(awaitItem()) {
                 assertThat(isDeveloperModeEnabled).isTrue()
-                eventSink(AdvancedSettingsEvent.SetDeveloperModeEnabled(false))
+                eventSink(MediaSettingsEvent.SetDeveloperModeEnabled(false))
             }
             with(awaitItem()) {
                 assertThat(isDeveloperModeEnabled).isFalse()
@@ -94,11 +94,11 @@ class AdvancedSettingsPresenterTest {
 
             with(awaitItem()) {
                 assertThat(isSharePresenceEnabled).isTrue()
-                eventSink(AdvancedSettingsEvent.SetSharePresenceEnabled(false))
+                eventSink(MediaSettingsEvent.SetSharePresenceEnabled(false))
             }
             with(awaitItem()) {
                 assertThat(isSharePresenceEnabled).isFalse()
-                eventSink(AdvancedSettingsEvent.SetSharePresenceEnabled(true))
+                eventSink(MediaSettingsEvent.SetSharePresenceEnabled(true))
             }
             with(awaitItem()) {
                 assertThat(isSharePresenceEnabled).isTrue()
@@ -117,11 +117,11 @@ class AdvancedSettingsPresenterTest {
 
             with(awaitItem()) {
                 assertThat((mediaOptimizationState as MediaOptimizationState.AllMedia).isEnabled).isTrue()
-                eventSink(AdvancedSettingsEvent.SetCompressMedia(false))
+                eventSink(MediaSettingsEvent.SetCompressMedia(false))
             }
             with(awaitItem()) {
                 assertThat((mediaOptimizationState as MediaOptimizationState.AllMedia).isEnabled).isFalse()
-                eventSink(AdvancedSettingsEvent.SetCompressMedia(true))
+                eventSink(MediaSettingsEvent.SetCompressMedia(true))
             }
             with(awaitItem()) {
                 assertThat((mediaOptimizationState as MediaOptimizationState.AllMedia).isEnabled).isTrue()
@@ -144,11 +144,11 @@ class AdvancedSettingsPresenterTest {
 
             with(awaitItem()) {
                 assertThat((mediaOptimizationState as MediaOptimizationState.Split).compressImages).isTrue()
-                eventSink(AdvancedSettingsEvent.SetCompressImages(false))
+                eventSink(MediaSettingsEvent.SetCompressImages(false))
             }
             with(awaitItem()) {
                 assertThat((mediaOptimizationState as MediaOptimizationState.Split).compressImages).isFalse()
-                eventSink(AdvancedSettingsEvent.SetCompressImages(true))
+                eventSink(MediaSettingsEvent.SetCompressImages(true))
             }
             with(awaitItem()) {
                 assertThat((mediaOptimizationState as MediaOptimizationState.Split).compressImages).isTrue()
@@ -171,11 +171,11 @@ class AdvancedSettingsPresenterTest {
 
             with(awaitItem()) {
                 assertThat((mediaOptimizationState as MediaOptimizationState.Split).videoPreset).isEqualTo(VideoCompressionPreset.STANDARD)
-                eventSink(AdvancedSettingsEvent.SetVideoUploadQuality(VideoCompressionPreset.LOW))
+                eventSink(MediaSettingsEvent.SetVideoUploadQuality(VideoCompressionPreset.LOW))
             }
             with(awaitItem()) {
                 assertThat((mediaOptimizationState as MediaOptimizationState.Split).videoPreset).isEqualTo(VideoCompressionPreset.LOW)
-                eventSink(AdvancedSettingsEvent.SetVideoUploadQuality(VideoCompressionPreset.HIGH))
+                eventSink(MediaSettingsEvent.SetVideoUploadQuality(VideoCompressionPreset.HIGH))
             }
             with(awaitItem()) {
                 assertThat((mediaOptimizationState as MediaOptimizationState.Split).videoPreset).isEqualTo(VideoCompressionPreset.HIGH)
@@ -194,15 +194,15 @@ class AdvancedSettingsPresenterTest {
 
             with(awaitItem()) {
                 assertThat(theme).isEqualTo(ThemeOption.System)
-                eventSink(AdvancedSettingsEvent.SetTheme(ThemeOption.Dark))
+                eventSink(MediaSettingsEvent.SetTheme(ThemeOption.Dark))
             }
             with(awaitItem()) {
                 assertThat(theme).isEqualTo(ThemeOption.Dark)
-                eventSink(AdvancedSettingsEvent.SetTheme(ThemeOption.Light))
+                eventSink(MediaSettingsEvent.SetTheme(ThemeOption.Light))
             }
             with(awaitItem()) {
                 assertThat(theme).isEqualTo(ThemeOption.Light)
-                eventSink(AdvancedSettingsEvent.SetTheme(ThemeOption.System))
+                eventSink(MediaSettingsEvent.SetTheme(ThemeOption.System))
             }
             with(awaitItem()) {
                 assertThat(theme).isEqualTo(ThemeOption.System)
@@ -242,7 +242,7 @@ class AdvancedSettingsPresenterTest {
 
             with(awaitItem()) {
                 assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(10)
-                eventSink(AdvancedSettingsEvent.SetLiveLocationMinimumDistanceUpdate(42))
+                eventSink(MediaSettingsEvent.SetLiveLocationMinimumDistanceUpdate(42))
             }
             with(awaitItem()) {
                 assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(42)
@@ -298,11 +298,11 @@ class AdvancedSettingsPresenterTest {
 
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.hideInviteAvatars).isFalse()
-                eventSink(AdvancedSettingsEvent.SetHideInviteAvatars(true))
+                eventSink(MediaSettingsEvent.SetHideInviteAvatars(true))
             }
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.hideInviteAvatars).isTrue()
-                eventSink(AdvancedSettingsEvent.SetHideInviteAvatars(false))
+                eventSink(MediaSettingsEvent.SetHideInviteAvatars(false))
             }
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.hideInviteAvatars).isFalse()
@@ -323,11 +323,11 @@ class AdvancedSettingsPresenterTest {
 
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.On)
-                eventSink(AdvancedSettingsEvent.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
+                eventSink(MediaSettingsEvent.SetTimelineMediaPreviewValue(MediaPreviewValue.Off))
             }
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.Off)
-                eventSink(AdvancedSettingsEvent.SetTimelineMediaPreviewValue(MediaPreviewValue.Private))
+                eventSink(MediaSettingsEvent.SetTimelineMediaPreviewValue(MediaPreviewValue.Private))
             }
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.Private)
@@ -383,7 +383,7 @@ class AdvancedSettingsPresenterTest {
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreviewConfigStateStore: MediaPreviewConfigStateStore = FakeMediaPreviewConfigStateStore(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
-    ) = AdvancedSettingsPresenter(
+    ) = MediaSettingsPresenter(
         appPreferencesStore = appPreferencesStore,
         sessionPreferencesStore = sessionPreferencesStore,
         mediaPreviewConfigStateStore = mediaPreviewConfigStateStore,

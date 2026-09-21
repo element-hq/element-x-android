@@ -544,7 +544,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
             onOpenLockScreenSettings = onOpenLockScreenSettings,
             onOpenAbout = onOpenAbout,
             onOpenDeveloperSettings = onOpenDeveloperSettings,
-            onOpenAdvancedSettings = onOpenAdvancedSettings,
+            onOpenMediaSettings = onOpenAdvancedSettings,
             onOpenLabs = onOpenLabs,
             onOpenNotificationSettings = onOpenNotificationSettings,
             onOpenUserProfile = onOpenUserProfile,

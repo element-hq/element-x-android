@@ -35,8 +35,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
 @Composable
-fun RoomPreviewAliasAtom(
-    alias: String,
+fun CopiableTextAtom(
+    text: String,
     modifier: Modifier = Modifier,
     copiable: Boolean = true
 ) {
@@ -46,7 +46,7 @@ fun RoomPreviewAliasAtom(
         modifier = modifier
             .clickable(enabled = copiable) {
                 coroutineScope.launch {
-                    val clipData = ClipData.newPlainText(alias, alias)
+                    val clipData = ClipData.newPlainText(text, text)
                     clipboard.setClipEntry(clipData.toClipEntry())
                 }
             },
@@ -55,7 +55,7 @@ fun RoomPreviewAliasAtom(
     ) {
         Text(
             modifier = Modifier.weight(weight = 1f, fill = false),
-            text = alias,
+            text = text,
             style = ElementTheme.typography.fontBodyLgRegular,
             textAlign = TextAlign.Center,
             maxLines = 1,
@@ -75,9 +75,9 @@ fun RoomPreviewAliasAtom(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomPreviewAliasAtomPreview() = ElementPreview {
-    RoomPreviewAliasAtom(
-        alias = "#room-alias:matrix.org",
+internal fun CopiableTextAtomPreview() = ElementPreview {
+    CopiableTextAtom(
+        text = "#room-alias:matrix.org",
         copiable = true
     )
 }

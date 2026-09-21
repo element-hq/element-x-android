@@ -26,11 +26,14 @@ import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
-import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNode
+import io.element.android.features.preferences.impl.account.PreferencesAccountNode
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.blockedusers.BlockedUsersNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
 import io.element.android.features.preferences.impl.labs.LabsNode
+import io.element.android.features.preferences.impl.location.LocationSettingsNode
+import io.element.android.features.preferences.impl.media.MediaSettingsNode
+import io.element.android.features.preferences.impl.moderation.ModerationAndSafetyNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
@@ -75,10 +78,16 @@ class PreferencesFlowNode(
         data object Root : NavTarget
 
         @Parcelize
+        data object AccountSettings : NavTarget
+
+        @Parcelize
         data object DeveloperSettings : NavTarget
 
         @Parcelize
-        data object AdvancedSettings : NavTarget
+        data object MediaSettings : NavTarget
+
+        @Parcelize
+        data object LocationSettings : NavTarget
 
         @Parcelize
         data object Labs : NavTarget
@@ -91,6 +100,9 @@ class PreferencesFlowNode(
 
         @Parcelize
         data object NotificationSettings : NavTarget
+
+        @Parcelize
+        data object ModerationAndSafety : NavTarget
 
         @Parcelize
         data object TroubleshootNotifications : NavTarget
@@ -133,14 +145,6 @@ class PreferencesFlowNode(
                         callback.navigateToAddAccount()
                     }
 
-                    override fun navigateToBugReport() {
-                        callback.navigateToBugReport()
-                    }
-
-                    override fun navigateToSecureBackup() {
-                        callback.navigateToSecureBackup()
-                    }
-
                     override fun navigateToAnalyticsSettings() {
                         backstack.push(NavTarget.AnalyticsSettings)
                     }
@@ -153,24 +157,48 @@ class PreferencesFlowNode(
                         backstack.push(NavTarget.DeveloperSettings)
                     }
 
-                    override fun navigateToNotificationSettings() {
-                        backstack.push(NavTarget.NotificationSettings)
-                    }
-
                     override fun navigateToLockScreenSettings() {
                         backstack.push(NavTarget.LockScreenSettings)
                     }
 
-                    override fun navigateToAdvancedSettings() {
-                        backstack.push(NavTarget.AdvancedSettings)
+                    override fun navigateToMediaSettings() {
+                        backstack.push(NavTarget.MediaSettings)
+                    }
+
+                    override fun navigateToLocationSettings() {
+                        backstack.push(NavTarget.LocationSettings)
                     }
 
                     override fun navigateToLabs() {
                         backstack.push(NavTarget.Labs)
                     }
 
+                    override fun navigateToAccountSettings() {
+                        backstack.push(NavTarget.AccountSettings)
+                    }
+                }
+                createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
+            }
+            NavTarget.AccountSettings -> {
+                val callback = object : PreferencesAccountNode.Callback {
+                    override fun navigateToBugReport() {
+                        callback.navigateToBugReport()
+                    }
+
+                    override fun navigateToSecureBackup() {
+                        callback.navigateToSecureBackup()
+                    }
+
+                    override fun navigateToModerationAndSafety() {
+                        backstack.push(NavTarget.ModerationAndSafety)
+                    }
+
+                    override fun navigateToNotificationSettings() {
+                        backstack.push(NavTarget.NotificationSettings)
+                    }
+
                     override fun navigateToLinkNewDevice() {
-                        callback.navigateToLinkNewDevice()
+                        callback.navigateToAddAccount()
                     }
 
                     override fun navigateToUserProfile(matrixUser: MatrixUser) {
@@ -189,7 +217,7 @@ class PreferencesFlowNode(
                         backstack.push(NavTarget.AccountDeactivation)
                     }
                 }
-                createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
+                createNode<PreferencesAccountNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.DeveloperSettings -> {
                 val developerSettingsCallback = object : DeveloperSettingsNode.Callback {
@@ -218,6 +246,12 @@ class PreferencesFlowNode(
                     }
                 }
                 createNode<LabsNode>(buildContext, listOf(callback))
+            }
+            NavTarget.ModerationAndSafety -> {
+                createNode<ModerationAndSafetyNode>(buildContext)
+            }
+            NavTarget.LocationSettings -> {
+                createNode<LocationSettingsNode>(buildContext)
             }
             NavTarget.About -> {
                 val callback = object : AboutNode.Callback {
@@ -309,8 +343,8 @@ class PreferencesFlowNode(
                 val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
                 createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input, callback))
             }
-            NavTarget.AdvancedSettings -> {
-                createNode<AdvancedSettingsNode>(buildContext)
+            NavTarget.MediaSettings -> {
+                createNode<MediaSettingsNode>(buildContext)
             }
             is NavTarget.UserProfile -> {
                 val inputs = EditUserProfileNode.Inputs(navTarget.matrixUser)

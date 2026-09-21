@@ -48,6 +48,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarRow
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.list.ListItemContent
+import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
+import io.element.android.libraries.designsystem.components.preferences.PreferenceDropdown
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -56,14 +58,12 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalDivi
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
-import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -75,21 +75,14 @@ fun PreferencesRootView(
     emojiPickerRenderer: EmojiPickerRenderer,
     onBackClick: () -> Unit,
     onAddAccountClick: () -> Unit,
-    onSecureBackupClick: () -> Unit,
-    onManageAccountClick: (url: String) -> Unit,
-    onLinkNewDeviceClick: () -> Unit,
     onOpenAnalytics: () -> Unit,
-    onOpenRageShake: () -> Unit,
     onOpenLockScreenSettings: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
-    onOpenAdvancedSettings: () -> Unit,
+    onOpenMediaSettings: () -> Unit,
+    onOpenLocationSettings: () -> Unit,
     onOpenLabs: () -> Unit,
-    onOpenNotificationSettings: () -> Unit,
-    onOpenUserProfile: (MatrixUser) -> Unit,
-    onOpenBlockedUsers: () -> Unit,
-    onSignOutClick: () -> Unit,
-    onDeactivateClick: () -> Unit,
+    onOpenAccountSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -103,7 +96,7 @@ fun PreferencesRootView(
         ) {
             UserPreferences(
                 modifier = Modifier.clickable {
-                    onOpenUserProfile(state.myUser)
+                    onOpenAccountSettings()
                 },
                 matrixUser = state.myUser,
             )
@@ -123,32 +116,20 @@ fun PreferencesRootView(
                 thickness = 8.dp,
                 color = ElementTheme.colors.bgSubtleSecondary,
             )
-            // 'Account' section
-            ManageAccountSection(
+            // 'App settings' section
+            AppSettingsSection(
                 state = state,
-                onManageAccountClick = onManageAccountClick,
-                onLinkNewDeviceClick = onLinkNewDeviceClick,
-                onOpenBlockedUsers = onOpenBlockedUsers
-            )
-            // 'Manage my app' section
-            ManageAppSection(
-                state = state,
-                onOpenNotificationSettings = onOpenNotificationSettings,
                 onOpenLockScreenSettings = onOpenLockScreenSettings,
-                onSecureBackupClick = onSecureBackupClick,
+                onOpenMediaSettings = onOpenMediaSettings,
+                onOpenLocationSettings = onOpenLocationSettings,
             )
-
             // General section
             GeneralSection(
                 state = state,
                 onOpenAbout = onOpenAbout,
                 onOpenAnalytics = onOpenAnalytics,
-                onOpenRageShake = onOpenRageShake,
-                onOpenAdvancedSettings = onOpenAdvancedSettings,
                 onOpenDeveloperSettings = onOpenDeveloperSettings,
                 onOpenLabs = onOpenLabs,
-                onSignOutClick = onSignOutClick,
-                onDeactivateClick = onDeactivateClick,
             )
             // Version
             Footer(
@@ -171,8 +152,8 @@ private fun BoxScope.UserStatusUpdateIndicator(updateStatusAction: AsyncAction<U
     AsyncActionIndicator(
         asyncAction = updateStatusAction,
         modifier = Modifier
-            .align(Alignment.TopCenter)
-            .statusBarsPadding(),
+                .align(Alignment.TopCenter)
+                .statusBarsPadding(),
         loading = { AsyncIndicator.Loading(text = stringResource(CommonStrings.common_saving)) },
         failure = { _ -> AsyncIndicator.Failure(text = stringResource(CommonStrings.common_failed)) },
     )
@@ -267,10 +248,10 @@ private fun ColumnScope.MultiAccountSection(
                 state.otherSessions.forEach { matrixUser ->
                     MatrixUserRow(
                         modifier = Modifier
-                            .clickable {
-                                state.eventSink(PreferencesRootEvent.SwitchToSession(matrixUser.userId))
-                            }
-                            .padding(top = 2.dp, bottom = 2.dp, end = 8.dp),
+                                .clickable {
+                                    state.eventSink(PreferencesRootEvent.SwitchToSession(matrixUser.userId))
+                                }
+                                .padding(top = 2.dp, bottom = 2.dp, end = 8.dp),
                         matrixUser = matrixUser,
                         avatarSize = AvatarSize.AccountItem,
                         verticalSpaceWidth = 16.dp,
@@ -294,65 +275,41 @@ private fun AddAccountItem(onAddAccountClick: () -> Unit) {
 }
 
 @Composable
-private fun ColumnScope.ManageAppSection(
+private fun AppSettingsSection(
     state: PreferencesRootState,
-    onOpenNotificationSettings: () -> Unit,
     onOpenLockScreenSettings: () -> Unit,
-    onSecureBackupClick: () -> Unit,
+    onOpenLocationSettings: () -> Unit,
+    onOpenMediaSettings: () -> Unit,
 ) {
-    ListItem(
-        content = { Text(stringResource(id = R.string.screen_notification_settings_title)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
-        onClick = onOpenNotificationSettings,
-    )
-    ListItem(
-        content = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
-        onClick = onOpenLockScreenSettings,
-    )
-    if (state.showSecureBackup) {
-        ListItem(
-            content = { Text(stringResource(id = CommonStrings.common_encryption)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Key())),
-            trailingContent = ListItemContent.Badge.takeIf { state.showSecureBackupBadge },
-            onClick = onSecureBackupClick,
+    PreferenceCategory(
+        title = stringResource(CommonStrings.common_app_settings),
+        showTopDivider = false,
+    ) {
+        PreferenceDropdown(
+            icon = CompoundIcons.DarkMode(),
+            dropDownIcon = CompoundIcons.ChevronUpDown(),
+            title = stringResource(id = CommonStrings.common_appearance),
+            selectedOption = state.theme,
+            options = state.availableThemeOptions,
+            onSelectOption = { themeOption ->
+                state.eventSink(PreferencesRootEvent.SetTheme(themeOption))
+            }
         )
-    }
-    HorizontalDivider()
-}
-
-@Composable
-private fun ColumnScope.ManageAccountSection(
-    state: PreferencesRootState,
-    onManageAccountClick: (url: String) -> Unit,
-    onLinkNewDeviceClick: () -> Unit,
-    onOpenBlockedUsers: () -> Unit,
-) {
-    state.accountManagementUrl?.let { url ->
         ListItem(
-            content = { Text(stringResource(id = CommonStrings.action_manage_account_and_devices)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserProfile())),
-            trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut())),
-            onClick = { onManageAccountClick(url) },
+            content = { Text(stringResource(id = CommonStrings.common_media_upload_quality)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
+            onClick = onOpenMediaSettings,
         )
-    }
-    if (state.showLinkNewDevice) {
         ListItem(
-            content = { Text(stringResource(id = CommonStrings.common_link_new_device)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Devices())),
-            onClick = onLinkNewDeviceClick,
+            content = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
+            onClick = onOpenLockScreenSettings,
         )
-    }
-    if (state.showBlockedUsersItem) {
         ListItem(
-            content = { Text(stringResource(id = CommonStrings.common_blocked_users)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
-            onClick = onOpenBlockedUsers,
-            trailingContent = ListItemContent.Text(state.nbOfBlockedUsers.toString()),
+            content = { Text(stringResource(id = CommonStrings.common_location_sharing)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.LocationPin())),
+            onClick = onOpenLocationSettings,
         )
-    }
-    if (state.accountManagementUrl != null || state.showLinkNewDevice || state.showBlockedUsersItem) {
-        HorizontalDivider()
     }
 }
 
@@ -361,18 +318,20 @@ private fun ColumnScope.GeneralSection(
     state: PreferencesRootState,
     onOpenAbout: () -> Unit,
     onOpenAnalytics: () -> Unit,
-    onOpenRageShake: () -> Unit,
-    onOpenAdvancedSettings: () -> Unit,
     onOpenLabs: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
-    onSignOutClick: () -> Unit,
-    onDeactivateClick: () -> Unit,
 ) {
-    ListItem(
-        content = { Text(stringResource(id = CommonStrings.common_advanced_settings)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
-        onClick = onOpenAdvancedSettings,
+    HorizontalDivider(
+        thickness = 1.dp,
+        color = ElementTheme.colors.bgSubtleSecondary,
     )
+    if (state.showAnalyticsSettings) {
+        ListItem(
+            content = { Text(stringResource(id = CommonStrings.common_analytics)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chart())),
+            onClick = onOpenAnalytics,
+        )
+    }
     if (state.showLabsItem) {
         ListItem(
             content = { Text(stringResource(id = R.string.screen_labs_title)) },
@@ -385,35 +344,6 @@ private fun ColumnScope.GeneralSection(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
         onClick = onOpenAbout,
     )
-    if (state.canReportBug) {
-        ListItem(
-            content = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
-            onClick = onOpenRageShake
-        )
-    }
-    if (state.showAnalyticsSettings) {
-        ListItem(
-            content = { Text(stringResource(id = CommonStrings.common_analytics)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Chart())),
-            onClick = onOpenAnalytics,
-        )
-    }
-    HorizontalDivider()
-    ListItem(
-        content = { Text(stringResource(id = CommonStrings.action_signout)) },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Close())),
-        style = ListItemStyle.Destructive,
-        onClick = onSignOutClick,
-    )
-    if (state.canDeactivateAccount) {
-        ListItem(
-            content = { Text(stringResource(id = CommonStrings.action_delete_account)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),
-            style = ListItemStyle.Destructive,
-            onClick = onDeactivateClick,
-        )
-    }
     // Put developer settings at the end, so nothing bad happens if the user clicks 8 times to enable the entry
     AnimatedVisibility(
         visible = state.showDeveloperSettings,
@@ -429,9 +359,9 @@ private fun ColumnScope.Footer(
 ) {
     Text(
         modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-            .clickable(enabled = onClick != null, onClick = onClick ?: {})
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 24.dp),
+                .align(Alignment.CenterHorizontally)
+                .clickable(enabled = onClick != null, onClick = onClick ?: {})
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 24.dp),
         textAlign = TextAlign.Center,
         text = version,
         style = ElementTheme.typography.fontBodySmRegular,
@@ -471,19 +401,12 @@ private fun ContentToPreview(state: PreferencesRootState) {
         onBackClick = {},
         onAddAccountClick = {},
         onOpenAnalytics = {},
-        onOpenRageShake = {},
         onOpenDeveloperSettings = {},
-        onOpenAdvancedSettings = {},
+        onOpenLocationSettings = {},
+        onOpenMediaSettings = {},
         onOpenLabs = {},
         onOpenAbout = {},
-        onSecureBackupClick = {},
-        onManageAccountClick = {},
-        onLinkNewDeviceClick = {},
-        onOpenNotificationSettings = {},
         onOpenLockScreenSettings = {},
-        onOpenUserProfile = {},
-        onOpenBlockedUsers = {},
-        onSignOutClick = {},
-        onDeactivateClick = {},
+        onOpenAccountSettings = {},
     )
 }
