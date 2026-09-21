@@ -27,6 +27,8 @@ interface SearchHistoryFileStore {
 
     /**
      * Delete any persisted content.
+     *
+     * @return `true` if the persisted content was deleted, `false` if there was no persisted content to delete.
      */
-    fun delete()
+    fun delete(): Boolean
 }

@@ -42,15 +42,16 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
+private val tombstonedRoomId = RoomId("!tombstone:server.org")
+private val roomId1 = RoomId("!roomId:server.org")
+private val roomId2 = RoomId("!roomId2:server.org")
+private val dmRoomId = RoomId("!dm:server.org")
+private const val AN_AVATAR_URL = "https://example.com/avatar.png"
+private val aCanonicalAlias = RoomAlias("#alias:server.org")
+
 class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState> {
     override val values: Sequence<GlobalSearchState>
         get() {
-            val tombstonedRoomId = RoomId("!tombstone:server.org")
-            val roomId1 = RoomId("!roomId:server.org")
-            val roomId2 = RoomId("!roomId2:server.org")
-            val dmRoomId = RoomId("!dm:server.org")
-            val anAvatarUrl = "https://example.com/avatar.png"
-            val aCanonicalAlias = RoomAlias("#alias:server.org")
             return sequenceOf(
                 // Not enabled, no preview
                 aGlobalSearchState(isEnabled = false),
@@ -120,7 +121,7 @@ class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState
                                 roomInfo = aRoomInfo(
                                     id = roomId1,
                                     name = "A room with alias",
-                                    avatarUrl = anAvatarUrl,
+                                    avatarUrl = AN_AVATAR_URL,
                                     canonicalAlias = aCanonicalAlias,
                                 )
                             ),
@@ -129,7 +130,7 @@ class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState
                                 roomInfo = aRoomInfo(
                                     id = roomId2,
                                     name = "A room",
-                                    avatarUrl = anAvatarUrl,
+                                    avatarUrl = AN_AVATAR_URL,
                                 )
                             ),
                             SearchHistoryResultItem.Room(
@@ -138,8 +139,8 @@ class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState
                                     id = dmRoomId,
                                     name = "A DM",
                                     isDm = true,
-                                    heroes = listOf(MatrixUser(UserId("@user:server.org"), "User", anAvatarUrl)),
-                                    avatarUrl = anAvatarUrl,
+                                    heroes = listOf(MatrixUser(UserId("@user:server.org"), "User", AN_AVATAR_URL)),
+                                    avatarUrl = AN_AVATAR_URL,
                                     canonicalAlias = aCanonicalAlias,
                                 )
                             ),
@@ -148,7 +149,7 @@ class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState
                                 roomInfo = aRoomInfo(
                                     id = tombstonedRoomId,
                                     name = "A tombstoned room",
-                                    avatarUrl = anAvatarUrl,
+                                    avatarUrl = AN_AVATAR_URL,
                                     successorRoom = SuccessorRoom(
                                         roomId = RoomId("!successorRoom:server.org"),
                                         reason = null,
@@ -163,11 +164,11 @@ class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState
 }
 
 fun aRoomInfo(
-    id: RoomId = RoomId("!roomId:server.org"),
+    id: RoomId = roomId1,
     name: String? = "A room",
     rawName: String? = "A room raw name",
     topic: String? = "A room topic",
-    avatarUrl: String? = "https://example.com/avatar.png",
+    avatarUrl: String? = AN_AVATAR_URL,
     isPublic: Boolean = true,
     isDirect: Boolean = false,
     isEncrypted: Boolean = false,
@@ -278,7 +279,7 @@ fun aMessageContent(
 )
 
 internal fun aMessageSearchResult(
-    roomId: RoomId = RoomId("!roomId:server.org"),
+    roomId: RoomId = roomId1,
     eventId: EventId = EventId("\$eventId:server.org"),
     senderId: UserId = UserId("@user:server.org"),
     senderProfile: ProfileDetails = aProfileDetailsReady(),

@@ -41,7 +41,7 @@ class DefaultSearchHistoryFileStore(
         EncryptedFile(context, file).openFileOutput().use { it.write(bytes) }
     }
 
-    override fun delete() {
-        file.delete()
+    override fun delete(): Boolean {
+        return file.delete()
     }
 }

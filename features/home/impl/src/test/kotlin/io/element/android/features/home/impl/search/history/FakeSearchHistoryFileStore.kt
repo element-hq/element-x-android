@@ -26,7 +26,8 @@ class FakeSearchHistoryFileStore(
         writeCount++
     }
 
-    override fun delete() {
+    override fun delete(): Boolean {
         content = null
+        return true
     }
 }
