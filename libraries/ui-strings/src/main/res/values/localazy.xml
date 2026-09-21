@@ -108,6 +108,7 @@
   <string name="action_copy_link">"Copy link"</string>
   <string name="action_copy_link_to_message">"Copy link to message"</string>
   <string name="action_copy_text">"Copy text"</string>
+  <string name="action_copy_to_clipboard">"Copy to clipboard"</string>
   <string name="action_create">"Create"</string>
   <string name="action_create_room">"Create room"</string>
   <string name="action_create_space">"Create space"</string>
@@ -240,6 +241,7 @@
   <string name="common_call_started">"Call started"</string>
   <string name="common_call_you_declined">"You declined a call"</string>
   <string name="common_chat_backup">"Chat backup"</string>
+  <string name="common_code_block">"Code block"</string>
   <string name="common_copied_to_clipboard">"Copied to clipboard"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creating room…"</string>

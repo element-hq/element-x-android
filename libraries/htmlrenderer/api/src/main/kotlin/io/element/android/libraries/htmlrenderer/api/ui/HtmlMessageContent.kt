@@ -8,8 +8,6 @@
 package io.element.android.libraries.htmlrenderer.api.ui
 
 import android.content.ClipData
-import android.content.ClipData.newPlainText
-import android.content.ClipboardManager
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,6 +38,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,9 +52,11 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -83,10 +84,12 @@ import io.element.android.libraries.htmlrenderer.api.QuoteNode
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.common.layout.ContentAvoidingLayout
 import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.coroutines.launch
 
 /**
  * Renders a parsed message tree ([DocumentNode]) as native Compose content.
@@ -232,9 +235,10 @@ private fun CodeBlockView(
     node: CodeBlockNode,
     modifier: Modifier = Modifier,
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    val context = LocalContext.current
-    val clipboardManager = remember { context.getSystemService(ClipboardManager::class.java) }
+    val localClipboard = LocalClipboard.current
+    val clipDataLabel = stringResource(CommonStrings.common_code_block)
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
@@ -244,9 +248,11 @@ private fun CodeBlockView(
             .combinedClickable(
                 onClick = {},
                 onLongClick = {
-                    clipboardManager.setPrimaryClip(ClipData(newPlainText("Code", node.code)))
+                    coroutineScope.launch {
+                        localClipboard.setClipEntry(ClipEntry(ClipData.newPlainText(clipDataLabel, node.code)))
+                    }
                 },
-                onLongClickLabel = "Copy code to clipboard",
+                onLongClickLabel = stringResource(CommonStrings.action_copy_to_clipboard),
             ),
     ) {
         Text(
