@@ -33,6 +33,8 @@ import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -73,8 +75,9 @@ class TimelineItemContentMessageFactory(
     private val permalinkParser: PermalinkParser,
     private val textPillificationHelper: TextPillificationHelper,
     private val htmlMessageParser: HtmlMessageParser,
+    private val featureFlagService: FeatureFlagService,
 ) {
-    fun create(
+    suspend fun create(
         content: MessageContent,
         senderId: UserId,
         senderProfile: ProfileDetails,
@@ -95,7 +98,11 @@ class TimelineItemContentMessageFactory(
                     htmlDocument = dom,
                     formattedBody = formattedBody,
                     isEdited = content.isEdited,
-                    messageTree = dom?.let(htmlMessageParser::parse),
+                    messageTree = if (featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)) {
+                        dom?.let(htmlMessageParser::parse)
+                    } else {
+                        null
+                    },
                 )
             }
             is ImageMessageType -> {
