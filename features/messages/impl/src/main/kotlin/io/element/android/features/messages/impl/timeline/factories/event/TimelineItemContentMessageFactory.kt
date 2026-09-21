@@ -105,6 +105,24 @@ class TimelineItemContentMessageFactory(
                     },
                 )
             }
+            is TextMessageType -> {
+                val body = messageType.body.trimEnd()
+                val dom = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
+                val formattedBody = dom?.let(::parseHtml)
+                    ?: textPillificationHelper.pillify(body).safeLinkify()
+                val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
+                TimelineItemTextContent(
+                    body = body,
+                    htmlDocument = htmlDocument,
+                    formattedBody = formattedBody,
+                    isEdited = content.isEdited,
+                    messageTree = if (featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)) {
+                        htmlDocument?.let(htmlMessageParser::parse)
+                    } else {
+                        null
+                    },
+                )
+            }
             is ImageMessageType -> {
                 val dom = messageType.formattedCaption?.toHtmlDocument(permalinkParser = permalinkParser)
                 val formattedCaption = dom?.let(::parseHtml)
@@ -266,20 +284,6 @@ class TimelineItemContentMessageFactory(
                     ?: textPillificationHelper.pillify(body).safeLinkify()
                 val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
                 TimelineItemNoticeContent(
-                    body = body,
-                    htmlDocument = htmlDocument,
-                    formattedBody = formattedBody,
-                    isEdited = content.isEdited,
-                    messageTree = htmlDocument?.let(htmlMessageParser::parse),
-                )
-            }
-            is TextMessageType -> {
-                val body = messageType.body.trimEnd()
-                val dom = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
-                val formattedBody = dom?.let(::parseHtml)
-                    ?: textPillificationHelper.pillify(body).safeLinkify()
-                val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
-                TimelineItemTextContent(
                     body = body,
                     htmlDocument = htmlDocument,
                     formattedBody = formattedBody,
