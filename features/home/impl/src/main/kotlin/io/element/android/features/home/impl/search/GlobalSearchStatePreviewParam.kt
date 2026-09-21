@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
@@ -97,6 +98,58 @@ class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState
                 currentTarget = GlobalSearchTarget.MESSAGES,
                 queryState = TextFieldState("Query"),
                 results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf())),
+            ),
+            aGlobalSearchState(
+                isSearchActive = true,
+                currentTarget = GlobalSearchTarget.ROOMS,
+                queryState = TextFieldState(),
+                results = AsyncData.Uninitialized,
+                history = AsyncData.Success(
+                    persistentListOf(
+                        SearchHistoryResultItem.Query("Query 1"),
+                        SearchHistoryResultItem.Query("Query 2"),
+                        SearchHistoryResultItem.Room(
+                            roomId = RoomId("!roomId:server.org"),
+                            roomInfo = aRoomInfo(
+                                id = RoomId("!roomId:server.org"),
+                                name = "A room with alias",
+                                avatarUrl = "https://example.com/avatar.png",
+                                canonicalAlias = RoomAlias("#alias:server.org"),
+                            )
+                        ),
+                        SearchHistoryResultItem.Room(
+                            roomId = RoomId("!roomId2:server.org"),
+                            roomInfo = aRoomInfo(
+                                id = RoomId("!roomId2:server.org"),
+                                name = "A room",
+                                avatarUrl = "https://example.com/avatar.png",
+                            )
+                        ),
+                        SearchHistoryResultItem.Room(
+                            roomId = RoomId("!dm:server.org"),
+                            roomInfo = aRoomInfo(
+                                id = RoomId("!dm:server.org"),
+                                name = "A DM",
+                                isDm = true,
+                                heroes = listOf(MatrixUser(UserId("@user:server.org"), "User", "https://example.com/avatar.png")),
+                                avatarUrl = "https://example.com/avatar.png",
+                                canonicalAlias = RoomAlias("#alias:server.org"),
+                            )
+                        ),
+                        SearchHistoryResultItem.Room(
+                            roomId = RoomId("!tombstone:server.org"),
+                            roomInfo = aRoomInfo(
+                                id = RoomId("!tombstone:server.org"),
+                                name = "A tombstoned room",
+                                avatarUrl = "https://example.com/avatar.png",
+                                successorRoom = SuccessorRoom(
+                                    roomId = RoomId("!successorRoom:server.org"),
+                                    reason = null,
+                                ),
+                            ),
+                        ),
+                    )
+                )
             ),
         )
 }
@@ -238,6 +291,7 @@ internal fun aGlobalSearchState(
     queryState: TextFieldState = TextFieldState(),
     currentTarget: GlobalSearchTarget = GlobalSearchTarget.ROOMS,
     results: AsyncData<GlobalSearchResults> = AsyncData.Uninitialized,
+    history: AsyncData<ImmutableList<SearchHistoryResultItem>> = AsyncData.Uninitialized,
     eventSink: (GlobalSearchEvent) -> Unit = {},
 ) = GlobalSearchState(
     isEnabled = isEnabled,
@@ -245,5 +299,6 @@ internal fun aGlobalSearchState(
     queryState = queryState,
     currentTarget = currentTarget,
     results = results,
+    history = history,
     eventSink = eventSink
 )
