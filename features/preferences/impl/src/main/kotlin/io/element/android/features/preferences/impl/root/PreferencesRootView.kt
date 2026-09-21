@@ -241,7 +241,7 @@ private fun ColumnScope.MultiAccountSection(
                     }
                     // Animate the chevron icon to rotate when the section is expanded/collapsed
                     val rotation: Float by animateFloatAsState(
-                        targetValue = if (state.isOtherAccountsSectionExpanded) 180f else 0f,
+                        targetValue = if (state.isOtherAccountsSectionExpanded) -180f else 0f,
                         animationSpec = tween(
                             delayMillis = 0,
                             durationMillis = 300,
@@ -250,11 +250,7 @@ private fun ColumnScope.MultiAccountSection(
                     )
                     Icon(
                         modifier = Modifier.rotate(rotation),
-                        imageVector = if (state.isOtherAccountsSectionExpanded) {
-                            CompoundIcons.ChevronUp()
-                        } else {
-                            CompoundIcons.ChevronDown()
-                        },
+                        imageVector = CompoundIcons.ChevronDown(),
                         contentDescription = null,
                     )
                 }
