@@ -47,8 +47,9 @@ forbiddenTerms = {
 #   %s %d %f ...    -> simple conversion
 #   %1$s %2$d ...   -> positional
 #   %.2f %1$.2f     -> optional precision
+# It also contains a trailing dot to catch cases like "%s." which are valid placeholders but will be flagged as invalid by the regex.
 _VALID_PLACEHOLDER = re.compile(
-    r'%(?:\d+\$)?(?:\.\d+)?[a-zA-Z]'
+    r'%(?:\d+\$)?(?:\.\d+)?[a-zA-Z]\.*'
 )
 
 # Grab each candidate token: a '%' plus the run of chars that could belong to a
