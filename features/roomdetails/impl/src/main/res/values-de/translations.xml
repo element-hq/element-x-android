@@ -148,7 +148,7 @@ Wir empfehlen keine Verschlüsselung für Chats zu aktivieren, die jeder finden 
   <string name="screen_security_and_privacy_encryption_section_footer">"Einmal angeschaltet kann die Verschlüsselung nicht mehr deaktiviert werden."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Verschlüsselung"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Ende-zu-Ende-Verschlüsselung aktivieren"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Alle können beitreten."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Alle können beitreten, auch Personen außerhalb deiner Organisation."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Jeder"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Wähle aus, welche Spaces ihren Mitgliedern ermöglichen sollen, dieser Gruppe ohne Einladung beitreten zu können. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Spaces verwalten"</string>

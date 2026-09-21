@@ -45,7 +45,7 @@
   <string name="notification_sender_mention_reply">"%1$s 提及或回覆"</string>
   <string name="notification_space_invite_body">"已邀請您加入空間"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s 已邀請您的加入此空間"</string>
-  <string name="notification_test_push_notification_content">"您正在查看通知！點我！"</string>
+  <string name="notification_test_push_notification_content">"您正在檢視通知！點我！"</string>
   <string name="notification_thread_in_room">"在 %1$s 的討論串"</string>
   <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>
   <string name="notification_ticker_text_group">"%1$s：%2$s %3$s"</string>
@@ -87,7 +87,7 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"無法顯示通知。"</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"已點選通知！"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"顯示通知"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"請點選通知以繼續測試。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"請輕點通知以繼續測試。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"確保應用程式正在接收推播。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"錯誤：推播程式拒絕請求。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"錯誤：%1$s。"</string>

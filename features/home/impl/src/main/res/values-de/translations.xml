@@ -36,6 +36,8 @@ Deaktiviere den entsprechenden Filter, um deine anderen Chats zu sehen"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Du hast keine ausstehenden Einladungen."</string>
   <string name="screen_roomlist_filter_low_priority">"Niedrige Priorität"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"Du hast noch keine Chats mit niedriger Priorität"</string>
+  <string name="screen_roomlist_filter_mention">"Erwähnungen"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"Du hast keine ungelesenen Erwähnungen"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Entferne Filter, um Chats zu sehen"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Für diese Auswahl hast du keinen Chat"</string>
   <string name="screen_roomlist_filter_people">"Personen"</string>

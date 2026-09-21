@@ -52,6 +52,10 @@
   <string name="screen_edit_profile_error_title">"Profiilin muokkaaminen ei onnistunut"</string>
   <string name="screen_edit_profile_title">"Muokkaa profiilia"</string>
   <string name="screen_edit_profile_updating_details">"Muokataan profiilia…"</string>
+  <string name="screen_labs_enable_gallery">"Galleriaviestit"</string>
+  <string name="screen_labs_enable_gallery_description">"Lähetä useita kuvia tai videoita kerralla. Toimii mobiililaitteilla, mutta ei vielä tuettu selainversiossa."</string>
+  <string name="screen_labs_enable_knocking">"Pyydä liittymistä"</string>
+  <string name="screen_labs_enable_knocking_description">"Käyttäjät voivat pyytää pääsyä huoneeseen, johon kuka tahansa ei voi liittyä. Toimii mobiililaitteilla. Selainversio on olemassa, mutta se on vielä kokeiluvaiheessa."</string>
   <string name="screen_labs_enable_threads">"Ota käyttöön viestiketjuvastaukset"</string>
   <string name="screen_labs_enable_threads_description">"Sovellus käynnistyy uudelleen muutoksen käyttöönottamiseksi."</string>
   <string name="screen_labs_header_description">"Kokeile uusimpia kehitteillä olevia ideoitamme. Nämä ominaisuudet eivät ole vielä valmiita; ne voivat olla epävakaita ja muuttua."</string>
@@ -75,7 +79,7 @@ Jos jatkat, jotkin asetukset saattavat muuttua."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Määritystä ei ole korjattu, yritä uudelleen."</string>
   <string name="screen_notification_settings_group_chats">"Ryhmäkeskusteluissa"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Kutsut"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Kotipalvelimesi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et ehkä saa ilmoitusta joissakin huoneissa."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Palveluntarjoajasi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et ehkä saa ilmoitusta joissakin huoneissa."</string>
   <string name="screen_notification_settings_mentions_section_title">"Maininnat"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Valitse toinen ääni…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Käytössä tällä hetkellä %1$s"</string>
@@ -84,7 +88,7 @@ Jos jatkat, jotkin asetukset saattavat muuttua."</string>
   <string name="screen_notification_settings_mode_all">"Kaikki"</string>
   <string name="screen_notification_settings_mode_mentions">"Maininnat"</string>
   <string name="screen_notification_settings_notification_section_title">"Ilmoita minulle"</string>
-  <string name="screen_notification_settings_room_mention_label">"Ilmoita minulle @room-maininnoista"</string>
+  <string name="screen_notification_settings_room_mention_label">@room-maininnat</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Mukautettu"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Mukautettu ääni…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Virhe tiedoston poistamisessa"</string>
