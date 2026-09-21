@@ -120,6 +120,24 @@ class DefaultAppPreferencesStoreTest {
         assertThat(history.last()).isEqualTo("https://server5.org")
     }
 
+    @Test
+    fun `other accounts section is expanded by default`() = runTest {
+        val store = createStore()
+
+        assertThat(store.isOtherAccountsExpandedFlow().first()).isTrue()
+    }
+
+    @Test
+    fun `other accounts expanded state persists updates`() = runTest {
+        val store = createStore()
+
+        store.setOtherAccountsExpanded(false)
+        assertThat(store.isOtherAccountsExpandedFlow().first()).isFalse()
+
+        store.setOtherAccountsExpanded(true)
+        assertThat(store.isOtherAccountsExpandedFlow().first()).isTrue()
+    }
+
     private fun createStore() = DefaultAppPreferencesStore(
         buildMeta = buildMeta,
         preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),

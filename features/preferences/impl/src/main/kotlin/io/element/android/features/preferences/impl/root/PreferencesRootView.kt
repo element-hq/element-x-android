@@ -9,17 +9,28 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -33,13 +44,16 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.async.AsyncActionIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
+import io.element.android.libraries.designsystem.components.avatar.AvatarRow
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
@@ -51,7 +65,9 @@ import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun PreferencesRootView(
@@ -91,19 +107,22 @@ fun PreferencesRootView(
                 },
                 matrixUser = state.myUser,
             )
+            if (state.userStatusState != null) {
+                UserStatusSection(
+                    userStatusState = state.userStatusState,
+                    emojiPickerRenderer = emojiPickerRenderer,
+                )
+            }
             if (state.isMultiAccountEnabled) {
                 MultiAccountSection(
                     state = state,
                     onAddAccountClick = onAddAccountClick,
                 )
             }
-            if (state.userStatusState != null) {
-                UserStatusSection(
-                    userStatusState = state.userStatusState,
-                    emojiPickerRenderer = emojiPickerRenderer,
-                    showTopDivider = !state.isMultiAccountEnabled,
-                )
-            }
+            HorizontalDivider(
+                thickness = 8.dp,
+                color = ElementTheme.colors.bgSubtleSecondary,
+            )
             // 'Account' section
             ManageAccountSection(
                 state = state,
@@ -163,25 +182,21 @@ private fun BoxScope.UserStatusUpdateIndicator(updateStatusAction: AsyncAction<U
 private fun ColumnScope.UserStatusSection(
     userStatusState: UserStatusState,
     emojiPickerRenderer: EmojiPickerRenderer,
-    showTopDivider: Boolean,
 ) {
-    if (showTopDivider) {
-        HorizontalDivider(
-            thickness = 8.dp,
-            color = ElementTheme.colors.bgSubtleSecondary,
-        )
-    }
+    HorizontalDivider(
+        thickness = 1.dp,
+        color = ElementTheme.colors.bgSubtleSecondary,
+    )
     UserStatusView(
         state = userStatusState,
         emojiPickerRenderer = emojiPickerRenderer,
         modifier = Modifier.fillMaxWidth(),
     )
-    HorizontalDivider(
-        thickness = 1.dp,
-        color = ElementTheme.colors.bgSubtleSecondary,
-    )
 }
 
+/**
+ * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=5414-4759
+ */
 @Composable
 private fun ColumnScope.MultiAccountSection(
     state: PreferencesRootState,
@@ -191,28 +206,90 @@ private fun ColumnScope.MultiAccountSection(
         thickness = 8.dp,
         color = ElementTheme.colors.bgSubtleSecondary,
     )
-    state.otherSessions.forEach { matrixUser ->
-        MatrixUserRow(
-            modifier = Modifier
-                .clickable {
-                    state.eventSink(PreferencesRootEvent.SwitchToSession(matrixUser.userId))
+    if (state.otherSessions.isEmpty()) {
+        AddAccountItem(onAddAccountClick)
+    } else {
+        val expandedStateDescription = if (state.isOtherAccountsSectionExpanded) {
+            stringResource(CommonStrings.a11y_state_expanded)
+        } else {
+            stringResource(CommonStrings.a11y_state_collapsed)
+        }
+        ListItem(
+            modifier = Modifier.semantics {
+                stateDescription = expandedStateDescription
+            },
+            content = { Text(stringResource(CommonStrings.common_switch_account)) },
+            onClick = { state.eventSink(PreferencesRootEvent.ToggleOtherAccountsExpanded) },
+            trailingContent = ListItemContent.Custom { _ ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    AnimatedVisibility(
+                        visible = !state.isOtherAccountsSectionExpanded,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                    ) {
+                        AvatarRow(
+                            avatarDataList = state.otherSessions
+                                .take(3)
+                                .map { it.getAvatarData(AvatarSize.OtherAccountItem) }
+                                .toImmutableList(),
+                            avatarType = AvatarType.User,
+                            lastOnTop = true,
+                        )
+                    }
+                    // Animate the chevron icon to rotate when the section is expanded/collapsed
+                    val rotation: Float by animateFloatAsState(
+                        targetValue = if (state.isOtherAccountsSectionExpanded) -180f else 0f,
+                        animationSpec = tween(
+                            delayMillis = 0,
+                            durationMillis = 300,
+                        ),
+                        label = "chevron"
+                    )
+                    Icon(
+                        modifier = Modifier.rotate(rotation),
+                        imageVector = CompoundIcons.ChevronDown(),
+                        contentDescription = null,
+                    )
                 }
-                .padding(top = 2.dp, bottom = 2.dp, end = 8.dp),
-            matrixUser = matrixUser,
-            avatarSize = AvatarSize.AccountItem,
-            verticalSpaceWidth = 16.dp,
+            },
         )
+        AnimatedVisibility(
+            visible = state.isOtherAccountsSectionExpanded,
+        ) {
+            Column {
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = ElementTheme.colors.bgSubtleSecondary,
+                )
+                state.otherSessions.forEach { matrixUser ->
+                    MatrixUserRow(
+                        modifier = Modifier
+                            .clickable {
+                                state.eventSink(PreferencesRootEvent.SwitchToSession(matrixUser.userId))
+                            }
+                            .padding(top = 2.dp, bottom = 2.dp, end = 8.dp),
+                        matrixUser = matrixUser,
+                        avatarSize = AvatarSize.AccountItem,
+                        verticalSpaceWidth = 16.dp,
+                    )
+                }
+                AddAccountItem(onAddAccountClick)
+            }
+        }
     }
+}
+
+@Composable
+private fun AddAccountItem(onAddAccountClick: () -> Unit) {
     ListItem(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())),
         content = {
             Text(stringResource(CommonStrings.common_add_another_account))
         },
         onClick = onAddAccountClick,
-    )
-    HorizontalDivider(
-        thickness = 8.dp,
-        color = ElementTheme.colors.bgSubtleSecondary,
     )
 }
 

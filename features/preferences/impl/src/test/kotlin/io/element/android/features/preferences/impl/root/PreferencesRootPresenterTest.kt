@@ -37,17 +37,21 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -82,6 +86,7 @@ class PreferencesRootPresenterTest {
             )
             assertThat(initialState.version).isEqualTo("A Version")
             assertThat(initialState.isMultiAccountEnabled).isFalse()
+            assertThat(initialState.isOtherAccountsSectionExpanded).isTrue()
             assertThat(initialState.otherSessions).isEmpty()
             assertThat(initialState.version).isEqualTo("A Version")
             val loadedState = awaitItem()
@@ -305,6 +310,43 @@ class PreferencesRootPresenterTest {
     }
 
     @Test
+    fun `present - other accounts section is collapsed if the preference says so`() = runTest {
+        createPresenter(
+            matrixClient = FakeMatrixClient(
+                canDeactivateAccountResult = { true },
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+            appPreferencesStore = InMemoryAppPreferencesStore(isOtherAccountsExpanded = false),
+        ).test {
+            consumeItemsUntilPredicate { !it.isOtherAccountsSectionExpanded }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - toggle other accounts expanded stores the new value`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore()
+        createPresenter(
+            matrixClient = FakeMatrixClient(
+                canDeactivateAccountResult = { true },
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+            appPreferencesStore = appPreferencesStore,
+        ).test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.isOtherAccountsSectionExpanded).isTrue()
+            initialState.eventSink(PreferencesRootEvent.ToggleOtherAccountsExpanded)
+            val collapsedState = consumeItemsUntilPredicate { !it.isOtherAccountsSectionExpanded }.last()
+            assertThat(appPreferencesStore.isOtherAccountsExpandedFlow().first()).isFalse()
+            // Toggling again must expand the section back
+            collapsedState.eventSink(PreferencesRootEvent.ToggleOtherAccountsExpanded)
+            consumeItemsUntilPredicate { it.isOtherAccountsSectionExpanded }
+            assertThat(appPreferencesStore.isOtherAccountsExpandedFlow().first()).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - link new device`() = runTest {
         createPresenter(
             matrixClient = FakeMatrixClient(
@@ -333,6 +375,7 @@ class PreferencesRootPresenterTest {
         indicatorService: IndicatorService = FakeIndicatorService(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         sessionStore: SessionStore = InMemorySessionStore(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         sessionEnterpriseService: SessionEnterpriseService = FakeSessionEnterpriseService(),
     ) = PreferencesRootPresenter(
         matrixClient = matrixClient,
@@ -346,6 +389,7 @@ class PreferencesRootPresenterTest {
         rageshakeFeatureAvailability = rageshakeFeatureAvailability,
         featureFlagService = featureFlagService,
         sessionStore = sessionStore,
+        appPreferencesStore = appPreferencesStore,
         sessionEnterpriseService = sessionEnterpriseService,
         userStatusPresenter = { aUserStatusState() },
     )

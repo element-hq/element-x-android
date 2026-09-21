@@ -27,6 +27,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
+import io.element.android.tests.testutils.assertNoNodeWithText
+import io.element.android.tests.testutils.assertNodeWithTextIsDisplayed
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
@@ -71,6 +73,7 @@ class PreferencesRootViewTest : RobolectricTest() {
         setView(
             aPreferencesRootState(
                 isMultiAccountEnabled = true,
+                isOtherAccountsSectionExpanded = true,
                 otherSessions = listOf(
                     aMatrixUser(
                         id = A_USER_ID_2.value,
@@ -82,6 +85,69 @@ class PreferencesRootViewTest : RobolectricTest() {
         )
         onNodeWithText("Bob").performClick()
         eventsRecorder.assertSingle(PreferencesRootEvent.SwitchToSession(A_USER_ID_2))
+    }
+
+    @Test
+    fun `clicking on Switch accounts sends a ToggleOtherAccountsExpanded`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<PreferencesRootEvent>()
+        setView(
+            aPreferencesRootState(
+                isMultiAccountEnabled = true,
+                isOtherAccountsSectionExpanded = false,
+                otherSessions = listOf(
+                    aMatrixUser(
+                        id = A_USER_ID_2.value,
+                        displayName = "Bob",
+                    )
+                ),
+                eventSink = eventsRecorder,
+            ),
+        )
+        clickOn(CommonStrings.common_switch_account)
+        eventsRecorder.assertSingle(PreferencesRootEvent.ToggleOtherAccountsExpanded)
+    }
+
+    @Test
+    fun `when the other accounts section is collapsed, other sessions and add account are not shown`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
+        setView(
+            aPreferencesRootState(
+                isMultiAccountEnabled = true,
+                isOtherAccountsSectionExpanded = false,
+                otherSessions = listOf(
+                    aMatrixUser(
+                        id = A_USER_ID_2.value,
+                        displayName = "Bob",
+                    )
+                ),
+                eventSink = eventsRecorder,
+            ),
+        )
+        assertNodeWithTextIsDisplayed(CommonStrings.common_switch_account)
+        onNodeWithText("Bob").assertDoesNotExist()
+        assertNoNodeWithText(CommonStrings.common_add_another_account)
+    }
+
+    @Test
+    fun `click on Add account of the expanded section invokes the expected callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            setView(
+                aPreferencesRootState(
+                    isMultiAccountEnabled = true,
+                    isOtherAccountsSectionExpanded = true,
+                    otherSessions = listOf(
+                        aMatrixUser(
+                            id = A_USER_ID_2.value,
+                            displayName = "Bob",
+                        )
+                    ),
+                    eventSink = eventsRecorder,
+                ),
+                onAddAccountClick = callback,
+            )
+            clickOn(CommonStrings.common_add_another_account)
+        }
     }
 
     @Test
