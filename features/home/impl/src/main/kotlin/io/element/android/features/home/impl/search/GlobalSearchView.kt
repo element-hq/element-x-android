@@ -128,60 +128,7 @@ private fun GlobalSearchContent(
         topBar = {
             TopAppBar(
                 navigationIcon = { BackButton(onClick = onBackButtonClick) },
-                title = {
-                    // The stateSaver will keep the selection state when returning to this UI
-                    val focusRequester = remember { FocusRequester() }
-                    val searchLabel = stringResource(CommonStrings.action_search)
-                    FilledTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .focusRequester(focusRequester)
-                            .semantics { contentDescription = searchLabel },
-                        state = state.queryState,
-                        lineLimits = TextFieldLineLimits.SingleLine,
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                        keyboardActions = KeyboardActionHandler { performDefault ->
-                            state.eventSink(GlobalSearchEvent.SaveQueryToHistory)
-                            performDefault()
-                        },
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            disabledContainerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent,
-                            disabledIndicatorColor = Color.Transparent,
-                            errorIndicatorColor = Color.Transparent,
-                        ),
-                        trailingIcon = if (state.queryState.text.isNotEmpty()) {
-                            @Composable {
-                                IconButton(
-                                    modifier = Modifier.clip(CircleShape).size(20.dp),
-                                    onClick = { state.eventSink(GlobalSearchEvent.ClearQuery) },
-                                    colors = IconButtonDefaults.iconButtonColors(
-                                        containerColor = ElementTheme.colors.borderInteractivePrimary,
-                                        contentColor = ElementTheme.colors.iconOnSolidPrimary
-                                    )
-                                ) {
-                                    Icon(
-                                        modifier = Modifier.size(16.dp),
-                                        imageVector = CompoundIcons.Close(),
-                                        contentDescription = stringResource(CommonStrings.a11y_clear_search_field),
-                                    )
-                                }
-                            }
-                        } else {
-                            null
-                        },
-                    )
-
-                    LaunchedEffect(Unit) {
-                        if (!focusRequester.restoreFocusedChild()) {
-                            focusRequester.requestFocus()
-                        }
-                        focusRequester.saveFocusedChild()
-                    }
-                }
+                title = { SearchTopAppBarContent(state = state) }
             )
         },
         contentWindowInsets = scaffoldScrollableContentInsets,
@@ -190,29 +137,8 @@ private fun GlobalSearchContent(
             modifier = Modifier.padding(padding),
         ) {
             HorizontalDivider(color = ElementTheme.colors.borderInteractivePrimary)
-            if (state.queryState.text.isNotEmpty()) {
-                SingleChoiceSegmentedButtonRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
-                ) {
-                    SegmentedButton(
-                        index = 0,
-                        count = 2,
-                        selected = state.currentTarget == GlobalSearchTarget.ROOMS,
-                        onClick = { state.eventSink(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.ROOMS)) },
-                        text = stringResource(R.string.search_section_chats),
-                    )
 
-                    SegmentedButton(
-                        index = 1,
-                        count = 2,
-                        selected = state.currentTarget == GlobalSearchTarget.MESSAGES,
-                        onClick = { state.eventSink(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.MESSAGES)) },
-                        text = stringResource(R.string.search_section_messages),
-                    )
-                }
-            }
+            SearchTargetSelector(state = state)
 
             val lazyListState = rememberLazyListState()
             OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
@@ -255,6 +181,89 @@ private fun GlobalSearchContent(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SearchTopAppBarContent(state: GlobalSearchState) {
+    // The stateSaver will keep the selection state when returning to this UI
+    val focusRequester = remember { FocusRequester() }
+    val searchLabel = stringResource(CommonStrings.action_search)
+    FilledTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester)
+            .semantics { contentDescription = searchLabel },
+        state = state.queryState,
+        lineLimits = TextFieldLineLimits.SingleLine,
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActionHandler { performDefault ->
+            state.eventSink(GlobalSearchEvent.SaveQueryToHistory)
+            performDefault()
+        },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
+            errorIndicatorColor = Color.Transparent,
+        ),
+        trailingIcon = if (state.queryState.text.isNotEmpty()) {
+            @Composable {
+                IconButton(
+                    modifier = Modifier.clip(CircleShape).size(20.dp),
+                    onClick = { state.eventSink(GlobalSearchEvent.ClearQuery) },
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = ElementTheme.colors.borderInteractivePrimary,
+                        contentColor = ElementTheme.colors.iconOnSolidPrimary
+                    )
+                ) {
+                    Icon(
+                        modifier = Modifier.size(16.dp),
+                        imageVector = CompoundIcons.Close(),
+                        contentDescription = stringResource(CommonStrings.a11y_clear_search_field),
+                    )
+                }
+            }
+        } else {
+            null
+        },
+    )
+
+    LaunchedEffect(Unit) {
+        if (!focusRequester.restoreFocusedChild()) {
+            focusRequester.requestFocus()
+        }
+        focusRequester.saveFocusedChild()
+    }
+}
+
+@Composable
+private fun SearchTargetSelector(state: GlobalSearchState) {
+    if (state.queryState.text.isEmpty()) return
+
+    SingleChoiceSegmentedButtonRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
+    ) {
+        SegmentedButton(
+            index = 0,
+            count = 2,
+            selected = state.currentTarget == GlobalSearchTarget.ROOMS,
+            onClick = { state.eventSink(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.ROOMS)) },
+            text = stringResource(R.string.search_section_chats),
+        )
+
+        SegmentedButton(
+            index = 1,
+            count = 2,
+            selected = state.currentTarget == GlobalSearchTarget.MESSAGES,
+            onClick = { state.eventSink(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.MESSAGES)) },
+            text = stringResource(R.string.search_section_messages),
+        )
     }
 }
 

@@ -44,114 +44,122 @@ import kotlinx.collections.immutable.toPersistentList
 
 class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState> {
     override val values: Sequence<GlobalSearchState>
-        get() = sequenceOf(
-            // Not enabled, no preview
-            aGlobalSearchState(isEnabled = false),
-            aGlobalSearchState(isSearchActive = true, queryState = TextFieldState("Query")),
-            aGlobalSearchState(
-                isSearchActive = true,
-                currentTarget = GlobalSearchTarget.ROOMS,
-                queryState = TextFieldState("Query"),
-                results = AsyncData.Loading(),
-            ),
-            aGlobalSearchState(
-                isSearchActive = true,
-                currentTarget = GlobalSearchTarget.ROOMS,
-                queryState = TextFieldState("Query"),
-                results = AsyncData.Success(
-                    GlobalSearchResults.RoomListResults(
-                        results = aRoomListRoomSummaryList().mapIndexed { index, summary ->
-                            summary.copy(name = "Room with Query #${index + 1}")
-                        }.toPersistentList()
-                    )
+        get() {
+            val tombstonedRoomId = RoomId("!tombstone:server.org")
+            val roomId1 = RoomId("!roomId:server.org")
+            val roomId2 = RoomId("!roomId2:server.org")
+            val dmRoomId = RoomId("!dm:server.org")
+            val anAvatarUrl = "https://example.com/avatar.png"
+            val aCanonicalAlias = RoomAlias("#alias:server.org")
+            return sequenceOf(
+                // Not enabled, no preview
+                aGlobalSearchState(isEnabled = false),
+                aGlobalSearchState(isSearchActive = true, queryState = TextFieldState("Query")),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.ROOMS,
+                    queryState = TextFieldState("Query"),
+                    results = AsyncData.Loading(),
                 ),
-            ),
-            aGlobalSearchState(
-                isSearchActive = true,
-                currentTarget = GlobalSearchTarget.MESSAGES,
-                queryState = TextFieldState("Query"),
-                results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf(
-                    MessageSearchResultItem.Message(
-                        messageSearchResult = aMessageSearchResult(eventId = EventId("\$eventId1:server.org")),
-                        body = "A message with Query",
-                        roomInfo = aRoomInfo(),
-                        formattedTimestamp = "12:00",
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.ROOMS,
+                    queryState = TextFieldState("Query"),
+                    results = AsyncData.Success(
+                        GlobalSearchResults.RoomListResults(
+                            results = aRoomListRoomSummaryList().mapIndexed { index, summary ->
+                                summary.copy(name = "Room with Query #${index + 1}")
+                            }.toPersistentList()
+                        )
                     ),
-                    MessageSearchResultItem.Media(
-                        messageSearchResult = aMessageSearchResult(eventId = EventId("\$eventId2:server.org")),
-                        mediaContent = MediaSearchResultContent(
-                            filename = "file.png",
-                            extension = "PNG",
-                            caption = "A caption containing Query",
-                            formattedSize = "1 MB",
-                            thumbnailSource = MediaSource("https://example.com/thumbnail.png"),
-                            thumbnailType = AttachmentThumbnailType.Image,
-                            blurhash = null,
+                ),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.MESSAGES,
+                    queryState = TextFieldState("Query"),
+                    results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf(
+                        MessageSearchResultItem.Message(
+                            messageSearchResult = aMessageSearchResult(eventId = EventId("\$eventId1:server.org")),
+                            body = "A message with Query",
+                            roomInfo = aRoomInfo(),
+                            formattedTimestamp = "12:00",
                         ),
-                        roomInfo = aRoomInfo(),
-                        formattedTimestamp = "12:00",
-                    ),
-                ))),
-            ),
-            aGlobalSearchState(
-                isSearchActive = true,
-                currentTarget = GlobalSearchTarget.MESSAGES,
-                queryState = TextFieldState("Query"),
-                results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf())),
-            ),
-            aGlobalSearchState(
-                isSearchActive = true,
-                currentTarget = GlobalSearchTarget.ROOMS,
-                queryState = TextFieldState(),
-                results = AsyncData.Uninitialized,
-                history = AsyncData.Success(
-                    persistentListOf(
-                        SearchHistoryResultItem.Query("Query 1"),
-                        SearchHistoryResultItem.Query("Query 2"),
-                        SearchHistoryResultItem.Room(
-                            roomId = RoomId("!roomId:server.org"),
-                            roomInfo = aRoomInfo(
-                                id = RoomId("!roomId:server.org"),
-                                name = "A room with alias",
-                                avatarUrl = "https://example.com/avatar.png",
-                                canonicalAlias = RoomAlias("#alias:server.org"),
-                            )
+                        MessageSearchResultItem.Media(
+                            messageSearchResult = aMessageSearchResult(eventId = EventId("\$eventId2:server.org")),
+                            mediaContent = MediaSearchResultContent(
+                                filename = "file.png",
+                                extension = "PNG",
+                                caption = "A caption containing Query",
+                                formattedSize = "1 MB",
+                                thumbnailSource = MediaSource("https://example.com/thumbnail.png"),
+                                thumbnailType = AttachmentThumbnailType.Image,
+                                blurhash = null,
+                            ),
+                            roomInfo = aRoomInfo(),
+                            formattedTimestamp = "12:00",
                         ),
-                        SearchHistoryResultItem.Room(
-                            roomId = RoomId("!roomId2:server.org"),
-                            roomInfo = aRoomInfo(
-                                id = RoomId("!roomId2:server.org"),
-                                name = "A room",
-                                avatarUrl = "https://example.com/avatar.png",
-                            )
-                        ),
-                        SearchHistoryResultItem.Room(
-                            roomId = RoomId("!dm:server.org"),
-                            roomInfo = aRoomInfo(
-                                id = RoomId("!dm:server.org"),
-                                name = "A DM",
-                                isDm = true,
-                                heroes = listOf(MatrixUser(UserId("@user:server.org"), "User", "https://example.com/avatar.png")),
-                                avatarUrl = "https://example.com/avatar.png",
-                                canonicalAlias = RoomAlias("#alias:server.org"),
-                            )
-                        ),
-                        SearchHistoryResultItem.Room(
-                            roomId = RoomId("!tombstone:server.org"),
-                            roomInfo = aRoomInfo(
-                                id = RoomId("!tombstone:server.org"),
-                                name = "A tombstoned room",
-                                avatarUrl = "https://example.com/avatar.png",
-                                successorRoom = SuccessorRoom(
-                                    roomId = RoomId("!successorRoom:server.org"),
-                                    reason = null,
+                    ))),
+                ),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.MESSAGES,
+                    queryState = TextFieldState("Query"),
+                    results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf())),
+                ),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.ROOMS,
+                    queryState = TextFieldState(),
+                    results = AsyncData.Uninitialized,
+                    history = AsyncData.Success(
+                        persistentListOf(
+                            SearchHistoryResultItem.Query("Query 1"),
+                            SearchHistoryResultItem.Query("Query 2"),
+                            SearchHistoryResultItem.Room(
+                                roomId = roomId1,
+                                roomInfo = aRoomInfo(
+                                    id = roomId1,
+                                    name = "A room with alias",
+                                    avatarUrl = anAvatarUrl,
+                                    canonicalAlias = aCanonicalAlias,
+                                )
+                            ),
+                            SearchHistoryResultItem.Room(
+                                roomId = roomId2,
+                                roomInfo = aRoomInfo(
+                                    id = roomId2,
+                                    name = "A room",
+                                    avatarUrl = anAvatarUrl,
+                                )
+                            ),
+                            SearchHistoryResultItem.Room(
+                                roomId = dmRoomId,
+                                roomInfo = aRoomInfo(
+                                    id = dmRoomId,
+                                    name = "A DM",
+                                    isDm = true,
+                                    heroes = listOf(MatrixUser(UserId("@user:server.org"), "User", anAvatarUrl)),
+                                    avatarUrl = anAvatarUrl,
+                                    canonicalAlias = aCanonicalAlias,
+                                )
+                            ),
+                            SearchHistoryResultItem.Room(
+                                roomId = tombstonedRoomId,
+                                roomInfo = aRoomInfo(
+                                    id = tombstonedRoomId,
+                                    name = "A tombstoned room",
+                                    avatarUrl = anAvatarUrl,
+                                    successorRoom = SuccessorRoom(
+                                        roomId = RoomId("!successorRoom:server.org"),
+                                        reason = null,
+                                    ),
                                 ),
                             ),
-                        ),
+                        )
                     )
-                )
-            ),
-        )
+                ),
+            )
+        }
 }
 
 fun aRoomInfo(
