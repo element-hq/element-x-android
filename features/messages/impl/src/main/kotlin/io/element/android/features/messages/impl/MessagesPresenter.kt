@@ -615,7 +615,7 @@ class MessagesPresenter(
 
     private fun handleForwardAction(event: TimelineItem.Event) {
         if (event.eventId == null) return
-        navigator.forwardEvent(event.eventId)
+        navigator.forwardEvent(eventId = event.eventId, timelineProvider = timelineController)
     }
 
     private fun handleReportAction(event: TimelineItem.Event) {

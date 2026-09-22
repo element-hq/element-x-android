@@ -181,7 +181,7 @@ class PinnedMessagesListPresenter(
             }
             TimelineItemAction.Forward -> {
                 targetEvent.eventId?.let { eventId ->
-                    navigator.forwardEvent(eventId)
+                    navigator.forwardEvent(eventId, timelineProvider)
                 }
             }
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
