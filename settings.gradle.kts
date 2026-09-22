@@ -47,6 +47,48 @@ dependencyResolutionManagement {
         flatDir {
             dirs("libraries/matrix/libs")
         }
+        // Temporary: the native call component and the matrix-rust-rtc core publish as GitHub release
+        // assets, which carry full Maven metadata. Both blocks go once they reach Maven Central.
+        ivy {
+            url = uri("https://github.com/element-hq/element-call-android/releases/download")
+            patternLayout { artifact("v[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
+            metadataSources { gradleMetadata() }
+            content {
+                // Per module: `element-call.*` would also catch element-call-embedded, the WebView call.
+                includeModule("io.element.android", "element-call-bom")
+                includeModule("io.element.android", "element-call-api")
+                includeModule("io.element.android", "element-call")
+                includeModule("io.element.android", "element-call-ui")
+                includeModule("io.element.android", "element-call-matrix")
+                includeModule("io.element.android", "element-call-test")
+            }
+        }
+        ivy {
+            url = uri("https://github.com/element-hq/matrix-rust-rtc/releases/download")
+            patternLayout { artifact("v[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
+            // The core ships an AAR and nothing else; element-call's module metadata names it with an
+            // explicit aar artifact selector, so it needs no POM.
+            metadataSources { artifact() }
+            content { includeModule("io.element.android", "matrix-rtc-android") }
+        }
+        // Also temporary: testing an unreleased element-call-android build. Publish it there with
+        // `publishToMavenLocal -PVERSION_NAME=0.1.0-local`, then build here with
+        // `-PelementCallLocalVersion=0.1.0-local`. Absent without the property, so that everything
+        // resolves for a contributor who has never built the library.
+        providers.gradleProperty("elementCallLocalVersion").orNull?.let { elementCallVersion ->
+            logger.lifecycle("Note: resolving io.element.android:element-call-* $elementCallVersion from mavenLocal")
+            mavenLocal {
+                content {
+                    // Per module: compound-android and element-call-embedded stay on Maven Central.
+                    includeModule("io.element.android", "element-call-bom")
+                    includeModule("io.element.android", "element-call-api")
+                    includeModule("io.element.android", "element-call")
+                    includeModule("io.element.android", "element-call-ui")
+                    includeModule("io.element.android", "element-call-matrix")
+                    includeModule("io.element.android", "element-call-test")
+                }
+            }
+        }
     }
 }
 

@@ -65,6 +65,8 @@ detekt_compose_rules = "0.4.28"
 ktlint = "1.8.0"
 androidx-test-ext-junit = "1.3.0"
 kover = "0.9.9"
+# The native MatrixRTC call component, https://github.com/element-hq/element-call-android
+element_call = "0.1.0-rc.2"
 
 [libraries]
 # Project
@@ -183,7 +185,11 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.09.9"
+# `strictly` because element-call-matrix is a published AAR compiled against one SDK version and declares
+# it as a plain `require`: without this, a library built against a newer SDK would silently drag this app
+# onto it. With it, this pin always wins, and a library that needs something newer fails at configuration
+# time naming both versions instead of at runtime with NoSuchMethodError.
+matrix_sdk = { module = "org.matrix.rustcomponents:sdk-android", version = { strictly = "26.09.9" } }
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -238,6 +244,13 @@ metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" 
 
 # Element Call
 element_call_embedded = "io.element.android:element-call-embedded:0.26.0"
+# The native MatrixRTC call component. Versions come from the BOM, so every artifact moves together.
+element_call_bom = { module = "io.element.android:element-call-bom", version.ref = "element_call" }
+element_call_api = { module = "io.element.android:element-call-api" }
+element_call_impl = { module = "io.element.android:element-call" }
+element_call_ui = { module = "io.element.android:element-call-ui" }
+element_call_matrix = { module = "io.element.android:element-call-matrix" }
+element_call_test = { module = "io.element.android:element-call-test" }
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
