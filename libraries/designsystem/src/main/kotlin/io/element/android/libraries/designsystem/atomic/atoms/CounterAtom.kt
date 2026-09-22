@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,13 +33,14 @@ import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Text
 
 private const val MAX_COUNT = 99
-private const val MAX_COUNT_STRING = "$MAX_COUNT+"
+private const val MAX_COUNT_STRING = "$MAX_COUNT"
+private const val OVERFLOW_STRING_STRING = "$MAX_COUNT+"
 
 /**
  * A counter atom that displays a number in a circle.
  * Figma link : https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2805-2649&m=dev
  *
- * @param count The number to display. If the number is greater than [MAX_COUNT], the counter will display [MAX_COUNT_STRING].
+ * @param count The number to display. If the number is greater than [MAX_COUNT], the counter will display [OVERFLOW_STRING_STRING].
  * If the number is less than 1, the counter will not be displayed.
  * @param modifier The modifier to apply to this layout.
  * @param containerColor The background color of the counter. When null, uses [isCritical] to pick a default.
@@ -59,7 +61,7 @@ fun CounterAtom(
     if (count < 1) return
     val countAsText = when (count) {
         in 0..MAX_COUNT -> count.toString()
-        else -> MAX_COUNT_STRING
+        else -> OVERFLOW_STRING_STRING
     }
     val textMeasurer = rememberTextMeasurer()
     // Measure the maximum count string size
@@ -68,13 +70,14 @@ fun CounterAtom(
         style = textStyle
     )
     val textSize = textLayoutResult.size
-    val badgeSize = textSize.height
+    // Pick the largest dimension to make sure the badge is a circle when the count is less than or equal to MAX_COUNT.
+    val badgeSize = maxOf(textSize.width, textSize.height)
     Box(
         modifier = modifier
+            // We add 1.dp to the minimum size to make sure the text does not look cramped or is clipped
             .then(if (count > MAX_COUNT) {
-                Modifier
+                Modifier.height(textSize.height.toDp() + 1.dp)
             } else {
-                // We add 1.dp to the minimum size to make sure the text does not look cramped or is clipped
                 Modifier.size(badgeSize.toDp() + 1.dp)
             })
             // Equivalent to adding a circle shape if the aspect ratio is 1:1, but allows for a pill shape if the count is greater than MAX_COUNT
@@ -89,7 +92,7 @@ fun CounterAtom(
             .then(
         if (count > MAX_COUNT) {
                     // We add some padding to the badge when the count is greater than MAX_COUNT to make it look like the circle-shaped badges
-                    Modifier.padding(horizontal = 2.dp, vertical = 0.5.dp)
+                    Modifier.padding(horizontal = 2.dp)
                 } else {
                     Modifier
                 }
