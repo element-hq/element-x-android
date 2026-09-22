@@ -287,7 +287,7 @@ private fun LazyListScope.searchHistory(
     item {
         Text(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
-            text = stringResource(R.string.search_recent_searches_section_title),
+            text = stringResource(R.string.screen_search_recent_searches_section_title),
             style = ElementTheme.typography.fontBodyLgMedium,
             color = ElementTheme.colors.textPrimary,
         )
