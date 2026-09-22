@@ -358,14 +358,15 @@ private fun MessagePreviewAndIndicatorRow(
                     isAudio = room.activeCallIntent == CallIntent.AUDIO
                 )
             }
-            if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
+            val isMuted = room.userDefinedNotificationMode == RoomNotificationMode.MUTE
+            if (isMuted) {
                 NotificationOffIndicatorAtom()
             } else if (room.numberOfUnreadMentions > 0) {
                 MentionIndicatorAtom()
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
-                val count = if (showUnreadCount && room.isHighlighted && room.numberOfUnreadNotifications > 0) {
+                val count = if (showUnreadCount && !isMuted && room.numberOfUnreadNotifications > 0) {
                     room.numberOfUnreadNotifications
                 } else {
                     null

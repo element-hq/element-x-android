@@ -11,9 +11,9 @@ package io.element.android.libraries.designsystem.atomic.atoms
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -72,17 +72,26 @@ fun CounterAtom(
     Box(
         modifier = modifier
             .then(if (count > MAX_COUNT) {
-                // Use width instead of size to avoid clipping the text when the count is greater than MAX_COUNT
-                Modifier.width(badgeSize.toDp() + 10.dp)
+                Modifier
             } else {
+                // We add 1.dp to the minimum size to make sure the text does not look cramped or is clipped
                 Modifier.size(badgeSize.toDp() + 1.dp)
             })
+            // Equivalent to adding a circle shape if the aspect ratio is 1:1, but allows for a pill shape if the count is greater than MAX_COUNT
             .clip(RoundedCornerShape(percent = 50))
             .background(
                 containerColor ?: if (isCritical) {
                     ElementTheme.colors.iconCriticalPrimary
                 } else {
                     ElementTheme.colors.iconAccentPrimary
+                }
+            )
+            .then(
+        if (count > MAX_COUNT) {
+                    // We add some padding to the badge when the count is greater than MAX_COUNT to make it look like the circle-shaped badges
+                    Modifier.padding(horizontal = 2.dp, vertical = 0.5.dp)
+                } else {
+                    Modifier
                 }
             )
     ) {
@@ -105,7 +114,7 @@ object CounterAtomDefaults {
 @PreviewsDayNight
 @Composable
 internal fun CounterAtomPreview() = ElementPreview {
-    Column(verticalArrangement = spacedBy(2.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Row(horizontalArrangement = spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
         CounterAtom(count = 0)
         CounterAtom(count = 4)
         CounterAtom(count = 99)

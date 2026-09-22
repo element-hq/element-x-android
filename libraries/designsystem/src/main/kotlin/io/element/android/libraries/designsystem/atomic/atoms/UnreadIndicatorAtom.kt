@@ -13,7 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -70,7 +70,7 @@ fun UnreadIndicatorAtom(
 @PreviewsDayNight
 @Composable
 internal fun UnreadIndicatorAtomPreview() = ElementPreview {
-    Column(verticalArrangement = Arrangement.spacedBy(2.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Row(horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
         UnreadIndicatorAtom()
         UnreadIndicatorAtom(count = 1)
         UnreadIndicatorAtom(count = 10)
