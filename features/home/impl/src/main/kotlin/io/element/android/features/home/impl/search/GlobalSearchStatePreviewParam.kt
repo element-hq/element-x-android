@@ -36,77 +36,139 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
+private val tombstonedRoomId = RoomId("!tombstone:server.org")
+private val roomId1 = RoomId("!roomId:server.org")
+private val roomId2 = RoomId("!roomId2:server.org")
+private val dmRoomId = RoomId("!dm:server.org")
+private const val AN_AVATAR_URL = "https://example.com/avatar.png"
+private val aCanonicalAlias = RoomAlias("#alias:server.org")
+
 class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState> {
     override val values: Sequence<GlobalSearchState>
-        get() = sequenceOf(
-            // Not enabled, no preview
-            aGlobalSearchState(isEnabled = false),
-            aGlobalSearchState(isSearchActive = true, queryState = TextFieldState("Query")),
-            aGlobalSearchState(
-                isSearchActive = true,
-                currentTarget = GlobalSearchTarget.ROOMS,
-                queryState = TextFieldState("Query"),
-                results = AsyncData.Loading(),
-            ),
-            aGlobalSearchState(
-                isSearchActive = true,
-                currentTarget = GlobalSearchTarget.ROOMS,
-                queryState = TextFieldState("Query"),
-                results = AsyncData.Success(
-                    GlobalSearchResults.RoomListResults(
-                        results = aRoomListRoomSummaryList().mapIndexed { index, summary ->
-                            summary.copy(name = "Room with Query #${index + 1}")
-                        }.toPersistentList()
+        get() {
+            return sequenceOf(
+                // Not enabled, no preview
+                aGlobalSearchState(isEnabled = false),
+                aGlobalSearchState(isSearchActive = true, queryState = TextFieldState("Query")),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.ROOMS,
+                    queryState = TextFieldState("Query"),
+                    results = AsyncData.Loading(),
+                ),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.ROOMS,
+                    queryState = TextFieldState("Query"),
+                    results = AsyncData.Success(
+                        GlobalSearchResults.RoomListResults(
+                            results = aRoomListRoomSummaryList().mapIndexed { index, summary ->
+                                summary.copy(name = "Room with Query #${index + 1}")
+                            }.toPersistentList()
+                        )
+                    ),
+                ),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.MESSAGES,
+                    queryState = TextFieldState("Query"),
+                    results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf(
+                        MessageSearchResultItem.Message(
+                            messageSearchResult = aMessageSearchResult(eventId = EventId("\$eventId1:server.org")),
+                            body = "A message with Query",
+                            roomInfo = aRoomInfo(),
+                            formattedTimestamp = "12:00",
+                        ),
+                        MessageSearchResultItem.Media(
+                            messageSearchResult = aMessageSearchResult(eventId = EventId("\$eventId2:server.org")),
+                            mediaContent = MediaSearchResultContent(
+                                filename = "file.png",
+                                extension = "PNG",
+                                caption = "A caption containing Query",
+                                formattedSize = "1 MB",
+                                thumbnailSource = MediaSource("https://example.com/thumbnail.png"),
+                                thumbnailType = AttachmentThumbnailType.Image,
+                                blurhash = null,
+                            ),
+                            roomInfo = aRoomInfo(),
+                            formattedTimestamp = "12:00",
+                        ),
+                    ))),
+                ),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.MESSAGES,
+                    queryState = TextFieldState("Query"),
+                    results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf())),
+                ),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.ROOMS,
+                    queryState = TextFieldState(),
+                    results = AsyncData.Uninitialized,
+                    history = AsyncData.Success(
+                        persistentListOf(
+                            SearchHistoryResultItem.Query("Query 1"),
+                            SearchHistoryResultItem.Query("Query 2"),
+                            SearchHistoryResultItem.Room(
+                                roomId = roomId1,
+                                roomInfo = aRoomInfo(
+                                    id = roomId1,
+                                    name = "A room with alias",
+                                    avatarUrl = AN_AVATAR_URL,
+                                    canonicalAlias = aCanonicalAlias,
+                                )
+                            ),
+                            SearchHistoryResultItem.Room(
+                                roomId = roomId2,
+                                roomInfo = aRoomInfo(
+                                    id = roomId2,
+                                    name = "A room",
+                                    avatarUrl = AN_AVATAR_URL,
+                                )
+                            ),
+                            SearchHistoryResultItem.Room(
+                                roomId = dmRoomId,
+                                roomInfo = aRoomInfo(
+                                    id = dmRoomId,
+                                    name = "A DM",
+                                    isDm = true,
+                                    heroes = listOf(MatrixUser(UserId("@user:server.org"), "User", AN_AVATAR_URL)),
+                                    avatarUrl = AN_AVATAR_URL,
+                                    canonicalAlias = aCanonicalAlias,
+                                )
+                            ),
+                            SearchHistoryResultItem.Room(
+                                roomId = tombstonedRoomId,
+                                roomInfo = aRoomInfo(
+                                    id = tombstonedRoomId,
+                                    name = "A tombstoned room",
+                                    avatarUrl = AN_AVATAR_URL,
+                                    successorRoom = SuccessorRoom(
+                                        roomId = RoomId("!successorRoom:server.org"),
+                                        reason = null,
+                                    ),
+                                ),
+                            ),
+                        )
                     )
                 ),
-            ),
-            aGlobalSearchState(
-                isSearchActive = true,
-                currentTarget = GlobalSearchTarget.MESSAGES,
-                queryState = TextFieldState("Query"),
-                results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf(
-                    MessageSearchResultItem.Message(
-                        messageSearchResult = aMessageSearchResult(eventId = EventId("\$eventId1:server.org")),
-                        body = "A message with Query",
-                        roomInfo = aRoomInfo(),
-                        formattedTimestamp = "12:00",
-                    ),
-                    MessageSearchResultItem.Media(
-                        messageSearchResult = aMessageSearchResult(eventId = EventId("\$eventId2:server.org")),
-                        mediaContent = MediaSearchResultContent(
-                            filename = "file.png",
-                            extension = "PNG",
-                            caption = "A caption containing Query",
-                            formattedSize = "1 MB",
-                            thumbnailSource = MediaSource("https://example.com/thumbnail.png"),
-                            thumbnailType = AttachmentThumbnailType.Image,
-                            blurhash = null,
-                        ),
-                        roomInfo = aRoomInfo(),
-                        formattedTimestamp = "12:00",
-                    ),
-                ))),
-            ),
-            aGlobalSearchState(
-                isSearchActive = true,
-                currentTarget = GlobalSearchTarget.MESSAGES,
-                queryState = TextFieldState("Query"),
-                results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf())),
-            ),
-        )
+            )
+        }
 }
 
 fun aRoomInfo(
-    id: RoomId = RoomId("!roomId:server.org"),
+    id: RoomId = roomId1,
     name: String? = "A room",
     rawName: String? = "A room raw name",
     topic: String? = "A room topic",
-    avatarUrl: String? = "https://example.com/avatar.png",
+    avatarUrl: String? = AN_AVATAR_URL,
     isPublic: Boolean = true,
     isDirect: Boolean = false,
     isEncrypted: Boolean = false,
@@ -217,7 +279,7 @@ fun aMessageContent(
 )
 
 internal fun aMessageSearchResult(
-    roomId: RoomId = RoomId("!roomId:server.org"),
+    roomId: RoomId = roomId1,
     eventId: EventId = EventId("\$eventId:server.org"),
     senderId: UserId = UserId("@user:server.org"),
     senderProfile: ProfileDetails = aProfileDetailsReady(),
@@ -238,6 +300,7 @@ internal fun aGlobalSearchState(
     queryState: TextFieldState = TextFieldState(),
     currentTarget: GlobalSearchTarget = GlobalSearchTarget.ROOMS,
     results: AsyncData<GlobalSearchResults> = AsyncData.Uninitialized,
+    history: AsyncData<ImmutableList<SearchHistoryResultItem>> = AsyncData.Uninitialized,
     eventSink: (GlobalSearchEvent) -> Unit = {},
 ) = GlobalSearchState(
     isEnabled = isEnabled,
@@ -245,5 +308,6 @@ internal fun aGlobalSearchState(
     queryState = queryState,
     currentTarget = currentTarget,
     results = results,
+    history = history,
     eventSink = eventSink
 )
