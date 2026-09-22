@@ -13,7 +13,8 @@ import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,14 +23,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Text
 
 private const val MAX_COUNT = 99
-private const val MAX_COUNT_STRING = "+$MAX_COUNT"
+private const val MAX_COUNT_STRING = "$MAX_COUNT+"
 
 /**
  * A counter atom that displays a number in a circle.
@@ -39,7 +42,7 @@ private const val MAX_COUNT_STRING = "+$MAX_COUNT"
  * If the number is less than 1, the counter will not be displayed.
  * @param modifier The modifier to apply to this layout.
  * @param containerColor The background color of the counter. When null, uses [isCritical] to pick a default.
- * @param contentColor The text color inside the counter. When null, uses [textOnSolidPrimary].
+ * @param contentColor The text color inside the counter. When null, uses [SemanticColors.textOnSolidPrimary].
  * @param textStyle The style to apply to the text inside the counter.
  * @param isCritical If true, the counter will use a critical color scheme, otherwise it will use an accent color scheme.
  * Only used when [containerColor] is null.
@@ -65,11 +68,16 @@ fun CounterAtom(
         style = textStyle
     )
     val textSize = textLayoutResult.size
-    val squareSize = maxOf(textSize.width, textSize.height)
+    val badgeSize = textSize.height
     Box(
         modifier = modifier
-            .size(squareSize.toDp() + 1.dp)
-            .clip(CircleShape)
+            .then(if (count > MAX_COUNT) {
+                // Use width instead of size to avoid clipping the text when the count is greater than MAX_COUNT
+                Modifier.width(badgeSize.toDp() + 10.dp)
+            } else {
+                Modifier.size(badgeSize.toDp() + 1.dp)
+            })
+            .clip(RoundedCornerShape(percent = 50))
             .background(
                 containerColor ?: if (isCritical) {
                     ElementTheme.colors.iconCriticalPrimary
@@ -89,13 +97,15 @@ fun CounterAtom(
 
 object CounterAtomDefaults {
     val textStyle: TextStyle
-        @Composable get() = ElementTheme.typography.fontBodyMdMedium
+        @Composable get() = ElementTheme.typography.fontBodyMdRegular
+            // We use a negative letter spacing to make the text fit better in the badge.
+            .copy(letterSpacing = (-0.25).sp)
 }
 
 @PreviewsDayNight
 @Composable
 internal fun CounterAtomPreview() = ElementPreview {
-    Column(verticalArrangement = spacedBy(2.dp)) {
+    Column(verticalArrangement = spacedBy(2.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         CounterAtom(count = 0)
         CounterAtom(count = 4)
         CounterAtom(count = 99)

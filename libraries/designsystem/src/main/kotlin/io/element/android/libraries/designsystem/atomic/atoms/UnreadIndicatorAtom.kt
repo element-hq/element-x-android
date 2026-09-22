@@ -11,11 +11,15 @@ package io.element.android.libraries.designsystem.atomic.atoms
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -46,10 +50,9 @@ fun UnreadIndicatorAtom(
                 .semantics {
                     contentDescription?.let { this.contentDescription = it }
                 }
-                .then(if (border != null) Modifier.border(border, CircleShape) else Modifier),
+                .then(if (border != null) Modifier.border(border, RoundedCornerShape(percent = 50)) else Modifier),
             containerColor = color,
             contentColor = ElementTheme.colors.bgCanvasDefault,
-            textStyle = ElementTheme.typography.fontBodySmMedium,
         )
         else -> Box(
             modifier = modifier
@@ -67,5 +70,11 @@ fun UnreadIndicatorAtom(
 @PreviewsDayNight
 @Composable
 internal fun UnreadIndicatorAtomPreview() = ElementPreview {
-    UnreadIndicatorAtom()
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        UnreadIndicatorAtom()
+        UnreadIndicatorAtom(count = 1)
+        UnreadIndicatorAtom(count = 10)
+        UnreadIndicatorAtom(count = 99)
+        UnreadIndicatorAtom(count = 999)
+    }
 }
