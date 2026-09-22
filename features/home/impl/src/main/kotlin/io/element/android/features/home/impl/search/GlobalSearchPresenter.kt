@@ -95,7 +95,7 @@ class GlobalSearchPresenter(
                     when (result) {
                         is SearchHistoryResult.Query -> SearchHistoryResultItem.Query(term = result.term)
                         is SearchHistoryResult.Room -> {
-                            val roomInfo = matrixClient.getRoomInfoFlow(result.roomId).first().getOrElse { return@mapNotNull null }
+                            val roomInfo = matrixClient.getRoomInfo(result.roomId).getOrNull() ?: return@mapNotNull null
                             SearchHistoryResultItem.Room(roomId = result.roomId, roomInfo = roomInfo)
                         }
                     }
@@ -160,7 +160,7 @@ class GlobalSearchPresenter(
                         // result, which can be slow if we have a lot of results. The original order is kept by using `awaitAll()`.
                         val mappedResults = results.map { result ->
                             async(coroutineDispatchers.computation) {
-                                val roomInfo = matrixClient.getRoomInfoFlow(result.roomId).first().getOrElse { return@async null }
+                                val roomInfo = matrixClient.getRoomInfo(result.roomId).getOrNull() ?: return@async null
                                 val formattedTimestamp = dateFormatter.format(
                                     timestamp = result.timestamp,
                                     mode = DateFormatterMode.TimeOrDate,

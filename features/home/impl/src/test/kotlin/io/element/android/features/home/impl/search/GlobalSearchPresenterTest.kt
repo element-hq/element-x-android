@@ -46,13 +46,11 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import java.util.Optional
 
 class GlobalSearchPresenterTest {
     @Test
@@ -208,7 +206,7 @@ class GlobalSearchPresenterTest {
     fun `present - message search results are mapped when the message search emits`() = runTest {
         val messageSearch = FakeMessageSearch()
         val matrixClient = FakeMatrixClient().apply {
-            getRoomInfoFlowLambda = { flowOf(Optional.of(aRoomInfo())) }
+            getRoomInfoLambda = { Result.success(aRoomInfo()) }
         }
         val presenter = createGlobalSearchPresenter(
             messageSearchService = FakeMessageSearchService(messageSearch),
@@ -235,7 +233,7 @@ class GlobalSearchPresenterTest {
     fun `present - message search displays the uninitialized state after removing the query`() = runTest {
         val messageSearch = FakeMessageSearch()
         val matrixClient = FakeMatrixClient().apply {
-            getRoomInfoFlowLambda = { flowOf(Optional.of(aRoomInfo())) }
+            getRoomInfoLambda = { Result.success(aRoomInfo()) }
         }
         val presenter = createGlobalSearchPresenter(
             messageSearchService = FakeMessageSearchService(messageSearch),
@@ -270,7 +268,7 @@ class GlobalSearchPresenterTest {
     fun `present - UpdateVisibleRange triggers pagination for messages when near the end`() = runTest {
         val messageSearch = FakeMessageSearch()
         val matrixClient = FakeMatrixClient().apply {
-            getRoomInfoFlowLambda = { flowOf(Optional.of(aRoomInfo())) }
+            getRoomInfoLambda = { Result.success(aRoomInfo()) }
         }
         val presenter = createGlobalSearchPresenter(
             messageSearchService = FakeMessageSearchService(messageSearch),
