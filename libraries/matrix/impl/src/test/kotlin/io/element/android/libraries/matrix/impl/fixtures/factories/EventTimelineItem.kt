@@ -16,6 +16,7 @@ import org.matrix.rustcomponents.sdk.EventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.LazyTimelineItemProvider
 import org.matrix.rustcomponents.sdk.ProfileDetails
+import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.Receipt
 import org.matrix.rustcomponents.sdk.TimelineItemContent
 import uniffi.matrix_sdk_ui.EventItemOrigin
@@ -37,6 +38,9 @@ internal fun aRustEventTimelineItem(
     readReceipts: Map<String, Receipt> = emptyMap(),
     origin: EventItemOrigin? = EventItemOrigin.SYNC,
     canBeRepliedTo: Boolean = true,
+    reactions: List<Reaction> = emptyList(),
+    editSendState: EventSendState? = null,
+    redactionSendState: EventSendState? = null,
     lazyProvider: LazyTimelineItemProvider = FakeFfiLazyTimelineItemProvider(),
 ) = EventTimelineItem(
     isRemote = isRemote,
@@ -55,5 +59,8 @@ internal fun aRustEventTimelineItem(
     readReceipts = readReceipts,
     origin = origin,
     canBeRepliedTo = canBeRepliedTo,
+    reactions = reactions,
+    editSendState = editSendState,
+    redactionSendState = redactionSendState,
     lazyProvider = lazyProvider,
 )
