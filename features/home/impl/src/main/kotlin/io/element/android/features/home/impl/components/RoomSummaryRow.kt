@@ -365,12 +365,8 @@ private fun MessagePreviewAndIndicatorRow(
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
-                val count = if (showUnreadCount) {
-                    if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
-                        room.numberOfUnreadMessages
-                    } else {
-                        room.numberOfUnreadNotifications
-                    }
+                val count = if (showUnreadCount && room.isHighlighted && room.numberOfUnreadNotifications > 0) {
+                    room.numberOfUnreadNotifications
                 } else {
                     null
                 }
