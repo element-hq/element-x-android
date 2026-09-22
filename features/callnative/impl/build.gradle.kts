@@ -8,7 +8,7 @@ import extension.testCommonDependencies
  * Please see LICENSE files in the repository root for full details.
  */
 plugins {
-    id("io.element.android-library")
+    id("io.element.android-compose-library")
 }
 
 android {
@@ -29,8 +29,10 @@ dependencies {
     implementation(platform("io.element.android:element-call-bom:$elementCallVersion"))
     implementation(libs.element.call.api)
     implementation(libs.element.call.impl)
+    implementation(libs.element.call.ui)
 
     implementation(projects.features.call.api)
+    implementation(projects.libraries.designsystem)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)
     implementation(projects.libraries.featureflag.api)
