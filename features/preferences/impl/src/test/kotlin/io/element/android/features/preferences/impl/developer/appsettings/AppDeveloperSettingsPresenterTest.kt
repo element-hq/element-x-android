@@ -47,6 +47,7 @@ class AppDeveloperSettingsPresenterTest {
         )
         presenter.test {
             awaitItem().also { state ->
+                assertThat(state.isDeveloperModeEnabled).isFalse()
                 assertThat(state.features).isEmpty()
                 assertThat(state.customElementCallBaseUrlState).isNotNull()
                 assertThat(state.customElementCallBaseUrlState.baseUrl).isNull()
@@ -126,6 +127,26 @@ class AppDeveloperSettingsPresenterTest {
             }
             awaitItem().also { state ->
                 assertThat(state.tracingLogLevel.dataOrNull()).isEqualTo(LogLevelItem.TRACE)
+            }
+        }
+    }
+
+    @Test
+    fun `present - developer mode on off`() = runTest {
+        val preferences = InMemoryAppPreferencesStore()
+        val presenter = createAppDeveloperSettingsPresenter(preferencesStore = preferences)
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.isDeveloperModeEnabled).isFalse()
+                state.eventSink(AppDeveloperSettingsEvent.SetDeveloperModeEnabled(true))
+            }
+            awaitItem().also { state ->
+                assertThat(state.isDeveloperModeEnabled).isTrue()
+                state.eventSink(AppDeveloperSettingsEvent.SetDeveloperModeEnabled(false))
+            }
+            awaitItem().also { state ->
+                assertThat(state.isDeveloperModeEnabled).isFalse()
             }
         }
     }
