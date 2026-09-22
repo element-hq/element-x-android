@@ -14,7 +14,7 @@
   <string name="confirm_recovery_key_banner_title">"您的金鑰儲存空間並未同步"</string>
   <string name="full_screen_intent_banner_message">"為確保您永遠不會錯過重要通話，請變更設定以允許在手機鎖定時允許全螢幕通知。"</string>
   <string name="full_screen_intent_banner_title">"提升您的通話體驗"</string>
-  <string name="screen_home_tab_chats">"所有聊天室"</string>
+  <string name="screen_home_tab_chats">"聊天"</string>
   <string name="screen_home_tab_spaces">"空間"</string>
   <string name="screen_invites_decline_chat_message">"您確定您想要拒絕加入 %1$s 的邀請嗎？"</string>
   <string name="screen_invites_decline_chat_title">"拒絕邀請"</string>
@@ -46,7 +46,7 @@
   <string name="screen_roomlist_filter_unreads_empty_state_title">"恭喜！
 您沒有任何未讀的訊息！"</string>
   <string name="screen_roomlist_knock_event_sent_description">"已傳送加入請求"</string>
-  <string name="screen_roomlist_main_space_title">"所有聊天室"</string>
+  <string name="screen_roomlist_main_space_title">"聊天"</string>
   <string name="screen_roomlist_mark_as_read">"標為已讀"</string>
   <string name="screen_roomlist_mark_as_unread">"標為未讀"</string>
   <string name="screen_roomlist_tombstoned_room_description">"此聊天室已升級"</string>

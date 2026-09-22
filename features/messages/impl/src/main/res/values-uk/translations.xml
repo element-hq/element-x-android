@@ -48,6 +48,12 @@
   <string name="screen_room_attachment_source_location">"Поділитися місцеперебуванням"</string>
   <string name="screen_room_attachment_source_poll">"Опитування"</string>
   <string name="screen_room_attachment_text_formatting">"Форматування тексту"</string>
+  <string name="screen_room_confirm_removal_message">"Ви впевнені, що хочете вилучити це повідомлення?"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Причина (необов\'язково)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Ввести…"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder_android">"Причина…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Необов\'язково)"</string>
+  <string name="screen_room_confirm_removal_title">"Підтвердити вилучення"</string>
   <string name="screen_room_encrypted_history_banner">"Історія повідомлень наразі недоступна."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Історія повідомлень недоступна в цій кімнаті. Звірте цей пристрій, щоб побачити історію повідомлень."</string>
   <string name="screen_room_invite_again_alert_message">"Чи хотіли б ви запросити їх знову?"</string>

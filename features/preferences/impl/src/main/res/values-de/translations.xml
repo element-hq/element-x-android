@@ -52,6 +52,10 @@
   <string name="screen_edit_profile_error_title">"Profil kann nicht aktualisiert werden"</string>
   <string name="screen_edit_profile_title">"Profil bearbeiten"</string>
   <string name="screen_edit_profile_updating_details">"Profil wird aktualisiert …"</string>
+  <string name="screen_labs_enable_gallery">"Galerie-Nachrichten"</string>
+  <string name="screen_labs_enable_gallery_description">"Sende mehrere Bilder oder Videos auf einmal. Auf Mobilgeräten stabil, von der Web-Version aber noch nicht unterstützt."</string>
+  <string name="screen_labs_enable_knocking">"Beitritt anfragen"</string>
+  <string name="screen_labs_enable_knocking_description">"Nutzer können Zugang zu einem Chat anfragen, der nicht öffentlich zugänglich ist. Auf Mobilgeräten stabil, die Web-Implementierung existiert, ist aber experimentell."</string>
   <string name="screen_labs_enable_threads">"Thread-Antworten aktivieren"</string>
   <string name="screen_labs_enable_threads_description">"Die App wird neu gestartet, um diese Änderung zu übernehmen."</string>
   <string name="screen_labs_header_description">"Probier unsere neuesten Ideen in der Entwicklung aus. Diese Funktionen sind noch nicht fertiggestellt; sie können instabil sein und sich noch ändern."</string>

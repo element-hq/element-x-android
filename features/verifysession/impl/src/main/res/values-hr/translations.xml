@@ -38,6 +38,8 @@
   <string name="screen_session_verification_request_title">"Zatražena je provjera"</string>
   <string name="screen_session_verification_they_dont_match">"Ne podudaraju se"</string>
   <string name="screen_session_verification_they_match">"Podudaraju se"</string>
+  <string name="screen_session_verification_unavailable_subtitle">"Molimo koristite drugi uređaj ili ključ za oporavak."</string>
+  <string name="screen_session_verification_unavailable_title">"Verifikacija s ovim uređajem trenutno nije dostupna"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Prije nego što odavde započnete provjeru, provjerite jeste li otvorili aplikaciju na drugom uređaju."</string>
   <string name="screen_session_verification_use_another_device_title">"Otvorite aplikaciju na drugom potvrđenom uređaju"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Radi dodatne sigurnosti potvrdite ovog korisnika tako da usporedite skup emotikona na svojim uređajima. Učinite to koristeći se pouzdanim načinom komunikacije."</string>
