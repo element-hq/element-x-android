@@ -112,6 +112,7 @@ fun GlobalSearchView(
                 },
                 onSelectSearchResult = { roomId, eventId ->
                     onSelectSearchResult(roomId, eventId)
+                    state.eventSink(GlobalSearchEvent.SaveRoomToHistory(roomId))
                 },
             )
         }
@@ -169,10 +170,7 @@ private fun GlobalSearchContent(
                     results?.isEmpty() == true -> emptySearchResults(query = state.queryState.text.toString())
                     results is GlobalSearchResults.RoomListResults -> roomListResults(
                         results = results.results,
-                        onRoomClick = { roomId ->
-                            onSelectSearchResult(roomId, null)
-                            state.eventSink(GlobalSearchEvent.SaveRoomToHistory(roomId))
-                        },
+                        onRoomClick = { roomId -> onSelectSearchResult(roomId, null) },
                     )
                     results is GlobalSearchResults.MessageSearchResults -> messageSearchResults(
                         results = results.results,
