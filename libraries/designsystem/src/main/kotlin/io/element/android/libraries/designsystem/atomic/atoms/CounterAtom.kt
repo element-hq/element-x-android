@@ -97,7 +97,7 @@ fun CounterAtom(
 
 object CounterAtomDefaults {
     val textStyle: TextStyle
-        @Composable get() = ElementTheme.typography.fontBodyMdRegular
+        @Composable get() = ElementTheme.typography.fontBodySmMedium
             // We use a negative letter spacing to make the text fit better in the badge.
             .copy(letterSpacing = (-0.25).sp)
 }
