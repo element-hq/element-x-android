@@ -66,6 +66,8 @@ import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
@@ -95,9 +97,11 @@ fun PreferencesRootView(
             snackbarHost = { SnackbarHost(snackbarHostState) }
         ) {
             UserPreferences(
-                modifier = Modifier.clickable {
-                    onOpenAccountSettings()
-                },
+                modifier = Modifier
+                    .testTag(TestTags.settingsUserProfile)
+                    .clickable {
+                        onOpenAccountSettings()
+                    },
                 matrixUser = state.myUser,
             )
             if (state.userStatusState != null) {
@@ -152,8 +156,8 @@ private fun BoxScope.UserStatusUpdateIndicator(updateStatusAction: AsyncAction<U
     AsyncActionIndicator(
         asyncAction = updateStatusAction,
         modifier = Modifier
-                .align(Alignment.TopCenter)
-                .statusBarsPadding(),
+            .align(Alignment.TopCenter)
+            .statusBarsPadding(),
         loading = { AsyncIndicator.Loading(text = stringResource(CommonStrings.common_saving)) },
         failure = { _ -> AsyncIndicator.Failure(text = stringResource(CommonStrings.common_failed)) },
     )
@@ -248,10 +252,10 @@ private fun ColumnScope.MultiAccountSection(
                 state.otherSessions.forEach { matrixUser ->
                     MatrixUserRow(
                         modifier = Modifier
-                                .clickable {
-                                    state.eventSink(PreferencesRootEvent.SwitchToSession(matrixUser.userId))
-                                }
-                                .padding(top = 2.dp, bottom = 2.dp, end = 8.dp),
+                            .clickable {
+                                state.eventSink(PreferencesRootEvent.SwitchToSession(matrixUser.userId))
+                            }
+                            .padding(top = 2.dp, bottom = 2.dp, end = 8.dp),
                         matrixUser = matrixUser,
                         avatarSize = AvatarSize.AccountItem,
                         verticalSpaceWidth = 16.dp,
@@ -359,9 +363,9 @@ private fun ColumnScope.Footer(
 ) {
     Text(
         modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .clickable(enabled = onClick != null, onClick = onClick ?: {})
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 24.dp),
+            .align(Alignment.CenterHorizontally)
+            .clickable(enabled = onClick != null, onClick = onClick ?: {})
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 24.dp),
         textAlign = TextAlign.Center,
         text = version,
         style = ElementTheme.typography.fontBodySmRegular,

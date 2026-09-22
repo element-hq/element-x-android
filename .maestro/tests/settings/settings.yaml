@@ -4,19 +4,35 @@ appId: ${MAESTRO_APP_ID}
     id: "home_screen-settings"
 - assertVisible: "Settings"
 - takeScreenshot: build/maestro/600-Settings
+
+## App settings section
+- assertVisible: "Appearance"
+
+- tapOn:
+    text: "Media upload quality"
+- assertVisible: "Media upload quality"
+- back
+
+- tapOn:
+    text: "Screen lock"
+- assertVisible: "Choose PIN"
+- hideKeyboard
+- back
+
+- tapOn:
+    text: "Location sharing"
+- assertVisible: "Live location updates"
+- back
+
+## General section
 - tapOn:
     text: "Analytics"
 - assertVisible: "Share analytics data"
 - back
 
 - tapOn:
-    text: "Notifications"
-- assertVisible: "Enable notifications on this device"
-- back
-
-- tapOn:
-    text: "Report a problem"
-- assertVisible: "Report a problem"
+    text: "Labs"
+- assertVisible: "Feeling experimental?"
 - back
 
 - tapOn:
@@ -27,20 +43,32 @@ appId: ${MAESTRO_APP_ID}
 - back
 
 - tapOn:
-    text: "Screen lock"
-- assertVisible: "Choose PIN"
-- hideKeyboard
-- back
-
-- tapOn:
-    text: "Advanced settings"
+    text: "Developer options"
+- assertVisible: "Feature flags"
 - assertVisible: "View source"
 - back
 
+## Account settings
 - tapOn:
-    text: "Developer options"
-- assertVisible: "Feature flags"
+    id: "settings-user_profile"
+- assertVisible: "Your account"
+- takeScreenshot: build/maestro/610-AccountSettings
+
+- tapOn:
+    text: "Notifications"
+- assertVisible: "Enable notifications on this device"
 - back
 
+- tapOn:
+    text: "Moderation & safety"
+- assertVisible: "Your appearance"
+- back
+
+- tapOn:
+    text: "Report a problem"
+- assertVisible: "Report a problem"
+- back
+
+- back
 - back
 - runFlow: ../assertions/assertHomeDisplayed.yaml
