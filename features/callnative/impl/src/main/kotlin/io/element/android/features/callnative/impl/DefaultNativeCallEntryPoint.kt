@@ -21,7 +21,6 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 /**
  * Starts a call on the native MatrixRTC stack.
@@ -37,15 +36,6 @@ class DefaultNativeCallEntryPoint(
     @AppCoroutineScope private val appCoroutineScope: CoroutineScope,
 ) : NativeCallEntryPoint {
     override fun startCall(callData: CallData) {
-        // The call does nothing past "requested" until the microphone permission is answered, and
-        // only an Activity can ask for one. Until the call has a UI of its own, the only answer
-        // available is the permission the app already holds - so check it before starting rather
-        // than after. Starting a call nobody can answer leaves it running and refusing every later
-        // attempt for the rest of the session, with nothing on screen to hang it up.
-        if (!hasMicrophonePermission()) {
-            Timber.w("NativeCall: RECORD_AUDIO is not granted and there is no call UI to ask for it, not starting the call")
-            return
-        }
         appCoroutineScope.launch {
             val controller = controllers.getOrBuild(callData.sessionId) ?: return@launch
             controller.startCall(
@@ -54,13 +44,14 @@ class DefaultNativeCallEntryPoint(
                     isAudioCall = callData.isAudioCall,
                 )
             )
-            controller.setMicrophonePermissionGranted(true)
-            // A call with no UI is never the screen the user is looking at, and the snapshot assumes
-            // it is. Saying so matters for more than tidiness: the component holds a proximity wake
-            // lock while a maximized audio call is on screen, so leaving the default in place blanks
-            // the display whenever a hand goes near the top of the phone - including when reaching
-            // for the notification shade, which is the only way to hang this call up.
-            controller.setMaximized(false)
+            // The call screen asks for the microphone itself, and is where the answer normally comes
+            // from. This covers the case it cannot reach: a call answered from a notification while
+            // the app is in the background has no call screen composed yet, and a call waiting on a
+            // permission nobody is there to grant would sit unanswered. Reporting a permission we
+            // already hold is idempotent, so the screen asking again later costs nothing.
+            if (hasMicrophonePermission()) {
+                controller.setMicrophonePermissionGranted(true)
+            }
         }
     }
 
