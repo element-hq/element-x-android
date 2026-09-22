@@ -474,19 +474,20 @@ private fun Modifier.linkTapHandler(
 ): Modifier = pointerInput(text) {
     detectTapGestures(
         onTap = { offset ->
-            val url = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
-            context.onLinkClick(url, text.text)
+            val (url, urlText) = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
+            context.onLinkClick(url, urlText)
         },
         onLongPress = { offset ->
-            val url = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
-            context.onLinkLongClick(url, text.text)
+            val (url, urlText) = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
+            context.onLinkLongClick(url, urlText)
         },
     )
 }
 
-private fun TextLayoutResult.urlAt(offset: Offset, text: AnnotatedString): String? {
+private fun TextLayoutResult.urlAt(offset: Offset, text: AnnotatedString): Pair<String, String>? {
     val position = getOffsetForPosition(offset)
-    return text.getStringAnnotations(LINK_ANNOTATION_TAG, position, position).firstOrNull()?.item
+    val urlAnnotation = text.getStringAnnotations(LINK_ANNOTATION_TAG, position, position).firstOrNull() ?: return null
+    return urlAnnotation.item to text.substring(urlAnnotation.start, urlAnnotation.end)
 }
 
 private val BlockSpacing: Dp = 8.dp
