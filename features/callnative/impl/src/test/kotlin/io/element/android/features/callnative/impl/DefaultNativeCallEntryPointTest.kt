@@ -36,13 +36,14 @@ class DefaultNativeCallEntryPointTest : RobolectricTest() {
         runCurrent()
 
         assertThat(controller.startedCalls.map { it.roomId.value }).containsExactly(A_ROOM_ID.value)
-        // Without this the call parks at RequestingPermission forever, and because a call is then
-        // "running" every later attempt is refused with nothing on screen to hang it up.
+        // The call screen normally answers this, but it is not composed when a call is answered from
+        // a notification with the app in the background - and a call waiting on a permission nobody
+        // is there to grant sits unanswered and refuses every later attempt.
         assertThat(controller.microphonePermissionAnswers).containsExactly(true)
     }
 
     @Test
-    fun `a call with no UI is not maximized`() = runTest {
+    fun `a call the user placed opens on the call screen, not in the minimized bar`() = runTest {
         grantMicrophonePermission()
         val controller = FakeElementCallController()
         val entryPoint = createEntryPoint(controller)
@@ -50,14 +51,14 @@ class DefaultNativeCallEntryPointTest : RobolectricTest() {
         entryPoint.startCall(A_CALL_DATA)
         runCurrent()
 
-        // The snapshot assumes a call is on screen. While there is no call UI it never is, and the
-        // component holds a proximity wake lock for a maximized audio call - which blanks the display
-        // whenever a hand goes near the top of the phone, including reaching for the shade.
-        assertThat(controller.maximizedCalls).containsExactly(false)
+        // A snapshot starts maximized, which is what the user asked for by pressing call. Saying
+        // otherwise here is what a UI-less build had to do, and it would now dock a freshly placed
+        // call into the bar.
+        assertThat(controller.maximizedCalls).isEmpty()
     }
 
     @Test
-    fun `no call is started when the microphone permission is missing`() = runTest {
+    fun `the call still starts without the microphone permission, so the call screen can ask`() = runTest {
         shadowOf(RuntimeEnvironment.getApplication()).denyPermissions(Manifest.permission.RECORD_AUDIO)
         val controller = FakeElementCallController()
         val entryPoint = createEntryPoint(controller)
@@ -65,9 +66,10 @@ class DefaultNativeCallEntryPointTest : RobolectricTest() {
         entryPoint.startCall(A_CALL_DATA)
         runCurrent()
 
-        // Nothing to ask with, so nothing is started: a call left unanswered would wedge the
-        // controller for the rest of the session.
-        assertThat(controller.startedCalls).isEmpty()
+        assertThat(controller.startedCalls).hasSize(1)
+        // Nothing to report, and nothing to report it from: only an Activity can ask, and the call
+        // screen does exactly that once it appears.
+        assertThat(controller.microphonePermissionAnswers).isEmpty()
     }
 
     @Test

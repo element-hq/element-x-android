@@ -9,6 +9,8 @@ package io.element.android.features.callnative.impl
 
 import io.element.android.call.api.ElementCallController
 import io.element.android.libraries.matrix.api.core.SessionId
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 /**
  * @param controller what [getOrBuild] answers with, or null to stand for a session that cannot be
@@ -23,6 +25,8 @@ class FakeElementCallControllers(
         requestedSessions += sessionId
         return controller
     }
+
+    override fun controller(sessionId: SessionId): Flow<ElementCallController?> = flowOf(controller)
 
     override fun withRunningCall(): ElementCallController? =
         controller?.takeIf { it.state.value != null }
