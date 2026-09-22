@@ -48,6 +48,7 @@ import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.compound.colors.SemanticColorsLightDark
+import io.element.android.features.callnative.api.NativeCallHost
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.SessionEnterpriseService
@@ -142,6 +143,7 @@ class LoggedInFlowNode(
     private val shareEntryPoint: ShareEntryPoint,
     private val matrixClient: MatrixClient,
     private val sendingQueue: SendQueues,
+    private val nativeCallHost: NativeCallHost,
     private val incomingVerificationEntryPoint: IncomingVerificationEntryPoint,
     private val mediaPreviewConfigMigration: MediaPreviewConfigMigration,
     private val sessionEnterpriseService: SessionEnterpriseService,
@@ -697,15 +699,19 @@ class LoggedInFlowNode(
         ) {
             CompositionLocalProvider(LocalMapTilerConfig provides updatedMapTilerConfig) {
                 val isOnline by syncService.isOnline.collectAsState()
-                ConnectivityIndicatorContainer(
-                    isOnline = isOnline,
-                    modifier = modifier,
-                ) { contentModifier ->
-                    Box(modifier = contentModifier) {
-                        val ftueState by ftueService.state.collectAsState()
-                        BackstackView(transitionHandler = rememberLoggedInFlowTransitionHandler(backstack))
-                        if (ftueState is FtueState.Complete) {
-                            PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                // Outside the connectivity indicator so the two strips stack rather than fight: an
+                // offline banner during a call belongs under the call bar, not over it.
+                nativeCallHost.Render(modifier = modifier) { callContentModifier ->
+                    ConnectivityIndicatorContainer(
+                        isOnline = isOnline,
+                        modifier = callContentModifier,
+                    ) { contentModifier ->
+                        Box(modifier = contentModifier) {
+                            val ftueState by ftueService.state.collectAsState()
+                            BackstackView(transitionHandler = rememberLoggedInFlowTransitionHandler(backstack))
+                            if (ftueState is FtueState.Complete) {
+                                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                            }
                         }
                     }
                 }
