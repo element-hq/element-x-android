@@ -107,10 +107,9 @@ class TimelineItemContentMessageFactory(
             }
             is TextMessageType -> {
                 val body = messageType.body.trimEnd()
-                val dom = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
-                val formattedBody = dom?.let(::parseHtml)
-                    ?: textPillificationHelper.pillify(body).safeLinkify()
                 val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
+                val formattedBody = htmlDocument?.let(::parseHtml)
+                    ?: textPillificationHelper.pillify(body).safeLinkify()
                 TimelineItemTextContent(
                     body = body,
                     htmlDocument = htmlDocument,
@@ -279,10 +278,9 @@ class TimelineItemContentMessageFactory(
             }
             is NoticeMessageType -> {
                 val body = messageType.body.trimEnd()
-                val dom = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
-                val formattedBody = dom?.let(::parseHtml)
-                    ?: textPillificationHelper.pillify(body).safeLinkify()
                 val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
+                val formattedBody = htmlDocument?.let(::parseHtml)
+                    ?: textPillificationHelper.pillify(body).safeLinkify()
                 TimelineItemNoticeContent(
                     body = body,
                     htmlDocument = htmlDocument,
