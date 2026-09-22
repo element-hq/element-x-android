@@ -209,10 +209,12 @@ private fun VideoQualitySelectorDialog(
 internal fun MediaSettingsViewPreview(
     @PreviewParameter(MediaSettingsStatePreviewParam::class) state: MediaSettingsState,
 ) {
-    MediaSettingsView(
-        state = state,
-        onBackClick = { },
-    )
+    ElementPreview {
+        MediaSettingsView(
+            state = state,
+            onBackClick = { },
+        )
+    }
 }
 
 @Composable
