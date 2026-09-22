@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"A(z) %1$s fiókszolgáltató nem engedélyezett."</string>
   <string name="screen_change_server_form_header">"Matrix-kiszolgáló webcíme"</string>
   <string name="screen_change_server_form_notice">"Adjon meg egy domaincímet."</string>
+  <string name="screen_change_server_navigation_title_login">"Bejelentkezés"</string>
+  <string name="screen_change_server_navigation_title_register">"Fiók létrehozása"</string>
   <string name="screen_change_server_subtitle">"Mi a kiszolgálója címe?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Ha fiókját a vállalata vagy egy közösség biztosítja, akkor módosítsa a fiók szolgáltatóját (például: companyname.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Hozzon létre ingyenes fiókot a matrix.org oldalon. Ha más szolgáltatónál szeretne fiókot létrehozni, akkor módosítsa a nevet ennek megfelelően (például: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"Fiókszolgáltató"</string>
+  <string name="screen_change_server_textfield_placeholder">"example.com"</string>
   <string name="screen_change_server_title">"Válassza ki a kiszolgálóját"</string>
+  <string name="screen_change_server_title_login">"Adja meg a fiókszolgáltatóját"</string>
+  <string name="screen_change_server_title_register">"Válasszon fiókszolgáltatót"</string>
   <string name="screen_create_account_title">"Fiók létrehozása"</string>
   <string name="screen_login_error_deactivated_account">"Ez a fiók törölve lett."</string>
   <string name="screen_login_error_invalid_credentials">"Helytelen felhasználónév vagy jelszó"</string>

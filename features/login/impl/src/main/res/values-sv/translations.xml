@@ -16,7 +16,7 @@
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Element Pro-appen krävs på %1$s. Ladda ner den från butiken."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro krävs"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"Vi kunde inte nå den här hemservern. Kontrollera att du har angett hemserverns URL korrekt. Om URL:en är korrekt kontaktar du administratören för hemservern för ytterligare hjälp."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Vi kunde inte nå den här kontoleverantören. Kontrollera att du har angett kontoleverantörens URL korrekt. Om URL:en är korrekt kontaktar du administratören för kontoleverantören för ytterligare hjälp."</string>
   <string name="screen_change_server_error_invalid_well_known">"Sliding Sync är inte tillgängligt på grund av ett problem i .well-known-filen:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Den valda kontoleverantören stöder inte sliding sync. En uppgradering till servern behövs för att använda %1$s."</string>
@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Felaktigt användarnamn och/eller lösenord"</string>
   <string name="screen_login_error_invalid_user_id">"Detta är inte en giltig användaridentifierare. Förväntat format: \'@användare:hemserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Den här servern är konfigurerad för att använda uppdateringstokens. Dessa stöds inte när du använder lösenordsbaserad inloggning."</string>
-  <string name="screen_login_error_unsupported_authentication">"Den valda hemservern stöder inte lösenord eller OAuth-inloggning. Kontakta administratören eller välj en annan hemserver."</string>
+  <string name="screen_login_error_unsupported_authentication">"Den valda kontoleverantören stöder inte lösenords- eller OAuth-inloggning. Kontakta kontoleverantören eller välj en annan."</string>
   <string name="screen_login_form_header">"Ange dina uppgifter"</string>
   <string name="screen_login_subtitle">"Matrix är ett öppet nätverk för säker, decentraliserad kommunikation."</string>
   <string name="screen_login_title">"Välkommen tillbaka!"</string>

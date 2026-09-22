@@ -19,7 +19,7 @@
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"要求加入"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"僅被邀請的人才可以加入。"</string>
   <string name="screen_create_room_room_access_section_private_option_title">"私人"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"任何人都可以加入"</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"任何人都可以加入，包括貴組織以外的人士。"</string>
   <string name="screen_create_room_room_access_section_public_option_title">"公開"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"在 %1$s 中的任何人都可以加入。"</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"標準"</string>

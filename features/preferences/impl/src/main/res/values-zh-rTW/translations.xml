@@ -74,7 +74,7 @@
   <string name="screen_notification_settings_failed_fixing_configuration">"組態尚未更正，請再試一次。"</string>
   <string name="screen_notification_settings_group_chats">"群組聊天"</string>
   <string name="screen_notification_settings_invite_for_me_label">"邀請"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"您的家伺服器在加密聊天室中不支援此選項，可能無法收到部份聊天室的通知。"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"您的帳號服務提供者不支援加密聊天中的此項功能，因此在某些聊天中您可能不會收到通知。"</string>
   <string name="screen_notification_settings_mentions_section_title">"提及"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"選擇其他音效⋯⋯"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"目前正在使用 %1$s"</string>
@@ -83,7 +83,7 @@
   <string name="screen_notification_settings_mode_all">"全部"</string>
   <string name="screen_notification_settings_mode_mentions">"提及"</string>
   <string name="screen_notification_settings_notification_section_title">"通知我"</string>
-  <string name="screen_notification_settings_room_mention_label">"於 @room 通知我"</string>
+  <string name="screen_notification_settings_room_mention_label">"提及 @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"自訂"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"自訂音效⋯⋯"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"刪除檔案時發生錯誤"</string>

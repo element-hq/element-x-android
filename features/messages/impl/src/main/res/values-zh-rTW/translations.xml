@@ -31,7 +31,7 @@
   <string name="screen_media_upload_preview_title">"新增媒體"</string>
   <string name="screen_report_content_block_user">"封鎖使用者"</string>
   <string name="screen_report_content_block_user_hint">"檢查您是否要隱藏所有來自此使用者的目前及未來的訊息"</string>
-  <string name="screen_report_content_explanation">"此訊息將會回報給您的家伺服器管理員。他們將無法讀取任何已加密的訊息。"</string>
+  <string name="screen_report_content_explanation">"這則訊息將會通報給您的帳號服務提供者。他們將無法閱讀任何加密訊息。"</string>
   <string name="screen_report_content_hint">"檢舉這個內容的原因"</string>
   <string name="screen_room_attachment_source_camera">"照相機"</string>
   <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
