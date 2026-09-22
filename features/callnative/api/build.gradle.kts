@@ -13,8 +13,18 @@ android {
     namespace = "io.element.android.features.callnative.api"
 }
 
+// Temporary: `-PelementCallLocalVersion` points this at a locally published build of
+// element-call-android. Goes with the repositories in settings.gradle.kts.
+val elementCallVersion: String = providers.gradleProperty("elementCallLocalVersion")
+    .getOrElse(libs.versions.element.call.get())
+
 dependencies {
-    // api, not implementation: CallData is part of NativeCallEntryPoint's signature.
+    // api, not implementation: ElementCallMatrixTransport is part of ElementCallTransportFactory's
+    // signature, and CallData of NativeCallEntryPoint's.
+    // api, so that consumers of this module inherit the versions the BOM pins - the artifact
+    // below is declared without one.
+    api(platform("io.element.android:element-call-bom:$elementCallVersion"))
+    api(libs.element.call.api)
     api(projects.features.call.api)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
