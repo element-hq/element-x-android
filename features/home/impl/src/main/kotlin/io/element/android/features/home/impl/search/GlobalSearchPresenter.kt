@@ -57,10 +57,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.jvm.optionals.getOrElse
 import kotlin.time.Duration.Companion.milliseconds
 
 @Inject
