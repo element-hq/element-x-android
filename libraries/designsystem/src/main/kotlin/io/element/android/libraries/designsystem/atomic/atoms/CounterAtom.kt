@@ -92,7 +92,7 @@ fun CounterAtom(
             .then(
         if (count > MAX_COUNT) {
                     // We add some padding to the badge when the count is greater than MAX_COUNT to make it look like the circle-shaped badges
-                    Modifier.padding(horizontal = 2.dp)
+                    Modifier.padding(horizontal = 6.dp)
                 } else {
                     Modifier
                 }
