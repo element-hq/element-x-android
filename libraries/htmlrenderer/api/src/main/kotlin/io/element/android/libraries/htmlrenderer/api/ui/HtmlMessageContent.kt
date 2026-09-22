@@ -70,6 +70,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.components.linkify
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.htmlrenderer.api.BlockNode
@@ -204,7 +205,9 @@ private fun ParagraphView(
     val codeBackgroundColor = ElementTheme.colors.bgSubtleSecondary
     val codeBorderColor = ElementTheme.colors.borderInteractiveSecondary
     val styledText = remember(node.text, linkColor) {
-        node.text.applyLinkStyles(linkColor = linkColor)
+        node.text
+            .linkify(SpanStyle(color = linkColor))
+            .applyLinkStyles(linkColor = linkColor)
     }
     val inlineContent = rememberMentionInlineContent(node.inlineContent, context)
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -411,7 +414,13 @@ private fun AnnotatedString.applyLinkStyles(linkColor: Color): AnnotatedString {
     if (linkRanges.isEmpty()) return this
     return buildAnnotatedString {
         append(this@applyLinkStyles)
-        linkRanges.forEach { addStyle(SpanStyle(color = linkColor), it.start, it.end) }
+        linkRanges.forEach { linkRange ->
+            val containsColorSpan =
+                spanStyles.any { colorRange -> colorRange.start == linkRange.start && colorRange.end == linkRange.end && colorRange.item.color == linkColor }
+            if (!containsColorSpan) {
+                addStyle(SpanStyle(color = linkColor), linkRange.start, linkRange.end)
+            }
+        }
     }
 }
 
