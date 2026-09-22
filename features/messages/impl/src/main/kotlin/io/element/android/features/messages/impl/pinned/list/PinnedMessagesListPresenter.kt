@@ -107,6 +107,7 @@ class PinnedMessagesListPresenter(
         val timelineRoomInfo by remember {
             derivedStateOf {
                 TimelineRoomInfo(
+                    currentUserId = room.sessionId,
                     isDm = roomInfo.isDm,
                     name = roomInfo.name,
                     // We don't need to compute those values

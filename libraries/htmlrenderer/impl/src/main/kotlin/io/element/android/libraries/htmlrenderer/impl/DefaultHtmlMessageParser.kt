@@ -10,7 +10,6 @@ package io.element.android.libraries.htmlrenderer.impl
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -27,6 +26,7 @@ import io.element.android.libraries.htmlrenderer.api.ListNode
 import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ParagraphNode
 import io.element.android.libraries.htmlrenderer.api.QuoteNode
+import io.element.android.libraries.htmlrenderer.api.spans.InlineCodeSpanStyle
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import kotlinx.collections.immutable.ImmutableList
@@ -158,7 +158,7 @@ class DefaultHtmlMessageParser(
             val start = builder.length
             appendChildren(element)
             if (builder.length > start) {
-                builder.addStyle(SpanStyle(fontFamily = FontFamily.Monospace), start, builder.length)
+                builder.addStyle(InlineCodeSpanStyle, start, builder.length)
                 builder.addStringAnnotation(INLINE_CODE_ANNOTATION_TAG, "", start, builder.length)
             }
         }

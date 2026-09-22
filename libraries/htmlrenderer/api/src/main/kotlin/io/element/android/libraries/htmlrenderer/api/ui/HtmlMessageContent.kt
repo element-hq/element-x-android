@@ -5,10 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.htmlrenderer.impl.renderer
+package io.element.android.libraries.htmlrenderer.api.ui
 
+import android.content.ClipData
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -26,20 +30,33 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -48,9 +65,12 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.htmlrenderer.api.BlockNode
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
@@ -64,10 +84,12 @@ import io.element.android.libraries.htmlrenderer.api.QuoteNode
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.ui.common.layout.ContentAvoidingLayout
 import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.coroutines.launch
 
 /**
  * Renders a parsed message tree ([DocumentNode]) as native Compose content.
@@ -76,8 +98,8 @@ import kotlinx.collections.immutable.toImmutableMap
  * through the callbacks. It performs no HTML parsing itself.
  *
  * @param node the root HTML node of the parsed message tree to render.
- * @param modifier applied to the root of the rendered content.
- * @param currentUserId used to style a mention of the current user differently; may be null.
+ * @param modifier the [Modifier] to be applied to the layout.
+ * @param currentUserId the current user ID, if known. This can be used to display UI sent by/owned by the current user differently.
  * @param onLinkClick invoked with the target URL when a link is tapped.
  * @param onLinkLongClick invoked with the target URL when a link is long-pressed.
  * @param onMentionClick invoked when a mention pill is tapped.
@@ -91,13 +113,20 @@ fun HtmlMessageContent(
     node: DocumentNode,
     modifier: Modifier = Modifier,
     currentUserId: UserId? = null,
-    onLinkClick: (String) -> Unit = {},
-    onLinkLongClick: (String) -> Unit = {},
+    onLinkClick: (url: String, text: String) -> Unit = { _, _ -> },
+    onLinkLongClick: (url: String, text: String) -> Unit = { _, _ -> },
     onMentionClick: (MentionNodeContent) -> Unit = {},
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit = {},
 ) {
     val measuredParagraph = remember(node) { node.lastBlockNode() }
-    val context = remember(currentUserId, onLinkClick, onLinkLongClick, onMentionClick, measuredParagraph, onContentLayoutChange) {
+    val context = remember(
+        currentUserId,
+        onLinkClick,
+        onLinkLongClick,
+        onMentionClick,
+        measuredParagraph,
+        onContentLayoutChange
+    ) {
         RenderContext(
             currentUserId = currentUserId,
             onLinkClick = onLinkClick,
@@ -107,17 +136,15 @@ fun HtmlMessageContent(
             onContentLayoutChange = onContentLayoutChange,
         )
     }
-    SelectionContainer {
-        BlockNodes(nodes = node.children, context = context, modifier = modifier)
-    }
+    BlockNodes(nodes = node.children, context = context, modifier = modifier)
 }
 
 /** Interaction callbacks and state threaded through the render tree. */
 @Immutable
 private data class RenderContext(
     val currentUserId: UserId?,
-    val onLinkClick: (String) -> Unit,
-    val onLinkLongClick: (String) -> Unit,
+    val onLinkClick: (url: String, text: String) -> Unit,
+    val onLinkLongClick: (url: String, text: String) -> Unit,
     val onMentionClick: (MentionNodeContent) -> Unit,
     // The latest descendant BlockNode of the root DocumentNode
     val lastBlockNode: BlockNode?,
@@ -175,8 +202,9 @@ private fun ParagraphView(
 ) {
     val linkColor = ElementTheme.colors.textLinkExternal
     val codeBackgroundColor = ElementTheme.colors.bgSubtleSecondary
-    val styledText = remember(node.text, linkColor, codeBackgroundColor) {
-        node.text.applyInlineStyles(linkColor = linkColor, codeBackgroundColor = codeBackgroundColor)
+    val codeBorderColor = ElementTheme.colors.borderInteractiveSecondary
+    val styledText = remember(node.text, linkColor) {
+        node.text.applyLinkStyles(linkColor = linkColor)
     }
     val inlineContent = rememberMentionInlineContent(node.inlineContent, context)
     val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -189,7 +217,9 @@ private fun ParagraphView(
     }
     Text(
         text = styledText,
-        modifier = modifier.linkTapHandler(styledText, layoutResult, context),
+        modifier = modifier
+            .drawInlineCodeBackgrounds(styledText, layoutResult, codeBackgroundColor, codeBorderColor, LocalDensity.current)
+            .linkTapHandler(styledText, layoutResult, context),
         style = ElementTheme.typography.fontBodyMdRegular,
         color = ElementTheme.colors.textPrimary,
         inlineContent = inlineContent,
@@ -205,19 +235,69 @@ private fun CodeBlockView(
     node: CodeBlockNode,
     modifier: Modifier = Modifier,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
+    val localClipboard = LocalClipboard.current
+    val clipDataLabel = stringResource(CommonStrings.common_code_block)
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
+            .border(width = 1.dp, color = ElementTheme.colors.borderInteractiveSecondary, shape = RoundedCornerShape(8.dp))
             .background(ElementTheme.colors.bgSubtleSecondary)
-            .horizontalScroll(rememberScrollState())
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            .height(IntrinsicSize.Min)
+            .combinedClickable(
+                onClick = {},
+                onLongClick = {
+                    coroutineScope.launch {
+                        localClipboard.setClipEntry(ClipEntry(ClipData.newPlainText(clipDataLabel, node.code)))
+                    }
+                },
+                onLongClickLabel = stringResource(CommonStrings.action_copy_to_clipboard),
+            ),
     ) {
         Text(
+            modifier = Modifier.horizontalScroll(scrollState).padding(horizontal = 12.dp, vertical = 8.dp),
             text = node.code,
-            style = ElementTheme.typography.fontBodyMdRegular.copy(fontFamily = FontFamily.Monospace),
+            style = ElementTheme.typography.fontBodySmRegular.copy(fontFamily = FontFamily.Monospace),
             color = ElementTheme.colors.textPrimary,
             softWrap = false,
         )
+
+        // Previews and screenshots can't render the fading edge gradients properly, everything is obscured by them, so we skip them in the preview mode.
+        if (LocalInspectionMode.current.not()) {
+            val progress by remember {
+                derivedStateOf {
+                    scrollState.value.toFloat() / scrollState.maxValue.coerceAtLeast(1)
+                }
+            }
+
+            val alpha by animateFloatAsState(targetValue = progress, label = "CodeBlockViewScrollAlpha")
+
+            // Draw a fading edge gradient at the left and right of the code block, to hint that it is horizontally scrollable.
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(ElementTheme.colors.bgSubtleTertiary.copy(alpha = alpha), Color.Transparent),
+                            startX = 0f,
+                            endX = CodeBlockFadingEdgeWidth.toPx(),
+                        )
+                    )
+            )
+
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(Color.Transparent, ElementTheme.colors.bgSubtleTertiary.copy(alpha = 1f - alpha)),
+                            startX = scrollState.viewportSize - CodeBlockFadingEdgeWidth.toPx(),
+                            endX = scrollState.viewportSize.toFloat(),
+                        )
+                    )
+            )
+        }
     }
 }
 
@@ -257,6 +337,7 @@ private fun ListView(
                     style = ElementTheme.typography.fontBodyMdRegular,
                     color = ElementTheme.colors.textPrimary,
                     modifier = Modifier.widthIn(min = ListMarkerWidth),
+                    textAlign = if (node.ordered) TextAlign.Start else TextAlign.Center,
                 )
                 BlockNodes(nodes = item.children, context = context)
             }
@@ -324,18 +405,65 @@ private fun rememberMentionInlineContent(
     }.toImmutableMap()
 }
 
-/** Overlays theme-dependent styling (link color, inline-code background) onto the annotated ranges. */
-private fun AnnotatedString.applyInlineStyles(
-    linkColor: Color,
-    codeBackgroundColor: Color,
-): AnnotatedString {
+/** Overlays the theme-dependent link color onto the link-annotated ranges. */
+private fun AnnotatedString.applyLinkStyles(linkColor: Color): AnnotatedString {
     val linkRanges = getStringAnnotations(LINK_ANNOTATION_TAG, 0, length)
-    val codeRanges = getStringAnnotations(INLINE_CODE_ANNOTATION_TAG, 0, length)
-    if (linkRanges.isEmpty() && codeRanges.isEmpty()) return this
+    if (linkRanges.isEmpty()) return this
     return buildAnnotatedString {
-        append(this@applyInlineStyles)
+        append(this@applyLinkStyles)
         linkRanges.forEach { addStyle(SpanStyle(color = linkColor), it.start, it.end) }
-        codeRanges.forEach { addStyle(SpanStyle(background = codeBackgroundColor), it.start, it.end) }
+    }
+}
+
+/**
+ * Draws a rounded, bordered box behind each inline code ([INLINE_CODE_ANNOTATION_TAG]) range, so
+ * inline code matches the look of [CodeBlockView] but only covers the annotated text. A range that
+ * wraps across several lines gets one box per line.
+ */
+private fun Modifier.drawInlineCodeBackgrounds(
+    text: AnnotatedString,
+    layoutResult: State<TextLayoutResult?>,
+    backgroundColor: Color,
+    borderColor: Color,
+    density: Density,
+): Modifier = drawBehind {
+    val layout = layoutResult.value ?: return@drawBehind
+    val codeRanges = text.getStringAnnotations(INLINE_CODE_ANNOTATION_TAG, 0, text.length)
+    if (codeRanges.isEmpty()) return@drawBehind
+    val strokeWidth = InlineCodeBorderWidth.toPx()
+    val horizontalPadding = InlineCodeHorizontalPadding.toPx()
+    codeRanges.forEach { range ->
+        val firstLine = layout.getLineForOffset(range.start)
+        val lastLine = layout.getLineForOffset(range.end)
+        for (line in firstLine..lastLine) {
+            val lineStart = maxOf(range.start, layout.getLineStart(line))
+            val lineEnd = minOf(range.end, layout.getLineEnd(line, visibleEnd = true))
+            if (lineEnd <= lineStart) continue
+            val startX = layout.getHorizontalPosition(lineStart, usePrimaryDirection = true)
+            val endX = layout.getHorizontalPosition(lineEnd, usePrimaryDirection = true)
+            val left = minOf(startX, endX) - horizontalPadding
+            val right = maxOf(startX, endX) + horizontalPadding
+            val topLeft = Offset(left, layout.getLineTop(line))
+            val size = Size(right - left, layout.getLineBottom(line) - layout.getLineTop(line))
+
+            val shape = RoundedCornerShape(
+                topStart = if (line == firstLine) InlineCodeCornerRadius else 0.dp,
+                topEnd = if (line == lastLine) InlineCodeCornerRadius else 0.dp,
+                bottomStart = if (line == firstLine) InlineCodeCornerRadius else 0.dp,
+                bottomEnd = if (line == lastLine) InlineCodeCornerRadius else 0.dp,
+            )
+
+            val outline = shape.createOutline(
+                size = size,
+                layoutDirection = layoutDirection,
+                density = density,
+            )
+
+            translate(topLeft.x, topLeft.y) {
+                drawOutline(outline = outline, color = backgroundColor, style = Fill)
+                drawOutline(outline = outline, color = borderColor, style = Stroke(width = strokeWidth))
+            }
+        }
     }
 }
 
@@ -345,14 +473,21 @@ private fun Modifier.linkTapHandler(
     context: RenderContext,
 ): Modifier = pointerInput(text) {
     detectTapGestures(
-        onTap = { offset -> layoutResult.value?.urlAt(offset, text)?.let(context.onLinkClick) },
-        onLongPress = { offset -> layoutResult.value?.urlAt(offset, text)?.let(context.onLinkLongClick) },
+        onTap = { offset ->
+            val (url, urlText) = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
+            context.onLinkClick(url, urlText)
+        },
+        onLongPress = { offset ->
+            val (url, urlText) = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
+            context.onLinkLongClick(url, urlText)
+        },
     )
 }
 
-private fun TextLayoutResult.urlAt(offset: Offset, text: AnnotatedString): String? {
+private fun TextLayoutResult.urlAt(offset: Offset, text: AnnotatedString): Pair<String, String>? {
     val position = getOffsetForPosition(offset)
-    return text.getStringAnnotations(LINK_ANNOTATION_TAG, position, position).firstOrNull()?.item
+    val urlAnnotation = text.getStringAnnotations(LINK_ANNOTATION_TAG, position, position).firstOrNull() ?: return null
+    return urlAnnotation.item to text.substring(urlAnnotation.start, urlAnnotation.end)
 }
 
 private val BlockSpacing: Dp = 8.dp
@@ -360,3 +495,11 @@ private val ListItemSpacing: Dp = 4.dp
 private val ListMarkerWidth: Dp = 24.dp
 private val PillPaddingHorizontal: Dp = 6.dp
 private val PillPaddingVertical: Dp = 2.dp
+
+/** Rounded, bordered box drawn behind inline code. */
+private val InlineCodeCornerRadius: Dp = 6.dp
+private val InlineCodeBorderWidth: Dp = 1.dp
+private val InlineCodeHorizontalPadding: Dp = 2.dp
+
+/** The width of the fading edge gradient drawn at the left and right of a [CodeBlockView]. */
+private val CodeBlockFadingEdgeWidth: Dp = 32.dp
