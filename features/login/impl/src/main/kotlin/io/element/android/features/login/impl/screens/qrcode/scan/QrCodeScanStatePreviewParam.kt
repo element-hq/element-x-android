@@ -11,8 +11,8 @@ package io.element.android.features.login.impl.screens.qrcode.scan
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 
 open class QrCodeScanStatePreviewParam : PreviewParameterProvider<QrCodeScanState> {
     override val values: Sequence<QrCodeScanState>
@@ -45,10 +45,12 @@ open class QrCodeScanStatePreviewParam : PreviewParameterProvider<QrCodeScanStat
 
 fun aQrCodeScanState(
     isScanning: Boolean = true,
-    authenticationAction: AsyncAction<MatrixQrCodeLoginData> = AsyncAction.Uninitialized,
+    authenticationAction: AsyncAction<QrCodeScanResult> = AsyncAction.Uninitialized,
+    localNetworkPermissionDialog: LocalNetworkPermissionDialog = LocalNetworkPermissionDialog.None,
     eventSink: (QrCodeScanEvent) -> Unit = {},
 ) = QrCodeScanState(
     isScanning = isScanning,
     authenticationAction = authenticationAction,
+    localNetworkPermissionDialog = localNetworkPermissionDialog,
     eventSink = eventSink
 )
