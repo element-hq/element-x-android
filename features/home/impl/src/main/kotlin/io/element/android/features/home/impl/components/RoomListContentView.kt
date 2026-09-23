@@ -8,7 +8,6 @@
 
 package io.element.android.features.home.impl.components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +22,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -129,6 +127,9 @@ private fun SkeletonView(
     }
 }
 
+/**
+ * Ref: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=8-4656
+ */
 @Composable
 private fun EmptyView(
     state: RoomListContentState.Empty,
@@ -139,13 +140,19 @@ private fun EmptyView(
     modifier: Modifier = Modifier,
 ) {
     Box(modifier.fillMaxSize()) {
+        val text = buildString {
+            append(stringResource(R.string.screen_roomlist_empty_title))
+            append("\n")
+            append(stringResource(R.string.screen_roomlist_empty_message))
+        }
         EmptyScaffold(
-            title = R.string.screen_roomlist_empty_title,
-            subtitle = R.string.screen_roomlist_empty_message,
-            action = {
+            title = null,
+            subtitle = text,
+            bottomPart = {
+                Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     text = stringResource(CommonStrings.action_start_chat),
-                    leadingIcon = IconSource.Vector(CompoundIcons.Compose()),
+                    leadingIcon = IconSource.Vector(CompoundIcons.Chat()),
                     onClick = onCreateRoomClick,
                 )
             },
@@ -298,39 +305,44 @@ private fun EmptyViewForFilterStates(
 ) {
     val emptyStateResources = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters, isSpaceFilterSelected) ?: return
     EmptyScaffold(
-        title = emptyStateResources.title,
-        subtitle = emptyStateResources.subtitle,
+        title = stringResource(emptyStateResources.title),
+        subtitle = stringResource(emptyStateResources.subtitle),
         modifier = modifier,
+        bottomPart = {
+            // Keep a spacer so that the content is not too low on the screen
+            Spacer(modifier = Modifier.height(32.dp))
+        }
     )
 }
 
 @Composable
 private fun EmptyScaffold(
-    @StringRes title: Int,
-    @StringRes subtitle: Int,
+    title: String?,
+    subtitle: String,
     modifier: Modifier = Modifier,
-    action: @Composable (ColumnScope.() -> Unit)? = null,
+    bottomPart: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
         modifier = modifier.padding(horizontal = 60.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        title?.let {
+            Text(
+                text = title,
+                style = ElementTheme.typography.fontHeadingMdBold,
+                color = ElementTheme.colors.textPrimary,
+                textAlign = TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
         Text(
-            text = stringResource(title),
-            style = ElementTheme.typography.fontHeadingMdBold,
-            color = ElementTheme.colors.textPrimary,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(subtitle),
+            text = subtitle,
             style = ElementTheme.typography.fontBodyLgRegular,
             color = ElementTheme.colors.textSecondary,
             textAlign = TextAlign.Center,
         )
-        Spacer(modifier = Modifier.height(32.dp))
-        action?.invoke(this)
+        bottomPart()
     }
 }
 
