@@ -285,8 +285,8 @@ private fun TextBlock(
 /** Maps an `<h1>`–`<h6>` [level] to a Compound typography style, largest first. */
 @Composable
 private fun headerTextStyle(level: Int): TextStyle = when (level) {
-    1 -> ElementTheme.typography.fontHeadingXlBold
-    2 -> ElementTheme.typography.fontHeadingLgBold
+    // For safety reasons, use the same style for H1 and H2, to avoid people using H1 for 'shouting' spam that fills the timeline with huge text
+    1, 2 -> ElementTheme.typography.fontHeadingLgBold
     3 -> ElementTheme.typography.fontHeadingMdBold
     4 -> ElementTheme.typography.fontHeadingSmMedium
     5 -> ElementTheme.typography.fontBodyLgMedium
