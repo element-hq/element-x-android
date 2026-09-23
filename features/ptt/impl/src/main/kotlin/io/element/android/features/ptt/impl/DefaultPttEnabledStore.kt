@@ -29,6 +29,11 @@ class DefaultPttEnabledStore(
 ) : PttEnabledStore {
     private val sessionId = matrixClient.sessionId
 
+    override fun availableRoomIds(): Flow<Set<RoomId>> = source.availableRoomIdsFlow(sessionId)
+
+    override suspend fun setAvailable(roomId: RoomId, available: Boolean) =
+        source.setAvailable(sessionId, roomId, available)
+
     override fun enabledRoomIds(): Flow<Set<RoomId>> = source.enabledRoomIdsFlow(sessionId)
 
     override suspend fun setEnabled(roomId: RoomId, enabled: Boolean) =

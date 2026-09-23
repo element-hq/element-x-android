@@ -18,6 +18,10 @@ import kotlinx.coroutines.flow.Flow
  * `io.element.ptt.config` room-state event once the SDK exposes custom-state read-back.
  */
 interface PttEnabledStore {
+    fun availableRoomIds(): Flow<Set<RoomId>>
+
+    suspend fun setAvailable(roomId: RoomId, available: Boolean)
+
     fun enabledRoomIds(): Flow<Set<RoomId>>
 
     suspend fun setEnabled(roomId: RoomId, enabled: Boolean)

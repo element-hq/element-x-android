@@ -15,26 +15,26 @@ open class PttPrototypeStateProvider : PreviewParameterProvider<PttPrototypeStat
     override val values: Sequence<PttPrototypeState>
         get() = sequenceOf(
             aPttPrototypeState(),
-            aPttPrototypeState(isPttEnabled = true),
-            aPttPrototypeState(isPttEnabled = true, hasLiveChannel = true, participantCount = 3),
-            aPttPrototypeState(isPttEnabled = true, hasLiveChannel = true, participantCount = 4, isUserInChannel = true),
+            aPttPrototypeState(isPttOffered = true),
+            aPttPrototypeState(isPttOffered = true, hasLiveChannel = true, participantCount = 3),
+            aPttPrototypeState(isPttOffered = true, hasLiveChannel = true, participantCount = 4, isUserInChannel = true),
             aPttPrototypeState(
-                isPttEnabled = true,
+                isPttOffered = true,
                 hasLiveChannel = true,
                 participantCount = 4,
                 isUserInChannel = true,
                 isTransmitting = true,
             ),
-            aPttPrototypeState(isPttEnabled = true, hasLiveChannel = true, participantCount = 3, isUserInChannel = true, isHearingEnabled = true),
-            aPttPrototypeState(isPttEnabled = true, hasLiveChannel = true, participantCount = 3, isUserInChannel = true, isCovert = true),
-            aPttPrototypeState(isPttEnabled = true, canDrawOverlays = false),
+            aPttPrototypeState(isPttOffered = true, hasLiveChannel = true, participantCount = 3, isUserInChannel = true, isHearingEnabled = true),
+            aPttPrototypeState(isPttOffered = true, hasLiveChannel = true, participantCount = 3, isUserInChannel = true, isCovert = true),
+            aPttPrototypeState(isPttOffered = true, canDrawOverlays = false),
             aPttPrototypeState(isPttAvailable = false),
         )
 }
 
 fun aPttPrototypeState(
     isPttAvailable: Boolean = true,
-    isPttEnabled: Boolean = false,
+    isPttOffered: Boolean = false,
     hasLiveChannel: Boolean = false,
     participantCount: Int = 0,
     isUserInChannel: Boolean = false,
@@ -48,7 +48,7 @@ fun aPttPrototypeState(
     eventSink: (PttPrototypeEvent) -> Unit = {},
 ) = PttPrototypeState(
     isPttAvailable = isPttAvailable,
-    isPttEnabled = isPttEnabled,
+    isPttOffered = isPttOffered,
     hasLiveChannel = hasLiveChannel,
     participantCount = participantCount,
     isUserInChannel = isUserInChannel,

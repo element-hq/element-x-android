@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -37,6 +38,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.permissions.api.PermissionsView
+import io.element.android.libraries.ui.strings.CommonStrings
 
 // NOTE: strings are hard-coded — this is a debug-only Stage 1 prototype screen and is not localised.
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,15 +68,15 @@ fun PttPrototypeView(
                 .padding(padding)
                 .consumeWindowInsets(padding),
         ) {
-            // Enable/disable PTT for this room — drives the in-room header/banner/composer UI.
+            // Temporary availability gate; the room audio selector controls the active mode.
             ListItem(
-                content = { Text("Enable push-to-talk in this room") },
-                supportingContent = { Text("Shows the PTT controls in the room. (Interim: local to this device.)") },
+                content = { Text(stringResource(CommonStrings.screen_room_details_offer_ptt)) },
+                supportingContent = { Text(stringResource(CommonStrings.screen_room_details_offer_ptt_description)) },
                 trailingContent = ListItemContent.Switch(
-                    checked = state.isPttEnabled,
+                    checked = state.isPttOffered,
                     enabled = state.isPttAvailable,
                 ),
-                onClick = { state.eventSink(PttPrototypeEvent.SetPttEnabled(!state.isPttEnabled)) },
+                onClick = { state.eventSink(PttPrototypeEvent.SetPttOffered(!state.isPttOffered)) },
             )
             // Silent by default: audio output only exists while this is on (and covert is off).
             ListItem(

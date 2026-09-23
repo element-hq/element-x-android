@@ -13,6 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.ptt.test.FakePttRoomService
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
@@ -80,6 +81,7 @@ class RoomDetailsPresenterTest {
 
     private fun TestScope.createRoomDetailsPresenter(
         room: JoinedRoom = aJoinedRoom(),
+        pttRoomService: FakePttRoomService = FakePttRoomService(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
@@ -106,6 +108,7 @@ class RoomDetailsPresenterTest {
             }
         }
         return RoomDetailsPresenter(
+            pttRoomService = pttRoomService,
             navigator = navigator,
             client = matrixClient,
             room = room,
@@ -689,6 +692,37 @@ class RoomDetailsPresenterTest {
             }
             onDoneResult.assertions().isCalledOnce()
             assertThat(room.baseRoom.setUnreadFlagCalls).containsExactly(true)
+        }
+    }
+
+    @Test
+    fun `room audio stays visible when switching back to video`() = runTest {
+        val service = FakePttRoomService().apply { isAvailable.value = true }
+        val presenter = createRoomDetailsPresenter(pttRoomService = service)
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            val video = consumeItemsUntilPredicate { it.showRoomAudio }.last()
+            assertThat(video.isPttEnabled).isFalse()
+            video.eventSink(RoomDetailsEvent.SetPttEnabled(true))
+            val ptt = consumeItemsUntilPredicate { it.isPttEnabled }.last()
+            ptt.eventSink(RoomDetailsEvent.SetPttEnabled(false))
+            val switchedBack = consumeItemsUntilPredicate { !it.isPttEnabled }.last()
+            assertThat(switchedBack.showRoomAudio).isTrue()
+            service.setPttAvailable(false)
+            consumeItemsUntilPredicate { !it.showRoomAudio }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `room audio cannot enable PTT without availability`() = runTest {
+        val service = FakePttRoomService()
+        val presenter = createRoomDetailsPresenter(pttRoomService = service)
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            val state = awaitItem()
+            assertThat(state.showRoomAudio).isFalse()
+            state.eventSink(RoomDetailsEvent.SetPttEnabled(true))
+            assertThat(service.isEnabled.value).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

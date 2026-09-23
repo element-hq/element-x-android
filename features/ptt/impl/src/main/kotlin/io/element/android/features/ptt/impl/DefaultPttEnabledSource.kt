@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.concurrent.ConcurrentHashMap
 
+private val pttAvailableRoomsKey = stringSetPreferencesKey("pttAvailableRooms")
 private val pttEnabledRoomsKey = stringSetPreferencesKey("pttEnabledRooms")
 
 /**
@@ -59,6 +60,20 @@ class DefaultPttEnabledSource(
         })
     }
 
+    override fun availableRoomIdsFlow(sessionId: SessionId): Flow<Set<RoomId>> =
+        store(sessionId).data.map { prefs ->
+            // Existing PTT rooms retain their availability and selected mode after upgrading.
+            (prefs[pttAvailableRoomsKey].orEmpty() + prefs[pttEnabledRoomsKey].orEmpty()).map { RoomId(it) }.toSet()
+        }
+
+    override suspend fun setAvailable(sessionId: SessionId, roomId: RoomId, available: Boolean) {
+        store(sessionId).edit { prefs ->
+            val rooms = prefs[pttAvailableRoomsKey].orEmpty() + prefs[pttEnabledRoomsKey].orEmpty()
+            prefs[pttAvailableRoomsKey] = if (available) rooms + roomId.value else rooms - roomId.value
+            if (!available) prefs[pttEnabledRoomsKey] = prefs[pttEnabledRoomsKey].orEmpty() - roomId.value
+        }
+    }
+
     override fun enabledRoomIdsFlow(sessionId: SessionId): Flow<Set<RoomId>> =
         store(sessionId).data.map { prefs ->
             prefs[pttEnabledRoomsKey].orEmpty().map { RoomId(it) }.toSet()
@@ -69,7 +84,10 @@ class DefaultPttEnabledSource(
 
     override suspend fun setEnabled(sessionId: SessionId, roomId: RoomId, enabled: Boolean) {
         store(sessionId).edit { prefs ->
-            prefs[pttEnabledRoomsKey] = if (enabled) {
+            // Persist the gate independently before switching an existing room back to video.
+            val availableRooms = prefs[pttAvailableRoomsKey].orEmpty() + prefs[pttEnabledRoomsKey].orEmpty()
+            prefs[pttAvailableRoomsKey] = availableRooms
+            prefs[pttEnabledRoomsKey] = if (enabled && roomId.value in availableRooms) {
                 prefs[pttEnabledRoomsKey].orEmpty() + roomId.value
             } else {
                 prefs[pttEnabledRoomsKey].orEmpty() - roomId.value

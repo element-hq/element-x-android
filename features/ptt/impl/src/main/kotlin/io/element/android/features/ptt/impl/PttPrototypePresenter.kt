@@ -113,7 +113,7 @@ class PttPrototypePresenter(
             onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
         }
 
-        val isPttEnabled by pttRoomService.isPttEnabledFlow().collectAsState(initial = false)
+        val isPttOffered by pttRoomService.isPttAvailableFlow().collectAsState(initial = false)
         val sessionState by pttSessionManager.sessionState.collectAsState()
         val isHearingEnabled by pttSessionManager.isHearingEnabled.collectAsState()
         val isCovert by pttSessionManager.isCovert.collectAsState()
@@ -132,7 +132,7 @@ class PttPrototypePresenter(
                 }
                 if (pendingEnable) {
                     pendingEnable = false
-                    pttRoomService.setPttEnabled(true)
+                    pttRoomService.setPttAvailable(true)
                 }
             }
         }
@@ -150,15 +150,14 @@ class PttPrototypePresenter(
                 PttPrototypeEvent.LeavePttChannel -> pttSessionManager.stop()
                 PttPrototypeEvent.StartTransmitting -> pttSessionManager.pressToTalk()
                 PttPrototypeEvent.StopTransmitting -> pttSessionManager.releaseToTalk()
-                is PttPrototypeEvent.SetPttEnabled -> {
+                is PttPrototypeEvent.SetPttOffered -> {
                     if (event.enabled && !permissionsState.permissionGranted) {
-                        // Enabling PTT starts a warm session that needs the mic to transmit. Secure
-                        // RECORD_AUDIO up-front so later transmit surfaces — including hardware buttons,
-                        // which can't prompt on their own — aren't denied. Enable once granted.
+                        // Secure microphone permission before offering the PTT mode in room settings.
+                        // The availability toggle itself does not start a session.
                         pendingEnable = true
                         permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                     } else {
-                        coroutineScope.launch { pttRoomService.setPttEnabled(event.enabled) }
+                        coroutineScope.launch { pttRoomService.setPttAvailable(event.enabled) }
                     }
                 }
                 is PttPrototypeEvent.SetHearingEnabled -> pttSessionManager.setHearingEnabled(event.enabled)
@@ -198,7 +197,7 @@ class PttPrototypePresenter(
 
         return PttPrototypeState(
             isPttAvailable = true,
-            isPttEnabled = isPttEnabled,
+            isPttOffered = isPttOffered,
             hasLiveChannel = hasLiveChannel,
             participantCount = participantCount,
             isUserInChannel = isUserInChannel,

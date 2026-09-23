@@ -21,7 +21,7 @@ sealed interface PttPrototypeEvent {
     data object StopTransmitting : PttPrototypeEvent
 
     /** Enable/disable PTT in this room (interim gate; see PttRoomService). */
-    data class SetPttEnabled(val enabled: Boolean) : PttPrototypeEvent
+    data class SetPttOffered(val enabled: Boolean) : PttPrototypeEvent
 
     /** Open the system settings screen to grant the "draw over other apps" permission. */
     data object GrantOverlayPermission : PttPrototypeEvent

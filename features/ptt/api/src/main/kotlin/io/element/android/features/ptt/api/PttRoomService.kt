@@ -12,12 +12,17 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Per-room gate for the Push-to-Talk UI: is PTT enabled in this room?
  *
- * INTERIM: backed by a room-scoped in-memory store toggled from the room settings screen.
+ * INTERIM: availability and selected mode are stored in per-session device-local preferences.
  * The productionised version reads/writes the `io.element.ptt.config` room-state event so the
  * setting is shared across users and devices — blocked today by the rust-SDK custom-state
  * read-back gap (see the roadmap plan, Phase 0/2).
  */
 interface PttRoomService {
+    /** Whether to offer the room audio selector (temporarily controlled by the prototype toggle). */
+    fun isPttAvailableFlow(): Flow<Boolean>
+
+    suspend fun setPttAvailable(available: Boolean)
+
     fun isPttEnabledFlow(): Flow<Boolean>
 
     suspend fun setPttEnabled(enabled: Boolean)

@@ -22,6 +22,11 @@ import kotlinx.coroutines.flow.Flow
  * same interface.
  */
 interface PttEnabledSource {
+    /** Temporary, device-local availability gate until the server advertises PTT support. */
+    fun availableRoomIdsFlow(sessionId: SessionId): Flow<Set<RoomId>>
+
+    suspend fun setAvailable(sessionId: SessionId, roomId: RoomId, available: Boolean)
+
     fun enabledRoomIdsFlow(sessionId: SessionId): Flow<Set<RoomId>>
 
     suspend fun isPttEnabled(sessionId: SessionId, roomId: RoomId): Boolean

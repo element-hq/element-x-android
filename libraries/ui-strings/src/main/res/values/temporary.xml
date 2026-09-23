@@ -10,4 +10,9 @@
     <string name="a11y_state_collapsed">"Collapsed"</string>
     <string name="a11y_active">Active</string>
     <string name="a11y_inactive">Inactive</string>
+    <string name="screen_room_details_room_audio">Room Audio</string>
+    <string name="screen_room_details_video_calls">Video Calls</string>
+    <string name="screen_room_details_push_to_talk">Push to Talk</string>
+    <string name="screen_room_details_offer_ptt">Offer push-to-talk in this room</string>
+    <string name="screen_room_details_offer_ptt_description">Shows the Room Audio options in room settings. This setting is local to this device.</string>
 </resources>

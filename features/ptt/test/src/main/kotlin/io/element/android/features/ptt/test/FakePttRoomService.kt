@@ -14,6 +14,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class FakePttRoomService(
     initialEnabled: Boolean = false,
 ) : PttRoomService {
+    val isAvailable = MutableStateFlow(initialEnabled)
+
+    override fun isPttAvailableFlow(): Flow<Boolean> = isAvailable
+
+    override suspend fun setPttAvailable(available: Boolean) {
+        isAvailable.value = available
+        if (!available) isEnabled.value = false
+    }
+
     val isEnabled = MutableStateFlow(initialEnabled)
 
     override fun isPttEnabledFlow(): Flow<Boolean> = isEnabled

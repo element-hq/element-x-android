@@ -27,6 +27,15 @@ class DefaultPttRoomService(
     private val room: JoinedRoom,
     private val store: PttEnabledStore,
 ) : PttRoomService {
+    override fun isPttAvailableFlow(): Flow<Boolean> =
+        store.availableRoomIds()
+            .map { room.roomId in it }
+            .distinctUntilChanged()
+
+    override suspend fun setPttAvailable(available: Boolean) {
+        store.setAvailable(room.roomId, available)
+    }
+
     override fun isPttEnabledFlow(): Flow<Boolean> =
         store.enabledRoomIds()
             .map { room.roomId in it }

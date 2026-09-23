@@ -200,6 +200,13 @@ fun RoomDetailsView(
                 )
             }
 
+            if (state.showRoomAudio) {
+                RoomAudioSection(
+                    isPttEnabled = state.isPttEnabled,
+                    onPttEnabledChange = { state.eventSink(RoomDetailsEvent.SetPttEnabled(it)) },
+                )
+            }
+
             PreferenceCategory {
                 if (state.hasNewContent) {
                     ListItem(
@@ -444,6 +451,7 @@ private fun MainActionsSection(
                 title = stringResource(CommonStrings.common_video),
                 imageVector = CompoundIcons.VideoCall(),
                 onClick = { onCall(CallIntent.VIDEO) },
+                enabled = !state.isPttEnabled,
             )
         }
         if (state.canInvite && state.roomType !is RoomDetailsType.Dm) {

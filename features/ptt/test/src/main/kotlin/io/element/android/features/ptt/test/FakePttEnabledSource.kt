@@ -16,6 +16,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class FakePttEnabledSource(
     initialEnabledRoomIds: Set<RoomId> = emptySet(),
 ) : PttEnabledSource {
+    val availableRoomIds = MutableStateFlow(initialEnabledRoomIds)
+
+    override fun availableRoomIdsFlow(sessionId: SessionId): Flow<Set<RoomId>> = availableRoomIds
+
+    override suspend fun setAvailable(sessionId: SessionId, roomId: RoomId, available: Boolean) {
+        availableRoomIds.value = if (available) availableRoomIds.value + roomId else availableRoomIds.value - roomId
+        if (!available) setEnabled(sessionId, roomId, false)
+    }
+
     val enabledRoomIds = MutableStateFlow(initialEnabledRoomIds)
 
     override fun enabledRoomIdsFlow(sessionId: SessionId): Flow<Set<RoomId>> = enabledRoomIds

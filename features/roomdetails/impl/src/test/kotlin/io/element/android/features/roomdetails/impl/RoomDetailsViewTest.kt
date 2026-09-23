@@ -13,10 +13,13 @@ package io.element.android.features.roomdetails.impl
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.roomdetails.impl.members.aRoomMember
@@ -41,6 +44,31 @@ import org.junit.Test
 import org.robolectric.annotation.Config
 
 class RoomDetailsViewTest : RobolectricTest() {
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `room audio keeps video shortcut when video is selected`() = runAndroidComposeUiTest {
+        setRoomDetailView(state = aRoomDetailsState().copy(showRoomAudio = true))
+        onNodeWithText("Room Audio").assertExists()
+        onNodeWithText("Video Calls").assertExists()
+        onNodeWithText("Push to Talk").assertExists()
+        onNodeWithText("Video").assertExists().assertIsEnabled()
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `room audio disables video shortcut when PTT is selected`() = runAndroidComposeUiTest {
+        setRoomDetailView(state = aRoomDetailsState().copy(showRoomAudio = true, isPttEnabled = true))
+        onNodeWithText("Room Audio").assertExists()
+        onNodeWithText("Video").assertExists().assertIsNotEnabled().performClick()
+    }
+
+    @Test
+    fun `room audio is hidden without the availability toggle`() = runAndroidComposeUiTest {
+        setRoomDetailView(state = aRoomDetailsState())
+        onNodeWithText("Room Audio").assertDoesNotExist()
+        onNodeWithText("Video").assertExists().assertIsEnabled()
+    }
+
     @Test
     fun `click on back invokes expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->

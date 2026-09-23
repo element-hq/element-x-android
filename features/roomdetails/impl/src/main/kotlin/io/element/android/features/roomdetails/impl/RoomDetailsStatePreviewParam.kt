@@ -61,6 +61,8 @@ open class RoomDetailsStatePreviewParam : PreviewParameterProvider<RoomDetailsSt
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.Joined),
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.Shared),
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.WorldReadable),
+            aRoomDetailsState().copy(showRoomAudio = true, isPttEnabled = false),
+            aRoomDetailsState().copy(showRoomAudio = true, isPttEnabled = true),
             // Add other state here
         )
 }

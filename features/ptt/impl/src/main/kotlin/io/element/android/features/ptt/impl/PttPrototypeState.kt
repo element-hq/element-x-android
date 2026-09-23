@@ -12,8 +12,8 @@ import io.element.android.libraries.permissions.api.PermissionsState
 data class PttPrototypeState(
     /** Whether a PTT transport is available in this build for this room. */
     val isPttAvailable: Boolean,
-    /** Whether PTT is enabled in this room (drives the in-room header/banner/composer UI). */
-    val isPttEnabled: Boolean,
+    /** Whether the temporary toggle offers PTT in the room audio selector. */
+    val isPttOffered: Boolean,
     /** Whether the transport session is joined/live (the "channel" is live). */
     val hasLiveChannel: Boolean,
     /** Number of participants currently in the channel. */
