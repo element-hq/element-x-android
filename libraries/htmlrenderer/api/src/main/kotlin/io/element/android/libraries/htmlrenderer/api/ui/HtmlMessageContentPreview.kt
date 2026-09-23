@@ -26,6 +26,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.htmlrenderer.api.BlockNode
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.api.HeaderNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.LINK_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.ListItemNode
@@ -55,6 +56,7 @@ internal fun HtmlMessageContentPreview(
 internal class HtmlMessageContentPreviewParam : PreviewParameterProvider<DocumentNode> {
     override val values: Sequence<DocumentNode>
         get() = sequenceOf(
+            headers(),
             richParagraph(),
             inlineCode(),
             multilineInlineCode(),
@@ -235,6 +237,16 @@ internal class HtmlMessageContentPreviewParam : PreviewParameterProvider<Documen
                 ),
             ),
         ),
+    )
+
+    private fun headers() = document(
+        HeaderNode(level = 1, text = AnnotatedString("Heading 1")),
+        HeaderNode(level = 2, text = AnnotatedString("Heading 2")),
+        HeaderNode(level = 3, text = AnnotatedString("Heading 3")),
+        HeaderNode(level = 4, text = AnnotatedString("Heading 4")),
+        HeaderNode(level = 5, text = AnnotatedString("Heading 5")),
+        HeaderNode(level = 6, text = AnnotatedString("Heading 6")),
+        paragraph(AnnotatedString("Body text under the headings.")),
     )
 
     private fun document(vararg blocks: BlockNode) = DocumentNode(blocks.toList().toImmutableList())

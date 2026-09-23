@@ -62,6 +62,7 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -76,6 +77,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.htmlrenderer.api.BlockNode
 import io.element.android.libraries.htmlrenderer.api.CodeBlockNode
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.api.HeaderNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.LINK_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.ListNode
@@ -158,6 +160,7 @@ internal fun BlockNode.lastBlockNode(): BlockNode? = when (this) {
     is ListNode -> this
     is QuoteNode -> this
     is CodeBlockNode -> this
+    is HeaderNode -> this
 }
 
 @Composable
@@ -180,7 +183,7 @@ private fun BlockNodeView(
     context: RenderContext,
     modifier: Modifier = Modifier,
 ) {
-    if (node === context.lastBlockNode && node !is ParagraphNode) {
+    if (node === context.lastBlockNode && node !is ParagraphNode && node !is HeaderNode) {
         SideEffect { context.onContentLayoutChange(ContentAvoidingLayoutData.NotOverlapping) }
     }
 
@@ -189,6 +192,7 @@ private fun BlockNodeView(
         is ParagraphNode -> {
             ParagraphView(node = node, context = context, modifier = modifier)
         }
+        is HeaderNode -> HeaderView(node = node, context = context, modifier = modifier)
         is CodeBlockNode -> CodeBlockView(node = node, modifier = modifier)
         is QuoteNode -> QuoteView(node = node, context = context, modifier = modifier)
         is ListNode -> ListView(node = node, context = context, modifier = modifier)
@@ -201,16 +205,6 @@ private fun ParagraphView(
     context: RenderContext,
     modifier: Modifier = Modifier,
 ) {
-    val linkColor = ElementTheme.colors.textLinkExternal
-    val codeBackgroundColor = ElementTheme.colors.bgSubtleSecondary
-    val codeBorderColor = ElementTheme.colors.borderInteractiveSecondary
-    val styledText = remember(node.text, linkColor) {
-        node.text
-            .linkify(SpanStyle(color = linkColor))
-            .applyLinkStyles(linkColor = linkColor)
-    }
-    val inlineContent = rememberMentionInlineContent(node.inlineContent, context)
-    val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     // Only the last rendered paragraph (and only when not inside a code block / quote) reports its
     // measured last line to the timeline.
     val measureLastLine = if (node === context.lastBlockNode) {
@@ -218,19 +212,85 @@ private fun ParagraphView(
     } else {
         null
     }
+    TextBlock(
+        text = node.text,
+        inlineContent = node.inlineContent,
+        textStyle = ElementTheme.typography.fontBodyMdRegular,
+        context = context,
+        modifier = modifier,
+        onTextLayout = { measureLastLine?.invoke(it) },
+    )
+}
+
+@Composable
+private fun HeaderView(
+    node: HeaderNode,
+    context: RenderContext,
+    modifier: Modifier = Modifier,
+) {
+    // Only the last rendered paragraph (and only when not inside a code block / quote) reports its
+    // measured last line to the timeline.
+    val measureLastLine = if (node === context.lastBlockNode) {
+        ContentAvoidingLayout.measureLastTextLine(onContentLayoutChange = context.onContentLayoutChange)
+    } else {
+        null
+    }
+    TextBlock(
+        text = node.text,
+        inlineContent = node.inlineContent,
+        textStyle = headerTextStyle(node.level),
+        context = context,
+        modifier = modifier,
+        onTextLayout = { measureLastLine?.invoke(it) }
+    )
+}
+
+/**
+ * Renders an inline-content block (a paragraph or a header) as a [Text] with [textStyle], applying
+ * link styling, the inline-code background boxes, mention/image inline content and link taps.
+ */
+@Composable
+private fun TextBlock(
+    text: AnnotatedString,
+    inlineContent: ImmutableMap<String, MentionNodeContent>,
+    textStyle: TextStyle,
+    context: RenderContext,
+    modifier: Modifier = Modifier,
+    onTextLayout: (TextLayoutResult) -> Unit = {},
+) {
+    val linkColor = ElementTheme.colors.textLinkExternal
+    val codeBackgroundColor = ElementTheme.colors.bgSubtleSecondary
+    val codeBorderColor = ElementTheme.colors.borderInteractiveSecondary
+    val styledText = remember(text, linkColor) {
+        text.linkify(SpanStyle(color = linkColor))
+            .applyLinkStyles(linkColor = linkColor)
+    }
+    val resolvedInlineContent = rememberMentionInlineContent(inlineContent, context)
+    val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     Text(
         text = styledText,
         modifier = modifier
             .drawInlineCodeBackgrounds(styledText, layoutResult, codeBackgroundColor, codeBorderColor, LocalDensity.current)
             .linkTapHandler(styledText, layoutResult, context),
-        style = ElementTheme.typography.fontBodyMdRegular,
+        style = textStyle,
         color = ElementTheme.colors.textPrimary,
-        inlineContent = inlineContent,
+        inlineContent = resolvedInlineContent,
         onTextLayout = { result ->
             layoutResult.value = result
-            measureLastLine?.invoke(result)
+            onTextLayout(result)
         },
     )
+}
+
+/** Maps an `<h1>`–`<h6>` [level] to a Compound typography style, largest first. */
+@Composable
+private fun headerTextStyle(level: Int): TextStyle = when (level) {
+    // For safety reasons, use the same style for H1 and H2, to avoid people using H1 for 'shouting' spam that fills the timeline with huge text
+    1, 2 -> ElementTheme.typography.fontHeadingLgBold
+    3 -> ElementTheme.typography.fontHeadingMdBold
+    4 -> ElementTheme.typography.fontHeadingSmMedium
+    5 -> ElementTheme.typography.fontBodyLgMedium
+    else -> ElementTheme.typography.fontBodyMdMedium
 }
 
 @Composable
