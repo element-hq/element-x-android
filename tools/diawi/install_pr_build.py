@@ -192,14 +192,18 @@ def adb_launch(serial: str | None) -> int:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("pr_url", help="GitHub PR URL")
+    ap.add_argument("pr_url", help="GitHub PR URL or PR number (e.g. 7750)")
     ap.add_argument("-s", "--serial", help="device serial, if several devices are connected")
     ap.add_argument("-r", "--replace", action="store_true", help="pass -r to adb install (reinstall, keep data)")
     ap.add_argument("-o", "--output", help="where to save the APK (default: temp dir, deleted afterwards)")
     args = ap.parse_args()
 
-    print(f"Looking for a Diawi link in {args.pr_url} ...")
-    diawi_url = find_diawi_link(args.pr_url)
+    if args.pr_url.isdigit():
+        pr_url = f"https://github.com/element-hq/element-x-android/pull/{args.pr_url}"
+    else:
+        pr_url = args.pr_url
+    print(f"Looking for a Diawi link in {pr_url} ...")
+    diawi_url = find_diawi_link(pr_url)
     print(f"Found: {diawi_url}")
 
     apk_url = find_apk_url(diawi_url)
