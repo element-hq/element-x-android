@@ -19,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
+import io.element.android.features.preferences.impl.account.PreferencesAccountState
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.libraries.architecture.Presenter
@@ -50,6 +51,7 @@ class PreferencesRootPresenter(
     private val sessionStore: SessionStore,
     private val appPreferencesStore: AppPreferencesStore,
     private val userStatusPresenter: Presenter<UserStatusState>,
+    private val preferencesAccountPresenter: Presenter<PreferencesAccountState>,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<PreferencesRootState> {
@@ -61,6 +63,7 @@ class PreferencesRootPresenter(
             // Force a refresh of the profile
             matrixClient.getUserProfile()
         }
+        val preferencesAccountState = preferencesAccountPresenter.present()
         val isMultiAccountEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.MultiAccount)
         }.collectAsState(initial = false)
@@ -144,6 +147,7 @@ class PreferencesRootPresenter(
         return PreferencesRootState(
             myUser = matrixUser.value,
             userStatusState = userStatusState,
+            preferencesAccountState = preferencesAccountState,
             theme = themeOption,
             availableThemeOptions = availableThemeOptions,
             version = remember { versionFormatter.get() },

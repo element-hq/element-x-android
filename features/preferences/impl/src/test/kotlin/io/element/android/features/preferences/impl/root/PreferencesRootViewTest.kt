@@ -20,15 +20,18 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
+import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.assertNoNodeWithText
 import io.element.android.tests.testutils.assertNodeWithTextIsDisplayed
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.collections.immutable.toImmutableList
@@ -52,13 +55,14 @@ class PreferencesRootViewTest : RobolectricTest() {
     @Test
     fun `click on the user row invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
-        ensureCalledOnce { callback ->
+        val user = aMatrixUser()
+        ensureCalledOnceWithParam(user) { callback ->
             setView(
                 aPreferencesRootState(
-                    myUser = aMatrixUser(),
+                    myUser = user,
                     eventSink = eventsRecorder,
                 ),
-                onOpenAccountSettings = callback,
+                onEditProfileClick = callback,
             )
             onNodeWithText("Alice").performClick()
         }
@@ -182,7 +186,8 @@ class PreferencesRootViewTest : RobolectricTest() {
                 eventSink = eventsRecorder,
             ),
         )
-        clickOn(CommonStrings.common_appearance)
+        val appearance = activity!!.getString(CommonStrings.common_appearance)
+        onNode(hasText(appearance) and hasClickAction()).performScrollTo().performClick()
         clickOn(R.string.theme_dark)
         eventsRecorder.assertSingle(PreferencesRootEvent.SetTheme(ThemeOption.Dark))
     }
@@ -196,8 +201,9 @@ class PreferencesRootViewTest : RobolectricTest() {
                 eventSink = eventsRecorder,
             ),
         )
-        clickOn(CommonStrings.common_appearance)
-        onNodeWithText(activity!!.getString(R.string.theme_black)).assertExists()
+        val appearance = activity!!.getString(CommonStrings.common_appearance)
+        onNode(hasText(appearance) and hasClickAction()).performScrollTo().performClick()
+        assertNodeWithTextIsDisplayed(R.string.theme_black)
     }
 
     @Test
@@ -209,7 +215,8 @@ class PreferencesRootViewTest : RobolectricTest() {
                 eventSink = eventsRecorder,
             ),
         )
-        clickOn(CommonStrings.common_appearance)
+        val appearance = activity!!.getString(CommonStrings.common_appearance)
+        onNode(hasText(appearance) and hasClickAction()).performScrollTo().performClick()
         assertNoNodeWithText(R.string.theme_black)
     }
 
@@ -223,7 +230,8 @@ class PreferencesRootViewTest : RobolectricTest() {
                 ),
                 onOpenMediaSettings = callback,
             )
-            clickOn(CommonStrings.common_media_upload_quality)
+            val text = activity!!.getString(CommonStrings.common_media_upload_quality)
+            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
         }
     }
 
@@ -237,7 +245,8 @@ class PreferencesRootViewTest : RobolectricTest() {
                 ),
                 onOpenLockScreenSettings = callback,
             )
-            clickOn(CommonStrings.common_screen_lock)
+            val text = activity!!.getString(CommonStrings.common_screen_lock)
+            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
         }
     }
 
@@ -393,7 +402,16 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
     onOpenMediaSettings: () -> Unit = EnsureNeverCalled(),
     onOpenLocationSettings: () -> Unit = EnsureNeverCalled(),
     onOpenLabs: () -> Unit = EnsureNeverCalled(),
-    onOpenAccountSettings: () -> Unit = EnsureNeverCalled(),
+    onEditProfileClick: (MatrixUser) -> Unit = EnsureNeverCalledWithParam(),
+    onSecureBackupClick: () -> Unit = EnsureNeverCalled(),
+    onManageAccountClick: (url: String) -> Unit = EnsureNeverCalledWithParam(),
+    onLinkNewDeviceClick: () -> Unit = EnsureNeverCalled(),
+    onOpenRageShake: () -> Unit = EnsureNeverCalled(),
+    onModerationAndSafetyClick: () -> Unit = EnsureNeverCalled(),
+    onOpenNotificationSettings: () -> Unit = EnsureNeverCalled(),
+    onOpenBlockedUsers: () -> Unit = EnsureNeverCalled(),
+    onSignOutClick: () -> Unit = EnsureNeverCalled(),
+    onDeactivateClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         PreferencesRootView(
@@ -408,7 +426,16 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
             onOpenMediaSettings = onOpenMediaSettings,
             onOpenLocationSettings = onOpenLocationSettings,
             onOpenLabs = onOpenLabs,
-            onOpenAccountSettings = onOpenAccountSettings,
+            onEditProfileClick = onEditProfileClick,
+            onSecureBackupClick = onSecureBackupClick,
+            onManageAccountClick = onManageAccountClick,
+            onLinkNewDeviceClick = onLinkNewDeviceClick,
+            onOpenRageShake = onOpenRageShake,
+            onModerationAndSafetyClick = onModerationAndSafetyClick,
+            onOpenNotificationSettings = onOpenNotificationSettings,
+            onOpenBlockedUsers = onOpenBlockedUsers,
+            onSignOutClick = onSignOutClick,
+            onDeactivateClick = onDeactivateClick,
         )
     }
 }

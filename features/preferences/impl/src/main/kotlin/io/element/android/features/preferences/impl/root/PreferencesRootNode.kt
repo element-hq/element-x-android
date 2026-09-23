@@ -8,6 +8,8 @@
 
 package io.element.android.features.preferences.impl.root
 
+import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
@@ -16,6 +18,11 @@ import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.logout.api.direct.DirectLogoutEvent
+import io.element.android.features.logout.api.direct.DirectLogoutView
+import io.element.android.features.preferences.impl.account.PreferencesAccountCallback
+import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
@@ -27,8 +34,9 @@ class PreferencesRootNode(
     @Assisted plugins: List<Plugin>,
     private val presenter: PreferencesRootPresenter,
     private val emojiPickerRenderer: EmojiPickerRenderer,
+    private val directLogoutView: DirectLogoutView,
 ) : Node(buildContext, plugins = plugins) {
-    interface Callback : Plugin {
+    interface Callback : PreferencesAccountCallback, Plugin {
         fun navigateToAddAccount()
         fun navigateToAnalyticsSettings()
         fun navigateToAbout()
@@ -37,14 +45,30 @@ class PreferencesRootNode(
         fun navigateToMediaSettings()
         fun navigateToLocationSettings()
         fun navigateToLabs()
-        fun navigateToAccountSettings()
     }
 
     private val callback: Callback = callback()
 
+    private fun onManageAccountClick(
+        activity: Activity,
+        url: String?,
+        isDark: Boolean,
+    ) {
+        url?.let {
+            activity.openUrlInChromeCustomTab(
+                null,
+                darkTheme = isDark,
+                url = it
+            )
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
+        val activity = requireNotNull(LocalActivity.current)
+        val isDark = ElementTheme.isLightTheme.not()
+
         PreferencesRootView(
             state = state,
             emojiPickerRenderer = emojiPickerRenderer,
@@ -58,7 +82,24 @@ class PreferencesRootNode(
             onOpenLocationSettings = callback::navigateToLocationSettings,
             onOpenLabs = callback::navigateToLabs,
             onOpenLockScreenSettings = callback::navigateToLockScreenSettings,
-            onOpenAccountSettings = callback::navigateToAccountSettings,
+            onOpenRageShake = callback::navigateToBugReport,
+            onSecureBackupClick = callback::navigateToSecureBackup,
+            onModerationAndSafetyClick = callback::navigateToModerationAndSafety,
+            onLinkNewDeviceClick = callback::navigateToLinkNewDevice,
+            onManageAccountClick = { onManageAccountClick(activity, it, isDark) },
+            onOpenNotificationSettings = callback::navigateToNotificationSettings,
+            onEditProfileClick = callback::navigateToUserProfile,
+            onOpenBlockedUsers = callback::navigateToBlockedUsers,
+            onSignOutClick = {
+                if (state.preferencesAccountState.directLogoutState.canDoDirectSignOut) {
+                    state.preferencesAccountState.directLogoutState.eventSink(DirectLogoutEvent.Logout(ignoreSdkError = false))
+                } else {
+                    callback.startSignOutFlow()
+                }
+            },
+            onDeactivateClick = callback::startAccountDeactivationFlow
         )
+
+        directLogoutView.Render(state = state.preferencesAccountState.directLogoutState)
     }
 }

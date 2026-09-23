@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
+import io.element.android.features.preferences.impl.account.PreferencesAccountView
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.userstatus.UserStatusView
@@ -64,6 +65,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.testtags.TestTags
@@ -84,7 +86,16 @@ fun PreferencesRootView(
     onOpenMediaSettings: () -> Unit,
     onOpenLocationSettings: () -> Unit,
     onOpenLabs: () -> Unit,
-    onOpenAccountSettings: () -> Unit,
+    onEditProfileClick: (MatrixUser) -> Unit,
+    onSecureBackupClick: () -> Unit,
+    onManageAccountClick: (url: String) -> Unit,
+    onLinkNewDeviceClick: () -> Unit,
+    onOpenRageShake: () -> Unit,
+    onModerationAndSafetyClick: () -> Unit,
+    onOpenNotificationSettings: () -> Unit,
+    onOpenBlockedUsers: () -> Unit,
+    onSignOutClick: () -> Unit,
+    onDeactivateClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -100,7 +111,7 @@ fun PreferencesRootView(
                 modifier = Modifier
                     .testTag(TestTags.settingsUserProfile)
                     .clickable {
-                        onOpenAccountSettings()
+                        onEditProfileClick(state.myUser)
                     },
                 matrixUser = state.myUser,
             )
@@ -119,6 +130,19 @@ fun PreferencesRootView(
             HorizontalDivider(
                 thickness = 8.dp,
                 color = ElementTheme.colors.bgSubtleSecondary,
+            )
+            // Account settings section
+            PreferencesAccountView(
+                state = state.preferencesAccountState,
+                onSecureBackupClick = onSecureBackupClick,
+                onManageAccountClick = onManageAccountClick,
+                onLinkNewDeviceClick = onLinkNewDeviceClick,
+                onOpenRageShake = onOpenRageShake,
+                onModerationAndSafetyClick = onModerationAndSafetyClick,
+                onOpenNotificationSettings = onOpenNotificationSettings,
+                onOpenBlockedUsers = onOpenBlockedUsers,
+                onSignOutClick = onSignOutClick,
+                onDeactivateClick = onDeactivateClick,
             )
             // 'App settings' section
             AppSettingsSection(
@@ -287,7 +311,6 @@ private fun AppSettingsSection(
 ) {
     PreferenceCategory(
         title = stringResource(CommonStrings.common_app_settings),
-        showTopDivider = false,
     ) {
         PreferenceDropdown(
             icon = CompoundIcons.DarkMode(),
@@ -411,6 +434,15 @@ private fun ContentToPreview(state: PreferencesRootState) {
         onOpenLabs = {},
         onOpenAbout = {},
         onOpenLockScreenSettings = {},
-        onOpenAccountSettings = {},
+        onEditProfileClick = {},
+        onSecureBackupClick = {},
+        onManageAccountClick = {},
+        onLinkNewDeviceClick = {},
+        onOpenRageShake = {},
+        onModerationAndSafetyClick = {},
+        onOpenNotificationSettings = {},
+        onOpenBlockedUsers = {},
+        onSignOutClick = {},
+        onDeactivateClick = {},
     )
 }

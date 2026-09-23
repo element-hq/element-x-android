@@ -26,7 +26,6 @@ import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
-import io.element.android.features.preferences.impl.account.PreferencesAccountNode
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.blockedusers.BlockedUsersNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
@@ -76,9 +75,6 @@ class PreferencesFlowNode(
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Root : NavTarget
-
-        @Parcelize
-        data object AccountSettings : NavTarget
 
         @Parcelize
         data object DeveloperSettings : NavTarget
@@ -173,14 +169,6 @@ class PreferencesFlowNode(
                         backstack.push(NavTarget.Labs)
                     }
 
-                    override fun navigateToAccountSettings() {
-                        backstack.push(NavTarget.AccountSettings)
-                    }
-                }
-                createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
-            }
-            NavTarget.AccountSettings -> {
-                val callback = object : PreferencesAccountNode.Callback {
                     override fun navigateToBugReport() {
                         callback.navigateToBugReport()
                     }
@@ -217,7 +205,7 @@ class PreferencesFlowNode(
                         backstack.push(NavTarget.AccountDeactivation)
                     }
                 }
-                createNode<PreferencesAccountNode>(buildContext, plugins = listOf(callback))
+                createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
             }
             NavTarget.DeveloperSettings -> {
                 val developerSettingsCallback = object : DeveloperSettingsNode.Callback {

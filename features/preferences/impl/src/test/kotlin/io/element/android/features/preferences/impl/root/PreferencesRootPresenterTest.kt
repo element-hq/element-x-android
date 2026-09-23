@@ -13,6 +13,7 @@ package io.element.android.features.preferences.impl.root
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.compound.theme.Theme
+import io.element.android.features.preferences.impl.account.aPreferencesAccountState
 import io.element.android.features.preferences.impl.userstatus.aUserStatusState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.libraries.core.meta.BuildType
@@ -67,6 +68,7 @@ class PreferencesRootPresenterTest {
             assertThat(initialState.isMultiAccountEnabled).isFalse()
             assertThat(initialState.isOtherAccountsSectionExpanded).isTrue()
             assertThat(initialState.otherSessions).isEmpty()
+            assertThat(initialState.preferencesAccountState).isEqualTo(aPreferencesAccountState())
             val loadedState = awaitItem()
             assertThat(loadedState.theme).isEqualTo(ThemeOption.System)
             assertThat(loadedState.availableThemeOptions).isEqualTo(
@@ -291,6 +293,7 @@ class PreferencesRootPresenterTest {
         sessionStore = sessionStore,
         appPreferencesStore = appPreferencesStore,
         userStatusPresenter = { aUserStatusState() },
+        preferencesAccountPresenter = { aPreferencesAccountState() },
         sessionCoroutineScope = this,
     )
 }

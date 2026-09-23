@@ -14,61 +14,20 @@ import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.preferences.impl.R
-import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
-import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 
 class PreferencesAccountViewTest : RobolectricTest() {
-    @Test
-    fun `clicking on back invokes back callback`() = runAndroidComposeUiTest {
-        ensureCalledOnce { callback ->
-            setView(
-                aPreferencesAccountState(),
-                onBackClick = callback,
-            )
-            pressBack()
-        }
-    }
-
-    @Test
-    fun `click on the avatar invokes the expected callback`() = runAndroidComposeUiTest {
-        ensureCalledOnceWithParam("anAvatarUrl") { callback ->
-            setView(
-                aPreferencesAccountState(
-                    myUser = aMatrixUser(avatarUrl = "anAvatarUrl"),
-                ),
-                onAvatarClick = callback,
-            )
-            onNodeWithContentDescription(activity!!.getString(CommonStrings.a11y_user_avatar)).performClick()
-        }
-    }
-
-    @Test
-    fun `click on Edit profile invokes the expected callback`() = runAndroidComposeUiTest {
-        val user = aMatrixUser()
-        ensureCalledOnceWithParam(user) { callback ->
-            setView(
-                aPreferencesAccountState(myUser = user),
-                onEditProfileClick = callback,
-            )
-            clickOn(R.string.screen_edit_profile_title)
-        }
-    }
-
     @Test
     fun `click on Manage account invokes the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnceWithParam("aUrl") { callback ->
@@ -139,7 +98,7 @@ class PreferencesAccountViewTest : RobolectricTest() {
                 onSecureBackupClick = callback,
             )
             val text = activity!!.getString(CommonStrings.common_encryption)
-            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
+            onNode(hasText(text) and hasClickAction()).performClick()
         }
     }
 
@@ -157,7 +116,7 @@ class PreferencesAccountViewTest : RobolectricTest() {
                 onModerationAndSafetyClick = callback,
             )
             val text = activity!!.getString(CommonStrings.common_moderation_and_safety)
-            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
+            onNode(hasText(text) and hasClickAction()).performClick()
         }
     }
 
@@ -169,7 +128,7 @@ class PreferencesAccountViewTest : RobolectricTest() {
                 onOpenRageShake = callback,
             )
             val text = activity!!.getString(CommonStrings.common_report_a_problem)
-            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
+            onNode(hasText(text) and hasClickAction()).performClick()
         }
     }
 
@@ -187,7 +146,7 @@ class PreferencesAccountViewTest : RobolectricTest() {
                 onSignOutClick = callback,
             )
             val text = activity!!.getString(CommonStrings.action_signout)
-            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
+            onNode(hasText(text) and hasClickAction()).performClick()
         }
     }
 
@@ -199,7 +158,7 @@ class PreferencesAccountViewTest : RobolectricTest() {
                 onDeactivateClick = callback,
             )
             val text = activity!!.getString(CommonStrings.action_delete_account)
-            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
+            onNode(hasText(text) and hasClickAction()).performClick()
         }
     }
 
@@ -212,9 +171,6 @@ class PreferencesAccountViewTest : RobolectricTest() {
 
 private fun AndroidComposeUiTest<ComponentActivity>.setView(
     state: PreferencesAccountState,
-    onBackClick: () -> Unit = EnsureNeverCalled(),
-    onAvatarClick: (String) -> Unit = EnsureNeverCalledWithParam(),
-    onEditProfileClick: (MatrixUser) -> Unit = EnsureNeverCalledWithParam(),
     onSecureBackupClick: () -> Unit = EnsureNeverCalled(),
     onManageAccountClick: (url: String) -> Unit = EnsureNeverCalledWithParam(),
     onLinkNewDeviceClick: () -> Unit = EnsureNeverCalled(),
@@ -228,9 +184,6 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
     setContent {
         PreferencesAccountView(
             state = state,
-            onBackClick = onBackClick,
-            onAvatarClick = onAvatarClick,
-            onEditProfileClick = onEditProfileClick,
             onSecureBackupClick = onSecureBackupClick,
             onManageAccountClick = onManageAccountClick,
             onLinkNewDeviceClick = onLinkNewDeviceClick,

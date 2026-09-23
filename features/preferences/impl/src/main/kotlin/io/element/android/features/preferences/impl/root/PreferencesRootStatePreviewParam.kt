@@ -9,6 +9,8 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.preferences.impl.account.PreferencesAccountState
+import io.element.android.features.preferences.impl.account.aPreferencesAccountState
 import io.element.android.features.preferences.impl.userstatus.UserStatusPickerState
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.userstatus.aUserStatusState
@@ -56,6 +58,7 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
 
 fun aPreferencesRootState(
     myUser: MatrixUser = aMatrixUser(),
+    preferencesAccountState: PreferencesAccountState = aPreferencesAccountState(),
     version: String = "Version 1.1 (1)",
     isMultiAccountEnabled: Boolean = false,
     isOtherAccountsSectionExpanded: Boolean = false,
@@ -70,6 +73,7 @@ fun aPreferencesRootState(
     eventSink: (PreferencesRootEvent) -> Unit = {},
 ) = PreferencesRootState(
     myUser = myUser,
+    preferencesAccountState = preferencesAccountState,
     version = version,
     isMultiAccountEnabled = isMultiAccountEnabled,
     theme = theme,

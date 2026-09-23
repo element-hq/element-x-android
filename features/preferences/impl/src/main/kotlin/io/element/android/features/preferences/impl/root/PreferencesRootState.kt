@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.preferences.impl.R
+import io.element.android.features.preferences.impl.account.PreferencesAccountState
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.libraries.designsystem.components.preferences.DropdownOption
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -21,6 +22,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class PreferencesRootState(
     val myUser: MatrixUser,
     val theme: ThemeOption,
+    val preferencesAccountState: PreferencesAccountState,
     val availableThemeOptions: ImmutableList<ThemeOption>,
     val userStatusState: UserStatusState?,
     val version: String,
