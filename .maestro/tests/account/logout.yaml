@@ -12,8 +12,7 @@ appId: ${MAESTRO_APP_ID}
 # Ensure cancel cancels
 - tapOn:
     id: "dialog-negative"
-- tapOn:
-    id: "sign-out-submit"
+- tapOn: "Remove this device"
 - tapOn:
     id: "dialog-positive"
 - runFlow: ../assertions/assertInitDisplayed.yaml
