@@ -9,7 +9,6 @@ package io.element.android.features.preferences.impl.account
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +27,8 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 @Inject
 class PreferencesAccountPresenter(
@@ -62,9 +59,6 @@ class PreferencesAccountPresenter(
 
         val showSecureBackupIndicator by indicatorService.showSettingChatBackupIndicator()
 
-        val accountManagementUrl: MutableState<String?> = remember {
-            mutableStateOf(null)
-        }
         var canDeactivateAccount by remember {
             mutableStateOf(false)
         }
@@ -81,15 +75,19 @@ class PreferencesAccountPresenter(
 
         val directLogoutState = directLogoutPresenter.present()
 
-        LaunchedEffect(Unit) {
-            initAccountManagementUrl(accountManagementUrl)
+        val accountManagementUrl by produceState<String?>(initialValue = null) {
+            value = matrixClient.getAccountManagementUrl(null)
+                .getOrNull()
+                ?.let {
+                    sessionEnterpriseService.tweakMasUrl(it)
+                }
         }
 
         return PreferencesAccountState(
             myUser = matrixUser.value,
             showSecureBackup = !canVerifyUserSession,
             showSecureBackupBadge = showSecureBackupIndicator,
-            accountManagementUrl = accountManagementUrl.value,
+            accountManagementUrl = accountManagementUrl,
             canReportBug = canReportBug,
             showLinkNewDevice = showLinkNewDevice,
             canDeactivateAccount = canDeactivateAccount,
@@ -97,15 +95,5 @@ class PreferencesAccountPresenter(
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
         )
-    }
-
-    private fun CoroutineScope.initAccountManagementUrl(
-        accountManagementUrl: MutableState<String?>,
-    ) = launch {
-        accountManagementUrl.value = matrixClient.getAccountManagementUrl(null)
-            .getOrNull()
-            ?.let {
-                sessionEnterpriseService.tweakMasUrl(it)
-            }
     }
 }
