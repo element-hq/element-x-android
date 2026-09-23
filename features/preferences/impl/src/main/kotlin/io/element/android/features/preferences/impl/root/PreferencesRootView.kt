@@ -93,7 +93,6 @@ fun PreferencesRootView(
     onOpenRageShake: () -> Unit,
     onModerationAndSafetyClick: () -> Unit,
     onOpenNotificationSettings: () -> Unit,
-    onOpenBlockedUsers: () -> Unit,
     onSignOutClick: () -> Unit,
     onDeactivateClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -140,7 +139,6 @@ fun PreferencesRootView(
                 onOpenRageShake = onOpenRageShake,
                 onModerationAndSafetyClick = onModerationAndSafetyClick,
                 onOpenNotificationSettings = onOpenNotificationSettings,
-                onOpenBlockedUsers = onOpenBlockedUsers,
                 onSignOutClick = onSignOutClick,
                 onDeactivateClick = onDeactivateClick,
             )
@@ -441,7 +439,6 @@ private fun ContentToPreview(state: PreferencesRootState) {
         onOpenRageShake = {},
         onModerationAndSafetyClick = {},
         onOpenNotificationSettings = {},
-        onOpenBlockedUsers = {},
         onSignOutClick = {},
         onDeactivateClick = {},
     )

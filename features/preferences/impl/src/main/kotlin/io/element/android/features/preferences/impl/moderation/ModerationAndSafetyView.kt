@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -24,6 +25,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewBlack
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.designsystem.theme.components.ListSupportingText
@@ -43,6 +45,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun ModerationAndSafetyView(
     state: ModerationAndSafetyState,
     onBackClick: () -> Unit,
+    onOpenBlockedUsers: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarDispatcher = LocalSnackbarDispatcher.current
@@ -63,6 +66,29 @@ fun ModerationAndSafetyView(
         PresenceSection(state)
         InvitesSection(state)
         MediaSection(state)
+        if (state.showBlockedUsersItem) {
+            BlockedUsersSection(
+                numberOfBlockedUsers = state.numberOfBlockedUsers,
+                onOpenBlockedUsers = onOpenBlockedUsers,
+            )
+        }
+    }
+}
+
+@Composable
+private fun BlockedUsersSection(
+    numberOfBlockedUsers: Int,
+    onOpenBlockedUsers: () -> Unit,
+) {
+    PreferenceCategory(
+        title = stringResource(R.string.screen_moderation_and_safety_other_users_heading),
+    ) {
+        ListItem(
+            content = { Text(stringResource(id = CommonStrings.common_blocked_users)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
+            onClick = onOpenBlockedUsers,
+            trailingContent = ListItemContent.Text(numberOfBlockedUsers.toString()),
+        )
     }
 }
 
@@ -175,6 +201,7 @@ internal fun ModerationAndSafetyViewBlackPreview(@PreviewParameter(ModerationAnd
 private fun ContentToPreview(state: ModerationAndSafetyState) {
     ModerationAndSafetyView(
         state = state,
-        onBackClick = { }
+        onBackClick = { },
+        onOpenBlockedUsers = { },
     )
 }

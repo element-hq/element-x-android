@@ -193,10 +193,6 @@ class PreferencesFlowNode(
                         backstack.push(NavTarget.UserProfile(matrixUser))
                     }
 
-                    override fun navigateToBlockedUsers() {
-                        backstack.push(NavTarget.BlockedUsers)
-                    }
-
                     override fun startSignOutFlow() {
                         backstack.push(NavTarget.SignOut)
                     }
@@ -236,7 +232,12 @@ class PreferencesFlowNode(
                 createNode<LabsNode>(buildContext, listOf(callback))
             }
             NavTarget.ModerationAndSafety -> {
-                createNode<ModerationAndSafetyNode>(buildContext)
+                val callback = object : ModerationAndSafetyNode.Callback {
+                    override fun navigateToBlockedUsers() {
+                        backstack.push(NavTarget.BlockedUsers)
+                    }
+                }
+                createNode<ModerationAndSafetyNode>(buildContext, listOf(callback))
             }
             NavTarget.LocationSettings -> {
                 createNode<LocationSettingsNode>(buildContext)

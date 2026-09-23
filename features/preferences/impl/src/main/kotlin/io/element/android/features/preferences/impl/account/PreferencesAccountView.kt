@@ -35,7 +35,6 @@ fun PreferencesAccountView(
     onOpenRageShake: () -> Unit,
     onModerationAndSafetyClick: () -> Unit,
     onOpenNotificationSettings: () -> Unit,
-    onOpenBlockedUsers: () -> Unit,
     onSignOutClick: () -> Unit,
     onDeactivateClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -46,7 +45,6 @@ fun PreferencesAccountView(
             state = state,
             onManageAccountClick = onManageAccountClick,
             onLinkNewDeviceClick = onLinkNewDeviceClick,
-            onOpenBlockedUsers = onOpenBlockedUsers,
         )
         OtherSettingsSection(
             state = state,
@@ -69,7 +67,6 @@ private fun ManageAccountSection(
     state: PreferencesAccountState,
     onManageAccountClick: (url: String) -> Unit,
     onLinkNewDeviceClick: () -> Unit,
-    onOpenBlockedUsers: () -> Unit,
 ) {
     PreferenceCategory(
         title = stringResource(CommonStrings.common_account_settings),
@@ -88,14 +85,6 @@ private fun ManageAccountSection(
                 content = { Text(stringResource(id = CommonStrings.common_link_new_device)) },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Devices())),
                 onClick = onLinkNewDeviceClick,
-            )
-        }
-        if (state.showBlockedUsersItem) {
-            ListItem(
-                content = { Text(stringResource(id = CommonStrings.common_blocked_users)) },
-                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
-                onClick = onOpenBlockedUsers,
-                trailingContent = ListItemContent.Text(state.numberOfBlockedUsers.toString()),
             )
         }
     }
@@ -173,9 +162,7 @@ internal fun PreferencesAccountViewPreview(@PreviewParameter(PreferencesAccountS
             onManageAccountClick = {},
             onLinkNewDeviceClick = {},
             onOpenNotificationSettings = {},
-            onOpenBlockedUsers = {},
             onSignOutClick = {},
             onDeactivateClick = {},
         )
     }
-

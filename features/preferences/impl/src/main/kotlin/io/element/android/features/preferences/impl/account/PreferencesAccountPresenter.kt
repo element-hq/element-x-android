@@ -27,8 +27,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @Inject
 class PreferencesAccountPresenter(
@@ -67,12 +65,6 @@ class PreferencesAccountPresenter(
             canDeactivateAccount = matrixClient.canDeactivateAccount()
         }
 
-        val numberOfBlockedUsers by produceState(initialValue = 0) {
-            matrixClient.ignoredUsersFlow
-                .onEach { value = it.size }
-                .launchIn(this)
-        }
-
         val directLogoutState = directLogoutPresenter.present()
 
         val accountManagementUrl by produceState<String?>(initialValue = null) {
@@ -91,7 +83,6 @@ class PreferencesAccountPresenter(
             canReportBug = canReportBug,
             showLinkNewDevice = showLinkNewDevice,
             canDeactivateAccount = canDeactivateAccount,
-            numberOfBlockedUsers = numberOfBlockedUsers,
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
         )

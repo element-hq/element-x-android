@@ -10,10 +10,16 @@ package io.element.android.features.preferences.impl.moderation
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.test
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -31,7 +37,22 @@ class ModerationAndSafetyPresenterTest {
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.On)
                 assertThat(mediaPreviewConfigState.setHideInviteAvatarsAction).isEqualTo(AsyncAction.Uninitialized)
                 assertThat(mediaPreviewConfigState.setTimelineMediaPreviewAction).isEqualTo(AsyncAction.Uninitialized)
+                assertThat(numberOfBlockedUsers).isEqualTo(0)
+                assertThat(showBlockedUsersItem).isFalse()
             }
+        }
+    }
+
+    @Test
+    fun `present - number of blocked users`() = runTest {
+        createModerationAndSafetyPresenter(
+            matrixClient = FakeMatrixClient(
+                ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID, A_USER_ID_2)),
+            ),
+        ).test {
+            val state = consumeItemsUntilPredicate { it.numberOfBlockedUsers == 2 }.last()
+            assertThat(state.showBlockedUsersItem).isTrue()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -121,9 +142,11 @@ class ModerationAndSafetyPresenterTest {
     }
 
     private fun CoroutineScope.createModerationAndSafetyPresenter(
+        matrixClient: FakeMatrixClient = FakeMatrixClient(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreviewConfigStateStore: MediaPreviewConfigStateStore = FakeMediaPreviewConfigStateStore(),
     ) = ModerationAndSafetyPresenter(
+        matrixClient = matrixClient,
         sessionPreferencesStore = sessionPreferencesStore,
         mediaPreviewConfigStateStore = mediaPreviewConfigStateStore,
         sessionCoroutineScope = this,

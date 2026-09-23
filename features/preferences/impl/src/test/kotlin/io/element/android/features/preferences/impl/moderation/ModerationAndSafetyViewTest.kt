@@ -12,10 +12,16 @@ package io.element.android.features.preferences.impl.moderation
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
@@ -138,16 +144,46 @@ class ModerationAndSafetyViewTest : RobolectricTest() {
         clickOn(R.string.screen_advanced_settings_show_media_timeline_always_hide)
         clickOn(R.string.screen_advanced_settings_show_media_timeline_private_rooms)
     }
+
+    @Test
+    fun `click on Blocked users invokes the expected callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<ModerationAndSafetyEvent>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            setModerationAndSafetyView(
+                state = aModerationAndSafetyState(
+                    numberOfBlockedUsers = 1,
+                    eventSink = eventsRecorder,
+                ),
+                onOpenBlockedUsers = callback,
+            )
+            val text = activity!!.getString(CommonStrings.common_blocked_users)
+            onNode(hasText(text) and hasClickAction()).performScrollTo().performClick()
+        }
+    }
+
+    @Test
+    fun `when numberOfBlockedUsers is 0, Blocked users item is not shown`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<ModerationAndSafetyEvent>(expectEvents = false)
+        setModerationAndSafetyView(
+            state = aModerationAndSafetyState(
+                numberOfBlockedUsers = 0,
+                eventSink = eventsRecorder,
+            ),
+        )
+        onNodeWithText(activity!!.getString(CommonStrings.common_blocked_users)).assertDoesNotExist()
+    }
 }
 
 private fun AndroidComposeUiTest<ComponentActivity>.setModerationAndSafetyView(
     state: ModerationAndSafetyState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
+    onOpenBlockedUsers: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         ModerationAndSafetyView(
             state = state,
             onBackClick = onBackClick,
+            onOpenBlockedUsers = onOpenBlockedUsers,
         )
     }
 }

@@ -22,8 +22,6 @@ import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -32,8 +30,6 @@ import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -69,8 +65,6 @@ class PreferencesAccountPresenterTest {
             assertThat(initialState.showSecureBackupBadge).isFalse()
             assertThat(initialState.accountManagementUrl).isNull()
             assertThat(initialState.showLinkNewDevice).isFalse()
-            assertThat(initialState.numberOfBlockedUsers).isEqualTo(0)
-            assertThat(initialState.showBlockedUsersItem).isFalse()
             assertThat(initialState.directLogoutState).isEqualTo(aDirectLogoutState())
             assertThat(initialState.snackbarMessage).isNull()
             val loadedState = consumeItemsUntilPredicate { it.accountManagementUrl != null }.last()
@@ -94,21 +88,6 @@ class PreferencesAccountPresenterTest {
             rageshakeFeatureAvailability = { flowOf(false) },
         ).test {
             assertThat(awaitItem().canReportBug).isFalse()
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - number of blocked users`() = runTest {
-        createPreferencesAccountPresenter(
-            matrixClient = FakeMatrixClient(
-                canDeactivateAccountResult = { true },
-                accountManagementUrlResult = { Result.success("") },
-                ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID, A_USER_ID_2)),
-            ),
-        ).test {
-            val state = consumeItemsUntilPredicate { it.numberOfBlockedUsers == 2 }.last()
-            assertThat(state.showBlockedUsersItem).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }

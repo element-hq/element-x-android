@@ -15,6 +15,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
@@ -24,6 +25,12 @@ class ModerationAndSafetyNode(
     @Assisted plugins: List<Plugin>,
     private val presenter: ModerationAndSafetyPresenter,
 ) : Node(buildContext, plugins = plugins) {
+    interface Callback : Plugin {
+        fun navigateToBlockedUsers()
+    }
+
+    private val callback: Callback = callback()
+
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
@@ -31,6 +38,7 @@ class ModerationAndSafetyNode(
             state = state,
             modifier = modifier,
             onBackClick = ::navigateUp,
+            onOpenBlockedUsers = callback::navigateToBlockedUsers,
         )
     }
 }

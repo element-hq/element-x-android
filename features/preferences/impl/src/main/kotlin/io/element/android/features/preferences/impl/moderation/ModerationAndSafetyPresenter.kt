@@ -10,16 +10,21 @@ package io.element.android.features.preferences.impl.moderation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @Inject
 class ModerationAndSafetyPresenter(
+    private val matrixClient: MatrixClient,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val mediaPreviewConfigStateStore: MediaPreviewConfigStateStore,
     @SessionCoroutineScope
@@ -32,6 +37,12 @@ class ModerationAndSafetyPresenter(
         }.collectAsState(initial = true)
 
         val mediaPreviewConfigState = mediaPreviewConfigStateStore.state()
+
+        val numberOfBlockedUsers by produceState(initialValue = 0) {
+            matrixClient.ignoredUsersFlow
+                .onEach { value = it.size }
+                .launchIn(this)
+        }
 
         fun handleEvent(event: ModerationAndSafetyEvent) {
             when (event) {
@@ -46,6 +57,7 @@ class ModerationAndSafetyPresenter(
         return ModerationAndSafetyState(
             isSharePresenceEnabled = isSharePresenceEnabled,
             mediaPreviewConfigState = mediaPreviewConfigState,
+            numberOfBlockedUsers = numberOfBlockedUsers,
             eventSink = ::handleEvent,
         )
     }

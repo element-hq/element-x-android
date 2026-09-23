@@ -62,6 +62,7 @@
   <string name="screen_labs_header_title">"Feeling experimental?"</string>
   <string name="screen_labs_title">"Labs"</string>
   <string name="screen_moderation_and_safety_invites_heading">"Invites"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Other users"</string>
   <string name="screen_moderation_and_safety_share_presence_heading">"Your appearance"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Call ringtone"</string>

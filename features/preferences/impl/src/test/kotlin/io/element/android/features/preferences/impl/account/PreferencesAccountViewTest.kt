@@ -63,23 +63,6 @@ class PreferencesAccountViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `click on Blocked users invokes the expected callback`() = runAndroidComposeUiTest {
-        ensureCalledOnce { callback ->
-            setView(
-                aPreferencesAccountState(numberOfBlockedUsers = 1),
-                onOpenBlockedUsers = callback,
-            )
-            clickOn(CommonStrings.common_blocked_users)
-        }
-    }
-
-    @Test
-    fun `when numberOfBlockedUsers is 0, item is not shown`() = runAndroidComposeUiTest {
-        setView(aPreferencesAccountState(numberOfBlockedUsers = 0))
-        onNodeWithText(activity!!.getString(CommonStrings.common_blocked_users)).assertDoesNotExist()
-    }
-
-    @Test
     fun `click on Notification invokes the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
             setView(
@@ -177,7 +160,6 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
     onOpenRageShake: () -> Unit = EnsureNeverCalled(),
     onModerationAndSafetyClick: () -> Unit = EnsureNeverCalled(),
     onOpenNotificationSettings: () -> Unit = EnsureNeverCalled(),
-    onOpenBlockedUsers: () -> Unit = EnsureNeverCalled(),
     onSignOutClick: () -> Unit = EnsureNeverCalled(),
     onDeactivateClick: () -> Unit = EnsureNeverCalled(),
 ) {
@@ -190,7 +172,6 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
             onOpenRageShake = onOpenRageShake,
             onModerationAndSafetyClick = onModerationAndSafetyClick,
             onOpenNotificationSettings = onOpenNotificationSettings,
-            onOpenBlockedUsers = onOpenBlockedUsers,
             onSignOutClick = onSignOutClick,
             onDeactivateClick = onDeactivateClick,
         )

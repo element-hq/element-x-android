@@ -10,5 +10,8 @@ package io.element.android.features.preferences.impl.moderation
 data class ModerationAndSafetyState(
     val isSharePresenceEnabled: Boolean,
     val mediaPreviewConfigState: MediaPreviewConfigState,
+    val numberOfBlockedUsers: Int,
     val eventSink: (ModerationAndSafetyEvent) -> Unit
-)
+) {
+    val showBlockedUsersItem = numberOfBlockedUsers > 0
+}

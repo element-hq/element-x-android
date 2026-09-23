@@ -20,6 +20,7 @@ open class ModerationAndSafetyStatePreviewParam : PreviewParameterProvider<Moder
             aModerationAndSafetyState(timelineMediaPreviewValue = MediaPreviewValue.Off),
             aModerationAndSafetyState(setHideInviteAvatarsAction = AsyncAction.Loading),
             aModerationAndSafetyState(setTimelineMediaPreviewAction = AsyncAction.Loading),
+            aModerationAndSafetyState(numberOfBlockedUsers = 3),
         )
 }
 
@@ -29,6 +30,7 @@ fun aModerationAndSafetyState(
     timelineMediaPreviewValue: MediaPreviewValue = MediaPreviewValue.On,
     setTimelineMediaPreviewAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     setHideInviteAvatarsAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    numberOfBlockedUsers: Int = 0,
     eventSink: (ModerationAndSafetyEvent) -> Unit = {},
 ) = ModerationAndSafetyState(
     isSharePresenceEnabled = isSharePresenceEnabled,
@@ -38,5 +40,6 @@ fun aModerationAndSafetyState(
         setTimelineMediaPreviewAction = setTimelineMediaPreviewAction,
         setHideInviteAvatarsAction = setHideInviteAvatarsAction
     ),
+    numberOfBlockedUsers = numberOfBlockedUsers,
     eventSink = eventSink
 )
