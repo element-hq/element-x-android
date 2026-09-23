@@ -49,7 +49,7 @@ haze = "1.7.2"
 maplibre-compose = "0.15.0"
 
 # Dependency analysis
-dependencyAnalysis = "3.19.1"
+dependencyAnalysis = "3.19.2"
 
 # DI
 metro = "1.4.3"
