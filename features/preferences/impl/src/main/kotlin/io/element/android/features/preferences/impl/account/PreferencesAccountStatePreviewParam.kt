@@ -26,7 +26,7 @@ open class PreferencesAccountStatePreviewParam : PreviewParameterProvider<Prefer
                 canReportBug = true,
                 showLinkNewDevice = true,
                 canDeactivateAccount = false,
-                nbOfBlockedUsers = 3,
+                numberOfBlockedUsers = 3,
             ),
             aPreferencesAccountState(
                 myUser = aMatrixUser(displayName = null),
@@ -40,7 +40,7 @@ open class PreferencesAccountStatePreviewParam : PreviewParameterProvider<Prefer
             ),
             aPreferencesAccountState(
                 canReportBug = true,
-                nbOfBlockedUsers = 3,
+                numberOfBlockedUsers = 3,
                 snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete),
             ),
             aPreferencesAccountState(
@@ -58,7 +58,7 @@ fun aPreferencesAccountState(
     canReportBug: Boolean = false,
     showLinkNewDevice: Boolean = false,
     canDeactivateAccount: Boolean = false,
-    nbOfBlockedUsers: Int = 0,
+    numberOfBlockedUsers: Int = 0,
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
     snackbarMessage: SnackbarMessage? = null,
 ) = PreferencesAccountState(
@@ -69,7 +69,7 @@ fun aPreferencesAccountState(
     canReportBug = canReportBug,
     showLinkNewDevice = showLinkNewDevice,
     canDeactivateAccount = canDeactivateAccount,
-    nbOfBlockedUsers = nbOfBlockedUsers,
+    numberOfBlockedUsers = numberOfBlockedUsers,
     directLogoutState = directLogoutState,
     snackbarMessage = snackbarMessage,
 )

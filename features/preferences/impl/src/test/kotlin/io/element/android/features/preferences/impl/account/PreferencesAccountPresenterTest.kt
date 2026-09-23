@@ -69,7 +69,7 @@ class PreferencesAccountPresenterTest {
             assertThat(initialState.showSecureBackupBadge).isFalse()
             assertThat(initialState.accountManagementUrl).isNull()
             assertThat(initialState.showLinkNewDevice).isFalse()
-            assertThat(initialState.nbOfBlockedUsers).isEqualTo(0)
+            assertThat(initialState.numberOfBlockedUsers).isEqualTo(0)
             assertThat(initialState.showBlockedUsersItem).isFalse()
             assertThat(initialState.directLogoutState).isEqualTo(aDirectLogoutState())
             assertThat(initialState.snackbarMessage).isNull()
@@ -107,7 +107,7 @@ class PreferencesAccountPresenterTest {
                 ignoredUsersFlow = MutableStateFlow(persistentListOf(A_USER_ID, A_USER_ID_2)),
             ),
         ).test {
-            val state = consumeItemsUntilPredicate { it.nbOfBlockedUsers == 2 }.last()
+            val state = consumeItemsUntilPredicate { it.numberOfBlockedUsers == 2 }.last()
             assertThat(state.showBlockedUsersItem).isTrue()
             cancelAndIgnoreRemainingEvents()
         }

@@ -123,7 +123,7 @@ private fun ManageAccountSection(
                 content = { Text(stringResource(id = CommonStrings.common_blocked_users)) },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
                 onClick = onOpenBlockedUsers,
-                trailingContent = ListItemContent.Text(state.nbOfBlockedUsers.toString()),
+                trailingContent = ListItemContent.Text(state.numberOfBlockedUsers.toString()),
             )
         }
     }

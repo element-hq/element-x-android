@@ -19,9 +19,9 @@ data class PreferencesAccountState(
     val canReportBug: Boolean,
     val showLinkNewDevice: Boolean,
     val canDeactivateAccount: Boolean,
-    val nbOfBlockedUsers: Int,
+    val numberOfBlockedUsers: Int,
     val directLogoutState: DirectLogoutState,
     val snackbarMessage: SnackbarMessage?,
 ) {
-    val showBlockedUsersItem = nbOfBlockedUsers > 0
+    val showBlockedUsersItem = numberOfBlockedUsers > 0
 }

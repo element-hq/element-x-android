@@ -107,7 +107,7 @@ class PreferencesAccountViewTest : RobolectricTest() {
     fun `click on Blocked users invokes the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
             setView(
-                aPreferencesAccountState(nbOfBlockedUsers = 1),
+                aPreferencesAccountState(numberOfBlockedUsers = 1),
                 onOpenBlockedUsers = callback,
             )
             clickOn(CommonStrings.common_blocked_users)
@@ -115,8 +115,8 @@ class PreferencesAccountViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `when nbOfBlockedUsers is 0, item is not shown`() = runAndroidComposeUiTest {
-        setView(aPreferencesAccountState(nbOfBlockedUsers = 0))
+    fun `when numberOfBlockedUsers is 0, item is not shown`() = runAndroidComposeUiTest {
+        setView(aPreferencesAccountState(numberOfBlockedUsers = 0))
         onNodeWithText(activity!!.getString(CommonStrings.common_blocked_users)).assertDoesNotExist()
     }
 

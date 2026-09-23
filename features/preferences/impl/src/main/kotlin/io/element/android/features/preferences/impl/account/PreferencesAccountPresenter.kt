@@ -73,7 +73,7 @@ class PreferencesAccountPresenter(
             canDeactivateAccount = matrixClient.canDeactivateAccount()
         }
 
-        val nbOfBlockedUsers by produceState(initialValue = 0) {
+        val numberOfBlockedUsers by produceState(initialValue = 0) {
             matrixClient.ignoredUsersFlow
                 .onEach { value = it.size }
                 .launchIn(this)
@@ -93,7 +93,7 @@ class PreferencesAccountPresenter(
             canReportBug = canReportBug,
             showLinkNewDevice = showLinkNewDevice,
             canDeactivateAccount = canDeactivateAccount,
-            nbOfBlockedUsers = nbOfBlockedUsers,
+            numberOfBlockedUsers = numberOfBlockedUsers,
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
         )
