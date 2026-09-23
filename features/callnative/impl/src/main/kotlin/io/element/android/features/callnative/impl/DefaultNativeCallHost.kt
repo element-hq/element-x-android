@@ -8,13 +8,13 @@
 package io.element.android.features.callnative.impl
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.call.impl.ElementCallPictureInPicture
 import io.element.android.call.ui.ElementCallOverlay
@@ -52,7 +52,7 @@ class DefaultNativeCallHost(
         // Installed here rather than in the Activity because this is the only place that has both the
         // Activity and the session whose call it is. The Activity keeps `onUserLeaveHint`, which it
         // cannot delegate: see NativeCallPip.
-        val activity = LocalContext.current as? ComponentActivity
+        val activity = LocalActivity.current as? ComponentActivity
         DisposableEffect(activity, current) {
             if (activity != null) {
                 runCatchingExceptions { ElementCallPictureInPicture.attach(activity, current) }
