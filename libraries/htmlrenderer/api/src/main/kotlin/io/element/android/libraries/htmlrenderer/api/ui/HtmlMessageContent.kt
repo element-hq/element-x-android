@@ -13,7 +13,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,6 +52,7 @@ import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.input.pointer.PointerEventTimeoutCancellationException
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
@@ -541,16 +543,31 @@ private fun Modifier.linkTapHandler(
     layoutResult: State<TextLayoutResult?>,
     context: RenderContext,
 ): Modifier = pointerInput(text) {
-    detectTapGestures(
-        onTap = { offset ->
-            val (url, urlText) = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
-            context.onLinkClick(url, urlText)
-        },
-        onLongPress = { offset ->
-            val (url, urlText) = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
+    awaitEachGesture {
+        val down = awaitFirstDown(requireUnconsumed = true)
+        val (url, urlText) = layoutResult.value?.urlAt(down.position, text) ?: return@awaitEachGesture
+        down.consume()
+
+        val longPressTimeout = viewConfiguration.longPressTimeoutMillis
+
+        val isLongPress = try {
+            withTimeout(longPressTimeout) {
+                val up = awaitPointerEvent().changes.firstOrNull { it.id == down.id } ?: return@withTimeout null
+                if (up.pressed) return@withTimeout null
+                up.consume()
+
+                up.uptimeMillis - down.uptimeMillis > longPressTimeout
+            }
+        } catch (_: PointerEventTimeoutCancellationException) {
+            true
+        } ?: return@awaitEachGesture
+
+        if (isLongPress) {
             context.onLinkLongClick(url, urlText)
-        },
-    )
+        } else {
+            context.onLinkClick(url, urlText)
+        }
+    }
 }
 
 private fun TextLayoutResult.urlAt(offset: Offset, text: AnnotatedString): Pair<String, String>? {
