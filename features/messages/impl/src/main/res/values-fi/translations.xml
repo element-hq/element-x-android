@@ -47,10 +47,8 @@
   <string name="screen_room_attachment_source_location">"Jaa sijainti"</string>
   <string name="screen_room_attachment_source_poll">"Kysely"</string>
   <string name="screen_room_attachment_text_formatting">"Tekstin muotoilu"</string>
-  <string name="screen_room_confirm_removal_message">"Oletko varma, että haluat poistaa tämän viestin?"</string>
   <string name="screen_room_confirm_removal_reason_label">"Syy (valinnainen)"</string>
   <string name="screen_room_confirm_removal_reason_placeholder">"Kirjoita…"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder_android">"Syy…"</string>
   <string name="screen_room_confirm_removal_reason_supporting_text">"(Valinnainen)"</string>
   <string name="screen_room_confirm_removal_title">"Vahvista poistaminen"</string>
   <string name="screen_room_encrypted_history_banner">"Viestihistoria ei ole tällä hetkellä saatavilla"</string>

@@ -46,10 +46,8 @@
   <string name="screen_room_attachment_source_location">"共享位置"</string>
   <string name="screen_room_attachment_source_poll">"投票"</string>
   <string name="screen_room_attachment_text_formatting">"文本格式化"</string>
-  <string name="screen_room_confirm_removal_message">"确定要移除此消息？"</string>
   <string name="screen_room_confirm_removal_reason_label">"理由（可选）"</string>
   <string name="screen_room_confirm_removal_reason_placeholder">"输入…"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder_android">"理由…"</string>
   <string name="screen_room_confirm_removal_reason_supporting_text">"（可选）"</string>
   <string name="screen_room_confirm_removal_title">"确认移除"</string>
   <string name="screen_room_encrypted_history_banner">"消息历史记录当前不可用。"</string>
