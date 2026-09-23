@@ -563,7 +563,7 @@ private val BlockSpacing: Dp = 8.dp
 private val ListItemSpacing: Dp = 4.dp
 private val ListMarkerWidth: Dp = 24.dp
 private val PillPaddingHorizontal: Dp = 6.dp
-private val PillPaddingVertical: Dp = 2.dp
+private val PillPaddingVertical: Dp = 0.dp
 
 /** Rounded, bordered box drawn behind inline code. */
 private val InlineCodeCornerRadius: Dp = 6.dp
