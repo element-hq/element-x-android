@@ -17,8 +17,10 @@ import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.matrix.api.core.MatrixPatternType
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.RoomAlias
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import kotlinx.collections.immutable.ImmutableMap
@@ -28,7 +30,7 @@ private val MATRIX_URI_REGEX = Regex("""matrix:(?:u|user|r|room|roomid|e|event)/
 private val WEB_URL_REGEX = Patterns.WEB_URL.toRegex()
 private val TRAILING_PUNCTUATION = charArrayOf('.', ',', ';', ':', '!', '?', '…')
 
-private const val PILL_ID_PREFIX = "pill_"
+private const val PILL_ID_PREFIX = "autopill_"
 
 /**
  * The result of [pillify]: the new [text] and the full map of inline content placeholders in it.
@@ -51,13 +53,15 @@ internal data class PillifiedText(
  *
  * @param inlineContent the inline content placeholders already present in this [AnnotatedString].
  * @param permalinkParser used to parse permalinks found in the text.
+ * @param permalinkBuilder used to build permalinks for the detected mentions if they weren't in a URL format.
  * @return the new text, and [inlineContent] plus any added pill.
  */
 internal fun AnnotatedString.pillify(
     inlineContent: Map<String, MentionNodeContent>,
     permalinkParser: PermalinkParser,
+    permalinkBuilder: PermalinkBuilder,
 ): PillifiedText {
-    val matches = findPillMatches(inlineContent.keys, permalinkParser)
+    val matches = findPillMatches(inlineContent.keys, permalinkParser, permalinkBuilder)
     if (matches.isEmpty()) return PillifiedText(this, inlineContent.toImmutableMap())
 
     val allInlineContent = inlineContent.toMutableMap()
@@ -92,11 +96,12 @@ private data class PillMatch(
 private fun AnnotatedString.findPillMatches(
     inlineContentIds: Set<String>,
     permalinkParser: PermalinkParser,
+    permalinkBuilder: PermalinkBuilder,
 ): List<PillMatch> {
     val candidates = buildList {
-        addAll(findMatrixPatternMatches(permalinkParser))
-        addAll(findPermalinkMatches(MATRIX_URI_REGEX, inlineContentIds, permalinkParser))
-        addAll(findPermalinkMatches(WEB_URL_REGEX, inlineContentIds, permalinkParser))
+        addAll(findMatrixPatternMatches(permalinkParser, permalinkBuilder))
+        addAll(findPermalinkMatches(MATRIX_URI_REGEX, inlineContentIds, permalinkParser, permalinkBuilder))
+        addAll(findPermalinkMatches(WEB_URL_REGEX, inlineContentIds, permalinkParser, permalinkBuilder))
     }
     val sortedCandidates = candidates
         .filter { canPillify(it.start, it.end, inlineContentIds) }
@@ -109,11 +114,21 @@ private fun AnnotatedString.findPillMatches(
     return result
 }
 
-private fun AnnotatedString.findMatrixPatternMatches(permalinkParser: PermalinkParser): List<PillMatch> {
+private fun AnnotatedString.findMatrixPatternMatches(permalinkParser: PermalinkParser, permalinkBuilder: PermalinkBuilder): List<PillMatch> {
     return MatrixPatterns.findPatterns(text, permalinkParser).mapNotNull { match ->
         val mention = when (match.type) {
-            MatrixPatternType.USER_ID -> MentionNodeContent.User(displayText = match.value, userId = UserId(match.value))
-            MatrixPatternType.ROOM_ALIAS -> MentionNodeContent.Room(displayText = match.value, roomIdOrAlias = RoomAlias(match.value).toRoomIdOrAlias())
+            MatrixPatternType.USER_ID -> {
+                val userId = UserId(match.value)
+                permalinkBuilder.permalinkForUser(userId).getOrNull()?.let {
+                    MentionNodeContent.User(displayText = match.value, userId = userId, permalinkUrl = it)
+                }
+            }
+            MatrixPatternType.ROOM_ALIAS -> {
+                val roomAlias = RoomAlias(match.value)
+                permalinkBuilder.permalinkForRoomAlias(roomAlias).getOrNull()?.let {
+                    MentionNodeContent.Room(displayText = match.value, roomIdOrAlias = roomAlias.toRoomIdOrAlias(), permalinkUrl = it)
+                }
+            }
             MatrixPatternType.AT_ROOM -> MentionNodeContent.Everyone(displayText = match.value)
             else -> null
         }
@@ -125,6 +140,7 @@ private fun AnnotatedString.findPermalinkMatches(
     regex: Regex,
     inlineContentIds: Set<String>,
     permalinkParser: PermalinkParser,
+    permalinkBuilder: PermalinkBuilder,
 ): List<PillMatch> {
     return regex.findAll(text).mapNotNull { match ->
         val start = match.range.first
@@ -132,16 +148,22 @@ private fun AnnotatedString.findPermalinkMatches(
         // Check this before parsing the url, as links will be discarded anyway
         if (end <= start || !canPillify(start, end, inlineContentIds)) return@mapNotNull null
         val mention = when (val permalink = permalinkParser.parse(text.substring(start, end))) {
-            is PermalinkData.UserLink -> MentionNodeContent.User(
-                displayText = permalink.userId.value,
-                userId = permalink.userId,
-            )
-            // A link to a specific event is a regular link, not a mention pill.
-            is PermalinkData.RoomLink -> if (permalink.eventId == null) {
-                MentionNodeContent.Room(
-                    displayText = permalink.roomIdOrAlias.identifier,
-                    roomIdOrAlias = permalink.roomIdOrAlias,
+            is PermalinkData.UserLink -> permalinkBuilder.permalinkForUser(permalink.userId).getOrNull()?.let {
+                MentionNodeContent.User(
+                    displayText = permalink.userId.value,
+                    userId = permalink.userId,
+                    permalinkUrl = it,
                 )
+            }
+            // A link to a specific event is a regular link, not a mention pill.
+            is PermalinkData.RoomLink -> if (permalink.eventId == null && permalink.roomIdOrAlias is RoomIdOrAlias.Alias) {
+                permalinkBuilder.permalinkForRoomAlias((permalink.roomIdOrAlias as RoomIdOrAlias.Alias).roomAlias).getOrNull()?.let {
+                    MentionNodeContent.Room(
+                        displayText = permalink.roomIdOrAlias.identifier,
+                        roomIdOrAlias = permalink.roomIdOrAlias,
+                        permalinkUrl = it,
+                    )
+                }
             } else {
                 null
             }
