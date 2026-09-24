@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.htmlrenderer.impl
 
+import android.net.Uri
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -129,7 +130,7 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
 
     @Test
     fun `a regular link is styled and annotated with its url`() {
-        val permalinkParser = FakePermalinkParser { PermalinkData.FallbackLink(android.net.Uri.parse(it)) }
+        val permalinkParser = FakePermalinkParser { PermalinkData.FallbackLink(Uri.parse(it)) }
         val document = parse("""Visit <a href="https://element.io">the site</a>""", permalinkParser)
         val paragraph = document.children.single() as ParagraphNode
         assertThat(paragraph.inlineContent).isEmpty()
@@ -183,6 +184,29 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
         val document = parse("""Look <a href="https://matrix.to/#/!room:example.org/event">here</a>""", permalinkParser)
         val paragraph = document.children.single() as ParagraphNode
         assertThat(paragraph.inlineContent).isEmpty()
+    }
+
+    @Test
+    fun `raw mentions in the text become mention pills next to the existing ones`() {
+        val alice = UserId("@alice:example.org")
+        val permalinkParser = FakePermalinkParser { url ->
+            if (url == "https://matrix.to/#/@alice:example.org") PermalinkData.UserLink(alice) else PermalinkData.FallbackLink(Uri.parse(url))
+        }
+        val document = parse(
+            """<p><a href="https://matrix.to/#/@alice:example.org">Alice</a>, @bob:example.org and @room</p><h2>Join #room:example.org</h2>""",
+            permalinkParser,
+        )
+        val paragraph = document.children[0] as ParagraphNode
+        assertThat(paragraph.text.text).isEqualTo("Alice, @bob:example.org and @room")
+        assertThat(paragraph.inlineContent.values).containsExactly(
+            MentionNodeContent.User(displayText = "Alice", userId = alice),
+            MentionNodeContent.User(displayText = "@bob:example.org", userId = UserId("@bob:example.org")),
+            MentionNodeContent.Everyone(displayText = "@room"),
+        )
+        val header = document.children[1] as HeaderNode
+        assertThat(header.inlineContent.values.single()).isEqualTo(
+            MentionNodeContent.Room(displayText = "#room:example.org", roomIdOrAlias = RoomAlias("#room:example.org").toRoomIdOrAlias())
+        )
     }
 
     @Test
