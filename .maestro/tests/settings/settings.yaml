@@ -5,6 +5,33 @@ appId: ${MAESTRO_APP_ID}
 - assertVisible: "Settings"
 - takeScreenshot: build/maestro/600-Settings
 
+## Account settings
+- tapOn:
+    id: "settings-user_profile"
+- assertVisible: "Edit profile"
+- takeScreenshot: build/maestro/610-AccountEditProfile
+- back
+
+- tapOn:
+    text: "Notifications"
+- assertVisible: "Enable notifications on this device"
+- back
+
+- tapOn:
+    text: "Encryption"
+- assertVisible: "Key storage"
+- back
+
+- tapOn:
+    text: "Moderation & safety"
+- assertVisible: "Your appearance"
+- back
+
+- tapOn:
+    text: "Report a problem"
+- assertVisible: "Report a problem"
+- back
+
 ## App settings section
 - assertVisible: "Appearance"
 
@@ -19,22 +46,38 @@ appId: ${MAESTRO_APP_ID}
 - hideKeyboard
 - back
 
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "Location sharing"
 - tapOn:
     text: "Location sharing"
 - assertVisible: "Live location updates"
 - back
 
 ## General section
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "Analytics"
 - tapOn:
     text: "Analytics"
 - assertVisible: "Share analytics data"
 - back
 
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "Labs"
 - tapOn:
     text: "Labs"
 - assertVisible: "Feeling experimental?"
 - back
 
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "About"
 - tapOn:
     text: "About"
 - assertVisible: "Copyright"
@@ -42,33 +85,15 @@ appId: ${MAESTRO_APP_ID}
 - assertVisible: "Privacy policy"
 - back
 
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "Developer options"
 - tapOn:
     text: "Developer options"
 - assertVisible: "Feature flags"
 - assertVisible: "View source"
 - back
 
-## Account settings
-- tapOn:
-    id: "settings-user_profile"
-- assertVisible: "Your account"
-- takeScreenshot: build/maestro/610-AccountSettings
-
-- tapOn:
-    text: "Notifications"
-- assertVisible: "Enable notifications on this device"
-- back
-
-- tapOn:
-    text: "Moderation & safety"
-- assertVisible: "Your appearance"
-- back
-
-- tapOn:
-    text: "Report a problem"
-- assertVisible: "Report a problem"
-- back
-
-- back
 - back
 - runFlow: ../assertions/assertHomeDisplayed.yaml
