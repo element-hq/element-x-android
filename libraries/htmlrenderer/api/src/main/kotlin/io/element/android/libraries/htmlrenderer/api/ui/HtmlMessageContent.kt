@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.PointerEventTimeoutCancellationException
+import androidx.compose.ui.input.pointer.changedToUp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
@@ -538,6 +539,10 @@ private fun Modifier.drawInlineCodeBackgrounds(
     }
 }
 
+/**
+ * Detects taps and long presses on link-annotated ranges ([LINK_ANNOTATION_TAG]) without consuming the touch events if none are detected, and invokes the
+ * appropriate callbacks in [context].
+ */
 private fun Modifier.linkTapHandler(
     text: AnnotatedString,
     layoutResult: State<TextLayoutResult?>,
@@ -550,17 +555,27 @@ private fun Modifier.linkTapHandler(
 
         val longPressTimeout = viewConfiguration.longPressTimeoutMillis
 
+        // Try detecting a long press by waiting for the long press timeout and checking if we received an up event before that.
+        // If we did, it's a tap, otherwise it's a long press.
+        // This warning is a false positive.
+        @Suppress("KotlinConstantConditions")
         val isLongPress = try {
             withTimeout(longPressTimeout) {
-                val up = awaitPointerEvent().changes.firstOrNull { it.id == down.id } ?: return@withTimeout null
-                if (up.pressed) return@withTimeout null
-                up.consume()
+                var receivedUp = false
+                while (!receivedUp) {
+                    val event = awaitPointerEvent()
+                    val up = event.changes.firstOrNull { it.id == down.id && it.changedToUp() }
+                    if (up != null) {
+                        receivedUp = true
+                        up.consume()
+                    }
+                }
 
-                up.uptimeMillis - down.uptimeMillis > longPressTimeout
+                !receivedUp
             }
         } catch (_: PointerEventTimeoutCancellationException) {
             true
-        } ?: return@awaitEachGesture
+        }
 
         if (isLongPress) {
             context.onLinkLongClick(url, urlText)
