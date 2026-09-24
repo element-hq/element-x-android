@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.jsoup.Jsoup
@@ -152,7 +153,7 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
         val paragraph = document.children.single() as ParagraphNode
 
         val mention = paragraph.inlineContent.values.single()
-        assertThat(mention).isEqualTo(MentionNodeContent.User(displayText = "Alice", userId = userId))
+        assertThat(mention).isEqualTo(MentionNodeContent.User(displayText = "Alice", userId = userId, permalinkUrl = "https://matrix.to/#/@alice:example.org"))
         // The placeholder id in the text matches the map key.
         val placeholderId = paragraph.inlineContent.keys.single()
         val annotations = paragraph.text.getStringAnnotations(0, paragraph.text.length)
@@ -169,7 +170,7 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
         val paragraph = document.children.single() as ParagraphNode
         val mention = paragraph.inlineContent.values.single()
         assertThat(mention).isEqualTo(
-            MentionNodeContent.Room(displayText = "the room", roomIdOrAlias = roomIdOrAlias)
+            MentionNodeContent.Room(displayText = "the room", roomIdOrAlias = roomIdOrAlias, permalinkUrl = "https://matrix.to/#/#room:example.org")
         )
     }
 
@@ -199,13 +200,21 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
         val paragraph = document.children[0] as ParagraphNode
         assertThat(paragraph.text.text).isEqualTo("Alice, @bob:example.org and @room")
         assertThat(paragraph.inlineContent.values).containsExactly(
-            MentionNodeContent.User(displayText = "Alice", userId = alice),
-            MentionNodeContent.User(displayText = "@bob:example.org", userId = UserId("@bob:example.org")),
+            MentionNodeContent.User(displayText = "Alice", userId = alice, permalinkUrl = "https://matrix.to/#/@alice:example.org"),
+            MentionNodeContent.User(
+                displayText = "@bob:example.org",
+                userId = UserId("@bob:example.org"),
+                permalinkUrl = "https://matrix.to/#/@bob:example.org"
+            ),
             MentionNodeContent.Everyone(displayText = "@room"),
         )
         val header = document.children[1] as HeaderNode
         assertThat(header.inlineContent.values.single()).isEqualTo(
-            MentionNodeContent.Room(displayText = "#room:example.org", roomIdOrAlias = RoomAlias("#room:example.org").toRoomIdOrAlias())
+            MentionNodeContent.Room(
+                displayText = "#room:example.org",
+                roomIdOrAlias = RoomAlias("#room:example.org").toRoomIdOrAlias(),
+                permalinkUrl = "https://matrix.to/#/#room:example.org"
+            )
         )
     }
 
@@ -243,5 +252,9 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
     private fun parse(
         html: String,
         permalinkParser: FakePermalinkParser = FakePermalinkParser(),
-    ) = DefaultHtmlMessageParser(permalinkParser).parse(Jsoup.parse(html))
+        permalinkBuilder: FakePermalinkBuilder = FakePermalinkBuilder(
+            permalinkForUserLambda = { Result.success("https://matrix.to/#/${it.value}") },
+            permalinkForRoomAliasLambda = { Result.success("https://matrix.to/#/${it.value}") },
+        ),
+    ) = DefaultHtmlMessageParser(permalinkParser, permalinkBuilder).parse(Jsoup.parse(html))
 }

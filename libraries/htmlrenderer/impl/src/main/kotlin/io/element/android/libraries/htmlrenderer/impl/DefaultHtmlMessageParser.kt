@@ -28,6 +28,7 @@ import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ParagraphNode
 import io.element.android.libraries.htmlrenderer.api.QuoteNode
 import io.element.android.libraries.htmlrenderer.api.spans.InlineCodeSpanStyle
+import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import kotlinx.collections.immutable.ImmutableList
@@ -47,6 +48,7 @@ import org.jsoup.nodes.TextNode
 @ContributesBinding(AppScope::class)
 class DefaultHtmlMessageParser(
     private val permalinkParser: PermalinkParser,
+    private val permalinkBuilder: PermalinkBuilder,
 ) : HtmlMessageParser {
     override fun parse(document: Document): DocumentNode {
         return DocumentNode(children = parseBlocks(document.body()))
@@ -198,11 +200,13 @@ class DefaultHtmlMessageParser(
                 is PermalinkData.UserLink -> MentionNodeContent.User(
                     displayText = element.text(),
                     userId = permalink.userId,
+                    permalinkUrl = href,
                 )
                 is PermalinkData.RoomLink -> if (permalink.eventId == null) {
                     MentionNodeContent.Room(
                         displayText = element.text(),
                         roomIdOrAlias = permalink.roomIdOrAlias,
+                        permalinkUrl = href,
                     )
                 } else {
                     // A link to a specific event is a regular link, not a mention pill.
@@ -216,7 +220,7 @@ class DefaultHtmlMessageParser(
             val text = builder.toAnnotatedString()
             if (text.isBlank() && mentions.isEmpty()) return null
             // Turn any mention in the raw text (not an `<a>` tag) into a pill too
-            val pillified = text.pillify(mentions, permalinkParser)
+            val pillified = text.pillify(mentions, permalinkParser, permalinkBuilder)
             return Result(
                 text = pillified.text,
                 inlineContent = pillified.inlineContent,
