@@ -460,8 +460,7 @@ fun MessagesView(
     if (state.redactEventAction is MessagesState.ConfirmingRedaction) {
         TextFieldDialog(
             title = stringResource(R.string.screen_room_confirm_removal_title),
-            content = stringResource(R.string.screen_room_confirm_removal_message),
-            placeholder = stringResource(R.string.screen_room_confirm_removal_reason_placeholder_android),
+            placeholder = stringResource(R.string.screen_room_confirm_removal_reason_placeholder),
             supportingText = stringResource(R.string.screen_room_confirm_removal_reason_supporting_text),
             value = null,
             submitText = stringResource(CommonStrings.action_remove),

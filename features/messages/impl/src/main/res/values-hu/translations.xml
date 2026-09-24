@@ -47,10 +47,8 @@
   <string name="screen_room_attachment_source_location">"Hely megosztása"</string>
   <string name="screen_room_attachment_source_poll">"Szavazás"</string>
   <string name="screen_room_attachment_text_formatting">"Szövegformázás"</string>
-  <string name="screen_room_confirm_removal_message">"Biztosan eltávolítja ezt az üzenetet?"</string>
   <string name="screen_room_confirm_removal_reason_label">"Ok (nem kötelező)"</string>
   <string name="screen_room_confirm_removal_reason_placeholder">"Írja be…"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder_android">"Ok…"</string>
   <string name="screen_room_confirm_removal_reason_supporting_text">"(Választható)"</string>
   <string name="screen_room_confirm_removal_title">"Eltávolítás megerősítése"</string>
   <string name="screen_room_encrypted_history_banner">"Az üzenetelőzmények jelenleg nem érhetők el."</string>
