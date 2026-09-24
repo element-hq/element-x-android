@@ -33,6 +33,7 @@ import io.element.android.libraries.androidutils.text.LinkifyHelper
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.utils.LocalUiTestMode
+import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ui.HtmlMessageContent
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
@@ -62,6 +63,13 @@ fun TimelineItemTextView(
                 currentUserId = LocalTimelineEventRendererConfig.current.currentUserId,
                 onLinkClick = { url, text -> onLinkClick(Link(url = url, text = text)) },
                 onLinkLongClick = { url, text -> onLinkLongClick(Link(url = url, text = text)) },
+                onMentionClick = { mention ->
+                    when (mention) {
+                        is MentionNodeContent.Room -> onLinkClick(Link(url = mention.permalinkUrl, text = mention.displayText))
+                        is MentionNodeContent.User -> onLinkClick(Link(url = mention.permalinkUrl, text = mention.displayText))
+                        is MentionNodeContent.Everyone -> { /* No action for @room mentions */ }
+                    }
+                },
                 onContentLayoutChange = { data ->
                     onContentLayoutChange(
                         ContentAvoidingLayoutData(
