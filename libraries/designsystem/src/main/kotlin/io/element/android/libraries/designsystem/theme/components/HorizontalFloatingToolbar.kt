@@ -8,17 +8,18 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.animation.core.FiniteAnimationSpec
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingToolbarColors
 import androidx.compose.material3.FloatingToolbarDefaults
 import androidx.compose.material3.FloatingToolbarHorizontalFabPosition
@@ -28,7 +29,6 @@ import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -139,8 +139,18 @@ fun HorizontalFloatingToolbarItem(
                 contentColor = ElementTheme.colors.iconSecondary,
             )
         }
-        Box {
-            FilledIconButton(
+        BadgedBox(
+            badge = {
+                CounterAtom(
+                    count = counter,
+                    // Tweak the offset so it's centered on the icon
+                    modifier = Modifier.offset(x = (-16).dp, y = 10.dp),
+                    contentPadding = PaddingValues(vertical = 0.5.dp),
+                    textStyle = ElementTheme.typography.fontBodySmMedium,
+                )
+            }
+        ) {
+            IconButton(
                 modifier = Modifier.widthIn(min = 56.dp),
                 colors = colors,
                 onClick = onClick,
@@ -149,15 +159,6 @@ fun HorizontalFloatingToolbarItem(
                     modifier = Modifier.size(24.dp),
                     imageVector = icon,
                     contentDescription = tooltipLabel,
-                )
-            }
-            if (counter != null) {
-                CounterAtom(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(top = 6.dp, end = 3.dp),
-                    count = counter,
-                    textStyle = ElementTheme.typography.fontBodyXsMedium,
                 )
             }
         }
@@ -172,18 +173,47 @@ fun HorizontalFloatingToolbarSeparator(modifier: Modifier = Modifier) {
 @PreviewsDayNight
 @Composable
 internal fun HorizontalFloatingToolbarPreview() = ElementPreview {
-    ContentToPreview(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {},
-            ) {
-                Icon(
-                    imageVector = CompoundIcons.Plus(),
-                    contentDescription = null,
-                )
+    Column {
+        ContentToPreview(
+            count = 1,
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {},
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.Plus(),
+                        contentDescription = null,
+                    )
+                }
             }
-        }
-    )
+        )
+        ContentToPreview(
+            count = 99,
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {},
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.Plus(),
+                        contentDescription = null,
+                    )
+                }
+            }
+        )
+        ContentToPreview(
+            count = 999,
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {},
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.Plus(),
+                        contentDescription = null,
+                    )
+                }
+            }
+        )
+    }
 }
 
 @PreviewsDayNight
@@ -197,10 +227,11 @@ internal fun HorizontalFloatingToolbarNoFabPreview() = ElementPreview {
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentToPreview(
+    count: Int? = 6,
     floatingActionButton: (@Composable () -> Unit)?,
 ) {
     HorizontalFloatingToolbar(
-        modifier = Modifier.padding(28.dp),
+        modifier = Modifier.padding(horizontal = 28.dp, vertical = 16.dp),
         floatingActionButton = floatingActionButton,
     ) {
         listOf(
@@ -214,7 +245,7 @@ private fun ContentToPreview(
                 icon = icon,
                 tooltipLabel = "Label",
                 isSelected = index == 0,
-                counter = if (index == 0) 6 else null,
+                counter = if (index == 0) count else null,
                 forceRenderingTooltip = true,
                 onClick = { },
             )
