@@ -329,7 +329,7 @@ private fun CodeBlockView(
         )
 
         // Previews and screenshots can't render the fading edge gradients properly, everything is obscured by them, so we skip them in the preview mode.
-        if (LocalInspectionMode.current.not() && scrollState.maxValue > 0) {
+        if (LocalInspectionMode.current.not() && (scrollState.canScrollForward || scrollState.canScrollBackward)) {
             val progress by remember {
                 derivedStateOf {
                     scrollState.value.toFloat() / scrollState.maxValue
