@@ -366,10 +366,10 @@ private fun MessagePreviewAndIndicatorRow(
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
-                val count = if (showUnreadCount && !isMuted && room.numberOfUnreadNotifications > 0) {
-                    room.numberOfUnreadNotifications
-                } else {
-                    null
+                val count = when {
+                    showUnreadCount && !isMuted && room.numberOfUnreadNotifications > 0 -> room.numberOfUnreadNotifications
+                    !showUnreadCount -> 0
+                    else -> null
                 }
                 UnreadIndicatorAtom(
                     color = tint,
@@ -454,6 +454,6 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryPreviewP
         isInviteSeen = data.name == "Bob",
         onClick = {},
         eventSink = {},
-        showUnreadCount = true,
+        showUnreadCount = data.numberOfUnreadNotifications > 0,
     )
 }

@@ -42,18 +42,20 @@ fun UnreadIndicatorAtom(
 ) {
     when {
         !isVisible -> Spacer(modifier = modifier.size(size))
-        else -> CounterAtom(
-            count = count?.toInt(),
-            modifier = modifier
-                .semantics {
-                    contentDescription?.let { this.contentDescription = it }
-                }
-                .then(if (border != null) Modifier.border(border, RoundedCornerShape(percent = 50)) else Modifier),
-            containerColor = color,
-            contentColor = ElementTheme.colors.bgCanvasDefault,
-            textStyle = ElementTheme.typography.fontBodySmMedium,
-            contentPadding = contentPadding,
-        )
+        else -> count?.let {
+            CounterAtom(
+                count = count.toInt(),
+                modifier = modifier
+                    .semantics {
+                        contentDescription?.let { this.contentDescription = it }
+                    }
+                    .then(if (border != null) Modifier.border(border, RoundedCornerShape(percent = 50)) else Modifier),
+                containerColor = color,
+                contentColor = ElementTheme.colors.bgCanvasDefault,
+                textStyle = ElementTheme.typography.fontBodySmMedium,
+                contentPadding = contentPadding,
+            )
+        }
     }
 }
 

@@ -141,13 +141,15 @@ fun HorizontalFloatingToolbarItem(
         }
         BadgedBox(
             badge = {
-                CounterAtom(
-                    count = counter,
-                    // Tweak the offset so it's centered on the icon
-                    modifier = Modifier.offset(x = (-16).dp, y = 10.dp),
-                    contentPadding = PaddingValues(vertical = 0.5.dp),
-                    textStyle = ElementTheme.typography.fontBodySmMedium,
-                )
+                counter?.let {
+                    CounterAtom(
+                        count = it,
+                        // Tweak the offset so it's centered on the icon
+                        modifier = Modifier.offset(x = (-16).dp, y = 10.dp),
+                        contentPadding = PaddingValues(vertical = 0.5.dp),
+                        textStyle = ElementTheme.typography.fontBodySmMedium,
+                    )
+                }
             }
         ) {
             IconButton(

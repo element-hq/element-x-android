@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -37,28 +38,29 @@ private const val MAX_COUNT_STRING = "$MAX_COUNT+"
  * Figma link : https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2805-2649&m=dev
  *
  * @param count The number to display. If the number is greater than [MAX_COUNT], the counter will display [MAX_COUNT_STRING].
- * If the number is less than 1, the counter will not be displayed.
+ * If the number is less than 1, just a dot will be displayed instead.
  * @param modifier The modifier to apply to this layout.
  * @param containerColor The background color of the counter. When null, uses [isCritical] to pick a default.
  * @param contentColor The text color inside the counter. When null, uses [SemanticColors.textOnSolidPrimary].
  * @param contentPadding The padding to apply to the text inside the counter.
  * @param textStyle The style to apply to the text inside the counter.
+ * @param dotSize The size of the dot when [count] is less than 1. It defaults to `12.0.dp`.
  * @param isCritical If true, the counter will use a critical color scheme, otherwise it will use an accent color scheme.
  * Only used when [containerColor] is null.
  */
 @Composable
 fun CounterAtom(
-    count: Int?,
+    count: Int,
     modifier: Modifier = Modifier,
     containerColor: Color? = null,
     contentColor: Color? = null,
     contentPadding: PaddingValues = PaddingValues.Zero,
     textStyle: TextStyle = CounterAtomDefaults.textStyle,
+    dotSize: Dp = 12.0.dp,
     isCritical: Boolean = false,
 ) {
     val countAsText = when (count) {
-        null -> return
-        0 -> null
+        in Int.MIN_VALUE..0 -> null
         in 1..MAX_COUNT -> count.toString()
         else -> MAX_COUNT_STRING
     }
@@ -77,7 +79,9 @@ fun CounterAtom(
     }
 
     androidx.compose.material3.Badge(
-        modifier = modifier,
+        modifier = modifier.then(
+            if (countAsText == null) Modifier.sizeIn(minWidth = dotSize, minHeight = dotSize) else Modifier
+        ),
         containerColor = containerColor ?: if (isCritical) ElementTheme.colors.iconCriticalPrimary else ElementTheme.colors.iconAccentPrimary,
         contentColor = contentColor ?: ElementTheme.colors.textOnSolidPrimary,
         content = countAsText?.let {
@@ -106,7 +110,6 @@ object CounterAtomDefaults {
 @Composable
 internal fun CounterAtomPreview() = ElementPreview {
     Row(horizontalArrangement = spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
-        CounterAtom(count = null)
         CounterAtom(count = 0)
         CounterAtom(count = 4)
         CounterAtom(count = 99)
