@@ -48,10 +48,8 @@
   <string name="screen_room_attachment_source_location">"Udostępnij lokalizację"</string>
   <string name="screen_room_attachment_source_poll">"Ankieta"</string>
   <string name="screen_room_attachment_text_formatting">"Formatowanie tekstu"</string>
-  <string name="screen_room_confirm_removal_message">"Czy na pewno chcesz usunąć wiadomość?"</string>
   <string name="screen_room_confirm_removal_reason_label">"Powód (opcjonalne)"</string>
   <string name="screen_room_confirm_removal_reason_placeholder">"Powód…"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder_android">"Powód…"</string>
   <string name="screen_room_confirm_removal_reason_supporting_text">"(Opcjonalne)"</string>
   <string name="screen_room_confirm_removal_title">"Potwierdź usunięcie"</string>
   <string name="screen_room_encrypted_history_banner">"Historia wiadomości jest obecnie niedostępna."</string>
