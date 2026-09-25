@@ -91,7 +91,6 @@ import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPr
 import io.element.android.features.messages.impl.timeline.focus.FocusRequestStateView
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.canBeSelected
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentPreviewParam
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
@@ -234,17 +233,18 @@ fun TimelineView(
                         selectionData = TimelineItemSelectionData(
                             isSelectionModeActive = isSelectionModeActive,
                             progress = selectionProgress,
-                            isSelected = state.isSelected((timelineItem as? TimelineItem.Event)?.eventId),
+                            isSelected = state.isSelected(timelineItem),
+                            canBeSelected = state.canSelect(timelineItem),
                         ),
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
                         onLinkLongClick = ::onLinkLongClick,
                         onContentClick = { event ->
-                            if (isSelectionModeActive && event.canBeSelected()) onToggleSelection(event) else onContentClick(event)
+                            if (state.canSelect(event)) onToggleSelection(event) else onContentClick(event)
                         },
                         onGalleryItemClick = onGalleryItemClick,
                         onLongClick = { event ->
-                            if (isSelectionModeActive && event.canBeSelected()) onToggleSelection(event) else onMessageLongClick(event)
+                            if (state.canSelect(event)) onToggleSelection(event) else onMessageLongClick(event)
                         },
                         inReplyToClick = ::inReplyToClick,
                         onReactionClick = onReactionClick,
@@ -646,14 +646,14 @@ internal fun TimelineViewPreview(
 @Composable
 internal fun TimelineViewSelectionModePreview() = ElementPreview {
     val timelineItems = aTimelineItemList(aTimelineItemTextContent())
-    val selectedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().first { it.canBeSelected() }.eventId!!
+    val selectedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().first { SelectionAction.Forward.canApplyTo(it) }.eventId!!
     CompositionLocalProvider(
         LocalTimelineItemPresenterFactories provides aFakeTimelineItemPresenterFactories(),
     ) {
         TimelineView(
             state = aTimelineState(
                 timelineItems = timelineItems,
-                selectionState = SelectionState.Active(persistentSetOf(selectedEventId)),
+                selectionState = SelectionState.Active(SelectionAction.Forward, persistentSetOf(selectedEventId)),
             ),
             timelineProtectionState = aTimelineProtectionState(),
             onUserDataClick = {},

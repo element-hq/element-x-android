@@ -21,6 +21,8 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.time.Duration
 
 data class TimelineState(
@@ -108,7 +110,36 @@ val TimelineState.isSelectionModeActive: Boolean
 val TimelineState.selectedCount: Int
     get() = (selectionState as? SelectionState.Active)?.selectedEventIds?.size ?: 0
 
-fun TimelineState.isSelected(eventId: EventId?): Boolean {
-    if (eventId == null) return false
-    return (selectionState as? SelectionState.Active)?.selectedEventIds?.contains(eventId) == true
+fun TimelineState.isSelected(item: TimelineItem): Boolean {
+    val selection = selectionState as? SelectionState.Active ?: return false
+    return when(item){
+        is TimelineItem.Event -> selection.selectedEventIds.contains(item.eventId)
+        else -> false
+    }
+}
+
+/**
+ * Whether [item] can be selected right now: selection mode must be active, and the action it was entered for must accept this event.
+ */
+fun TimelineState.canSelect(item: TimelineItem): Boolean {
+    val selection = selectionState as? SelectionState.Active ?: return false
+    return when(item) {
+        is TimelineItem.Event -> selection.action.canApplyTo(item)
+        else -> false
+    }
+}
+
+/**
+ * The selected event ids, sorted from the oldest to the most recent one, as they appear in the timeline.
+ * The selection itself is stored as a set, in the order the events were tapped, which is not necessarily the order they must be acted on.
+ */
+fun TimelineState.selectedEventIdsInTimelineOrder(): ImmutableList<EventId> {
+    val selectedEventIds = (selectionState as? SelectionState.Active)?.selectedEventIds ?: return persistentListOf()
+    return timelineItems
+        .filterIsInstance<TimelineItem.Event>()
+        .mapNotNull { it.eventId }
+        .filter { it in selectedEventIds }
+        // Most recent item is first in the timeline, so reverse the result.
+        .reversed()
+        .toImmutableList()
 }

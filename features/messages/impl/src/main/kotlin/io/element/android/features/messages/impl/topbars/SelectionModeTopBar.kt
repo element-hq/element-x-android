@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.R
+import io.element.android.features.messages.impl.timeline.SelectionAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -28,7 +29,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun SelectionModeTopBar(
     selectedCount: Int,
+    action: SelectionAction,
     onCancelClick: () -> Unit,
+    onConfirmClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
@@ -43,6 +46,17 @@ fun SelectionModeTopBar(
                 Icon(imageVector = CompoundIcons.Close(), contentDescription = stringResource(CommonStrings.action_close))
             }
         },
+        actions = {
+            IconButton(
+                onClick = onConfirmClick,
+                enabled = selectedCount > 0,
+            ) {
+                Icon(
+                    resourceId = action.iconRes,
+                    contentDescription = stringResource(action.titleRes),
+                )
+            }
+        },
     )
 }
 
@@ -51,7 +65,12 @@ fun SelectionModeTopBar(
 internal fun SelectionModeTopBarPreview(
     @PreviewParameter(SelectionCountProvider::class) count: Int,
 ) = ElementPreview {
-    SelectionModeTopBar(selectedCount = count, onCancelClick = {})
+    SelectionModeTopBar(
+        selectedCount = count,
+        action = SelectionAction.Forward,
+        onCancelClick = {},
+        onConfirmClick = {},
+    )
 }
 
 internal class SelectionCountProvider : PreviewParameterProvider<Int> {

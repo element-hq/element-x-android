@@ -10,8 +10,6 @@ package io.element.android.features.messages.impl
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -79,6 +77,7 @@ import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBan
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerViewDefaults
 import io.element.android.features.messages.impl.timeline.FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS
+import io.element.android.features.messages.impl.timeline.SelectionState
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineView
 import io.element.android.features.messages.impl.timeline.aGroupedEvents
@@ -248,10 +247,15 @@ fun MessagesView(
                 topBar = {
                     when {
                         state.timelineState.isSelectionModeActive -> {
+                            val selection = state.timelineState.selectionState as SelectionState.Active
                             SelectionModeTopBar(
                                 selectedCount = state.timelineState.selectedCount,
+                                action = selection.action,
                                 onCancelClick = {
                                     state.timelineState.eventSink(TimelineEvent.ExitSelectionMode)
+                                },
+                                onConfirmClick = {
+                                    state.eventSink(MessagesEvent.ConfirmSelectionAction)
                                 },
                             )
                         }

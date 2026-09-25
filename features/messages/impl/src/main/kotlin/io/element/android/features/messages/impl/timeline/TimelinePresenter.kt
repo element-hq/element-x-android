@@ -34,7 +34,6 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.canBeSelected
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
@@ -265,7 +264,7 @@ class TimelinePresenter(
                 }
                 is TimelineEvent.EnterSelectionMode -> {
                     if (!isMultiSelectEnabled) return
-                    selectionState = SelectionState.Active(persistentSetOf(event.eventId))
+                    selectionState = SelectionState.Active(event.action, persistentSetOf(event.eventId))
                 }
                 is TimelineEvent.ToggleSelection -> {
                     val current = selectionState as? SelectionState.Active ?: return
@@ -273,13 +272,13 @@ class TimelinePresenter(
                     selectionState = when {
                         event.eventId in selected -> {
                             val next = (selected - event.eventId).toPersistentSet()
-                            if (next.isEmpty()) SelectionState.Disabled else SelectionState.Active(next)
+                            if (next.isEmpty()) SelectionState.Disabled else current.copy(selectedEventIds = next)
                         }
                         selected.size >= MAX_SELECTION_COUNT -> {
                             snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_selection_limit_reached))
                             current
                         }
-                        else -> SelectionState.Active((selected + event.eventId).toPersistentSet())
+                        else -> current.copy(selectedEventIds = (selected + event.eventId).toPersistentSet())
                     }
                 }
                 is TimelineEvent.ExitSelectionMode -> {
@@ -394,19 +393,22 @@ class TimelinePresenter(
             computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
         }
 
-        // Reconcile the selection when the items change: drop any selected event that is no longer
-        // present or no longer selectable, and exit selection mode if nothing remains selected.
-        LaunchedEffect(timelineItems.map { it.identifier() }) {
-            val active = selectionState as? SelectionState.Active ?: return@LaunchedEffect
-            val stillSelectable = timelineItems
+        val selectableEventIds = (selectionState as? SelectionState.Active)?.let { active ->
+            timelineItems
                 .filterIsInstance<TimelineItem.Event>()
-                .filter { it.canBeSelected() }
+                .filter { active.action.canApplyTo(it) }
                 .mapNotNull { it.eventId }
                 .toSet()
-            val reconciled = active.selectedEventIds.filter { it in stillSelectable }.toPersistentSet()
+        }.orEmpty()
+
+        // Reconcile the selection when the items change: drop any selected event that is no longer
+        // present or no longer selectable, and exit selection mode if nothing remains selected.
+        LaunchedEffect(selectableEventIds) {
+            val active = selectionState as? SelectionState.Active ?: return@LaunchedEffect
+            val reconciled = active.selectedEventIds.filter { it in selectableEventIds }.toPersistentSet()
             selectionState = when {
                 reconciled.isEmpty() -> SelectionState.Disabled
-                reconciled.size != active.selectedEventIds.size -> SelectionState.Active(reconciled)
+                reconciled.size != active.selectedEventIds.size -> active.copy(selectedEventIds = reconciled)
                 else -> active
             }
         }

@@ -20,5 +20,6 @@ package io.element.android.features.messages.impl.timeline.components
 data class TimelineItemSelectionData(
     val isSelectionModeActive: Boolean = false,
     val isSelected: Boolean = false,
+    val canBeSelected: Boolean = false,
     val progress: Float = 0f,
 )

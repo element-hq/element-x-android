@@ -21,6 +21,7 @@ sealed interface MessagesEvent {
     data object StopLiveLocationShare : MessagesEvent
     data object ShowLiveLocationShare : MessagesEvent
     data object MarkAsFullyReadAndExit : MessagesEvent
+    data object ConfirmSelectionAction : MessagesEvent
 }
 
 enum class InviteDialogAction {

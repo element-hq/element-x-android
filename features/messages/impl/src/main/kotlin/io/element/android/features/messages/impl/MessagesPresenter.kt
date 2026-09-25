@@ -39,6 +39,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
+import io.element.android.features.messages.impl.timeline.SelectionAction
+import io.element.android.features.messages.impl.timeline.SelectionState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -53,6 +55,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.captionOrNull
 import io.element.android.features.messages.impl.timeline.model.event.htmlCaptionOrNull
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.selectedEventIdsInTimelineOrder
 import io.element.android.features.messages.impl.voicemessages.composer.DefaultVoiceMessageComposerPresenter
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
@@ -253,6 +256,17 @@ class MessagesPresenter(
                         timelineProtectionState = timelineProtectionState,
                     )
                 }
+                is MessagesEvent.ConfirmSelectionAction -> {
+                    val selection = timelineState.selectionState as? SelectionState.Active
+                    if (selection != null) {
+                        when (selection.action) {
+                            SelectionAction.Forward -> {
+                                navigator.forwardEvents(timelineState.selectedEventIdsInTimelineOrder())
+                            }
+                        }
+                        timelineState.eventSink(TimelineEvent.ExitSelectionMode)
+                    }
+                }
                 is MessagesEvent.ToggleReaction -> {
                     localCoroutineScope.toggleReaction(event.emoji, event.eventOrTransactionId)
                 }
@@ -395,17 +409,20 @@ class MessagesPresenter(
                 }
             }
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
-            TimelineItemAction.Forward -> handleForwardAction(targetEvent)
+            TimelineItemAction.Forward -> {
+                val eventId = targetEvent.eventId ?: return@launch
+                if (featureFlagService.isFeatureEnabled(FeatureFlags.MessageMultiSelect)) {
+                    timelineState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, eventId))
+                } else {
+                    navigator.forwardEvents(listOf(eventId))
+                }
+            }
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
             TimelineItemAction.RetrySending -> handleRetrySending(targetEvent)
-            TimelineItemAction.Select -> {
-                val eventId = targetEvent.eventId ?: return@launch
-                timelineState.eventSink(TimelineEvent.EnterSelectionMode(eventId))
-            }
         }
     }
 
@@ -586,11 +603,6 @@ class MessagesPresenter(
 
     private fun handleShowDebugInfoAction(event: TimelineItem.Event) {
         navigator.navigateToEventDebugInfo(event.eventId, event.debugInfo)
-    }
-
-    private fun handleForwardAction(event: TimelineItem.Event) {
-        if (event.eventId == null) return
-        navigator.forwardEvent(event.eventId)
     }
 
     private fun handleReportAction(event: TimelineItem.Event) {

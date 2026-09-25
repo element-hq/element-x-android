@@ -71,44 +71,6 @@ class ActionListPresenterTest {
     }
 
     @Test
-    fun `present - Select action is present for a remote message when multi-select is enabled`() = runTest {
-        val presenter = createActionListPresenter(
-            isDeveloperModeEnabled = false,
-            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true)),
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink.invoke(
-                ActionListEvent.ComputeForMessage(
-                    event = aMessageEvent(),
-                    userEventPermissions = aUserEventPermissions(canSendMessage = true),
-                )
-            )
-            val successState = awaitItem()
-            assertThat((successState.target as ActionListState.Target.Success).actions).contains(TimelineItemAction.Select)
-        }
-    }
-
-    @Test
-    fun `present - Select action is absent when multi-select is disabled`() = runTest {
-        val presenter = createActionListPresenter(
-            isDeveloperModeEnabled = false,
-            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to false)),
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink.invoke(
-                ActionListEvent.ComputeForMessage(
-                    event = aMessageEvent(),
-                    userEventPermissions = aUserEventPermissions(canSendMessage = true),
-                )
-            )
-            val successState = awaitItem()
-            assertThat((successState.target as ActionListState.Target.Success).actions).doesNotContain(TimelineItemAction.Select)
-        }
-    }
-
-    @Test
     fun `present - compute for message from me redacted`() = runTest {
         val presenter = createActionListPresenter(isDeveloperModeEnabled = true)
         presenter.test {

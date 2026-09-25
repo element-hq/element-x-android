@@ -50,8 +50,10 @@ import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -1835,9 +1837,9 @@ class TimelinePresenterTest {
         presenter.test {
             val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
             assertThat(initialState.selectionState).isEqualTo(SelectionState.Disabled)
-            initialState.eventSink(TimelineEvent.EnterSelectionMode(AN_EVENT_ID))
+            initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
             val state = consumeItemsUntilPredicate { it.isSelectionModeActive }.last()
-            assertThat(state.selectionState).isEqualTo(SelectionState.Active(persistentSetOf(AN_EVENT_ID)))
+            assertThat(state.selectionState).isEqualTo(SelectionState.Active(SelectionAction.Forward, persistentSetOf(AN_EVENT_ID)))
             assertThat(state.selectedCount).isEqualTo(1)
             cancelAndIgnoreRemainingEvents()
         }
@@ -1849,7 +1851,7 @@ class TimelinePresenterTest {
         val presenter = createTimelinePresenter(featureFlagService = featureFlagService)
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(TimelineEvent.EnterSelectionMode(AN_EVENT_ID))
+            initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
             expectNoEvents()
             assertThat(initialState.selectionState).isEqualTo(SelectionState.Disabled)
             cancelAndIgnoreRemainingEvents()
@@ -1867,7 +1869,7 @@ class TimelinePresenterTest {
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
-            initialState.eventSink(TimelineEvent.EnterSelectionMode(AN_EVENT_ID))
+            initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
             consumeItemsUntilPredicate { it.isSelectionModeActive }
             initialState.eventSink(TimelineEvent.ToggleSelection(AN_EVENT_ID))
             val state = consumeItemsUntilPredicate { !it.isSelectionModeActive }.last()
@@ -1888,9 +1890,35 @@ class TimelinePresenterTest {
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
-            initialState.eventSink(TimelineEvent.EnterSelectionMode(AN_EVENT_ID))
+            initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
             consumeItemsUntilPredicate { it.isSelectionModeActive }
             featureFlagService.setFeatureEnabled(FeatureFlags.MessageMultiSelect, false)
+            val state = consumeItemsUntilPredicate { !it.isSelectionModeActive }.last()
+            assertThat(state.selectionState).isEqualTo(SelectionState.Disabled)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - selection drops events the action cannot apply to`() = runTest {
+        val timelineItems = MutableStateFlow(
+            listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())))
+        )
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(timelineItems = timelineItems),
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true)),
+        )
+        presenter.test {
+            val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
+            initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
+            consumeItemsUntilPredicate { it.isSelectionModeActive }
+            // The message is replaced by a state event, which cannot be forwarded.
+            timelineItems.value = listOf(
+                MatrixTimelineItem.Event(
+                    UniqueId("1"),
+                    anEventTimelineItem(eventId = AN_EVENT_ID, content = StateContent("", OtherState.RoomCreate)),
+                )
+            )
             val state = consumeItemsUntilPredicate { !it.isSelectionModeActive }.last()
             assertThat(state.selectionState).isEqualTo(SelectionState.Disabled)
             cancelAndIgnoreRemainingEvents()
