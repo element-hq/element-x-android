@@ -135,7 +135,7 @@ class ThreadedMessagesNode(
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
         fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-        fun handleForwardEventClick(eventId: EventId)
+        fun handleForwardEventClick(eventIds: List<EventId>)
         fun navigateToReportMessage(eventId: EventId, senderId: UserId)
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
@@ -219,8 +219,8 @@ class ThreadedMessagesNode(
         callback.navigateToEventDebugInfo(eventId, debugInfo)
     }
 
-    override fun forwardEvent(eventId: EventId) {
-        callback.handleForwardEventClick(eventId)
+    override fun forwardEvents(eventIds: List<EventId>) {
+        callback.handleForwardEventClick(eventIds)
     }
 
     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
