@@ -47,6 +47,10 @@
   <string name="screen_room_attachment_source_location">"Dijeli lokaciju"</string>
   <string name="screen_room_attachment_source_poll">"Anketa"</string>
   <string name="screen_room_attachment_text_formatting">"Oblikovanje teksta"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Razlog (neobavezno)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Unesite…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Neobavezno)"</string>
+  <string name="screen_room_confirm_removal_title">"Potvrdite uklanjanje"</string>
   <string name="screen_room_encrypted_history_banner">"Povijest poruka trenutačno nije dostupna."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Povijest poruka nije dostupna u ovoj sobi. Potvrdite ovaj uređaj kako biste vidjeli povijest poruka."</string>
   <string name="screen_room_invite_again_alert_message">"Želite li ih pozvati natrag?"</string>

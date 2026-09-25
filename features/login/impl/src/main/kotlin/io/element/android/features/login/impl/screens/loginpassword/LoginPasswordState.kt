@@ -9,8 +9,8 @@
 package io.element.android.features.login.impl.screens.loginpassword
 
 import android.os.Parcelable
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.parcelize.Parcelize
 

@@ -38,6 +38,8 @@
   <string name="screen_session_verification_request_title">"Vahvistus pyydetty"</string>
   <string name="screen_session_verification_they_dont_match">"Ne eivät täsmää"</string>
   <string name="screen_session_verification_they_match">"Ne täsmäävät"</string>
+  <string name="screen_session_verification_unavailable_subtitle">"Käytä toista laitetta tai palautusavainta."</string>
+  <string name="screen_session_verification_unavailable_title">"Vahvistus tällä laitteella ei ole tällä hetkellä käytettävissä"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Varmista, että sovellus on avoinna toisessa laitteessa, ennen kuin aloitat vahvistuksen tästä."</string>
   <string name="screen_session_verification_use_another_device_title">"Avaa sovellus toisella vahvistetulla laitteella"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Vahvista tämä käyttäjä turvallisuuden lisäämiseksi vertaamalla emojeja laitteillanne. Tee tämä käyttämällä luotettavaa viestintätapaa."</string>

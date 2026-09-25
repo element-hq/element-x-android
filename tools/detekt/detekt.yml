@@ -175,6 +175,8 @@ complexity:
     active: true
   LargeClass:
     active: true
+    # Do not report large test classes.
+    excludes: [ '**/test/**', '**/androidTest/**' ]
 
 naming:
   VariableNaming:
@@ -239,6 +241,7 @@ Compose:
       - LocalBuildMeta
       - LocalUiTestMode
       - LocalSdkIntVersionProvider
+      - LocalTimelineEventRendererConfig
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

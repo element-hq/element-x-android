@@ -18,6 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
+import io.element.android.features.home.impl.search.history.SearchHistoryResult
+import io.element.android.features.home.impl.search.history.SearchHistoryStore
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -31,6 +33,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
+import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.search.MessageSearch
 import io.element.android.libraries.matrix.api.search.MessageSearchPaginationState
 import io.element.android.libraries.matrix.api.search.MessageSearchResult
@@ -46,6 +49,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.isMediaContent
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
@@ -53,10 +57,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.jvm.optionals.getOrElse
 import kotlin.time.Duration.Companion.milliseconds
 
 @Inject
@@ -70,6 +72,7 @@ class GlobalSearchPresenter(
     private val permalinkParser: PermalinkParser,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val matrixClient: MatrixClient,
+    private val searchHistoryStore: SearchHistoryStore,
 ) : Presenter<GlobalSearchState> {
     @Composable
     override fun present(): GlobalSearchState {
@@ -84,6 +87,21 @@ class GlobalSearchPresenter(
         var currentTarget: GlobalSearchTarget by remember { mutableStateOf(GlobalSearchTarget.ROOMS) }
         val currentMessageSearch: MessageSearch = remember { messageSearchService.createMessageSearch(scope = coroutineScope) }
 
+        val searchHistory by produceState<AsyncData<ImmutableList<SearchHistoryResultItem>>>(initialValue = AsyncData.Uninitialized) {
+            searchHistoryStore.history.collectLatest { history ->
+                val mappedHistoryItems = history.mapNotNull { result ->
+                    when (result) {
+                        is SearchHistoryResult.Query -> SearchHistoryResultItem.Query(term = result.term)
+                        is SearchHistoryResult.Room -> {
+                            val roomInfo = matrixClient.getRoomInfo(result.roomId).getOrNull() ?: return@mapNotNull null
+                            SearchHistoryResultItem.Room(roomId = result.roomId, roomInfo = roomInfo)
+                        }
+                    }
+                }
+                value = AsyncData.Success(mappedHistoryItems.toImmutableList())
+            }
+        }
+
         LaunchedEffect(queryState.text) {
             // Add a delay to avoid performing too many searches in a short period of time, which can be expensive
             delay(200.milliseconds)
@@ -94,7 +112,14 @@ class GlobalSearchPresenter(
                 AsyncData.Uninitialized
             }
 
-            launch { roomListSearchDataSource.setSearchQuery(queryState.text.toString()) }
+            // Apply the query to the room list search, looking only for joined rooms matching the query
+            launch {
+                roomListSearchDataSource.setSearchQuery(
+                    searchQuery = queryState.text.toString(),
+                    additionalFilters = RoomListFilter.Joined,
+                )
+            }
+            // Apply the query to the message search too
             launch {
                 currentMessageSearch.setQuery(queryState.text.toString())
                     .onFailure { Timber.e(it, "Could not set query for message search") }
@@ -133,7 +158,7 @@ class GlobalSearchPresenter(
                         // result, which can be slow if we have a lot of results. The original order is kept by using `awaitAll()`.
                         val mappedResults = results.map { result ->
                             async(coroutineDispatchers.computation) {
-                                val roomInfo = matrixClient.getRoomInfoFlow(result.roomId).first().getOrElse { return@async null }
+                                val roomInfo = matrixClient.getRoomInfo(result.roomId).getOrNull() ?: return@async null
                                 val formattedTimestamp = dateFormatter.format(
                                     timestamp = result.timestamp,
                                     mode = DateFormatterMode.TimeOrDate,
@@ -172,7 +197,8 @@ class GlobalSearchPresenter(
 
         fun handleEvent(event: GlobalSearchEvent) {
             when (event) {
-                GlobalSearchEvent.ClearQuery -> {
+                GlobalSearchEvent.ClearQuery -> coroutineScope.launch {
+                    searchResults = AsyncData.Uninitialized
                     queryState.clearText()
                 }
                 GlobalSearchEvent.ToggleSearchVisibility -> {
@@ -197,6 +223,30 @@ class GlobalSearchPresenter(
                     }
                 }
                 is GlobalSearchEvent.UpdateTarget -> currentTarget = event.target
+                GlobalSearchEvent.SaveQueryToHistory -> {
+                    val term = queryState.text.toString()
+                    if (term.isNotBlank()) {
+                        coroutineScope.launch {
+                            searchHistoryStore.add(SearchHistoryResult.Query(term))
+                        }
+                    }
+                }
+                is GlobalSearchEvent.SaveRoomToHistory -> coroutineScope.launch {
+                    searchHistoryStore.add(SearchHistoryResult.Room(event.roomId))
+                }
+                is GlobalSearchEvent.SearchHistoryResultSelected -> {
+                    when (event.resultItem) {
+                        is SearchHistoryResultItem.Query -> coroutineScope.launch {
+                            delay(300.milliseconds)
+                            queryState.edit {
+                                replace(0, length, event.resultItem.term)
+                            }
+                            searchResults = AsyncData.Loading()
+                            currentTarget = GlobalSearchTarget.ROOMS
+                        }
+                        is SearchHistoryResultItem.Room -> Unit
+                    }
+                }
             }
         }
 
@@ -206,6 +256,7 @@ class GlobalSearchPresenter(
             queryState = queryState,
             currentTarget = currentTarget,
             results = searchResults,
+            history = searchHistory,
             eventSink = ::handleEvent,
         )
     }

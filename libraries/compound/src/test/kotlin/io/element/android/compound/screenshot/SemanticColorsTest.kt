@@ -8,35 +8,33 @@
 
 package io.element.android.compound.screenshot
 
-import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.previews.CompoundSemanticColorsDark
 import io.element.android.compound.previews.CompoundSemanticColorsDarkHc
 import io.element.android.compound.previews.CompoundSemanticColorsLight
 import io.element.android.compound.previews.CompoundSemanticColorsLightHc
-import io.element.android.compound.screenshot.utils.screenshotFile
-import io.element.android.tests.testutils.robolectric.RobolectricTest
+import io.element.android.compound.screenshot.utils.createPaparazziRule
+import org.junit.Rule
 import org.junit.Test
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
-class SemanticColorsTest : RobolectricTest() {
-    @Config(sdk = [35], qualifiers = "h2000dp-xhdpi")
+class SemanticColorsTest {
+    @get:Rule
+    val paparazzi = createPaparazziRule()
+
     @Test
     fun screenshots() {
-        captureRoboImage(file = screenshotFile("Compound Semantic Colors - Light.png")) {
+        paparazzi.snapshot(name = "Compound Semantic Colors - Light") {
             CompoundSemanticColorsLight()
         }
 
-        captureRoboImage(file = screenshotFile("Compound Semantic Colors - Light HC.png")) {
+        paparazzi.snapshot(name = "Compound Semantic Colors - Light HC") {
             CompoundSemanticColorsLightHc()
         }
 
-        captureRoboImage(file = screenshotFile("Compound Semantic Colors - Dark.png")) {
+        paparazzi.snapshot(name = "Compound Semantic Colors - Dark") {
             CompoundSemanticColorsDark()
         }
 
-        captureRoboImage(file = screenshotFile("Compound Semantic Colors - Dark HC.png")) {
+        paparazzi.snapshot(name = "Compound Semantic Colors - Dark HC") {
             CompoundSemanticColorsDarkHc()
         }
     }

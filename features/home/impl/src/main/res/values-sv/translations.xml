@@ -12,7 +12,7 @@
   <string name="confirm_recovery_key_banner_title">"Din nyckellagring är inte synkroniserad"</string>
   <string name="full_screen_intent_banner_message">"För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst."</string>
   <string name="full_screen_intent_banner_title">"Förbättra din samtalsupplevelse"</string>
-  <string name="screen_home_tab_chats">"Alla chattar"</string>
+  <string name="screen_home_tab_chats">"Chattar"</string>
   <string name="screen_home_tab_spaces">"Utrymmen"</string>
   <string name="screen_invites_decline_chat_message">"Är du säker på att du vill tacka nej till inbjudan att gå med%1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Avböj inbjudan"</string>
@@ -44,7 +44,7 @@ För tillfället kan du avmarkera filter för att se dina andra chattar"</string
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Grattis!
 Du har inga olästa meddelanden!"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Begäran om att gå med skickad"</string>
-  <string name="screen_roomlist_main_space_title">"Alla chattar"</string>
+  <string name="screen_roomlist_main_space_title">"Chattar"</string>
   <string name="screen_roomlist_mark_as_read">"Markera som läst"</string>
   <string name="screen_roomlist_mark_as_unread">"Markera som oläst"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Det här rummet har uppgraderats"</string>

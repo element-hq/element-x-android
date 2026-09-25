@@ -45,6 +45,7 @@ import io.element.android.features.messages.test.timeline.voicemessages.composer
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -70,6 +71,7 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
@@ -78,10 +80,12 @@ import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_CAPTION
+import io.element.android.libraries.matrix.test.A_REASON
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_THREAD_ID
+import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.core.FakeSendHandle
@@ -106,6 +110,7 @@ import io.element.android.tests.testutils.FakeLifecycleOwner
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
+import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -125,7 +130,6 @@ import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("LargeClass")
 class MessagesPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -286,7 +290,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action forward`() = runTest {
-        val onForwardEventClickLambda = lambdaRecorder<EventId, Unit> { }
+        val onForwardEventClickLambda = lambdaRecorder<EventId, TimelineProvider, Unit> { _, _ -> }
         val navigator = FakeMessagesNavigator(
             onForwardEventClickLambda = onForwardEventClickLambda,
         )
@@ -295,7 +299,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
-            onForwardEventClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
+            onForwardEventClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID), any())
         }
     }
 
@@ -557,10 +561,83 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent()
             initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, messageEvent))
-            awaitItem()
+            advanceUntilIdle()
+            val confirmingState = expectMostRecentItem()
+            assertThat(confirmingState.redactEventAction).isEqualTo(MessagesState.ConfirmingRedaction(messageEvent.eventId!!))
+            assert(redactEventLambda).isNeverCalled()
+            confirmingState.eventSink(MessagesEvent.ConfirmRedact(A_REASON))
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().redactEventAction).isEqualTo(AsyncAction.Uninitialized)
+            assert(redactEventLambda)
+                .isCalledOnce()
+                .with(value(messageEvent.eventOrTransactionId), value(A_REASON))
+        }
+    }
+
+    @Test
+    fun `present - handle action redact - a blank reason is not sent`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+        val liveTimeline = FakeTimeline()
+        val redactEventLambda = lambdaRecorder { _: EventOrTransactionId, _: String? -> Result.success(Unit) }
+        liveTimeline.redactEventLambda = redactEventLambda
+        val presenter = createMessagesPresenter(
+            timeline = liveTimeline,
+            coroutineDispatchers = coroutineDispatchers,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            val messageEvent = aMessageEvent()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, messageEvent))
+            advanceUntilIdle()
+            expectMostRecentItem().eventSink(MessagesEvent.ConfirmRedact("  "))
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().redactEventAction).isEqualTo(AsyncAction.Uninitialized)
             assert(redactEventLambda)
                 .isCalledOnce()
                 .with(value(messageEvent.eventOrTransactionId), value(null))
+        }
+    }
+
+    @Test
+    fun `present - handle action redact - cancelling does not redact`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+        val liveTimeline = FakeTimeline()
+        val redactEventLambda = lambdaRecorder { _: EventOrTransactionId, _: String? -> Result.success(Unit) }
+        liveTimeline.redactEventLambda = redactEventLambda
+        val presenter = createMessagesPresenter(
+            timeline = liveTimeline,
+            coroutineDispatchers = coroutineDispatchers,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, aMessageEvent()))
+            advanceUntilIdle()
+            expectMostRecentItem().eventSink(MessagesEvent.CancelRedact)
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().redactEventAction).isEqualTo(AsyncAction.Uninitialized)
+            assert(redactEventLambda).isNeverCalled()
+        }
+    }
+
+    @Test
+    fun `present - handle action redact - a message which was never sent is redacted without asking`() = runTest {
+        val coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+        val liveTimeline = FakeTimeline()
+        val redactEventLambda = lambdaRecorder { _: EventOrTransactionId, _: String? -> Result.success(Unit) }
+        liveTimeline.redactEventLambda = redactEventLambda
+        val presenter = createMessagesPresenter(
+            timeline = liveTimeline,
+            coroutineDispatchers = coroutineDispatchers,
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            val localEcho = aMessageEvent(eventId = null, transactionId = A_TRANSACTION_ID)
+            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, localEcho))
+            advanceUntilIdle()
+            assertThat(expectMostRecentItem().redactEventAction).isEqualTo(AsyncAction.Uninitialized)
+            assert(redactEventLambda)
+                .isCalledOnce()
+                .with(value(localEcho.eventOrTransactionId), value(null))
         }
     }
 
@@ -1388,7 +1465,7 @@ class MessagesPresenterTest {
             assertThat(initialState.threads.hasThreads).isFalse()
 
             // Enable the feature flag, now it should reflect the thread list state
-            featureFlagService.setFeatureEnabled(FeatureFlags.RoomThreadList, true)
+            featureFlagService.setFeatureEnabled(FeatureFlags.Threads, true)
             skipItems(1)
             assertThat(awaitItem().threads.hasThreads).isTrue()
 
@@ -1484,7 +1561,12 @@ class MessagesPresenterTest {
             clipboardHelper = clipboardHelper,
             htmlConverterProvider = FakeHtmlConverterProvider(),
             buildMeta = aBuildMeta(),
-            timelineController = TimelineController(joinedRoom, timeline),
+            timelineController = TimelineController(
+                room = joinedRoom,
+                liveTimeline = timeline,
+                roomCoroutineScope = backgroundScope,
+                dispatchers = coroutineDispatchers,
+            ),
             permalinkParser = permalinkParser,
             analyticsService = analyticsService,
             encryptionService = encryptionService,

@@ -47,6 +47,10 @@
   <string name="screen_room_attachment_source_location">"Standort teilen"</string>
   <string name="screen_room_attachment_source_poll">"Umfrage"</string>
   <string name="screen_room_attachment_text_formatting">"Textformatierung"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Grund (optional)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Eingeben …"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Optional)"</string>
+  <string name="screen_room_confirm_removal_title">"Entfernen bestätigen"</string>
   <string name="screen_room_encrypted_history_banner">"Der Nachrichtenverlauf ist derzeit nicht verfügbar."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Der Nachrichtenverlauf ist nicht verfügbar. Verifiziere dieses Gerät, um deinen Nachrichtenverlauf zu sehen."</string>
   <string name="screen_room_invite_again_alert_message">"Möchtest du sie wieder einladen?"</string>

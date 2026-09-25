@@ -27,7 +27,6 @@ internal fun aRustTimelineItemContentMsgLike(
                 mentions = null,
             )
         ),
-        reactions = emptyList(),
         threadRoot = null,
         inReplyTo = null,
         threadSummary = null,

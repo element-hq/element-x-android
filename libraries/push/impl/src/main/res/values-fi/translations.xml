@@ -34,6 +34,7 @@
   </plurals>
   <string name="notification_invite_body">"Kutsui sinut keskustelemaan"</string>
   <string name="notification_invite_body_with_sender">"%1$s kutsui sinut keskustelemaan"</string>
+  <string name="notification_knock_request_body">"Pyytää liittymistä"</string>
   <string name="notification_live_location_started_body">"Aloitti reaaliaikaisen sijainnin jakamisen"</string>
   <string name="notification_mentioned_you_body">"Mainitsi sinut: %1$s"</string>
   <string name="notification_new_messages">"Uusia viestejä"</string>
@@ -50,7 +51,7 @@
   <string name="notification_sender_mention_reply">"%1$s mainitsi tai vastasi"</string>
   <string name="notification_space_invite_body">"Kutsui sinut liittymään tilaan"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s kutsui sinut liittymään tilaan"</string>
-  <string name="notification_test_push_notification_content">"Katselet ilmoitusta! Klikkaa minua!"</string>
+  <string name="notification_test_push_notification_content">"Katselet ilmoitusta! Napauta minua!"</string>
   <string name="notification_thread_in_room">"Viestiketju huoneessa %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -96,12 +97,13 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Ilmoitusta ei voida näyttää."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Ilmoitusta on klikattu!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Ilmoituksen näyttäminen"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Klikkaa ilmoitusta jatkaaksesi testiä."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Napauta ilmoitusta jatkaaksesi testiä."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Varmistaa, että sovellus vastaanottaa push-ilmoituksen."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Virhe: pusher on hylännyt pyynnön."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Virhe: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Virhe, push-ilmoitusta ei voi testata."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Virhe, aikakatkaisu push-ilmoitusta odotellessa."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Virhe: push-yhdyskäytävä rajoittaa tätä laittetta, joten ilmoitukset eivät ole luotettavia. Määritä toinen push-yhdyskäytävä."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Push-ilmoituksella kesti %1$d ms palata takaisin."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Testaa push-ilmoituksen paluu"</string>
 </resources>

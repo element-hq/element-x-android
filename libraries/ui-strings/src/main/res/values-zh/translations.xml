@@ -31,7 +31,7 @@
   <string name="a11y_join_call">"加入通话"</string>
   <string name="a11y_jump_to_bottom">"跳转到底部"</string>
   <string name="a11y_jump_to_unread">"跳转到未读"</string>
-  <string name="a11y_jump_to_unread_messages">"跳转到首个未读消息"</string>
+  <string name="a11y_jump_to_unread_messages">"跳转到首条未读消息"</string>
   <string name="a11y_move_the_map_to_my_location">"将地图移动到我的位置"</string>
   <string name="a11y_notifications_mentions_only">"仅提及"</string>
   <string name="a11y_notifications_muted">"通知已关闭"</string>
@@ -53,11 +53,11 @@
   <string name="a11y_qr_code">"二维码"</string>
   <string name="a11y_react_with">"使用 %1$s 反应"</string>
   <string name="a11y_react_with_other_emojis">"使用其它 Emoji 做出反应"</string>
-  <string name="a11y_read_receipts_multiple">"上一个消息已被 %1$s 与 %2$s 阅读"</string>
+  <string name="a11y_read_receipts_multiple">"上一条消息已被 %1$s 与 %2$s 阅读"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="other">"上一个消息已被 %1$s 与其余 %2$d 人阅读"</item>
+    <item quantity="other">"上一条消息已被 %1$s 与其余 %2$d 人阅读"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"上一个消息已被 %1$s 阅读"</string>
+  <string name="a11y_read_receipts_single">"上一条消息已被 %1$s 阅读"</string>
   <string name="a11y_read_receipts_tap_to_show_all_android">"显示所有已读回执"</string>
   <string name="a11y_remove_reaction">"移除反应：%1$s"</string>
   <string name="a11y_remove_reaction_with">"移除反应：%1$s"</string>
@@ -405,6 +405,7 @@
   <string name="common_success">"成功"</string>
   <string name="common_suggested">"建议"</string>
   <string name="common_suggestions">"建议"</string>
+  <string name="common_switch_accounts">"切换账户"</string>
   <string name="common_syncing">"正在同步"</string>
   <string name="common_text">"文本"</string>
   <string name="common_third_party_notices">"第三方通知"</string>
@@ -522,7 +523,7 @@
   <string name="screen_pinned_timeline_empty_state_description">"按下消息并选择 “%1$s” 将其包含在此处。"</string>
   <string name="screen_pinned_timeline_empty_state_headline">"置顶重要的消息以便于发现"</string>
   <plurals name="screen_pinned_timeline_screen_title">
-    <item quantity="other">"%1$d 个已置顶的消息"</item>
+    <item quantity="other">"%1$d 条已置顶的消息"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"已置顶的消息"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"你即将被重定向到你在 %1$s 上的账户以重置数字身份。之后将被带回 app。"</string>
@@ -536,10 +537,6 @@
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"你有至少 1 个未经验证的设备。你可以照常发送消息，也可以暂时取消，并在验证所有设备后重试。"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"你的消息未能发送，因为你有尚未验证的设备。"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"编辑管理员或所有者"</string>
-  <string name="screen_room_confirm_removal_message">"确定要移除此消息？"</string>
-  <string name="screen_room_confirm_removal_reason_label">"理由（可选）"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder">"输入…"</string>
-  <string name="screen_room_confirm_removal_title">"确认移除"</string>
   <string name="screen_room_error_failed_processing_media">"处理要上传的媒体失败，请重试。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"无法获取用户信息"</string>
   <string name="screen_room_event_pill">"%1$s 中的消息"</string>
@@ -549,11 +546,11 @@
   <string name="screen_room_maximum_messages_selected">"选择的消息已达到最大数量"</string>
   <string name="screen_room_permalink_same_room_android">"已经位于此房间！"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
-  <string name="screen_room_pinned_banner_indicator_description">"%1$s 个已置顶的消息"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s 条已置顶的消息"</string>
   <string name="screen_room_pinned_banner_loading_description">"正在加载消息…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"查看全部"</string>
   <plurals name="screen_room_selection_count">
-    <item quantity="other">"已选择 %1$d 个消息"</item>
+    <item quantity="other">"已选择 %1$d 条消息"</item>
   </plurals>
   <string name="screen_room_title">"聊天"</string>
   <string name="screen_share_location_title">"共享位置"</string>

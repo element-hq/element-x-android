@@ -9,11 +9,11 @@
 package io.element.android.features.login.impl.screens.loginpassword
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.accountprovider.SaveAccountProviderToHistory
 import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.matrixOrgAccountProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_PASSWORD
@@ -39,7 +39,7 @@ class LoginPasswordPresenterTest {
     fun `present - initial state`() = runTest {
         createLoginPasswordPresenter().test {
             val initialState = awaitItem()
-            assertThat(initialState.accountProvider.url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+            assertThat(initialState.accountProvider).isEqualTo(matrixOrgAccountProvider)
             assertThat(initialState.formState).isEqualTo(LoginFormState.Default)
             assertThat(initialState.loginAction).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.submitEnabled).isFalse()
@@ -127,7 +127,7 @@ class LoginPasswordPresenterTest {
             val loggedInState = awaitItem()
             assertThat(loggedInState.loginAction).isEqualTo(AsyncData.Success(A_SESSION_ID))
             assertThat(appPreferencesStore.getHomeserverHistoryFlow().first())
-                .containsExactly(AuthenticationConfig.MATRIX_ORG_URL)
+                .containsExactly(matrixOrgAccountProvider.serverName)
         }
     }
 

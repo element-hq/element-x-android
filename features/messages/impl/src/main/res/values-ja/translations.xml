@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"削除されたまたは不明な端末により暗号化されています。"</string>
   <string name="crypto_event_authenticity_unsigned_device">"所有者に検証されていない端末により暗号化されています。"</string>
   <string name="crypto_event_authenticity_unverified_identity">"未検証のユーザーにより暗号化されています。"</string>
+  <string name="error_sending_failure_invalid_mime_type">"無効なMIMEタイプ: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"メディアの内容が見つかりません"</string>
+  <string name="error_sending_failure_other">"エラーの詳細: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"未検証の端末から送信"</string>
+  <string name="error_sending_failure_unknown">"不明なエラー"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"水平に反転"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"垂直に反転"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"元画像"</string>
@@ -31,7 +36,7 @@
   <string name="screen_media_upload_preview_title">"メディアを追加"</string>
   <string name="screen_report_content_block_user">"ユーザーをブロック"</string>
   <string name="screen_report_content_block_user_hint">"このユーザーからのメッセージをすべて非表示にする場合はチェックしてください。"</string>
-  <string name="screen_report_content_explanation">"このメッセージはホームサーバーの管理者に報告されます。暗号化されたメッセージを確認することはできません。"</string>
+  <string name="screen_report_content_explanation">"このメッセージはアカウント提供元の管理者に報告されます。暗号化されたメッセージは確認することができません。"</string>
   <string name="screen_report_content_hint">"このコンテンツを通報する理由"</string>
   <string name="screen_room_attachment_source_camera">"カメラ"</string>
   <string name="screen_room_attachment_source_camera_photo">"写真を撮影"</string>
@@ -41,6 +46,10 @@
   <string name="screen_room_attachment_source_location">"場所を共有"</string>
   <string name="screen_room_attachment_source_poll">"投票"</string>
   <string name="screen_room_attachment_text_formatting">"書式設定"</string>
+  <string name="screen_room_confirm_removal_reason_label">"理由 (任意)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"入力…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(任意)"</string>
+  <string name="screen_room_confirm_removal_title">"削除の確認"</string>
   <string name="screen_room_encrypted_history_banner">"過去のメッセージを現在表示できません。"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"このルームの過去のメッセージを表示できません。確認するには、この端末を検証してください。"</string>
   <string name="screen_room_invite_again_alert_message">"招待し直しますか？"</string>

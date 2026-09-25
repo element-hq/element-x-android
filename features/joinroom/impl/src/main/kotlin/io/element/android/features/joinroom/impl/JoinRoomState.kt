@@ -107,6 +107,7 @@ sealed interface LoadedDetails {
     ) : LoadedDetails
 }
 
+@Immutable
 sealed interface JoinAuthorisationStatus {
     data object None : JoinAuthorisationStatus
     data class IsInvited(val inviteData: InviteData, val inviteSender: InviteSender?) : JoinAuthorisationStatus

@@ -11,6 +11,7 @@ package io.element.android.features.enterprise.api
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.flow.Flow
 
@@ -36,18 +37,21 @@ interface EnterpriseService {
     suspend fun tweakMasUrl(url: String, urlContentFetcher: ClientUrlContentFetcher): String
 
     /**
-     * Returns the list of homeservers the user is allowed to sign in to.
-     *
-     * If the list is empty or contains the special value [ANY_ACCOUNT_PROVIDER], the user is allowed to sign in to any homeserver.
+     * Returns the list of account provider the user is allowed to sign in to.
      */
-    fun homeserverAllowList(): List<String>
+    fun accountProviderAllowList(): List<AccountProvider>
 
     /**
-     * Whether the user is allowed to sign in to a given homeserver, according to [homeserverAllowList].
-     *
-     * @param homeserverUrl the server the user is trying to use.
+     * Whether the user is allowed to sign in to any account provider.
      */
-    suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
+    fun canConnectToAnyAccountProvider(): Boolean
+
+    /**
+     * Whether the user is allowed to sign in to a given homeserver, according to [accountProviderAllowList].
+     *
+     * @param accountProvider the account provider the user is trying to use.
+     */
+    suspend fun isAllowedToConnectToAccountProvider(accountProvider: AccountProvider): Boolean
 
     /**
      * Whether the given homeserver enforces the use of Element Pro or a derived app.
@@ -97,14 +101,4 @@ interface EnterpriseService {
      * @param sessionId the session whose channel is requested.
      */
     fun getNoisyNotificationChannelId(sessionId: SessionId): String?
-
-    companion object {
-        const val ANY_ACCOUNT_PROVIDER = "*"
-    }
-}
-
-fun EnterpriseService.canConnectToAnyHomeserver(): Boolean {
-    return homeserverAllowList().let {
-        it.isEmpty() || it.contains(EnterpriseService.ANY_ACCOUNT_PROVIDER)
-    }
 }

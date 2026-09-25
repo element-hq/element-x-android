@@ -51,6 +51,7 @@ import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -67,6 +68,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
@@ -103,6 +105,7 @@ class MessagesNode(
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
     private val eventContentValidationCache: EventContentValidationCache,
     private val emojiPickerRenderer: EmojiPickerRenderer,
+    private val dispatchers: CoroutineDispatchers,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     data class Inputs(
         val focusedEventId: EventId?,
@@ -111,7 +114,12 @@ class MessagesNode(
     private val inputs = inputs<Inputs>()
     private val callback: Callback = callback()
 
-    private val timelineController = TimelineController(room, room.liveTimeline)
+    private val timelineController = TimelineController(
+        room = room,
+        liveTimeline = room.liveTimeline,
+        roomCoroutineScope = room.roomCoroutineScope,
+        dispatchers = dispatchers,
+    )
     private val presenter = presenterFactory.create(
         navigator = this,
         composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = null),
@@ -130,7 +138,7 @@ class MessagesNode(
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
         fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-        fun forwardEvent(eventId: EventId)
+        fun forwardEvent(eventId: EventId, timelineProvider: TimelineProvider)
         fun navigateToReportMessage(eventId: EventId, senderId: UserId)
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
@@ -213,8 +221,8 @@ class MessagesNode(
         callback.navigateToEventDebugInfo(eventId, debugInfo)
     }
 
-    override fun forwardEvent(eventId: EventId) {
-        callback.forwardEvent(eventId)
+    override fun forwardEvent(eventId: EventId, timelineProvider: TimelineProvider) {
+        callback.forwardEvent(eventId, timelineProvider)
     }
 
     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {

@@ -46,6 +46,10 @@
   <string name="screen_room_attachment_source_location">"共享位置"</string>
   <string name="screen_room_attachment_source_poll">"投票"</string>
   <string name="screen_room_attachment_text_formatting">"文本格式化"</string>
+  <string name="screen_room_confirm_removal_reason_label">"理由（可选）"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"输入…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"（可选）"</string>
+  <string name="screen_room_confirm_removal_title">"确认移除"</string>
   <string name="screen_room_encrypted_history_banner">"消息历史记录当前不可用。"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"消息历史在此房间不可用。请验证此设备以查看。"</string>
   <string name="screen_room_invite_again_alert_message">"你想邀请他们回来吗？"</string>
@@ -73,7 +77,7 @@
   <string name="screen_room_timeline_reactions_show_reactions_summary">"显示反应摘要"</string>
   <string name="screen_room_timeline_read_marker_title">"新消息"</string>
   <plurals name="screen_room_timeline_redacted_messages">
-    <item quantity="other">"%1$d 个已移除的消息"</item>
+    <item quantity="other">"%1$d 条已移除的消息"</item>
   </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="other">"%1$d 个房间变化"</item>

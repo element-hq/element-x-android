@@ -27,7 +27,7 @@
   <string name="screen_join_room_loading_alert_title">"Emme voineet näyttää tämän huoneen esikatselua"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s ei tue vielä tiloja. Voit käyttää tiloja selainversiolla."</string>
   <string name="screen_join_room_space_not_supported_title">"Tiloja ei vielä tueta"</string>
-  <string name="screen_join_room_subtitle_knock">"Paina alla olevaa nappia ja huoneen ylläpitäjä saa ilmoituksen. Voit liittyä keskusteluun kun pyyntösi on hyväksytty."</string>
+  <string name="screen_join_room_subtitle_knock">"Paina alla olevaa nappia ja keskustelun ylläpitäjä saa ilmoituksen. Voit liittyä keskusteluun kun pyyntösi on hyväksytty."</string>
   <string name="screen_join_room_subtitle_no_preview">"Sinun on oltava tämän huoneen jäsen, jotta voit nähdä viestihistorian."</string>
   <string name="screen_join_room_title_knock">"Haluatko liittyä tähän huoneeseen?"</string>
   <string name="screen_join_room_title_no_preview">"Esikatselu ei ole saatavilla"</string>

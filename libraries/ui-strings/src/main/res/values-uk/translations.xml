@@ -189,6 +189,7 @@
   <string name="action_retry_decryption">"Повторити спробу розшифрування"</string>
   <string name="action_save">"Зберегти"</string>
   <string name="action_search">"Шукати"</string>
+  <string name="action_select">"Вибрати"</string>
   <string name="action_select_all">"Вибрати все"</string>
   <string name="action_send">"Надіслати"</string>
   <string name="action_send_edited_message">"Надіслати змінене повідомлення"</string>
@@ -569,11 +570,17 @@
   <string name="screen_room_grouped_state_events_expand">"Розгорнути"</string>
   <string name="screen_room_grouped_state_events_reduce">"Згорнути"</string>
   <string name="screen_room_live_location_banner">"Спільний доступ до місцезнаходження у реальному часі"</string>
+  <string name="screen_room_maximum_messages_selected">"Вибрано максимальну кількість повідомлень"</string>
   <string name="screen_room_permalink_same_room_android">"Уже переглядаєте цю кімнату!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s із %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s закріплених повідомлень"</string>
   <string name="screen_room_pinned_banner_loading_description">"Завантаження повідомлення…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Переглянути всі"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"Вибрано %1$d повідомлення"</item>
+    <item quantity="few">"Вибрано %1$d повідомлення"</item>
+    <item quantity="many">"Вибрано %1$d повідомлень"</item>
+  </plurals>
   <string name="screen_room_title">"Бесіда"</string>
   <string name="screen_share_location_title">"Поділитися розташуванням"</string>
   <string name="screen_share_my_location_action">"Поділитися моїм розташуванням"</string>

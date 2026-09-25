@@ -183,6 +183,7 @@
   <string name="action_retry_decryption">"復号化を再試行"</string>
   <string name="action_save">"保存"</string>
   <string name="action_search">"検索"</string>
+  <string name="action_select">"選択"</string>
   <string name="action_select_all">"すべて選択"</string>
   <string name="action_send">"送信"</string>
   <string name="action_send_edited_message">"編集したメッセージを送信"</string>
@@ -395,7 +396,7 @@
   <string name="common_something_went_wrong_message">"問題が発生しました。再度お試しください。"</string>
   <string name="common_space">"スペース"</string>
   <string name="common_space_members">"スペースのメンバー"</string>
-  <string name="common_space_topic_placeholder">"このスペースは何についてのものですか?"</string>
+  <string name="common_space_topic_placeholder">"このスペースは何についてのものですか？"</string>
   <plurals name="common_spaces">
     <item quantity="other">"%1$d 個のスペース"</item>
   </plurals>
@@ -441,7 +442,7 @@
   <string name="common_waiting">"待機中…"</string>
   <string name="common_waiting_for_decryption_key">"メッセージを待機中"</string>
   <string name="common_waiting_live_location">"ライブ位置情報を待機中…"</string>
-  <string name="common_world_readable_history">"誰でも履歴を閲覧できます"</string>
+  <string name="common_world_readable_history">"誰でも過去のメッセージを閲覧できます"</string>
   <string name="common_you">"あなた"</string>
   <string name="content_scanner_not_found">"ダウンロードは使用できません。"</string>
   <string name="content_scanner_not_found_title">"問題が発生しました"</string>
@@ -479,7 +480,7 @@
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"アップロードする画質を選択してください。"</string>
   <string name="dialog_video_quality_selector_title">"動画のアップロード品質を選択"</string>
   <string name="error_account_already_logged_in">"この端末では既に %1$s としてログインしています。"</string>
-  <string name="error_account_creation_not_possible">"Matrix Authentication Service とアカウント作成に対応するため、このホームサーバーはアップグレードが必要です。"</string>
+  <string name="error_account_creation_not_possible">"Matrix Authentication Service とアカウント作成に対応させるため、アカウント提供元のアップグレードが必要です。"</string>
   <string name="error_failed_creating_the_permalink">"固定リンクの作成に失敗しました"</string>
   <string name="error_failed_loading_map">"%1$s で地図を読み込めません。時間を置いて再度お試しください。"</string>
   <string name="error_failed_loading_messages">"メッセージの読み込みに失敗しました"</string>
@@ -541,11 +542,15 @@
   <string name="screen_room_grouped_state_events_expand">"展開"</string>
   <string name="screen_room_grouped_state_events_reduce">"縮小"</string>
   <string name="screen_room_live_location_banner">"ライブ位置情報を共有中"</string>
+  <string name="screen_room_maximum_messages_selected">"最大数のメッセージを選択中"</string>
   <string name="screen_room_permalink_same_room_android">"すでにこのルームを表示しています"</string>
   <string name="screen_room_pinned_banner_indicator">"%2$s 個のうち %1$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s 個のピン留めされたメッセージ"</string>
   <string name="screen_room_pinned_banner_loading_description">"メッセージを読み込み中…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"すべて表示"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="other">"%1$d件のメッセージを選択中"</item>
+  </plurals>
   <string name="screen_room_title">"チャット"</string>
   <string name="screen_share_location_title">"場所を共有"</string>
   <string name="screen_share_my_location_action">"現在地を共有する"</string>

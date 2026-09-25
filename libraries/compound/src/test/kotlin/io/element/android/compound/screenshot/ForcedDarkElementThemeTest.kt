@@ -18,22 +18,21 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.colors.SemanticColorsLightDark
-import io.element.android.compound.screenshot.utils.screenshotFile
+import io.element.android.compound.screenshot.utils.createPaparazziRule
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.ForcedDarkElementTheme
-import io.element.android.tests.testutils.robolectric.RobolectricTest
+import org.junit.Rule
 import org.junit.Test
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
-class ForcedDarkElementThemeTest : RobolectricTest() {
+class ForcedDarkElementThemeTest {
+    // The preview uses `fillMaxSize` to fill the inner Surface, so it needs a bounded frame.
+    @get:Rule
+    val paparazzi = createPaparazziRule(widthDp = 420, heightDp = 640)
+
     @Test
-    @Config(sdk = [35], qualifiers = "xxhdpi")
     fun screenshots() {
-        captureRoboImage(file = screenshotFile("ForcedDarkElementTheme.png")) {
+        paparazzi.snapshot(name = "ForcedDarkElementTheme") {
             ElementTheme {
                 Surface {
                     Column(

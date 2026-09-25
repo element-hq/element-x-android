@@ -18,7 +18,7 @@
   <string name="screen_media_upload_preview_processing">"Bearbetar …"</string>
   <string name="screen_report_content_block_user">"Blockera användare"</string>
   <string name="screen_report_content_block_user_hint">"Markera om du vill dölja alla nuvarande och framtida meddelanden från denna användare"</string>
-  <string name="screen_report_content_explanation">"Det här meddelandet kommer att rapporteras till din hemservers administratör. Denne kommer inte att kunna läsa några krypterade meddelanden."</string>
+  <string name="screen_report_content_explanation">"Det här meddelandet kommer att rapporteras till din kontoleverantör. Denne kommer inte att kunna läsa några krypterade meddelanden."</string>
   <string name="screen_report_content_hint">"Anledning till att rapportera detta innehåll"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Ta ett foto"</string>

@@ -37,8 +37,8 @@
   <string name="screen_advanced_settings_share_presence_description">"If turned off, you won’t be able to send or receive read receipts or typing notifications."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Always hide"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Always show"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"In private rooms"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"A hidden media can always be shown by tapping on it"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Show in private rooms"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Hidden media can always be shown by tapping on it."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Show media in timeline"</string>
   <string name="screen_advanced_settings_view_source_description">"Enable option to view message source in the timeline."</string>
   <string name="screen_blocked_users_empty">"You have no blocked users"</string>
@@ -61,6 +61,9 @@
   <string name="screen_labs_header_description">"Try out our latest ideas in development. These features are not finalised; they may be unstable, may change."</string>
   <string name="screen_labs_header_title">"Feeling experimental?"</string>
   <string name="screen_labs_title">"Labs"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Invites"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Other users"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Your appearance"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Call ringtone"</string>
   <string name="screen_notification_settings_calls_label">"Audio and video calls"</string>
