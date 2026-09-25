@@ -27,6 +27,7 @@ import androidx.compose.ui.layout.AlignmentLine
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
@@ -173,9 +174,12 @@ internal fun TimelineItemRow(
                 }
             },
             {
-                if (isSelectionModeActive && selectableEvent != null) {
+                if (isSelectionModeActive) {
                     // In selection mode the whole row toggles selection.
-                    Box(modifier = Modifier.clickable { onContentClick(selectableEvent) })
+                    Box(modifier = Modifier.clickable(enabled = selectionData.canBeSelected, role = Role.Checkbox) {
+                        if(selectableEvent != null)
+                        onContentClick(selectableEvent)
+                    })
                 }
             },
         ),
