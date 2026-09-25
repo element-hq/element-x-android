@@ -28,7 +28,7 @@ dependencies {
     } else {
         debugImplementation(libs.matrix.sdk)
     }
-    implementation(projects.libraries.rustlsTls)
+    implementation(variantOf(libs.rustls.platform.verifier) { artifactType("aar") })
 
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)

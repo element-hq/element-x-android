@@ -17,6 +17,16 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = uri("https://github.com/rustls/rustls-platform-verifier/raw/maven-archive/android-release-support/maven/")
+                }
+            }
+            filter {
+                includeModule("org.rustls", "rustls-platform-verifier")
+            }
+        }
         maven {
             url = uri("https://www.jitpack.io")
             content {
