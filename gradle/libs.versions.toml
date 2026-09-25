@@ -17,12 +17,12 @@ constraintlayout = "2.2.2"
 constraintlayout_compose = "1.1.2"
 lifecycle = "2.11.0"
 activity = "1.13.0"
-media3 = "1.11.0"
+media3 = "1.11.1"
 camera = "1.6.2"
 work = "2.11.2"
 
 # Compose
-compose_bom = "2026.08.00"
+compose_bom = "2026.09.00"
 
 # Coroutines
 coroutines = "1.11.0"
@@ -49,7 +49,7 @@ haze = "1.7.2"
 maplibre-compose = "0.15.0"
 
 # Dependency analysis
-dependencyAnalysis = "3.19.1"
+dependencyAnalysis = "3.19.2"
 
 # DI
 metro = "1.4.3"
@@ -205,7 +205,7 @@ sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", ver
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:sqlcipher-android:4.19.0"
-sqlite = "androidx.sqlite:sqlite-ktx:2.7.0"
+sqlite = "androidx.sqlite:sqlite-ktx:2.7.1"
 unifiedpush = "org.unifiedpush.android:connector:3.3.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil3", version.ref = "telephoto" }

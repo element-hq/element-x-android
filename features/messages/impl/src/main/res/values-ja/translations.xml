@@ -46,10 +46,8 @@
   <string name="screen_room_attachment_source_location">"場所を共有"</string>
   <string name="screen_room_attachment_source_poll">"投票"</string>
   <string name="screen_room_attachment_text_formatting">"書式設定"</string>
-  <string name="screen_room_confirm_removal_message">"このメッセージを削除しますか？"</string>
   <string name="screen_room_confirm_removal_reason_label">"理由 (任意)"</string>
   <string name="screen_room_confirm_removal_reason_placeholder">"入力…"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder_android">"理由…"</string>
   <string name="screen_room_confirm_removal_reason_supporting_text">"(任意)"</string>
   <string name="screen_room_confirm_removal_title">"削除の確認"</string>
   <string name="screen_room_encrypted_history_banner">"過去のメッセージを現在表示できません。"</string>

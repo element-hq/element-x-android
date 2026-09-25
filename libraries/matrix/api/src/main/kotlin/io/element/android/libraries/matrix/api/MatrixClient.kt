@@ -327,6 +327,11 @@ interface MatrixClient : ClientUrlContentFetcher {
     suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String>
 
     /**
+     * Returns the latest [RoomInfo] of a room, if known to the client, or `null` if the room is unknown.
+     */
+    suspend fun getRoomInfo(roomId: RoomId): Result<RoomInfo?>
+
+    /**
      * Get a room info flow for a given room ID.
      * The flow will emit a new value whenever the room info is updated, skipping duplicates, and an empty [Optional] if the room is not found.
      *
