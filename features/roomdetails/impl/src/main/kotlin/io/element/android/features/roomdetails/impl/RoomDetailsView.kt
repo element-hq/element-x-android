@@ -123,6 +123,7 @@ fun RoomDetailsView(
     onProfileClick: (UserId) -> Unit,
     onReportRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
+    additionalSections: @Composable () -> Unit = {},
     leaveRoomView: @Composable () -> Unit,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -197,6 +198,8 @@ fun RoomDetailsView(
                     onActionClick = onActionClick,
                 )
             }
+
+            additionalSections()
 
             PreferenceCategory {
                 if (state.hasNewContent) {

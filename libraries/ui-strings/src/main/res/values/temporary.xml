@@ -11,4 +11,7 @@
     <string name="a11y_active">Active</string>
     <string name="a11y_inactive">Inactive</string>
     <string name="common_switch_account">Switch accounts</string>
+    <string name="screen_room_audio_title">Room Audio</string>
+    <string name="screen_room_audio_video_calls">Video calls</string>
+    <string name="screen_room_audio_push_to_talk">Push to talk</string>
 </resources>
