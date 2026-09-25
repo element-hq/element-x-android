@@ -31,12 +31,16 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.services.appnavstate.api.AppForegroundStateService
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.job
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * The native call controller of a session, built on demand.
@@ -50,6 +54,14 @@ interface ElementCallControllers {
      * session - logged out, or a session id that cannot be restored.
      */
     suspend fun getOrBuild(sessionId: SessionId): ElementCallController?
+
+    /**
+     * The session's controller once its stack exists, and null until then. Never builds one.
+     *
+     * A flow rather than a getter because the stack appears part-way through the session's life, when
+     * a call is first placed or answered, and whatever draws the call has to notice when it does.
+     */
+    fun controller(sessionId: SessionId): Flow<ElementCallController?>
 
     /**
      * The controller of whichever session currently has a call, or null when none does.
@@ -84,33 +96,37 @@ class DefaultElementCallControllers(
     private val appPreferencesStore: AppPreferencesStore,
     private val featureFlagService: FeatureFlagService,
 ) : ElementCallControllers {
-    private val stacks = ConcurrentHashMap<SessionId, ElementCallStack>()
+    // A flow rather than a plain map because what draws the call has to see the stack appear.
+    private val stacks = MutableStateFlow<Map<SessionId, ElementCallStack>>(emptyMap())
 
     // One at a time across every session: two calls placed at once must not race into two stacks for
     // the same session, because only one of them would ever be closed.
     private val mutex = Mutex()
 
     override suspend fun getOrBuild(sessionId: SessionId): ElementCallController? = mutex.withLock {
-        stacks[sessionId]?.let { return@withLock it.controller }
+        stacks.value[sessionId]?.let { return@withLock it.controller }
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull()
         if (client == null) {
             Timber.w("NativeCall: no client for $sessionId, cannot start a call")
             return@withLock null
         }
         build(client).also { stack ->
-            stacks[sessionId] = stack
+            stacks.update { it + (sessionId to stack) }
             // The client's scope is the stack's lifetime: the component has no shutdown of its own, so
             // cancelling this at logout is what stops the RTC core. Closing here only releases the
             // component's own reference, so a dead stack is not left behind it.
             client.sessionCoroutineScope.coroutineContext.job.invokeOnCompletion {
-                stacks.remove(sessionId, stack)
+                stacks.update { if (it[sessionId] === stack) it - sessionId else it }
                 stack.close()
             }
         }.controller
     }
 
+    override fun controller(sessionId: SessionId): Flow<ElementCallController?> =
+        stacks.map { it[sessionId]?.controller }.distinctUntilChanged()
+
     override fun withRunningCall(): ElementCallController? =
-        stacks.values.firstNotNullOfOrNull { stack ->
+        stacks.value.values.firstNotNullOfOrNull { stack ->
             stack.controller.takeIf { it.state.value != null }
         }
 

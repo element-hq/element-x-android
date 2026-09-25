@@ -6,7 +6,8 @@
  */
 
 plugins {
-    id("io.element.android-library")
+    // NativeCallHost renders the call, so this module carries a composable.
+    id("io.element.android-compose-library")
 }
 
 android {
