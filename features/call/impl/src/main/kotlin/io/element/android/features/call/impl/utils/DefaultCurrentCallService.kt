@@ -11,20 +11,23 @@ package io.element.android.features.call.impl.utils
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.binding
 import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.api.CurrentCallService
+import io.element.android.features.call.api.CurrentCallTracker
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class)
-class DefaultCurrentCallService : CurrentCallService {
+@ContributesBinding(AppScope::class, binding = binding<CurrentCallService>())
+@ContributesBinding(AppScope::class, binding = binding<CurrentCallTracker>())
+class DefaultCurrentCallService : CurrentCallService, CurrentCallTracker {
     override val currentCall = MutableStateFlow<CurrentCall>(CurrentCall.None)
 
-    fun onCallStarted(call: CurrentCall) {
+    override fun onCallStarted(call: CurrentCall) {
         currentCall.value = call
     }
 
-    fun onCallEnded() {
+    override fun onCallEnded() {
         currentCall.value = CurrentCall.None
     }
 }

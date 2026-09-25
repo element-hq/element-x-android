@@ -169,4 +169,11 @@ enum class FeatureFlags(
         isFinished = false,
         isInLabs = false,
     ),
+    NativeCall(
+        key = "feature.native_call",
+        title = "Native calls (experimental)",
+        description = "Place calls with the native MatrixRTC stack instead of the Element Call WebView.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }
