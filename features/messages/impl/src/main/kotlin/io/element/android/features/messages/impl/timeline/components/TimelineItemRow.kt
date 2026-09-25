@@ -177,8 +177,9 @@ internal fun TimelineItemRow(
                 if (isSelectionModeActive) {
                     // In selection mode the whole row toggles selection.
                     Box(modifier = Modifier.clickable(enabled = selectionData.canBeSelected, role = Role.Checkbox) {
-                        if(selectableEvent != null)
-                        onContentClick(selectableEvent)
+                        if (selectableEvent != null) {
+                            onContentClick(selectableEvent)
+                        }
                     })
                 }
             },

@@ -112,7 +112,7 @@ val TimelineState.selectedCount: Int
 
 fun TimelineState.isSelected(item: TimelineItem): Boolean {
     val selection = selectionState as? SelectionState.Active ?: return false
-    return when(item){
+    return when (item) {
         is TimelineItem.Event -> selection.selectedEventIds.contains(item.eventId)
         else -> false
     }
@@ -123,7 +123,7 @@ fun TimelineState.isSelected(item: TimelineItem): Boolean {
  */
 fun TimelineState.canSelect(item: TimelineItem): Boolean {
     val selection = selectionState as? SelectionState.Active ?: return false
-    return when(item) {
+    return when (item) {
         is TimelineItem.Event -> selection.action.canApplyTo(item)
         else -> false
     }
