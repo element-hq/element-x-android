@@ -19,6 +19,6 @@ import io.element.android.features.call.api.CallData
  * There is nothing behind this seam yet - the default implementation does nothing and says so. The
  * native stack that implements it is a separate library, added in a follow-up.
  */
-interface NativeCallEntryPoint {
+fun interface NativeCallEntryPoint {
     fun startCall(callData: CallData)
 }
