@@ -1465,7 +1465,7 @@ class MessagesPresenterTest {
             assertThat(initialState.threads.hasThreads).isFalse()
 
             // Enable the feature flag, now it should reflect the thread list state
-            featureFlagService.setFeatureEnabled(FeatureFlags.RoomThreadList, true)
+            featureFlagService.setFeatureEnabled(FeatureFlags.Threads, true)
             skipItems(1)
             assertThat(awaitItem().threads.hasThreads).isTrue()
 

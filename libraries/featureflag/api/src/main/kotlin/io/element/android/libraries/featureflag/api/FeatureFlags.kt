@@ -116,13 +116,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    RoomThreadList(
-        key = "feature.room_thread_list",
-        title = "Add a list of threads in a room",
-        description = "Add a new screen with a list of threads in a room.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     AutomaticBackPagination(
         key = "feature.automatic_back_pagination",
         title = "Automatic back pagination of rooms",
