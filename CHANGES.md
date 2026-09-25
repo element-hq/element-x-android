@@ -1,3 +1,66 @@
+Changes in Element X v26.09.3
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.09.3 -->
+
+## What's Changed
+### ✨ Features
+* Integrate the new timeline renderer behind a feature flag by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7722
+* Add headers (`h1-h6`) tag support for the new timeline renderer by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7754
+### 🙌 Improvements
+* Add smooth animation to voice messages play progress by @bxdxnn in https://github.com/element-hq/element-x-android/pull/7698
+* Add linkification to the new timeline renderer by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7731
+### 🐛 Bugfixes
+* Make global search use a `Joined` filter for room results by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7695
+* Fix flaky test in `TimelinePresenterTest` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7702
+* Close the threaded timelines created to create a poll, share a location or send media by @bmarty in https://github.com/element-hq/element-x-android/pull/7705
+* Start sync manually after completing the auth flow by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7734
+* Fix forwarding an event not working in threads by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7743
+* Fix blank screen at launch when the homeserver expires the sliding sync session by @bmarty in https://github.com/element-hq/element-x-android/pull/7692
+* Fix unread notification count in room list by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7749
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/7699
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/7736
+### 🧱 Build
+* Reduce parallel JVMs spawned for tests by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7701
+* Replace git flow with regular git commands in the release script V2 by @bmarty in https://github.com/element-hq/element-x-android/pull/7707
+* Remove Roborazzi, use Paparazzi for Compound by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7735
+* Fix regex for invalid placeholders by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7738
+* Add a script to install and launch an APK given a PR URL by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7752
+### 🚧 In development 🚧
+* New timeline event renderer: add new modules by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7721
+* Add recent search results to global search by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7742
+### Dependency upgrades
+* Update dependency io.sentry:sentry-android to v8.55.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7685
+* Update coil to v3.6.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7693
+* Update kotlinpoet to v2.4.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7709
+* Update plugin sonarqube to v7.5.0.8588 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7671
+* Update roborazzi to v1.74.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7712
+* Update dependency io.element.android:element-call-embedded to v0.26.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7715
+* Use patched Konsist version (forked, 0.18.0) by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7719
+* Update dependency net.zetetic:sqlcipher-android to v4.19.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7716
+* Update metro to v1.4.3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7711
+* Update actions/setup-java action to v6.0.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7728
+* Update dependency androidx.compose:compose-bom to v2026.09.00 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7730
+* Update dependency androidx.sqlite:sqlite-ktx to v2.7.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7729
+* Update dependencyAnalysis to v3.19.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7755
+* Update media3 to v1.11.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7756
+* Upgrade SDK bindings to `v26.09.26` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7780
+### Others
+* Let the user give a reason when removing a message by @hayaksi1 in https://github.com/element-hq/element-x-android/pull/7538
+* Iterate on client creation by @bmarty in https://github.com/element-hq/element-x-android/pull/7591
+* Iteration on Acount provider by @bmarty in https://github.com/element-hq/element-x-android/pull/7703
+* Do not report detekt LargeClass issues on test classes by @bmarty in https://github.com/element-hq/element-x-android/pull/7713
+* Let the user give an optional reason when removing a message by @bmarty in https://github.com/element-hq/element-x-android/pull/7679
+* Make NotificationResultProcessor.emit wait until the batch is processed by @Johennes in https://github.com/element-hq/element-x-android/pull/7640
+* Settings iteration: move user status and update multi-account section by @bmarty in https://github.com/element-hq/element-x-android/pull/7741
+* Update remove message confirmation dialog. by @bmarty in https://github.com/element-hq/element-x-android/pull/7757
+* Add a script to end all the sessions of a Matrix account using MAS by @bmarty in https://github.com/element-hq/element-x-android/pull/7762
+* Settings iteration: split account settings and application settings. by @bmarty in https://github.com/element-hq/element-x-android/pull/7750
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.09.2...v26.09.3
+
 Changes in Element X v26.09.2
 =============================
 
