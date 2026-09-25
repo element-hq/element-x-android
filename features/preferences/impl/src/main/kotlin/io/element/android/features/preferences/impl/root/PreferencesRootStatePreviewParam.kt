@@ -9,8 +9,8 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.features.logout.api.direct.aDirectLogoutState
+import io.element.android.features.preferences.impl.account.PreferencesAccountState
+import io.element.android.features.preferences.impl.account.aPreferencesAccountState
 import io.element.android.features.preferences.impl.userstatus.UserStatusPickerState
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.userstatus.aUserStatusState
@@ -30,40 +30,25 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
                 version = "Version 1.1 (1)",
                 isMultiAccountEnabled = true,
                 otherSessions = aMatrixUserList().drop(1).take(1),
-                showSecureBackup = true,
-                accountManagementUrl = "aUrl",
-                canReportBug = true,
-                showLinkNewDevice = true,
                 showAnalyticsSettings = true,
-                canDeactivateAccount = false,
-                nbOfBlockedUsers = 3,
                 showLabsItem = true,
             ),
             aPreferencesRootState(
                 myUser = aMatrixUser(displayName = null),
                 isMultiAccountEnabled = true,
-                showSecureBackup = true,
-                canDeactivateAccount = true,
             ),
             aPreferencesRootState(
                 isMultiAccountEnabled = true,
                 isOtherAccountsSectionExpanded = true,
                 otherSessions = aMatrixUserList().drop(1).take(3),
-                accountManagementUrl = "aUrl",
-                showSecureBackup = true,
-                showSecureBackupBadge = true,
             ),
             aPreferencesRootState(
                 showLabsItem = true,
-                canReportBug = true,
-                nbOfBlockedUsers = 3,
                 snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete),
             ),
             aPreferencesRootState(
-                showLinkNewDevice = true,
                 showAnalyticsSettings = true,
                 showDeveloperSettings = true,
-                canDeactivateAccount = true,
             ),
             aPreferencesRootState(userStatusState = aUserStatusState(pickerState = UserStatusPickerState.ShowingPicker)),
             // Minimal state
@@ -73,41 +58,31 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
 
 fun aPreferencesRootState(
     myUser: MatrixUser = aMatrixUser(),
+    preferencesAccountState: PreferencesAccountState = aPreferencesAccountState(),
     version: String = "Version 1.1 (1)",
     isMultiAccountEnabled: Boolean = false,
     isOtherAccountsSectionExpanded: Boolean = false,
+    theme: ThemeOption = ThemeOption.System,
+    availableThemeOptions: List<ThemeOption> = ThemeOption.entries,
     otherSessions: List<MatrixUser> = emptyList(),
-    showSecureBackup: Boolean = false,
-    showSecureBackupBadge: Boolean = false,
-    accountManagementUrl: String? = null,
-    canReportBug: Boolean = false,
-    showLinkNewDevice: Boolean = false,
     showAnalyticsSettings: Boolean = false,
     showDeveloperSettings: Boolean = false,
-    canDeactivateAccount: Boolean = false,
-    nbOfBlockedUsers: Int = 0,
     showLabsItem: Boolean = false,
-    directLogoutState: DirectLogoutState = aDirectLogoutState(),
     userStatusState: UserStatusState? = aUserStatusState(),
     snackbarMessage: SnackbarMessage? = null,
     eventSink: (PreferencesRootEvent) -> Unit = {},
 ) = PreferencesRootState(
     myUser = myUser,
+    preferencesAccountState = preferencesAccountState,
     version = version,
     isMultiAccountEnabled = isMultiAccountEnabled,
+    theme = theme,
+    availableThemeOptions = availableThemeOptions.toImmutableList(),
     isOtherAccountsSectionExpanded = isOtherAccountsSectionExpanded,
     otherSessions = otherSessions.toImmutableList(),
-    showSecureBackup = showSecureBackup,
-    showSecureBackupBadge = showSecureBackupBadge,
-    accountManagementUrl = accountManagementUrl,
-    canReportBug = canReportBug,
-    showLinkNewDevice = showLinkNewDevice,
     showAnalyticsSettings = showAnalyticsSettings,
     showDeveloperSettings = showDeveloperSettings,
-    canDeactivateAccount = canDeactivateAccount,
-    nbOfBlockedUsers = nbOfBlockedUsers,
     showLabsItem = showLabsItem,
-    directLogoutState = directLogoutState,
     userStatusState = userStatusState,
     snackbarMessage = snackbarMessage,
     eventSink = eventSink,
