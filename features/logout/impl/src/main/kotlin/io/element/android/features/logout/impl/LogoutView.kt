@@ -32,6 +32,7 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
@@ -54,7 +55,7 @@ fun LogoutView(
         onBackClick = onBackClick,
         title = title(state),
         subTitle = subtitle(state),
-        iconStyle = BigIcon.Style.Default(CompoundIcons.KeySolid()),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.Mobile()),
         modifier = modifier,
         buttons = {
             Buttons(
@@ -62,7 +63,8 @@ fun LogoutView(
                 onChangeRecoveryKeyClick = onChangeRecoveryKeyClick,
                 onLogoutClick = {
                     eventSink(LogoutEvent.Logout(ignoreSdkError = false))
-                }
+                },
+                onCancelClick = onBackClick,
             )
         },
     ) {
@@ -116,6 +118,7 @@ private fun ColumnScope.Buttons(
     state: LogoutState,
     onLogoutClick: () -> Unit,
     onChangeRecoveryKeyClick: () -> Unit,
+    onCancelClick: () -> Unit,
 ) {
     val logoutAction = state.logoutAction
     if (state.isLastDevice) {
@@ -138,6 +141,11 @@ private fun ColumnScope.Buttons(
             .fillMaxWidth()
             .testTag(TestTags.signOut),
         onClick = onLogoutClick,
+    )
+    TextButton(
+        text = stringResource(id = CommonStrings.action_cancel),
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onCancelClick,
     )
 }
 

@@ -88,8 +88,22 @@ class LogoutViewTest : RobolectricTest() {
                 eventSink = eventsRecorder
             ),
         )
-        clickOn(CommonStrings.action_cancel)
+        clickOn(CommonStrings.action_cancel, inDialog = true)
         eventsRecorder.assertSingle(LogoutEvent.CloseDialogs)
+    }
+
+    @Test
+    fun `clicking on cancel invoke back callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LogoutEvent>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            setLogoutView(
+                aLogoutState(
+                    eventSink = eventsRecorder
+                ),
+                onBackClick = callback,
+            )
+            clickOn(CommonStrings.action_cancel)
+        }
     }
 
     @Test
