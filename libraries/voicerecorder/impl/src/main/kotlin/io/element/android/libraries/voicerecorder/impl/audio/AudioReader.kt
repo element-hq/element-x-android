@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.voicerecorder.impl.audio
 
+import android.content.Context
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 
 interface AudioReader {
@@ -23,6 +24,6 @@ interface AudioReader {
     fun stop()
 
     interface Factory {
-        fun create(config: AudioConfig, dispatchers: CoroutineDispatchers): AudioReader
+        fun create(context: Context, config: AudioConfig, dispatchers: CoroutineDispatchers): AudioReader
     }
 }
