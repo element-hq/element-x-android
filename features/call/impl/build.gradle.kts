@@ -86,6 +86,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.serialization.json)
     implementation(libs.element.call.embedded)
+    implementation(projects.features.callnative.api)
     api(projects.features.call.api)
 
     testCommonDependencies(libs, true)
