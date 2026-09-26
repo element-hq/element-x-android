@@ -59,6 +59,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.onVisibilityChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
@@ -104,6 +105,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
 import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.FloatingVideoService
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
@@ -558,8 +560,10 @@ private fun MediaViewerTopBar(
     onSaveClick: () -> Unit,
     onInfoClick: () -> Unit,
 ) {
+    val context = LocalContext.current
     val downloadedMedia by data.downloadedMedia
     val actionsEnabled = downloadedMedia.isSuccess()
+    val mimeType = data.mediaInfo.mimeType
     val senderName = data.mediaInfo.senderName
     val dateSent = data.mediaInfo.dateSent
     TopAppBar(
@@ -600,6 +604,23 @@ private fun MediaViewerTopBar(
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
+            if (mimeType.isMimeTypeVideo()) {
+                IconButton(
+                    enabled = actionsEnabled,
+                    onClick = {
+                        val media = downloadedMedia
+                        if (media is AsyncData.Success) {
+                            FloatingVideoService.startFloating(context, media.data.uri)
+                        }
+                        onBackClick()
+                    },
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.Collapse(),
+                        contentDescription = stringResource(id = CommonStrings.action_minimize),
+                    )
+                }
+            }
             IconButton(
                 onClick = onShareClick,
                 enabled = actionsEnabled,
