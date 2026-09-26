@@ -8,6 +8,7 @@
 package io.element.android.libraries.mediaplayer.impl.di
 
 import android.content.Context
+import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.exoplayer.ExoPlayer
 import dev.zacsweers.metro.BindingContainer
@@ -24,5 +25,16 @@ object SimplePlayerBindingContainer {
     @Provides
     fun providesSimplePlayer(
         @ApplicationContext context: Context,
-    ): SimplePlayer = DefaultSimplePlayer(ExoPlayer.Builder(context).setWakeMode(C.WAKE_MODE_LOCAL).build())
+    ): SimplePlayer = DefaultSimplePlayer(
+        ExoPlayer.Builder(context)
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(C.USAGE_VOICE_COMMUNICATION)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
+                    .build(),
+                true, // handleAudioFocus
+            )
+            .setWakeMode(C.WAKE_MODE_LOCAL)
+            .build()
+    )
 }
