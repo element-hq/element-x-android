@@ -13,7 +13,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -51,6 +52,8 @@ import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.input.pointer.PointerEventTimeoutCancellationException
+import androidx.compose.ui.input.pointer.changedToUp
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
@@ -327,10 +330,10 @@ private fun CodeBlockView(
         )
 
         // Previews and screenshots can't render the fading edge gradients properly, everything is obscured by them, so we skip them in the preview mode.
-        if (LocalInspectionMode.current.not()) {
+        if (LocalInspectionMode.current.not() && (scrollState.canScrollForward || scrollState.canScrollBackward)) {
             val progress by remember {
                 derivedStateOf {
-                    scrollState.value.toFloat() / scrollState.maxValue.coerceAtLeast(1)
+                    scrollState.value.toFloat() / scrollState.maxValue
                 }
             }
 
@@ -536,21 +539,50 @@ private fun Modifier.drawInlineCodeBackgrounds(
     }
 }
 
+/**
+ * Detects taps and long presses on link-annotated ranges ([LINK_ANNOTATION_TAG]) without consuming the touch events if none are detected, and invokes the
+ * appropriate callbacks in [context].
+ */
 private fun Modifier.linkTapHandler(
     text: AnnotatedString,
     layoutResult: State<TextLayoutResult?>,
     context: RenderContext,
 ): Modifier = pointerInput(text) {
-    detectTapGestures(
-        onTap = { offset ->
-            val (url, urlText) = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
-            context.onLinkClick(url, urlText)
-        },
-        onLongPress = { offset ->
-            val (url, urlText) = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
+    awaitEachGesture {
+        val down = awaitFirstDown(requireUnconsumed = true)
+        val (url, urlText) = layoutResult.value?.urlAt(down.position, text) ?: return@awaitEachGesture
+        down.consume()
+
+        val longPressTimeout = viewConfiguration.longPressTimeoutMillis
+
+        // Try detecting a long press by waiting for the long press timeout and checking if we received an up event before that.
+        // If we did, it's a tap, otherwise it's a long press.
+        // This warning is a false positive.
+        @Suppress("KotlinConstantConditions")
+        val isLongPress = try {
+            withTimeout(longPressTimeout) {
+                var receivedUp = false
+                while (!receivedUp) {
+                    val event = awaitPointerEvent()
+                    val up = event.changes.firstOrNull { it.id == down.id && it.changedToUp() }
+                    if (up != null) {
+                        receivedUp = true
+                        up.consume()
+                    }
+                }
+
+                !receivedUp
+            }
+        } catch (_: PointerEventTimeoutCancellationException) {
+            true
+        }
+
+        if (isLongPress) {
             context.onLinkLongClick(url, urlText)
-        },
-    )
+        } else {
+            context.onLinkClick(url, urlText)
+        }
+    }
 }
 
 private fun TextLayoutResult.urlAt(offset: Offset, text: AnnotatedString): Pair<String, String>? {
@@ -563,7 +595,7 @@ private val BlockSpacing: Dp = 8.dp
 private val ListItemSpacing: Dp = 4.dp
 private val ListMarkerWidth: Dp = 24.dp
 private val PillPaddingHorizontal: Dp = 6.dp
-private val PillPaddingVertical: Dp = 2.dp
+private val PillPaddingVertical: Dp = 0.dp
 
 /** Rounded, bordered box drawn behind inline code. */
 private val InlineCodeCornerRadius: Dp = 6.dp
