@@ -16,6 +16,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 class FakeMediaOptimizationSelectorPresenterFactory(
     private val fakePresenter: MediaOptimizationSelectorPresenter = MediaOptimizationSelectorPresenter {
         MediaOptimizationSelectorState(
+            index = 0,
             maxUploadSize = AsyncData.Uninitialized,
             videoSizeEstimations = AsyncData.Uninitialized,
             isImageOptimizationEnabled = null,
@@ -26,7 +27,7 @@ class FakeMediaOptimizationSelectorPresenterFactory(
         )
     }
 ) : MediaOptimizationSelectorPresenter.Factory {
-    override fun create(localMedia: LocalMedia, sendAsFile: Boolean): MediaOptimizationSelectorPresenter {
+    override fun create(index: Int, localMedia: LocalMedia, sendAsFile: Boolean): MediaOptimizationSelectorPresenter {
         return fakePresenter
     }
 }

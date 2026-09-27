@@ -21,6 +21,7 @@ import com.google.testing.junit.testparameterinjector.KotlinTestParameters.named
 import com.google.testing.junit.testparameterinjector.TestParameter
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -32,12 +33,10 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTestParameter
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestParameterInjector
 
-@RunWith(RobolectricTestParameterInjector::class)
-class OnboardingViewTest {
+class OnboardingViewTest : RobolectricTestParameter() {
     @Test
     fun `when can create account - clicking on create account calls the expected callback`() = runAndroidComposeUiTest {
         val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
@@ -150,7 +149,7 @@ class OnboardingViewTest {
         setOnboardingView(
             state = anOnBoardingState(
                 defaultAccountProvider = "element.io",
-                loginMode = AsyncData.Failure(AN_EXCEPTION),
+                loginModeState = aLoginModeState(loginMode = AsyncData.Failure(AN_EXCEPTION)),
                 eventSink = eventSink,
             ),
         )
@@ -210,7 +209,7 @@ class OnboardingViewTest {
         ensureCalledOnce { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.PasswordLogin),
+                    loginModeState = aLoginModeState(loginMode = AsyncData.Success(LoginMode.PasswordLogin)),
                     eventSink = eventSink,
                 ),
                 onNeedLoginPassword = callback,
@@ -226,7 +225,7 @@ class OnboardingViewTest {
         ensureCalledOnceWithParam(oAuthDetails) { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.OAuth(oAuthDetails)),
+                    loginModeState = aLoginModeState(loginMode = AsyncData.Success(LoginMode.OAuth(oAuthDetails))),
                     eventSink = eventSink,
                 ),
                 onOAuthDetails = callback,
@@ -242,7 +241,7 @@ class OnboardingViewTest {
         ensureCalledOnceWithParam(oAuthDetails.url) { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.AccountCreation("aUrl")),
+                    loginModeState = aLoginModeState(loginMode = AsyncData.Success(LoginMode.AccountCreation("aUrl"))),
                     eventSink = eventSink,
                 ),
                 onCreateAccountContinue = callback,

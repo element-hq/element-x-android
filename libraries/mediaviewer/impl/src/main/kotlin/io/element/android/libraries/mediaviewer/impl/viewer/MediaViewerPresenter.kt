@@ -67,20 +67,31 @@ class MediaViewerPresenter(
     // Use a local snackbarDispatcher because this presenter is used in an Overlay Node
     private val snackbarDispatcher = SnackbarDispatcher()
 
+    private val eventId = inputs.eventId()
+    private val mediaSource = inputs.mediaSource()
+
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
-        val currentIndex = remember { mutableIntStateOf(dataSource.findEventIndex(inputs.eventId) ?: 0) }
+        val currentIndex = remember {
+            val firstIndex = if (inputs is MediaViewerEntryPoint.Params.EventGallery) {
+                // Order is reversed so we have to reverse the index
+                inputs.galleryItems.lastIndex - inputs.galleryInfo.initialIndex
+            } else {
+                dataSource.findEventIndex(eventId, mediaSource) ?: 0
+            }
+            mutableIntStateOf(firstIndex)
+        }
         val data = dataSource.produceState { flow ->
             flow.collectLatest { new ->
                 val existingItem = value.getOrNull(currentIndex.intValue)
                 val newItem = new.getOrNull(currentIndex.intValue)
-                if (existingItem is MediaViewerPageData.MediaViewerData && existingItem.eventId == inputs.eventId && newItem != existingItem) {
-                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                if (existingItem is MediaViewerPageData.MediaViewerData && existingItem.eventId == eventId && newItem != existingItem) {
+                    currentIndex.intValue = dataSource.findEventIndex(eventId, mediaSource) ?: 0
                 } else if (currentIndex.intValue > 0 && value.firstOrNull() is MediaViewerPageData.Loading &&
                     new.firstOrNull() !is MediaViewerPageData.Loading) {
                     // Restore index based on the eventId after the initial items have been loaded
-                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                    currentIndex.intValue = dataSource.findEventIndex(eventId, mediaSource) ?: 0
                 }
                 value = new
             }
@@ -140,7 +151,15 @@ class MediaViewerPresenter(
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onForwardClick(
                         eventId = event.eventId,
-                        fromPinnedEvents = inputs.mode.getTimelineMode() == Timeline.Mode.PinnedEvents,
+                        fromPinnedEvents = when (inputs) {
+                            is MediaViewerEntryPoint.Params.RoomMedia -> when (val myMode = inputs.mode) {
+                                is MediaViewerEntryPoint.MediaViewerMode.EventGallery -> myMode.fromPinnedMessages
+                                is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> myMode.getTimelineMode() == Timeline.Mode.PinnedEvents
+                                is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> myMode.getTimelineMode() == Timeline.Mode.PinnedEvents
+                            }
+                            is MediaViewerEntryPoint.Params.EventGallery -> inputs.fromPinnedMessages
+                            is MediaViewerEntryPoint.Params.Avatar -> false
+                        },
                     )
                 }
                 is MediaViewerEvent.OpenInfo -> coroutineScope.launch {
@@ -176,11 +195,11 @@ class MediaViewerPresenter(
         }
 
         return MediaViewerState(
-            initiallySelectedEventId = inputs.eventId,
+            initiallySelectedEventId = eventId,
             listData = data.value,
             currentIndex = currentIndex.intValue,
             snackbarMessage = snackbarMessage,
-            canShowInfo = inputs.canShowInfo,
+            canShowInfo = inputs !is MediaViewerEntryPoint.Params.Avatar,
             mediaBottomSheetState = mediaBottomSheetState,
             eventSink = ::handleEvent,
         )
@@ -224,13 +243,16 @@ class MediaViewerPresenter(
     }
 
     private fun showNoMoreItemsSnackbar() {
-        val messageResId = when (inputs.mode) {
-            MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
-            is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> R.string.screen_media_details_no_more_media_to_show
-            is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> R.string.screen_media_details_no_more_files_to_show
+        if (inputs is MediaViewerEntryPoint.Params.RoomMedia) {
+            val messageResId = when (inputs.mode) {
+                is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> R.string.screen_media_details_no_more_media_to_show
+                is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> R.string.screen_media_details_no_more_files_to_show
+                // Should not happen
+                is MediaViewerEntryPoint.MediaViewerMode.EventGallery -> R.string.screen_media_details_no_more_media_to_show
+            }
+            val message = SnackbarMessage(messageResId)
+            snackbarDispatcher.post(message)
         }
-        val message = SnackbarMessage(messageResId)
-        snackbarDispatcher.post(message)
     }
 
     private fun CoroutineScope.downloadMedia(
@@ -291,4 +313,16 @@ class MediaViewerPresenter(
             CommonStrings.error_unknown
         }
     }
+}
+
+private fun MediaViewerEntryPoint.Params.eventId() = when (this) {
+    is MediaViewerEntryPoint.Params.Avatar -> null
+    is MediaViewerEntryPoint.Params.EventGallery -> eventId
+    is MediaViewerEntryPoint.Params.RoomMedia -> eventId
+}
+
+private fun MediaViewerEntryPoint.Params.mediaSource() = when (this) {
+    is MediaViewerEntryPoint.Params.Avatar -> mediaSource
+    is MediaViewerEntryPoint.Params.EventGallery -> null
+    is MediaViewerEntryPoint.Params.RoomMedia -> mediaSource
 }

@@ -16,6 +16,18 @@
   <string name="emoji_picker_category_places">"Viaggi &amp; Luoghi"</string>
   <string name="emoji_picker_category_recent">"Emoji recenti"</string>
   <string name="emoji_picker_category_symbols">"Simboli"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Capovolgi l\'immagine orizzontalmente"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Capovolto orizzontalmente"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Originale"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Capovolgi l\'immagine verticalmente"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Capovolto verticalmente"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Originale"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Ruota l\'immagine verso sinistra"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d grado"</item>
+    <item quantity="other">"%1$d gradi"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Modifica foto"</string>
   <string name="screen_media_upload_preview_caption_warning">"Le didascalie potrebbero non essere visibili agli utenti di app meno recenti."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tocca per modificare la qualità di caricamento del video"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Impossibile caricare il file."</string>
@@ -26,6 +38,7 @@
   <string name="screen_media_upload_preview_item_count">"Elemento %1$d di %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Ottimizza la qualità delle immagini"</string>
   <string name="screen_media_upload_preview_processing">"Elaborazione…"</string>
+  <string name="screen_media_upload_preview_title">"Aggiungi contenuti multimediali"</string>
   <string name="screen_report_content_block_user">"Blocca utente"</string>
   <string name="screen_report_content_block_user_hint">"Seleziona se vuoi nascondere tutti i messaggi attuali e futuri di questo utente"</string>
   <string name="screen_report_content_explanation">"Questo messaggio verrà segnalato all\'amministratore dell\'homeserver. Questi non sarà in grado di leggere i messaggi cifrati."</string>

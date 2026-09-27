@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.mediaviewer.api.AvatarInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
@@ -109,7 +110,11 @@ class MediaViewerPresenterTest {
     fun `present - initial state cannot show info`() = runTest {
         val presenter = createMediaViewerPresenter(
             localMediaFactory = localMediaFactory,
-            canShowInfo = false,
+            inputs = MediaViewerEntryPoint.Params.Avatar(
+                avatarInfo = AvatarInfo(filename = "avatar.png"),
+                mediaSource = aMediaSource(),
+                thumbnailSource = null,
+            ),
             room = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
                     roomPermissions = FakeRoomPermissions(
@@ -639,7 +644,7 @@ class MediaViewerPresenterTest {
                     }
                 )
             )
-            skipItems(2)
+            skipItems(1)
             val stateWithSnackbar = awaitItem()
             assertThat(stateWithSnackbar.snackbarMessage!!.messageResId).isEqualTo(expectedSnackbarResId)
         }
@@ -932,29 +937,31 @@ class MediaViewerPresenterTest {
 
 internal fun TestScope.createMediaViewerPresenter(
     localMediaFactory: LocalMediaFactory,
+    inputs: MediaViewerEntryPoint.Params? = null,
     eventId: EventId? = null,
-    mode: MediaViewerEntryPoint.MediaViewerMode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
+    mode: MediaViewerEntryPoint.MediaViewerMode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media),
     matrixMediaLoader: FakeMatrixMediaLoader = FakeMatrixMediaLoader(),
     localMediaActions: FakeLocalMediaActions = FakeLocalMediaActions(),
     mediaGalleryDataSource: MediaGalleryDataSource = FakeMediaGalleryDataSource(
         startLambda = { },
     ),
-    canShowInfo: Boolean = true,
     mediaViewerNavigator: MediaViewerNavigator = FakeMediaViewerNavigator(),
     room: JoinedRoom = FakeJoinedRoom(
         liveTimeline = FakeTimeline(),
     ),
 ): MediaViewerPresenter {
+    val actualInputs = inputs ?: createMediaViewerEntryPointParams(eventId = eventId, mode = mode)
+    val actualMode = when (actualInputs) {
+        is MediaViewerEntryPoint.Params.Avatar -> MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
+        is MediaViewerEntryPoint.Params.EventGallery -> MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
+        is MediaViewerEntryPoint.Params.RoomMedia -> actualInputs.mode
+    }
     return MediaViewerPresenter(
-        inputs = createMediaViewerEntryPointParams(
-            eventId = eventId,
-            mode = mode,
-            canShowInfo = canShowInfo,
-        ),
+        inputs = actualInputs,
         navigator = mediaViewerNavigator,
         dataSource = MediaViewerDataSource(
             coroutineScope = backgroundScope,
-            mode = mode,
+            mode = actualMode,
             dispatcher = testCoroutineDispatchers().computation,
             galleryDataSource = mediaGalleryDataSource,
             mediaLoader = matrixMediaLoader,
@@ -969,13 +976,11 @@ internal fun TestScope.createMediaViewerPresenter(
 
 internal fun createMediaViewerEntryPointParams(
     eventId: EventId? = null,
-    mode: MediaViewerEntryPoint.MediaViewerMode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
-    canShowInfo: Boolean = true,
-) = MediaViewerEntryPoint.Params(
+    mode: MediaViewerEntryPoint.MediaViewerMode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.Media),
+) = MediaViewerEntryPoint.Params.RoomMedia(
     mode = mode,
     eventId = eventId,
     mediaInfo = TESTED_MEDIA_INFO,
     mediaSource = aMediaSource(),
     thumbnailSource = null,
-    canShowInfo = canShowInfo,
 )

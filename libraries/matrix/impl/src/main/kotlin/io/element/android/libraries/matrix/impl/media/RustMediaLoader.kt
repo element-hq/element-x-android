@@ -9,11 +9,13 @@
 package io.element.android.libraries.matrix.impl.media
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.impl.exception.mapClientException
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.use
@@ -37,7 +39,7 @@ class RustMediaLoader(
                 source.toRustMediaSource().use { source ->
                     innerClient.getMediaContent(source)
                 }
-            }
+            }.mapFailure { it.mapClientException() }
         }
 
     override suspend fun loadMediaThumbnail(
@@ -54,7 +56,7 @@ class RustMediaLoader(
                         height = height.toULong()
                     )
                 }
-            }
+            }.mapFailure { it.mapClientException() }
         }
 
     override suspend fun downloadMediaFile(

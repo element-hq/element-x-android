@@ -37,7 +37,6 @@
     <item quantity="many">"Прачытана %1$s і %2$d іншымі"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Прачытана %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Націсніце, каб паказаць усе"</string>
   <string name="a11y_remove_reaction">"Выдаліць рэакцыю з %1$s"</string>
   <string name="a11y_send_files">"Адправіць файлы"</string>
   <string name="a11y_show_password">"Паказаць пароль"</string>

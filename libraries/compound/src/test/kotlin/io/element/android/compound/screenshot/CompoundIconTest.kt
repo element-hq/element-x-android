@@ -11,7 +11,6 @@ package io.element.android.compound.screenshot
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.previews.IconsCompoundPreviewDark
 import io.element.android.compound.previews.IconsCompoundPreviewLight
@@ -21,15 +20,14 @@ import io.element.android.compound.screenshot.utils.screenshotFile
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
-@RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class CompoundIconTest {
+class CompoundIconTest : RobolectricTest() {
     @Test
     @Config(sdk = [35], qualifiers = "w1024dp-h2048dp")
     fun screenshots() {

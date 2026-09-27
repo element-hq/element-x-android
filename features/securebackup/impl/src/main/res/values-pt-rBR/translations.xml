@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_chat_backup_key_backup_action_disable">"Apagar o armazenamento de chaves"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Ativar o backup"</string>
-  <string name="screen_chat_backup_key_backup_description">"Armazene sua identidade criptográfica e chaves de mensagem com segurança no servidor. Isso permitirá que você visualize seu histórico de mensagens em dispositivos futuros. %1$s."</string>
+  <string name="screen_chat_backup_key_backup_description">"Isso te permite ver seu histórico de conversas em dispositivos novos, e é necessário para o backup de conversas e identidade digital. %1$s"</string>
   <string name="screen_chat_backup_key_backup_title">"Armazenamento de chaves"</string>
   <string name="screen_chat_backup_key_storage_disabled_error">"O armazenamento de chaves deve ser ativado para configurar a recuperação."</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"Enviar chaves a partir deste dispositivo"</string>
@@ -11,7 +11,7 @@
   <string name="screen_chat_backup_recovery_action_change_description">"Recupere sua identidade criptográfica e o histórico de mensagens com uma chave de recuperação, caso você tenha perdido todos os dispositivos existentes."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Digitar chave de recuperação"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Seu armazenamento de chaves está fora de sincronia no momento."</string>
-  <string name="screen_chat_backup_recovery_action_setup">"Configurar a recuperação"</string>
+  <string name="screen_chat_backup_recovery_action_setup">"Receber chave de recuperação"</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Abra o %1$s em um computador"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Entre na sua conta novamente"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Ao ser solicitado para verificar o seu dispositivo, selecione %1$s"</string>
@@ -25,10 +25,10 @@
   <string name="screen_encryption_reset_bullet_3">"Você precisará verificar todos os seus dispositivos e contatos existentes novamente."</string>
   <string name="screen_encryption_reset_footer">"Redefina sua identidade somente se você não tiver acesso a outro dispositivo conectado e se tiver perdido sua chave de recuperação."</string>
   <string name="screen_encryption_reset_title">"Não consegue confirmar? Você precisará redefinir sua identidade."</string>
-  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Desativar"</string>
-  <string name="screen_key_backup_disable_confirmation_description">"Você perderá suas mensagens criptografadas se for desconectado de todos os dispositivos."</string>
-  <string name="screen_key_backup_disable_confirmation_title">"Tem certeza de que deseja desativar o backup?"</string>
-  <string name="screen_key_backup_disable_description">"Ao apagar o armazenamento de chaves, a sua identidade criptográfica e as chaves das mensagens serão apagadas do servidor e os seguintes recursos de segurança serão desativados:"</string>
+  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Apagar"</string>
+  <string name="screen_key_backup_disable_confirmation_description">"Você perderá o seu histórico de mensagens criptografadas e precisará reconfigurar sua identidade digital se remover todos os dispositivos."</string>
+  <string name="screen_key_backup_disable_confirmation_title">"Tem certeza de que deseja apagar o armazenamento de chaves?"</string>
+  <string name="screen_key_backup_disable_description">"Ao apagar o armazenamento de chaves, a sua identidade digital e as chaves das mensagens serão apagadas do servidor e os seguintes recursos de segurança serão desativados:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Você não terá o histórico de mensagens criptografadas em dispositivos novos"</string>
   <string name="screen_key_backup_disable_description_point_2">"Você perderá o acesso às suas mensagens criptografadas se for desconectado de %1$s em todos os dispositivos"</string>
   <string name="screen_key_backup_disable_title">"Tem certeza de que deseja desativar o armazenamento de chaves e apagá-lo?"</string>
@@ -58,7 +58,7 @@
   <string name="screen_recovery_key_setup_generate_key">"Gere sua chave de recuperação"</string>
   <string name="screen_recovery_key_setup_generate_key_description">"Não compartilhe isso com ninguém!"</string>
   <string name="screen_recovery_key_setup_success">"Configuração de recuperação bem-sucedida"</string>
-  <string name="screen_recovery_key_setup_title">"Configurar a recuperação"</string>
+  <string name="screen_recovery_key_setup_title">"Receber chave de recuperação"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Sim, redefinir agora"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Esse processo é irreversível."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Você tem certeza de que deseja redefinir sua identidade?"</string>

@@ -20,6 +20,27 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Kövesse az utasításokat egy új helyreállítási kulcs létrehozásához"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Mentse az új helyreállítási kulcsot egy jelszókezelőbe vagy egy titkosított jegyzetbe."</string>
   <string name="screen_create_new_recovery_key_title">"A fiók titkosításának visszaállítása egy másik eszköz használatával"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"A megadott helyreállítási kulcsok nem egyeznek"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"Beállítás befejezése"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"Írja be újra a helyreállítási kulcsot."</string>
+  <string name="screen_custom_recovery_key_confirm_title">"Erősítse meg a helyreállítási kulcsát"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="one">"Minimum %1$d karakter. Ne használja a fiók jelszavát."</item>
+    <item quantity="other">"Minimum %1$d karakter. Ne használja a fiók jelszavát."</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"Erősség"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"Jelszó erőssége: %1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"Mérsékelt"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"Erős"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"Nagyon erős"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"Nagyon gyenge"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"Gyenge"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"Válasszon egy olyan helyreállítási kulcsot, amelyet könnyen megjegyezhet."</string>
+  <string name="screen_custom_recovery_key_input_title">"Adja meg a helyreállítási kulcsot"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"Helyreállítási kulcs követelményeinek betöltése"</string>
+  <string name="screen_custom_recovery_key_success_notice">"A helyreállítási kulcs módosításához lépjen a Beállítások → Titkosítás → Biztonsági mentés menüpontra."</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"A helyreállítási kulcs segítségével megerősítheti az új eszközöket, vagy visszaállíthatja a titkosított csevegéseket, ha elveszítette a hozzáférését az összes eszközéhez."</string>
+  <string name="screen_custom_recovery_key_success_title">"A biztonsági mentés most már teljesen be van állítva"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Visszaállítás folytatása"</string>
   <string name="screen_encryption_reset_bullet_1">"A fiókadatok, a kapcsolatok, a beállítások és a csevegéslista megmarad"</string>
   <string name="screen_encryption_reset_bullet_2">"Elveszíti meglévő üzenetelőzményeit"</string>

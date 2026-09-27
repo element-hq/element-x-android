@@ -10,26 +10,34 @@ package io.element.android.libraries.wellknown.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.network.RetrofitFactory
 import io.element.android.libraries.wellknown.api.ElementWellKnown
+import io.element.android.libraries.wellknown.api.ElementWellknownStore
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import retrofit2.HttpException
 import timber.log.Timber
 import java.net.HttpURLConnection
+import java.net.URL
 
 @ContributesBinding(AppScope::class)
 class DefaultWellknownRetriever(
     private val retrofitFactory: RetrofitFactory,
+    private val elementWellknownStore: ElementWellknownStore,
+    private val jsonProvider: JsonProvider,
 ) : WellknownRetriever {
     override suspend fun getElementWellKnown(baseUrl: String): WellknownRetrieverResult<ElementWellKnown> {
+        val domain = URL(baseUrl).host
         return buildWellknownApi(baseUrl)
             .map { wellknownApi ->
                 try {
-                    val result = wellknownApi.getElementWellKnown().map()
-                    WellknownRetrieverResult.Success(result)
+                    val json = jsonProvider()
+                    val result = wellknownApi.getElementWellKnown()
+                    elementWellknownStore.update(domain, json.encodeToString(result))
+                    WellknownRetrieverResult.Success(result.map())
                 } catch (e: Exception) {
                     // Is it a 404?
                     Timber.e(e, "Failed to retrieve Element well-known data for $baseUrl")

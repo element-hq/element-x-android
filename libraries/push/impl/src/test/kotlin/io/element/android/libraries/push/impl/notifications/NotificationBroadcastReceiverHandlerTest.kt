@@ -49,6 +49,7 @@ import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -56,12 +57,8 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-
 @ExperimentalCoroutinesApi
-@RunWith(RobolectricTestRunner::class)
-class NotificationBroadcastReceiverHandlerTest {
+class NotificationBroadcastReceiverHandlerTest : RobolectricTest() {
     private val actionIds = NotificationActionIds(aBuildMeta())
 
     @Test

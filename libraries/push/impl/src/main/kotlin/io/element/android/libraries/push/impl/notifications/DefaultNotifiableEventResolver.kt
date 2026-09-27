@@ -36,11 +36,13 @@ import io.element.android.libraries.matrix.api.media.isPreviewEnabled
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
@@ -298,7 +300,39 @@ class DefaultNotifiableEventResolver(
                 Timber.tag(loggerTag.value).d("Ignoring notification for sticker")
                 throw NotificationResolverException.EventFilteredOut
             }
-            is NotificationContent.StateEvent.RoomMemberContent,
+            is NotificationContent.StateEvent.RoomMemberContent -> {
+                if (content.membershipState == RoomMembershipState.INVITE && content.userId == userId) {
+                    // An invite for us can resolve as a timeline member event rather than a stripped
+                    // invite when the room has already advanced past the invited state — e.g. the
+                    // server auto-joined us because our knock was accepted (synapse#16307).
+                    val inviteNotifiableEvent = InviteNotifiableEvent(
+                        sessionId = userId,
+                        roomId = roomId,
+                        eventId = eventId,
+                        editedEventId = null,
+                        canBeReplaced = true,
+                        roomName = roomDisplayName,
+                        noisy = isNoisy,
+                        timestamp = this.timestamp,
+                        soundName = null,
+                        isRedacted = false,
+                        isUpdated = false,
+                        description = descriptionFromRoomMembershipInvite(
+                            senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                            isDirectRoom = isDirect,
+                            isSpace = isSpace
+                        ),
+                        // TODO check if type is needed anymore
+                        type = null,
+                        // TODO check if title is needed anymore
+                        title = null,
+                    )
+                    ResolvedPushEvent.Event(inviteNotifiableEvent)
+                } else {
+                    Timber.tag(loggerTag.value).d("Ignoring notification for membership ${content.membershipState}")
+                    throw NotificationResolverException.EventFilteredOut
+                }
+            }
             NotificationContent.StateEvent.PolicyRuleRoom,
             NotificationContent.StateEvent.PolicyRuleServer,
             NotificationContent.StateEvent.PolicyRuleUser,
@@ -344,6 +378,7 @@ class DefaultNotifiableEventResolver(
             is TextMessageType -> messageType.toPlainText(permalinkParser = permalinkParser)
             is VideoMessageType -> messageType.bestDescription
             is LocationMessageType -> messageType.body
+            is GalleryMessageType -> messageType.body
             is OtherMessageType -> messageType.body
         }
     }

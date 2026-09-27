@@ -38,6 +38,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import dev.zacsweers.metro.Inject
 import io.element.android.compound.colors.SemanticColorsLightDark
+import io.element.android.compound.theme.ForcedDarkElementTheme
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
@@ -143,24 +144,28 @@ class ElementCallActivity :
                 compoundDark = colors.dark,
                 buildMeta = buildMeta,
             ) {
-                val state = presenter.present()
-                eventSink = state.eventSink
-                LaunchedEffect(state.isCallActive) {
-                    if (state.isCallActive) {
-                        setCallIsActive()
+                ForcedDarkElementTheme(
+                    colors = colors,
+                ) {
+                    val state = presenter.present()
+                    eventSink = state.eventSink
+                    LaunchedEffect(state.isCallActive) {
+                        if (state.isCallActive) {
+                            setCallIsActive()
+                        }
                     }
+                    CallScreenView(
+                        state = state,
+                        pipState = pipState,
+                        onConsoleMessage = {
+                            consoleMessageLogger.log("ElementCall", it)
+                        },
+                        requestPermissions = { permissions, callback ->
+                            requestPermissionCallback = callback
+                            requestPermissionsLauncher.launch(permissions)
+                        }
+                    )
                 }
-                CallScreenView(
-                    state = state,
-                    pipState = pipState,
-                    onConsoleMessage = {
-                        consoleMessageLogger.log("ElementCall", it)
-                    },
-                    requestPermissions = { permissions, callback ->
-                        requestPermissionCallback = callback
-                        requestPermissionsLauncher.launch(permissions)
-                    }
-                )
             }
         }
     }

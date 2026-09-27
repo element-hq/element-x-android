@@ -15,6 +15,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 
 data class PinUnlockState(
+    val canNavigateBack: Boolean,
     val pinEntry: AsyncData<PinEntry>,
     val showWrongPinTitle: Boolean,
     val remainingAttempts: AsyncData<Int>,

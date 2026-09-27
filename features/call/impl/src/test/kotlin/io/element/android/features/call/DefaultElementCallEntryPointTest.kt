@@ -21,19 +21,17 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
 import kotlin.time.Duration.Companion.seconds
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultElementCallEntryPointTest {
+class DefaultElementCallEntryPointTest : RobolectricTest() {
     @Test
     fun `startCall - starts ElementCallActivity setup with the needed extras`() = runTest {
         val entryPoint = createEntryPoint()

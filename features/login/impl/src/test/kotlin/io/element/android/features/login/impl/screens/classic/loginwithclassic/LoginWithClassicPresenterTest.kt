@@ -16,8 +16,8 @@ import io.element.android.features.login.impl.classic.FakeElementClassicConnecti
 import io.element.android.features.login.impl.classic.ROOM_KEYS_VERSION
 import io.element.android.features.login.impl.classic.anElementClassicReady
 import io.element.android.features.login.impl.classic.anElementClassicSession
-import io.element.android.features.login.impl.login.LoginHelper
-import io.element.android.features.login.impl.screens.onboarding.createLoginHelper
+import io.element.android.features.login.impl.login.LoginModePresenter
+import io.element.android.features.login.impl.screens.onboarding.createLoginModePresenter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
@@ -42,7 +42,7 @@ class LoginWithClassicPresenterTest {
             assertThat(initialState.displayName).isNull()
             assertThat(initialState.avatar).isNull()
             assertThat(initialState.loginWithClassicAction.isUninitialized()).isTrue()
-            assertThat(initialState.loginMode.isUninitialized()).isTrue()
+            assertThat(initialState.loginModeState.loginMode.isUninitialized()).isTrue()
         }
     }
 
@@ -69,7 +69,7 @@ class LoginWithClassicPresenterTest {
         )
         val presenter = createPresenter(
             elementClassicConnection = elementClassicConnection,
-            loginHelper = createLoginHelper(
+            loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
             ),
         )
@@ -108,7 +108,7 @@ class LoginWithClassicPresenterTest {
         )
         val presenter = createPresenter(
             elementClassicConnection = elementClassicConnection,
-            loginHelper = createLoginHelper(
+            loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
             ),
         )
@@ -147,7 +147,7 @@ class LoginWithClassicPresenterTest {
         val navigateToMissingKeyBackupResult = lambdaRecorder<Unit> { }
         val presenter = createPresenter(
             elementClassicConnection = elementClassicConnection,
-            loginHelper = createLoginHelper(
+            loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
             ),
             navigator = FakeLoginWithClassicNavigator(
@@ -188,7 +188,7 @@ class LoginWithClassicPresenterTest {
         val navigateToMissingKeyBackupResult = lambdaRecorder<Unit> { }
         val presenter = createPresenter(
             elementClassicConnection = elementClassicConnection,
-            loginHelper = createLoginHelper(
+            loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
             ),
             navigator = FakeLoginWithClassicNavigator(
@@ -247,14 +247,14 @@ class LoginWithClassicPresenterTest {
 private fun createPresenter(
     userId: UserId = A_USER_ID,
     navigator: LoginWithClassicNavigator = FakeLoginWithClassicNavigator(),
-    loginHelper: LoginHelper = createLoginHelper(),
+    loginModePresenter: LoginModePresenter = createLoginModePresenter(),
     elementClassicConnection: ElementClassicConnection = FakeElementClassicConnection(),
     accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
     isEnterpriseBuild: Boolean = false,
 ) = LoginWithClassicPresenter(
     userId = userId,
     navigator = navigator,
-    loginHelper = loginHelper,
+    loginModePresenter = loginModePresenter,
     elementClassicConnection = elementClassicConnection,
     accountProviderDataSource = accountProviderDataSource,
     buildMeta = aBuildMeta(

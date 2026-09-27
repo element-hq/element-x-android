@@ -30,6 +30,7 @@ import me.saket.telephoto.zoomable.rememberZoomableImageState
 fun MediaImageView(
     localMediaViewState: LocalMediaViewState,
     localMedia: LocalMedia?,
+    forPreview: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -42,11 +43,16 @@ fun MediaImageView(
     } else {
         val zoomableImageState = rememberZoomableImageState(localMediaViewState.zoomableState)
         localMediaViewState.isReady = zoomableImageState.isImageDisplayed
+        val imageDescription = if (forPreview) {
+            stringResource(CommonStrings.a11y_photo_preview)
+        } else {
+            stringResource(CommonStrings.common_image)
+        }
         ZoomableAsyncImage(
             modifier = modifier,
             state = zoomableImageState,
             model = localMedia?.uri,
-            contentDescription = stringResource(id = CommonStrings.common_image),
+            contentDescription = imageDescription,
             contentScale = ContentScale.Fit,
             onClick = { onClick() }
         )
@@ -60,6 +66,7 @@ internal fun MediaImageViewPreview() = ElementPreview {
         modifier = Modifier.fillMaxSize(),
         localMediaViewState = rememberLocalMediaViewState(),
         localMedia = null,
+        forPreview = false,
         onClick = {},
     )
 }

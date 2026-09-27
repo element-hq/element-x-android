@@ -27,7 +27,6 @@
     <item quantity="other">"Leído por %1$s y %2$d otros"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Leído por %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Pulsa para mostrar todo"</string>
   <string name="a11y_remove_reaction">"Elimina la reacción con %1$s"</string>
   <string name="a11y_remove_reaction_with">"Retirar la reacción con %1$s"</string>
   <string name="a11y_room_avatar">"Avatar de la sala"</string>

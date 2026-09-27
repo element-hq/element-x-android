@@ -39,7 +39,6 @@
     <item quantity="other">"%1$s và %2$d người khác đã đọc."</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Đọc bởi %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Nhấn để hiển thị tất cả"</string>
   <string name="a11y_remove_reaction">"Xóa phản ứng: %1$s"</string>
   <string name="a11y_remove_reaction_with">"Loại bỏ phản ứng với %1$s"</string>
   <string name="a11y_room_avatar">"Ảnh đại diện phòng"</string>

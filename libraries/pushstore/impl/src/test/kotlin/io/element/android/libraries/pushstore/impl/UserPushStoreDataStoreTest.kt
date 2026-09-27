@@ -14,14 +14,12 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class UserPushStoreDataStoreTest {
+class UserPushStoreDataStoreTest : RobolectricTest() {
     @Test
     fun `test getPushProviderName`() = runTest {
         val sut = createUserPushStoreDataStore()

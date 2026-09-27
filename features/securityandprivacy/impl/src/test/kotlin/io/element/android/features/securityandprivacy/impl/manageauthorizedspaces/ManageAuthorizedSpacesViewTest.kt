@@ -16,7 +16,6 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -25,13 +24,12 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class ManageAuthorizedSpacesViewTest {
+class ManageAuthorizedSpacesViewTest : RobolectricTest() {
     @Test
     fun `clicking back emits Cancel event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ManageAuthorizedSpacesEvent>()

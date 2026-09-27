@@ -15,7 +15,8 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.login.LoginHelper
+import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
+import io.element.android.features.login.impl.login.LoginModePresenter
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
@@ -33,6 +34,7 @@ import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationSer
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.oauth.api.OAuthActionFlow
 import io.element.android.libraries.oauth.test.customtab.FakeOAuthActionFlow
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionAdvisor
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -255,7 +257,7 @@ class OnBoardingPresenterTest {
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = { true },
             ),
-            loginHelper = createLoginHelper(
+            loginModePresenter = createLoginModePresenter(
                 authenticationService = authenticationService,
             ),
             accountProviderDataSource = accountProviderDataSource,
@@ -271,12 +273,12 @@ class OnBoardingPresenterTest {
                 assertThat(accountProviderDataSource.flow.first().url).isEqualTo(A_HOMESERVER_URL_2)
                 // Check an error was returned
                 val submittedState = awaitItem()
-                assertThat(submittedState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
+                assertThat(submittedState.loginModeState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
 
                 // Assert the error is then cleared
                 submittedState.eventSink(OnBoardingEvents.ClearError)
                 val clearedState = awaitItem()
-                assertThat(clearedState.loginMode).isEqualTo(AsyncData.Uninitialized)
+                assertThat(clearedState.loginModeState.loginMode).isEqualTo(AsyncData.Uninitialized)
             }
         }
     }
@@ -292,7 +294,7 @@ private fun createPresenter(
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
     rageshakeFeatureAvailability: () -> Flow<Boolean> = { flowOf(true) },
-    loginHelper: LoginHelper = createLoginHelper(),
+    loginModePresenter: LoginModePresenter = createLoginModePresenter(),
     onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider = OnBoardingLogoResIdProvider { null },
     sessionStore: SessionStore = InMemorySessionStore(),
     accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
@@ -305,18 +307,26 @@ private fun createPresenter(
         wellknownRetriever = wellknownRetriever,
     ),
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
-    loginHelper = loginHelper,
+    loginModePresenter = loginModePresenter,
     onBoardingLogoResIdProvider = onBoardingLogoResIdProvider,
     sessionStore = sessionStore,
     accountProviderDataSource = accountProviderDataSource,
 )
 
-fun createLoginHelper(
+fun createLoginModePresenter(
     oAuthActionFlow: OAuthActionFlow = FakeOAuthActionFlow(),
     authenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
     webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
-): LoginHelper = LoginHelper(
+    localNetworkPermissionAdvisor: LocalNetworkPermissionAdvisor =
+        io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor(),
+    permissionsPresenterFactory: io.element.android.libraries.permissions.api.PermissionsPresenter.Factory =
+        io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory(),
+): LoginModePresenter = LoginModePresenter(
     oAuthActionFlow = oAuthActionFlow,
     authenticationService = authenticationService,
     webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever,
+    localNetworkPermissionGate = LocalNetworkPermissionGate(
+        advisor = localNetworkPermissionAdvisor,
+        permissionsPresenterFactory = permissionsPresenterFactory,
+    ),
 )

@@ -59,6 +59,7 @@ class DefaultBiometricAuthentication(
     private var cryptoObject: CryptoObject? = null
 
     override suspend fun setup() {
+        if (cryptoObject != null) return
         try {
             val secretKey = ensureKey()
             val cipher = encryptionDecryptionService.createEncryptionCipher(secretKey)
@@ -109,7 +110,9 @@ private class AuthenticationCallback(
 
     override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
         super.onAuthenticationSucceeded(result)
-        if (result.cryptoObject?.cipher.isValid()) {
+        if (result.authenticationType == BiometricPrompt.AUTHENTICATION_RESULT_TYPE_BIOMETRIC &&
+            result.cryptoObject?.cipher.isValid() ||
+            result.authenticationType == BiometricPrompt.AUTHENTICATION_RESULT_TYPE_DEVICE_CREDENTIAL) {
             callbacks.forEach { it.onBiometricAuthenticationSuccess() }
             deferredAuthenticationResult.complete(BiometricAuthenticator.AuthenticationResult.Success)
         } else {

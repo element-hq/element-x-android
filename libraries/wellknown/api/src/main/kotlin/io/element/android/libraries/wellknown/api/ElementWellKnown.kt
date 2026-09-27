@@ -16,4 +16,5 @@ data class ElementWellKnown(
     val notificationSound: String?,
     val identityProviderAppScheme: String?,
     val customRecoveryPassphrase: CustomRecoveryPassphrase?,
+    val contentScannerUrl: String?,
 )

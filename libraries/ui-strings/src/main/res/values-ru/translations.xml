@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Добавить аватар"</string>
   <string name="a11y_add_reaction">"Добавить реакцию: %1$s"</string>
   <string name="a11y_address">"Адрес"</string>
   <string name="a11y_avatar">"Аватар"</string>
+  <string name="a11y_clear_search_field">"Очистить поле поиска"</string>
   <string name="a11y_collapse_message_text_field">"Свернуть поле ввода"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"Уменьшить количество голосов, разрешенных на одного человека"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"Увеличь количество голосов, разрешенных на одного человека"</string>
   <string name="a11y_delete">"Удалить"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"Введена %1$d цифра"</item>
@@ -30,6 +34,7 @@
   <string name="a11y_page_n">"Страница %1$d"</string>
   <string name="a11y_pause">"Приостановить"</string>
   <string name="a11y_paused_voice_message">"Голосовое сообщение, длительность: %1$s, текущая позиция: %2$s"</string>
+  <string name="a11y_photo_preview">"Пред. просмотр фото"</string>
   <string name="a11y_pin_field">"Поле PIN-кода"</string>
   <string name="a11y_pinned_location">"Закреплённое местоположение"</string>
   <string name="a11y_play">"Воспроизвести"</string>
@@ -42,12 +47,12 @@
   <string name="a11y_react_with_other_emojis">"Реакция с помощью эмодзи"</string>
   <string name="a11y_read_receipts_multiple">"Прочитано %1$s и %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Прочитано %1$s и %2$d другим"</item>
-    <item quantity="few">"Прочитано %1$s и %2$d другими"</item>
-    <item quantity="many">"Прочитано %1$s и %2$d другими"</item>
+    <item quantity="one">"Предыдущее сообщение прочитано пользователями %1$s и %2$d."</item>
+    <item quantity="few">"Предыдущее сообщение прочитано пользователями %1$s и %2$d."</item>
+    <item quantity="many">"Предыдущие сообщения прочитаны пользователями %1$s и %2$d."</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Прочитано %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Нажмите, чтобы показать все"</string>
+  <string name="a11y_read_receipts_single">"Предыдущее сообщение прочитали %1$s человек"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"показать все уведомления о прочтении"</string>
   <string name="a11y_remove_reaction">"Удалить реакцию с %1$s"</string>
   <string name="a11y_remove_reaction_with">"Удалить реакцию %1$s"</string>
   <string name="a11y_room_avatar">"Аватар комнаты"</string>
@@ -65,6 +70,7 @@
   <string name="a11y_tombstoned_room">"Брошенная комната"</string>
   <string name="a11y_user_avatar">"Аватар пользователя"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
+  <string name="a11y_video_preview">"Видео-превью"</string>
   <string name="a11y_view_avatar">"Просмотреть аватар"</string>
   <string name="a11y_view_details">"Подробнее"</string>
   <string name="a11y_voice_message">"Голосовое сообщение, продолжительность: %1$s"</string>
@@ -193,9 +199,11 @@
   <string name="action_translate">"Перевести"</string>
   <string name="action_try_again">"Повторить попытку"</string>
   <string name="action_unpin">"Открепить"</string>
+  <string name="action_video_call">"Видеозвонок"</string>
   <string name="action_view">"Просмотреть"</string>
   <string name="action_view_in_timeline">"Просмотреть в хронологии"</string>
   <string name="action_view_source">"Показать источник"</string>
+  <string name="action_voice_call">"Голосовой звонок"</string>
   <string name="action_yes">"Да"</string>
   <string name="action_yes_try_again">"Да, попробовать ещё раз"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Теперь Ваш сервер поддерживает новый, более быстрый протокол. Чтобы обновить его прямо сейчас, выйдите и войдите в свою учётную запись снова. Сделав это сейчас, Вы сможете избежать принудительного выхода из системы при последующем удалении старого протокола."</string>
@@ -216,6 +224,7 @@
   <string name="common_blocked_users">"Заблокированные пользователи"</string>
   <string name="common_bubbles">"Пузыри"</string>
   <string name="common_call_declined">"Вызов отклонен"</string>
+  <string name="common_call_in_progress">"Звонок выполняется"</string>
   <string name="common_call_started">"Звонок начат"</string>
   <string name="common_call_you_declined">"Ты отклонил звонок"</string>
   <string name="common_chat_backup">"Резервная копия чатов"</string>
@@ -259,7 +268,9 @@
   <string name="common_file_saved_on_disk_android">"Файл сохранен в «Загрузки»"</string>
   <string name="common_forward_message">"Переслать сообщение"</string>
   <string name="common_frequently_used">"Часто используемые"</string>
+  <string name="common_gallery">"Галерея"</string>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Выполняется групповой звонок"</string>
   <string name="common_image">"Изображение"</string>
   <string name="common_in_reply_to">"В ответ %1$s"</string>
   <string name="common_install_apk_android">"Установить APK"</string>
@@ -409,6 +420,7 @@
   <string name="common_unmute">"Вкл. звук"</string>
   <string name="common_unsupported_call">"Неподдерживаемый вызов"</string>
   <string name="common_unsupported_event">"Неподдерживаемое событие"</string>
+  <string name="common_user_started_a_call">"%1$s начал звонок"</string>
   <string name="common_username">"Имя пользователя"</string>
   <string name="common_verification_cancelled">"Подтверждение отменено"</string>
   <string name="common_verification_complete">"Подтверждение завершено"</string>
@@ -430,6 +442,10 @@
   <string name="common_waiting_live_location">"Ожидание трансляции местоположения…"</string>
   <string name="common_world_readable_history">"Любой может видеть историю"</string>
   <string name="common_you">"Вы"</string>
+  <string name="content_scanner_not_found">"Загрузка недоступна."</string>
+  <string name="content_scanner_not_found_title">"Файл не найден"</string>
+  <string name="content_scanner_unsafe_message">"Пред. просмотр и загрузка отключены."</string>
+  <string name="content_scanner_unsafe_title">"Файл небезопасен"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поделился(ась) этим сообщением, поскольку Вас не было в комнате, когда оно было отправлено."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s поделился(ась) этим сообщением, поскольку Вас не было в комнате, когда оно было отправлено."</string>
   <string name="crypto_history_visible">"Эта комната настроена так, что новые участники могут видеть историю. %1$s"</string>
@@ -491,6 +507,7 @@
   <string name="screen_create_poll_options_section_title">"Параметры"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Удалить %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Настройки"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Количество голосов, разрешенных одному человеку"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Никто не делится своим местоположением"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Местоположение отправляется в реальном времени"</string>
   <plurals name="screen_live_location_sheet_subtitle">

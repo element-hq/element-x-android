@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
@@ -51,16 +52,14 @@ import io.element.android.libraries.matrix.test.timeline.aProfileDetails
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class DefaultRoomLatestEventFormatterTest {
+class DefaultRoomLatestEventFormatterTest : RobolectricTest() {
     private lateinit var context: Context
     private lateinit var fakeMatrixClient: FakeMatrixClient
     private lateinit var formatter: DefaultRoomLatestEventFormatter
@@ -197,6 +196,7 @@ class DefaultRoomLatestEventFormatterTest {
             AudioMessageType(body, null, null, MediaSource("url"), null),
             VoiceMessageType(body, null, null, MediaSource("url"), null, null),
             ImageMessageType(body, null, null, MediaSource("url"), null),
+            GalleryMessageType(body, null, emptyList()),
             StickerMessageType(body, null, null, MediaSource("url"), null),
             FileMessageType(body, null, null, MediaSource("url"), null),
             LocationMessageType(body, "geo:1,2", null, null),
@@ -229,6 +229,7 @@ class DefaultRoomLatestEventFormatterTest {
                 is AudioMessageType -> "Audio: Shared body"
                 is VoiceMessageType -> "Voice message"
                 is ImageMessageType -> "Image: Shared body"
+                is GalleryMessageType -> "Gallery: Shared body"
                 is StickerMessageType -> "Sticker: Shared body"
                 is FileMessageType -> "File: Shared body"
                 is LocationMessageType -> "Shared location"
@@ -249,6 +250,7 @@ class DefaultRoomLatestEventFormatterTest {
                 is TextMessageType -> false
                 is NoticeMessageType -> false
                 is OtherMessageType -> false
+                is GalleryMessageType -> true
             }
             if (shouldCreateAnnotatedString) {
                 assertWithMessage("$type doesn't produce an AnnotatedString")
@@ -266,6 +268,7 @@ class DefaultRoomLatestEventFormatterTest {
                 is AudioMessageType -> "$expectedPrefix: Audio: Shared body"
                 is VoiceMessageType -> "$expectedPrefix: Voice message"
                 is ImageMessageType -> "$expectedPrefix: Image: Shared body"
+                is GalleryMessageType -> "$expectedPrefix: Gallery: Shared body"
                 is StickerMessageType -> "$expectedPrefix: Sticker: Shared body"
                 is FileMessageType -> "$expectedPrefix: File: Shared body"
                 is LocationMessageType -> "$expectedPrefix: Shared location"
@@ -286,6 +289,7 @@ class DefaultRoomLatestEventFormatterTest {
                 is TextMessageType -> true
                 is NoticeMessageType -> true
                 is OtherMessageType -> true
+                is GalleryMessageType -> true
             }
             if (shouldCreateAnnotatedString) {
                 assertWithMessage("$type doesn't produce an AnnotatedString")

@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.push.impl.workmanager
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.work.Data
 import androidx.work.ListenableWorker
@@ -34,12 +33,12 @@ import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.util.UUID
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
@@ -48,8 +47,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(AndroidJUnit4::class)
-class FetchPendingNotificationWorkerTest {
+class FetchPendingNotificationWorkerTest : RobolectricTest() {
     @Test
     fun `test - success`() = runTest {
         var synced = false

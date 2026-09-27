@@ -31,18 +31,16 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiable
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 private const val A_ROOM_AVATAR = "mxc://roomAvatar"
 private const val A_USER_AVATAR_1 = "mxc://userAvatar1"
 private const val A_USER_AVATAR_2 = "mxc://userAvatar2"
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultBaseRoomGroupMessageCreatorTest {
+class DefaultBaseRoomGroupMessageCreatorTest : RobolectricTest() {
     @Test
     fun `test createRoomMessage with one Event`() = runTest {
         val sut = createRoomGroupMessageCreator()

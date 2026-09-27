@@ -25,6 +25,8 @@ sealed interface TimelineEvent {
 
     data object HideShieldDialog : TimelineEvent
 
+    data object MarkAllAsRead : TimelineEvent
+
     /**
      * Events coming from a timeline item.
      */

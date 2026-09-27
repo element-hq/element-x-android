@@ -5,7 +5,7 @@
   <string name="screen_start_chat_error_starting_chat">"Si è verificato un errore durante il tentativo di avviare una chat"</string>
   <string name="screen_start_chat_join_room_by_address_action">"Accedi alla stanza tramite indirizzo"</string>
   <string name="screen_start_chat_join_room_by_address_invalid_address">"Indirizzo non valido"</string>
-  <string name="screen_start_chat_join_room_by_address_placeholder">"Inserisci…"</string>
+  <string name="screen_start_chat_join_room_by_address_placeholder">"Inserisci l\'indirizzo…"</string>
   <string name="screen_start_chat_join_room_by_address_room_found">"Stanza trovata"</string>
   <string name="screen_start_chat_join_room_by_address_room_not_found">"Stanza non trovata"</string>
   <string name="screen_start_chat_join_room_by_address_supporting_text">"ad esempio #room -name:matrix.org"</string>

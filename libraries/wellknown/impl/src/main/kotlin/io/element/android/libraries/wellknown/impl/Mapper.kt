@@ -22,7 +22,7 @@ private val loggerTag = LoggerTag("Wellknown")
  */
 private const val MINIMUM_PASSPHRASE_CHARACTER_COUNT = 1
 
-internal fun InternalElementWellKnown.map() = ElementWellKnown(
+fun InternalElementWellKnown.map() = ElementWellKnown(
     registrationHelperUrl = registrationHelperUrl,
     enforceElementPro = enforceElementPro,
     rageshakeUrl = rageshakeUrl,
@@ -30,6 +30,7 @@ internal fun InternalElementWellKnown.map() = ElementWellKnown(
     notificationSound = notificationSound,
     identityProviderAppScheme = identityProviderAppScheme,
     customRecoveryPassphrase = customRecoveryPassphrase?.toPublic(),
+    contentScannerUrl = contentScannerUrl,
 )
 
 private fun InternalCustomRecoveryPassphrase.toPublic(): CustomRecoveryPassphrase {

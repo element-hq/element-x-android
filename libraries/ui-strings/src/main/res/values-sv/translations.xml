@@ -37,7 +37,6 @@
     <item quantity="other">"Läst av %1$s och %2$d andra"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Läst av %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tryck för att visa alla"</string>
   <string name="a11y_remove_reaction">"Ta bort reaktionen med %1$s"</string>
   <string name="a11y_remove_reaction_with">"Ta bort reaktion med %1$s"</string>
   <string name="a11y_room_avatar">"Rumsavatar"</string>

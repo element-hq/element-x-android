@@ -160,23 +160,20 @@ class SingleMediaGalleryDataSourceTest {
 
     private fun testFactory(
         mediaInfo: MediaInfo,
-        expectedResult: (MediaViewerEntryPoint.Params) -> MediaItem,
+        expectedResult: (MediaViewerEntryPoint.Params.RoomMedia) -> MediaItem,
     ) {
         val params = aMediaViewerEntryPointParams(mediaInfo)
-        val result = SingleMediaGalleryDataSource.createFrom(params)
-        val resultData = result.getLastData().dataOrNull()
-        assertThat(resultData!!.imageAndVideoItems.first()).isEqualTo(expectedResult(params))
-        assertThat(resultData.fileItems).isEmpty()
+        val result = params.toMediaItem()
+        assertThat(result).isEqualTo(expectedResult(params))
     }
 
     internal fun aMediaViewerEntryPointParams(
         mediaInfo: MediaInfo,
-    ) = MediaViewerEntryPoint.Params(
-        mode = MediaViewerEntryPoint.MediaViewerMode.SingleMedia,
+    ) = MediaViewerEntryPoint.Params.RoomMedia(
+        mode = MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media),
         eventId = AN_EVENT_ID,
         mediaInfo = mediaInfo,
         mediaSource = aMediaSource(url = "aUrl"),
         thumbnailSource = aMediaSource(url = "aThumbnailUrl"),
-        canShowInfo = true,
     )
 }

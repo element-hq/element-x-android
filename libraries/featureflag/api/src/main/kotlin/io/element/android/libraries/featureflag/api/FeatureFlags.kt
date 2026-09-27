@@ -108,6 +108,14 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
+    JumpToUnread(
+        key = "feature.jump_to_unread",
+        title = "Jump to unread messages",
+        description = "Show a button to jump to the read marker, plus a count badge on the scroll-to-bottom button " +
+            "when new messages arrive while scrolled away.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
     SlashCommand(
         key = "feature.slash_command",
         title = "Parse slash commands in the message composer",
@@ -134,6 +142,20 @@ enum class FeatureFlags(
         key = "feature.unread_indicator_count",
         title = "Unread indicator count",
         description = "Show the number of unread messages on the unread indicator in the room list.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    SendGalleryMessages(
+        key = "feature.send_gallery_messages",
+        title = "Send gallery messages",
+        description = "Allow sending multiple media items in a single message.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    UserStatus(
+        key = "feature.user_status",
+        title = "User status",
+        description = "Allow users to set a status (e.g. In a meeting, Away) visible to their contacts.",
         defaultValue = { false },
         isFinished = false,
     ),

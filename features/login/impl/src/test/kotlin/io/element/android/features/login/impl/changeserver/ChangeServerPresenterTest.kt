@@ -15,6 +15,7 @@ import io.element.android.features.login.impl.accesscontrol.DefaultAccountProvid
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
+import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
 import io.element.android.features.wellknown.test.anElementWellKnown
 import io.element.android.libraries.architecture.AsyncData
@@ -23,6 +24,10 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
+import io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor
+import io.element.android.libraries.permissions.test.FakePermissionsPresenter
+import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.wellknown.api.ElementWellKnown
 import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
@@ -43,6 +48,7 @@ class ChangeServerPresenterTest {
         createPresenter().test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
+            assertThat(initialState.localNetworkPermissionDialog).isEqualTo(LocalNetworkPermissionDialog.None)
         }
     }
 
@@ -183,17 +189,91 @@ class ChangeServerPresenterTest {
         }
     }
 
+    @Test
+    fun `present - advisor advises prompt, dialog shown before setHomeserver runs`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = { Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true)) },
+        )
+        createPresenter(
+            authenticationService = authenticationService,
+            enterpriseService = FakeEnterpriseService(isAllowedToConnectToHomeserverResult = { true }),
+            localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(shouldPrompt = true),
+            permissionsPresenter = FakePermissionsPresenter(),
+        ).test {
+            val initialState = awaitItem()
+            assertThat(initialState.localNetworkPermissionDialog).isEqualTo(LocalNetworkPermissionDialog.None)
+            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            val promptState = expectMostRecentItem()
+            // Dialog is shown, permission has not been requested yet, setHomeserver has not been called.
+            assertThat(promptState.localNetworkPermissionDialog).isNotEqualTo(LocalNetworkPermissionDialog.None)
+            assertThat(promptState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - dismissing the dialog aborts the submit`() = runTest {
+        createPresenter(
+            authenticationService = FakeMatrixAuthenticationService(
+                setHomeserverResult = { Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true)) },
+            ),
+            enterpriseService = FakeEnterpriseService(isAllowedToConnectToHomeserverResult = { true }),
+            localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(shouldPrompt = true),
+            permissionsPresenter = FakePermissionsPresenter(),
+        ).test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            val promptState = expectMostRecentItem()
+            assertThat(promptState.localNetworkPermissionDialog).isNotEqualTo(LocalNetworkPermissionDialog.None)
+            promptState.eventSink.invoke(ChangeServerEvents.DismissLocalNetworkPermission)
+            val dismissedState = expectMostRecentItem()
+            assertThat(dismissedState.localNetworkPermissionDialog).isEqualTo(LocalNetworkPermissionDialog.None)
+            assertThat(dismissedState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - advisor advises prompt, permission granted resumes setHomeserver`() = runTest {
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = { Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true)) },
+        )
+        val permissionsPresenter = FakePermissionsPresenter()
+        createPresenter(
+            authenticationService = authenticationService,
+            enterpriseService = FakeEnterpriseService(isAllowedToConnectToHomeserverResult = { true }),
+            localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(shouldPrompt = true),
+            permissionsPresenter = permissionsPresenter,
+        ).test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(ChangeServerEvents.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            val promptState = expectMostRecentItem()
+            assertThat(promptState.localNetworkPermissionDialog).isNotEqualTo(LocalNetworkPermissionDialog.None)
+            permissionsPresenter.setPermissionGranted()
+            // Await recompositions until the deferred setHomeserver completes.
+            var finalState = awaitItem()
+            while (finalState.changeServerAction !is AsyncData.Success) {
+                finalState = awaitItem()
+            }
+            assertThat(finalState.changeServerAction).isEqualTo(AsyncData.Success(Unit))
+        }
+    }
+
     private fun createPresenter(
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
         accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
         wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
+        localNetworkPermissionAdvisor: FakeLocalNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
+        permissionsPresenter: FakePermissionsPresenter = FakePermissionsPresenter(),
     ) = ChangeServerPresenter(
         authenticationService = authenticationService,
         accountProviderDataSource = accountProviderDataSource,
         defaultAccountProviderAccessControl = DefaultAccountProviderAccessControl(
             enterpriseService = enterpriseService,
             wellknownRetriever = wellknownRetriever,
+        ),
+        localNetworkPermissionGate = LocalNetworkPermissionGate(
+            advisor = localNetworkPermissionAdvisor,
+            permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionsPresenter),
         ),
     )
 }

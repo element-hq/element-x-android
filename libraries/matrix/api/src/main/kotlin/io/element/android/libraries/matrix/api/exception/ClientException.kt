@@ -22,3 +22,6 @@ sealed class ClientException(message: String, val details: String?, cause: Throw
 fun ClientException.isNetworkError(): Boolean {
     return this is ClientException.Generic && message?.contains("error sending request for url", ignoreCase = true) == true
 }
+
+fun Throwable.isNetworkError(): Boolean =
+    (this as? ClientException)?.isNetworkError() == true

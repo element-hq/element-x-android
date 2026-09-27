@@ -27,7 +27,7 @@ class LinkNewDeviceRootNode(
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun onDone()
-        fun linkDesktopDevice()
+        fun onUnlockDevice(type: LinkDeviceType)
     }
 
     private val callback: Callback = callback()
@@ -39,7 +39,7 @@ class LinkNewDeviceRootNode(
             state = state,
             modifier = modifier,
             onBackClick = callback::onDone,
-            onLinkDesktopDeviceClick = callback::linkDesktopDevice,
+            onUnlockDevice = callback::onUnlockDevice,
         )
     }
 }

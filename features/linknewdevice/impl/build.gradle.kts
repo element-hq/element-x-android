@@ -30,6 +30,7 @@ dependencies {
     // TODO Cleanup
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)
+    implementation(projects.features.lockscreen.api)
     implementation(projects.features.rageshake.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
@@ -53,6 +54,7 @@ dependencies {
 
     testCommonDependencies(libs, true)
     testImplementation(projects.features.linknewdevice.test)
+    testImplementation(projects.features.lockscreen.test)
     testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)

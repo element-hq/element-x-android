@@ -12,21 +12,19 @@ import android.content.ComponentName
 import android.content.Context.ACTIVITY_SERVICE
 import android.content.Context.POWER_SERVICE
 import android.os.PowerManager
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.async
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.Shadows
 import org.robolectric.shadows.ShadowActivityManager
 import org.robolectric.shadows.ShadowPowerManager
 import kotlin.time.Duration.Companion.seconds
 
-@RunWith(AndroidJUnit4::class)
-class DefaultFetchPushForegroundServiceManagerTest {
+class DefaultFetchPushForegroundServiceManagerTest : RobolectricTest() {
     @Test
     fun `start should start the service if the device is not interactive`() {
         val manager = createDefaultFetchPushForegroundServiceManager()

@@ -14,19 +14,17 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class ChooseSessionVerificationModeViewTest {
+class ChooseSessionVerificationModeViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on learn more invokes the expected callback`() = runAndroidComposeUiTest {

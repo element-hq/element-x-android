@@ -2,4 +2,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_share_location_live_location_disclaimer_title">"Vaša povijest lokacije uživo bit će pohranjena u sobi i vidljiva članovima nakon završetka sesije."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Odaberite koliko dugo želite dijeliti svoju lokaciju uživo."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"Nemate dopuštenja za dijeljenje svoje lokacije uživo u ovoj sobi"</string>
 </resources>

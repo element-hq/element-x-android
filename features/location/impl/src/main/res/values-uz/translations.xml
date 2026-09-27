@@ -2,4 +2,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_share_location_live_location_disclaimer_title">"Jonli joylashuv tarixingiz chat-xonada saqlanadi va sessiya tugaganidan keyin homiylarga ko‘rinadi."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Jonli joylashuvingiz qancha vaqt ulashilishini tanlang."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"Bu xonada jonli joylashuvingizni ulashish uchun sizda ruxsat yoʻq"</string>
 </resources>

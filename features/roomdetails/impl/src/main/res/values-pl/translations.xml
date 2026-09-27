@@ -48,7 +48,7 @@
   <string name="screen_room_details_edit_room_title">"Edytuj szczegóły"</string>
   <string name="screen_room_details_edition_error">"Wystąpił nieznany błąd i nie można było zmienić informacji."</string>
   <string name="screen_room_details_edition_error_title">"Nie można zaktualizować pokoju"</string>
-  <string name="screen_room_details_encryption_enabled_subtitle">"Wiadomości są zabezpieczone kłódkami. Tylko Ty i odbiorcy macie unikalne klucze do ich odblokowania."</string>
+  <string name="screen_room_details_encryption_enabled_subtitle">"Wiadomości są zabezpieczone kłódkami. Tylko Ty i Twoi odbiorcy posiadacie klucze do ich otwarcia."</string>
   <string name="screen_room_details_encryption_enabled_title">"Szyfrowanie wiadomości włączone"</string>
   <string name="screen_room_details_error_loading_notification_settings">"Wystąpił błąd podczas ładowania ustawień powiadomień."</string>
   <string name="screen_room_details_error_muting">"Wyciszenie tego pokoju nie powiodło się, spróbuj ponownie."</string>

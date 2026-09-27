@@ -2,11 +2,11 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="crypto_event_authenticity_mismatched_sender">"Відправник події не збігається з власником пристрою, який його надіслав."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Автентичність цього зашифрованого повідомлення не може бути гарантована на цьому пристрої."</string>
-  <string name="crypto_event_authenticity_previously_verified">"Зашифровано попередньо перевіреним користувачем."</string>
+  <string name="crypto_event_authenticity_previously_verified">"Зашифровано звіреним раніше користувачем."</string>
   <string name="crypto_event_authenticity_sent_in_clear">"Не зашифровано."</string>
   <string name="crypto_event_authenticity_unknown_device">"Зашифровано невідомим або видаленим пристроєм."</string>
-  <string name="crypto_event_authenticity_unsigned_device">"Зашифровано пристроєм, який не верифіковано його власником."</string>
-  <string name="crypto_event_authenticity_unverified_identity">"Зашифровано неверифікованим користувачем."</string>
+  <string name="crypto_event_authenticity_unsigned_device">"Зашифровано пристроєм, який не звірено його власником."</string>
+  <string name="crypto_event_authenticity_unverified_identity">"Зашифровано не звіреним користувачем."</string>
   <string name="emoji_picker_category_activity">"Дії"</string>
   <string name="emoji_picker_category_flags">"Прапори"</string>
   <string name="emoji_picker_category_foods">"Їжа та напої"</string>
@@ -16,6 +16,12 @@
   <string name="emoji_picker_category_places">"Подорожі та місця"</string>
   <string name="emoji_picker_category_recent">"Нещодавні емодзі"</string>
   <string name="emoji_picker_category_symbols">"Символи"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Повернути зображення по горизонталі"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Перевернуто по горизонталі"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Оригінал"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Повернути зображення по вертикалі"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Перевернуто по вертикалі"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Оригінал"</string>
   <string name="screen_image_edition_a11y_rotate_to_the_left">"Повернути зображення вліво"</string>
   <plurals name="screen_image_edition_a11y_rotation_state">
     <item quantity="one">"%1$d градус"</item>
@@ -47,7 +53,7 @@
   <string name="screen_room_attachment_source_poll">"Опитування"</string>
   <string name="screen_room_attachment_text_formatting">"Форматування тексту"</string>
   <string name="screen_room_encrypted_history_banner">"Історія повідомлень наразі недоступна."</string>
-  <string name="screen_room_encrypted_history_banner_unverified">"Історія повідомлень недоступна в цій кімнаті. Перевірте цей пристрій, щоб побачити історію повідомлень."</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"Історія повідомлень недоступна в цій кімнаті. Звірте цей пристрій, щоб побачити історію повідомлень."</string>
   <string name="screen_room_invite_again_alert_message">"Чи хотіли б ви запросити їх знову?"</string>
   <string name="screen_room_invite_again_alert_title">"Ви одні в цій бесіді"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Сповістити всю кімнату"</string>

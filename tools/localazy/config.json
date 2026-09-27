@@ -271,6 +271,7 @@
         "screen_room_message.*",
         "screen_room_retry.*",
         "screen_room_timeline.*",
+        "screen\\.room\\.timeline.*",
         "screen\\.room_timeline.*",
         "screen_room_typing.*",
         "screen\\.image_edition\\..*",

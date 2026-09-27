@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"Fayl nomi"</string>
   <string name="screen_media_details_no_more_files_to_show">"Ko‘rsatish uchun boshqa fayllar yo‘q"</string>
   <string name="screen_media_details_no_more_media_to_show">"Ko‘rsatish uchun boshqa media yo‘q"</string>
+  <string name="screen_media_details_title">"Fayl haqida"</string>
   <string name="screen_media_details_uploaded_by">"Tomonidan yuklangan"</string>
   <string name="screen_media_details_uploaded_on">"Yuklangan"</string>
 </resources>

@@ -12,50 +12,49 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
-import io.element.android.features.login.impl.login.LoginHelper
+import io.element.android.features.login.impl.login.LoginModeEvent
+import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.uri.ensureProtocol
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.launch
 
 @Inject
 class ChooseAccountProviderPresenter(
     private val enterpriseService: EnterpriseService,
-    private val loginHelper: LoginHelper,
+    private val loginModePresenter: Presenter<LoginModeState>,
 ) : Presenter<ChooseAccountProviderState> {
     @Composable
     override fun present(): ChooseAccountProviderState {
-        val localCoroutineScope = rememberCoroutineScope()
-        val loginMode by loginHelper.collectLoginMode()
-
+        val loginModeState = loginModePresenter.present()
         var selectedAccountProvider: AccountProvider? by remember { mutableStateOf(null) }
 
         fun handleEvent(event: ChooseAccountProviderEvents) {
             when (event) {
-                ChooseAccountProviderEvents.Continue -> localCoroutineScope.launch {
-                    selectedAccountProvider?.let {
-                        loginHelper.submit(
-                            isAccountCreation = false,
-                            homeserverUrl = it.url,
-                            resolvedHomeserverUrl = null,
-                            loginHint = null,
+                ChooseAccountProviderEvents.Continue -> {
+                    selectedAccountProvider?.let { provider ->
+                        loginModeState.eventSink(
+                            LoginModeEvent.Submit(
+                                isAccountCreation = false,
+                                homeserverUrl = provider.url,
+                                resolvedHomeserverUrl = null,
+                                loginHint = null,
+                            )
                         )
                     }
                 }
                 is ChooseAccountProviderEvents.SelectAccountProvider -> {
-                    // Ensure that the user do not change the server during processing
-                    if (loginMode is AsyncData.Uninitialized) {
+                    // Ensure that the user does not change the server during processing.
+                    if (loginModeState.loginMode is AsyncData.Uninitialized) {
                         selectedAccountProvider = event.accountProvider
                     }
                 }
-                ChooseAccountProviderEvents.ClearError -> loginHelper.clearError()
+                ChooseAccountProviderEvents.ClearError -> loginModeState.eventSink(LoginModeEvent.ClearError)
             }
         }
 
@@ -77,7 +76,7 @@ class ChooseAccountProviderPresenter(
         return ChooseAccountProviderState(
             accountProviders = staticAccountProviderList,
             selectedAccountProvider = selectedAccountProvider,
-            loginMode = loginMode,
+            loginModeState = loginModeState,
             eventSink = ::handleEvent,
         )
     }

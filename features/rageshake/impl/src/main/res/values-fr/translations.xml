@@ -8,6 +8,8 @@
   <string name="screen_bug_report_editor_placeholder">"Décrire le problème…"</string>
   <string name="screen_bug_report_editor_supporting">"Si possible, veuillez rédiger la description en anglais."</string>
   <string name="screen_bug_report_error_description_too_short">"La description est trop courte, veuillez fournir plus de détails sur ce qui s’est passé. Merci !"</string>
+  <string name="screen_bug_report_github_issue_description">"Vous pouvez saisir le numéro d’un ticket GitHub associé, le cas échéant."</string>
+  <string name="screen_bug_report_github_issue_label">"Ticket GitHub"</string>
   <string name="screen_bug_report_include_crash_logs">"Envoyer des journaux d’incident"</string>
   <string name="screen_bug_report_include_logs">"Autoriser à inclure les journaux techniques"</string>
   <string name="screen_bug_report_include_logs_error">"Vos fichiers de log sont trop volumineux et ne peuvent donc pas être inclus dans ce rapport, veuillez nous les envoyer par un autre moyen."</string>

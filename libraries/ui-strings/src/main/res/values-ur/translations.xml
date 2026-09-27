@@ -27,7 +27,6 @@
     <item quantity="other">"%1$s اور %2$d دیگر نے لڑھا"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s نے پڑھا"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"سب دکھانے کے لیے تھپتھپائیں"</string>
   <string name="a11y_remove_reaction">"%1$s کے ساتھ رد عمل ہٹائیں"</string>
   <string name="a11y_send_files">"مسلیں بھیجیں"</string>
   <string name="a11y_show_password">"لفظ عبور دکھائیں"</string>

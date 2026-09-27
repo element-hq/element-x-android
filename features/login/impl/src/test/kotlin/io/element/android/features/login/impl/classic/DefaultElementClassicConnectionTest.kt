@@ -28,17 +28,15 @@ import io.element.android.libraries.matrix.test.auth.FakeHomeServerLoginCompatib
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultElementClassicConnectionTest {
+class DefaultElementClassicConnectionTest : RobolectricTest() {
     @Test
     fun `connection can be started Element Classic service can be bound`() = runTest {
         val connection = createDefaultElementClassicConnection(

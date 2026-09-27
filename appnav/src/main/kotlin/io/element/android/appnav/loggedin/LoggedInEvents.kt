@@ -12,4 +12,7 @@ sealed interface LoggedInEvents {
     data class CloseErrorDialog(val doNotShowAgain: Boolean) : LoggedInEvents
     data object CheckSlidingSyncProxyAvailability : LoggedInEvents
     data object LogoutAndMigrateToNativeSlidingSync : LoggedInEvents
+    data object DismissLocalNetworkPermissionPrompt : LoggedInEvents
+
+    data object RequestLocationNetworkPermission : LoggedInEvents
 }

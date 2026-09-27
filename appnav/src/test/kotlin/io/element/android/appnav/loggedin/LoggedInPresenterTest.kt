@@ -36,6 +36,8 @@ import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor
+import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.PusherRegistrationFailure
 import io.element.android.libraries.push.test.FakePushService
@@ -124,6 +126,8 @@ class LoggedInPresenterTest {
             encryptionService = encryptionService,
             buildMeta = buildMeta,
             networkMonitor = networkMonitor,
+            localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
+            permissionsPresenterFactory = FakePermissionsPresenterFactory(),
         ).test {
             encryptionService.emitRecoveryState(RecoveryState.UNKNOWN)
             encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
@@ -368,6 +372,8 @@ class LoggedInPresenterTest {
             encryptionService = encryptionService,
             buildMeta = buildMeta,
             networkMonitor = networkMonitor,
+            localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
+            permissionsPresenterFactory = FakePermissionsPresenterFactory(),
         )
     }
 }

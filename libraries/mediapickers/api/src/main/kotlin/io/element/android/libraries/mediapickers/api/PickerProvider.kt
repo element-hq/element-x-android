@@ -24,10 +24,21 @@ interface PickerProvider {
     ): PickerLauncher<PickVisualMediaRequest, Uri?>
 
     @Composable
+    fun registerGalleryMultiPicker(
+        onResult: (uris: List<Uri>) -> Unit
+    ): PickerLauncher<PickVisualMediaRequest, List<Uri>>
+
+    @Composable
     fun registerFilePicker(
         mimeType: String,
         onResult: (uri: Uri?, mimeType: String?) -> Unit,
     ): PickerLauncher<String, Uri?>
+
+    @Composable
+    fun registerFileMultiPicker(
+        mimeType: String,
+        onResult: (uris: List<Uri>) -> Unit,
+    ): PickerLauncher<Array<String>, List<Uri>>
 
     @Composable
     fun registerCameraPhotoPicker(onResult: (Uri?) -> Unit): PickerLauncher<Uri, Boolean>

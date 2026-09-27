@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<resources>
+    <string name="common_user_status_in_a_meeting">In a meeting</string>
+    <string name="common_user_status_focus_time">Focus time</string>
+    <string name="common_user_status_on_the_road">On the road</string>
+    <string name="common_user_status_be_right_back">Be right back</string>
+    <string name="common_user_status_away">Away</string>
+    <string name="common_user_status_on_a_call">On a call</string>
+    <string name="common_user_status_custom">Custom…</string>
+    <string name="screen_preferences_user_status_placeholder">What\'s your status?</string>
+    <string name="screen_preferences_user_status_custom_hint">Custom status…</string>
+</resources>

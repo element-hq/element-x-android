@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Kan du ikke bekrefte?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Opprett en ny gjenopprettingsnøkkel"</string>
-  <string name="screen_identity_confirmation_subtitle">"Verifiser denne enheten for å sette opp sikker meldingsutveksling."</string>
+  <string name="screen_identity_confirmation_subtitle">"Velg hvordan du vil verifisere deg for å sette opp sikker meldingsutveksling."</string>
   <string name="screen_identity_confirmation_title">"Bekreft din digitale identitet"</string>
   <string name="screen_identity_confirmation_use_another_device">"Bruk en annen enhet"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Bruk gjenopprettingsnøkkel"</string>
@@ -17,7 +17,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Kontroller at tallene nedenfor stemmer overens med dem som vises på den andre sesjonen."</string>
   <string name="screen_session_verification_compare_numbers_title">"Sammenlign tallene"</string>
   <string name="screen_session_verification_complete_subtitle">"Nå kan du lese eller sende meldinger sikkert på den andre enheten din."</string>
-  <string name="screen_session_verification_complete_user_subtitle">"Nå kan du stole på identiteten til denne brukeren når du sender eller mottar meldinger."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Nå kan du stole på den digitale identiteten til denne brukeren når du sender eller mottar meldinger."</string>
   <string name="screen_session_verification_device_verified">"Enhet verifisert"</string>
   <string name="screen_session_verification_enter_recovery_key">"Skriv inn gjenopprettingsnøkkel"</string>
   <string name="screen_session_verification_failed_subtitle">"Enten ble forespørselen tidsavbrutt, forespørselen ble avslått eller det var en feil i verifiseringen."</string>

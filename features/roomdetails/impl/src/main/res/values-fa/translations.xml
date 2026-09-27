@@ -68,7 +68,7 @@
   <string name="screen_room_details_title">"اطّلاعات اتاق"</string>
   <string name="screen_room_details_topic_title">"موضوع"</string>
   <string name="screen_room_details_updating_room">"به‌روز کردن اتاق…"</string>
-  <string name="screen_room_member_list_banned_empty">"هیچ کاربر محرومی در این اتاق نیست."</string>
+  <string name="screen_room_member_list_banned_empty">"هیچ کاربری محروم نشده."</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d نفر"</item>
     <item quantity="other">"%1$d نفر"</item>
@@ -109,6 +109,7 @@
   <string name="screen_room_roles_and_permissions_moderators">"ناظم‌ها"</string>
   <string name="screen_room_roles_and_permissions_owners">"مالکان"</string>
   <string name="screen_room_roles_and_permissions_reset">"بازنشانی اجازه‌ها"</string>
+  <string name="screen_room_roles_and_permissions_reset_confirm_description">"پس از بازنشانی اجازه‌ها تنظیمات فعلی را از دست خواهید داد."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"بازنشانی اجازه‌ها؟"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"نقش‌ها"</string>
   <string name="screen_room_roles_and_permissions_room_details">"جزییات اتاق"</string>

@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Sudah menjadi anggota"</string>
   <string name="screen_invite_users_already_invited">"Sudah diundang"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Saat ini Anda belum memiliki obrolan dengan kontak-kontak ini. Konfirmasikan undangan untuk mengundang mereka ke ruang obrolan ini sebelum melanjutkan."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Saat ini Anda belum memiliki obrolan apa pun dengan kontak ini. Konfirmasikan undangan ke ruang obrolan ini sebelum melanjutkan."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Ingin mengundang kontak baru ke ruang ini?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Ingin mengundang kontak baru ke ruang ini?"</string>
 </resources>

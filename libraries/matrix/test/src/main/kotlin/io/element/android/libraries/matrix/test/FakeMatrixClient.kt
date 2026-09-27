@@ -38,11 +38,14 @@ import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
@@ -74,6 +77,7 @@ class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
     override val sessionPaths: SessionPaths = SessionPaths(fileDirectory = File("files"), cacheDirectory = File("cache")),
     override val deviceId: DeviceId = A_DEVICE_ID,
+    override val homeserverUrl: String = A_HOMESERVER_URL,
     override val sessionCoroutineScope: CoroutineScope = TestScope(),
     private val userDisplayName: String? = A_USER_NAME,
     private val userAvatarUrl: String? = AN_AVATAR_URL,
@@ -117,10 +121,12 @@ class FakeMatrixClient(
     private val getRecentEmojisLambda: () -> Result<List<String>> = { Result.success(emptyList()) },
     private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val markAllRoomsAsReadResult: () -> Result<Unit> = { Result.success(Unit) },
     private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
     private val getMapStyleUrlResult: () -> Result<String?> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
+    override val contentScanner: ContentScanner? = null
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -128,6 +134,12 @@ class FakeMatrixClient(
         private set
     var removeAvatarCalled: Boolean = false
         private set
+    var setUserStatusCalled: Boolean = false
+        private set
+    var clearUserStatusCalled: Boolean = false
+        private set
+    var setUserStatusResult: Result<Unit> = Result.success(Unit)
+    var clearUserStatusResult: Result<Unit> = Result.success(Unit)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(MatrixUser(sessionId, userDisplayName, userAvatarUrl))
     override val userProfile: StateFlow<MatrixUser> = _userProfile
@@ -248,6 +260,28 @@ class FakeMatrixClient(
     override suspend fun removeAvatar(): Result<Unit> = simulateLongTask {
         removeAvatarCalled = true
         return removeAvatarResult
+    }
+
+    override suspend fun setUserStatus(status: UserStatus): Result<Unit> {
+        setUserStatusCalled = true
+        if (setUserStatusResult.isSuccess) {
+            _userProfile.emit(_userProfile.value.copy(
+                rawStatus = status,
+                displayedStatus = DisplayedStatus.UserSet(status),
+            ))
+        }
+        return setUserStatusResult
+    }
+
+    override suspend fun clearUserStatus(): Result<Unit> {
+        clearUserStatusCalled = true
+        if (clearUserStatusResult.isSuccess) {
+            _userProfile.emit(_userProfile.value.copy(
+                rawStatus = null,
+                displayedStatus = null,
+            ))
+        }
+        return clearUserStatusResult
     }
 
     override suspend fun joinRoom(roomId: RoomId): Result<RoomInfo?> = joinRoomLambda(roomId)
@@ -371,6 +405,10 @@ class FakeMatrixClient(
 
     override suspend fun markRoomAsFullyRead(roomId: RoomId, eventId: EventId): Result<Unit> {
         return markRoomAsFullyReadResult(roomId, eventId)
+    }
+
+    override suspend fun markAllRoomsAsRead(): Result<Unit> {
+        return markAllRoomsAsReadResult()
     }
 
     override suspend fun performDatabaseVacuum(): Result<Unit> {

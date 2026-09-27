@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.matrix.ui.messages.reply
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -25,6 +24,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryItemType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
@@ -47,14 +48,14 @@ import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembers
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.withConfigurationAndContext
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import kotlin.time.Duration.Companion.minutes
 
-@RunWith(AndroidJUnit4::class)
-class InReplyToMetadataKtTest {
+@Suppress("LargeClass")
+class InReplyToMetadataKtTest : RobolectricTest() {
     @Test
     fun `any message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
@@ -401,6 +402,226 @@ class InReplyToMetadataKtTest {
                             thumbnailSource = null,
                             textContent = "Voice message",
                             type = AttachmentThumbnailType.Voice,
+                            blurHash = null,
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `a gallery message with all media items shows media count`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            withConfigurationAndContext {
+                anInReplyToDetailsReady(
+                    eventContent = aMessageContent(
+                        messageType = GalleryMessageType(
+                            body = "",
+                            formatted = null,
+                            items = listOf(
+                                GalleryItemType.Image(
+                                    ImageMessageType(
+                                        filename = "image1.jpg",
+                                        caption = null,
+                                        formattedCaption = null,
+                                        source = aMediaSource(),
+                                        info = anImageInfo(),
+                                    )
+                                ),
+                                GalleryItemType.Image(
+                                    ImageMessageType(
+                                        filename = "image2.jpg",
+                                        caption = null,
+                                        formattedCaption = null,
+                                        source = aMediaSource(),
+                                        info = anImageInfo(),
+                                    )
+                                ),
+                            ),
+                        )
+                    ),
+                    textContent = "",
+                ).metadata(hideImage = false)
+            }
+        }.test {
+            awaitItem().let {
+                assertThat(it).isEqualTo(
+                    InReplyToMetadata.Thumbnail(
+                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                            thumbnailSource = aMediaSource(),
+                            textContent = "2 media items…",
+                            type = AttachmentThumbnailType.Image,
+                            blurHash = A_BLUR_HASH,
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `a gallery message with attachment items shows attachment count`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            withConfigurationAndContext {
+                anInReplyToDetailsReady(
+                    eventContent = aMessageContent(
+                        messageType = GalleryMessageType(
+                            body = "",
+                            formatted = null,
+                            items = listOf(
+                                GalleryItemType.File(
+                                    FileMessageType(
+                                        filename = "doc1.pdf",
+                                        caption = null,
+                                        formattedCaption = null,
+                                        source = aMediaSource(),
+                                        info = FileInfo(
+                                            mimetype = null,
+                                            size = null,
+                                            thumbnailInfo = null,
+                                            thumbnailSource = null,
+                                        ),
+                                    )
+                                ),
+                                GalleryItemType.File(
+                                    FileMessageType(
+                                        filename = "doc2.pdf",
+                                        caption = null,
+                                        formattedCaption = null,
+                                        source = aMediaSource(),
+                                        info = FileInfo(
+                                            mimetype = null,
+                                            size = null,
+                                            thumbnailInfo = null,
+                                            thumbnailSource = null,
+                                        ),
+                                    )
+                                ),
+                            ),
+                        )
+                    ),
+                    textContent = "",
+                ).metadata(hideImage = false)
+            }
+        }.test {
+            awaitItem().let {
+                assertThat(it).isEqualTo(
+                    InReplyToMetadata.Thumbnail(
+                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                            thumbnailSource = null,
+                            textContent = "2 attachments…",
+                            type = AttachmentThumbnailType.File,
+                            blurHash = null,
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `a gallery message with caption shows caption instead of count`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            withConfigurationAndContext {
+                anInReplyToDetailsReady(
+                    eventContent = aMessageContent(
+                        messageType = GalleryMessageType(
+                            body = "My vacation photos",
+                            formatted = null,
+                            items = listOf(
+                                GalleryItemType.Image(
+                                    ImageMessageType(
+                                        filename = "image1.jpg",
+                                        caption = null,
+                                        formattedCaption = null,
+                                        source = aMediaSource(),
+                                        info = anImageInfo(),
+                                    )
+                                ),
+                                GalleryItemType.Image(
+                                    ImageMessageType(
+                                        filename = "image2.jpg",
+                                        caption = null,
+                                        formattedCaption = null,
+                                        source = aMediaSource(),
+                                        info = anImageInfo(),
+                                    )
+                                ),
+                            ),
+                        )
+                    ),
+                    textContent = "My vacation photos",
+                ).metadata(hideImage = false)
+            }
+        }.test {
+            awaitItem().let {
+                assertThat(it).isEqualTo(
+                    InReplyToMetadata.Thumbnail(
+                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                            thumbnailSource = aMediaSource(),
+                            textContent = "My vacation photos",
+                            type = AttachmentThumbnailType.Image,
+                            blurHash = A_BLUR_HASH,
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `a gallery message with attachment items and caption shows caption instead of count`() = runTest {
+        moleculeFlow(RecompositionMode.Immediate) {
+            withConfigurationAndContext {
+                anInReplyToDetailsReady(
+                    eventContent = aMessageContent(
+                        messageType = GalleryMessageType(
+                            body = "My documents",
+                            formatted = null,
+                            items = listOf(
+                                GalleryItemType.File(
+                                    FileMessageType(
+                                        filename = "doc1.pdf",
+                                        caption = null,
+                                        formattedCaption = null,
+                                        source = aMediaSource(),
+                                        info = FileInfo(
+                                            mimetype = null,
+                                            size = null,
+                                            thumbnailInfo = null,
+                                            thumbnailSource = null,
+                                        ),
+                                    )
+                                ),
+                                GalleryItemType.File(
+                                    FileMessageType(
+                                        filename = "doc2.pdf",
+                                        caption = null,
+                                        formattedCaption = null,
+                                        source = aMediaSource(),
+                                        info = FileInfo(
+                                            mimetype = null,
+                                            size = null,
+                                            thumbnailInfo = null,
+                                            thumbnailSource = null,
+                                        ),
+                                    )
+                                ),
+                            ),
+                        )
+                    ),
+                    textContent = "My documents",
+                ).metadata(hideImage = false)
+            }
+        }.test {
+            awaitItem().let {
+                assertThat(it).isEqualTo(
+                    InReplyToMetadata.Thumbnail(
+                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                            thumbnailSource = null,
+                            textContent = "My documents",
+                            type = AttachmentThumbnailType.File,
                             blurHash = null,
                         )
                     )

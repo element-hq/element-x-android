@@ -36,10 +36,10 @@ import io.element.android.features.announcement.impl.AnnouncementState
 import io.element.android.features.announcement.impl.AnnouncementStateProvider
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.visuallist.VisualList
+import io.element.android.libraries.designsystem.components.visuallist.VisualListItemData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -134,11 +134,9 @@ private fun FullscreenAnnouncementContent(
     Column(
         modifier = modifier.fillMaxSize(),
     ) {
-        InfoListOrganism(
+        VisualList(
             modifier = Modifier.fillMaxWidth(),
             items = announcement.items(),
-            textStyle = ElementTheme.typography.fontBodyLgMedium,
-            iconTint = ElementTheme.colors.iconSecondary,
             iconSize = 24.dp
         )
         announcement.notice()?.let { notice ->
@@ -186,25 +184,25 @@ private fun Announcement.Fullscreen.icon() = when (this) {
 }
 
 @Composable
-private fun Announcement.Fullscreen.items(): ImmutableList<InfoListItem> = when (this) {
+private fun Announcement.Fullscreen.items(): ImmutableList<VisualListItemData> = when (this) {
     Announcement.Fullscreen.Space -> persistentListOf(
-        InfoListItem(
+        VisualListItemData(
             message = "View spaces you\'ve created or joined",
             iconVector = CompoundIcons.VisibilityOn(),
         ),
-        InfoListItem(
+        VisualListItemData(
             message = "Accept or decline invites to spaces",
             iconVector = CompoundIcons.Email(),
         ),
-        InfoListItem(
+        VisualListItemData(
             message = "Discover any rooms you can join in your spaces",
             iconVector = CompoundIcons.Search(),
         ),
-        InfoListItem(
+        VisualListItemData(
             message = "Join public spaces",
             iconVector = CompoundIcons.Explore(),
         ),
-        InfoListItem(
+        VisualListItemData(
             message = "Leave any spaces you’ve joined",
             iconVector = CompoundIcons.Leave(),
         ),

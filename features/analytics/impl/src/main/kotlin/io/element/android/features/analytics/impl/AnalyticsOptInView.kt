@@ -31,12 +31,12 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.analytics.api.AnalyticsOptInEvents
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.background.OnboardingBackground
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.ClickableLinkText
+import io.element.android.libraries.designsystem.components.visuallist.VisualList
+import io.element.android.libraries.designsystem.components.visuallist.VisualListItemData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
@@ -129,22 +129,21 @@ private fun AnalyticsOptInContent() {
             verticalBias = -0.4f
         )
     ) {
-        InfoListOrganism(
+        VisualList(
             items = persistentListOf(
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(id = R.string.screen_analytics_prompt_data_usage),
                     iconVector = CompoundIcons.CheckCircle(),
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(id = R.string.screen_analytics_prompt_third_party_sharing),
                     iconVector = CompoundIcons.CheckCircle(),
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(id = R.string.screen_analytics_prompt_settings),
                     iconVector = CompoundIcons.CheckCircle(),
                 ),
             ),
-            textStyle = ElementTheme.typography.fontBodyLgMedium,
             iconTint = ElementTheme.colors.iconSuccessPrimary,
         )
     }

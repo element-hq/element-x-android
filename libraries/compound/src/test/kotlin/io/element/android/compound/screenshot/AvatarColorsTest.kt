@@ -8,19 +8,17 @@
 
 package io.element.android.compound.screenshot
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.screenshot.utils.screenshotFile
 import io.element.android.compound.theme.AvatarColorsPreviewDark
 import io.element.android.compound.theme.AvatarColorsPreviewLight
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
-@RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-class AvatarColorsTest {
+class AvatarColorsTest : RobolectricTest() {
     @Test
     @Config(sdk = [35], qualifiers = "xxhdpi")
     fun screenshots() {

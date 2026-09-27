@@ -15,4 +15,6 @@ sealed interface DeveloperSettingsEvents {
     data class ChangeBrandColor(val color: Color?) : DeveloperSettingsEvents
     data object ClearCache : DeveloperSettingsEvents
     data object VacuumStores : DeveloperSettingsEvents
+    data class MarkAllRoomsAsRead(val needsConfirmation: Boolean) : DeveloperSettingsEvents
+    data object DismissMarkAllRoomsAsReadConfirmation : DeveloperSettingsEvents
 }

@@ -41,7 +41,6 @@
     <item quantity="other">"Gelesen von %1$s und %2$d weiteren"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Gelesen von %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tippe, um alle anzuzeigen"</string>
   <string name="a11y_remove_reaction">"Reaktion mit %1$s entfernen"</string>
   <string name="a11y_remove_reaction_with">"Entferne Reaktionen mit %1$s"</string>
   <string name="a11y_room_avatar">"Avatar"</string>

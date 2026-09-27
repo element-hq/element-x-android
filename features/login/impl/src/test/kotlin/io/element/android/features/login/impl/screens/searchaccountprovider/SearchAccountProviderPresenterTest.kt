@@ -13,6 +13,7 @@ import io.element.android.features.login.impl.changeserver.aChangeServerState
 import io.element.android.features.login.impl.resolver.HomeserverResolver
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.auth.FakeHomeServerLoginCompatibilityChecker
+import io.element.android.libraries.permissions.test.FakeLocalNetworkPermissionAdvisor
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -30,7 +31,7 @@ class SearchAccountProviderPresenterTest {
     fun `present - initial state`() = runTest {
         val fakeLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(checkResult = { Result.success(true) })
         val presenter = SearchAccountProviderPresenter(
-            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker, FakeLocalNetworkPermissionAdvisor()),
             changeServerPresenter = { aChangeServerState() }
         )
         presenter.test {
@@ -44,7 +45,7 @@ class SearchAccountProviderPresenterTest {
     fun `present - error while checking login compatibility`() = runTest {
         val fakeLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(checkResult = { Result.failure(IllegalStateException("Oops")) })
         val presenter = SearchAccountProviderPresenter(
-            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker, FakeLocalNetworkPermissionAdvisor()),
             changeServerPresenter = { aChangeServerState() }
         )
         presenter.test {
@@ -68,7 +69,7 @@ class SearchAccountProviderPresenterTest {
     fun `present - enter text no result`() = runTest {
         val fakeWellknownRetriever = FakeHomeServerLoginCompatibilityChecker(checkResult = { Result.success(false) })
         val presenter = SearchAccountProviderPresenter(
-            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRetriever),
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeWellknownRetriever, FakeLocalNetworkPermissionAdvisor()),
             changeServerPresenter = { aChangeServerState() }
         )
         presenter.test {
@@ -101,7 +102,7 @@ class SearchAccountProviderPresenterTest {
         }
         val fakeLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(checkResult = checkResult)
         val presenter = SearchAccountProviderPresenter(
-            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker, FakeLocalNetworkPermissionAdvisor()),
             changeServerPresenter = { aChangeServerState() }
         )
         presenter.test {
@@ -141,7 +142,7 @@ class SearchAccountProviderPresenterTest {
         }
         val fakeLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(checkResult = checkResult)
         val presenter = SearchAccountProviderPresenter(
-            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker),
+            homeserverResolver = HomeserverResolver(testCoroutineDispatchers(), fakeLoginCompatibilityChecker, FakeLocalNetworkPermissionAdvisor()),
             changeServerPresenter = { aChangeServerState() }
         )
         presenter.test {

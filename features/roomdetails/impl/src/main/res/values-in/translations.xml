@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_history_sharing_room_info_hidden_badge_content">"Anggota baru tidak dapat melihat riwayat"</string>
+  <string name="crypto_history_sharing_room_info_shared_badge_content">"Anggota baru dapat melihat riwayat"</string>
+  <string name="crypto_history_sharing_room_info_world_readable_badge_content">"Siapa pun dapat melihat riwayat"</string>
   <string name="screen_edit_room_address_room_address_section_footer">"Supaya ruangan ini terlihat di direktori ruangan publik, Anda memerlukan alamat ruangan."</string>
   <string name="screen_edit_room_address_title">"Edit alamat"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Terjadi kesalahan saat memperbarui pengaturan pemberitahuan."</string>
@@ -64,6 +67,7 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Permintaan untuk bergabung"</string>
   <string name="screen_room_details_roles_and_permissions">"Peran dan perizinan"</string>
+  <string name="screen_room_details_room_name_label">"Nama"</string>
   <string name="screen_room_details_security_and_privacy_title">"Keamanan &amp; privasi"</string>
   <string name="screen_room_details_security_title">"Keamanan"</string>
   <string name="screen_room_details_share_room_title">"Bagikan ruangan"</string>
@@ -71,6 +75,11 @@
   <string name="screen_room_details_topic_title">"Topik"</string>
   <string name="screen_room_details_updating_room">"Memperbarui ruangan…"</string>
   <string name="screen_room_member_list_banned_empty">"Tidak ada pengguna yang dicekal dalam ruangan ini."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="other">"%1$d Dilarang"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Periksa ejaannya atau coba pencarian baru"</string>
+  <string name="screen_room_member_list_empty_search_title">"Tidak ada hasil untuk%1$s"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="other">"%1$d orang"</item>
   </plurals>
@@ -81,6 +90,10 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Batalkan cekalan dari ruangan"</string>
   <string name="screen_room_member_list_mode_banned">"Tercekal"</string>
   <string name="screen_room_member_list_mode_members">"Anggota"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="other">"%1$d Diundang"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Tertunda"</string>
   <string name="screen_room_member_list_role_administrator">"Hanya admin"</string>
   <string name="screen_room_member_list_role_moderator">"Admin dan moderator"</string>
   <string name="screen_room_member_list_role_owner">"Pemilik"</string>
@@ -109,6 +122,7 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Pesan dan konten"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderator"</string>
   <string name="screen_room_roles_and_permissions_owners">"Pemilik"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Permission"</string>
   <string name="screen_room_roles_and_permissions_reset">"Atur ulang perizinan"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Setelah Anda mengatur ulang perizinan, Anda akan kehilangan pengaturan Anda saat ini."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Atur ulang perizinan?"</string>
@@ -118,8 +132,10 @@
   <string name="screen_roomlist_mark_as_read">"Tandai sebagai dibaca"</string>
   <string name="screen_roomlist_mark_as_unread">"Tandai sebagai belum dibaca"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Tambahkan alamat"</string>
+  <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Siapa pun yang berada di ruang yang diizinkan dapat bergabung, tetapi semua orang lain harus meminta akses."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Meminta hak akses pada administrator atau moderator."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Ijin bergabung"</string>
+  <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Siapa pun di %1$s dapat bergabung, tetapi semua orang lain harus meminta akses."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ya, aktifkan enkripsi"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Setelah diaktifkan, encryption untuk sebuah ruangan tidak dapat dinonaktifkan, Riwayat pesan hanya akan terlihat oleh anggota ruangan sejak mereka diundang atau sejak mereka bergabung dengan ruangan tersebut.
 Tidak ada orang lain selain anggota ruangan yang dapat membaca pesan. Hal ini dapat mencegah bot dan jembatan bekerja dengan benar.
@@ -130,20 +146,28 @@ Kami tidak menyarankan untuk mengaktifkan enkripsi untuk ruangan yang dapat dite
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktifkan enkripsi ujung ke ujung"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Siapa pun dapat menemukan dan bergabung"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Semua orang"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Pilih ruang mana yang anggotanya dapat bergabung ke ruangan ini tanpa undangan. %1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Kelola ruang"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Orang hanya dapat bergabung jika mereka diundang"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Hanya undangan"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Akses ruangan"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Siapa pun yang berada di area yang diizinkan dapat bergabung."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Siapa pun di %1$s dapat bergabung."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Anggota space"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Space saat ini tidak didukung"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Supaya ruangan ini terlihat di direktori ruangan publik, Anda memerlukan alamat ruangan."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Alamat"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Izinkan ruangan ini ditemukan dengan mencari direktori ruangan %1$s publik"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"Izinkan agar dapat ditemukan melalui pencarian di direktori publik."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Tersedia di direktori publik"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Siapa saja (riwayat publik)"</string>
+  <string name="screen_security_and_privacy_room_history_section_footer">"Perubahan tidak akan memengaruhi pesan lama, hanya pesan baru. %1$s"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Siapa yang bisa membaca riwayat"</string>
   <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Hanya sejak anggota diundang"</string>
   <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Anggota dapat melihat rekaman percakapan sejak memilih opsi ini"</string>
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Alamat ruangan adalah cara untuk menemukan dan mengakses ruangan. Ini juga memastikan Anda dapat dengan mudah berbagi ruangan dengan orang lain. Anda dapat memilih untuk menerbitkan ruangan Anda di direktori ruangan publik homeserver Anda."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Penerbitan ruangan"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Alamat adalah cara untuk menemukan dan mengakses ruangan dan ruang. Ini juga memastikan Anda dapat dengan mudah membagikannya dengan orang lain."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Visibilitas"</string>
   <string name="screen_security_and_privacy_title">"Keamanan &amp; privasi"</string>
 </resources>

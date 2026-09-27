@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SPACE_NAME
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -59,16 +60,14 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class DefaultNotifiableEventResolverTest {
+class DefaultNotifiableEventResolverTest : RobolectricTest() {
     @Test
     fun `resolve event no session`() = runTest {
         val sut = createDefaultNotifiableEventResolver(notificationService = null)
@@ -425,6 +424,7 @@ class DefaultNotifiableEventResolverTest {
                 mapOf(
                     AN_EVENT_ID to Result.success(aNotificationData(
                         content = NotificationContent.StateEvent.RoomMemberContent(
+                            senderId = A_USER_ID,
                             userId = A_USER_ID_2,
                             membershipState = RoomMembershipState.INVITE
                         ),
@@ -436,6 +436,45 @@ class DefaultNotifiableEventResolverTest {
         val request = aPushRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
         val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
         assertThat(result.getEvent(request)?.getOrNull()).isNull()
+    }
+
+    @Test
+    fun `resolve RoomMemberContent invite room for me`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                mapOf(
+                    AN_EVENT_ID to Result.success(aNotificationData(
+                        content = NotificationContent.StateEvent.RoomMemberContent(
+                            senderId = A_USER_ID_2,
+                            userId = A_SESSION_ID,
+                            membershipState = RoomMembershipState.INVITE
+                        ),
+                        isDirect = false,
+                    ))
+                )
+            )
+        )
+        val request = aPushRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        val expectedResult = ResolvedPushEvent.Event(
+            InviteNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
+                editedEventId = null,
+                canBeReplaced = true,
+                roomName = A_ROOM_NAME,
+                noisy = false,
+                title = null,
+                description = "Bob invited you to join the room",
+                type = null,
+                timestamp = A_TIMESTAMP,
+                soundName = null,
+                isRedacted = false,
+                isUpdated = false,
+            )
+        )
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
     }
 
     @Test
@@ -636,6 +675,7 @@ class DefaultNotifiableEventResolverTest {
                 mapOf(
                     AN_EVENT_ID to Result.success(aNotificationData(
                         content = NotificationContent.StateEvent.RoomMemberContent(
+                            senderId = A_USER_ID_2,
                             userId = A_USER_ID_2,
                             membershipState = RoomMembershipState.JOIN
                         )

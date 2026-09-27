@@ -16,8 +16,8 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.login.impl.accountprovider.anAccountProvider
+import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -28,12 +28,11 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class ChooseAccountProviderViewTest {
+class ChooseAccountProviderViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
         val eventSink = EventsRecorder<ChooseAccountProviderEvents>(expectEvents = false)
@@ -71,7 +70,7 @@ class ChooseAccountProviderViewTest {
         val eventSink = EventsRecorder<ChooseAccountProviderEvents>()
         setChooseAccountProviderView(
             state = aChooseAccountProviderState(
-                loginMode = AsyncData.Failure(AN_EXCEPTION),
+                loginModeState = aLoginModeState(loginMode = AsyncData.Failure(AN_EXCEPTION)),
                 eventSink = eventSink,
             ),
         )

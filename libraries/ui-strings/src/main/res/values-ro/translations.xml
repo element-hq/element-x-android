@@ -44,7 +44,6 @@
     <item quantity="other">"Citit de %1$s și incă %2$d"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Citit de %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Atingeți pentru a le afișa pe toate"</string>
   <string name="a11y_remove_reaction">"Îndepărtați reacția cu %1$s"</string>
   <string name="a11y_remove_reaction_with">"Îndepărtați reacția %1$s"</string>
   <string name="a11y_room_avatar">"Avatarul camerei"</string>

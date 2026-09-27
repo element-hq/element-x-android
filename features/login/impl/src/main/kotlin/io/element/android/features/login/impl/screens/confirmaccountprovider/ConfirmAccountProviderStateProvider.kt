@@ -11,7 +11,8 @@ package io.element.android.features.login.impl.screens.confirmaccountprovider
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.anAccountProvider
-import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.LoginModeState
+import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.libraries.architecture.AsyncData
 
@@ -24,7 +25,7 @@ open class ConfirmAccountProviderStateProvider : PreviewParameterProvider<Confir
             ),
             aConfirmAccountProviderState(
                 isAccountCreation = true,
-                loginMode = AsyncData.Failure(AccountCreationNotSupported())
+                loginModeState = aLoginModeState(loginMode = AsyncData.Failure(AccountCreationNotSupported())),
             ),
         )
 }
@@ -32,11 +33,11 @@ open class ConfirmAccountProviderStateProvider : PreviewParameterProvider<Confir
 private fun aConfirmAccountProviderState(
     accountProvider: AccountProvider = anAccountProvider(),
     isAccountCreation: Boolean = false,
-    loginMode: AsyncData<LoginMode> = AsyncData.Uninitialized,
+    loginModeState: LoginModeState = aLoginModeState(),
     eventSink: (ConfirmAccountProviderEvents) -> Unit = {},
 ) = ConfirmAccountProviderState(
     accountProvider = accountProvider,
     isAccountCreation = isAccountCreation,
-    loginMode = loginMode,
+    loginModeState = loginModeState,
     eventSink = eventSink
 )

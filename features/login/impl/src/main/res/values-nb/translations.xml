@@ -28,7 +28,7 @@
   <string name="screen_change_server_subtitle">"Hva er adressen til serveren din?"</string>
   <string name="screen_change_server_title">"Velg din server"</string>
   <string name="screen_create_account_title">"Opprett konto"</string>
-  <string name="screen_login_error_deactivated_account">"Denne kontoen er deaktivert."</string>
+  <string name="screen_login_error_deactivated_account">"Denne kontoen er slettet."</string>
   <string name="screen_login_error_invalid_credentials">"Feil brukernavn og/eller passord"</string>
   <string name="screen_login_error_invalid_user_id">"Dette er ikke en gyldig brukeridentifikator. Forventet format: \'@bruker:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Denne serveren er konfigurert til å bruke oppdateringstokener. Disse støttes ikke når du bruker passordbasert pålogging."</string>

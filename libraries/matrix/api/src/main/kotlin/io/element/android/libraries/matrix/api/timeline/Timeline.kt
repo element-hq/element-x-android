@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.GalleryItemInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
@@ -157,6 +158,13 @@ interface Timeline : AutoCloseable {
         inReplyToEventId: EventId?,
     ): Result<MediaUploadHandler>
 
+    suspend fun sendGallery(
+        items: List<GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ): Result<MediaUploadHandler>
+
     suspend fun redactEvent(eventOrTransactionId: EventOrTransactionId, reason: String?): Result<Unit>
 
     suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Boolean>
@@ -215,6 +223,13 @@ interface Timeline : AutoCloseable {
     suspend fun endPoll(pollStartId: EventId, text: String): Result<Unit>
 
     suspend fun loadReplyDetails(eventId: EventId): InReplyTo
+
+    /**
+     * Returns true if [eventId] is currently loaded in this timeline's window, even if the display
+     * layer does not render it (e.g. filtered or state events). This distinguishes "in the window
+     * but not displayed" from "genuinely outside the loaded window".
+     */
+    suspend fun isEventLoaded(eventId: EventId): Boolean
 
     /**
      * Adds a new pinned event by sending an updated `m.room.pinned_events`

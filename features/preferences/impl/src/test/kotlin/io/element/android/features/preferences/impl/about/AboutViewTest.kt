@@ -14,7 +14,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
@@ -22,11 +21,10 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class AboutViewTest {
+class AboutViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes back callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->

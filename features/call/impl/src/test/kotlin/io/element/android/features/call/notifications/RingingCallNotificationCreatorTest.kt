@@ -23,13 +23,11 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class RingingCallNotificationCreatorTest {
+class RingingCallNotificationCreatorTest : RobolectricTest() {
     @Test
     fun `createNotification - with no associated MatrixClient does nothing`() = runTest {
         val notificationCreator = createRingingCallNotificationCreator(

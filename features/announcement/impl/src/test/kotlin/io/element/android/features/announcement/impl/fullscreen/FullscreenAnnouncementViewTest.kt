@@ -14,7 +14,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.impl.AnnouncementEvent
 import io.element.android.features.announcement.impl.AnnouncementState
@@ -23,11 +22,10 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.pressBackKey
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class FullscreenAnnouncementViewTest {
+class FullscreenAnnouncementViewTest : RobolectricTest() {
     @Test
     fun `clicking on back sends a AnnouncementEvent`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<AnnouncementEvent>()

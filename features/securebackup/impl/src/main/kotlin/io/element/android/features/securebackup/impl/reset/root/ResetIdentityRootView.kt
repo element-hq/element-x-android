@@ -22,11 +22,11 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListItem
-import io.element.android.libraries.designsystem.atomic.organisms.InfoListOrganism
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.visuallist.VisualList
+import io.element.android.libraries.designsystem.components.visuallist.VisualListItemData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -79,10 +79,10 @@ private fun Content() {
         modifier = Modifier.padding(top = 8.dp, bottom = 40.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-        InfoListOrganism(
+        VisualList(
             modifier = Modifier.fillMaxWidth(),
             items = persistentListOf(
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(R.string.screen_encryption_reset_bullet_1),
                     iconComposable = {
                         Icon(
@@ -93,7 +93,7 @@ private fun Content() {
                         )
                     },
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(R.string.screen_encryption_reset_bullet_2),
                     iconComposable = {
                         Icon(
@@ -104,7 +104,7 @@ private fun Content() {
                         )
                     },
                 ),
-                InfoListItem(
+                VisualListItemData(
                     message = stringResource(R.string.screen_encryption_reset_bullet_3),
                     iconComposable = {
                         Icon(
