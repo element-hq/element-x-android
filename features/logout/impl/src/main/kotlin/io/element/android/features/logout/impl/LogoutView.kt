@@ -65,6 +65,7 @@ fun LogoutView(
         subTitle = subtitle(state),
         iconStyle = BigIcon.Style.Default(CompoundIcons.Mobile()),
         modifier = modifier,
+        isScrollable = true,
         buttons = {
             Buttons(
                 state = state,
