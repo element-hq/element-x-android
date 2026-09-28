@@ -80,6 +80,7 @@ internal fun RoomSummaryRow(
     onClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
     showUnreadCount: Boolean = false,
+    showAllActivity: Boolean = false,
     eventSink: (RoomListEvent) -> Unit,
 ) {
     Box(modifier = modifier) {
@@ -131,7 +132,7 @@ internal fun RoomSummaryRow(
                         isHighlighted = room.isHighlighted,
                         dmUserStatus = room.dmUserStatus,
                     )
-                    MessagePreviewAndIndicatorRow(room = room, showUnreadCount = showUnreadCount)
+                    MessagePreviewAndIndicatorRow(room = room, showUnreadCount = showUnreadCount, showAllActivity = showAllActivity)
                 }
             }
             RoomSummaryDisplayType.KNOCKED -> {
@@ -278,6 +279,7 @@ private fun InviteSubtitle(
 private fun MessagePreviewAndIndicatorRow(
     room: RoomListRoomSummary,
     showUnreadCount: Boolean,
+    showAllActivity: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -358,21 +360,24 @@ private fun MessagePreviewAndIndicatorRow(
                     isAudio = room.activeCallIntent == CallIntent.AUDIO
                 )
             }
-            if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
+            val isMuted = room.userDefinedNotificationMode == RoomNotificationMode.MUTE
+            if (isMuted) {
                 NotificationOffIndicatorAtom()
             } else if (room.numberOfUnreadMentions > 0) {
                 MentionIndicatorAtom()
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
-                val count = if (showUnreadCount) {
-                    if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
-                        room.numberOfUnreadMessages
-                    } else {
-                        room.numberOfUnreadNotifications
-                    }
-                } else {
-                    null
+                val count = when {
+                    // Show only unread notifications when the room is not muted and there are unread notifications
+                    !isMuted && room.numberOfUnreadNotifications > 0 -> room.numberOfUnreadNotifications
+                    // Otherwise, show unread messages when showAllActivity is true
+                    showAllActivity -> room.numberOfUnreadMessages.takeIf { it > 0 }
+                    // Or don't display anything
+                    else -> null
+                }?.let {
+                    // We only want to show the count if the option is enabled, otherwise we just show the dot indicator (value 0)
+                    if (showUnreadCount) it else 0
                 }
                 UnreadIndicatorAtom(
                     color = tint,

@@ -76,5 +76,6 @@ sealed interface RoomListContentState {
         val showUnreadCount: Boolean,
         val summaries: ImmutableList<RoomListRoomSummary>,
         val seenRoomInvites: ImmutableSet<RoomId>,
+        val showAllActivity: Boolean,
     ) : RoomListContentState
 }
