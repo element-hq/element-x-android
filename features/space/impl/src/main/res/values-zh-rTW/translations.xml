@@ -16,7 +16,7 @@
   <string name="screen_space_add_rooms_room_access_description">"新增聊天室不會影響聊天室存取權。要變更存取權，請前往「聊天室設定」→「安全性與隱私權」"</string>
   <string name="screen_space_empty_state_title">"新增您的第一個聊天室"</string>
   <string name="screen_space_menu_action_members">"檢視成員"</string>
-  <string name="screen_space_remove_rooms_confirmation_content">"移除聊天室不會影響聊天室存取權。要變更存取權，請前往「聊天室資訊」→「隱私權與安全性」。"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"移除聊天室不會影響聊天室存取權。要變更存取權，請前往「聊天室資訊」→「安全性與隱私權」。"</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">
     <item quantity="other">"從 %2$s 移除 %1$d 個聊天室"</item>
   </plurals>

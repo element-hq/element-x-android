@@ -38,8 +38,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Якщо вимкнути цю функцію, ви не зможете надсилати чи отримувати підтвердження прочитання або сповіщення про набір тексту."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Завжди ховати"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Завжди показувати"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"У приватних кімнатах"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Сховані медіа завжди можна переглянути, натиснувши на нього"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Показувати в приватних кімнатах"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Приховані медіафайли завжди можна переглянути, натиснувши на них."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Показувати медіа у стрічці"</string>
   <string name="screen_advanced_settings_view_source_description">"Увімкнення цього параметра уможливить перегляд джерела повідомлень зі стрічки."</string>
   <string name="screen_blocked_users_empty">"У вас немає заблокованих користувачів."</string>
@@ -62,6 +62,9 @@
   <string name="screen_labs_header_description">"Випробуйте найновіші ідеї наших розробників. Ці функції ще не завершені, вони можуть бути нестабільними та змінюватись."</string>
   <string name="screen_labs_header_title">"Хочете поекспериментувати?"</string>
   <string name="screen_labs_title">"Лабораторія"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Запрошення"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Інші користувачі"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Як вас бачать інші"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Додаткові налаштування"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Мелодія виклику"</string>
   <string name="screen_notification_settings_calls_label">"Аудіо та відеовиклики"</string>
@@ -90,6 +93,7 @@
   <string name="screen_notification_settings_mode_mentions">"Згадки"</string>
   <string name="screen_notification_settings_notification_section_title">"Сповіщати мене про"</string>
   <string name="screen_notification_settings_room_mention_label">"Згадки @room"</string>
+  <string name="screen_notification_settings_show_all_activity">"Показати всю діяльність у списку кімнат (крапки або кількість непрочитаних повідомлень)"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Власний"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Користувацький звук…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Помилка видалення файлу"</string>
