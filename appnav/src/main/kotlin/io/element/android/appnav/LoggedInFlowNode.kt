@@ -93,7 +93,6 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
@@ -111,14 +110,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
-import java.time.Duration
-import java.time.Instant
 import java.util.Optional
 import java.util.UUID
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.toKotlinDuration
 import im.vector.app.features.analytics.plan.JoinedRoom as JoinedRoomAnalyticsEvent
 
 // The maximum number of room nodes that should be kept in the backstack at the same time.
@@ -185,36 +180,20 @@ class LoggedInFlowNode(
         roomMembershipObserver = matrixClient.roomMembershipObserver,
     )
 
-    private val verificationListener = object : SessionVerificationServiceListener {
-        override fun onIncomingSessionRequest(verificationRequest: VerificationRequest.Incoming) {
-            // Without this launch the rendering and actual state of this Appyx node's children gets out of sync, resulting in a crash.
-            // This might be because this method is called back from Rust in a background thread.
-            lifecycleScope.launch {
-                val receivedAt = Instant.now()
-
-                // Wait until the app is in foreground to display the incoming verification request
-                appNavigationStateService.appNavigationState.first { it.isInForeground }
-
-                // TODO there should also be a timeout for > 10 minutes elapsed since the request was created, but the SDK doesn't expose that info yet
-                val now = Instant.now()
-                val elapsedTimeSinceReceived = Duration.between(receivedAt, now).toKotlinDuration()
-
-                // Discard the incoming verification request if it has timed out
-                if (elapsedTimeSinceReceived > 2.minutes) {
-                    Timber.w("Incoming verification request ${verificationRequest.details.flowId} discarded due to timeout.")
-                    return@launch
+    /**
+     * Display the incoming verification request, the app is expected to be in foreground.
+     */
+    fun onIncomingVerificationRequest(verificationRequest: VerificationRequest.Incoming) {
+        lifecycleScope.launch {
+            // Wait for the RoomList UI to be ready so the incoming verification screen can be displayed on top of it
+            // Otherwise, the RoomList UI may be incorrectly displayed on top
+            withTimeout(5.seconds) {
+                backstack.elements.first { elements ->
+                    elements.any { it.key.navTarget == NavTarget.Home }
                 }
-
-                // Wait for the RoomList UI to be ready so the incoming verification screen can be displayed on top of it
-                // Otherwise, the RoomList UI may be incorrectly displayed on top
-                withTimeout(5.seconds) {
-                    backstack.elements.first { elements ->
-                        elements.any { it.key.navTarget == NavTarget.Home }
-                    }
-                }
-
-                backstack.singleTop(NavTarget.IncomingVerificationRequest(verificationRequest))
             }
+
+            backstack.singleTop(NavTarget.IncomingVerificationRequest(verificationRequest))
         }
     }
 
@@ -229,7 +208,6 @@ class LoggedInFlowNode(
                 analyticsRoomListStateWatcher.start()
                 appNavigationStateService.onNavigateToSession(id, matrixClient.sessionId)
                 loggedInFlowProcessor.observeEvents(sessionCoroutineScope)
-                matrixClient.sessionVerificationService.setListener(verificationListener)
                 mediaPreviewConfigMigration()
                 sessionCoroutineScope.launch {
                     // Wait for the network to be connected before pre-fetching the max file upload size
@@ -258,7 +236,6 @@ class LoggedInFlowNode(
             onDestroy = {
                 appNavigationStateService.onLeavingSession(id)
                 loggedInFlowProcessor.stopObserving()
-                matrixClient.sessionVerificationService.setListener(null)
                 analyticsRoomListStateWatcher.stop()
             }
         )

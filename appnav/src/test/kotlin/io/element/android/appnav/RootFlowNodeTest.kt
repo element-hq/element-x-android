@@ -25,6 +25,7 @@ import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.session.FakeSyncOrchestratorFactory
 import io.element.android.appnav.session.MatrixSessionCache
+import io.element.android.appnav.verification.IncomingVerificationRequestObserver
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.test.FakeLoginEntryPoint
@@ -50,6 +51,7 @@ import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
 import io.element.android.services.apperror.test.FakeAppErrorStateService
+import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.node.FakeNodeFactoriesBindings
 import io.element.android.tests.testutils.node.FakeParentNode
 import io.element.android.tests.testutils.presenter.NotUsedPresenter
@@ -183,6 +185,10 @@ class RootFlowNodeTest : RobolectricTest() {
             announcementService = FakeAnnouncementService(),
             analyticsService = FakeAnalyticsService(),
             analyticsColdStartWatcher = FakeAnalyticsColdStartWatcher(),
+            incomingVerificationRequestObserver = IncomingVerificationRequestObserver(
+                matrixSessionCache = matrixSessionCache,
+                appForegroundStateService = FakeAppForegroundStateService(),
+            ),
             appCoroutineScope = backgroundScope,
         )
     }
