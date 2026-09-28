@@ -86,7 +86,7 @@ def extract_cleartext_domains(aar_bytes):
     return domains
 
 
-def write_network_security_config(version, domains):
+def write_network_security_config(domains, version):
     with open(SOURCE_CONFIG, "r") as f:
         content = f.read()
 
@@ -121,7 +121,7 @@ def main():
     aar_bytes = download_aar(version)
     domains = extract_cleartext_domains(aar_bytes)
     update_libs_versions(version)
-    write_network_security_config(version, domains)
+    write_network_security_config(domains, version)
 
 
 if __name__ == "__main__":
