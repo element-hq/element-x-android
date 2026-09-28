@@ -17,6 +17,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.provider.Settings
+import android.system.ErrnoException
+import android.system.Os
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
@@ -26,6 +28,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.core.net.toFile
+import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -44,7 +48,10 @@ import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.maximize
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.minimizeWindowHelper
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.movePosition
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.updateWindowSize
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.io.File
 
 class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner {
     private var windowManager: WindowManager? = null
@@ -179,6 +186,7 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
 
     override fun onDestroy() {
         removeFloatingView()
+        floatingVideoDir().deleteRecursively()
         lifecycleRegistry.currentState = Lifecycle.State.DESTROYED
         super.onDestroy()
     }
@@ -188,25 +196,59 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
         const val ACTION_START_FLOATING = "START_FLOATING"
         const val EXTRA_POSITION = "position"
         private const val INITIAL_FLOATING_WINDOW_OFFSET_Y_DP = 300
+        private const val FLOATING_VIDEO_DIR = "temp/floating_video"
 
+        /**
+         * Starts the floating player for the local video file at [videoUri].
+         * Returns false if it could not be started, e.g. because the overlay permission is not granted yet.
+         */
         @SuppressLint("ObsoleteSdkInt")
-        fun startFloating(context: Context, videoUri: Uri, position: Long = 0L) {
+        suspend fun startFloating(context: Context, videoUri: Uri, position: Long = 0L): Boolean {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
                 Toast.makeText(
                     context,
-                    context.getString(R.string.floating_video_overlay_permission_needed),
+                    context.getString(R.string.screen_media_viewer_floating_video_overlay_permission_needed),
                     Toast.LENGTH_LONG,
                 ).show()
                 context.openSystemOverlaySettings()
-                return
+                return false
             }
+            val videoFile = withContext(Dispatchers.IO) { context.createFloatingVideoFile(videoUri) } ?: return false
             context.startService(
                 Intent(context, FloatingVideoService::class.java).apply {
                     action = ACTION_START_FLOATING
-                    data = videoUri
+                    data = videoFile.toUri()
                     putExtra(EXTRA_POSITION, position)
                 }
             )
+            return true
         }
+
+        /**
+         * The media viewer deletes its downloaded file when it is closed, so the floating player needs its own reference to the file.
+         * A hard link is instant and survives that deletion; fall back to a copy if linking is not possible.
+         */
+        private fun Context.createFloatingVideoFile(videoUri: Uri): File? {
+            return try {
+                val source = videoUri.toFile()
+                val dir = floatingVideoDir().apply {
+                    deleteRecursively()
+                    mkdirs()
+                }
+                val destination = File(dir, source.name)
+                try {
+                    Os.link(source.path, destination.path)
+                } catch (e: ErrnoException) {
+                    Timber.tag(TAG).w(e, "Cannot link video file, copying it")
+                    source.copyTo(destination, overwrite = true)
+                }
+                destination
+            } catch (e: Exception) {
+                Timber.tag(TAG).e(e, "Cannot prepare video file for the floating player")
+                null
+            }
+        }
+
+        private fun Context.floatingVideoDir() = File(cacheDir, FLOATING_VIDEO_DIR)
     }
 }

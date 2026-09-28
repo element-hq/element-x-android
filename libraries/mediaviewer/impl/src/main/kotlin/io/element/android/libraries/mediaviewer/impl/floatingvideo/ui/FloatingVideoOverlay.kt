@@ -163,7 +163,7 @@ fun FloatingVideoOverlay(
                 Icon(
                     imageVector = if (isMinimized) CompoundIcons.Expand() else CompoundIcons.Collapse(),
                     contentDescription = stringResource(
-                        if (isMinimized) R.string.floating_video_a11y_expand else CommonStrings.action_minimize
+                        if (isMinimized) R.string.screen_media_viewer_a11y_expand_video else CommonStrings.action_minimize
                     ),
                     tint = Color.White,
                     modifier = Modifier.padding(4.dp),

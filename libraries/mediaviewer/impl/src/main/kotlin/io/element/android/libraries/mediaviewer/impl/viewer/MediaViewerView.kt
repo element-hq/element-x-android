@@ -49,6 +49,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -114,6 +115,7 @@ import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.EditorStyledText
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
@@ -561,6 +563,7 @@ private fun MediaViewerTopBar(
     onInfoClick: () -> Unit,
 ) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val downloadedMedia by data.downloadedMedia
     val actionsEnabled = downloadedMedia.isSuccess()
     val mimeType = data.mediaInfo.mimeType
@@ -608,11 +611,12 @@ private fun MediaViewerTopBar(
                 IconButton(
                     enabled = actionsEnabled,
                     onClick = {
-                        val media = downloadedMedia
-                        if (media is AsyncData.Success) {
-                            FloatingVideoService.startFloating(context, media.data.uri)
+                        val media = downloadedMedia.dataOrNull() ?: return@IconButton
+                        coroutineScope.launch {
+                            if (FloatingVideoService.startFloating(context, media.uri)) {
+                                onBackClick()
+                            }
                         }
-                        onBackClick()
                     },
                 ) {
                     Icon(
