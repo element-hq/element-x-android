@@ -49,7 +49,7 @@ class RustMatrixClientFactoryTest {
 fun TestScope.createRustMatrixClientFactory(
     cacheDirectory: File = File("/cache"),
     sessionStore: SessionStore = InMemorySessionStore(
-        updateUserProfileResult = { _, _, _ -> },
+        updateUserProfileResult = { _, _, _, _ -> },
     ),
     clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
     workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),

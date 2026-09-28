@@ -38,4 +38,5 @@ internal fun Session.toSessionData(
     lastUsageIndex = 0,
     userDisplayName = null,
     userAvatarUrl = null,
+    userAvatarData = null,
 )

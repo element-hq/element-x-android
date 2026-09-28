@@ -84,12 +84,13 @@ class DatabaseSessionStore(
                     lastUsageIndex = result.lastUsageIndex,
                     userDisplayName = result.userDisplayName,
                     userAvatarUrl = result.userAvatarUrl,
+                    userAvatarData = result.userAvatarData,
                 ).toDbModel()
             )
         }
     }
 
-    override suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?) {
+    override suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?, avatarData: String?) {
         sessionDataMutex.withLock {
             val result = database.sessionDataQueries.selectByUserId(sessionId)
                 .executeAsOneOrNull()
@@ -102,6 +103,7 @@ class DatabaseSessionStore(
                 result.copy(
                     userDisplayName = displayName,
                     userAvatarUrl = avatarUrl,
+                    userAvatarData = avatarData,
                 ).toDbModel()
             )
         }

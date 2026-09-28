@@ -255,7 +255,7 @@ class RustMatrixAuthenticationServiceTest {
     }
 
     private fun TestScope.createRustMatrixAuthenticationService(
-        sessionStore: SessionStore = InMemorySessionStore(updateUserProfileResult = { _, _, _ -> }),
+        sessionStore: SessionStore = InMemorySessionStore(updateUserProfileResult = { _, _, _, _ -> }),
         clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
         sessionPathsFactory: SessionPathsFactory = SessionPathsFactory(File("/base"), File("/cache")),
