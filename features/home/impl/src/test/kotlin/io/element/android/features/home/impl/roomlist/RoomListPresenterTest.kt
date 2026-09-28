@@ -39,6 +39,7 @@ import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -218,7 +219,7 @@ class RoomListPresenterTest {
         presenter.test {
             val initialState = awaitItem()
 
-            // Skip intermediate event for loading the value of the `UnreadIndicatorCount` feature flag
+            // Skip intermediate event for loading the value of the feature flags
             skipItems(1)
 
             val summary = createRoomListRoomSummary()
@@ -265,7 +266,7 @@ class RoomListPresenterTest {
         presenter.test {
             val initialState = awaitItem()
 
-            // Skip intermediate event for loading the value of the `UnreadIndicatorCount` feature flag
+            // Skip intermediate event for loading the value of the feature flags
             skipItems(1)
 
             val summary = createRoomListRoomSummary()
@@ -318,7 +319,7 @@ class RoomListPresenterTest {
         presenter.test {
             val initialState = awaitItem()
 
-            // Skip intermediate event for loading the value of the `UnreadIndicatorCount` feature flag
+            // Skip intermediate event for loading the value of the feature flags
             skipItems(1)
 
             eventRecorder.assertEmpty()
@@ -629,7 +630,7 @@ class RoomListPresenterTest {
         )
         presenter.test {
             assertThat(announcementService.announcementsToShowFlow().first()).isEmpty()
-            skipItems(2) // Skip initial state and intermediate event for loading the value of the `UnreadIndicatorCount` feature flag
+            skipItems(2) // Skip initial state and intermediate event for loading the value of the feature flags
             val state = awaitItem()
             assertThat(state.contentAsRooms().showNewNotificationSoundBanner).isFalse()
             announcementService.emitAnnouncementsToShow(listOf(Announcement.NewNotificationSound))
@@ -640,6 +641,51 @@ class RoomListPresenterTest {
             // Simulate service updating the value
             announcementService.emitAnnouncementsToShow(emptyList())
             assertThat(awaitItem().contentAsRooms().showNewNotificationSoundBanner).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - showAllActivity and showUnreadCount reflect the feature flag values`() = runTest {
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(aRoomSummary())),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1)),
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = FakeRoomListService(createRoomListLambda = { roomList }),
+        )
+        val featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(
+                FeatureFlags.ShowAllActivityInRoomList.key to true,
+                FeatureFlags.UnreadIndicatorCount.key to true,
+            )
+        )
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            featureFlagService = featureFlagService,
+        )
+        presenter.test {
+            val enabledState = consumeItemsUntilPredicate { state ->
+                state.contentState is RoomListContentState.Rooms &&
+                    state.contentAsRooms().showAllActivity &&
+                    state.contentAsRooms().showUnreadCount
+            }.last()
+            assertThat(enabledState.contentAsRooms().showAllActivity).isTrue()
+            assertThat(enabledState.contentAsRooms().showUnreadCount).isTrue()
+
+            featureFlagService.setFeatureEnabled(FeatureFlags.ShowAllActivityInRoomList, false)
+            val allActivityDisabledState = consumeItemsUntilPredicate { state ->
+                state.contentState is RoomListContentState.Rooms && !state.contentAsRooms().showAllActivity
+            }.last()
+            assertThat(allActivityDisabledState.contentAsRooms().showAllActivity).isFalse()
+            assertThat(allActivityDisabledState.contentAsRooms().showUnreadCount).isTrue()
+
+            featureFlagService.setFeatureEnabled(FeatureFlags.UnreadIndicatorCount, false)
+            val unreadCountDisabledState = consumeItemsUntilPredicate { state ->
+                state.contentState is RoomListContentState.Rooms && !state.contentAsRooms().showUnreadCount
+            }.last()
+            assertThat(unreadCountDisabledState.contentAsRooms().showAllActivity).isFalse()
+            assertThat(unreadCountDisabledState.contentAsRooms().showUnreadCount).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

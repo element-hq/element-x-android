@@ -368,24 +368,37 @@ private fun MessagePreviewAndIndicatorRow(
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
-                val count = when {
-                    // Show only unread notifications when the room is not muted and there are unread notifications
-                    !isMuted && room.numberOfUnreadNotifications > 0 -> room.numberOfUnreadNotifications
-                    // Otherwise, show unread messages when showAllActivity is true
-                    showAllActivity -> room.numberOfUnreadMessages.takeIf { it > 0 }
-                    // Or don't display anything
-                    else -> null
-                }?.let {
-                    // We only want to show the count if the option is enabled, otherwise we just show the dot indicator (value 0)
-                    if (showUnreadCount) it else 0
-                }
                 UnreadIndicatorAtom(
                     color = tint,
-                    count = count,
+                    count = room.unreadIndicatorCount(showUnreadCount = showUnreadCount, showAllActivity = showAllActivity),
                     contentDescription = contentDescription,
                 )
             }
         }
+    }
+}
+
+/**
+ * Computes the value to pass to [UnreadIndicatorAtom] as `count`.
+ * - `null`: nothing is displayed.
+ * - `0`: dot indicator without a count.
+ * - `> 0`: the number to display.
+ */
+internal fun RoomListRoomSummary.unreadIndicatorCount(
+    showUnreadCount: Boolean,
+    showAllActivity: Boolean,
+): Long? {
+    val isMuted = userDefinedNotificationMode == RoomNotificationMode.MUTE
+    return when {
+        // Show only unread notifications when the room is not muted and there are unread notifications
+        !isMuted && numberOfUnreadNotifications > 0 -> numberOfUnreadNotifications
+        // Otherwise, show unread messages when showAllActivity is true
+        showAllActivity -> numberOfUnreadMessages.takeIf { it > 0 }
+        // Or don't display anything
+        else -> null
+    }?.let {
+        // We only want to show the count if the option is enabled, otherwise we just show the dot indicator (value 0)
+        if (showUnreadCount) it else 0
     }
 }
 
