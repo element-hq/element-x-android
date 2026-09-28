@@ -45,7 +45,6 @@ appyx = "1.7.1"
 sqldelight = "2.3.2"
 wysiwyg = "2.42.1"
 telephoto = "0.19.0"
-haze = "1.7.2"
 maplibre-compose = "0.15.0"
 
 # Dependency analysis
@@ -219,8 +218,6 @@ zxing_cpp = "io.github.zxing-cpp:android:3.1.1"
 google_zxing = "com.google.zxing:core:3.5.4"
 google_guava = "com.google.guava:guava:33.7.1-android"
 
-haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
-haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
 color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
