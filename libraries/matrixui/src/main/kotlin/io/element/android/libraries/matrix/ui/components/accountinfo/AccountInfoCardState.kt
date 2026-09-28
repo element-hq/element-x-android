@@ -24,7 +24,6 @@ sealed interface AccountInfoCardMode {
         val otherUser: MatrixUser,
     ) : AccountInfoCardMode
 
-    // TODO Replace SessionDetailsView with this component
     data class DeviceVerification(
         val deviceName: String?,
         val deviceId: DeviceId,

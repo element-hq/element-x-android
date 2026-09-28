@@ -127,8 +127,7 @@ private fun DeviceInfoRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             TextWithLabelMolecule(
-                // TODO i18n
-                label = "Signed in",
+                label = stringResource(CommonStrings.common_signed_in),
                 text = mode.signInFormattedTimestamp,
                 modifier = Modifier.weight(1f),
             )

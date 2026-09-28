@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.preferences.api)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.features.logout.api)
     api(libs.statemachine)
@@ -44,4 +45,5 @@ dependencies {
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.preferences.test)
+    testImplementation(projects.libraries.sessionStorage.test)
 }

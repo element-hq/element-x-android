@@ -31,7 +31,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.verifysession.impl.R
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationState.Step
-import io.element.android.features.verifysession.impl.incoming.ui.SessionDetailsView
 import io.element.android.features.verifysession.impl.ui.VerificationBottomMenu
 import io.element.android.features.verifysession.impl.ui.VerificationContentVerifying
 import io.element.android.features.verifysession.impl.ui.VerificationUserProfileContent
@@ -47,6 +46,9 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCard
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardMode
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardState
 import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
@@ -173,10 +175,15 @@ private fun ContentInitial(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
             ) {
-                SessionDetailsView(
-                    deviceName = stepInitial.deviceDisplayName,
-                    deviceId = stepInitial.deviceId,
-                    signInFormattedTimestamp = stepInitial.formattedSignInTime,
+                AccountInfoCard(
+                    state = AccountInfoCardState(
+                        matrixUser = stepInitial.currentUser,
+                        mode = AccountInfoCardMode.DeviceVerification(
+                            deviceName = stepInitial.deviceDisplayName,
+                            deviceId = stepInitial.deviceId,
+                            signInFormattedTimestamp = stepInitial.formattedSignInTime,
+                        ),
+                    ),
                 )
                 Text(
                     modifier = Modifier
