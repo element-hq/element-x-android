@@ -187,7 +187,6 @@
   <string name="action_retry_decryption">"Ponovno pokušaj dešifrirati"</string>
   <string name="action_save">"Spremi"</string>
   <string name="action_search">"Pretraži"</string>
-  <string name="action_select">"Odaberite"</string>
   <string name="action_select_all">"Odaberi sve"</string>
   <string name="action_send">"Pošalji"</string>
   <string name="action_send_edited_message">"Pošalji uređenu poruku"</string>

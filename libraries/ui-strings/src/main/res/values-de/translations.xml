@@ -186,7 +186,6 @@
   <string name="action_retry_decryption">"Entschlüsselung wiederholen"</string>
   <string name="action_save">"Speichern"</string>
   <string name="action_search">"Suchen"</string>
-  <string name="action_select">"Auswählen"</string>
   <string name="action_select_all">"Alles auswählen"</string>
   <string name="action_send">"Senden"</string>
   <string name="action_send_edited_message">"Bearbeitete Nachricht senden"</string>

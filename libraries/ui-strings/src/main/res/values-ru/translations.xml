@@ -189,7 +189,6 @@
   <string name="action_retry_decryption">"Повторите расшифровку"</string>
   <string name="action_save">"Сохранить"</string>
   <string name="action_search">"Поиск"</string>
-  <string name="action_select">"Выбрать"</string>
   <string name="action_select_all">"Выбрать все"</string>
   <string name="action_send">"Отправить"</string>
   <string name="action_send_edited_message">"Отправить отредактированное сообщение"</string>

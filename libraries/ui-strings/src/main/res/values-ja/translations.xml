@@ -183,7 +183,6 @@
   <string name="action_retry_decryption">"復号化を再試行"</string>
   <string name="action_save">"保存"</string>
   <string name="action_search">"検索"</string>
-  <string name="action_select">"選択"</string>
   <string name="action_select_all">"すべて選択"</string>
   <string name="action_send">"送信"</string>
   <string name="action_send_edited_message">"編集したメッセージを送信"</string>

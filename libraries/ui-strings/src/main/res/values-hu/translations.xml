@@ -186,7 +186,6 @@
   <string name="action_retry_decryption">"Visszafejtés újbóli megpróbálása"</string>
   <string name="action_save">"Mentés"</string>
   <string name="action_search">"Keresés"</string>
-  <string name="action_select">"Kiválasztás"</string>
   <string name="action_select_all">"Összes kijelölése"</string>
   <string name="action_send">"Küldés"</string>
   <string name="action_send_edited_message">"Szerkesztett üzenet küldése"</string>
