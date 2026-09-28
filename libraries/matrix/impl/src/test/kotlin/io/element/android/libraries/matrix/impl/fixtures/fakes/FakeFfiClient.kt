@@ -26,6 +26,7 @@ import org.matrix.rustcomponents.sdk.HomeserverCapabilities
 import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.LoginWithQrCodeHandler
+import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
@@ -70,6 +71,7 @@ class FakeFfiClient(
     private val isProfilesSlidingSyncExtensionSupportedResult: () -> Boolean = { false },
     private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
     private val getUrlResult: (String) -> ByteArray = { lambdaError() },
+    private val getMediaThumbnailResult: (MediaSource, ULong, ULong) -> ByteArray = { _, _, _ -> byteArrayOf() },
     private val contentScannerResult: () -> ContentScanner = { FakeFfiContentScanner() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
@@ -120,6 +122,10 @@ class FakeFfiClient(
 
     override suspend fun getProfile(userId: String): UserProfile {
         return getProfileResult(userId)
+    }
+
+    override suspend fun getMediaThumbnail(mediaSource: MediaSource, width: ULong, height: ULong): ByteArray {
+        return getMediaThumbnailResult(mediaSource, width, height)
     }
 
     override suspend fun homeserverLoginDetails(): HomeserverLoginDetails {

@@ -81,7 +81,7 @@ class HomePresenterTest {
         val presenter = createHomePresenter(
             rageshakeFeatureAvailability = { flowOf(true) },
             sessionStore = InMemorySessionStore(
-                updateUserProfileResult = { _, _, _ -> },
+                updateUserProfileResult = { _, _, _, _ -> },
             ),
         )
         presenter.test {
@@ -98,7 +98,7 @@ class HomePresenterTest {
         val presenter = createHomePresenter(
             indicatorService = indicatorService,
             sessionStore = InMemorySessionStore(
-                updateUserProfileResult = { _, _, _ -> },
+                updateUserProfileResult = { _, _, _, _ -> },
             ),
         )
         presenter.test {
@@ -120,7 +120,7 @@ class HomePresenterTest {
         val presenter = createHomePresenter(
             client = matrixClient,
             sessionStore = InMemorySessionStore(
-                updateUserProfileResult = { _, _, _ -> },
+                updateUserProfileResult = { _, _, _, _ -> },
             ),
         )
         presenter.test {
@@ -134,7 +134,7 @@ class HomePresenterTest {
     fun `present - NavigationBar change`() = runTest {
         val presenter = createHomePresenter(
             sessionStore = InMemorySessionStore(
-                updateUserProfileResult = { _, _, _ -> },
+                updateUserProfileResult = { _, _, _, _ -> },
             ),
         )
         presenter.test {

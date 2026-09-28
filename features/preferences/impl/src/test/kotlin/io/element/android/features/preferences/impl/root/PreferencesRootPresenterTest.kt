@@ -234,6 +234,7 @@ class PreferencesRootPresenterTest {
                         sessionId = A_SESSION_ID_2.value,
                         userDisplayName = "Bob",
                         userAvatarUrl = "avatarUrl",
+                        userAvatarData = "avatarData",
                     ),
                 )
             )
@@ -241,7 +242,14 @@ class PreferencesRootPresenterTest {
             val state = awaitFirstItem()
             assertThat(state.isMultiAccountEnabled).isTrue()
             assertThat(state.otherSessions).hasSize(1)
-            assertThat(state.otherSessions[0]).isEqualTo(MatrixUser(userId = A_SESSION_ID_2, displayName = "Bob", avatarUrl = "avatarUrl"))
+            assertThat(state.otherSessions[0]).isEqualTo(
+                MatrixUser(
+                    userId = A_SESSION_ID_2,
+                    displayName = "Bob",
+                    avatarUrl = "avatarUrl",
+                    avatarThumbnail = "avatarData",
+                )
+            )
         }
     }
 
