@@ -26,7 +26,6 @@ class PlatformInitializer : Initializer<Unit> {
     override fun create(context: Context) {
         // Init the SDK with the Android context, so it can be used with rustls and other Android specific features
         org.matrix.rustsdk.Android.init(context)
-        println("Initialized rustls with Android context")
 
         val appBindings = context.bindings<AppBindings>()
         val tracingService = appBindings.tracingService()
@@ -52,4 +51,3 @@ class PlatformInitializer : Initializer<Unit> {
 
     override fun dependencies(): List<Class<out Initializer<*>>> = mutableListOf()
 }
-
