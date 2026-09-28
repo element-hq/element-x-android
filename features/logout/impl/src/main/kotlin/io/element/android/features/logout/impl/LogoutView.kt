@@ -11,7 +11,9 @@ package io.element.android.features.logout.impl
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,6 +40,9 @@ import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.encryption.SteadyStateException
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCard
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardMode
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardState
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -157,9 +162,16 @@ private fun Content(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 60.dp, start = 20.dp, end = 20.dp),
+            .padding(top = 8.dp, start = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        AccountInfoCard(
+            AccountInfoCardState(
+                matrixUser = state.currentUser,
+                mode = AccountInfoCardMode.Simple,
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         when (state.backupUploadState) {
             is BackupUploadState.Uploading -> {
                 LinearProgressIndicator(
