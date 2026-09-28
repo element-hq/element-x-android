@@ -47,6 +47,9 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=442-34581
+ */
 @Composable
 fun LogoutView(
     state: LogoutState,
@@ -78,6 +81,8 @@ fun LogoutView(
 
     LogoutActionDialog(
         state.logoutAction,
+        // Do not show the progress dialog, the progress is rendered in the button.
+        showProgressDialog = false,
         onConfirmClick = {
             eventSink(LogoutEvent.Logout(ignoreSdkError = false))
         },
@@ -149,6 +154,7 @@ private fun ColumnScope.Buttons(
     )
     TextButton(
         text = stringResource(id = CommonStrings.action_cancel),
+        enabled = logoutAction !is AsyncAction.Loading,
         modifier = Modifier.fillMaxWidth(),
         onClick = onCancelClick,
     )
