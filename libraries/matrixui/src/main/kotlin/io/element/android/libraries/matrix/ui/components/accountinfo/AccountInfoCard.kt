@@ -177,7 +177,6 @@ private fun AccountInfoCardUser(matrixUser: MatrixUser) {
                 )
             }
         }
-
     }
 }
 
