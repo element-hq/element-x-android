@@ -60,15 +60,3 @@ class RustSqliteStoreBuilder(
         return clientBuilder.sqliteStore(this.inner)
     }
 }
-
-private fun ClientSecret.RawKey.keyOfSize(size: Int): ByteArray {
-    return if (bytes.size == 32) {
-        bytes
-    } else if (bytes.size < 32) {
-        // If the key is shorter than 32 bytes, pad it with zeros
-        bytes + ByteArray(32 - bytes.size)
-    } else {
-        // Otherwise, take the first 32 bytes of the key
-        bytes.copyOfRange(0, 32)
-    }
-}
