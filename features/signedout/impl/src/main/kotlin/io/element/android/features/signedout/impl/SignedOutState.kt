@@ -8,10 +8,10 @@
 
 package io.element.android.features.signedout.impl
 
-import io.element.android.libraries.sessionstorage.api.SessionData
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class SignedOutState(
     val appName: String,
-    val signedOutSession: SessionData?,
+    val signedOutMatrixUser: MatrixUser,
     val eventSink: (SignedOutEvent) -> Unit,
 )
