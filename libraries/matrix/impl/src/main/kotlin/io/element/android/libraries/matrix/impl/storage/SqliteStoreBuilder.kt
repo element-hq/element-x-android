@@ -7,11 +7,13 @@
 
 package io.element.android.libraries.matrix.impl.storage
 
+import android.util.Base64
 import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.android.libraries.core.data.ByteUnit
 import io.element.android.libraries.core.data.megaBytes
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import uniffi.matrix_sdk_sqlite.Base64Variant
 import org.matrix.rustcomponents.sdk.SqliteStoreBuilder as SdkSqliteStoreBuilder
 
 /**
@@ -40,10 +42,15 @@ class RustSqliteStoreBuilder(
     override fun secret(clientSecret: ClientSecret?): SqliteStoreBuilder {
         when (clientSecret) {
             null -> Unit
-            is ClientSecret.Passphrase -> inner = inner.passphrase(clientSecret.value)
+            is ClientSecret.Passphrase -> {
+                // Use high entropy passphrase to migrate a passphrase to a raw key.
+                val base64Passphrase = Base64.decode(clientSecret.value, Base64.NO_WRAP or Base64.NO_PADDING)
+                inner = inner.highEntropyPassphrase(base64Passphrase, Base64Variant.UNPADDED)
+                // Once the passphrase is migrated, we can derive a raw key from it and use that for the SDK, replacing the line above.
+//                inner = inner.key(base64Passphrase)
+            }
             is ClientSecret.RawKey -> {
-                // Ensure the key is 32 bytes long, as required by the SDK
-                inner = inner.key(clientSecret.keyOfSize(32))
+                inner = inner.key(clientSecret.bytes)
             }
         }
         return this
@@ -51,17 +58,5 @@ class RustSqliteStoreBuilder(
 
     override fun setupClientBuilder(clientBuilder: ClientBuilder): ClientBuilder {
         return clientBuilder.sqliteStore(this.inner)
-    }
-}
-
-private fun ClientSecret.RawKey.keyOfSize(size: Int): ByteArray {
-    return if (bytes.size == 32) {
-        bytes
-    } else if (bytes.size < 32) {
-        // If the key is shorter than 32 bytes, pad it with zeros
-        bytes + ByteArray(32 - bytes.size)
-    } else {
-        // Otherwise, take the first 32 bytes of the key
-        bytes.copyOfRange(0, 32)
     }
 }
