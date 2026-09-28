@@ -28,6 +28,7 @@ data class GlobalSearchState(
     val queryState: TextFieldState,
     val currentTarget: GlobalSearchTarget,
     val results: AsyncData<GlobalSearchResults>,
+    val history: AsyncData<ImmutableList<SearchHistoryResultItem>>,
     val eventSink: (GlobalSearchEvent) -> Unit
 )
 
@@ -78,6 +79,20 @@ sealed interface MessageSearchResultItem {
         override val eventId: EventId = messageSearchResult.eventId
         override val senderId: UserId = messageSearchResult.senderId
         override val senderName: String = messageSearchResult.senderProfile.getDisambiguatedDisplayName(senderId)
+    }
+}
+
+sealed interface SearchHistoryResultItem {
+    val id: String
+
+    data class Query(val term: String) : SearchHistoryResultItem {
+        override val id: String = "query:$term"
+    }
+    data class Room(
+        val roomId: RoomId,
+        val roomInfo: RoomInfo,
+    ) : SearchHistoryResultItem {
+        override val id: String = "room:${roomId.value}"
     }
 }
 

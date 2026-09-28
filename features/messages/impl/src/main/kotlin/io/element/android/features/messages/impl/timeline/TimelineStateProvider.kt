@@ -63,6 +63,7 @@ fun aTimelineState(
     displayJumpToUnread: Boolean = false,
     jumpToUnread: JumpToUnreadState = JumpToUnreadState.Hidden,
     newEventState: NewEventState = NewEventState.None,
+    useNewTimelineEventRenderer: Boolean = false,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -84,6 +85,7 @@ fun aTimelineState(
         displayThreadSummaries = displayThreadSummaries,
         displayJumpToUnread = displayJumpToUnread,
         jumpToUnread = jumpToUnread,
+        useNewTimelineEventRenderer = useNewTimelineEventRenderer,
         eventSink = eventSink,
     )
 }
@@ -277,6 +279,7 @@ internal fun aRedactedMessagesGroupedEvents(
 }
 
 internal fun aTimelineRoomInfo(
+    currentUserId: UserId = UserId("@user:domain"),
     name: String = ROOM_NAME,
     isDm: Boolean = false,
     userHasPermissionToSendMessage: Boolean = true,
@@ -284,6 +287,7 @@ internal fun aTimelineRoomInfo(
     typingNotificationState: TypingNotificationState = aTypingNotificationState(),
     predecessorRoom: PredecessorRoom? = null,
 ) = TimelineRoomInfo(
+    currentUserId = currentUserId,
     isDm = isDm,
     name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,

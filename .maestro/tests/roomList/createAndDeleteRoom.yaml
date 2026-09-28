@@ -8,6 +8,12 @@ appId: ${MAESTRO_APP_ID}
 - tapOn: "Add description…"
 - inputText: "aRoomTopic"
 - tapOn: "Create"
+
+# It can take ages to create room on matrix.org
+- extendedWaitUntil:
+    timeout: 30000
+    visible: "Invite people"
+
 - takeScreenshot: build/maestro/320-createAndDeleteRoom
 - tapOn: "Search for someone"
 - inputText: ${MAESTRO_INVITEE1_MXID}

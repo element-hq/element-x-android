@@ -10,7 +10,7 @@ import extension.testCommonDependencies
 
 plugins {
     id("io.element.android-compose-library")
-    alias(libs.plugins.roborazzi)
+    alias(libs.plugins.paparazzi)
 }
 
 android {
@@ -21,9 +21,30 @@ android {
     }
 }
 
+// Paparazzi's layoutlib runtime conflicts with Robolectric, so during Paparazzi record/verify runs
+// only execute the screenshot tests (which use Paparazzi) and leave the Robolectric-based unit tests
+// out. On plain unit test runs the screenshot package is excluded in the root build.gradle.kts.
+tasks.withType(Test::class).configureEach {
+    val isScreenshotTest = gradle.startParameter.taskNames.any { it.contains("paparazzi", ignoreCase = true) }
+    if (isScreenshotTest) {
+        include("**/screenshot/**")
+    }
+}
+
 dependencies {
     testCommonDependencies(libs)
-    testImplementation(libs.test.roborazzi)
-    testImplementation(libs.test.roborazzi.compose)
-    testImplementation(libs.test.roborazzi.junit)
+
+    // Paparazzi 1.3.2 workaround (see https://github.com/cashapp/paparazzi/blob/master/CHANGELOG.md#132---2024-01-13)
+    constraints.add("testImplementation", "com.google.guava:guava") {
+        attributes {
+            attribute(
+                TargetJvmEnvironment.TARGET_JVM_ENVIRONMENT_ATTRIBUTE,
+                objects.named(TargetJvmEnvironment::class.java, TargetJvmEnvironment.STANDARD_JVM)
+            )
+        }
+        because(
+            "LayoutLib and sdk-common depend on Guava's -jre published variant." +
+                "See https://github.com/cashapp/paparazzi/issues/906."
+        )
+    }
 }

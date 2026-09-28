@@ -12,6 +12,7 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -31,18 +32,25 @@ import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationSto
 import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
 import io.element.android.libraries.push.impl.push.OnRedactedEventReceived
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import timber.log.Timber
 
 private const val TAG = "NotifResultProcessor"
 
 interface NotificationResultProcessor {
+    /**
+     * Queue a batch of resolved push events for processing and suspend until it has been processed, so that the caller can keep the process
+     * alive (e.g. through a foreground service) until any resulting notification or ringing call has been set up.
+     */
     suspend fun emit(results: Map<PushRequest, Result<ResolvedPushEvent>>)
     fun start()
     fun stop()
@@ -61,23 +69,50 @@ class DefaultNotificationResultProcessor(
     private val notificationChannels: NotificationChannels,
     @AppCoroutineScope private val coroutineScope: CoroutineScope,
 ) : NotificationResultProcessor {
-    private val resultFlow = MutableSharedFlow<Map<PushRequest, Result<ResolvedPushEvent>>>(extraBufferCapacity = Int.MAX_VALUE)
+    private data class PendingResults(
+        val results: Map<PushRequest, Result<ResolvedPushEvent>>,
+        val processed: CompletableDeferred<Unit> = CompletableDeferred(),
+    )
+
+    // A channel rather than a shared flow: it keeps the results until the collector takes them, so nothing is dropped if the collector isn't
+    // running yet (e.g. the worker runs in a process where no push has been received, after a WorkManager retry) or hasn't subscribed yet.
+    private val pendingResults = Channel<PendingResults>(Channel.UNLIMITED)
     private var processJob: Job? = null
 
     override suspend fun emit(results: Map<PushRequest, Result<ResolvedPushEvent>>) {
-        resultFlow.emit(results)
+        val collector = ensureStarted()
+        val pending = PendingResults(results)
+        pendingResults.send(pending)
+        // Suspend until the batch has been processed, or give up if the collector was stopped in the meantime.
+        select<Unit> {
+            pending.processed.onAwait {}
+            collector.onJoin { Timber.tag(TAG).w("Processing stopped before the results were processed") }
+        }
     }
 
     override fun start() {
-        if (processJob?.isActive == true) {
-            Timber.tag(TAG).w("Is already processing, not starting again")
-            return
-        }
-        processJob = resultFlow
-            .onEach(::processResults)
-            .launchIn(coroutineScope)
+        ensureStarted()
     }
 
+    @Synchronized
+    private fun ensureStarted(): Job {
+        processJob?.takeIf { it.isActive }?.let { return it }
+        return pendingResults
+            .receiveAsFlow()
+            .onEach { pending ->
+                try {
+                    // Don't let a failing batch cancel the collector, or subsequent batches would never be processed.
+                    runCatchingExceptions { processResults(pending.results) }
+                        .onFailure { Timber.tag(TAG).e(it, "Failed to process notification results") }
+                } finally {
+                    pending.processed.complete(Unit)
+                }
+            }
+            .launchIn(coroutineScope)
+            .also { processJob = it }
+    }
+
+    @Synchronized
     override fun stop() {
         if (processJob?.isActive != true) {
             Timber.tag(TAG).w("Is not processing, not stopping")

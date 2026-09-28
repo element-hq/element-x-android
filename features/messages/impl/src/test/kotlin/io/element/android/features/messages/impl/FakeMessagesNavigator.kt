@@ -13,13 +13,14 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.collections.immutable.ImmutableList
 
 class FakeMessagesNavigator(
     private val onShowEventDebugInfoClickLambda: (eventId: EventId?, debugInfo: TimelineItemDebugInfo) -> Unit = { _, _ -> lambdaError() },
-    private val onForwardEventClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
+    private val onForwardEventClickLambda: (eventId: EventId, timelineProvider: TimelineProvider) -> Unit = { _, _ -> lambdaError() },
     private val onReportContentClickLambda: (eventId: EventId, senderId: UserId) -> Unit = { _, _ -> lambdaError() },
     private val onEditPollClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
     private val onPreviewAttachmentLambda: (attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) -> Unit = { _, _ -> lambdaError() },
@@ -34,8 +35,8 @@ class FakeMessagesNavigator(
         onShowEventDebugInfoClickLambda(eventId, debugInfo)
     }
 
-    override fun forwardEvent(eventId: EventId) {
-        onForwardEventClickLambda(eventId)
+    override fun forwardEvent(eventId: EventId, timelineProvider: TimelineProvider) {
+        onForwardEventClickLambda(eventId, timelineProvider)
     }
 
     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {

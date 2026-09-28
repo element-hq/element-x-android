@@ -10,4 +10,5 @@
     <string name="a11y_state_collapsed">"Collapsed"</string>
     <string name="a11y_active">Active</string>
     <string name="a11y_inactive">Inactive</string>
+    <string name="common_switch_account">Switch accounts</string>
 </resources>

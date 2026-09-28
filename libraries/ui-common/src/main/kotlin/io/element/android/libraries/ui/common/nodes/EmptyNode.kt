@@ -8,38 +8,23 @@
 
 package io.element.android.libraries.ui.common.nodes
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
-import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import kotlin.time.Duration
 
 /**
  * Ref: https://www.figma.com/design/0MMNu7cTOzLOlWb7ctTkv3/Element-X?node-id=1518-85323
+ *
+ * @param buildContext the [BuildContext] of the Node.
+ * @param state the [EmptyState] of the Node. Default value will render an empty node forever.
  */
 fun emptyNode(
     buildContext: BuildContext,
+    state: EmptyState = EmptyState(Duration.INFINITE),
 ): Node = node(buildContext) { modifier ->
-    EmptyView(modifier)
-}
-
-@Composable
-private fun EmptyView(
-    modifier: Modifier = Modifier,
-) = Box(
-    modifier = modifier
-        .fillMaxSize()
-        .background(ElementTheme.colors.bgCanvasDefault),
-)
-
-@PreviewsDayNight
-@Composable
-internal fun EmptyViewPreview() = ElementPreview {
-    EmptyView(Modifier)
+    EmptyView(
+        state = state,
+        modifier = modifier,
+    )
 }

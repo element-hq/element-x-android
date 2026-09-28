@@ -37,7 +37,7 @@
   <string name="screen_roomlist_filter_low_priority">"低优先级"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"你暂无任何低优先级聊天"</string>
   <string name="screen_roomlist_filter_mention">"提及"</string>
-  <string name="screen_roomlist_filter_mention_empty_state_title">"你没有任何未读提及"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"你暂无任何未读提及"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"你可以取消选择筛选器以查看其它对话"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"你暂无适用于此选项的聊天"</string>
   <string name="screen_roomlist_filter_people">"人员"</string>
@@ -46,7 +46,7 @@
   <string name="screen_roomlist_filter_rooms_empty_state_title">"你尚未进入任何房间"</string>
   <string name="screen_roomlist_filter_unreads">"未读"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"恭喜！
-没有任何未读消息！"</string>
+你暂无任何未读消息！"</string>
   <string name="screen_roomlist_knock_event_sent_description">"加入申请已发送"</string>
   <string name="screen_roomlist_main_space_title">"聊天"</string>
   <string name="screen_roomlist_mark_as_read">"设为已读"</string>

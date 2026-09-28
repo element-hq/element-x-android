@@ -217,8 +217,8 @@ class ShareLocationPresenter(
         val replyMode = messageComposerContext.composerMode as? MessageComposerMode.Reply
         val inReplyToEventId = replyMode?.eventId
         val geoUri = event.location.toGeoUri()
-        getTimeline().flatMap {
-            it.sendLocation(
+        withTimeline { timeline ->
+            timeline.sendLocation(
                 body = generateBody(geoUri),
                 geoUri = geoUri,
                 description = null,
@@ -237,10 +237,22 @@ class ShareLocationPresenter(
         )
     }
 
-    private suspend fun getTimeline(): Result<Timeline> {
+    /**
+     * Invokes [block] with the [Timeline] matching [timelineMode].
+     *
+     * For a thread, a dedicated timeline is created and closed once [block] returns, since such a
+     * timeline owns SDK resources. For the other modes, the live timeline is used, and is not
+     * closed here since it is owned by its room.
+     */
+    private suspend fun <T> withTimeline(block: suspend (Timeline) -> Result<T>): Result<T> {
         return when (timelineMode) {
-            is Timeline.Mode.Thread -> room.createTimeline(CreateTimelineParams.Threaded(timelineMode.threadRootId))
-            else -> Result.success(room.liveTimeline)
+            is Timeline.Mode.Thread -> {
+                room.createTimeline(CreateTimelineParams.Threaded(timelineMode.threadRootId))
+                    .flatMap { threadedTimeline ->
+                        threadedTimeline.use { block(it) }
+                    }
+            }
+            else -> block(room.liveTimeline)
         }
     }
 }

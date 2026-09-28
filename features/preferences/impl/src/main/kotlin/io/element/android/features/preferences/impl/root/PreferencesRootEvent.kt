@@ -13,4 +13,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 sealed interface PreferencesRootEvent {
     data object OnVersionInfoClick : PreferencesRootEvent
     data class SwitchToSession(val sessionId: SessionId) : PreferencesRootEvent
+    data object ToggleOtherAccountsExpanded : PreferencesRootEvent
+    data class SetTheme(val theme: ThemeOption) : PreferencesRootEvent
 }

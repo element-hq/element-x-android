@@ -51,6 +51,10 @@
   <string name="screen_edit_profile_error_title">"無法更新個人檔案"</string>
   <string name="screen_edit_profile_title">"編輯個人檔案"</string>
   <string name="screen_edit_profile_updating_details">"正在更新個人檔案…"</string>
+  <string name="screen_labs_enable_gallery">"圖庫訊息"</string>
+  <string name="screen_labs_enable_gallery_description">"一次傳送多張圖片或影片。在行動裝置上可穩定運作，但網頁端尚不支援。"</string>
+  <string name="screen_labs_enable_knocking">"要求加入"</string>
+  <string name="screen_labs_enable_knocking_description">"使用者可以申請加入尚未對所有人開放的聊天室。此功能在行動裝置上已穩定運作，網頁版雖已實作，但仍處於實驗階段。"</string>
   <string name="screen_labs_enable_threads">"啟用討論串回覆"</string>
   <string name="screen_labs_enable_threads_description">"應用程式將會重新啟動以套用此變更。"</string>
   <string name="screen_labs_header_description">"試試我們正在開發中的最新構想。這些功能可能尚未完成，可能不夠穩定，也可能隨時變動。"</string>
@@ -74,7 +78,7 @@
   <string name="screen_notification_settings_failed_fixing_configuration">"組態尚未更正，請再試一次。"</string>
   <string name="screen_notification_settings_group_chats">"群組聊天"</string>
   <string name="screen_notification_settings_invite_for_me_label">"邀請"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"您的家伺服器在加密聊天室中不支援此選項，可能無法收到部份聊天室的通知。"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"您的帳號服務提供者不支援加密聊天中的此項功能，因此在某些聊天中您可能不會收到通知。"</string>
   <string name="screen_notification_settings_mentions_section_title">"提及"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"選擇其他音效⋯⋯"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"目前正在使用 %1$s"</string>
@@ -83,7 +87,7 @@
   <string name="screen_notification_settings_mode_all">"全部"</string>
   <string name="screen_notification_settings_mode_mentions">"提及"</string>
   <string name="screen_notification_settings_notification_section_title">"通知我"</string>
-  <string name="screen_notification_settings_room_mention_label">"於 @room 通知我"</string>
+  <string name="screen_notification_settings_room_mention_label">"提及 @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"自訂"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"自訂音效⋯⋯"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"刪除檔案時發生錯誤"</string>

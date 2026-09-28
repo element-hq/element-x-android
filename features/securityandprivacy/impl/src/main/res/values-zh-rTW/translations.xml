@@ -20,7 +20,7 @@
   <string name="screen_security_and_privacy_encryption_section_footer">"一旦啟用就無法停用加密。"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"加密"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"啟用端到端加密"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以加入。"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以加入，包括貴組織以外的人士。"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"任何人"</string>
   <string name="screen_security_and_privacy_room_access_footer">"選擇哪些空間的成員不需要邀請就可以加入此聊天室。%1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"管理空間"</string>

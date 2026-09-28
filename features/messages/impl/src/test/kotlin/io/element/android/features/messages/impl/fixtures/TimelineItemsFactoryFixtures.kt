@@ -32,6 +32,8 @@ import io.element.android.features.poll.test.pollcontent.FakePollContentStateFac
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.htmlrenderer.test.FakeHtmlMessageParser
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -59,6 +61,8 @@ internal fun aTimelineItemContentFactory(
         htmlConverterProvider = FakeHtmlConverterProvider(),
         permalinkParser = FakePermalinkParser(),
         textPillificationHelper = FakeTextPillificationHelper(),
+        htmlMessageParser = FakeHtmlMessageParser(),
+        featureFlagService = FakeFeatureFlagService(),
     ),
     redactedMessageFactory = TimelineItemContentRedactedFactory(),
     stickerFactory = TimelineItemContentStickerFactory(

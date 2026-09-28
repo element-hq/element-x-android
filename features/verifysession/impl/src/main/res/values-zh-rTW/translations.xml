@@ -38,6 +38,8 @@
   <string name="screen_session_verification_request_title">"已請求驗證"</string>
   <string name="screen_session_verification_they_dont_match">"不一樣"</string>
   <string name="screen_session_verification_they_match">"一樣"</string>
+  <string name="screen_session_verification_unavailable_subtitle">"請使用其他裝置或復原金鑰。"</string>
+  <string name="screen_session_verification_unavailable_title">"目前無法使用此裝置進行驗證"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"從這裡開始驗證之前，請確保您在其他裝置中開啟了應用程式。"</string>
   <string name="screen_session_verification_use_another_device_title">"在另外一個已驗證的裝置上開啟應用程式"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"為了提昇安全性，請透過比較您裝置上的一組表情符號來驗證此使用者。請透過可信的通訊方式來執行此動作。"</string>

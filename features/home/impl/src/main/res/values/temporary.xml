@@ -14,4 +14,5 @@
     <string name="search_section_messages">Messages</string>
     <string name="search_no_results_title">No results</string>
     <string name="search_no_results_subtitle">There are no results for “%1$s”. Try a new search term.</string>
+    <string name="screen_search_recent_searches_section_title">Recent searches</string>
 </resources>

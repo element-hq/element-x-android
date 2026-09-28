@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.ui.model
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -20,6 +21,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.ui.R
 
+@Immutable
 data class InviteSender(
     val userId: UserId,
     val displayName: String,

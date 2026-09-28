@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"您需要地址才能在公開目錄中顯示。"</string>
   <string name="screen_edit_room_address_title">"編輯地址"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"更新通知設定時發生錯誤。"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"您的家伺服器在加密聊天室中不支援此選項，可能無法收到部份聊天室的通知。"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"您的帳號服務提供者不支援加密聊天中的此項功能，因此在某些聊天中您可能不會收到通知。"</string>
   <string name="screen_polls_history_title">"所有投票"</string>
   <string name="screen_room_change_permissions_administrators">"管理員"</string>
   <string name="screen_room_change_permissions_ban_people">"管理黑名單"</string>
@@ -109,7 +109,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"載入通知設定時發生錯誤。"</string>
   <string name="screen_room_notification_settings_error_restoring_default">"無法重設為預設模式，請再試一次。"</string>
   <string name="screen_room_notification_settings_error_setting_mode">"無法設定模式，請再試一次。"</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"您的家伺服器在加密聊天室中不支援此選項，您將不會收到此聊天室的通知。"</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"您的帳號服務提供者不支援加密聊天中的此項功能，因此您將不會在此聊天中收到通知。"</string>
   <string name="screen_room_notification_settings_mode_all_messages">"所有訊息"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"僅提及與回覆"</string>
   <string name="screen_room_notification_settings_mode_mute">"靜音"</string>
@@ -145,7 +145,7 @@
   <string name="screen_security_and_privacy_encryption_section_footer">"一旦啟用就無法停用加密。"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"加密"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"啟用端到端加密"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以加入。"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以加入，包括貴組織以外的人士。"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"任何人"</string>
   <string name="screen_security_and_privacy_room_access_footer">"選擇哪些空間的成員不需要邀請就可以加入此聊天室。%1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"管理空間"</string>

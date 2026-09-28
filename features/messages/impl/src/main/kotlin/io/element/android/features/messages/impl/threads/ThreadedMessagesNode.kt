@@ -70,6 +70,7 @@ import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
@@ -142,7 +143,7 @@ class ThreadedMessagesNode(
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
         fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-        fun handleForwardEventClick(eventId: EventId)
+        fun handleForwardEventClick(eventId: EventId, timelineProvider: TimelineProvider)
         fun navigateToReportMessage(eventId: EventId, senderId: UserId)
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
@@ -226,8 +227,8 @@ class ThreadedMessagesNode(
         callback.navigateToEventDebugInfo(eventId, debugInfo)
     }
 
-    override fun forwardEvent(eventId: EventId) {
-        callback.handleForwardEventClick(eventId)
+    override fun forwardEvent(eventId: EventId, timelineProvider: TimelineProvider) {
+        callback.handleForwardEventClick(eventId, timelineProvider)
     }
 
     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {

@@ -27,7 +27,7 @@
   <string name="screen_join_room_loading_alert_title">"我們無法顯示此聊天室的預覽"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s 尚未支援空間。您可以在網頁上存取空間。"</string>
   <string name="screen_join_room_space_not_supported_title">"尚未支援空間"</string>
-  <string name="screen_join_room_subtitle_knock">"點選下方按鈕將會通知聊天試管里員。一旦核准，您就可以加入對話。"</string>
+  <string name="screen_join_room_subtitle_knock">"輕點下方的按鈕，系統將通知聊天室管理員。經核准後，您即可加入對話。"</string>
   <string name="screen_join_room_subtitle_no_preview">"您必須是此聊天室的成員才能檢視訊息歷史紀錄。"</string>
   <string name="screen_join_room_title_knock">"想要加入此聊天室？"</string>
   <string name="screen_join_room_title_no_preview">"無法使用預覽"</string>

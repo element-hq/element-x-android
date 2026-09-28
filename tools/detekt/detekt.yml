@@ -241,6 +241,7 @@ Compose:
       - LocalBuildMeta
       - LocalUiTestMode
       - LocalSdkIntVersionProvider
+      - LocalTimelineEventRendererConfig
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:

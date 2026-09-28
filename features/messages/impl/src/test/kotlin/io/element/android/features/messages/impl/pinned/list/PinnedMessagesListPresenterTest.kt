@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
@@ -47,6 +48,7 @@ import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -329,7 +331,7 @@ class PinnedMessagesListPresenterTest {
 
     @Test
     fun `present - forward event`() = runTest {
-        val onForwardEventClickLambda = lambdaRecorder { _: EventId -> }
+        val onForwardEventClickLambda = lambdaRecorder { _: EventId, _: TimelineProvider -> }
         val navigator = FakePinnedMessagesListNavigator().apply {
             this.onForwardEventClickLambda = onForwardEventClickLambda
         }
@@ -352,7 +354,7 @@ class PinnedMessagesListPresenterTest {
             cancelAndIgnoreRemainingEvents()
             assert(onForwardEventClickLambda)
                 .isCalledOnce()
-                .with(value(AN_EVENT_ID))
+                .with(value(AN_EVENT_ID), any())
         }
     }
 

@@ -34,6 +34,7 @@ class AccountSelectPresenter(
                         userId = UserId(it.userId),
                         displayName = it.userDisplayName,
                         avatarUrl = it.userAvatarUrl,
+                        avatarThumbnail = it.userAvatarData,
                     )
                 }
                 .toImmutableList()

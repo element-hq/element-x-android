@@ -40,8 +40,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.invite.api.InviteData
+import io.element.android.libraries.designsystem.atomic.atoms.CopiableTextAtom
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
-import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewAliasAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAtom
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
@@ -514,7 +514,7 @@ private fun IncompleteContent(
         title = {
             when (roomIdOrAlias) {
                 is RoomIdOrAlias.Alias -> {
-                    RoomPreviewAliasAtom(roomIdOrAlias.identifier)
+                    CopiableTextAtom(roomIdOrAlias.identifier)
                 }
                 is RoomIdOrAlias.Id -> {
                     PlaceholderAtom(width = 200.dp, height = 22.dp)
@@ -567,7 +567,7 @@ private fun DefaultLoadedContent(
         },
         subtitle = {
             if (contentState.alias != null) {
-                RoomPreviewAliasAtom(contentState.alias.value)
+                CopiableTextAtom(contentState.alias.value)
             }
             if (contentState.details is LoadedDetails.Space) {
                 Spacer(Modifier.height(8.dp))

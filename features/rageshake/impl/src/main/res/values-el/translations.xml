@@ -8,6 +8,8 @@
   <string name="screen_bug_report_editor_placeholder">"Περιέγραψε το πρόβλημα…"</string>
   <string name="screen_bug_report_editor_supporting">"Εάν είναι δυνατόν, γράψε την περιγραφή στα αγγλικά."</string>
   <string name="screen_bug_report_error_description_too_short">"Η περιγραφή είναι πολύ σύντομη, δώσε περισσότερες λεπτομέρειες σχετικά με το τί συνέβη. Ευχαριστώ!"</string>
+  <string name="screen_bug_report_github_issue_description">"Μπορείτε να εισαγάγετε τον αριθμό ενός σχετικού προβλήματος GitHub, εάν υπάρχει."</string>
+  <string name="screen_bug_report_github_issue_label">"Ζήτημα GitHub"</string>
   <string name="screen_bug_report_include_crash_logs">"Αποστολή αρχείων καταγραφής σφαλμάτων"</string>
   <string name="screen_bug_report_include_logs">"Να επιτρέπονται τα αρχεία καταγραφής"</string>
   <string name="screen_bug_report_include_logs_error">"Τα αρχεία καταγραφής σας είναι υπερβολικά μεγάλα και δεν μπορούν να συμπεριληφθούν σε αυτήν την αναφορά. Παρακαλούμε να μας τα στείλετε με άλλο τρόπο."</string>

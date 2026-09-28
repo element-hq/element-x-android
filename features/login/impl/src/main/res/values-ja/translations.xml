@@ -16,7 +16,7 @@
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s では Element Pro を使用する必要があります。アプリストアよりダウンロードしてください。"</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro が必要です"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"このホームサーバーに接続できませんでした。正しいURLを入力したことを確認し、問題が継続する場合は、ホームサーバーの管理者に問い合わせてください。"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"このアカウント提供元に接続できませんでした。正しいURLを入力したことを確認し、問題が継続する場合は、アカウント提供元の管理者に問い合わせてください。"</string>
   <string name="screen_change_server_error_invalid_well_known">".well-knownファイルに問題があるためサーバーを使用できません: %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"このアカウント提供元は、スライド同期に対応していません。%1$s を使用するにはサーバーのアップグレードが必要です。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%2$s は %1$s からの接続を許可していません。"</string>
@@ -39,7 +39,7 @@
   <string name="screen_login_error_invalid_credentials">"ユーザー名またはパスワードが違います"</string>
   <string name="screen_login_error_invalid_user_id">"無効なユーザーIDです。正しい形式は \"@ユーザー:ホームサーバー\" です。"</string>
   <string name="screen_login_error_refresh_tokens">"このサーバーはリフレッシュトークンを使用します。パスワードを使用したログインとは併用できません。"</string>
-  <string name="screen_login_error_unsupported_authentication">"指定したホームサーバはパスワードまたはOAuthによるログインに対応していません。管理者に問い合わせるか、異なるホームサーバーを使用してください。"</string>
+  <string name="screen_login_error_unsupported_authentication">"指定したアカウント提供元はパスワードまたはOAuthによるログインに対応していません。管理者に問い合わせるか、異なるアカウント提供元を使用してください。"</string>
   <string name="screen_login_form_header">"詳細を入力"</string>
   <string name="screen_login_subtitle">"Matrix は安全で分散型のオープンなネットワークです。"</string>
   <string name="screen_login_title">"お待ちしておりました。"</string>

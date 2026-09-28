@@ -51,6 +51,10 @@
   <string name="screen_edit_profile_error_title">"プロフィールを更新できません"</string>
   <string name="screen_edit_profile_title">"プロフィールを編集"</string>
   <string name="screen_edit_profile_updating_details">"プロフィールを更新中…"</string>
+  <string name="screen_labs_enable_gallery">"ギャラリーメッセージ"</string>
+  <string name="screen_labs_enable_gallery_description">"複数の画像や動画を一度に送信できます。モバイルアプリでは安定して動作しますが、web版では対応していません。"</string>
+  <string name="screen_labs_enable_knocking">"参加の申請"</string>
+  <string name="screen_labs_enable_knocking_description">"招待制のルームにおいて、参加したいユーザーが申請を送信できるようになります。モバイルアプリでは安定して動作しますが、web版では試験的にのみ実装されています。"</string>
   <string name="screen_labs_enable_threads">"スレッドへの返信を有効化"</string>
   <string name="screen_labs_enable_threads_description">"変更を適用するためにアプリケーションは再起動します。"</string>
   <string name="screen_labs_header_description">"開発段階の最新機能を試すことができます。未完成のため、変更や不安定な挙動が生じる可能性があります。"</string>
@@ -74,7 +78,7 @@
   <string name="screen_notification_settings_failed_fixing_configuration">"設定が修正されていません。再試行してください。"</string>
   <string name="screen_notification_settings_group_chats">"グループチャット"</string>
   <string name="screen_notification_settings_invite_for_me_label">"招待"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"暗号化されたルームでは、この機能にホームサーバーが対応しないため、一部のルームから通知が届かない可能性があります。"</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"暗号化されたルームにおいてこの機能にアカウント提供元が対応しないため、このルームからの一部の通知を受信できない可能性があります。"</string>
   <string name="screen_notification_settings_mentions_section_title">"メンション"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"他の音を選択…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"%1$s を使用中"</string>
@@ -83,7 +87,7 @@
   <string name="screen_notification_settings_mode_all">"すべて"</string>
   <string name="screen_notification_settings_mode_mentions">"メンション"</string>
   <string name="screen_notification_settings_notification_section_title">"以下を通知"</string>
-  <string name="screen_notification_settings_room_mention_label">@ルームで通知を受け取る</string>
+  <string name="screen_notification_settings_room_mention_label">@ルームのメンション</string>
   <string name="screen_notification_settings_sound_custom_fallback">"カスタム"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"カスタム着信音"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"ファイルの削除に失敗"</string>

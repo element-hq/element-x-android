@@ -11,6 +11,7 @@ package io.element.android.compound.previews
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +28,7 @@ import kotlinx.collections.immutable.persistentMapOf
 @Preview(heightDp = 2000)
 @Composable
 internal fun CompoundSemanticColorsLight() = ElementTheme {
-    Surface {
+    Surface(Modifier.width(300.dp)) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -48,7 +49,7 @@ internal fun CompoundSemanticColorsLight() = ElementTheme {
 internal fun CompoundSemanticColorsLightHc() = ElementTheme(
     compoundDark = compoundColorsHcDark,
 ) {
-    Surface {
+    Surface(Modifier.width(300.dp)) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -67,7 +68,7 @@ internal fun CompoundSemanticColorsLightHc() = ElementTheme(
 @Preview(heightDp = 2000)
 @Composable
 internal fun CompoundSemanticColorsDark() = ElementTheme(theme = Theme.Dark) {
-    Surface {
+    Surface(Modifier.width(300.dp)) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -89,7 +90,7 @@ internal fun CompoundSemanticColorsDarkHc() = ElementTheme(
     theme = Theme.Dark,
     compoundDark = compoundColorsHcDark,
 ) {
-    Surface {
+    Surface(Modifier.width(300.dp)) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)

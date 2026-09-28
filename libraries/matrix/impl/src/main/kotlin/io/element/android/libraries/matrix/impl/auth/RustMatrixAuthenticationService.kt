@@ -381,6 +381,9 @@ class RustMatrixAuthenticationService(
         // Apply enterprise hooks to the newly created client as soon as possible
         clientEnterpriseHook(matrixClient)
 
+        // Start the sync service to ensure that the client receives the encryption updates we'll wait for next.
+        matrixClient.syncService.startSync()
+
         matrixClient.waitForKnownVerificationState()
 
         newMatrixClientObservers.forEach { it.invoke(matrixClient) }
