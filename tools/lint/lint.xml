@@ -42,6 +42,8 @@
         <ignore path="**/src/debug/**" />
         <!-- Ignore unused resources in designsystem since they're imported elsewhere through aliases and can't be properly detected -->
         <ignore path="**/libraries/designsystem/src/main/res/**" />
+        <!-- Ignore the network security config template: this will be merged with rustls's security config -->
+        <ignore path="**/src/main/res/xml/network_security_config_element.xml" />
     </issue>
 
     <!-- UX -->
