@@ -11,6 +11,7 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -390,7 +391,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomDetailView(
     onSecurityAndPrivacyClick: () -> Unit = EnsureNeverCalled(),
     onProfileClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
     onReportRoomClick: () -> Unit = EnsureNeverCalled(),
-    additionalSections: @Composable () -> Unit = {},
+    additionalSections: @Composable ColumnScope.() -> Unit = {},
 ) {
     setContent {
         RoomDetailsView(

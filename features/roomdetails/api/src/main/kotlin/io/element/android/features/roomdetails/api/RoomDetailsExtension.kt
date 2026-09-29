@@ -7,11 +7,12 @@
 
 package io.element.android.features.roomdetails.api
 
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 /** Optional room-details sections contributed by a build-specific implementation. */
 interface RoomDetailsExtension {
     @Composable
-    fun Render(modifier: Modifier)
+    fun ColumnScope.Render(modifier: Modifier)
 }
