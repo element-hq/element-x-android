@@ -342,6 +342,9 @@ licensee {
     ignoreDependencies("com.github.matrix-org", "matrix-analytics-events")
     // Ignore dependency that are not third-party licenses to us.
     ignoreDependencies(groupId = "io.element.android")
+    // The rustls-platform-verifier dependency does not provide a license file in their maven repo, but there are MIT and Apache licenses in
+    // the source code repo: see https://github.com/rustls/rustls-platform-verifier
+    ignoreDependencies(groupId = "org.rustls", artifactId = "rustls-platform-verifier")
 }
 
 fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {
