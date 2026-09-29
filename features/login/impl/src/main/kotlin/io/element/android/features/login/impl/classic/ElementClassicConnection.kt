@@ -25,6 +25,7 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.login.impl.BuildConfig
 import io.element.android.libraries.androidutils.service.ServiceBinder
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.di.annotations.AppCoroutineScope
@@ -69,6 +70,7 @@ class DefaultElementClassicConnection(
     private val coroutineScope: CoroutineScope,
     private val matrixAuthenticationService: MatrixAuthenticationService,
     private val homeServerLoginCompatibilityChecker: HomeServerLoginCompatibilityChecker,
+    private val dispatchers: CoroutineDispatchers,
 ) : ElementClassicConnection {
     // Messenger for communicating with the service.
     private var messenger: Messenger? = null
@@ -221,7 +223,7 @@ class DefaultElementClassicConnection(
     fun onSessionReceived(data: Bundle) {
         // The data must be extracted from the bundle before we launch the coroutine, else the bundle will be emptied
         val state = data.toElementClassicConnectionState()
-        coroutineScope.launch {
+        coroutineScope.launch(dispatchers.io) {
             val updatedState = ensureHomeserverIsSupported(state)
             emitState(updatedState)
             val userId = (updatedState as? ElementClassicConnectionState.ElementClassicReady)?.elementClassicSession?.userId
