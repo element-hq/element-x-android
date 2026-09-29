@@ -69,7 +69,6 @@ import org.junit.Test
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
-@Suppress("LargeClass")
 class DefaultNotifiableEventResolverTest : RobolectricTest() {
     @Test
     fun `resolve event no session`() = runTest {

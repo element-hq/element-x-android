@@ -116,13 +116,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    RoomThreadList(
-        key = "feature.room_thread_list",
-        title = "Add a list of threads in a room",
-        description = "Add a new screen with a list of threads in a room.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     AutomaticBackPagination(
         key = "feature.automatic_back_pagination",
         title = "Automatic back pagination of rooms",
@@ -167,5 +160,14 @@ enum class FeatureFlags(
         description = "Adds a Select action to the message menu to pick several messages at once.",
         defaultValue = { false },
         isFinished = false,
+        isInLabs = false,
+    ),
+    NewTimelineEventRenderer(
+        key = "feature.new_timeline_event_renderer",
+        title = "New timeline event renderer",
+        description = "Render formatted message bodies natively with Jetpack Compose instead of the rich text editor view.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = false,
     ),
 }

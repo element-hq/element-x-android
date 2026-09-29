@@ -62,7 +62,6 @@ import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("LargeClass")
 class EventItemFactoryTest {
     @Test
     fun `create check all null cases`() {

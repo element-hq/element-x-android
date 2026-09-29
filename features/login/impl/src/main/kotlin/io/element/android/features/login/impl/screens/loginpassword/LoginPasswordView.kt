@@ -131,7 +131,7 @@ fun LoginPasswordView(
                 iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
                 title = stringResource(
                     id = R.string.screen_account_provider_signin_title,
-                    state.accountProvider.title
+                    state.accountProvider.friendlyServerName()
                 ),
                 subTitle = stringResource(id = R.string.screen_login_subtitle)
             )

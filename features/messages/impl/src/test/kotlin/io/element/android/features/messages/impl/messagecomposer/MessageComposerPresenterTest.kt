@@ -113,6 +113,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.collections.immutable.ImmutableList
@@ -126,7 +127,6 @@ import org.junit.Test
 import uniffi.wysiwyg_composer.MentionsState
 import java.io.File
 
-@Suppress("LargeClass")
 class MessageComposerPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -1707,7 +1707,12 @@ class MessageComposerPresenterTest : RobolectricTest() {
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,
-        timelineController = TimelineController(room, timeline),
+        timelineController = TimelineController(
+            room = room,
+            liveTimeline = timeline,
+            roomCoroutineScope = backgroundScope,
+            dispatchers = testCoroutineDispatchers(),
+        ),
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,

@@ -20,6 +20,12 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Postupujte podle pokynů k vytvoření nového obnovovacího klíče"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Uložte nový klíč pro obnovení do správce hesel nebo do zašifrované poznámky"</string>
   <string name="screen_create_new_recovery_key_title">"Obnovte šifrování účtu pomocí jiného zařízení"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"Zadejte znovu svůj klíč pro obnovení."</string>
+  <string name="screen_custom_recovery_key_confirm_title">"Potvrďte svůj klíč pro obnovení"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"Vyberte si klíč pro obnovení, který si budete moci zapamatovat."</string>
+  <string name="screen_custom_recovery_key_input_title">"Zadejte klíč pro obnovení"</string>
+  <string name="screen_custom_recovery_key_success_subtitle">"Pomocí svého klíče pro obnovení můžete potvrdit nová zařízení nebo obnovit šifrované chaty, pokud ztratíte přístup ke všem svým zařízením."</string>
+  <string name="screen_custom_recovery_key_success_title">"Vaše záloha je nyní plně nastavena"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Pokračovat v resetování"</string>
   <string name="screen_encryption_reset_bullet_1">"Podrobnosti o vašem účtu, kontaktech, preferencích a seznamu chatu budou zachovány"</string>
   <string name="screen_encryption_reset_bullet_2">"Ztratíte svou stávající historii zpráv"</string>

@@ -47,6 +47,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
+import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.common.Timeline
 import androidx.media3.exoplayer.ExoPlayer
@@ -124,6 +125,7 @@ private fun ExoPlayerMediaAudioView(
                 canMute = false,
                 isMuted = false,
                 seekingToMillis = null,
+                playbackSpeed = exoPlayer.playbackParameters.speed,
             )
         )
     }
@@ -153,6 +155,12 @@ private fun ExoPlayerMediaAudioView(
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
                     isPlaying = isPlaying,
+                )
+            }
+
+            override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    playbackSpeed = playbackParameters.speed,
                 )
             }
 
@@ -276,6 +284,9 @@ private fun ExoPlayerMediaAudioView(
                         onSeek = {
                             exoPlayer.seekToEnsurePlaying((it * exoPlayer.duration).toLong())
                         },
+                        isPlaying = mediaPlayerControllerState.isPlaying,
+                        durationMs = mediaPlayerControllerState.durationInMillis,
+                        playbackSpeed = mediaPlayerControllerState.playbackSpeed,
                         seekEnabled = true,
                     )
                 } else {

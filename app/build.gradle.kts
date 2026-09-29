@@ -21,6 +21,7 @@ import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
 import extension.buildConfigFieldStr
+import extension.environmentOrGradleValue
 import extension.locales
 import extension.setupDependencyInjection
 import extension.testCommonDependencies
@@ -88,13 +89,14 @@ android {
             storePassword = "android"
         }
         register("nightly") {
-            keyAlias = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYID")
-                ?: project.property("signing.element.nightly.keyId") as? String?
-            keyPassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD")
-                ?: project.property("signing.element.nightly.keyPassword") as? String?
-            storeFile = file("./signature/nightly.keystore")
-            storePassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD")
-                ?: project.property("signing.element.nightly.storePassword") as? String?
+            keyAlias = environmentOrGradleValue("ELEMENT_ANDROID_NIGHTLY_KEYID", "signing.element.nightly.keyId")
+            keyPassword = environmentOrGradleValue("ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD", "signing.element.nightly.keyPassword")
+            storeFile = file(
+                environmentOrGradleValue("ELEMENT_ANDROID_NIGHTLY_STOREFILE", "signing.element.nightly.storeFile")
+                    ?.ifBlank { null }
+                    ?: "./signature/nightly.keystore"
+            )
+            storePassword = environmentOrGradleValue("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD", "signing.element.nightly.storePassword")
         }
     }
 
@@ -340,6 +342,9 @@ licensee {
     ignoreDependencies("com.github.matrix-org", "matrix-analytics-events")
     // Ignore dependency that are not third-party licenses to us.
     ignoreDependencies(groupId = "io.element.android")
+    // The rustls-platform-verifier dependency does not provide a license file in their maven repo, but there are MIT and Apache licenses in
+    // the source code repo: see https://github.com/rustls/rustls-platform-verifier
+    ignoreDependencies(groupId = "org.rustls", artifactId = "rustls-platform-verifier")
 }
 
 fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {

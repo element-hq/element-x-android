@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"Ismeretlen vagy törölt eszköz által titkosítva."</string>
   <string name="crypto_event_authenticity_unsigned_device">"A tulajdonos által nem ellenőrzött eszköz által titkosítva."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Nem ellenőrzött felhasználó által titkosítva."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Érvénytelen MIME-típus: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Hiányzó médiatartalom"</string>
+  <string name="error_sending_failure_other">"Hiba részletei: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Küldés ellenőrizetlen eszközről"</string>
+  <string name="error_sending_failure_unknown">"Ismeretlen hiba"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Kép vízszintes tükrözése"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Vízszintesen tükrözve"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Eredeti"</string>
@@ -42,6 +47,10 @@
   <string name="screen_room_attachment_source_location">"Hely megosztása"</string>
   <string name="screen_room_attachment_source_poll">"Szavazás"</string>
   <string name="screen_room_attachment_text_formatting">"Szövegformázás"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Ok (nem kötelező)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Írja be…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Választható)"</string>
+  <string name="screen_room_confirm_removal_title">"Eltávolítás megerősítése"</string>
   <string name="screen_room_encrypted_history_banner">"Az üzenetelőzmények jelenleg nem érhetők el."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Az üzenetelőzmények nem érhetők el ebben a szobában. Ellenőrizze ezt az eszközt, hogy lássa az előzményeket."</string>
   <string name="screen_room_invite_again_alert_message">"Visszahívja?"</string>

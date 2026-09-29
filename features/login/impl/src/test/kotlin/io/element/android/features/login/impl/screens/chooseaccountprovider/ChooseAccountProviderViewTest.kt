@@ -16,7 +16,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import io.element.android.features.login.impl.accountprovider.anAccountProvider
+import io.element.android.features.login.impl.accountprovider.anAccountProviderManaged
 import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
@@ -57,11 +57,11 @@ class ChooseAccountProviderViewTest : RobolectricTest() {
                     ChooseAccountProviderPresenterTest.accountProvider1,
                     ChooseAccountProviderPresenterTest.accountProvider2,
                 ),
-                selectedAccountProvider = anAccountProvider(),
+                selectedAccountProvider = anAccountProviderManaged(),
                 eventSink = eventSink,
             ),
         )
-        onNodeWithText(ChooseAccountProviderPresenterTest.accountProvider1.title).performClick()
+        onNodeWithText(ChooseAccountProviderPresenterTest.accountProvider1.friendlyServerName()).performClick()
         eventSink.assertSingle(ChooseAccountProviderEvent.SelectAccountProvider(ChooseAccountProviderPresenterTest.accountProvider1))
     }
 

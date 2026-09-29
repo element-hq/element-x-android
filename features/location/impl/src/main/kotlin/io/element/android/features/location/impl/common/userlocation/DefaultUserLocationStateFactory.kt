@@ -39,7 +39,7 @@ class DefaultUserLocationStateFactory : UserLocationState.Factory {
                 .updates(locationRequest)
                 .mapNotNull { event ->
                     when (event) {
-                        is LocationEvent.Fix -> event.location
+                        is LocationEvent.Update -> event.measurement
                         is LocationEvent.Unavailable -> null
                     }
                 }

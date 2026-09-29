@@ -38,8 +38,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Po wyłączeniu nie będzie można wysyłać ani odbierać potwierdzeń odczytu i powiadomień o pisaniu."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Zawsze ukrywaj"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Zawsze pokazuj"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"W pokojach prywatnych"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ukryte media można zawsze wyświetlić, dotykając ich"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Pokaż w pokojach prywatnych"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ukryte media można zawsze wyświetlić, dotykając ich."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Pokaż media na osi czasu"</string>
   <string name="screen_advanced_settings_view_source_description">"Włącz, aby móc wyświetlać źródło wiadomości na osi czasu."</string>
   <string name="screen_blocked_users_empty">"Nie blokujesz żadnych użytkowników"</string>
@@ -62,6 +62,9 @@
   <string name="screen_labs_header_description">"Wypróbuj nasze najnowsze pomysły w fazie rozwoju. Funkcje te nie są jeszcze sfinalizowane; mogą być niestabilne i ulec zmianie."</string>
   <string name="screen_labs_header_title">"Chcesz poeksperymentować?"</string>
   <string name="screen_labs_title">"Laboratoria"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Zaproszenia"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Pozostali użytkownicy"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Twój wygląd"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Dodatkowe ustawienia"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Dzwonek połączenia"</string>
   <string name="screen_notification_settings_calls_label">"Połączenia audio i wideo"</string>

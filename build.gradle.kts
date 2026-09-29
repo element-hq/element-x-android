@@ -18,7 +18,6 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.dependencycheck) apply false
-    alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.dependencyanalysis)
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
@@ -154,6 +153,8 @@ allprojects {
 
         val isScreenshotTest = project.gradle.startParameter.taskNames.any { it.contains("paparazzi", ignoreCase = true) }
         if (isScreenshotTest) {
+            // Paparazzi tests benefit from parallelisation, so we can use half the available cores to run them in parallel.
+            maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
             // Increase heap size for screenshot tests
             maxHeapSize = "2g"
             // Record all the languages?
@@ -165,9 +166,20 @@ allprojects {
                 exclude("translations/*.class")
             }
         } else {
+            // Robolectric and Compose pay a 5 to 30 seconds bootstrap cost per test JVM (instrumenting
+            // android-all, then warming up the Compose runtime). That cost is paid once per JVM and then
+            // amortised over every test class the JVM runs, so splitting a module across several forks
+            // re-pays it for each fork instead of saving time. Keep a single fork per module and let
+            // Gradle parallelise by running many modules' test tasks concurrently instead.
+            maxParallelForks = 1
+
             // Disable screenshot tests by default
             exclude("ui/*.class")
             exclude("translations/*.class")
+            // The Compound screenshot tests (:libraries:compound) live in a `screenshot` package, which
+            // the two patterns above do not match, so they would otherwise run on every plain unit test run.
+            // They are verified by the dedicated `verifyPaparazziDebug` task instead.
+            exclude("**/screenshot/**")
         }
     }
 }
@@ -212,21 +224,6 @@ subprojects {
     tasks.findByName("recordPaparazzi")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziDebug")?.dependsOn(removeOldScreenshotsTask)
     tasks.findByName("recordPaparazziRelease")?.dependsOn(removeOldScreenshotsTask)
-}
-
-// Make sure to delete old snapshot before recording new ones
-subprojects {
-    val screenshotsDir = File("${project.projectDir}/screenshots")
-    val removeOldScreenshotsTask = tasks.register("removeOldScreenshots") {
-        onlyIf { screenshotsDir.exists() }
-        doFirst {
-            println("Delete previous screenshots located at $screenshotsDir\n")
-            screenshotsDir.deleteRecursively()
-        }
-    }
-    tasks.findByName("recordRoborazzi")?.dependsOn(removeOldScreenshotsTask)
-    tasks.findByName("recordRoborazziDebug")?.dependsOn(removeOldScreenshotsTask)
-    tasks.findByName("recordRoborazziRelease")?.dependsOn(removeOldScreenshotsTask)
 }
 
 subprojects {

@@ -68,7 +68,6 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
 
-@Suppress("LargeClass")
 @ExperimentalCoroutinesApi
 class RoomDetailsPresenterTest {
     @get:Rule

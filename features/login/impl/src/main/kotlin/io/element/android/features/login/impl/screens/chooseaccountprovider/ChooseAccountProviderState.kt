@@ -8,9 +8,9 @@
 
 package io.element.android.features.login.impl.screens.chooseaccountprovider
 
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import kotlinx.collections.immutable.ImmutableList
 
 data class ChooseAccountProviderState(

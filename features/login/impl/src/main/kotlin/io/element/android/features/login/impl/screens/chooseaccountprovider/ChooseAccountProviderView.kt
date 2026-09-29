@@ -96,16 +96,8 @@ fun ChooseAccountProviderView(
                 )
 
                 state.accountProviders.forEach { item ->
-                    val alteredItem = if (item.isMatrixOrg) {
-                        // Set the subtitle from the resource
-                        item.copy(
-                            subtitle = stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle),
-                        )
-                    } else {
-                        item
-                    }
                     AccountProviderView(
-                        item = alteredItem,
+                        item = item,
                         selected = item == state.selectedAccountProvider,
                         onClick = {
                             state.eventSink(ChooseAccountProviderEvent.SelectAccountProvider(item))

@@ -48,6 +48,18 @@ class AppDeveloperSettingsPageTest : RobolectricTest() {
         }
     }
 
+    @Test
+    fun `clicking on View source emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<AppDeveloperSettingsEvent>()
+        setAppDeveloperSettingsView(
+            state = anAppDeveloperSettingsState(
+                eventSink = eventsRecorder
+            ),
+        )
+        clickOn(CommonStrings.action_view_source)
+        eventsRecorder.assertSingle(AppDeveloperSettingsEvent.SetDeveloperModeEnabled(true))
+    }
+
     @Config(qualifiers = "h1500dp")
     @Test
     fun `clicking on element call url open the dialogs and submit emits the expected event`() = runAndroidComposeUiTest {

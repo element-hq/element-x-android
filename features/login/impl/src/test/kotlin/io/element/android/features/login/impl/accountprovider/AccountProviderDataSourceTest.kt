@@ -10,9 +10,10 @@ package io.element.android.features.login.impl.accountprovider
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.appconfig.AuthenticationConfig
-import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
+import io.element.android.libraries.matrix.api.accountprovider.matrixOrgAccountProvider
+import io.element.android.libraries.matrix.test.accountprovider.anAccountProviderManaged
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
@@ -24,61 +25,24 @@ class AccountProviderDataSourceTest {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `present - initial state`() = runTest {
+    fun `present - initial state - matrix org is the default when nothing is configured`() = runTest {
         val sut = anAccountProviderDataSource()
         sut.flow.test {
-            val initialState = awaitItem()
-            assertThat(initialState).isEqualTo(
-                AccountProvider(
-                    url = AuthenticationConfig.MATRIX_ORG_URL,
-                    title = "matrix.org",
-                    subtitle = null,
-                    isPublic = true,
-                    isMatrixOrg = true,
-                )
-            )
+            assertThat(awaitItem()).isEqualTo(matrixOrgAccountProvider)
         }
     }
 
     @Test
-    fun `present - initial state - matrix org`() = runTest {
+    fun `present - initial state - the first configured account provider is the default`() = runTest {
         val sut = anAccountProviderDataSource(
             enterpriseService = FakeEnterpriseService(
-                defaultHomeserverListResult = { listOf(AuthenticationConfig.MATRIX_ORG_URL) }
+                accountProviderAllowListResult = {
+                    listOf(anAccountProviderManaged(serverName = "first.org"), anAccountProviderManaged(serverName = "second.org"))
+                }
             ),
         )
         sut.flow.test {
-            val initialState = awaitItem()
-            assertThat(initialState).isEqualTo(
-                AccountProvider(
-                    url = AuthenticationConfig.MATRIX_ORG_URL,
-                    title = "matrix.org",
-                    subtitle = null,
-                    isPublic = true,
-                    isMatrixOrg = true,
-                )
-            )
-        }
-    }
-
-    @Test
-    fun `present - ensure that default homeserver is not star char`() = runTest {
-        val sut = anAccountProviderDataSource(
-            enterpriseService = FakeEnterpriseService(
-                defaultHomeserverListResult = { listOf(EnterpriseService.ANY_ACCOUNT_PROVIDER, AuthenticationConfig.MATRIX_ORG_URL) }
-            ),
-        )
-        sut.flow.test {
-            val initialState = awaitItem()
-            assertThat(initialState).isEqualTo(
-                AccountProvider(
-                    url = AuthenticationConfig.MATRIX_ORG_URL,
-                    title = "matrix.org",
-                    subtitle = null,
-                    isPublic = true,
-                    isMatrixOrg = true,
-                )
-            )
+            assertThat(awaitItem()).isEqualTo(anAccountProviderManaged(serverName = "first.org"))
         }
     }
 
@@ -86,22 +50,11 @@ class AccountProviderDataSourceTest {
     fun `present - user change and reset`() = runTest {
         val sut = anAccountProviderDataSource()
         sut.flow.test {
-            val initialState = awaitItem()
-            assertThat(initialState.url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
-            sut.setAccountProvider(AccountProvider(url = "https://example.com"))
-            val changedState = awaitItem()
-            assertThat(changedState).isEqualTo(
-                AccountProvider(
-                    url = "https://example.com",
-                    title = "example.com",
-                    subtitle = null,
-                    isPublic = false,
-                    isMatrixOrg = false,
-                )
-            )
+            assertThat(awaitItem()).isEqualTo(matrixOrgAccountProvider)
+            sut.setAccountProvider(AccountProvider.Generic("https://example.com"))
+            assertThat(awaitItem()).isEqualTo(AccountProvider.Generic("https://example.com"))
             sut.reset()
-            val resetState = awaitItem()
-            assertThat(resetState.url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+            assertThat(awaitItem()).isEqualTo(matrixOrgAccountProvider)
         }
     }
 
@@ -109,22 +62,23 @@ class AccountProviderDataSourceTest {
     fun `present - set url and reset`() = runTest {
         val sut = anAccountProviderDataSource()
         sut.flow.test {
-            val initialState = awaitItem()
-            assertThat(initialState.url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+            assertThat(awaitItem()).isEqualTo(matrixOrgAccountProvider)
             sut.setUrl(url = "https://example.com")
-            val changedState = awaitItem()
-            assertThat(changedState).isEqualTo(
-                AccountProvider(
-                    url = "https://example.com",
-                    title = "example.com",
-                    subtitle = null,
-                    isPublic = false,
-                    isMatrixOrg = false,
-                )
+            assertThat(awaitItem()).isEqualTo(
+                AccountProvider.Generic("https://example.com")
             )
             sut.reset()
-            val resetState = awaitItem()
-            assertThat(resetState.url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+            assertThat(awaitItem()).isEqualTo(matrixOrgAccountProvider)
+        }
+    }
+
+    @Test
+    fun `present - a provider set by the user is stored as they input it`() = runTest {
+        val sut = anAccountProviderDataSource()
+        sut.flow.test {
+            skipItems(1)
+            sut.setUrl(url = "example.com")
+            assertThat(awaitItem()).isEqualTo(AccountProvider.Generic("example.com"))
         }
     }
 
@@ -136,7 +90,7 @@ class AccountProviderDataSourceTest {
             ),
         )
         sut.flow.test {
-            assertThat(awaitItem().url).isEqualTo("https://example.com")
+            assertThat(awaitItem()).isEqualTo(AccountProvider.Generic("https://example.com"))
         }
     }
 
@@ -144,14 +98,31 @@ class AccountProviderDataSourceTest {
     fun `present - history is ignored when the account provider is enforced`() = runTest {
         val sut = anAccountProviderDataSource(
             enterpriseService = FakeEnterpriseService(
-                defaultHomeserverListResult = { listOf("https://enforced.org") }
+                accountProviderAllowListResult = { listOf(anAccountProviderManaged(serverName = "enforced.org")) },
+                canConnectToAnyAccountProviderResult = { false },
             ),
             appPreferencesStore = InMemoryAppPreferencesStore(
                 homeserverHistory = listOf("https://example.com"),
             ),
         )
         sut.flow.test {
-            assertThat(awaitItem().url).isEqualTo("https://enforced.org")
+            assertThat(awaitItem()).isEqualTo(anAccountProviderManaged(serverName = "enforced.org"))
+        }
+    }
+
+    @Test
+    fun `present - history wins over the configured provider when other providers are allowed`() = runTest {
+        val sut = anAccountProviderDataSource(
+            enterpriseService = FakeEnterpriseService(
+                accountProviderAllowListResult = { listOf(anAccountProviderManaged(serverName = "preferred.org")) },
+                canConnectToAnyAccountProviderResult = { true },
+            ),
+            appPreferencesStore = InMemoryAppPreferencesStore(
+                homeserverHistory = listOf("https://example.com"),
+            ),
+        )
+        sut.flow.test {
+            assertThat(awaitItem()).isEqualTo(AccountProvider.Generic("https://example.com"))
         }
     }
 
@@ -163,11 +134,11 @@ class AccountProviderDataSourceTest {
             ),
         )
         sut.flow.test {
-            assertThat(awaitItem().url).isEqualTo("https://example.com")
+            assertThat(awaitItem()).isEqualTo(AccountProvider.Generic("https://example.com"))
             sut.setUrl("https://other.com")
-            assertThat(awaitItem().url).isEqualTo("https://other.com")
+            assertThat(awaitItem()).isEqualTo(AccountProvider.Generic("https://other.com"))
             sut.reset()
-            assertThat(awaitItem().url).isEqualTo("https://example.com")
+            assertThat(awaitItem()).isEqualTo(AccountProvider.Generic("https://example.com"))
         }
     }
 }

@@ -170,6 +170,9 @@ class TimelinePresenter(
         val displayJumpToUnread by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.JumpToUnread)
         }
+        val useNewTimelineEventRenderer by produceState(false) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)
+        }
 
         val isMultiSelectEnabled by produceState(false) {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageMultiSelect).collect { value = it }
@@ -495,6 +498,7 @@ class TimelinePresenter(
         val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo) {
             derivedStateOf {
                 TimelineRoomInfo(
+                    currentUserId = room.sessionId,
                     name = roomInfo.name,
                     isDm = roomInfo.isDm,
                     userHasPermissionToSendMessage = userEventPermissions.canSendMessage,
@@ -525,6 +529,7 @@ class TimelinePresenter(
             displayJumpToUnread = displayJumpToUnread,
             jumpToUnread = jumpToUnread.value,
             selectionState = selectionState,
+            useNewTimelineEventRenderer = useNewTimelineEventRenderer,
             eventSink = ::handleEvent,
         )
     }

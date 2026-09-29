@@ -708,6 +708,45 @@ class ShareLocationPresenterTest {
         }
     }
 
+    @Test
+    fun `ShareStaticLocation in a thread closes the created timeline`() = runTest {
+        val threadedTimeline = FakeTimeline(mode = Timeline.Mode.Thread(A_THREAD_ID)).apply {
+            sendLocationLambda = { _, _, _, _, _, _ -> Result.success(Unit) }
+        }
+        val liveTimeline = FakeTimeline()
+        val joinedRoom = FakeJoinedRoom(
+            liveTimeline = liveTimeline,
+            createTimelineResult = { Result.success(threadedTimeline) },
+        )
+        val shareLocationPresenter = createShareLocationPresenter(
+            joinedRoom = joinedRoom,
+            timelineMode = Timeline.Mode.Thread(A_THREAD_ID),
+        )
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        shareLocationPresenter.test {
+            val initialState = awaitFirstItem()
+
+            initialState.eventSink(
+                ShareLocationEvent.ShareStaticLocation(
+                    location = Location(lat = 3.0, lon = 4.0, accuracy = 5.0f),
+                    isPinned = false,
+                )
+            )
+
+            advanceUntilIdle()
+
+            assertThat(threadedTimeline.closeCounter).isEqualTo(1)
+            assertThat(liveTimeline.closeCounter).isEqualTo(0)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         skipItems(1)
         return awaitItem()

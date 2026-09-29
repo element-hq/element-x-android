@@ -16,7 +16,7 @@
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Element Pro -sovellus on pakollinen %1$s -palvelimella. Lataa se sovelluskaupasta."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro vaaditaan"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Palveluntarjoajaan ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palveluntarjoajasi ylläpitäjään."</string>
   <string name="screen_change_server_error_invalid_well_known">"Palvelin ei ole saatavilla .well-known tiedostossa olevan ongelman vuoksi:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Valitsemasi palveluntarjoaja ei tue sliding syncia. Palvelimen päivitys tarvitaan %1$s -sovelluksen käyttämiseen."</string>
@@ -40,7 +40,7 @@
   <string name="screen_login_error_invalid_credentials">"Väärä käyttäjänimi ja/tai salasana"</string>
   <string name="screen_login_error_invalid_user_id">"Tämä ei ole kelvollinen käyttäjätunnus. Odotettu muoto: \'@käyttäjä:kotipalvelin.fi\'"</string>
   <string name="screen_login_error_refresh_tokens">"Tämä palvelin on määritetty käyttämään refresh tokeneja. Näitä ei tueta salasanapohjaisen kirjautumisen kanssa."</string>
-  <string name="screen_login_error_unsupported_authentication">"Valitsemasi kotipalvelin ei tue salasana- tai OAuth-kirjautumista. Ota yhteyttä palvelimesi ylläpitäjään tai valitse toinen kotipalvelin."</string>
+  <string name="screen_login_error_unsupported_authentication">"Valitsemasi palveluntarjoaja ei tue salasana- tai OAuth-kirjautumista. Ota yhteyttä palveluntarjoajaasi tai valitse toinen."</string>
   <string name="screen_login_form_header">"Anna tietosi"</string>
   <string name="screen_login_subtitle">"Matrix on avoin verkko turvallista, hajautettua viestintää varten."</string>
   <string name="screen_login_title">"Tervetuloa takaisin!"</string>
@@ -89,7 +89,7 @@ Yritä kirjautua sisään manuaalisesti tai skannaa QR-koodi toisella laitteella
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s -sovellusta ei tueta"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Valmis skannaamaan"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Avaa %1$s tietokoneella"</string>
-  <string name="screen_qr_code_login_initial_state_item_2">"Napsauta avatariasi"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Klikkaa avatariasi"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Valitse %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"“Yhdistä uusi laite”"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Skannaa QR-koodi tällä laitteella"</string>

@@ -11,7 +11,7 @@
   <string name="screen_create_room_private_option_title">"Yksityinen"</string>
   <string name="screen_create_room_public_option_description">"Kuka tahansa voi löytää tämän huoneen.
 Voit muuttaa tämän milloin tahansa huoneen asetuksista."</string>
-  <string name="screen_create_room_public_option_short_description">"Kuka tahansa voi liittyä."</string>
+  <string name="screen_create_room_public_option_short_description">"Kuka tahansa voi liittyä, myös organisaatiosi ulkopuoliset henkilöt."</string>
   <string name="screen_create_room_public_option_title">"Julkinen"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Kuka tahansa voi pyytää saada liittyä huoneeseen, mutta ylläpitäjän tai valvojan on hyväksyttävä pyyntö."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Salli liittymispyynnöt"</string>
@@ -19,7 +19,7 @@ Voit muuttaa tämän milloin tahansa huoneen asetuksista."</string>
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Pyydä liittymistä"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Vain kutsutut henkilöt voivat liittyä."</string>
   <string name="screen_create_room_room_access_section_private_option_title">"Yksityinen"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"Kuka tahansa voi liittyä."</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Kuka tahansa voi liittyä, myös organisaatiosi ulkopuoliset henkilöt."</string>
   <string name="screen_create_room_room_access_section_public_option_title">"Julkinen"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"Kuka tahansa tilassa %1$s voi liittyä."</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"Vakio"</string>

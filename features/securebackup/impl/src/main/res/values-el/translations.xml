@@ -20,6 +20,26 @@
   <string name="screen_create_new_recovery_key_list_item_4">"Ακολούθησε τις οδηγίες για να δημιουργήσεις ένα νέο κλειδί ανάκτησης"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Αποθήκευσε το νέο κλειδί ανάκτησης σε έναν διαχειριστή κωδικών πρόσβασης ή σε κρυπτογραφημένη σημείωση"</string>
   <string name="screen_create_new_recovery_key_title">"Επανάφερε την κρυπτογράφηση για το λογαριασμό σου χρησιμοποιώντας άλλη συσκευή"</string>
+  <string name="screen_custom_recovery_key_confirm_error_mismatch">"Το κλειδί ανάκτησης που εισαγάγατε δεν ταιριάζει"</string>
+  <string name="screen_custom_recovery_key_confirm_submit">"Ολοκλήρωση της ρύθμισης"</string>
+  <string name="screen_custom_recovery_key_confirm_subtitle">"Εισαγάγετε ξανά το κλειδί ανάκτησης."</string>
+  <string name="screen_custom_recovery_key_confirm_title">"Επιβεβαιώστε το κλειδί ανάκτησης"</string>
+  <plurals name="screen_custom_recovery_key_input_notice">
+    <item quantity="one">"Ελάχιστος αριθμός χαρακτήρων: %1$d. Μην χρησιμοποιείτε τον κωδικό πρόσβασης του λογαριασμού σας"</item>
+    <item quantity="other">"Ελάχιστος αριθμός χαρακτήρων: %1$d. Μην χρησιμοποιείτε τον κωδικό πρόσβασης του λογαριασμού σας"</item>
+  </plurals>
+  <string name="screen_custom_recovery_key_input_strength">"Δύναμη"</string>
+  <string name="screen_custom_recovery_key_input_strength_a11y">"Ισχύς φράσης πρόσβασης: %1$s"</string>
+  <string name="screen_custom_recovery_key_input_strength_moderate">"Μέτριο"</string>
+  <string name="screen_custom_recovery_key_input_strength_strong">"Ισχυρό"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_strong">"Πολύ ισχυρό"</string>
+  <string name="screen_custom_recovery_key_input_strength_very_weak">"Πολύ αδύναμο"</string>
+  <string name="screen_custom_recovery_key_input_strength_weak">"Αδύναμο"</string>
+  <string name="screen_custom_recovery_key_input_subtitle">"Επιλέξτε ένα κλειδί ανάκτησης που μπορείτε να απομνημονεύσετε."</string>
+  <string name="screen_custom_recovery_key_input_title">"Εισαγάγετε ένα κλειδί ανάκτησης"</string>
+  <string name="screen_custom_recovery_key_loading_a11y">"Φόρτωση απαιτήσεων κλειδιού ανάκτησης"</string>
+  <string name="screen_custom_recovery_key_success_notice">"Για να αλλάξετε το κλειδί ανάκτησης, μεταβείτε στις Ρυθμίσεις → Κρυπτογράφηση → Αντίγραφα ασφαλείας"</string>
+  <string name="screen_custom_recovery_key_success_title">"Το αντίγραφο ασφαλείας σας έχει πλέον ρυθμιστεί πλήρως"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Συνέχιση επαναφοράς"</string>
   <string name="screen_encryption_reset_bullet_1">"Τα στοιχεία του λογαριασμού σου, οι επαφές, οι προτιμήσεις και η λίστα συνομιλιών θα διατηρηθούν"</string>
   <string name="screen_encryption_reset_bullet_2">"Θα χάσεις το υπάρχον ιστορικό μηνυμάτων σου"</string>

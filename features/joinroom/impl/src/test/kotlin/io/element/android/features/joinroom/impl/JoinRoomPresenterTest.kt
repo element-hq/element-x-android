@@ -70,7 +70,6 @@ import org.junit.Rule
 import org.junit.Test
 import java.util.Optional
 
-@Suppress("LargeClass")
 class JoinRoomPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()

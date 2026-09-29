@@ -25,8 +25,11 @@ class SaveAccountProviderToHistory(
     suspend operator fun invoke() {
         // Persist the provider the user actually selected, not the currently-exposed default: the latter can be
         // reset back to the history default while the login flow is torn down across an OAuth round-trip.
-        val url = accountProviderDataSource.lastSelectedAccountProviderUrl
-            ?: accountProviderDataSource.flow.value.url
-        appPreferencesStore.addHomeserverToHistory(url)
+        val accountProvider = accountProviderDataSource.lastSelectedAccountProvider
+            ?: accountProviderDataSource.flow.value
+        // Persist the sanitized name the user knows the provider by rather than its base url, which can be an
+        // internal client API url (e.g. matrix.org resolves to matrix-client.matrix.org) the user would not
+        // recognise, and so that the same provider is not stored twice with and without its scheme.
+        appPreferencesStore.addHomeserverToHistory(accountProvider.serverNameOrBaseUrl())
     }
 }

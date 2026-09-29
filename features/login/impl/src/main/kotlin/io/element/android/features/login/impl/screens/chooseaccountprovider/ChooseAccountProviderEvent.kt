@@ -8,7 +8,7 @@
 
 package io.element.android.features.login.impl.screens.chooseaccountprovider
 
-import io.element.android.features.login.impl.accountprovider.AccountProvider
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 
 sealed interface ChooseAccountProviderEvent {
     data class SelectAccountProvider(val accountProvider: AccountProvider) : ChooseAccountProviderEvent

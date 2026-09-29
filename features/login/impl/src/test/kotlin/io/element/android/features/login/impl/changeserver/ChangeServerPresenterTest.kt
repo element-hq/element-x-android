@@ -12,14 +12,15 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.accountprovider.anAccountProviderDataSource
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
+import io.element.android.libraries.matrix.test.accountprovider.anAccountProviderManaged
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
@@ -57,13 +58,13 @@ class ChangeServerPresenterTest {
         createPresenter(
             authenticationService = authenticationService,
             enterpriseService = FakeEnterpriseService(
-                isAllowedToConnectToHomeserverResult = { true },
+                isAllowedToConnectToAccountProviderResult = { true },
                 isElementProEnforcedResult = { false },
             ),
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
-            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider.Generic(A_HOMESERVER_URL)))
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
@@ -80,14 +81,14 @@ class ChangeServerPresenterTest {
         )
         createPresenter(
             enterpriseService = FakeEnterpriseService(
-                isAllowedToConnectToHomeserverResult = { true },
+                isAllowedToConnectToAccountProviderResult = { true },
                 isElementProEnforcedResult = { false },
             ),
             authenticationService = authenticationService,
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
-            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider.Generic(A_HOMESERVER_URL)))
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
@@ -108,14 +109,14 @@ class ChangeServerPresenterTest {
         )
         createPresenter(
             enterpriseService = FakeEnterpriseService(
-                isAllowedToConnectToHomeserverResult = { true },
+                isAllowedToConnectToAccountProviderResult = { true },
                 isElementProEnforcedResult = { false },
             ),
             authenticationService = authenticationService,
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
-            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider.Generic(A_HOMESERVER_URL)))
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
@@ -128,30 +129,30 @@ class ChangeServerPresenterTest {
 
     @Test
     fun `present - change server not allowed error`() = runTest {
-        val isAllowedToConnectToHomeserverResult = lambdaRecorder<String, Boolean> { false }
+        val isAllowedToConnectToAccountProviderResult = lambdaRecorder<AccountProvider, Boolean> { false }
         createPresenter(
             enterpriseService = FakeEnterpriseService(
-                isAllowedToConnectToHomeserverResult = isAllowedToConnectToHomeserverResult,
-                defaultHomeserverListResult = { listOf("element.io") },
+                isAllowedToConnectToAccountProviderResult = isAllowedToConnectToAccountProviderResult,
+                accountProviderAllowListResult = { listOf(anAccountProviderManaged(serverName = "element.io")) },
                 isElementProEnforcedResult = { false },
             ),
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
-            val anAccountProvider = AccountProvider(url = A_HOMESERVER_URL)
+            val anAccountProvider = AccountProvider.Generic(A_HOMESERVER_URL)
             initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(anAccountProvider))
             val loadingState = awaitItem()
             assertThat(loadingState.changeServerAction).isInstanceOf(AsyncData.Loading::class.java)
             val failureState = awaitItem()
             assertThat(
                 (failureState.changeServerAction.errorOrNull() as ChangeServerError.UnauthorizedAccountProvider).unauthorisedAccountProviderTitle
-            ).isEqualTo(anAccountProvider.title)
+            ).isEqualTo(anAccountProvider.serverNameOrBaseUrl())
             assertThat(
                 (failureState.changeServerAction.errorOrNull() as ChangeServerError.UnauthorizedAccountProvider).authorisedAccountProviderTitles
             ).containsExactly("element.io")
-            isAllowedToConnectToHomeserverResult.assertions()
+            isAllowedToConnectToAccountProviderResult.assertions()
                 .isCalledOnce()
-                .with(value(A_HOMESERVER_URL))
+                .with(value(AccountProvider.Generic(A_HOMESERVER_URL)))
         }
     }
 
@@ -166,14 +167,14 @@ class ChangeServerPresenterTest {
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.changeServerAction).isEqualTo(AsyncData.Uninitialized)
-            val anAccountProvider = AccountProvider(url = A_HOMESERVER_URL)
+            val anAccountProvider = AccountProvider.Generic(A_HOMESERVER_URL)
             initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(anAccountProvider))
             // Skip loading state
             skipItems(1)
             val failureState = awaitItem()
             assertThat(
                 (failureState.changeServerAction.errorOrNull() as ChangeServerError.NeedElementPro).unauthorisedAccountProviderTitle
-            ).isEqualTo(anAccountProvider.title)
+            ).isEqualTo(anAccountProvider.serverNameOrBaseUrl())
             assertThat(
                 (failureState.changeServerAction.errorOrNull() as ChangeServerError.NeedElementPro).applicationId
             ).isEqualTo("io.element.enterprise")
@@ -188,13 +189,13 @@ class ChangeServerPresenterTest {
         )
         createPresenter(
             authenticationService = authenticationService,
-            enterpriseService = FakeEnterpriseService(isAllowedToConnectToHomeserverResult = { true }),
+            enterpriseService = FakeEnterpriseService(isAllowedToConnectToAccountProviderResult = { true }),
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(shouldPrompt = true),
             permissionsPresenter = FakePermissionsPresenter(),
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.localNetworkPermissionDialog).isEqualTo(LocalNetworkPermissionDialog.None)
-            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider.Generic(A_HOMESERVER_URL)))
             val promptState = expectMostRecentItem()
             // Dialog is shown, permission has not been requested yet, setHomeserver has not been called.
             assertThat(promptState.localNetworkPermissionDialog).isNotEqualTo(LocalNetworkPermissionDialog.None)
@@ -208,12 +209,12 @@ class ChangeServerPresenterTest {
             authenticationService = FakeMatrixAuthenticationService(
                 setHomeserverResult = { Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true)) },
             ),
-            enterpriseService = FakeEnterpriseService(isAllowedToConnectToHomeserverResult = { true }),
+            enterpriseService = FakeEnterpriseService(isAllowedToConnectToAccountProviderResult = { true }),
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(shouldPrompt = true),
             permissionsPresenter = FakePermissionsPresenter(),
         ).test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider.Generic(A_HOMESERVER_URL)))
             val promptState = expectMostRecentItem()
             assertThat(promptState.localNetworkPermissionDialog).isNotEqualTo(LocalNetworkPermissionDialog.None)
             promptState.eventSink.invoke(ChangeServerEvent.DismissLocalNetworkPermission)
@@ -231,12 +232,12 @@ class ChangeServerPresenterTest {
         val permissionsPresenter = FakePermissionsPresenter()
         createPresenter(
             authenticationService = authenticationService,
-            enterpriseService = FakeEnterpriseService(isAllowedToConnectToHomeserverResult = { true }, isElementProEnforcedResult = { false }),
+            enterpriseService = FakeEnterpriseService(isAllowedToConnectToAccountProviderResult = { true }, isElementProEnforcedResult = { false }),
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(shouldPrompt = true),
             permissionsPresenter = permissionsPresenter,
         ).test {
             val initialState = awaitItem()
-            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider(url = A_HOMESERVER_URL)))
+            initialState.eventSink.invoke(ChangeServerEvent.ChangeServer(AccountProvider.Generic(A_HOMESERVER_URL)))
             val promptState = expectMostRecentItem()
             assertThat(promptState.localNetworkPermissionDialog).isNotEqualTo(LocalNetworkPermissionDialog.None)
             permissionsPresenter.setPermissionGranted()

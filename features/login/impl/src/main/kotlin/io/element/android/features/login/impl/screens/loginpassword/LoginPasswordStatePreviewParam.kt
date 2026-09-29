@@ -9,9 +9,9 @@
 package io.element.android.features.login.impl.screens.loginpassword
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.login.impl.accountprovider.AccountProvider
-import io.element.android.features.login.impl.accountprovider.anAccountProvider
+import io.element.android.features.login.impl.accountprovider.anAccountProviderManaged
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 
 open class LoginPasswordStatePreviewParam : PreviewParameterProvider<LoginPasswordState> {
@@ -26,7 +26,7 @@ open class LoginPasswordStatePreviewParam : PreviewParameterProvider<LoginPasswo
 }
 
 fun aLoginPasswordState(
-    accountProvider: AccountProvider = anAccountProvider(),
+    accountProvider: AccountProvider = anAccountProviderManaged(),
     formState: LoginFormState = LoginFormState.Default,
     loginAction: AsyncData<SessionId> = AsyncData.Uninitialized,
     eventSink: (LoginPasswordEvent) -> Unit = {},

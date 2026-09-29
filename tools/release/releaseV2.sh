@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 # Please see LICENSE files in the repository root for full details.
 
-# do not exit when any command fails (issue with git flow)
+# do not exit when any command fails, failures are handled explicitly by the script
 set +e
 
 printf "\n================================================================================\n"
@@ -63,6 +63,12 @@ if [ ${envError} == 1 ]; then
   exit 1
 fi
 
+# Abort the script with an error message.
+fail() {
+  printf "\nFatal: %s\n" "$1"
+  exit 1
+}
+
 # Handle the result of a version check. ${checkError} must be set to 1 when a check has failed.
 checkVersionResult() {
   if [[ ${checkError} -ne 0 ]]; then
@@ -96,16 +102,6 @@ if [[ ${unmergedPrs} != "" ]]; then
     exit 1
 fi
 
-
-# Check if git flow is enabled
-gitFlowDevelop=$(git config gitflow.branch.develop)
-if [[ ${gitFlowDevelop} != "" ]]
-then
-    printf "Git flow is initialized\n"
-else
-    printf "Git flow is not initialized. Initializing...\n"
-    ./tools/gitflow/gitflow-init.sh
-fi
 
 printf "OK\n"
 
@@ -149,7 +145,7 @@ versionReleaseNumber=$(echo "${version}" | cut  -d "." -f3)
 
 printf "\n================================================================================\n"
 printf "Starting the release %s\n" "${version}"
-git flow release start "${version}"
+git checkout -b "release/${version}" develop
 
 # Note: in case the release is already started and the script is started again, checkout the release branch again.
 ret=$?
@@ -160,7 +156,7 @@ if [[ $ret -ne 0 ]]; then
   read -r -p "Continue (yes/no) default to yes? " doContinue
   doContinue=${doContinue:-yes}
   if [ "${doContinue}" == "no" ]; then
-    printf "OK, exiting, you can start the release again with the command 'git flow release start %s'\n" "${version}"
+    printf "OK, exiting, you can start the release again with the command 'git checkout -b release/%s develop'\n" "${version}"
     exit 1
   fi
   git checkout "release/${version}"
@@ -197,10 +193,17 @@ git commit -a -m "Adding fastlane file for version ${version}"
 
 printf "\n================================================================================\n"
 printf "OK, finishing the release...\n"
-# GIT_MERGE_AUTOEDIT avoids opening the editor for the 2 merge commits, whose default message is
-# always used, and -m provides the message of the annotated tag. git flow appends the tag name to
-# it, so the tag message ends up being "Release v${version}".
-GIT_MERGE_AUTOEDIT=no git flow release finish -m "Release" "${version}"
+# Merge the release branch into main, tag it, then merge the tag back into develop and delete the
+# release branch. The merge messages are provided explicitly to keep the history consistent with
+# the previous releases.
+git checkout main || fail "unable to checkout main."
+git merge --no-ff --no-edit -m "Merge branch 'release/${version}'" "release/${version}" \
+  || fail "unable to merge the branch release/${version} into main. Please fix the conflicts and finish the release manually."
+git tag -a "v${version}" -m "Release v${version}" || fail "unable to create the tag v${version}."
+git checkout develop || fail "unable to checkout develop."
+git merge --no-ff --no-edit -m "Merge tag 'v${version}' into develop" "v${version}" \
+  || fail "unable to merge the tag v${version} into develop. Please fix the conflicts and finish the release manually."
+git branch -d "release/${version}" || fail "unable to delete the branch release/${version}."
 
 printf "\n================================================================================\n"
 read -r -p "Done, push the branch 'main' and the new tag (yes/no) default to yes? " doPush

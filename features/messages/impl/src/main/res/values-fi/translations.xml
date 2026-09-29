@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"Tuntemattoman tai poistetun laitteen salaama."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Salattu laitteella, jota sen omistaja ei ole vahvistanut."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Vahvistamattoman käyttäjän salaama."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Virheellinen MIME-tyyppi: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Mediasisältö puuttuu"</string>
+  <string name="error_sending_failure_other">"Virheen tiedot: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Lähetetään vahvistamattomasta laitteesta"</string>
+  <string name="error_sending_failure_unknown">"Tuntematon virhe"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Käännä kuva vaakasuunnassa"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Käännetty vaakasuunnassa"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Alkuperäinen"</string>
@@ -32,7 +37,7 @@
   <string name="screen_media_upload_preview_title">"Lisää mediaa"</string>
   <string name="screen_report_content_block_user">"Estä käyttäjä"</string>
   <string name="screen_report_content_block_user_hint">"Valitse tämä, jos haluat piilottaa kaikki nykyiset ja tulevat viestit tältä käyttäjältä"</string>
-  <string name="screen_report_content_explanation">"Tämä viesti ilmoitetaan kotipalvelimesi ylläpitäjälle. Ylläpitäjä ei pysty lukemaan salattuja viestejä."</string>
+  <string name="screen_report_content_explanation">"Tämä viesti ilmoitetaan palveluntarjoajallesi. He eivät pysty lukemaan salattuja viestejä."</string>
   <string name="screen_report_content_hint">"Syy tämän sisällön ilmoittamiseen"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Ota kuva"</string>
@@ -42,6 +47,10 @@
   <string name="screen_room_attachment_source_location">"Jaa sijainti"</string>
   <string name="screen_room_attachment_source_poll">"Kysely"</string>
   <string name="screen_room_attachment_text_formatting">"Tekstin muotoilu"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Syy (valinnainen)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Kirjoita…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Valinnainen)"</string>
+  <string name="screen_room_confirm_removal_title">"Vahvista poistaminen"</string>
   <string name="screen_room_encrypted_history_banner">"Viestihistoria ei ole tällä hetkellä saatavilla"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Viestihistoria ei ole käytettävissä tässä huoneessa. Vahvista tämä laite nähdäksesi viestihistoriasi."</string>
   <string name="screen_room_invite_again_alert_message">"Haluatko kutsua heidät takaisin?"</string>

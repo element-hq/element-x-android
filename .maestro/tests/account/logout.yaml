@@ -2,6 +2,9 @@ appId: ${MAESTRO_APP_ID}
 ---
 - tapOn:
     id: "home_screen-settings"
+- tapOn:
+    id: "settings-user_profile"
+- assertVisible: "Your account"
 - tapOn: "Remove this device"
 - takeScreenshot: build/maestro/900-SignOutScreen
 - back

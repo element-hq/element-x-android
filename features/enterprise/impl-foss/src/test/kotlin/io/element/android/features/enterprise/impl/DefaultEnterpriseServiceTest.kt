@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClient
 import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClientFactory
+import io.element.android.libraries.matrix.test.accountprovider.anAccountProviderGeneric
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
@@ -26,15 +27,21 @@ import org.junit.Test
 
 class DefaultEnterpriseServiceTest {
     @Test
-    fun homeserverWhitelist() {
+    fun accountProviderAllowList() {
         val defaultEnterpriseService = createDefaultEnterpriseService()
-        assertThat(defaultEnterpriseService.homeserverAllowList()).isEmpty()
+        assertThat(defaultEnterpriseService.accountProviderAllowList()).isEmpty()
     }
 
     @Test
-    fun `isAllowedToConnectToHomeserver is true for all homeserver urls`() = runTest {
+    fun `canConnectToAnyAccountProvider is always true`() {
         val defaultEnterpriseService = createDefaultEnterpriseService()
-        assertThat(defaultEnterpriseService.isAllowedToConnectToHomeserver(A_HOMESERVER_URL)).isTrue()
+        assertThat(defaultEnterpriseService.canConnectToAnyAccountProvider()).isTrue()
+    }
+
+    @Test
+    fun `isAllowedToConnectToAccountProvider is true for all account providers`() = runTest {
+        val defaultEnterpriseService = createDefaultEnterpriseService()
+        assertThat(defaultEnterpriseService.isAllowedToConnectToAccountProvider(anAccountProviderGeneric())).isTrue()
     }
 
     @Test

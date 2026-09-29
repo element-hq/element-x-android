@@ -120,7 +120,9 @@ class ExoPlayerForPreview(
     override fun seekToNext() {}
     override fun setPlaybackParameters(playbackParameters: PlaybackParameters) {}
     override fun setPlaybackSpeed(speed: Float) {}
-    override fun getPlaybackParameters(): PlaybackParameters = throw NotImplementedError()
+
+    // Cannot throw, this method is invoked when recording Paparazzi screenshots.
+    override fun getPlaybackParameters(): PlaybackParameters = PlaybackParameters.DEFAULT
     override fun stop() {}
     override fun release() {}
     override fun getCurrentTracks(): Tracks = throw NotImplementedError()

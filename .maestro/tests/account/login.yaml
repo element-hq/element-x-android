@@ -7,6 +7,13 @@ appId: ${MAESTRO_APP_ID}
 - tapOn:
     id: "login-continue"
 ## MAS page
+# Click on "Use another account" if MAS is already logged in:
+- runFlow:
+    when:
+      visible: "Use another account"
+    commands:
+      - tapOn:
+          text: "Use another account"
 - retry:
     maxRetries: 3
     commands:

@@ -8,9 +8,11 @@
 
 package io.element.android.features.login.impl.screens.onboarding
 
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
+
 sealed interface OnBoardingEvent {
     data class OnSignIn(
-        val defaultAccountProvider: String
+        val defaultAccountProvider: AccountProvider
     ) : OnBoardingEvent
 
     data object OnVersionClick : OnBoardingEvent

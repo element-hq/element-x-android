@@ -112,9 +112,10 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Hiba történt az értesítési beállítások betöltésekor."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Nem sikerült visszaállítani az alapértelmezett módot, próbálja újra."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nem sikerült a mód beállítása, próbálja újra."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, egyes szobákban nem fog értesítéseket kapni."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, ebből a csevegésből nem fog értesítést kapni."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Összes üzenet"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Csak említések és kulcsszavak"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Csak említések és válaszok"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Némítás"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Ebben a szobában, értesítés ezekről:"</string>
   <string name="screen_room_roles_and_permissions_admins">"Adminisztrátorok"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Adminisztrátorok és tulajdonosok"</string>
@@ -147,7 +148,7 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_encryption_section_footer">"Engedélyezés után a titkosítás nem tiltható le."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Titkosítás"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Végpontok közötti titkosítás engedélyezése"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Bárki csatlakozhat."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Bárki csatlakozhat, beleértve a szervezeten kívülieket is."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Bárki"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Válassza ki, hogy mely terek tagjai csatlakozhatnak ehhez a szobához meghívás nélkül.%1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Terek kezelése"</string>

@@ -20,7 +20,7 @@ class SaveAccountProviderToHistoryTest {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `invoke saves the current account provider url to history`() = runTest {
+    fun `invoke saves the current account provider server name to history`() = runTest {
         val appPreferencesStore = InMemoryAppPreferencesStore()
         val accountProviderDataSource = anAccountProviderDataSource()
         accountProviderDataSource.setUrl("https://example.com")
@@ -29,7 +29,7 @@ class SaveAccountProviderToHistoryTest {
         sut()
 
         assertThat(appPreferencesStore.getHomeserverHistoryFlow().first())
-            .containsExactly("https://example.com")
+            .containsExactly("example.com")
     }
 
     @Test
@@ -45,6 +45,6 @@ class SaveAccountProviderToHistoryTest {
         sut()
 
         assertThat(appPreferencesStore.getHomeserverHistoryFlow().first())
-            .containsExactly("https://example.com")
+            .containsExactly("example.com")
     }
 }

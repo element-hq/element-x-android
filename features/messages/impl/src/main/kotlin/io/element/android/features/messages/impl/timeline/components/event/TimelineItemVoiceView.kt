@@ -40,7 +40,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentPreviewParam
 import io.element.android.libraries.designsystem.atomic.atoms.PlaybackSpeedButton
@@ -52,6 +51,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvent
@@ -142,6 +142,9 @@ fun TimelineItemVoiceView(
             modifier = Modifier
                 .weight(1f)
                 .height(34.dp),
+            isPlaying = state.isPlaying,
+            durationMs = state.durationMs,
+            playbackSpeed = state.playbackSpeed,
             seekEnabled = !isTalkbackActive(),
             onSeek = { state.eventSink(VoiceMessageEvent.Seek(it)) },
         )

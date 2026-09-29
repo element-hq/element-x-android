@@ -38,6 +38,8 @@
   <string name="screen_session_verification_request_title">"Verifizierung angefordert"</string>
   <string name="screen_session_verification_they_dont_match">"Sie stimmen nicht überein"</string>
   <string name="screen_session_verification_they_match">"Sie stimmen überein"</string>
+  <string name="screen_session_verification_unavailable_subtitle">"Bitte verwende ein anderes Gerät oder deinen Wiederherstellungsschlüssel."</string>
+  <string name="screen_session_verification_unavailable_title">"Verifizierung mit diesem Gerät ist derzeit nicht möglich"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Öffne die App auf dem anderen Gerät, bevor du die Verifizierung auf diesem Gerät startest."</string>
   <string name="screen_session_verification_use_another_device_title">"Öffne die App auf einem anderen verifizierten Gerät"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Verifiziere diesen Nutzer für zusätzliche Sicherheit durch den Vergleich einer Reihe von Emojis auf den Geräten. Verwende dazu einen vertraulichen Kommunikationskanal."</string>

@@ -24,6 +24,7 @@ import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
 import io.element.android.libraries.androidutils.system.copyToClipboard
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDropdown
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
@@ -48,6 +49,18 @@ fun AppDeveloperSettingsView(
         modifier = modifier.fillMaxWidth(),
     ) {
         // Note: this is OK to hardcode strings in this debug screen.
+        ListItem(
+            content = {
+                Text(text = stringResource(id = CommonStrings.action_view_source))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_view_source_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.isDeveloperModeEnabled,
+            ),
+            onClick = { state.eventSink(AppDeveloperSettingsEvent.SetDeveloperModeEnabled(!state.isDeveloperModeEnabled)) }
+        )
         PreferenceCategory(
             title = "Feature flags",
             showTopDivider = false,

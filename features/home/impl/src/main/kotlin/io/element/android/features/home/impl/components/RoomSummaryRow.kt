@@ -345,7 +345,7 @@ private fun MessagePreviewAndIndicatorRow(
         // Call and unread
         Row(
             modifier = Modifier
-                .height(16.dp)
+                .heightIn(min = 16.dp)
                 // Used to force this line to be read aloud earlier than the latest event when using Talkback
                 .zIndex(-1f),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -358,21 +358,18 @@ private fun MessagePreviewAndIndicatorRow(
                     isAudio = room.activeCallIntent == CallIntent.AUDIO
                 )
             }
-            if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
+            val isMuted = room.userDefinedNotificationMode == RoomNotificationMode.MUTE
+            if (isMuted) {
                 NotificationOffIndicatorAtom()
             } else if (room.numberOfUnreadMentions > 0) {
                 MentionIndicatorAtom()
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
-                val count = if (showUnreadCount) {
-                    if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
-                        room.numberOfUnreadMessages
-                    } else {
-                        room.numberOfUnreadNotifications
-                    }
-                } else {
-                    null
+                val count = when {
+                    showUnreadCount && !isMuted && room.numberOfUnreadNotifications > 0 -> room.numberOfUnreadNotifications
+                    !showUnreadCount -> 0
+                    else -> null
                 }
                 UnreadIndicatorAtom(
                     color = tint,
@@ -457,5 +454,6 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryPreviewP
         isInviteSeen = data.name == "Bob",
         onClick = {},
         eventSink = {},
+        showUnreadCount = data.numberOfUnreadNotifications > 0,
     )
 }

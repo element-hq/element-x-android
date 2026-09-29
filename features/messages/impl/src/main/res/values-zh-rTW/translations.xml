@@ -7,6 +7,11 @@
   <string name="crypto_event_authenticity_unknown_device">"由未知或已刪除的裝置加密。"</string>
   <string name="crypto_event_authenticity_unsigned_device">"由未經其擁有者驗證的裝置加密。"</string>
   <string name="crypto_event_authenticity_unverified_identity">"由未經驗證的使用者加密。"</string>
+  <string name="error_sending_failure_invalid_mime_type">"無效的 MIME 類型：%s"</string>
+  <string name="error_sending_failure_missing_media_content">"缺少媒體內容"</string>
+  <string name="error_sending_failure_other">"錯誤詳細資訊：%s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"從未經驗證的裝置傳送"</string>
+  <string name="error_sending_failure_unknown">"未知錯誤"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"水平翻轉圖片"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"水平翻轉"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"原始狀態"</string>
@@ -31,7 +36,7 @@
   <string name="screen_media_upload_preview_title">"新增媒體"</string>
   <string name="screen_report_content_block_user">"封鎖使用者"</string>
   <string name="screen_report_content_block_user_hint">"檢查您是否要隱藏所有來自此使用者的目前及未來的訊息"</string>
-  <string name="screen_report_content_explanation">"此訊息將會回報給您的家伺服器管理員。他們將無法讀取任何已加密的訊息。"</string>
+  <string name="screen_report_content_explanation">"這則訊息將會通報給您的帳號服務提供者。他們將無法閱讀任何加密訊息。"</string>
   <string name="screen_report_content_hint">"檢舉這個內容的原因"</string>
   <string name="screen_room_attachment_source_camera">"照相機"</string>
   <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
@@ -41,6 +46,10 @@
   <string name="screen_room_attachment_source_location">"分享位置"</string>
   <string name="screen_room_attachment_source_poll">"投票"</string>
   <string name="screen_room_attachment_text_formatting">"格式化文字"</string>
+  <string name="screen_room_confirm_removal_reason_label">"理由（選擇性）"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"輸入⋯⋯"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"（選擇性）"</string>
+  <string name="screen_room_confirm_removal_title">"確認移除"</string>
   <string name="screen_room_encrypted_history_banner">"目前無法檢視訊息歷史紀錄。"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"無法檢視此聊天室的訊息歷史紀錄。驗證此裝置以檢視您的訊息紀錄。"</string>
   <string name="screen_room_invite_again_alert_message">"您想要邀請他們回來嗎？"</string>
