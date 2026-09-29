@@ -21,7 +21,6 @@ open class LogoutStatePreviewParam : PreviewParameterProvider<LogoutState> {
     override val values: Sequence<LogoutState>
         get() = sequenceOf(
             aLogoutState(),
-            aLogoutState(currentUser = aMatrixUser(id = "@alice:server.org", displayName = null)),
             aLogoutState(isLastDevice = true),
             aLogoutState(isLastDevice = false, backupUploadState = BackupUploadState.Uploading(66, 200)),
             aLogoutState(isLastDevice = true, backupUploadState = BackupUploadState.Done),
@@ -42,6 +41,7 @@ open class LogoutStatePreviewParam : PreviewParameterProvider<LogoutState> {
                 backupUploadState = BackupUploadState.Waiting,
                 waitingForALongTime = true,
             ),
+            aLogoutState(currentUser = aMatrixUser(id = "@alice:server.org", displayName = null)),
         )
 }
 
