@@ -10,7 +10,7 @@ package io.element.android.features.preferences.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingPresenter
-import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingStateEvents
+import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingStateEvent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -150,7 +150,7 @@ class EditDefaultNotificationSettingsPresenterTest {
             ),
         )
         presenter.test {
-            awaitItem().eventSink(EditDefaultNotificationSettingStateEvents.SetNotificationMode(RoomNotificationMode.ALL_MESSAGES))
+            awaitItem().eventSink(EditDefaultNotificationSettingStateEvent.SetNotificationMode(RoomNotificationMode.ALL_MESSAGES))
             val loadedState = consumeItemsUntilPredicate {
                 it.mode == RoomNotificationMode.ALL_MESSAGES
             }.last()
@@ -166,12 +166,12 @@ class EditDefaultNotificationSettingsPresenterTest {
         val presenter = createEditDefaultNotificationSettingPresenter(notificationSettingsService)
         notificationSettingsService.givenSetDefaultNotificationModeError(AN_EXCEPTION)
         presenter.test {
-            awaitItem().eventSink(EditDefaultNotificationSettingStateEvents.SetNotificationMode(RoomNotificationMode.ALL_MESSAGES))
+            awaitItem().eventSink(EditDefaultNotificationSettingStateEvent.SetNotificationMode(RoomNotificationMode.ALL_MESSAGES))
             val errorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isFailure()
             }.last()
             assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
-            errorState.eventSink(EditDefaultNotificationSettingStateEvents.ClearError)
+            errorState.eventSink(EditDefaultNotificationSettingStateEvent.ClearError)
             val clearErrorState = consumeItemsUntilPredicate {
                 it.changeNotificationSettingAction.isUninitialized()
             }.last()

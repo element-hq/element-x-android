@@ -30,7 +30,7 @@ import org.junit.Test
 class DeclineAndBlockViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invoke the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>(expectEvents = false)
         ensureCalledOnce {
             setDeclineAndBlockView(
                 aDeclineAndBlockState(
@@ -44,7 +44,7 @@ class DeclineAndBlockViewTest : RobolectricTest() {
 
     @Test
     fun `a successful decline invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>(expectEvents = false)
         ensureCalledOnce {
             setDeclineAndBlockView(
                 aDeclineAndBlockState(
@@ -58,7 +58,7 @@ class DeclineAndBlockViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on decline when enabled emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>()
         setDeclineAndBlockView(
             aDeclineAndBlockState(
                 blockUser = true,
@@ -66,12 +66,12 @@ class DeclineAndBlockViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_decline)
-        eventsRecorder.assertSingle(DeclineAndBlockEvents.Decline)
+        eventsRecorder.assertSingle(DeclineAndBlockEvent.Decline)
     }
 
     @Test
     fun `clicking on decline when disabled does not emit event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>(expectEvents = false)
         setDeclineAndBlockView(
             aDeclineAndBlockState(
                 blockUser = false,
@@ -85,7 +85,7 @@ class DeclineAndBlockViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on block option emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>()
         setDeclineAndBlockView(
             aDeclineAndBlockState(
                 blockUser = true,
@@ -93,12 +93,12 @@ class DeclineAndBlockViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_decline_and_block_block_user_option_title)
-        eventsRecorder.assertSingle(DeclineAndBlockEvents.ToggleBlockUser)
+        eventsRecorder.assertSingle(DeclineAndBlockEvent.ToggleBlockUser)
     }
 
     @Test
     fun `clicking on report room option emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>()
         setDeclineAndBlockView(
             aDeclineAndBlockState(
                 reportRoom = true,
@@ -106,12 +106,12 @@ class DeclineAndBlockViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_report_room)
-        eventsRecorder.assertSingle(DeclineAndBlockEvents.ToggleReportRoom)
+        eventsRecorder.assertSingle(DeclineAndBlockEvent.ToggleReportRoom)
     }
 
     @Test
     fun `typing text in the reason field emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>()
         setDeclineAndBlockView(
             aDeclineAndBlockState(
                 reportRoom = true,
@@ -120,7 +120,7 @@ class DeclineAndBlockViewTest : RobolectricTest() {
             ),
         )
         onNodeWithText("").performTextInput("Spam!")
-        eventsRecorder.assertSingle(DeclineAndBlockEvents.UpdateReportReason("Spam!"))
+        eventsRecorder.assertSingle(DeclineAndBlockEvent.UpdateReportReason("Spam!"))
     }
 }
 

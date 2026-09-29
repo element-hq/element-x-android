@@ -30,7 +30,7 @@ sealed interface LoadingRoomState {
     data class Loaded(val room: JoinedRoom) : LoadingRoomState
 }
 
-open class LoadingRoomStateProvider : PreviewParameterProvider<LoadingRoomState> {
+open class LoadingRoomStatePreviewParam : PreviewParameterProvider<LoadingRoomState> {
     override val values: Sequence<LoadingRoomState>
         get() = sequenceOf(
             LoadingRoomState.Loading,

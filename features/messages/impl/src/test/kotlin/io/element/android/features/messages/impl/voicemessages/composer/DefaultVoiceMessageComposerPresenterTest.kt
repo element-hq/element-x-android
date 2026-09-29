@@ -47,7 +47,6 @@ import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -65,7 +64,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("LargeClass")
 class DefaultVoiceMessageComposerPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -106,6 +104,7 @@ class DefaultVoiceMessageComposerPresenterTest {
 
     companion object {
         private val RECORDING_DURATION = 1.seconds
+        private val PLAYER_DURATION = 10.seconds
         private val FIRST_LEVEL_DURATION = 500.milliseconds
         private val RECORDING_STATE = VoiceMessageState.Recording(RECORDING_DURATION, listOf(0.1f, 0.2f).toImmutableList())
         private val FIRST_RECORDING_STATE = VoiceMessageState.Recording(FIRST_LEVEL_DURATION, listOf(0.1f).toImmutableList())
@@ -158,7 +157,9 @@ class DefaultVoiceMessageComposerPresenterTest {
             // Give extra time to generate all states
             runCurrent()
 
-            val finalState = consumeItemsUntilTimeout().last()
+            // Skip until we reach the final state, which should have the last 128 levels
+            skipItems(numberOfLevels - 1)
+            val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isInstanceOf(VoiceMessageState.Recording::class.java)
             val recordingState = finalState.voiceMessageState as VoiceMessageState.Recording
             // The number of levels should be limited to 128 items
@@ -270,6 +271,7 @@ class DefaultVoiceMessageComposerPresenterTest {
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(aPreviewState())
+            assertThat((finalState.voiceMessageState as VoiceMessageState.Preview).duration).isEqualTo(RECORDING_DURATION)
             startRecordResult.assertions().isCalledOnce()
             stopRecordResult.assertions().isCalledOnce().with(value(false))
             deleteRecordingResult.assertions().isNeverCalled()
@@ -306,6 +308,7 @@ class DefaultVoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Play))
             val finalState = awaitItem().also {
                 assertThat(it.voiceMessageState).isEqualTo(aPlayingState())
+                assertThat((it.voiceMessageState as VoiceMessageState.Preview).duration).isEqualTo(PLAYER_DURATION)
             }
             startRecordResult.assertions().isCalledOnce()
             stopRecordResult.assertions().isCalledOnce().with(value(false))
@@ -342,17 +345,30 @@ class DefaultVoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
             awaitItem().eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Seek(0.5f)))
             awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState(playbackProgress = 0.5f, time = 0.seconds, showCursor = true))
+                assertThat(voiceMessageState).isEqualTo(
+                    aPreviewState(playbackProgress = 0.5f, time = 0.seconds, showCursor = true)
+                )
             }
             awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState(playbackProgress = 0.5f, time = 5.seconds, showCursor = true))
+                assertThat(voiceMessageState).isEqualTo(
+                    aPreviewState(playbackProgress = 0.5f, time = 0.seconds, showCursor = true, duration = PLAYER_DURATION)
+                )
+            }
+            awaitItem().apply {
+                assertThat(voiceMessageState).isEqualTo(
+                    aPreviewState(playbackProgress = 0.5f, time = 5.seconds, showCursor = true, duration = PLAYER_DURATION)
+                )
                 eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Seek(0.2f)))
             }
             awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState(playbackProgress = 0.2f, time = 5.seconds, showCursor = true))
+                assertThat(voiceMessageState).isEqualTo(
+                    aPreviewState(playbackProgress = 0.2f, time = 5.seconds, showCursor = true, duration = PLAYER_DURATION)
+                )
             }
             val finalState = awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState(playbackProgress = 0.2f, time = 2.seconds, showCursor = true))
+                assertThat(voiceMessageState).isEqualTo(
+                    aPreviewState(playbackProgress = 0.2f, time = 2.seconds, showCursor = true, duration = PLAYER_DURATION)
+                )
             }
 
             testPauseAndDestroy(finalState)
@@ -831,6 +847,7 @@ class DefaultVoiceMessageComposerPresenterTest {
         playbackProgress: Float = 0f,
         isSending: Boolean = false,
         time: Duration = RECORDING_DURATION,
+        duration: Duration = RECORDING_DURATION,
         showCursor: Boolean = false,
         waveform: List<Float> = voiceRecorder.waveform,
     ) = VoiceMessageState.Preview(
@@ -838,6 +855,7 @@ class DefaultVoiceMessageComposerPresenterTest {
         playbackProgress = playbackProgress,
         isSending = isSending,
         time = time,
+        duration = duration,
         showCursor = showCursor,
         waveform = waveform.toImmutableList(),
     )
@@ -848,6 +866,7 @@ class DefaultVoiceMessageComposerPresenterTest {
             playbackProgress = 0.1f,
             showCursor = true,
             time = RECORDING_DURATION,
+            duration = PLAYER_DURATION,
         )
 
     private fun aPausedState() =

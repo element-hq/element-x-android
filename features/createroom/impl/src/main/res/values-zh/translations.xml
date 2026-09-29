@@ -11,7 +11,7 @@
   <string name="screen_create_room_private_option_title">"私密"</string>
   <string name="screen_create_room_public_option_description">"任何人都能找到此房间。
 你可以随时在房间设置中更改。"</string>
-  <string name="screen_create_room_public_option_short_description">"任何人都可以加入"</string>
+  <string name="screen_create_room_public_option_short_description">"任何人都可以加入，包括你的组织之外的人员。"</string>
   <string name="screen_create_room_public_option_title">"公共"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"任何人都可申请加入，但需由管理员或协管员批准申请。"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"申请加入"</string>
@@ -19,7 +19,7 @@
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"申请加入"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"仅限受邀人员加入。"</string>
   <string name="screen_create_room_room_access_section_private_option_title">"私密"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"任何人都可以加入。"</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"任何人都可以加入，包括你的组织之外的人员。"</string>
   <string name="screen_create_room_room_access_section_public_option_title">"公共"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"%1$s 中的任何人都可以加入。"</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"标准"</string>

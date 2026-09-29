@@ -122,7 +122,7 @@ private fun ViolationAlert(
 @PreviewsDayNight
 @Composable
 internal fun IdentityChangeStateViewPreview(
-    @PreviewParameter(IdentityChangeStateProvider::class) state: IdentityChangeState,
+    @PreviewParameter(IdentityChangeStatePreviewParam::class) state: IdentityChangeState,
 ) = ElementPreview {
     IdentityChangeStateView(
         state = state,

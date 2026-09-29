@@ -10,7 +10,7 @@ package io.element.android.libraries.push.api.battery
 
 fun aBatteryOptimizationState(
     shouldDisplayBanner: Boolean = false,
-    eventSink: (BatteryOptimizationEvents) -> Unit = {},
+    eventSink: (BatteryOptimizationEvent) -> Unit = {},
 ) = BatteryOptimizationState(
     shouldDisplayBanner = shouldDisplayBanner,
     eventSink = eventSink,

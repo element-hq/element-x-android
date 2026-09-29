@@ -293,7 +293,7 @@ private fun SenderRow(
 @PreviewsDayNight
 @Composable
 internal fun ReactionSummaryViewContentPreview(
-    @PreviewParameter(ReactionSummaryStateProvider::class) state: ReactionSummaryState
+    @PreviewParameter(ReactionSummaryStatePreviewParam::class) state: ReactionSummaryState
 ) = ElementPreview {
     ReactionSummaryViewContent(summary = state.target as ReactionSummaryState.Summary)
 }

@@ -46,7 +46,7 @@ fun AudioItemView(
 @PreviewsDayNight
 @Composable
 internal fun AudioItemViewPreview(
-    @PreviewParameter(MediaItemAudioProvider::class) audio: MediaItem.Audio,
+    @PreviewParameter(MediaItemAudioPreviewParam::class) audio: MediaItem.Audio,
 ) = ElementPreview {
     val states = remember {
         listOf(

@@ -18,7 +18,7 @@
   <string name="screen_space_add_rooms_room_access_description">"Додавання кімнати не вплине на доступ до неї. Щоб змінити доступ, перейдіть до «Налаштування кімнати» &gt; «Безпека та конфіденційність»."</string>
   <string name="screen_space_empty_state_title">"Додайте свою першу кімнату"</string>
   <string name="screen_space_menu_action_members">"Переглянути учасників"</string>
-  <string name="screen_space_remove_rooms_confirmation_content">"Видалення кімнати не вплине на доступ до неї. Щоб змінити доступ, перейдіть до розділу «Налаштування кімнати» &gt; «Безпека та конфіденційність»."</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Вилучення кімнати не вплине на доступ до неї. Щоб змінити доступ, перейдіть до розділу Відомості про кімнату &gt; Безпека та приватність."</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">
     <item quantity="one">"Видалити %1$d кімнату з %2$s"</item>
     <item quantity="few">"Видалити %1$d кімнати з %2$s"</item>

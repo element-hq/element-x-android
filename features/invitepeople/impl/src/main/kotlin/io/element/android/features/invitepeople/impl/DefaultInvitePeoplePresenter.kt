@@ -24,7 +24,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.features.invitepeople.api.InvitePeoplePresenter
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.libraries.architecture.AsyncAction
@@ -179,26 +179,26 @@ class DefaultInvitePeoplePresenter(
             )
         }
 
-        fun handleEvent(event: InvitePeopleEvents) {
+        fun handleEvent(event: InvitePeopleEvent) {
             when (event) {
                 // Dedicated `when` for exhaustivity.
-                is DefaultInvitePeopleEvents -> when (event) {
-                    is DefaultInvitePeopleEvents.OnSearchActiveChanged -> {
+                is DefaultInvitePeopleEvent -> when (event) {
+                    is DefaultInvitePeopleEvent.OnSearchActiveChanged -> {
                         searchActive = event.active
                         if (!event.active) {
                             queryState.clearText()
                         }
                     }
 
-                    is DefaultInvitePeopleEvents.ToggleUser -> {
+                    is DefaultInvitePeopleEvent.ToggleUser -> {
                         selectedUsers.toggleUser(event.user)
                         searchResults.toggleUser(event.user)
                         // suggestions will automatically update via derivedStateOf when selectedUsers changes
                     }
-                    is DefaultInvitePeopleEvents.DismissUnknownUsersModal -> {
+                    is DefaultInvitePeopleEvent.DismissUnknownUsersModal -> {
                         sendInvitesAction.value = AsyncAction.Uninitialized
                     }
-                    is DefaultInvitePeopleEvents.RemoveUnknownUsers -> {
+                    is DefaultInvitePeopleEvent.RemoveUnknownUsers -> {
                         val usersToRemove = selectedUsers.value.filter { it in unknownUsers }
                         usersToRemove.forEach { user ->
                             selectedUsers.toggleUser(user)
@@ -207,7 +207,7 @@ class DefaultInvitePeoplePresenter(
                         sendInvitesAction.value = AsyncAction.Uninitialized
                     }
                 }
-                is InvitePeopleEvents.SendInvites -> {
+                is InvitePeopleEvent.SendInvites -> {
                     if (unknownUsers.isNotEmpty() && sendInvitesAction.value !is ConfirmingUnknownUserInvitation) {
                         sendInvitesAction.value = ConfirmingUnknownUserInvitation(
                             unknownUsers
@@ -224,11 +224,11 @@ class DefaultInvitePeoplePresenter(
                         }
                     }
                 }
-                is InvitePeopleEvents.CloseSearch -> {
+                is InvitePeopleEvent.CloseSearch -> {
                     searchActive = false
                     queryState.clearText()
                 }
-                is InvitePeopleEvents.ClearError -> {
+                is InvitePeopleEvent.ClearError -> {
                     sendInvitesAction.value = AsyncAction.Uninitialized
                     createRoomFromDmAction.value = AsyncAction.Uninitialized
                 }

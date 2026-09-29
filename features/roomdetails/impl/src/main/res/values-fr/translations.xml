@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Vous aurez besoin d’une adresse pour le rendre visible dans l’annuaire public."</string>
   <string name="screen_edit_room_address_title">"Modifier l’adresse"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Une erreur s’est produite lors de la mise à jour du paramètre de notification."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre fournisseur de compte ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
   <string name="screen_polls_history_title">"Sondages"</string>
   <string name="screen_room_change_permissions_administrators">"Administrateurs"</string>
   <string name="screen_room_change_permissions_ban_people">"Bannir des participants"</string>

@@ -41,9 +41,9 @@ class DefaultPermissionsPresenter(
             permissionsRequested = true
         }
 
-        fun handleEvent(event: PermissionsEvents) {
+        fun handleEvent(event: PermissionsEvent) {
             when (event) {
-                PermissionsEvents.RequestPermissions -> {
+                PermissionsEvent.RequestPermissions -> {
                     multiplePermissionsState.launchMultiplePermissionRequest()
                 }
             }

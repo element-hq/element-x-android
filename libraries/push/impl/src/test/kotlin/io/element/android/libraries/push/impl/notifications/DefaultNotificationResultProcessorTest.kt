@@ -267,6 +267,84 @@ class DefaultNotificationResultProcessorTest {
         assertThat(receivedFallbackEvent).isTrue()
     }
 
+    @Test
+    fun `when an event cannot be resolved, the generated fallback event is silent`() = runTest {
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
+        val onPushReceivedResult = lambdaRecorder<String, EventId?, RoomId?, SessionId?, Boolean, Boolean, String?, Unit> { _, _, _, _, _, _, _ -> }
+        val processor = createDefaultNotificationResultProcessor(
+            mutableBatteryOptimizationStore = FakeMutableBatteryOptimizationStore(
+                showBatteryOptimizationBannerResult = lambdaRecorder<Unit> {},
+            ),
+            pushHistoryService = FakePushHistoryService(
+                onPushReceivedResult = onPushReceivedResult,
+            ),
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+        )
+
+        runningProcessor(processor) {
+            emit(mapOf(aPushRequest() to Result.failure(NotificationResolverException.UnknownError("Unable to resolve event"))))
+        }
+
+        advanceTimeBy(300.milliseconds)
+
+        onNotifiableEventsReceived.assertions()
+            .isCalledOnce()
+            .with(
+                value(
+                    listOf(
+                        aFallbackNotifiableEvent(
+                            description = "",
+                            canBeReplaced = true,
+                            noisy = false,
+                            cause = "Unable to resolve event",
+                        )
+                    )
+                )
+            )
+    }
+
+    @Test
+    fun `emit starts the processing if needed and only returns once the results have been processed`() = runTest {
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
+        val processor = createDefaultNotificationResultProcessor(
+            pushHistoryService = FakePushHistoryService(onPushReceivedResult = { _, _, _, _, _, _, _ -> }),
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+        )
+
+        // No call to start(): the worker may run in a process where no push has been received yet
+        processor.emit(mapOf(aPushRequest() to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent()))))
+
+        // No runCurrent(): the results must already have been processed when emit returns
+        onNotifiableEventsReceived.assertions().isCalledOnce()
+
+        processor.stop()
+    }
+
+    @Test
+    fun `a failing batch does not prevent later batches from being processed`() = runTest {
+        var pushHistoryCalls = 0
+        val pushHistoryService = FakePushHistoryService(
+            onPushReceivedResult = { _, _, _, _, _, _, _ ->
+                pushHistoryCalls++
+                if (pushHistoryCalls == 1) error("boom")
+            },
+        )
+        val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
+        val processor = createDefaultNotificationResultProcessor(
+            pushHistoryService = pushHistoryService,
+            onNotifiableEventsReceived = onNotifiableEventsReceived,
+        )
+
+        runningProcessor(processor) {
+            // Processing the first batch throws, but emit must still return and the collector must survive
+            emit(mapOf(aPushRequest() to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent()))))
+            emit(mapOf(aPushRequest() to Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent()))))
+        }
+
+        // Only the second batch made it to the notification drawer
+        onNotifiableEventsReceived.assertions().isCalledOnce()
+    }
+
     private suspend fun TestScope.runningProcessor(processor: NotificationResultProcessor, block: suspend NotificationResultProcessor.() -> Unit) {
         processor.start()
 

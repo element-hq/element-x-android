@@ -39,6 +39,7 @@
   </plurals>
   <string name="notification_invite_body">"Запрошує вас до бесіди"</string>
   <string name="notification_invite_body_with_sender">"%1$s запрошує вас до бесіди"</string>
+  <string name="notification_knock_request_body">"Запит на приєднання"</string>
   <string name="notification_live_location_started_body">"Починає ділитися своїм поточним місцем розташування"</string>
   <string name="notification_mentioned_you_body">"Вас згадує: %1$s"</string>
   <string name="notification_new_messages">"Нові повідомлення"</string>
@@ -56,7 +57,7 @@
   <string name="notification_sender_mention_reply">"%1$s згадували або відповідали"</string>
   <string name="notification_space_invite_body">"Вас запросили приєднатися до простору"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s запрошує вас приєднатися до простору"</string>
-  <string name="notification_test_push_notification_content">"Ви переглядаєте сповіщення! Натисніть тут!"</string>
+  <string name="notification_test_push_notification_content">"Ви переглядаєте сповіщення! Торкніться мене!"</string>
   <string name="notification_thread_in_room">"Гілка в %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -106,12 +107,13 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Не вдається показати сповіщення."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Ви натиснули на сповіщення!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Показ сповіщення"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Натисніть на сповіщення, щоб продовжити тест."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Торкніться сповіщення, щоб продовжити тест."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Переконується, що застосунок отримує push-сповіщення."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Помилка: постачальник push-сповіщень відхилив запит."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Помилка: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Помилка, неможливо перевірити push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Помилка, час очікування вийшов на push-повідомлення."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Помилка: шлюз push обмежує швидкість для цього пристрою, тому сповіщення не будуть надійними. Налаштуйте інший шлюз push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Зворотнє відправлення push-повідомлення, зайняло %1$d мс."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Перевірка зворотного надсилання"</string>
 </resources>

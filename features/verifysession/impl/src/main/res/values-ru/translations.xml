@@ -38,6 +38,8 @@
   <string name="screen_session_verification_request_title">"Запрошено подтверждение"</string>
   <string name="screen_session_verification_they_dont_match">"Они не совпадают"</string>
   <string name="screen_session_verification_they_match">"Они совпадают"</string>
+  <string name="screen_session_verification_unavailable_subtitle">"Пожалуйста, используйте другое устройство или ключ восстановления."</string>
+  <string name="screen_session_verification_unavailable_title">"В данный момент проверка с помощью этого устройства недоступна"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Прежде чем начать проверку, убедитесь, что приложение открыто на другом устройстве."</string>
   <string name="screen_session_verification_use_another_device_title">"Откройте приложение на другом проверенном устройстве"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Для дополнительной безопасности проверьте этого пользователя, сравнив набор эмодзи на ваших устройствах. Сделайте это, используя надежный способ коммуникации."</string>

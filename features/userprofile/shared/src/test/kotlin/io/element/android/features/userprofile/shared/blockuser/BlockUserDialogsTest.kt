@@ -12,7 +12,7 @@ package io.element.android.features.userprofile.shared.blockuser
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileEvent
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.R
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -25,7 +25,7 @@ import org.junit.Test
 class BlockUserDialogsTest : RobolectricTest() {
     @Test
     fun `confirm block user emit expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setContent {
             BlockUserDialogs(
                 state = aUserProfileState(
@@ -35,12 +35,12 @@ class BlockUserDialogsTest : RobolectricTest() {
             )
         }
         clickOn(R.string.screen_dm_details_block_alert_action)
-        eventsRecorder.assertSingle(UserProfileEvents.BlockUser(false))
+        eventsRecorder.assertSingle(UserProfileEvent.BlockUser(false))
     }
 
     @Test
     fun `cancel block user emit expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setContent {
             BlockUserDialogs(
                 state = aUserProfileState(
@@ -50,12 +50,12 @@ class BlockUserDialogsTest : RobolectricTest() {
             )
         }
         clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(UserProfileEvents.ClearConfirmationDialog)
+        eventsRecorder.assertSingle(UserProfileEvent.ClearConfirmationDialog)
     }
 
     @Test
     fun `confirm unblock user emit expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setContent {
             BlockUserDialogs(
                 state = aUserProfileState(
@@ -65,12 +65,12 @@ class BlockUserDialogsTest : RobolectricTest() {
             )
         }
         clickOn(R.string.screen_dm_details_unblock_alert_action)
-        eventsRecorder.assertSingle(UserProfileEvents.UnblockUser(false))
+        eventsRecorder.assertSingle(UserProfileEvent.UnblockUser(false))
     }
 
     @Test
     fun `cancel unblock user emit expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setContent {
             BlockUserDialogs(
                 state = aUserProfileState(
@@ -80,6 +80,6 @@ class BlockUserDialogsTest : RobolectricTest() {
             )
         }
         clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(UserProfileEvents.ClearConfirmationDialog)
+        eventsRecorder.assertSingle(UserProfileEvent.ClearConfirmationDialog)
     }
 }

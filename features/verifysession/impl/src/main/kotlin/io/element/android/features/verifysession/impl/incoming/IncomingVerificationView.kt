@@ -62,7 +62,7 @@ fun IncomingVerificationView(
     val step = state.step
 
     BackHandler {
-        state.eventSink(IncomingVerificationViewEvents.GoBack)
+        state.eventSink(IncomingVerificationViewEvent.GoBack)
     }
     HeaderFooterPage(
         modifier = modifier,
@@ -70,7 +70,7 @@ fun IncomingVerificationView(
             TopAppBar(
                 title = {},
                 navigationIcon = {
-                    BackButton(onClick = { state.eventSink(IncomingVerificationViewEvents.GoBack) })
+                    BackButton(onClick = { state.eventSink(IncomingVerificationViewEvent.GoBack) })
                 },
                 colors = topAppBarColors(containerColor = Color.Transparent),
             )
@@ -217,13 +217,13 @@ private fun IncomingVerificationBottomMenu(
                     text = stringResource(CommonStrings.action_start_verification),
                     enabled = !step.isWaiting,
                     showProgress = step.isWaiting,
-                    onClick = { eventSink(IncomingVerificationViewEvents.StartVerification) },
+                    onClick = { eventSink(IncomingVerificationViewEvent.StartVerification) },
                 )
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_ignore),
                     enabled = !step.isWaiting,
-                    onClick = { eventSink(IncomingVerificationViewEvents.IgnoreVerification) },
+                    onClick = { eventSink(IncomingVerificationViewEvent.IgnoreVerification) },
                 )
             }
         }
@@ -235,14 +235,14 @@ private fun IncomingVerificationBottomMenu(
                     enabled = !step.isWaiting,
                     showProgress = step.isWaiting,
                     onClick = {
-                        eventSink(IncomingVerificationViewEvents.ConfirmVerification)
+                        eventSink(IncomingVerificationViewEvent.ConfirmVerification)
                     },
                 )
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.screen_session_verification_they_dont_match),
                     enabled = !step.isWaiting,
-                    onClick = { eventSink(IncomingVerificationViewEvents.DeclineVerification) },
+                    onClick = { eventSink(IncomingVerificationViewEvent.DeclineVerification) },
                 )
             }
         }
@@ -254,7 +254,7 @@ private fun IncomingVerificationBottomMenu(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_done),
                     onClick = {
-                        eventSink(IncomingVerificationViewEvents.GoBack)
+                        eventSink(IncomingVerificationViewEvent.GoBack)
                     },
                 )
             }
@@ -264,7 +264,9 @@ private fun IncomingVerificationBottomMenu(
 
 @PreviewsDayNight
 @Composable
-internal fun IncomingVerificationViewPreview(@PreviewParameter(IncomingVerificationStateProvider::class) state: IncomingVerificationState) = ElementPreview {
+internal fun IncomingVerificationViewPreview(@PreviewParameter(
+    IncomingVerificationStatePreviewParam::class
+) state: IncomingVerificationState) = ElementPreview {
     IncomingVerificationView(
         state = state,
     )

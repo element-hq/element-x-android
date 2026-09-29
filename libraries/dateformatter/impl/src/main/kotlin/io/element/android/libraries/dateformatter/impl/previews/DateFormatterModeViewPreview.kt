@@ -34,7 +34,7 @@ import kotlin.time.Instant
 @Preview
 @Composable
 internal fun DateFormatterModeViewPreview(
-    @PreviewParameter(DateFormatterModeProvider::class) dateFormatterMode: DateFormatterMode,
+    @PreviewParameter(DateFormatterModePreviewParam::class) dateFormatterMode: DateFormatterMode,
 ) = ElementPreview {
     DateFormatterModeView(dateFormatterMode)
 }

@@ -51,7 +51,7 @@ fun AboutView(
 
 @PreviewsDayNight
 @Composable
-internal fun AboutViewPreview(@PreviewParameter(AboutStateProvider::class) state: AboutState) = ElementPreview {
+internal fun AboutViewPreview(@PreviewParameter(AboutStatePreviewParam::class) state: AboutState) = ElementPreview {
     AboutView(
         state = state,
         onElementLegalClick = {},

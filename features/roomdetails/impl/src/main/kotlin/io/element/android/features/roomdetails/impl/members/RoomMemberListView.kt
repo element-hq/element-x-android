@@ -375,7 +375,7 @@ private fun RoomMemberListTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomMemberListViewPreview(@PreviewParameter(RoomMemberListStateProvider::class) state: RoomMemberListState) = ElementPreview {
+internal fun RoomMemberListViewPreview(@PreviewParameter(RoomMemberListStatePreviewParam::class) state: RoomMemberListState) = ElementPreview {
     RoomMemberListView(
         state = state,
         navigator = object : RoomMemberListNavigator {

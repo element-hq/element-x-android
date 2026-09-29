@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"Dateiname"</string>
   <string name="screen_media_details_no_more_files_to_show">"Keine weiteren Dateien zum Anzeigen"</string>
   <string name="screen_media_details_no_more_media_to_show">"Keine weiteren Medien mehr zum Anzeigen"</string>
+  <string name="screen_media_details_title">"Datei-Info"</string>
   <string name="screen_media_details_uploaded_by">"Hochgeladen von"</string>
   <string name="screen_media_details_uploaded_on">"Hochgeladen am"</string>
 </resources>

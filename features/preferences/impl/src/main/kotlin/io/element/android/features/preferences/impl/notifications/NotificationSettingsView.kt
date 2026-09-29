@@ -54,7 +54,7 @@ import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
-import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvents
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -74,7 +74,7 @@ fun NotificationSettingsView(
 ) {
     OnLifecycleEvent { _, event ->
         when (event) {
-            Lifecycle.Event.ON_RESUME -> state.eventSink.invoke(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
+            Lifecycle.Event.ON_RESUME -> state.eventSink.invoke(NotificationSettingsEvent.RefreshSystemNotificationsEnabled)
             else -> Unit
         }
     }
@@ -86,27 +86,27 @@ fun NotificationSettingsView(
         when (state.matrixSettings) {
             is NotificationSettingsState.MatrixSettings.Invalid -> InvalidNotificationSettingsView(
                 showError = state.matrixSettings.fixFailed,
-                onContinueClick = { state.eventSink(NotificationSettingsEvents.FixConfigurationMismatch) },
-                onDismissError = { state.eventSink(NotificationSettingsEvents.ClearConfigurationMismatchError) },
+                onContinueClick = { state.eventSink(NotificationSettingsEvent.FixConfigurationMismatch) },
+                onDismissError = { state.eventSink(NotificationSettingsEvent.ClearConfigurationMismatchError) },
             )
             NotificationSettingsState.MatrixSettings.Uninitialized -> return@PreferencePage
             is NotificationSettingsState.MatrixSettings.Valid -> NotificationSettingsContentView(
                 matrixSettings = state.matrixSettings,
                 state = state,
-                onNotificationsEnabledChange = { state.eventSink(NotificationSettingsEvents.SetNotificationsEnabled(it)) },
+                onNotificationsEnabledChange = { state.eventSink(NotificationSettingsEvent.SetNotificationsEnabled(it)) },
                 onGroupChatsClick = { onOpenEditDefault(false) },
                 onDirectChatsClick = { onOpenEditDefault(true) },
-                onMentionNotificationsChange = { state.eventSink(NotificationSettingsEvents.SetAtRoomNotificationsEnabled(it)) },
+                onMentionNotificationsChange = { state.eventSink(NotificationSettingsEvent.SetAtRoomNotificationsEnabled(it)) },
                 // TODO We are removing the call notification toggle until support for call notifications has been added
-//                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
-                onInviteForMeNotificationsChange = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
+//                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvent.SetCallNotificationsEnabled(it)) },
+                onInviteForMeNotificationsChange = { state.eventSink(NotificationSettingsEvent.SetInviteForMeNotificationsEnabled(it)) },
                 onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
             )
         }
         AsyncActionView(
             async = state.changeNotificationSettingAction,
             errorMessage = { stringResource(R.string.screen_notification_settings_edit_failed_updating_default_mode) },
-            onErrorDismiss = { state.eventSink(NotificationSettingsEvents.ClearNotificationChangeError) },
+            onErrorDismiss = { state.eventSink(NotificationSettingsEvent.ClearNotificationChangeError) },
             onSuccess = {},
         )
     }
@@ -165,7 +165,7 @@ private fun NotificationSettingsContentView(
                         Text(stringResource(R.string.full_screen_intent_banner_message))
                     },
                     onClick = {
-                        state.fullScreenIntentPermissionsState.eventSink(FullScreenIntentPermissionsEvents.OpenSettings)
+                        state.fullScreenIntentPermissionsState.eventSink(FullScreenIntentPermissionsEvent.OpenSettings)
                     }
                 )
             }
@@ -249,7 +249,7 @@ private fun NotificationSettingsContentView(
                     },
                     onClick = {
                         if (state.currentPushDistributor.isReady()) {
-                            state.eventSink(NotificationSettingsEvents.ChangePushProvider)
+                            state.eventSink(NotificationSettingsEvent.ChangePushProvider)
                         }
                     }
                 )
@@ -269,10 +269,10 @@ private fun NotificationSettingsContentView(
                     initialSelection = state.availablePushDistributors.indexOf(state.currentPushDistributor.dataOrNull()),
                     onSelectOption = { index ->
                         state.eventSink(
-                            NotificationSettingsEvents.SetPushProvider(index)
+                            NotificationSettingsEvent.SetPushProvider(index)
                         )
                     },
-                    onDismissRequest = { state.eventSink(NotificationSettingsEvents.CancelChangePushProvider) },
+                    onDismissRequest = { state.eventSink(NotificationSettingsEvent.CancelChangePushProvider) },
                 )
             }
         }
@@ -286,7 +286,7 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             type = RingtoneManager.TYPE_NOTIFICATION,
             current = state.messageSound.sound,
             defaultUri = Settings.System.DEFAULT_NOTIFICATION_URI,
-            onSoundPick = { sound -> state.eventSink(NotificationSettingsEvents.SetMessageSound(sound)) },
+            onSoundPick = { sound -> state.eventSink(NotificationSettingsEvent.SetMessageSound(sound)) },
         )
         // Skip the initial 0 emission so the picker doesn't auto-open on screen entry; only
         // increments fired by LaunchMessageSoundPicker should launch it.
@@ -298,11 +298,11 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
         ListItem(
             content = { Text(stringResource(id = R.string.screen_notification_settings_message_sound_label)) },
             supportingContent = { Text(state.messageSound.displayName) },
-            onClick = { state.eventSink(NotificationSettingsEvents.ShowMessageSoundDialog) },
+            onClick = { state.eventSink(NotificationSettingsEvent.ShowMessageSoundDialog) },
         )
         if (state.messageSound.copyError) {
             SoundCopyErrorRow(
-                onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundCopyError) },
+                onDismissClick = { state.eventSink(NotificationSettingsEvent.DismissMessageSoundCopyError) },
             )
         }
         if (state.showMessageSoundDialog) {
@@ -313,7 +313,7 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             type = RingtoneManager.TYPE_RINGTONE,
             current = state.callRingtone.sound,
             defaultUri = Settings.System.DEFAULT_RINGTONE_URI,
-            onSoundPick = { sound -> state.eventSink(NotificationSettingsEvents.SetCallRingtone(sound)) },
+            onSoundPick = { sound -> state.eventSink(NotificationSettingsEvent.SetCallRingtone(sound)) },
         )
         // Skip the initial 0 emission so the picker doesn't auto-open on screen entry; only
         // increments fired by LaunchCallRingtonePicker should launch it.
@@ -325,11 +325,11 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
         ListItem(
             content = { Text(stringResource(id = R.string.screen_notification_settings_call_ringtone_label)) },
             supportingContent = { Text(state.callRingtone.displayName) },
-            onClick = { state.eventSink(NotificationSettingsEvents.ShowCallRingtoneDialog) },
+            onClick = { state.eventSink(NotificationSettingsEvent.ShowCallRingtoneDialog) },
         )
         if (state.callRingtone.copyError) {
             SoundCopyErrorRow(
-                onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissCallRingtoneCopyError) },
+                onDismissClick = { state.eventSink(NotificationSettingsEvent.DismissCallRingtoneCopyError) },
             )
         }
         if (state.showCallRingtoneDialog) {
@@ -368,13 +368,13 @@ private fun MessageSoundDialog(state: NotificationSettingsState) {
         initialSelection = initialSelection,
         onSelectOption = { index ->
             when (index) {
-                0 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.ElementDefault))
-                1 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.ElementFade))
-                2 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.SystemDefault))
-                else -> state.eventSink(NotificationSettingsEvents.LaunchMessageSoundPicker)
+                0 -> state.eventSink(NotificationSettingsEvent.SelectMessageSoundPreset(NotificationSound.ElementDefault))
+                1 -> state.eventSink(NotificationSettingsEvent.SelectMessageSoundPreset(NotificationSound.ElementFade))
+                2 -> state.eventSink(NotificationSettingsEvent.SelectMessageSoundPreset(NotificationSound.SystemDefault))
+                else -> state.eventSink(NotificationSettingsEvent.LaunchMessageSoundPicker)
             }
         },
-        onDismissRequest = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundDialog) },
+        onDismissRequest = { state.eventSink(NotificationSettingsEvent.DismissMessageSoundDialog) },
     )
 }
 
@@ -402,11 +402,11 @@ private fun CallRingtoneDialog(state: NotificationSettingsState) {
         initialSelection = initialSelection,
         onSelectOption = { index ->
             when (index) {
-                0 -> state.eventSink(NotificationSettingsEvents.SelectCallRingtonePreset(NotificationSound.SystemDefault))
-                else -> state.eventSink(NotificationSettingsEvents.LaunchCallRingtonePicker)
+                0 -> state.eventSink(NotificationSettingsEvent.SelectCallRingtonePreset(NotificationSound.SystemDefault))
+                else -> state.eventSink(NotificationSettingsEvent.LaunchCallRingtonePicker)
             }
         },
-        onDismissRequest = { state.eventSink(NotificationSettingsEvents.DismissCallRingtoneDialog) },
+        onDismissRequest = { state.eventSink(NotificationSettingsEvent.DismissCallRingtoneDialog) },
     )
 }
 
@@ -500,7 +500,9 @@ private fun InvalidNotificationSettingsView(
 
 @PreviewsDayNight
 @Composable
-internal fun NotificationSettingsViewPreview(@PreviewParameter(NotificationSettingsStateProvider::class) state: NotificationSettingsState) = ElementPreview {
+internal fun NotificationSettingsViewPreview(@PreviewParameter(
+    NotificationSettingsStatePreviewParam::class
+) state: NotificationSettingsState) = ElementPreview {
     NotificationSettingsView(
         state = state,
         onBackClick = {},

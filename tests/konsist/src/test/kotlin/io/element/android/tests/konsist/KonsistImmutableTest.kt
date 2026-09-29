@@ -67,11 +67,14 @@ class KonsistImmutableTest {
     }
 
     @Test
-    fun `Immutable annotation is not used on sealed interface for Presenter Events`() {
+    fun `Immutable annotation is not used on sealed interface for Presenter Event`() {
         Konsist
             .scopeFromProduction()
             .interfaces()
-            .withNameEndingWith("Events")
+            .withoutName(
+                "LatestEvent",
+            )
+            .withNameEndingWith("Event")
             .withAnnotationOf(Immutable::class)
             .assertEmpty()
     }

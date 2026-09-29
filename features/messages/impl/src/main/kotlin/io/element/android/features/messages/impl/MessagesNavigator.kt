@@ -13,12 +13,13 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import kotlinx.collections.immutable.ImmutableList
 
 interface MessagesNavigator {
     fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-    fun forwardEvent(eventId: EventId)
+    fun forwardEvent(eventId: EventId, timelineProvider: TimelineProvider)
     fun navigateToReportMessage(eventId: EventId, senderId: UserId)
     fun navigateToEditPoll(eventId: EventId)
     fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)

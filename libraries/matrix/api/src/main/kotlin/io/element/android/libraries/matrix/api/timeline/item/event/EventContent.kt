@@ -32,7 +32,9 @@ data class MessageContent(
     val type: MessageType,
 ) : EventContent
 
-data object RedactedContent : EventContent
+data class RedactedContent(
+    val threadInfo: EventThreadInfo?,
+) : EventContent
 
 data class StickerContent(
     val filename: String,

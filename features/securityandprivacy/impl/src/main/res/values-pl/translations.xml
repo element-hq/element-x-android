@@ -20,7 +20,7 @@ Odradzamy włączanie szyfrowania dla pokoi, które każdy może znaleźć i do 
   <string name="screen_security_and_privacy_encryption_section_footer">"Po włączeniu szyfrowania nie można wyłączyć."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Szyfrowanie"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Włącz szyfrowanie end-to-end"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Każdy może dołączyć."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Każdy może dołączyć, w tym osoby spoza Twojej organizacji."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Każdy"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Wybierz, którzy członkowie przestrzeni mogą dołączyć do tego pokoju bez zaproszenia. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Zarządzaj przestrzeniami"</string>

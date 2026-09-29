@@ -11,5 +11,5 @@ package io.element.android.libraries.fullscreenintent.api
 data class FullScreenIntentPermissionsState(
     val permissionGranted: Boolean,
     val shouldDisplayBanner: Boolean,
-    val eventSink: (FullScreenIntentPermissionsEvents) -> Unit,
+    val eventSink: (FullScreenIntentPermissionsEvent) -> Unit,
 )

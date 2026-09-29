@@ -676,7 +676,7 @@ private fun DrawScope.drawEdgeHandle(
 @Preview
 @Composable
 internal fun AttachmentImageEditorViewPreview(
-    @PreviewParameter(AttachmentImageEditorStateProvider::class) state: AttachmentImageEditorState,
+    @PreviewParameter(AttachmentImageEditorStatePreviewParam::class) state: AttachmentImageEditorState,
 ) = ElementPreviewDark {
     AttachmentImageEditorView(
         state = state,

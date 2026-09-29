@@ -16,5 +16,7 @@ android {
 dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.features.preferences.api)
+    implementation(projects.libraries.matrix.api)
+    implementation(libs.coroutines.core)
     implementation(projects.tests.testutils)
 }

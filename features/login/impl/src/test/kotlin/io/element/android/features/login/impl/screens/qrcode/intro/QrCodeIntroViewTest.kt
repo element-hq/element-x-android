@@ -59,12 +59,12 @@ class QrCodeIntroViewTest : RobolectricTest() {
 
     @Test
     fun `on submit button clicked - emits the Continue event`() = runAndroidComposeUiTest {
-        val eventRecorder = EventsRecorder<QrCodeIntroEvents>()
+        val eventRecorder = EventsRecorder<QrCodeIntroEvent>()
         setQrCodeIntroView(
             state = aQrCodeIntroState(eventSink = eventRecorder),
         )
         clickOn(R.string.screen_qr_code_login_initial_state_button_title)
-        eventRecorder.assertSingle(QrCodeIntroEvents.Continue)
+        eventRecorder.assertSingle(QrCodeIntroEvent.Continue)
     }
 
     private fun AndroidComposeUiTest<ComponentActivity>.setQrCodeIntroView(

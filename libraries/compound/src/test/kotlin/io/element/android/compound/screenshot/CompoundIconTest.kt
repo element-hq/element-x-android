@@ -11,36 +11,34 @@ package io.element.android.compound.screenshot
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.previews.IconsCompoundPreviewDark
 import io.element.android.compound.previews.IconsCompoundPreviewLight
 import io.element.android.compound.previews.IconsCompoundPreviewRtl
 import io.element.android.compound.previews.IconsPreview
-import io.element.android.compound.screenshot.utils.screenshotFile
+import io.element.android.compound.screenshot.utils.createPaparazziRule
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.collections.immutable.toImmutableList
+import org.junit.Rule
 import org.junit.Test
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
-class CompoundIconTest : RobolectricTest() {
+class CompoundIconTest {
+    @get:Rule
+    val paparazzi = createPaparazziRule()
+
     @Test
-    @Config(sdk = [35], qualifiers = "w1024dp-h2048dp")
     fun screenshots() {
-        captureRoboImage(file = screenshotFile("Compound Icons - Light.png")) {
+        paparazzi.snapshot(name = "Compound Icons - Light") {
             IconsCompoundPreviewLight()
         }
-        captureRoboImage(file = screenshotFile("Compound Icons - Rtl.png")) {
+        paparazzi.snapshot(name = "Compound Icons - Rtl") {
             IconsCompoundPreviewRtl()
         }
-        captureRoboImage(file = screenshotFile("Compound Icons - Dark.png")) {
+        paparazzi.snapshot(name = "Compound Icons - Dark") {
             IconsCompoundPreviewDark()
         }
-        captureRoboImage(file = screenshotFile("Compound Vector Icons - Light.png")) {
+        paparazzi.snapshot(name = "Compound Vector Icons - Light") {
             val content: List<@Composable ColumnScope.() -> Unit> = CompoundIcons.all.map {
                 @Composable { Icon(imageVector = it, contentDescription = null) }
             }
@@ -51,7 +49,7 @@ class CompoundIconTest : RobolectricTest() {
                 )
             }
         }
-        captureRoboImage(file = screenshotFile("Compound Vector Icons - Dark.png")) {
+        paparazzi.snapshot(name = "Compound Vector Icons - Dark") {
             val content: List<@Composable ColumnScope.() -> Unit> = CompoundIcons.all.map {
                 @Composable { Icon(imageVector = it, contentDescription = null) }
             }

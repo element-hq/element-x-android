@@ -36,7 +36,10 @@ CREATE TABLE SessionData (
     -- user display name
     userDisplayName TEXT,
     -- user avatar url
-    userAvatarUrl TEXT
+    userAvatarUrl TEXT,
+    -- added in version 13
+    -- user avatar thumbnail data, base64 encoded
+    userAvatarData TEXT
 );
 
 

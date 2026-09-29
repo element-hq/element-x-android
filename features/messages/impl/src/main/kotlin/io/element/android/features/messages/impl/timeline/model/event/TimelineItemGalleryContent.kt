@@ -16,6 +16,7 @@ data class TimelineItemGalleryContent(
     val body: String,
     val caption: String?,
     val formattedCaption: CharSequence?,
+    val htmlCaption: String? = null,
     override val isEdited: Boolean,
     val items: ImmutableList<GalleryItem>,
 ) : TimelineItemEventContent, TimelineItemEventMutableContent {

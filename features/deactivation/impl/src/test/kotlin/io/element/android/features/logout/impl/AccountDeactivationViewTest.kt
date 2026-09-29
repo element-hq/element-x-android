@@ -35,7 +35,7 @@ import org.robolectric.annotation.Config
 class AccountDeactivationViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>(expectEvents = false)
         ensureCalledOnce {
             setAccountDeactivationView(
                 state = anAccountDeactivationState(eventSink = eventsRecorder),
@@ -48,7 +48,7 @@ class AccountDeactivationViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on Deactivate emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
         setAccountDeactivationView(
             state = anAccountDeactivationState(
                 deactivateFormState = aDeactivateFormState(
@@ -58,12 +58,12 @@ class AccountDeactivationViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_delete)
-        eventsRecorder.assertSingle(AccountDeactivationEvents.DeactivateAccount(false))
+        eventsRecorder.assertSingle(AccountDeactivationEvent.DeactivateAccount(false))
     }
 
     @Test
     fun `clicking on Deactivate on the confirmation dialog emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
         setAccountDeactivationView(
             state = anAccountDeactivationState(
                 deactivateFormState = aDeactivateFormState(
@@ -74,12 +74,12 @@ class AccountDeactivationViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(AccountDeactivationEvents.DeactivateAccount(false))
+        eventsRecorder.assertSingle(AccountDeactivationEvent.DeactivateAccount(false))
     }
 
     @Test
     fun `clicking on retry on the confirmation dialog emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
         setAccountDeactivationView(
             state = anAccountDeactivationState(
                 deactivateFormState = aDeactivateFormState(
@@ -90,24 +90,24 @@ class AccountDeactivationViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_retry)
-        eventsRecorder.assertSingle(AccountDeactivationEvents.DeactivateAccount(true))
+        eventsRecorder.assertSingle(AccountDeactivationEvent.DeactivateAccount(true))
     }
 
     @Test
     fun `switching on the erase all switch emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
         setAccountDeactivationView(
             state = anAccountDeactivationState(
                 eventSink = eventsRecorder,
             ),
         )
         clickOn(R.string.screen_deactivate_account_delete_all_messages)
-        eventsRecorder.assertSingle(AccountDeactivationEvents.SetEraseData(true))
+        eventsRecorder.assertSingle(AccountDeactivationEvent.SetEraseData(true))
     }
 
     @Test
     fun `switching off the erase all switch emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
         setAccountDeactivationView(
             state = anAccountDeactivationState(
                 deactivateFormState = aDeactivateFormState(
@@ -117,13 +117,13 @@ class AccountDeactivationViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_deactivate_account_delete_all_messages)
-        eventsRecorder.assertSingle(AccountDeactivationEvents.SetEraseData(false))
+        eventsRecorder.assertSingle(AccountDeactivationEvent.SetEraseData(false))
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
     fun `typing text in the password field emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<AccountDeactivationEvents>()
+        val eventsRecorder = EventsRecorder<AccountDeactivationEvent>()
         setAccountDeactivationView(
             state = anAccountDeactivationState(
                 deactivateFormState = aDeactivateFormState(
@@ -133,7 +133,7 @@ class AccountDeactivationViewTest : RobolectricTest() {
             ),
         )
         onNodeWithTag(TestTags.loginPassword.value).performTextInput("A")
-        eventsRecorder.assertSingle(AccountDeactivationEvents.SetPassword("A$A_PASSWORD"))
+        eventsRecorder.assertSingle(AccountDeactivationEvent.SetPassword("A$A_PASSWORD"))
     }
 }
 

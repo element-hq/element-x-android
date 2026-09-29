@@ -49,12 +49,12 @@ class KonsistArchitectureTest {
     }
 
     @Test
-    fun `Events MUST be sealed interface`() {
+    fun `Event MUST be sealed interface`() {
         Konsist.scopeFromProject()
             .classes()
             .withSealedModifier()
-            .withNameEndingWith("Events")
-            .assertEmpty(additionalMessage = "Events class MUST be sealed interface")
+            .withNameEndingWith("Event")
+            .assertEmpty(additionalMessage = "Event class MUST be sealed interface")
     }
 
     @Test
@@ -76,6 +76,7 @@ class KonsistArchitectureTest {
             .withSealedModifier()
             .withoutAnnotationOf(Immutable::class, Stable::class)
             .map { it.fullyQualifiedName }
+            .toSet()
         Konsist.scopeFromProject()
             .functions()
             .withAnnotationOf(Composable::class)
@@ -85,13 +86,7 @@ class KonsistArchitectureTest {
                     return@all if (type.startsWith("@") || type.contains("->") || type.startsWith("suspend")) {
                         true
                     } else {
-                        val typePackage = param.type.sourceDeclaration?.let { declaration ->
-                            declaration.asTypeParameterDeclaration()?.packagee
-                                ?: declaration.asExternalDeclaration()?.packagee
-                                ?: declaration.asClassOrInterfaceDeclaration()?.packagee
-                                ?: declaration.asKotlinTypeDeclaration()?.packagee
-                                ?: declaration.asObjectDeclaration()?.packagee
-                        }?.name
+                        val typePackage = param.type.packagee?.name
                         if (typePackage == null) {
                             false
                         } else {

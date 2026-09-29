@@ -8,6 +8,7 @@
   <string name="a11y_collapse_message_text_field">"تصغير حقل نص الرسالة"</string>
   <string name="a11y_create_poll_votes_allowed_decrease">"تقليل عدد الأصوات المسموح بها لكل شخص"</string>
   <string name="a11y_create_poll_votes_allowed_increase">"زيادة عدد الأصوات المسموح بها لكل شخص"</string>
+  <string name="a11y_custom_emoji">"رموز تعبيرية مخصصة"</string>
   <string name="a11y_delete">"احذف"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="zero">"تم إدخال %1$d أرقام"</item>
@@ -22,11 +23,25 @@
   <string name="a11y_edit_room_address_hint">"العنوان الكامل سيكون %1$s"</string>
   <string name="a11y_encryption_details">"تفاصيل التشفير"</string>
   <string name="a11y_expand_message_text_field">"تكبير حقل نص الرسالة"</string>
+  <string name="a11y_gallery_attachment">"معرض الصور، المرفق %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"معرض الصور، فشل في مسح %1$d"</string>
+  <string name="a11y_gallery_image">"معرض الصور، صورة %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="zero">"معرض الصور، %1$d من الوسائط زيادة"</item>
+    <item quantity="one">"معرض الصور، %1$d من الوسائط زيادة"</item>
+    <item quantity="two">"معرض الصور، %1$d من الوسائط زيادة"</item>
+    <item quantity="few">"معرض الصور، %1$d من الوسائط زيادة"</item>
+    <item quantity="many">"معرض الصور، %1$d من الوسائط زيادة"</item>
+    <item quantity="other">"معرض الصور، %1$d من الوسائط زيادة"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"معرض، جاري مسح %1$d"</string>
+  <string name="a11y_gallery_video">"معرض الصور، فيديو %1$d"</string>
   <string name="a11y_hide_password">"أخفِ كلمة السر"</string>
   <string name="a11y_info">"معلومات"</string>
   <string name="a11y_join_call">"انضم للمكالمة"</string>
   <string name="a11y_jump_to_bottom">"الانتقال للأسفل"</string>
   <string name="a11y_jump_to_unread">"الانتقال إلى الرسائل غير المقروءة"</string>
+  <string name="a11y_jump_to_unread_messages">"الانتقال إلى أول رسالة غير مقروءة"</string>
   <string name="a11y_move_the_map_to_my_location">"انقل الخريطة إلى موقعي"</string>
   <string name="a11y_notifications_mentions_only">"الإشارات فقط"</string>
   <string name="a11y_notifications_muted">"مكتوم"</string>
@@ -71,6 +86,7 @@
   <string name="a11y_start_call">"بدء مكالمة"</string>
   <string name="a11y_start_video_call">"بدء مكالمة فيديو"</string>
   <string name="a11y_start_voice_call">"بدء مكالمة صوتية"</string>
+  <string name="a11y_status">"حالة"</string>
   <string name="a11y_thread_in_room">"سلسلة في %1$s"</string>
   <string name="a11y_threads_in_room">"سلاسل في %1$s"</string>
   <string name="a11y_tombstoned_room">"غرفة مستبدلة"</string>
@@ -151,6 +167,7 @@
   <string name="action_manage_account_and_devices">"إدارة الحساب والأجهزة"</string>
   <string name="action_manage_devices">"إدارة الأجهزة"</string>
   <string name="action_manage_rooms">"إدارة الغرف"</string>
+  <string name="action_mark_as_read">"وضع علامة كمقروء"</string>
   <string name="action_message">"إرسال رسالة"</string>
   <string name="action_minimize">"تصغير"</string>
   <string name="action_next">"التالي"</string>
@@ -275,6 +292,22 @@
   <string name="common_forward_message">"إعادة توجيه الرسالة"</string>
   <string name="common_frequently_used">"المستخدمة بكثرة"</string>
   <string name="common_gallery">"المعرض"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="zero">"%1$d مرفق…"</item>
+    <item quantity="one">"%1$d مرفق…"</item>
+    <item quantity="two">"%1$d مرفقان…"</item>
+    <item quantity="few">"%1$d مرفق…"</item>
+    <item quantity="many">"%1$d مرفق…"</item>
+    <item quantity="other">"%1$d مرفق…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="zero">"%1$d عنصر وسائط…"</item>
+    <item quantity="one">"%1$d عنصر وسائط…"</item>
+    <item quantity="two">"%1$d عنصرا وسائط…"</item>
+    <item quantity="few">"%1$d عنصر وسائط…"</item>
+    <item quantity="many">"%1$d عنصر وسائط…"</item>
+    <item quantity="other">"%1$d عنصر وسائط…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"مكالمة جماعية جارية"</string>
   <string name="common_image">"صورة"</string>
@@ -320,6 +353,7 @@
   <string name="common_no_space_name">"لا يوجد اسم للمساحة"</string>
   <string name="common_not_encrypted">"غير مشفّر"</string>
   <string name="common_offline">"غير متصل"</string>
+  <string name="common_on_a_call">"في مكالمة"</string>
   <string name="common_open_source_licenses">"تراخيص المصادر المفتوحة"</string>
   <string name="common_or">"أو"</string>
   <string name="common_other_options">"خيارات أخرى"</string>
@@ -546,6 +580,7 @@
     <item quantity="other">"%1$d شخص"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"على الخريطة"</string>
+  <string name="screen_local_network_opt_in_title">"السماح بالوصول إلى الشبكة المحلية"</string>
   <string name="screen_media_picker_error_failed_selection">"تعذّر اختيار الوسائط، يرجى المحاولة مجدداً."</string>
   <string name="screen_pinned_timeline_empty_state_description">"اضغط على رسالة واختر “%1$s” لإضافتها هنا."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"ثبّت الرسائل المهمة لتسهيل العثور عليها"</string>

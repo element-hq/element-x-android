@@ -20,7 +20,7 @@ import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.ModerationActionState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.features.roommembermoderation.api.roomMemberModerationPermissions
@@ -77,9 +77,9 @@ class RoomMemberModerationPresenter(
         }
         val moderationActions = remember { mutableStateOf<ImmutableList<ModerationActionState>>(persistentListOf()) }
 
-        fun handleEvent(event: RoomMemberModerationEvents) {
+        fun handleEvent(event: RoomMemberModerationEvent) {
             when (event) {
-                is RoomMemberModerationEvents.ShowActionsForUser -> {
+                is RoomMemberModerationEvent.ShowActionsForUser -> {
                     selectedUser = event.user
                     val member = room.membersStateFlow.value.roomMembers()?.firstOrNull {
                         it.userId == event.user.userId
@@ -90,7 +90,7 @@ class RoomMemberModerationPresenter(
                         currentUserPowerLevel = currentUserPowerLevel,
                     )
                 }
-                is RoomMemberModerationEvents.ProcessAction -> {
+                is RoomMemberModerationEvent.ProcessAction -> {
                     // First, hide any list of existing actions that could be displayed
                     moderationActions.value = persistentListOf()
 
@@ -110,25 +110,25 @@ class RoomMemberModerationPresenter(
                         }
                     }
                 }
-                is InternalRoomMemberModerationEvents.DoKickUser -> {
+                is InternalRoomMemberModerationEvent.DoKickUser -> {
                     selectedUser?.let {
                         coroutineScope.kickUser(it.userId, event.reason, kickUserAsyncAction)
                     }
                     selectedUser = null
                 }
-                is InternalRoomMemberModerationEvents.DoBanUser -> {
+                is InternalRoomMemberModerationEvent.DoBanUser -> {
                     selectedUser?.let {
                         coroutineScope.banUser(it.userId, event.reason, banUserAsyncAction)
                     }
                     selectedUser = null
                 }
-                is InternalRoomMemberModerationEvents.DoUnbanUser -> {
+                is InternalRoomMemberModerationEvent.DoUnbanUser -> {
                     selectedUser?.let {
                         coroutineScope.unbanUser(it.userId, event.reason, unbanUserAsyncAction)
                     }
                     selectedUser = null
                 }
-                is InternalRoomMemberModerationEvents.Reset -> {
+                is InternalRoomMemberModerationEvent.Reset -> {
                     selectedUser = null
                     moderationActions.value = persistentListOf()
                     kickUserAsyncAction.value = AsyncAction.Uninitialized

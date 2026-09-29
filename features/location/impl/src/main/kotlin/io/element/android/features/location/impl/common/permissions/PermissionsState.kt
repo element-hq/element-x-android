@@ -12,7 +12,7 @@ data class PermissionsState(
     val permissions: Permissions,
     val shouldShowRationale: Boolean,
     val permissionsAlreadyRequested: Boolean,
-    val eventSink: (PermissionsEvents) -> Unit,
+    val eventSink: (PermissionsEvent) -> Unit,
 ) {
     sealed interface Permissions {
         data object AllGranted : Permissions

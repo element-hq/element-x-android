@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"امسح رمز QR ضوئيًا باستخدام هذا الجهاز"</string>
   <string name="screen_link_new_device_desktop_submit">"جاهز للمسح الضوئي"</string>
   <string name="screen_link_new_device_desktop_title">"افتح %1$s على كمبيوتر مكتبي للحصول على رمز QR"</string>
+  <string name="screen_link_new_device_desktop_warning">"لا تقم بمسح رمز الاستجابة السريعة إلا بعد اتباع الخطوات المذكورة أعلاه على جهازك الخاص. لا تقم أبدًا بمسح رمز مرسل من شخص آخر."</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"الأرقام غير متطابقة"</string>
   <string name="screen_link_new_device_enter_number_notice">"أدخل الرمز المكوّن من رقمين"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"سيؤكد هذا أن الاتصال بجهازك الآخر آمن."</string>

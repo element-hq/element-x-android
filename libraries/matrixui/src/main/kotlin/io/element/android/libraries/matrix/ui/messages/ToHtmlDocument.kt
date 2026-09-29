@@ -19,7 +19,8 @@ import org.jsoup.safety.Safelist
 
 /**
  * Converts the HTML string [FormattedBody.body] to a [Document] by parsing it.
- * If the message is not formatted or the format is not [MessageFormat.HTML] we return `null`.
+ * If the message is not formatted, the format is not [MessageFormat.HTML], or nothing renderable is left once the
+ * unsupported tags have been removed, we return `null` so that the plain text body is used instead.
  *
  * This will also make sure mentions are prefixed with `@`.
  *
@@ -44,7 +45,7 @@ fun FormattedBody.toHtmlDocument(
             // Prepend `@` to mentions
             fixMentions(dom, permalinkParser)
 
-            dom
+            dom.takeIf { it.text().isNotBlank() }
         }
 }
 
@@ -88,6 +89,12 @@ private object CustomHtmlToDomParser {
             "blockquote",
             "p",
             "br",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
             // Add custom `mx-reply` tag, even if it's just to remove its contents from the plain text version of the message
             "mx-reply"
         )

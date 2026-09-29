@@ -33,7 +33,7 @@ import org.junit.Test
 class BlockedUserViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes back callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<BlockedUsersEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<BlockedUsersEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setBlockedUsersView(
                 aBlockedUsersState(
@@ -47,7 +47,7 @@ class BlockedUserViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on a user emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<BlockedUsersEvents>()
+        val eventsRecorder = EventsRecorder<BlockedUsersEvent>()
         val userList = aMatrixUserList()
         setBlockedUsersView(
             aBlockedUsersState(
@@ -56,12 +56,12 @@ class BlockedUserViewTest : RobolectricTest() {
             ),
         )
         onNodeWithText(userList.first().displayName.orEmpty()).performClick()
-        eventsRecorder.assertSingle(BlockedUsersEvents.Unblock(userList.first().userId))
+        eventsRecorder.assertSingle(BlockedUsersEvent.Unblock(userList.first().userId))
     }
 
     @Test
     fun `long clicking on a user emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<BlockedUsersEvents>()
+        val eventsRecorder = EventsRecorder<BlockedUsersEvent>()
         val userList = aMatrixUserList()
         setBlockedUsersView(
             aBlockedUsersState(
@@ -70,12 +70,12 @@ class BlockedUserViewTest : RobolectricTest() {
             ),
         )
         onNodeWithText(userList.first().displayName.orEmpty()).performTouchInput { longClick() }
-        eventsRecorder.assertSingle(BlockedUsersEvents.CopyToClipboard(userList.first().userId))
+        eventsRecorder.assertSingle(BlockedUsersEvent.CopyToClipboard(userList.first().userId))
     }
 
     @Test
-    fun `clicking on cancel sends a BlockedUsersEvents`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<BlockedUsersEvents>()
+    fun `clicking on cancel sends a BlockedUsersEvent`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<BlockedUsersEvent>()
         setBlockedUsersView(
             aBlockedUsersState(
                 unblockUserAction = AsyncAction.ConfirmingNoParams,
@@ -83,12 +83,12 @@ class BlockedUserViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(BlockedUsersEvents.Cancel)
+        eventsRecorder.assertSingle(BlockedUsersEvent.Cancel)
     }
 
     @Test
-    fun `clicking on confirm sends a BlockedUsersEvents`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<BlockedUsersEvents>()
+    fun `clicking on confirm sends a BlockedUsersEvent`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<BlockedUsersEvent>()
         setBlockedUsersView(
             aBlockedUsersState(
                 unblockUserAction = AsyncAction.ConfirmingNoParams,
@@ -96,7 +96,7 @@ class BlockedUserViewTest : RobolectricTest() {
             ),
         )
         clickOn(R.string.screen_blocked_users_unblock_alert_action)
-        eventsRecorder.assertSingle(BlockedUsersEvents.ConfirmUnblock)
+        eventsRecorder.assertSingle(BlockedUsersEvent.ConfirmUnblock)
     }
 }
 

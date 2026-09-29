@@ -32,7 +32,6 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.annotations.ContributesNode
-import io.element.android.appnav.di.MatrixSessionCache
 import io.element.android.appnav.intent.IntentResolver
 import io.element.android.appnav.intent.ResolvedIntent
 import io.element.android.appnav.room.RoomFlowNode
@@ -40,6 +39,7 @@ import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
+import io.element.android.appnav.session.MatrixSessionCache
 import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
@@ -52,11 +52,11 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.rememberDelegateTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
-import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -109,6 +109,13 @@ class RootFlowNode(
     buildContext = buildContext,
     plugins = plugins
 ) {
+    /**
+     * Login params coming from a launch or new [Intent], waiting to be consumed by the not logged in flow.
+     * Kept here so that the root nav target can be computed from both the logged in state and the pending
+     * login params, whatever the order in which the intent and the first nav state emission are processed.
+     */
+    private var pendingLoginParams: LoginParams? = null
+
     override fun onBuilt() {
         analyticsColdStartWatcher.start()
         appCoroutineScope.launch {
@@ -152,7 +159,7 @@ class RootFlowNode(
                         }
                     }
                     LoggedInState.NotLoggedIn -> {
-                        switchToNotLoggedInFlow(null)
+                        switchToNotLoggedInFlow(pendingLoginParams)
                     }
                 }
             }
@@ -194,15 +201,18 @@ class RootFlowNode(
     }
 
     private fun switchToLoggedInFlow(sessionId: SessionId, navId: Int) {
+        pendingLoginParams = null
         backstack.safeRoot(NavTarget.LoggedInFlow(sessionId, navId))
     }
 
     private fun switchToNotLoggedInFlow(params: LoginParams?) {
+        Timber.d("switchToNotLoggedInFlow, hasLoginParams=${params != null}")
         matrixSessionCache.removeAll()
         backstack.safeRoot(NavTarget.NotLoggedInFlow(params))
     }
 
     private fun switchToSignedOutFlow(sessionId: SessionId) {
+        pendingLoginParams = null
         backstack.safeRoot(NavTarget.SignedOutFlow(sessionId))
     }
 
@@ -319,6 +329,7 @@ class RootFlowNode(
                     }
 
                     override fun onDone() {
+                        pendingLoginParams = null
                         backstack.pop()
                     }
                 }
@@ -399,7 +410,8 @@ class RootFlowNode(
     }
 
     private suspend fun onLoginLink(params: LoginParams) {
-        if (accountProviderAccessControl.isAllowedToConnectToAccountProvider(params.accountProvider.ensureProtocol())) {
+        val accountProvider = AccountProvider.Generic(params.accountProvider)
+        if (accountProviderAccessControl.isAllowedToConnectToAccountProvider(accountProvider)) {
             // Is there a session already?
             val sessions = sessionStore.getAllSessions()
             if (sessions.isNotEmpty()) {
@@ -418,6 +430,7 @@ class RootFlowNode(
                     Timber.w("Login link ignored, multi account is disabled")
                 }
             } else {
+                pendingLoginParams = params
                 switchToNotLoggedInFlow(params)
             }
         } else {

@@ -53,15 +53,15 @@ class KnockRequestsBannerPresenter(
             }
         }
 
-        fun handleEvent(event: KnockRequestsBannerEvents) {
+        fun handleEvent(event: KnockRequestsBannerEvent) {
             when (event) {
-                is KnockRequestsBannerEvents.AcceptSingleRequest -> {
+                is KnockRequestsBannerEvent.AcceptSingleRequest -> {
                     sessionCoroutineScope.acceptSingleKnockRequest(
                         knockRequests = knockRequests,
                         displayAcceptError = showAcceptError,
                     )
                 }
-                is KnockRequestsBannerEvents.Dismiss -> {
+                is KnockRequestsBannerEvent.Dismiss -> {
                     sessionCoroutineScope.launch {
                         knockRequestsService.markAllKnockRequestsAsSeen()
                     }

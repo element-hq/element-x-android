@@ -78,7 +78,7 @@ fun OnBoardingView(
         LoginModeView(
             loginMode = state.loginModeState.loginMode,
             onClearError = {
-                state.eventSink(OnBoardingEvents.ClearError)
+                state.eventSink(OnBoardingEvent.ClearError)
             },
             onLearnMoreClick = onLearnMoreClick,
             onOAuthDetails = onOAuthDetails,
@@ -303,10 +303,10 @@ private fun OnBoardingButtons(
             )
         } else {
             Button(
-                text = stringResource(id = R.string.screen_onboarding_sign_in_to, defaultAccountProvider),
+                text = stringResource(id = R.string.screen_onboarding_sign_in_to, defaultAccountProvider.friendlyServerName()),
                 showProgress = isLoading,
                 onClick = {
-                    state.eventSink(OnBoardingEvents.OnSignIn(defaultAccountProvider))
+                    state.eventSink(OnBoardingEvent.OnSignIn(defaultAccountProvider))
                 },
                 enabled = state.submitEnabled || isLoading,
                 modifier = Modifier
@@ -336,7 +336,7 @@ private fun OnBoardingButtons(
                 Text(
                     modifier = Modifier
                         .clickable(role = Role.Button) {
-                            state.eventSink(OnBoardingEvents.OnVersionClick)
+                            state.eventSink(OnBoardingEvent.OnVersionClick)
                         }
                         .padding(16.dp),
                     text = stringResource(id = R.string.screen_onboarding_app_version, state.version),
@@ -351,7 +351,7 @@ private fun OnBoardingButtons(
 @PreviewsDayNight
 @Composable
 internal fun OnBoardingViewPreview(
-    @PreviewParameter(OnBoardingStateProvider::class) state: OnBoardingState
+    @PreviewParameter(OnBoardingStatePreviewParam::class) state: OnBoardingState
 ) = ElementPreview {
     OnBoardingView(
         state = state,

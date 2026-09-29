@@ -12,14 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContentPreviewParam
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
+import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -75,7 +75,7 @@ fun TimelineItemEncryptedView(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemEncryptedViewPreview(
-    @PreviewParameter(TimelineItemEncryptedContentProvider::class) content: TimelineItemEncryptedContent
+    @PreviewParameter(TimelineItemEncryptedContentPreviewParam::class) content: TimelineItemEncryptedContent
 ) = ElementPreview {
     TimelineItemEncryptedView(
         content = content,

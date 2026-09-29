@@ -19,6 +19,10 @@
     <item quantity="one">"Van %d új üzenete."</item>
     <item quantity="other">"Van %d új üzenete."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Megosztott %1$d melléklet"</item>
+    <item quantity="other">"Megosztott %1$d melléklet"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Bejövő hívás"</string>
   <string name="notification_incoming_call">"📹 Bejövő hívás"</string>
   <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – nyissa meg a szobát"</string>
@@ -30,6 +34,7 @@
   </plurals>
   <string name="notification_invite_body">"Meghívta, hogy csevegjen"</string>
   <string name="notification_invite_body_with_sender">"%1$s meghívta egy csevegésre"</string>
+  <string name="notification_knock_request_body">"Csatlakozási kérelem benyújtva"</string>
   <string name="notification_live_location_started_body">"Elkezdték megosztani az élő helyzetüket"</string>
   <string name="notification_mentioned_you_body">"Megemlítette Önt: %1$s"</string>
   <string name="notification_new_messages">"Új üzenetek"</string>
@@ -92,12 +97,13 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Az értesítés nem jeleníthető meg."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Az értesítésre rákattintottak!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Értesítés megjelenítése"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"A teszt folytatásához kattintson az értesítésre."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"A teszt folytatásához koppintson az értesítésre."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Győződjön meg arról, hogy az alkalmazás megkapja-e a leküldéses értesítést."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Hiba: a leküldő elutasította a kérést."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Hiba: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Hiba, nem lehet tesztelni a leküldéses értesítést."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Hiba, időtúllépés a leküldéses értesítésre való várakozás során."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Hiba: a push-átjáró korlátozza ennek az eszköznek a forgalmát, ezért az értesítések nem lesznek megbízhatóak. Kérjük, állítson be egy másik push-átjárót."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"A leküldéses értesítés folyamata %1$d ezredmásodpercig tartott."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Leküldéses értesítés folyamatának tesztelése"</string>
 </resources>

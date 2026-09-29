@@ -9,8 +9,8 @@
 package io.element.android.features.login.impl.screens.loginpassword
 
 import android.os.Parcelable
-import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.parcelize.Parcelize
 
@@ -18,7 +18,7 @@ data class LoginPasswordState(
     val accountProvider: AccountProvider,
     val formState: LoginFormState,
     val loginAction: AsyncData<SessionId>,
-    val eventSink: (LoginPasswordEvents) -> Unit
+    val eventSink: (LoginPasswordEvent) -> Unit
 ) {
     val submitEnabled: Boolean
         get() = loginAction !is AsyncData.Failure &&

@@ -9,7 +9,7 @@
 package io.element.android.features.login.impl.screens.chooseaccountprovider
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.login.impl.accountprovider.anAccountProvider
+import io.element.android.features.login.impl.accountprovider.anAccountProviderManaged
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncData
@@ -27,7 +27,7 @@ class ChooseAccountProviderStateTest {
     @Test
     fun `submitEnabled returns true when there is a selectedAccountProvider`() {
         val sut = aChooseAccountProviderState(
-            selectedAccountProvider = anAccountProvider(),
+            selectedAccountProvider = anAccountProviderManaged(),
         )
         assertThat(sut.submitEnabled).isTrue()
     }
@@ -35,7 +35,7 @@ class ChooseAccountProviderStateTest {
     @Test
     fun `submitEnabled returns false when there is a selectedAccountProvider but there is an error`() {
         val sut = aChooseAccountProviderState(
-            selectedAccountProvider = anAccountProvider(),
+            selectedAccountProvider = anAccountProviderManaged(),
             loginModeState = aLoginModeState(loginMode = AsyncData.Failure(Throwable("Error"))),
         )
         assertThat(sut.submitEnabled).isFalse()
@@ -44,7 +44,7 @@ class ChooseAccountProviderStateTest {
     @Test
     fun `submitEnabled returns false when there is a selectedAccountProvider but the result is successful`() {
         val sut = aChooseAccountProviderState(
-            selectedAccountProvider = anAccountProvider(),
+            selectedAccountProvider = anAccountProviderManaged(),
             loginModeState = aLoginModeState(loginMode = AsyncData.Success(LoginMode.PasswordLogin)),
         )
         assertThat(sut.submitEnabled).isFalse()

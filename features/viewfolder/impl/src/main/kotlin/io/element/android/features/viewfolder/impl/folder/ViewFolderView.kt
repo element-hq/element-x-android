@@ -142,7 +142,7 @@ private fun ItemRow(
 
 @PreviewsDayNight
 @Composable
-internal fun ViewFolderViewPreview(@PreviewParameter(ViewFolderStateProvider::class) state: ViewFolderState) = ElementPreview {
+internal fun ViewFolderViewPreview(@PreviewParameter(ViewFolderStatePreviewParam::class) state: ViewFolderState) = ElementPreview {
     ViewFolderView(
         state = state,
         onNavigateTo = {},

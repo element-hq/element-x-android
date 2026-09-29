@@ -74,6 +74,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import java.io.File
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
@@ -100,7 +101,7 @@ class FakeMatrixClient(
     override val roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
     private val homeserverCapabilitiesProvider: FakeHomeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(),
     private val accountManagementUrlResult: (AccountManagementAction?) -> Result<String?> = { lambdaError() },
-    private val resolveRoomAliasResult: (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
+    private val resolveRoomAliasResult: suspend (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
         Result.success(
             Optional.of(ResolvedRoomAlias(A_ROOM_ID, emptyList()))
         )
@@ -173,6 +174,7 @@ class FakeMatrixClient(
     var knockRoomLambda: (RoomIdOrAlias, String, List<String>) -> Result<RoomInfo?> = { _, _, _ ->
         Result.success(null)
     }
+    var getRoomInfoLambda = { _: RoomId -> Result.success<RoomInfo?>(null) }
     var getRoomInfoFlowLambda = { _: RoomId ->
         flowOf<Optional<RoomInfo>>(Optional.empty())
     }
@@ -378,6 +380,8 @@ class FakeMatrixClient(
     override suspend fun getRecentlyVisitedRooms(): Result<List<RoomId>> {
         return Result.success(visitedRoomsId)
     }
+
+    override suspend fun getRoomInfo(roomId: RoomId): Result<RoomInfo?> = getRoomInfoLambda(roomId)
 
     override fun getRoomInfoFlow(roomId: RoomId) = getRoomInfoFlowLambda(roomId)
 

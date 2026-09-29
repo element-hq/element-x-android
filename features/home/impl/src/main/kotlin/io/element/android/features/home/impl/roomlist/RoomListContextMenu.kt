@@ -199,7 +199,7 @@ private fun RoomListModalBottomSheetContent(
 @PreviewsDayNight
 @Composable
 internal fun RoomListContextMenuPreview(
-    @PreviewParameter(RoomListStateContextMenuShownProvider::class) contextMenu: RoomListState.ContextMenu.Shown
+    @PreviewParameter(RoomListStateContextMenuShownPreviewParam::class) contextMenu: RoomListState.ContextMenu.Shown
 ) = ElementPreview(fillMaxSize = true) {
     RoomListContextMenu(
         contextMenu = contextMenu,

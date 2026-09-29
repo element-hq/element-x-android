@@ -34,19 +34,19 @@ class AccountDeactivationPresenter(
 
         val formState = remember { mutableStateOf(DeactivateFormState.Default) }
 
-        fun handleEvent(event: AccountDeactivationEvents) {
+        fun handleEvent(event: AccountDeactivationEvent) {
             when (event) {
-                is AccountDeactivationEvents.SetEraseData -> {
+                is AccountDeactivationEvent.SetEraseData -> {
                     updateFormState(formState) {
                         copy(eraseData = event.eraseData)
                     }
                 }
-                is AccountDeactivationEvents.SetPassword -> {
+                is AccountDeactivationEvent.SetPassword -> {
                     updateFormState(formState) {
                         copy(password = event.password)
                     }
                 }
-                is AccountDeactivationEvents.DeactivateAccount ->
+                is AccountDeactivationEvent.DeactivateAccount ->
                     if (action.value.isConfirming() || event.isRetry) {
                         localCoroutineScope.deactivateAccount(
                             formState = formState.value,
@@ -55,7 +55,7 @@ class AccountDeactivationPresenter(
                     } else {
                         action.value = AsyncAction.ConfirmingNoParams
                     }
-                AccountDeactivationEvents.CloseDialogs -> {
+                AccountDeactivationEvent.CloseDialogs -> {
                     action.value = AsyncAction.Uninitialized
                 }
             }

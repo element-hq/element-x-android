@@ -525,6 +525,8 @@ class CreatePollPresenterTest {
             assertThat(question).isEmpty()
             assertThat(answers).isEqualTo(listOf(Answer("", false), Answer("", false)))
             assertThat(pollKind).isEqualTo(PollKind.Disclosed)
+            assertThat(maxSelections).isEqualTo(1)
+            assertThat(maxAllowedSelections).isEqualTo(2)
             assertThat(showBackConfirmation).isFalse()
             assertThat(showDeleteConfirmation).isFalse()
         }

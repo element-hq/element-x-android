@@ -64,8 +64,8 @@ fun BlockedUsersView(
                 items(state.blockedUsers) { matrixUser ->
                     BlockedUserItem(
                         matrixUser = matrixUser,
-                        onClick = { state.eventSink(BlockedUsersEvents.Unblock(it)) },
-                        onLongClick = { state.eventSink(BlockedUsersEvents.CopyToClipboard(it)) },
+                        onClick = { state.eventSink(BlockedUsersEvent.Unblock(it)) },
+                        onLongClick = { state.eventSink(BlockedUsersEvent.CopyToClipboard(it)) },
                     )
                 }
             }
@@ -99,8 +99,8 @@ fun BlockedUsersView(
                     title = stringResource(R.string.screen_blocked_users_unblock_alert_title),
                     content = stringResource(R.string.screen_blocked_users_unblock_alert_description),
                     submitText = stringResource(R.string.screen_blocked_users_unblock_alert_action),
-                    onSubmitClick = { state.eventSink(BlockedUsersEvents.ConfirmUnblock) },
-                    onDismiss = { state.eventSink(BlockedUsersEvents.Cancel) }
+                    onSubmitClick = { state.eventSink(BlockedUsersEvent.ConfirmUnblock) },
+                    onDismiss = { state.eventSink(BlockedUsersEvent.Cancel) }
                 )
             }
             else -> Unit
@@ -126,7 +126,7 @@ private fun BlockedUserItem(
 
 @PreviewsDayNight
 @Composable
-internal fun BlockedUsersViewPreview(@PreviewParameter(BlockedUsersStateProvider::class) state: BlockedUsersState) {
+internal fun BlockedUsersViewPreview(@PreviewParameter(BlockedUsersStatePreviewParam::class) state: BlockedUsersState) {
     ElementPreview {
         BlockedUsersView(
             state = state,

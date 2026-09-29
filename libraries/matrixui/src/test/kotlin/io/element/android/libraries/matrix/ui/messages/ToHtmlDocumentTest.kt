@@ -103,4 +103,28 @@ class ToHtmlDocumentTest : RobolectricTest() {
         })
         assertThat(document?.text()).isEqualTo("Hey Alice!")
     }
+
+    @Test
+    fun `toHtmlDocument - returns null if the body only contains unsupported tags`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<img data-mx-emoticon src=\"mxc://matrix.org/anImage\" height=\"32\" width=\"32\" alt=\"\uD83D\uDE1C\" />"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+
+        assertThat(document).isNull()
+    }
+
+    @Test
+    fun `toHtmlDocument - returns a Document if some text survives next to unsupported tags`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "Look at this <img src=\"mxc://matrix.org/anImage\" alt=\"cat\" />!"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+
+        assertThat(document?.text()).isEqualTo("Look at this !")
+    }
 }

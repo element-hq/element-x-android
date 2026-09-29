@@ -25,18 +25,23 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun SyncStateView(
-    isVisible: Boolean,
+    state: SyncIndicatorState,
     modifier: Modifier = Modifier
 ) {
     AnimatedVisibility(
-        visible = isVisible,
+        visible = state != SyncIndicatorState.Hidden,
         modifier = modifier,
         enter = fadeIn(spring(stiffness = 500F)),
         exit = fadeOut(spring(stiffness = 500F)),
     ) {
-        AsyncIndicator.Loading(
-            text = stringResource(id = CommonStrings.common_syncing),
-        )
+        when (state) {
+            SyncIndicatorState.ServerUnreachable -> AsyncIndicator.Failure(
+                text = stringResource(id = CommonStrings.common_server_unreachable),
+            )
+            else -> AsyncIndicator.Loading(
+                text = stringResource(id = CommonStrings.common_syncing),
+            )
+        }
     }
 }
 
@@ -46,7 +51,18 @@ internal fun SyncStateViewPreview() = ElementPreview {
     // Add a box to see the shadow
     Box(modifier = Modifier.padding(24.dp)) {
         SyncStateView(
-            isVisible = true
+            state = SyncIndicatorState.Syncing
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun SyncStateViewServerUnreachablePreview() = ElementPreview {
+    // Add a box to see the shadow
+    Box(modifier = Modifier.padding(24.dp)) {
+        SyncStateView(
+            state = SyncIndicatorState.ServerUnreachable
         )
     }
 }

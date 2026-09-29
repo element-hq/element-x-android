@@ -84,7 +84,7 @@ fun LockScreenSettingsView(
 @PreviewsDayNight
 @Composable
 internal fun LockScreenSettingsViewPreview(
-    @PreviewParameter(LockScreenSettingsStateProvider::class) state: LockScreenSettingsState,
+    @PreviewParameter(LockScreenSettingsStatePreviewParam::class) state: LockScreenSettingsState,
 ) {
     ElementPreview {
         LockScreenSettingsView(

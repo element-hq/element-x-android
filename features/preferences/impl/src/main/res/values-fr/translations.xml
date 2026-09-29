@@ -37,8 +37,6 @@
   <string name="screen_advanced_settings_share_presence_description">"Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Toujours cacher"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Toujours montrer"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Dans les salons privés"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Un média caché peut toujours être affiché en cliquant dessus"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Afficher les médias dans les discussions."</string>
   <string name="screen_advanced_settings_view_source_description">"Activer cette option pour pouvoir voir la source des messages dans la discussion."</string>
   <string name="screen_blocked_users_empty">"Vous n’avez bloqué personne"</string>
@@ -75,7 +73,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_failed_fixing_configuration">"La configuration n’a pas été corrigée, veuillez réessayer."</string>
   <string name="screen_notification_settings_group_chats">"Discussions de groupe"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre fournisseur de compte ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Choisir un autre son…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Vous utilisez actuellement %1$s"</string>
@@ -84,7 +82,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_mode_all">"Tous"</string>
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
   <string name="screen_notification_settings_notification_section_title">"Prévenez-moi pour"</string>
-  <string name="screen_notification_settings_room_mention_label">"Prévenez-moi si un message contient \"@room\""</string>
+  <string name="screen_notification_settings_room_mention_label">"Un message qui contient @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Personnalisé"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Son personnalisé…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Erreur lors de la suppression du fichier"</string>

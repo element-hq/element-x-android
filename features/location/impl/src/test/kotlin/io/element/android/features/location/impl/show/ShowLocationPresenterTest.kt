@@ -20,7 +20,7 @@ import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.FakeUserLocationStateFactory
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
-import io.element.android.features.location.impl.common.permissions.PermissionsEvents
+import io.element.android.features.location.impl.common.permissions.PermissionsEvent
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
@@ -188,7 +188,7 @@ class ShowLocationPresenterTest {
 
             // Continue the dialog sends permission request to the permissions presenter
             trackLocationState.eventSink(ShowLocationEvent.RequestPermissions)
-            assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
+            assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvent.RequestPermissions)
         }
     }
 
@@ -208,7 +208,7 @@ class ShowLocationPresenterTest {
 
             initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
 
-            assertThat(fakePermissionsPresenter.events).contains(PermissionsEvents.RequestPermissions)
+            assertThat(fakePermissionsPresenter.events).contains(PermissionsEvent.RequestPermissions)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -510,8 +510,8 @@ class ShowLocationPresenterTest {
             val state = awaitItem()
             assertThat(state.hideUserLocationPuck).isTrue()
             val location = requireNotNull(state.userLocationState.location)
-            assertThat(location.position.value.latitude).isEqualTo(ownLocation?.lat)
-            assertThat(location.position.value.longitude).isEqualTo(ownLocation?.lon)
+            assertThat(location.position.latitude).isEqualTo(ownLocation?.lat)
+            assertThat(location.position.longitude).isEqualTo(ownLocation?.lon)
         }
     }
 }

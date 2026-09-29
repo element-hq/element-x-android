@@ -597,7 +597,7 @@ private fun LoadingContent(
 @PreviewsDayNight
 @Composable
 internal fun MediaGalleryViewPreview(
-    @PreviewParameter(MediaGalleryStateProvider::class) state: MediaGalleryState
+    @PreviewParameter(MediaGalleryStatePreviewParam::class) state: MediaGalleryState
 ) = ElementPreview {
     CompositionLocalProvider(
         LocalMediaItemPresenterFactories provides aFakeMediaItemPresenterFactories(),

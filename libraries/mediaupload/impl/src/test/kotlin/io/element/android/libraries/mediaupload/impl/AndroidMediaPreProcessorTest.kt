@@ -65,6 +65,20 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
         assertThat(height).isEqualTo(2268)
     }
 
+    @Test
+    fun `test processing an image shared with a wildcard mime type`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageJpeg,
+            mimeType = MimeTypes.Images,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = true,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.imageInfo.mimetype).isEqualTo(MimeTypes.Jpeg)
+    }
+
     private suspend fun TestScope.process(
         asset: Asset,
         mediaOptimizationConfig: MediaOptimizationConfig,
@@ -124,7 +138,7 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
     }
 
     @Test
-    fun `a file that is not an image keeps the wildcard mime type it was shared with`() = runTest {
+    fun `a file that is not an image falls back to the default subtype of the wildcard it was shared with`() = runTest {
         val mediaUploadInfo = process(
             asset = assetText,
             mimeType = MimeTypes.Images,
@@ -135,7 +149,7 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
             sdkIntVersion = Build.VERSION_CODES.Q,
         )
         val info = mediaUploadInfo as MediaUploadInfo.Image
-        assertThat(info.imageInfo.mimetype).isEqualTo(MimeTypes.Images)
+        assertThat(info.imageInfo.mimetype).isEqualTo(MimeTypes.Jpeg)
     }
 
     @Test

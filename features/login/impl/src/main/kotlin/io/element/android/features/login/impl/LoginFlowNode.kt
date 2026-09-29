@@ -23,7 +23,6 @@ import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.operation.replace
-import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
@@ -33,13 +32,11 @@ import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.classic.ElementClassicConnection
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
-import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.chooseaccountprovider.ChooseAccountProviderNode
 import io.element.android.features.login.impl.screens.classic.ClassicFlowNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.screens.onboarding.OnBoardingNode
-import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.BackstackView
@@ -128,12 +125,6 @@ class LoginFlowNode(
 
         @Parcelize
         data object ChooseAccountProvider : NavTarget
-
-        @Parcelize
-        data object ChangeAccountProvider : NavTarget
-
-        @Parcelize
-        data object SearchAccountProvider : NavTarget
 
         @Parcelize
         data class LoginPassword(
@@ -261,42 +252,8 @@ class LoginFlowNode(
                     override fun navigateToLoginPassword() {
                         backstack.push(NavTarget.LoginPassword())
                     }
-
-                    override fun navigateToChangeAccountProvider() {
-                        backstack.push(NavTarget.ChangeAccountProvider)
-                    }
                 }
                 createNode<ConfirmAccountProviderNode>(buildContext, plugins = listOf(inputs, callback))
-            }
-            NavTarget.ChangeAccountProvider -> {
-                val callback = object : ChangeAccountProviderNode.Callback {
-                    override fun onDone() {
-                        // Go back to the Account Provider screen
-                        val confirmAccountProvider = backstack.elements.value.firstOrNull {
-                            it.key.navTarget is NavTarget.ConfirmAccountProvider
-                        }?.key?.navTarget ?: NavTarget.ConfirmAccountProvider(isAccountCreation = false)
-                        backstack.singleTop(confirmAccountProvider)
-                    }
-
-                    override fun navigateToSearchAccountProvider() {
-                        backstack.push(NavTarget.SearchAccountProvider)
-                    }
-                }
-
-                createNode<ChangeAccountProviderNode>(buildContext, plugins = listOf(callback))
-            }
-            NavTarget.SearchAccountProvider -> {
-                val callback = object : SearchAccountProviderNode.Callback {
-                    override fun onDone() {
-                        // Go back to the Account Provider screen
-                        val confirmAccountProvider = backstack.elements.value.firstOrNull {
-                            it.key.navTarget is NavTarget.ConfirmAccountProvider
-                        }?.key?.navTarget ?: NavTarget.ConfirmAccountProvider(isAccountCreation = false)
-                        backstack.singleTop(confirmAccountProvider)
-                    }
-                }
-
-                createNode<SearchAccountProviderNode>(buildContext, plugins = listOf(callback))
             }
             is NavTarget.LoginPassword -> {
                 val inputs = LoginPasswordNode.Inputs(

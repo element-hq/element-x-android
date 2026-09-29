@@ -29,7 +29,7 @@ import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.SendLiveLocationPermissions
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
-import io.element.android.features.location.impl.common.permissions.PermissionsEvents
+import io.element.android.features.location.impl.common.permissions.PermissionsEvent
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.sendLiveLocationPermissions
@@ -111,7 +111,7 @@ class ShareLocationPresenter(
                 sendLiveLocationPermissions = SendLiveLocationPermissions.GRANTED
             )
             if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
-                permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                permissionsState.eventSink(PermissionsEvent.RequestPermissions)
             }
             trackUserPosition = locationConstraints is LocationConstraintsCheck.Success
             dialogState = ShareLocationState.Dialog.Constraints(locationConstraints.toDialogState())
@@ -137,7 +137,7 @@ class ShareLocationPresenter(
                 }
                 else -> {
                     if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
-                        permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                        permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                     }
                     dialogState = ShareLocationState.Dialog.Constraints(locationConstraints.toDialogState())
                 }
@@ -195,7 +195,7 @@ class ShareLocationPresenter(
                 }
                 ShareLocationEvent.RequestPermissions -> {
                     dialogState = ShareLocationState.Dialog.None
-                    permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                    permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                 }
             }
         }
@@ -217,8 +217,8 @@ class ShareLocationPresenter(
         val replyMode = messageComposerContext.composerMode as? MessageComposerMode.Reply
         val inReplyToEventId = replyMode?.eventId
         val geoUri = event.location.toGeoUri()
-        getTimeline().flatMap {
-            it.sendLocation(
+        withTimeline { timeline ->
+            timeline.sendLocation(
                 body = generateBody(geoUri),
                 geoUri = geoUri,
                 description = null,
@@ -237,10 +237,22 @@ class ShareLocationPresenter(
         )
     }
 
-    private suspend fun getTimeline(): Result<Timeline> {
+    /**
+     * Invokes [block] with the [Timeline] matching [timelineMode].
+     *
+     * For a thread, a dedicated timeline is created and closed once [block] returns, since such a
+     * timeline owns SDK resources. For the other modes, the live timeline is used, and is not
+     * closed here since it is owned by its room.
+     */
+    private suspend fun <T> withTimeline(block: suspend (Timeline) -> Result<T>): Result<T> {
         return when (timelineMode) {
-            is Timeline.Mode.Thread -> room.createTimeline(CreateTimelineParams.Threaded(timelineMode.threadRootId))
-            else -> Result.success(room.liveTimeline)
+            is Timeline.Mode.Thread -> {
+                room.createTimeline(CreateTimelineParams.Threaded(timelineMode.threadRootId))
+                    .flatMap { threadedTimeline ->
+                        threadedTimeline.use { block(it) }
+                    }
+            }
+            else -> block(room.liveTimeline)
         }
     }
 }

@@ -15,11 +15,14 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -188,6 +191,22 @@ class TimelineItemGrouperTest {
                 )
             )
         )
+    }
+
+    @Test
+    fun `a deleted message that still heads a thread is left out of the removed messages group`() {
+        val threadRoot = aGroupableItem.copy(
+            id = UniqueId("r1"),
+            content = TimelineItemRedactedContent,
+            threadInfo = TimelineItemThreadInfo.ThreadRoot(
+                summary = ThreadSummary(latestEvent = AsyncData.Uninitialized, numberOfReplies = 2),
+                latestEventText = null,
+            ),
+        )
+        val r0 = aGroupableItem.copy(id = UniqueId("r0"), content = TimelineItemRedactedContent)
+        val r2 = aGroupableItem.copy(id = UniqueId("r2"), content = TimelineItemRedactedContent)
+        val result = sut.group(listOf(r0, threadRoot, r2))
+        assertThat(result).isEqualTo(listOf(r0, threadRoot, r2))
     }
 
     @Test

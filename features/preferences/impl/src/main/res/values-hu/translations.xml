@@ -52,6 +52,10 @@
   <string name="screen_edit_profile_error_title">"Nem sikerült frissíteni a profilt"</string>
   <string name="screen_edit_profile_title">"Profil szerkesztése"</string>
   <string name="screen_edit_profile_updating_details">"Profil frissítése…"</string>
+  <string name="screen_labs_enable_gallery">"Galéria üzenetek"</string>
+  <string name="screen_labs_enable_gallery_description">"Több kép vagy videó küldése egyszerre. Mobilon stabil, de weben még nem támogatott."</string>
+  <string name="screen_labs_enable_knocking">"Csatlakozási kérés"</string>
+  <string name="screen_labs_enable_knocking_description">"A felhasználók hozzáférést kérhetnek olyan szobákhoz, amelyek nem állnak mindenki számára nyitva. Mobil eszközökön stabilan működik, webes megvalósítás is létezik, de még kísérleti stádiumban van."</string>
   <string name="screen_labs_enable_threads">"Üzenetszál válaszok engedélyezése"</string>
   <string name="screen_labs_enable_threads_description">"Az alkalmazás újraindul, hogy a változás érvénybe lépjen."</string>
   <string name="screen_labs_header_description">"Próbálja ki legújabb fejlesztéseinket. Ezek a funkciók még nem véglegesek, instabilak lehetnek és változhatnak."</string>
@@ -84,7 +88,7 @@ Ha folytatja, egyes beállítások megváltozhatnak."</string>
   <string name="screen_notification_settings_mode_all">"Összes"</string>
   <string name="screen_notification_settings_mode_mentions">"Említések"</string>
   <string name="screen_notification_settings_notification_section_title">"Értesítés ezekről:"</string>
-  <string name="screen_notification_settings_room_mention_label">"Értesítés a @room említésekor"</string>
+  <string name="screen_notification_settings_room_mention_label">@szoba említések</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Egyedi"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Egyedi hang…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Hiba a fájl törlésekor"</string>

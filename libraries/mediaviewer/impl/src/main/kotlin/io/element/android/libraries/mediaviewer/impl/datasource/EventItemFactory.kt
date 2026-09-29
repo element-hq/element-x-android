@@ -79,7 +79,7 @@ class EventItemFactory(
             LegacyCallInviteContent,
             is PollContent,
             is ProfileChangeContent,
-            RedactedContent,
+            is RedactedContent,
             is RoomMembershipContent,
             is StateContent,
             is StickerContent,

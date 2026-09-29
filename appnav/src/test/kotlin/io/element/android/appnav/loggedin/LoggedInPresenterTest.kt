@@ -17,9 +17,6 @@ import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -70,7 +67,7 @@ class LoggedInPresenterTest {
     fun `present - initial state`() = runTest {
         createLoggedInPresenter().test {
             val initialState = awaitItem()
-            assertThat(initialState.showSyncSpinner).isFalse()
+            assertThat(initialState.syncIndicatorState).isEqualTo(SyncIndicatorState.Hidden)
             assertThat(initialState.pusherRegistrationState.isUninitialized()).isTrue()
             assertThat(initialState.ignoreRegistrationError).isFalse()
         }
@@ -100,11 +97,33 @@ class LoggedInPresenterTest {
             matrixClient = FakeMatrixClient(roomListService = roomListService),
         ).test {
             val initialState = awaitItem()
-            assertThat(initialState.showSyncSpinner).isFalse()
+            assertThat(initialState.syncIndicatorState).isEqualTo(SyncIndicatorState.Hidden)
             roomListService.postSyncIndicator(RoomListService.SyncIndicator.Show)
-            consumeItemsUntilPredicate { it.showSyncSpinner }
+            consumeItemsUntilPredicate { it.syncIndicatorState == SyncIndicatorState.Syncing }
             roomListService.postSyncIndicator(RoomListService.SyncIndicator.Hide)
-            consumeItemsUntilPredicate { !it.showSyncSpinner }
+            consumeItemsUntilPredicate { it.syncIndicatorState != SyncIndicatorState.Syncing }
+        }
+    }
+
+    @Test
+    fun `present - say the server is unreachable when the device has network but the sync is offline`() = runTest {
+        createLoggedInPresenter(
+            syncState = SyncState.Offline,
+            networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected),
+        ).test {
+            consumeItemsUntilPredicate { it.syncIndicatorState == SyncIndicatorState.ServerUnreachable }
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - say nothing when the device itself has no network`() = runTest {
+        createLoggedInPresenter(
+            syncState = SyncState.Offline,
+            networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected),
+        ).test {
+            consumeItemsUntilPredicate { it.syncIndicatorState == SyncIndicatorState.Hidden }
+            cancelAndConsumeRemainingEvents()
         }
     }
 
@@ -131,7 +150,6 @@ class LoggedInPresenterTest {
             buildMeta = buildMeta,
             networkMonitor = networkMonitor,
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
-            featureFlagService = FakeFeatureFlagService(),
             permissionsPresenterFactory = FakePermissionsPresenterFactory(),
         ).test {
             encryptionService.emitRecoveryState(RecoveryState.UNKNOWN)
@@ -214,7 +232,7 @@ class LoggedInPresenterTest {
             lambda.assertions()
                 .isCalledOnce()
             // Reset the error and do not show again
-            finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = false))
+            finalState.eventSink(LoggedInEvent.CloseErrorDialog(doNotShowAgain = false))
             val lastState = awaitItem()
             assertThat(lastState.pusherRegistrationState.isUninitialized()).isTrue()
             assertThat(lastState.ignoreRegistrationError).isFalse()
@@ -244,7 +262,7 @@ class LoggedInPresenterTest {
             lambda.assertions()
                 .isCalledOnce()
             // Reset the error and do not show again
-            finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = true))
+            finalState.eventSink(LoggedInEvent.CloseErrorDialog(doNotShowAgain = true))
             skipItems(1)
             setIgnoreRegistrationErrorLambda.assertions()
                 .isCalledOnce()
@@ -300,7 +318,7 @@ class LoggedInPresenterTest {
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.forceNativeSlidingSyncMigration).isFalse()
-            initialState.eventSink(LoggedInEvents.CheckSlidingSyncProxyAvailability)
+            initialState.eventSink(LoggedInEvent.CheckSlidingSyncProxyAvailability)
             assertThat(awaitItem().forceNativeSlidingSyncMigration).isTrue()
         }
     }
@@ -322,7 +340,7 @@ class LoggedInPresenterTest {
         ).test {
             val initialState = awaitItem()
 
-            initialState.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
+            initialState.eventSink(LoggedInEvent.LogoutAndMigrateToNativeSlidingSync)
 
             advanceUntilIdle()
 
@@ -362,9 +380,6 @@ class LoggedInPresenterTest {
         }
         createLoggedInPresenter(
             matrixClient = matrixClient,
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(FeatureFlags.UserStatus.key to true),
-            ),
         ).test {
             cancelAndConsumeRemainingEvents()
             assert(enableAutomaticCallStatusLambda)
@@ -374,7 +389,7 @@ class LoggedInPresenterTest {
     }
 
     @Test
-    fun `present - reacts to user status flag being toggled at runtime`() = runTest {
+    fun `present - enables automatic call status when server supports it`() = runTest {
         val enableAutomaticCallStatusLambda = lambdaRecorder<Boolean, Unit> { }
         val matrixClient = FakeMatrixClient(
             accountManagementUrlResult = { Result.success(null) },
@@ -382,23 +397,13 @@ class LoggedInPresenterTest {
         ).apply {
             isUserStatusSupportedResult = Result.success(true)
         }
-        val featureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(FeatureFlags.UserStatus.key to false),
-        )
         createLoggedInPresenter(
             matrixClient = matrixClient,
-            featureFlagService = featureFlagService,
         ).test {
-            awaitItem()
-            // Turning the flag on at runtime enables it.
-            featureFlagService.setFeatureEnabled(FeatureFlags.UserStatus, true)
             cancelAndConsumeRemainingEvents()
             assert(enableAutomaticCallStatusLambda)
-                .isCalledExactly(2)
-                .withSequence(
-                    listOf(value(false)),
-                    listOf(value(true)),
-                )
+                .isCalledOnce()
+                .with(value(true))
         }
     }
 
@@ -418,7 +423,6 @@ class LoggedInPresenterTest {
         ),
         buildMeta: BuildMeta = aBuildMeta(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = matrixClient,
@@ -430,7 +434,6 @@ class LoggedInPresenterTest {
             buildMeta = buildMeta,
             networkMonitor = networkMonitor,
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
-            featureFlagService = featureFlagService,
             permissionsPresenterFactory = FakePermissionsPresenterFactory(),
         )
     }

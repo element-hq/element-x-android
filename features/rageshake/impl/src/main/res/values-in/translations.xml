@@ -8,6 +8,8 @@
   <string name="screen_bug_report_editor_placeholder">"Jelaskan masalah tersebut…"</string>
   <string name="screen_bug_report_editor_supporting">"Jika memungkinkan, silakan tulis deskripsi dalam bahasa Inggris."</string>
   <string name="screen_bug_report_error_description_too_short">"Deskripsinya terlalu pendek, silakan menyediakan detail tambahan tentang apa yang terjadi. Terima kasih!"</string>
+  <string name="screen_bug_report_github_issue_description">"Anda dapat memasukkan nomor masalah GitHub terkait, jika ada."</string>
+  <string name="screen_bug_report_github_issue_label">"Masalah GitHub"</string>
   <string name="screen_bug_report_include_crash_logs">"Kirim log kerusakan"</string>
   <string name="screen_bug_report_include_logs">"Izinkan log"</string>
   <string name="screen_bug_report_include_logs_error">"Log Anda terlalu besar sehingga tidak dapat dimasukkan dalam laporan ini, kirimkan kepada kami dengan cara lain."</string>

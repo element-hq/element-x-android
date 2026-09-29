@@ -57,16 +57,17 @@ class KonsistClassNameTest {
     }
 
     @Test
-    fun `Classes extending 'PreviewParameterProvider' name MUST end with 'Provider' and MUST contain provided class name`() {
+    fun `Classes extending 'PreviewParameterProvider' name MUST end with 'PreviewParam' and MUST contain provided class name`() {
         Konsist.scopeFromProduction()
             .classes()
             .withAllParentsOf(PreviewParameterProvider::class)
             .withoutName(
-                "AspectRatioProvider",
-                "EditableAvatarViewUriProvider",
-                "LoginModeViewErrorProvider",
-                "OverlapRatioProvider",
-                "TextFileContentProvider",
+                "AspectRatioPreviewParam",
+                "EditableAvatarViewUriPreviewParam",
+                "LoginModeViewErrorPreviewParam",
+                "OverlapRatioPreviewParam",
+                "TextFileContentPreviewParam",
+                "HtmlMessageContentPreviewParam",
             )
             .also {
                 // Check that classes are actually found
@@ -82,8 +83,7 @@ class KonsistClassNameTest {
                     .removeSuffix("?")
                     .replace(".", "")
                 val name = klass.name
-                name.endsWith("Provider") &&
-                    name.endsWith("PreviewProvider").not() &&
+                name.endsWith("PreviewParam") &&
                     name.contains(providedType)
             }
     }
@@ -104,6 +104,9 @@ class KonsistClassNameTest {
                 "FakeImageLoader",
                 "FakeKeyStore",
                 "FakeListenableFuture",
+                "FakeMediaStoreContentProvider",
+                "FakeParentNode",
+                "FakeSequentialClientBuilderProvider",
             )
             .assertTrue {
                 val interfaceName = it.name

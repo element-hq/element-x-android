@@ -19,7 +19,7 @@ data class LeaveSpaceState(
     val areCreatorsPrivileged: Boolean,
     val selectableSpaceRooms: AsyncData<ImmutableList<SelectableSpaceRoom>>,
     val leaveSpaceAction: AsyncAction<Unit>,
-    val eventSink: (LeaveSpaceEvents) -> Unit,
+    val eventSink: (LeaveSpaceEvent) -> Unit,
 ) {
     private val rooms = selectableSpaceRooms.dataOrNull().orEmpty().toImmutableList()
     private val lastAdminRooms: ImmutableList<SelectableSpaceRoom>

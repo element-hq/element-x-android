@@ -38,8 +38,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Po wyłączeniu nie będzie można wysyłać ani odbierać potwierdzeń odczytu i powiadomień o pisaniu."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Zawsze ukrywaj"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Zawsze pokazuj"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"W pokojach prywatnych"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ukryte media można zawsze wyświetlić, dotykając ich"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Pokaż w pokojach prywatnych"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ukryte media można zawsze wyświetlić, dotykając ich."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Pokaż media na osi czasu"</string>
   <string name="screen_advanced_settings_view_source_description">"Włącz, aby móc wyświetlać źródło wiadomości na osi czasu."</string>
   <string name="screen_blocked_users_empty">"Nie blokujesz żadnych użytkowników"</string>
@@ -53,11 +53,18 @@
   <string name="screen_edit_profile_error_title">"Nie można zaktualizować profilu"</string>
   <string name="screen_edit_profile_title">"Edytuj profil"</string>
   <string name="screen_edit_profile_updating_details">"Aktualizuję profil…"</string>
+  <string name="screen_labs_enable_gallery">"Wiadomości z galerii"</string>
+  <string name="screen_labs_enable_gallery_description">"Wysyłaj wiele obrazów lub filmów jednocześnie. Funkcja jest stabilna na urządzeniach mobilnych, lecz nie jest dostępna w przeglądarce."</string>
+  <string name="screen_labs_enable_knocking">"Poproś o dołączenie"</string>
+  <string name="screen_labs_enable_knocking_description">"Użytkownicy mogą poprosić o dostęp do pokoju, który jest zamknięty dla wszystkich. Funkcja działa stabilnie na urządzeniach mobilnych, wersja internetowa istnieje, lecz jest eksperymentalna."</string>
   <string name="screen_labs_enable_threads">"Włącz odpowiedzi w wątkach"</string>
   <string name="screen_labs_enable_threads_description">"Aplikacja uruchomi się ponownie, aby zastosować tę zmianę."</string>
   <string name="screen_labs_header_description">"Wypróbuj nasze najnowsze pomysły w fazie rozwoju. Funkcje te nie są jeszcze sfinalizowane; mogą być niestabilne i ulec zmianie."</string>
   <string name="screen_labs_header_title">"Chcesz poeksperymentować?"</string>
   <string name="screen_labs_title">"Laboratoria"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Zaproszenia"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Pozostali użytkownicy"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Twój wygląd"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Dodatkowe ustawienia"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Dzwonek połączenia"</string>
   <string name="screen_notification_settings_calls_label">"Połączenia audio i wideo"</string>
@@ -76,7 +83,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Konfiguracja nie została poprawiona, spróbuj ponownie."</string>
   <string name="screen_notification_settings_group_chats">"Czaty grupowe"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Zaproszenia"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Twój serwer domowy nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z niektórych pokoi."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Twój dostawca konta nie wspiera tej opcji w pokojach szyfrowanych, możesz nie otrzymać powiadomień z niektórych pokoi."</string>
   <string name="screen_notification_settings_mentions_section_title">"Wzmianki"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Wybierz inny dźwięk…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Aktualnie używany %1$s"</string>
@@ -85,7 +92,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_mode_all">"Wszystkie"</string>
   <string name="screen_notification_settings_mode_mentions">"Wzmianki"</string>
   <string name="screen_notification_settings_notification_section_title">"Powiadamiaj mnie przez"</string>
-  <string name="screen_notification_settings_room_mention_label">"Powiadom mnie na @pokój"</string>
+  <string name="screen_notification_settings_room_mention_label">"Wzmianki @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Własny"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Własny dźwięk…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Błąd usuwania pliku"</string>

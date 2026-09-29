@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Необходимо задать адрес комнаты, чтобы опубликовать ее в каталоге комнат."</string>
   <string name="screen_edit_room_address_title">"Редактировать адрес комнаты"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Произошла ошибка при обновлении настройки уведомления."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш сервер не поддерживает эту опцию для зашифрованных комнат, Вы можете не получать некоторые уведомления."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Ваш сервер не поддерживает эту опцию для зашифрованных чатах, в некоторых чатах Вы можете не получать уведомления."</string>
   <string name="screen_polls_history_title">"Опросы"</string>
   <string name="screen_room_change_permissions_administrators">"Администраторы"</string>
   <string name="screen_room_change_permissions_ban_people">"Блокировать пользователей"</string>
@@ -115,9 +115,10 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Произошла ошибка при загрузке настроек уведомлений."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Не удалось восстановить режим по умолчанию, попробуйте ещё раз."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Не удалось настроить режим, попробуйте ещё раз."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш домашний сервер не поддерживает эту опцию в зашифрованных комнатах, вы не будете получать уведомления в этой комнате."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Ваш сервер не поддерживает эту опцию в зашифрованных чатах, Вы не будете получать уведомления в этом чате."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"О всех сообщениях"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ключевые слова"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Только упоминания и ответы"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Отключить уведомления"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В этой комнате уведомлять меня"</string>
   <string name="screen_room_roles_and_permissions_admins">"Администраторы"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Администраторы и владельцы"</string>

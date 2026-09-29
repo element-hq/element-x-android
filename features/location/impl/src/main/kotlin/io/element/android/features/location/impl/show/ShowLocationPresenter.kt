@@ -32,13 +32,13 @@ import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.SendLiveLocationPermissions
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
-import io.element.android.features.location.impl.common.permissions.PermissionsEvents
+import io.element.android.features.location.impl.common.permissions.PermissionsEvent
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.userlocation.UserLocationState
-import io.element.android.features.location.impl.common.userlocation.asMapLibreLocation
+import io.element.android.features.location.impl.common.userlocation.toLocationMeasurement
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
@@ -99,7 +99,7 @@ class ShowLocationPresenter(
                 sendLiveLocationPermissions = SendLiveLocationPermissions.GRANTED
             )
             if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
-                permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                permissionsState.eventSink(PermissionsEvent.RequestPermissions)
             }
             isTrackMyLocation = locationConstraints is LocationConstraintsCheck.Success
             dialogState = locationConstraints.toDialogState()
@@ -130,7 +130,7 @@ class ShowLocationPresenter(
                     locationActions.openLocationSettings()
                     dialogState = LocationConstraintsDialogState.None
                 }
-                ShowLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                ShowLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                 ShowLocationEvent.StopLocationSharing -> coroutineScope.launch {
                     liveLocationShareManager.stopShare(joinedRoom.roomId)
                 }
@@ -215,7 +215,7 @@ class ShowLocationPresenter(
         val hideUserLocationPuck = mode is ShowLocationMode.Live && isCurrentlySharing
         val userLocationState = if (hideUserLocationPuck) {
             // When sharing with this device, use the user LocationShareItem as source of data instead of the device.
-            val ownLocationShare by remember { derivedStateOf { updatedLocationShares.find { it.isOwnUser }?.location?.asMapLibreLocation() } }
+            val ownLocationShare by remember { derivedStateOf { updatedLocationShares.find { it.isOwnUser }?.location?.toLocationMeasurement() } }
             UserLocationState(ownLocationShare)
         } else {
             userLocationStateFactory.create(hasLocationPermission = permissionsState.isAnyGranted)

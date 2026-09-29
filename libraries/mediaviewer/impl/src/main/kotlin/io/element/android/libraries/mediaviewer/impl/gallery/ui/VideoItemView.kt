@@ -117,7 +117,7 @@ private fun VideoInfoRow(
 @PreviewsDayNight
 @Composable
 internal fun VideoItemViewPreview(
-    @PreviewParameter(MediaItemVideoProvider::class) video: MediaItem.Video,
+    @PreviewParameter(MediaItemVideoPreviewParam::class) video: MediaItem.Video,
 ) = ElementPreview {
     VideoItemView(
         video = video,

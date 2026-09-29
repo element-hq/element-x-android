@@ -18,7 +18,7 @@ import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.libraries.voicerecorder.impl.audio.Audio
 import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
 import io.element.android.libraries.voicerecorder.impl.audio.SampleRate
-import io.element.android.libraries.voicerecorder.impl.di.VoiceRecorderModule
+import io.element.android.libraries.voicerecorder.impl.di.VoiceRecorderBindingContainer
 import io.element.android.libraries.voicerecorder.test.FakeAudioLevelCalculator
 import io.element.android.libraries.voicerecorder.test.FakeAudioReaderFactory
 import io.element.android.libraries.voicerecorder.test.FakeEncoder
@@ -151,7 +151,7 @@ class DefaultVoiceRecorderTest {
     }
 
     private fun TestScope.createDefaultVoiceRecorder(): DefaultVoiceRecorder {
-        val fileConfig = VoiceRecorderModule.provideVoiceFileConfig()
+        val fileConfig = VoiceRecorderBindingContainer.providesVoiceFileConfig()
         return DefaultVoiceRecorder(
             dispatchers = testCoroutineDispatchers(),
             timeSource = timeSource,

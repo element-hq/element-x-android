@@ -63,17 +63,17 @@ class EditRoomAddressPresenter(
             )
         }
 
-        fun handleEvent(event: EditRoomAddressEvents) {
+        fun handleEvent(event: EditRoomAddressEvent) {
             when (event) {
-                EditRoomAddressEvents.Save -> coroutineScope.save(
+                EditRoomAddressEvent.Save -> coroutineScope.save(
                     saveAction = saveAction,
                     serverName = homeserverName,
                     newRoomAddress = newRoomAddress
                 )
-                is EditRoomAddressEvents.RoomAddressChanged -> {
+                is EditRoomAddressEvent.RoomAddressChanged -> {
                     newRoomAddress = event.roomAddress
                 }
-                EditRoomAddressEvents.DismissError -> {
+                EditRoomAddressEvent.DismissError -> {
                     saveAction.value = AsyncAction.Uninitialized
                 }
             }

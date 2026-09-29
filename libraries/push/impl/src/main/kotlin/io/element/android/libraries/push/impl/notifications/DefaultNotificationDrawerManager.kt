@@ -274,6 +274,12 @@ private fun NotifiableEvent.toFallbackNotifiableEvent(): FallbackNotifiableEvent
         is FallbackNotifiableEvent -> timestamp
         is NotifiableRingingCallEvent -> return null
     }
+    val noisy = when (this) {
+        is NotifiableMessageEvent -> noisy
+        is InviteNotifiableEvent -> noisy
+        is SimpleNotifiableEvent -> noisy
+        is FallbackNotifiableEvent -> noisy
+    }
     return FallbackNotifiableEvent(
         sessionId = sessionId,
         roomId = roomId,
@@ -283,6 +289,7 @@ private fun NotifiableEvent.toFallbackNotifiableEvent(): FallbackNotifiableEvent
         canBeReplaced = false,
         isRedacted = false,
         isUpdated = false,
+        noisy = noisy,
         timestamp = timestamp,
         cause = null,
     )

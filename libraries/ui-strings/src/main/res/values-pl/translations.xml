@@ -111,6 +111,7 @@
   <string name="action_copy_link">"Kopiuj link"</string>
   <string name="action_copy_link_to_message">"Kopiuj link do wiadomości"</string>
   <string name="action_copy_text">"Kopiuj tekst"</string>
+  <string name="action_copy_to_clipboard">"Kopiuj do schowka"</string>
   <string name="action_create">"Utwórz"</string>
   <string name="action_create_room">"Utwórz pokój"</string>
   <string name="action_create_space">"Utwórz przestrzeń"</string>
@@ -206,10 +207,10 @@
   <string name="action_start_chat">"Rozpocznij chat"</string>
   <string name="action_start_over">"Zacznij od nowa"</string>
   <string name="action_start_verification">"Rozpocznij weryfikację"</string>
-  <string name="action_static_map_load">"Stuknij, aby załadować mapę"</string>
+  <string name="action_static_map_load">"Dotknij, aby załadować mapę"</string>
   <string name="action_stop">"Zatrzymaj"</string>
   <string name="action_take_photo">"Zrób zdjęcie"</string>
-  <string name="action_tap_for_options">"Stuknij, by wyświetlić opcje"</string>
+  <string name="action_tap_for_options">"Dotknij, by wyświetlić opcje"</string>
   <string name="action_translate">"Przetłumacz"</string>
   <string name="action_try_again">"Spróbuj ponownie"</string>
   <string name="action_unpin">"Odepnij"</string>
@@ -224,6 +225,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Dostępna aktualizacja"</string>
   <string name="common_about">"O programie"</string>
   <string name="common_acceptable_use_policy">"Polityka użytkowania"</string>
+  <string name="common_account_settings">"Ustawienia konta"</string>
   <string name="common_add_account">"Dodaj konto"</string>
   <string name="common_add_another_account">"Dodaj kolejne konto"</string>
   <string name="common_adding_caption">"Dodawanie opisu"</string>
@@ -232,6 +234,7 @@
   <string name="common_analytics">"Dane analityczne"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Opuściłeś pokój"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Zostałeś wylogowany z sesji"</string>
+  <string name="common_app_settings">"Ustawienia aplikacji"</string>
   <string name="common_appearance">"Wygląd"</string>
   <string name="common_audio">"Dźwięk"</string>
   <string name="common_beta">"Beta"</string>
@@ -242,6 +245,7 @@
   <string name="common_call_started">"Rozpoczęto rozmowę"</string>
   <string name="common_call_you_declined">"Odrzuciłeś połączenie"</string>
   <string name="common_chat_backup">"Backup czatu"</string>
+  <string name="common_code_block">"Blok kodu"</string>
   <string name="common_copied_to_clipboard">"Skopiowano do schowka"</string>
   <string name="common_copyright">"Prawa autorskie"</string>
   <string name="common_creating_room">"Tworzenie pokoju…"</string>
@@ -308,11 +312,13 @@ Powód: %1$s."</string>
   <string name="common_live_location_ended">"Zakończono udostępnianie lokalizacji na żywo"</string>
   <string name="common_loading">"Ładowanie…"</string>
   <string name="common_loading_more">"Ładuję więcej…"</string>
+  <string name="common_location_sharing">"Udostępnianie lokalizacji"</string>
   <plurals name="common_many_members">
     <item quantity="one">"%d inny"</item>
     <item quantity="few">"%d innych"</item>
     <item quantity="many">"%d innych"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Jakość przesyłanych mediów"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d członek"</item>
     <item quantity="few">"%1$d członków"</item>
@@ -323,6 +329,7 @@ Powód: %1$s."</string>
   <string name="common_message_failed_to_send">"Nie udało się wysłać wiadomości"</string>
   <string name="common_message_layout">"Układ wiadomości"</string>
   <string name="common_message_removed">"Wiadomość usunięta"</string>
+  <string name="common_moderation_and_safety">"Moderacja i bezpieczeństwo"</string>
   <string name="common_modern">"Nowoczesny"</string>
   <string name="common_mute">"Wycisz"</string>
   <string name="common_name">"Nazwa"</string>
@@ -428,6 +435,7 @@ Powód: %1$s."</string>
   <string name="common_success">"Sukces"</string>
   <string name="common_suggested">"Polecane"</string>
   <string name="common_suggestions">"Sugestie"</string>
+  <string name="common_switch_accounts">"Zmień konto"</string>
   <string name="common_syncing">"Synchronizuję"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Informacje stron trzecich"</string>
@@ -467,6 +475,7 @@ Powód: %1$s."</string>
   <string name="common_waiting_live_location">"Czekam na lokalizację na żywo…"</string>
   <string name="common_world_readable_history">"Każdy może zobaczyć historię"</string>
   <string name="common_you">"Ty"</string>
+  <string name="common_your_account">"Twoje konto"</string>
   <string name="content_scanner_not_found">"Pobieranie niedostępne."</string>
   <string name="content_scanner_not_found_title">"Nie znaleziono pliku"</string>
   <string name="content_scanner_scanning">"Skanuję…"</string>
@@ -503,7 +512,7 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Wybierz jakość filmu, który chcesz przesłać."</string>
   <string name="dialog_video_quality_selector_title">"Wybierz jakość przesyłania wideo"</string>
   <string name="error_account_already_logged_in">"Jesteś już zalogowany na tym urządzeniu jako %1$s."</string>
-  <string name="error_account_creation_not_possible">"Twój serwer domowy wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont."</string>
+  <string name="error_account_creation_not_possible">"Twój dostawca konta wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont."</string>
   <string name="error_failed_creating_the_permalink">"Nie udało się utworzyć linku bezpośredniego"</string>
   <string name="error_failed_loading_map">"%1$s nie mogło wczytać mapy. Spróbuj ponownie później."</string>
   <string name="error_failed_loading_messages">"Nie udało się załadować wiadomości"</string>
@@ -528,14 +537,6 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Wstrząśnij gniewnie, aby zgłosić błąd"</string>
   <string name="screen_bug_report_a11y_screenshot">"Zrzut ekranu"</string>
-  <string name="screen_change_server_navigation_title_login">"Zaloguj"</string>
-  <string name="screen_change_server_navigation_title_register">"Utwórz konto"</string>
-  <string name="screen_change_server_textfield_footer_login">"Jeśli uzyskałeś konto od firmy lub społeczności, wprowadź dostawcę konta (na przykład: nazwafirmy.com)"</string>
-  <string name="screen_change_server_textfield_footer_register">"Załóż darmowe konto na matrix.org. Jeśli chcesz założyć konto u innego dostawcy wprowadź własny adres (na przykład: nazwaspołeczności.org)."</string>
-  <string name="screen_change_server_textfield_header">"Dostawca konta"</string>
-  <string name="screen_change_server_textfield_placeholder">"przykład.com"</string>
-  <string name="screen_change_server_title_login">"Wprowadź dostawcę swojego konta"</string>
-  <string name="screen_change_server_title_register">"Wybierz dostawcę konta"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Opcje"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Usuń %1$s"</string>
@@ -577,11 +578,17 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="screen_room_grouped_state_events_expand">"Rozwiń"</string>
   <string name="screen_room_grouped_state_events_reduce">"Zmniejsz"</string>
   <string name="screen_room_live_location_banner">"Udostępnianie lokalizacji na żywo"</string>
+  <string name="screen_room_maximum_messages_selected">"Zaznaczono maksymalną liczbę wiadomości"</string>
   <string name="screen_room_permalink_same_room_android">"Już oglądasz ten pokój!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s przypiętych wiadomości"</string>
   <string name="screen_room_pinned_banner_loading_description">"Wczytywanie wiadomości…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Wyświetl wszystkie"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"Zaznaczono %1$d wiadomość"</item>
+    <item quantity="few">"Zaznaczono %1$d wiadomości"</item>
+    <item quantity="many">"Zaznaczono %1$d wiadomości"</item>
+  </plurals>
   <string name="screen_room_title">"Czat"</string>
   <string name="screen_share_location_title">"Udostępnij lokalizację"</string>
   <string name="screen_share_my_location_action">"Udostępnij moją lokalizację"</string>

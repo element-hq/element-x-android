@@ -117,7 +117,7 @@ private fun ReadReceiptBottomSheetContent(
 
 @PreviewsDayNight
 @Composable
-internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStateProvider::class) state: ReadReceiptBottomSheetState) {
+internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStatePreviewParam::class) state: ReadReceiptBottomSheetState) {
     ElementPreview(fillMaxSize = true) {
         ReadReceiptBottomSheet(
             state = state,

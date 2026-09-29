@@ -12,6 +12,7 @@ import extension.testCommonDependencies
 plugins {
     id("io.element.android-compose-library")
     id("kotlin-parcelize")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -31,6 +32,8 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.encryptedDb)
+    implementation(libs.serialization.json)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
@@ -55,8 +58,6 @@ dependencies {
     implementation(projects.features.rageshake.api)
     implementation(projects.services.analytics.api)
     implementation(libs.androidx.datastore.preferences)
-    implementation(libs.haze)
-    implementation(libs.haze.materials)
     implementation(projects.features.preferences.impl)
     implementation(projects.features.reportroom.api)
     implementation(projects.features.rolesandpermissions.api)

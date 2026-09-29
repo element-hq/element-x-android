@@ -390,7 +390,7 @@ private fun RemainingCountOverlay(count: Int) {
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemGalleryViewPreview(
-    @PreviewParameter(TimelineItemGalleryContentProvider::class) content: TimelineItemGalleryContent,
+    @PreviewParameter(TimelineItemGalleryContentPreviewParam::class) content: TimelineItemGalleryContent,
 ) = ElementPreview {
     TimelineItemGalleryView(
         eventId = null,

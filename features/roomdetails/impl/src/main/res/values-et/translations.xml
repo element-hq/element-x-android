@@ -114,6 +114,8 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Seadistuste muutmine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Sinu koduserver ei toeta seda võimalust krüptitud jututubades, seega sa ei saa selle jututoa kohta teavitusi."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Kõik sõnumid"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mainimiste ja võtmesõnade alusel"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Summuta"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Selles jututoas teavita mind"</string>
   <string name="screen_room_roles_and_permissions_admins">"Peakasutajad"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Peakasutajad ja omanikud"</string>

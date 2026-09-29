@@ -27,7 +27,7 @@
   <string name="screen_join_room_loading_alert_title">"Не удалось показать предпросмотр комнаты"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s еще не поддерживает пространства. Вы можете получить к ним доступ в веб-версии."</string>
   <string name="screen_join_room_space_not_supported_title">"Пространства пока не поддерживаются"</string>
-  <string name="screen_join_room_subtitle_knock">"Нажмите кнопку ниже и администратор комнаты получит уведомление. После одобрения Вы сможете присоединиться к беседе."</string>
+  <string name="screen_join_room_subtitle_knock">"Нажмите кнопку ниже и администратор чата получит уведомление. После одобрения Вы сможете присоединиться к беседе."</string>
   <string name="screen_join_room_subtitle_no_preview">"Вы должны быть участником этой комнаты, чтобы просмотреть историю сообщений."</string>
   <string name="screen_join_room_title_knock">"Хотите присоединиться к этой комнате?"</string>
   <string name="screen_join_room_title_no_preview">"Предпросмотр недоступен"</string>

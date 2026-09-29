@@ -29,6 +29,7 @@
   </plurals>
   <string name="notification_invite_body">"邀請您聊天"</string>
   <string name="notification_invite_body_with_sender">"%1$s 邀請您加入聊天"</string>
+  <string name="notification_knock_request_body">"已要求加入"</string>
   <string name="notification_live_location_started_body">"已開始分享他們的即時位置"</string>
   <string name="notification_mentioned_you_body">"提及您：%1$s"</string>
   <string name="notification_new_messages">"新訊息"</string>
@@ -44,7 +45,7 @@
   <string name="notification_sender_mention_reply">"%1$s 提及或回覆"</string>
   <string name="notification_space_invite_body">"已邀請您加入空間"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s 已邀請您的加入此空間"</string>
-  <string name="notification_test_push_notification_content">"您正在查看通知！點我！"</string>
+  <string name="notification_test_push_notification_content">"您正在檢視通知！點我！"</string>
   <string name="notification_thread_in_room">"在 %1$s 的討論串"</string>
   <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>
   <string name="notification_ticker_text_group">"%1$s：%2$s %3$s"</string>
@@ -86,12 +87,13 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"無法顯示通知。"</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"已點選通知！"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"顯示通知"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"請點選通知以繼續測試。"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"請輕點通知以繼續測試。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"確保應用程式正在接收推播。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"錯誤：推播程式拒絕請求。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"錯誤：%1$s。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"錯誤，無法測試推播。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"錯誤，等待推播逾時。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"錯誤：推播閘道已限速此裝置，因此通知可能不穩定。請設定其他推播閘道。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"推播返回需要 %1$d 毫秒。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"測試推播返回"</string>
 </resources>

@@ -54,7 +54,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.time.Duration.Companion.minutes
 
-@Suppress("LargeClass")
 class InReplyToMetadataKtTest : RobolectricTest() {
     @Test
     fun `any message content`() = runTest {
@@ -656,7 +655,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
     fun `redacted content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             anInReplyToDetailsReady(
-                eventContent = RedactedContent
+                eventContent = RedactedContent(threadInfo = null)
             ).metadata(hideImage = false)
         }.test {
             awaitItem().let {

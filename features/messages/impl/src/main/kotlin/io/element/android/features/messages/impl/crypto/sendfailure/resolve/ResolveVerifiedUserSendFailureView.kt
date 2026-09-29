@@ -158,7 +158,7 @@ private fun VerifiedUserSendFailure.resolveAction(): String {
 @PreviewsDayNight
 @Composable
 internal fun ResolveVerifiedUserSendFailureViewPreview(
-    @PreviewParameter(ResolveVerifiedUserSendFailureStateProvider::class) state: ResolveVerifiedUserSendFailureState
+    @PreviewParameter(ResolveVerifiedUserSendFailureStatePreviewParam::class) state: ResolveVerifiedUserSendFailureState
 ) = ElementPreview {
     ResolveVerifiedUserSendFailureView(state)
 }

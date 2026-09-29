@@ -384,6 +384,48 @@ class SuggestionsProcessorTest {
     }
 
     @Test
+    fun `processing Mention suggestion returns the members matching the start of the query first`() = runTest {
+        val matchingOnAnyPart = aRoomMember(userId = UserId("@carol:server.org"), displayName = "Not Alice")
+        val matchingOnUserIdStart = aRoomMember(userId = UserId("@alicia:server.org"), displayName = null)
+        val matchingOnDisplayNameStart = aRoomMember(userId = UserId("@zoe:server.org"), displayName = "Alice")
+        val result = suggestionsProcessor.process(
+            suggestion = aMentionSuggestion("ali"),
+            roomMembersState = RoomMembersState.Ready(
+                persistentListOf(matchingOnAnyPart, matchingOnUserIdStart, matchingOnDisplayNameStart)
+            ),
+            roomAliasSuggestions = emptyList(),
+            currentUserId = A_USER_ID_2,
+            canSendRoomMention = { false },
+            isInThread = false,
+        )
+        assertThat(result).isEqualTo(
+            listOf(
+                ResolvedSuggestion.Member(matchingOnDisplayNameStart),
+                ResolvedSuggestion.Member(matchingOnUserIdStart),
+                ResolvedSuggestion.Member(matchingOnAnyPart),
+            )
+        )
+    }
+
+    @Test
+    fun `processing Mention suggestion returns room ignoring the case of the query`() = runTest {
+        val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "alice")
+        val result = suggestionsProcessor.process(
+            suggestion = aMentionSuggestion("RO"),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember)),
+            roomAliasSuggestions = emptyList(),
+            currentUserId = A_USER_ID_2,
+            canSendRoomMention = { true },
+            isInThread = false,
+        )
+        assertThat(result).isEqualTo(
+            listOf(
+                ResolvedSuggestion.AtRoom,
+            )
+        )
+    }
+
+    @Test
     fun `processing Mention suggestion with return matching display name but not room if not allowed`() = runTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "ro")
         val result = suggestionsProcessor.process(

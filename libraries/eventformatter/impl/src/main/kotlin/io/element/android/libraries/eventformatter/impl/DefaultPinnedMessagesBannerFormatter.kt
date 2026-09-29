@@ -56,7 +56,7 @@ class DefaultPinnedMessagesBannerFormatter(
             is PollContent -> {
                 content.question.prefixWith(CommonStrings.a11y_poll)
             }
-            RedactedContent -> {
+            is RedactedContent -> {
                 sp.getString(CommonStrings.common_message_removed)
             }
             else -> {

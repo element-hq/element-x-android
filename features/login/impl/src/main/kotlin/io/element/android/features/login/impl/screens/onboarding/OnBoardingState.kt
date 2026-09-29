@@ -11,13 +11,14 @@ package io.element.android.features.login.impl.screens.onboarding
 import androidx.annotation.DrawableRes
 import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 
 data class OnBoardingState(
     val isAddingAccount: Boolean,
     val showBackButton: Boolean,
     val showDeveloperSettings: Boolean,
     val productionApplicationName: String,
-    val defaultAccountProvider: String?,
+    val defaultAccountProvider: AccountProvider?,
     val mustChooseAccountProvider: Boolean,
     val canLoginWithQrCode: Boolean,
     val canCreateAccount: Boolean,
@@ -26,7 +27,7 @@ data class OnBoardingState(
     @DrawableRes
     val onBoardingLogoResId: Int?,
     val loginModeState: LoginModeState,
-    val eventSink: (OnBoardingEvents) -> Unit,
+    val eventSink: (OnBoardingEvent) -> Unit,
 ) {
     val submitEnabled: Boolean
         get() = defaultAccountProvider != null &&

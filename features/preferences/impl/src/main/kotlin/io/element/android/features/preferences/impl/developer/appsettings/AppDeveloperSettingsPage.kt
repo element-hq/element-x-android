@@ -21,7 +21,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @Composable
 fun AppDeveloperSettingsPage(
     state: AppDeveloperSettingsState,
-    onOpenShowkase: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     extraOptions: @Composable () -> Unit = {},
@@ -38,7 +37,6 @@ fun AppDeveloperSettingsPage(
     ) {
         AppDeveloperSettingsView(
             state = state,
-            onOpenShowkase = onOpenShowkase,
             modifier = Modifier.padding(top = 8.dp)
         )
         extraOptions()
@@ -50,7 +48,6 @@ fun AppDeveloperSettingsPage(
 internal fun AppDeveloperSettingsPagePreview() = ElementPreview {
     AppDeveloperSettingsPage(
         state = anAppDeveloperSettingsState(),
-        onOpenShowkase = {},
         onBackClick = {},
     )
 }

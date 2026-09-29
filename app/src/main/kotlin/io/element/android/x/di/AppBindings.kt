@@ -10,7 +10,9 @@ package io.element.android.x.di
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Multibinds
 import io.element.android.features.api.MigrationEntryPoint
+import io.element.android.features.enterprise.api.AppStartupHook
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenService
@@ -51,4 +53,7 @@ interface AppBindings {
     fun buildMeta(): BuildMeta
 
     fun sentrySdkDsn(): SentrySdkDsn?
+
+    @Multibinds(allowEmpty = true)
+    fun appStartupHooks(): Set<AppStartupHook>
 }

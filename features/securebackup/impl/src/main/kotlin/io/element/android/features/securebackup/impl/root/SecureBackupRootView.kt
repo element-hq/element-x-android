@@ -114,12 +114,12 @@ fun SecureBackupRootView(
                                 if (state.doesBackupExistOnServer.data) {
                                     onDisableClick()
                                 } else {
-                                    state.eventSink.invoke(SecureBackupRootEvents.EnableKeyStorage)
+                                    state.eventSink.invoke(SecureBackupRootEvent.EnableKeyStorage)
                                 }
                             }
                             is AsyncData.Loading,
                             AsyncData.Uninitialized -> Unit
-                            is AsyncData.Failure -> state.eventSink.invoke(SecureBackupRootEvents.RetryKeyBackupState)
+                            is AsyncData.Failure -> state.eventSink.invoke(SecureBackupRootEvent.RetryKeyBackupState)
                         }
                     }
                     BackupState.CREATING,
@@ -154,7 +154,7 @@ fun SecureBackupRootView(
                         if (state.isKeyStorageEnabled) {
                             onSetupClick()
                         } else {
-                            state.eventSink.invoke(SecureBackupRootEvents.DisplayKeyStorageDisabledError)
+                            state.eventSink.invoke(SecureBackupRootEvent.DisplayKeyStorageDisabledError)
                         }
                     },
                 )
@@ -177,7 +177,7 @@ fun SecureBackupRootView(
                         if (state.isKeyStorageEnabled) {
                             onChangeClick()
                         } else {
-                            state.eventSink.invoke(SecureBackupRootEvents.DisplayKeyStorageDisabledError)
+                            state.eventSink.invoke(SecureBackupRootEvent.DisplayKeyStorageDisabledError)
                         }
                     },
                 )
@@ -201,7 +201,7 @@ fun SecureBackupRootView(
                         if (state.isKeyStorageEnabled) {
                             onConfirmRecoveryKeyClick()
                         } else {
-                            state.eventSink.invoke(SecureBackupRootEvents.DisplayKeyStorageDisabledError)
+                            state.eventSink.invoke(SecureBackupRootEvent.DisplayKeyStorageDisabledError)
                         }
                     },
                 )
@@ -212,13 +212,13 @@ fun SecureBackupRootView(
         async = state.enableAction,
         progressDialog = { },
         onSuccess = { },
-        onErrorDismiss = { state.eventSink.invoke(SecureBackupRootEvents.DismissDialog) }
+        onErrorDismiss = { state.eventSink.invoke(SecureBackupRootEvent.DismissDialog) }
     )
     if (state.displayKeyStorageDisabledError) {
         ErrorDialog(
             title = null,
             content = stringResource(id = R.string.screen_chat_backup_key_storage_disabled_error),
-            onSubmit = { state.eventSink.invoke(SecureBackupRootEvents.DismissDialog) },
+            onSubmit = { state.eventSink.invoke(SecureBackupRootEvent.DismissDialog) },
         )
     }
 }
@@ -236,7 +236,7 @@ private fun LoadingView() {
 @PreviewsDayNight
 @Composable
 internal fun SecureBackupRootViewPreview(
-    @PreviewParameter(SecureBackupRootStateProvider::class) state: SecureBackupRootState
+    @PreviewParameter(SecureBackupRootStatePreviewParam::class) state: SecureBackupRootState
 ) = ElementPreview {
     SecureBackupRootView(
         state = state,

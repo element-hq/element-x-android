@@ -51,7 +51,7 @@
   <string name="notification_sender_mention_reply">"%1$s mentioned or replied"</string>
   <string name="notification_space_invite_body">"Invited you to join the space"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s invited you to join the space"</string>
-  <string name="notification_test_push_notification_content">"You are viewing the notification! Click me!"</string>
+  <string name="notification_test_push_notification_content">"You are viewing the notification! Tap me!"</string>
   <string name="notification_thread_in_room">"Thread in %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -97,7 +97,7 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Cannot display the notification."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"The notification has been clicked!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Display notification"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Please click on the notification to continue the test."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Please tap the notification to continue the test."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Ensure that the application is receiving push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Error: pusher has rejected the request."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Error: %1$s."</string>

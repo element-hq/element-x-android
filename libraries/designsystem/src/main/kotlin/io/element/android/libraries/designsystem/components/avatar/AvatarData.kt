@@ -8,14 +8,18 @@
 
 package io.element.android.libraries.designsystem.components.avatar
 
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.core.data.tryOrNull
 import java.text.BreakIterator
 
+@Immutable
 data class AvatarData(
     val id: String,
     val name: String?,
     val url: String? = null,
     val size: AvatarSize,
+    /** Base64 encoded thumbnail of [url], stored locally, used as a fallback when the avatar cannot be loaded. */
+    val thumbnail: String? = null,
 ) {
     val initialLetter by lazy {
         // For roomIds, use "#" as initial

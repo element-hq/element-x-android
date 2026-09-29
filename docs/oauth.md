@@ -6,8 +6,6 @@ Rust sdk branch: https://github.com/matrix-org/matrix-rust-sdk/tree/oidc-ffi
 
 Figma https://www.figma.com/file/o9p34zmiuEpZRyvZXJZAYL/FTUE?node-id=133-5426&t=yQXKeANatk6keoZF-0
 
-Server list: https://github.com/element-hq/oidc-playground
-
 Metadata iOS: (from https://github.com/element-hq/element-x-ios/blob/5f9d07377cebc4f21d9668b1a25f6e3bb22f64a1/ElementX/Sources/Services/Authentication/AuthenticationServiceProxy.swift#L28)
 
 clientName: InfoPlistReader.main.bundleDisplayName,

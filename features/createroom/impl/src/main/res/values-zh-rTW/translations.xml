@@ -11,7 +11,7 @@
   <string name="screen_create_room_private_option_title">"私人"</string>
   <string name="screen_create_room_public_option_description">"任何人都可以找到此聊天室。
 您隨時都可以在聊天室設定中變更此設定。"</string>
-  <string name="screen_create_room_public_option_short_description">"任何人都可以加入。"</string>
+  <string name="screen_create_room_public_option_short_description">"任何人都可以加入，包括貴組織以外的人士。"</string>
   <string name="screen_create_room_public_option_title">"公開"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"任何人都可以要求加入，但管理員或版主必須接受該請求"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"允許要求加入"</string>
@@ -19,7 +19,7 @@
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"要求加入"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"僅被邀請的人才可以加入。"</string>
   <string name="screen_create_room_room_access_section_private_option_title">"私人"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"任何人都可以加入"</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"任何人都可以加入，包括貴組織以外的人士。"</string>
   <string name="screen_create_room_room_access_section_public_option_title">"公開"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"在 %1$s 中的任何人都可以加入。"</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"標準"</string>

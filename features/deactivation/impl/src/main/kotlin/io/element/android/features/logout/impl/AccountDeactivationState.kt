@@ -15,7 +15,7 @@ import kotlinx.parcelize.Parcelize
 data class AccountDeactivationState(
     val deactivateFormState: DeactivateFormState,
     val accountDeactivationAction: AsyncAction<Unit>,
-    val eventSink: (AccountDeactivationEvents) -> Unit,
+    val eventSink: (AccountDeactivationEvent) -> Unit,
 ) {
     val submitEnabled: Boolean
         get() = accountDeactivationAction is AsyncAction.Uninitialized &&

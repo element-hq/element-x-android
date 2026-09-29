@@ -30,7 +30,7 @@ import org.junit.Test
 class RoomDirectoryViewTest : RobolectricTest() {
     @Test
     fun `typing text in search field emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomDirectoryEvents>()
+        val eventsRecorder = EventsRecorder<RoomDirectoryEvent>()
         setRoomDirectoryView(
             state = aRoomDirectoryState(
                 eventSink = eventsRecorder,
@@ -39,12 +39,12 @@ class RoomDirectoryViewTest : RobolectricTest() {
         onNodeWithTag(TestTags.searchTextField.value).performTextInput(
             text = "Test"
         )
-        eventsRecorder.assertSingle(RoomDirectoryEvents.Search("Test"))
+        eventsRecorder.assertSingle(RoomDirectoryEvent.Search("Test"))
     }
 
     @Test
     fun `clicking on room item then onResultClick lambda is called once`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomDirectoryEvents>()
+        val eventsRecorder = EventsRecorder<RoomDirectoryEvent>()
         val state = aRoomDirectoryState(
             roomDescriptions = aRoomDescriptionList(),
             eventSink = eventsRecorder,
@@ -61,13 +61,13 @@ class RoomDirectoryViewTest : RobolectricTest() {
 
     @Test
     fun `composing load more indicator emits expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<RoomDirectoryEvents>()
+        val eventsRecorder = EventsRecorder<RoomDirectoryEvent>()
         val state = aRoomDirectoryState(
             displayLoadMoreIndicator = true,
             eventSink = eventsRecorder,
         )
         setRoomDirectoryView(state = state)
-        eventsRecorder.assertSingle(RoomDirectoryEvents.LoadMore)
+        eventsRecorder.assertSingle(RoomDirectoryEvent.LoadMore)
     }
 }
 

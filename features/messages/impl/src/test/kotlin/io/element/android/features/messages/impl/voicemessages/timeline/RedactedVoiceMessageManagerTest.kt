@@ -16,11 +16,11 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
-import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.core.FakeSendHandle
+import io.element.android.libraries.matrix.test.timeline.aRedactedContent
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -88,7 +88,7 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             sender = A_USER_ID,
             senderProfile = ProfileDetails.Unavailable,
             timestamp = 9442,
-            content = RedactedContent,
+            content = aRedactedContent(),
             origin = null,
             timelineItemDebugInfoProvider = {
                 TimelineItemDebugInfo(

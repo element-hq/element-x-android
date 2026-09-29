@@ -82,6 +82,14 @@
   <string name="screen_room_timeline_reactions_show_more">"أظهر المزيد"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"اعرض ملخص التفاعلات"</string>
   <string name="screen_room_timeline_read_marker_title">"جديدة"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="zero">"%1$d رسالة محذوفة"</item>
+    <item quantity="one">"%1$d رسالة محذوفة"</item>
+    <item quantity="two">"%1$d رسالة محذوفة"</item>
+    <item quantity="few">"%1$d رسالة محذوفة"</item>
+    <item quantity="many">"%1$d رسالة محذوفة"</item>
+    <item quantity="other">"%1$d رسالة محذوفة"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="zero">"%1$d تغيير في الغرفة"</item>
     <item quantity="one">"%1$d تغيير في الغرفة"</item>

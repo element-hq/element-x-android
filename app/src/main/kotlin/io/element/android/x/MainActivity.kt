@@ -61,6 +61,13 @@ class MainActivity : NodeActivity() {
         setContent {
             MainContent(appBindings)
         }
+
+        val activity = this
+        appBindings.appStartupHooks().forEach {
+            lifecycleScope.launch {
+                it.onAppStartup(activity)
+            }
+        }
     }
 
     @Composable

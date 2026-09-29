@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.startchat.impl.userlist.UserListEvents
+import io.element.android.features.startchat.impl.userlist.UserListEvent
 import io.element.android.features.startchat.impl.userlist.UserListState
-import io.element.android.features.startchat.impl.userlist.UserListStateProvider
+import io.element.android.features.startchat.impl.userlist.UserListStatePreviewParam
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -63,13 +63,13 @@ fun UserListView(
             showLoader = state.showSearchLoader,
             isMultiSelectionEnable = state.isMultiSelectionEnabled,
             showBackButton = showBackButton,
-            onActiveChange = { state.eventSink(UserListEvents.OnSearchActiveChanged(it)) },
+            onActiveChange = { state.eventSink(UserListEvent.OnSearchActiveChanged(it)) },
             onUserSelect = {
-                state.eventSink(UserListEvents.AddToSelection(it))
+                state.eventSink(UserListEvent.AddToSelection(it))
                 onSelectUser(it)
             },
             onUserDeselect = {
-                state.eventSink(UserListEvents.RemoveFromSelection(it))
+                state.eventSink(UserListEvent.RemoveFromSelection(it))
                 onDeselectUser(it)
             },
         )
@@ -80,7 +80,7 @@ fun UserListView(
                 selectedUsers = state.selectedUsers,
                 autoScroll = true,
                 onUserRemove = {
-                    state.eventSink(UserListEvents.RemoveFromSelection(it))
+                    state.eventSink(UserListEvent.RemoveFromSelection(it))
                     onDeselectUser(it)
                 },
             )
@@ -104,10 +104,10 @@ fun UserListView(
                             checked = isSelected,
                             onCheckedChange = {
                                 if (isSelected) {
-                                    state.eventSink(UserListEvents.RemoveFromSelection(recentDirectRoom.matrixUser))
+                                    state.eventSink(UserListEvent.RemoveFromSelection(recentDirectRoom.matrixUser))
                                     onDeselectUser(recentDirectRoom.matrixUser)
                                 } else {
-                                    state.eventSink(UserListEvents.AddToSelection(recentDirectRoom.matrixUser))
+                                    state.eventSink(UserListEvent.AddToSelection(recentDirectRoom.matrixUser))
                                     onSelectUser(recentDirectRoom.matrixUser)
                                 }
                             },
@@ -129,7 +129,7 @@ fun UserListView(
 
 @PreviewsDayNight
 @Composable
-internal fun UserListViewPreview(@PreviewParameter(UserListStateProvider::class) state: UserListState) = ElementPreview {
+internal fun UserListViewPreview(@PreviewParameter(UserListStatePreviewParam::class) state: UserListState) = ElementPreview {
     UserListView(
         state = state,
         onSelectUser = {},

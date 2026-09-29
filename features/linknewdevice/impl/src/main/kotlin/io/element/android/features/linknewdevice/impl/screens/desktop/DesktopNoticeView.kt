@@ -118,7 +118,7 @@ fun DesktopNoticeView(
 @PreviewsDayNight
 @Composable
 internal fun DesktopNoticeViewPreview(
-    @PreviewParameter(DesktopNoticeStateProvider::class) state: DesktopNoticeState,
+    @PreviewParameter(DesktopNoticeStatePreviewParam::class) state: DesktopNoticeState,
 ) = ElementPreview {
     DesktopNoticeView(
         state = state,

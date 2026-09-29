@@ -30,6 +30,7 @@
   </plurals>
   <string name="notification_invite_body">"Kutse osalema vestluses"</string>
   <string name="notification_invite_body_with_sender">"%1$s saatus sulle vestluskutse"</string>
+  <string name="notification_knock_request_body">"Palun võimalust liitumiseks"</string>
   <string name="notification_live_location_started_body">"Hakkas jagama oma asukohta reaalajas"</string>
   <string name="notification_mentioned_you_body">"Mainis sind: %1$s"</string>
   <string name="notification_new_messages">"Uued sõnumid"</string>
@@ -46,7 +47,7 @@
   <string name="notification_sender_mention_reply">"%1$s mainis või vastas"</string>
   <string name="notification_space_invite_body">"Kutsus sind liituma kogukonnaga"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s kutsus sind liituma kogukonnaga"</string>
-  <string name="notification_test_push_notification_content">"See ongi teavitus! Klõpsi mind!"</string>
+  <string name="notification_test_push_notification_content">"See ongi teavitus! Klõpsa mind!"</string>
   <string name="notification_thread_in_room">"Jutulõng „%1$s“ jututoas"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -92,7 +93,7 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Teavituse kuvamine ei õnnestu."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Sa oled teavitust klõpsinud!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Kuva teavitust"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Testiga jätkamiseks palun klõpsi teavitust."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Testiga jätkamiseks palun klõpsa teavitust."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Palun veendu, et rakendus saab tõuketeavitusi."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Viga: tõuketeenuse teostaja on päringust keeldunud."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Viga: %1$s."</string>

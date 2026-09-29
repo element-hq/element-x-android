@@ -84,7 +84,7 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_mode_all">"Kõik"</string>
   <string name="screen_notification_settings_mode_mentions">"Mainimiste alusel"</string>
   <string name="screen_notification_settings_notification_section_title">"Teavita mind"</string>
-  <string name="screen_notification_settings_room_mention_label">"Teavita mind @jututoa puhul"</string>
+  <string name="screen_notification_settings_room_mention_label">@jututoa mainimised</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Kohandatud"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Sinu valitud helin…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Viga faili kustutamisel"</string>

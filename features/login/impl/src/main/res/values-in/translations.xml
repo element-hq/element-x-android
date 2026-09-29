@@ -25,8 +25,16 @@
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Penyedia akun %1$s tidak diizinkan."</string>
   <string name="screen_change_server_form_header">"URL Homeserver"</string>
   <string name="screen_change_server_form_notice">"Masukkan alamat domain."</string>
+  <string name="screen_change_server_navigation_title_login">"Login"</string>
+  <string name="screen_change_server_navigation_title_register">"Buat akun"</string>
   <string name="screen_change_server_subtitle">"Apa alamat server Anda?"</string>
+  <string name="screen_change_server_textfield_footer_login">"Jika akun Anda disediakan oleh perusahaan atau komunitas Anda, maka ubah penyedia akun (contoh: companyname.com)."</string>
+  <string name="screen_change_server_textfield_footer_register">"Buat akun di matrix.org secara gratis. Jika anda ingin membuat akun dengan penyedia lain, ubah sesuai kebutuhan (contoh: communityname.org)."</string>
+  <string name="screen_change_server_textfield_header">"Penyedia akun"</string>
+  <string name="screen_change_server_textfield_placeholder">"contoh.com"</string>
   <string name="screen_change_server_title">"Pilih server Anda"</string>
+  <string name="screen_change_server_title_login">"Masukkan penyedia akun Anda"</string>
+  <string name="screen_change_server_title_register">"Pilih penyedia akun"</string>
   <string name="screen_create_account_title">"Buat akun"</string>
   <string name="screen_login_error_deactivated_account">"Akun ini telah dinonaktifkan."</string>
   <string name="screen_login_error_invalid_credentials">"Nama pengguna dan/atau kata sandi salah"</string>

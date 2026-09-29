@@ -11,7 +11,7 @@
   <string name="screen_create_room_private_option_title">"Private"</string>
   <string name="screen_create_room_public_option_description">"Anyone can find this room.
 You can change this anytime in room settings."</string>
-  <string name="screen_create_room_public_option_short_description">"Anyone can join."</string>
+  <string name="screen_create_room_public_option_short_description">"Anyone can join, including people outside your organisation."</string>
   <string name="screen_create_room_public_option_title">"Public"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Anyone can ask to join but an administrator or a moderator must accept the request."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Allow ask to join"</string>
@@ -19,7 +19,7 @@ You can change this anytime in room settings."</string>
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Ask to join"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Only people invited can join."</string>
   <string name="screen_create_room_room_access_section_private_option_title">"Private"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"Anyone can join."</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Anyone can join, including people outside your organisation."</string>
   <string name="screen_create_room_room_access_section_public_option_title">"Public"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"Anyone in %1$s can join."</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"Standard"</string>

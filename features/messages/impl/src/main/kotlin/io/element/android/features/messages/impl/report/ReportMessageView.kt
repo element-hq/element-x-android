@@ -137,7 +137,7 @@ fun ReportMessageView(
 
 @PreviewsDayNight
 @Composable
-internal fun ReportMessageViewPreview(@PreviewParameter(ReportMessageStateProvider::class) state: ReportMessageState) = ElementPreview {
+internal fun ReportMessageViewPreview(@PreviewParameter(ReportMessageStatePreviewParam::class) state: ReportMessageState) = ElementPreview {
     ReportMessageView(
         onBackClick = {},
         state = state,

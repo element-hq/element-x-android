@@ -217,7 +217,7 @@ fun LoginWithClassicView(
 
 @PreviewsDayNight
 @Composable
-internal fun LoginWithClassicViewPreview(@PreviewParameter(LoginWithClassicStateProvider::class) state: LoginWithClassicState) = ElementPreview {
+internal fun LoginWithClassicViewPreview(@PreviewParameter(LoginWithClassicStatePreviewParam::class) state: LoginWithClassicState) = ElementPreview {
     LoginWithClassicView(
         state = state,
         onOtherOptionsClick = {},
