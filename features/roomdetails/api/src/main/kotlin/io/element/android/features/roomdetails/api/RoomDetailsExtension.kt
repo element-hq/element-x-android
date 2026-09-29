@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 /** Optional room-details sections contributed by a build-specific implementation. */
-interface RoomDetailsExtension {
+fun interface RoomDetailsExtension {
     @Composable
     fun ColumnScope.Render(modifier: Modifier)
 }
