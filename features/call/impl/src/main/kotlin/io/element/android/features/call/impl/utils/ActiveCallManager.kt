@@ -19,9 +19,11 @@ import coil3.annotation.DelicateCoilApi
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.binding
 import io.element.android.appconfig.ElementCallConfig
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.CurrentCall
+import io.element.android.features.call.api.RingingCallTracker
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -90,7 +92,8 @@ interface ActiveCallManager {
 }
 
 @SingleIn(AppScope::class)
-@ContributesBinding(AppScope::class)
+@ContributesBinding(AppScope::class, binding = binding<ActiveCallManager>())
+@ContributesBinding(AppScope::class, binding = binding<RingingCallTracker>())
 class DefaultActiveCallManager(
     @ApplicationContext context: Context,
     @AppCoroutineScope
@@ -103,7 +106,16 @@ class DefaultActiveCallManager(
     private val appForegroundStateService: AppForegroundStateService,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val systemClock: SystemClock,
-) : ActiveCallManager {
+) : ActiveCallManager, RingingCallTracker {
+    /**
+     * The two [RingingCallTracker] entry points are the existing methods under the names a caller
+     * outside this module can reach. Deliberately not new behaviour: answering has always had to do
+     * exactly this, and the native path simply could not say so from another module.
+     */
+    override suspend fun onCallJoined(callData: CallData) = joinedCall(callData)
+
+    override suspend fun onCallEnded(callData: CallData) = hangUpCall(callData)
+
     private val tag = "ActiveCallManager"
     private var timedOutCallJob: Job? = null
 

@@ -111,6 +111,7 @@
   <string name="action_copy_link">"Скопіювати посилання"</string>
   <string name="action_copy_link_to_message">"Скопіювати посилання на повідомлення"</string>
   <string name="action_copy_text">"Скопіювати текст"</string>
+  <string name="action_copy_to_clipboard">"Копіювати в буфер обміну"</string>
   <string name="action_create">"Створити"</string>
   <string name="action_create_room">"Створити кімнату"</string>
   <string name="action_create_space">"Створити простір"</string>
@@ -138,6 +139,11 @@
   <string name="action_finish">"Завершити"</string>
   <string name="action_forgot_password">"Забули пароль?"</string>
   <string name="action_forward">"Переслати"</string>
+  <plurals name="action_forward_messages">
+    <item quantity="one">"Переслати %1$d повідомлення"</item>
+    <item quantity="few">"Переслати %1$d повідомлення"</item>
+    <item quantity="many">"Переслати %1$d повідомлень"</item>
+  </plurals>
   <string name="action_go_back">"Повернутися"</string>
   <string name="action_go_to_roles_and_permissions">"Перейти до ролей і дозволів"</string>
   <string name="action_go_to_settings">"Перейти до налаштувань"</string>
@@ -189,7 +195,6 @@
   <string name="action_retry_decryption">"Повторити спробу розшифрування"</string>
   <string name="action_save">"Зберегти"</string>
   <string name="action_search">"Шукати"</string>
-  <string name="action_select">"Вибрати"</string>
   <string name="action_select_all">"Вибрати все"</string>
   <string name="action_send">"Надіслати"</string>
   <string name="action_send_edited_message">"Надіслати змінене повідомлення"</string>
@@ -225,6 +230,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Доступне оновлення"</string>
   <string name="common_about">"Відомості"</string>
   <string name="common_acceptable_use_policy">"Політика прийнятного використання"</string>
+  <string name="common_account_settings">"Налаштування облікового запису"</string>
   <string name="common_add_account">"Додати обліковий запис"</string>
   <string name="common_add_another_account">"Додати ще один обліковий запис"</string>
   <string name="common_adding_caption">"Додавання підпису"</string>
@@ -233,6 +239,7 @@
   <string name="common_analytics">"Аналітика"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Ви вийшли з кімнати"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Ви вийшли з сеансу"</string>
+  <string name="common_app_settings">"Налаштування застосунку"</string>
   <string name="common_appearance">"Вигляд"</string>
   <string name="common_audio">"Аудіо"</string>
   <string name="common_beta">"Бета-версія"</string>
@@ -243,6 +250,7 @@
   <string name="common_call_started">"Виклик розпочато"</string>
   <string name="common_call_you_declined">"Ви відхилили виклик"</string>
   <string name="common_chat_backup">"Резервне копіювання бесіди"</string>
+  <string name="common_code_block">"Блок коду"</string>
   <string name="common_copied_to_clipboard">"Скопійовано до буферу обміну"</string>
   <string name="common_copyright">"Авторське право"</string>
   <string name="common_creating_room">"Створення кімнати…"</string>
@@ -309,11 +317,13 @@
   <string name="common_live_location_ended">"Показ місцеперебування наживо завершено"</string>
   <string name="common_loading">"Завантаження"</string>
   <string name="common_loading_more">"Завантаження наступних…"</string>
+  <string name="common_location_sharing">"Обмін даними про розташування"</string>
   <plurals name="common_many_members">
     <item quantity="one">"%d інший"</item>
     <item quantity="few">"%d інші"</item>
     <item quantity="many">"%d інші"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Якість вивантажуваних медіа"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d учасник"</item>
     <item quantity="few">"%1$d учасники"</item>
@@ -324,6 +334,7 @@
   <string name="common_message_failed_to_send">"Не вдалося надіслати повідомлення"</string>
   <string name="common_message_layout">"Макет повідомлень"</string>
   <string name="common_message_removed">"Повідомлення вилучено"</string>
+  <string name="common_moderation_and_safety">"Модерування та безпека"</string>
   <string name="common_modern">"Модерн"</string>
   <string name="common_mute">"Вимкнути звук"</string>
   <string name="common_name">"Назва"</string>
@@ -429,6 +440,7 @@
   <string name="common_success">"Успіх"</string>
   <string name="common_suggested">"Запропоновано"</string>
   <string name="common_suggestions">"Пропозиції"</string>
+  <string name="common_switch_accounts">"Змінити обліковий запис"</string>
   <string name="common_syncing">"Синхронізація"</string>
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Повідомлення третіх сторін"</string>
@@ -468,6 +480,7 @@
   <string name="common_waiting_live_location">"Очікування геолокації…"</string>
   <string name="common_world_readable_history">"Будь-хто може переглянути історію"</string>
   <string name="common_you">"Ви"</string>
+  <string name="common_your_account">"Ваш обліковий запис"</string>
   <string name="content_scanner_not_found">"Завантаження недоступне."</string>
   <string name="content_scanner_not_found_title">"Файл не знайдено"</string>
   <string name="content_scanner_scanning">"Сканування…"</string>
@@ -571,6 +584,11 @@
   <string name="screen_room_grouped_state_events_reduce">"Згорнути"</string>
   <string name="screen_room_live_location_banner">"Спільний доступ до місцезнаходження у реальному часі"</string>
   <string name="screen_room_maximum_messages_selected">"Вибрано максимальну кількість повідомлень"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"Переслано %1$d повідомлення"</item>
+    <item quantity="few">"Переслано %1$d повідомлення"</item>
+    <item quantity="many">"Переслано %1$d повідомлень"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"Уже переглядаєте цю кімнату!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s із %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s закріплених повідомлень"</string>

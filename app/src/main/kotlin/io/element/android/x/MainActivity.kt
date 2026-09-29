@@ -70,6 +70,19 @@ class MainActivity : NodeActivity() {
         }
     }
 
+    /**
+     * The pre-Android 12 way into picture-in-picture for a native call.
+     *
+     * Everything else about it is installed where the call is drawn, which knows whose call it is.
+     * This cannot be: an Activity override has no session in scope. From Android 12 the system is told
+     * up front that this Activity would like to shrink, and the call handles it without ever coming
+     * through here.
+     */
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        appBindings.nativeCallPip().onUserLeaveHint(this)
+    }
+
     @Composable
     private fun MainContent(appBindings: AppBindings) {
         val migrationState = appBindings.migrationEntryPoint().present()

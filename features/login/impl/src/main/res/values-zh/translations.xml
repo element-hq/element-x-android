@@ -3,7 +3,7 @@
   <string name="screen_account_provider_change">"更改账户提供者"</string>
   <string name="screen_account_provider_form_hint">"主服务器地址"</string>
   <string name="screen_account_provider_form_notice">"输入搜索词或域名地址。"</string>
-  <string name="screen_account_provider_form_subtitle">"搜索公司、社区或私人服务器。"</string>
+  <string name="screen_account_provider_form_subtitle">"搜索公司、社区或私有服务器。"</string>
   <string name="screen_account_provider_form_title">"查找账户提供者"</string>
   <string name="screen_account_provider_signin_subtitle">"这是你的对话将存在的地方，就像你使用邮件提供者来存储电子邮件那样。"</string>
   <string name="screen_account_provider_signin_title">"你即将登录到 %s"</string>
@@ -108,7 +108,7 @@
   <string name="screen_qr_code_login_verify_code_subtitle">"你的账户提供者可能会要求你提供以下代码以验证登录。"</string>
   <string name="screen_qr_code_login_verify_code_title">"你的验证码"</string>
   <string name="screen_server_confirmation_change_server">"更改账户提供者"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"专为 Element 员工提供的私人服务器。"</string>
+  <string name="screen_server_confirmation_message_login_element_dot_io">"专为 Element 员工提供的私有服务器。"</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
   <string name="screen_server_confirmation_message_register">"这是你的对话将存在的地方，就像你使用邮件提供者来存储电子邮件那样。"</string>
   <string name="screen_server_confirmation_title_login">"即将登录 %1$s"</string>

@@ -186,7 +186,6 @@
   <string name="action_retry_decryption">"Yritä salauksen purkamista uudelleen"</string>
   <string name="action_save">"Tallenna"</string>
   <string name="action_search">"Hae"</string>
-  <string name="action_select">"Valitse"</string>
   <string name="action_select_all">"Valitse kaikki"</string>
   <string name="action_send">"Lähetä"</string>
   <string name="action_send_edited_message">"Lähetä muokattu viesti"</string>

@@ -31,11 +31,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.location.api.internal.rememberTileStyleUrl
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
@@ -54,10 +56,11 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraPosition
-import org.maplibre.compose.camera.rememberCameraState
+import org.maplibre.compose.map.MapState
+import org.maplibre.compose.map.rememberMapState
+import org.maplibre.compose.style.BaseStyle
 import org.maplibre.spatialk.geojson.Position
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowLocationView(
     state: ShowLocationState,
@@ -73,7 +76,49 @@ fun ShowLocationView(
         onDismiss = { state.eventSink(ShowLocationEvent.DismissDialog) },
     )
 
-    val cameraState = rememberCameraState(firstPosition = MapDefaults.defaultCameraPosition)
+    if (LocalInspectionMode.current) {
+        // Inspection/preview mode: the native map runtime is unavailable (previews, screenshot
+        // tests, Robolectric), so no MapState is created and the scaffold renders a placeholder map.
+        ShowLocationScaffold(
+            state = state,
+            mapState = null,
+            onBackClick = onBackClick,
+            onLocationShareClick = {},
+            modifier = modifier,
+        )
+    } else {
+        ShowLocationViewContent(
+            state = state,
+            onBackClick = onBackClick,
+            modifier = modifier,
+        )
+    }
+}
+
+@Composable
+private fun ShowLocationViewContent(
+    state: ShowLocationState,
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val tileStyleUrl = rememberTileStyleUrl(state.customMapTilerConfig.dataOrNull())
+    val mapState = rememberMapState(
+        baseStyle = BaseStyle.Uri(tileStyleUrl),
+        initialCameraPosition = MapDefaults.defaultCameraPosition,
+    ) {
+        if (!state.hideUserLocationPuck) {
+            UserLocationPuck(location = state.userLocationState.location)
+        }
+        val markers = remember(state.locationShares) {
+            state.locationShares.map { it.toMarkerData() }.toImmutableList()
+        }
+        LocationPinMarkers(markers)
+    }
+    UserLocationTrackingEffect(
+        mapState = mapState,
+        locationState = state.userLocationState,
+        enabled = state.isTrackMyLocation,
+    )
     var hasAnimatedToFocusedLocation by remember { mutableStateOf(false) }
     LaunchedEffect(state.focusedLocation) {
         if (state.focusedLocation != null && !hasAnimatedToFocusedLocation) {
@@ -82,15 +127,44 @@ fun ShowLocationView(
                 target = Position(latitude = state.focusedLocation.location.lat, longitude = state.focusedLocation.location.lon),
                 zoom = MapDefaults.DEFAULT_ZOOM
             )
-            cameraState.position = position
+            mapState.setCameraPosition(position)
         }
     }
-    LaunchedEffect(cameraState.isCameraMoving) {
-        if (cameraState.moveReason == CameraMoveReason.GESTURE) {
+    LaunchedEffect(mapState.isCameraMoving) {
+        if (mapState.cameraMoveReason == CameraMoveReason.GESTURE) {
             state.eventSink(ShowLocationEvent.TrackMyLocation(false))
         }
     }
+    val coroutineScope = rememberCoroutineScope()
+    ShowLocationScaffold(
+        state = state,
+        mapState = mapState,
+        onBackClick = onBackClick,
+        onLocationShareClick = { locationShare ->
+            state.eventSink(ShowLocationEvent.TrackMyLocation(false))
+            val position = CameraPosition(
+                target = Position(locationShare.location.lon, locationShare.location.lat),
+                // Force pointing to NORTH
+                bearing = 0.0,
+                zoom = mapState.cameraPosition.zoom.coerceAtLeast(MapDefaults.DEFAULT_ZOOM),
+            )
+            coroutineScope.launch {
+                mapState.animateCameraPosition(position = position)
+            }
+        },
+        modifier = modifier,
+    )
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ShowLocationScaffold(
+    state: ShowLocationState,
+    mapState: MapState?,
+    onBackClick: () -> Unit,
+    onLocationShareClick: (LocationShareItem) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberBottomSheetState(
             initialValue = SheetValue.Expanded,
@@ -103,7 +177,7 @@ fun ShowLocationView(
         }
     }
     MapBottomSheetScaffold(
-        customMapTilerConfig = state.customMapTilerConfig,
+        isReady = state.customMapTilerConfig.isReady(),
         sheetDragHandle = if (state.isSheetDraggable) {
             { BottomSheetDefaults.DragHandle() }
         } else {
@@ -111,7 +185,7 @@ fun ShowLocationView(
         },
         sheetSwipeEnabled = state.isSheetDraggable,
         scaffoldState = scaffoldState,
-        cameraState = cameraState,
+        mapState = mapState,
         modifier = modifier,
         topBar = {
             TopAppBar(
@@ -123,8 +197,7 @@ fun ShowLocationView(
                 },
             )
         },
-        sheetContent = { sheetPaddings ->
-            val coroutineScope = rememberCoroutineScope()
+        sheetContent = {
             if (!state.isSheetDraggable) {
                 // If sheet is draggable the DragHandle has already some padding
                 Spacer(Modifier.height(20.dp))
@@ -152,41 +225,13 @@ fun ShowLocationView(
                             item = locationShare,
                             onShareClick = { state.eventSink(ShowLocationEvent.Share(locationShare.location)) },
                             onStopClick = { state.eventSink(ShowLocationEvent.StopLocationSharing) },
-                            modifier = Modifier.clickable {
-                                state.eventSink(ShowLocationEvent.TrackMyLocation(false))
-                                val position = CameraPosition(
-                                    target = Position(locationShare.location.lon, locationShare.location.lat),
-                                    // Force pointing to NORTH
-                                    bearing = 0.0,
-                                    zoom = cameraState.position.zoom.coerceAtLeast(MapDefaults.DEFAULT_ZOOM),
-                                )
-                                coroutineScope.launch {
-                                    cameraState.animateTo(finalPosition = position)
-                                }
-                            }
+                            modifier = Modifier.clickable { onLocationShareClick(locationShare) }
                         )
                     }
                 }
             }
         },
-        mapContent = {
-            UserLocationTrackingEffect(
-                cameraState = cameraState,
-                locationState = state.userLocationState,
-                enabled = state.isTrackMyLocation,
-            )
-            if (!state.hideUserLocationPuck) {
-                UserLocationPuck(
-                    cameraState = cameraState,
-                    location = state.userLocationState.location,
-                )
-            }
-            val markers = remember(state.locationShares) {
-                state.locationShares.map { it.toMarkerData() }.toImmutableList()
-            }
-            LocationPinMarkers(markers)
-        },
-        overlayContent = {
+        overlay = {
             LocationFloatingActionButton(
                 isMapCenteredOnUser = state.isTrackMyLocation,
                 onClick = { state.eventSink(ShowLocationEvent.TrackMyLocation(true)) },

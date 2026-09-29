@@ -67,6 +67,9 @@
   <string name="screen_room_details_profile_row_title">"Profile"</string>
   <string name="screen_room_details_requests_to_join_title">"Requests to join"</string>
   <string name="screen_room_details_roles_and_permissions">"Roles &amp; permissions"</string>
+  <string name="screen_room_details_room_audio_ptt">"Push to talk"</string>
+  <string name="screen_room_details_room_audio_title">"Room Audio"</string>
+  <string name="screen_room_details_room_audio_video_calls">"Video calls"</string>
   <string name="screen_room_details_room_name_label">"Name"</string>
   <string name="screen_room_details_security_and_privacy_title">"Security &amp; privacy"</string>
   <string name="screen_room_details_security_title">"Security"</string>

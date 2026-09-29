@@ -10,24 +10,23 @@ package io.element.android.features.location.impl.common.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import org.maplibre.compose.camera.CameraState
-import org.maplibre.compose.location.Location
+import org.maplibre.compose.location.LocationMeasurement
 import org.maplibre.compose.location.LocationPuck
 import org.maplibre.compose.location.LocationPuckColors
 import org.maplibre.compose.location.LocationPuckSizes
+import org.maplibre.spatialk.units.Length
 
 @Composable
 fun UserLocationPuck(
-    cameraState: CameraState,
-    location: Location?,
+    location: LocationMeasurement?,
 ) {
     LocationPuck(
         idPrefix = "user-location",
         location = location,
-        cameraState = cameraState,
-        accuracyThreshold = Float.POSITIVE_INFINITY,
-        showBearingAccuracy = false,
-        showBearing = false,
+        // Hide the accuracy circle.
+        accuracyThreshold = Length.PositiveInfinity,
+        // Hide the bearing (and bearing accuracy) indicator.
+        bearing = null,
         sizes = LocationPuckSizes(
             dotRadius = 8.dp,
             dotStrokeWidth = 2.dp,

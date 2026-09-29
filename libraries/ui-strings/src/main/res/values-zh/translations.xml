@@ -105,6 +105,7 @@
   <string name="action_copy_link">"复制链接"</string>
   <string name="action_copy_link_to_message">"复制消息链接"</string>
   <string name="action_copy_text">"复制文本"</string>
+  <string name="action_copy_to_clipboard">"复制到剪贴板"</string>
   <string name="action_create">"创建"</string>
   <string name="action_create_room">"创建房间"</string>
   <string name="action_create_space">"创建空间"</string>
@@ -132,6 +133,9 @@
   <string name="action_finish">"完成"</string>
   <string name="action_forgot_password">"忘记密码？"</string>
   <string name="action_forward">"转发"</string>
+  <plurals name="action_forward_messages">
+    <item quantity="other">"转发 %1$d 条消息"</item>
+  </plurals>
   <string name="action_go_back">"返回"</string>
   <string name="action_go_to_roles_and_permissions">"前往角色与权限"</string>
   <string name="action_go_to_settings">"前往设置"</string>
@@ -183,7 +187,6 @@
   <string name="action_retry_decryption">"重试解密"</string>
   <string name="action_save">"保存"</string>
   <string name="action_search">"搜索"</string>
-  <string name="action_select">"选择"</string>
   <string name="action_select_all">"全选"</string>
   <string name="action_send">"发送"</string>
   <string name="action_send_edited_message">"发送编辑后的消息"</string>
@@ -219,6 +222,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"有可用升级"</string>
   <string name="common_about">"关于"</string>
   <string name="common_acceptable_use_policy">"可接受的使用政策"</string>
+  <string name="common_account_settings">"账户设置"</string>
   <string name="common_add_account">"添加账户"</string>
   <string name="common_add_another_account">"添加账户"</string>
   <string name="common_adding_caption">"正在添加标题"</string>
@@ -227,6 +231,7 @@
   <string name="common_analytics">"分析"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"你离开了房间"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"你已注销会话"</string>
+  <string name="common_app_settings">"应用设置"</string>
   <string name="common_appearance">"外观"</string>
   <string name="common_audio">"音频"</string>
   <string name="common_beta">"Beta"</string>
@@ -237,6 +242,7 @@
   <string name="common_call_started">"通话已开始"</string>
   <string name="common_call_you_declined">"你已拒接来电"</string>
   <string name="common_chat_backup">"聊天记录备份"</string>
+  <string name="common_code_block">"代码块"</string>
   <string name="common_copied_to_clipboard">"已复制到剪贴板"</string>
   <string name="common_copyright">"版权"</string>
   <string name="common_creating_room">"正在创建房间…"</string>
@@ -299,9 +305,11 @@
   <string name="common_live_location_ended">"实时位置已结束"</string>
   <string name="common_loading">"正在加载…"</string>
   <string name="common_loading_more">"正在加载更多…"</string>
+  <string name="common_location_sharing">"位置共享"</string>
   <plurals name="common_many_members">
     <item quantity="other">"其他 %d 人"</item>
   </plurals>
+  <string name="common_media_upload_quality">"媒体上传质量"</string>
   <plurals name="common_member_count">
     <item quantity="other">"%1$d 个成员"</item>
   </plurals>
@@ -310,6 +318,7 @@
   <string name="common_message_failed_to_send">"消息发送失败"</string>
   <string name="common_message_layout">"消息布局"</string>
   <string name="common_message_removed">"消息已移除"</string>
+  <string name="common_moderation_and_safety">"尺度与安全"</string>
   <string name="common_modern">"现代"</string>
   <string name="common_mute">"静音"</string>
   <string name="common_name">"名称"</string>
@@ -445,6 +454,7 @@
   <string name="common_waiting_live_location">"正在等待实时位置…"</string>
   <string name="common_world_readable_history">"任何人都可以看到历史"</string>
   <string name="common_you">"你"</string>
+  <string name="common_your_account">"你的账户"</string>
   <string name="content_scanner_not_found">"无法下载。"</string>
   <string name="content_scanner_not_found_title">"文件未找到"</string>
   <string name="content_scanner_scanning">"正在扫描…"</string>
@@ -544,6 +554,9 @@
   <string name="screen_room_grouped_state_events_reduce">"折叠"</string>
   <string name="screen_room_live_location_banner">"正在共享实时位置"</string>
   <string name="screen_room_maximum_messages_selected">"选择的消息已达到最大数量"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="other">"已转发 %1$d 条消息"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"已经位于此房间！"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s 条已置顶的消息"</string>

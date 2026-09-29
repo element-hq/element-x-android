@@ -186,7 +186,7 @@ class PreferencesFlowNode(
                     }
 
                     override fun navigateToLinkNewDevice() {
-                        callback.navigateToAddAccount()
+                        callback.navigateToLinkNewDevice()
                     }
 
                     override fun navigateToUserProfile(matrixUser: MatrixUser) {

@@ -136,6 +136,10 @@
   <string name="action_finish">"Finish"</string>
   <string name="action_forgot_password">"Forgot password?"</string>
   <string name="action_forward">"Forward"</string>
+  <plurals name="action_forward_messages">
+    <item quantity="one">"Forward %1$d message"</item>
+    <item quantity="other">"Forward %1$d messages"</item>
+  </plurals>
   <string name="action_go_back">"Go back"</string>
   <string name="action_go_to_roles_and_permissions">"Go to roles &amp; permissions"</string>
   <string name="action_go_to_settings">"Go to settings"</string>
@@ -187,7 +191,6 @@
   <string name="action_retry_decryption">"Retry decryption"</string>
   <string name="action_save">"Save"</string>
   <string name="action_search">"Search"</string>
-  <string name="action_select">"Select"</string>
   <string name="action_select_all">"Select all"</string>
   <string name="action_send">"Send"</string>
   <string name="action_send_edited_message">"Send edited message"</string>
@@ -566,6 +569,10 @@ Are you sure you want to continue?"</string>
   <string name="screen_room_grouped_state_events_reduce">"Reduce"</string>
   <string name="screen_room_live_location_banner">"Sharing live location"</string>
   <string name="screen_room_maximum_messages_selected">"Maximum messages selected"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"%1$d message forwarded"</item>
+    <item quantity="other">"%1$d messages forwarded"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"Already viewing this room!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s of %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pinned messages"</string>

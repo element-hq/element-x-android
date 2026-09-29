@@ -30,4 +30,5 @@ internal fun aDbSessionData(
     lastUsageIndex = 0,
     userDisplayName = null,
     userAvatarUrl = null,
+    userAvatarData = null,
 )
