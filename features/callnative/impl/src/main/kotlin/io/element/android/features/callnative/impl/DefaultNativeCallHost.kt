@@ -31,8 +31,8 @@ import timber.log.Timber
  * session is already in scope and there is no need to go looking for one. The stack it draws is not,
  * so this asks the app-scoped registry for its own session's controller.
  *
- * That controller only exists once a call has been placed or answered. Until then this is a
- * pass-through and nothing about the call is on screen.
+ * That controller only exists once a call has been placed or answered. Until then the overlay draws
+ * the content alone.
  */
 @ContributesBinding(SessionScope::class)
 class DefaultNativeCallHost(
@@ -44,23 +44,20 @@ class DefaultNativeCallHost(
         val controller by remember(client.sessionId) { controllers.controller(client.sessionId) }
             .collectAsState(initial = null)
         val current = controller
-        if (current == null) {
-            content(modifier)
-            return
-        }
 
         // Installed here rather than in the Activity because this is the only place that has both the
         // Activity and the session whose call it is. The Activity keeps `onUserLeaveHint`, which it
         // cannot delegate: see NativeCallPip.
         val activity = LocalActivity.current as? ComponentActivity
         DisposableEffect(activity, current) {
-            if (activity != null) {
+            if (activity != null && current != null) {
                 runCatchingExceptions { ElementCallPictureInPicture.attach(activity, current) }
                     .onFailure { Timber.w(it, "NativeCall: cannot attach picture-in-picture") }
             }
             onDispose { }
         }
 
+        // Composed even with no controller yet, so the content never moves in the tree and keeps its state.
         ElementCallOverlay(
             controller = current,
             modifier = modifier,
