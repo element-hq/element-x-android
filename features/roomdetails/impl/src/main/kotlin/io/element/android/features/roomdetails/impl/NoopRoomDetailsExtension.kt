@@ -7,6 +7,7 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.zacsweers.metro.ContributesBinding
@@ -16,5 +17,5 @@ import io.element.android.libraries.di.RoomScope
 @ContributesBinding(RoomScope::class)
 class NoopRoomDetailsExtension : RoomDetailsExtension {
     @Composable
-    override fun Render(modifier: Modifier) = Unit
+    override fun ColumnScope.Render(modifier: Modifier) = Unit
 }

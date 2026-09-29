@@ -10,6 +10,7 @@
 package io.element.android.features.roomdetails.impl
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
@@ -26,7 +27,7 @@ class NoopRoomDetailsExtensionTest : RobolectricTest() {
     @Test
     fun `default extension renders no additional content`() = runAndroidComposeUiTest<ComponentActivity> {
         val extension = NoopRoomDetailsExtension()
-        setContent { extension.Render(Modifier) }
+        setContent { Column { with(extension) { Render(Modifier) } } }
         onRoot().onChildren().assertCountEquals(0)
     }
 
@@ -35,8 +36,10 @@ class NoopRoomDetailsExtensionTest : RobolectricTest() {
         val extension = NoopRoomDetailsExtension()
         val text = mutableStateOf("Before")
         setContent {
-            BasicText(text.value)
-            extension.Render(Modifier)
+            Column {
+                BasicText(text.value)
+                with(extension) { Render(Modifier) }
+            }
         }
         onNodeWithText("Before").assertExists()
         onRoot().onChildren().assertCountEquals(1)

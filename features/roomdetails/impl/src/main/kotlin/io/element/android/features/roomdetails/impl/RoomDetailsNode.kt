@@ -122,7 +122,7 @@ class RoomDetailsNode(
 
         RoomDetailsView(
             state = state,
-            additionalSections = { roomDetailsExtension.Render(Modifier) },
+            additionalSections = { with(roomDetailsExtension) { Render(Modifier) } },
             modifier = modifier,
             goBack = ::navigateUp,
             onActionClick = ::onActionClick,
