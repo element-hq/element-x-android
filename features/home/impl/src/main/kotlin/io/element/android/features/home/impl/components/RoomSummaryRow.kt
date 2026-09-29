@@ -426,7 +426,8 @@ private fun InviteNameAndIndicatorRow(
         )
         if (!isInviteSeen) {
             UnreadIndicatorAtom(
-                color = ElementTheme.colors.unreadIndicator
+                color = ElementTheme.colors.unreadIndicator,
+                count = 0,
             )
         }
     }
@@ -475,5 +476,7 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryPreviewP
         isInviteSeen = data.name == "Bob",
         onClick = {},
         eventSink = {},
+        showUnreadCount = data.numberOfUnreadNotifications > 0,
+        showAllActivity = true,
     )
 }
