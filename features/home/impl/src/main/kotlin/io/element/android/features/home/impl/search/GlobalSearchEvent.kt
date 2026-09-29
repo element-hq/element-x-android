@@ -30,4 +30,10 @@ sealed interface GlobalSearchEvent {
 
     /** The user selected a search result from the search history. */
     data class SearchHistoryResultSelected(val resultItem: SearchHistoryResultItem) : GlobalSearchEvent
+
+    /** The user removed a search history entry. */
+    data class RemoveSearchHistoryResult(val id: String) : GlobalSearchEvent
+
+    /** The user cleared the search history. */
+    data object ClearSearchHistory : GlobalSearchEvent
 }

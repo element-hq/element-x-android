@@ -12,12 +12,14 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -31,9 +33,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -67,6 +71,8 @@ import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.roundToPx
+import io.element.android.libraries.designsystem.text.toDp
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.FilledTextField
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -75,6 +81,7 @@ import io.element.android.libraries.designsystem.theme.components.LinearProgress
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SegmentedButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
 import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
@@ -155,7 +162,11 @@ private fun GlobalSearchContent(
                 val historyResults = state.history.dataOrNull()?.toImmutableList() ?: persistentListOf()
                 when {
                     state.results.isUninitialized() -> if (state.queryState.text.isBlank() && historyResults.isNotEmpty()) {
-                        searchHistory(historyResults) { result ->
+                        searchHistory(
+                            historyResults = historyResults,
+                            onRemoveResult = { id -> state.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(id)) },
+                            onClearAllResults = { state.eventSink(GlobalSearchEvent.ClearSearchHistory) },
+                        ) { result ->
                             when (result) {
                                 is SearchHistoryResultItem.Query -> Unit
                                 is SearchHistoryResultItem.Room -> onSelectSearchResult(result.roomInfo.id, null)
@@ -214,7 +225,7 @@ private fun SearchTopAppBarContent(state: GlobalSearchState) {
                     modifier = Modifier.clip(CircleShape).size(20.dp),
                     onClick = { state.eventSink(GlobalSearchEvent.ClearQuery) },
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = ElementTheme.colors.borderInteractivePrimary,
+                        containerColor = ElementTheme.colors.iconSecondary,
                         contentColor = ElementTheme.colors.iconOnSolidPrimary
                     )
                 ) {
@@ -280,25 +291,46 @@ private fun LazyListScope.startSearching() {
 
 private fun LazyListScope.searchHistory(
     historyResults: ImmutableList<SearchHistoryResultItem>,
+    onRemoveResult: (id: String) -> Unit,
+    onClearAllResults: () -> Unit,
     onSelectSearchHistoryResult: (SearchHistoryResultItem) -> Unit,
 ) {
     item {
-        Text(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
-            text = stringResource(R.string.screen_search_recent_searches_section_title),
-            style = ElementTheme.typography.fontBodyLgMedium,
-            color = ElementTheme.colors.textPrimary,
-        )
+        Row(
+            modifier = Modifier.padding(top = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier.padding(start = 16.dp).weight(1f),
+                text = stringResource(R.string.screen_search_recent_searches_section_title),
+                style = ElementTheme.typography.fontBodyLgMedium,
+                color = ElementTheme.colors.textPrimary,
+            )
+
+            TextButton(
+                text = "Clear all",
+                size = ButtonSize.Small,
+                colors = ButtonDefaults.textButtonColors(contentColor = ElementTheme.colors.textActionAccent),
+                onClick = onClearAllResults,
+            )
+        }
     }
     items(
         items = historyResults,
         key = { it.id },
     ) { result ->
+        val twoLineHeight =
+            // Vertical padding
+            12.dp * 2 +
+            // Text line heights
+                ElementTheme.typography.fontBodyMdRegular.lineHeight.toDp() +
+                ElementTheme.typography.fontBodyLgRegular.lineHeight.toDp()
         Row(
             modifier = Modifier
-                .niceClickable(onClick = { onSelectSearchHistoryResult(result) })
+                .clickable(onClick = { onSelectSearchHistoryResult(result) })
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(start = 16.dp, end = 2.dp)
+                .height(twoLineHeight),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -315,6 +347,7 @@ private fun LazyListScope.searchHistory(
                     )
 
                     Text(
+                        modifier = Modifier.weight(1f, fill = true),
                         text = result.term,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -333,7 +366,7 @@ private fun LazyListScope.searchHistory(
                         ),
                     )
 
-                    Column(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.weight(1f, fill = true)) {
                         Text(
                             text = result.roomInfo.name.orEmpty(),
                             maxLines = 1,
@@ -365,6 +398,16 @@ private fun LazyListScope.searchHistory(
                     }
                 }
             }
+
+            Icon(
+                modifier = Modifier.minimumInteractiveComponentSize()
+                    .niceClickable {
+                        onRemoveResult(result.id)
+                    },
+                imageVector = CompoundIcons.Close(),
+                contentDescription = stringResource(CommonStrings.action_remove),
+                tint = ElementTheme.colors.iconSecondary,
+            )
         }
     }
 }

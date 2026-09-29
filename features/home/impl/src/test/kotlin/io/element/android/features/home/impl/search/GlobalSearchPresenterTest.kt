@@ -338,6 +338,71 @@ class GlobalSearchPresenterTest {
     }
 
     @Test
+    fun `present - RemoveSearchHistoryResult removes a query entry`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply {
+            add(SearchHistoryResult.Query("keep"))
+            add(SearchHistoryResult.Query("drop"))
+        }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(SearchHistoryResultItem.Query("drop").id))
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).containsExactly(SearchHistoryResult.Query("keep"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - RemoveSearchHistoryResult removes a room entry`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply {
+            add(SearchHistoryResult.Query("keep"))
+            add(SearchHistoryResult.Room(A_ROOM_ID))
+        }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(SearchHistoryResultItem.Room(A_ROOM_ID, aRoomInfo()).id))
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).containsExactly(SearchHistoryResult.Query("keep"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - RemoveSearchHistoryResult with an unknown id does nothing`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply { add(SearchHistoryResult.Query("keep")) }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult("query:unknown"))
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).containsExactly(SearchHistoryResult.Query("keep"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - ClearSearchHistory removes every entry`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply {
+            add(SearchHistoryResult.Query("a"))
+            add(SearchHistoryResult.Room(A_ROOM_ID))
+        }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.ClearSearchHistory)
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - SearchHistoryResultSelected does nothing for a room result`() = runTest {
         val searchHistoryStore = FakeSearchHistoryStore()
         val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)

@@ -54,6 +54,17 @@ class DefaultSearchHistoryStore(
         }
     }
 
+    override suspend fun remove(result: SearchHistoryResult) {
+        withContext(dispatchers.io) {
+            mutex.withLock {
+                ensureLoadedLocked()
+                val updated = cache.value.filterNot { it == result }
+                cache.value = updated
+                persist(updated)
+            }
+        }
+    }
+
     override suspend fun clear() = withContext<Unit>(dispatchers.io) {
         mutex.withLock {
             isLoaded = true

@@ -57,6 +57,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
@@ -246,6 +247,21 @@ class GlobalSearchPresenter(
                         }
                         is SearchHistoryResultItem.Room -> Unit
                     }
+                }
+                is GlobalSearchEvent.RemoveSearchHistoryResult -> coroutineScope.launch {
+                    val currentHistory = searchHistoryStore.history.first()
+                    val actualId = event.id.substringAfter(":")
+                    val result = currentHistory.find {
+                        when (it) {
+                            is SearchHistoryResult.Query if actualId == it.term -> true
+                            is SearchHistoryResult.Room if actualId == it.roomId.value -> true
+                            else -> false
+                        }
+                    } ?: return@launch
+                    searchHistoryStore.remove(result)
+                }
+                GlobalSearchEvent.ClearSearchHistory -> coroutineScope.launch {
+                    searchHistoryStore.clear()
                 }
             }
         }
