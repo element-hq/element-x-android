@@ -79,6 +79,9 @@ fun <T> SearchBar(
         }
     }
 
+    // TODO Migrate to the SearchBarState API. The replacement (ExpandedFullScreenSearchBar) displays the results in a dialog,
+    //  which would change the UX, in particular for the emoji picker bottom sheet.
+    @Suppress("DEPRECATION")
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
