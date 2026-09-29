@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FloatingToolbarColors
 import androidx.compose.material3.FloatingToolbarDefaults
@@ -46,7 +45,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 /**
  * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=4457-1136
  */
-@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun HorizontalFloatingToolbar(
     modifier: Modifier = Modifier,
@@ -194,7 +192,6 @@ internal fun HorizontalFloatingToolbarNoFabPreview() = ElementPreview {
     )
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun ContentToPreview(
     floatingActionButton: (@Composable () -> Unit)?,

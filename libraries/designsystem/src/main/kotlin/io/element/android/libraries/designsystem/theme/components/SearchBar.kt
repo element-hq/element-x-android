@@ -159,7 +159,6 @@ fun <T> SearchBar(
 }
 
 object ElementSearchBarDefaults {
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun inactiveColors() = SearchBarDefaults.colors(
         containerColor = Color.Transparent,
@@ -179,7 +178,6 @@ object ElementSearchBarDefaults {
         errorContainerColor = ElementTheme.colors.bgSubtleSecondary,
     )
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun activeColors() = SearchBarDefaults.colors(
         containerColor = Color.Transparent,
@@ -289,7 +287,6 @@ internal fun SearchBarActiveWithContentPreview() = ElementThemedPreview {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ExcludeFromCoverage
 private fun ContentToPreview(

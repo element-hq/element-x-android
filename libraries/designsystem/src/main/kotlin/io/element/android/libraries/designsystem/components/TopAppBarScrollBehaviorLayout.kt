@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.designsystem.components
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.contentColorFor
@@ -24,7 +23,6 @@ import io.element.android.compound.theme.ElementTheme
  * It places the content according to the current height offset of the scroll behavior.
  *
  */
-@ExperimentalMaterial3Api
 @Composable
 fun TopAppBarScrollBehaviorLayout(
     scrollBehavior: TopAppBarScrollBehavior,
