@@ -1,0 +1,38 @@
+appId: ${MAESTRO_APP_ID}
+---
+- tapOn: "Sign in manually"
+- runFlow: ../assertions/assertLoginDisplayed.yaml
+- takeScreenshot: build/maestro/100-SignIn
+# The account provider field defaults to matrix.org, so continue straight to the MAS login.
+- tapOn:
+    id: "login-continue"
+## MAS page
+# Click on "Use another account" if MAS is already logged in:
+- runFlow:
+    when:
+      visible: "Use another account"
+    commands:
+      - tapOn:
+          text: "Use another account"
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible:
+            id: "form-1"
+          timeout: 10000
+- tapOn:
+    id: "form-1"
+- inputText: ${MAESTRO_USERNAME}
+- pressKey: Enter
+- tapOn:
+    id: "form-3"
+- inputText: ${MAESTRO_PASSWORD}
+- pressKey: Enter
+- tapOn: "Continue"
+## Back to native world
+- runFlow: ../assertions/assertSessionVerificationDisplayed.yaml
+- runFlow: ./verifySession.yaml
+- runFlow: ../assertions/assertAnalyticsDisplayed.yaml
+- tapOn: "Not now"
+- runFlow: ../assertions/assertHomeDisplayed.yaml

@@ -1,0 +1,40 @@
+appId: ${MAESTRO_APP_ID}
+---
+- tapOn: "Sign in manually"
+- runFlow: ../assertions/assertLoginDisplayed.yaml
+- takeScreenshot: build/maestro/100-SignIn
+# enter the account provider
+- tapOn:
+    id: "change_server-server"
+- eraseText
+- inputText: ${MAESTRO_ACCOUNT_PROVIDER_DOMAIN}
+- tapOn:
+    id: "login-continue"
+## MAS page
+- tapOn:
+    text: "Continue with Keycloak"
+# Click on "Use another account" if MAS is already logged in:
+- runFlow:
+    when:
+      visible: "Use another account"
+    commands:
+      - tapOn:
+          text: "Use another account"
+- retry:
+    maxRetries: 3
+    commands:
+      - extendedWaitUntil:
+          visible: "Username or email"
+          timeout: 10000
+- tapOn: "Username or email"
+- inputText: ${MAESTRO_USERNAME}
+- tapOn: "Password"
+- inputText: ${MAESTRO_PASSWORD}
+- tapOn: "Sign In"
+- tapOn: "Continue"
+## Back to native world
+- runFlow: ../assertions/assertSessionVerificationDisplayed.yaml
+- runFlow: ./verifySession.yaml
+- runFlow: ../assertions/assertAnalyticsDisplayed.yaml
+- tapOn: "Not now"
+- runFlow: ../assertions/assertHomeDisplayed.yaml

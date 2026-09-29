@@ -107,9 +107,11 @@ jobs:
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         continue-on-error: true
         env:
-          MAESTRO_USERNAME: maestroelement
-          MAESTRO_PASSWORD: ${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD }}
-          MAESTRO_RECOVERY_KEY: ${{ secrets.MATRIX_MAESTRO_ACCOUNT_RECOVERY_KEY }}
+          MAESTRO_ACCOUNT_PROVIDER_DOMAIN: ${{ secrets.MATRIX_MAESTRO_ACCOUNT_PROVIDER_DOMAIN_2 }}
+          MAESTRO_LOGIN_WITH_KEYCLOAK: true
+          MAESTRO_USERNAME: ${{ secrets.MATRIX_MAESTRO_ACCOUNT_USERNAME_2 }}
+          MAESTRO_PASSWORD: ${{ secrets.MATRIX_MAESTRO_ACCOUNT_PASSWORD_2 }}
+          MAESTRO_RECOVERY_KEY: ${{ secrets.MATRIX_MAESTRO_ACCOUNT_RECOVERY_KEY_2 }}
           MAESTRO_ROOM_NAME: MyRoom
           MAESTRO_INVITEE1_MXID: "@maestroelement2:matrix.org"
           MAESTRO_INVITEE2_MXID: "@maestroelement3:matrix.org"
