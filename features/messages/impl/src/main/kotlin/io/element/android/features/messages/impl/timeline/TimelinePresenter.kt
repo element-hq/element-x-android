@@ -63,6 +63,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.DisplayFirstTimelineItems
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationToMessage
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
@@ -275,7 +276,7 @@ class TimelinePresenter(
                             if (next.isEmpty()) SelectionState.Disabled else current.copy(selectedEventIds = next)
                         }
                         selected.size >= MAX_SELECTION_COUNT -> {
-                            snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_selection_limit_reached))
+                            snackbarDispatcher.post(SnackbarMessage(CommonStrings.screen_room_maximum_messages_selected))
                             current
                         }
                         else -> current.copy(selectedEventIds = (selected + event.eventId).toPersistentSet())

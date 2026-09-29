@@ -23,6 +23,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +38,7 @@ fun SelectionModeTopBar(
     TopAppBar(
         modifier = modifier,
         title = {
-            Text(text = pluralStringResource(R.plurals.screen_room_timeline_selection_title, selectedCount, selectedCount))
+            Text(text = pluralStringResource(CommonPlurals.common_selected_count, selectedCount, selectedCount))
         },
         navigationIcon = {
             IconButton(
