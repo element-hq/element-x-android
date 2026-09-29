@@ -1,3 +1,12 @@
+Changes in Element X v26.09.4
+=============================
+
+## Hotifx version:
+
+Fixes an issue with the room list not displaying all activity from unread messages.
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.09.3...v26.09.4
+
 Changes in Element X v26.09.3
 =============================
 
