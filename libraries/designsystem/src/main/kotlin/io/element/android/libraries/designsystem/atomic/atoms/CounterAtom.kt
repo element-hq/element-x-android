@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.designsystem.atomic.atoms
 
-
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -60,7 +59,6 @@ fun CounterAtom(
     dotSize: Dp = 12.0.dp,
     isCritical: Boolean = false,
 ) {
-
     val countAsText = when (count) {
         in Int.MIN_VALUE..0 -> null
         in 1..MAX_COUNT -> count.toString()

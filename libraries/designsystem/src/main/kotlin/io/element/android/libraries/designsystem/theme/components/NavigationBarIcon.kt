@@ -30,7 +30,8 @@ fun NavigationBarIcon(
                 count = count,
                 isCritical = isCritical,
             )
-        }) {
+        }
+    ) {
         Icon(
             imageVector = imageVector,
             contentDescription = null,
