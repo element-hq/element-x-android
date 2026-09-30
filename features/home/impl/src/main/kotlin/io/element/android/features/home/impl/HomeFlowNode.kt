@@ -40,7 +40,6 @@ import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteView
 import io.element.android.features.invite.api.declineandblock.DeclineInviteAndBlockEntryPoint
 import io.element.android.features.leaveroom.api.LeaveRoomRenderer
-import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesListType
@@ -83,7 +82,6 @@ class HomeFlowNode(
     private val inviteFriendsUseCase: InviteFriendsUseCase,
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInviteView: AcceptDeclineInviteView,
-    private val directLogoutView: DirectLogoutView,
     private val reportRoomEntryPoint: ReportRoomEntryPoint,
     private val declineInviteAndBlockUserEntryPoint: DeclineInviteAndBlockEntryPoint,
     private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,
@@ -248,7 +246,6 @@ class HomeFlowNode(
                     )
                 }
             )
-            directLogoutView.Render(state.directLogoutState)
         }
     }
 

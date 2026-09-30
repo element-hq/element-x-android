@@ -20,7 +20,9 @@ import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
@@ -39,11 +41,18 @@ class LogoutPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val presenter = createLogoutPresenter()
+        val presenter = createLogoutPresenter(
+            matrixClient = FakeMatrixClient(
+                sessionId = A_SESSION_ID,
+                userDisplayName = "Alice",
+                userAvatarUrl = "mxc://avatar",
+            ),
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
+            assertThat(initialState.currentUser).isEqualTo(MatrixUser(A_SESSION_ID, "Alice", "mxc://avatar"))
             assertThat(initialState.isLastDevice).isFalse()
             assertThat(initialState.backupState).isEqualTo(BackupState.UNKNOWN)
             assertThat(initialState.doesBackupExistOnServer).isTrue()

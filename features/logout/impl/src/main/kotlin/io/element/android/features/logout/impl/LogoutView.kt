@@ -11,7 +11,9 @@ package io.element.android.features.logout.impl
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,15 +34,22 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.encryption.SteadyStateException
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCard
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardMode
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardState
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=442-34581
+ */
 @Composable
 fun LogoutView(
     state: LogoutState,
@@ -54,15 +63,17 @@ fun LogoutView(
         onBackClick = onBackClick,
         title = title(state),
         subTitle = subtitle(state),
-        iconStyle = BigIcon.Style.Default(CompoundIcons.KeySolid()),
+        iconStyle = BigIcon.Style.Default(CompoundIcons.Mobile()),
         modifier = modifier,
+        isScrollable = true,
         buttons = {
             Buttons(
                 state = state,
                 onChangeRecoveryKeyClick = onChangeRecoveryKeyClick,
                 onLogoutClick = {
                     eventSink(LogoutEvent.Logout(ignoreSdkError = false))
-                }
+                },
+                onCancelClick = onBackClick,
             )
         },
     ) {
@@ -71,6 +82,8 @@ fun LogoutView(
 
     LogoutActionDialog(
         state.logoutAction,
+        // Do not show the progress dialog, the progress is rendered in the button.
+        showProgressDialog = false,
         onConfirmClick = {
             eventSink(LogoutEvent.Logout(ignoreSdkError = false))
         },
@@ -116,6 +129,7 @@ private fun ColumnScope.Buttons(
     state: LogoutState,
     onLogoutClick: () -> Unit,
     onChangeRecoveryKeyClick: () -> Unit,
+    onCancelClick: () -> Unit,
 ) {
     val logoutAction = state.logoutAction
     if (state.isLastDevice) {
@@ -139,6 +153,12 @@ private fun ColumnScope.Buttons(
             .testTag(TestTags.signOut),
         onClick = onLogoutClick,
     )
+    TextButton(
+        text = stringResource(id = CommonStrings.action_cancel),
+        enabled = logoutAction !is AsyncAction.Loading,
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onCancelClick,
+    )
 }
 
 @Composable
@@ -149,9 +169,16 @@ private fun Content(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 60.dp, start = 20.dp, end = 20.dp),
+            .padding(top = 8.dp, start = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        AccountInfoCard(
+            AccountInfoCardState(
+                matrixUser = state.currentUser,
+                mode = AccountInfoCardMode.Simple,
+            )
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         when (state.backupUploadState) {
             is BackupUploadState.Uploading -> {
                 LinearProgressIndicator(
