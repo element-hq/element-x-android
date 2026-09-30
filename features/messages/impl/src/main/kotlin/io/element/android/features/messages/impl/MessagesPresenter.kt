@@ -425,10 +425,8 @@ class MessagesPresenter(
     }
 
     private suspend fun handleRetrySending(targetEvent: TimelineItem.Event) {
-        val sendHandle = targetEvent.sendhandle ?: return Unit.also {
-            Timber.w("No send handle for event ${targetEvent.eventOrTransactionId}")
-        }
-        sendHandle.retry()
+        val (sendTarget, _) = targetEvent.pendingSend() ?: return
+        timelineController.retrySend(targetEvent.eventOrTransactionId, sendTarget)
             .onSuccess {
                 Timber.d("Succeed to add the message back to the send queue")
             }
@@ -518,8 +516,9 @@ class MessagesPresenter(
     private suspend fun handleActionRedact(event: TimelineItem.Event, redactEventAction: MutableState<AsyncAction<Unit>>) {
         val eventId = event.eventId
         if (eventId == null) {
-            // The message was never sent, so there is nobody to give a reason to.
-            redact(event.eventOrTransactionId, reason = null)
+            val (sendTarget, _) = event.pendingSend() ?: return
+            // The message was never sent, just remove it from the send queue.
+            timelineController.abortSend(event.eventOrTransactionId, sendTarget).onFailure { Timber.e(it) }
         } else {
             redactEventAction.value = MessagesState.ConfirmingRedaction(eventId)
         }

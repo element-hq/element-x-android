@@ -16,6 +16,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -50,16 +51,18 @@ fun SendFailureDialogView(
                 )
             }
 
+            val (sendTarget, _) = sendFailureDialogState.event.pendingSend() ?: (null to null)
+
             ConfirmationDialog(
                 modifier = modifier,
                 title = stringResource(id = CommonStrings.common_sending_failed),
                 content = content,
                 onDismiss = onDismiss,
                 submitText = stringResource(id = CommonStrings.action_retry),
-                onSubmitClick = { onRetry(sendFailureDialogState.event) },
+                onSubmitClick = { sendTarget?.let { onRetry(sendFailureDialogState.event) } },
                 onCancelClick = onDismiss,
                 thirdButtonText = stringResource(id = CommonStrings.action_remove_message),
-                onThirdButtonClick = { onRemoveMessage(sendFailureDialogState.event) },
+                onThirdButtonClick = { sendTarget?.let { onRemoveMessage(sendFailureDialogState.event) } },
             )
         }
     }
