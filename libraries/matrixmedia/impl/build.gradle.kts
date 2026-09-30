@@ -31,6 +31,5 @@ dependencies {
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.sessionStorage.test)
 }

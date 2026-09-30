@@ -32,7 +32,6 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.matrixui)
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
