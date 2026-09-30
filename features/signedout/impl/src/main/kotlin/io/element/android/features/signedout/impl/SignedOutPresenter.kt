@@ -17,7 +17,6 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.sessionstorage.api.SessionData
@@ -30,7 +29,6 @@ import kotlinx.coroutines.launch
 class SignedOutPresenter(
     @Assisted private val sessionId: SessionId,
     private val sessionStore: SessionStore,
-    private val buildMeta: BuildMeta,
 ) : Presenter<SignedOutState> {
     @AssistedFactory
     fun interface Factory {
@@ -56,7 +54,6 @@ class SignedOutPresenter(
         }
 
         return SignedOutState(
-            appName = buildMeta.applicationName,
             signedOutMatrixUser = signedOutSession,
             eventSink = ::handleEvent,
         )

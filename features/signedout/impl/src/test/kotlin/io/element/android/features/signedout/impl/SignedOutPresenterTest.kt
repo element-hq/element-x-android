@@ -14,9 +14,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.test.AN_APPLICATION_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -47,7 +45,6 @@ class SignedOutPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.appName).isEqualTo(AN_APPLICATION_NAME)
             assertThat(initialState.signedOutMatrixUser).isEqualTo(MatrixUser(userId = A_SESSION_ID))
             assertThat(awaitItem().signedOutMatrixUser).isEqualTo(
                 MatrixUser(
@@ -96,6 +93,5 @@ internal fun createSignedOutPresenter(
     return SignedOutPresenter(
         sessionId = sessionId,
         sessionStore = sessionStore,
-        buildMeta = aBuildMeta(applicationName = AN_APPLICATION_NAME),
     )
 }

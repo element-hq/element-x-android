@@ -41,7 +41,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
 /**
- * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=795-6095
+ * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=856-6104
  */
 @Composable
 fun SignedOutView(
@@ -69,9 +69,9 @@ private fun SignedOutHeader(state: SignedOutState) {
     IconTitleSubtitleMolecule(
         modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
         title = stringResource(id = R.string.screen_signed_out_title),
-        subTitle = stringResource(id = R.string.screen_signed_out_subtitle, state.appName),
+        subTitle = stringResource(id = R.string.screen_signed_out_subtitle_v2),
         iconStyle = BigIcon.Style.Default(
-            CompoundIcons.UserProfileSolid(),
+            CompoundIcons.Devices(),
             usePrimaryTint = true,
         ),
     )
@@ -104,11 +104,11 @@ private fun SignedOutContent(
                 items = persistentListOf(
                     VisualListItemData(
                         message = stringResource(id = R.string.screen_signed_out_reason_1),
-                        iconVector = CompoundIcons.Lock(),
+                        iconVector = CompoundIcons.UserProfile(),
                     ),
                     VisualListItemData(
                         message = stringResource(id = R.string.screen_signed_out_reason_2),
-                        iconVector = CompoundIcons.Devices(),
+                        iconVector = CompoundIcons.Lock(),
                     ),
                     VisualListItemData(
                         message = stringResource(id = R.string.screen_signed_out_reason_3),

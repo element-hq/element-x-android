@@ -24,7 +24,6 @@ internal fun aSignedOutState(
     signedOutSession: MatrixUser = aMatrixUser(id = "@alice:server.org", displayName = "Alice"),
     eventSink: (SignedOutEvent) -> Unit = {},
 ) = SignedOutState(
-    appName = "AppName",
     signedOutMatrixUser = signedOutSession,
     eventSink = eventSink,
 )
