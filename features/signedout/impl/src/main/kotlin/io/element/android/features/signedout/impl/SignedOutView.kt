@@ -10,7 +10,6 @@ package io.element.android.features.signedout.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -54,6 +52,7 @@ fun SignedOutView(
             .fillMaxSize()
             .systemBarsPadding()
             .imePadding(),
+        isScrollable = true,
         header = { SignedOutHeader(state) },
         content = { SignedOutContent(state.signedOutMatrixUser) },
         footer = {
@@ -85,7 +84,7 @@ private fun SignedOutContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         AccountInfoCard(
             AccountInfoCardState(
@@ -93,30 +92,22 @@ private fun SignedOutContent(
                 mode = AccountInfoCardMode.Simple,
             )
         )
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = BiasAlignment(
-                horizontalBias = 0f,
-                verticalBias = -0.4f
-            )
-        ) {
-            VisualList(
-                items = persistentListOf(
-                    VisualListItemData(
-                        message = stringResource(id = R.string.screen_signed_out_reason_1),
-                        iconVector = CompoundIcons.UserProfile(),
-                    ),
-                    VisualListItemData(
-                        message = stringResource(id = R.string.screen_signed_out_reason_2),
-                        iconVector = CompoundIcons.Lock(),
-                    ),
-                    VisualListItemData(
-                        message = stringResource(id = R.string.screen_signed_out_reason_3),
-                        iconVector = CompoundIcons.Block(),
-                    ),
+        VisualList(
+            items = persistentListOf(
+                VisualListItemData(
+                    message = stringResource(id = R.string.screen_signed_out_reason_1),
+                    iconVector = CompoundIcons.UserProfile(),
                 ),
-            )
-        }
+                VisualListItemData(
+                    message = stringResource(id = R.string.screen_signed_out_reason_2),
+                    iconVector = CompoundIcons.Lock(),
+                ),
+                VisualListItemData(
+                    message = stringResource(id = R.string.screen_signed_out_reason_3),
+                    iconVector = CompoundIcons.Block(),
+                ),
+            ),
+        )
     }
 }
 
