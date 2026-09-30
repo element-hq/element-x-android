@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.cryptography.api)
