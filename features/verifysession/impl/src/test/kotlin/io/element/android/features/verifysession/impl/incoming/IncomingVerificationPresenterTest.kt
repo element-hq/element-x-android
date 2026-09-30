@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -49,7 +50,19 @@ class IncomingVerificationPresenterTest {
 
     @Test
     fun `present - the current user is built from the stored session`() = runTest {
+        assertCurrentUserIsBuiltFromStoredSession(anIncomingSessionVerificationRequest)
+    }
+
+    @Test
+    fun `present - incoming user verification - the current user is built from the stored session`() = runTest {
+        assertCurrentUserIsBuiltFromStoredSession(anIncomingUserVerificationRequest)
+    }
+
+    private suspend fun TestScope.assertCurrentUserIsBuiltFromStoredSession(
+        verificationRequest: VerificationRequest.Incoming,
+    ) {
         createPresenter(
+            verificationRequest = verificationRequest,
             service = FakeSessionVerificationService(
                 acknowledgeVerificationRequestLambda = { },
                 resetLambda = { },
@@ -344,6 +357,20 @@ private val anIncomingSessionVerificationRequest = VerificationRequest.Incoming.
         senderProfile = MatrixUser(
             userId = A_USER_ID,
             displayName = "a user name",
+            avatarUrl = null,
+        ),
+        flowId = FlowId("flowId"),
+        deviceId = A_DEVICE_ID,
+        deviceDisplayName = "a device name",
+        firstSeenTimestamp = A_TIMESTAMP,
+    )
+)
+
+private val anIncomingUserVerificationRequest = VerificationRequest.Incoming.User(
+    details = SessionVerificationRequestDetails(
+        senderProfile = MatrixUser(
+            userId = A_USER_ID_2,
+            displayName = "another user name",
             avatarUrl = null,
         ),
         flowId = FlowId("flowId"),

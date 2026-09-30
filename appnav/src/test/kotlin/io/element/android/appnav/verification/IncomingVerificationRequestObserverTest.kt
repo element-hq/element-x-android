@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationR
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -80,6 +81,23 @@ class IncomingVerificationRequestObserverTest {
             runCurrent()
             assertThat(sessionVerificationService1.listener).isNull()
             assertThat(sessionVerificationService2.listener).isNotNull()
+        }
+    }
+
+    @Test
+    fun `incoming user verification request of another session is emitted with its session id`() = runTest {
+        val matrixSessionCache = createMatrixSessionCache()
+        val observer = IncomingVerificationRequestObserver(
+            matrixSessionCache = matrixSessionCache,
+            appForegroundStateService = FakeAppForegroundStateService(),
+        )
+        observer.incomingVerificationRequests().test {
+            matrixSessionCache.getOrRestore(A_SESSION_ID)
+            matrixSessionCache.getOrRestore(A_SESSION_ID_2)
+            runCurrent()
+            val request = anIncomingUserVerificationRequest()
+            sessionVerificationService2.listener!!.onIncomingSessionRequest(request)
+            assertThat(awaitItem()).isEqualTo(IncomingVerificationRequestData(A_SESSION_ID_2, request))
         }
     }
 
@@ -156,12 +174,18 @@ class IncomingVerificationRequestObserverTest {
     }
 
     private fun anIncomingVerificationRequest() = VerificationRequest.Incoming.OtherSession(
-        details = SessionVerificationRequestDetails(
-            senderProfile = MatrixUser(A_SESSION_ID),
-            flowId = FlowId("flowId"),
-            deviceId = DeviceId("deviceId"),
-            deviceDisplayName = "a device name",
-            firstSeenTimestamp = 0,
-        )
+        details = aSessionVerificationRequestDetails(senderProfile = MatrixUser(A_SESSION_ID)),
+    )
+
+    private fun anIncomingUserVerificationRequest() = VerificationRequest.Incoming.User(
+        details = aSessionVerificationRequestDetails(senderProfile = MatrixUser(A_USER_ID_3)),
+    )
+
+    private fun aSessionVerificationRequestDetails(senderProfile: MatrixUser) = SessionVerificationRequestDetails(
+        senderProfile = senderProfile,
+        flowId = FlowId("flowId"),
+        deviceId = DeviceId("deviceId"),
+        deviceDisplayName = "a device name",
+        firstSeenTimestamp = 0,
     )
 }

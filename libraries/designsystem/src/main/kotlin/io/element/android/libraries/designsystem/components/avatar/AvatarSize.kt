@@ -73,8 +73,6 @@ enum class AvatarSize(val dp: Dp) {
 
     DmCreationConfirmation(64.dp),
 
-    UserVerification(52.dp),
-
     OrganizationHeader(64.dp),
     SpaceHeader(64.dp),
     RoomPreviewHeader(64.dp),

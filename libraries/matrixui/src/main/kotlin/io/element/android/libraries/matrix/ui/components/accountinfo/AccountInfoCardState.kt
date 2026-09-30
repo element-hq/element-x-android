@@ -22,6 +22,7 @@ sealed interface AccountInfoCardMode {
 
     data class UserVerification(
         val otherUser: MatrixUser,
+        val hint: String,
     ) : AccountInfoCardMode
 
     data class DeviceVerification(
