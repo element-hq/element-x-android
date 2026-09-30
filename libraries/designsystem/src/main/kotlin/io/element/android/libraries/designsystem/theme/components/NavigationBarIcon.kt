@@ -8,12 +8,10 @@
 
 package io.element.android.libraries.designsystem.theme.components
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.offset
+import androidx.compose.material3.BadgedBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.atomic.atoms.CounterAtom
 
@@ -24,16 +22,18 @@ fun NavigationBarIcon(
     count: Int = 0,
     isCritical: Boolean = false,
 ) {
-    Box(modifier) {
+    BadgedBox(
+        modifier = modifier,
+        badge = {
+            CounterAtom(
+                textStyle = ElementTheme.typography.fontBodyXsMedium,
+                count = count,
+                isCritical = isCritical,
+            )
+        }) {
         Icon(
             imageVector = imageVector,
             contentDescription = null,
-        )
-        CounterAtom(
-            modifier = Modifier.offset(11.dp, (-11).dp),
-            textStyle = ElementTheme.typography.fontBodyXsMedium,
-            count = count,
-            isCritical = isCritical,
         )
     }
 }
