@@ -12,6 +12,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Multibinds
 import io.element.android.features.api.MigrationEntryPoint
+import io.element.android.features.callnative.api.NativeCallPip
 import io.element.android.features.enterprise.api.AppStartupHook
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
@@ -51,6 +52,13 @@ interface AppBindings {
     fun featureFlagService(): FeatureFlagService
 
     fun buildMeta(): BuildMeta
+
+    /**
+     * For picture-in-picture. Only an Activity is told it is being left, and only the call knows
+     * whether that is worth shrinking for, so `MainActivity` needs this much of the native call and
+     * no more.
+     */
+    fun nativeCallPip(): NativeCallPip
 
     fun sentrySdkDsn(): SentrySdkDsn?
 
