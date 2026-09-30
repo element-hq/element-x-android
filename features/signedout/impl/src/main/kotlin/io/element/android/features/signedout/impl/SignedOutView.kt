@@ -53,7 +53,7 @@ fun SignedOutView(
             .systemBarsPadding()
             .imePadding(),
         isScrollable = true,
-        header = { SignedOutHeader(state) },
+        header = { SignedOutHeader() },
         content = { SignedOutContent(state.signedOutMatrixUser) },
         footer = {
             SignedOutFooter(
@@ -64,7 +64,7 @@ fun SignedOutView(
 }
 
 @Composable
-private fun SignedOutHeader(state: SignedOutState) {
+private fun SignedOutHeader() {
     IconTitleSubtitleMolecule(
         modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
         title = stringResource(id = R.string.screen_signed_out_title),
