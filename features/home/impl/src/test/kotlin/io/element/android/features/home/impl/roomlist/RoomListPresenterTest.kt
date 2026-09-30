@@ -217,6 +217,10 @@ class RoomListPresenterTest {
         val presenter = createRoomListPresenter(client = client)
         presenter.test {
             val initialState = awaitItem()
+
+            // Skip intermediate event for loading the value of the `UnreadIndicatorCount` feature flag
+            skipItems(1)
+
             val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvent.ShowContextMenu(summary))
 
@@ -260,6 +264,10 @@ class RoomListPresenterTest {
         val presenter = createRoomListPresenter(client = client)
         presenter.test {
             val initialState = awaitItem()
+
+            // Skip intermediate event for loading the value of the `UnreadIndicatorCount` feature flag
+            skipItems(1)
+
             val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvent.ShowContextMenu(summary))
 
@@ -309,6 +317,10 @@ class RoomListPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
+
+            // Skip intermediate event for loading the value of the `UnreadIndicatorCount` feature flag
+            skipItems(1)
+
             eventRecorder.assertEmpty()
             initialState.eventSink(RoomListEvent.ToggleSearchResults)
             eventRecorder.assertSingle(
@@ -398,6 +410,7 @@ class RoomListPresenterTest {
             client = matrixClient,
         )
         presenter.test {
+            skipItems(1) // Skip initial state
             assertThat(awaitItem().contentState).isInstanceOf(RoomListContentState.Empty::class.java)
         }
     }
@@ -616,7 +629,7 @@ class RoomListPresenterTest {
         )
         presenter.test {
             assertThat(announcementService.announcementsToShowFlow().first()).isEmpty()
-            skipItems(1)
+            skipItems(2) // Skip initial state and intermediate event for loading the value of the `UnreadIndicatorCount` feature flag
             val state = awaitItem()
             assertThat(state.contentAsRooms().showNewNotificationSoundBanner).isFalse()
             announcementService.emitAnnouncementsToShow(listOf(Announcement.NewNotificationSound))

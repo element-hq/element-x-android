@@ -121,14 +121,14 @@ enum class FeatureFlags(
         title = "Automatic back pagination of rooms",
         description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
             "\nRequires an app restart to take effect.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     UnreadIndicatorCount(
         key = "feature.unread_indicator_count",
         title = "Unread indicator count",
         description = "Show the number of unread messages on the unread indicator in the room list.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     SendGalleryMessages(
