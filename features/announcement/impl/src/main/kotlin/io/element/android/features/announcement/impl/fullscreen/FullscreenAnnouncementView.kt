@@ -121,7 +121,6 @@ private fun FullscreenAnnouncementHeader(
         subTitle = announcement.subtitle(),
         iconStyle = BigIcon.Style.Default(
             vectorIcon = announcement.icon(),
-            usePrimaryTint = true,
         ),
     )
 }
