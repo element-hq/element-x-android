@@ -42,7 +42,7 @@ coil = "3.6.3"
 # There is some custom logic in `RootFlowNode` that may break because it reuses some Appyx internal APIs.
 # When upgrading this version, check state restoration still works fine.
 appyx = "1.7.1"
-sqldelight = "2.3.2"
+sqldelight = "2.4.0"
 wysiwyg = "2.42.1"
 telephoto = "0.19.0"
 maplibre-compose = "0.17.0"
