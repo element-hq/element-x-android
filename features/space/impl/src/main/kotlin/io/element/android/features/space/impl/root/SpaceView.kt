@@ -357,7 +357,7 @@ private fun EmptySpaceView(
         IconTitleSubtitleMolecule(
             title = stringResource(R.string.screen_space_empty_state_title),
             subTitle = null,
-            iconStyle = BigIcon.Style.Default(vectorIcon = CompoundIcons.Room(), usePrimaryTint = true),
+            iconStyle = BigIcon.Style.Default(vectorIcon = CompoundIcons.Room()),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 40.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),

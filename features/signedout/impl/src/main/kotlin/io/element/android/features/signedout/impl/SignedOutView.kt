@@ -70,8 +70,7 @@ private fun SignedOutHeader() {
         title = stringResource(id = R.string.screen_signed_out_title),
         subTitle = stringResource(id = R.string.screen_signed_out_subtitle_v2),
         iconStyle = BigIcon.Style.Default(
-            CompoundIcons.Devices(),
-            usePrimaryTint = true,
+            vectorIcon = CompoundIcons.Devices(),
         ),
     )
 }
