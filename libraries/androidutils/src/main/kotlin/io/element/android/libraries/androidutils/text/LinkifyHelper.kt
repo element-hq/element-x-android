@@ -12,7 +12,6 @@ import android.text.Spannable
 import android.text.style.URLSpan
 import android.text.util.Linkify
 import androidx.core.text.getSpans
-import androidx.core.text.toSpannable
 import androidx.core.text.util.LinkifyCompat
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import timber.log.Timber
