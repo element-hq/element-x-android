@@ -55,6 +55,7 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.rememberDelegateTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
+import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -84,7 +85,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.parcelize.Parcelize
@@ -238,9 +238,9 @@ class RootFlowNode(
     private fun observeRemovedSessions() {
         sessionStore.sessionsFlow()
             .map { sessions -> sessions.map { SessionId(it.userId) }.toSet() }
-            .runningFold(emptySet<SessionId>() to emptySet<SessionId>()) { (_, previous), current -> previous to current }
+            .withPreviousValue()
             .onEach { (previous, current) ->
-                (previous - current).forEach { sessionId ->
+                (previous.orEmpty() - current).forEach { sessionId ->
                     Timber.d("Session $sessionId removed, remove it from the cache")
                     matrixSessionCache.remove(sessionId)
                 }
