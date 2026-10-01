@@ -267,6 +267,7 @@ private fun ThreadListItemRow(
                     UnreadIndicatorAtom(
                         size = 14.dp,
                         isVisible = hasUnreadNotifications,
+                        count = 0,
                     )
                 }
             }
