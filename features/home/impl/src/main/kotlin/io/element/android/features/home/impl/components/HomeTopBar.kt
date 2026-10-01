@@ -9,9 +9,11 @@
 package io.element.android.features.home.impl.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -43,18 +45,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.CompositingStrategy
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.appconfig.RoomListConfig
 import io.element.android.compound.theme.ElementTheme
@@ -296,11 +290,15 @@ private fun NavigationIcon(
     onAccountSwitch: (SessionId) -> Unit,
     onClick: () -> Unit,
 ) {
+    // Reserve the status emoji slot for all the accounts, else the width of the navigation icon,
+    // and so the position of the title, would change while scrolling the pager.
+    val reserveStatusEmojiSlot = currentUserAndNeighbors.any { it.displayedStatus != null }
     if (currentUserAndNeighbors.size == 1) {
         AccountIcon(
             matrixUser = currentUserAndNeighbors.single(),
             isCurrentAccount = true,
             showAvatarIndicator = showAvatarIndicator,
+            reserveStatusEmojiSlot = reserveStatusEmojiSlot,
             onClick = onClick,
         )
     } else {
@@ -321,6 +319,7 @@ private fun NavigationIcon(
                 matrixUser = currentUserAndNeighbors[page],
                 isCurrentAccount = page == 1,
                 showAvatarIndicator = page == 1 && showAvatarIndicator,
+                reserveStatusEmojiSlot = reserveStatusEmojiSlot,
                 onClick = if (page == 1) {
                     onClick
                 } else {
@@ -336,95 +335,74 @@ private fun AccountIcon(
     matrixUser: MatrixUser,
     isCurrentAccount: Boolean,
     showAvatarIndicator: Boolean,
+    reserveStatusEmojiSlot: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val testTag = if (isCurrentAccount) Modifier.testTag(TestTags.homeScreenSettings) else Modifier
     val interactionSource = remember { MutableInteractionSource() }
-    Box(
+    Row(
         modifier = modifier
             .then(testTag)
-            .minimumInteractiveComponentSize()
             .clickable(
                 interactionSource = interactionSource,
                 onClick = onClick,
-                indication = ripple(bounded = false),
+                // The ripple is rendered on the avatar only, see below.
+                indication = null,
             ),
-        contentAlignment = Alignment.Center,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        val avatarData by remember(matrixUser) {
-            derivedStateOf {
-                matrixUser.getAvatarData(size = AvatarSize.CurrentUserTopBar)
+        Box(
+            modifier = Modifier
+                .minimumInteractiveComponentSize()
+                .indication(
+                    interactionSource = interactionSource,
+                    indication = ripple(bounded = false),
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            val avatarData by remember(matrixUser) {
+                derivedStateOf {
+                    matrixUser.getAvatarData(size = AvatarSize.CurrentUserTopBar)
+                }
+            }
+            Avatar(
+                avatarData = avatarData,
+                avatarType = AvatarType.User,
+                contentDescription = if (isCurrentAccount) {
+                    if (showAvatarIndicator) {
+                        stringResource(CommonStrings.a11y_settings_with_required_action)
+                    } else {
+                        stringResource(CommonStrings.common_settings)
+                    }
+                } else {
+                    null
+                },
+            )
+            if (showAvatarIndicator) {
+                RedIndicatorAtom(
+                    modifier = Modifier.align(Alignment.TopEnd)
+                )
             }
         }
-        val statusEmoji = matrixUser.displayedStatus?.toEmojiText()
-        val avatarModifier = if (statusEmoji != null) {
-            Modifier.eraseStatusEmojiBackground(
-                parentSize = AvatarSize.CurrentUserTopBar.dp,
-                layoutDirection = LocalLayoutDirection.current,
-            )
-        } else {
-            Modifier
-        }
-        Avatar(
-            avatarData = avatarData,
-            avatarType = AvatarType.User,
-            modifier = avatarModifier,
-            contentDescription = if (isCurrentAccount) {
-                if (showAvatarIndicator) {
-                    stringResource(CommonStrings.a11y_settings_with_required_action)
-                } else {
-                    stringResource(CommonStrings.common_settings)
-                }
-            } else {
-                null
-            },
-        )
-        if (statusEmoji != null) {
-            StatusEmojiBadge(
-                emoji = statusEmoji,
-                modifier = Modifier.align(Alignment.BottomEnd),
-            )
-        }
-        if (showAvatarIndicator) {
-            RedIndicatorAtom(
-                modifier = Modifier.align(Alignment.TopEnd)
+        if (reserveStatusEmojiSlot) {
+            StatusEmoji(
+                emoji = matrixUser.displayedStatus?.toEmojiText(),
+                modifier = Modifier.offset(x = statusEmojiStartOffset),
             )
         }
     }
 }
 
-private val statusEmojiBadgeSize = 20.dp
-private val statusEmojiBadgeRadius = statusEmojiBadgeSize / 2
-private val statusEmojiBadgeOffset = 8.dp
+private val statusEmojiSize = 20.dp
 
-private fun Modifier.eraseStatusEmojiBackground(
-    parentSize: Dp,
-    layoutDirection: LayoutDirection,
-): Modifier = this
-    .graphicsLayer {
-        compositingStrategy = CompositingStrategy.Offscreen
-    }
-    .drawWithContent {
-        drawContent()
-        drawCircle(
-            color = Color.Black,
-            center = Offset(
-                x = if (layoutDirection == LayoutDirection.Ltr) {
-                    (parentSize - statusEmojiBadgeRadius + statusEmojiBadgeOffset).toPx()
-                } else {
-                    (statusEmojiBadgeRadius - statusEmojiBadgeOffset).toPx()
-                },
-                y = size.height - statusEmojiBadgeRadius.toPx(),
-            ),
-            radius = statusEmojiBadgeRadius.toPx(),
-            blendMode = BlendMode.Clear,
-        )
-    }
+// The avatar is centered inside a 48dp touch target, so there is already 8dp of free space
+// on its trailing side. Compensate it to end up with a 4dp gap after the avatar itself.
+private val statusEmojiStartOffset = 4.dp - (48.dp - AvatarSize.CurrentUserTopBar.dp) / 2
 
 @Composable
-private fun StatusEmojiBadge(
-    emoji: String,
+private fun StatusEmoji(
+    emoji: String?,
     modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
@@ -433,16 +411,16 @@ private fun StatusEmojiBadge(
         Density(density = density.density, fontScale = 1f)
     }
     Box(
-        modifier = modifier
-            .offset(x = statusEmojiBadgeOffset)
-            .size(statusEmojiBadgeSize),
+        modifier = modifier.size(statusEmojiSize),
         contentAlignment = Alignment.Center,
     ) {
-        CompositionLocalProvider(LocalDensity provides fixedFontScaleDensity) {
-            Text(
-                text = emoji,
-                style = ElementTheme.typography.fontBodyMdRegular,
-            )
+        if (emoji != null) {
+            CompositionLocalProvider(LocalDensity provides fixedFontScaleDensity) {
+                Text(
+                    text = emoji,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                )
+            }
         }
     }
 }
