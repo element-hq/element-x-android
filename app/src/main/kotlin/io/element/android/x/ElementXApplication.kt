@@ -49,6 +49,7 @@ class ElementXApplication : Application(), DependencyInjectionGraphOwner, Config
                 StrictMode.ThreadPolicy.Builder()
                     .detectNetwork()
                     .penaltyLog()
+                    .penaltyDialog()
                     .build()
             )
         }
