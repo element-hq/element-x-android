@@ -8,8 +8,10 @@
 
 package io.element.android.x.initializer
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.system.Os
+import android.util.Log
 import androidx.startup.Initializer
 import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
 import io.element.android.libraries.architecture.bindings
@@ -25,6 +27,15 @@ private const val ELEMENT_X_TARGET = "elementx"
 
 class PlatformInitializer : Initializer<Unit> {
     override fun create(context: Context) {
+        // Init the SDK with the Android Context, so it can be used with rustls and other Android specific features
+        runCatchingExceptions {
+            org.matrix.rustsdk.Android.init(context)
+        }.onFailure {
+            // We can't log this to Timber since the logs aren't initialized yet, so we log it to Logcat instead
+            @SuppressLint("LogNotTimber")
+            Log.e("PlatformInitializer", "Failed to init the SDK with an Android Context. The app probably won't work properly.", it)
+        }
+
         val appBindings = context.bindings<AppBindings>()
         val tracingService = appBindings.tracingService()
         val platformService = appBindings.platformService()
@@ -47,13 +58,6 @@ class PlatformInitializer : Initializer<Unit> {
         platformService.init(tracingConfiguration)
         // Also set env variable for rust back trace
         Os.setenv("RUST_BACKTRACE", "1", true)
-
-        // Init the SDK with the Android Context, so it can be used with rustls and other Android specific features
-        runCatchingExceptions {
-            org.matrix.rustsdk.Android.init(context)
-        }.onFailure {
-            Timber.e(it, "Failed to init the SDK with an Android Context. The app probably won't work properly.")
-        }
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> = mutableListOf()

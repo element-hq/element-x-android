@@ -9,6 +9,7 @@
 package io.element.android.x
 
 import android.app.Application
+import android.os.StrictMode
 import androidx.compose.material3.ComposeMaterial3Flags.isAnchoredDraggableComponentsStrictOffsetCheckEnabled
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.startup.AppInitializer
@@ -38,6 +39,21 @@ class ElementXApplication : Application(), DependencyInjectionGraphOwner, Config
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate() {
         super.onCreate()
+
+        // Workaround to avoid NetworkOnMainThreadException when using the network on the main thread.
+        // This is a temporary solution to rustls doing the certificate verification using blocking network requests.
+        // It should be removed once the underlying issue is fixed.
+        // Also, we only want to enable it on nightly and release builds so we can debug the issue on debug builds.
+        if (!BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectNetwork()
+                    .penaltyLog()
+                    .penaltyDialog()
+                    .build()
+            )
+        }
+
         AppInitializer.getInstance(this).apply {
             initializeComponent(CrashInitializer::class.java)
             initializeComponent(PlatformInitializer::class.java)
