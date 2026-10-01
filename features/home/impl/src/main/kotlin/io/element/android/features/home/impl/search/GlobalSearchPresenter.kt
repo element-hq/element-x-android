@@ -88,14 +88,14 @@ class GlobalSearchPresenter(
         var currentTarget: GlobalSearchTarget by remember { mutableStateOf(GlobalSearchTarget.ROOMS) }
         val currentMessageSearch: MessageSearch = remember { messageSearchService.createMessageSearch(scope = coroutineScope) }
 
-        val searchHistory by produceState<AsyncData<ImmutableList<SearchHistoryResultItem>>>(initialValue = AsyncData.Uninitialized) {
+        val searchHistory by produceState<AsyncData<ImmutableList<SearchHistoryListItem>>>(initialValue = AsyncData.Uninitialized) {
             searchHistoryStore.history.collectLatest { history ->
                 val mappedHistoryItems = history.mapNotNull { result ->
                     when (result) {
-                        is SearchHistoryResult.Query -> SearchHistoryResultItem.Query(term = result.term)
+                        is SearchHistoryResult.Query -> SearchHistoryListItem.Query(term = result.term)
                         is SearchHistoryResult.Room -> {
                             val roomInfo = matrixClient.getRoomInfo(result.roomId).getOrNull() ?: return@mapNotNull null
-                            SearchHistoryResultItem.Room(roomId = result.roomId, roomInfo = roomInfo)
+                            SearchHistoryListItem.Room(roomId = result.roomId, roomInfo = roomInfo)
                         }
                     }
                 }
@@ -237,7 +237,7 @@ class GlobalSearchPresenter(
                 }
                 is GlobalSearchEvent.SearchHistoryResultSelected -> {
                     when (event.resultItem) {
-                        is SearchHistoryResultItem.Query -> coroutineScope.launch {
+                        is SearchHistoryListItem.Query -> coroutineScope.launch {
                             delay(300.milliseconds)
                             queryState.edit {
                                 replace(0, length, event.resultItem.term)
@@ -245,14 +245,14 @@ class GlobalSearchPresenter(
                             searchResults = AsyncData.Loading()
                             currentTarget = GlobalSearchTarget.ROOMS
                         }
-                        is SearchHistoryResultItem.Room -> Unit
+                        is SearchHistoryListItem.Room -> Unit
                     }
                 }
                 is GlobalSearchEvent.RemoveSearchHistoryResult -> coroutineScope.launch {
                     val currentHistory = searchHistoryStore.history.first()
                     val id = when (event.result) {
-                        is SearchHistoryResultItem.Query -> event.result.term
-                        is SearchHistoryResultItem.Room -> event.result.roomId.value
+                        is SearchHistoryListItem.Query -> event.result.term
+                        is SearchHistoryListItem.Room -> event.result.roomId.value
                     }
                     val result = currentHistory.find { it.id == id } ?: return@launch
                     searchHistoryStore.remove(result)
@@ -278,7 +278,7 @@ class GlobalSearchPresenter(
         result: MessageSearchResult,
         roomInfo: RoomInfo,
         formattedTimestamp: String,
-    ): MessageSearchResultItem.Message? {
+    ): MessageSearchListItem.Message? {
         val body = latestEventFormatter.format(
             latestEvent = LatestEventValue.Remote(
                 timestamp = result.timestamp,
@@ -289,7 +289,7 @@ class GlobalSearchPresenter(
             ),
             isDmRoom = false,
         )
-        return MessageSearchResultItem.Message(
+        return MessageSearchListItem.Message(
             messageSearchResult = result,
             body = body?.toString() ?: "",
             formattedTimestamp = formattedTimestamp,
@@ -301,7 +301,7 @@ class GlobalSearchPresenter(
         result: MessageSearchResult,
         roomInfo: RoomInfo,
         formattedTimestamp: String,
-    ): MessageSearchResultItem.Media? {
+    ): MessageSearchListItem.Media? {
         val messageType = when (val content = result.content) {
             is MessageContent if content.type is MessageTypeWithAttachment -> content.type as MessageTypeWithAttachment
             else -> return null
@@ -355,7 +355,7 @@ class GlobalSearchPresenter(
             blurhash = blurhash
         )
 
-        return MessageSearchResultItem.Media(
+        return MessageSearchListItem.Media(
             messageSearchResult = result,
             mediaContent = mediaContent,
             formattedTimestamp = formattedTimestamp,

@@ -168,8 +168,8 @@ private fun GlobalSearchContent(
                             onClearAllResults = { state.eventSink(GlobalSearchEvent.ClearSearchHistory) },
                         ) { result ->
                             when (result) {
-                                is SearchHistoryResultItem.Query -> Unit
-                                is SearchHistoryResultItem.Room -> onSelectSearchResult(result.roomInfo.id, null)
+                                is SearchHistoryListItem.Query -> Unit
+                                is SearchHistoryListItem.Room -> onSelectSearchResult(result.roomInfo.id, null)
                             }
 
                             state.eventSink(GlobalSearchEvent.SearchHistoryResultSelected(result))
@@ -290,10 +290,10 @@ private fun LazyListScope.startSearching() {
 }
 
 private fun LazyListScope.searchHistory(
-    historyResults: ImmutableList<SearchHistoryResultItem>,
-    onRemoveResult: (SearchHistoryResultItem) -> Unit,
+    historyResults: ImmutableList<SearchHistoryListItem>,
+    onRemoveResult: (SearchHistoryListItem) -> Unit,
     onClearAllResults: () -> Unit,
-    onSelectSearchHistoryResult: (SearchHistoryResultItem) -> Unit,
+    onSelectSearchHistoryResult: (SearchHistoryListItem) -> Unit,
 ) {
     item {
         Row(
@@ -335,7 +335,7 @@ private fun LazyListScope.searchHistory(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             when (result) {
-                is SearchHistoryResultItem.Query -> {
+                is SearchHistoryListItem.Query -> {
                     Icon(
                         modifier = Modifier.size(32.dp)
                             .clip(RoundedCornerShape(8.dp))
@@ -354,7 +354,7 @@ private fun LazyListScope.searchHistory(
                         style = ElementTheme.typography.fontBodyLgRegular,
                     )
                 }
-                is SearchHistoryResultItem.Room -> {
+                is SearchHistoryListItem.Room -> {
                     val heroAvatars = remember(result.roomInfo.heroes) {
                         result.roomInfo.heroes.map { it.getAvatarData(AvatarSize.SearchRoomListItem) }.toImmutableList()
                     }
@@ -494,7 +494,7 @@ private fun LazyListScope.roomListResults(
 }
 
 private fun LazyListScope.messageSearchResults(
-    results: ImmutableList<MessageSearchResultItem>,
+    results: ImmutableList<MessageSearchListItem>,
     onSearchResultSelected: (RoomId, EventId?) -> Unit,
 ) {
     if (results.isNotEmpty()) {
@@ -514,7 +514,7 @@ private fun LazyListScope.messageSearchResults(
     ) { index, result ->
         val clickableModifier = Modifier.niceClickable(onClick = { onSearchResultSelected(result.roomId, result.eventId) })
         when (result) {
-            is MessageSearchResultItem.Message -> TextMessageSearchResultItemView(
+            is MessageSearchListItem.Message -> TextMessageSearchResultItemView(
                 modifier = clickableModifier.addSeparatorLine(color = ElementTheme.colors.separatorSecondary, isLastItem = index == results.lastIndex),
                 avatarData = result.roomInfo.getAvatarData(AvatarSize.RoomListItem),
                 avatarType = AvatarType.Room(
@@ -525,7 +525,7 @@ private fun LazyListScope.messageSearchResults(
                 body = result.body,
                 formattedTimestamp = result.formattedTimestamp,
             )
-            is MessageSearchResultItem.Media -> {
+            is MessageSearchListItem.Media -> {
                 MediaMessageSearchResultItemView(
                     modifier = clickableModifier.addSeparatorLine(color = ElementTheme.colors.separatorSecondary, isLastItem = index == results.lastIndex),
                     avatarData = result.roomInfo.getAvatarData(AvatarSize.RoomListItem),
