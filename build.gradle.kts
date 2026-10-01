@@ -237,7 +237,7 @@ subprojects {
 //
 // Pruning per preview, and not per screenshot, is deliberate: a preview that fails to render is absent
 // from the run report in exactly the same way as a preview that was deleted, and LayoutLib does fail to
-// render a preview now and then (see LayoutLibErrorFilterStatement). Matching whole previews means such
+// render a preview now and then. Matching whole previews means such
 // a failure leaves the other screenshots of that preview in place, so it cannot silently delete a
 // screenshot that is still in use. The cost is that dropping one value from a PreviewParameterProvider
 // leaves its last screenshot behind, since the preview itself still renders. Run `removeOldSnapshots`

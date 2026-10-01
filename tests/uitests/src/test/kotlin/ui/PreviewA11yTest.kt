@@ -29,10 +29,7 @@ class PreviewA11yTest(
     @TestParameter(valuesProvider = ComposableA11yPreviewProvider::class)
     val preview: ComposablePreview<AndroidPreviewInfo>,
 ) {
-    @get:Rule(order = 0)
-    val layoutLibErrorFilterStatement = LayoutLibErrorFilterStatement()
-
-    @get:Rule(order = 1)
+    @get:Rule
     val paparazziRule = PaparazziPreviewRule.createFor(
         preview = preview,
         locale = "en",
