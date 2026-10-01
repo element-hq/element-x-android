@@ -12,7 +12,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.impl.roomlist.aRoomListState
 import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.home.impl.spaces.aHomeSpacesState
-import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -162,7 +161,6 @@ internal fun createHomePresenter(
     indicatorService = indicatorService,
     roomListPresenter = { aRoomListState() },
     homeSpacesPresenter = homeSpacesPresenter,
-    logoutPresenter = { aDirectLogoutState() },
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     sessionStore = sessionStore,
 )

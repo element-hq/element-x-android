@@ -16,8 +16,6 @@ import io.element.android.features.home.impl.roomlist.aRoomsContentState
 import io.element.android.features.home.impl.roomlist.generateRoomListRoomSummaryList
 import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.home.impl.spaces.aHomeSpacesState
-import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -63,7 +61,6 @@ internal fun aHomeState(
     roomListState: RoomListState = aRoomListState(),
     homeSpacesState: HomeSpacesState = aHomeSpacesState(),
     canReportBug: Boolean = true,
-    directLogoutState: DirectLogoutState = aDirectLogoutState(),
     eventSink: (HomeEvent) -> Unit = {}
 ) = HomeState(
     currentUserAndNeighbors = currentUserAndNeighbors.toImmutableList(),
@@ -71,7 +68,6 @@ internal fun aHomeState(
     hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = snackbarMessage,
     canReportBug = canReportBug,
-    directLogoutState = directLogoutState,
     currentHomeNavigationBarItem = currentHomeNavigationBarItem,
     roomListState = roomListState,
     homeSpacesState = homeSpacesState,

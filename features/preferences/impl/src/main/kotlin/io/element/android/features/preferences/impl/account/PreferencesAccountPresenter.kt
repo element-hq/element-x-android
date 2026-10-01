@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.enterprise.api.SessionEnterpriseService
-import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -34,7 +33,6 @@ class PreferencesAccountPresenter(
     private val sessionVerificationService: SessionVerificationService,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val indicatorService: IndicatorService,
-    private val directLogoutPresenter: Presenter<DirectLogoutState>,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val featureFlagService: FeatureFlagService,
     private val sessionEnterpriseService: SessionEnterpriseService,
@@ -65,8 +63,6 @@ class PreferencesAccountPresenter(
             canDeactivateAccount = matrixClient.canDeactivateAccount()
         }
 
-        val directLogoutState = directLogoutPresenter.present()
-
         val accountManagementUrl by produceState<String?>(initialValue = null) {
             value = matrixClient.getAccountManagementUrl(null)
                 .getOrNull()
@@ -83,7 +79,6 @@ class PreferencesAccountPresenter(
             canReportBug = canReportBug,
             showLinkNewDevice = showLinkNewDevice,
             canDeactivateAccount = canDeactivateAccount,
-            directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
         )
     }

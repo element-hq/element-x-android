@@ -22,8 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -150,7 +148,6 @@ fun HomeView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScaffold(
     state: HomeState,
@@ -187,7 +184,7 @@ private fun HomeScaffold(
     val spacesLazyListState = rememberLazyListState()
 
     Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = modifier,
         topBar = {
             HomeTopBar(
                 selectedNavigationItem = state.currentHomeNavigationBarItem,
@@ -268,42 +265,50 @@ private fun HomeScaffold(
             val contentPadding = PaddingValues(
                 bottom = 96.dp,
             )
-            when (state.currentHomeNavigationBarItem) {
-                HomeNavigationBarItem.Chats -> {
-                    RoomListContentView(
-                        contentState = roomListState.contentState,
-                        filtersState = roomListState.filtersState,
-                        spaceFiltersState = roomListState.spaceFiltersState,
-                        lazyListState = roomsLazyListState,
-                        hideInvitesAvatars = roomListState.hideInvitesAvatars,
-                        eventSink = roomListState.eventSink,
-                        onSetUpRecoveryClick = onSetUpRecoveryClick,
-                        onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-                        onRoomClick = ::onRoomClick,
-                        onCreateRoomClick = onStartChatClick,
-                        contentPadding = lazyColumnContentPadding + contentPadding,
-                        modifier = Modifier
-                            .padding(outerPadding)
-                            .consumeWindowInsets(outerPadding)
-                    )
-                    SpaceFiltersView(roomListState.spaceFiltersState)
-                }
-                HomeNavigationBarItem.Spaces -> {
-                    HomeSpacesView(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(outerPadding)
-                            .consumeWindowInsets(outerPadding),
-                        contentPadding = lazyColumnContentPadding + contentPadding,
-                        state = state.homeSpacesState,
-                        lazyListState = spacesLazyListState,
-                        onSpaceClick = { spaceId ->
-                            onRoomClick(spaceId)
-                        },
-                        onCreateSpaceClick = onCreateSpaceClick,
-                        // TODO use actual callbacks for this
-                        onExploreClick = {},
-                    )
+            // The nested scroll connection is set on the content and not on the Scaffold, else the top bar would
+            // consume the scroll events of its own content.
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+            ) {
+                when (state.currentHomeNavigationBarItem) {
+                    HomeNavigationBarItem.Chats -> {
+                        RoomListContentView(
+                            contentState = roomListState.contentState,
+                            filtersState = roomListState.filtersState,
+                            spaceFiltersState = roomListState.spaceFiltersState,
+                            lazyListState = roomsLazyListState,
+                            hideInvitesAvatars = roomListState.hideInvitesAvatars,
+                            eventSink = roomListState.eventSink,
+                            onSetUpRecoveryClick = onSetUpRecoveryClick,
+                            onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+                            onRoomClick = ::onRoomClick,
+                            onCreateRoomClick = onStartChatClick,
+                            contentPadding = lazyColumnContentPadding + contentPadding,
+                            modifier = Modifier
+                                .padding(outerPadding)
+                                .consumeWindowInsets(outerPadding)
+                        )
+                        SpaceFiltersView(roomListState.spaceFiltersState)
+                    }
+                    HomeNavigationBarItem.Spaces -> {
+                        HomeSpacesView(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(outerPadding)
+                                .consumeWindowInsets(outerPadding),
+                            contentPadding = lazyColumnContentPadding + contentPadding,
+                            state = state.homeSpacesState,
+                            lazyListState = spacesLazyListState,
+                            onSpaceClick = { spaceId ->
+                                onRoomClick(spaceId)
+                            },
+                            onCreateSpaceClick = onCreateSpaceClick,
+                            // TODO use actual callbacks for this
+                            onExploreClick = {},
+                        )
+                    }
                 }
             }
         },
@@ -325,7 +330,6 @@ private fun HomeFloatingActionButton(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun HomeBottomBar(
     currentHomeNavigationBarItem: HomeNavigationBarItem,

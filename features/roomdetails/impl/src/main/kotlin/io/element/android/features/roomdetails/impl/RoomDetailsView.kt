@@ -14,6 +14,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -24,7 +25,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -124,6 +124,7 @@ fun RoomDetailsView(
     onProfileClick: (UserId) -> Unit,
     onReportRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
+    additionalSections: @Composable ColumnScope.() -> Unit = {},
     leaveRoomView: @Composable () -> Unit,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -198,6 +199,8 @@ fun RoomDetailsView(
                     onActionClick = onActionClick,
                 )
             }
+
+            additionalSections()
 
             PreferenceCategory {
                 if (state.hasNewContent) {
@@ -356,7 +359,6 @@ private fun KnockRequestsItem(knockRequestsCount: Int?, onKnockRequestsClick: ()
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomDetailsTopBar(
     goBack: () -> Unit,

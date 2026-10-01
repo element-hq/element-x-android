@@ -6,8 +6,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.libraries.matrix.ui.components
 
 import androidx.activity.compose.BackHandler
