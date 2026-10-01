@@ -9,6 +9,7 @@ package io.element.android.appnav.verification
 
 import dev.zacsweers.metro.Inject
 import io.element.android.appnav.session.MatrixSessionCache
+import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
@@ -41,8 +42,13 @@ class IncomingVerificationRequestObserver(
      */
     fun incomingVerificationRequests(): Flow<IncomingVerificationRequestData> = channelFlow {
         launch {
-            matrixSessionCache.matrixClients.collect { matrixClients ->
-                matrixClients.forEach { matrixClient ->
+            matrixSessionCache.matrixClients.withPreviousValue().collect { (previousMatrixClients, matrixClients) ->
+                val previousMatrixClientSet = previousMatrixClients.orEmpty().toSet()
+                // Remove the listener of the clients which are not in the cache anymore
+                (previousMatrixClientSet - matrixClients.toSet()).forEach { matrixClient ->
+                    matrixClient.sessionVerificationService.setListener(null)
+                }
+                (matrixClients - previousMatrixClientSet).forEach { matrixClient ->
                     val sessionId = matrixClient.sessionId
                     matrixClient.sessionVerificationService.setListener(
                         object : SessionVerificationServiceListener {

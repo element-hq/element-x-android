@@ -84,6 +84,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.runningFold
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.parcelize.Parcelize
@@ -138,6 +139,7 @@ class RootFlowNode(
             }
         }
         observeIncomingVerificationRequests()
+        observeRemovedSessions()
         super.onBuilt()
     }
 
@@ -228,6 +230,22 @@ class RootFlowNode(
                     Timber.e(it, "Failed to restore session ${sessionData.userId}")
                 }
             }
+    }
+
+    /**
+     * Remove from the cache the sessions which have been removed from the session store, for instance after a logout.
+     */
+    private fun observeRemovedSessions() {
+        sessionStore.sessionsFlow()
+            .map { sessions -> sessions.map { SessionId(it.userId) }.toSet() }
+            .runningFold(emptySet<SessionId>() to emptySet<SessionId>()) { (_, previous), current -> previous to current }
+            .onEach { (previous, current) ->
+                (previous - current).forEach { sessionId ->
+                    Timber.d("Session $sessionId removed, remove it from the cache")
+                    matrixSessionCache.remove(sessionId)
+                }
+            }
+            .launchIn(lifecycleScope)
     }
 
     private fun observeIncomingVerificationRequests() {

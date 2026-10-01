@@ -64,6 +64,26 @@ class IncomingVerificationRequestObserverTest {
     }
 
     @Test
+    fun `listener is removed when the session is removed from the cache`() = runTest {
+        val matrixSessionCache = createMatrixSessionCache()
+        val observer = IncomingVerificationRequestObserver(
+            matrixSessionCache = matrixSessionCache,
+            appForegroundStateService = FakeAppForegroundStateService(),
+        )
+        observer.incomingVerificationRequests().test {
+            matrixSessionCache.getOrRestore(A_SESSION_ID)
+            matrixSessionCache.getOrRestore(A_SESSION_ID_2)
+            runCurrent()
+            assertThat(sessionVerificationService1.listener).isNotNull()
+            assertThat(sessionVerificationService2.listener).isNotNull()
+            matrixSessionCache.remove(A_SESSION_ID)
+            runCurrent()
+            assertThat(sessionVerificationService1.listener).isNull()
+            assertThat(sessionVerificationService2.listener).isNotNull()
+        }
+    }
+
+    @Test
     fun `incoming verification request is emitted when the app goes to foreground`() = runTest {
         val matrixSessionCache = createMatrixSessionCache()
         val appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = false)
