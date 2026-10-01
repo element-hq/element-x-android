@@ -9,6 +9,7 @@
 package io.element.android.features.home.impl.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -341,16 +342,21 @@ private fun AccountIcon(
     val testTag = if (isCurrentAccount) Modifier.testTag(TestTags.homeScreenSettings) else Modifier
     val interactionSource = remember { MutableInteractionSource() }
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .then(testTag)
+            .clickable(
+                interactionSource = interactionSource,
+                onClick = onClick,
+                // The ripple is rendered on the avatar only, see below.
+                indication = null,
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
             modifier = Modifier
-                .then(testTag)
                 .minimumInteractiveComponentSize()
-                .clickable(
+                .indication(
                     interactionSource = interactionSource,
-                    onClick = onClick,
                     indication = ripple(bounded = false),
                 ),
             contentAlignment = Alignment.Center,
