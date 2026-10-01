@@ -53,7 +53,7 @@ class ContributesNodeProcessor(
         val annotatedSymbols = resolver.getSymbolsWithAnnotation(ContributesNode::class.qualifiedName!!)
             .filterIsInstance<KSClassDeclaration>()
 
-        val (validSymbols, invalidSymbols) = annotatedSymbols.partition { it.validate() }
+        val (validSymbols, invalidSymbols) = annotatedSymbols.partition { it.validate(enableNewFeatures = false) }
 
         if (validSymbols.isEmpty()) return invalidSymbols
 
