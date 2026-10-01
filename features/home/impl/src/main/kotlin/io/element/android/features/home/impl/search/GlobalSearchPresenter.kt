@@ -250,14 +250,11 @@ class GlobalSearchPresenter(
                 }
                 is GlobalSearchEvent.RemoveSearchHistoryResult -> coroutineScope.launch {
                     val currentHistory = searchHistoryStore.history.first()
-                    val actualId = event.id.substringAfter(":")
-                    val result = currentHistory.find {
-                        when (it) {
-                            is SearchHistoryResult.Query if actualId == it.term -> true
-                            is SearchHistoryResult.Room if actualId == it.roomId.value -> true
-                            else -> false
-                        }
-                    } ?: return@launch
+                    val id = when (event.result) {
+                        is SearchHistoryResultItem.Query -> event.result.term
+                        is SearchHistoryResultItem.Room -> event.result.roomId.value
+                    }
+                    val result = currentHistory.find { it.id == id } ?: return@launch
                     searchHistoryStore.remove(result)
                 }
                 GlobalSearchEvent.ClearSearchHistory -> coroutineScope.launch {

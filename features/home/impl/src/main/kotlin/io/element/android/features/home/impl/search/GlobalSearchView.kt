@@ -164,7 +164,7 @@ private fun GlobalSearchContent(
                     state.results.isUninitialized() -> if (state.queryState.text.isBlank() && historyResults.isNotEmpty()) {
                         searchHistory(
                             historyResults = historyResults,
-                            onRemoveResult = { id -> state.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(id)) },
+                            onRemoveResult = { item -> state.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(item)) },
                             onClearAllResults = { state.eventSink(GlobalSearchEvent.ClearSearchHistory) },
                         ) { result ->
                             when (result) {
@@ -291,7 +291,7 @@ private fun LazyListScope.startSearching() {
 
 private fun LazyListScope.searchHistory(
     historyResults: ImmutableList<SearchHistoryResultItem>,
-    onRemoveResult: (id: String) -> Unit,
+    onRemoveResult: (SearchHistoryResultItem) -> Unit,
     onClearAllResults: () -> Unit,
     onSelectSearchHistoryResult: (SearchHistoryResultItem) -> Unit,
 ) {
@@ -402,7 +402,7 @@ private fun LazyListScope.searchHistory(
             Icon(
                 modifier = Modifier.minimumInteractiveComponentSize()
                     .niceClickable {
-                        onRemoveResult(result.id)
+                        onRemoveResult(result)
                     },
                 imageVector = CompoundIcons.Close(),
                 contentDescription = stringResource(CommonStrings.action_remove),
