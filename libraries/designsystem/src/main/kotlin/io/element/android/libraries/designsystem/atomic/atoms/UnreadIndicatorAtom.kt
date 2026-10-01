@@ -9,15 +9,16 @@
 package io.element.android.libraries.designsystem.atomic.atoms
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -37,35 +38,36 @@ fun UnreadIndicatorAtom(
     isVisible: Boolean = true,
     contentDescription: String? = null,
     border: BorderStroke? = null,
+    contentPadding: PaddingValues = PaddingValues.Zero,
 ) {
     when {
         !isVisible -> Spacer(modifier = modifier.size(size))
-        count != null && count >= 1 -> CounterAtom(
-            count = count.toInt(),
-            modifier = modifier
-                .semantics {
-                    contentDescription?.let { this.contentDescription = it }
-                }
-                .then(if (border != null) Modifier.border(border, CircleShape) else Modifier),
-            containerColor = color,
-            contentColor = ElementTheme.colors.bgCanvasDefault,
-            textStyle = ElementTheme.typography.fontBodySmMedium,
-        )
-        else -> Box(
-            modifier = modifier
-                .semantics {
-                    contentDescription?.let { this.contentDescription = it }
-                }
-                .size(size)
-                .clip(CircleShape)
-                .background(color)
-                .then(if (border != null) Modifier.border(border, CircleShape) else Modifier),
-        )
+        else -> count?.let {
+            CounterAtom(
+                count = count.toInt(),
+                modifier = modifier
+                    .semantics {
+                        contentDescription?.let { this.contentDescription = it }
+                    }
+                    .then(if (border != null) Modifier.border(border, RoundedCornerShape(percent = 50)) else Modifier),
+                containerColor = color,
+                contentColor = ElementTheme.colors.bgCanvasDefault,
+                textStyle = ElementTheme.typography.fontBodySmMedium,
+                contentPadding = contentPadding,
+            )
+        }
     }
 }
 
 @PreviewsDayNight
 @Composable
 internal fun UnreadIndicatorAtomPreview() = ElementPreview {
-    UnreadIndicatorAtom()
+    Row(horizontalArrangement = Arrangement.spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
+        UnreadIndicatorAtom(count = null)
+        UnreadIndicatorAtom(count = 0)
+        UnreadIndicatorAtom(count = 1)
+        UnreadIndicatorAtom(count = 10)
+        UnreadIndicatorAtom(count = 99)
+        UnreadIndicatorAtom(count = 999)
+    }
 }

@@ -91,7 +91,6 @@
   <string name="screen_notification_settings_mode_mentions">"提及"</string>
   <string name="screen_notification_settings_notification_section_title">"通知我以下类型"</string>
   <string name="screen_notification_settings_room_mention_label">"含有 @room 的提及"</string>
-  <string name="screen_notification_settings_show_all_activity">"在房间列表上显示所有活动（用于未读消息的圆点或数字）"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"自定义"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"自定义提示音…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"删除文件时出错"</string>

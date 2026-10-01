@@ -199,6 +199,16 @@ private fun NotificationSettingsContentView(
                 onCheckedChange = onMentionNotificationsChange
             )
         }
+
+        PreferenceCategory {
+            PreferenceSwitch(
+                title = stringResource(R.string.screen_notification_settings_show_all_activity_title),
+                subtitle = stringResource(R.string.screen_notification_settings_show_all_activity_subtitle),
+                isChecked = state.showAllActivityInRoomList,
+                onCheckedChange = { state.eventSink(NotificationSettingsEvent.ToggleShowAllActivityInRoomList) }
+            )
+        }
+
         SoundsPreferenceCategory(state = state)
         PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_additional_settings_section_title)) {
             // TODO We are removing the call notification toggle until support for call notifications has been added

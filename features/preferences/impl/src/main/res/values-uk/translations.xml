@@ -93,7 +93,6 @@
   <string name="screen_notification_settings_mode_mentions">"Згадки"</string>
   <string name="screen_notification_settings_notification_section_title">"Сповіщати мене про"</string>
   <string name="screen_notification_settings_room_mention_label">"Згадки @room"</string>
-  <string name="screen_notification_settings_show_all_activity">"Показати всю діяльність у списку кімнат (крапки або кількість непрочитаних повідомлень)"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Власний"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Користувацький звук…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Помилка видалення файлу"</string>

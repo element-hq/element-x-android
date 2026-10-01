@@ -280,6 +280,7 @@ private fun RoomsViewList(
                 isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
                     state.seenRoomInvites.contains(room.roomId),
                 showUnreadCount = state.showUnreadCount,
+                showAllActivity = state.showAllActivity,
                 onClick = onRoomClick,
                 eventSink = eventSink,
             )

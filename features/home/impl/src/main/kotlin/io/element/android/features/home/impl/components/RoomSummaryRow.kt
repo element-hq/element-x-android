@@ -80,6 +80,7 @@ internal fun RoomSummaryRow(
     onClick: (RoomListRoomSummary) -> Unit,
     modifier: Modifier = Modifier,
     showUnreadCount: Boolean = false,
+    showAllActivity: Boolean = false,
     eventSink: (RoomListEvent) -> Unit,
 ) {
     Box(modifier = modifier) {
@@ -131,7 +132,7 @@ internal fun RoomSummaryRow(
                         isHighlighted = room.isHighlighted,
                         dmUserStatus = room.dmUserStatus,
                     )
-                    MessagePreviewAndIndicatorRow(room = room, showUnreadCount = showUnreadCount)
+                    MessagePreviewAndIndicatorRow(room = room, showUnreadCount = showUnreadCount, showAllActivity = showAllActivity)
                 }
             }
             RoomSummaryDisplayType.KNOCKED -> {
@@ -278,6 +279,7 @@ private fun InviteSubtitle(
 private fun MessagePreviewAndIndicatorRow(
     room: RoomListRoomSummary,
     showUnreadCount: Boolean,
+    showAllActivity: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -348,7 +350,7 @@ private fun MessagePreviewAndIndicatorRow(
                 .height(16.dp)
                 // Used to force this line to be read aloud earlier than the latest event when using Talkback
                 .zIndex(-1f),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             val tint = if (room.isHighlighted) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
@@ -358,29 +360,45 @@ private fun MessagePreviewAndIndicatorRow(
                     isAudio = room.activeCallIntent == CallIntent.AUDIO
                 )
             }
-            if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
+            val isMuted = room.userDefinedNotificationMode == RoomNotificationMode.MUTE
+            if (isMuted) {
                 NotificationOffIndicatorAtom()
             } else if (room.numberOfUnreadMentions > 0) {
                 MentionIndicatorAtom()
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
-                val count = if (showUnreadCount) {
-                    if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
-                        room.numberOfUnreadMessages
-                    } else {
-                        room.numberOfUnreadNotifications
-                    }
-                } else {
-                    null
-                }
                 UnreadIndicatorAtom(
                     color = tint,
-                    count = count,
+                    count = room.unreadIndicatorCount(showUnreadCount = showUnreadCount, showAllActivity = showAllActivity),
                     contentDescription = contentDescription,
                 )
             }
         }
+    }
+}
+
+/**
+ * Computes the value to pass to [UnreadIndicatorAtom] as `count`.
+ * - `null`: nothing is displayed.
+ * - `0`: dot indicator without a count.
+ * - `> 0`: the number to display.
+ */
+internal fun RoomListRoomSummary.unreadIndicatorCount(
+    showUnreadCount: Boolean,
+    showAllActivity: Boolean,
+): Long? {
+    val isMuted = userDefinedNotificationMode == RoomNotificationMode.MUTE
+    return when {
+        // Show only unread notifications when the room is not muted and there are unread notifications
+        !isMuted && numberOfUnreadNotifications > 0 -> numberOfUnreadNotifications
+        // Otherwise, show unread messages when showAllActivity is true
+        showAllActivity -> numberOfUnreadMessages.takeIf { it > 0 }
+        // Or don't display anything
+        else -> null
+    }?.let {
+        // We only want to show the count if the option is enabled, otherwise we just show the dot indicator (value 0)
+        if (showUnreadCount) it else 0
     }
 }
 
@@ -408,7 +426,8 @@ private fun InviteNameAndIndicatorRow(
         )
         if (!isInviteSeen) {
             UnreadIndicatorAtom(
-                color = ElementTheme.colors.unreadIndicator
+                color = ElementTheme.colors.unreadIndicator,
+                count = 0,
             )
         }
     }
@@ -457,5 +476,7 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryPreviewP
         isInviteSeen = data.name == "Bob",
         onClick = {},
         eventSink = {},
+        showUnreadCount = data.numberOfUnreadNotifications > 0,
+        showAllActivity = true,
     )
 }
