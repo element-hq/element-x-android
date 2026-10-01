@@ -162,7 +162,7 @@ class GlobalSearchViewTest : RobolectricTest() {
                 results = AsyncData.Success(
                     GlobalSearchResults.MessageSearchResults(
                         persistentListOf(
-                            MessageSearchResultItem.Message(
+                            MessageSearchListItem.Message(
                                 messageSearchResult = aMessageSearchResult(roomId = roomId, eventId = eventId),
                                 body = "A message body",
                                 roomInfo = aRoomInfo(id = roomId, name = "A message room"),
@@ -184,7 +184,7 @@ class GlobalSearchViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on a history query result - emits the expected Event`() = runAndroidComposeUiTest {
-        val queryResult = SearchHistoryResultItem.Query("Recent term")
+        val queryResult = SearchHistoryListItem.Query("Recent term")
         val eventsRecorder = EventsRecorder<GlobalSearchEvent>()
         setGlobalSearchView(
             state = aGlobalSearchState(
@@ -205,7 +205,7 @@ class GlobalSearchViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on the remove button of a history result - emits the expected Event`() = runAndroidComposeUiTest {
-        val queryResult = SearchHistoryResultItem.Query("Recent term")
+        val queryResult = SearchHistoryListItem.Query("Recent term")
         val eventsRecorder = EventsRecorder<GlobalSearchEvent>()
         setGlobalSearchView(
             state = aGlobalSearchState(
@@ -219,7 +219,7 @@ class GlobalSearchViewTest : RobolectricTest() {
         // Remove automatic initial events
         eventsRecorder.clear()
         onNodeWithContentDescription(activity!!.getString(CommonStrings.action_remove)).performClick()
-        eventsRecorder.assertSingle(GlobalSearchEvent.RemoveSearchHistoryResult(queryResult.id))
+        eventsRecorder.assertSingle(GlobalSearchEvent.RemoveSearchHistoryResult(queryResult))
     }
 
     @Test
@@ -230,7 +230,7 @@ class GlobalSearchViewTest : RobolectricTest() {
                 isSearchActive = true,
                 queryState = TextFieldState(),
                 results = AsyncData.Uninitialized,
-                history = AsyncData.Success(persistentListOf(SearchHistoryResultItem.Query("Recent term"))),
+                history = AsyncData.Success(persistentListOf(SearchHistoryListItem.Query("Recent term"))),
                 eventSink = eventsRecorder,
             ),
         )
@@ -243,7 +243,7 @@ class GlobalSearchViewTest : RobolectricTest() {
     @Test
     fun `clicking on a history room result - invokes the callback and emits the expected Events`() = runAndroidComposeUiTest {
         val roomId = RoomId("!aHistoryRoom:server.org")
-        val roomResult = SearchHistoryResultItem.Room(
+        val roomResult = SearchHistoryListItem.Room(
             roomId = roomId,
             roomInfo = aRoomInfo(id = roomId, name = "A history room"),
         )
