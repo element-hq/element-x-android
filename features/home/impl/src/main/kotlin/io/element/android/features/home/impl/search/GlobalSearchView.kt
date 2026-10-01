@@ -308,7 +308,7 @@ private fun LazyListScope.searchHistory(
             )
 
             TextButton(
-                text = "Clear all",
+                text = stringResource(CommonStrings.action_clear_all),
                 size = ButtonSize.Small,
                 colors = ButtonDefaults.textButtonColors(contentColor = ElementTheme.colors.textActionAccent),
                 onClick = onClearAllResults,

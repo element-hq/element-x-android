@@ -98,6 +98,7 @@
   <string name="action_choose_file">"Choose file"</string>
   <string name="action_choose_photo">"Choose photo"</string>
   <string name="action_clear">"Clear"</string>
+  <string name="action_clear_all">"Clear all"</string>
   <string name="action_close">"Close"</string>
   <string name="action_complete_verification">"Complete verification"</string>
   <string name="action_confirm">"Confirm"</string>
