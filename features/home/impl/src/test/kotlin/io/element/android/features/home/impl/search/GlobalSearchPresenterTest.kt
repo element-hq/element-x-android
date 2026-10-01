@@ -224,7 +224,7 @@ class GlobalSearchPresenterTest {
             val successState = consumeItemsUntilPredicate { it.results is AsyncData.Success }.last()
             val results = (successState.results.dataOrNull() as GlobalSearchResults.MessageSearchResults).results
             assertThat(results).hasSize(1)
-            assertThat(results.first()).isInstanceOf(MessageSearchResultItem.Message::class.java)
+            assertThat(results.first()).isInstanceOf(MessageSearchListItem.Message::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -251,7 +251,7 @@ class GlobalSearchPresenterTest {
             val successState = consumeItemsUntilPredicate { it.results is AsyncData.Success }.last()
             val results = (successState.results.dataOrNull() as GlobalSearchResults.MessageSearchResults).results
             assertThat(results).hasSize(1)
-            assertThat(results.first()).isInstanceOf(MessageSearchResultItem.Message::class.java)
+            assertThat(results.first()).isInstanceOf(MessageSearchListItem.Message::class.java)
 
             // Remove the query
             successState.queryState.edit { replace(0, length, "") }
@@ -338,6 +338,71 @@ class GlobalSearchPresenterTest {
     }
 
     @Test
+    fun `present - RemoveSearchHistoryResult removes a query entry`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply {
+            add(SearchHistoryResult.Query("keep"))
+            add(SearchHistoryResult.Query("drop"))
+        }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(SearchHistoryListItem.Query("drop")))
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).containsExactly(SearchHistoryResult.Query("keep"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - RemoveSearchHistoryResult removes a room entry`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply {
+            add(SearchHistoryResult.Query("keep"))
+            add(SearchHistoryResult.Room(A_ROOM_ID))
+        }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(SearchHistoryListItem.Room(A_ROOM_ID, aRoomInfo())))
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).containsExactly(SearchHistoryResult.Query("keep"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - RemoveSearchHistoryResult with an unknown id does nothing`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply { add(SearchHistoryResult.Query("keep")) }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(SearchHistoryListItem.Query("query:unknown")))
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).containsExactly(SearchHistoryResult.Query("keep"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - ClearSearchHistory removes every entry`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply {
+            add(SearchHistoryResult.Query("a"))
+            add(SearchHistoryResult.Room(A_ROOM_ID))
+        }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.ClearSearchHistory)
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - SearchHistoryResultSelected does nothing for a room result`() = runTest {
         val searchHistoryStore = FakeSearchHistoryStore()
         val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
@@ -345,7 +410,7 @@ class GlobalSearchPresenterTest {
             val initialState = awaitItem()
             skipItems(1)
 
-            initialState.eventSink(GlobalSearchEvent.SearchHistoryResultSelected(SearchHistoryResultItem.Room(A_ROOM_ID, aRoomInfo())))
+            initialState.eventSink(GlobalSearchEvent.SearchHistoryResultSelected(SearchHistoryListItem.Room(A_ROOM_ID, aRoomInfo())))
             testScheduler.advanceUntilIdle()
 
             ensureAllEventsConsumed()
@@ -361,7 +426,7 @@ class GlobalSearchPresenterTest {
             // Skip loading search results state
             skipItems(1)
 
-            initialState.eventSink(GlobalSearchEvent.SearchHistoryResultSelected(SearchHistoryResultItem.Query("Test")))
+            initialState.eventSink(GlobalSearchEvent.SearchHistoryResultSelected(SearchHistoryListItem.Query("Test")))
 
             assertThat(awaitItem().queryState.text.toString()).isEqualTo("Test")
             assertThat(awaitItem().results.isLoading()).isTrue()
