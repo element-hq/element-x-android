@@ -43,12 +43,15 @@ class ElementXApplication : Application(), DependencyInjectionGraphOwner, Config
         // Workaround to avoid NetworkOnMainThreadException when using the network on the main thread.
         // This is a temporary solution to rustls doing the certificate verification using blocking network requests.
         // It should be removed once the underlying issue is fixed.
-        StrictMode.setThreadPolicy(
-            StrictMode.ThreadPolicy.Builder()
-                .detectNetwork()
-                .penaltyLog()
-                .build()
-        )
+        // Also, we only want to enable it on nightly and release builds so we can debug the issue on debug builds.
+        if (!BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectNetwork()
+                    .penaltyLog()
+                    .build()
+            )
+        }
 
         AppInitializer.getInstance(this).apply {
             initializeComponent(CrashInitializer::class.java)
