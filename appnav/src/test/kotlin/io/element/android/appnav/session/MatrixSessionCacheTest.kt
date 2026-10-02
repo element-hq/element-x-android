@@ -70,9 +70,11 @@ class MatrixSessionCacheTest {
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isEqualTo(fakeMatrixClient)
+        assertThat(matrixSessionCache.matrixClients.value).containsExactly(fakeMatrixClient)
         // Remove
         matrixSessionCache.remove(A_SESSION_ID)
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isNull()
+        assertThat(matrixSessionCache.matrixClients.value).isEmpty()
     }
 
     @Test
@@ -83,9 +85,11 @@ class MatrixSessionCacheTest {
         fakeAuthenticationService.givenMatrixClient(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isEqualTo(fakeMatrixClient)
+        assertThat(matrixSessionCache.matrixClients.value).containsExactly(fakeMatrixClient)
         // Remove all
         matrixSessionCache.removeAll()
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isNull()
+        assertThat(matrixSessionCache.matrixClients.value).isEmpty()
     }
 
     @Test

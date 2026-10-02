@@ -413,6 +413,7 @@ Reason: %1$s."</string>
   <string name="common_shared_live_location">"Shared live location"</string>
   <string name="common_shared_location">"Shared location"</string>
   <string name="common_shared_space">"Shared space"</string>
+  <string name="common_signed_in">"Signed in"</string>
   <string name="common_signing_out">"Removing device"</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>

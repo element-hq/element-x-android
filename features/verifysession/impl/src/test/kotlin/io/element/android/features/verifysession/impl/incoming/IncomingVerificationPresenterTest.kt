@@ -18,10 +18,16 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationR
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
+import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -42,6 +48,39 @@ class IncomingVerificationPresenterTest {
     val warmUpRule = WarmUpRule()
 
     @Test
+    fun `present - the current user is built from the stored session`() = runTest {
+        createPresenter(
+            service = FakeSessionVerificationService(
+                acknowledgeVerificationRequestLambda = { },
+                resetLambda = { },
+            ),
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(
+                        sessionId = A_SESSION_ID.value,
+                        userDisplayName = A_USER_NAME,
+                        userAvatarUrl = AN_AVATAR_URL,
+                        userAvatarData = "avatarData",
+                    )
+                ),
+            ),
+        ).test {
+            val step = awaitItem().step as IncomingVerificationState.Step.Initial
+            assertThat(step.currentUser).isEqualTo(MatrixUser(A_SESSION_ID))
+            val stepWithUser = awaitItem().step as IncomingVerificationState.Step.Initial
+            assertThat(stepWithUser.currentUser).isEqualTo(
+                MatrixUser(
+                    userId = A_SESSION_ID,
+                    displayName = A_USER_NAME,
+                    avatarUrl = AN_AVATAR_URL,
+                    avatarThumbnail = "avatarData",
+                )
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - nominal case - incoming verification successful`() = runTest {
         val acknowledgeVerificationRequestLambda = lambdaRecorder<VerificationRequest.Incoming, Unit> { _ -> }
         val acceptVerificationRequestLambda = lambdaRecorder<Unit> { }
@@ -59,6 +98,7 @@ class IncomingVerificationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.step).isEqualTo(
                 IncomingVerificationState.Step.Initial(
+                    currentUser = MatrixUser(A_SESSION_ID),
                     deviceDisplayName = "a device name",
                     deviceId = A_DEVICE_ID,
                     formattedSignInTime = "567 TimeOrDate false",
@@ -128,6 +168,7 @@ class IncomingVerificationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.step).isEqualTo(
                 IncomingVerificationState.Step.Initial(
+                    currentUser = MatrixUser(A_SESSION_ID),
                     deviceDisplayName = "a device name",
                     deviceId = A_DEVICE_ID,
                     formattedSignInTime = "567 TimeOrDate false",
@@ -193,6 +234,7 @@ class IncomingVerificationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.step).isEqualTo(
                 IncomingVerificationState.Step.Initial(
+                    currentUser = MatrixUser(A_SESSION_ID),
                     deviceDisplayName = "a device name",
                     deviceId = A_DEVICE_ID,
                     formattedSignInTime = "567 TimeOrDate false",
@@ -228,6 +270,7 @@ class IncomingVerificationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.step).isEqualTo(
                 IncomingVerificationState.Step.Initial(
+                    currentUser = MatrixUser(A_SESSION_ID),
                     deviceDisplayName = "a device name",
                     deviceId = A_DEVICE_ID,
                     formattedSignInTime = "567 TimeOrDate false",
@@ -315,10 +358,13 @@ internal fun TestScope.createPresenter(
     navigator: IncomingVerificationNavigator = IncomingVerificationNavigator { lambdaError() },
     service: SessionVerificationService = FakeSessionVerificationService(),
     dateFormatter: DateFormatter = FakeDateFormatter(),
+    sessionStore: SessionStore = InMemorySessionStore(),
 ) = IncomingVerificationPresenter(
     verificationRequest = verificationRequest,
     navigator = navigator,
     sessionVerificationService = service,
+    sessionId = A_SESSION_ID,
+    sessionStore = sessionStore,
     stateMachine = IncomingVerificationStateMachine(service),
     dateFormatter = dateFormatter,
     sessionCoroutineScope = backgroundScope,
