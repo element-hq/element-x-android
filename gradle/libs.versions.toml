@@ -51,7 +51,7 @@ maplibre-compose = "0.17.0"
 dependencyAnalysis = "3.19.2"
 
 # DI
-metro = "1.4.4"
+metro = "1.4.5"
 
 # Auto service
 autoservice = "1.1.1"
