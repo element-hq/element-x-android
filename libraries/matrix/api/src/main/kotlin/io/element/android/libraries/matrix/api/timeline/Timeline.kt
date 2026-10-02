@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
@@ -422,4 +423,20 @@ interface Timeline : AutoCloseable {
      * Get the latest event id of the timeline, or `null` when it holds no event yet.
      */
     suspend fun getLatestEventId(): Result<EventId?>
+
+    /**
+     * Retries sending an event that failed to send, by putting it back in the send queue.
+     *
+     * @param eventOrTransactionId the event or transaction ID of the event to retry sending.
+     * @param sendTarget the target action of the send operation.
+     */
+    suspend fun retrySend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean>
+
+    /**
+     * Aborts sending an event that failed to send, by removing it from the send queue.
+     *
+     * @param eventOrTransactionId the event or transaction ID of the event to abort sending.
+     * @param sendTarget the target action of the send operation.
+     */
+    suspend fun abortSend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean>
 }

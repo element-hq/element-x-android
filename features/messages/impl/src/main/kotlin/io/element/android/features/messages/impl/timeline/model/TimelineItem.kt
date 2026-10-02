@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -92,6 +93,8 @@ sealed interface TimelineItem {
         val reactionsState: TimelineItemReactions,
         val readReceiptState: TimelineItemReadReceipts,
         val localSendState: LocalEventSendState?,
+        val editSendState: LocalEventSendState?,
+        val redactionSendState: LocalEventSendState?,
         val inReplyTo: InReplyToDetails?,
         val threadInfo: TimelineItemThreadInfo?,
         val origin: TimelineItemEventOrigin?,
@@ -143,6 +146,18 @@ sealed interface TimelineItem {
             get() = timelineItemDebugInfoProvider()
 
         val sendhandle: SendHandle? get() = sendHandleProvider()
+
+        /**
+         * Returns the first pending send state, if any, along with the corresponding [SendTarget].
+         */
+        fun pendingSend(): Pair<SendTarget, LocalEventSendState>? {
+            return when  {
+                localSendState != null -> SendTarget.Event to localSendState
+                editSendState != null -> SendTarget.Edit to editSendState
+                redactionSendState != null -> SendTarget.Redaction to redactionSendState
+                else -> null
+            }
+        }
     }
 
     data class GroupedEvents(

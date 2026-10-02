@@ -51,6 +51,8 @@ class EventTimelineItemMapper(
             isOwn = isOwn,
             isRemote = isRemote,
             localSendState = localSendState?.map(),
+            editSendState = editSendState?.map(),
+            redactionSendState = redactionSendState?.map(),
             reactions = reactions.map(),
             receipts = readReceipts.map(),
             sender = UserId(sender),
