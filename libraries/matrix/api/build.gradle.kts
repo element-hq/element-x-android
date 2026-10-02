@@ -54,6 +54,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.services.analytics.api)
+    implementation(projects.libraries.sessionStorage.api)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)

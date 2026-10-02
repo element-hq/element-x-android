@@ -29,8 +29,7 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.toMatrixUser
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.analytics.api.AnalyticsService
@@ -85,14 +84,7 @@ class PreferencesRootPresenter(
             sessionStore.sessionsFlow().map { list ->
                 list
                     .filter { it.userId != matrixClient.sessionId.value }
-                    .map {
-                        MatrixUser(
-                            userId = UserId(it.userId),
-                            displayName = it.userDisplayName,
-                            avatarUrl = it.userAvatarUrl,
-                            avatarThumbnail = it.userAvatarData,
-                        )
-                    }
+                    .map { it.toMatrixUser() }
                     .toImmutableList()
             }
         }.collectAsState(initial = persistentListOf())
