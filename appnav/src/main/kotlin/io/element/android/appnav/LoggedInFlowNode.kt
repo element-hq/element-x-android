@@ -157,6 +157,7 @@ class LoggedInFlowNode(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val activeLiveLocationShareManager: ActiveLiveLocationShareManager,
     private val customMapTilerConfigProvider: CustomMapTilerConfigProvider,
+    private val loggedInEventProcessorFactory: LoggedInEventProcessor.Factory,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -175,10 +176,7 @@ class LoggedInFlowNode(
     }
 
     private val callback: Callback = callback()
-    private val loggedInFlowProcessor = LoggedInEventProcessor(
-        snackbarDispatcher = snackbarDispatcher,
-        roomMembershipObserver = matrixClient.roomMembershipObserver,
-    )
+    private val loggedInFlowProcessor = loggedInEventProcessorFactory.create(snackbarDispatcher)
 
     /**
      * Display the incoming verification request, the app is expected to be in foreground.

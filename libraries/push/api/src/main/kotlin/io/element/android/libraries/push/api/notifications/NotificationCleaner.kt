@@ -65,4 +65,11 @@ interface NotificationCleaner {
      * @param roomId the room whose notifications are dismissed.
      */
     fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId)
+
+    /**
+     * Dismisses the notifications of every read room.
+     *
+     * @param sessionId the session whose notifications should be dismissed.
+     */
+    fun clearReadRoomsNotifications(sessionId: SessionId)
 }
