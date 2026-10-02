@@ -9,6 +9,7 @@
 package io.element.android.features.share.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.Assisted
@@ -26,6 +27,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
+import io.element.android.libraries.push.api.notifications.conversations.conversationShortcutRoomId
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -55,6 +57,15 @@ class SharePresenter(
 
     @Composable
     override fun present(): ShareState {
+        val pickedRoomId = shareIntentData.shortcutId?.let { conversationShortcutRoomId(it, matrixClient.sessionId) }
+        LaunchedEffect(Unit) {
+            // Send to the room picked in the share sheet, unless a configuration change is replaying this
+            // effect over a send already in flight. Anything else falls back to room selection.
+            if (pickedRoomId != null && shareActionState.value is AsyncAction.Uninitialized) {
+                onRoomSelected(listOf(pickedRoomId))
+            }
+        }
+
         fun handleEvent(event: ShareEvent) {
             when (event) {
                 ShareEvent.ClearError -> shareActionState.value = AsyncAction.Uninitialized

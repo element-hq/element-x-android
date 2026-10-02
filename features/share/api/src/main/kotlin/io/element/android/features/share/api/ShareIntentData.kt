@@ -16,16 +16,29 @@ import kotlinx.parcelize.Parcelize
  */
 sealed interface ShareIntentData : Parcelable {
     /**
+     * The id of the shortcut the user picked in the Direct Share row of the system share sheet, or `null`
+     * when they shared to the app itself and still have to choose a conversation.
+     */
+    val shortcutId: String?
+
+    /**
      * A list of [Uri]s to share and their mime types, with an optional [text] to be used as caption.
      */
     @Parcelize
-    data class Uris(val text: String?, val uris: List<UriToShare>) : ShareIntentData
+    data class Uris(
+        val text: String?,
+        val uris: List<UriToShare>,
+        override val shortcutId: String? = null,
+    ) : ShareIntentData
 
     /**
      * A plain text to share.
      */
     @Parcelize
-    data class PlainText(val content: String) : ShareIntentData
+    data class PlainText(
+        val content: String,
+        override val shortcutId: String? = null,
+    ) : ShareIntentData
 }
 
 /**
