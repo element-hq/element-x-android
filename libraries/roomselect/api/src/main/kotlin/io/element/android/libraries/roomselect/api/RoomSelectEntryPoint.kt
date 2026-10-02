@@ -13,9 +13,16 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 
 interface RoomSelectEntryPoint : FeatureEntryPoint {
+    /**
+     * @param sessionId the session to use initially. In [RoomSelectMode.Share] mode, the user can select another session.
+     * @param mode the mode of the screen.
+     * @param maxNumberOfRooms the maximum number of rooms the user can select.
+     */
     data class Params(
+        val sessionId: SessionId,
         val mode: RoomSelectMode,
         val maxNumberOfRooms: Int,
     )
@@ -28,7 +35,11 @@ interface RoomSelectEntryPoint : FeatureEntryPoint {
     ): Node
 
     interface Callback : Plugin {
-        fun onRoomSelected(roomIds: List<RoomId>)
+        /**
+         * @param sessionId the session which has been selected by the user, the rooms belong to this session.
+         * @param roomIds the selected rooms.
+         */
+        fun onRoomSelected(sessionId: SessionId, roomIds: List<RoomId>)
         fun onCancel()
     }
 

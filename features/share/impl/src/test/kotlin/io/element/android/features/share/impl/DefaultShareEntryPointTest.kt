@@ -14,8 +14,13 @@ import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.share.api.ShareIntentData
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.SessionGraphFactory
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_MESSAGE
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.roomselect.test.FakeRoomSelectEntryPoint
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
@@ -39,10 +44,15 @@ class DefaultShareEntryPointTest {
                 plugins = plugins,
                 presenterFactory = { createSharePresenter() },
                 roomSelectEntryPoint = FakeRoomSelectEntryPoint(),
+                sessionId = A_SESSION_ID,
+                matrixClientProvider = FakeMatrixClientProvider(),
+                sessionGraphFactory = object : SessionGraphFactory {
+                    override fun create(client: MatrixClient): Any = lambdaError()
+                },
             )
         }
         val callback = object : ShareEntryPoint.Callback {
-            override fun onDone(roomIds: List<RoomId>) = lambdaError()
+            override fun onDone(sessionId: SessionId, roomIds: List<RoomId>) = lambdaError()
         }
         val params = ShareEntryPoint.Params(
             shareIntentData = ShareIntentData.PlainText(A_MESSAGE),

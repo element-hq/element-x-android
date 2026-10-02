@@ -15,6 +15,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.timeline.FakeTimelineProvider
 import io.element.android.libraries.roomselect.test.FakeRoomSelectEntryPoint
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -39,6 +40,7 @@ class DefaultForwardEntryPointTest {
                 plugins = plugins,
                 presenterFactory = { _, _ -> createForwardMessagesPresenter() },
                 roomSelectEntryPoint = FakeRoomSelectEntryPoint(),
+                sessionId = A_SESSION_ID,
             )
         }
         val callback = object : ForwardEntryPoint.Callback {
