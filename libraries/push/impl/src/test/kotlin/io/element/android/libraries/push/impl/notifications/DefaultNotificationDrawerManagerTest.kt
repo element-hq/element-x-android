@@ -9,6 +9,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import android.app.Notification
+import android.service.notification.StatusBarNotification
 import androidx.compose.ui.graphics.Color
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
@@ -16,6 +17,8 @@ import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.test.FakeLockScreenService
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -27,6 +30,7 @@ import io.element.android.libraries.matrix.test.A_THREAD_ID_2
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
@@ -57,6 +61,7 @@ import io.element.android.services.appnavstate.test.aNavigationState
 import io.element.android.services.appnavstate.test.anAppNavigationState
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.tests.testutils.lambda.LambdaThreeParamsRecorder
+import io.element.android.tests.testutils.lambda.LambdaTwoParamsRecorder
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -567,6 +572,126 @@ class DefaultNotificationDrawerManagerTest {
         )
         sut.onNotifiableEventsReceived(listOf(aNotifiableMessageEvent(noisy = true)))
         createFallbackNotificationResult.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `clearReadRoomsNotifications cancels notifications of rooms without unread counts`() = runTest {
+        val cancelNotificationResult = lambdaRecorder<String?, Int, Unit> { _, _ -> }
+        val sut = createClearReadRoomsManager(
+            cancelNotificationResult = cancelNotificationResult,
+            notifications = listOf(aRoomStatusBarNotification(A_ROOM_ID, 1)),
+            roomInfo = aRoomInfo(id = A_ROOM_ID),
+        )
+        sut.clearReadRoomsNotifications(A_SESSION_ID)
+        runCurrent()
+        cancelNotificationResult.assertions().isCalledOnce().with(value(A_ROOM_ID.value), value(1))
+    }
+
+    @Test
+    fun `clearReadRoomsNotifications keeps notifications of rooms with unread messages`() = testKeepsNotification(
+        aRoomInfo(id = A_ROOM_ID, numUnreadMessages = 1)
+    )
+
+    @Test
+    fun `clearReadRoomsNotifications keeps notifications of rooms with unread notifications`() =
+        testKeepsNotification(aRoomInfo(id = A_ROOM_ID, numUnreadNotifications = 1))
+
+    @Test
+    fun `clearReadRoomsNotifications keeps notifications of rooms with unread mentions`() = testKeepsNotification(
+        aRoomInfo(id = A_ROOM_ID, numUnreadMentions = 1)
+    )
+
+    @Test
+    fun `clearReadRoomsNotifications keeps notifications when the room info is not found`() = testKeepsNotification(null)
+
+    @Test
+    fun `clearReadRoomsNotifications does nothing when the client cannot be restored`() = runTest {
+        val cancelNotificationResult = lambdaRecorder<String?, Int, Unit> { _, _ -> }
+        val sut = createClearReadRoomsManager(
+            cancelNotificationResult = cancelNotificationResult,
+            notifications = listOf(aRoomStatusBarNotification(A_ROOM_ID, 1)),
+            roomInfo = aRoomInfo(id = A_ROOM_ID),
+            clientResult = Result.failure(IllegalStateException("No client")),
+        )
+        sut.clearReadRoomsNotifications(A_SESSION_ID)
+        runCurrent()
+        cancelNotificationResult.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `clearReadRoomsNotifications ignores notifications not linked to a room`() = runTest {
+        val cancelNotificationResult = lambdaRecorder<String?, Int, Unit> { _, _ -> }
+        val sut = createClearReadRoomsManager(
+            cancelNotificationResult = cancelNotificationResult,
+            notifications = listOf(
+                mockk<StatusBarNotification> {
+                    every { id } returns 1
+                    every { tag } returns null
+                },
+            ),
+            roomInfo = aRoomInfo(id = A_ROOM_ID),
+        )
+        sut.clearReadRoomsNotifications(A_SESSION_ID)
+        runCurrent()
+        cancelNotificationResult.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `clearReadRoomsNotifications clears the summary when it is the only notification left`() = runTest {
+        val cancelNotificationResult = lambdaRecorder<String?, Int, Unit> { _, _ -> }
+        val summaryId = NotificationIdProvider.getSummaryNotificationId(A_SESSION_ID)
+        val sut = createClearReadRoomsManager(
+            cancelNotificationResult = cancelNotificationResult,
+            notifications = listOf(aRoomStatusBarNotification(A_ROOM_ID, 1)),
+            roomInfo = aRoomInfo(id = A_ROOM_ID),
+            summaryNotification = mockk { every { id } returns summaryId },
+            count = 1,
+        )
+        sut.clearReadRoomsNotifications(A_SESSION_ID)
+        runCurrent()
+        cancelNotificationResult.assertions().isCalledExactly(2).withSequence(
+            listOf(value(A_ROOM_ID.value), value(1)),
+            listOf(value(null), value(summaryId)),
+        )
+    }
+
+    private fun testKeepsNotification(roomInfo: RoomInfo?) = runTest {
+        val cancelNotificationResult = lambdaRecorder<String?, Int, Unit> { _, _ -> }
+        val sut = createClearReadRoomsManager(
+            cancelNotificationResult = cancelNotificationResult,
+            notifications = listOf(aRoomStatusBarNotification(A_ROOM_ID, 1)),
+            roomInfo = roomInfo,
+        )
+        sut.clearReadRoomsNotifications(A_SESSION_ID)
+        runCurrent()
+        cancelNotificationResult.assertions().isNeverCalled()
+    }
+
+    private fun aRoomStatusBarNotification(roomId: RoomId, notificationId: Int): StatusBarNotification = mockk {
+        every { id } returns notificationId
+        every { tag } returns roomId.value
+    }
+
+    private fun TestScope.createClearReadRoomsManager(
+        cancelNotificationResult: LambdaTwoParamsRecorder<String?, Int, Unit>,
+        notifications: List<StatusBarNotification>,
+        roomInfo: RoomInfo?,
+        clientResult: Result<FakeMatrixClient>? = null,
+        summaryNotification: StatusBarNotification? = null,
+        count: Int = notifications.size,
+    ): DefaultNotificationDrawerManager {
+        val matrixClient = FakeMatrixClient().apply {
+            getRoomInfoLambda = { Result.success(roomInfo) }
+        }
+        return createDefaultNotificationDrawerManager(
+            notificationDisplayer = FakeNotificationDisplayer(cancelNotificationResult = cancelNotificationResult),
+            activeNotificationsProvider = FakeActiveNotificationsProvider(
+                getNotificationsForSessionResult = { notifications },
+                getSummaryNotificationResult = { summaryNotification },
+                countResult = { count },
+            ),
+            matrixClientProvider = FakeMatrixClientProvider(getClient = { clientResult ?: Result.success(matrixClient) }),
+        )
     }
 
     /**
