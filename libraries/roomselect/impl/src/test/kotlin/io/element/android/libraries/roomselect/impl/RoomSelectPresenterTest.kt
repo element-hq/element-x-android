@@ -32,6 +32,7 @@ import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
@@ -116,13 +117,17 @@ class RoomSelectPresenterTest {
             },
         )
         presenter.test {
-            val state = awaitLastSequentialItem()
+            // Wait for the rooms to be loaded, they are emitted on another dispatcher
+            val state = consumeItemsUntilPredicate { it.resultState is SearchBarResultState.Results }.last()
             assertThat(state.selectedAccount.userId).isEqualTo(A_SESSION_ID)
             assertThat((state.resultState as SearchBarResultState.Results).results.map { it.roomId }).containsExactly(A_ROOM_ID)
             state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary1.toSelectRoomInfo()))
             state.eventSink(RoomSelectEvent.ToggleAccountListExpanded)
             state.eventSink(RoomSelectEvent.SelectAccount(A_SESSION_ID_2))
-            val finalState = awaitLastSequentialItem()
+            val finalState = consumeItemsUntilPredicate {
+                it.selectedAccount.userId == A_SESSION_ID_2 &&
+                    (it.resultState as? SearchBarResultState.Results)?.results?.map { room -> room.roomId } == listOf(A_ROOM_ID_2)
+            }.last()
             assertThat(finalState.selectedAccount.userId).isEqualTo(A_SESSION_ID_2)
             assertThat(finalState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID)
             assertThat(finalState.selectedRooms).isEmpty()
