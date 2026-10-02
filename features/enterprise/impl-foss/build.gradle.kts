@@ -25,7 +25,6 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.wellknown.api)
     implementation(libs.serialization.json)
 
     testCommonDependencies(libs)

@@ -15,7 +15,6 @@ android {
 
 dependencies {
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
     implementation(projects.features.forward.api)
     implementation(projects.tests.testutils)
 }

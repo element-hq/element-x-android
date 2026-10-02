@@ -16,6 +16,5 @@ android {
 dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.features.rageshake.api)
-    implementation(libs.coroutines.core)
     implementation(projects.tests.testutils)
 }

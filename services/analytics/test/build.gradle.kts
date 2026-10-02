@@ -15,7 +15,6 @@ android {
 
 dependencies {
     api(projects.services.analytics.api)
-    implementation(projects.libraries.core)
     implementation(projects.tests.testutils)
     implementation(libs.coroutines.core)
 }
