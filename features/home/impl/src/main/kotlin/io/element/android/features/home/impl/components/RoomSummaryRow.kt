@@ -391,14 +391,11 @@ internal fun RoomListRoomSummary.unreadIndicatorCount(
     val isMuted = userDefinedNotificationMode == RoomNotificationMode.MUTE
     return when {
         // Show only unread notifications when the room is not muted and there are unread notifications
-        !isMuted && numberOfUnreadNotifications > 0 -> numberOfUnreadNotifications
-        // Otherwise, show unread messages when showAllActivity is true
-        showAllActivity -> numberOfUnreadMessages.takeIf { it > 0 }
+        !isMuted && numberOfUnreadNotifications > 0 -> if (showUnreadCount) numberOfUnreadNotifications else 0
+        // Otherwise, show a dot for unread messages when showAllActivity is true and there are unread messages
+        showAllActivity -> if (numberOfUnreadMessages > 0) 0 else null
         // Or don't display anything
         else -> null
-    }?.let {
-        // We only want to show the count if the option is enabled, otherwise we just show the dot indicator (value 0)
-        if (showUnreadCount) it else 0
     }
 }
 
