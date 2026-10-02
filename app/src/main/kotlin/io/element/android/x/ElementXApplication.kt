@@ -40,19 +40,7 @@ class ElementXApplication : Application(), DependencyInjectionGraphOwner, Config
     override fun onCreate() {
         super.onCreate()
 
-        // Workaround to avoid NetworkOnMainThreadException when using the network on the main thread.
-        // This is a temporary solution to rustls doing the certificate verification using blocking network requests.
-        // It should be removed once the underlying issue is fixed.
-        // Also, we only want to enable it on nightly and release builds so we can debug the issue on debug builds.
-        if (!BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder()
-                    .detectNetwork()
-                    .penaltyLog()
-                    .penaltyDialog()
-                    .build()
-            )
-        }
+        enableStrictMode()
 
         AppInitializer.getInstance(this).apply {
             initializeComponent(CrashInitializer::class.java)
@@ -66,5 +54,17 @@ class ElementXApplication : Application(), DependencyInjectionGraphOwner, Config
         // Disable the strict offset check for anchored draggable components, as it can cause issues with bottom sheets.
         // Remove once https://issuetracker.google.com/issues/477038695 is fixed.
         isAnchoredDraggableComponentsStrictOffsetCheckEnabled = false
+    }
+
+    private fun enableStrictMode() {
+        // Workaround to avoid NetworkOnMainThreadException when using the network on the main thread.
+        // This is a temporary solution to rustls doing the certificate verification using blocking network requests.
+        // It should be removed once the underlying issue is fixed.
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectNetwork()
+                .penaltyLog()
+                .build()
+        )
     }
 }
