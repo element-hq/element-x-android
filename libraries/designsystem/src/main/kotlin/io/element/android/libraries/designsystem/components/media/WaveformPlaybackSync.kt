@@ -152,8 +152,10 @@ internal fun remainingPlaybackAnimationMs(
     durationMs: Long,
     playbackSpeed: Float,
 ): Int {
-    val remainingProgress = (1f - progress).coerceAtLeast(0f)
-    return (remainingProgress * durationMs / playbackSpeed.coerceAtLeast(0.01f))
+    if (!progress.isFinite() || !playbackSpeed.isFinite() || durationMs <= 0L) return 0
+    val remainingProgress = (1f - progress).coerceIn(0f, 1f)
+    val speed = playbackSpeed.coerceAtLeast(0.01f)
+    return (remainingProgress * durationMs / speed)
         .roundToInt()
         .coerceAtLeast(0)
 }
