@@ -7,4 +7,7 @@
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Needed to switch the audio mode and start a Bluetooth SCO connection so that voice messages
+         can be recorded using a connected Bluetooth headset's microphone. -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 </manifest>
