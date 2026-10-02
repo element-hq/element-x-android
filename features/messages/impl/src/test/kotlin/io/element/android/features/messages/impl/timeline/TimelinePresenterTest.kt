@@ -50,10 +50,8 @@ import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
-import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -1862,7 +1860,7 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - toggling the last selected event exits selection mode`() = runTest {
+    fun `present - toggling the last selected event keeps selection mode active`() = runTest {
         val timelineItems = MutableStateFlow(
             listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())))
         )
@@ -1875,6 +1873,28 @@ class TimelinePresenterTest {
             initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
             consumeItemsUntilPredicate { it.isSelectionModeActive }
             initialState.eventSink(TimelineEvent.ToggleSelection(AN_EVENT_ID))
+            // Selection mode is only exited explicitly, so an empty selection keeps it active.
+            val state = consumeItemsUntilPredicate { it.selectedCount == 0 }.last()
+            assertThat(state.selectionState).isEqualTo(SelectionState.Active(SelectionAction.Forward, persistentSetOf()))
+            assertThat(state.isSelectionModeActive).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - exiting selection mode clears the selection`() = runTest {
+        val timelineItems = MutableStateFlow(
+            listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())))
+        )
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(timelineItems = timelineItems),
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true)),
+        )
+        presenter.test {
+            val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
+            initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
+            consumeItemsUntilPredicate { it.isSelectionModeActive }
+            initialState.eventSink(TimelineEvent.ExitSelectionMode)
             val state = consumeItemsUntilPredicate { !it.isSelectionModeActive }.last()
             assertThat(state.selectionState).isEqualTo(SelectionState.Disabled)
             cancelAndIgnoreRemainingEvents()
@@ -1903,7 +1923,35 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - selection drops events the action cannot apply to`() = runTest {
+    fun `present - a selected event which cannot be forwarded anymore is deselected`() = runTest {
+        val timelineItems = MutableStateFlow(
+            listOf(
+                MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())),
+                MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(eventId = AN_EVENT_ID_2, content = aMessageContent())),
+            )
+        )
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(timelineItems = timelineItems),
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true)),
+        )
+        presenter.test {
+            val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
+            initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
+            initialState.eventSink(TimelineEvent.ToggleSelection(AN_EVENT_ID_2))
+            consumeItemsUntilPredicate { it.selectedCount == 2 }
+            // The first message is deleted, so it cannot be forwarded anymore.
+            timelineItems.value = listOf(
+                MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aRedactedContent())),
+                MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(eventId = AN_EVENT_ID_2, content = aMessageContent())),
+            )
+            val state = consumeItemsUntilPredicate { it.selectedCount == 1 }.last()
+            assertThat(state.selectionState).isEqualTo(SelectionState.Active(SelectionAction.Forward, persistentSetOf(AN_EVENT_ID_2)))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - the selection survives a timeline which no longer contains the selected event`() = runTest {
         val timelineItems = MutableStateFlow(
             listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())))
         )
@@ -1915,15 +1963,11 @@ class TimelinePresenterTest {
             val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
             initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
             consumeItemsUntilPredicate { it.isSelectionModeActive }
-            // The message is replaced by a state event, which cannot be forwarded.
-            timelineItems.value = listOf(
-                MatrixTimelineItem.Event(
-                    UniqueId("1"),
-                    anEventTimelineItem(eventId = AN_EVENT_ID, content = StateContent("", OtherState.RoomCreate)),
-                )
-            )
-            val state = consumeItemsUntilPredicate { !it.isSelectionModeActive }.last()
-            assertThat(state.selectionState).isEqualTo(SelectionState.Disabled)
+            // The timeline no longer holds the selected event, for instance because it has been reset or because it switched to a detached timeline.
+            timelineItems.value = emptyList()
+            val state = consumeItemsUntilPredicate { !it.hasAnyEvent }.last()
+            // The selection is the user intent: it is only validated when the action is confirmed, so that a transient timeline update cannot drop it.
+            assertThat(state.selectionState).isEqualTo(SelectionState.Active(SelectionAction.Forward, persistentSetOf(AN_EVENT_ID)))
             cancelAndIgnoreRemainingEvents()
         }
     }

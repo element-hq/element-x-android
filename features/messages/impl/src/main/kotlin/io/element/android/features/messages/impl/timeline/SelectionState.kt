@@ -16,6 +16,7 @@ import io.element.android.features.messages.impl.timeline.model.event.canBeForwa
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.toPersistentSet
 
 /** Maximum number of messages that can be selected at once. */
 const val MAX_SELECTION_COUNT = 10
@@ -25,7 +26,10 @@ sealed interface SelectionState {
     /** Selection mode is not active. */
     data object Disabled : SelectionState
 
-    /** Selection mode is active for [action], with the given selection. */
+    /**
+     * Selection mode is active for [action], with the given selection.
+     * [selectedEventIds] can be empty: selection mode is never exited automatically, only when the user explicitly leaves it.
+     */
     data class Active(
         val action: SelectionAction,
         val selectedEventIds: ImmutableSet<EventId>,
@@ -45,4 +49,40 @@ enum class SelectionAction(@field:StringRes val titleRes: Int, @field:DrawableRe
  */
 fun SelectionAction.canApplyTo(event: TimelineItem.Event): Boolean = when (this) {
     SelectionAction.Forward -> event.isRemote && event.content.canBeForwarded()
+}
+
+/**
+ * This selection without [eventIds].
+ * Selection mode stays active even when nothing remains selected, see [SelectionState.Active].
+ */
+fun SelectionState.deselect(eventIds: Set<EventId>): SelectionState = when (this) {
+    SelectionState.Disabled -> this
+    is SelectionState.Active -> copy(selectedEventIds = (selectedEventIds - eventIds).toPersistentSet())
+}
+
+/**
+ * The ids of the selected events which [SelectionState.Active.action] cannot be applied to anymore, for instance because the message has been
+ * deleted. They are meant to be given to [deselect].
+ */
+fun SelectionState.eventIdsToDeselect(timelineItems: List<TimelineItem>): Set<EventId> {
+    val selection = this as? SelectionState.Active ?: return emptySet()
+    if (selection.selectedEventIds.isEmpty()) return emptySet()
+    val result = mutableSetOf<EventId>()
+
+    fun process(event: TimelineItem.Event) {
+        val eventId = event.eventId ?: return
+        if (eventId in selection.selectedEventIds && !selection.action.canApplyTo(event)) {
+            result.add(eventId)
+        }
+    }
+
+    timelineItems.forEach { item ->
+        when (item) {
+            is TimelineItem.Event -> process(item)
+            // A deleted message can be folded into a group of deleted messages, so look inside the groups too.
+            is TimelineItem.GroupedEvents -> item.events.forEach(::process)
+            is TimelineItem.Virtual -> Unit
+        }
+    }
+    return result
 }

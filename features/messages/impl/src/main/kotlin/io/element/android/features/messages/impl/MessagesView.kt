@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -192,6 +193,10 @@ fun MessagesView(
         if (state.timelineState.isSelectionModeActive) {
             localView.hideKeyboard()
         }
+    }
+
+    BackHandler(enabled = state.timelineState.isSelectionModeActive) {
+        state.timelineState.eventSink(TimelineEvent.ExitSelectionMode)
     }
 
     fun onContentClick(event: TimelineItem.Event) {

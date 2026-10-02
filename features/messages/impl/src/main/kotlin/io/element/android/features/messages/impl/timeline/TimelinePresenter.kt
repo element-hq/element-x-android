@@ -77,9 +77,11 @@ import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -273,10 +275,8 @@ class TimelinePresenter(
                     val current = selectionState as? SelectionState.Active ?: return
                     val selected = current.selectedEventIds
                     selectionState = when {
-                        event.eventId in selected -> {
-                            val next = (selected - event.eventId).toPersistentSet()
-                            if (next.isEmpty()) SelectionState.Disabled else current.copy(selectedEventIds = next)
-                        }
+                        // Deselecting the last event does not exit selection mode: it is only left explicitly, as on iOS.
+                        event.eventId in selected -> current.deselect(setOf(event.eventId))
                         selected.size >= MAX_SELECTION_COUNT -> {
                             snackbarDispatcher.post(SnackbarMessage(CommonStrings.screen_room_maximum_messages_selected))
                             current
@@ -371,6 +371,14 @@ class TimelinePresenter(
                 }
                 .launchIn(this)
 
+            // Drop the selected events which the action cannot be applied to anymore, for instance because the message has been deleted.
+            timelineItemsFactory.timelineItems
+                .map { items -> selectionState.eventIdsToDeselect(items) }
+                .filter { eventIdsToDeselect -> eventIdsToDeselect.isNotEmpty() }
+                .flowOn(dispatchers.computation)
+                .onEach { eventIdsToDeselect -> selectionState = selectionState.deselect(eventIdsToDeselect) }
+                .launchIn(this)
+
             combine(
                 timelineController.timelineItems(),
                 room.membersStateFlow,
@@ -394,26 +402,6 @@ class TimelinePresenter(
 
         LaunchedEffect(timelineItems.size) {
             computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
-        }
-
-        val selectableEventIds = (selectionState as? SelectionState.Active)?.let { active ->
-            timelineItems
-                .filterIsInstance<TimelineItem.Event>()
-                .filter { active.action.canApplyTo(it) }
-                .mapNotNull { it.eventId }
-                .toSet()
-        }.orEmpty()
-
-        // Reconcile the selection when the items change: drop any selected event that is no longer
-        // present or no longer selectable, and exit selection mode if nothing remains selected.
-        LaunchedEffect(selectableEventIds) {
-            val active = selectionState as? SelectionState.Active ?: return@LaunchedEffect
-            val reconciled = active.selectedEventIds.filter { it in selectableEventIds }.toPersistentSet()
-            selectionState = when {
-                reconciled.isEmpty() -> SelectionState.Disabled
-                reconciled.size != active.selectedEventIds.size -> active.copy(selectedEventIds = reconciled)
-                else -> active
-            }
         }
 
         // Keyed on the full [timelineItems] reference (not just .size) so we re-scan when the
