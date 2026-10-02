@@ -149,7 +149,13 @@ sonar {
 
 allprojects {
     tasks.withType<Test> {
-        maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+        // Robolectric 4.17 sets up shared memory during application setup, which goes through its
+        // FileDescriptor interceptor. That interceptor reaches into `java.io.FileDescriptor` and
+        // `jdk.internal.access.SharedSecrets`, both of which are encapsulated since JDK 17.
+        jvmArgs(
+            "--add-opens=java.base/java.io=ALL-UNNAMED",
+            "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
+        )
 
         val isScreenshotTest = project.gradle.startParameter.taskNames.any { it.contains("paparazzi", ignoreCase = true) }
         if (isScreenshotTest) {
@@ -172,6 +178,9 @@ allprojects {
             // re-pays it for each fork instead of saving time. Keep a single fork per module and let
             // Gradle parallelise by running many modules' test tasks concurrently instead.
             maxParallelForks = 1
+
+            // Increase heap size for screenshot tests
+            maxHeapSize = "2g"
 
             // Disable screenshot tests by default
             exclude("ui/*.class")
