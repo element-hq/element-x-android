@@ -9,4 +9,11 @@
     <!-- To be able to install APK from the application -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <application>
+        <service
+            android:name=".floatingvideo.FloatingVideoService"
+            android:enabled="true"
+            android:exported="false" />
+    </application>
 </manifest>

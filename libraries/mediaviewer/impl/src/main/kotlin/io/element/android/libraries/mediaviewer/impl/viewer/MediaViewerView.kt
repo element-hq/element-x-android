@@ -46,6 +46,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,6 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.onVisibilityChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
@@ -101,6 +103,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
 import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.FloatingVideoService
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
@@ -109,6 +112,7 @@ import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.compose.EditorStyledText
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
@@ -554,8 +558,11 @@ private fun MediaViewerTopBar(
     onSaveClick: () -> Unit,
     onInfoClick: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     val downloadedMedia by data.downloadedMedia
     val actionsEnabled = downloadedMedia.isSuccess()
+    val mimeType = data.mediaInfo.mimeType
     val senderName = data.mediaInfo.senderName
     val dateSent = data.mediaInfo.dateSent
     TopAppBar(
@@ -596,6 +603,24 @@ private fun MediaViewerTopBar(
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
+            if (mimeType.isMimeTypeVideo()) {
+                IconButton(
+                    enabled = actionsEnabled,
+                    onClick = {
+                        val media = downloadedMedia.dataOrNull() ?: return@IconButton
+                        coroutineScope.launch {
+                            if (FloatingVideoService.startFloating(context, media.uri)) {
+                                onBackClick()
+                            }
+                        }
+                    },
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.Collapse(),
+                        contentDescription = stringResource(id = CommonStrings.action_minimize),
+                    )
+                }
+            }
             IconButton(
                 onClick = onShareClick,
                 enabled = actionsEnabled,
