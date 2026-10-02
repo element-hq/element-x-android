@@ -36,12 +36,12 @@ private const val PAGE_SIZE = 30
 @AssistedInject
 class RoomSelectSearchDataSource(
     @Assisted coroutineScope: CoroutineScope,
-    roomListService: RoomListService,
+    @Assisted roomListService: RoomListService,
     coroutineDispatchers: CoroutineDispatchers,
 ) {
     @AssistedFactory
     interface Factory {
-        fun create(coroutineScope: CoroutineScope): RoomSelectSearchDataSource
+        fun create(coroutineScope: CoroutineScope, roomListService: RoomListService): RoomSelectSearchDataSource
     }
 
     private val roomList = roomListService.createRoomList(

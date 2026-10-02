@@ -10,6 +10,7 @@ package io.element.android.libraries.roomselect.impl
 
 import androidx.compose.foundation.text.input.TextFieldState
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
@@ -21,7 +22,15 @@ data class RoomSelectState(
     val searchQuery: TextFieldState,
     val isSearchActive: Boolean,
     val selectedRooms: ImmutableList<SelectRoomInfo>,
+    val selectedAccount: MatrixUser,
+    val otherAccounts: ImmutableList<MatrixUser>,
+    val isAccountListExpanded: Boolean,
     val eventSink: (RoomSelectEvent) -> Unit,
 ) {
     val canSelectMoreRooms = selectedRooms.size < maxNumberOfRooms
+
+    /**
+     * The account switch is only displayed when sharing, and if there are several accounts.
+     */
+    val showAccountSwitch = mode == RoomSelectMode.Share && otherAccounts.isNotEmpty()
 }
