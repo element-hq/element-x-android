@@ -122,6 +122,7 @@ private fun Content(
             context.copyToClipboard(
                 text = formattedRecoveryKey,
                 toastMessage = toastMessage,
+                isSensitive = true,
             )
             state.eventSink.invoke(SecureBackupSetupEvent.RecoveryKeyHasBeenSaved)
         }

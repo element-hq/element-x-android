@@ -63,9 +63,10 @@ fun Context.getVersionCodeFromManifest(): Long {
  */
 fun Context.copyToClipboard(
     text: CharSequence,
-    toastMessage: String? = null
+    toastMessage: String? = null,
+    isSensitive: Boolean = false,
 ) {
-    CopyToClipboardUseCase(this).execute(text)
+    CopyToClipboardUseCase(this).execute(text, isSensitive)
     toastMessage?.let { toast(it) }
 }
 
