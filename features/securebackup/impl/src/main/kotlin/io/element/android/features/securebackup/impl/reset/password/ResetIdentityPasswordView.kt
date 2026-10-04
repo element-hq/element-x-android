@@ -9,14 +9,21 @@
 package io.element.android.features.securebackup.impl.reset.password
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentType
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -42,6 +49,11 @@ fun ResetIdentityPasswordView(
     modifier: Modifier = Modifier,
 ) {
     val passwordState = textFieldState(stateValue = "")
+    val submit = {
+        if (passwordState.value.isNotEmpty()) {
+            state.eventSink(ResetIdentityPasswordEvent.Reset(passwordState.value))
+        }
+    }
     FlowStepPage(
         modifier = modifier,
         iconStyle = BigIcon.Style.Default(CompoundIcons.LockSolid()),
@@ -58,13 +70,14 @@ fun ResetIdentityPasswordView(
                     passwordState.value = newText
                 },
                 hasError = state.resetAction.isFailure(),
+                onSubmit = submit,
             )
         },
         buttons = {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(CommonStrings.action_reset_identity),
-                onClick = { state.eventSink(ResetIdentityPasswordEvent.Reset(passwordState.value)) },
+                onClick = submit,
                 destructive = true,
                 enabled = passwordState.value.isNotEmpty(),
             )
@@ -78,12 +91,20 @@ fun ResetIdentityPasswordView(
 }
 
 @Composable
-private fun Content(text: String, onTextChange: (String) -> Unit, hasError: Boolean) {
+private fun Content(
+    text: String,
+    onTextChange: (String) -> Unit,
+    hasError: Boolean,
+    onSubmit: () -> Unit,
+) {
     var showPassword by remember { mutableStateOf(false) }
     TextField(
         modifier = Modifier
             .fillMaxWidth()
-            .onTabOrEnterKeyFocusNext(LocalFocusManager.current),
+            .onTabOrEnterKeyFocusNext(LocalFocusManager.current)
+            .semantics {
+                contentType = ContentType.Password
+            },
         value = text,
         onValueChange = onTextChange,
         placeholder = stringResource(CommonStrings.common_password),
@@ -95,6 +116,13 @@ private fun Content(text: String, onTextChange: (String) -> Unit, hasError: Bool
                 onToggle = { showPassword = !showPassword },
             )
         },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done,
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = { onSubmit() }
+        ),
         validity = if (hasError) TextFieldValidity.Invalid else TextFieldValidity.None,
         supportingText = if (hasError) {
             stringResource(R.string.screen_reset_encryption_password_error)
