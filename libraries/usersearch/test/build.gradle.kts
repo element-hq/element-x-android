@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.usersearch"
+    namespace = "io.element.android.libraries.usersearch.test"
 }
 
 dependencies {
