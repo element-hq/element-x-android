@@ -6,13 +6,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.mediapickers
+package io.element.android.libraries.mediapickers.api
 
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
-import io.element.android.libraries.mediapickers.api.PickerType
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 
