@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProf
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
+import io.element.android.libraries.matrix.impl.workmanager.SearchBackfillRequestBuilder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -27,6 +28,7 @@ import io.element.android.libraries.matrix.test.scanner.FakeContentScanner
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
+import io.element.android.libraries.workmanager.api.WorkManagerRequestWrapper
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
@@ -328,5 +330,10 @@ class RustMatrixClientTest {
         workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
         contentScanner = FakeContentScanner(),
         isMessageSearchAvailable = false,
+        searchBackfillRequestBuilderFactory = {
+            object : SearchBackfillRequestBuilder {
+                override suspend fun build(): Result<List<WorkManagerRequestWrapper>> = Result.success(emptyList())
+            }
+        }
     )
 }

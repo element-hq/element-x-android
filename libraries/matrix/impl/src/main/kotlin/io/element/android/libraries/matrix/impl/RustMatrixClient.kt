@@ -8,6 +8,9 @@
 
 package io.element.android.libraries.matrix.impl
 
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -16,6 +19,7 @@ import io.element.android.libraries.core.data.bytes
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
@@ -156,24 +160,37 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 private const val AVATAR_THUMBNAIL_SIZE_IN_PIXEL = 240L
 
 @Suppress("LargeClass")
+@AssistedInject
 class RustMatrixClient(
-    override val sessionPaths: SessionPaths,
-    val innerClient: Client,
+    @Assisted override val sessionPaths: SessionPaths,
+    @Assisted val innerClient: Client,
+    @Assisted private val innerSyncService: ClientSyncService,
+    @Assisted baseCacheDirectory: File,
+    @Assisted override val contentScanner: ContentScanner?,
+    @Assisted override val isMessageSearchAvailable: Boolean,
+    @Assisted private val sessionDelegate: RustClientSessionDelegate,
     private val sessionStore: SessionStore,
-    private val sessionDelegate: RustClientSessionDelegate,
-    private val innerSyncService: ClientSyncService,
-    appCoroutineScope: CoroutineScope,
+    @AppCoroutineScope appCoroutineScope: CoroutineScope,
     dispatchers: CoroutineDispatchers,
-    baseCacheDirectory: File,
     clock: SystemClock,
     timelineEventFilterFactory: TimelineEventFilterFactory,
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
     private val workManagerScheduler: WorkManagerScheduler,
-    override val contentScanner: ContentScanner?,
-    override val isMessageSearchAvailable: Boolean,
     private val searchBackfillRequestBuilderFactory: SearchBackfillRequestBuilder.Factory,
 ) : MatrixClient {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            sessionPaths: SessionPaths,
+            innerClient: Client,
+            innerSyncService: ClientSyncService,
+            baseCacheDirectory: File,
+            contentScanner: ContentScanner?,
+            isMessageSearchAvailable: Boolean,
+            sessionDelegate: RustClientSessionDelegate,
+        ): RustMatrixClient
+    }
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
     override val server: String? = innerClient.server()
