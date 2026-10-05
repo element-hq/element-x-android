@@ -12,8 +12,13 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
+import io.element.android.libraries.androidutils.toast.FakeToastHelper
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.test.A_RECOVERY_KEY
@@ -186,16 +191,70 @@ class SecureBackupSetupPresenterTest {
         }
     }
 
+    @Test
+    fun `present - copy recovery key on old device shows a toast`() = runTest {
+        val encryptionService = FakeEncryptionService()
+        val clipboardHelper = FakeClipboardHelper(isOldDevice = true)
+        val toastHelper = FakeToastHelper()
+        val presenter = createSecureBackupSetupPresenter(
+            encryptionService = encryptionService,
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink.invoke(SecureBackupSetupEvent.CreateRecoveryKey)
+            skipItems(1)
+            encryptionService.emitEnableRecoveryProgress(EnableRecoveryProgress.Done(A_RECOVERY_KEY))
+            val createdState = awaitItem()
+            createdState.eventSink.invoke(SecureBackupSetupEvent.CopyRecoveryKey)
+            assertThat(clipboardHelper.clipboardContents).isEqualTo(A_RECOVERY_KEY)
+            assertThat(clipboardHelper.isSensitive).isTrue()
+            assertThat(toastHelper.shownToasts).containsExactly(R.string.screen_recovery_key_copied_to_clipboard)
+            assertThat(awaitItem().setupState).isInstanceOf(SetupState.CreatedAndSaved::class.java)
+        }
+    }
+
+    @Test
+    fun `present - copy recovery key on new device does not show a toast`() = runTest {
+        val encryptionService = FakeEncryptionService()
+        val clipboardHelper = FakeClipboardHelper(isOldDevice = false)
+        val toastHelper = FakeToastHelper()
+        val presenter = createSecureBackupSetupPresenter(
+            encryptionService = encryptionService,
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink.invoke(SecureBackupSetupEvent.CreateRecoveryKey)
+            skipItems(1)
+            encryptionService.emitEnableRecoveryProgress(EnableRecoveryProgress.Done(A_RECOVERY_KEY))
+            val createdState = awaitItem()
+            createdState.eventSink.invoke(SecureBackupSetupEvent.CopyRecoveryKey)
+            assertThat(clipboardHelper.clipboardContents).isEqualTo(A_RECOVERY_KEY)
+            assertThat(clipboardHelper.isSensitive).isTrue()
+            assertThat(toastHelper.shownToasts).isEmpty()
+            assertThat(awaitItem().setupState).isInstanceOf(SetupState.CreatedAndSaved::class.java)
+        }
+    }
+
     private fun createSecureBackupSetupPresenter(
         isChangeRecoveryKeyUserStory: Boolean = false,
         encryptionService: EncryptionService = FakeEncryptionService(
             enableRecoveryLambda = { _, _ -> Result.success("") },
         ),
+        clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
+        toastHelper: ToastHelper = FakeToastHelper(),
     ): SecureBackupSetupPresenter {
         return SecureBackupSetupPresenter(
             isChangeRecoveryKeyUserStory = isChangeRecoveryKeyUserStory,
             stateMachine = SecureBackupSetupStateMachine(),
             encryptionService = encryptionService,
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
         )
     }
 }

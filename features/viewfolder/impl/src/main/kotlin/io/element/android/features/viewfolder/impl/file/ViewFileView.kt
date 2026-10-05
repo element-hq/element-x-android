@@ -80,6 +80,7 @@ fun ViewFileView(
                         modifier = Modifier.weight(1f),
                         lines = state.lines.data.toImmutableList(),
                         colorationMode = state.colorationMode,
+                        onLineClick = { state.eventSink(ViewFileEvent.CopyToClipboard(it)) },
                     )
                     is AsyncData.Failure -> AsyncFailure(throwable = state.lines.error, onRetry = null)
                 }

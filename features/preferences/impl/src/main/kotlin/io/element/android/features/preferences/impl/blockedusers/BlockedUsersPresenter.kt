@@ -81,8 +81,9 @@ class BlockedUsersPresenter(
                     unblockUserAction.value = AsyncAction.ConfirmingNoParams
                 }
                 is BlockedUsersEvent.CopyToClipboard -> {
-                    clipboardHelper.copyPlainText(event.userId.value)
-                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
+                    clipboardHelper.copyPlainText(event.userId.value) {
+                        snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
+                    }
                 }
                 BlockedUsersEvent.ConfirmUnblock -> {
                     pendingUserToUnblock?.let {
