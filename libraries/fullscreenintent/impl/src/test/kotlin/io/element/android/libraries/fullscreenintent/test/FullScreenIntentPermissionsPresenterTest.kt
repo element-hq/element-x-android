@@ -11,9 +11,7 @@ package io.element.android.libraries.fullscreenintent.test
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationManagerCompat
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
+import androidx.lifecycle.Lifecycle
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvent
@@ -23,8 +21,10 @@ import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFact
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
 import io.element.android.services.toolbox.test.intent.FakeExternalIntentLauncher
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.tests.testutils.FakeLifecycleOwner
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.testWithLifecycleOwner
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,9 +45,7 @@ class FullScreenIntentPermissionsPresenterTest {
                 every { canUseFullScreenIntent() } returns false
             }
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             skipItems(1)
             val initialItem = awaitItem()
             assertThat(initialItem.shouldDisplayBanner).isTrue()
@@ -61,9 +59,7 @@ class FullScreenIntentPermissionsPresenterTest {
                 every { canUseFullScreenIntent() } returns true
             }
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             skipItems(1)
             val initialItem = awaitItem()
             assertThat(initialItem.shouldDisplayBanner).isFalse()
@@ -71,11 +67,31 @@ class FullScreenIntentPermissionsPresenterTest {
     }
 
     @Test
+    fun `shouldDisplay - becomes false when permission is granted while the app is in background`() = runTest {
+        var canUseFullScreenIntent = false
+        val presenter = createPresenter(
+            notificationManagerCompat = mockk {
+                every { canUseFullScreenIntent() } answers { canUseFullScreenIntent }
+            }
+        )
+        val lifecycleOwner = FakeLifecycleOwner(Lifecycle.State.RESUMED)
+        presenter.testWithLifecycleOwner(lifecycleOwner) {
+            skipItems(1)
+            assertThat(awaitItem().shouldDisplayBanner).isTrue()
+            // User opens the system settings and grants the permission
+            lifecycleOwner.givenState(Lifecycle.State.STARTED)
+            canUseFullScreenIntent = true
+            lifecycleOwner.givenState(Lifecycle.State.RESUMED)
+            val finalItem = awaitItem()
+            assertThat(finalItem.permissionGranted).isTrue()
+            assertThat(finalItem.shouldDisplayBanner).isFalse()
+        }
+    }
+
+    @Test
     fun `dismissFullScreenIntentBanner - makes shouldDisplay false`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             skipItems(1)
             val loadedItem = awaitItem()
             loadedItem.eventSink(FullScreenIntentPermissionsEvent.Dismiss)
@@ -89,9 +105,7 @@ class FullScreenIntentPermissionsPresenterTest {
         val launchLambda = lambdaRecorder<Intent, Unit> { _ -> }
         val externalIntentLauncher = FakeExternalIntentLauncher(launchLambda)
         val presenter = createPresenter(externalIntentLauncher = externalIntentLauncher)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             skipItems(1)
             val loadedItem = awaitItem()
             loadedItem.eventSink(FullScreenIntentPermissionsEvent.OpenSettings)
@@ -108,9 +122,7 @@ class FullScreenIntentPermissionsPresenterTest {
             buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.Q),
             externalIntentLauncher = externalIntentLauncher,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.testWithLifecycleOwner {
             skipItems(1)
             val loadedItem = awaitItem()
             loadedItem.eventSink(FullScreenIntentPermissionsEvent.OpenSettings)
