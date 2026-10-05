@@ -6,12 +6,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.voicerecorder.test
+package io.element.android.libraries.voicerecorder.impl.audio
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.voicerecorder.impl.audio.Audio
-import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
-import io.element.android.libraries.voicerecorder.impl.audio.AudioReader
 
 class FakeAudioReaderFactory(
     private val audio: List<Audio>

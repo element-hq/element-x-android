@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.voicerecorder.test
+package io.element.android.libraries.voicerecorder.impl.file
 
 import java.io.File
 
