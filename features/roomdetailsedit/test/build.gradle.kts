@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.roomdetetailsedit.test"
+    namespace = "io.element.android.features.roomdetailsedit.test"
 }
 
 dependencies {

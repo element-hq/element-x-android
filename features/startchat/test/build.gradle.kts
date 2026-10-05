@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.invitepeople.test"
+    namespace = "io.element.android.features.startchat.test"
 }
 
 dependencies {
