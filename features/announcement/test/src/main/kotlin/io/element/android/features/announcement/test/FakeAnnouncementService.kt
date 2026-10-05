@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.rageshake.test.logs
+package io.element.android.features.announcement.test
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

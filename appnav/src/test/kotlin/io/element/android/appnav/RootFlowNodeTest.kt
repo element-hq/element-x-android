@@ -26,6 +26,7 @@ import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.session.FakeSyncOrchestratorFactory
 import io.element.android.appnav.session.MatrixSessionCache
 import io.element.android.appnav.verification.IncomingVerificationRequestObserver
+import io.element.android.features.announcement.test.FakeAnnouncementService
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.test.FakeLoginEntryPoint
@@ -33,7 +34,6 @@ import io.element.android.features.login.test.FakeLoginIntentResolver
 import io.element.android.features.login.test.accesscontrol.FakeAccountProviderAccessControl
 import io.element.android.features.preferences.test.FakeCacheService
 import io.element.android.features.rageshake.test.FakeBugReportEntryPoint
-import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.features.share.test.FakeShareIntentHandler
 import io.element.android.features.signedout.test.FakeSignedOutEntryPoint
 import io.element.android.libraries.accountselect.test.FakeAccountSelectEntryPoint
