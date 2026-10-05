@@ -21,6 +21,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -142,13 +143,15 @@ class LoggedInEventProcessorTest {
 
         loggedInEventProcessor.observeEvents(backgroundScope)
 
+        assertThat(loggedInEventProcessor.currentChildScope?.isActive).isTrue()
+
         testScheduler.runCurrent()
 
         // Stop observing events
         loggedInEventProcessor.stopObserving()
 
-        // Verify that the child scope is cancelled
-        assertThat(loggedInEventProcessor.isRunning).isFalse()
+        // Verify that the child scope is cancelled (the scope is null)
+        assertThat(loggedInEventProcessor.currentChildScope).isNull()
     }
 
     @Test

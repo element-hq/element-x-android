@@ -8,6 +8,7 @@
 
 package io.element.android.appnav
 
+import androidx.annotation.VisibleForTesting
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -27,7 +28,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.isActive
 
 @AssistedInject
 class LoggedInEventProcessor(
@@ -43,9 +43,8 @@ class LoggedInEventProcessor(
         fun create(snackbarDispatcher: SnackbarDispatcher): LoggedInEventProcessor
     }
 
-    private var currentChildScope: CoroutineScope? = null
-
-    val isRunning: Boolean = currentChildScope?.isActive == true
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal var currentChildScope: CoroutineScope? = null
 
     fun observeEvents(coroutineScope: CoroutineScope) {
         if (currentChildScope != null) return
