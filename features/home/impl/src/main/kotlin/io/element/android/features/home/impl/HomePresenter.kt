@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 @Inject
@@ -75,6 +76,20 @@ class HomePresenter(
                 isMultiAccountEnabled && sessions.size == 1 && announcements.contains(Announcement.MultiAccount)
             }
         }.collectAsState(false)
+        LaunchedEffect(Unit) {
+            // The user already uses several accounts, so the feature does not need to be announced anymore,
+            // even if they later remove accounts.
+            combine(
+                announcementService.announcementsToShowFlow(),
+                sessionStore.sessionsFlow(),
+            ) { announcements, sessions ->
+                announcements.contains(Announcement.MultiAccount) && sessions.size > 1
+            }
+                .filter { it }
+                .collect {
+                    announcementService.onAnnouncementDismissed(Announcement.MultiAccount)
+                }
+        }
         val roomListState = roomListPresenter.present()
         val homeSpacesState = homeSpacesPresenter.present()
         var currentHomeNavigationBarItemOrdinal by rememberSaveable { mutableIntStateOf(HomeNavigationBarItem.Chats.ordinal) }

@@ -193,7 +193,8 @@ class HomePresenterTest {
     }
 
     @Test
-    fun `present - multi account announcement is not shown when there are several accounts`() = runTest {
+    fun `present - multi account announcement is not shown and is dismissed when there are several accounts`() = runTest {
+        val onAnnouncementDismissedResult = lambdaRecorder<Announcement, Unit> { }
         val presenter = createHomePresenter(
             sessionStore = InMemorySessionStore(
                 initialList = listOf(
@@ -204,6 +205,7 @@ class HomePresenterTest {
             ),
             announcementService = FakeAnnouncementService(
                 initialAnnouncementsToShowFlowValue = listOf(Announcement.MultiAccount),
+                onAnnouncementDismissedResult = onAnnouncementDismissedResult,
             ),
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.MultiAccount.key to true),
@@ -211,6 +213,8 @@ class HomePresenterTest {
         )
         presenter.test {
             assertThat(expectMostRecentItem().showMultiAccountAnnouncement).isFalse()
+            onAnnouncementDismissedResult.assertions().isCalledOnce()
+                .with(value(Announcement.MultiAccount))
         }
     }
 
