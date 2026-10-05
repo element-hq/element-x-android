@@ -6,10 +6,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.createroom.api
+package io.element.android.features.createroom.test
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.tests.testutils.lambda.lambdaError
 
