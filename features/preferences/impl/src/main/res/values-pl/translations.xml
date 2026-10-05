@@ -93,6 +93,8 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_mode_mentions">"Wzmianki"</string>
   <string name="screen_notification_settings_notification_section_title">"Powiadamiaj mnie przez"</string>
   <string name="screen_notification_settings_room_mention_label">"Wzmianki @room"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Kropki lub liczba nieprzeczytanych wiadomości"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Pokaż całą aktywność na liście pokoi"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Własny"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Własny dźwięk…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Błąd usuwania pliku"</string>
@@ -109,6 +111,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"ustawienia systemowe"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Powiadomienia systemowe wyłączone"</string>
   <string name="screen_notification_settings_title">"Powiadomienia"</string>
+  <string name="screen_settings_add_account">"Dodaj konto"</string>
   <string name="screen_settings_user_status_away">"Z dala od urządzenia"</string>
   <string name="screen_settings_user_status_be_right_back">"Zaraz wracam"</string>
   <string name="screen_settings_user_status_custom">"Własny"</string>

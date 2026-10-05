@@ -85,7 +85,7 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_mode_all">"Semua"</string>
   <string name="screen_notification_settings_mode_mentions">"Sebutan"</string>
   <string name="screen_notification_settings_notification_section_title">"Beri tahu saya tentang"</string>
-  <string name="screen_notification_settings_room_mention_label">"Beri tahu saya pada @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Penyebutan @room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Kustom"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Suara kustom"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Terjadi kesalahan saat menghapus file."</string>

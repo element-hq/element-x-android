@@ -95,6 +95,7 @@
   <string name="action_choose_file">"选择文件"</string>
   <string name="action_choose_photo">"选择照片"</string>
   <string name="action_clear">"清除"</string>
+  <string name="action_clear_all">"全部清除"</string>
   <string name="action_close">"关闭"</string>
   <string name="action_complete_verification">"完成验证"</string>
   <string name="action_confirm">"确认"</string>
@@ -242,6 +243,7 @@
   <string name="common_call_started">"通话已开始"</string>
   <string name="common_call_you_declined">"你已拒接来电"</string>
   <string name="common_chat_backup">"聊天记录备份"</string>
+  <string name="common_chats">"聊天"</string>
   <string name="common_code_block">"代码块"</string>
   <string name="common_copied_to_clipboard">"已复制到剪贴板"</string>
   <string name="common_copyright">"版权"</string>
@@ -282,6 +284,7 @@
   <string name="common_file_saved">"文件已保存"</string>
   <string name="common_file_saved_on_disk_android">"文件已保存到“下载”"</string>
   <string name="common_forward_message">"转发消息"</string>
+  <string name="common_forward_to">"转发到"</string>
   <string name="common_frequently_used">"常用"</string>
   <string name="common_gallery">"媒体组"</string>
   <plurals name="common_gallery_reply_attachments">
@@ -292,6 +295,7 @@
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"群组通话进行中"</string>
+  <string name="common_header_rooms">"房间"</string>
   <string name="common_image">"图片"</string>
   <string name="common_in_reply_to">"回复 %1$s"</string>
   <string name="common_install_apk_android">"安装 APK"</string>
@@ -349,7 +353,7 @@
   </plurals>
   <string name="common_preparing">"正在准备…"</string>
   <string name="common_privacy_policy">"隐私政策"</string>
-  <string name="common_private">"私密"</string>
+  <string name="common_private">"私有"</string>
   <string name="common_private_room">"私有房间"</string>
   <string name="common_private_space">"私有空间"</string>
   <string name="common_public">"公共"</string>
@@ -400,6 +404,7 @@
   <string name="common_shared_live_location">"已共享实时位置"</string>
   <string name="common_shared_location">"共享位置"</string>
   <string name="common_shared_space">"已共享的空间"</string>
+  <string name="common_signed_in">"已登录"</string>
   <string name="common_signing_out">"正在移除设备"</string>
   <string name="common_something_went_wrong">"发生了一些错误"</string>
   <string name="common_something_went_wrong_message">"我们遇到了一个问题。请重试。"</string>
