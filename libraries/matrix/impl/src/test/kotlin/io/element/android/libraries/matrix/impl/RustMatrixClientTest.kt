@@ -327,7 +327,7 @@ class RustMatrixClientTest {
         timelineEventFilterFactory = FakeTimelineEventFilterFactory(),
         featureFlagService = FakeFeatureFlagService(),
         analyticsService = FakeAnalyticsService(),
-        workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
+        workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}, cancelLambda = { _, _ -> }),
         contentScanner = FakeContentScanner(),
         isMessageSearchAvailable = false,
         searchBackfillRequestBuilderFactory = {
