@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.scanner.RustContentScanner
 import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
+import io.element.android.libraries.matrix.impl.workmanager.SearchBackfillRequestBuilder
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -69,6 +70,7 @@ class RustMatrixClientFactory(
     private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
     private val workManagerScheduler: WorkManagerScheduler,
     private val clientBuilderEnterpriseHook: ClientBuilderEnterpriseHook,
+    private val searchBackfillRequestBuilderFactory: SearchBackfillRequestBuilder.Factory,
 ) {
     private val sessionDelegate = RustClientSessionDelegate(
         sessionStore = sessionStore,
@@ -147,6 +149,7 @@ class RustMatrixClientFactory(
             workManagerScheduler = workManagerScheduler,
             contentScanner = client.contentScanner()?.let { RustContentScanner(client, it) },
             isMessageSearchAvailable = isMessageSearchAvailable,
+            searchBackfillRequestBuilderFactory = searchBackfillRequestBuilderFactory,
         ).also {
             Timber.tag("RustMatrixClient").i("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }

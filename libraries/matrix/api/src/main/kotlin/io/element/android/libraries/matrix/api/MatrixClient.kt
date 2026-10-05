@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryServic
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.search.MessageSearchService
+import io.element.android.libraries.matrix.api.search.SearchBackfillStrategy
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -501,6 +502,26 @@ interface MatrixClient : ClientUrlContentFetcher {
 
     /** Returns a provider for the capabilities the homeserver advertises, such as whether the display name can be changed. */
     fun homeserverCapabilities(): HomeserverCapabilitiesProvider
+
+    /** Starts a background task to backfill messages for rooms that have been joined but not fully backfilled yet.
+     * The strategy parameter determines how the backfill should be performed (e.g., in the foreground or background).
+     *
+     * @param strategy the strategy to use for backfilling messages.
+     * @return a [Result] containing an [SdkPendingTask] that can be used to monitor or cancel the backfill task.
+     */
+    fun startSearchBackfill(strategy: SearchBackfillStrategy): Result<SdkPendingTask>
+
+    /** Checks if a search backfill task is currently running.
+     *
+     * @return `true` if a search backfill task is running, `false` otherwise.
+     */
+    fun isSearchBackfillRunning(): Boolean
+
+    /** Cancels the currently running search backfill task, if any.
+     *
+     * @return a [Result] indicating the success or failure of the cancellation operation.
+     */
+    fun cancelSearchBackfill(): Result<Unit>
 }
 
 /**

@@ -63,6 +63,7 @@ dependencies {
 
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)
+    implementation(projects.features.networkmonitor.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)

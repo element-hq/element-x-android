@@ -17,8 +17,10 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.SdkPendingTask
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
@@ -47,6 +49,7 @@ import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
+import io.element.android.libraries.matrix.api.search.SearchBackfillStrategy
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
@@ -81,6 +84,7 @@ import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
+import io.element.android.libraries.matrix.impl.search.map
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
@@ -91,6 +95,7 @@ import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.matrix.impl.workmanager.PerformDatabaseVacuumRequestBuilder
+import io.element.android.libraries.matrix.impl.workmanager.SearchBackfillRequestBuilder
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
@@ -110,8 +115,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -165,6 +172,7 @@ class RustMatrixClient(
     private val workManagerScheduler: WorkManagerScheduler,
     override val contentScanner: ContentScanner?,
     override val isMessageSearchAvailable: Boolean,
+    private val searchBackfillRequestBuilderFactory: SearchBackfillRequestBuilder.Factory,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
@@ -332,6 +340,9 @@ class RustMatrixClient(
 
         // Schedule regular database vacuuming to ensure DB performance remains optimal
         scheduleDatabaseVacuum()
+
+        // Schedule background search backfill if needed
+        scheduleBackgroundSearchBackfill()
     }
 
     private suspend fun setupUserProfile() {
@@ -687,6 +698,7 @@ class RustMatrixClient(
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
         ownProfileTaskHandle?.cancelAndDestroy()
+        currentSearchBackfillTaskHandle?.cancelAndDestroy()
         sessionVerificationService.destroy()
 
         sessionDelegate.clearCurrentClient()
@@ -991,6 +1003,44 @@ class RustMatrixClient(
 
     override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
         return RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities())
+    }
+
+    @Volatile
+    private var currentSearchBackfillTaskHandle: TaskHandle? = null
+
+    private fun scheduleBackgroundSearchBackfill() {
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageSearch)
+            .distinctUntilChanged()
+            .onEach { isEnabled ->
+                if (isEnabled) {
+                    if (workManagerScheduler.hasPendingWork(sessionId, WorkManagerRequestType.SEARCH_BACKFILL)) {
+                        Timber.d("Background search backfill already scheduled for session $sessionId")
+                        return@onEach
+                    }
+                    Timber.d("Scheduling background search backfill for session $sessionId")
+                    val builder = searchBackfillRequestBuilderFactory.create(sessionId)
+                    workManagerScheduler.submit(builder)
+                } else {
+                    Timber.d("Cancelling background search backfill for session $sessionId")
+                    workManagerScheduler.cancel(sessionId, WorkManagerRequestType.SEARCH_BACKFILL)
+                }
+            }
+            .launchIn(sessionCoroutineScope)
+    }
+
+    override fun startSearchBackfill(strategy: SearchBackfillStrategy): Result<SdkPendingTask> = runCatchingExceptions {
+        RustSdkPendingTask(innerClient.runSearchBackfill(strategy.map()).also { currentSearchBackfillTaskHandle = it })
+    }
+
+    override fun isSearchBackfillRunning(): Boolean {
+        return currentSearchBackfillTaskHandle?.let { task ->
+            !task.isFinished()
+        } ?: false
+    }
+
+    override fun cancelSearchBackfill(): Result<Unit> = runCatchingExceptions {
+        currentSearchBackfillTaskHandle?.cancelAndDestroy()
+        currentSearchBackfillTaskHandle = null
     }
 }
 
