@@ -199,6 +199,7 @@
         "screen\\.home\\..*",
         "screen_roomlist_.*",
         "screen\\.roomlist\\..*",
+        "screen\\.multi_account_announcement\\..*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
         "banner\\.set_up_recovery\\..*",
