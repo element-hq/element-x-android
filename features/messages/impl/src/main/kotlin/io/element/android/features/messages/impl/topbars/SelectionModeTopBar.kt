@@ -63,7 +63,7 @@ fun SelectionModeTopBar(
 @PreviewsDayNight
 @Composable
 internal fun SelectionModeTopBarPreview(
-    @PreviewParameter(SelectionCountProvider::class) count: Int,
+    @PreviewParameter(SelectionCountPreviewParam::class) count: Int,
 ) = ElementPreview {
     SelectionModeTopBar(
         selectedCount = count,
@@ -73,6 +73,6 @@ internal fun SelectionModeTopBarPreview(
     )
 }
 
-internal class SelectionCountProvider : PreviewParameterProvider<Int> {
+internal class SelectionCountPreviewParam : PreviewParameterProvider<Int> {
     override val values = sequenceOf(0, 1, 5)
 }
