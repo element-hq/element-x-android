@@ -177,4 +177,13 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    ShowAllActivityInRoomList(
+        key = "feature.show_all_activity_in_room_list",
+        title = "Show all activity in room list",
+        description = "Show all activity indicators in the room list, using unread messages instead of notifications.",
+        defaultValue = { true },
+        // To hide it from the developer options, since it's displayed in the notification settings instead
+        isFinished = true,
+        isInLabs = false,
+    )
 }

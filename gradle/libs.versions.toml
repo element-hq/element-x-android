@@ -5,9 +5,9 @@
 # Project
 android_gradle_plugin = "9.3.2"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
-kotlin = "2.4.10"
+kotlin = "2.4.20"
 kotlinpoet = "2.4.0"
-ksp = "2.3.11"
+ksp = "2.3.12"
 firebaseAppDistribution = "5.3.0"
 
 # AndroidX
@@ -19,7 +19,7 @@ lifecycle = "2.11.0"
 activity = "1.13.0"
 media3 = "1.11.1"
 camera = "1.6.2"
-work = "2.11.2"
+work = "2.12.0"
 
 # Compose
 compose_bom = "2026.09.00"
@@ -51,7 +51,7 @@ maplibre-compose = "0.17.0"
 dependencyAnalysis = "3.19.2"
 
 # DI
-metro = "1.4.4"
+metro = "1.4.5"
 
 # Auto service
 autoservice = "1.1.1"
@@ -93,7 +93,7 @@ jna = "net.java.dev.jna:jna:5.19.1"
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
-androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.10.0"
+androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.11.0"
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx_exifinterface = "androidx.exifinterface:exifinterface:1.4.2"
@@ -102,7 +102,7 @@ androidx_constraintlayout_compose = { module = "androidx.constraintlayout:constr
 androidx_camera_lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camera" }
 androidx_camera_view = { module = "androidx.camera:camera-view", version.ref = "camera" }
 androidx_camera_camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camera" }
-androidx_javascriptengine = "androidx.javascriptengine:javascriptengine:1.1.0"
+androidx_javascriptengine = "androidx.javascriptengine:javascriptengine:1.1.1"
 androidx_workmanager_runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
 
 androidx_recyclerview = "androidx.recyclerview:recyclerview:1.4.0"
@@ -171,8 +171,8 @@ test_mockk = "io.mockk:mockk:1.14.11"
 test_konsist = "com.github.jmartinesp:konsist:0.18.0"
 test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.5"
-test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.22"
-test_robolectric = "org.robolectric:robolectric:4.16.1"
+test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.23"
+test_robolectric = "org.robolectric:robolectric:4.17"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.9.3"
 test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }

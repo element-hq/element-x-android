@@ -64,7 +64,6 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
@@ -96,7 +95,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
-import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -171,8 +169,6 @@ fun TimelineView(
         state.eventSink(TimelineEvent.FocusOnEvent(eventId))
     }
 
-    val context = LocalContext.current
-    val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
     val view = LocalView.current
     fun inReplyToClick(eventId: EventId) {
         state.eventSink(TimelineEvent.FocusOnEvent(eventId))
@@ -182,10 +178,7 @@ fun TimelineView(
         view.performHapticFeedback(
             HapticFeedbackConstants.LONG_PRESS
         )
-        context.copyToClipboard(
-            text = link.url,
-            toastMessage = toastMessage,
-        )
+        state.eventSink(TimelineEvent.CopyToClipboard(link.url))
     }
 
     fun prefetchMoreItems() {
@@ -606,6 +599,7 @@ private fun JumpToPositionButton(
                         .offset { IntOffset(x = 0, y = dotYOffset.roundToPx()) },
                     color = ElementTheme.colors.iconSuccessPrimary,
                     border = BorderStroke(2.dp, ElementTheme.colors.bgCanvasDefault),
+                    count = 0,
                 )
             }
         }

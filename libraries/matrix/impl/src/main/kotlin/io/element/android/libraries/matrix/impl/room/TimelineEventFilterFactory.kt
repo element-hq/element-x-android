@@ -46,10 +46,13 @@ class RustTimelineEventFilterFactory : TimelineEventFilterFactory {
         } else {
             emptyList()
         }
+
+        // Exclude any custom state events not supported by the SDK
+        val customStateEventsFilter = listOf(TimelineEventCondition.AnyCustomStateEvent)
         return if (excludedEventTypes.isNotEmpty() || excludedMembershipChanges.isNotEmpty()) {
-            TimelineEventFilter.Exclude(excludedEventTypes + excludedMembershipChanges)
+            TimelineEventFilter.Exclude(customStateEventsFilter + excludedEventTypes + excludedMembershipChanges)
         } else {
-            null
+            TimelineEventFilter.Exclude(customStateEventsFilter)
         }
     }
 }

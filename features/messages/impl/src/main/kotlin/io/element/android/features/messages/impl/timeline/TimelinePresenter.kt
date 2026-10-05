@@ -44,6 +44,8 @@ import io.element.android.features.messages.impl.voicemessages.timeline.Redacted
 import io.element.android.features.poll.api.actions.EndPollAction
 import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -112,6 +114,8 @@ class TimelinePresenter(
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
     private val markAsFullyRead: MarkAsFullyRead,
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
+    private val clipboardHelper: ClipboardHelper,
+    private val toastHelper: ToastHelper,
 ) : Presenter<TimelineState> {
     private val tag = "TimelinePresenter"
 
@@ -354,6 +358,11 @@ class TimelinePresenter(
                 }
                 is TimelineEvent.ValidateMedia -> {
                     timelineProtectionState.eventSink(TimelineProtectionEvent.ValidateContent(event.mediaSources, event.validationState))
+                }
+                is TimelineEvent.CopyToClipboard -> {
+                    clipboardHelper.copyPlainText(event.text) {
+                        toastHelper.show(CommonStrings.common_copied_to_clipboard)
+                    }
                 }
             }
         }

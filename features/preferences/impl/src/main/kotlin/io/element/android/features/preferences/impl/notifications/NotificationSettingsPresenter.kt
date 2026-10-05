@@ -28,6 +28,8 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -73,6 +75,7 @@ class NotificationSettingsPresenter(
     private val stringProvider: StringProvider,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<NotificationSettingsState> {
     // Serializes the pick → copy → persist → recreate pipeline per slot. The copier already locks
     // its `<slot>.tmp` file, but the persist+recreate window outside the copier is unprotected;
@@ -196,6 +199,11 @@ class NotificationSettingsPresenter(
                 )
         }
 
+        val showAllActivityInRoomList by produceState(false) {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.ShowAllActivityInRoomList)
+                .collect { value = it }
+        }
+
         fun handleEvent(event: NotificationSettingsEvent) {
             when (event) {
                 is NotificationSettingsEvent.SetAtRoomNotificationsEnabled -> {
@@ -276,6 +284,9 @@ class NotificationSettingsPresenter(
                 NotificationSettingsEvent.DismissCallRingtoneCopyError -> {
                     callRingtoneCopyError = false
                 }
+                NotificationSettingsEvent.ToggleShowAllActivityInRoomList -> localCoroutineScope.launch {
+                    featureFlagService.setFeatureEnabled(FeatureFlags.ShowAllActivityInRoomList, !showAllActivityInRoomList)
+                }
             }
         }
 
@@ -304,6 +315,7 @@ class NotificationSettingsPresenter(
             showCallRingtoneDialog = showCallRingtoneDialog,
             pendingMessageSoundPickerLaunch = pendingMessageSoundPickerLaunch,
             pendingCallRingtonePickerLaunch = pendingCallRingtonePickerLaunch,
+            showAllActivityInRoomList = showAllActivityInRoomList,
             eventSink = ::handleEvent,
         )
     }

@@ -18,9 +18,15 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 sealed interface SearchHistoryResult {
-    @Serializable
-    data class Query(val term: String) : SearchHistoryResult
+    val id: String
 
     @Serializable
-    data class Room(val roomId: RoomId) : SearchHistoryResult
+    data class Query(val term: String) : SearchHistoryResult {
+        override val id: String = term
+    }
+
+    @Serializable
+    data class Room(val roomId: RoomId) : SearchHistoryResult {
+        override val id: String = roomId.value
+    }
 }

@@ -8,9 +8,18 @@
 
 package io.element.android.libraries.androidutils.clipboard
 
-/**
- * Wrapper class for handling clipboard operations so it can be used in JVM environments.
- */
 interface ClipboardHelper {
-    fun copyPlainText(text: String)
+    /**
+     * Copy a text to the clipboard.
+     *
+     * @param text the text to copy
+     * @param isSensitive if true, the clip is flagged so the system clipboard preview (Android 13+) and keyboards hide its content.
+     * @param onSuccessOnOldDevice invoked after the copy only on Android versions older than 13, since newer versions already
+     * display a confirmation. Can be used to render a Toast or a Snackbar.
+     */
+    fun copyPlainText(
+        text: String,
+        isSensitive: Boolean = false,
+        onSuccessOnOldDevice: () -> Unit,
+    )
 }

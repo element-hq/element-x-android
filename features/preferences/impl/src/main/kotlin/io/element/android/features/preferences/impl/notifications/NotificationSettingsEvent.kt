@@ -34,4 +34,5 @@ sealed interface NotificationSettingsEvent {
     data object DismissCallRingtoneDialog : NotificationSettingsEvent
     data class SelectCallRingtonePreset(val sound: NotificationSound) : NotificationSettingsEvent
     data object LaunchCallRingtonePicker : NotificationSettingsEvent
+    data object ToggleShowAllActivityInRoomList : NotificationSettingsEvent
 }

@@ -8,8 +8,6 @@
 
 package io.element.android.features.messages.impl.timeline.debug
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -34,11 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.core.content.getSystemService
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -63,6 +59,7 @@ fun EventDebugInfoView(
     originalJson: String?,
     latestEditedJson: String?,
     onBackClick: () -> Unit,
+    onCopyText: (String) -> Unit,
     modifier: Modifier = Modifier,
     isTest: Boolean = false,
 ) {
@@ -87,20 +84,30 @@ fun EventDebugInfoView(
             item {
                 Column(Modifier.padding(vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(text = "Event ID:")
-                    CopyableText(text = eventId?.value ?: "-", modifier = Modifier.fillMaxWidth())
+                    CopyableText(text = eventId?.value ?: "-", onClick = onCopyText, modifier = Modifier.fillMaxWidth())
                 }
             }
             item {
-                CollapsibleSection(title = "Model:", text = model, initiallyExpanded = sectionsInitiallyExpanded)
+                CollapsibleSection(title = "Model:", text = model, onCopyText = onCopyText, initiallyExpanded = sectionsInitiallyExpanded)
             }
             if (originalJson != null) {
                 item {
-                    CollapsibleSection(title = "Original JSON:", text = prettyJSON(originalJson), initiallyExpanded = sectionsInitiallyExpanded)
+                    CollapsibleSection(
+                        title = "Original JSON:",
+                        text = prettyJSON(originalJson),
+                        onCopyText = onCopyText,
+                        initiallyExpanded = sectionsInitiallyExpanded,
+                    )
                 }
             }
             if (latestEditedJson != null) {
                 item {
-                    CollapsibleSection(title = "Latest edited JSON:", text = prettyJSON(latestEditedJson), initiallyExpanded = sectionsInitiallyExpanded)
+                    CollapsibleSection(
+                        title = "Latest edited JSON:",
+                        text = prettyJSON(latestEditedJson),
+                        onCopyText = onCopyText,
+                        initiallyExpanded = sectionsInitiallyExpanded,
+                    )
                 }
             }
         }
@@ -120,6 +127,7 @@ private fun prettyJSON(maybeJSON: String): String {
 private fun CollapsibleSection(
     title: String,
     text: String,
+    onCopyText: (String) -> Unit,
     initiallyExpanded: Boolean = false,
 ) {
     var isExpanded by remember { mutableStateOf(initiallyExpanded) }
@@ -139,7 +147,7 @@ private fun CollapsibleSection(
             )
         }
         AnimatedVisibility(visible = isExpanded, enter = expandVertically(), exit = shrinkVertically()) {
-            CopyableText(text = text, modifier = Modifier.fillMaxWidth())
+            CopyableText(text = text, onClick = onCopyText, modifier = Modifier.fillMaxWidth())
         }
     }
 }
@@ -147,16 +155,15 @@ private fun CollapsibleSection(
 @Composable
 private fun CopyableText(
     text: String,
+    onClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-    val clipboardManager = remember { requireNotNull(context.getSystemService<ClipboardManager>()) }
     Box(
         modifier
             .clip(RoundedCornerShape(4.dp))
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(6.dp)
-            .clickable { clipboardManager.setPrimaryClip(ClipData.newPlainText("JSON", text)) }
+            .clickable { onClick(text) }
     ) {
         Text(
             text = text,
@@ -174,6 +181,7 @@ internal fun EventDebugInfoViewPreview() = ElementPreview {
         model = "Rust(\n\tModel()\n)",
         originalJson = "{\"name\": \"original\"}",
         latestEditedJson = "{\"name\": \"edited\"}",
-        onBackClick = { }
+        onBackClick = { },
+        onCopyText = { },
     )
 }

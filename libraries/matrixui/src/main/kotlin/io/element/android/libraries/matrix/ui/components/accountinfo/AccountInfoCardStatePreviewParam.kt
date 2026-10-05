@@ -20,6 +20,7 @@ open class AccountInfoCardStatePreviewParam : PreviewParameterProvider<AccountIn
             anAccountInfoCardState(
                 mode = AccountInfoCardMode.UserVerification(
                     otherUser = aMatrixUser(displayName = "Other User"),
+                    hint = "User request verification hint",
                 )
             ),
             anAccountInfoCardState(

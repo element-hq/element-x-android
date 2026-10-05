@@ -58,19 +58,6 @@ fun AccountInfoCard(
             .border(1.dp, ElementTheme.colors.borderDisabled, RoundedCornerShape(8.dp))
             .padding(20.dp),
     ) {
-        when (state.mode) {
-            AccountInfoCardMode.Simple -> Unit
-            is AccountInfoCardMode.DeviceVerification -> Unit
-            is AccountInfoCardMode.UserVerification -> {
-                Text(
-                    // TODO
-                    text = "User requesting verification:",
-                    style = ElementTheme.typography.fontBodySmRegular,
-                    color = ElementTheme.colors.textSecondary,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-        }
         AccountInfoCardUser(
             matrixUser = state.matrixUser,
         )
@@ -82,6 +69,12 @@ fun AccountInfoCard(
             }
             is AccountInfoCardMode.UserVerification -> {
                 AccountInfoSeparator()
+                Text(
+                    text = state.mode.hint,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
                 AccountInfoCardUser(
                     matrixUser = state.mode.otherUser,
                 )
@@ -127,8 +120,7 @@ private fun DeviceInfoRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             TextWithLabelMolecule(
-                // TODO i18n
-                label = "Signed in",
+                label = stringResource(CommonStrings.common_signed_in),
                 text = mode.signInFormattedTimestamp,
                 modifier = Modifier.weight(1f),
             )
