@@ -126,3 +126,4 @@ jobs:
     uses: $/.github/workflows/codecov.yml
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      ELEMENT_ENTERPRISE_DEPLOY_KEY: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}

@@ -6,6 +6,8 @@ on:
     secrets:
       CODECOV_TOKEN:
         required: false
+      ELEMENT_ENTERPRISE_DEPLOY_KEY:
+        required: false
 
 permissions: {}
 
