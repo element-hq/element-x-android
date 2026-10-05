@@ -1,0 +1,29 @@
+name: Codecov
+
+# Reusable workflow, called from tests.yml. Uploads the kover coverage report generated there to codecov.
+on:
+  workflow_call:
+    secrets:
+      CODECOV_TOKEN:
+        required: false
+
+permissions: {}
+
+jobs:
+  codecov:
+    name: Upload coverage to codecov
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⏬ Download kover report from the tests job
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: kover-xml-report
+          path: build/reports/kover
+      # https://github.com/codecov/codecov-action
+      - name: ☂️ Upload coverage reports to codecov
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build/reports/kover/reportMerged.xml
+          verbose: true
