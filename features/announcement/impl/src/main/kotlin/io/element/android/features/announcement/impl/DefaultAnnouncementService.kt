@@ -29,10 +29,11 @@ class DefaultAnnouncementService(
 ) : AnnouncementService {
     override suspend fun showAnnouncement(announcement: Announcement) {
         when (announcement) {
-            is Announcement.Fullscreen -> showFullscreenAnnouncement(announcement)
+            is Announcement.Fullscreen -> showAnnouncementIfNeverShown(announcement)
             Announcement.NewNotificationSound -> {
                 announcementStore.setAnnouncementStatus(Announcement.NewNotificationSound, AnnouncementStatus.Show)
             }
+            Announcement.MultiAccount -> showAnnouncementIfNeverShown(announcement)
         }
     }
 
@@ -44,16 +45,20 @@ class DefaultAnnouncementService(
         return combine(
             flowOf(Unit),
             announcementStore.announcementStatusFlow(Announcement.NewNotificationSound),
-        ) { _, newNotificationSoundStatus ->
+            announcementStore.announcementStatusFlow(Announcement.MultiAccount),
+        ) { _, newNotificationSoundStatus, multiAccountStatus ->
             buildList {
                 if (newNotificationSoundStatus == AnnouncementStatus.Show) {
                     add(Announcement.NewNotificationSound)
+                }
+                if (multiAccountStatus == AnnouncementStatus.Show) {
+                    add(Announcement.MultiAccount)
                 }
             }
         }
     }
 
-    private suspend fun showFullscreenAnnouncement(announcement: Announcement.Fullscreen) {
+    private suspend fun showAnnouncementIfNeverShown(announcement: Announcement) {
         val currentValue = announcementStore.announcementStatusFlow(announcement).first()
         if (currentValue == AnnouncementStatus.NeverShown) {
             announcementStore.setAnnouncementStatus(announcement, AnnouncementStatus.Show)

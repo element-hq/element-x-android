@@ -359,6 +359,10 @@ class LoggedInFlowNode(
                     override fun navigateToBugReport() {
                         callback.navigateToBugReport()
                     }
+
+                    override fun navigateToAddAccount() {
+                        callback.navigateToAddAccount()
+                    }
                 }
                 homeEntryPoint.createNode(
                     parentNode = this,

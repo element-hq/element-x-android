@@ -41,6 +41,9 @@ open class HomeStatePreviewParam : PreviewParameterProvider<HomeState> {
             aHomeState(
                 currentHomeNavigationBarItem = HomeNavigationBarItem.Spaces,
             ),
+            aHomeState(
+                showMultiAccountAnnouncement = true,
+            ),
         ) + RoomListStatePreviewParam().values.map {
             aHomeState(roomListState = it)
         } + aHomeState(
@@ -61,6 +64,7 @@ internal fun aHomeState(
     roomListState: RoomListState = aRoomListState(),
     homeSpacesState: HomeSpacesState = aHomeSpacesState(),
     canReportBug: Boolean = true,
+    showMultiAccountAnnouncement: Boolean = false,
     eventSink: (HomeEvent) -> Unit = {}
 ) = HomeState(
     currentUserAndNeighbors = currentUserAndNeighbors.toImmutableList(),
@@ -68,6 +72,7 @@ internal fun aHomeState(
     hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = snackbarMessage,
     canReportBug = canReportBug,
+    showMultiAccountAnnouncement = showMultiAccountAnnouncement,
     currentHomeNavigationBarItem = currentHomeNavigationBarItem,
     roomListState = roomListState,
     homeSpacesState = homeSpacesState,

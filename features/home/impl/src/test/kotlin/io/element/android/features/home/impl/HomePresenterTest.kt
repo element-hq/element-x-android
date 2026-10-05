@@ -9,12 +9,18 @@
 package io.element.android.features.home.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.announcement.api.Announcement
+import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.roomlist.aRoomListState
 import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.home.impl.spaces.aHomeSpacesState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
+import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.indicator.test.FakeIndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -30,6 +36,8 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -144,6 +152,95 @@ class HomePresenterTest {
             assertThat(finalState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Spaces)
         }
     }
+
+    @Test
+    fun `present - multi account announcement is shown when announced, feature enabled and a single account`() = runTest {
+        val presenter = createHomePresenter(
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(aSessionData()),
+                updateUserProfileResult = { _, _, _, _ -> },
+            ),
+            announcementService = FakeAnnouncementService(
+                initialAnnouncementsToShowFlowValue = listOf(Announcement.MultiAccount),
+            ),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.MultiAccount.key to true),
+            ),
+        )
+        presenter.test {
+            assertThat(awaitItem().showMultiAccountAnnouncement).isFalse()
+            assertThat(expectMostRecentItem().showMultiAccountAnnouncement).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - multi account announcement is not shown when the feature is disabled`() = runTest {
+        val presenter = createHomePresenter(
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(aSessionData()),
+                updateUserProfileResult = { _, _, _, _ -> },
+            ),
+            announcementService = FakeAnnouncementService(
+                initialAnnouncementsToShowFlowValue = listOf(Announcement.MultiAccount),
+            ),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.MultiAccount.key to false),
+            ),
+        )
+        presenter.test {
+            assertThat(expectMostRecentItem().showMultiAccountAnnouncement).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - multi account announcement is not shown when there are several accounts`() = runTest {
+        val presenter = createHomePresenter(
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(sessionId = "@alice:server.org"),
+                    aSessionData(sessionId = "@bob:server.org"),
+                ),
+                updateUserProfileResult = { _, _, _, _ -> },
+            ),
+            announcementService = FakeAnnouncementService(
+                initialAnnouncementsToShowFlowValue = listOf(Announcement.MultiAccount),
+            ),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.MultiAccount.key to true),
+            ),
+        )
+        presenter.test {
+            assertThat(expectMostRecentItem().showMultiAccountAnnouncement).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - dismiss multi account announcement`() = runTest {
+        val onAnnouncementDismissedResult = lambdaRecorder<Announcement, Unit> { }
+        val announcementService = FakeAnnouncementService(
+            initialAnnouncementsToShowFlowValue = listOf(Announcement.MultiAccount),
+            onAnnouncementDismissedResult = onAnnouncementDismissedResult,
+        )
+        val presenter = createHomePresenter(
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(aSessionData()),
+                updateUserProfileResult = { _, _, _, _ -> },
+            ),
+            announcementService = announcementService,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.MultiAccount.key to true),
+            ),
+        )
+        presenter.test {
+            val state = expectMostRecentItem()
+            assertThat(state.showMultiAccountAnnouncement).isTrue()
+            state.eventSink(HomeEvent.DismissMultiAccountAnnouncement)
+            announcementService.emitAnnouncementsToShow(emptyList())
+            assertThat(awaitItem().showMultiAccountAnnouncement).isFalse()
+            onAnnouncementDismissedResult.assertions().isCalledOnce()
+                .with(value(Announcement.MultiAccount))
+        }
+    }
 }
 
 internal fun createHomePresenter(
@@ -154,6 +251,8 @@ internal fun createHomePresenter(
     indicatorService: IndicatorService = FakeIndicatorService(),
     homeSpacesPresenter: Presenter<HomeSpacesState> = Presenter { aHomeSpacesState() },
     sessionStore: SessionStore = InMemorySessionStore(),
+    announcementService: AnnouncementService = FakeAnnouncementService(),
+    featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
 ) = HomePresenter(
     client = client,
     syncService = syncService,
@@ -163,4 +262,6 @@ internal fun createHomePresenter(
     homeSpacesPresenter = homeSpacesPresenter,
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     sessionStore = sessionStore,
+    announcementService = announcementService,
+    featureFlagService = featureFlagService,
 )

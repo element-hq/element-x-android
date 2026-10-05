@@ -19,12 +19,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
+import io.element.android.features.announcement.api.Announcement
+import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -43,6 +47,8 @@ class HomePresenter(
     private val homeSpacesPresenter: Presenter<HomeSpacesState>,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val sessionStore: SessionStore,
+    private val announcementService: AnnouncementService,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<HomeState> {
     private val currentUserWithNeighborsBuilder = CurrentUserWithNeighborsBuilder()
 
@@ -59,6 +65,16 @@ class HomePresenter(
         }.collectAsState(initial = persistentListOf(matrixUser))
         val isOnline by syncService.isOnline.collectAsState()
         val canReportBug by remember { rageshakeFeatureAvailability.isAvailable() }.collectAsState(false)
+        val showMultiAccountAnnouncement by remember {
+            combine(
+                announcementService.announcementsToShowFlow(),
+                featureFlagService.isFeatureEnabledFlow(FeatureFlags.MultiAccount),
+                sessionStore.sessionsFlow(),
+            ) { announcements, isMultiAccountEnabled, sessions ->
+                // Do not announce the feature to users who already have several accounts
+                isMultiAccountEnabled && sessions.size == 1 && announcements.contains(Announcement.MultiAccount)
+            }
+        }.collectAsState(false)
         val roomListState = roomListPresenter.present()
         val homeSpacesState = homeSpacesPresenter.present()
         var currentHomeNavigationBarItemOrdinal by rememberSaveable { mutableIntStateOf(HomeNavigationBarItem.Chats.ordinal) }
@@ -82,6 +98,9 @@ class HomePresenter(
                 is HomeEvent.SwitchToAccount -> coroutineState.launch {
                     sessionStore.setLatestSession(event.sessionId.value)
                 }
+                HomeEvent.DismissMultiAccountAnnouncement -> coroutineState.launch {
+                    announcementService.onAnnouncementDismissed(Announcement.MultiAccount)
+                }
             }
         }
 
@@ -95,6 +114,7 @@ class HomePresenter(
             homeSpacesState = homeSpacesState,
             snackbarMessage = snackbarMessage,
             canReportBug = canReportBug,
+            showMultiAccountAnnouncement = showMultiAccountAnnouncement,
             eventSink = ::handleEvent,
         )
     }

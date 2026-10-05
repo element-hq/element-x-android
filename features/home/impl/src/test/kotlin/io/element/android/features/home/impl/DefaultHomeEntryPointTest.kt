@@ -52,6 +52,7 @@ class DefaultHomeEntryPointTest : RobolectricTest() {
             override fun navigateToEnterRecoveryKey() = lambdaError()
             override fun navigateToRoomSettings(roomId: RoomId) = lambdaError()
             override fun navigateToBugReport() = lambdaError()
+            override fun navigateToAddAccount() = lambdaError()
         }
         val result = entryPoint.createNode(
             parentNode = parentNode,

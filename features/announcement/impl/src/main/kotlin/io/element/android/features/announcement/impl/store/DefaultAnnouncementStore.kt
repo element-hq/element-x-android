@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.map
 
 private val spaceAnnouncementKey = intPreferencesKey("spaceAnnouncement")
 private val newNotificationSoundKey = intPreferencesKey("newNotificationSound")
+private val multiAccountKey = intPreferencesKey("multiAccountAnnouncement")
 
 @ContributesBinding(AppScope::class)
 class DefaultAnnouncementStore(
@@ -36,11 +37,14 @@ class DefaultAnnouncementStore(
     override fun announcementStatusFlow(announcement: Announcement): Flow<AnnouncementStatus> {
         val key = announcement.toKey()
         // Default-status convention: Shown for one-shot intro/feature announcements that should
-        // NOT replay on first launch (Fullscreen.Space is disabled; NewNotificationSound is opted
-        // in by AppMigration08).
+        // NOT replay on first launch.
+        // - Fullscreen.Space is disabled
+        // - NewNotificationSound is opted in by AppMigration08
+        // - MultiAccount is opted in by AppMigration11
         val defaultStatus = when (announcement) {
             Announcement.Fullscreen.Space -> AnnouncementStatus.Shown
             Announcement.NewNotificationSound -> AnnouncementStatus.Shown
+            Announcement.MultiAccount -> AnnouncementStatus.Shown
         }
         return store.data.map { prefs ->
             val ordinal = prefs[key] ?: defaultStatus.ordinal
@@ -56,4 +60,5 @@ class DefaultAnnouncementStore(
 private fun Announcement.toKey() = when (this) {
     Announcement.Fullscreen.Space -> spaceAnnouncementKey
     Announcement.NewNotificationSound -> newNotificationSoundKey
+    Announcement.MultiAccount -> multiAccountKey
 }
