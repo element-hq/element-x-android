@@ -194,7 +194,7 @@ internal fun TimelineItemRow(
         layout(width = width, height = height) {
             contentPlaceable.place(0, 0)
             if (indicatorPlaceable != null) {
-                val bubbleCenter = contentPlaceable[BubbleVerticalCenter].takeIf { it != AlignmentLine.Unspecified } ?: (height / 2)
+                val bubbleCenter = contentPlaceable[BubbleVerticalCenter].takeIf { it != AlignmentLine.Unspecified } ?: height / 2
                 val x = if (layoutDirection == LayoutDirection.Ltr) 0 else width - indicatorPlaceable.width
                 indicatorPlaceable.place(x = x, y = bubbleCenter - indicatorPlaceable.height / 2)
             }
