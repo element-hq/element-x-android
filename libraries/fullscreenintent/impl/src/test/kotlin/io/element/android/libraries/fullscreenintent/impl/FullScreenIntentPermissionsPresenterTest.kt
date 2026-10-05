@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.fullscreenintent.test
+package io.element.android.libraries.fullscreenintent.impl
 
 import android.content.Intent
 import android.os.Build
@@ -15,7 +15,6 @@ import androidx.lifecycle.Lifecycle
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvent
-import io.element.android.libraries.fullscreenintent.impl.FullScreenIntentPermissionsPresenter
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import io.element.android.services.toolbox.api.intent.ExternalIntentLauncher
