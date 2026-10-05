@@ -11,6 +11,7 @@ package io.element.android.appnav
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
@@ -21,12 +22,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MembershipCha
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.isActive
 
 @AssistedInject
 class LoggedInEventProcessor(
@@ -35,6 +36,7 @@ class LoggedInEventProcessor(
     private val sessionId: SessionId,
     private val roomListService: RoomListService,
     private val notificationCleaner: NotificationCleaner,
+    private val dispatchers: CoroutineDispatchers
 ) {
     @AssistedFactory
     interface Factory {
@@ -43,10 +45,12 @@ class LoggedInEventProcessor(
 
     private var currentChildScope: CoroutineScope? = null
 
+    val isRunning: Boolean = currentChildScope?.isActive == true
+
     fun observeEvents(coroutineScope: CoroutineScope) {
         if (currentChildScope != null) return
 
-        val childScope = coroutineScope.childScope(Dispatchers.Default, "LoggedInEventProcessor")
+        val childScope = coroutineScope.childScope(dispatchers.computation, "LoggedInEventProcessor")
             .also { currentChildScope = it }
 
         roomMembershipObserver.updates
