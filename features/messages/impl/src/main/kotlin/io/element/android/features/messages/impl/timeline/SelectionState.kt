@@ -16,7 +16,7 @@ import io.element.android.features.messages.impl.timeline.model.event.canBeForwa
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableSet
-import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.collections.immutable.toImmutableSet
 
 /** Maximum number of messages that can be selected at once. */
 const val MAX_SELECTION_COUNT = 10
@@ -57,7 +57,7 @@ fun SelectionAction.canApplyTo(event: TimelineItem.Event): Boolean = when (this)
  */
 fun SelectionState.deselect(eventIds: Set<EventId>): SelectionState = when (this) {
     SelectionState.Disabled -> this
-    is SelectionState.Active -> copy(selectedEventIds = (selectedEventIds - eventIds).toPersistentSet())
+    is SelectionState.Active -> copy(selectedEventIds = (selectedEventIds - eventIds).toImmutableSet())
 }
 
 /**

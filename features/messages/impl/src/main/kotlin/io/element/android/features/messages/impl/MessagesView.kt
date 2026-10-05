@@ -142,7 +142,7 @@ import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.collections.immutable.toImmutableSet
 import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -774,7 +774,7 @@ internal fun MessagesViewSelectionModePreview() = ElementPreview {
         .filter { SelectionAction.Forward.canApplyTo(it) }
         .take(2)
         .mapNotNull { it.eventId }
-        .toPersistentSet()
+        .toImmutableSet()
     MessagesView(
         state = aMessagesState(
             timelineState = aTimelineState(

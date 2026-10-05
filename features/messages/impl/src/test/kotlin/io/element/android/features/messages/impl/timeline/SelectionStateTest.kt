@@ -16,7 +16,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_3
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.collections.immutable.toImmutableSet
 import org.junit.Test
 
 class SelectionStateTest {
@@ -84,6 +84,6 @@ class SelectionStateTest {
 
     private fun anActiveSelection(eventIds: List<EventId> = emptyList()) = SelectionState.Active(
         action = SelectionAction.Forward,
-        selectedEventIds = eventIds.toPersistentSet(),
+        selectedEventIds = eventIds.toImmutableSet(),
     )
 }

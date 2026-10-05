@@ -75,7 +75,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
@@ -285,7 +285,7 @@ class TimelinePresenter(
                             snackbarDispatcher.post(SnackbarMessage(CommonStrings.screen_room_maximum_messages_selected))
                             current
                         }
-                        else -> current.copy(selectedEventIds = (selected + event.eventId).toPersistentSet())
+                        else -> current.copy(selectedEventIds = (selected + event.eventId).toImmutableSet())
                     }
                 }
                 is TimelineEvent.ExitSelectionMode -> {
