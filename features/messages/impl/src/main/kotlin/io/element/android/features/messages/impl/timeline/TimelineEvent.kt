@@ -29,6 +29,8 @@ sealed interface TimelineEvent {
 
     data object MarkAllAsRead : TimelineEvent
 
+    data class CopyToClipboard(val text: String) : TimelineEvent
+
     /**
      * Events coming from a timeline item.
      */

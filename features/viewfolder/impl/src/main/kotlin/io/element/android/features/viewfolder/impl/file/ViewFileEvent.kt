@@ -11,4 +11,5 @@ package io.element.android.features.viewfolder.impl.file
 sealed interface ViewFileEvent {
     data object SaveOnDisk : ViewFileEvent
     data object Share : ViewFileEvent
+    data class CopyToClipboard(val text: String) : ViewFileEvent
 }

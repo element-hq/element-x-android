@@ -18,8 +18,13 @@ import io.element.android.features.viewfolder.impl.file.FileSave
 import io.element.android.features.viewfolder.impl.file.FileShare
 import io.element.android.features.viewfolder.impl.file.ViewFileEvent
 import io.element.android.features.viewfolder.impl.file.ViewFilePresenter
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
+import io.element.android.libraries.androidutils.toast.FakeToastHelper
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -126,17 +131,51 @@ class ViewFilePresenterTest {
         }
     }
 
+    @Test
+    fun `present - copy line on old device shows a toast`() = runTest {
+        val clipboardHelper = FakeClipboardHelper(isOldDevice = true)
+        val toastHelper = FakeToastHelper()
+        val presenter = createPresenter(clipboardHelper = clipboardHelper, toastHelper = toastHelper)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(ViewFileEvent.CopyToClipboard("aLine"))
+            assertThat(clipboardHelper.clipboardContents).isEqualTo("aLine")
+            assertThat(toastHelper.shownToasts).containsExactly(CommonStrings.common_line_copied_to_clipboard)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - copy line on new device does not show a toast`() = runTest {
+        val clipboardHelper = FakeClipboardHelper(isOldDevice = false)
+        val toastHelper = FakeToastHelper()
+        val presenter = createPresenter(clipboardHelper = clipboardHelper, toastHelper = toastHelper)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(ViewFileEvent.CopyToClipboard("aLine"))
+            assertThat(clipboardHelper.clipboardContents).isEqualTo("aLine")
+            assertThat(toastHelper.shownToasts).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private fun createPresenter(
         path: String = "aPath",
         name: String = "aName",
         fileContentReader: FileContentReader = FakeFileContentReader(),
         fileShare: FileShare = FakeFileShare(),
         fileSave: FileSave = FakeFileSave(),
+        clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
+        toastHelper: ToastHelper = FakeToastHelper(),
     ) = ViewFilePresenter(
         path = path,
         name = name,
         fileContentReader = fileContentReader,
         fileShare = fileShare,
         fileSave = fileSave,
+        clipboardHelper = clipboardHelper,
+        toastHelper = toastHelper,
     )
 }

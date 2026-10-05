@@ -9,8 +9,11 @@
 package io.element.android.libraries.androidutils.clipboard
 
 import android.content.ClipData
+import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.Build
+import android.os.PersistableBundle
 import androidx.core.content.getSystemService
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -24,7 +27,30 @@ class AndroidClipboardHelper(
 ) : ClipboardHelper {
     private val clipboardManager = requireNotNull(context.getSystemService<ClipboardManager>())
 
-    override fun copyPlainText(text: String) {
-        clipboardManager.setPrimaryClip(ClipData.newPlainText("", text))
+    override fun copyPlainText(
+        text: String,
+        isSensitive: Boolean,
+        onSuccessOnOldDevice: () -> Unit,
+    ) {
+        val clipData = ClipData.newPlainText("", text)
+        if (isSensitive) {
+            clipData.description.extras = PersistableBundle().apply {
+                putBoolean(EXTRA_IS_SENSITIVE, true)
+            }
+        }
+        clipboardManager.setPrimaryClip(clipData)
+        // On Android 13+, the system already displays a confirmation when content is copied to the clipboard.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            onSuccessOnOldDevice()
+        }
+    }
+
+    private companion object {
+        // The constant only exists from API 33, but the documentation recommends using its value on older versions too.
+        val EXTRA_IS_SENSITIVE = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ClipDescription.EXTRA_IS_SENSITIVE
+        } else {
+            "android.content.extra.IS_SENSITIVE"
+        }
     }
 }
