@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.ui.media
+package io.element.android.libraries.matrixmedia.impl
 
 import androidx.test.platform.app.InstrumentationRegistry
 import coil3.ImageLoader

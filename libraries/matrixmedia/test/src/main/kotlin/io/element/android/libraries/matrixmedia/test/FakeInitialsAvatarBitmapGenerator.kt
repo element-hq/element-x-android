@@ -5,11 +5,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.ui.media.test
+package io.element.android.libraries.matrixmedia.test
 
 import coil3.Bitmap
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.ui.media.InitialsAvatarBitmapGenerator
+import io.element.android.libraries.matrixmedia.api.InitialsAvatarBitmapGenerator
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeInitialsAvatarBitmapGenerator(

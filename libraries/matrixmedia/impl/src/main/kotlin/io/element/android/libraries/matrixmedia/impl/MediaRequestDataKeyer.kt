@@ -6,11 +6,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.ui.media
+package io.element.android.libraries.matrixmedia.impl
 
 import coil3.key.Keyer
 import coil3.request.Options
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
 
 internal class AvatarDataKeyer : Keyer<AvatarData> {
     override fun key(data: AvatarData, options: Options): String? {

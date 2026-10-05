@@ -42,7 +42,7 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
-import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
+import io.element.android.libraries.matrixmedia.test.FakeImageLoaderHolder
 import io.element.android.libraries.oauth.test.FakeOAuthActionFlow
 import io.element.android.libraries.oauth.test.FakeOAuthIntentResolver
 import io.element.android.libraries.preferences.test.FakeSessionPreferencesStoreFactory

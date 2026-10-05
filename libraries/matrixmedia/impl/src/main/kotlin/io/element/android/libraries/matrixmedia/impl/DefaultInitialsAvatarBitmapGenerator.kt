@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.ui.media
+package io.element.android.libraries.matrixmedia.impl
 
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrixmedia.api.InitialsAvatarBitmapGenerator
 
 @ContributesBinding(AppScope::class)
 class DefaultInitialsAvatarBitmapGenerator : InitialsAvatarBitmapGenerator {

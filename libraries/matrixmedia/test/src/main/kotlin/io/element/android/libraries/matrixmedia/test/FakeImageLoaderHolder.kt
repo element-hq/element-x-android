@@ -6,12 +6,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.ui.media.test
+package io.element.android.libraries.matrixmedia.test
 
 import coil3.ImageLoader
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
+import io.element.android.libraries.matrixmedia.api.ImageLoaderHolder
 
 class FakeImageLoaderHolder(
     val fakeImageLoader: ImageLoader = FakeImageLoader(),

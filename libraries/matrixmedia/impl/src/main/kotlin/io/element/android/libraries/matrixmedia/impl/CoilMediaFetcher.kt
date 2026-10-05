@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.ui.media
+package io.element.android.libraries.matrixmedia.impl
 
 import coil3.decode.DataSource
 import coil3.decode.ImageSource
@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.exception.isNetworkError
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.toFile
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
 import okio.Buffer
 import okio.FileSystem
 import okio.Path.Companion.toOkioPath

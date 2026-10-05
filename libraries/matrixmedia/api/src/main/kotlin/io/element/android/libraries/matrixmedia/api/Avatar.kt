@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.ui.media
+package io.element.android.libraries.matrixmedia.api
 
 /**
  * The size in pixel of the thumbnail to generate for the avatar.
