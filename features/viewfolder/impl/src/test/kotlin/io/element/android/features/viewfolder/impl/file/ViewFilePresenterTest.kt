@@ -6,18 +6,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.viewfolder.test.file
+package io.element.android.features.viewfolder.impl.file
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.viewfolder.impl.file.ColorationMode
-import io.element.android.features.viewfolder.impl.file.FileContentReader
-import io.element.android.features.viewfolder.impl.file.FileSave
-import io.element.android.features.viewfolder.impl.file.FileShare
-import io.element.android.features.viewfolder.impl.file.ViewFileEvent
-import io.element.android.features.viewfolder.impl.file.ViewFilePresenter
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.androidutils.toast.FakeToastHelper

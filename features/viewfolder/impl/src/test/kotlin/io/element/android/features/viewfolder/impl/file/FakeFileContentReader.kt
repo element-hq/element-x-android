@@ -6,9 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.viewfolder.test.file
-
-import io.element.android.features.viewfolder.impl.file.FileContentReader
+package io.element.android.features.viewfolder.impl.file
 
 class FakeFileContentReader : FileContentReader {
     private var result: Result<List<String>> = Result.success(emptyList())

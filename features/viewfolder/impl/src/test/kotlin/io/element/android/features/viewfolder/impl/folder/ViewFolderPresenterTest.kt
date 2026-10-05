@@ -6,14 +6,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.viewfolder.test.folder
+package io.element.android.features.viewfolder.impl.folder
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.viewfolder.impl.folder.FolderExplorer
-import io.element.android.features.viewfolder.impl.folder.ViewFolderPresenter
 import io.element.android.features.viewfolder.impl.model.Item
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.test.core.aBuildMeta

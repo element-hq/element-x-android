@@ -6,9 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.viewfolder.test.folder
+package io.element.android.features.viewfolder.impl.folder
 
-import io.element.android.features.viewfolder.impl.folder.FolderExplorer
 import io.element.android.features.viewfolder.impl.model.Item
 
 class FakeFolderExplorer : FolderExplorer {

@@ -6,15 +6,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.viewfolder.test.file
+package io.element.android.features.viewfolder.impl.file
 
-import io.element.android.features.viewfolder.impl.file.FileShare
-
-class FakeFileShare : FileShare {
+class FakeFileSave : FileSave {
     var hasBeenCalled = false
         private set
 
-    override suspend fun share(path: String) {
+    override suspend fun save(path: String) {
         hasBeenCalled = true
     }
 }
