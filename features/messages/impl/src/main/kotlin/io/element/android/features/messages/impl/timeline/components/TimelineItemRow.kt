@@ -241,9 +241,9 @@ private fun TimelineItemRowContent(
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
-    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
     modifier: Modifier = Modifier,
     selectionContentOffset: Dp = 0.dp,
+    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
     Box(modifier) {
         when (timelineItem) {
