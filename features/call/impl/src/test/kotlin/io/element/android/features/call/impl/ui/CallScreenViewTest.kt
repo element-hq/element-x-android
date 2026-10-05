@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.ui
+package io.element.android.features.call.impl.ui
 
 import android.view.KeyEvent
 import android.webkit.WebView
@@ -18,11 +18,6 @@ import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.call.impl.pip.PictureInPictureEvent
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.aPictureInPictureState
-import io.element.android.features.call.impl.ui.CallScreenEvent
-import io.element.android.features.call.impl.ui.CallScreenState
-import io.element.android.features.call.impl.ui.CallScreenView
-import io.element.android.features.call.impl.ui.JavascriptBackHandlerBridge
-import io.element.android.features.call.impl.ui.aCallScreenState
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.pressBackKey
 import io.element.android.tests.testutils.robolectric.RobolectricTest

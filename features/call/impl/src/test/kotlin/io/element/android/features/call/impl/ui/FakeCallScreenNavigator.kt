@@ -6,9 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.ui
-
-import io.element.android.features.call.impl.ui.CallScreenNavigator
+package io.element.android.features.call.impl.ui
 
 class FakeCallScreenNavigator : CallScreenNavigator {
     var closeCalled = false

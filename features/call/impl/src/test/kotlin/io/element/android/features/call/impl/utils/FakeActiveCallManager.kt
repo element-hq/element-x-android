@@ -6,12 +6,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.utils
+package io.element.android.features.call.impl.utils
 
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.notifications.CallNotificationData
-import io.element.android.features.call.impl.utils.ActiveCall
-import io.element.android.features.call.impl.utils.ActiveCallManager
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.MutableStateFlow
 

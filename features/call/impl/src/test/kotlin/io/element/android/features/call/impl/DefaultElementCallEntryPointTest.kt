@@ -6,17 +6,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call
+package io.element.android.features.call.impl
 
 import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CallData
-import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.ui.ElementCallActivity
-import io.element.android.features.call.utils.FakeActiveCallManager
-import io.element.android.features.call.utils.FakeNativeCallEntryPoint
+import io.element.android.features.call.impl.utils.FakeActiveCallManager
+import io.element.android.features.call.impl.utils.FakeNativeCallEntryPoint
 import io.element.android.features.callnative.api.NativeCallEntryPoint
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService

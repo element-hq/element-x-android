@@ -6,13 +6,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.notifications
+package io.element.android.features.call.impl.notifications
 
 import androidx.core.graphics.drawable.IconCompat
 import androidx.test.platform.app.InstrumentationRegistry
 import coil3.ImageLoader
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.features.call.impl.ui.IncomingCallActivity
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.test.AN_EVENT_ID

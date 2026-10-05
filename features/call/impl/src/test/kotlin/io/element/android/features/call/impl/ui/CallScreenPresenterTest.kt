@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.ui
+package io.element.android.features.call.impl.ui
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -14,13 +14,10 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.features.call.api.CallData
-import io.element.android.features.call.impl.ui.CallScreenEvent
-import io.element.android.features.call.impl.ui.CallScreenNavigator
-import io.element.android.features.call.impl.ui.CallScreenPresenter
+import io.element.android.features.call.impl.utils.FakeActiveCallManager
+import io.element.android.features.call.impl.utils.FakeCallWidgetProvider
+import io.element.android.features.call.impl.utils.FakeWidgetMessageInterceptor
 import io.element.android.features.call.impl.utils.WidgetMessageSerializer
-import io.element.android.features.call.utils.FakeActiveCallManager
-import io.element.android.features.call.utils.FakeCallWidgetProvider
-import io.element.android.features.call.utils.FakeWidgetMessageInterceptor
 import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers

@@ -6,10 +6,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.utils
+package io.element.android.features.call.impl.utils
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.call.impl.utils.DefaultCallWidgetProvider
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
 import io.element.android.libraries.matrix.test.A_ROOM_ID

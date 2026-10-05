@@ -6,9 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.utils
+package io.element.android.features.call.impl.utils
 
-import io.element.android.features.call.impl.utils.CallWidgetProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver

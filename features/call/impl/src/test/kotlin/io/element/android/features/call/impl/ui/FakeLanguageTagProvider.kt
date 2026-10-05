@@ -6,10 +6,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.ui
+package io.element.android.features.call.impl.ui
 
 import androidx.compose.runtime.Composable
-import io.element.android.features.call.impl.ui.LanguageTagProvider
 
 class FakeLanguageTagProvider(private val languageTag: String?) : LanguageTagProvider {
     @Composable

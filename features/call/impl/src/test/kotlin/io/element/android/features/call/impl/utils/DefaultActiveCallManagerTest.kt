@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.utils
+package io.element.android.features.call.impl.utils
 
 import android.os.PowerManager
 import androidx.core.app.NotificationManagerCompat
@@ -16,10 +16,6 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.notifications.RingingCallNotificationCreator
 import io.element.android.features.call.impl.notifications.aCallNotificationData
-import io.element.android.features.call.impl.utils.ActiveCall
-import io.element.android.features.call.impl.utils.CallState
-import io.element.android.features.call.impl.utils.DefaultActiveCallManager
-import io.element.android.features.call.impl.utils.DefaultCurrentCallService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
