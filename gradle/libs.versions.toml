@@ -239,7 +239,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.26.0"
+element_call_embedded = "io.element.android:element-call-embedded:0.27.0"
 # The native MatrixRTC call component. Versions come from the BOM, so every artifact moves together.
 element_call_bom = { module = "io.element.android:element-call-bom", version.ref = "element_call" }
 element_call_api = { module = "io.element.android:element-call-api" }
