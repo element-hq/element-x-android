@@ -30,8 +30,9 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
+import io.element.android.libraries.push.api.notifications.conversations.conversationShortcutRoomId
+import io.element.android.libraries.push.api.notifications.conversations.createConversationShortcutId
 import io.element.android.libraries.push.impl.intent.IntentProvider
-import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.libraries.push.impl.notifications.shortcut.filterBySession
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
@@ -112,7 +113,7 @@ class DefaultNotificationConversationService(
             targetSize = defaultShortcutIconSize.toLong()
         )?.let(IconCompat::createWithBitmap)
 
-        val shortcutInfo = ShortcutInfoCompat.Builder(context, createShortcutId(sessionId, roomId))
+        val shortcutInfo = ShortcutInfoCompat.Builder(context, createConversationShortcutId(sessionId, roomId))
             .setShortLabel(name)
             .setIcon(icon)
             .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null, eventId = null))
@@ -133,7 +134,7 @@ class DefaultNotificationConversationService(
     }
 
     override suspend fun onLeftRoom(sessionId: SessionId, roomId: RoomId) {
-        val shortcutsToRemove = listOf(createShortcutId(sessionId, roomId))
+        val shortcutsToRemove = listOf(createConversationShortcutId(sessionId, roomId))
         runCatchingExceptions {
             ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutsToRemove)
             if (isRequestPinShortcutSupported) {
@@ -150,16 +151,12 @@ class DefaultNotificationConversationService(
 
     override suspend fun onAvailableRoomsChanged(sessionId: SessionId, roomIds: Set<RoomId>) {
         runCatchingExceptions {
-            val shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context)
-
-            val shortcutsToRemove = mutableListOf<String>()
-            shortcuts.filter { it.id.startsWith(sessionId.value) }
-                .forEach { shortcut ->
-                    val roomId = RoomId(shortcut.id.removePrefix("$sessionId-"))
-                    if (!roomIds.contains(roomId)) {
-                        shortcutsToRemove.add(shortcut.id)
-                    }
+            val shortcutsToRemove = ShortcutManagerCompat.getDynamicShortcuts(context)
+                .filter { shortcut ->
+                    val roomId = conversationShortcutRoomId(shortcut.id, sessionId)
+                    roomId != null && roomId !in roomIds
                 }
+                .map { it.id }
 
             if (shortcutsToRemove.isNotEmpty()) {
                 ShortcutManagerCompat.removeDynamicShortcuts(context, shortcutsToRemove)

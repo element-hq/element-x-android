@@ -23,8 +23,8 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
+import io.element.android.libraries.push.api.notifications.conversations.createConversationShortcutId
 import io.element.android.libraries.push.impl.notifications.factories.FakeIntentProvider
-import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
 import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObserver
 import io.element.android.tests.testutils.robolectric.RobolectricTest
@@ -79,7 +79,7 @@ class DefaultNotificationConversationServiceTest : RobolectricTest() {
         val context = InstrumentationRegistry.getInstrumentation().context
         val service = createService(context)
 
-        val shortcutId = createShortcutId(A_SESSION_ID, A_ROOM_ID)
+        val shortcutId = createConversationShortcutId(A_SESSION_ID, A_ROOM_ID)
         val shortcutInfo = ShortcutInfoCompat.Builder(context, shortcutId)
             .setShortLabel("Room title")
             .setIntent(Intent(Intent.ACTION_VIEW))
