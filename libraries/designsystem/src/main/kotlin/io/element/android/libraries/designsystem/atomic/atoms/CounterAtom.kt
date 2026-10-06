@@ -105,7 +105,9 @@ fun CounterAtom(
     ) {
         countAsText?.let {
             Text(
-                modifier = sizeModifier.padding(extraPadding),
+                modifier = sizeModifier
+                    .align(Alignment.Center)
+                    .padding(extraPadding),
                 text = countAsText,
                 style = textStyle,
                 color = contentColor ?: ElementTheme.colors.textOnSolidPrimary,
