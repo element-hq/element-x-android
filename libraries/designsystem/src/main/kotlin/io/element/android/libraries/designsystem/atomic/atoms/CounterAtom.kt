@@ -8,26 +8,32 @@
 
 package io.element.android.libraries.designsystem.atomic.atoms
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.plus
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Text
 
 private const val MAX_COUNT = 99
@@ -54,7 +60,7 @@ fun CounterAtom(
     modifier: Modifier = Modifier,
     containerColor: Color? = null,
     contentColor: Color? = null,
-    contentPadding: PaddingValues = PaddingValues.Zero,
+    contentPadding: PaddingValues = PaddingValues(vertical = 0.5.dp),
     textStyle: TextStyle = CounterAtomDefaults.textStyle,
     dotSize: Dp = 12.0.dp,
     isCritical: Boolean = false,
@@ -65,40 +71,48 @@ fun CounterAtom(
         else -> MAX_COUNT_STRING
     }
 
-    val minSingleDigitSize = if (countAsText?.length == 1) {
-        val textMeasurer = rememberTextMeasurer()
-        // Measure the maximum count string size
-        val textLayoutResult = textMeasurer.measure(
-            text = countAsText,
+    val density = LocalDensity.current
+    val textMeasurer = rememberTextMeasurer()
+    val minTextSize = remember(density.density, textStyle) {
+        val result = textMeasurer.measure(
+            text = MAX_COUNT_STRING,
             style = textStyle
         )
-        val textSize = textLayoutResult.size
-        maxOf(textSize.width, textSize.height)
+        with(density) {
+            minOf(result.size.width, result.size.height).toDp()
+        }
+    }
+    val sizeModifier = if (countAsText?.length == 1) {
+        Modifier.size(minTextSize)
     } else {
-        0
+        Modifier.sizeIn(minHeight = minTextSize)
     }
 
-    androidx.compose.material3.Badge(
-        modifier = modifier.then(
-            if (countAsText == null) Modifier.sizeIn(minWidth = dotSize, minHeight = dotSize) else Modifier
-        ),
-        containerColor = containerColor ?: if (isCritical) ElementTheme.colors.iconCriticalPrimary else ElementTheme.colors.iconAccentPrimary,
-        contentColor = contentColor ?: ElementTheme.colors.textOnSolidPrimary,
-        content = countAsText?.let {
-            @Composable {
-                Text(
-                    modifier = Modifier.sizeIn(
-                        minWidth = (minSingleDigitSize.toDp() - 8.dp).coerceAtLeast(0.dp),
-                        minHeight = minSingleDigitSize.toDp()
-                    ).padding(contentPadding),
-                    text = countAsText,
-                    style = textStyle,
-                    color = contentColor ?: ElementTheme.colors.textOnSolidPrimary,
-                    textAlign = TextAlign.Center,
-                )
-            }
+    val extraPadding = if (countAsText?.length == 1) {
+        contentPadding
+    } else {
+        contentPadding + PaddingValues(horizontal = 4.dp)
+    }
+    val backgroundColor = containerColor ?: if (isCritical) ElementTheme.colors.iconCriticalPrimary else ElementTheme.colors.iconAccentPrimary
+
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(100))
+            .background(backgroundColor)
+            .then(
+                if (countAsText == null) Modifier.size(dotSize) else Modifier
+            )
+    ) {
+        countAsText?.let {
+            Text(
+                modifier = sizeModifier.padding(extraPadding),
+                text = countAsText,
+                style = textStyle,
+                color = contentColor ?: ElementTheme.colors.textOnSolidPrimary,
+                textAlign = TextAlign.Center,
+            )
         }
-    )
+    }
 }
 
 object CounterAtomDefaults {
@@ -112,7 +126,7 @@ internal fun CounterAtomPreview() = ElementPreview {
     Row(horizontalArrangement = spacedBy(2.dp), verticalAlignment = Alignment.CenterVertically) {
         CounterAtom(count = 0)
         CounterAtom(count = 4)
-        CounterAtom(count = 99)
+        CounterAtom(count = 10)
         CounterAtom(count = 100)
         CounterAtom(count = 4, isCritical = true)
     }

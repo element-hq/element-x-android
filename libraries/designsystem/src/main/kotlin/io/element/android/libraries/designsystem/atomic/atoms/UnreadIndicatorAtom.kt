@@ -27,14 +27,13 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.unreadIndicator
 
 @Composable
 fun UnreadIndicatorAtom(
     modifier: Modifier = Modifier,
     size: Dp = 12.dp,
     count: Long? = null,
-    color: Color = ElementTheme.colors.unreadIndicator,
+    color: Color = ElementTheme.colors.iconAccentPrimary,
     isVisible: Boolean = true,
     contentDescription: String? = null,
     border: BorderStroke? = null,
@@ -49,10 +48,10 @@ fun UnreadIndicatorAtom(
                     .semantics {
                         contentDescription?.let { this.contentDescription = it }
                     }
-                    .then(if (border != null) Modifier.border(border, RoundedCornerShape(percent = 50)) else Modifier),
+                    .then(if (border != null) Modifier.border(border, RoundedCornerShape(percent = 100)) else Modifier),
                 containerColor = color,
                 contentColor = ElementTheme.colors.bgCanvasDefault,
-                textStyle = ElementTheme.typography.fontBodySmMedium,
+                textStyle = ElementTheme.typography.fontBodyXsMedium,
                 contentPadding = contentPadding,
             )
         }
@@ -66,7 +65,7 @@ internal fun UnreadIndicatorAtomPreview() = ElementPreview {
         UnreadIndicatorAtom(count = null)
         UnreadIndicatorAtom(count = 0)
         UnreadIndicatorAtom(count = 1)
-        UnreadIndicatorAtom(count = 10)
+        UnreadIndicatorAtom(count = 20)
         UnreadIndicatorAtom(count = 99)
         UnreadIndicatorAtom(count = 999)
     }
