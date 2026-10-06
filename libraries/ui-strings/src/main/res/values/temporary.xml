@@ -11,4 +11,14 @@
     <string name="a11y_active">Active</string>
     <string name="a11y_inactive">Inactive</string>
     <string name="common_switch_account">Switch accounts</string>
+    <string name="screen_ptt_settings_title">Push to talk</string>
+    <string name="screen_ptt_settings_covert_mode">Covert mode</string>
+    <string name="screen_ptt_settings_covert_mode_description">Mute all channels</string>
+    <string name="screen_ptt_settings_system_overlay">Enable system overlay</string>
+    <string name="screen_ptt_settings_system_overlay_description">Access a floating action button</string>
+    <string name="screen_ptt_settings_lock_screen">Show on lock screen</string>
+    <string name="screen_ptt_settings_lock_screen_description">Access from the lock screen</string>
+    <string name="screen_ptt_settings_battery_optimization">Ignore battery optimization</string>
+    <string name="screen_ptt_settings_battery_optimization_description">Stay active in background</string>
+    <string name="screen_ptt_settings_bluetooth">Connect Bluetooth device</string>
 </resources>
