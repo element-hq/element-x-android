@@ -207,7 +207,7 @@ class NotificationSettingsViewTest : RobolectricTest() {
         eventsRecorder.assertList(
             listOf(
                 NotificationSettingsEvent.RefreshSystemNotificationsEnabled,
-                NotificationSettingsEvent.ToggleShowAllActivityInRoomList,
+                NotificationSettingsEvent.ToggleShowAllActivityInRoomList(!initialState),
             )
         )
     }
