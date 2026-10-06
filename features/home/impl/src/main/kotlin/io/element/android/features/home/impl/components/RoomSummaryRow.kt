@@ -244,7 +244,7 @@ private fun NameAndTimestampRow(
             text = timestamp ?: "",
             style = ElementTheme.typography.fontBodySmMedium,
             color = if (isHighlighted) {
-                ElementTheme.colors.unreadIndicator
+                ElementTheme.colors.textActionAccent
             } else {
                 ElementTheme.colors.roomListRoomMessageDate
             },
