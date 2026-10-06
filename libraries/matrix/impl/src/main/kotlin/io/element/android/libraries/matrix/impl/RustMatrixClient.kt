@@ -847,6 +847,7 @@ class RustMatrixClient(
     override fun sendQueueDisabledFlow(): Flow<RoomId> = mxCallbackFlow {
         innerClient.subscribeToSendQueueStatus(object : SendQueueRoomErrorListener {
             override fun onError(roomId: String, error: ClientException) {
+                Timber.e(error, "Send queue error for room $roomId")
                 trySend(RoomId(roomId))
             }
         })
