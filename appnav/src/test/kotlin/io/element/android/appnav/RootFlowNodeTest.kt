@@ -26,6 +26,7 @@ import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.session.FakeSyncOrchestratorFactory
 import io.element.android.appnav.session.MatrixSessionCache
 import io.element.android.appnav.verification.IncomingVerificationRequestObserver
+import io.element.android.features.announcement.test.FakeAnnouncementService
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.test.FakeLoginEntryPoint
@@ -33,7 +34,6 @@ import io.element.android.features.login.test.FakeLoginIntentResolver
 import io.element.android.features.login.test.accesscontrol.FakeAccountProviderAccessControl
 import io.element.android.features.preferences.test.FakeCacheService
 import io.element.android.features.rageshake.test.FakeBugReportEntryPoint
-import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.features.share.test.FakeShareIntentHandler
 import io.element.android.features.signedout.test.FakeSignedOutEntryPoint
 import io.element.android.libraries.accountselect.test.FakeAccountSelectEntryPoint
@@ -42,7 +42,7 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
-import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
+import io.element.android.libraries.matrixmedia.test.FakeImageLoaderHolder
 import io.element.android.libraries.oauth.test.FakeOAuthActionFlow
 import io.element.android.libraries.oauth.test.FakeOAuthIntentResolver
 import io.element.android.libraries.preferences.test.FakeSessionPreferencesStoreFactory

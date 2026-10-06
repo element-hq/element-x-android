@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import io.element.android.features.startchat.StartChatNavigator
+import io.element.android.features.startchat.impl.StartChatNavigator
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.MatrixClient

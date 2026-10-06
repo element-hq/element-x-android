@@ -38,7 +38,7 @@ import io.element.android.libraries.designsystem.utils.ForceOrientationInMobileD
 import io.element.android.libraries.designsystem.utils.ScreenOrientation
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
+import io.element.android.libraries.matrixmedia.api.ImageLoaderHolder
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize

@@ -13,7 +13,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.matrix.ui.media.impl"
+    namespace = "io.element.android.libraries.matrixmedia.impl"
 }
 
 setupDependencyInjection()
