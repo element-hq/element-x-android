@@ -31,6 +31,11 @@ interface SearchHistoryStore {
     suspend fun add(result: SearchHistoryResult)
 
     /**
+     * Remove a [result] from the history.
+     */
+    suspend fun remove(result: SearchHistoryResult)
+
+    /**
      * Remove every entry from the history.
      */
     suspend fun clear()

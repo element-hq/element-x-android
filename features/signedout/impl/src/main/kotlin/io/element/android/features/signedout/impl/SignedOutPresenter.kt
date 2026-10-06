@@ -17,17 +17,18 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 
 @AssistedInject
 class SignedOutPresenter(
     @Assisted private val sessionId: SessionId,
     private val sessionStore: SessionStore,
-    private val buildMeta: BuildMeta,
 ) : Presenter<SignedOutState> {
     @AssistedFactory
     fun interface Factory {
@@ -37,24 +38,31 @@ class SignedOutPresenter(
     @Composable
     override fun present(): SignedOutState {
         val signedOutSession by remember {
-            sessionStore.sessionsFlow().map { sessions ->
-                sessions.firstOrNull { it.userId == sessionId.value }
-            }
-        }.collectAsState(initial = null)
+            sessionStore.sessionsFlow()
+                // Ignore the removal of the session, to keep rendering the account data until the screen is closed
+                .mapNotNull { sessions -> sessions.firstOrNull { it.userId == sessionId.value } }
+                .map { it.toMatrixUser() }
+        }.collectAsState(initial = MatrixUser(userId = sessionId))
         val coroutineScope = rememberCoroutineScope()
 
         fun handleEvent(event: SignedOutEvent) {
             when (event) {
-                SignedOutEvent.SignInAgain -> coroutineScope.launch {
+                SignedOutEvent.Submit -> coroutineScope.launch {
                     sessionStore.removeSession(sessionId.value)
                 }
             }
         }
 
         return SignedOutState(
-            appName = buildMeta.applicationName,
-            signedOutSession = signedOutSession,
+            signedOutMatrixUser = signedOutSession,
             eventSink = ::handleEvent,
         )
     }
+
+    private fun SessionData.toMatrixUser() = MatrixUser(
+        userId = sessionId,
+        displayName = userDisplayName,
+        avatarUrl = userAvatarUrl,
+        avatarThumbnail = userAvatarData,
+    )
 }

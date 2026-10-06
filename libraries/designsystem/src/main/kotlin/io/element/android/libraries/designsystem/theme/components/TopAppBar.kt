@@ -10,7 +10,6 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
@@ -38,7 +37,6 @@ import io.element.android.libraries.designsystem.theme.aliasScreenTitle
  * @param colors The colors used for this top app bar.
  * @param scrollBehavior Optional scroll behavior for this top app bar.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
     titleStr: String,
@@ -78,7 +76,6 @@ fun TopAppBar(
  * @param colors The colors used for this top app bar.
  * @param scrollBehavior Optional scroll behavior for this top app bar.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBar(
     title: @Composable () -> Unit,
@@ -104,7 +101,6 @@ fun TopAppBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(group = PreviewGroup.AppBars)
 @Composable
 internal fun TopAppBarPreview() = ElementThemedPreview {
@@ -123,7 +119,6 @@ internal fun TopAppBarPreview() = ElementThemedPreview {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(group = PreviewGroup.AppBars)
 @Composable
 internal fun TopAppBarStrPreview() = ElementThemedPreview {

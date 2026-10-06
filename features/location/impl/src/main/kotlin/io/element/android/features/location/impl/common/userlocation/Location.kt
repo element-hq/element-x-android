@@ -8,19 +8,18 @@
 package io.element.android.features.location.impl.common.userlocation
 
 import io.element.android.features.location.api.Location
-import org.maplibre.compose.location.PositionWithAccuracy
+import org.maplibre.compose.location.LocationMeasurement
 import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.units.extensions.meters
-import kotlin.time.TimeSource
-import org.maplibre.compose.location.Location as MapLibreLocation
+import kotlin.time.Clock
 
-fun Location.asMapLibreLocation(): MapLibreLocation {
-    return MapLibreLocation(
-        position = PositionWithAccuracy(
-            value = Position(latitude = lat, longitude = lon),
-            accuracy = accuracy?.toDouble()?.meters
+fun Location.toLocationMeasurement(): LocationMeasurement {
+    return LocationMeasurement(
+        position = Position(
+            latitude = lat,
+            longitude = lon,
         ),
-        // Not relevant as not used
-        timestamp = TimeSource.Monotonic.markNow(),
+        horizontalAccuracy = accuracy?.toDouble()?.meters,
+        measuredAt = Clock.System.now(),
     )
 }

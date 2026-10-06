@@ -8,28 +8,51 @@
 
 package io.element.android.appnav
 
-import dev.zacsweers.metro.Inject
+import androidx.annotation.VisibleForTesting
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@Inject
+@AssistedInject
 class LoggedInEventProcessor(
-    private val snackbarDispatcher: SnackbarDispatcher,
+    @Assisted private val snackbarDispatcher: SnackbarDispatcher,
     private val roomMembershipObserver: RoomMembershipObserver,
+    private val sessionId: SessionId,
+    private val roomListService: RoomListService,
+    private val notificationCleaner: NotificationCleaner,
+    private val dispatchers: CoroutineDispatchers
 ) {
-    private var observingJob: Job? = null
+    @AssistedFactory
+    interface Factory {
+        fun create(snackbarDispatcher: SnackbarDispatcher): LoggedInEventProcessor
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal var currentChildScope: CoroutineScope? = null
 
     fun observeEvents(coroutineScope: CoroutineScope) {
-        observingJob = roomMembershipObserver.updates
+        if (currentChildScope != null) return
+
+        val childScope = coroutineScope.childScope(dispatchers.computation, "LoggedInEventProcessor")
+            .also { currentChildScope = it }
+
+        roomMembershipObserver.updates
             .filter { !it.isUserInRoom }
             .distinctUntilChanged()
             .onEach { roomMemberShipUpdate ->
@@ -48,12 +71,20 @@ class LoggedInEventProcessor(
                     else -> Unit
                 }
             }
-            .launchIn(coroutineScope)
+            .launchIn(childScope)
+
+        // Use the room list service state as a 'heartbeat' update to check existing notifications
+        roomListService.state
+            .filter { it == RoomListService.State.Running }
+            .onEach {
+                notificationCleaner.clearReadRoomsNotifications(sessionId)
+            }
+            .launchIn(childScope)
     }
 
     fun stopObserving() {
-        observingJob?.cancel()
-        observingJob = null
+        currentChildScope?.cancel()
+        currentChildScope = null
     }
 
     private fun displayMessage(message: Int) {

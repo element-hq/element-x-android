@@ -101,6 +101,7 @@
   <string name="action_choose_file">"Вибрати файл"</string>
   <string name="action_choose_photo">"Вибрати фото"</string>
   <string name="action_clear">"Очистити"</string>
+  <string name="action_clear_all">"Очистити все"</string>
   <string name="action_close">"Закрити"</string>
   <string name="action_complete_verification">"Завершити звіряння"</string>
   <string name="action_confirm">"Підтвердити"</string>
@@ -250,6 +251,7 @@
   <string name="common_call_started">"Виклик розпочато"</string>
   <string name="common_call_you_declined">"Ви відхилили виклик"</string>
   <string name="common_chat_backup">"Резервне копіювання бесіди"</string>
+  <string name="common_chats">"Бесіди"</string>
   <string name="common_code_block">"Блок коду"</string>
   <string name="common_copied_to_clipboard">"Скопійовано до буферу обміну"</string>
   <string name="common_copyright">"Авторське право"</string>
@@ -290,6 +292,7 @@
   <string name="common_file_saved">"Файл збережено"</string>
   <string name="common_file_saved_on_disk_android">"Файл збережений у Завантаження"</string>
   <string name="common_forward_message">"Переслати повідомлення"</string>
+  <string name="common_forward_to">"Переслати"</string>
   <string name="common_frequently_used">"Частовживані"</string>
   <string name="common_gallery">"Галерея"</string>
   <plurals name="common_gallery_reply_attachments">
@@ -424,6 +427,7 @@
   <string name="common_shared_live_location">"Поділитися місцезнаходженням в реальному часі"</string>
   <string name="common_shared_location">"Поширене розташування"</string>
   <string name="common_shared_space">"Простір спільного користування"</string>
+  <string name="common_signed_in">"Вхід виконано"</string>
   <string name="common_signing_out">"Вилучення пристрою"</string>
   <string name="common_something_went_wrong">"Щось пішло не так"</string>
   <string name="common_something_went_wrong_message">"Ми зіткнулися з проблемою. Будь ласка, повторіть спробу."</string>

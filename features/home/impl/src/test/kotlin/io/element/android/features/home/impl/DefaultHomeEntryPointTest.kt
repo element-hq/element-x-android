@@ -36,7 +36,6 @@ class DefaultHomeEntryPointTest : RobolectricTest() {
                 inviteFriendsUseCase = { lambdaError() },
                 analyticsService = FakeAnalyticsService(),
                 acceptDeclineInviteView = { _, _, _, _ -> lambdaError() },
-                directLogoutView = { _ -> lambdaError() },
                 reportRoomEntryPoint = { _, _, _ -> lambdaError() },
                 declineInviteAndBlockUserEntryPoint = FakeDeclineInviteAndBlockEntryPoint(),
                 changeRoomMemberRolesEntryPoint = { _, _, _, _ -> lambdaError() },
@@ -53,6 +52,7 @@ class DefaultHomeEntryPointTest : RobolectricTest() {
             override fun navigateToEnterRecoveryKey() = lambdaError()
             override fun navigateToRoomSettings(roomId: RoomId) = lambdaError()
             override fun navigateToBugReport() = lambdaError()
+            override fun navigateToAddAccount() = lambdaError()
         }
         val result = entryPoint.createNode(
             parentNode = parentNode,

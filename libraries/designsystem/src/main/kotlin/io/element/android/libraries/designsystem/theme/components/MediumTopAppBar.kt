@@ -10,7 +10,6 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
@@ -25,7 +24,6 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediumTopAppBar(
     title: @Composable () -> Unit,
@@ -51,7 +49,6 @@ fun MediumTopAppBar(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(group = PreviewGroup.AppBars)
 @Composable
 internal fun MediumTopAppBarPreview() = ElementThemedPreview {

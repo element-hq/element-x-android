@@ -6,8 +6,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.DragInteraction
@@ -15,9 +13,9 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SliderColors
 import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.SliderState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -60,16 +58,16 @@ fun Slider(
             }
         }
     }
+    val sliderState = remember(steps, valueRange) { SliderState(value = value, steps = steps, trackRange = valueRange) }
+    sliderState.value = value
     androidx.compose.material3.Slider(
-        value = value,
+        state = sliderState,
         onValueChange = onValueChange,
         modifier = modifier,
         enabled = enabled,
-        valueRange = valueRange,
-        steps = steps,
         onValueChangeFinished = onValueChangeFinish,
         colors = colors,
-        thumb = {
+        thumb = { _ ->
             if (useCustomLayout) {
                 SliderDefaults.Thumb(
                     modifier = Modifier.drawWithContent {

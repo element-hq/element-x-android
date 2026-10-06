@@ -40,6 +40,9 @@ import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
 import io.element.android.appnav.session.MatrixSessionCache
+import io.element.android.appnav.verification.IncomingVerificationRequestData
+import io.element.android.appnav.verification.IncomingVerificationRequestObserver
+import io.element.android.appnav.verification.OtherSessionIncomingVerificationNode
 import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
@@ -52,6 +55,7 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.rememberDelegateTransitionHandler
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
+import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -63,6 +67,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.oauth.api.OAuthAction
 import io.element.android.libraries.oauth.api.OAuthActionFlow
 import io.element.android.libraries.sessionstorage.api.LoggedInState
@@ -75,11 +80,16 @@ import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 @ContributesNode(AppScope::class)
 @AssistedInject
@@ -100,6 +110,7 @@ class RootFlowNode(
     private val announcementService: AnnouncementService,
     private val analyticsService: AnalyticsService,
     private val analyticsColdStartWatcher: AnalyticsColdStartWatcher,
+    private val incomingVerificationRequestObserver: IncomingVerificationRequestObserver,
     @AppCoroutineScope private val appCoroutineScope: CoroutineScope,
 ) : BaseFlowNode<RootFlowNode.NavTarget>(
     backstack = BackStack(
@@ -127,6 +138,8 @@ class RootFlowNode(
                 observeNavState(false)
             }
         }
+        observeIncomingVerificationRequests()
+        observeRemovedSessions()
         super.onBuilt()
     }
 
@@ -203,6 +216,65 @@ class RootFlowNode(
     private fun switchToLoggedInFlow(sessionId: SessionId, navId: Int) {
         pendingLoginParams = null
         backstack.safeRoot(NavTarget.LoggedInFlow(sessionId, navId))
+        restoreAllSessions()
+    }
+
+    /**
+     * Restore all the sessions with a valid token, so that they sync and can receive incoming verification requests.
+     */
+    private fun restoreAllSessions() = lifecycleScope.launch {
+        sessionStore.getAllSessions()
+            .filter { it.isTokenValid }
+            .forEach { sessionData ->
+                matrixSessionCache.getOrRestore(SessionId(sessionData.userId)).onFailure {
+                    Timber.e(it, "Failed to restore session ${sessionData.userId}")
+                }
+            }
+    }
+
+    /**
+     * Remove from the cache the sessions which have been removed from the session store, for instance after a logout.
+     */
+    private fun observeRemovedSessions() {
+        sessionStore.sessionsFlow()
+            .map { sessions -> sessions.map { SessionId(it.userId) }.toSet() }
+            .withPreviousValue()
+            .onEach { (previous, current) ->
+                (previous.orEmpty() - current).forEach { sessionId ->
+                    Timber.d("Session $sessionId removed, remove it from the cache")
+                    matrixSessionCache.remove(sessionId)
+                }
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun observeIncomingVerificationRequests() {
+        incomingVerificationRequestObserver.incomingVerificationRequests()
+            .onEach(::onIncomingVerificationRequest)
+            .launchIn(lifecycleScope)
+    }
+
+    private fun onIncomingVerificationRequest(data: IncomingVerificationRequestData) = lifecycleScope.launch {
+        // Wait for a logged in flow to be displayed
+        val currentSessionId = withTimeoutOrNull(5.seconds) {
+            backstack.elements.map { elements ->
+                elements.firstNotNullOfOrNull { (it.key.navTarget as? NavTarget.LoggedInFlow)?.sessionId }
+            }.filterNotNull().first()
+        }
+        if (currentSessionId == null) {
+            Timber.w("Incoming verification request ${data.verificationRequest.details.flowId} discarded, no logged in flow.")
+            return@launch
+        }
+        if (currentSessionId == data.sessionId) {
+            waitForChildAttached<LoggedInAppScopeFlowNode, NavTarget> { navTarget ->
+                navTarget is NavTarget.LoggedInFlow && navTarget.sessionId == currentSessionId
+            }
+                .attachSession()
+                .onIncomingVerificationRequest(data.verificationRequest)
+        } else {
+            // Display the request on top of the current session, without switching session
+            backstack.push(NavTarget.OtherAccountIncomingVerificationRequest(data.sessionId, data.verificationRequest))
+        }
     }
 
     private fun switchToNotLoggedInFlow(params: LoginParams?) {
@@ -294,6 +366,11 @@ class RootFlowNode(
         ) : NavTarget
 
         @Parcelize data object BugReport : NavTarget
+
+        @Parcelize data class OtherAccountIncomingVerificationRequest(
+            val sessionId: SessionId,
+            val verificationRequest: VerificationRequest.Incoming,
+        ) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -348,6 +425,23 @@ class RootFlowNode(
                 )
             }
             NavTarget.SplashScreen -> emptyNode(buildContext)
+            is NavTarget.OtherAccountIncomingVerificationRequest -> {
+                if (matrixSessionCache.getOrNull(navTarget.sessionId) == null) {
+                    Timber.w("Couldn't find session ${navTarget.sessionId} for the incoming verification request")
+                    lifecycleScope.launch { backstack.pop() }
+                    return emptyNode(buildContext)
+                }
+                val inputs = OtherSessionIncomingVerificationNode.Inputs(
+                    sessionId = navTarget.sessionId,
+                    verificationRequest = navTarget.verificationRequest,
+                )
+                val callback = object : OtherSessionIncomingVerificationNode.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                createNode<OtherSessionIncomingVerificationNode>(buildContext, plugins = listOf(inputs, callback))
+            }
             NavTarget.BugReport -> {
                 val callback = object : BugReportEntryPoint.Callback {
                     override fun onDone() {

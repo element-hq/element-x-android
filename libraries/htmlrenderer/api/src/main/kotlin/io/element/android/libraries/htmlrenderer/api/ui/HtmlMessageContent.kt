@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.SideEffect
@@ -218,7 +219,7 @@ private fun ParagraphView(
     TextBlock(
         text = node.text,
         inlineContent = node.inlineContent,
-        textStyle = ElementTheme.typography.fontBodyMdRegular,
+        textStyle = LocalTextStyle.current,
         context = context,
         modifier = modifier,
         onTextLayout = { measureLastLine?.invoke(it) },

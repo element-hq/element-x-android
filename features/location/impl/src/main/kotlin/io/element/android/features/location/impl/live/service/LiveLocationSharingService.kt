@@ -102,11 +102,11 @@ class LiveLocationSharingService : Service() {
             }
             .onEach { locationEvent ->
                 when (locationEvent) {
-                    is LocationEvent.Fix -> {
+                    is LocationEvent.Update -> {
                         val location = ApiLocation(
-                            lat = locationEvent.location.position.value.latitude,
-                            lon = locationEvent.location.position.value.longitude,
-                            accuracy = locationEvent.location.position.accuracy?.inMeters?.toFloat(),
+                            lat = locationEvent.measurement.position.latitude,
+                            lon = locationEvent.measurement.position.longitude,
+                            accuracy = locationEvent.measurement.horizontalAccuracy?.inMeters?.toFloat(),
                         )
                         coordinator.dispatch(location)
                     }
@@ -115,7 +115,6 @@ class LiveLocationSharingService : Service() {
                             LocationUnavailableReason.ServicesDisabled,
                             LocationUnavailableReason.TemporarilyUnavailable -> Unit
                             LocationUnavailableReason.Unsupported,
-                            LocationUnavailableReason.Misconfigured,
                             LocationUnavailableReason.PermissionDenied,
                             LocationUnavailableReason.UnexpectedFailure -> coordinator.dispatchUnrecoverableError()
                         }

@@ -8,7 +8,6 @@
 
 package io.element.android.features.messages.impl
 
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -634,8 +633,9 @@ class MessagesPresenter(
         event.eventId ?: return
         room.getPermalinkFor(event.eventId).fold(
             onSuccess = { permalink ->
-                clipboardHelper.copyPlainText(permalink)
-                snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_link_copied_to_clipboard))
+                clipboardHelper.copyPlainText(permalink) {
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_link_copied_to_clipboard))
+                }
             },
             onFailure = {
                 Timber.e(it, "Failed to get permalink for event ${event.eventId}")
@@ -650,16 +650,14 @@ class MessagesPresenter(
             is TimelineItemStateContent -> event.content.body
             else -> return
         }
-        clipboardHelper.copyPlainText(content)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        clipboardHelper.copyPlainText(content) {
             snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_message_copied))
         }
     }
 
     private fun handleCopyCaption(event: TimelineItem.Event) {
         val content = event.content.captionOrNull() ?: return
-        clipboardHelper.copyPlainText(content)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        clipboardHelper.copyPlainText(content) {
             snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
         }
     }

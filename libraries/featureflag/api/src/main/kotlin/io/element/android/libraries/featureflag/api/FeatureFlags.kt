@@ -121,14 +121,14 @@ enum class FeatureFlags(
         title = "Automatic back pagination of rooms",
         description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
             "\nRequires an app restart to take effect.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     UnreadIndicatorCount(
         key = "feature.unread_indicator_count",
         title = "Unread indicator count",
         description = "Show the number of unread messages on the unread indicator in the room list.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     SendGalleryMessages(
@@ -162,4 +162,20 @@ enum class FeatureFlags(
         isFinished = false,
         isInLabs = false,
     ),
+    NativeCall(
+        key = "feature.native_call",
+        title = "Native calls (experimental)",
+        description = "Place calls with the native MatrixRTC stack instead of the Element Call WebView.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    ShowAllActivityInRoomList(
+        key = "feature.show_all_activity_in_room_list",
+        title = "Show all activity in room list",
+        description = "Show all activity indicators in the room list, using unread messages instead of notifications.",
+        defaultValue = { true },
+        // To hide it from the developer options, since it's displayed in the notification settings instead
+        isFinished = true,
+        isInLabs = false,
+    )
 }

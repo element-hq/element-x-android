@@ -109,6 +109,7 @@ fun TextButton(
     showProgress: Boolean = false,
     destructive: Boolean = false,
     leadingIcon: IconSource? = null,
+    colors: ButtonColors = ButtonStyle.Text.getColors(destructive),
 ) = ButtonInternal(
     text = text,
     onClick = onClick,
@@ -118,7 +119,8 @@ fun TextButton(
     size = size,
     showProgress = showProgress,
     destructive = destructive,
-    leadingIcon = leadingIcon
+    leadingIcon = leadingIcon,
+    colors = colors,
 )
 
 @Composable

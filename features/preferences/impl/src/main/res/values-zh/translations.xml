@@ -91,7 +91,8 @@
   <string name="screen_notification_settings_mode_mentions">"提及"</string>
   <string name="screen_notification_settings_notification_section_title">"通知我以下类型"</string>
   <string name="screen_notification_settings_room_mention_label">"含有 @room 的提及"</string>
-  <string name="screen_notification_settings_show_all_activity">"在房间列表上显示所有活动（用于未读消息的圆点或数字）"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"用于未读消息的圆点或数字"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"显示房间列表中的所有活动"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"自定义"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"自定义提示音…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"删除文件时出错"</string>
@@ -108,6 +109,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"系统设置"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"系统通知已关闭"</string>
   <string name="screen_notification_settings_title">"通知"</string>
+  <string name="screen_settings_add_account">"添加账户"</string>
   <string name="screen_settings_user_status_away">"离开"</string>
   <string name="screen_settings_user_status_be_right_back">"马上回来"</string>
   <string name="screen_settings_user_status_custom">"自定义…"</string>

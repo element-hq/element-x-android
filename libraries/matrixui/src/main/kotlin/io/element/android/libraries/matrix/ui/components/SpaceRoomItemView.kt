@@ -169,7 +169,8 @@ private fun NameAndIndicatorRow(
         )
         if (showIndicator) {
             UnreadIndicatorAtom(
-                color = ElementTheme.colors.unreadIndicator
+                color = ElementTheme.colors.unreadIndicator,
+                count = 0,
             )
         }
     }

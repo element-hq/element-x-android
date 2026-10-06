@@ -98,6 +98,7 @@
   <string name="action_choose_file">"Choose file"</string>
   <string name="action_choose_photo">"Choose photo"</string>
   <string name="action_clear">"Clear"</string>
+  <string name="action_clear_all">"Clear all"</string>
   <string name="action_close">"Close"</string>
   <string name="action_complete_verification">"Complete verification"</string>
   <string name="action_confirm">"Confirm"</string>
@@ -246,6 +247,7 @@
   <string name="common_call_started">"Call started"</string>
   <string name="common_call_you_declined">"You declined a call"</string>
   <string name="common_chat_backup">"Chat backup"</string>
+  <string name="common_chats">"Chats"</string>
   <string name="common_code_block">"Code block"</string>
   <string name="common_copied_to_clipboard">"Copied to clipboard"</string>
   <string name="common_copyright">"Copyright"</string>
@@ -286,6 +288,7 @@ Reason: %1$s."</string>
   <string name="common_file_saved">"File saved"</string>
   <string name="common_file_saved_on_disk_android">"File saved to Downloads"</string>
   <string name="common_forward_message">"Forward message"</string>
+  <string name="common_forward_to">"Forward to"</string>
   <string name="common_frequently_used">"Frequently used"</string>
   <string name="common_gallery">"Gallery"</string>
   <plurals name="common_gallery_reply_attachments">
@@ -298,6 +301,7 @@ Reason: %1$s."</string>
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Group call in progress"</string>
+  <string name="common_header_rooms">"Rooms"</string>
   <string name="common_image">"Image"</string>
   <string name="common_in_reply_to">"In reply to %1$s"</string>
   <string name="common_install_apk_android">"Install APK"</string>
@@ -412,6 +416,7 @@ Reason: %1$s."</string>
   <string name="common_shared_live_location">"Shared live location"</string>
   <string name="common_shared_location">"Shared location"</string>
   <string name="common_shared_space">"Shared space"</string>
+  <string name="common_signed_in">"Signed in"</string>
   <string name="common_signing_out">"Removing device"</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>

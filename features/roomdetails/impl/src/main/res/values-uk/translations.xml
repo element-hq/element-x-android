@@ -42,6 +42,9 @@
   <string name="screen_room_change_role_unsaved_changes_description">"У вас є не збережені зміни."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Зберегти зміни?"</string>
   <string name="screen_room_details_add_topic_title">"Додати тему"</string>
+  <string name="screen_room_details_audio_push_to_talk">"Натисніть, щоб говорити"</string>
+  <string name="screen_room_details_audio_title">"Аудіо в кімнаті"</string>
+  <string name="screen_room_details_audio_video_calls">"Відеовиклики"</string>
   <string name="screen_room_details_badge_encrypted">"Зашифровано"</string>
   <string name="screen_room_details_badge_not_encrypted">"Не зашифровано"</string>
   <string name="screen_room_details_badge_public">"Загальнодоступна кімната"</string>

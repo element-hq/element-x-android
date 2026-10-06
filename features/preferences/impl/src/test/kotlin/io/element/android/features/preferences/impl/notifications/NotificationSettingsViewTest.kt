@@ -185,6 +185,35 @@ class NotificationSettingsViewTest : RobolectricTest() {
 
     @Config(qualifiers = "h1024dp")
     @Test
+    fun `clicking on disable show all activity emits the expected events`() {
+        testShowAllActivityToggle(true)
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `clicking on enable show all activity emits the expected events`() {
+        testShowAllActivityToggle(false)
+    }
+
+    private fun testShowAllActivityToggle(initialState: Boolean) = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
+        setNotificationSettingsView(
+            state = aValidNotificationSettingsState(
+                showAllActivityInRoomList = initialState,
+                eventSink = eventsRecorder
+            ),
+        )
+        clickOn(R.string.screen_notification_settings_show_all_activity_title)
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvent.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvent.ToggleShowAllActivityInRoomList,
+            )
+        )
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
     fun `with an error configuration, clicking on continue emits the expected events`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(

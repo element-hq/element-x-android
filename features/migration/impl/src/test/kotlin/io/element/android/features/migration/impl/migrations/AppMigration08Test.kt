@@ -10,7 +10,7 @@ package io.element.android.features.migration.impl.migrations
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.announcement.api.Announcement
-import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
+import io.element.android.features.announcement.test.FakeAnnouncementService
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value

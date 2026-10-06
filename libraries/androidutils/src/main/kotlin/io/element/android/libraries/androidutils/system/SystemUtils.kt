@@ -50,25 +50,6 @@ fun Context.getVersionCodeFromManifest(): Long {
     )
 }
 
-// ==============================================================================================================
-// Clipboard helper
-// ==============================================================================================================
-
-/**
- * Copy a text to the clipboard, and display a Toast when done.
- *
- * @receiver the context
- * @param text the text to copy
- * @param toastMessage content of the toast message as a String resource. Null for no toast
- */
-fun Context.copyToClipboard(
-    text: CharSequence,
-    toastMessage: String? = null
-) {
-    CopyToClipboardUseCase(this).execute(text)
-    toastMessage?.let { toast(it) }
-}
-
 /**
  * Shows notification settings for the current app.
  * In android O will directly opens the notification settings, in lower version it will show the App settings

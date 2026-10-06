@@ -9,7 +9,6 @@
 package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,7 +21,6 @@ import io.element.android.libraries.designsystem.theme.components.DialogPreview
 import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConfirmationDialog(
     content: String,

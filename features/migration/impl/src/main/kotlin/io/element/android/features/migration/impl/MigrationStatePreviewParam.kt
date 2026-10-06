@@ -9,7 +9,7 @@
 package io.element.android.features.migration.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.api.MigrationState
+import io.element.android.features.migration.api.MigrationState
 import io.element.android.libraries.architecture.AsyncData
 
 internal class MigrationStatePreviewParam : PreviewParameterProvider<MigrationState> {

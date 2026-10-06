@@ -280,7 +280,6 @@ dependencies {
     implementation(projects.features.migration.api)
     implementation(projects.appnav)
     implementation(projects.appconfig)
-    implementation(projects.libraries.uiStrings)
     implementation(projects.services.analytics.compose)
 
     if (ModulesConfig.pushProvidersConfig.includeFirebase) {
@@ -298,18 +297,13 @@ dependencies {
     implementation(libs.androidx.splash)
     implementation(libs.androidx.core)
     implementation(libs.androidx.corektx)
-    implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.preference)
-    implementation(libs.coil)
 
     implementation(platform(libs.network.okhttp.bom))
     implementation(libs.network.okhttp.logging)
-    implementation(libs.serialization.json)
-
-    implementation(libs.matrix.emojibase.bindings)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
@@ -342,6 +336,9 @@ licensee {
     ignoreDependencies("com.github.matrix-org", "matrix-analytics-events")
     // Ignore dependency that are not third-party licenses to us.
     ignoreDependencies(groupId = "io.element.android")
+    // The rustls-platform-verifier dependency does not provide a license file in their maven repo, but there are MIT and Apache licenses in
+    // the source code repo: see https://github.com/rustls/rustls-platform-verifier
+    ignoreDependencies(groupId = "org.rustls", artifactId = "rustls-platform-verifier")
 }
 
 fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {

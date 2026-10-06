@@ -12,7 +12,7 @@ import android.graphics.Bitmap
 import androidx.core.graphics.drawable.IconCompat
 import coil3.ImageLoader
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.matrix.ui.media.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
+import io.element.android.libraries.matrixmedia.api.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
 
 /**
  * Loads the avatars used to decorate notifications, since the notification APIs need bitmaps rather than Compose images.

@@ -25,7 +25,6 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    implementation(projects.appconfig)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
@@ -33,15 +32,13 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.preferences.api)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.features.logout.api)
     api(libs.statemachine)
     api(projects.features.verifysession.api)
 
     testCommonDependencies(libs, true)
-    testImplementation(projects.features.logout.test)
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.preferences.test)
+    testImplementation(projects.libraries.sessionStorage.test)
 }

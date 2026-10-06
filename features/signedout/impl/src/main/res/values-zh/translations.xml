@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"你在另一个会话中更改了密码"</string>
-  <string name="screen_signed_out_reason_2">"你已从其它会话中删除此会话"</string>
-  <string name="screen_signed_out_reason_3">"服务器管理员已禁止你的访问"</string>
+  <string name="screen_signed_out_reason_1">"你已为账户移除此设备"</string>
+  <string name="screen_signed_out_reason_2">"你已在另一设备上更改密码"</string>
+  <string name="screen_signed_out_reason_3">"你的服务器会话已过期，或管理员已阻止你的访问。"</string>
   <string name="screen_signed_out_subtitle">"你可能因以下原因而被注销。请重新登录以继续使用 %s。"</string>
-  <string name="screen_signed_out_title">"你已注销"</string>
+  <string name="screen_signed_out_subtitle_v2">"此设备因以下原因之一已被移除。请重新登录以连接设备到你的账户。"</string>
+  <string name="screen_signed_out_title">"设备已移除"</string>
 </resources>

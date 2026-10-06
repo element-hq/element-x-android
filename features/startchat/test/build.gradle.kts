@@ -11,13 +11,11 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.invitepeople.test"
+    namespace = "io.element.android.features.startchat.test"
 }
 
 dependencies {
-    implementation(libs.coroutines.core)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.matrix.test)
     implementation(projects.libraries.architecture)
     implementation(projects.tests.testutils)
     api(projects.features.startchat.api)

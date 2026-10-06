@@ -1,0 +1,2 @@
+Main changes in this version: fix an issue with the room list not displaying all activity from unread messages.
+Full changelog: https://github.com/element-hq/element-x-android/releases

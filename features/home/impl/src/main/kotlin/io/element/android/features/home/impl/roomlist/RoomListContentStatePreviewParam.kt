@@ -40,6 +40,7 @@ internal fun aRoomsContentState(
     summaries: ImmutableList<RoomListRoomSummary> = aRoomListRoomSummaryList(),
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
     batteryOptimizationState: BatteryOptimizationState = aBatteryOptimizationState(),
+    showAllActivity: Boolean = false,
     seenRoomInvites: Set<RoomId> = emptySet(),
 ) = RoomListContentState.Rooms(
     securityBannerState = securityBannerState,
@@ -48,6 +49,7 @@ internal fun aRoomsContentState(
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
     batteryOptimizationState = batteryOptimizationState,
     summaries = summaries,
+    showAllActivity = showAllActivity,
     seenRoomInvites = seenRoomInvites.toImmutableSet(),
 )
 

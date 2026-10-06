@@ -510,8 +510,8 @@ class ShowLocationPresenterTest {
             val state = awaitItem()
             assertThat(state.hideUserLocationPuck).isTrue()
             val location = requireNotNull(state.userLocationState.location)
-            assertThat(location.position.value.latitude).isEqualTo(ownLocation?.lat)
-            assertThat(location.position.value.longitude).isEqualTo(ownLocation?.lon)
+            assertThat(location.position.latitude).isEqualTo(ownLocation?.lat)
+            assertThat(location.position.longitude).isEqualTo(ownLocation?.lon)
         }
     }
 }

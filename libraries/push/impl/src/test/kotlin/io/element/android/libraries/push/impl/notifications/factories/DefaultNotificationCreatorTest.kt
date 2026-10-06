@@ -27,8 +27,8 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
-import io.element.android.libraries.matrix.ui.media.test.FakeImageLoader
-import io.element.android.libraries.matrix.ui.media.test.FakeInitialsAvatarBitmapGenerator
+import io.element.android.libraries.matrixmedia.test.FakeImageLoader
+import io.element.android.libraries.matrixmedia.test.FakeInitialsAvatarBitmapGenerator
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
