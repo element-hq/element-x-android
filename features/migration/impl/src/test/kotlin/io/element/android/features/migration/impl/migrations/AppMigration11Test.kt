@@ -18,14 +18,18 @@ import org.junit.Test
 
 class AppMigration11Test {
     @Test
-    fun `migration on fresh install should not invoke the AnnouncementService`() = runTest {
-        val service = FakeAnnouncementService()
+    fun `migration on fresh install should mark the announcement as dismissed`() = runTest {
+        val onAnnouncementDismissedResult = lambdaRecorder<Announcement, Unit> { }
+        val service = FakeAnnouncementService(
+            onAnnouncementDismissedResult = onAnnouncementDismissedResult,
+        )
         val migration = AppMigration11(
             sessionStore = InMemorySessionStore(initialList = listOf(aSessionData())),
             announcementService = service,
         )
-        // FakeAnnouncementService lambdas throw by default
         migration.migrate(isFreshInstall = true)
+        onAnnouncementDismissedResult.assertions().isCalledOnce()
+            .with(value(Announcement.MultiAccount))
     }
 
     @Test

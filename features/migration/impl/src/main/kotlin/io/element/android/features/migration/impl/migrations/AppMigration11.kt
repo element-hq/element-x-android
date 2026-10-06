@@ -16,6 +16,7 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 /**
  * Ensure the multi-account announcement is displayed, but only on application upgrade,
  * and only if the user does not already have several accounts.
+ * In the other cases, mark the announcement as already shown.
  */
 @ContributesIntoSet(AppScope::class)
 class AppMigration11(
@@ -25,10 +26,8 @@ class AppMigration11(
     override val order: Int = 11
 
     override suspend fun migrate(isFreshInstall: Boolean) {
-        if (isFreshInstall) return
-
-        if (sessionStore.getAllSessions().size > 1) {
-            // The user already uses several accounts, no need to announce the feature
+        if (isFreshInstall || sessionStore.getAllSessions().size > 1) {
+            // New users, or users who already have several accounts, do not need to be informed about the feature
             announcementService.onAnnouncementDismissed(Announcement.MultiAccount)
         } else {
             announcementService.showAnnouncement(Announcement.MultiAccount)

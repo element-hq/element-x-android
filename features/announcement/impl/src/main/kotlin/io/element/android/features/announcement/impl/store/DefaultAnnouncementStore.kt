@@ -40,11 +40,11 @@ class DefaultAnnouncementStore(
         // NOT replay on first launch.
         // - Fullscreen.Space is disabled
         // - NewNotificationSound is opted in by AppMigration08
-        // - MultiAccount is opted in by AppMigration11
+        // - MultiAccount is NeverShown by default, AppMigration11 sets it to Show or Shown.
         val defaultStatus = when (announcement) {
             Announcement.Fullscreen.Space -> AnnouncementStatus.Shown
             Announcement.NewNotificationSound -> AnnouncementStatus.Shown
-            Announcement.MultiAccount -> AnnouncementStatus.Shown
+            Announcement.MultiAccount -> AnnouncementStatus.NeverShown
         }
         return store.data.map { prefs ->
             val ordinal = prefs[key] ?: defaultStatus.ordinal
