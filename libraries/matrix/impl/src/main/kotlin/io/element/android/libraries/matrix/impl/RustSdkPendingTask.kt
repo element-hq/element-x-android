@@ -14,7 +14,7 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 class RustSdkPendingTask(
     private val taskHandle: TaskHandle,
 ) : SdkPendingTask {
-    override fun isRunning(): Boolean = !taskHandle.isFinished()
+    override fun isRunning(): Boolean = !taskHandle.uniffiIsDestroyed && !taskHandle.isFinished()
 
     override fun close() {
         taskHandle.cancelAndDestroy()
