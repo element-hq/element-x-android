@@ -120,7 +120,7 @@ private fun MultiAccountAnnouncementContent(
 
 @PreviewsDayNight
 @Composable
-internal fun MultiAccountAnnouncementContentPreview() = ElementPreview(fillMaxSize = true) {
+internal fun MultiAccountAnnouncementBottomSheetPreview() = ElementPreview(fillMaxSize = true) {
     MultiAccountAnnouncementBottomSheet(
         onDismiss = {},
         onAddAccountClick = {},
