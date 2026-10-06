@@ -15,10 +15,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.serialization.json)
-    implementation(projects.libraries.androidutils)
-    implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.wellknown.api)
-    implementation(projects.libraries.wellknown.impl)
     implementation(projects.tests.testutils)
 }

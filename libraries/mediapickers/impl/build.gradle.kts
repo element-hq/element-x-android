@@ -19,7 +19,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     api(projects.libraries.mediapickers.api)
 }

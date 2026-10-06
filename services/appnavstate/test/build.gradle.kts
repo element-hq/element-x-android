@@ -18,5 +18,4 @@ dependencies {
     api(projects.libraries.matrix.api)
     api(projects.services.appnavstate.api)
     implementation(libs.coroutines.core)
-    implementation(libs.androidx.lifecycle.runtime)
 }

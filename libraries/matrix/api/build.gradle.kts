@@ -53,7 +53,6 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.services.analytics.api)
 
     testCommonDependencies(libs)
