@@ -221,7 +221,7 @@ maplibre_compose_location_runtime_gms = { module = "org.maplibre.compose:locatio
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:3.1.1"
 google_zxing = "com.google.zxing:core:3.5.4"
-google_guava = "com.google.guava:guava:33.7.1-android"
+google_guava = "com.google.guava:guava:33.7.2-android"
 
 color_picker = "io.mhssn:colorpicker:1.0.0"
 
