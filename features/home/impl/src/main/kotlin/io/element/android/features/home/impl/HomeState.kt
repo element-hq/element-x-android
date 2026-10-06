@@ -28,6 +28,7 @@ data class HomeState(
     val homeSpacesState: HomeSpacesState,
     val snackbarMessage: SnackbarMessage?,
     val canReportBug: Boolean,
+    val showMultiAccountAnnouncement: Boolean,
     val eventSink: (HomeEvent) -> Unit,
 ) {
     val isBackHandlerEnabled = currentHomeNavigationBarItem != HomeNavigationBarItem.Chats || roomListState.spaceFiltersState is SpaceFiltersState.Selected

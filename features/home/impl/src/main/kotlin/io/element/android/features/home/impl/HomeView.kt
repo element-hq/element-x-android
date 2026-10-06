@@ -39,6 +39,7 @@ import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.components.HomeTopBar
+import io.element.android.features.home.impl.components.MultiAccountAnnouncementBottomSheet
 import io.element.android.features.home.impl.components.RoomListContentView
 import io.element.android.features.home.impl.components.RoomListMenuAction
 import io.element.android.features.home.impl.model.RoomListRoomSummary
@@ -76,6 +77,7 @@ fun HomeView(
     homeState: HomeState,
     onRoomClick: (RoomId, EventId?) -> Unit,
     onSettingsClick: () -> Unit,
+    onAddAccountClick: () -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onStartChatClick: () -> Unit,
@@ -107,6 +109,13 @@ fun HomeView(
                 canReportRoom = state.canReportRoom,
                 eventSink = state.eventSink,
                 onDeclineAndBlockClick = onDeclineInviteAndBlockUser,
+            )
+        }
+
+        if (homeState.showMultiAccountAnnouncement) {
+            MultiAccountAnnouncementBottomSheet(
+                onDismiss = { homeState.eventSink(HomeEvent.DismissMultiAccountAnnouncement) },
+                onAddAccountClick = { if (firstThrottler.canHandle()) onAddAccountClick() },
             )
         }
 
@@ -366,6 +375,7 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStatePreviewParam::class) sta
         homeState = state,
         onRoomClick = { _, _ -> },
         onSettingsClick = {},
+        onAddAccountClick = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
         onStartChatClick = {},
@@ -386,6 +396,7 @@ internal fun HomeViewA11yPreview() = ElementPreview {
         homeState = aHomeState(),
         onRoomClick = { _, _ -> },
         onSettingsClick = {},
+        onAddAccountClick = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
         onStartChatClick = {},

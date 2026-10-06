@@ -110,6 +110,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"system settings"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="screen_settings_add_account">"Add account"</string>
   <string name="screen_settings_user_status_away">"Away"</string>
   <string name="screen_settings_user_status_be_right_back">"Be right back"</string>
   <string name="screen_settings_user_status_custom">"Custom…"</string>
