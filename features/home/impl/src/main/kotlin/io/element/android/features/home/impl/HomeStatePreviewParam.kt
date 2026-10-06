@@ -41,9 +41,6 @@ open class HomeStatePreviewParam : PreviewParameterProvider<HomeState> {
             aHomeState(
                 currentHomeNavigationBarItem = HomeNavigationBarItem.Spaces,
             ),
-            aHomeState(
-                showMultiAccountAnnouncement = true,
-            ),
         ) + RoomListStatePreviewParam().values.map {
             aHomeState(roomListState = it)
         } + aHomeState(
@@ -51,6 +48,8 @@ open class HomeStatePreviewParam : PreviewParameterProvider<HomeState> {
             homeSpacesState = aHomeSpacesState(
                 spaceRooms = emptyList(),
             ),
+        ) + aHomeState(
+            showMultiAccountAnnouncement = true,
         )
 }
 
