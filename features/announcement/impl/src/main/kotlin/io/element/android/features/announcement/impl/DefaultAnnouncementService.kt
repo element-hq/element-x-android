@@ -51,7 +51,9 @@ class DefaultAnnouncementService(
                 if (newNotificationSoundStatus == AnnouncementStatus.Show) {
                     add(Announcement.NewNotificationSound)
                 }
-                if (multiAccountStatus == AnnouncementStatus.Show) {
+                // The multi-account announcement is pending until it is dismissed. Users who were already
+                // logged in when the feature became available still have the default NeverShown status.
+                if (multiAccountStatus != AnnouncementStatus.Shown) {
                     add(Announcement.MultiAccount)
                 }
             }

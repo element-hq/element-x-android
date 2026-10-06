@@ -74,10 +74,12 @@ class DefaultAnnouncementServiceTest {
             announcementStore = announcementStore,
         )
         sut.announcementsToShowFlow().test {
-            assertThat(awaitItem()).isEmpty()
+            // MultiAccount is pending by default
+            assertThat(awaitItem()).containsExactly(Announcement.MultiAccount)
             announcementStore.setAnnouncementStatus(Announcement.NewNotificationSound, AnnouncementStatus.Show)
-            assertThat(awaitItem()).containsExactly(Announcement.NewNotificationSound)
+            assertThat(awaitItem()).containsExactly(Announcement.NewNotificationSound, Announcement.MultiAccount)
             announcementStore.setAnnouncementStatus(Announcement.MultiAccount, AnnouncementStatus.Show)
+            // Still pending
             assertThat(awaitItem()).containsExactly(Announcement.NewNotificationSound, Announcement.MultiAccount)
             announcementStore.setAnnouncementStatus(Announcement.NewNotificationSound, AnnouncementStatus.Shown)
             assertThat(awaitItem()).containsExactly(Announcement.MultiAccount)

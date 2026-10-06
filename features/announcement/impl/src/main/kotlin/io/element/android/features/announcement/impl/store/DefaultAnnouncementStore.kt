@@ -40,7 +40,8 @@ class DefaultAnnouncementStore(
         // NOT replay on first launch.
         // - Fullscreen.Space is disabled
         // - NewNotificationSound is opted in by AppMigration08
-        // - MultiAccount is NeverShown by default, AppMigration11 sets it to Show or Shown.
+        // - MultiAccount is NeverShown by default, which means pending. It is set to Shown when the user enters
+        //   the login flow while the feature is enabled (see NotLoggedInFlowNode), or dismisses the announcement.
         val defaultStatus = when (announcement) {
             Announcement.Fullscreen.Space -> AnnouncementStatus.Shown
             Announcement.NewNotificationSound -> AnnouncementStatus.Shown

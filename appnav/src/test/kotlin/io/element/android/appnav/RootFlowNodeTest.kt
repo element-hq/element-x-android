@@ -141,6 +141,8 @@ class RootFlowNodeTest : RobolectricTest() {
                             loginEntryPoint = loginEntryPoint,
                             imageLoaderHolder = FakeImageLoaderHolder(),
                             analyticsColdStartWatcher = FakeAnalyticsColdStartWatcher(),
+                            featureFlagService = FakeFeatureFlagService(),
+                            announcementService = FakeAnnouncementService(),
                         )
                     }
                 )
