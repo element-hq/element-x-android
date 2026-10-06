@@ -1,0 +1,14 @@
+/*
+ * Copyright (c) 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.features.createroom.impl.configureroom
+
+/** Lets a build-specific implementation adjust what the configure room screen offers. */
+interface ConfigureRoomExtension {
+    /** Whether the public join rule may be offered. */
+    suspend fun isPublicAccessAllowed(): Boolean
+}

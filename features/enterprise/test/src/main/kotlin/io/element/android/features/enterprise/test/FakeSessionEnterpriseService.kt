@@ -16,7 +16,6 @@ class FakeSessionEnterpriseService(
     private val isElementCallAvailableResult: () -> Boolean = { lambdaError() },
     private val tweakMasUrlResult: (String) -> String = { lambdaError() },
     private val isEncryptionDisabledResult: () -> Boolean = { lambdaError() },
-    private val arePublicRoomsDisabledResult: () -> Boolean = { lambdaError() },
 ) : SessionEnterpriseService {
     override suspend fun init() {
     }
@@ -31,9 +30,5 @@ class FakeSessionEnterpriseService(
 
     override suspend fun isEncryptionDisabledByHomeserver(): Boolean {
         return isEncryptionDisabledResult()
-    }
-
-    override suspend fun arePublicRoomsDisabledByHomeserver(): Boolean {
-        return arePublicRoomsDisabledResult()
     }
 }

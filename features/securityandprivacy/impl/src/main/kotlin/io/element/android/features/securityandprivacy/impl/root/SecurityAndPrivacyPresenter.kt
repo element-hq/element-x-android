@@ -65,6 +65,7 @@ class SecurityAndPrivacyPresenter(
     private val room: JoinedRoom,
     private val featureFlagService: FeatureFlagService,
     private val sessionEnterpriseService: SessionEnterpriseService,
+    private val securityAndPrivacyExtension: SecurityAndPrivacyExtension,
 ) : Presenter<SecurityAndPrivacyState> {
     @AssistedFactory
     interface Factory {
@@ -89,8 +90,8 @@ class SecurityAndPrivacyPresenter(
             value = sessionEnterpriseService.isEncryptionDisabledByHomeserver()
         }
 
-        val arePublicRoomsDisabledByHomeserver by produceState(false) {
-            value = sessionEnterpriseService.arePublicRoomsDisabledByHomeserver()
+        val isPublicAccessAllowed by produceState(true) {
+            value = securityAndPrivacyExtension.isPublicAccessAllowed()
         }
 
         val savedIsVisibleInRoomDirectory = remember { mutableStateOf<AsyncData<Boolean>>(AsyncData.Uninitialized) }
@@ -258,7 +259,7 @@ class SecurityAndPrivacyPresenter(
             selectableJoinedSpaces = selectableJoinedSpaces,
             spaceSelectionMode = spaceSelectionMode,
             isEncryptionDisabledByHomeserver = isEncryptionDisabledByHomeserver,
-            arePublicRoomsDisabledByHomeserver = arePublicRoomsDisabledByHomeserver,
+            isPublicAccessAllowed = isPublicAccessAllowed,
             eventSink = ::handleEvent,
         )
 

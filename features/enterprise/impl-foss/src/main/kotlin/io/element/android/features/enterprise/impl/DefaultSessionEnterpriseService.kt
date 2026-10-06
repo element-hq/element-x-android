@@ -18,5 +18,4 @@ class DefaultSessionEnterpriseService : SessionEnterpriseService {
     override suspend fun tweakMasUrl(url: String): String = url
     override suspend fun isElementCallAvailable(): Boolean = true
     override suspend fun isEncryptionDisabledByHomeserver(): Boolean = false
-    override suspend fun arePublicRoomsDisabledByHomeserver(): Boolean = false
 }

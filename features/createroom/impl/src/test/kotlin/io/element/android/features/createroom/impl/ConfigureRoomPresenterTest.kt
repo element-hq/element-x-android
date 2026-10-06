@@ -18,6 +18,7 @@ import io.element.android.features.createroom.impl.configureroom.ConfigureRoomSt
 import io.element.android.features.createroom.impl.configureroom.CreateRoomConfig
 import io.element.android.features.createroom.impl.configureroom.CreateRoomConfigStore
 import io.element.android.features.createroom.impl.configureroom.JoinRuleItem
+import io.element.android.features.createroom.impl.configureroom.NoopConfigureRoomExtension
 import io.element.android.features.createroom.impl.configureroom.RoomAddress
 import io.element.android.features.createroom.impl.configureroom.RoomVisibilityState
 import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
@@ -57,7 +58,6 @@ import io.element.android.libraries.previewutils.room.aSpaceRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.matching
 import io.element.android.tests.testutils.robolectric.RobolectricTest
@@ -523,10 +523,7 @@ class ConfigureRoomPresenterTest : RobolectricTest() {
 
     @Test
     fun `present - creating a private room when encryption is disabled by the HS creates it unencrypted`() = runTest {
-        val sessionEnterpriseService = FakeSessionEnterpriseService(
-            isEncryptionDisabledResult = { true },
-            arePublicRoomsDisabledResult = { false },
-        )
+        val sessionEnterpriseService = FakeSessionEnterpriseService(isEncryptionDisabledResult = { true })
         val createRoomLambda = lambdaRecorder<CreateRoomParameters, Result<RoomId>> { Result.success(A_ROOM_ID) }
         val matrixClient = createMatrixClient().apply {
             createRoomResult = createRoomLambda
@@ -545,38 +542,6 @@ class ConfigureRoomPresenterTest : RobolectricTest() {
             assertThat(awaitItem().createRoomAction.isSuccess()).isTrue()
 
             createRoomLambda.assertions().isCalledOnce().with(matching<CreateRoomParameters> { !it.isEncrypted })
-        }
-    }
-
-    @Test
-    fun `present - when public rooms are disabled by the HS, the public join rule is not available`() = runTest {
-        val presenter = createConfigureRoomPresenter(
-            sessionEnterpriseService = FakeSessionEnterpriseService(
-                isEncryptionDisabledResult = { false },
-                arePublicRoomsDisabledResult = { true },
-            ),
-        )
-        presenter.test {
-            val expectedJoinRules = listOf(JoinRuleItem.PublicVisibility.AskToJoin, JoinRuleItem.PrivateVisibility.Private)
-            val state = consumeItemsUntilPredicate { it.availableJoinRules == expectedJoinRules }.last()
-            assertThat(state.availableJoinRules).containsExactlyElementsIn(expectedJoinRules).inOrder()
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - when public rooms are disabled by the HS, only the private join rule is available for a space`() = runTest {
-        val presenter = createConfigureRoomPresenter(
-            isSpace = true,
-            sessionEnterpriseService = FakeSessionEnterpriseService(
-                isEncryptionDisabledResult = { false },
-                arePublicRoomsDisabledResult = { true },
-            ),
-        )
-        presenter.test {
-            val state = consumeItemsUntilPredicate { it.availableJoinRules == listOf(JoinRuleItem.PrivateVisibility.Private) }.last()
-            assertThat(state.config.visibilityState).isEqualTo(RoomVisibilityState.Private(JoinRuleItem.PrivateVisibility.Private))
-            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -615,10 +580,7 @@ class ConfigureRoomPresenterTest : RobolectricTest() {
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         isKnockFeatureEnabled: Boolean = true,
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
-        sessionEnterpriseService: FakeSessionEnterpriseService = FakeSessionEnterpriseService(
-            isEncryptionDisabledResult = { false },
-            arePublicRoomsDisabledResult = { false },
-        ),
+        sessionEnterpriseService: FakeSessionEnterpriseService = FakeSessionEnterpriseService(isEncryptionDisabledResult = { false }),
     ) = ConfigureRoomPresenter(
         isSpace = isSpace,
         initialParentSpaceId = initialParenSpaceId,
@@ -634,5 +596,6 @@ class ConfigureRoomPresenterTest : RobolectricTest() {
         ),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         sessionEnterpriseService = sessionEnterpriseService,
+        configureRoomExtension = NoopConfigureRoomExtension(),
     )
 }

@@ -29,10 +29,4 @@ interface SessionEnterpriseService {
 
     /** Whether the homeserver forbids creating encrypted rooms, in which case the app must not offer the option. */
     suspend fun isEncryptionDisabledByHomeserver(): Boolean
-
-    /**
-     * Whether the homeserver forbids public rooms and spaces, in which case the app must not offer to create one,
-     * nor to make an existing room or space public.
-     */
-    suspend fun arePublicRoomsDisabledByHomeserver(): Boolean
 }
