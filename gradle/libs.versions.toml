@@ -188,7 +188,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # it as a plain `require`: without this, a library built against a newer SDK would silently drag this app
 # onto it. With it, this pin always wins, and a library that needs something newer fails at configuration
 # time naming both versions instead of at runtime with NoSuchMethodError.
-matrix_sdk = { module = "org.matrix.rustcomponents:sdk-android", version = { strictly = "26.10.01-nightly" } }
+matrix_sdk = { module = "org.matrix.rustcomponents:sdk-android", version = { strictly = "26.10.05-nightly" } }
 rustls_platform_verifier = "org.rustls:rustls-platform-verifier:0.2.0"
 
 # Others
