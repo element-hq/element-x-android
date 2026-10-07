@@ -40,6 +40,7 @@ import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.api.ShowAllActivityInRoomListFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -655,7 +656,7 @@ class RoomListPresenterTest {
         )
         val featureFlagService = FakeFeatureFlagService(
             initialState = mapOf(
-                FeatureFlags.ShowAllActivityInRoomList.key to true,
+                ShowAllActivityInRoomListFeature.key to true,
                 FeatureFlags.UnreadIndicatorCount.key to true,
             )
         )
@@ -672,7 +673,7 @@ class RoomListPresenterTest {
             assertThat(enabledState.contentAsRooms().showAllActivity).isTrue()
             assertThat(enabledState.contentAsRooms().showUnreadCount).isTrue()
 
-            featureFlagService.setFeatureEnabled(FeatureFlags.ShowAllActivityInRoomList, false)
+            featureFlagService.setFeatureEnabled(ShowAllActivityInRoomListFeature, false)
             val allActivityDisabledState = consumeItemsUntilPredicate { state ->
                 state.contentState is RoomListContentState.Rooms && !state.contentAsRooms().showAllActivity
             }.last()

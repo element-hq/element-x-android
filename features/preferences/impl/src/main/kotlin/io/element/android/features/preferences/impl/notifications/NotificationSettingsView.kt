@@ -205,7 +205,7 @@ private fun NotificationSettingsContentView(
                 title = stringResource(R.string.screen_notification_settings_show_all_activity_title),
                 subtitle = stringResource(R.string.screen_notification_settings_show_all_activity_subtitle),
                 isChecked = state.showAllActivityInRoomList,
-                onCheckedChange = { state.eventSink(NotificationSettingsEvent.ToggleShowAllActivityInRoomList) }
+                onCheckedChange = { newValue -> state.eventSink(NotificationSettingsEvent.ToggleShowAllActivityInRoomList(newValue)) }
             )
         }
 

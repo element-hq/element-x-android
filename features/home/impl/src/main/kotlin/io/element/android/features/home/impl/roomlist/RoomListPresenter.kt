@@ -47,6 +47,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.api.ShowAllActivityInRoomListFeature
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -119,7 +120,7 @@ class RoomListPresenter(
         val declineInviteMenu = remember { mutableStateOf<RoomListState.DeclineInviteMenu>(RoomListState.DeclineInviteMenu.Hidden) }
 
         val showAllActivity by produceState(initialValue = false) {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.ShowAllActivityInRoomList).collect { value = it }
+            featureFlagService.isFeatureEnabledFlow(ShowAllActivityInRoomListFeature).collect { value = it }
         }
 
         fun handleEvent(event: RoomListEvent) {
