@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -63,6 +64,45 @@ class RoomSelectPresenterTest {
             assertThat(initialState.otherAccounts).isEmpty()
             assertThat(initialState.isAccountListExpanded).isFalse()
             assertThat(initialState.showAccountSwitch).isFalse()
+            assertThat(initialState.hasRoomListError).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - failure to get the client shows an error`() = runTest {
+        val presenter = createRoomSelectPresenter(
+            matrixClientProvider = FakeMatrixClientProvider { Result.failure(AN_EXCEPTION) },
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate { it.hasRoomListError }.last()
+            assertThat(state.hasRoomListError).isTrue()
+            assertThat(state.resultState).isInstanceOf(SearchBarResultState.Initial::class.java)
+        }
+    }
+
+    @Test
+    fun `present - select another account whose client cannot be restored shows an error`() = runTest {
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Share,
+            sessionStore = aSessionStoreWithTwoAccounts(),
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                if (sessionId == A_SESSION_ID) {
+                    Result.success(FakeMatrixClient(sessionId = sessionId))
+                } else {
+                    Result.failure(AN_EXCEPTION)
+                }
+            },
+        )
+        presenter.test {
+            val state = awaitLastSequentialItem()
+            assertThat(state.hasRoomListError).isFalse()
+            state.eventSink(RoomSelectEvent.SelectAccount(A_SESSION_ID_2))
+            val errorState = consumeItemsUntilPredicate { it.hasRoomListError }.last()
+            assertThat(errorState.selectedAccount.userId).isEqualTo(A_SESSION_ID_2)
+            // Going back to the first account clears the error
+            errorState.eventSink(RoomSelectEvent.SelectAccount(A_SESSION_ID))
+            val finalState = consumeItemsUntilPredicate { it.selectedAccount.userId == A_SESSION_ID && !it.hasRoomListError }.last()
+            assertThat(finalState.hasRoomListError).isFalse()
         }
     }
 

@@ -87,20 +87,22 @@ class RoomSelectPresenter(
         val coroutineScope = rememberCoroutineScope()
         // Create one data source per session. When the selected session changes, the previous
         // data source is removed from the composition and its coroutine scope is cancelled.
-        val dataSource = key(selectedSessionId) {
+        val (dataSource, hasRoomListError) = key(selectedSessionId) {
             val dataSourceCoroutineScope = rememberCoroutineScope()
-            // The sessions are restored at startup, so the client should already be in memory
-            val roomListService by produceState(matrixClientProvider.getOrNull(selectedSessionId)?.roomListService) {
+            // The sessions are restored at startup, so the client should already be in memory.
+            // A null value means that the client is being restored.
+            val roomListServiceResult by produceState(matrixClientProvider.getOrNull(selectedSessionId)?.roomListService?.let { Result.success(it) }) {
                 if (value == null) {
                     value = matrixClientProvider.getOrRestore(selectedSessionId)
                         .onFailure { Timber.e(it, "Failed to get the client for $selectedSessionId") }
-                        .getOrNull()
-                        ?.roomListService
+                        .map { it.roomListService }
                 }
             }
-            remember(roomListService) {
+            val roomListService = roomListServiceResult?.getOrNull()
+            val dataSource = remember(roomListService) {
                 roomListService?.let { dataSourceFactory.create(dataSourceCoroutineScope, it) }
             }
+            dataSource to (roomListServiceResult?.isFailure == true)
         }
 
         val searchQuery = queryState.text.toString()
@@ -156,6 +158,7 @@ class RoomSelectPresenter(
             isSearchActive = isSearchActive,
             selectedRooms = selectedRooms,
             selectedAccount = selectedAccount,
+            hasRoomListError = hasRoomListError,
             otherAccounts = otherAccounts,
             isAccountListExpanded = isAccountListExpanded,
             eventSink = ::handleEvent,

@@ -122,6 +122,19 @@ class RoomSelectViewTest : RobolectricTest() {
         )
         onNodeWithText(activity!!.getString(CommonStrings.common_switch_account)).assertDoesNotExist()
     }
+
+    @Test
+    fun `an error is displayed instead of the rooms if they cannot be loaded`() = runAndroidComposeUiTest<ComponentActivity> {
+        setRoomSelectView(
+            aRoomSelectState(
+                resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
+                hasRoomListError = true,
+            ),
+        )
+        onNodeWithText(activity!!.getString(CommonStrings.common_something_went_wrong)).assertIsDisplayed()
+        onNodeWithText(activity!!.getString(R.string.screen_room_select_error_cannot_load_rooms)).assertIsDisplayed()
+        onNodeWithText("Room with alias").assertDoesNotExist()
+    }
 }
 
 private fun AndroidComposeUiTest<ComponentActivity>.setRoomSelectView(

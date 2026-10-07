@@ -62,6 +62,12 @@ open class RoomSelectStatePreviewParam : PreviewParameterProvider<RoomSelectStat
                 otherAccounts = anOtherAccountList(),
                 isAccountListExpanded = true,
             ),
+            aRoomSelectState(
+                mode = RoomSelectMode.Share,
+                selectedAccount = aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
+                otherAccounts = anOtherAccountList(),
+                hasRoomListError = true,
+            ),
         )
 }
 
@@ -73,6 +79,7 @@ internal fun aRoomSelectState(
     isSearchActive: Boolean = false,
     selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
     selectedAccount: MatrixUser = MatrixUser(UserId("@alice:example.org")),
+    hasRoomListError: Boolean = false,
     otherAccounts: ImmutableList<MatrixUser> = persistentListOf(),
     isAccountListExpanded: Boolean = false,
     eventSink: (RoomSelectEvent) -> Unit = {},
@@ -84,6 +91,7 @@ internal fun aRoomSelectState(
     isSearchActive = isSearchActive,
     selectedRooms = selectedRooms,
     selectedAccount = selectedAccount,
+    hasRoomListError = hasRoomListError,
     otherAccounts = otherAccounts,
     isAccountListExpanded = isAccountListExpanded,
     eventSink = eventSink,

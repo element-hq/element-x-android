@@ -23,6 +23,10 @@ data class RoomSelectState(
     val isSearchActive: Boolean,
     val selectedRooms: ImmutableList<SelectRoomInfo>,
     val selectedAccount: MatrixUser,
+    /**
+     * True if the rooms of the selected account cannot be loaded.
+     */
+    val hasRoomListError: Boolean,
     val otherAccounts: ImmutableList<MatrixUser>,
     val isAccountListExpanded: Boolean,
     val eventSink: (RoomSelectEvent) -> Unit,

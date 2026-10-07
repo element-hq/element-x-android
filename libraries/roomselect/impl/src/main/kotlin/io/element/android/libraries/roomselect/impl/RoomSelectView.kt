@@ -54,6 +54,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.TopAppBarScrollBehaviorLayout
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarRow
@@ -240,7 +242,9 @@ fun RoomSelectView(
                     // showVerticalSpace only if there is no other accounts
                     showVerticalSpace = !state.showAccountSwitch,
                 )
-                if (state.resultState is SearchBarResultState.Results) {
+                if (state.hasRoomListError) {
+                    RoomListError()
+                } else if (state.resultState is SearchBarResultState.Results) {
                     LazyColumn(
                         state = lazyListState,
                         contentPadding = lazyColumnContentPadding,
@@ -268,6 +272,18 @@ fun RoomSelectView(
             }
         }
     }
+}
+
+@Composable
+private fun RoomListError() {
+    IconTitleSubtitleMolecule(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 32.dp),
+        title = stringResource(CommonStrings.common_something_went_wrong),
+        subTitle = stringResource(R.string.screen_room_select_error_cannot_load_rooms),
+        iconStyle = BigIcon.Style.AlertSolid,
+    )
 }
 
 /**
