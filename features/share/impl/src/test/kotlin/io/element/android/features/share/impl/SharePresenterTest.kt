@@ -8,37 +8,32 @@
 
 package io.element.android.features.share.impl
 
-import android.net.Uri
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.share.api.OnSharedData
 import io.element.android.features.share.api.ShareIntentData
-import io.element.android.features.share.api.UriToShare
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
-import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
-import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
-import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
-import io.element.android.libraries.mediaupload.test.FakeMediaSender
-import io.element.android.services.appnavstate.api.ActiveRoomsHolder
-import io.element.android.services.appnavstate.impl.DefaultActiveRoomsHolder
+import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.robolectric.RobolectricTest
+import io.element.android.tests.testutils.lambda.value
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-class SharePresenterTest : RobolectricTest() {
+class SharePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -49,22 +44,25 @@ class SharePresenterTest : RobolectricTest() {
             presenter.present()
         }.test {
             val initialState = awaitItem()
+            assertThat(initialState.sessionId).isEqualTo(A_SESSION_ID)
             assertThat(initialState.shareAction.isUninitialized()).isTrue()
         }
     }
 
     @Test
     fun `present - on room selected error then clear error`() = runTest {
-        val presenter = createSharePresenter()
+        val presenter = createSharePresenter(
+            shareDataSender = FakeShareDataSender { _, _, _ -> Result.failure(AN_EXCEPTION) },
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.shareAction.isUninitialized()).isTrue()
-            presenter.onRoomSelected(listOf(A_ROOM_ID))
+            presenter.onRoomSelected(A_SESSION_ID, listOf(A_ROOM_ID))
             assertThat(awaitItem().shareAction.isLoading()).isTrue()
             val failure = awaitItem()
-            assertThat(failure.shareAction.isFailure()).isTrue()
+            assertThat(failure.shareAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
             failure.eventSink.invoke(ShareEvent.ClearError)
             assertThat(awaitItem().shareAction.isUninitialized()).isTrue()
         }
@@ -72,113 +70,115 @@ class SharePresenterTest : RobolectricTest() {
 
     @Test
     fun `present - on room selected ok`() = runTest {
-        val joinedRoom = FakeJoinedRoom(
-            liveTimeline = FakeTimeline().apply {
-                sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
-            },
-        )
-        val matrixClient = FakeMatrixClient().apply {
-            givenGetRoomResult(A_ROOM_ID, joinedRoom)
-        }
+        val client = FakeMatrixClient(sessionId = A_SESSION_ID)
+        val shareIntentData = ShareIntentData.PlainText(A_MESSAGE)
+        val sendResult = lambdaRecorder<MatrixClient, ShareIntentData, List<RoomId>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val presenter = createSharePresenter(
-            matrixClient = matrixClient,
-            shareIntentData = ShareIntentData.PlainText(A_MESSAGE),
+            shareIntentData = shareIntentData,
+            matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
+            shareDataSender = FakeShareDataSender(sendResult),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.shareAction.isUninitialized()).isTrue()
-            presenter.onRoomSelected(listOf(A_ROOM_ID))
+            presenter.onRoomSelected(A_SESSION_ID, listOf(A_ROOM_ID))
             assertThat(awaitItem().shareAction.isLoading()).isTrue()
             val success = awaitItem()
-            assertThat(success.shareAction.isSuccess()).isTrue()
+            assertThat(success.sessionId).isEqualTo(A_SESSION_ID)
             assertThat(success.shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
+            sendResult.assertions().isCalledOnce().with(value(client), value(shareIntentData), value(listOf(A_ROOM_ID)))
         }
     }
 
     @Test
-    fun `present - send text ok`() = runTest {
-        val joinedRoom = FakeJoinedRoom(
-            liveTimeline = FakeTimeline().apply {
-                sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
-            },
-        )
-        val matrixClient = FakeMatrixClient().apply {
-            givenGetRoomResult(A_ROOM_ID, joinedRoom)
+    fun `present - on room selected from another session ok`() = runTest {
+        val getClient = lambdaRecorder<SessionId, Result<MatrixClient>> { sessionId -> Result.success(FakeMatrixClient(sessionId = sessionId)) }
+        val sendResult = lambdaRecorder<MatrixClient, ShareIntentData, List<RoomId>, Result<Unit>> { client, _, _ ->
+            assertThat(client.sessionId).isEqualTo(A_SESSION_ID_2)
+            Result.success(Unit)
         }
         val presenter = createSharePresenter(
-            matrixClient = matrixClient,
-            shareIntentData = ShareIntentData.PlainText(A_MESSAGE),
+            matrixClientProvider = FakeMatrixClientProvider { getClient(it) },
+            shareDataSender = FakeShareDataSender(sendResult),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.shareAction.isUninitialized()).isTrue()
-            presenter.onRoomSelected(listOf(A_ROOM_ID))
+            assertThat(initialState.sessionId).isEqualTo(A_SESSION_ID)
+            presenter.onRoomSelected(A_SESSION_ID_2, listOf(A_ROOM_ID))
+            val sessionChanged = awaitItem()
+            assertThat(sessionChanged.sessionId).isEqualTo(A_SESSION_ID_2)
+            assertThat(sessionChanged.shareAction.isUninitialized()).isTrue()
             assertThat(awaitItem().shareAction.isLoading()).isTrue()
             val success = awaitItem()
-            assertThat(success.shareAction.isSuccess()).isTrue()
+            assertThat(success.sessionId).isEqualTo(A_SESSION_ID_2)
             assertThat(success.shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
+            getClient.assertions().isCalledOnce().with(value(A_SESSION_ID_2))
+            sendResult.assertions().isCalledOnce()
         }
     }
 
     @Test
-    fun `present - send media ok`() = runTest {
-        val sendMediaResult = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
-        val joinedRoom = FakeJoinedRoom(
-            liveTimeline = FakeTimeline(),
-        )
-        val matrixClient = FakeMatrixClient().apply {
-            givenGetRoomResult(A_ROOM_ID, joinedRoom)
-        }
-        val mediaSender = FakeMediaSender(
-            sendMediaResult = sendMediaResult,
-        )
+    fun `present - on room selected, failure to get the client`() = runTest {
+        val sendResult = lambdaRecorder<MatrixClient, ShareIntentData, List<RoomId>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val presenter = createSharePresenter(
-            matrixClient = matrixClient,
-            shareIntentData = ShareIntentData.Uris(
-                text = A_MESSAGE,
-                listOf(
-                    UriToShare(
-                        uri = Uri.parse("content://image.jpg"),
-                        mimeType = MimeTypes.Jpeg,
-                    )
-                )
-            ),
-            mediaSenderRoomFactory = MediaSenderRoomFactory { mediaSender },
+            matrixClientProvider = FakeMatrixClientProvider { Result.failure(AN_EXCEPTION) },
+            shareDataSender = FakeShareDataSender(sendResult),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.shareAction.isUninitialized()).isTrue()
-            presenter.onRoomSelected(listOf(A_ROOM_ID))
+            skipItems(1)
+            presenter.onRoomSelected(A_SESSION_ID_2, listOf(A_ROOM_ID))
+            assertThat(awaitItem().sessionId).isEqualTo(A_SESSION_ID_2)
             assertThat(awaitItem().shareAction.isLoading()).isTrue()
+            assertThat(awaitItem().shareAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
+            sendResult.assertions().isNeverCalled()
+        }
+    }
+
+    @Test
+    fun `present - on room selected while sharing is ignored`() = runTest {
+        val completable = CompletableDeferred<Result<Unit>>()
+        val sendResult = lambdaRecorder<MatrixClient, ShareIntentData, List<RoomId>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
+        val presenter = createSharePresenter(
+            shareDataSender = object : ShareDataSender {
+                override suspend fun send(client: MatrixClient, shareIntentData: ShareIntentData, roomIds: List<RoomId>): Result<Unit> {
+                    sendResult(client, shareIntentData, roomIds)
+                    return completable.await()
+                }
+            },
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            presenter.onRoomSelected(A_SESSION_ID, listOf(A_ROOM_ID))
+            assertThat(awaitItem().shareAction.isLoading()).isTrue()
+            presenter.onRoomSelected(A_SESSION_ID_2, listOf(A_ROOM_ID))
+            completable.complete(Result.success(Unit))
             val success = awaitItem()
-            assertThat(success.shareAction.isSuccess()).isTrue()
+            assertThat(success.sessionId).isEqualTo(A_SESSION_ID)
             assertThat(success.shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
-            sendMediaResult.assertions().isCalledOnce()
+            sendResult.assertions().isCalledOnce()
         }
     }
 }
 
 internal fun TestScope.createSharePresenter(
     shareIntentData: ShareIntentData = ShareIntentData.PlainText(A_MESSAGE),
-    matrixClient: MatrixClient = FakeMatrixClient(),
-    activeRoomsHolder: ActiveRoomsHolder = DefaultActiveRoomsHolder(),
-    mediaSenderRoomFactory: MediaSenderRoomFactory = MediaSenderRoomFactory { FakeMediaSender() },
-    mediaOptimizationConfigProvider: MediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
-    onSharedData: OnSharedData = OnSharedData {},
+    initialSessionId: SessionId = A_SESSION_ID,
+    matrixClientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
+    shareDataSender: ShareDataSender = FakeShareDataSender(),
 ): SharePresenter {
     return SharePresenter(
         shareIntentData = shareIntentData,
-        sessionCoroutineScope = this,
-        matrixClient = matrixClient,
-        activeRoomsHolder = activeRoomsHolder,
-        mediaSenderRoomFactory = mediaSenderRoomFactory,
-        mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
-        onSharedData = onSharedData,
+        initialSessionId = initialSessionId,
+        appCoroutineScope = this,
+        matrixClientProvider = matrixClientProvider,
+        shareDataSender = shareDataSender,
     )
 }
