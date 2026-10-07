@@ -10,8 +10,8 @@ package io.element.android.x.di
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.appnav.di.SessionGraphFactory
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.SessionGraphFactory
 
 @ContributesBinding(AppScope::class)
 class DefaultSessionGraphFactory(

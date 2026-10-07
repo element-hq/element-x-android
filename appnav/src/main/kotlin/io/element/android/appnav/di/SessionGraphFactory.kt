@@ -6,12 +6,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.api
+package io.element.android.appnav.di
 
-/**
- * Create the dependency injection graph of a session.
- * It can be used to get session scoped dependencies of a session which is not the current one.
- */
+import io.element.android.libraries.matrix.api.MatrixClient
+
 interface SessionGraphFactory {
     fun create(client: MatrixClient): Any
 }
