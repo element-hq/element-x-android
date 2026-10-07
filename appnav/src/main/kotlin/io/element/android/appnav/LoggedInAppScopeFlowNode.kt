@@ -33,8 +33,6 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrixmedia.api.ImageLoaderHolder
 import kotlinx.parcelize.Parcelize
 
@@ -61,7 +59,6 @@ class LoggedInAppScopeFlowNode(
     interface Callback : Plugin {
         fun navigateToBugReport()
         fun navigateToAddAccount()
-        fun switchAccountAndOpenRoom(sessionId: SessionId, roomId: RoomId?)
     }
 
     private val callback: Callback = callback()
@@ -93,10 +90,6 @@ class LoggedInAppScopeFlowNode(
 
             override fun navigateToAddAccount() {
                 callback.navigateToAddAccount()
-            }
-
-            override fun switchAccountAndOpenRoom(sessionId: SessionId, roomId: RoomId?) {
-                callback.switchAccountAndOpenRoom(sessionId, roomId)
             }
         }
         return createNode<LoggedInFlowNode>(buildContext, listOf(callback))

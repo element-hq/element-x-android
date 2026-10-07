@@ -42,7 +42,7 @@ class DefaultRoomSelectEntryPointTest : RobolectricTest() {
                     assertThat(initialSessionId).isEqualTo(A_SESSION_ID)
                     assertThat(mode).isEqualTo(testMode)
                     assertThat(maxNumberOfRooms).isEqualTo(testMaxNumberOfRooms)
-                    createRoomSelectPresenter(mode, maxNumberOfRooms)
+                    createRoomSelectPresenter(mode = mode, maxNumberOfRooms = maxNumberOfRooms)
                 },
             )
         }

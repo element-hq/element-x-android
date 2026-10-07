@@ -13,6 +13,7 @@ import app.cash.turbine.Event
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -113,7 +114,7 @@ class RoomSelectPresenterTest {
         val presenter = createRoomSelectPresenter(
             mode = RoomSelectMode.Share,
             sessionStore = InMemorySessionStore(
-                initialList = listOf(aSessionData(sessionId = A_SESSION_ID.value)),
+                initialList = listOf(aSessionData(sessionId = A_SESSION_ID.value, isTokenValid = true)),
             ),
         )
         presenter.test {
@@ -205,6 +206,30 @@ class RoomSelectPresenterTest {
             val finalState = consumeItemsUntilPredicate { it.selectedAccount.userId == A_SESSION_ID && !it.hasRoomListError }.last()
             assertThat(finalState.showAccountSwitch).isTrue()
             assertThat(finalState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+        }
+    }
+
+    @Test
+    fun `present - the current account is invalidated while selected, an error is displayed`() = runTest {
+        val roomSummary = aRoomSummary()
+        val sessionStore = aSessionStoreWithTwoAccounts()
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Share,
+            sessionStore = sessionStore,
+            roomListService = FakeRoomListService(createRoomListLambda = { FakeDynamicRoomList(summaries = MutableStateFlow(listOf(roomSummary))) }),
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate { it.resultState is SearchBarResultState.Results }.last()
+            state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary.toSelectRoomInfo()))
+            assertThat(consumeItemsUntilPredicate { it.selectedRooms.isNotEmpty() }.last().selectedRooms).hasSize(1)
+            // The current session is signed out from another device while the screen is displayed
+            sessionStore.updateData(sessionStore.getSession(A_SESSION_ID.value)!!.copy(isTokenValid = false))
+            val errorState = consumeItemsUntilPredicate { it.hasRoomListError && it.selectedRooms.isEmpty() }.last()
+            assertThat(errorState.selectedAccount.userId).isEqualTo(A_SESSION_ID)
+            assertThat(errorState.resultState).isInstanceOf(SearchBarResultState.Initial::class.java)
+            // The user can switch to the other account
+            assertThat(errorState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -389,15 +414,19 @@ class RoomSelectPresenterTest {
 }
 
 internal fun TestScope.createRoomSelectPresenter(
+    initialSessionId: SessionId = A_SESSION_ID,
     mode: RoomSelectMode = RoomSelectMode.Forward,
     maxNumberOfRooms: Int = RoomSelectEntryPoint.DEFAULT_MAX_NUMBER_OF_ROOMS,
     roomListService: RoomListService = FakeRoomListService(),
-    sessionStore: SessionStore = InMemorySessionStore(),
+    // The current session is always in the store
+    sessionStore: SessionStore = InMemorySessionStore(
+        initialList = listOf(aSessionData(sessionId = A_SESSION_ID.value, isTokenValid = true)),
+    ),
     matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider { sessionId ->
         Result.success(FakeMatrixClient(sessionId = sessionId, roomListService = roomListService))
     },
 ) = RoomSelectPresenter(
-    initialSessionId = A_SESSION_ID,
+    initialSessionId = initialSessionId,
     mode = mode,
     maxNumberOfRooms = maxNumberOfRooms,
     dataSourceFactory = object : RoomSelectSearchDataSource.Factory {

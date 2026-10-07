@@ -44,7 +44,6 @@ class SharePresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.sessionId).isEqualTo(A_SESSION_ID)
             assertThat(initialState.shareAction.isUninitialized()).isTrue()
         }
     }
@@ -86,8 +85,7 @@ class SharePresenterTest {
             presenter.onRoomSelected(A_SESSION_ID, listOf(A_ROOM_ID))
             assertThat(awaitItem().shareAction.isLoading()).isTrue()
             val success = awaitItem()
-            assertThat(success.sessionId).isEqualTo(A_SESSION_ID)
-            assertThat(success.shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
+            assertThat(success.shareAction).isEqualTo(AsyncAction.Success(ShareResult(A_SESSION_ID, listOf(A_ROOM_ID))))
             sendResult.assertions().isCalledOnce().with(value(client), value(shareIntentData), value(listOf(A_ROOM_ID)))
         }
     }
@@ -106,16 +104,11 @@ class SharePresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.sessionId).isEqualTo(A_SESSION_ID)
+            skipItems(1)
             presenter.onRoomSelected(A_SESSION_ID_2, listOf(A_ROOM_ID))
-            val sessionChanged = awaitItem()
-            assertThat(sessionChanged.sessionId).isEqualTo(A_SESSION_ID_2)
-            assertThat(sessionChanged.shareAction.isUninitialized()).isTrue()
             assertThat(awaitItem().shareAction.isLoading()).isTrue()
             val success = awaitItem()
-            assertThat(success.sessionId).isEqualTo(A_SESSION_ID_2)
-            assertThat(success.shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
+            assertThat(success.shareAction).isEqualTo(AsyncAction.Success(ShareResult(A_SESSION_ID_2, listOf(A_ROOM_ID))))
             getClient.assertions().isCalledOnce().with(value(A_SESSION_ID_2))
             sendResult.assertions().isCalledOnce()
         }
@@ -133,7 +126,6 @@ class SharePresenterTest {
         }.test {
             skipItems(1)
             presenter.onRoomSelected(A_SESSION_ID_2, listOf(A_ROOM_ID))
-            assertThat(awaitItem().sessionId).isEqualTo(A_SESSION_ID_2)
             assertThat(awaitItem().shareAction.isLoading()).isTrue()
             assertThat(awaitItem().shareAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
             sendResult.assertions().isNeverCalled()
@@ -161,8 +153,8 @@ class SharePresenterTest {
             presenter.onRoomSelected(A_SESSION_ID_2, listOf(A_ROOM_ID))
             completable.complete(Result.success(Unit))
             val success = awaitItem()
-            assertThat(success.sessionId).isEqualTo(A_SESSION_ID)
-            assertThat(success.shareAction).isEqualTo(AsyncAction.Success(listOf(A_ROOM_ID)))
+            // The second selection has been ignored
+            assertThat(success.shareAction).isEqualTo(AsyncAction.Success(ShareResult(A_SESSION_ID, listOf(A_ROOM_ID))))
             sendResult.assertions().isCalledOnce()
         }
     }
@@ -170,13 +162,11 @@ class SharePresenterTest {
 
 internal fun TestScope.createSharePresenter(
     shareIntentData: ShareIntentData = ShareIntentData.PlainText(A_MESSAGE),
-    initialSessionId: SessionId = A_SESSION_ID,
     matrixClientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
     shareDataSender: ShareDataSender = FakeShareDataSender(),
 ): SharePresenter {
     return SharePresenter(
         shareIntentData = shareIntentData,
-        initialSessionId = initialSessionId,
         appCoroutineScope = this,
         matrixClientProvider = matrixClientProvider,
         shareDataSender = shareDataSender,

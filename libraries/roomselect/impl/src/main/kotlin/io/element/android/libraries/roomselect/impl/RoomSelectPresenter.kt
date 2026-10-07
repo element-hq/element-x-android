@@ -65,17 +65,19 @@ class RoomSelectPresenter(
         val queryState = rememberTextFieldState()
         var isSearchActive by remember { mutableStateOf(false) }
         var isAccountListExpanded by remember { mutableStateOf(false) }
+        // Null until the sessions are loaded
+        val sessions by remember { sessionStore.sessionsFlow() }.collectAsState(initial = null)
         var selectedSessionId by remember { mutableStateOf(initialSessionId) }
-        val sessions by remember { sessionStore.sessionsFlow() }.collectAsState(initial = emptyList())
         // All the accounts are proposed, even the ones with an invalid token. Selecting them displays an error.
         val accounts by remember {
-            derivedStateOf { sessions.map { it.toMatrixUser() } }
+            derivedStateOf { sessions.orEmpty().map { it.toMatrixUser() } }
         }
         // The selected session can have an invalid token, or be invalidated while this screen is displayed, for instance if it is
-        // signed out from another device. The invalidation of the initial session, which is the current one, is handled by the application.
+        // signed out from another device.
         val isSelectedSessionInvalid by remember {
             derivedStateOf {
-                selectedSessionId != initialSessionId && sessions.none { it.userId == selectedSessionId.value && it.isTokenValid }
+                val loadedSessions = sessions ?: return@derivedStateOf false
+                loadedSessions.none { it.userId == selectedSessionId.value && it.isTokenValid }
             }
         }
         LaunchedEffect(isSelectedSessionInvalid) {
@@ -99,27 +101,31 @@ class RoomSelectPresenter(
         val coroutineScope = rememberCoroutineScope()
         // Create one data source per session. When the selected session changes, the previous
         // data source is removed from the composition and its coroutine scope is cancelled.
-        val (selectedSessionDataSource, hasClientError) = key(selectedSessionId) {
-            val dataSourceCoroutineScope = rememberCoroutineScope()
-            // The sessions are restored at startup, so the client should already be in memory.
-            // A null value means that the client is being restored, or that the session is invalid: its client cannot be restored,
-            // and an in-memory client would have been destroyed, so do not try to get it.
-            val initialRoomListService = if (isSelectedSessionInvalid) null else matrixClientProvider.getOrNull(selectedSessionId)?.roomListService
-            val roomListServiceResult by produceState(initialRoomListService?.let { Result.success(it) }) {
-                if (value == null && !isSelectedSessionInvalid) {
-                    value = matrixClientProvider.getOrRestore(selectedSessionId)
-                        .onFailure { Timber.e(it, "Failed to get the client for $selectedSessionId") }
-                        .map { it.roomListService }
+        // Also use the validity of the session as a key, so that the data source is removed if the session is invalidated, and recreated
+        // if the session becomes valid again.
+        val (dataSource, hasClientError) = key(selectedSessionId, isSelectedSessionInvalid) {
+            val sessionId = selectedSessionId
+            if (isSelectedSessionInvalid) {
+                // Do not try to get the client of an invalid session: it cannot be restored, and an in-memory client would have been destroyed.
+                null to false
+            } else {
+                val dataSourceCoroutineScope = rememberCoroutineScope()
+                // The sessions are restored at startup, so the client should already be in memory.
+                // A null value means that the client is being restored.
+                val roomListServiceResult by produceState(matrixClientProvider.getOrNull(sessionId)?.roomListService?.let { Result.success(it) }) {
+                    if (value == null) {
+                        value = matrixClientProvider.getOrRestore(sessionId)
+                            .onFailure { Timber.e(it, "Failed to get the client for $sessionId") }
+                            .map { it.roomListService }
+                    }
                 }
+                val roomListService = roomListServiceResult?.getOrNull()
+                val dataSource = remember(roomListService) {
+                    roomListService?.let { dataSourceFactory.create(dataSourceCoroutineScope, it) }
+                }
+                dataSource to (roomListServiceResult?.isFailure == true)
             }
-            val roomListService = roomListServiceResult?.getOrNull()
-            val dataSource = remember(roomListService) {
-                roomListService?.let { dataSourceFactory.create(dataSourceCoroutineScope, it) }
-            }
-            dataSource to (roomListServiceResult?.isFailure == true)
         }
-        // Do not use the data source of an invalid session, its client has been destroyed
-        val dataSource = selectedSessionDataSource.takeIf { !isSelectedSessionInvalid }
         val hasRoomListError = hasClientError || isSelectedSessionInvalid
 
         val searchQuery = queryState.text.toString()

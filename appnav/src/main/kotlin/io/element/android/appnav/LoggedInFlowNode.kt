@@ -67,8 +67,6 @@ import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
-import io.element.android.features.share.api.ShareEntryPoint
-import io.element.android.features.share.api.ShareIntentData
 import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.verifysession.api.IncomingVerificationEntryPoint
@@ -88,7 +86,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -138,7 +135,6 @@ class LoggedInFlowNode(
     private val sessionCoroutineScope: CoroutineScope,
     private val ftueService: FtueService,
     private val roomDirectoryEntryPoint: RoomDirectoryEntryPoint,
-    private val shareEntryPoint: ShareEntryPoint,
     private val matrixClient: MatrixClient,
     private val sendingQueue: SendQueues,
     private val nativeCallHost: NativeCallHost,
@@ -174,7 +170,6 @@ class LoggedInFlowNode(
     interface Callback : Plugin {
         fun navigateToBugReport()
         fun navigateToAddAccount()
-        fun switchAccountAndOpenRoom(sessionId: SessionId, roomId: RoomId?)
     }
 
     private val callback: Callback = callback()
@@ -295,9 +290,6 @@ class LoggedInFlowNode(
 
         @Parcelize
         data object RoomDirectory : NavTarget
-
-        @Parcelize
-        data class IncomingShare(val shareIntentData: ShareIntentData) : NavTarget
 
         @Parcelize
         data class IncomingVerificationRequest(val data: VerificationRequest.Incoming) : NavTarget
@@ -570,36 +562,6 @@ class LoggedInFlowNode(
                     },
                 )
             }
-            is NavTarget.IncomingShare -> {
-                shareEntryPoint.createNode(
-                    parentNode = this,
-                    buildContext = buildContext,
-                    params = ShareEntryPoint.Params(shareIntentData = navTarget.shareIntentData),
-                    callback = object : ShareEntryPoint.Callback {
-                        override fun onDone(sessionId: SessionId, roomIds: List<RoomId>) {
-                            // Remove the incoming share screen
-                            backstack.pop()
-
-                            if (sessionId != matrixClient.sessionId) {
-                                // The data has been shared using another session, switch to it
-                                callback.switchAccountAndOpenRoom(sessionId, roomIds.singleOrNull())
-                                return
-                            }
-
-                            // Navigate to the room if the text/media was shared to a single one
-                            roomIds.singleOrNull()?.let { roomId ->
-                                lifecycleScope.launch {
-                                    // Wait until the incoming share screen is removed
-                                    backstack.elements.first { it.lastOrNull()?.key?.navTarget !is NavTarget.IncomingShare }
-
-                                    // Then attach the room
-                                    attachRoom(roomId.toRoomIdOrAlias(), clearBackstack = false)
-                                }
-                            }
-                        }
-                    },
-                )
-            }
             is NavTarget.IncomingVerificationRequest -> {
                 incomingVerificationEntryPoint.createNode(
                     parentNode = this,
@@ -655,17 +617,6 @@ class LoggedInFlowNode(
                 NavTarget.UserProfile(
                     userId = userId,
                 )
-            )
-        }
-    }
-
-    internal suspend fun attachIncomingShare(shareIntentData: ShareIntentData) {
-        waitForNavTargetAttached { navTarget ->
-            navTarget is NavTarget.Home
-        }
-        attachChild<Node> {
-            backstack.push(
-                NavTarget.IncomingShare(shareIntentData)
             )
         }
     }

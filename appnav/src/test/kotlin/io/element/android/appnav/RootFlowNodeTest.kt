@@ -14,6 +14,7 @@ import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.AncestryInfo
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
@@ -34,6 +35,7 @@ import io.element.android.features.login.test.FakeLoginIntentResolver
 import io.element.android.features.login.test.accesscontrol.FakeAccountProviderAccessControl
 import io.element.android.features.preferences.test.FakeCacheService
 import io.element.android.features.rageshake.test.FakeBugReportEntryPoint
+import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.share.test.FakeShareIntentHandler
 import io.element.android.features.signedout.test.FakeSignedOutEntryPoint
 import io.element.android.libraries.accountselect.test.FakeAccountSelectEntryPoint
@@ -52,6 +54,7 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
 import io.element.android.services.apperror.test.FakeAppErrorStateService
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.FakeNodeFactoriesBindings
 import io.element.android.tests.testutils.node.FakeParentNode
 import io.element.android.tests.testutils.presenter.NotUsedPresenter
@@ -192,6 +195,14 @@ class RootFlowNodeTest : RobolectricTest() {
                 appForegroundStateService = FakeAppForegroundStateService(),
             ),
             appCoroutineScope = backgroundScope,
+            shareEntryPoint = object : ShareEntryPoint {
+                override fun createNode(
+                    parentNode: Node,
+                    buildContext: BuildContext,
+                    params: ShareEntryPoint.Params,
+                    callback: ShareEntryPoint.Callback,
+                ): Node = lambdaError()
+            },
         )
     }
 }
