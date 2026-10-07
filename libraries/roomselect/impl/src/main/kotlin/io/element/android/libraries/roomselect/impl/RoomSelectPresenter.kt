@@ -72,8 +72,12 @@ class RoomSelectPresenter(
                 list.map { it.toMatrixUser() }
             }
         }.collectAsState(initial = emptyList())
-        // Fallback to a MatrixUser with only the userId until the sessions are loaded
-        val selectedAccount = accounts.find { it.userId == selectedSessionId } ?: MatrixUser(selectedSessionId)
+        val selectedAccount by remember {
+            derivedStateOf {
+                // Fallback to a MatrixUser with only the userId until the sessions are loaded
+                accounts.find { it.userId == selectedSessionId } ?: MatrixUser(selectedSessionId)
+            }
+        }
         val otherAccounts by remember {
             derivedStateOf {
                 accounts.filter { it.userId != selectedSessionId }.toImmutableList()
