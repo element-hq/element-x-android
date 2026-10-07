@@ -15,6 +15,8 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.impl.auth.FakeProxyProvider
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClientBuilder
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
 import io.element.android.libraries.matrix.impl.search.workmanager.SearchBackfillRequestBuilder
@@ -35,6 +37,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientDelegate
 import java.io.File
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
@@ -50,6 +53,46 @@ class RustMatrixClientFactoryTest {
         assertThat(result.sessionId).isEqualTo(SessionId("@alice:server.org"))
         scheduleVacuumLambda.assertions().isCalledOnce()
         result.destroy()
+    }
+
+    @Test
+    fun `an auth error on a client only invalidates its own session`() = runTest {
+        val aliceSessionId = "@alice:server.org"
+        val bobSessionId = "@bob:server.org"
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(sessionId = aliceSessionId, isTokenValid = true),
+                aSessionData(sessionId = bobSessionId, isTokenValid = true),
+            ),
+            updateUserProfileResult = { _, _, _, _ -> },
+        )
+        val userIds = ArrayDeque(listOf(aliceSessionId, bobSessionId))
+        val delegates = mutableMapOf<String, ClientDelegate?>()
+        val sut = createRustMatrixClientFactory(
+            sessionStore = sessionStore,
+            workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}, cancelLambda = { _, _ -> }),
+            clientBuilderProvider = FakeClientBuilderProvider {
+                val userId = userIds.removeFirst()
+                FakeFfiClientBuilder(
+                    buildResult = {
+                        FakeFfiClient(
+                            userId = userId,
+                            withUtdHook = {},
+                            setDelegateResult = { delegates[userId] = it },
+                        )
+                    }
+                )
+            },
+        )
+        val aliceClient = sut.create(sessionStore.getSession(aliceSessionId)!!)
+        val bobClient = sut.create(sessionStore.getSession(bobSessionId)!!)
+
+        delegates.getValue(aliceSessionId)!!.didReceiveAuthError(isSoftLogout = false)
+
+        assertThat(sessionStore.getSession(aliceSessionId)!!.isTokenValid).isFalse()
+        assertThat(sessionStore.getSession(bobSessionId)!!.isTokenValid).isTrue()
+        aliceClient.destroy()
+        bobClient.destroy()
     }
 }
 

@@ -33,6 +33,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.ClientSessionDelegate
 import org.matrix.rustcomponents.sdk.CrossProcessLockConfig
 import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.Session
@@ -65,7 +66,11 @@ class RustMatrixClientFactory(
     private val clientBuilderEnterpriseHook: ClientBuilderEnterpriseHook,
     private val innerMatrixClientFactory: RustMatrixClient.Factory,
 ) {
-    private val sessionDelegate = RustClientSessionDelegate(
+    /**
+     * Create a new [RustClientSessionDelegate]. Each client must have its own instance, since the delegate
+     * keeps a reference to the client it handles the auth errors for.
+     */
+    private fun createSessionDelegate() = RustClientSessionDelegate(
         sessionStore = sessionStore,
         appCoroutineScope = appCoroutineScope,
         analyticsService = analyticsService,
@@ -86,11 +91,14 @@ class RustMatrixClientFactory(
             indexDirectory.deleteRecursively()
         }
 
+        // Use a dedicated delegate for this client, so that an auth error only affects this session
+        val sessionDelegate = createSessionDelegate()
         val client = getBaseClientBuilder(
             sessionPaths = sessionPaths,
             clientSecret = clientSecret,
             slidingSyncType = ClientBuilderSlidingSync.Restored,
             isMessageSearchAvailable = isMessageSearchAvailable,
+            sessionDelegate = sessionDelegate,
         )
             .homeserverUrl(sessionData.homeserverUrl)
             .enableAutomaticBackPagination(featureFlagService.isFeatureEnabled(FeatureFlags.AutomaticBackPagination))
@@ -144,6 +152,7 @@ class RustMatrixClientFactory(
         clientSecret: ClientSecret?,
         slidingSyncType: ClientBuilderSlidingSync,
         isMessageSearchAvailable: Boolean,
+        sessionDelegate: ClientSessionDelegate,
     ): ClientBuilder {
         return clientBuilderProvider.provide()
             .run {
