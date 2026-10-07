@@ -50,7 +50,8 @@ class DefaultShareDataSender(
                 if (filesToShare.isEmpty()) {
                     false
                 } else {
-                    val mediaOptimizationConfigProvider = mediaOptimizationConfigProviderFactory.create(client)
+                    // The media optimization config is the same for all the files and all the rooms
+                    val mediaOptimizationConfig = mediaOptimizationConfigProviderFactory.create(client).get()
                     roomIds
                         .map { roomId ->
                             val room = client.findJoinedRoom(roomId) ?: return@map false
@@ -61,7 +62,7 @@ class DefaultShareDataSender(
                                         caption = shareIntentData.text,
                                         uri = fileToShare.uri,
                                         mimeType = fileToShare.mimeType,
-                                        mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
+                                        mediaOptimizationConfig = mediaOptimizationConfig,
                                     )
                                     // If the coroutine was cancelled, destroy the room and rethrow the exception
                                     val cancellationException = result.exceptionOrNull() as? CancellationException
