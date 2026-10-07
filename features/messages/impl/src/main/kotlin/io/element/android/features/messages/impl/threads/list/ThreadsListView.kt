@@ -264,11 +264,12 @@ private fun ThreadListItemRow(
                         )
                     }
 
-                    UnreadIndicatorAtom(
-                        size = 14.dp,
-                        isVisible = hasUnreadNotifications,
-                        count = 0,
-                    )
+                    if (hasUnreadNotifications) {
+                        UnreadIndicatorAtom(
+                            dotIndicatorSize = 14.dp,
+                            count = 0,
+                        )
+                    }
                 }
             }
 
