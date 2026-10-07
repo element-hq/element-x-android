@@ -60,7 +60,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
-import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
@@ -352,7 +351,7 @@ private fun MessagePreviewAndIndicatorRow(
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val tint = if (room.isHighlighted) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
+            val tint = if (room.isHighlighted) ElementTheme.colors.textActionAccent else ElementTheme.colors.iconQuaternary
             if (room.hasRoomCall) {
                 OnGoingCallIcon(
                     color = tint,
@@ -421,10 +420,7 @@ private fun InviteNameAndIndicatorRow(
             overflow = TextOverflow.Ellipsis
         )
         if (!isInviteSeen) {
-            UnreadIndicatorAtom(
-                color = ElementTheme.colors.unreadIndicator,
-                count = 0,
-            )
+            UnreadIndicatorAtom(count = 0)
         }
     }
 }
@@ -458,7 +454,7 @@ private fun MentionIndicatorAtom() {
         modifier = Modifier.size(16.dp),
         contentDescription = stringResource(CommonStrings.a11y_notifications_new_mentions),
         imageVector = CompoundIcons.Mention(),
-        tint = ElementTheme.colors.unreadIndicator,
+        tint = ElementTheme.colors.iconAccentPrimary,
     )
 }
 

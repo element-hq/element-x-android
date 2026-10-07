@@ -571,7 +571,6 @@ private fun JumpToPositionButton(
                     modifier = Modifier
                         .align(dotAlignment)
                         .offset { IntOffset(x = 0, y = dotYOffset.roundToPx()) },
-                    color = ElementTheme.colors.iconSuccessPrimary,
                     border = BorderStroke(2.dp, ElementTheme.colors.bgCanvasDefault),
                     count = 0,
                 )
