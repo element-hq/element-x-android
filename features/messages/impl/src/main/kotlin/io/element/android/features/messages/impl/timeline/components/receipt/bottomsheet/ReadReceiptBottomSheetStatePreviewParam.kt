@@ -19,7 +19,7 @@ class ReadReceiptBottomSheetStatePreviewParam : PreviewParameterProvider<ReadRec
     // Reuse the provider ReadReceiptViewStatePreviewParam
     private val readReceiptViewStateProvider = ReadReceiptViewStatePreviewParam()
     override val values: Sequence<ReadReceiptBottomSheetState> = readReceiptViewStateProvider.values
-        .filter { it.sendState is LocalEventSendState.Sent }
+        .filter { it.sendState is LocalEventSendState.Sent && it.receipts.isNotEmpty() }
         .map { readReceiptViewState ->
             ReadReceiptBottomSheetState(
                 selectedEvent = aTimelineItemEvent(
