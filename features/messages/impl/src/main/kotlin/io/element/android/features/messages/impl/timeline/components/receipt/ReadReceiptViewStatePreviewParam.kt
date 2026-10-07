@@ -20,9 +20,9 @@ import kotlinx.collections.immutable.toImmutableList
 class ReadReceiptViewStatePreviewParam : PreviewParameterProvider<ReadReceiptViewState> {
     override val values: Sequence<ReadReceiptViewState>
         get() = sequenceOf(
-            aReadReceiptViewState(),
-            aReadReceiptViewState(sendState = LocalEventSendState.Sending.Event),
-            aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId"))),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId")), isLastOutgoingMessage = true),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sending.Event, isLastOutgoingMessage = true),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId")), isLastOutgoingMessage = true),
             aReadReceiptViewState(
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),
                 receipts = List(1) { aReadReceiptData(it) },
@@ -43,12 +43,15 @@ class ReadReceiptViewStatePreviewParam : PreviewParameterProvider<ReadReceiptVie
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),
                 receipts = List(5) { aReadReceiptData(it) },
             ),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId")), isLastOutgoingMessage = false),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sending.Event, isLastOutgoingMessage = false),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId")), isLastOutgoingMessage = false),
         )
 }
 
 internal fun aReadReceiptViewState(
     sendState: LocalEventSendState? = null,
-    isLastOutgoingMessage: Boolean = true,
+    isLastOutgoingMessage: Boolean = false,
     receipts: List<ReadReceiptData> = emptyList(),
 ) = ReadReceiptViewState(
     sendState = sendState,

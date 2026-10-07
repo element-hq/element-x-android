@@ -72,7 +72,7 @@ fun TimelineItemReadReceiptView(
             // Error? The timestamp is already displayed in red
             null
         }
-        is LocalEventSendState.Sent if state.isLastOutgoingMessage -> {
+        is LocalEventSendState.Sent if state.isLastOutgoingMessage && state.receipts.isEmpty() -> {
             @Composable {
                 Icon(
                     modifier = Modifier.padding(2.dp),
