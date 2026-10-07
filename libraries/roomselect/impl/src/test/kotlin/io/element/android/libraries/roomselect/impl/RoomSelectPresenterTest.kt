@@ -9,6 +9,7 @@
 package io.element.android.libraries.roomselect.impl
 
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import app.cash.turbine.Event
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -35,6 +36,7 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.assert
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -142,6 +144,92 @@ class RoomSelectPresenterTest {
     }
 
     @Test
+    fun `present - accounts with an invalid token are displayed, selecting one displays an error`() = runTest {
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Share,
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(sessionId = A_SESSION_ID.value, userDisplayName = "Alice", isTokenValid = true),
+                    aSessionData(sessionId = A_SESSION_ID_2.value, userDisplayName = "Bob", isTokenValid = false),
+                ),
+            ),
+            // The client of the invalid session must not be requested
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                if (sessionId == A_SESSION_ID) Result.success(FakeMatrixClient(sessionId = sessionId)) else lambdaError()
+            },
+        )
+        presenter.test {
+            val state = awaitLastSequentialItem()
+            assertThat(state.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+            assertThat(state.hasRoomListError).isFalse()
+            state.eventSink(RoomSelectEvent.SelectAccount(A_SESSION_ID_2))
+            val errorState = consumeItemsUntilPredicate { it.selectedAccount.userId == A_SESSION_ID_2 && it.hasRoomListError }.last()
+            // The account information is still available
+            assertThat(errorState.selectedAccount.displayName).isEqualTo("Bob")
+            assertThat(errorState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID)
+        }
+    }
+
+    @Test
+    fun `present - the selected account is invalidated, an error is displayed and the selected rooms are cleared`() = runTest {
+        val roomSummary2 = aRoomSummary(roomId = A_ROOM_ID_2)
+        val roomListServices = mapOf(
+            A_SESSION_ID to FakeRoomListService(createRoomListLambda = { FakeDynamicRoomList(summaries = MutableStateFlow(listOf(aRoomSummary()))) }),
+            A_SESSION_ID_2 to FakeRoomListService(createRoomListLambda = { FakeDynamicRoomList(summaries = MutableStateFlow(listOf(roomSummary2))) }),
+        )
+        val sessionStore = aSessionStoreWithTwoAccounts()
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Share,
+            sessionStore = sessionStore,
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                Result.success(FakeMatrixClient(sessionId = sessionId, roomListService = roomListServices.getValue(sessionId)))
+            },
+        )
+        presenter.test {
+            val state = awaitLastSequentialItem()
+            state.eventSink(RoomSelectEvent.SelectAccount(A_SESSION_ID_2))
+            val otherAccountState = consumeItemsUntilPredicate {
+                it.selectedAccount.userId == A_SESSION_ID_2 &&
+                    (it.resultState as? SearchBarResultState.Results)?.results?.map { room -> room.roomId } == listOf(A_ROOM_ID_2)
+            }.last()
+            otherAccountState.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary2.toSelectRoomInfo()))
+            assertThat(consumeItemsUntilPredicate { it.selectedRooms.isNotEmpty() }.last().selectedRooms).hasSize(1)
+            // The session of the selected account is invalidated, for instance signed out from another device
+            sessionStore.updateData(sessionStore.getSession(A_SESSION_ID_2.value)!!.copy(isTokenValid = false))
+            val errorState = consumeItemsUntilPredicate { it.hasRoomListError && it.selectedRooms.isEmpty() }.last()
+            assertThat(errorState.selectedAccount.userId).isEqualTo(A_SESSION_ID_2)
+            assertThat(errorState.selectedAccount.displayName).isEqualTo("Bob")
+            assertThat(errorState.resultState).isInstanceOf(SearchBarResultState.Initial::class.java)
+            // Go back to the current account: the invalid account is still proposed
+            errorState.eventSink(RoomSelectEvent.SelectAccount(A_SESSION_ID))
+            val finalState = consumeItemsUntilPredicate { it.selectedAccount.userId == A_SESSION_ID && !it.hasRoomListError }.last()
+            assertThat(finalState.showAccountSwitch).isTrue()
+            assertThat(finalState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+        }
+    }
+
+    @Test
+    fun `present - another account is invalidated, it is still proposed and there is no error`() = runTest {
+        val sessionStore = aSessionStoreWithTwoAccounts()
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Share,
+            sessionStore = sessionStore,
+        )
+        presenter.test {
+            val state = awaitLastSequentialItem()
+            assertThat(state.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+            sessionStore.updateData(sessionStore.getSession(A_SESSION_ID_2.value)!!.copy(isTokenValid = false))
+            testScheduler.advanceUntilIdle()
+            // The state may not change at all
+            val finalState = cancelAndConsumeRemainingEvents().filterIsInstance<Event.Item<RoomSelectState>>().lastOrNull()?.value ?: state
+            assertThat(finalState.selectedAccount.userId).isEqualTo(A_SESSION_ID)
+            assertThat(finalState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+            assertThat(finalState.hasRoomListError).isFalse()
+            assertThat(finalState.showAccountSwitch).isTrue()
+        }
+    }
+
+    @Test
     fun `present - select another account displays the rooms of this account`() = runTest {
         val roomSummary1 = aRoomSummary(roomId = A_ROOM_ID)
         val roomSummary2 = aRoomSummary(roomId = A_ROOM_ID_2)
@@ -191,8 +279,8 @@ class RoomSelectPresenterTest {
 
     private fun aSessionStoreWithTwoAccounts() = InMemorySessionStore(
         initialList = listOf(
-            aSessionData(sessionId = A_SESSION_ID.value, userDisplayName = "Alice"),
-            aSessionData(sessionId = A_SESSION_ID_2.value, userDisplayName = "Bob"),
+            aSessionData(sessionId = A_SESSION_ID.value, userDisplayName = "Alice", isTokenValid = true),
+            aSessionData(sessionId = A_SESSION_ID_2.value, userDisplayName = "Bob", isTokenValid = true),
         ),
     )
 

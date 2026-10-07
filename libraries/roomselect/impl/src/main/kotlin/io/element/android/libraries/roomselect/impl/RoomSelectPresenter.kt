@@ -38,7 +38,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -67,11 +66,24 @@ class RoomSelectPresenter(
         var isSearchActive by remember { mutableStateOf(false) }
         var isAccountListExpanded by remember { mutableStateOf(false) }
         var selectedSessionId by remember { mutableStateOf(initialSessionId) }
+        val sessions by remember { sessionStore.sessionsFlow() }.collectAsState(initial = emptyList())
+        // All the accounts are proposed, even the ones with an invalid token. Selecting them displays an error.
         val accounts by remember {
-            sessionStore.sessionsFlow().map { list ->
-                list.map { it.toMatrixUser() }
+            derivedStateOf { sessions.map { it.toMatrixUser() } }
+        }
+        // The selected session can have an invalid token, or be invalidated while this screen is displayed, for instance if it is
+        // signed out from another device. The invalidation of the initial session, which is the current one, is handled by the application.
+        val isSelectedSessionInvalid by remember {
+            derivedStateOf {
+                selectedSessionId != initialSessionId && sessions.none { it.userId == selectedSessionId.value && it.isTokenValid }
             }
-        }.collectAsState(initial = emptyList())
+        }
+        LaunchedEffect(isSelectedSessionInvalid) {
+            if (isSelectedSessionInvalid) {
+                // The rooms of an invalid session cannot be used
+                selectedRooms = persistentListOf()
+            }
+        }
         val selectedAccount by remember {
             derivedStateOf {
                 // Fallback to a MatrixUser with only the userId until the sessions are loaded
@@ -87,12 +99,14 @@ class RoomSelectPresenter(
         val coroutineScope = rememberCoroutineScope()
         // Create one data source per session. When the selected session changes, the previous
         // data source is removed from the composition and its coroutine scope is cancelled.
-        val (dataSource, hasRoomListError) = key(selectedSessionId) {
+        val (selectedSessionDataSource, hasClientError) = key(selectedSessionId) {
             val dataSourceCoroutineScope = rememberCoroutineScope()
             // The sessions are restored at startup, so the client should already be in memory.
-            // A null value means that the client is being restored.
-            val roomListServiceResult by produceState(matrixClientProvider.getOrNull(selectedSessionId)?.roomListService?.let { Result.success(it) }) {
-                if (value == null) {
+            // A null value means that the client is being restored, or that the session is invalid: its client cannot be restored,
+            // and an in-memory client would have been destroyed, so do not try to get it.
+            val initialRoomListService = if (isSelectedSessionInvalid) null else matrixClientProvider.getOrNull(selectedSessionId)?.roomListService
+            val roomListServiceResult by produceState(initialRoomListService?.let { Result.success(it) }) {
+                if (value == null && !isSelectedSessionInvalid) {
                     value = matrixClientProvider.getOrRestore(selectedSessionId)
                         .onFailure { Timber.e(it, "Failed to get the client for $selectedSessionId") }
                         .map { it.roomListService }
@@ -104,6 +118,9 @@ class RoomSelectPresenter(
             }
             dataSource to (roomListServiceResult?.isFailure == true)
         }
+        // Do not use the data source of an invalid session, its client has been destroyed
+        val dataSource = selectedSessionDataSource.takeIf { !isSelectedSessionInvalid }
+        val hasRoomListError = hasClientError || isSelectedSessionInvalid
 
         val searchQuery = queryState.text.toString()
         LaunchedEffect(dataSource, searchQuery) {
