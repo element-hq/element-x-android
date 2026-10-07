@@ -421,6 +421,7 @@ class MessagesPresenter(
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
             TimelineItemAction.RetrySending -> handleRetrySending(targetEvent)
+            TimelineItemAction.AbortSending -> handleActionAbortSend(targetEvent)
         }
     }
 
@@ -515,13 +516,17 @@ class MessagesPresenter(
 
     private suspend fun handleActionRedact(event: TimelineItem.Event, redactEventAction: MutableState<AsyncAction<Unit>>) {
         val eventId = event.eventId
-        val sendTarget = event.pendingSend()?.first ?: SendTarget.Event
-        if (eventId == null || sendTarget != SendTarget.Event) {
+        if (eventId == null) {
             // The message (or its edit/redaction) was never sent, just remove it from the send queue.
-            timelineController.abortSend(event.eventOrTransactionId, sendTarget).onFailure { Timber.e(it) }
+            handleActionAbortSend(event)
         } else {
             redactEventAction.value = MessagesState.ConfirmingRedaction(eventId)
         }
+    }
+
+    private suspend fun handleActionAbortSend(event: TimelineItem.Event) {
+        val sendTarget = event.pendingSend()?.first ?: SendTarget.Event
+        timelineController.abortSend(event.eventOrTransactionId, sendTarget).onFailure { Timber.e(it) }
     }
 
     private suspend fun redact(eventOrTransactionId: EventOrTransactionId, reason: String?) {

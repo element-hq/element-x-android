@@ -449,7 +449,7 @@ fun MessagesView(
         onRemoveMessage = { event ->
             state.eventSink(
                 MessagesEvent.HandleAction(
-                    action = TimelineItemAction.Redact,
+                    action = TimelineItemAction.AbortSending,
                     event = event,
                 )
             )
