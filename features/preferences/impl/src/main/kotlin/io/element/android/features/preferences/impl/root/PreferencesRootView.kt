@@ -96,6 +96,7 @@ fun PreferencesRootView(
     onSignOutClick: () -> Unit,
     onDeactivateClick: () -> Unit,
     modifier: Modifier = Modifier,
+    supplementarySettings: @Composable ColumnScope.() -> Unit = {},
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
@@ -145,6 +146,7 @@ fun PreferencesRootView(
             // 'App settings' section
             AppSettingsSection(
                 state = state,
+                supplementarySettings = supplementarySettings,
                 onOpenLockScreenSettings = onOpenLockScreenSettings,
                 onOpenMediaSettings = onOpenMediaSettings,
                 onOpenLocationSettings = onOpenLocationSettings,
@@ -306,6 +308,7 @@ private fun AppSettingsSection(
     onOpenLockScreenSettings: () -> Unit,
     onOpenLocationSettings: () -> Unit,
     onOpenMediaSettings: () -> Unit,
+    supplementarySettings: @Composable ColumnScope.() -> Unit,
 ) {
     PreferenceCategory(
         title = stringResource(CommonStrings.common_app_settings),
@@ -325,6 +328,7 @@ private fun AppSettingsSection(
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
             onClick = onOpenMediaSettings,
         )
+        supplementarySettings()
         ListItem(
             content = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),

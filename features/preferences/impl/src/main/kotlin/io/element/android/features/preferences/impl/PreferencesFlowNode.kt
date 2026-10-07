@@ -10,9 +10,11 @@ package io.element.android.features.preferences.impl
 
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.node.node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
@@ -25,6 +27,7 @@ import io.element.android.features.licenses.api.OpenSourceLicensesEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
+import io.element.android.features.preferences.api.PreferencesExtension
 import io.element.android.features.preferences.impl.about.AboutNode
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.blockedusers.BlockedUsersNode
@@ -57,6 +60,7 @@ import kotlinx.parcelize.Parcelize
 class PreferencesFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val preferencesExtension: PreferencesExtension,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val notificationTroubleShootEntryPoint: NotificationTroubleShootEntryPoint,
     private val pushHistoryEntryPoint: PushHistoryEntryPoint,
@@ -75,6 +79,9 @@ class PreferencesFlowNode(
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Root : NavTarget
+
+        @Parcelize
+        data class SupplementarySettings(val route: String) : NavTarget
 
         @Parcelize
         data object DeveloperSettings : NavTarget
@@ -165,6 +172,10 @@ class PreferencesFlowNode(
                         backstack.push(NavTarget.LocationSettings)
                     }
 
+                    override fun navigateToSupplementarySettings(route: String) {
+                        backstack.push(NavTarget.SupplementarySettings(route))
+                    }
+
                     override fun navigateToLabs() {
                         backstack.push(NavTarget.Labs)
                     }
@@ -202,6 +213,14 @@ class PreferencesFlowNode(
                     }
                 }
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
+            }
+            is NavTarget.SupplementarySettings -> {
+                preferencesExtension.createNode(this, buildContext, navTarget.route) ?: node(buildContext) {
+                    // A restored route may no longer be supported by the current build.
+                    LaunchedEffect(Unit) {
+                        if (backstack.canPop()) backstack.pop() else navigateUp()
+                    }
+                }
             }
             NavTarget.DeveloperSettings -> {
                 val developerSettingsCallback = object : DeveloperSettingsNode.Callback {
