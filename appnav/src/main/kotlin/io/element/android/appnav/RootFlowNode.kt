@@ -62,6 +62,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.asEventId
@@ -349,8 +350,7 @@ class RootFlowNode(
 
         @Parcelize data class AccountSelect(
             val currentSessionId: SessionId,
-            val shareIntentData: ShareIntentData?,
-            val permalinkData: PermalinkData?,
+            val permalinkData: PermalinkData,
         ) : NavTarget
 
         @Parcelize data class NotLoggedInFlow(
@@ -388,6 +388,15 @@ class RootFlowNode(
 
                     override fun navigateToAddAccount() {
                         backstack.push(NavTarget.NotLoggedInFlow(null))
+                    }
+
+                    override fun switchAccountAndOpenRoom(sessionId: SessionId, roomId: RoomId?) {
+                        lifecycleScope.launch {
+                            val loggedInFlowNode = attachSession(sessionId)
+                            roomId?.let {
+                                loggedInFlowNode.attachRoom(it.toRoomIdOrAlias(), clearBackstack = false)
+                            }
+                        }
                     }
                 }
                 val savedNavState = extractSavedStateForNavTarget(navTarget, this.buildContext.savedStateMap)
@@ -463,13 +472,7 @@ class RootFlowNode(
                                 // Do not pop when the account is changed to avoid a UI flicker.
                                 backstack.pop()
                             }
-                            attachSession(sessionId).apply {
-                                if (navTarget.shareIntentData != null) {
-                                    attachIncomingShare(navTarget.shareIntentData)
-                                } else if (navTarget.permalinkData != null) {
-                                    attachPermalinkData(navTarget.permalinkData)
-                                }
-                            }
+                            attachSession(sessionId).attachPermalinkData(navTarget.permalinkData)
                         }
                     }
 
@@ -539,21 +542,9 @@ class RootFlowNode(
             // No session, open login
             switchToNotLoggedInFlow(null)
         } else {
-            // wait for the current session to be restored
-            val loggedInFlowNode = attachSession(latestSessionId)
-            if (sessionStore.numberOfSessions() > 1) {
-                // Several accounts, let the user choose which one to use
-                backstack.push(
-                    NavTarget.AccountSelect(
-                        currentSessionId = latestSessionId,
-                        shareIntentData = shareIntentData,
-                        permalinkData = null,
-                    )
-                )
-            } else {
-                // Only one account, directly attach the incoming share node.
-                loggedInFlowNode.attachIncomingShare(shareIntentData)
-            }
+            // wait for the current session to be restored, then attach the incoming share node.
+            // In case of multiple accounts, the user can switch account from the room select screen.
+            attachSession(latestSessionId).attachIncomingShare(shareIntentData)
         }
     }
 
@@ -576,7 +567,6 @@ class RootFlowNode(
                         backstack.push(
                             NavTarget.AccountSelect(
                                 currentSessionId = latestSessionId,
-                                shareIntentData = null,
                                 permalinkData = permalinkData,
                             )
                         )

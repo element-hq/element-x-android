@@ -19,7 +19,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.sessionstorage.api.SessionData
+import io.element.android.libraries.matrix.api.user.toMatrixUser
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -58,11 +58,4 @@ class SignedOutPresenter(
             eventSink = ::handleEvent,
         )
     }
-
-    private fun SessionData.toMatrixUser() = MatrixUser(
-        userId = sessionId,
-        displayName = userDisplayName,
-        avatarUrl = userAvatarUrl,
-        avatarThumbnail = userAvatarData,
-    )
 }
