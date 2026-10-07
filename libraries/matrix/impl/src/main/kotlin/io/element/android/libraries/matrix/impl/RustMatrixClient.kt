@@ -24,7 +24,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.SdkPendingTask
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
@@ -88,6 +87,7 @@ import io.element.android.libraries.matrix.impl.roomlist.RoomListFactory
 import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
+import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
 import io.element.android.libraries.matrix.impl.search.map
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
@@ -99,7 +99,6 @@ import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
 import io.element.android.libraries.matrix.impl.workmanager.PerformDatabaseVacuumRequestBuilder
-import io.element.android.libraries.matrix.impl.workmanager.SearchBackfillRequestBuilder
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
@@ -177,7 +176,7 @@ class RustMatrixClient(
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
     private val workManagerScheduler: WorkManagerScheduler,
-    private val searchBackfillRequestBuilderFactory: SearchBackfillRequestBuilder.Factory,
+    private val searchBackfillServiceFactory: RustSearchBackfillService.Factory,
 ) : MatrixClient {
     @AssistedFactory
     interface Factory {
@@ -304,6 +303,8 @@ class RustMatrixClient(
     )
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
+
+    override val searchBackfillService = searchBackfillServiceFactory.create(innerClient)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
         MatrixUser(
@@ -715,7 +716,7 @@ class RustMatrixClient(
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
         ownProfileTaskHandle?.cancelAndDestroy()
-        currentSearchBackfillTaskHandle?.cancelAndDestroy()
+        searchBackfillService.cancelSearchBackfill()
         sessionVerificationService.destroy()
 
         sessionDelegate.clearCurrentClient()
@@ -1022,42 +1023,17 @@ class RustMatrixClient(
         return RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities())
     }
 
-    @Volatile
-    private var currentSearchBackfillTaskHandle: TaskHandle? = null
-
     private fun scheduleBackgroundSearchBackfill() {
         featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageSearch)
             .distinctUntilChanged()
             .onEach { isEnabled ->
                 if (isEnabled) {
-                    if (workManagerScheduler.hasPendingWork(sessionId, WorkManagerRequestType.SEARCH_BACKFILL)) {
-                        Timber.d("Background search backfill already scheduled for session $sessionId")
-                        return@onEach
-                    }
-                    Timber.d("Scheduling background search backfill for session $sessionId")
-                    val builder = searchBackfillRequestBuilderFactory.create(sessionId)
-                    workManagerScheduler.submit(builder)
+                    searchBackfillService.schedulePeriodicSearchBackfill(SearchBackfillStrategy.BACKGROUND)
                 } else {
-                    Timber.d("Cancelling background search backfill for session $sessionId")
-                    workManagerScheduler.cancel(sessionId, WorkManagerRequestType.SEARCH_BACKFILL)
+                    searchBackfillService.cancelPeriodicSearchBackfill()
                 }
             }
             .launchIn(sessionCoroutineScope)
-    }
-
-    override fun startSearchBackfill(strategy: SearchBackfillStrategy): Result<SdkPendingTask> = runCatchingExceptions {
-        RustSdkPendingTask(innerClient.runSearchBackfill(strategy.map()).also { currentSearchBackfillTaskHandle = it })
-    }
-
-    override fun isSearchBackfillRunning(): Boolean {
-        return currentSearchBackfillTaskHandle?.let { task ->
-            !task.isFinished()
-        } ?: false
-    }
-
-    override fun cancelSearchBackfill(): Result<Unit> = runCatchingExceptions {
-        currentSearchBackfillTaskHandle?.cancelAndDestroy()
-        currentSearchBackfillTaskHandle = null
     }
 }
 

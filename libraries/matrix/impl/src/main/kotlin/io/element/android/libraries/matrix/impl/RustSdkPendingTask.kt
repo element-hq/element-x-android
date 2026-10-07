@@ -10,13 +10,18 @@ package io.element.android.libraries.matrix.impl
 import io.element.android.libraries.matrix.api.SdkPendingTask
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import org.matrix.rustcomponents.sdk.TaskHandle
+import java.util.concurrent.atomic.AtomicBoolean
 
 class RustSdkPendingTask(
     private val taskHandle: TaskHandle,
 ) : SdkPendingTask {
-    override fun isRunning(): Boolean = !taskHandle.uniffiIsDestroyed && !taskHandle.isFinished()
+    private val closed = AtomicBoolean(false)
+
+    override fun isRunning(): Boolean = !closed.get() && !taskHandle.isFinished()
 
     override fun close() {
-        taskHandle.cancelAndDestroy()
+        if (!closed.getAndSet(true)) {
+            taskHandle.cancelAndDestroy()
+        }
     }
 }

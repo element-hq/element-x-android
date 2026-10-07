@@ -10,7 +10,6 @@ package io.element.android.libraries.matrix.test
 
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.SdkPendingTask
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
@@ -41,7 +40,7 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryServic
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.search.MessageSearchService
-import io.element.android.libraries.matrix.api.search.SearchBackfillStrategy
+import io.element.android.libraries.matrix.api.search.SearchBackfillService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -59,6 +58,7 @@ import io.element.android.libraries.matrix.test.pushers.FakePushersService
 import io.element.android.libraries.matrix.test.roomdirectory.FakeRoomDirectoryService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.search.FakeMessageSearchService
+import io.element.android.libraries.matrix.test.search.FakeSearchBackfillService
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -133,9 +133,7 @@ class FakeMatrixClient(
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val markAllRoomsAsReadResult: () -> Result<Unit> = { Result.success(Unit) },
     private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
-    private val startSearchBackfillLambda: (SearchBackfillStrategy) -> Result<SdkPendingTask> = { lambdaError() },
-    private val isSearchBackfillRunningLambda: () -> Boolean = { false },
-    private val cancelSearchBackfillLambda: () -> Result<Unit> = { lambdaError() },
+    override val searchBackfillService: SearchBackfillService = FakeSearchBackfillService(),
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
     private val enableAutomaticCallStatusLambda: (Boolean) -> Unit = { },
@@ -465,18 +463,6 @@ class FakeMatrixClient(
 
     override suspend fun resetWellKnownConfig(): Result<Unit> {
         return resetWellKnownConfigLambda()
-    }
-
-    override fun startSearchBackfill(strategy: SearchBackfillStrategy): Result<SdkPendingTask> {
-        return startSearchBackfillLambda(strategy)
-    }
-
-    override fun isSearchBackfillRunning(): Boolean {
-        return isSearchBackfillRunningLambda()
-    }
-
-    override fun cancelSearchBackfill(): Result<Unit> {
-        return cancelSearchBackfillLambda()
     }
 
     override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {

@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.search.FakeMessageSearch
 import io.element.android.libraries.matrix.test.search.FakeMessageSearchService
+import io.element.android.libraries.matrix.test.search.FakeSearchBackfillService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
@@ -208,7 +209,7 @@ class GlobalSearchPresenterTest {
     fun `present - message search results are mapped when the message search emits`() = runTest {
         val messageSearch = FakeMessageSearch()
         val matrixClient = FakeMatrixClient(
-            startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) },
+            searchBackfillService = FakeSearchBackfillService(startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) }),
         ).apply {
             getRoomInfoLambda = { Result.success(aRoomInfo()) }
         }
@@ -237,7 +238,7 @@ class GlobalSearchPresenterTest {
     fun `present - message search displays the uninitialized state after removing the query`() = runTest {
         val messageSearch = FakeMessageSearch()
         val matrixClient = FakeMatrixClient(
-            startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) },
+            searchBackfillService = FakeSearchBackfillService(startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) }),
         ).apply {
             getRoomInfoLambda = { Result.success(aRoomInfo()) }
         }
@@ -274,7 +275,7 @@ class GlobalSearchPresenterTest {
     fun `present - UpdateVisibleRange triggers pagination for messages when near the end`() = runTest {
         val messageSearch = FakeMessageSearch()
         val matrixClient = FakeMatrixClient(
-            startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) },
+            searchBackfillService = FakeSearchBackfillService(startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) }),
         ).apply {
             getRoomInfoLambda = { Result.success(aRoomInfo()) }
         }
@@ -446,10 +447,12 @@ class GlobalSearchPresenterTest {
         var isRunning = false
         val closeLambda = lambdaRecorder<Unit> { isRunning = false }
         val matrixClient = FakeMatrixClient(
-            startSearchBackfillLambda = {
-                isRunning = true
-                Result.success(FakeSdkPendingTask(isRunningLambda = { isRunning }, closeLambda = closeLambda))
-            },
+            searchBackfillService = FakeSearchBackfillService(
+                startSearchBackfillLambda = {
+                    isRunning = true
+                    Result.success(FakeSdkPendingTask(isRunningLambda = { isRunning }, closeLambda = closeLambda))
+                },
+            ),
         )
         val presenter = createGlobalSearchPresenter(
             matrixClient = matrixClient,
@@ -486,7 +489,8 @@ private fun TestScope.createGlobalSearchPresenter(
     dateFormatter: DateFormatter = FakeDateFormatter(),
     fileSizeFormatter: FileSizeFormatter = FakeFileSizeFormatter(),
     permalinkParser: PermalinkParser = FakePermalinkParser(),
-    matrixClient: MatrixClient = FakeMatrixClient(startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) }),
+    matrixClient: MatrixClient =
+    FakeMatrixClient(searchBackfillService = FakeSearchBackfillService(startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) })),
     searchHistoryStore: SearchHistoryStore = FakeSearchHistoryStore(),
 ): GlobalSearchPresenter {
     return GlobalSearchPresenter(

@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProf
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
+import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
 import io.element.android.libraries.matrix.impl.workmanager.SearchBackfillRequestBuilder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
@@ -330,10 +331,16 @@ class RustMatrixClientTest {
         workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}, cancelLambda = { _, _ -> }),
         contentScanner = FakeContentScanner(),
         isMessageSearchAvailable = false,
-        searchBackfillRequestBuilderFactory = {
-            object : SearchBackfillRequestBuilder {
-                override suspend fun build(): Result<List<WorkManagerRequestWrapper>> = Result.success(emptyList())
-            }
-        }
+        searchBackfillServiceFactory = object : RustSearchBackfillService.Factory {
+            override fun create(innerClient: Client) = RustSearchBackfillService(
+                innerClient = innerClient,
+                searchBackfillRequestBuilderFactory = {
+                    object : SearchBackfillRequestBuilder {
+                        override suspend fun build(): Result<List<WorkManagerRequestWrapper>> = Result.success(emptyList())
+                    }
+                },
+                workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}, cancelLambda = { _, _ -> }),
+            )
+        },
     )
 }

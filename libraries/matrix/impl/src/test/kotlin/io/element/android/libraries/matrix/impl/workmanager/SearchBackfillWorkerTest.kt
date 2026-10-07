@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.FakeSdkPendingTask
+import io.element.android.libraries.matrix.test.search.FakeSearchBackfillService
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -59,8 +60,10 @@ class SearchBackfillWorkerTest : RobolectricTest() {
     fun `backfill already running - does not start another one`() = runTest {
         val startLambda = lambdaRecorder<SearchBackfillStrategy, Result<SdkPendingTask>> { error("Should not be called") }
         val client = FakeMatrixClient(
-            isSearchBackfillRunningLambda = { true },
-            startSearchBackfillLambda = startLambda,
+            searchBackfillService = FakeSearchBackfillService(
+                isSearchBackfillRunningLambda = { true },
+                startSearchBackfillLambda = startLambda,
+            ),
         )
 
         val result = createWorker(client = client).doWork()
@@ -72,7 +75,9 @@ class SearchBackfillWorkerTest : RobolectricTest() {
     @Test
     fun `start fails - fails`() = runTest {
         val client = FakeMatrixClient(
-            startSearchBackfillLambda = { Result.failure(IllegalStateException("boom")) },
+            searchBackfillService = FakeSearchBackfillService(
+                startSearchBackfillLambda = { Result.failure(IllegalStateException("boom")) },
+            ),
         )
 
         assertThat(createWorker(client = client).doWork()).isEqualTo(ListenableWorker.Result.failure())
@@ -85,7 +90,7 @@ class SearchBackfillWorkerTest : RobolectricTest() {
         val startLambda = lambdaRecorder<SearchBackfillStrategy, Result<SdkPendingTask>> {
             Result.success(FakeSdkPendingTask(isRunningLambda = { running }, closeLambda = closeLambda))
         }
-        val client = FakeMatrixClient(startSearchBackfillLambda = startLambda)
+        val client = FakeMatrixClient(searchBackfillService = FakeSearchBackfillService(startSearchBackfillLambda = startLambda))
 
         val deferred = async { createWorker(client = client).doWork() }
         advanceTimeBy(10.seconds)
@@ -101,7 +106,9 @@ class SearchBackfillWorkerTest : RobolectricTest() {
     fun `backfill times out after 10 minutes - closes the task and retries`() = runTest {
         val closeLambda = lambdaRecorder<Unit> { }
         val client = FakeMatrixClient(
-            startSearchBackfillLambda = { Result.success(FakeSdkPendingTask(isRunningLambda = { true }, closeLambda = closeLambda)) },
+            searchBackfillService = FakeSearchBackfillService(
+                startSearchBackfillLambda = { Result.success(FakeSdkPendingTask(isRunningLambda = { true }, closeLambda = closeLambda)) },
+            ),
         )
 
         val deferred = async { createWorker(client = client).doWork() }

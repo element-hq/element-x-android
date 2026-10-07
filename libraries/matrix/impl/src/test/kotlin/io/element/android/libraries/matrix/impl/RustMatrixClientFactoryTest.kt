@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.impl.auth.FakeProxyProvider
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
+import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
 import io.element.android.libraries.matrix.impl.storage.FakeSqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.workmanager.SearchBackfillRequestBuilder
@@ -103,10 +104,16 @@ private fun TestScope.createRustMatrixClientInnerFactory(
         featureFlagService = FakeFeatureFlagService(),
         analyticsService = FakeAnalyticsService(),
         workManagerScheduler = workManagerScheduler,
-        searchBackfillRequestBuilderFactory = {
-            object : SearchBackfillRequestBuilder {
-                override suspend fun build(): Result<List<WorkManagerRequestWrapper>> = Result.success(emptyList())
-            }
+        searchBackfillServiceFactory = object : RustSearchBackfillService.Factory {
+            override fun create(innerClient: Client) = RustSearchBackfillService(
+                innerClient = innerClient,
+                searchBackfillRequestBuilderFactory = {
+                    object : SearchBackfillRequestBuilder {
+                        override suspend fun build(): Result<List<WorkManagerRequestWrapper>> = Result.success(emptyList())
+                    }
+                },
+                workManagerScheduler = workManagerScheduler,
+            )
         },
     )
 }

@@ -46,13 +46,13 @@ class SearchBackfillWorker(
         val sessionId = inputData.getString(SESSION_ID_PARAM)?.let(::SessionId) ?: return Result.failure()
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return Result.failure()
 
-        if (client.isSearchBackfillRunning()) {
+        if (client.searchBackfillService.isSearchBackfillRunning()) {
             Timber.d("Search backfill is already running for session $sessionId, nothing to do")
             return Result.success()
         }
 
         Timber.d("Starting search backfill for session $sessionId")
-        val task = client.startSearchBackfill(SearchBackfillStrategy.BACKGROUND).getOrElse {
+        val task = client.searchBackfillService.startSearchBackfill(SearchBackfillStrategy.BACKGROUND).getOrElse {
             Timber.e(it, "Failed to start search backfill")
             return Result.failure()
         }
