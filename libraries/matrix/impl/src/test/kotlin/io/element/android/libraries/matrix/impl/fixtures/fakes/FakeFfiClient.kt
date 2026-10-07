@@ -45,6 +45,7 @@ import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 import org.matrix.rustcomponents.sdk.UserProfile
+import uniffi.matrix_sdk.SearchBackfillStrategy
 import uniffi.matrix_sdk_base.MediaRetentionPolicy
 
 class FakeFfiClient(
@@ -73,6 +74,7 @@ class FakeFfiClient(
     private val getUrlResult: (String) -> ByteArray = { lambdaError() },
     private val getMediaThumbnailResult: (MediaSource, ULong, ULong) -> ByteArray = { _, _, _ -> byteArrayOf() },
     private val contentScannerResult: () -> ContentScanner = { FakeFfiContentScanner() },
+    private val runSearchBackfillResult: (SearchBackfillStrategy) -> TaskHandle = { lambdaError() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
@@ -169,6 +171,8 @@ class FakeFfiClient(
     override suspend fun contentScanner(): ContentScanner = simulateLongTask {
         contentScannerResult()
     }
+
+    override fun runSearchBackfill(strategy: SearchBackfillStrategy): TaskHandle = runSearchBackfillResult(strategy)
 
     override fun close() = closeResult()
 }
