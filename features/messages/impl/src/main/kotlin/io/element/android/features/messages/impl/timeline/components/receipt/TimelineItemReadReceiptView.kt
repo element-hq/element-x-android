@@ -58,29 +58,19 @@ fun TimelineItemReadReceiptView(
     modifier: Modifier = Modifier,
 ) {
     val content: @Composable (() -> Unit)? = when (state.sendState) {
+        // If null, assume it's Sent and act the same way
+        null if state.isLastOutgoingMessage && state.receipts.isEmpty() -> {
+            @Composable { SentIcon() }
+        }
         is LocalEventSendState.Sending -> {
-            @Composable {
-                Icon(
-                    modifier = Modifier.padding(2.dp),
-                    imageVector = CompoundIcons.Circle(),
-                    contentDescription = stringResource(id = CommonStrings.common_sending),
-                    tint = ElementTheme.colors.iconSecondary
-                )
-            }
+            @Composable { SendingIcon() }
         }
         is LocalEventSendState.Failed -> {
             // Error? The timestamp is already displayed in red
             null
         }
         is LocalEventSendState.Sent if state.isLastOutgoingMessage && state.receipts.isEmpty() -> {
-            @Composable {
-                Icon(
-                    modifier = Modifier.padding(2.dp),
-                    imageVector = CompoundIcons.CheckCircle(),
-                    contentDescription = stringResource(id = CommonStrings.common_sent),
-                    tint = ElementTheme.colors.iconSecondary
-                )
-            }
+            @Composable { SentIcon() }
         }
         else -> if (state.receipts.isNotEmpty()) {
             @Composable {
@@ -101,6 +91,26 @@ fun TimelineItemReadReceiptView(
             content = it,
         )
     }
+}
+
+@Composable
+private fun SendingIcon() {
+    Icon(
+        modifier = Modifier.padding(2.dp),
+        imageVector = CompoundIcons.Circle(),
+        contentDescription = stringResource(id = CommonStrings.common_sending),
+        tint = ElementTheme.colors.iconSecondary
+    )
+}
+
+@Composable
+private fun SentIcon() {
+    Icon(
+        modifier = Modifier.padding(2.dp),
+        imageVector = CompoundIcons.CheckCircle(),
+        contentDescription = stringResource(id = CommonStrings.common_sent),
+        tint = ElementTheme.colors.iconSecondary
+    )
 }
 
 @Composable

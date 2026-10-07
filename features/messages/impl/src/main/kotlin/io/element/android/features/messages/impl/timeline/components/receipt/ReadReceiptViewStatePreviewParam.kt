@@ -20,7 +20,7 @@ import kotlinx.collections.immutable.toImmutableList
 class ReadReceiptViewStatePreviewParam : PreviewParameterProvider<ReadReceiptViewState> {
     override val values: Sequence<ReadReceiptViewState>
         get() = sequenceOf(
-            aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId")), isLastOutgoingMessage = true),
+            aReadReceiptViewState(sendState = null, isLastOutgoingMessage = true),
             aReadReceiptViewState(sendState = LocalEventSendState.Sending.Event, isLastOutgoingMessage = true),
             aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId")), isLastOutgoingMessage = true),
             aReadReceiptViewState(
