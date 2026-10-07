@@ -76,6 +76,7 @@ class FakeFfiClient(
     private val contentScannerResult: () -> ContentScanner = { FakeFfiContentScanner() },
     private val runSearchBackfillResult: (SearchBackfillStrategy) -> TaskHandle = { lambdaError() },
     private val closeResult: () -> Unit = {},
+    private val setDelegateResult: (ClientDelegate?) -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
@@ -85,7 +86,10 @@ class FakeFfiClient(
     override suspend fun getNotificationSettings(): NotificationSettings = notificationSettings
     override fun encryption(): Encryption = encryption
     override fun session(): Session = session
-    override fun setDelegate(delegate: ClientDelegate?): TaskHandle = FakeFfiTaskHandle()
+    override fun setDelegate(delegate: ClientDelegate?): TaskHandle {
+        setDelegateResult(delegate)
+        return FakeFfiTaskHandle()
+    }
     override suspend fun cachedAvatarUrl(): String? = null
     override suspend fun restoreSession(session: Session) = Unit
     override fun syncService(): SyncServiceBuilder = FakeFfiSyncServiceBuilder()
