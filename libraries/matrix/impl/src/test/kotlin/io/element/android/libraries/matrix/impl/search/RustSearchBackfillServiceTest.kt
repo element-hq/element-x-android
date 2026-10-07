@@ -12,7 +12,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.search.SearchBackfillStrategy
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTaskHandle
-import io.element.android.libraries.matrix.impl.workmanager.SearchBackfillRequestBuilder
+import io.element.android.libraries.matrix.impl.search.workmanager.SearchBackfillRequestBuilder
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType

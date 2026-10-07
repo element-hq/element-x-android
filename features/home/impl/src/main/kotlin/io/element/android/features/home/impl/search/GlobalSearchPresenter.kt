@@ -314,15 +314,19 @@ class GlobalSearchPresenter(
             DisposableEffect(Unit) {
                 // When we open the message search, we want to backfill the search results so that we can show the user more results if they scroll down.
                 val handle = matrixClient.searchBackfillService.startSearchBackfill(SearchBackfillStrategy.FOREGROUND).getOrNull()
+                    ?: return@DisposableEffect onDispose {
+                        Timber.w("Could not start search backfill, it may already be running.")
+                    }
+
                 val job = coroutineScope.launch(coroutineDispatchers.io) {
-                    while (handle?.isRunning() == true) {
+                    while (handle.isRunning()) {
                         delay(100.milliseconds)
                     }
                     hasBackfillRun = true
                 }
                 onDispose {
                     job.cancel()
-                    handle?.close()
+                    handle.close()
                 }
             }
         }

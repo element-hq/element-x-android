@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.impl.workmanager
+package io.element.android.libraries.matrix.impl.search.workmanager
 
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
@@ -20,7 +20,7 @@ import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.impl.workmanager.SearchBackfillWorker.Companion.SESSION_ID_PARAM
+import io.element.android.libraries.matrix.impl.search.workmanager.SearchBackfillWorker.Companion.SESSION_ID_PARAM
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerRequestWrapper
@@ -71,7 +71,7 @@ class DefaultSearchBackfillRequestBuilder(
         }
 
         val constraints = Constraints.Builder()
-            .setRequiredNetworkRequest(networkRequestBuilder.build(), NetworkType.NOT_REQUIRED)
+            .setRequiredNetworkRequest(networkRequestBuilder.build(), NetworkType.UNMETERED)
             .setRequiresCharging(true)
             .build()
 

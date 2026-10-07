@@ -19,7 +19,7 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
-import io.element.android.libraries.matrix.impl.workmanager.SearchBackfillRequestBuilder
+import io.element.android.libraries.matrix.impl.search.workmanager.SearchBackfillRequestBuilder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID

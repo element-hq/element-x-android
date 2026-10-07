@@ -16,7 +16,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.search.SearchBackfillService
 import io.element.android.libraries.matrix.api.search.SearchBackfillStrategy
 import io.element.android.libraries.matrix.impl.RustSdkPendingTask
-import io.element.android.libraries.matrix.impl.workmanager.SearchBackfillRequestBuilder
+import io.element.android.libraries.matrix.impl.search.workmanager.SearchBackfillRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import org.matrix.rustcomponents.sdk.Client
