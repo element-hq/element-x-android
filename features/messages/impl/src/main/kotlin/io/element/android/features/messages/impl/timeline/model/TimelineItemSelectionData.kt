@@ -14,7 +14,8 @@ package io.element.android.features.messages.impl.timeline.model
  *   behaviour (e.g. the whole-row click target) and must reflect the real mode, not [progress].
  * @param isSelected whether this specific row's event is part of the current selection.
  * @param canBeSelected whether this specific row's event can be selected for the action selection mode was entered for.
- *   Rows which cannot be selected render no indicator, and their content does not slide.
+ *   Rows which cannot be selected render no indicator and ignore clicks, but their content still slides: sliding only depends on the row being a
+ *   start-aligned bubble, so that the bubbles stay aligned with each other.
  * @param progress animated 0f..1f value driving the visuals (content slide + indicator slide-in).
  *   Animated once in TimelineView and shared by every row. Differs from [isSelectionModeActive]
  *   during the enter/exit animation.
