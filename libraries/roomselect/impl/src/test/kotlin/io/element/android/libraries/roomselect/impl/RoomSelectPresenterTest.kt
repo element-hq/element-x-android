@@ -59,7 +59,6 @@ class RoomSelectPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.selectedRooms).isEmpty()
             assertThat(initialState.resultState).isInstanceOf(SearchBarResultState.Initial::class.java)
-            assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.maxNumberOfRooms).isEqualTo(10)
             assertThat(initialState.canSelectMoreRooms).isTrue()
             assertThat(initialState.selectedAccount).isEqualTo(MatrixUser(A_SESSION_ID))
@@ -285,18 +284,6 @@ class RoomSelectPresenterTest {
     )
 
     @Test
-    fun `present - toggle search active`() = runTest {
-        val presenter = createRoomSelectPresenter()
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(RoomSelectEvent.ToggleSearchActive)
-            assertThat(awaitItem().isSearchActive).isTrue()
-            initialState.eventSink(RoomSelectEvent.ToggleSearchActive)
-            assertThat(awaitItem().isSearchActive).isFalse()
-        }
-    }
-
-    @Test
     fun `present - update query`() = runTest {
         val roomSummary = aRoomSummary()
         val roomList = FakeDynamicRoomList(
@@ -314,8 +301,6 @@ class RoomSelectPresenterTest {
             // Do not compare the lambda because they will be different. So copy the lambda from expectedRoomSummary to result
             val result = (awaitItem().resultState as SearchBarResultState.Results).results
             assertThat(result).isEqualTo(listOf(expectedRoomInfo))
-            initialState.eventSink(RoomSelectEvent.ToggleSearchActive)
-            skipItems(1)
             initialState.searchQuery.setTextAndPlaceCursorAtEnd("string not contained")
             assertThat(
                 roomList.currentFilter.value

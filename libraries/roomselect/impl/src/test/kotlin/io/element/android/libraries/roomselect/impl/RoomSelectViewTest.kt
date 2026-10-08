@@ -156,6 +156,17 @@ class RoomSelectViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `a message is displayed when no room matches the search query`() = runAndroidComposeUiTest {
+        setRoomSelectView(
+            aRoomSelectState(
+                searchQuery = "Test",
+                resultState = SearchBarResultState.NoResultsFound,
+            ),
+        )
+        onNodeWithText(activity!!.getString(CommonStrings.common_no_results)).assertIsDisplayed()
+    }
+
+    @Test
     fun `an error is displayed instead of the rooms if they cannot be loaded`() = runAndroidComposeUiTest<ComponentActivity> {
         setRoomSelectView(
             aRoomSelectState(

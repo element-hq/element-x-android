@@ -63,7 +63,6 @@ class RoomSelectPresenter(
     override fun present(): RoomSelectState {
         var selectedRooms by remember { mutableStateOf(persistentListOf<SelectRoomInfo>()) }
         val queryState = rememberTextFieldState()
-        var isSearchActive by remember { mutableStateOf(false) }
         var isAccountListExpanded by remember { mutableStateOf(false) }
         var selectedSessionId by remember { mutableStateOf(initialSessionId) }
         val sessions by remember { sessionStore.sessionsFlow() }.collectAsState(initial = emptyList())
@@ -136,7 +135,7 @@ class RoomSelectPresenter(
             derivedStateOf {
                 when {
                     roomSummaryDetailsList.isNotEmpty() -> SearchBarResultState.Results(roomSummaryDetailsList.toImmutableList())
-                    isSearchActive -> SearchBarResultState.NoResultsFound
+                    queryState.text.isNotBlank() -> SearchBarResultState.NoResultsFound
                     else -> SearchBarResultState.Initial
                 }
             }
@@ -152,7 +151,6 @@ class RoomSelectPresenter(
                         selectedRooms.adding(event.room)
                     }
                 }
-                RoomSelectEvent.ToggleSearchActive -> isSearchActive = !isSearchActive
                 RoomSelectEvent.ToggleAccountListExpanded -> isAccountListExpanded = !isAccountListExpanded
                 is RoomSelectEvent.SelectAccount -> {
                     selectedSessionId = event.sessionId
@@ -172,7 +170,6 @@ class RoomSelectPresenter(
             maxNumberOfRooms = maxNumberOfRooms,
             resultState = searchResults,
             searchQuery = queryState,
-            isSearchActive = isSearchActive,
             selectedRooms = selectedRooms,
             selectedAccount = selectedAccount,
             hasRoomListError = hasRoomListError,
