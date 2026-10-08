@@ -13,8 +13,12 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeUp
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -29,6 +33,7 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 import org.robolectric.annotation.Config
 
@@ -124,6 +129,33 @@ class RoomSelectViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `the room list can be scrolled when there is no other account`() = runAndroidComposeUiTest {
+        setRoomSelectView(
+            aRoomSelectState(
+                mode = RoomSelectMode.Share,
+                resultState = SearchBarResultState.Results(aLongRoomList()),
+            ),
+        )
+        onNodeWithText("Room 0").assertIsDisplayed()
+        onRoot().performTouchInput { swipeUp() }
+        onNodeWithText("Room 0").assertIsNotDisplayed()
+    }
+
+    @Test
+    fun `the room list can be scrolled when there are other accounts`() = runAndroidComposeUiTest {
+        setRoomSelectView(
+            aRoomSelectState(
+                mode = RoomSelectMode.Share,
+                resultState = SearchBarResultState.Results(aLongRoomList()),
+                otherAccounts = persistentListOf(aMatrixUser(id = "@bob:example.org", displayName = "Bob")),
+            ),
+        )
+        onNodeWithText("Room 0").assertIsDisplayed()
+        onRoot().performTouchInput { swipeUp() }
+        onNodeWithText("Room 0").assertIsNotDisplayed()
+    }
+
+    @Test
     fun `an error is displayed instead of the rooms if they cannot be loaded`() = runAndroidComposeUiTest<ComponentActivity> {
         setRoomSelectView(
             aRoomSelectState(
@@ -150,3 +182,10 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomSelectView(
         )
     }
 }
+
+private fun aLongRoomList() = List(30) { index ->
+    aSelectRoomInfo(
+        roomId = RoomId("!room$index:domain"),
+        name = "Room $index",
+    )
+}.toImmutableList()

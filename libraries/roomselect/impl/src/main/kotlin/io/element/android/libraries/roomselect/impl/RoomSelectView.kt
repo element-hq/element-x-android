@@ -177,7 +177,14 @@ fun RoomSelectView(
             Modifier
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
-                .nestedScroll(accountSwitchScrollBehavior.nestedScrollConnection)
+                .then(
+                    // Only when the account switch section is displayed, else its unknown height would consume all the scroll events
+                    if (state.showAccountSwitch && !state.isSearchActive) {
+                        Modifier.nestedScroll(accountSwitchScrollBehavior.nestedScrollConnection)
+                    } else {
+                        Modifier
+                    }
+                )
         ) {
             SearchBar(
                 modifier = Modifier
@@ -194,16 +201,18 @@ fun RoomSelectView(
                 resultState = state.resultState,
                 showBackButton = false,
             ) { summaries ->
-                if (summaries.isNotEmpty()) {
-                    ListSectionHeader(
-                        title = stringResource(CommonStrings.common_header_rooms),
-                        hasDivider = false,
-                    )
-                }
                 LazyColumn(
                     state = lazyListState,
                     contentPadding = lazyColumnContentPadding,
                 ) {
+                    if (summaries.isNotEmpty()) {
+                        item {
+                            ListSectionHeader(
+                                title = stringResource(CommonStrings.common_header_rooms),
+                                hasDivider = false,
+                            )
+                        }
+                    }
                     item {
                         SelectedRoomsHelper(
                             selectedRooms = state.selectedRooms,
