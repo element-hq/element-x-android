@@ -11,10 +11,13 @@ package io.element.android.features.preferences.impl
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.onChildren
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import com.bumble.appyx.core.modality.BuildContext
@@ -24,6 +27,23 @@ import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 
 class NoopPreferencesExtensionTest : RobolectricTest() {
+    @Test
+    fun `FOSS extension leaves surrounding settings unchanged during updates`() = runAndroidComposeUiTest<ComponentActivity> {
+        val extension = NoopPreferencesExtension()
+        val text = mutableStateOf("Before")
+        setContent {
+            Column {
+                BasicText(text.value)
+                with(extension) { Render({ error("No navigation expected") }, Modifier) }
+            }
+        }
+        onNodeWithText("Before").assertExists()
+        onRoot().onChildren().assertCountEquals(1)
+        runOnIdle { text.value = "After" }
+        onNodeWithText("After").assertExists()
+        onRoot().onChildren().assertCountEquals(1)
+    }
+
     @Test
     fun `FOSS extension has no rows or supported routes`() = runAndroidComposeUiTest<ComponentActivity> {
         val extension = NoopPreferencesExtension()
