@@ -15,11 +15,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.libraries.architecture)
     implementation(projects.libraries.androidutils)
-    implementation(projects.libraries.core)
-    implementation(projects.libraries.di)
     api(projects.libraries.matrix.api)
     api(projects.libraries.preferences.api)
-    implementation(libs.coroutines.core)
 }

@@ -8,10 +8,13 @@
 
 package io.element.android.libraries.roomselect.impl
 
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 
 sealed interface RoomSelectEvent {
     data class ToggleSelectedRoom(val room: SelectRoomInfo) : RoomSelectEvent
     data object ToggleSearchActive : RoomSelectEvent
     data class UpdateVisibleRange(val range: IntRange) : RoomSelectEvent
+    data object ToggleAccountListExpanded : RoomSelectEvent
+    data class SelectAccount(val sessionId: SessionId) : RoomSelectEvent
 }

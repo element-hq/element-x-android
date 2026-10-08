@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.messagecomposer.aReplyMode
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.audio.api.AudioFocusRequester
+import io.element.android.libraries.audio.test.FakeAudioFocus
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -28,7 +29,6 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.mediaplayer.test.FakeAudioFocus
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.impl.DefaultMediaSender

@@ -111,6 +111,7 @@
   <string name="action_copy_link">"Скопировать ссылку"</string>
   <string name="action_copy_link_to_message">"Скопировать ссылку на сообщение"</string>
   <string name="action_copy_text">"Копировать текст"</string>
+  <string name="action_copy_to_clipboard">"Скопировать в буфер обмена"</string>
   <string name="action_create">"Создать"</string>
   <string name="action_create_room">"Создать комнату"</string>
   <string name="action_create_space">"Создать пространство"</string>
@@ -224,6 +225,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Доступно обновление"</string>
   <string name="common_about">"О приложении"</string>
   <string name="common_acceptable_use_policy">"Политика допустимого использования"</string>
+  <string name="common_account_settings">"Настройки аккаунта"</string>
   <string name="common_add_account">"Добавить аккаунт"</string>
   <string name="common_add_another_account">"Добавить другой аккаунт"</string>
   <string name="common_adding_caption">"Добавление подписи"</string>
@@ -232,6 +234,7 @@
   <string name="common_analytics">"Аналитика"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Вы покинули комнату"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Вы вышли из сессии"</string>
+  <string name="common_app_settings">"Настройки приложения"</string>
   <string name="common_appearance">"Внешний вид"</string>
   <string name="common_audio">"Аудио"</string>
   <string name="common_beta">"Бета-версия"</string>
@@ -242,6 +245,7 @@
   <string name="common_call_started">"Звонок начат"</string>
   <string name="common_call_you_declined">"Ты отклонил звонок"</string>
   <string name="common_chat_backup">"Резервная копия чатов"</string>
+  <string name="common_code_block">"Блок кода"</string>
   <string name="common_copied_to_clipboard">"Скопировано в буфер обмена"</string>
   <string name="common_copyright">"Авторское право"</string>
   <string name="common_creating_room">"Создание комнаты…"</string>
@@ -308,11 +312,13 @@
   <string name="common_live_location_ended">"Трансляция местоположения завершена"</string>
   <string name="common_loading">"Загрузка…"</string>
   <string name="common_loading_more">"Загрузить больше…"</string>
+  <string name="common_location_sharing">"Обмен местоположением"</string>
   <plurals name="common_many_members">
     <item quantity="one">"%d"</item>
     <item quantity="few">"%d другие"</item>
     <item quantity="many">"%d другие"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Качество загружаемого медиа"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d участник"</item>
     <item quantity="few">"%1$d участников"</item>
@@ -323,6 +329,7 @@
   <string name="common_message_failed_to_send">"Ошибка отправки сообщения"</string>
   <string name="common_message_layout">"Оформление сообщения"</string>
   <string name="common_message_removed">"Сообщение удалено"</string>
+  <string name="common_moderation_and_safety">"Модерация и безопасность"</string>
   <string name="common_modern">"Современный"</string>
   <string name="common_mute">"Выкл. звук"</string>
   <string name="common_name">"Имя"</string>
@@ -428,6 +435,7 @@
   <string name="common_success">"Успешно"</string>
   <string name="common_suggested">"Рекомендуемые"</string>
   <string name="common_suggestions">"Предложения"</string>
+  <string name="common_switch_accounts">"Сменить аккаунт"</string>
   <string name="common_syncing">"Синхронизация"</string>
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Уведомления о третьих лицах"</string>
@@ -467,6 +475,7 @@
   <string name="common_waiting_live_location">"Ожидание трансляции местоположения…"</string>
   <string name="common_world_readable_history">"Любой может видеть историю"</string>
   <string name="common_you">"Вы"</string>
+  <string name="common_your_account">"Ваш аккаунт"</string>
   <string name="content_scanner_not_found">"Загрузка недоступна."</string>
   <string name="content_scanner_not_found_title">"Файл не найден"</string>
   <string name="content_scanner_scanning">"Сканирование…"</string>

@@ -16,7 +16,5 @@ android {
 
 dependencies {
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.matrix.api)
 }

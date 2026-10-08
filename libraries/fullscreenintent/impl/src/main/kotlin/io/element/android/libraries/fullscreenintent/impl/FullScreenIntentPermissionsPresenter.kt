@@ -15,11 +15,15 @@ import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -61,8 +65,14 @@ class FullScreenIntentPermissionsPresenter(
     @Composable
     override fun present(): FullScreenIntentPermissionsState {
         val coroutineScope = rememberCoroutineScope()
-        val isGranted = notificationManagerCompat.canUseFullScreenIntent()
+        var isGranted by remember { mutableStateOf(notificationManagerCompat.canUseFullScreenIntent()) }
         val isBannerDismissed by isFullScreenIntentBannerDismissed.collectAsState(initial = true)
+
+        // The permission can be granted from the system settings, so check it again when the user comes back to the app.
+        LifecycleResumeEffect(Unit) {
+            isGranted = notificationManagerCompat.canUseFullScreenIntent()
+            onPauseOrDispose {}
+        }
 
         fun handleEvent(event: FullScreenIntentPermissionsEvent) {
             when (event) {

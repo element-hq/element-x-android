@@ -28,6 +28,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
@@ -40,6 +41,7 @@ class ForwardMessagesNode(
     @Assisted plugins: List<Plugin>,
     presenterFactory: ForwardMessagesPresenter.Factory,
     private val roomSelectEntryPoint: RoomSelectEntryPoint,
+    private val sessionId: SessionId,
 ) : ParentNode<ForwardMessagesNode.NavTarget>(
     navModel = PermanentNavModel(
         navTargets = setOf(NavTarget),
@@ -62,7 +64,8 @@ class ForwardMessagesNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         val callback = object : RoomSelectEntryPoint.Callback {
-            override fun onRoomSelected(roomIds: List<RoomId>) {
+            override fun onRoomSelected(sessionId: SessionId, roomIds: List<RoomId>) {
+                // In Forward mode, the session cannot be changed
                 presenter.onRoomSelected(roomIds)
             }
 
@@ -75,6 +78,7 @@ class ForwardMessagesNode(
             parentNode = this,
             buildContext = buildContext,
             params = RoomSelectEntryPoint.Params(
+                sessionId = sessionId,
                 mode = RoomSelectMode.Forward,
                 maxNumberOfRooms = RoomSelectEntryPoint.DEFAULT_MAX_NUMBER_OF_ROOMS,
             ),

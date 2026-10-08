@@ -17,5 +17,4 @@ dependencies {
     api(projects.services.analyticsproviders.api)
     api(projects.services.toolbox.api)
     implementation(libs.coroutines.core)
-    implementation(projects.libraries.core)
 }

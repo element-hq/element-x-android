@@ -140,7 +140,7 @@ fun MapBottomSheetScaffold(
                     isReady && mapState != null -> {
                         MaplibreMap(
                             state = mapState,
-                            cameraPadding = sheetPadding,
+                            viewportInsets = sheetPadding,
                             renderOptions = renderOptions,
                             interactions = interactions,
                             uiOptions = uiOptions,

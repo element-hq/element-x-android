@@ -11,12 +11,11 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.usersearch"
+    namespace = "io.element.android.libraries.usersearch.test"
 }
 
 dependencies {
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrixui)
     implementation(projects.libraries.matrix.api)
     api(projects.libraries.usersearch.api)
 }

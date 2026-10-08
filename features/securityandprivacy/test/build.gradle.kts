@@ -17,6 +17,5 @@ android {
 dependencies {
     implementation(projects.features.securityandprivacy.api)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
     implementation(projects.tests.testutils)
 }

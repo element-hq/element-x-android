@@ -9,6 +9,11 @@
 package io.element.android.libraries.roomselect.impl
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +26,6 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -29,27 +33,42 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.TopAppBarScrollBehaviorLayout
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarRow
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -60,6 +79,10 @@ import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffec
 import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
 import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
+import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -68,6 +91,9 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
+/**
+ * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=195-38510
+ */
 @Suppress("MultipleEmitters") // False positive
 @Composable
 fun RoomSelectView(
@@ -111,7 +137,13 @@ fun RoomSelectView(
         onBack = { onBackButton(state) }
     )
 
-    val lazyListState = rememberLazyListState()
+    // Use a new list state when the selected account changes, so that the list of rooms is scrolled to the top
+    val lazyListState = key(state.selectedAccount.userId) { rememberLazyListState() }
+    // Hide the account switch section when the room list is scrolled up, and show it again as soon as it is scrolled down.
+    // Use a new state when the selected account changes, so that the section is fully displayed again.
+    val accountSwitchScrollBehavior = key(state.selectedAccount.userId) {
+        TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    }
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
         state.eventSink(RoomSelectEvent.UpdateVisibleRange(visibleRange))
     }
@@ -145,6 +177,14 @@ fun RoomSelectView(
             Modifier
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
+                .then(
+                    // Only when the account switch section is displayed, else its unknown height would consume all the scroll events
+                    if (state.showAccountSwitch && !state.isSearchActive) {
+                        Modifier.nestedScroll(accountSwitchScrollBehavior.nestedScrollConnection)
+                    } else {
+                        Modifier
+                    }
+                )
         ) {
             SearchBar(
                 modifier = Modifier
@@ -165,6 +205,14 @@ fun RoomSelectView(
                     state = lazyListState,
                     contentPadding = lazyColumnContentPadding,
                 ) {
+                    if (summaries.isNotEmpty()) {
+                        item {
+                            ListSectionHeader(
+                                title = stringResource(CommonStrings.common_header_rooms),
+                                hasDivider = false,
+                            )
+                        }
+                    }
                     item {
                         SelectedRoomsHelper(
                             selectedRooms = state.selectedRooms,
@@ -172,7 +220,53 @@ fun RoomSelectView(
                         )
                     }
                     items(summaries, key = { it.roomId.value }) { roomSummary ->
-                        Column {
+                        RoomSummaryView(
+                            roomSummary,
+                            isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
+                            onSelection = { roomSummary ->
+                                state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary))
+                            },
+                            canBeSelected = state.canSelectMoreRooms,
+                        )
+                    }
+                }
+            }
+
+            if (!state.isSearchActive) {
+                if (state.showAccountSwitch) {
+                    // Keep this space outside the collapsing section, so that the section does not touch the search bar when it is collapsing
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TopAppBarScrollBehaviorLayout(scrollBehavior = accountSwitchScrollBehavior) {
+                        AccountSwitchSection(
+                            selectedAccount = state.selectedAccount,
+                            otherAccounts = state.otherAccounts,
+                            isExpanded = state.isAccountListExpanded,
+                            onToggleExpand = { state.eventSink(RoomSelectEvent.ToggleAccountListExpanded) },
+                            onSelectAccount = { state.eventSink(RoomSelectEvent.SelectAccount(it)) },
+                        )
+                    }
+                }
+                SelectedRoomsHelper(
+                    selectedRooms = state.selectedRooms,
+                    // showVerticalSpace only if there is no other accounts
+                    showVerticalSpace = !state.showAccountSwitch,
+                )
+                if (state.hasRoomListError) {
+                    RoomListError()
+                } else if (state.resultState is SearchBarResultState.Results) {
+                    LazyColumn(
+                        state = lazyListState,
+                        contentPadding = lazyColumnContentPadding,
+                    ) {
+                        if (state.resultState.results.isNotEmpty()) {
+                            item {
+                                ListSectionHeader(
+                                    title = stringResource(CommonStrings.common_header_rooms),
+                                    hasDivider = false,
+                                )
+                            }
+                        }
+                        items(state.resultState.results, key = { it.roomId.value }) { roomSummary ->
                             RoomSummaryView(
                                 roomSummary,
                                 isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
@@ -181,39 +275,119 @@ fun RoomSelectView(
                                 },
                                 canBeSelected = state.canSelectMoreRooms,
                             )
-                            HorizontalDivider(modifier = Modifier.fillMaxWidth())
-                        }
-                    }
-                }
-            }
-
-            if (!state.isSearchActive) {
-                SelectedRoomsHelper(
-                    selectedRooms = state.selectedRooms,
-                    showVerticalSpace = true,
-                )
-                if (state.resultState is SearchBarResultState.Results) {
-                    LazyColumn(
-                        state = lazyListState,
-                        contentPadding = lazyColumnContentPadding,
-                    ) {
-                        items(state.resultState.results, key = { it.roomId.value }) { roomSummary ->
-                            Column {
-                                RoomSummaryView(
-                                    roomSummary,
-                                    isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
-                                    onSelection = { roomSummary ->
-                                        state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary))
-                                    },
-                                    canBeSelected = state.canSelectMoreRooms,
-                                )
-                                HorizontalDivider(modifier = Modifier.fillMaxWidth())
-                            }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun RoomListError() {
+    IconTitleSubtitleMolecule(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 32.dp),
+        title = stringResource(CommonStrings.common_something_went_wrong),
+        subTitle = stringResource(R.string.screen_room_select_error_cannot_load_rooms),
+        iconStyle = BigIcon.Style.AlertSolid,
+    )
+}
+
+/**
+ * Similar to the MultiAccountSection of the PreferencesRootView.
+ * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=5414-4759
+ */
+@Composable
+private fun AccountSwitchSection(
+    selectedAccount: MatrixUser,
+    otherAccounts: ImmutableList<MatrixUser>,
+    isExpanded: Boolean,
+    onToggleExpand: () -> Unit,
+    onSelectAccount: (SessionId) -> Unit,
+) {
+    Column {
+        MatrixUserHeader(
+            matrixUser = selectedAccount,
+        )
+        HorizontalDivider(
+            thickness = 8.dp,
+            color = ElementTheme.colors.bgSubtleSecondary,
+        )
+        val expandedStateDescription = if (isExpanded) {
+            stringResource(CommonStrings.a11y_state_expanded)
+        } else {
+            stringResource(CommonStrings.a11y_state_collapsed)
+        }
+        ListItem(
+            modifier = Modifier.semantics {
+                stateDescription = expandedStateDescription
+            },
+            content = { Text(stringResource(CommonStrings.common_switch_account)) },
+            onClick = onToggleExpand,
+            trailingContent = ListItemContent.Custom { _ ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    AnimatedVisibility(
+                        visible = !isExpanded,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                    ) {
+                        AvatarRow(
+                            avatarDataList = otherAccounts
+                                .take(3)
+                                .map { it.getAvatarData(AvatarSize.OtherAccountItem) }
+                                .toImmutableList(),
+                            avatarType = AvatarType.User,
+                            lastOnTop = true,
+                        )
+                    }
+                    // Animate the chevron icon to rotate when the section is expanded/collapsed
+                    val rotation: Float by animateFloatAsState(
+                        targetValue = if (isExpanded) -180f else 0f,
+                        animationSpec = tween(
+                            delayMillis = 0,
+                            durationMillis = 300,
+                        ),
+                        label = "chevron"
+                    )
+                    Icon(
+                        modifier = Modifier.rotate(rotation),
+                        imageVector = CompoundIcons.ChevronDown(),
+                        contentDescription = null,
+                    )
+                }
+            },
+        )
+        AnimatedVisibility(
+            visible = isExpanded,
+        ) {
+            Column {
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = ElementTheme.colors.bgSubtleSecondary,
+                )
+                otherAccounts.forEach { matrixUser ->
+                    MatrixUserRow(
+                        modifier = Modifier
+                            .clickable {
+                                onSelectAccount(matrixUser.userId)
+                            }
+                            .padding(top = 2.dp, bottom = 2.dp, end = 8.dp),
+                        matrixUser = matrixUser,
+                        avatarSize = AvatarSize.AccountItem,
+                        verticalSpaceWidth = 16.dp,
+                    )
+                }
+            }
+        }
+        HorizontalDivider(
+            thickness = 8.dp,
+            color = ElementTheme.colors.bgSubtleSecondary,
+        )
     }
 }
 
@@ -241,28 +415,25 @@ private fun RoomSummaryView(
     canBeSelected: Boolean,
     onSelection: (SelectRoomInfo) -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .clickable { onSelection(roomInfo) }
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 4.dp)
-            .heightIn(56.dp),
-        verticalAlignment = Alignment.CenterVertically
+    ListItem(
+        onClick = { onSelection(roomInfo) },
+        leadingContent = ListItemContent.Custom {
+            Avatar(
+                avatarData = roomInfo.getAvatarData(size = AvatarSize.RoomSelectRoomListItem),
+                avatarType = AvatarType.Room(
+                    heroes = roomInfo.heroes.map { user ->
+                        user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
+                    }.toImmutableList(),
+                    isTombstoned = roomInfo.isTombstoned,
+                ),
+            )
+        },
+        trailingContent = ListItemContent.Checkbox(
+            checked = isSelected,
+            enabled = isSelected || canBeSelected,
+        ),
     ) {
-        Avatar(
-            avatarData = roomInfo.getAvatarData(size = AvatarSize.RoomSelectRoomListItem),
-            avatarType = AvatarType.Room(
-                heroes = roomInfo.heroes.map { user ->
-                    user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
-                }.toImmutableList(),
-                isTombstoned = roomInfo.isTombstoned,
-            ),
-        )
-        Column(
-            modifier = Modifier
-                .padding(start = 12.dp, end = 4.dp, top = 4.dp, bottom = 4.dp)
-                .weight(1f)
-        ) {
+        Column {
             // Name
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,
@@ -284,11 +455,6 @@ private fun RoomSummaryView(
                 )
             }
         }
-        Checkbox(
-            checked = isSelected,
-            enabled = isSelected || canBeSelected,
-            onCheckedChange = { onSelection(roomInfo) },
-        )
     }
 }
 

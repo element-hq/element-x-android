@@ -12,6 +12,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -19,7 +20,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
+import io.element.android.libraries.matrixmedia.api.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
@@ -53,7 +54,7 @@ class DefaultNotificationDrawerManager(
     private val notificationRenderer: NotificationRenderer,
     private val appNavigationStateService: AppNavigationStateService,
     @AppCoroutineScope
-    coroutineScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val activeNotificationsProvider: ActiveNotificationsProvider,
@@ -185,6 +186,31 @@ class DefaultNotificationDrawerManager(
         val id = NotificationIdProvider.getRoomEventNotificationId(sessionId)
         notificationDisplayer.cancelNotification(eventId.value, id)
         clearSummaryNotificationIfNeeded(sessionId)
+    }
+
+    override fun clearReadRoomsNotifications(sessionId: SessionId) {
+        val notifications = activeNotificationsProvider.getNotificationsForSession(sessionId)
+        val notificationsGroupedByRoomId = notifications.mapNotNull {
+            tryOrNull { RoomId(it.tag) }?.let { roomId -> roomId to it }
+        }
+
+        if (notificationsGroupedByRoomId.isEmpty()) return
+
+        coroutineScope.launch {
+            val client = matrixClientProvider.getOrRestore(sessionId).getOrElse { return@launch }
+
+            notificationsGroupedByRoomId.forEach { (roomId, notification) ->
+                val roomInfo = client.getRoomInfo(roomId).getOrNull() ?: return@forEach
+
+                if (roomInfo.numUnreadNotifications > 0L || roomInfo.numUnreadMessages > 0 || roomInfo.numUnreadMentions > 0) {
+                    return@forEach
+                }
+
+                notificationDisplayer.cancelNotification(notification.tag, notification.id)
+            }
+
+            clearSummaryNotificationIfNeeded(sessionId)
+        }
     }
 
     private fun clearSummaryNotificationIfNeeded(sessionId: SessionId) {

@@ -42,6 +42,9 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Masz niezapisane zmiany."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Zapisać zmiany?"</string>
   <string name="screen_room_details_add_topic_title">"Dodaj temat"</string>
+  <string name="screen_room_details_audio_push_to_talk">"Naciśnij i mów"</string>
+  <string name="screen_room_details_audio_title">"Pokój audio"</string>
+  <string name="screen_room_details_audio_video_calls">"Rozmowy wideo"</string>
   <string name="screen_room_details_badge_encrypted">"Szyfrowany"</string>
   <string name="screen_room_details_badge_not_encrypted">"Nieszyfrowany"</string>
   <string name="screen_room_details_badge_public">"Pokój publiczny"</string>
@@ -67,6 +70,9 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Prośby o dołączenie"</string>
   <string name="screen_room_details_roles_and_permissions">"Role i uprawnienia"</string>
+  <string name="screen_room_details_room_audio_ptt">"Naciśnij i mów"</string>
+  <string name="screen_room_details_room_audio_title">"Pokój audio"</string>
+  <string name="screen_room_details_room_audio_video_calls">"Rozmowy wideo"</string>
   <string name="screen_room_details_room_name_label">"Nazwa"</string>
   <string name="screen_room_details_security_and_privacy_title">"Bezpieczeństwo i prywatność"</string>
   <string name="screen_room_details_security_title">"Bezpieczeństwo"</string>

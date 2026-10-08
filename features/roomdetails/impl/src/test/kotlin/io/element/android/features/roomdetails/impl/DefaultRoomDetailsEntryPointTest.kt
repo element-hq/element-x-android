@@ -13,12 +13,12 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.test.FakeElementCallEntryPoint
-import io.element.android.features.changeroommemberroles.test.FakeChangeRoomMemberRolesEntryPoint
-import io.element.android.features.changeroommemberroles.test.FakeRolesAndPermissionsEntryPoint
 import io.element.android.features.knockrequests.test.FakeKnockRequestsListEntryPoint
 import io.element.android.features.messages.test.FakeMessagesEntryPoint
 import io.element.android.features.poll.test.history.FakePollHistoryEntryPoint
 import io.element.android.features.reportroom.test.FakeReportRoomEntryPoint
+import io.element.android.features.rolesandpermissions.test.FakeChangeRoomMemberRolesEntryPoint
+import io.element.android.features.rolesandpermissions.test.FakeRolesAndPermissionsEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetailsedit.test.FakeRoomDetailsEditEntryPoint
 import io.element.android.features.securityandprivacy.test.FakeSecurityAndPrivacyEntryPoint

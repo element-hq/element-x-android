@@ -247,6 +247,7 @@
   <string name="common_call_started">"Call started"</string>
   <string name="common_call_you_declined">"You declined a call"</string>
   <string name="common_chat_backup">"Chat backup"</string>
+  <string name="common_chats">"Chats"</string>
   <string name="common_code_block">"Code block"</string>
   <string name="common_copied_to_clipboard">"Copied to clipboard"</string>
   <string name="common_copyright">"Copyright"</string>
@@ -300,6 +301,7 @@ Reason: %1$s."</string>
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Group call in progress"</string>
+  <string name="common_header_rooms">"Rooms"</string>
   <string name="common_image">"Image"</string>
   <string name="common_in_reply_to">"In reply to %1$s"</string>
   <string name="common_install_apk_android">"Install APK"</string>

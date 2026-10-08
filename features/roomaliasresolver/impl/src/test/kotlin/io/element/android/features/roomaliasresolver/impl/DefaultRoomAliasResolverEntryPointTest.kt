@@ -11,7 +11,7 @@ package io.element.android.features.roomaliasresolver.impl
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
+import io.element.android.features.roomaliasresolver.api.RoomAliasResolverEntryPoint
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.tests.testutils.lambda.lambdaError

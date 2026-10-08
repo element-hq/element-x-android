@@ -19,6 +19,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
+import io.element.android.features.home.impl.HomeEvent
 import io.element.android.features.home.impl.HomeView
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.aHomeState
@@ -259,6 +260,23 @@ class RoomListViewTest : RobolectricTest() {
             )
         )
     }
+
+    @Test
+    fun `clicking on add account in the multi-account announcement emits the expected Event and invokes the callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<HomeEvent>()
+        ensureCalledOnce { callback ->
+            setRoomListView(
+                state = aRoomListState(),
+                showMultiAccountAnnouncement = true,
+                homeEventSink = eventsRecorder,
+                onAddAccountClick = callback,
+            )
+            clickOn(R.string.screen_multi_account_announcement_action)
+            // Wait for the bottom sheet to be hidden
+            waitForIdle()
+        }
+        eventsRecorder.assertSingle(HomeEvent.DismissMultiAccountAnnouncement)
+    }
 }
 
 private fun AndroidComposeUiTest<ComponentActivity>.setRoomListView(
@@ -273,12 +291,20 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomListView(
     onMenuActionClick: (RoomListMenuAction) -> Unit = EnsureNeverCalledWithParam(),
     onReportRoomClick: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
     onDeclineInviteAndBlockUser: (RoomListRoomSummary) -> Unit = EnsureNeverCalledWithParam(),
+    onAddAccountClick: () -> Unit = EnsureNeverCalled(),
+    showMultiAccountAnnouncement: Boolean = false,
+    homeEventSink: (HomeEvent) -> Unit = {},
 ) {
     setSafeContent {
         HomeView(
-            homeState = aHomeState(roomListState = state),
+            homeState = aHomeState(
+                roomListState = state,
+                showMultiAccountAnnouncement = showMultiAccountAnnouncement,
+                eventSink = homeEventSink,
+            ),
             onRoomClick = { roomId, _ -> onRoomClick(roomId) },
             onSettingsClick = onSettingsClick,
+            onAddAccountClick = onAddAccountClick,
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
             onStartChatClick = onCreateRoomClick,
