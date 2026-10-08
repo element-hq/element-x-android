@@ -59,7 +59,7 @@ fun UnreadIndicatorAtom(
                 .then(if (border != null) Modifier.border(border, RoundedCornerShape(percent = 100)) else Modifier),
             containerColor = color,
             contentColor = ElementTheme.colors.bgCanvasDefault,
-            textStyle = ElementTheme.typography.fontBodyXsMedium,
+            textStyle = ElementTheme.typography.fontBodySmMedium,
             contentPadding = contentPadding,
         )
     }
