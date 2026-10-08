@@ -177,7 +177,14 @@ fun RoomSelectView(
             Modifier
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
-                .nestedScroll(accountSwitchScrollBehavior.nestedScrollConnection)
+                .then(
+                    // Only when the account switch section is displayed, else its unknown height would consume all the scroll events
+                    if (state.showAccountSwitch && !state.isSearchActive) {
+                        Modifier.nestedScroll(accountSwitchScrollBehavior.nestedScrollConnection)
+                    } else {
+                        Modifier
+                    }
+                )
         ) {
             SearchBar(
                 modifier = Modifier
