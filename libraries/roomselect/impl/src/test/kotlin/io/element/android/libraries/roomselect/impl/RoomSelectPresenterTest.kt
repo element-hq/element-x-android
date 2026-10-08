@@ -264,6 +264,33 @@ class RoomSelectPresenterTest {
     }
 
     @Test
+    fun `present - select another account keeps the search query and applies it to the rooms of this account`() = runTest {
+        val roomList2 = FakeDynamicRoomList(summaries = MutableStateFlow(listOf(aRoomSummary(roomId = A_ROOM_ID_2))))
+        val roomListServices = mapOf(
+            A_SESSION_ID to FakeRoomListService(createRoomListLambda = { FakeDynamicRoomList(summaries = MutableStateFlow(listOf(aRoomSummary()))) }),
+            A_SESSION_ID_2 to FakeRoomListService(createRoomListLambda = { roomList2 }),
+        )
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Share,
+            sessionStore = aSessionStoreWithTwoAccounts(),
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                Result.success(FakeMatrixClient(sessionId = sessionId, roomListService = roomListServices.getValue(sessionId)))
+            },
+        )
+        presenter.test {
+            val state = awaitLastSequentialItem()
+            state.searchQuery.setTextAndPlaceCursorAtEnd("query")
+            state.eventSink(RoomSelectEvent.SelectAccount(A_SESSION_ID_2))
+            val finalState = consumeItemsUntilPredicate {
+                it.selectedAccount.userId == A_SESSION_ID_2 && it.resultState is SearchBarResultState.Results
+            }.last()
+            assertThat(finalState.searchQuery.text.toString()).isEqualTo("query")
+            assertThat(finalState.showAccountSwitch).isTrue()
+            assertThat(roomList2.currentFilter.value).isEqualTo(RoomListFilter.NormalizedMatchRoomName("query"))
+        }
+    }
+
+    @Test
     fun `present - forward mode with several accounts does not show the account switch`() = runTest {
         val presenter = createRoomSelectPresenter(
             mode = RoomSelectMode.Forward,

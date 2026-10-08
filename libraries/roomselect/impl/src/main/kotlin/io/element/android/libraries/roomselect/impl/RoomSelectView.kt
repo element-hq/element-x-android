@@ -10,12 +10,14 @@ package io.element.android.libraries.roomselect.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -24,18 +26,23 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +53,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontStyle
@@ -136,12 +144,26 @@ fun RoomSelectView(
         onBack = ::onBackButton,
     )
 
-    // Use a new list state when the selected account changes, so that the list of rooms is scrolled to the top
-    val lazyListState = key(state.selectedAccount.userId) { rememberLazyListState() }
+    val searchQuery = state.searchQuery.text.toString()
+    // Use a new list state when the selected account or the search query changes, so that the list of rooms is scrolled to the top
+    val lazyListState = key(state.selectedAccount.userId, searchQuery) { rememberLazyListState() }
     // Hide the account switch section when the room list is scrolled up, and show it again as soon as it is scrolled down.
     // Use a new state when the selected account changes, so that the section is fully displayed again.
     val accountSwitchScrollBehavior = key(state.selectedAccount.userId) {
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    }
+    // Collapse the account switch section when the user starts searching. It can be displayed again by scrolling down.
+    val isSearching = searchQuery.isNotEmpty()
+    LaunchedEffect(isSearching) {
+        if (isSearching) {
+            val topAppBarState = accountSwitchScrollBehavior.state
+            animate(
+                initialValue = topAppBarState.heightOffset,
+                targetValue = topAppBarState.heightOffsetLimit,
+            ) { value, _ ->
+                topAppBarState.heightOffset = value
+            }
+        }
     }
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
         state.eventSink(RoomSelectEvent.UpdateVisibleRange(visibleRange))
@@ -217,7 +239,7 @@ fun RoomSelectView(
             )
             when {
                 state.hasRoomListError -> RoomListError()
-                state.resultState is SearchBarResultState.NoResultsFound -> NoResultsFound()
+                state.resultState is SearchBarResultState.NoResultsFound -> NoResultsView(searchQuery = searchQuery)
                 state.resultState is SearchBarResultState.Results -> {
                     LazyColumn(
                         state = lazyListState,
@@ -225,8 +247,13 @@ fun RoomSelectView(
                     ) {
                         if (state.resultState.results.isNotEmpty()) {
                             item {
+                                val headerText = if (searchQuery.isEmpty()) {
+                                    stringResource(CommonStrings.common_header_rooms)
+                                } else {
+                                    stringResource(CommonStrings.common_results_for, searchQuery)
+                                }
                                 ListSectionHeader(
-                                    title = stringResource(CommonStrings.common_header_rooms),
+                                    title = headerText,
                                     hasDivider = false,
                                 )
                             }
@@ -250,15 +277,36 @@ fun RoomSelectView(
 }
 
 @Composable
-private fun NoResultsFound() {
-    Text(
-        text = stringResource(CommonStrings.common_no_results),
-        textAlign = TextAlign.Center,
-        color = ElementTheme.colors.textSecondary,
+private fun NoResultsView(
+    searchQuery: String,
+) {
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 80.dp),
-    )
+            .fillMaxSize()
+            // Scrollable, so that the account switch section can be displayed again by scrolling down
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp, vertical = 40.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = spacedBy(8.dp),
+    ) {
+        Text(
+            text = stringResource(CommonStrings.common_no_results),
+            modifier = Modifier
+                .semantics {
+                    heading()
+                },
+            textAlign = TextAlign.Center,
+            style = ElementTheme.typography.fontHeadingMdBold,
+            color = ElementTheme.colors.textPrimary,
+        )
+        Text(
+            text = stringResource(CommonStrings.common_no_results_for, searchQuery),
+            modifier = Modifier.widthIn(max = 300.dp),
+            textAlign = TextAlign.Center,
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = ElementTheme.colors.textSecondary,
+        )
+    }
 }
 
 @Composable

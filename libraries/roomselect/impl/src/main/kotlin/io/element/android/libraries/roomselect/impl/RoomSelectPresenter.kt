@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.roomselect.impl
 
-import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -154,9 +153,8 @@ class RoomSelectPresenter(
                 RoomSelectEvent.ToggleAccountListExpanded -> isAccountListExpanded = !isAccountListExpanded
                 is RoomSelectEvent.SelectAccount -> {
                     selectedSessionId = event.sessionId
-                    // The selected rooms and the search query are specific to the session
+                    // The selected rooms are specific to the session. The search query is kept, and applied to the rooms of the new session.
                     selectedRooms = persistentListOf()
-                    queryState.clearText()
                     isAccountListExpanded = false
                 }
                 is RoomSelectEvent.UpdateVisibleRange -> coroutineScope.launch {
