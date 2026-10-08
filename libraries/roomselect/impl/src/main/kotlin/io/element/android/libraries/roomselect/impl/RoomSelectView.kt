@@ -201,16 +201,18 @@ fun RoomSelectView(
                 resultState = state.resultState,
                 showBackButton = false,
             ) { summaries ->
-                if (summaries.isNotEmpty()) {
-                    ListSectionHeader(
-                        title = stringResource(CommonStrings.common_header_rooms),
-                        hasDivider = false,
-                    )
-                }
                 LazyColumn(
                     state = lazyListState,
                     contentPadding = lazyColumnContentPadding,
                 ) {
+                    if (summaries.isNotEmpty()) {
+                        item {
+                            ListSectionHeader(
+                                title = stringResource(CommonStrings.common_header_rooms),
+                                hasDivider = false,
+                            )
+                        }
+                    }
                     item {
                         SelectedRoomsHelper(
                             selectedRooms = state.selectedRooms,
