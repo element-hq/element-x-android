@@ -316,12 +316,13 @@ interface Timeline : AutoCloseable {
     suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Boolean>
 
     /**
-     * Forwards the content of an event to other rooms, as new messages sent by the current user.
+     * Forwards the content of some events to other rooms, as new messages sent by the current user.
+     * The events are forwarded in the order of [eventIds].
      *
-     * @param eventId the event whose content is forwarded.
-     * @param roomIds the rooms to forward it to.
+     * @param eventIds the events whose content is forwarded.
+     * @param roomIds the rooms to forward them to.
      */
-    suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
+    suspend fun forwardEvents(eventIds: List<EventId>, roomIds: List<RoomId>): Result<Unit>
 
     /**
      * Cancels an event that is still waiting in the send queue, by redacting its local echo.

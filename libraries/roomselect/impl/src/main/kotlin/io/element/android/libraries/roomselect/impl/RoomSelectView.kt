@@ -153,7 +153,7 @@ fun RoomSelectView(
         topBar = {
             TopAppBar(
                 titleStr = when (state.mode) {
-                    RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_message)
+                    RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_to)
                     RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                 },
                 navigationIcon = {
