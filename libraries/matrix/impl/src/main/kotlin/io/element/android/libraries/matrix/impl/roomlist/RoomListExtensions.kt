@@ -57,7 +57,7 @@ fun RoomListInterface.loadingStateFlow(): Flow<RoomListLoadingState> =
 internal fun RoomListInterface.entriesFlow(
     pageSize: Int,
     initialFilterKind: RoomListEntriesDynamicFilterKind,
-    onControllerCreated: (RoomListDynamicEntriesController) -> Unit,
+    onControllerCreated: suspend (RoomListDynamicEntriesController) -> Unit,
 ): Flow<List<RoomListEntriesUpdate>> =
     callbackFlow {
         val listener = object : RoomListEntriesListener {
