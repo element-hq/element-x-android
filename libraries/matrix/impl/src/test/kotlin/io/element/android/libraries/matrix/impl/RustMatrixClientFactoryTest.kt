@@ -44,14 +44,15 @@ import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 class RustMatrixClientFactoryTest {
     @Test
     fun test() = runTest {
-        val scheduleVacuumLambda = lambdaRecorder<WorkManagerRequestBuilder, Unit> {}
-        val workManagerScheduler = FakeWorkManagerScheduler(submitLambda = scheduleVacuumLambda, cancelLambda = { _, _ -> })
+        val scheduleWorkersLambda = lambdaRecorder<WorkManagerRequestBuilder, Unit> {}
+        val workManagerScheduler = FakeWorkManagerScheduler(submitLambda = scheduleWorkersLambda, cancelLambda = { _, _ -> })
         val sut = createRustMatrixClientFactory(workManagerScheduler = workManagerScheduler)
 
         val result = sut.create(aSessionData())
 
         assertThat(result.sessionId).isEqualTo(SessionId("@alice:server.org"))
-        scheduleVacuumLambda.assertions().isCalledOnce()
+        // 2 workers are scheduled: one for the search backfill and one for the vacuum
+        scheduleWorkersLambda.assertions().isCalledExactly(2)
         result.destroy()
     }
 

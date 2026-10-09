@@ -50,5 +50,6 @@ class FakeFfiClientBuilder(
     override fun inMemoryStore(): ClientBuilder = this
     override fun crossProcessLockConfig(crossProcessLockConfig: CrossProcessLockConfig): ClientBuilder = this
     override fun dmRoomDefinition(dmRoomDefinition: DmRoomDefinition): ClientBuilder = this
+    override fun withSearchIndexStore(path: String, password: String?): ClientBuilder = this
     override suspend fun build() = buildResult()
 }
