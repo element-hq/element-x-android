@@ -302,7 +302,9 @@ class TimelinePresenter(
                 }
                 is TimelineEvent.ShowShieldDialog -> messageShieldDialogData.value = event.messageShieldData
                 is TimelineEvent.ShowSendFailureDialog -> {
-                    val sendStateFailure = event.event.localSendState as? LocalEventSendState.Failed ?: return
+                    val (_, sendStateFailure) = event.event.pendingSend() ?: return
+                    if (sendStateFailure !is LocalEventSendState.Failed) return
+
                     when (sendStateFailure) {
                         is LocalEventSendState.Failed.VerifiedUser -> {
                             // defer to the resolveVerifiedUserSendFailureState to handle this case,

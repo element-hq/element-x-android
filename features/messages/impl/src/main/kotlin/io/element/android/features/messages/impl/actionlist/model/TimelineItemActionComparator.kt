@@ -32,8 +32,9 @@ class TimelineItemActionComparator : Comparator<TimelineItemAction> {
         TimelineItemAction.ViewSource,
         TimelineItemAction.ReportContent,
         TimelineItemAction.Redact,
-        // Not rendered in the action list, but has to be listed here for exhaustiveness.
+        // Not rendered in the action list, but have to be listed here for exhaustiveness.
         TimelineItemAction.RetrySending,
+        TimelineItemAction.AbortSending,
     )
 
     override fun compare(o1: TimelineItemAction, o2: TimelineItemAction): Int {

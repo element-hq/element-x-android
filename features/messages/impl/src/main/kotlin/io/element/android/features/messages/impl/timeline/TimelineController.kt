@@ -23,6 +23,8 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,6 +34,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.getAndUpdate
@@ -132,6 +135,14 @@ class TimelineController(
                     focusOnLive()
                 }
             }
+    }
+
+    suspend fun retrySend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean> {
+        return currentTimelineFlow.first().retrySend(eventOrTransactionId, sendTarget)
+    }
+
+    suspend fun abortSend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean> {
+        return currentTimelineFlow.first().abortSend(eventOrTransactionId, sendTarget)
     }
 
     private val currentTimelineFlow = combine(liveTimelineFlow, detachedTimelineFlow) { live, detached ->

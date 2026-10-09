@@ -324,9 +324,10 @@ fun TimelineItemEventRow(
         }
 
         // Read receipts / Send state
+        val sendState = event.pendingSend()?.second
         TimelineItemReadReceiptView(
             state = ReadReceiptViewState(
-                sendState = event.localSendState,
+                sendState = sendState,
                 isLastOutgoingMessage = isLastOutgoingMessage,
                 receipts = event.readReceiptState.receipts,
             ),

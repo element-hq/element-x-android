@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
@@ -60,7 +61,9 @@ class FakeTimeline(
         receiptType: ReceiptType,
     ) -> Result<Unit> = { _, _ ->
         lambdaError()
-    }
+    },
+    private val retrySendResult: (eventOrTransactionId: EventOrTransactionId) -> Result<Boolean> = { lambdaError() },
+    private val abortSendResult: (eventOrTransactionId: EventOrTransactionId) -> Result<Boolean> = { lambdaError() },
 ) : Timeline {
     var sendMessageLambda: (
         body: String,
@@ -475,6 +478,14 @@ class FakeTimeline(
 
     override suspend fun getLatestEventId(): Result<EventId?> {
         return getLatestEventIdResult()
+    }
+
+    override suspend fun retrySend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean> {
+        return retrySendResult(eventOrTransactionId)
+    }
+
+    override suspend fun abortSend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean> {
+        return abortSendResult(eventOrTransactionId)
     }
 
     var closeCounter = 0

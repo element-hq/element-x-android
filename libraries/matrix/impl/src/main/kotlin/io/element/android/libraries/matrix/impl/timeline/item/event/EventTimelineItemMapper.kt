@@ -51,6 +51,8 @@ class EventTimelineItemMapper(
             isOwn = isOwn,
             isRemote = isRemote,
             localSendState = localSendState?.map(),
+            editSendState = editSendState?.map(),
+            redactionSendState = redactionSendState?.map(),
             reactions = reactions.map(),
             receipts = readReceipts.map(),
             sender = UserId(sender),
@@ -113,11 +115,7 @@ fun RustEventSendState?.map(): LocalEventSendState? {
                     )
                 }
                 is QueueWedgeError.GenericApiError -> {
-                    if (isRecoverable) {
-                        LocalEventSendState.Sending.Event
-                    } else {
-                        LocalEventSendState.Failed.Unknown(queueWedgeError.msg)
-                    }
+                    LocalEventSendState.Failed.Unknown(queueWedgeError.msg)
                 }
                 is QueueWedgeError.InvalidMimeType -> {
                     LocalEventSendState.Failed.InvalidMimeType(queueWedgeError.mimeType)

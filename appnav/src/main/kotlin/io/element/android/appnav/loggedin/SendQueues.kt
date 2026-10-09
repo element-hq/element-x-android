@@ -41,7 +41,7 @@ class SendQueues(
     fun launchIn(coroutineScope: CoroutineScope) {
         combine(
             syncService.syncState,
-            matrixClient.sendQueueDisabledFlow(),
+            matrixClient.sendQueueDisabledFlow().onEach { Timber.tag("SendQueues").d("Send queue disabled for room: $it") },
         ) { syncState, _ -> syncState }
             .debounce(SEND_QUEUES_RETRY_DELAY_MILLIS)
             .onEach { syncState ->
