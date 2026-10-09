@@ -54,11 +54,9 @@ jobs:
           {
             echo "body<<EOF"
             if [ "$on_main" = "true" ]; then
-              echo "Update the \`enterprise\` submodule from \`$current\` to the latest commit of \`main\` (\`$main\`)."
-              echo
-              echo "New commits:"
-              echo
-              git -C "$RUNNER_TEMP/enterprise" log --format='- %h %s' "$current..$main"
+              # Do not list the commit messages, the enterprise repository is private.
+              count=$(git -C "$RUNNER_TEMP/enterprise" rev-list --count "$current..$main")
+              echo "Update the \`enterprise\` submodule from \`$current\` to the latest commit of \`main\` (\`$main\`), $count new commit(s)."
             else
               echo "The \`enterprise\` submodule targets \`$current\`, which is not on the \`main\` branch."
               echo
