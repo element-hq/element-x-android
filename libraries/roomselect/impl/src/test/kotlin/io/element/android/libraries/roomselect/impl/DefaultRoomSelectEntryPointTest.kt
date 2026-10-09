@@ -38,17 +38,18 @@ class DefaultRoomSelectEntryPointTest : RobolectricTest() {
             RoomSelectNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenterFactory = { initialSessionId, mode, maxNumberOfRooms ->
+                presenterFactory = { initialSessionId, mode, maxNumberOfRooms, _ ->
                     assertThat(initialSessionId).isEqualTo(A_SESSION_ID)
                     assertThat(mode).isEqualTo(testMode)
                     assertThat(maxNumberOfRooms).isEqualTo(testMaxNumberOfRooms)
-                    createRoomSelectPresenter(mode, maxNumberOfRooms)
+                    createRoomSelectPresenter(mode = mode, maxNumberOfRooms = maxNumberOfRooms)
                 },
             )
         }
         val callback = object : RoomSelectEntryPoint.Callback {
             override fun onRoomSelected(sessionId: SessionId, roomIds: List<RoomId>) = lambdaError()
             override fun onCancel() = lambdaError()
+            override fun onSessionVerificationRequired(sessionId: SessionId) = lambdaError()
         }
         val params = RoomSelectEntryPoint.Params(
             sessionId = A_SESSION_ID,

@@ -10,9 +10,7 @@ package io.element.android.features.share.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -30,7 +28,6 @@ import kotlinx.coroutines.launch
 @AssistedInject
 class SharePresenter(
     @Assisted private val shareIntentData: ShareIntentData,
-    @Assisted initialSessionId: SessionId,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
@@ -38,24 +35,21 @@ class SharePresenter(
 ) : Presenter<ShareState> {
     @AssistedFactory
     fun interface Factory {
-        fun create(shareIntentData: ShareIntentData, initialSessionId: SessionId): SharePresenter
+        fun create(shareIntentData: ShareIntentData): SharePresenter
     }
 
-    private val shareActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
+    private val shareActionState: MutableState<AsyncAction<ShareResult>> = mutableStateOf(AsyncAction.Uninitialized)
 
     /**
-     * The session the data is shared with, it can be updated if the user selects rooms from another session.
+     * Share the data to the rooms with [roomIds], which belong to the session [sessionId]. It can be another session than the current one.
      */
-    private var targetSessionId by mutableStateOf(initialSessionId)
-
     fun onRoomSelected(sessionId: SessionId, roomIds: List<RoomId>) {
         if (shareActionState.value.isLoading()) return
-        targetSessionId = sessionId
         appCoroutineScope.launch {
             suspend {
                 val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
                 shareDataSender.send(client, shareIntentData, roomIds).getOrThrow()
-                roomIds
+                ShareResult(sessionId = sessionId, roomIds = roomIds)
             }.runCatchingUpdatingState(shareActionState)
         }
     }
@@ -69,7 +63,6 @@ class SharePresenter(
         }
 
         return ShareState(
-            sessionId = targetSessionId,
             shareAction = shareActionState.value,
             eventSink = ::handleEvent,
         )

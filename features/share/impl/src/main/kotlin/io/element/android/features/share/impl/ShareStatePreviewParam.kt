@@ -21,9 +21,7 @@ open class ShareStatePreviewParam : PreviewParameterProvider<ShareState> {
                 shareAction = AsyncAction.Loading,
             ),
             aShareState(
-                shareAction = AsyncAction.Success(
-                    listOf(RoomId("!room2:domain")),
-                )
+                shareAction = AsyncAction.Success(aShareResult())
             ),
             aShareState(
                 shareAction = AsyncAction.Failure(RuntimeException("error")),
@@ -31,12 +29,18 @@ open class ShareStatePreviewParam : PreviewParameterProvider<ShareState> {
         )
 }
 
-fun aShareState(
-    sessionId: SessionId = SessionId("@alice:server.org"),
-    shareAction: AsyncAction<List<RoomId>> = AsyncAction.Uninitialized,
+private fun aShareState(
+    shareAction: AsyncAction<ShareResult> = AsyncAction.Uninitialized,
     eventSink: (ShareEvent) -> Unit = {}
 ) = ShareState(
-    sessionId = sessionId,
     shareAction = shareAction,
     eventSink = eventSink
+)
+
+private fun aShareResult(
+    sessionId: SessionId = SessionId("@alice:server.org"),
+    roomIds: List<RoomId> = listOf(RoomId("!room2:domain")),
+) = ShareResult(
+    sessionId = sessionId,
+    roomIds = roomIds,
 )

@@ -39,15 +39,17 @@ class DefaultShareEntryPointTest {
             ShareNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenterFactory = { _, _ -> createSharePresenter() },
+                presenterFactory = { createSharePresenter() },
                 roomSelectEntryPoint = FakeRoomSelectEntryPoint(),
-                sessionId = A_SESSION_ID,
             )
         }
         val callback = object : ShareEntryPoint.Callback {
             override fun onDone(sessionId: SessionId, roomIds: List<RoomId>) = lambdaError()
+            override fun onCancel() = lambdaError()
+            override fun onSessionVerificationRequired(sessionId: SessionId) = lambdaError()
         }
         val params = ShareEntryPoint.Params(
+            sessionId = A_SESSION_ID,
             shareIntentData = ShareIntentData.PlainText(A_MESSAGE),
         )
         val result = entryPoint.createNode(
@@ -57,7 +59,7 @@ class DefaultShareEntryPointTest {
             callback = callback,
         )
         assertThat(result).isInstanceOf(ShareNode::class.java)
-        assertThat(result.plugins).contains(ShareNode.Inputs(params.shareIntentData))
+        assertThat(result.plugins).contains(ShareNode.Inputs(params.sessionId, params.shareIntentData))
         assertThat(result.plugins).contains(callback)
     }
 }
