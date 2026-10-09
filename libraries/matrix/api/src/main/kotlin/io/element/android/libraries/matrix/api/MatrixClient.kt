@@ -40,6 +40,7 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryServic
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.search.MessageSearchService
+import io.element.android.libraries.matrix.api.search.SearchBackfillService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -132,6 +133,9 @@ interface MatrixClient : ClientUrlContentFetcher {
 
     /** Scans media content before it is displayed, or `null` when no content scanner is configured for this session. */
     val contentScanner: ContentScanner?
+
+    /** Backfills messages from the homeserver for searching for messages in a room. */
+    val searchBackfillService: SearchBackfillService
 
     /** Whether the session is in the process of shutting down, either because it is being logged out or its cache is being cleared. */
     val isShuttingDown: Boolean

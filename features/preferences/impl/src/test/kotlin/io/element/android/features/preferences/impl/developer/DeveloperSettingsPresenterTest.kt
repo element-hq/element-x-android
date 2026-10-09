@@ -19,7 +19,11 @@ import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
 import io.element.android.features.preferences.impl.tasks.FakeMarkAllRoomsAsRead
 import io.element.android.features.preferences.impl.tasks.VacuumStoresUseCase
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
+import io.element.android.libraries.androidutils.toast.FakeToastHelper
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.data.megaBytes
@@ -33,6 +37,7 @@ import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -250,6 +255,38 @@ class DeveloperSettingsPresenterTest {
         }
     }
 
+    @Test
+    fun `present - copy to clipboard on old device shows a toast`() = runTest {
+        val clipboardHelper = FakeClipboardHelper(isOldDevice = true)
+        val toastHelper = FakeToastHelper()
+        val presenter = createDeveloperSettingsPresenter(
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
+        )
+        presenter.test {
+            awaitItem().eventSink(DeveloperSettingsEvent.CopyToClipboard("text"))
+            assertThat(clipboardHelper.clipboardContents).isEqualTo("text")
+            assertThat(toastHelper.shownToasts).containsExactly(CommonStrings.common_copied_to_clipboard)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - copy to clipboard on new device does not show a toast`() = runTest {
+        val clipboardHelper = FakeClipboardHelper(isOldDevice = false)
+        val toastHelper = FakeToastHelper()
+        val presenter = createDeveloperSettingsPresenter(
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
+        )
+        presenter.test {
+            awaitItem().eventSink(DeveloperSettingsEvent.CopyToClipboard("text"))
+            assertThat(clipboardHelper.clipboardContents).isEqualTo("text")
+            assertThat(toastHelper.shownToasts).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private fun createDeveloperSettingsPresenter(
         navigator: DeveloperSettingsNavigator = DeveloperSettingsNavigator { _, _ -> lambdaError() },
         sessionId: SessionId = A_SESSION_ID,
@@ -262,6 +299,8 @@ class DeveloperSettingsPresenterTest {
         markAllRoomsAsRead: FakeMarkAllRoomsAsRead = FakeMarkAllRoomsAsRead(),
         buildMeta: BuildMeta = aBuildMeta(),
         notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
+        clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
+        toastHelper: ToastHelper = FakeToastHelper(),
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             navigator = navigator,
@@ -277,6 +316,8 @@ class DeveloperSettingsPresenterTest {
             markAllRoomsAsRead = markAllRoomsAsRead,
             buildMeta = buildMeta,
             notificationSettingsService = notificationSettingsService,
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
         )
     }
 }

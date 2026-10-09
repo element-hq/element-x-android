@@ -125,6 +125,10 @@ fun RustEventSendState?.map(): LocalEventSendState? {
                 is QueueWedgeError.MissingMediaContent -> {
                     LocalEventSendState.Failed.MissingMediaContent
                 }
+                is QueueWedgeError.ExpiredAccessToken -> {
+                    // This will automatically recover, so map it to the sending state
+                    LocalEventSendState.Sending.Event
+                }
             }
         }
         is RustEventSendState.Sent -> LocalEventSendState.Sent(EventId(eventId))

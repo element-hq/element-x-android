@@ -12,6 +12,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -36,7 +38,8 @@ class DefaultRoomSelectEntryPointTest : RobolectricTest() {
             RoomSelectNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenterFactory = { mode, maxNumberOfRooms ->
+                presenterFactory = { initialSessionId, mode, maxNumberOfRooms ->
+                    assertThat(initialSessionId).isEqualTo(A_SESSION_ID)
                     assertThat(mode).isEqualTo(testMode)
                     assertThat(maxNumberOfRooms).isEqualTo(testMaxNumberOfRooms)
                     createRoomSelectPresenter(mode, maxNumberOfRooms)
@@ -44,10 +47,11 @@ class DefaultRoomSelectEntryPointTest : RobolectricTest() {
             )
         }
         val callback = object : RoomSelectEntryPoint.Callback {
-            override fun onRoomSelected(roomIds: List<RoomId>) = lambdaError()
+            override fun onRoomSelected(sessionId: SessionId, roomIds: List<RoomId>) = lambdaError()
             override fun onCancel() = lambdaError()
         }
         val params = RoomSelectEntryPoint.Params(
+            sessionId = A_SESSION_ID,
             mode = testMode,
             maxNumberOfRooms = testMaxNumberOfRooms,
         )
@@ -58,7 +62,7 @@ class DefaultRoomSelectEntryPointTest : RobolectricTest() {
             callback = callback,
         )
         assertThat(result).isInstanceOf(RoomSelectNode::class.java)
-        assertThat(result.plugins).contains(RoomSelectNode.Inputs(params.mode, params.maxNumberOfRooms))
+        assertThat(result.plugins).contains(RoomSelectNode.Inputs(params.sessionId, params.mode, params.maxNumberOfRooms))
         assertThat(result.plugins).contains(callback)
     }
 }

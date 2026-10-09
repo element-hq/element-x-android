@@ -14,7 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -23,7 +22,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
-import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDropdown
@@ -108,6 +106,7 @@ fun AppDeveloperSettingsView(
         GitCategory(
             gitBranch = state.gitBranch,
             gitSha = state.gitSha,
+            onCopyToClipboard = { state.eventSink(AppDeveloperSettingsEvent.CopyToClipboard(it)) },
         )
     }
 }
@@ -116,29 +115,18 @@ fun AppDeveloperSettingsView(
 private fun GitCategory(
     gitBranch: String,
     gitSha: String,
+    onCopyToClipboard: (String) -> Unit,
 ) {
     PreferenceCategory(title = "Git") {
-        val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
-        val context = LocalContext.current
         ListItem(
             content = { Text("Git branch") },
             supportingContent = { Text(text = gitBranch) },
-            onClick = {
-                context.copyToClipboard(
-                    text = gitBranch,
-                    toastMessage = toastMessage,
-                )
-            }
+            onClick = { onCopyToClipboard(gitBranch) }
         )
         ListItem(
             content = { Text("Git SHA") },
             supportingContent = { Text(text = gitSha) },
-            onClick = {
-                context.copyToClipboard(
-                    text = gitSha,
-                    toastMessage = toastMessage,
-                )
-            }
+            onClick = { onCopyToClipboard(gitSha) }
         )
     }
 }

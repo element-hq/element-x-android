@@ -57,6 +57,18 @@ dependencyResolutionManagement {
         flatDir {
             dirs("libraries/matrix/libs")
         }
+
+        // Add ivy repository for nightly builds of the SDK bindings for Android, which are published as GitHub release assets.
+        ivy {
+            url = uri("https://github.com/matrix-org/matrix-rust-components-kotlin/releases/download")
+            patternLayout { artifact("sdk-[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
+            metadataSources { gradleMetadata() }
+            content {
+                // The nightly versions of the SDK bindings for Android
+                includeModule("org.matrix.rustcomponents", "sdk-android")
+            }
+        }
+
         // Temporary: the native call component and the matrix-rust-rtc core publish as GitHub release
         // assets, which carry full Maven metadata. Both blocks go once they reach Maven Central.
         ivy {

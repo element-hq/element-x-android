@@ -47,8 +47,6 @@ dependencies {
     testCommonDependencies(libs)
     testImplementation(libs.element.call.test)
     testImplementation(projects.features.call.test)
-    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.services.appnavstate.test)
 }

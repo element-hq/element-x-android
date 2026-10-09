@@ -16,17 +16,22 @@ import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesNode(RoomScope::class)
 @AssistedInject
 class EventDebugInfoNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val clipboardHelper: ClipboardHelper,
+    private val toastHelper: ToastHelper,
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(
         val eventId: EventId?,
@@ -39,6 +44,12 @@ class EventDebugInfoNode(
         navigateUp()
     }
 
+    private fun onCopyText(text: String) {
+        clipboardHelper.copyPlainText(text) {
+            toastHelper.show(CommonStrings.common_copied_to_clipboard)
+        }
+    }
+
     @Composable
     override fun View(modifier: Modifier) = with(inputs) {
         EventDebugInfoView(
@@ -46,7 +57,8 @@ class EventDebugInfoNode(
             model = timelineItemDebugInfo.model,
             originalJson = timelineItemDebugInfo.originalJson,
             latestEditedJson = timelineItemDebugInfo.latestEditedJson,
-            onBackClick = ::onBackClick
+            onBackClick = ::onBackClick,
+            onCopyText = ::onCopyText,
         )
     }
 }

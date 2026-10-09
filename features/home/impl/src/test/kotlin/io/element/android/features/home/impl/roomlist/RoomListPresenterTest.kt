@@ -12,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
+import io.element.android.features.announcement.test.FakeAnnouncementService
 import io.element.android.features.home.impl.FakeDateTimeObserver
 import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.datasource.aRoomListRoomSummaryFactory
@@ -32,7 +33,6 @@ import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.preferences.impl.tasks.MarkRoomAsRead
-import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
@@ -40,6 +40,7 @@ import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.api.ShowAllActivityInRoomListFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -655,7 +656,7 @@ class RoomListPresenterTest {
         )
         val featureFlagService = FakeFeatureFlagService(
             initialState = mapOf(
-                FeatureFlags.ShowAllActivityInRoomList.key to true,
+                ShowAllActivityInRoomListFeature.key to true,
                 FeatureFlags.UnreadIndicatorCount.key to true,
             )
         )
@@ -672,7 +673,7 @@ class RoomListPresenterTest {
             assertThat(enabledState.contentAsRooms().showAllActivity).isTrue()
             assertThat(enabledState.contentAsRooms().showUnreadCount).isTrue()
 
-            featureFlagService.setFeatureEnabled(FeatureFlags.ShowAllActivityInRoomList, false)
+            featureFlagService.setFeatureEnabled(ShowAllActivityInRoomListFeature, false)
             val allActivityDisabledState = consumeItemsUntilPredicate { state ->
                 state.contentState is RoomListContentState.Rooms && !state.contentAsRooms().showAllActivity
             }.last()

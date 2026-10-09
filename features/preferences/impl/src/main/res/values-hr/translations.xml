@@ -38,7 +38,7 @@
   <string name="screen_advanced_settings_share_presence_description">"Ako je to isključeno, nećete moći slati ili primati potvrde o čitanju ili obavijesti o tipkanju."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Uvijek sakrij"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Uvijek prikaži"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"U privatnim sobama"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Prikaži u privatnim sobama"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"Skriveni medij uvijek se može prikazati tako se da se dodirne"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Prikaži medije na vremenskoj traci"</string>
   <string name="screen_advanced_settings_view_source_description">"Omogući opciju za prikaz izvora poruke na vremenskoj traci."</string>

@@ -63,6 +63,7 @@ fun aTimelineState(
     displayJumpToUnread: Boolean = false,
     jumpToUnread: JumpToUnreadState = JumpToUnreadState.Hidden,
     newEventState: NewEventState = NewEventState.None,
+    selectionState: SelectionState = SelectionState.Disabled,
     useNewTimelineEventRenderer: Boolean = false,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
@@ -85,6 +86,7 @@ fun aTimelineState(
         displayThreadSummaries = displayThreadSummaries,
         displayJumpToUnread = displayJumpToUnread,
         jumpToUnread = jumpToUnread,
+        selectionState = selectionState,
         useNewTimelineEventRenderer = useNewTimelineEventRenderer,
         eventSink = eventSink,
     )

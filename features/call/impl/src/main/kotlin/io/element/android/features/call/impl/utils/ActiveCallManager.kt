@@ -31,7 +31,7 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
+import io.element.android.libraries.matrixmedia.api.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.api.notifications.OnMissedCallNotificationHandler

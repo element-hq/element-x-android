@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
+import io.element.android.libraries.matrix.impl.NoOpClientSessionDelegate
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.RustTemporaryMatrixClient
 import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
@@ -407,6 +408,7 @@ class RustMatrixAuthenticationService(
                 clientSecret = pendingKey,
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
                 isMessageSearchAvailable = isMessageSearchAvailable(),
+                sessionDelegate = NoOpClientSessionDelegate,
             )
             .config()
             .build()
@@ -440,6 +442,7 @@ class RustMatrixAuthenticationService(
                 clientSecret = pendingKey,
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
                 isMessageSearchAvailable = isMessageSearchAvailable(),
+                sessionDelegate = NoOpClientSessionDelegate,
             )
             .serverNameOrHomeserverUrl(baseUrlOrServerName)
             .build()

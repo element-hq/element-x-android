@@ -9,12 +9,13 @@
 package io.element.android.libraries.mediaupload.impl
 
 import android.net.Uri
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.flatMapCatching
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
@@ -22,6 +23,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProviderFactory
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaSenderFactory
@@ -52,19 +54,20 @@ class DefaultMediaSenderFactory(
     }
 }
 
-@ContributesBinding(SessionScope::class)
+@ContributesBinding(AppScope::class)
 class DefaultMediaSenderRoomFactory(
     private val preProcessor: MediaPreProcessor,
-    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
+    private val mediaOptimizationConfigProviderFactory: MediaOptimizationConfigProviderFactory,
 ) : MediaSenderRoomFactory {
     override fun create(
+        client: MatrixClient,
         room: JoinedRoom,
     ): MediaSender {
         return DefaultMediaSender(
             preProcessor = preProcessor,
             room = room,
             timelineMode = Timeline.Mode.Live,
-            mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
+            mediaOptimizationConfigProvider = mediaOptimizationConfigProviderFactory.create(client),
         )
     }
 }

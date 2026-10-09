@@ -8,28 +8,39 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.AlignmentLine
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemSelectionData
 import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
@@ -60,6 +71,7 @@ internal fun TimelineItemRow(
     timelineProtectionState: TimelineProtectionState,
     focusedEventId: EventId?,
     displayThreadSummaries: Boolean,
+    selectionData: TimelineItemSelectionData,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
@@ -92,17 +104,148 @@ internal fun TimelineItemRow(
             )
         },
 ) {
-    val backgroundModifier = if (timelineItem.isEvent(focusedEventId)) {
-        val focusedEventOffset = if ((timelineItem as? TimelineItem.Event)?.showSenderInformation == true) {
-            14.dp
-        } else {
-            2.dp
+    val isSelectionModeActive = selectionData.isSelectionModeActive
+    val selectionProgress = selectionData.progress
+    val isSelected = selectionData.isSelected
+    val backgroundModifier = when {
+        timelineItem.isEvent(focusedEventId) && !isSelectionModeActive -> {
+            val focusedEventOffset =
+                if ((timelineItem as? TimelineItem.Event)?.showSenderInformation == true) {
+                    14.dp
+                } else {
+                    2.dp
+                }
+            Modifier.focusedEvent(focusedEventOffset)
         }
-        Modifier.focusedEvent(focusedEventOffset)
-    } else {
-        Modifier
+        else -> {
+            Modifier
+        }
     }
-    Box(modifier = modifier.then(backgroundModifier)) {
+    val selectableEvent = (timelineItem as? TimelineItem.Event)?.takeIf { selectionData.canBeSelected }
+    // Only start-aligned message bubbles slide to make room for the selection indicator:
+    //  - Outgoing (own) messages are end-aligned, opposite the indicator, so they already have room.
+    //  - Centered tiles (state events, call tiles, day dividers, grouped events) must stay put.
+    val isOutgoing = (timelineItem as? TimelineItem.Event)?.isMine == true
+    val shouldSlideContent = timelineItem.rendersAsBubble() && !isOutgoing
+    val layoutDirection = LocalLayoutDirection.current
+    val contentSlide = if (shouldSlideContent) SELECTION_COLUMN_WIDTH * selectionProgress else 0.dp
+    Layout(
+        modifier = modifier.then(backgroundModifier),
+        contents = listOf(
+            {
+                TimelineItemRowContent(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .offset(x = contentSlide),
+                    selectionContentOffset = contentSlide,
+                    timelineItem = timelineItem,
+                    timelineMode = timelineMode,
+                    timelineRoomInfo = timelineRoomInfo,
+                    timelineProtectionState = timelineProtectionState,
+                    isLastOutgoingMessage = isLastOutgoingMessage,
+                    focusedEventId = focusedEventId,
+                    displayThreadSummaries = displayThreadSummaries,
+                    onUserDataClick = onUserDataClick,
+                    onLinkClick = onLinkClick,
+                    onLinkLongClick = onLinkLongClick,
+                    onContentClick = onContentClick,
+                    onGalleryItemClick = onGalleryItemClick,
+                    onLongClick = onLongClick,
+                    inReplyToClick = inReplyToClick,
+                    onReactionClick = onReactionClick,
+                    onReactionLongClick = onReactionLongClick,
+                    onMoreReactionsClick = onMoreReactionsClick,
+                    onReadReceiptClick = onReadReceiptClick,
+                    onJoinCallClick = onJoinCallClick,
+                    onSwipeToReply = onSwipeToReply,
+                    eventSink = eventSink,
+                    eventContentView = eventContentView,
+                )
+            },
+            {
+                if (selectableEvent != null && selectionProgress > 0f) {
+                    val slideSign = if (layoutDirection == LayoutDirection.Ltr) -1f else 1f
+                    SelectionIndicator(
+                        selected = isSelected,
+                        modifier = Modifier
+                            .graphicsLayer { translationX = slideSign * SELECTION_COLUMN_WIDTH.toPx() * (1f - selectionProgress) }
+                            .padding(start = 16.dp)
+                            .size(24.dp),
+                    )
+                }
+            },
+            {
+                if (isSelectionModeActive) {
+                    // In selection mode the whole row toggles selection.
+                    Box(modifier = Modifier.clickable(enabled = selectionData.canBeSelected, role = Role.Checkbox) {
+                        if (selectableEvent != null) {
+                            onContentClick(selectableEvent)
+                        }
+                    })
+                }
+            },
+        ),
+    ) { (contentMeasurables, indicatorMeasurables, overlayMeasurables), constraints ->
+        val contentPlaceable = contentMeasurables.first().measure(constraints)
+        val width = contentPlaceable.width
+        val height = contentPlaceable.height
+        val indicatorPlaceable = indicatorMeasurables.firstOrNull()?.measure(constraints.copy(minWidth = 0, minHeight = 0))
+        val overlayPlaceable = overlayMeasurables.firstOrNull()?.measure(Constraints.fixed(width, height))
+        layout(width = width, height = height) {
+            contentPlaceable.place(0, 0)
+            if (indicatorPlaceable != null) {
+                val bubbleCenter = contentPlaceable[BubbleVerticalCenter].takeIf { it != AlignmentLine.Unspecified } ?: height / 2
+                val x = if (layoutDirection == LayoutDirection.Ltr) 0 else width - indicatorPlaceable.width
+                indicatorPlaceable.place(x = x, y = bubbleCenter - indicatorPlaceable.height / 2)
+            }
+            overlayPlaceable?.place(0, 0)
+        }
+    }
+}
+
+/** Width reserved for the selection indicator : the row content slides by this amount. */
+private val SELECTION_COLUMN_WIDTH = 36.dp
+
+/**
+ * Whether this item is rendered as a start/end-aligned message bubble, as opposed to a centered
+ * tile (state event, legacy call invite, call/RTC notification, day divider, grouped events).
+ * Mirrors the dispatch in [TimelineItemRowContent]: only bubbles shift to reveal the selection
+ * indicator; centered tiles stay put.
+ */
+private fun TimelineItem.rendersAsBubble(): Boolean = this is TimelineItem.Event &&
+    content !is TimelineItemStateContent &&
+    content !is TimelineItemLegacyCallInviteContent &&
+    content !is TimelineItemRtcNotificationContent
+
+@Suppress("LongMethod")
+@Composable
+private fun TimelineItemRowContent(
+    timelineItem: TimelineItem,
+    timelineMode: Timeline.Mode,
+    timelineRoomInfo: TimelineRoomInfo,
+    isLastOutgoingMessage: Boolean,
+    timelineProtectionState: TimelineProtectionState,
+    focusedEventId: EventId?,
+    displayThreadSummaries: Boolean,
+    onUserDataClick: (MatrixUser) -> Unit,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
+    onContentClick: (TimelineItem.Event) -> Unit,
+    onGalleryItemClick: (TimelineItem.Event, Int) -> Unit,
+    onLongClick: (TimelineItem.Event) -> Unit,
+    inReplyToClick: (EventId) -> Unit,
+    onReactionClick: (key: String, TimelineItem.Event) -> Unit,
+    onReactionLongClick: (key: String, TimelineItem.Event) -> Unit,
+    onMoreReactionsClick: (TimelineItem.Event) -> Unit,
+    onReadReceiptClick: (TimelineItem.Event) -> Unit,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
+    onSwipeToReply: (TimelineItem.Event) -> Unit,
+    eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+    modifier: Modifier = Modifier,
+    selectionContentOffset: Dp = 0.dp,
+    eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
+) {
+    Box(modifier) {
         when (timelineItem) {
             is TimelineItem.Virtual -> {
                 TimelineItemVirtualRow(
@@ -197,6 +340,7 @@ internal fun TimelineItemRow(
                             onSwipeToReply = { onSwipeToReply(timelineItem) },
                             onGalleryItemClick = { index -> onGalleryItemClick(timelineItem, index) },
                             eventSink = eventSink,
+                            selectionContentOffset = selectionContentOffset,
                             eventContentView = { contentModifier, onContentLayoutChange ->
                                 eventContentView(timelineItem, contentModifier, onContentLayoutChange)
                             },

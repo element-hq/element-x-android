@@ -52,16 +52,38 @@ class DefaultAnnouncementServiceTest {
     }
 
     @Test
+    fun `when showing MultiAccount announcement, announcement is set to show only if it was never shown`() = runTest {
+        val announcementStore = InMemoryAnnouncementStore()
+        val sut = createDefaultAnnouncementService(
+            announcementStore = announcementStore,
+        )
+        assertThat(announcementStore.announcementStatusFlow(Announcement.MultiAccount).first()).isEqualTo(AnnouncementStatus.NeverShown)
+        sut.showAnnouncement(Announcement.MultiAccount)
+        assertThat(announcementStore.announcementStatusFlow(Announcement.MultiAccount).first()).isEqualTo(AnnouncementStatus.Show)
+        // Simulate user close the announcement
+        sut.onAnnouncementDismissed(Announcement.MultiAccount)
+        // Calling again showAnnouncement should not change the value
+        sut.showAnnouncement(Announcement.MultiAccount)
+        assertThat(announcementStore.announcementStatusFlow(Announcement.MultiAccount).first()).isEqualTo(AnnouncementStatus.Shown)
+    }
+
+    @Test
     fun `test announcementsToShowFlow`() = runTest {
         val announcementStore = InMemoryAnnouncementStore()
         val sut = createDefaultAnnouncementService(
             announcementStore = announcementStore,
         )
         sut.announcementsToShowFlow().test {
-            assertThat(awaitItem()).isEmpty()
+            // MultiAccount is pending by default
+            assertThat(awaitItem()).containsExactly(Announcement.MultiAccount)
             announcementStore.setAnnouncementStatus(Announcement.NewNotificationSound, AnnouncementStatus.Show)
-            assertThat(awaitItem()).containsExactly(Announcement.NewNotificationSound)
+            assertThat(awaitItem()).containsExactly(Announcement.NewNotificationSound, Announcement.MultiAccount)
+            announcementStore.setAnnouncementStatus(Announcement.MultiAccount, AnnouncementStatus.Show)
+            // Still pending
+            assertThat(awaitItem()).containsExactly(Announcement.NewNotificationSound, Announcement.MultiAccount)
             announcementStore.setAnnouncementStatus(Announcement.NewNotificationSound, AnnouncementStatus.Shown)
+            assertThat(awaitItem()).containsExactly(Announcement.MultiAccount)
+            announcementStore.setAnnouncementStatus(Announcement.MultiAccount, AnnouncementStatus.Shown)
             assertThat(awaitItem()).isEmpty()
         }
     }

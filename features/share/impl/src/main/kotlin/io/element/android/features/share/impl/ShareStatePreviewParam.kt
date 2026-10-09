@@ -11,6 +11,7 @@ package io.element.android.features.share.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 
 open class ShareStatePreviewParam : PreviewParameterProvider<ShareState> {
     override val values: Sequence<ShareState>
@@ -31,9 +32,11 @@ open class ShareStatePreviewParam : PreviewParameterProvider<ShareState> {
 }
 
 fun aShareState(
+    sessionId: SessionId = SessionId("@alice:server.org"),
     shareAction: AsyncAction<List<RoomId>> = AsyncAction.Uninitialized,
     eventSink: (ShareEvent) -> Unit = {}
 ) = ShareState(
+    sessionId = sessionId,
     shareAction = shareAction,
     eventSink = eventSink
 )

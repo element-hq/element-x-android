@@ -13,6 +13,7 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 
 interface ShareEntryPoint : FeatureEntryPoint {
     data class Params(val shareIntentData: ShareIntentData)
@@ -25,6 +26,11 @@ interface ShareEntryPoint : FeatureEntryPoint {
     ): Node
 
     interface Callback : Plugin {
-        fun onDone(roomIds: List<RoomId>)
+        /**
+         * Called when the share is done, or cancelled.
+         * @param sessionId the session which has been used to share the data. It can be different from the current session.
+         * @param roomIds the rooms the data has been shared to, empty if the share has been cancelled.
+         */
+        fun onDone(sessionId: SessionId, roomIds: List<RoomId>)
     }
 }

@@ -38,8 +38,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Если выключено, Вы не будете видеть, кто печатает и читает сообщения, а также другие пользователи не будут знать, когда Вы печатаете или читаете сообщения."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Всегда скрывать"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Всегда показывать"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"В приватных комнатах"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Скрытые медиа всегда можно просмотреть, нажав на них."</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Показывать в приватных комнатах"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Скрытый контент всегда можно отобразить, нажав на него."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Показать медиа в истории сообщений"</string>
   <string name="screen_advanced_settings_view_source_description">"Включить опцию просмотра источника сообщения в истории сообщений."</string>
   <string name="screen_blocked_users_empty">"У Вас нет заблокированных пользователей"</string>
@@ -62,6 +62,9 @@
   <string name="screen_labs_header_description">"Попробуйте функции в разработке. Эти функции ещё не завершены, они нестабильны и могут измениться."</string>
   <string name="screen_labs_header_title">"Хотите попробовать?"</string>
   <string name="screen_labs_title">"Лаборатория"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Приглашения"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Другие пользователи"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Ваш внешний вид"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Дополнительные параметры"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Мелодия звонка"</string>
   <string name="screen_notification_settings_calls_label">"Аудио и видео звонки"</string>

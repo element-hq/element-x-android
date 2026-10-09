@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -59,6 +60,7 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
@@ -180,6 +182,9 @@ fun TimelineItemEventRow(
     onSwipeToReply: () -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    // Horizontal offset applied to this row's content by selection mode. The read receipts are
+    // anchored to the end edge and should stay pinned, so they are counter-offset by this amount.
+    selectionContentOffset: Dp = 0.dp,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
         // Only pass down a custom clickable lambda if the content can be clicked separately
         val onContentClick = onEventClick.takeUnless { event.isWholeContentClickable }
@@ -326,7 +331,10 @@ fun TimelineItemEventRow(
                 receipts = event.readReceiptState.receipts,
             ),
             onReadReceiptsClick = { onReadReceiptClick(event) },
-            modifier = Modifier.padding(top = 4.dp)
+            // Counter the selection-mode content slide so the end-anchored read receipts stay pinned.
+            modifier = Modifier
+                .padding(top = 4.dp)
+                .offset(x = -selectionContentOffset)
         )
     }
 }

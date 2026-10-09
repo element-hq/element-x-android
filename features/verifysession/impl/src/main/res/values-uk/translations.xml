@@ -44,6 +44,7 @@
   <string name="screen_session_verification_use_another_device_title">"Відкрийте застосунок на іншому звіреному пристрої"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Для додаткової безпеки звірте цього користувача, порівнявши набір емоджі на ваших пристроях. Зробіть це, використовуючи надійний спосіб спілкування."</string>
   <string name="screen_session_verification_user_initiator_title">"Звірити цього користувача?"</string>
+  <string name="screen_session_verification_user_requesting_verification">"Користувач, який запитує звірку:"</string>
   <string name="screen_session_verification_user_responder_subtitle">"Для додаткової безпеки інший користувач хоче звірити вашу цифрову ідентичність. Вам буде показано набір емодзі для порівняння."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"На іншому пристрої має з’явитися спливне вікно. Розпочніть звіряння звідти."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Розпочати звіряння на іншому пристрої"</string>

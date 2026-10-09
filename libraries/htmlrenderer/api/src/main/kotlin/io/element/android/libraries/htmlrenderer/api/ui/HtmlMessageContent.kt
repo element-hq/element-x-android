@@ -70,6 +70,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -513,7 +514,7 @@ private fun Modifier.drawInlineCodeBackgrounds(
             val lineEnd = minOf(range.end, layout.getLineEnd(line, visibleEnd = true))
             if (lineEnd <= lineStart) continue
             val startX = layout.getHorizontalPosition(lineStart, usePrimaryDirection = true)
-            val endX = layout.getHorizontalPosition(lineEnd, usePrimaryDirection = true)
+            val endX = layout.getHorizontalPosition(lineEnd, usePrimaryDirection = true).takeUnless { it == 0f } ?: layout.getLineEndPosition(line)
             val left = minOf(startX, endX) - horizontalPadding
             val right = maxOf(startX, endX) + horizontalPadding
             val topLeft = Offset(left, layout.getLineTop(line))
@@ -537,6 +538,16 @@ private fun Modifier.drawInlineCodeBackgrounds(
                 drawOutline(outline = outline, color = borderColor, style = Stroke(width = strokeWidth))
             }
         }
+    }
+}
+
+private fun TextLayoutResult.getLineEndPosition(line: Int): Float {
+    val lineEnd = getLineEnd(line, visibleEnd = true)
+    val direction = getParagraphDirection(lineEnd)
+    return if (direction == ResolvedTextDirection.Ltr) {
+        getLineRight(line)
+    } else {
+        getLineLeft(line)
     }
 }
 

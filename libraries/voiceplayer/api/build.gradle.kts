@@ -14,8 +14,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.annotationjvm)
-    implementation(libs.coroutines.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
 }

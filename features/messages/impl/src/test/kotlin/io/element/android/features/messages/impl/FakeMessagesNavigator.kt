@@ -20,7 +20,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 class FakeMessagesNavigator(
     private val onShowEventDebugInfoClickLambda: (eventId: EventId?, debugInfo: TimelineItemDebugInfo) -> Unit = { _, _ -> lambdaError() },
-    private val onForwardEventClickLambda: (eventId: EventId, timelineProvider: TimelineProvider) -> Unit = { _, _ -> lambdaError() },
+    private val onForwardEventClickLambda: (eventIds: List<EventId>, timelineProvider: TimelineProvider) -> Unit = { _, _ -> lambdaError() },
     private val onReportContentClickLambda: (eventId: EventId, senderId: UserId) -> Unit = { _, _ -> lambdaError() },
     private val onEditPollClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
     private val onPreviewAttachmentLambda: (attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) -> Unit = { _, _ -> lambdaError() },
@@ -35,8 +35,8 @@ class FakeMessagesNavigator(
         onShowEventDebugInfoClickLambda(eventId, debugInfo)
     }
 
-    override fun forwardEvent(eventId: EventId, timelineProvider: TimelineProvider) {
-        onForwardEventClickLambda(eventId, timelineProvider)
+    override fun forwardEvents(eventIds: List<EventId>, timelineProvider: TimelineProvider) {
+        onForwardEventClickLambda(eventIds, timelineProvider)
     }
 
     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
