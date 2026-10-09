@@ -26,17 +26,15 @@ open class RoomSelectStatePreviewParam : PreviewParameterProvider<RoomSelectStat
     override val values: Sequence<RoomSelectState>
         get() = sequenceOf(
             aRoomSelectState(),
-            aRoomSelectState(searchQuery = "Test", isSearchActive = true),
+            aRoomSelectState(searchQuery = "Test", resultState = SearchBarResultState.NoResultsFound),
             aRoomSelectState(resultState = SearchBarResultState.Results(aRoomSelectRoomList())),
             aRoomSelectState(
                 resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
                 searchQuery = "Test",
-                isSearchActive = true,
             ),
             aRoomSelectState(
                 resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
                 searchQuery = "Test",
-                isSearchActive = true,
                 selectedRooms = aRoomSelectRoomList().subList(0, 1),
             ),
             aRoomSelectState(
@@ -76,7 +74,6 @@ internal fun aRoomSelectState(
     maxNumberOfRooms: Int = 10,
     resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>> = SearchBarResultState.Initial,
     searchQuery: String = "",
-    isSearchActive: Boolean = false,
     selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
     selectedAccount: MatrixUser = MatrixUser(UserId("@alice:example.org")),
     hasRoomListError: Boolean = false,
@@ -88,7 +85,6 @@ internal fun aRoomSelectState(
     maxNumberOfRooms = maxNumberOfRooms,
     resultState = resultState,
     searchQuery = TextFieldState(initialText = searchQuery),
-    isSearchActive = isSearchActive,
     selectedRooms = selectedRooms,
     selectedAccount = selectedAccount,
     hasRoomListError = hasRoomListError,

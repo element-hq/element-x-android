@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.roomselect.impl
 
-import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -63,7 +62,6 @@ class RoomSelectPresenter(
     override fun present(): RoomSelectState {
         var selectedRooms by remember { mutableStateOf(persistentListOf<SelectRoomInfo>()) }
         val queryState = rememberTextFieldState()
-        var isSearchActive by remember { mutableStateOf(false) }
         var isAccountListExpanded by remember { mutableStateOf(false) }
         var selectedSessionId by remember { mutableStateOf(initialSessionId) }
         val sessions by remember { sessionStore.sessionsFlow() }.collectAsState(initial = emptyList())
@@ -136,7 +134,7 @@ class RoomSelectPresenter(
             derivedStateOf {
                 when {
                     roomSummaryDetailsList.isNotEmpty() -> SearchBarResultState.Results(roomSummaryDetailsList.toImmutableList())
-                    isSearchActive -> SearchBarResultState.NoResultsFound
+                    queryState.text.isNotBlank() -> SearchBarResultState.NoResultsFound
                     else -> SearchBarResultState.Initial
                 }
             }
@@ -152,13 +150,11 @@ class RoomSelectPresenter(
                         selectedRooms.adding(event.room)
                     }
                 }
-                RoomSelectEvent.ToggleSearchActive -> isSearchActive = !isSearchActive
                 RoomSelectEvent.ToggleAccountListExpanded -> isAccountListExpanded = !isAccountListExpanded
                 is RoomSelectEvent.SelectAccount -> {
                     selectedSessionId = event.sessionId
-                    // The selected rooms and the search query are specific to the session
+                    // The selected rooms are specific to the session. The search query is kept, and applied to the rooms of the new session.
                     selectedRooms = persistentListOf()
-                    queryState.clearText()
                     isAccountListExpanded = false
                 }
                 is RoomSelectEvent.UpdateVisibleRange -> coroutineScope.launch {
@@ -172,7 +168,6 @@ class RoomSelectPresenter(
             maxNumberOfRooms = maxNumberOfRooms,
             resultState = searchResults,
             searchQuery = queryState,
-            isSearchActive = isSearchActive,
             selectedRooms = selectedRooms,
             selectedAccount = selectedAccount,
             hasRoomListError = hasRoomListError,
