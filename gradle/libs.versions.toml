@@ -44,7 +44,7 @@ appyx = "1.7.1"
 sqldelight = "2.4.0"
 wysiwyg = "2.42.1"
 telephoto = "0.19.0"
-maplibre-compose = "0.18.0"
+maplibre-compose = "0.19.0"
 
 # Dependency analysis
 dependencyAnalysis = "3.19.2"
@@ -64,7 +64,7 @@ ktlint = "1.8.0"
 androidx-test-ext-junit = "1.3.0"
 kover = "0.9.9"
 # The native MatrixRTC call component, https://github.com/element-hq/element-call-android
-element_call = "0.1.0-rc.6"
+element_call = "0.1.0-rc.7"
 
 [libraries]
 # Project
@@ -120,7 +120,7 @@ androidx_activity_activity = { module = "androidx.activity:activity", version.re
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = "androidx.startup:startup-runtime:1.2.0"
 androidx_preference = "androidx.preference:preference:1.2.1"
-androidx_webkit = "androidx.webkit:webkit:1.17.0"
+androidx_webkit = "androidx.webkit:webkit:1.17.1"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
 androidx_compose_material3 = { module = "androidx.compose.material3:material3", version = '1.5.0-alpha29' }
@@ -186,7 +186,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # it as a plain `require`: without this, a library built against a newer SDK would silently drag this app
 # onto it. With it, this pin always wins, and a library that needs something newer fails at configuration
 # time naming both versions instead of at runtime with NoSuchMethodError.
-matrix_sdk = { module = "org.matrix.rustcomponents:sdk-android", version = { strictly = "26.09.28" } }
+matrix_sdk = { module = "org.matrix.rustcomponents:sdk-android", version = { strictly = "26.10.05-nightly" } }
 rustls_platform_verifier = "org.rustls:rustls-platform-verifier:0.2.0"
 
 # Others
@@ -208,7 +208,7 @@ matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose",
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:sqlcipher-android:4.19.0"
+sqlcipher = "net.zetetic:sqlcipher-android:4.19.1"
 sqlite = "androidx.sqlite:sqlite-ktx:2.7.1"
 unifiedpush = "org.unifiedpush.android:connector:3.3.5"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
@@ -221,15 +221,15 @@ maplibre_compose_location_runtime_gms = { module = "org.maplibre.compose:locatio
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:3.1.1"
 google_zxing = "com.google.zxing:core:3.5.4"
-google_guava = "com.google.guava:guava:33.7.1-android"
+google_guava = "com.google.guava:guava:33.7.2-android"
 
 color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.60.7"
-sentry = "io.sentry:sentry-android:8.57.0"
+sentry = "io.sentry:sentry-android:8.59.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
-matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.37.0"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.38.0"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.5.3"
@@ -239,7 +239,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.26.0"
+element_call_embedded = "io.element.android:element-call-embedded:0.27.0"
 # The native MatrixRTC call component. Versions come from the BOM, so every artifact moves together.
 element_call_bom = { module = "io.element.android:element-call-bom", version.ref = "element_call" }
 element_call_api = { module = "io.element.android:element-call-api" }

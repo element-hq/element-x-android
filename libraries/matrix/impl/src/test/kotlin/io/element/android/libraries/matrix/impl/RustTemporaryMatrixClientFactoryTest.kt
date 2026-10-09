@@ -8,19 +8,7 @@
 package io.element.android.libraries.matrix.impl
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.enterprise.test.FakeClientBuilderEnterpriseHook
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.matrix.impl.auth.FakeProxyProvider
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
-import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
-import io.element.android.libraries.matrix.impl.storage.FakeSqliteStoreBuilderProvider
-import io.element.android.libraries.network.useragent.SimpleUserAgentProvider
-import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
-import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
-import io.element.android.services.analytics.test.FakeAnalyticsService
-import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
-import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -56,28 +44,4 @@ class RustTemporaryMatrixClientFactoryTest {
             rustMatrixClientFactory = rustMatrixClientFactory,
         )
     }
-
-    private fun TestScope.createRustMatrixClientFactory(
-        cacheDirectory: File = File("/cache"),
-        sessionStore: SessionStore = InMemorySessionStore(
-            updateUserProfileResult = { _, _, _, _ -> },
-        ),
-        clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
-        workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
-    ) = RustMatrixClientFactory(
-        cacheDirectory = cacheDirectory,
-        appCoroutineScope = backgroundScope,
-        coroutineDispatchers = testCoroutineDispatchers(),
-        sessionStore = sessionStore,
-        userAgentProvider = SimpleUserAgentProvider(),
-        proxyProvider = FakeProxyProvider(),
-        clock = FakeSystemClock(),
-        analyticsService = FakeAnalyticsService(),
-        featureFlagService = FakeFeatureFlagService(),
-        timelineEventFilterFactory = FakeTimelineEventFilterFactory(),
-        clientBuilderProvider = clientBuilderProvider,
-        sqliteStoreBuilderProvider = FakeSqliteStoreBuilderProvider(),
-        workManagerScheduler = workManagerScheduler,
-        clientBuilderEnterpriseHook = FakeClientBuilderEnterpriseHook(),
-    )
 }

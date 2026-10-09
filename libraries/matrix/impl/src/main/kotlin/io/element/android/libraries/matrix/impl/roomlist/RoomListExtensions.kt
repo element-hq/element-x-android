@@ -57,7 +57,7 @@ fun RoomListInterface.loadingStateFlow(): Flow<RoomListLoadingState> =
 internal fun RoomListInterface.entriesFlow(
     pageSize: Int,
     initialFilterKind: RoomListEntriesDynamicFilterKind,
-    onControllerCreated: (RoomListDynamicEntriesController) -> Unit,
+    onControllerCreated: suspend (RoomListDynamicEntriesController) -> Unit,
 ): Flow<List<RoomListEntriesUpdate>> =
     callbackFlow {
         val listener = object : RoomListEntriesListener {
@@ -70,9 +70,13 @@ internal fun RoomListInterface.entriesFlow(
             listener = listener,
         )
         val controller = result.controller()
-        controller.setFilter(initialFilterKind)
-        onControllerCreated(controller)
-        awaitClose {
+        // Use try/finally rather than awaitClose's block, so that the resources are released even if
+        // onControllerCreated is cancelled or throws before awaitClose is reached
+        try {
+            controller.setFilter(initialFilterKind)
+            onControllerCreated(controller)
+            awaitClose()
+        } finally {
             result.entriesStream().cancelAndDestroy()
             controller.destroy()
             result.destroy()

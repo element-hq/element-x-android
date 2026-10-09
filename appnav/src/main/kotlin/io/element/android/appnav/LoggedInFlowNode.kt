@@ -88,6 +88,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -173,6 +174,7 @@ class LoggedInFlowNode(
     interface Callback : Plugin {
         fun navigateToBugReport()
         fun navigateToAddAccount()
+        fun switchAccountAndOpenRoom(sessionId: SessionId, roomId: RoomId?)
     }
 
     private val callback: Callback = callback()
@@ -574,9 +576,15 @@ class LoggedInFlowNode(
                     buildContext = buildContext,
                     params = ShareEntryPoint.Params(shareIntentData = navTarget.shareIntentData),
                     callback = object : ShareEntryPoint.Callback {
-                        override fun onDone(roomIds: List<RoomId>) {
+                        override fun onDone(sessionId: SessionId, roomIds: List<RoomId>) {
                             // Remove the incoming share screen
                             backstack.pop()
+
+                            if (sessionId != matrixClient.sessionId) {
+                                // The data has been shared using another session, switch to it
+                                callback.switchAccountAndOpenRoom(sessionId, roomIds.singleOrNull())
+                                return
+                            }
 
                             // Navigate to the room if the text/media was shared to a single one
                             roomIds.singleOrNull()?.let { roomId ->

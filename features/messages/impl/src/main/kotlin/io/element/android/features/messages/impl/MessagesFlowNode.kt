@@ -181,7 +181,7 @@ class MessagesFlowNode(
 
         @Parcelize
         data class ForwardEvent(
-            val eventId: EventId,
+            val eventIds: List<EventId>,
             @IgnoredOnParcel
             val timelineProvider: TimelineProvider? = null,
         ) : NavTarget
@@ -306,8 +306,8 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
 
-                    override fun forwardEvent(eventId: EventId, timelineProvider: TimelineProvider) {
-                        backstack.push(NavTarget.ForwardEvent(eventId, timelineProvider))
+                    override fun forwardEvents(eventIds: List<EventId>, timelineProvider: TimelineProvider) {
+                        backstack.push(NavTarget.ForwardEvent(eventIds, timelineProvider))
                     }
 
                     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
@@ -464,7 +464,7 @@ class MessagesFlowNode(
             is NavTarget.ForwardEvent -> {
                 // If no timeline provider is received, assume the live timeline should be used
                 val timelineProvider = navTarget.timelineProvider ?: timelineController
-                val params = ForwardEntryPoint.Params(navTarget.eventId, timelineProvider)
+                val params = ForwardEntryPoint.Params(navTarget.eventIds, timelineProvider)
                 val callback = object : ForwardEntryPoint.Callback {
                     override fun onDone(roomIds: List<RoomId>) {
                         backstack.pop()
@@ -551,7 +551,7 @@ class MessagesFlowNode(
                     }
 
                     override fun handleForwardEventClick(eventId: EventId, timelineProvider: TimelineProvider) {
-                        backstack.push(NavTarget.ForwardEvent(eventId = eventId, timelineProvider = timelineProvider))
+                        backstack.push(NavTarget.ForwardEvent(eventIds = listOf(eventId), timelineProvider = timelineProvider))
                     }
 
                     override fun navigateToThread(threadRootId: ThreadId) {
@@ -617,8 +617,8 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
 
-                    override fun handleForwardEventClick(eventId: EventId, timelineProvider: TimelineProvider) {
-                        backstack.push(NavTarget.ForwardEvent(eventId, timelineProvider))
+                    override fun handleForwardEventClick(eventIds: List<EventId>, timelineProvider: TimelineProvider) {
+                        backstack.push(NavTarget.ForwardEvent(eventIds, timelineProvider))
                     }
 
                     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {

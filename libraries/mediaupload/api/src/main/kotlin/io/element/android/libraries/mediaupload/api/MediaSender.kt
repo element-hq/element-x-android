@@ -9,6 +9,7 @@
 package io.element.android.libraries.mediaupload.api
 
 import android.net.Uri
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -34,9 +35,11 @@ fun interface MediaSenderRoomFactory {
     /**
      * Create a [MediaSender] for the given [JoinedRoom], with timeline mode Live.
      *
+     * @param client the client of the session the room belongs to, used to read the media preferences of that session.
      * @param room the room the media should be sent to.
      */
     fun create(
+        client: MatrixClient,
         room: JoinedRoom,
     ): MediaSender
 }

@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.atomic.atoms.CounterAtom
+import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.tooltip.PlainTooltip
 import io.element.android.libraries.designsystem.components.tooltip.TooltipBox
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -140,12 +140,10 @@ fun HorizontalFloatingToolbarItem(
         BadgedBox(
             badge = {
                 counter?.let {
-                    CounterAtom(
-                        count = it,
+                    UnreadIndicatorAtom(
+                        count = it.toLong(),
                         // Tweak the offset so it's centered on the icon
                         modifier = Modifier.offset(x = (-16).dp, y = 10.dp),
-                        contentPadding = PaddingValues(vertical = 0.5.dp),
-                        textStyle = ElementTheme.typography.fontBodySmMedium,
                     )
                 }
             }

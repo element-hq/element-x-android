@@ -13,7 +13,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -27,35 +26,42 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.unreadIndicator
 
+/**
+ * A small indicator to show the number of unread messages or notifications.
+ *
+ * @param count The number of unread messages or notifications. If null, the indicator will be hidden, if 0, a notification dot will be shown.
+ * @param modifier The modifier to be applied to the indicator.
+ * @param dotIndicatorSize The size of the dot indicator.
+ * @param color The background color of the indicator.
+ * @param contentDescription The content description for accessibility.
+ * @param border The border to be applied to the indicator.
+ * @param contentPadding The padding inside the indicator.
+ */
 @Composable
 fun UnreadIndicatorAtom(
+    count: Long?,
     modifier: Modifier = Modifier,
-    size: Dp = 12.dp,
-    count: Long? = null,
-    color: Color = ElementTheme.colors.unreadIndicator,
-    isVisible: Boolean = true,
+    dotIndicatorSize: Dp = 12.dp,
+    color: Color = ElementTheme.colors.iconAccentPrimary,
     contentDescription: String? = null,
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues.Zero,
 ) {
-    when {
-        !isVisible -> Spacer(modifier = modifier.size(size))
-        else -> count?.let {
-            CounterAtom(
-                count = count.toInt(),
-                modifier = modifier
-                    .semantics {
-                        contentDescription?.let { this.contentDescription = it }
-                    }
-                    .then(if (border != null) Modifier.border(border, RoundedCornerShape(percent = 50)) else Modifier),
-                containerColor = color,
-                contentColor = ElementTheme.colors.bgCanvasDefault,
-                textStyle = ElementTheme.typography.fontBodySmMedium,
-                contentPadding = contentPadding,
-            )
-        }
+    count?.let {
+        CounterAtom(
+            count = count.toInt(),
+            modifier = modifier
+                .semantics {
+                    contentDescription?.let { this.contentDescription = it }
+                }
+                .then(if (count == 0L) Modifier.size(dotIndicatorSize) else Modifier)
+                .then(if (border != null) Modifier.border(border, RoundedCornerShape(percent = 100)) else Modifier),
+            containerColor = color,
+            contentColor = ElementTheme.colors.bgCanvasDefault,
+            textStyle = ElementTheme.typography.fontBodySmMedium,
+            contentPadding = contentPadding,
+        )
     }
 }
 
@@ -66,7 +72,7 @@ internal fun UnreadIndicatorAtomPreview() = ElementPreview {
         UnreadIndicatorAtom(count = null)
         UnreadIndicatorAtom(count = 0)
         UnreadIndicatorAtom(count = 1)
-        UnreadIndicatorAtom(count = 10)
+        UnreadIndicatorAtom(count = 20)
         UnreadIndicatorAtom(count = 99)
         UnreadIndicatorAtom(count = 999)
     }

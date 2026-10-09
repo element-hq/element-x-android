@@ -154,6 +154,14 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    MessageMultiSelect(
+        key = "feature.message_multi_select",
+        title = "Multi-select messages",
+        description = "The Forward action enters a selection mode, to pick and forward up to 10 messages at once.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = false,
+    ),
     NewTimelineEventRenderer(
         key = "feature.new_timeline_event_renderer",
         title = "New timeline event renderer",
@@ -169,13 +177,19 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    ShowAllActivityInRoomList(
-        key = "feature.show_all_activity_in_room_list",
-        title = "Show all activity in room list",
-        description = "Show all activity indicators in the room list, using unread messages instead of notifications.",
-        defaultValue = { true },
-        // To hide it from the developer options, since it's displayed in the notification settings instead
-        isFinished = true,
-        isInLabs = false,
-    )
+}
+
+/**
+ * Feature flag to show all activity indicators in the room list, using unread messages instead of notifications.
+ *
+ * This is separate from the [FeatureFlags] enum because it is not a feature flag that can be toggled in developer options,
+ * but rather a setting that can be toggled in the app settings.
+ */
+object ShowAllActivityInRoomListFeature : Feature {
+    override val key: String = "feature.show_all_activity_in_room_list"
+    override val title: String = "Show all activity in room list"
+    override val description: String = "Show all activity indicators in the room list, using unread messages instead of notifications."
+    override val defaultValue: (BuildMeta) -> Boolean = { true }
+    override val isFinished: Boolean = false
+    override val isInLabs: Boolean = false
 }

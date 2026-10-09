@@ -10,12 +10,12 @@ package io.element.android.libraries.roomselect.impl
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 
-@ContributesBinding(SessionScope::class)
+@ContributesBinding(AppScope::class)
 class DefaultRoomSelectEntryPoint : RoomSelectEntryPoint {
     override fun createNode(
         parentNode: Node,
@@ -27,6 +27,7 @@ class DefaultRoomSelectEntryPoint : RoomSelectEntryPoint {
             buildContext = buildContext,
             plugins = listOf(
                 RoomSelectNode.Inputs(
+                    sessionId = params.sessionId,
                     mode = params.mode,
                     maxNumberOfRooms = params.maxNumberOfRooms,
                 ),

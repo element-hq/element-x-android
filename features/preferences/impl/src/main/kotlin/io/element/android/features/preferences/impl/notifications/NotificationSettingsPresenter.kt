@@ -29,7 +29,7 @@ import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.api.ShowAllActivityInRoomListFeature
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -200,7 +200,7 @@ class NotificationSettingsPresenter(
         }
 
         val showAllActivityInRoomList by produceState(false) {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.ShowAllActivityInRoomList)
+            featureFlagService.isFeatureEnabledFlow(ShowAllActivityInRoomListFeature)
                 .collect { value = it }
         }
 
@@ -284,8 +284,8 @@ class NotificationSettingsPresenter(
                 NotificationSettingsEvent.DismissCallRingtoneCopyError -> {
                     callRingtoneCopyError = false
                 }
-                NotificationSettingsEvent.ToggleShowAllActivityInRoomList -> localCoroutineScope.launch {
-                    featureFlagService.setFeatureEnabled(FeatureFlags.ShowAllActivityInRoomList, !showAllActivityInRoomList)
+                is NotificationSettingsEvent.ToggleShowAllActivityInRoomList -> localCoroutineScope.launch {
+                    featureFlagService.setFeatureEnabled(ShowAllActivityInRoomListFeature, event.newValue)
                 }
             }
         }
