@@ -11,6 +11,7 @@ package io.element.android.libraries.eventformatter.impl
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
 import io.element.android.libraries.matrix.api.core.UserId
@@ -31,8 +32,11 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @ContributesBinding(SessionScope::class)
 class DefaultTimelineEventFormatter(
@@ -41,7 +45,18 @@ class DefaultTimelineEventFormatter(
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
+    appPreferencesStore: AppPreferencesStore,
+    @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
 ) : TimelineEventFormatter {
+    private var isDeveloperModeEnabled = false
+
+    init {
+        sessionCoroutineScope.launch {
+            appPreferencesStore.isDeveloperModeEnabledFlow().collect { enabled ->
+                isDeveloperModeEnabled = enabled
+            }
+        }
+    }
     override fun format(event: EventTimelineItem): CharSequence? {
         val isOutgoing = event.isOwn
         val senderDisambiguatedDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender)
@@ -51,13 +66,13 @@ class DefaultTimelineEventFormatter(
     override fun format(content: EventContent, isOutgoing: Boolean, sender: UserId, senderDisambiguatedDisplayName: String): CharSequence? {
         return when (content) {
             is RoomMembershipContent -> {
-                roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
+                roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, isDeveloperModeEnabled)
             }
             is ProfileChangeContent -> {
                 profileChangeContentFormatter.format(content, sender, senderDisambiguatedDisplayName, isOutgoing)
             }
             is StateContent -> {
-                stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.Timeline)
+                stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.Timeline, isDeveloperModeEnabled)
             }
             is CallNotifyContent -> {
                 sp.getString(CommonStrings.common_call_started)
