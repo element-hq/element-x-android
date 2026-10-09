@@ -102,6 +102,7 @@ class FakeMatrixClient(
     override val mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
     override val roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
     private val homeserverCapabilitiesProvider: FakeHomeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(),
+    private val totalUnreadCountResult: () -> Result<Long> = { Result.success(0L) },
     private val accountManagementUrlResult: (AccountManagementAction?) -> Result<String?> = { lambdaError() },
     private val resolveRoomAliasResult: suspend (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
         Result.success(
@@ -467,5 +468,9 @@ class FakeMatrixClient(
 
     override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
         return homeserverCapabilitiesProvider
+    }
+
+    override fun totalUnreadCount(): Result<Long> {
+        return totalUnreadCountResult()
     }
 }

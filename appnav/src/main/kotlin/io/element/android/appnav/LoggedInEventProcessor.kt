@@ -18,7 +18,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -34,7 +34,7 @@ class LoggedInEventProcessor(
     @Assisted private val snackbarDispatcher: SnackbarDispatcher,
     private val roomMembershipObserver: RoomMembershipObserver,
     private val sessionId: SessionId,
-    private val roomListService: RoomListService,
+    private val syncService: SyncService,
     private val notificationCleaner: NotificationCleaner,
     private val dispatchers: CoroutineDispatchers
 ) {
@@ -73,9 +73,8 @@ class LoggedInEventProcessor(
             }
             .launchIn(childScope)
 
-        // Use the room list service state as a 'heartbeat' update to check existing notifications
-        roomListService.state
-            .filter { it == RoomListService.State.Running }
+        // Use the sync service heartbeat as a 'heartbeat' update to check existing notifications
+        syncService.heartBeat
             .onEach {
                 notificationCleaner.clearReadRoomsNotifications(sessionId)
             }

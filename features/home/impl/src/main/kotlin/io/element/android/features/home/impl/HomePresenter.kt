@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,9 +35,14 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @Inject
 class HomePresenter(
@@ -53,10 +59,20 @@ class HomePresenter(
 ) : Presenter<HomeState> {
     private val currentUserWithNeighborsBuilder = CurrentUserWithNeighborsBuilder()
 
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     @Composable
     override fun present(): HomeState {
         val coroutineState = rememberCoroutineScope()
         val matrixUser by client.userProfile.collectAsState()
+
+        val totalUnreadCount by produceState(0) {
+            syncService.heartBeat
+                // Delay the heartbeat so the SDK has time to update the unread count before we read it.
+                .debounce(100.milliseconds)
+                .mapLatest { client.totalUnreadCount().getOrDefault(0).toInt() }
+                .collect { value = it }
+        }
+
         val currentUserAndNeighbors by remember {
             combine(
                 client.userProfile,
@@ -130,6 +146,7 @@ class HomePresenter(
             snackbarMessage = snackbarMessage,
             canReportBug = canReportBug,
             showMultiAccountAnnouncement = showMultiAccountAnnouncement,
+            totalUnreadCount = totalUnreadCount,
             eventSink = ::handleEvent,
         )
     }
