@@ -144,15 +144,19 @@ fun RoomSelectView(
     )
 
     val searchQuery = state.searchQuery.text.toString()
-    // Use a new list state when the selected account or the search query changes, so that the list of rooms is scrolled to the top
-    val lazyListState = key(state.selectedAccount.userId, searchQuery) { rememberLazyListState() }
+    // Use a new list state when the selected account changes, so that the list of rooms is scrolled to the top
+    val lazyListState = key(state.selectedAccount.userId) { rememberLazyListState() }
+    // Scroll the list of rooms to the top when the search query changes
+    LaunchedEffect(lazyListState, searchQuery) {
+        lazyListState.scrollToItem(0)
+    }
     // Hide the account switch section when the room list is scrolled up, and show it again as soon as it is scrolled down.
     // Use a new state when the selected account changes, so that the section is fully displayed again.
     val accountSwitchScrollBehavior = key(state.selectedAccount.userId) {
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     }
     // Collapse the account switch section when the user starts searching. It can be displayed again by scrolling down.
-    val isSearching = searchQuery.isNotEmpty()
+    val isSearching = searchQuery.isNotBlank()
     LaunchedEffect(isSearching) {
         if (isSearching) {
             val topAppBarState = accountSwitchScrollBehavior.state
@@ -246,7 +250,7 @@ fun RoomSelectView(
                     ) {
                         if (state.resultState.results.isNotEmpty()) {
                             item {
-                                val headerText = if (searchQuery.isEmpty()) {
+                                val headerText = if (searchQuery.isBlank()) {
                                     stringResource(CommonStrings.common_header_rooms)
                                 } else {
                                     stringResource(CommonStrings.common_results_for, searchQuery)
