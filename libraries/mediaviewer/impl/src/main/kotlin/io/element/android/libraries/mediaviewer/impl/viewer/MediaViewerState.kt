@@ -20,6 +20,7 @@ import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.flow.StateFlow
 
 data class MediaViewerState(
     val initiallySelectedEventId: EventId?,
@@ -52,6 +53,7 @@ sealed interface MediaViewerPageData {
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
         val downloadedMedia: State<AsyncData<LocalMedia>>,
+        val downloadProgress: StateFlow<Int?>,
         val validationState: ContentValidationState,
         override val pagerKey: Long,
     ) : MediaViewerPageData
