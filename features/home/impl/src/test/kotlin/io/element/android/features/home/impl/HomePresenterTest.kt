@@ -40,9 +40,11 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 class HomePresenterTest {
     @get:Rule
@@ -114,6 +116,38 @@ class HomePresenterTest {
             indicatorService.setShowRoomListTopBarIndicator(true)
             val finalState = awaitItem()
             assertThat(finalState.showAvatarIndicator).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - total unread count is updated on sync heartbeat`() = runTest {
+        var unreadCount = 0L
+        val syncService = FakeSyncService()
+        val presenter = createHomePresenter(
+            client = FakeMatrixClient(totalUnreadCountResult = { Result.success(unreadCount) }),
+            syncService = syncService,
+        )
+        presenter.test {
+            assertThat(awaitItem().totalUnreadCount).isEqualTo(0)
+            unreadCount = 5
+            syncService.emitHeartBeat()
+            advanceTimeBy(200.milliseconds)
+            assertThat(awaitItem().totalUnreadCount).isEqualTo(5)
+        }
+    }
+
+    @Test
+    fun `present - total unread count defaults to 0 when the SDK call fails`() = runTest {
+        val syncService = FakeSyncService()
+        val presenter = createHomePresenter(
+            client = FakeMatrixClient(totalUnreadCountResult = { Result.failure(AN_EXCEPTION) }),
+            syncService = syncService,
+        )
+        presenter.test {
+            assertThat(awaitItem().totalUnreadCount).isEqualTo(0)
+            syncService.emitHeartBeat()
+            advanceTimeBy(200.milliseconds)
+            expectNoEvents()
         }
     }
 

@@ -259,6 +259,7 @@ private fun HomeScaffold(
                         }
                     }
                 },
+                totalUnreadCount = state.totalUnreadCount,
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -341,6 +342,7 @@ private fun HomeFloatingActionButton(
 
 @Composable
 private fun HomeBottomBar(
+    totalUnreadCount: Int,
     currentHomeNavigationBarItem: HomeNavigationBarItem,
     onItemClick: (HomeNavigationBarItem) -> Unit,
     modifier: Modifier = Modifier,
@@ -361,6 +363,7 @@ private fun HomeBottomBar(
                 tooltipLabel = stringResource(item.labelRes),
                 isSelected = isSelected,
                 onClick = { onItemClick(item) },
+                counter = if (item == HomeNavigationBarItem.Chats) totalUnreadCount.takeIf { it > 0 } else null
             )
         }
     }

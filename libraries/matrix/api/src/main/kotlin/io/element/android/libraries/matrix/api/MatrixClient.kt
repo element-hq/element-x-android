@@ -505,6 +505,12 @@ interface MatrixClient : ClientUrlContentFetcher {
 
     /** Returns a provider for the capabilities the homeserver advertises, such as whether the display name can be changed. */
     fun homeserverCapabilities(): HomeserverCapabilitiesProvider
+
+    /**
+     * Returns the total number of unread notifications across all rooms, as currently known by the client.
+     * This is a snapshot and may be out of date if the sync is running.
+     */
+    fun totalUnreadCount(): Result<Long>
 }
 
 /**
