@@ -151,7 +151,7 @@ enum class FeatureFlags(
         key = "feature.message_search",
         title = "Message search",
         description = "Index messages locally so they can be searched. Only messages received while enabled are indexed.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     MessageMultiSelect(
