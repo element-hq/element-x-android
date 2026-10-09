@@ -16,15 +16,15 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ThreadsListService {
     /**
-     * The threads loaded so far, starting empty and re-emitted in full whenever the SDK sends an update.
+     * The list of changes to the threads loaded so far, emitted whenever the SDK sends an update.
      * The underlying subscription is started on the first call and shared by later ones.
      */
-    fun subscribeToItemUpdates(): Flow<List<ThreadListItem>>
+    fun subscribeToItemDiffs(): Flow<List<ThreadListDiff>>
 
     /** The pagination state of the list, emitting the current value immediately so callers know whether more threads can be loaded. */
     fun subscribeToPaginationUpdates(): Flow<ThreadListPaginationStatus>
 
-    /** Loads the next page of threads, which will be reflected in [subscribeToItemUpdates]. */
+    /** Loads the next page of threads, which will be reflected in [subscribeToItemDiffs]. */
     suspend fun paginate(): Result<Unit>
 
     /** Discards the loaded threads and starts the list again from the most recent one. */
