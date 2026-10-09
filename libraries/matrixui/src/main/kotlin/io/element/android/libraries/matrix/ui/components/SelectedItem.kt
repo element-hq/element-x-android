@@ -9,6 +9,8 @@
 package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,11 +27,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -48,6 +55,7 @@ import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.utils.activationKeys
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -62,9 +70,31 @@ fun SelectedItem(
     modifier: Modifier = Modifier,
 ) {
     val actionRemove = stringResource(id = CommonStrings.action_remove)
+    val interactionSource = remember { MutableInteractionSource() }
     Box(
         modifier = modifier
             .width(avatarData.size.dp)
+            .then(
+                if (canRemove) {
+                    // Let the whole item get the keyboard focus, so that the focus indicator is drawn around it.
+                    Modifier
+                        .onKeyEvent { event ->
+                            if (event.type == KeyEventType.KeyUp && event.key in activationKeys) {
+                                onRemoveClick()
+                                true
+                            } else {
+                                false
+                            }
+                        }
+                        .indication(
+                            interactionSource = interactionSource,
+                            indication = ripple(),
+                        )
+                        .focusable(interactionSource = interactionSource)
+                } else {
+                    Modifier
+                }
+            )
             .clearAndSetSemantics {
                 contentDescription = a11yContentDescription
                 if (canRemove) {
@@ -130,6 +160,8 @@ fun SelectedItem(
                     .clip(CircleShape)
                     .size(20.dp)
                     .align(Alignment.TopEnd)
+                    // The whole item is focusable, not the remove button
+                    .focusProperties { canFocus = false }
                     .clickable(
                         indication = ripple(),
                         interactionSource = remember { MutableInteractionSource() },
