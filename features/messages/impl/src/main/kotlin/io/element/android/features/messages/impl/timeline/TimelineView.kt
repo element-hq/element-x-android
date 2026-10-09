@@ -11,6 +11,7 @@ package io.element.android.features.messages.impl.timeline
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -88,8 +89,10 @@ import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPr
 import io.element.android.features.messages.impl.timeline.focus.FocusRequestStateView
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemSelectionData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentPreviewParam
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
@@ -108,6 +111,7 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -181,6 +185,18 @@ fun TimelineView(
         state.eventSink(TimelineEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS))
     }
 
+    val isSelectionModeActive = state.isSelectionModeActive
+    // Animate once here (shared by every row) rather than per-row: the value is identical for all
+    // rows since it only depends on the timeline-wide selection mode.
+    val selectionProgress by animateFloatAsState(
+        targetValue = if (isSelectionModeActive) 1f else 0f,
+        label = "selectionProgress",
+    )
+    fun onToggleSelection(event: TimelineItem.Event) {
+        val eventId = event.eventId ?: return
+        state.eventSink(TimelineEvent.ToggleSelection(eventId))
+    }
+
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
         val composeLocalTimelineEventRendererConfig = remember(state.useNewTimelineEventRenderer, state.timelineRoomInfo.currentUserId) {
@@ -213,12 +229,22 @@ fun TimelineView(
                             isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                             focusedEventId = state.focusedEventId,
                             displayThreadSummaries = state.displayThreadSummaries,
+                            selectionData = TimelineItemSelectionData(
+                                isSelectionModeActive = isSelectionModeActive,
+                                progress = selectionProgress,
+                                isSelected = state.isSelected(timelineItem),
+                                canBeSelected = state.canSelect(timelineItem),
+                            ),
                             onUserDataClick = onUserDataClick,
                             onLinkClick = onLinkClick,
                             onLinkLongClick = ::onLinkLongClick,
-                            onContentClick = onContentClick,
+                            onContentClick = { event ->
+                                if (state.canSelect(event)) onToggleSelection(event) else onContentClick(event)
+                            },
                             onGalleryItemClick = onGalleryItemClick,
-                            onLongClick = onMessageLongClick,
+                            onLongClick = { event ->
+                                if (state.canSelect(event)) onToggleSelection(event) else onMessageLongClick(event)
+                            },
                             inReplyToClick = ::inReplyToClick,
                             onReactionClick = onReactionClick,
                             onReactionLongClick = onReactionLongClick,
@@ -571,7 +597,6 @@ private fun JumpToPositionButton(
                     modifier = Modifier
                         .align(dotAlignment)
                         .offset { IntOffset(x = 0, y = dotYOffset.roundToPx()) },
-                    color = ElementTheme.colors.iconSuccessPrimary,
                     border = BorderStroke(2.dp, ElementTheme.colors.bgCanvasDefault),
                     count = 0,
                 )
@@ -599,6 +624,36 @@ internal fun TimelineViewPreview(
                     pinnedEventIds = listOfNotNull(lastEventIdFromMe, lastEventIdFromOther)
                 ),
                 focusedEventIndex = 0,
+            ),
+            timelineProtectionState = aTimelineProtectionState(),
+            onUserDataClick = {},
+            onLinkClick = {},
+            onContentClick = {},
+            onMessageLongClick = {},
+            onSwipeToReply = {},
+            onReactionClick = { _, _ -> },
+            onReactionLongClick = { _, _ -> },
+            onJoinCallClick = {},
+            onMoreReactionsClick = {},
+            onReadReceiptClick = {},
+            onGalleryItemClick = { _, _ -> },
+            forceJumpToBottomVisibility = true,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineViewSelectionModePreview() = ElementPreview {
+    val timelineItems = aTimelineItemList(aTimelineItemTextContent())
+    val selectedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().first { SelectionAction.Forward.canApplyTo(it) }.eventId!!
+    CompositionLocalProvider(
+        LocalTimelineItemPresenterFactories provides aFakeTimelineItemPresenterFactories(),
+    ) {
+        TimelineView(
+            state = aTimelineState(
+                timelineItems = timelineItems,
+                selectionState = SelectionState.Active(SelectionAction.Forward, persistentSetOf(selectedEventId)),
             ),
             timelineProtectionState = aTimelineProtectionState(),
             onUserDataClick = {},

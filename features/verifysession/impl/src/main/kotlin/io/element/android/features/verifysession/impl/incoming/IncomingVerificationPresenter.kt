@@ -29,6 +29,7 @@ import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.toMatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationRequestDetails
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
@@ -101,16 +102,7 @@ class IncomingVerificationPresenter(
         }
         val currentUser by remember {
             sessionStore.sessionsFlow().mapNotNull { sessions ->
-                sessions.find { it.userId == sessionId.value }?.let { sessionData ->
-                    MatrixUser(
-                        userId = sessionId,
-                        displayName = sessionData.userDisplayName,
-                        avatarUrl = sessionData.userAvatarUrl,
-                        // Locally stored avatar, used as a fallback when the avatar cannot be loaded,
-                        // for instance for a session which is not the current one
-                        avatarThumbnail = sessionData.userAvatarData,
-                    )
-                }
+                sessions.find { it.userId == sessionId.value }?.toMatrixUser()
             }
         }.collectAsState(MatrixUser(sessionId))
         val step by remember {

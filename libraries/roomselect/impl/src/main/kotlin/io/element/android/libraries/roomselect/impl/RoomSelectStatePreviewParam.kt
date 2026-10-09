@@ -13,6 +13,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aSelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
@@ -24,17 +26,15 @@ open class RoomSelectStatePreviewParam : PreviewParameterProvider<RoomSelectStat
     override val values: Sequence<RoomSelectState>
         get() = sequenceOf(
             aRoomSelectState(),
-            aRoomSelectState(searchQuery = "Test", isSearchActive = true),
+            aRoomSelectState(searchQuery = "Test", resultState = SearchBarResultState.NoResultsFound),
             aRoomSelectState(resultState = SearchBarResultState.Results(aRoomSelectRoomList())),
             aRoomSelectState(
                 resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
                 searchQuery = "Test",
-                isSearchActive = true,
             ),
             aRoomSelectState(
                 resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
                 searchQuery = "Test",
-                isSearchActive = true,
                 selectedRooms = aRoomSelectRoomList().subList(0, 1),
             ),
             aRoomSelectState(
@@ -47,6 +47,25 @@ open class RoomSelectStatePreviewParam : PreviewParameterProvider<RoomSelectStat
                 selectedRooms = aRoomSelectRoomList().subList(0, 1),
                 maxNumberOfRooms = 1,
             ),
+            aRoomSelectState(
+                mode = RoomSelectMode.Share,
+                resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
+                selectedAccount = aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
+                otherAccounts = anOtherAccountList(),
+            ),
+            aRoomSelectState(
+                mode = RoomSelectMode.Share,
+                resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
+                selectedAccount = aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
+                otherAccounts = anOtherAccountList(),
+                isAccountListExpanded = true,
+            ),
+            aRoomSelectState(
+                mode = RoomSelectMode.Share,
+                selectedAccount = aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
+                otherAccounts = anOtherAccountList(),
+                hasRoomListError = true,
+            ),
         )
 }
 
@@ -55,17 +74,28 @@ internal fun aRoomSelectState(
     maxNumberOfRooms: Int = 10,
     resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>> = SearchBarResultState.Initial,
     searchQuery: String = "",
-    isSearchActive: Boolean = false,
     selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
+    selectedAccount: MatrixUser = MatrixUser(UserId("@alice:example.org")),
+    hasRoomListError: Boolean = false,
+    otherAccounts: ImmutableList<MatrixUser> = persistentListOf(),
+    isAccountListExpanded: Boolean = false,
     eventSink: (RoomSelectEvent) -> Unit = {},
 ) = RoomSelectState(
     mode = mode,
     maxNumberOfRooms = maxNumberOfRooms,
     resultState = resultState,
     searchQuery = TextFieldState(initialText = searchQuery),
-    isSearchActive = isSearchActive,
     selectedRooms = selectedRooms,
+    selectedAccount = selectedAccount,
+    hasRoomListError = hasRoomListError,
+    otherAccounts = otherAccounts,
+    isAccountListExpanded = isAccountListExpanded,
     eventSink = eventSink,
+)
+
+private fun anOtherAccountList() = persistentListOf(
+    aMatrixUser(id = "@bob:example.org", displayName = "Bob"),
+    aMatrixUser(id = "@carol:server.org", displayName = "Carol"),
 )
 
 internal fun aRoomSelectRoomList() = persistentListOf(

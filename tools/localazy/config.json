@@ -15,6 +15,12 @@
       ]
     },
     {
+      "name" : ":libraries:roomselect:impl",
+      "includeRegex" : [
+        "screen\\.room_select\\..*"
+      ]
+    },
+    {
       "name" : ":features:rageshake:api",
       "includeRegex" : [
         "crash_detection_.*",

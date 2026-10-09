@@ -28,6 +28,7 @@ import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.parcelize.Parcelize
@@ -39,6 +40,7 @@ class ShareNode(
     @Assisted plugins: List<Plugin>,
     presenterFactory: SharePresenter.Factory,
     private val roomSelectEntryPoint: RoomSelectEntryPoint,
+    private val sessionId: SessionId,
 ) : ParentNode<ShareNode.NavTarget>(
     navModel = PermanentNavModel(
         navTargets = setOf(NavTarget),
@@ -53,17 +55,17 @@ class ShareNode(
     data class Inputs(val shareIntentData: ShareIntentData) : NodeInputs
 
     private val inputs = inputs<Inputs>()
-    private val presenter = presenterFactory.create(inputs.shareIntentData)
+    private val presenter = presenterFactory.create(inputs.shareIntentData, sessionId)
     private val callback: ShareEntryPoint.Callback = callback()
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         val callback = object : RoomSelectEntryPoint.Callback {
-            override fun onRoomSelected(roomIds: List<RoomId>) {
-                presenter.onRoomSelected(roomIds)
+            override fun onRoomSelected(sessionId: SessionId, roomIds: List<RoomId>) {
+                presenter.onRoomSelected(sessionId, roomIds)
             }
 
             override fun onCancel() {
-                callback.onDone(emptyList())
+                callback.onDone(sessionId, emptyList())
             }
         }
 
@@ -71,6 +73,7 @@ class ShareNode(
             parentNode = this,
             buildContext = buildContext,
             params = RoomSelectEntryPoint.Params(
+                sessionId = sessionId,
                 mode = RoomSelectMode.Share,
                 maxNumberOfRooms = RoomSelectEntryPoint.DEFAULT_MAX_NUMBER_OF_ROOMS,
             ),
@@ -89,7 +92,7 @@ class ShareNode(
             val state = presenter.present()
             ShareView(
                 state = state,
-                onShareSuccess = callback::onDone,
+                onShareSuccess = { roomIds -> callback.onDone(state.sessionId, roomIds) },
             )
         }
     }

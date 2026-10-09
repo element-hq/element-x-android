@@ -232,13 +232,15 @@ private fun RoomAccessSection(
         title = stringResource(R.string.screen_security_and_privacy_room_access_section_header),
         modifier = modifier,
     ) {
-        ListItem(
-            content = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_title)) },
-            supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_description)) },
-            trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.Anyone),
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Public())),
-            onClick = { onSelectOption(SecurityAndPrivacyRoomAccess.Anyone) },
-        )
+        if (state.showAnyoneOption) {
+            ListItem(
+                content = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_title)) },
+                supportingContent = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_anyone_option_description)) },
+                trailingContent = ListItemContent.RadioButton(selected = edited == SecurityAndPrivacyRoomAccess.Anyone),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Public())),
+                onClick = { onSelectOption(SecurityAndPrivacyRoomAccess.Anyone) },
+            )
+        }
         if (state.showSpaceMemberOption) {
             ListItem(
                 content = { Text(text = stringResource(R.string.screen_security_and_privacy_room_access_space_members_option_title)) },

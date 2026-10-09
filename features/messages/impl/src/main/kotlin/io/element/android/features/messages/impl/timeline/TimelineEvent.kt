@@ -28,7 +28,9 @@ sealed interface TimelineEvent {
     data object HideShieldDialog : TimelineEvent
 
     data object MarkAllAsRead : TimelineEvent
-
+    data class EnterSelectionMode(val action: SelectionAction, val eventId: EventId) : TimelineEvent
+    data class ToggleSelection(val eventId: EventId) : TimelineEvent
+    data object ExitSelectionMode : TimelineEvent
     data class CopyToClipboard(val text: String) : TimelineEvent
 
     /**

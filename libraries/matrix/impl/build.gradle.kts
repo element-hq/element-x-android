@@ -63,6 +63,7 @@ dependencies {
 
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)
+    implementation(projects.features.networkmonitor.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)
@@ -80,6 +81,7 @@ dependencies {
 
     testCommonDependencies(libs)
     testImplementation(projects.features.enterprise.test)
+    testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.previewutils)
