@@ -10,6 +10,7 @@ package io.element.android.libraries.roomselect.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -24,18 +25,23 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -46,9 +52,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -70,8 +78,8 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.designsystem.theme.components.Scaffold
-import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.designsystem.theme.components.SearchField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -123,10 +131,8 @@ fun RoomSelectView(
     }
 
     var canHandleBack by remember { mutableStateOf(true) }
-    fun onBackButton(state: RoomSelectState) {
-        if (state.isSearchActive) {
-            state.eventSink(RoomSelectEvent.ToggleSearchActive)
-        } else if (canHandleBack) {
+    fun onBackButton() {
+        if (canHandleBack) {
             canHandleBack = false
             onDismiss()
         }
@@ -134,15 +140,33 @@ fun RoomSelectView(
 
     BackHandler(
         enabled = canHandleBack,
-        onBack = { onBackButton(state) }
+        onBack = ::onBackButton,
     )
 
+    val searchQuery = state.searchQuery.text.toString()
     // Use a new list state when the selected account changes, so that the list of rooms is scrolled to the top
     val lazyListState = key(state.selectedAccount.userId) { rememberLazyListState() }
+    // Scroll the list of rooms to the top when the search query changes
+    LaunchedEffect(lazyListState, searchQuery) {
+        lazyListState.scrollToItem(0)
+    }
     // Hide the account switch section when the room list is scrolled up, and show it again as soon as it is scrolled down.
     // Use a new state when the selected account changes, so that the section is fully displayed again.
     val accountSwitchScrollBehavior = key(state.selectedAccount.userId) {
         TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    }
+    // Collapse the account switch section when the user starts searching. It can be displayed again by scrolling down.
+    val isSearching = searchQuery.isNotBlank()
+    LaunchedEffect(isSearching) {
+        if (isSearching) {
+            val topAppBarState = accountSwitchScrollBehavior.state
+            animate(
+                initialValue = topAppBarState.heightOffset,
+                targetValue = topAppBarState.heightOffsetLimit,
+            ) { value, _ ->
+                topAppBarState.heightOffset = value
+            }
+        }
     }
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
         state.eventSink(RoomSelectEvent.UpdateVisibleRange(visibleRange))
@@ -153,13 +177,13 @@ fun RoomSelectView(
         topBar = {
             TopAppBar(
                 titleStr = when (state.mode) {
-                    RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_message)
+                    RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_to)
                     RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                 },
                 navigationIcon = {
                     BackButton(
                         enabled = canHandleBack,
-                        onClick = { onBackButton(state) }
+                        onClick = ::onBackButton,
                     )
                 },
                 actions = {
@@ -177,82 +201,62 @@ fun RoomSelectView(
             Modifier
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
-                .nestedScroll(accountSwitchScrollBehavior.nestedScrollConnection)
+                .then(
+                    // Only when the account switch section is displayed, else its unknown height would consume all the scroll events
+                    if (state.showAccountSwitch) {
+                        Modifier.nestedScroll(accountSwitchScrollBehavior.nestedScrollConnection)
+                    } else {
+                        Modifier
+                    }
+                )
         ) {
-            SearchBar(
+            SearchField(
+                state = state.searchQuery,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
                         WindowInsets.safeDrawing
                             .only(WindowInsetsSides.Horizontal)
                             .asPaddingValues()
-                    ),
-                placeHolderTitle = stringResource(CommonStrings.action_search),
-                queryState = state.searchQuery,
-                active = state.isSearchActive,
-                onActiveChange = { state.eventSink(RoomSelectEvent.ToggleSearchActive) },
-                resultState = state.resultState,
-                showBackButton = false,
-            ) { summaries ->
-                if (summaries.isNotEmpty()) {
-                    ListSectionHeader(
-                        title = stringResource(CommonStrings.common_header_rooms),
-                        hasDivider = false,
+                    )
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                placeholder = stringResource(CommonStrings.action_search),
+            )
+            if (state.showAccountSwitch) {
+                // Keep this space outside the collapsing section, so that the section does not touch the search field when it is collapsing
+                Spacer(modifier = Modifier.height(8.dp))
+                TopAppBarScrollBehaviorLayout(scrollBehavior = accountSwitchScrollBehavior) {
+                    AccountSwitchSection(
+                        selectedAccount = state.selectedAccount,
+                        otherAccounts = state.otherAccounts,
+                        isExpanded = state.isAccountListExpanded,
+                        onToggleExpand = { state.eventSink(RoomSelectEvent.ToggleAccountListExpanded) },
+                        onSelectAccount = { state.eventSink(RoomSelectEvent.SelectAccount(it)) },
                     )
                 }
-                LazyColumn(
-                    state = lazyListState,
-                    contentPadding = lazyColumnContentPadding,
-                ) {
-                    item {
-                        SelectedRoomsHelper(
-                            selectedRooms = state.selectedRooms,
-                            showVerticalSpace = false,
-                        )
-                    }
-                    items(summaries, key = { it.roomId.value }) { roomSummary ->
-                        RoomSummaryView(
-                            roomSummary,
-                            isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
-                            onSelection = { roomSummary ->
-                                state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary))
-                            },
-                            canBeSelected = state.canSelectMoreRooms,
-                        )
-                    }
-                }
             }
-
-            if (!state.isSearchActive) {
-                if (state.showAccountSwitch) {
-                    // Keep this space outside the collapsing section, so that the section does not touch the search bar when it is collapsing
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TopAppBarScrollBehaviorLayout(scrollBehavior = accountSwitchScrollBehavior) {
-                        AccountSwitchSection(
-                            selectedAccount = state.selectedAccount,
-                            otherAccounts = state.otherAccounts,
-                            isExpanded = state.isAccountListExpanded,
-                            onToggleExpand = { state.eventSink(RoomSelectEvent.ToggleAccountListExpanded) },
-                            onSelectAccount = { state.eventSink(RoomSelectEvent.SelectAccount(it)) },
-                        )
-                    }
-                }
-                SelectedRoomsHelper(
-                    selectedRooms = state.selectedRooms,
-                    // showVerticalSpace only if there is no other accounts
-                    showVerticalSpace = !state.showAccountSwitch,
-                )
-                if (state.hasRoomListError) {
-                    RoomListError()
-                } else if (state.resultState is SearchBarResultState.Results) {
+            SelectedRoomsHelper(
+                selectedRooms = state.selectedRooms,
+                // showVerticalSpace only if there is no other accounts
+                showVerticalSpace = !state.showAccountSwitch,
+            )
+            when {
+                state.hasRoomListError -> RoomListError()
+                state.resultState is SearchBarResultState.NoResultsFound -> NoResultsView(searchQuery = searchQuery)
+                state.resultState is SearchBarResultState.Results -> {
                     LazyColumn(
                         state = lazyListState,
                         contentPadding = lazyColumnContentPadding,
                     ) {
                         if (state.resultState.results.isNotEmpty()) {
                             item {
+                                val headerText = if (searchQuery.isBlank()) {
+                                    stringResource(CommonStrings.common_header_rooms)
+                                } else {
+                                    stringResource(CommonStrings.common_results_for, searchQuery)
+                                }
                                 ListSectionHeader(
-                                    title = stringResource(CommonStrings.common_header_rooms),
+                                    title = headerText,
                                     hasDivider = false,
                                 )
                             }
@@ -269,8 +273,42 @@ fun RoomSelectView(
                         }
                     }
                 }
+                else -> Unit
             }
         }
+    }
+}
+
+@Composable
+private fun NoResultsView(
+    searchQuery: String,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            // Scrollable, so that the account switch section can be displayed again by scrolling down
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp, vertical = 40.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = stringResource(CommonStrings.common_no_results),
+            modifier = Modifier
+                .semantics {
+                    heading()
+                },
+            textAlign = TextAlign.Center,
+            style = ElementTheme.typography.fontHeadingMdBold,
+            color = ElementTheme.colors.textPrimary,
+        )
+        Text(
+            text = stringResource(CommonStrings.common_no_results_for, searchQuery),
+            modifier = Modifier.widthIn(max = 300.dp),
+            textAlign = TextAlign.Center,
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = ElementTheme.colors.textSecondary,
+        )
     }
 }
 

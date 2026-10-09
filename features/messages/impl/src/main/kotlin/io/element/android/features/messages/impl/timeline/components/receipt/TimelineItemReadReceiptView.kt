@@ -57,43 +57,60 @@ fun TimelineItemReadReceiptView(
     onReadReceiptsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.receipts.isNotEmpty()) {
-        ReadReceiptsRow(modifier = modifier) {
-            ReadReceiptsAvatars(
-                receipts = state.receipts,
-                onClick = onReadReceiptsClick,
-            )
+    val content: @Composable (() -> Unit)? = when (state.sendState) {
+        // If null, assume it's Sent and act the same way
+        null if state.isLastOutgoingMessage && state.receipts.isEmpty() -> {
+            @Composable { SentIcon() }
         }
-    } else {
-        when (state.sendState) {
-            is LocalEventSendState.Sending -> {
-                ReadReceiptsRow(modifier) {
-                    Icon(
-                        modifier = Modifier.padding(2.dp),
-                        imageVector = CompoundIcons.Circle(),
-                        contentDescription = stringResource(id = CommonStrings.common_sending),
-                        tint = ElementTheme.colors.iconSecondary
-                    )
-                }
+        is LocalEventSendState.Sending -> {
+            @Composable { SendingIcon() }
+        }
+        is LocalEventSendState.Failed -> {
+            // Error? The timestamp is already displayed in red
+            null
+        }
+        is LocalEventSendState.Sent if state.isLastOutgoingMessage && state.receipts.isEmpty() -> {
+            @Composable { SentIcon() }
+        }
+        else -> if (state.receipts.isNotEmpty()) {
+            @Composable {
+                ReadReceiptsAvatars(
+                    receipts = state.receipts,
+                    onClick = onReadReceiptsClick,
+                )
             }
-            is LocalEventSendState.Failed -> {
-                // Error? The timestamp is already displayed in red
-            }
-            null,
-            is LocalEventSendState.Sent -> {
-                if (state.isLastOutgoingMessage) {
-                    ReadReceiptsRow(modifier = modifier) {
-                        Icon(
-                            modifier = Modifier.padding(2.dp),
-                            imageVector = CompoundIcons.CheckCircle(),
-                            contentDescription = stringResource(id = CommonStrings.common_sent),
-                            tint = ElementTheme.colors.iconSecondary
-                        )
-                    }
-                }
-            }
+        } else {
+            null
         }
     }
+
+    // Only show the row if there is content to display
+    content?.let {
+        ReadReceiptsRow(
+            modifier = modifier,
+            content = it,
+        )
+    }
+}
+
+@Composable
+private fun SendingIcon() {
+    Icon(
+        modifier = Modifier.padding(2.dp),
+        imageVector = CompoundIcons.Circle(),
+        contentDescription = stringResource(id = CommonStrings.common_sending),
+        tint = ElementTheme.colors.iconSecondary
+    )
+}
+
+@Composable
+private fun SentIcon() {
+    Icon(
+        modifier = Modifier.padding(2.dp),
+        imageVector = CompoundIcons.CheckCircle(),
+        contentDescription = stringResource(id = CommonStrings.common_sent),
+        tint = ElementTheme.colors.iconSecondary
+    )
 }
 
 @Composable

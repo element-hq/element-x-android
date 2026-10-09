@@ -20,7 +20,6 @@ data class RoomSelectState(
     val maxNumberOfRooms: Int,
     val resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>>,
     val searchQuery: TextFieldState,
-    val isSearchActive: Boolean,
     val selectedRooms: ImmutableList<SelectRoomInfo>,
     val selectedAccount: MatrixUser,
     /**

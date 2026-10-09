@@ -335,6 +335,7 @@ Reason: %1$s."</string>
   <string name="common_mute">"Mute"</string>
   <string name="common_name">"Name"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
+  <string name="common_no_results_for">"There are no results for “%1$s”. Try a new search term."</string>
   <string name="common_no_results">"No results"</string>
   <string name="common_no_room_name">"No room name"</string>
   <string name="common_no_space_name">"No space name"</string>
@@ -381,6 +382,7 @@ Reason: %1$s."</string>
   <string name="common_replying_to">"Replying to %1$s"</string>
   <string name="common_report_a_problem">"Report a problem"</string>
   <string name="common_report_submitted">"Report submitted"</string>
+  <string name="common_results_for">"Results for “%1$s”"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>
   <string name="common_role">"Role"</string>
   <string name="common_room">"Room"</string>
