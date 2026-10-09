@@ -12,7 +12,6 @@ import android.text.Spannable
 import android.text.style.URLSpan
 import android.text.util.Linkify
 import androidx.core.text.getSpans
-import androidx.core.text.toSpannable
 import androidx.core.text.util.LinkifyCompat
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import timber.log.Timber
@@ -32,7 +31,7 @@ object LinkifyHelper {
     ): CharSequence {
         // Convert the text to a Spannable to be able to add URL spans, return the original text if it's not possible (in tests, i.e.)
         @Suppress("USELESS_ELVIS")
-        val spannable = text.toSpannable() ?: return text
+        val spannable = text.safeToSpannable() ?: return text
 
         // Get all URL spans, as they will be removed by LinkifyCompat.addLinks
         val oldURLSpans = spannable.getSpans<URLSpan>(0, text.length).associateWith {
