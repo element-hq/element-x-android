@@ -37,6 +37,10 @@ open class SecurityAndPrivacyStatePreviewParam : PreviewParameterProvider<Securi
                     showEncryptionConfirmation = true,
                     isSpace = false,
                 ),
+                aSecurityAndPrivacyState(
+                    arePublicRoomsDisabledByHomeserver = true,
+                    isSpace = false,
+                ),
             )
 }
 
@@ -139,7 +143,7 @@ fun aSecurityAndPrivacyState(
     selectableJoinedSpaces: Set<SpaceRoom> = emptySet(),
     spaceSelectionMode: SpaceSelectionMode = SpaceSelectionMode.None,
     isEncryptionDisabledByHomeserver: Boolean = false,
-    isPublicAccessAllowed: Boolean = true,
+    arePublicRoomsDisabledByHomeserver: Boolean = false,
     eventSink: (SecurityAndPrivacyEvent) -> Unit = {}
 ) = SecurityAndPrivacyState(
     editedSettings = editedSettings,
@@ -153,6 +157,6 @@ fun aSecurityAndPrivacyState(
     selectableJoinedSpaces = selectableJoinedSpaces.toImmutableSet(),
     spaceSelectionMode = spaceSelectionMode,
     isEncryptionDisabledByHomeserver = isEncryptionDisabledByHomeserver,
-    isPublicAccessAllowed = isPublicAccessAllowed,
+    arePublicRoomsDisabledByHomeserver = arePublicRoomsDisabledByHomeserver,
     eventSink = eventSink,
 )

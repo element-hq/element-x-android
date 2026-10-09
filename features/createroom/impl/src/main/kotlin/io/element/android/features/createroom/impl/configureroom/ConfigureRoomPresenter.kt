@@ -76,7 +76,6 @@ class ConfigureRoomPresenter(
     private val roomAliasHelper: RoomAliasHelper,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
     private val sessionEnterpriseService: SessionEnterpriseService,
-    private val configureRoomExtension: ConfigureRoomExtension,
 ) : Presenter<ConfigureRoomState> {
     @AssistedFactory
     interface Factory {
@@ -94,8 +93,8 @@ class ConfigureRoomPresenter(
         val isKnockFeatureEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)
         }.collectAsState(initial = false)
-        val isPublicAccessAllowed by produceState(true) {
-            value = configureRoomExtension.isPublicAccessAllowed()
+        val arePublicRoomsDisabled by produceState(false) {
+            value = sessionEnterpriseService.arePublicRoomsDisabledByHomeserver()
         }
         val roomAddressValidity = remember {
             mutableStateOf<RoomAddressValidity>(RoomAddressValidity.Unknown)
@@ -150,13 +149,13 @@ class ConfigureRoomPresenter(
         // 1. If we are creating a space.
         // 2. If it has a parent space.
         // 3. If knocking is enabled.
-        // 4. If public access is allowed.
+        // 4. If the homeserver forbids public rooms.
         val parentSpace = createRoomConfig.parentSpace
-        val availableJoinRules = remember(parentSpace, isSpace, isKnockFeatureEnabled, isPublicAccessAllowed) {
+        val availableJoinRules = remember(parentSpace, isSpace, isKnockFeatureEnabled, arePublicRoomsDisabled) {
             when {
                 isSpace && parentSpace != null -> TODO("Adding a space to a parent space is not supported yet! How did you get here?")
                 parentSpace == null || parentSpace.joinRule == JoinRule.Public -> listOfNotNull(
-                    JoinRuleItem.PublicVisibility.Public.takeIf { isPublicAccessAllowed },
+                    JoinRuleItem.PublicVisibility.Public.takeIf { !arePublicRoomsDisabled },
                     JoinRuleItem.PublicVisibility.AskToJoin.takeIf { !isSpace && isKnockFeatureEnabled },
                     JoinRuleItem.PrivateVisibility.Private,
                 ).toImmutableList()
