@@ -43,6 +43,7 @@ import io.element.android.appnav.session.MatrixSessionCache
 import io.element.android.appnav.verification.IncomingVerificationRequestData
 import io.element.android.appnav.verification.IncomingVerificationRequestObserver
 import io.element.android.appnav.verification.OtherSessionIncomingVerificationNode
+import io.element.android.appnav.verification.OtherSessionVerificationNode
 import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
@@ -244,6 +245,8 @@ class RootFlowNode(
             .withPreviousValue()
             .onEach { (previous, current) ->
                 (previous.orEmpty() - current).forEach { sessionId ->
+                    // The verification of a removed session cannot continue, for instance if the user has signed out from it
+                    backstack.removeLast(NavTarget.OtherAccountSessionVerification(sessionId))
                     Timber.d("Session $sessionId removed, remove it from the cache")
                     matrixSessionCache.remove(sessionId)
                 }
@@ -391,6 +394,10 @@ class RootFlowNode(
             val sessionId: SessionId,
             val verificationRequest: VerificationRequest.Incoming,
         ) : NavTarget
+
+        @Parcelize data class OtherAccountSessionVerification(
+            val sessionId: SessionId,
+        ) : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -462,6 +469,20 @@ class RootFlowNode(
                 }
                 createNode<OtherSessionIncomingVerificationNode>(buildContext, plugins = listOf(inputs, callback))
             }
+            is NavTarget.OtherAccountSessionVerification -> {
+                if (matrixSessionCache.getOrNull(navTarget.sessionId) == null) {
+                    Timber.w("Couldn't find session ${navTarget.sessionId} to verify")
+                    lifecycleScope.launch { backstack.pop() }
+                    return emptyNode(buildContext)
+                }
+                val inputs = OtherSessionVerificationNode.Inputs(sessionId = navTarget.sessionId)
+                val callback = object : OtherSessionVerificationNode.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                createNode<OtherSessionVerificationNode>(buildContext, plugins = listOf(inputs, callback))
+            }
             is NavTarget.IncomingShare -> {
                 val callback = object : ShareEntryPoint.Callback {
                     override fun onDone(sessionId: SessionId, roomIds: List<RoomId>) {
@@ -479,6 +500,13 @@ class RootFlowNode(
 
                     override fun onCancel() {
                         backstack.pop()
+                    }
+
+                    override fun onSessionVerificationRequired(sessionId: SessionId) {
+                        val navTarget = NavTarget.OtherAccountSessionVerification(sessionId)
+                        if (backstack.elements.value.lastOrNull()?.key?.navTarget != navTarget) {
+                            backstack.push(navTarget)
+                        }
                     }
                 }
                 shareEntryPoint.createNode(
@@ -582,10 +610,11 @@ class RootFlowNode(
             // No session, open login
             switchToNotLoggedInFlow(null)
         } else {
-            // Wait for the current session to be restored, then display the incoming share on top of it.
+            // Wait for the current session to be restored and for the FTUE to be complete, so that the session is verified,
+            // then display the incoming share on top of it.
             // The incoming share does not belong to the current session: in case of multiple accounts, the user can switch account
             // from the room select screen, and the share is kept if the current session is signed out in the meantime.
-            attachSession(latestSessionId)
+            attachSession(latestSessionId).waitForHome()
             backstack.push(NavTarget.IncomingShare(latestSessionId, shareIntentData))
         }
     }

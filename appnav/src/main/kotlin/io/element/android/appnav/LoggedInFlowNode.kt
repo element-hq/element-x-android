@@ -577,6 +577,15 @@ class LoggedInFlowNode(
         }
     }
 
+    /**
+     * Wait for the home screen to be attached, i.e. for the FTUE to be complete.
+     */
+    internal suspend fun waitForHome() {
+        waitForNavTargetAttached { navTarget ->
+            navTarget is NavTarget.Home
+        }
+    }
+
     suspend fun attachRoom(
         roomIdOrAlias: RoomIdOrAlias,
         serverNames: List<String> = emptyList(),

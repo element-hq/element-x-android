@@ -46,6 +46,7 @@ class DefaultShareEntryPointTest {
         val callback = object : ShareEntryPoint.Callback {
             override fun onDone(sessionId: SessionId, roomIds: List<RoomId>) = lambdaError()
             override fun onCancel() = lambdaError()
+            override fun onSessionVerificationRequired(sessionId: SessionId) = lambdaError()
         }
         val params = ShareEntryPoint.Params(
             sessionId = A_SESSION_ID,

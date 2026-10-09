@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
@@ -27,6 +28,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.matrix.ui.model.toSelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
@@ -39,6 +41,7 @@ import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
@@ -290,6 +293,80 @@ class RoomSelectPresenterTest {
     }
 
     @Test
+    fun `present - select another account which is not verified navigates to its verification`() = runTest {
+        val sessionVerificationService = FakeSessionVerificationService(SessionVerifiedStatus.NotVerified)
+        val navigateToSessionVerificationLambda = lambdaRecorder<SessionId, Unit> { }
+        val presenter = createRoomSelectPresenter(
+            navigator = RoomSelectNavigator(navigateToSessionVerificationLambda),
+            mode = RoomSelectMode.Share,
+            sessionStore = aSessionStoreWithTwoAccounts(),
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                Result.success(
+                    FakeMatrixClient(
+                        sessionId = sessionId,
+                        sessionVerificationService = if (sessionId == A_SESSION_ID_2) sessionVerificationService else FakeSessionVerificationService(),
+                    )
+                )
+            },
+        )
+        presenter.test {
+            val state = awaitLastSequentialItem()
+            state.eventSink(RoomSelectEvent.SelectAccount(A_SESSION_ID_2))
+            consumeItemsUntilPredicate { it.selectedAccount.userId == A_SESSION_ID_2 }
+            testScheduler.advanceUntilIdle()
+            navigateToSessionVerificationLambda.assertions().isCalledOnce().with(value(A_SESSION_ID_2))
+            // The session is verified, no new navigation
+            sessionVerificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
+            testScheduler.advanceUntilIdle()
+            navigateToSessionVerificationLambda.assertions().isCalledOnce()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - the initial session is not verified, no navigation to its verification`() = runTest {
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Share,
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                Result.success(
+                    FakeMatrixClient(
+                        sessionId = sessionId,
+                        sessionVerificationService = FakeSessionVerificationService(SessionVerifiedStatus.NotVerified),
+                    )
+                )
+            },
+        )
+        presenter.test {
+            // The default navigator fails if it is invoked
+            awaitLastSequentialItem()
+            testScheduler.advanceUntilIdle()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - forward mode, no navigation to the verification of the session`() = runTest {
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Forward,
+            initialSessionId = A_SESSION_ID_2,
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                Result.success(
+                    FakeMatrixClient(
+                        sessionId = sessionId,
+                        sessionVerificationService = FakeSessionVerificationService(SessionVerifiedStatus.NotVerified),
+                    )
+                )
+            },
+        )
+        presenter.test {
+            // The default navigator fails if it is invoked
+            awaitLastSequentialItem()
+            testScheduler.advanceUntilIdle()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - forward mode with several accounts does not show the account switch`() = runTest {
         val presenter = createRoomSelectPresenter(
             mode = RoomSelectMode.Forward,
@@ -425,10 +502,12 @@ internal fun TestScope.createRoomSelectPresenter(
     matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider { sessionId ->
         Result.success(FakeMatrixClient(sessionId = sessionId, roomListService = roomListService))
     },
+    navigator: RoomSelectNavigator = RoomSelectNavigator { lambdaError() },
 ) = RoomSelectPresenter(
     initialSessionId = initialSessionId,
     mode = mode,
     maxNumberOfRooms = maxNumberOfRooms,
+    navigator = navigator,
     dataSourceFactory = object : RoomSelectSearchDataSource.Factory {
         override fun create(coroutineScope: CoroutineScope, roomListService: RoomListService): RoomSelectSearchDataSource {
             return RoomSelectSearchDataSource(

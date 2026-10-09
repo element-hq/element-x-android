@@ -69,6 +69,10 @@ class ShareNode(
             override fun onCancel() {
                 callback.onCancel()
             }
+
+            override fun onSessionVerificationRequired(sessionId: SessionId) {
+                callback.onSessionVerificationRequired(sessionId)
+            }
         }
 
         return roomSelectEntryPoint.createNode(

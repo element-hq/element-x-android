@@ -72,6 +72,10 @@ class ForwardMessagesNode(
             override fun onCancel() {
                 callback.onDone(emptyList())
             }
+
+            override fun onSessionVerificationRequired(sessionId: SessionId) {
+                // Only called in Share mode
+            }
         }
 
         return roomSelectEntryPoint.createNode(
