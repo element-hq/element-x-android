@@ -32,8 +32,10 @@ import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTa
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
@@ -64,7 +66,10 @@ class ResetIdentityFlowNode(
         fun onDone()
     }
 
+    data class Inputs(val hasConfirmationOptions: Boolean) : NodeInputs
+
     private val callback: Callback = callback()
+    private val inputs: Inputs = inputs()
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -94,7 +99,7 @@ class ResetIdentityFlowNode(
                         sessionCoroutineScope.startReset()
                     }
                 }
-                createNode<ResetIdentityRootNode>(buildContext, listOf(callback))
+                createNode<ResetIdentityRootNode>(buildContext, listOf(callback, ResetIdentityRootNode.Inputs(inputs.hasConfirmationOptions)))
             }
             is NavTarget.ResetPassword -> {
                 val handle = resetIdentityFlowManager.currentHandleFlow.value.dataOrNull() as? IdentityPasswordResetHandle ?: error("No password handle found")

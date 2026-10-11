@@ -9,17 +9,26 @@
 package io.element.android.features.securebackup.impl.reset.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.logout.api.direct.aDirectLogoutState
 
 class ResetIdentityRootStatePreviewParam : PreviewParameterProvider<ResetIdentityRootState> {
     override val values: Sequence<ResetIdentityRootState>
         get() = sequenceOf(
-            ResetIdentityRootState(
-                displayConfirmationDialog = false,
-                eventSink = {}
-            ),
-            ResetIdentityRootState(
-                displayConfirmationDialog = true,
-                eventSink = {}
-            )
+            aResetIdentityRootState(),
+            aResetIdentityRootState(displayConfirmationDialog = true),
+            aResetIdentityRootState(variant = ResetIdentityRootVariant.NoOptionsWithEncryptedChats),
+            aResetIdentityRootState(variant = ResetIdentityRootVariant.NoOptionsWithoutEncryptedChats),
+            aResetIdentityRootState(variant = null),
         )
 }
+
+fun aResetIdentityRootState(
+    variant: ResetIdentityRootVariant? = ResetIdentityRootVariant.HasConfirmationOptions,
+    displayConfirmationDialog: Boolean = false,
+    eventSink: (ResetIdentityRootEvent) -> Unit = {},
+) = ResetIdentityRootState(
+    variant = variant,
+    displayConfirmationDialog = displayConfirmationDialog,
+    directLogoutState = aDirectLogoutState(),
+    eventSink = eventSink,
+)

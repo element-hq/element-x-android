@@ -46,7 +46,7 @@ fun ChooseSelfVerificationModeView(
     state: ChooseSelfVerificationModeState,
     onUseAnotherDevice: () -> Unit,
     onUseRecoveryKey: () -> Unit,
-    onResetKey: () -> Unit,
+    onResetKey: (hasConfirmationOptions: Boolean) -> Unit,
     onLearnMore: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -61,7 +61,7 @@ fun ChooseSelfVerificationModeView(
                 title = {},
                 actions = {
                     TextButton(
-                        text = stringResource(CommonStrings.action_signout),
+                        text = stringResource(CommonStrings.screen_identity_confirmation_sign_out),
                         onClick = { state.eventSink(ChooseSelfVerificationModeEvent.SignOut) }
                     )
                 }
@@ -108,7 +108,7 @@ private fun ChooseSelfVerificationModeButtons(
     state: ChooseSelfVerificationModeState,
     onUseAnotherDevice: () -> Unit,
     onUseRecoveryKey: () -> Unit,
-    onResetKey: () -> Unit,
+    onResetKey: (hasConfirmationOptions: Boolean) -> Unit,
 ) {
     ButtonColumnMolecule(
         modifier = Modifier.padding(bottom = 16.dp)
@@ -120,25 +120,34 @@ private fun ChooseSelfVerificationModeButtons(
                 LoadingButtonAtom()
             }
             is AsyncData.Success -> {
-                if (state.buttonsState.data.canUseAnotherDevice) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_identity_use_another_device),
-                        onClick = onUseAnotherDevice,
-                    )
-                }
-                if (state.buttonsState.data.canUseRecoveryKey) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_identity_confirmation_use_recovery_key),
-                        onClick = onUseRecoveryKey,
-                    )
-                }
-                OutlinedButton(
+                val buttonsState = state.buttonsState.data
+                Button(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
-                    onClick = onResetKey,
+                    text = stringResource(R.string.screen_identity_use_another_device),
+                    onClick = onUseAnotherDevice,
+                    enabled = buttonsState.canUseAnotherDevice,
                 )
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.screen_identity_confirmation_use_recovery_key),
+                    onClick = onUseRecoveryKey,
+                    enabled = buttonsState.canUseRecoveryKey,
+                )
+                val cannotConfirmText = stringResource(R.string.screen_identity_confirmation_cannot_confirm)
+                val onCannotConfirm = { onResetKey(buttonsState.hasConfirmationOptions) }
+                if (buttonsState.hasConfirmationOptions) {
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = cannotConfirmText,
+                        onClick = onCannotConfirm,
+                    )
+                } else {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = cannotConfirmText,
+                        onClick = onCannotConfirm,
+                    )
+                }
             }
         }
     }

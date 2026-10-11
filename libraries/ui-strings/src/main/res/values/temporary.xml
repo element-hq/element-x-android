@@ -11,4 +11,5 @@
     <string name="a11y_active">Active</string>
     <string name="a11y_inactive">Inactive</string>
     <string name="common_switch_account">Switch accounts</string>
+    <string name="screen_identity_confirmation_sign_out">Sign out</string>
 </resources>
