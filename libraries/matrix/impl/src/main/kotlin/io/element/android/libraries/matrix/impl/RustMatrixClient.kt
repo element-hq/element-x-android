@@ -143,6 +143,7 @@ import org.matrix.rustcomponents.sdk.TotalUnreadNotificationsListener
 import org.matrix.rustcomponents.sdk.UserProfile
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
+import uniffi.matrix_sdk_base.EncryptionState
 import java.io.File
 import java.util.Optional
 import java.util.concurrent.atomic.AtomicBoolean
@@ -155,7 +156,6 @@ import kotlin.time.toJavaDuration
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
-import uniffi.matrix_sdk_base.EncryptionState
 
 // Same value as AVATAR_THUMBNAIL_SIZE_IN_PIXEL in the matrixmedia module
 private const val AVATAR_THUMBNAIL_SIZE_IN_PIXEL = 240L
