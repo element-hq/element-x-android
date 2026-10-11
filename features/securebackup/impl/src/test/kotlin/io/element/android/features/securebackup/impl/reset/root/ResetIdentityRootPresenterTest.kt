@@ -129,7 +129,7 @@ class ResetIdentityRootPresenterTest {
         }.test {
             awaitItem().eventSink(ResetIdentityRootEvent.SignOut)
 
-            logoutEventRecorder.assertSingle(DirectLogoutEvent.Logout(ignoreSdkError = false))
+            logoutEventRecorder.assertSingle(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = true))
         }
     }
 

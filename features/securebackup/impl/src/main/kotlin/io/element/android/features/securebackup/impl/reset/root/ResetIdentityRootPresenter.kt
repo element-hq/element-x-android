@@ -54,7 +54,8 @@ class ResetIdentityRootPresenter(
             when (event) {
                 ResetIdentityRootEvent.Continue -> displayConfirmDialog = true
                 ResetIdentityRootEvent.DismissDialog -> displayConfirmDialog = false
-                ResetIdentityRootEvent.SignOut -> directLogoutState.eventSink(DirectLogoutEvent.Logout(ignoreSdkError = false))
+                // Resetting is the only option here, so there is nothing to lose by signing out.
+                ResetIdentityRootEvent.SignOut -> directLogoutState.eventSink(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = true))
             }
         }
 
