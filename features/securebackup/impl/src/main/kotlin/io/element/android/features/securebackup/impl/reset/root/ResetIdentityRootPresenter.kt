@@ -11,24 +11,57 @@ package io.element.android.features.securebackup.impl.reset.root
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.logout.api.direct.DirectLogoutEvent
+import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.MatrixClient
 
-class ResetIdentityRootPresenter : Presenter<ResetIdentityRootState> {
+@AssistedInject
+class ResetIdentityRootPresenter(
+    @Assisted private val hasConfirmationOptions: Boolean,
+    private val matrixClient: MatrixClient,
+    private val directLogoutPresenter: Presenter<DirectLogoutState>,
+) : Presenter<ResetIdentityRootState> {
+    @AssistedFactory
+    interface Factory {
+        fun create(hasConfirmationOptions: Boolean): ResetIdentityRootPresenter
+    }
+
     @Composable
     override fun present(): ResetIdentityRootState {
         var displayConfirmDialog by remember { mutableStateOf(false) }
+        val directLogoutState = directLogoutPresenter.present()
+
+        val variant by produceState<ResetIdentityRootVariant?>(
+            initialValue = ResetIdentityRootVariant.HasConfirmationOptions.takeIf { hasConfirmationOptions },
+        ) {
+            if (!hasConfirmationOptions) {
+                value = if (matrixClient.hasEncryptedRooms().getOrDefault(true)) {
+                    ResetIdentityRootVariant.NoOptionsWithEncryptedChats
+                } else {
+                    ResetIdentityRootVariant.NoOptionsWithoutEncryptedChats
+                }
+            }
+        }
 
         fun handleEvent(event: ResetIdentityRootEvent) {
-            displayConfirmDialog = when (event) {
-                ResetIdentityRootEvent.Continue -> true
-                ResetIdentityRootEvent.DismissDialog -> false
+            when (event) {
+                ResetIdentityRootEvent.Continue -> displayConfirmDialog = true
+                ResetIdentityRootEvent.DismissDialog -> displayConfirmDialog = false
+                ResetIdentityRootEvent.SignOut -> directLogoutState.eventSink(DirectLogoutEvent.Logout(ignoreSdkError = false))
             }
         }
 
         return ResetIdentityRootState(
+            variant = variant,
             displayConfirmationDialog = displayConfirmDialog,
+            directLogoutState = directLogoutState,
             eventSink = ::handleEvent,
         )
     }

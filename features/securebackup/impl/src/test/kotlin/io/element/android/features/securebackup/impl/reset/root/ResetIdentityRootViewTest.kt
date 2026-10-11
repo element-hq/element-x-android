@@ -13,6 +13,9 @@ package io.element.android.features.securebackup.impl.reset.root
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -31,7 +34,7 @@ class ResetIdentityRootViewTest : RobolectricTest() {
     fun `pressing the back HW button invokes the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce {
             setResetRootView(
-                ResetIdentityRootState(displayConfirmationDialog = false, eventSink = {}),
+                aResetIdentityRootState(),
                 onBack = it,
             )
             pressBackKey()
@@ -42,7 +45,7 @@ class ResetIdentityRootViewTest : RobolectricTest() {
     fun `clicking on the back navigation button invokes the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce {
             setResetRootView(
-                ResetIdentityRootState(displayConfirmationDialog = false, eventSink = {}),
+                aResetIdentityRootState(),
                 onBack = it,
             )
             pressBack()
@@ -54,7 +57,7 @@ class ResetIdentityRootViewTest : RobolectricTest() {
     fun `clicking Continue displays the confirmation dialog`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ResetIdentityRootEvent>()
         setResetRootView(
-            ResetIdentityRootState(displayConfirmationDialog = false, eventSink = eventsRecorder),
+            aResetIdentityRootState(eventSink = eventsRecorder),
         )
 
         clickOn(R.string.screen_encryption_reset_action_continue_reset)
@@ -66,7 +69,7 @@ class ResetIdentityRootViewTest : RobolectricTest() {
     fun `clicking 'Yes, reset now' confirms the reset`() = runAndroidComposeUiTest {
         ensureCalledOnce {
             setResetRootView(
-                ResetIdentityRootState(displayConfirmationDialog = true, eventSink = {}),
+                aResetIdentityRootState(displayConfirmationDialog = true),
                 onContinue = it,
             )
             clickOn(R.string.screen_reset_encryption_confirmation_alert_action)
@@ -77,11 +80,58 @@ class ResetIdentityRootViewTest : RobolectricTest() {
     fun `clicking Cancel dismisses the dialog`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ResetIdentityRootEvent>()
         setResetRootView(
-            ResetIdentityRootState(displayConfirmationDialog = true, eventSink = eventsRecorder),
+            aResetIdentityRootState(displayConfirmationDialog = true, eventSink = eventsRecorder),
         )
 
         clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(ResetIdentityRootEvent.DismissDialog)
+    }
+
+    @Test
+    @Config(qualifiers = "h720dp")
+    fun `without other options, clicking Continue resets without asking for confirmation`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<ResetIdentityRootEvent>(expectEvents = false)
+        ensureCalledOnce {
+            setResetRootView(
+                aResetIdentityRootState(variant = ResetIdentityRootVariant.NoOptionsWithEncryptedChats, eventSink = eventsRecorder),
+                onContinue = it,
+            )
+            clickOn(R.string.screen_encryption_reset_action_continue_reset)
+        }
+    }
+
+    @Test
+    @Config(qualifiers = "h720dp")
+    fun `without other options, clicking Sign out sends the event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<ResetIdentityRootEvent>()
+        setResetRootView(
+            aResetIdentityRootState(variant = ResetIdentityRootVariant.NoOptionsWithoutEncryptedChats, eventSink = eventsRecorder),
+        )
+
+        clickOn(CommonStrings.screen_identity_confirmation_sign_out)
+
+        eventsRecorder.assertSingle(ResetIdentityRootEvent.SignOut)
+    }
+
+    @Test
+    fun `without other options, the back navigation button is not displayed`() = runAndroidComposeUiTest {
+        setResetRootView(aResetIdentityRootState(variant = ResetIdentityRootVariant.NoOptionsWithEncryptedChats))
+
+        onNodeWithContentDescription(activity!!.getString(CommonStrings.action_back)).assertDoesNotExist()
+    }
+
+    @Test
+    fun `with other options, Sign out is not displayed`() = runAndroidComposeUiTest {
+        setResetRootView(aResetIdentityRootState())
+
+        onNodeWithText(activity!!.getString(CommonStrings.screen_identity_confirmation_sign_out)).assertDoesNotExist()
+    }
+
+    @Test
+    fun `while the variant is unknown, Continue is disabled`() = runAndroidComposeUiTest {
+        setResetRootView(aResetIdentityRootState(variant = null))
+
+        onNodeWithText(activity!!.getString(R.string.screen_encryption_reset_action_continue_reset)).assertIsNotEnabled()
     }
 }
 

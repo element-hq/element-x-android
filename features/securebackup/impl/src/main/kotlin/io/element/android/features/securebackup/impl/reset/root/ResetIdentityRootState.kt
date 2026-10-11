@@ -8,7 +8,12 @@
 
 package io.element.android.features.securebackup.impl.reset.root
 
+import io.element.android.features.logout.api.direct.DirectLogoutState
+
 data class ResetIdentityRootState(
+    /** The variant to display, or `null` while it is still being determined. */
+    val variant: ResetIdentityRootVariant?,
     val displayConfirmationDialog: Boolean,
+    val directLogoutState: DirectLogoutState,
     val eventSink: (ResetIdentityRootEvent) -> Unit,
 )

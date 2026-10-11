@@ -63,7 +63,7 @@ class FtueSessionVerificationFlowNode(
         data object EnterRecoveryKey : NavTarget
 
         @Parcelize
-        data object ResetIdentity : NavTarget
+        data class ResetIdentity(val hasConfirmationOptions: Boolean) : NavTarget
     }
 
     interface Callback : Plugin {
@@ -93,8 +93,8 @@ class FtueSessionVerificationFlowNode(
                         backstack.push(NavTarget.EnterRecoveryKey)
                     }
 
-                    override fun navigateToResetKey() {
-                        backstack.push(NavTarget.ResetIdentity)
+                    override fun navigateToResetKey(hasConfirmationOptions: Boolean) {
+                        backstack.push(NavTarget.ResetIdentity(hasConfirmationOptions))
                     }
 
                     override fun navigateToLearnMoreAboutEncryption() {
@@ -139,7 +139,7 @@ class FtueSessionVerificationFlowNode(
                 secureBackupEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
-                    params = SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.ResetIdentity),
+                    params = SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.ResetIdentity(navTarget.hasConfirmationOptions)),
                     callback = object : SecureBackupEntryPoint.Callback {
                         override fun onDone() {
                             callback.onDone()

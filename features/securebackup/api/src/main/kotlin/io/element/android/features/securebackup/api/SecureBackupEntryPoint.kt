@@ -27,8 +27,11 @@ interface SecureBackupEntryPoint : FeatureEntryPoint {
         @Parcelize
         data object EnterRecoveryKey : InitialTarget
 
+        /**
+         * @param hasConfirmationOptions whether the user could confirm their identity another way, using another device or a recovery key.
+         */
         @Parcelize
-        data object ResetIdentity : InitialTarget
+        data class ResetIdentity(val hasConfirmationOptions: Boolean = true) : InitialTarget
     }
 
     data class Params(val initialElement: InitialTarget) : NodeInputs
