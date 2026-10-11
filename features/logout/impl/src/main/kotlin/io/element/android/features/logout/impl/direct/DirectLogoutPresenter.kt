@@ -38,7 +38,7 @@ class DirectLogoutPresenter(
         fun handleEvent(event: DirectLogoutEvent) {
             when (event) {
                 is DirectLogoutEvent.Logout -> {
-                    if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
+                    if (logoutAction.value.isConfirming() || event.ignoreSdkError || event.skipConfirmation) {
                         localCoroutineScope.logout(logoutAction, event.ignoreSdkError)
                     } else {
                         logoutAction.value = AsyncAction.ConfirmingNoParams
