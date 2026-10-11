@@ -32,7 +32,7 @@ class ChooseSelfVerificationModeNode(
     interface Callback : Plugin {
         fun navigateToUseAnotherDevice()
         fun navigateToUseRecoveryKey()
-        fun navigateToResetKey()
+        fun navigateToResetKey(hasConfirmationOptions: Boolean)
         fun navigateToLearnMoreAboutEncryption()
     }
 

@@ -42,11 +42,11 @@ class SecureBackupFlowNode(
     private val secureBackupSetupEntryPoint: SecureBackupSetupEntryPoint,
 ) : BaseFlowNode<SecureBackupFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = when (plugins.filterIsInstance<SecureBackupEntryPoint.Params>().first().initialElement) {
+        initialElement = when (val initialElement = plugins.filterIsInstance<SecureBackupEntryPoint.Params>().first().initialElement) {
             SecureBackupEntryPoint.InitialTarget.Root -> NavTarget.Root
             SecureBackupEntryPoint.InitialTarget.SetUpRecovery -> NavTarget.Setup
             SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey -> NavTarget.EnterRecoveryKey
-            is SecureBackupEntryPoint.InitialTarget.ResetIdentity -> NavTarget.ResetIdentity
+            is SecureBackupEntryPoint.InitialTarget.ResetIdentity -> NavTarget.ResetIdentity(initialElement.hasConfirmationOptions)
         },
         savedStateMap = buildContext.savedStateMap,
     ),
@@ -70,7 +70,7 @@ class SecureBackupFlowNode(
         data object EnterRecoveryKey : NavTarget
 
         @Parcelize
-        data object ResetIdentity : NavTarget
+        data class ResetIdentity(val hasConfirmationOptions: Boolean) : NavTarget
     }
 
     private val callback: SecureBackupEntryPoint.Callback = callback()
@@ -132,7 +132,7 @@ class SecureBackupFlowNode(
                         callback.onDone()
                     }
                 }
-                createNode<ResetIdentityFlowNode>(buildContext, listOf(callback))
+                createNode<ResetIdentityFlowNode>(buildContext, listOf(callback, ResetIdentityFlowNode.Inputs(navTarget.hasConfirmationOptions)))
             }
         }
     }

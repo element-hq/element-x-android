@@ -21,5 +21,7 @@ data class ChooseSelfVerificationModeState(
     data class ButtonsState(
         val canUseAnotherDevice: Boolean,
         val canUseRecoveryKey: Boolean,
-    )
+    ) {
+        val hasConfirmationOptions = canUseAnotherDevice || canUseRecoveryKey
+    }
 }

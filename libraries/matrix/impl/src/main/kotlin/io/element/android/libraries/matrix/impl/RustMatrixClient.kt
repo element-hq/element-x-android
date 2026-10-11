@@ -155,6 +155,7 @@ import kotlin.time.toJavaDuration
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
+import uniffi.matrix_sdk_base.EncryptionState
 
 // Same value as AVATAR_THUMBNAIL_SIZE_IN_PIXEL in the matrixmedia module
 private const val AVATAR_THUMBNAIL_SIZE_IN_PIXEL = 240L
@@ -464,6 +465,14 @@ class RustMatrixClient(
                 .filter { it.membership() == Membership.JOINED }
                 .map { RoomId(it.id()) }
                 .toSet()
+        }
+    }
+
+    override suspend fun hasEncryptedRooms(): Result<Boolean> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.rooms().any { room ->
+                room.membership() == Membership.JOINED && !room.isSpace() && room.encryptionState() == EncryptionState.ENCRYPTED
+            }
         }
     }
 

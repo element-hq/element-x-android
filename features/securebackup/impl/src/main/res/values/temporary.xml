@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <string name="screen_encryption_reset_bullet_4">Any devices you’re signed in to will need to be reconfirmed</string>
+    <string name="screen_encryption_reset_no_chats_message">It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity</string>
+    <string name="screen_encryption_reset_no_options_subtitle">You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app.</string>
+    <string name="screen_encryption_reset_no_options_title">You need to reset your digital identity</string>
+    <string name="screen_encryption_reset_subtitle">If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app.</string>
+</resources>
