@@ -67,7 +67,8 @@ class ChooseSelfVerificationModePresenter(
 
         fun handleEvent(event: ChooseSelfVerificationModeEvent) {
             when (event) {
-                ChooseSelfVerificationModeEvent.SignOut -> directLogoutState.eventSink(DirectLogoutEvent.Logout(ignoreSdkError = false))
+                ChooseSelfVerificationModeEvent.SignOut -> // Nothing can be lost before the identity is confirmed, so there is no need to ask for confirmation.
+                directLogoutState.eventSink(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = true))
             }
         }
 
