@@ -10,6 +10,8 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasClickAction
@@ -19,6 +21,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID_2
@@ -38,6 +42,17 @@ import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 
 class PreferencesRootViewTest : RobolectricTest() {
+    @Test
+    fun `supplementary settings row is rendered and clickable`() = runAndroidComposeUiTest {
+        ensureCalledOnce { onClick ->
+            setView(
+                state = aPreferencesRootState(),
+                supplementarySettings = { ListItem(content = { Text("Extra settings") }, onClick = onClick) },
+            )
+            onNodeWithText("Extra settings").performScrollTo().performClick()
+        }
+    }
+
     @Test
     fun `clicking on back invokes back callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
@@ -411,11 +426,13 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
     onOpenNotificationSettings: () -> Unit = EnsureNeverCalled(),
     onSignOutClick: () -> Unit = EnsureNeverCalled(),
     onDeactivateClick: () -> Unit = EnsureNeverCalled(),
+    supplementarySettings: @Composable ColumnScope.() -> Unit = {},
 ) {
     setContent {
         PreferencesRootView(
             state = state,
             emojiPickerRenderer = NoOpEmojiPickerRenderer,
+            supplementarySettings = supplementarySettings,
             onBackClick = onBackClick,
             onAddAccountClick = onAddAccountClick,
             onOpenAnalytics = onOpenAnalytics,

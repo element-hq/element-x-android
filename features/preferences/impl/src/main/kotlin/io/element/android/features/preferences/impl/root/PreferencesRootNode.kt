@@ -19,6 +19,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.preferences.api.PreferencesExtension
 import io.element.android.features.preferences.impl.account.PreferencesAccountCallback
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.callback
@@ -31,6 +32,7 @@ class PreferencesRootNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: PreferencesRootPresenter,
+    private val preferencesExtension: PreferencesExtension,
     private val emojiPickerRenderer: EmojiPickerRenderer,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : PreferencesAccountCallback, Plugin {
@@ -41,6 +43,7 @@ class PreferencesRootNode(
         fun navigateToLockScreenSettings()
         fun navigateToMediaSettings()
         fun navigateToLocationSettings()
+        fun navigateToSupplementarySettings(route: String)
         fun navigateToLabs()
     }
 
@@ -69,6 +72,9 @@ class PreferencesRootNode(
         PreferencesRootView(
             state = state,
             emojiPickerRenderer = emojiPickerRenderer,
+            supplementarySettings = {
+                with(preferencesExtension) { Render(callback::navigateToSupplementarySettings, Modifier) }
+            },
             modifier = modifier,
             onBackClick = this::navigateUp,
             onAddAccountClick = callback::navigateToAddAccount,

@@ -41,6 +41,7 @@ class DefaultPreferencesEntryPointTest {
             PreferencesFlowNode(
                 buildContext = buildContext,
                 plugins = plugins,
+                preferencesExtension = NoopPreferencesExtension(),
                 lockScreenEntryPoint = FakeLockScreenEntryPoint(),
                 notificationTroubleShootEntryPoint = FakeNotificationTroubleShootEntryPoint(),
                 pushHistoryEntryPoint = FakePushHistoryEntryPoint(),
