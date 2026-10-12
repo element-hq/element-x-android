@@ -33,7 +33,7 @@ class RoomSelectNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: RoomSelectPresenter.Factory,
-) : Node(buildContext, plugins = plugins) {
+) : Node(buildContext, plugins = plugins), RoomSelectNavigator {
     data class Inputs(
         val sessionId: SessionId,
         val mode: RoomSelectMode,
@@ -41,13 +41,18 @@ class RoomSelectNode(
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
+    private val callback: RoomSelectEntryPoint.Callback = callback()
     private val presenter = presenterFactory.create(
         initialSessionId = inputs.sessionId,
         mode = inputs.mode,
         maxNumberOfRooms = inputs.maxNumberOfRooms,
+        navigator = this,
     )
     private val stateFlow = launchMolecule { presenter.present() }
-    private val callback: RoomSelectEntryPoint.Callback = callback()
+
+    override fun navigateToSessionVerification(sessionId: SessionId) {
+        callback.onSessionVerificationRequired(sessionId)
+    }
 
     @Composable
     override fun View(modifier: Modifier) {

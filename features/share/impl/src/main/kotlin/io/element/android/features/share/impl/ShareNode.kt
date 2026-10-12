@@ -18,6 +18,7 @@ import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
@@ -26,21 +27,19 @@ import io.element.android.features.share.api.ShareIntentData
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.parcelize.Parcelize
 
-@ContributesNode(SessionScope::class)
+@ContributesNode(AppScope::class)
 @AssistedInject
 class ShareNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: SharePresenter.Factory,
     private val roomSelectEntryPoint: RoomSelectEntryPoint,
-    private val sessionId: SessionId,
 ) : ParentNode<ShareNode.NavTarget>(
     navModel = PermanentNavModel(
         navTargets = setOf(NavTarget),
@@ -52,10 +51,13 @@ class ShareNode(
     @Parcelize
     object NavTarget : Parcelable
 
-    data class Inputs(val shareIntentData: ShareIntentData) : NodeInputs
+    data class Inputs(
+        val sessionId: SessionId,
+        val shareIntentData: ShareIntentData,
+    ) : NodeInputs
 
     private val inputs = inputs<Inputs>()
-    private val presenter = presenterFactory.create(inputs.shareIntentData, sessionId)
+    private val presenter = presenterFactory.create(inputs.shareIntentData)
     private val callback: ShareEntryPoint.Callback = callback()
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -65,7 +67,11 @@ class ShareNode(
             }
 
             override fun onCancel() {
-                callback.onDone(sessionId, emptyList())
+                callback.onCancel()
+            }
+
+            override fun onSessionVerificationRequired(sessionId: SessionId) {
+                callback.onSessionVerificationRequired(sessionId)
             }
         }
 
@@ -73,7 +79,7 @@ class ShareNode(
             parentNode = this,
             buildContext = buildContext,
             params = RoomSelectEntryPoint.Params(
-                sessionId = sessionId,
+                sessionId = inputs.sessionId,
                 mode = RoomSelectMode.Share,
                 maxNumberOfRooms = RoomSelectEntryPoint.DEFAULT_MAX_NUMBER_OF_ROOMS,
             ),
@@ -92,7 +98,7 @@ class ShareNode(
             val state = presenter.present()
             ShareView(
                 state = state,
-                onShareSuccess = { roomIds -> callback.onDone(state.sessionId, roomIds) },
+                onShareSuccess = { result -> callback.onDone(result.sessionId, result.roomIds) },
             )
         }
     }

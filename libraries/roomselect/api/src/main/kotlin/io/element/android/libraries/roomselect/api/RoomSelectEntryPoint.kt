@@ -41,6 +41,13 @@ interface RoomSelectEntryPoint : FeatureEntryPoint {
          */
         fun onRoomSelected(sessionId: SessionId, roomIds: List<RoomId>)
         fun onCancel()
+
+        /**
+         * Called in [RoomSelectMode.Share] mode when the user has selected an account whose session is not verified.
+         * The session has to be verified before the user can share content with it.
+         * @param sessionId the session to verify.
+         */
+        fun onSessionVerificationRequired(sessionId: SessionId)
     }
 
     companion object {
