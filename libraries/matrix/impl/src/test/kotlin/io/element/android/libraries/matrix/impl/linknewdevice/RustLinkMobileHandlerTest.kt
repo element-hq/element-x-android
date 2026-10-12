@@ -22,8 +22,8 @@ import io.element.android.tests.testutils.ExpectedResult
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.match
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
