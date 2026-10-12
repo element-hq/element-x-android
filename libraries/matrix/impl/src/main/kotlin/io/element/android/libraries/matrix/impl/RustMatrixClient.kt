@@ -519,12 +519,14 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun getUserProfile(): Result<MatrixUser> = getProfile(sessionId)
-        .onSuccess { matrixUser ->
-            // Also update our session storage
-            _userProfile.emit(matrixUser)
-            storeUserProfile(matrixUser)
-        }
+    override suspend fun getUserProfile(): Result<MatrixUser> = withContext(sessionDispatcher) {
+        getProfile(sessionId)
+            .onSuccess { matrixUser ->
+                // Also update our session storage
+                _userProfile.emit(matrixUser)
+                storeUserProfile(matrixUser)
+            }
+    }
 
     /**
      * Store the user profile in the session storage, including a base64 encoded thumbnail of the avatar,

@@ -40,10 +40,7 @@ class PreferencesAccountPresenter(
     @Composable
     override fun present(): PreferencesAccountState {
         val matrixUser = matrixClient.userProfile.collectAsState()
-        LaunchedEffect(Unit) {
-            // Force a refresh of the profile
-            matrixClient.getUserProfile()
-        }
+        // Note: no need to force a refresh of the profile here, PreferencesRootPresenter, which embeds this presenter, already does it.
         val showLinkNewDevice by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.QrCodeLogin)
         }.collectAsState(initial = false)
