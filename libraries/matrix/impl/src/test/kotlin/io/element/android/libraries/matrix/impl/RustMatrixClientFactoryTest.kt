@@ -33,7 +33,9 @@ import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Client
@@ -41,6 +43,7 @@ import org.matrix.rustcomponents.sdk.ClientDelegate
 import java.io.File
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class RustMatrixClientFactoryTest {
     @Test
     fun test() = runTest {
@@ -51,6 +54,7 @@ class RustMatrixClientFactoryTest {
         val result = sut.create(aSessionData())
 
         assertThat(result.sessionId).isEqualTo(SessionId("@alice:server.org"))
+        runCurrent()
         // 2 workers are scheduled: one for the search backfill and one for the vacuum
         scheduleWorkersLambda.assertions().isCalledExactly(2)
         result.destroy()
