@@ -307,6 +307,7 @@
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Триває груповий виклик"</string>
+  <string name="common_header_rooms">"Кімнати"</string>
   <string name="common_image">"Зображення"</string>
   <string name="common_in_reply_to">"У відповідь на %1$s"</string>
   <string name="common_install_apk_android">"Встановити APK"</string>
@@ -343,6 +344,7 @@
   <string name="common_name">"Назва"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Немає результатів"</string>
+  <string name="common_no_results_for">"Не знайдено результатів за запитом «%1$s». Спробуйте ввести інший пошуковий термін."</string>
   <string name="common_no_room_name">"Немає назви кімнати"</string>
   <string name="common_no_space_name">"Без назви простору"</string>
   <string name="common_not_encrypted">"Не зашифровано"</string>
@@ -390,6 +392,7 @@
   <string name="common_replying_to">"Відповідь %1$s"</string>
   <string name="common_report_a_problem">"Повідомити про проблему"</string>
   <string name="common_report_submitted">"Звіт подано"</string>
+  <string name="common_results_for">"Результати для запиту «%1$s»"</string>
   <string name="common_rich_text_editor">"Багатоформатний текстовий редактор"</string>
   <string name="common_role">"Роль"</string>
   <string name="common_room">"Кімната"</string>
@@ -570,6 +573,14 @@
     <item quantity="many">"%1$d Закріплених повідомлення"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Закріплені повідомлення"</string>
+  <string name="screen_ptt_settings_battery_optimization">"Ігнорувати оптимізацію заряду акумулятора"</string>
+  <string name="screen_ptt_settings_battery_optimization_description">"Залишати активним у фоновому режимі"</string>
+  <string name="screen_ptt_settings_covert_mode">"Прихований режим"</string>
+  <string name="screen_ptt_settings_covert_mode_description">"Вимкнути звук усіх каналів"</string>
+  <string name="screen_ptt_settings_lock_screen">"Показувати на екрані блокування"</string>
+  <string name="screen_ptt_settings_lock_screen_description">"Доступ з екрана блокування"</string>
+  <string name="screen_ptt_settings_system_overlay">"Увімкнути системне накладання"</string>
+  <string name="screen_ptt_settings_system_overlay_description">"Доступ до рухомої кнопки дій"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Ви збираєтеся перейти до свого облікового запису %1$s, щоб скинути свою цифрову ідентичність. Після цього ви повернетеся до застосунку."</string>
   <string name="screen_reset_identity_confirmation_title">"Не можете підтвердити? Перейдіть до свого облікового запису, щоб скинути цифрову ідентичність."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Відкликати верифікацію та відправити"</string>

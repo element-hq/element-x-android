@@ -47,6 +47,10 @@
   <string name="screen_room_attachment_source_location">"Partager votre position"</string>
   <string name="screen_room_attachment_source_poll">"Sondage"</string>
   <string name="screen_room_attachment_text_formatting">"Formatage du texte"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Raison (facultatif)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Saisissez la raison…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Facultatif)"</string>
+  <string name="screen_room_confirm_removal_title">"Supprimer le message ?"</string>
   <string name="screen_room_encrypted_history_banner">"L’historique des messages n’est actuellement pas disponible dans ce salon"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"L’historique de la discussion n’est pas disponible. Vérifiez cette session pour accéder à l’historique."</string>
   <string name="screen_room_invite_again_alert_message">"Souhaitez-vous inviter l’ancien membre à revenir ?"</string>

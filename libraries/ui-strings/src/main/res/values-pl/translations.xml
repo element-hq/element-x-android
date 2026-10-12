@@ -241,7 +241,7 @@
   <string name="common_android_shortcuts_remove_reason_left_room">"Opuściłeś pokój"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Zostałeś wylogowany z sesji"</string>
   <string name="common_app_settings">"Ustawienia aplikacji"</string>
-  <string name="common_appearance">"Wygląd"</string>
+  <string name="common_appearance">"Motyw"</string>
   <string name="common_audio">"Dźwięk"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Zablokowani użytkownicy"</string>
@@ -344,6 +344,7 @@ Powód: %1$s."</string>
   <string name="common_name">"Nazwa"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Brak wyników"</string>
+  <string name="common_no_results_for">"Nie znaleziono wyników dla “%1$s”. Prosimy o wpisanie nowego terminu."</string>
   <string name="common_no_room_name">"Brak nazwy pokoju"</string>
   <string name="common_no_space_name">"Brak nazwy przestrzeni"</string>
   <string name="common_not_encrypted">"Nieszyfrowane"</string>
@@ -391,6 +392,7 @@ Powód: %1$s."</string>
   <string name="common_replying_to">"Odpowiadanie do %1$s"</string>
   <string name="common_report_a_problem">"Zgłoś problem"</string>
   <string name="common_report_submitted">"Zgłoszenie wysłane"</string>
+  <string name="common_results_for">"Wyniki dla “%1$s”"</string>
   <string name="common_rich_text_editor">"Bogaty edytor tekstu"</string>
   <string name="common_role">"Rola"</string>
   <string name="common_room">"Pokój"</string>
@@ -571,6 +573,14 @@ Czy na pewno chcesz kontynuować?"</string>
     <item quantity="many">"%1$d przypiętych wiadomości"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Przypięte wiadomości"</string>
+  <string name="screen_ptt_settings_battery_optimization">"Ignoruj ​​optymalizację baterii"</string>
+  <string name="screen_ptt_settings_battery_optimization_description">"Pozostań aktywny w tle"</string>
+  <string name="screen_ptt_settings_covert_mode">"Tryb ukryty"</string>
+  <string name="screen_ptt_settings_covert_mode_description">"Wycisz wszystkie kanały"</string>
+  <string name="screen_ptt_settings_lock_screen">"Pokaż na ekranie blokady"</string>
+  <string name="screen_ptt_settings_lock_screen_description">"Dostęp z ekranu blokady"</string>
+  <string name="screen_ptt_settings_system_overlay">"Włącz nakładkę systemową"</string>
+  <string name="screen_ptt_settings_system_overlay_description">"Uzyskaj dostęp do pływającego przycisku akcji"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Zostaniesz przeniesiony na swoje konto %1$s, aby zresetować tożsamość. Wrócisz do aplikacji po zakończeniu."</string>
   <string name="screen_reset_identity_confirmation_title">"Nie możesz potwierdzić? Przejdź do swojego konta i zresetuj swoją tożsamość."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Wycofaj weryfikację i wyślij"</string>

@@ -24,4 +24,5 @@
     <item quantity="other">"%1$d asmenų"</item>
   </plurals>
   <string name="screen_room_member_list_room_members_header_title">"Kambario nariai"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Šiuo metu erdvės nepalaikomi."</string>
 </resources>

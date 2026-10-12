@@ -24,6 +24,9 @@
   <string name="screen_invites_invited_you">"%1$s（%2$s）邀请了你"</string>
   <string name="screen_migration_message">"此为一次性流程，感谢等待。"</string>
   <string name="screen_migration_title">"设置账户。"</string>
+  <string name="screen_multi_account_announcement_action">"添加账户"</string>
+  <string name="screen_multi_account_announcement_description">"转到 %1$s 以登录另一账户。之后你可以轻松地在它们之间切换。"</string>
+  <string name="screen_multi_account_announcement_title">"你现在可以添加多个账户"</string>
   <string name="screen_roomlist_a11y_create_message">"创建新的对话或房间"</string>
   <string name="screen_roomlist_clear_filters">"清除筛选条件"</string>
   <string name="screen_roomlist_empty_message">"通过向某人发送消息来开始。"</string>

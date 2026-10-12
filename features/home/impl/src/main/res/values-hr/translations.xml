@@ -24,6 +24,9 @@
   <string name="screen_invites_invited_you">"Pozvao vas je korisnik %1$s (%2$s)"</string>
   <string name="screen_migration_message">"Ovaj se postupak izvodi samo jednom, hvala na čekanju."</string>
   <string name="screen_migration_title">"Postavljanje vašeg računa."</string>
+  <string name="screen_multi_account_announcement_action">"Dodaj još jedan račun"</string>
+  <string name="screen_multi_account_announcement_description">"Idite na %1$s da biste se prijavili na drugi račun. Zatim možete jednostavno prelaziti između njih."</string>
+  <string name="screen_multi_account_announcement_title">"Sada možete dodati više računa"</string>
   <string name="screen_roomlist_a11y_create_message">"Stvori novi razgovor ili sobu"</string>
   <string name="screen_roomlist_clear_filters">"Ukloni filtre"</string>
   <string name="screen_roomlist_empty_message">"Započnite tako da nekome pošaljete poruku."</string>

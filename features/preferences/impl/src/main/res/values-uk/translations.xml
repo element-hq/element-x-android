@@ -111,6 +111,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системні налаштування"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системні сповіщення вимкнені"</string>
   <string name="screen_notification_settings_title">"Сповіщення"</string>
+  <string name="screen_settings_add_account">"Додати обліковий запис"</string>
   <string name="screen_settings_user_status_away">"Не на місці"</string>
   <string name="screen_settings_user_status_be_right_back">"Зараз повернуся"</string>
   <string name="screen_settings_user_status_custom">"Власний…"</string>

@@ -98,6 +98,7 @@
   <string name="action_choose_file">"Fájl kiválasztása"</string>
   <string name="action_choose_photo">"Fénykép kiválasztása"</string>
   <string name="action_clear">"Törlés"</string>
+  <string name="action_clear_all">"Összes törlése"</string>
   <string name="action_close">"Bezárás"</string>
   <string name="action_complete_verification">"Ellenőrzés befejezése"</string>
   <string name="action_confirm">"Megerősítés"</string>
@@ -108,6 +109,7 @@
   <string name="action_copy_link">"Hivatkozás másolása"</string>
   <string name="action_copy_link_to_message">"Üzenethivatkozás másolása"</string>
   <string name="action_copy_text">"Szöveg másolása"</string>
+  <string name="action_copy_to_clipboard">"Másolás a vágólapra"</string>
   <string name="action_create">"Létrehozás"</string>
   <string name="action_create_room">"Szoba létrehozása"</string>
   <string name="action_create_space">"Tér létrehozása"</string>
@@ -135,6 +137,10 @@
   <string name="action_finish">"Befejezés"</string>
   <string name="action_forgot_password">"Elfelejtette a jelszót?"</string>
   <string name="action_forward">"Tovább"</string>
+  <plurals name="action_forward_messages">
+    <item quantity="one">"%1$d üzenet továbbítása"</item>
+    <item quantity="other">"%1$d üzenet továbbítása"</item>
+  </plurals>
   <string name="action_go_back">"Visszalépés"</string>
   <string name="action_go_to_roles_and_permissions">"Ugrás a szerepkörökre és jogosultságokra"</string>
   <string name="action_go_to_settings">"Ugrás a beállításokhoz"</string>
@@ -221,6 +227,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Frissítés érhető el"</string>
   <string name="common_about">"Névjegy"</string>
   <string name="common_acceptable_use_policy">"Elfogadható használatra vonatkozó szabályzat"</string>
+  <string name="common_account_settings">"Fiókbeállítások"</string>
   <string name="common_add_account">"Fiók hozzáadása"</string>
   <string name="common_add_another_account">"Másik fiók hozzáadása"</string>
   <string name="common_adding_caption">"Felirat hozzáadása"</string>
@@ -229,6 +236,7 @@
   <string name="common_analytics">"Elemzések"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Elhagyta a szobát"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Ki lett jelentkeztetve a munkamenetből"</string>
+  <string name="common_app_settings">"Alkalmazásbeállítások"</string>
   <string name="common_appearance">"Megjelenítés"</string>
   <string name="common_audio">"Hang"</string>
   <string name="common_beta">"Béta"</string>
@@ -239,6 +247,8 @@
   <string name="common_call_started">"A hívás elindult"</string>
   <string name="common_call_you_declined">"Elutasított egy hívást"</string>
   <string name="common_chat_backup">"Csevegés biztonsági mentése"</string>
+  <string name="common_chats">"Csevegések"</string>
+  <string name="common_code_block">"Kódblokk"</string>
   <string name="common_copied_to_clipboard">"A vágólapra másolva"</string>
   <string name="common_copyright">"Szerzői jogok"</string>
   <string name="common_creating_room">"Szoba létrehozása…"</string>
@@ -278,6 +288,7 @@ Ok: %1$s."</string>
   <string name="common_file_saved">"A fájl mentve"</string>
   <string name="common_file_saved_on_disk_android">"A fájl a Letöltések mappába mentve"</string>
   <string name="common_forward_message">"Üzenet továbbítása"</string>
+  <string name="common_forward_to">"Továbbítás:"</string>
   <string name="common_frequently_used">"Gyakran használt"</string>
   <string name="common_gallery">"Galéria"</string>
   <plurals name="common_gallery_reply_attachments">
@@ -290,6 +301,7 @@ Ok: %1$s."</string>
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Csoportos hívás folyamatban"</string>
+  <string name="common_header_rooms">"Szobák"</string>
   <string name="common_image">"Kép"</string>
   <string name="common_in_reply_to">"Válasz erre: %1$s"</string>
   <string name="common_install_apk_android">"APK telepítése"</string>
@@ -303,10 +315,12 @@ Ok: %1$s."</string>
   <string name="common_live_location_ended">"Élő pozíciómegosztás befejezve"</string>
   <string name="common_loading">"Betöltés…"</string>
   <string name="common_loading_more">"Továbbiak betöltése…"</string>
+  <string name="common_location_sharing">"Tartózkodási hely megosztása"</string>
   <plurals name="common_many_members">
     <item quantity="one">"%d további felhasználó"</item>
     <item quantity="other">"%d további felhasználó"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Médiafeltöltés minősége"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d tag"</item>
     <item quantity="other">"%1$d tag"</item>
@@ -316,11 +330,13 @@ Ok: %1$s."</string>
   <string name="common_message_failed_to_send">"Az üzenet elküldése sikertelen"</string>
   <string name="common_message_layout">"Üzenet elrendezése"</string>
   <string name="common_message_removed">"Üzenet eltávolítva"</string>
+  <string name="common_moderation_and_safety">"Moderálás és biztonság"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Némítás"</string>
   <string name="common_name">"Név"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nincs találat"</string>
+  <string name="common_no_results_for">"Nincsenek találatok erre a kifejezésre: „%1$s” . Próbáljon ki egy új keresési kifejezést."</string>
   <string name="common_no_room_name">"Nincs szobanév"</string>
   <string name="common_no_space_name">"Nincs térnév"</string>
   <string name="common_not_encrypted">"Nincs titkosítva"</string>
@@ -365,6 +381,7 @@ Ok: %1$s."</string>
   <string name="common_replying_to">"Válasz %1$s számára"</string>
   <string name="common_report_a_problem">"Probléma jelentése"</string>
   <string name="common_report_submitted">"A jelentés elküldve"</string>
+  <string name="common_results_for">"Eredmények a következőre: „%1$s”"</string>
   <string name="common_rich_text_editor">"Formázott szöveges szerkesztő"</string>
   <string name="common_role">"Szerepkör"</string>
   <string name="common_room">"Szoba"</string>
@@ -400,6 +417,7 @@ Ok: %1$s."</string>
   <string name="common_shared_live_location">"Megosztott élő helymeghatározás"</string>
   <string name="common_shared_location">"Megosztott tartózkodási hely"</string>
   <string name="common_shared_space">"Megosztott tér"</string>
+  <string name="common_signed_in">"Bejelentkezve"</string>
   <string name="common_signing_out">"Eszköz eltávolítása"</string>
   <string name="common_something_went_wrong">"Valamilyen hiba történt"</string>
   <string name="common_something_went_wrong_message">"Problémába ütköztünk. Próbálja újra."</string>
@@ -455,6 +473,7 @@ Ok: %1$s."</string>
   <string name="common_waiting_live_location">"Várakozás az élő helymeghatározásra…"</string>
   <string name="common_world_readable_history">"Bárki láthatja az előzményeket"</string>
   <string name="common_you">"Ön"</string>
+  <string name="common_your_account">"Saját fiók"</string>
   <string name="content_scanner_not_found">"A letöltés nem érhető el."</string>
   <string name="content_scanner_not_found_title">"A fájl nem található"</string>
   <string name="content_scanner_scanning">"Keresés…"</string>
@@ -538,6 +557,14 @@ Biztos, hogy folytatja?"</string>
     <item quantity="other">"%1$d kitűzött üzenet"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Kitűzött üzenetek"</string>
+  <string name="screen_ptt_settings_battery_optimization">"Az akkumulátoroptimalizálás figyelmen kívül hagyása"</string>
+  <string name="screen_ptt_settings_battery_optimization_description">"Háttérben is aktív marad"</string>
+  <string name="screen_ptt_settings_covert_mode">"Rejtett mód"</string>
+  <string name="screen_ptt_settings_covert_mode_description">"Az összes csatorna némítása"</string>
+  <string name="screen_ptt_settings_lock_screen">"Megjelenítés a zárolási képernyőn"</string>
+  <string name="screen_ptt_settings_lock_screen_description">"Hozzáférés a zárolási képernyőről"</string>
+  <string name="screen_ptt_settings_system_overlay">"Rendszer-overlay engedélyezése"</string>
+  <string name="screen_ptt_settings_system_overlay_description">"Lebegő műveletgomb elérése"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Arra készül, hogy belépjen a(z) %1$s fiókjába, hogy alaphelyzetbe állítsa a digitális személyazonosságát. Ezután vissza fog térni az alkalmazásba."</string>
   <string name="screen_reset_identity_confirmation_title">"Nem tudja megerősíteni? Ugorjon a fiókjához, és állítsa alaphelyzetbe a digitális személyazonosságát."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ellenőrzés visszavonása és elküldés"</string>
@@ -556,6 +583,10 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_room_grouped_state_events_reduce">"Csökkentés"</string>
   <string name="screen_room_live_location_banner">"Élő helymegosztás"</string>
   <string name="screen_room_maximum_messages_selected">"Maximális üzenet kiválasztva"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"%1$d üzenet továbbítva"</item>
+    <item quantity="other">"%1$d üzenet továbbítva"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"Már ezt a szobát nézi!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s. / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s kitűzött üzenet"</string>

@@ -24,6 +24,9 @@
   <string name="screen_invites_invited_you">"%1$s (%2$s) zaprosił Cię"</string>
   <string name="screen_migration_message">"Jest to jednorazowy proces, dziękujemy za czekanie."</string>
   <string name="screen_migration_title">"Konfigurowanie Twojego konta."</string>
+  <string name="screen_multi_account_announcement_action">"Dodaj konto"</string>
+  <string name="screen_multi_account_announcement_description">"Przejdź do %1$s, aby zalogować się na kolejne konto i łatwo się między nimi przełączać."</string>
+  <string name="screen_multi_account_announcement_title">"Możesz teraz dodawać wiele kont"</string>
   <string name="screen_roomlist_a11y_create_message">"Utwórz nową rozmowę lub pokój"</string>
   <string name="screen_roomlist_clear_filters">"Wyczyść filtry"</string>
   <string name="screen_roomlist_empty_message">"Wyślij komuś wiadomość, aby rozpocząć."</string>

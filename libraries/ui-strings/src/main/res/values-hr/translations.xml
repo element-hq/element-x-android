@@ -99,6 +99,7 @@
   <string name="action_choose_file">"Odaberite datoteku"</string>
   <string name="action_choose_photo">"Odaberi fotografiju"</string>
   <string name="action_clear">"Očisti"</string>
+  <string name="action_clear_all">"Očisti sve"</string>
   <string name="action_close">"Zatvori"</string>
   <string name="action_complete_verification">"Dovrši provjeru"</string>
   <string name="action_confirm">"Potvrdi"</string>
@@ -109,6 +110,7 @@
   <string name="action_copy_link">"Kopiraj poveznicu"</string>
   <string name="action_copy_link_to_message">"Kopiraj poveznicu u poruku"</string>
   <string name="action_copy_text">"Kopiraj tekst"</string>
+  <string name="action_copy_to_clipboard">"Kopiraj u međuspremnik"</string>
   <string name="action_create">"Stvori"</string>
   <string name="action_create_room">"Napravi sobu"</string>
   <string name="action_create_space">"Stvori prostor"</string>
@@ -136,6 +138,10 @@
   <string name="action_finish">"Završi"</string>
   <string name="action_forgot_password">"Zaboravili ste zaporku?"</string>
   <string name="action_forward">"Proslijedi"</string>
+  <plurals name="action_forward_messages">
+    <item quantity="one">"Proslijedi poruku %1$d"</item>
+    <item quantity="other">"Prosljeđivanje poruka %1$d"</item>
+  </plurals>
   <string name="action_go_back">"Idi natrag"</string>
   <string name="action_go_to_roles_and_permissions">"Idi na uloge i dopuštenja"</string>
   <string name="action_go_to_settings">"Idi na postavke"</string>
@@ -222,6 +228,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Dostupna je nadogradnja"</string>
   <string name="common_about">"O aplikaciji"</string>
   <string name="common_acceptable_use_policy">"Pravilnik o prihvatljivoj upotrebi"</string>
+  <string name="common_account_settings">"Postavke računa"</string>
   <string name="common_add_account">"Dodaj račun"</string>
   <string name="common_add_another_account">"Dodaj još jedan račun"</string>
   <string name="common_adding_caption">"Dodavanje opisa"</string>
@@ -230,6 +237,7 @@
   <string name="common_analytics">"Analitika"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Napustili ste sobu"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Odjavljeni ste iz sesije"</string>
+  <string name="common_app_settings">"Postavke aplikacije"</string>
   <string name="common_appearance">"Izgled"</string>
   <string name="common_audio">"Audiozapis"</string>
   <string name="common_beta">"Beta"</string>
@@ -240,6 +248,8 @@
   <string name="common_call_started">"Poziv je započeo"</string>
   <string name="common_call_you_declined">"Odbili ste poziv"</string>
   <string name="common_chat_backup">"Sigurnosna kopija razgovora"</string>
+  <string name="common_chats">"Razgovori"</string>
+  <string name="common_code_block">"Blok koda"</string>
   <string name="common_copied_to_clipboard">"Kopirano u međuspremnik"</string>
   <string name="common_copyright">"Autorsko pravo"</string>
   <string name="common_creating_room">"Stvaranje sobe…"</string>
@@ -279,6 +289,7 @@ Razlog: %1$s ."</string>
   <string name="common_file_saved">"Datoteka je spremljena"</string>
   <string name="common_file_saved_on_disk_android">"Datoteka je spremljena u preuzimanja"</string>
   <string name="common_forward_message">"Proslijedi poruku"</string>
+  <string name="common_forward_to">"Proslijedi na"</string>
   <string name="common_frequently_used">"Često korišteno"</string>
   <string name="common_gallery">"Galerija"</string>
   <plurals name="common_gallery_reply_attachments">
@@ -291,6 +302,7 @@ Razlog: %1$s ."</string>
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Grupni poziv u tijeku"</string>
+  <string name="common_header_rooms">"Sobe"</string>
   <string name="common_image">"Slika"</string>
   <string name="common_in_reply_to">"Kao odgovor osobi %1$s"</string>
   <string name="common_install_apk_android">"Instaliraj APK"</string>
@@ -304,11 +316,13 @@ Razlog: %1$s ."</string>
   <string name="common_live_location_ended">"Prikaz lokacije uživo je završio"</string>
   <string name="common_loading">"Učitavanje…"</string>
   <string name="common_loading_more">"Učitava se još…"</string>
+  <string name="common_location_sharing">"Dijeljenje lokacije"</string>
   <plurals name="common_many_members">
     <item quantity="one">"još %d"</item>
     <item quantity="few">"još %d"</item>
     <item quantity="other">"još %d"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Kvaliteta prijenosa medija"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d član"</item>
     <item quantity="few">"%1$d člana"</item>
@@ -319,11 +333,13 @@ Razlog: %1$s ."</string>
   <string name="common_message_failed_to_send">"Slanje poruke nije uspjelo"</string>
   <string name="common_message_layout">"Izgled poruke"</string>
   <string name="common_message_removed">"Poruka je uklonjena"</string>
+  <string name="common_moderation_and_safety">"Umjerenost i sigurnost"</string>
   <string name="common_modern">"Suvremeni"</string>
   <string name="common_mute">"Isključi zvuk"</string>
   <string name="common_name">"Naziv"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nema rezultata"</string>
+  <string name="common_no_results_for">"Nema rezultata za „%1$s”. Pokušajte s novim pojmom za pretraživanje."</string>
   <string name="common_no_room_name">"Nema naziva sobe"</string>
   <string name="common_no_space_name">"Nema naziva prostora"</string>
   <string name="common_not_encrypted">"Nije šifrirano"</string>
@@ -371,6 +387,7 @@ Razlog: %1$s ."</string>
   <string name="common_replying_to">"Odgovara korisniku %1$s"</string>
   <string name="common_report_a_problem">"Prijavi problem"</string>
   <string name="common_report_submitted">"Prijava je podnesena"</string>
+  <string name="common_results_for">"Rezultati za „%1$s”"</string>
   <string name="common_rich_text_editor">"Uređivač obogaćenog teksta"</string>
   <string name="common_role">"Uloga"</string>
   <string name="common_room">"Soba"</string>
@@ -407,6 +424,7 @@ Razlog: %1$s ."</string>
   <string name="common_shared_live_location">"Dijeljena lokacija uživo"</string>
   <string name="common_shared_location">"Podijeljena lokacija"</string>
   <string name="common_shared_space">"Zajednički prostor"</string>
+  <string name="common_signed_in">"Prijavljen/a"</string>
   <string name="common_signing_out">"Uklanjanje uređaja"</string>
   <string name="common_something_went_wrong">"Nešto je pošlo po zlu"</string>
   <string name="common_something_went_wrong_message">"Naišli smo na problem. Pokušajte ponovno."</string>
@@ -423,6 +441,7 @@ Razlog: %1$s ."</string>
   <string name="common_success">"Uspjeh"</string>
   <string name="common_suggested">"Preporučeno"</string>
   <string name="common_suggestions">"Prijedlozi"</string>
+  <string name="common_switch_accounts">"Promijeni račun"</string>
   <string name="common_syncing">"Sinkronizacija"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Obavijesti trećih strana"</string>
@@ -462,6 +481,7 @@ Razlog: %1$s ."</string>
   <string name="common_waiting_live_location">"Čekanje lokacije uživo…"</string>
   <string name="common_world_readable_history">"Svatko može vidjeti povijest"</string>
   <string name="common_you">"Vi"</string>
+  <string name="common_your_account">"Vaš račun"</string>
   <string name="content_scanner_not_found">"Preuzimanje nije dostupno."</string>
   <string name="content_scanner_not_found_title">"Datoteka nije pronađena"</string>
   <string name="content_scanner_scanning">"Skeniranje…"</string>
@@ -547,6 +567,14 @@ Jeste li sigurni da želite nastaviti?"</string>
     <item quantity="other">"%1$d prikvačenih poruka"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Prikvačene poruke"</string>
+  <string name="screen_ptt_settings_battery_optimization">"Zanemari optimizaciju baterije"</string>
+  <string name="screen_ptt_settings_battery_optimization_description">"Održavaj aktivnost u pozadini"</string>
+  <string name="screen_ptt_settings_covert_mode">"Prikriveni način rada"</string>
+  <string name="screen_ptt_settings_covert_mode_description">"Utišaj sve kanale"</string>
+  <string name="screen_ptt_settings_lock_screen">"Prikaži na zaključanom zaslonu"</string>
+  <string name="screen_ptt_settings_lock_screen_description">"Pristup sa zaključanog zaslona"</string>
+  <string name="screen_ptt_settings_system_overlay">"Omogući preklapanje sustava"</string>
+  <string name="screen_ptt_settings_system_overlay_description">"Pristup plutajućem gumbu za radnju"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Spremate se otići u svoj %1$s račun kako biste poništili identitet. Nakon toga bit ćete vraćeni u aplikaciju."</string>
   <string name="screen_reset_identity_confirmation_title">"Ne možete potvrditi? Idite na svoj račun kako biste poništili svoj identitet."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Povuci potvrdu i pošalji"</string>
@@ -565,6 +593,10 @@ Jeste li sigurni da želite nastaviti?"</string>
   <string name="screen_room_grouped_state_events_reduce">"Smanji"</string>
   <string name="screen_room_live_location_banner">"Dijeljenje lokacije uživo"</string>
   <string name="screen_room_maximum_messages_selected">"Odabran je maksimalan broj poruka"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"%1$d poruka proslijeđena"</item>
+    <item quantity="other">"Proslijeđene poruke %1$d"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"Već gledam ovu sobu!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s od %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Prikvačene poruke"</string>

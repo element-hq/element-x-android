@@ -5,4 +5,5 @@
   <string name="common_favourite">"Favorite"</string>
   <string name="common_favourited">"Favorited"</string>
   <string name="crypto_history_visible">"This room has been configured so that new members can read history. %1$s"</string>
+  <string name="screen_ptt_settings_battery_optimization">"Ignore battery optimization"</string>
 </resources>

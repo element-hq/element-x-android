@@ -123,7 +123,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="theme_black">"Czarny"</string>
   <string name="theme_dark">"Ciemny"</string>
   <string name="theme_light">"Jasny"</string>
-  <string name="theme_system">"System"</string>
+  <string name="theme_system">"Systemowy"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Historia powiadomień Push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Rozwiązywanie problemów"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Rozwiązywanie problemów powiadomień"</string>

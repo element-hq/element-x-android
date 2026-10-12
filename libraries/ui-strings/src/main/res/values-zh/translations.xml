@@ -328,6 +328,7 @@
   <string name="common_name">"名称"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"没有结果"</string>
+  <string name="common_no_results_for">"未找到与“%1$s”相关的搜索结果。尝试其它搜索条件。"</string>
   <string name="common_no_room_name">"无房间名称"</string>
   <string name="common_no_space_name">"未命名空间"</string>
   <string name="common_not_encrypted">"未加密"</string>
@@ -371,6 +372,7 @@
   <string name="common_replying_to">"正在回复 %1$s"</string>
   <string name="common_report_a_problem">"报告问题"</string>
   <string name="common_report_submitted">"报告已提交"</string>
+  <string name="common_results_for">"与“%1$s”相关的搜索结果"</string>
   <string name="common_rich_text_editor">"富文本编辑器"</string>
   <string name="common_role">"角色"</string>
   <string name="common_room">"房间"</string>
@@ -541,6 +543,14 @@
     <item quantity="other">"%1$d 条已置顶的消息"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"已置顶的消息"</string>
+  <string name="screen_ptt_settings_battery_optimization">"忽略电池优化"</string>
+  <string name="screen_ptt_settings_battery_optimization_description">"保持后台活跃"</string>
+  <string name="screen_ptt_settings_covert_mode">"隐蔽模式"</string>
+  <string name="screen_ptt_settings_covert_mode_description">"静默所有频道"</string>
+  <string name="screen_ptt_settings_lock_screen">"在锁屏上显示"</string>
+  <string name="screen_ptt_settings_lock_screen_description">"从锁屏访问"</string>
+  <string name="screen_ptt_settings_system_overlay">"启用系统叠加层"</string>
+  <string name="screen_ptt_settings_system_overlay_description">"访问浮动操作按钮"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"你即将被重定向到你在 %1$s 上的账户以重置数字身份。之后将被带回 app。"</string>
   <string name="screen_reset_identity_confirmation_title">"无法确认？请转到你的账户重置数字身份。"</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"撤回验证并发送"</string>

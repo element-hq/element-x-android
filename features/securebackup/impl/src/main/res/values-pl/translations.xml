@@ -42,10 +42,10 @@
   <string name="screen_custom_recovery_key_success_notice">"Aby zmienić klucz przywracania przejdź do Ustawienia → Szyfrowanie → Kopia zapasowa"</string>
   <string name="screen_custom_recovery_key_success_subtitle">"Możesz użyć klucza przywracania, żeby potwierdzić nowe urządzenia lub przywrócić zaszyfrowane czaty, jeśli stracisz dostęp do wszystkich swoich urządzeń."</string>
   <string name="screen_custom_recovery_key_success_title">"Twoja kopia zapasowa jest gotowa."</string>
-  <string name="screen_encryption_reset_action_continue_reset">"Kontynuuj resetowanie"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Kontynuuj"</string>
   <string name="screen_encryption_reset_bullet_1">"Szczegóły konta, kontakty, preferencje i lista czatów zostaną zachowane"</string>
   <string name="screen_encryption_reset_bullet_2">"Utracisz istniejącą historię wiadomości"</string>
-  <string name="screen_encryption_reset_bullet_3">"Wymagana będzie ponowna weryfikacja istniejących urządzeń i kontaktów"</string>
+  <string name="screen_encryption_reset_bullet_3">"Pozostali użytkownicy zobaczą, że Twoja tożsamość cyfrowa została zresetowana"</string>
   <string name="screen_encryption_reset_footer">"Zresetuj swoją tożsamość tylko wtedy, gdy nie posiadasz dostępu do żadnego innego zweryfikowanego urządzenia i straciłeś swój klucz przywracania."</string>
   <string name="screen_encryption_reset_title">"Nie możesz potwierdzić? Zresetuj swoją tożsamość cyfrową."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Usuń"</string>
