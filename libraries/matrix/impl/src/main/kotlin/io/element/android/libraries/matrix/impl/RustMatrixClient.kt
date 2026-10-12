@@ -322,7 +322,7 @@ class RustMatrixClient(
         override fun onUpdate(profile: UserProfile) {
             val matrixUser = profile.map()
             _userProfile.tryEmit(matrixUser)
-            sessionCoroutineScope.launch {
+            sessionCoroutineScope.launch(sessionDispatcher) {
                 storeUserProfile(matrixUser)
             }
         }
