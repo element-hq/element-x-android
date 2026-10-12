@@ -19,12 +19,16 @@ import org.matrix.rustcomponents.sdk.QrCodeData
 class FakeFfiGrantLoginWithQrCodeHandler(
     private val generateResult: suspend () -> Unit = {},
     private val scanResult: suspend (QrCodeData) -> Unit = {},
+    private val cancelResult: () -> Unit = {},
 ) : GrantLoginWithQrCodeHandler(NoHandle) {
     private var generateProgressListener: GrantGeneratedQrLoginProgressListener? = null
     private var scanProgressListener: GrantQrLoginProgressListener? = null
     override fun generate(progressListener: GrantGeneratedQrLoginProgressListener): GrantLoginWithQrCodeTask {
         generateProgressListener = progressListener
-        return FakeFfiGrantLoginWithQrCodeTask(waitResult = generateResult)
+        return FakeFfiGrantLoginWithQrCodeTask(
+            waitResult = generateResult,
+            cancelResult = cancelResult,
+        )
     }
 
     fun emitGenerateProgress(progress: GrantGeneratedQrLoginProgress) {
@@ -33,7 +37,10 @@ class FakeFfiGrantLoginWithQrCodeHandler(
 
     override fun scan(qrCodeData: QrCodeData, progressListener: GrantQrLoginProgressListener): GrantLoginWithQrCodeTask {
         scanProgressListener = progressListener
-        return FakeFfiGrantLoginWithQrCodeTask(waitResult = { scanResult(qrCodeData) })
+        return FakeFfiGrantLoginWithQrCodeTask(
+            waitResult = { scanResult(qrCodeData) },
+            cancelResult = cancelResult,
+        )
     }
 
     fun emitScanProgress(progress: GrantQrLoginProgress) {

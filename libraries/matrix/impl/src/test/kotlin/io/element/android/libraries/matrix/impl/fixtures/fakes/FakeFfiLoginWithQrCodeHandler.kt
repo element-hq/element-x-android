@@ -18,16 +18,23 @@ import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 class FakeFfiLoginWithQrCodeHandler(
     private val generateResult: suspend () -> Unit = {},
     private val scanResult: suspend (QrCodeData) -> Unit = {},
+    private val cancelResult: () -> Unit = {},
 ) : LoginWithQrCodeHandler(NoHandle) {
     private var scanProgressListener: QrLoginProgressListener? = null
 
     override fun generate(progressListener: GeneratedQrLoginProgressListener): LoginWithQrCodeTask {
-        return FakeFfiLoginWithQrCodeTask(waitResult = generateResult)
+        return FakeFfiLoginWithQrCodeTask(
+            waitResult = generateResult,
+            cancelResult = cancelResult,
+        )
     }
 
     override fun scan(qrCodeData: QrCodeData, progressListener: QrLoginProgressListener): LoginWithQrCodeTask {
         scanProgressListener = progressListener
-        return FakeFfiLoginWithQrCodeTask(waitResult = { scanResult(qrCodeData) })
+        return FakeFfiLoginWithQrCodeTask(
+            waitResult = { scanResult(qrCodeData) },
+            cancelResult = cancelResult,
+        )
     }
 
     fun emitScanProgress(progress: QrLoginProgress) {
