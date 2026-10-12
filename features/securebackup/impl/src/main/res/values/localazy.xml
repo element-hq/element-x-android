@@ -41,10 +41,10 @@
   <string name="screen_custom_recovery_key_success_notice">"To change your recovery key, go to Settings → Encryption → Backup"</string>
   <string name="screen_custom_recovery_key_success_subtitle">"You can use your recovery key to confirm new devices or restore your encrypted chats if you lose access to all your devices."</string>
   <string name="screen_custom_recovery_key_success_title">"Your backup is now fully set up"</string>
-  <string name="screen_encryption_reset_action_continue_reset">"Continue reset"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Continue"</string>
   <string name="screen_encryption_reset_bullet_1">"Your account details, contacts, preferences, and chat list will be kept"</string>
   <string name="screen_encryption_reset_bullet_2">"You will lose any message history that’s stored only on the server"</string>
-  <string name="screen_encryption_reset_bullet_3">"You will need to verify all your existing devices and contacts again"</string>
+  <string name="screen_encryption_reset_bullet_3">"Other users will see that your digital identity has been reset"</string>
   <string name="screen_encryption_reset_footer">"Only reset your digital identity if you don\'t have access to another verified device and you don\'t have your recovery key."</string>
   <string name="screen_encryption_reset_title">"Can\'t confirm? You’ll need to reset your digital identity."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Delete"</string>

@@ -4,5 +4,5 @@
   <string name="screen_signed_out_reason_2">"Anda telah menghapus sesi dari sesi lain"</string>
   <string name="screen_signed_out_reason_3">"Administrator homeserver Anda telah membatalkan akses Anda"</string>
   <string name="screen_signed_out_subtitle">"Anda mungkin dikeluarkan karena alasan berikut. Silakan masuk lagi untuk melanjutkan menggunakan %s."</string>
-  <string name="screen_signed_out_title">"Anda telah keluar"</string>
+  <string name="screen_signed_out_title">"Perangkat dihapus"</string>
 </resources>

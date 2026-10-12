@@ -2,12 +2,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="emoji_picker_category_activity">"Activități"</string>
   <string name="emoji_picker_category_flags">"Steaguri"</string>
-  <string name="emoji_picker_category_foods">"Mâncare &amp; Băutură"</string>
-  <string name="emoji_picker_category_nature">"Animale și Natură"</string>
+  <string name="emoji_picker_category_foods">"Mâncare și băutură"</string>
+  <string name="emoji_picker_category_nature">"Animale și natură"</string>
   <string name="emoji_picker_category_objects">"Obiecte"</string>
-  <string name="emoji_picker_category_people">"Fețe zâmbitoare &amp; Oameni"</string>
-  <string name="emoji_picker_category_places">"Călătorii &amp; Locuri"</string>
-  <string name="emoji_picker_category_recent">"Emoticoane recente"</string>
+  <string name="emoji_picker_category_people">"Emoticoane și oameni"</string>
+  <string name="emoji_picker_category_places">"Călătorii și locuri"</string>
+  <string name="emoji_picker_category_recent">"Emojiuri recente"</string>
   <string name="emoji_picker_category_symbols">"Simboluri"</string>
-  <string name="emoji_picker_search_placeholder">"Căutați emoticoane"</string>
+  <string name="emoji_picker_search_placeholder">"Căutați emojiuri"</string>
 </resources>

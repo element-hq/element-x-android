@@ -24,6 +24,9 @@
   <string name="screen_invites_invited_you">"%1$s (%2$s) запрошує вас"</string>
   <string name="screen_migration_message">"Це одноразовий процес, дякую за очікування."</string>
   <string name="screen_migration_title">"Налаштування облікового запису."</string>
+  <string name="screen_multi_account_announcement_action">"Додати обліковий запис"</string>
+  <string name="screen_multi_account_announcement_description">"Перейдіть до %1$s, щоб увійти в інший обліковий запис. Після цього ви зможете легко перемикатися між ними."</string>
+  <string name="screen_multi_account_announcement_title">"Відтепер ви можете додавати кілька облікових записів"</string>
   <string name="screen_roomlist_a11y_create_message">"Створити нову розмову або кімнату"</string>
   <string name="screen_roomlist_clear_filters">"Очистити фільтри"</string>
   <string name="screen_roomlist_empty_message">"Почніть з обміну повідомленнями з кимось."</string>

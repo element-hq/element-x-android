@@ -42,7 +42,7 @@
   <string name="screen_room_change_role_unsaved_changes_description">"你有未保存的更改。"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"保存更改？"</string>
   <string name="screen_room_details_add_topic_title">"添加主题"</string>
-  <string name="screen_room_details_audio_push_to_talk">"按下发言"</string>
+  <string name="screen_room_details_audio_push_to_talk">"对讲"</string>
   <string name="screen_room_details_audio_title">"房间音频"</string>
   <string name="screen_room_details_audio_video_calls">"视频通话"</string>
   <string name="screen_room_details_badge_encrypted">"已加密"</string>
@@ -70,7 +70,7 @@
   <string name="screen_room_details_profile_row_title">"个人资料"</string>
   <string name="screen_room_details_requests_to_join_title">"申请加入"</string>
   <string name="screen_room_details_roles_and_permissions">"角色与权限"</string>
-  <string name="screen_room_details_room_audio_ptt">"按下发言"</string>
+  <string name="screen_room_details_room_audio_ptt">"对讲"</string>
   <string name="screen_room_details_room_audio_title">"房间音频"</string>
   <string name="screen_room_details_room_audio_video_calls">"视频通话"</string>
   <string name="screen_room_details_room_name_label">"名称"</string>

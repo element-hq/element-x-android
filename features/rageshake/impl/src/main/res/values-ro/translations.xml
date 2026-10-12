@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Atașați o captură de ecran"</string>
-  <string name="screen_bug_report_contact_me">"Puteți să mă contactați dacă aveți întrebări suplimentare"</string>
+  <string name="screen_bug_report_contact_me">"Puteți să mă contactați dacă aveți întrebări suplimentare."</string>
   <string name="screen_bug_report_contact_me_title">"Contactați-mă"</string>
   <string name="screen_bug_report_edit_screenshot">"Editați captura de ecran"</string>
-  <string name="screen_bug_report_editor_description">"Vă rugăm să descrieți problema. Ce ați făcut? Ce vă aşteptați să se întâmple? Ce s-a întâmplat de fapt. Vă rugam să oferiți cât mai multe detalii cu putință."</string>
+  <string name="screen_bug_report_editor_description">"Vă rugăm să descrieți problema. Ce ați făcut? Ce vă așteptați să se întâmple? Ce s-a întâmplat de fapt? Oferiți cât mai multe detalii."</string>
   <string name="screen_bug_report_editor_placeholder">"Descrieți problema…"</string>
-  <string name="screen_bug_report_editor_supporting">"Dacă posibil, vă rugăm să scrieți descrierea în engleză."</string>
-  <string name="screen_bug_report_error_description_too_short">"Descrierea este prea scurtă, vă rugăm să oferiți mai multe detalii despre ceea ce s-a întâmplat. Vă mulțumim!"</string>
+  <string name="screen_bug_report_editor_supporting">"Pe când posibil, vă rugăm să scrieți descrierea în engleză."</string>
+  <string name="screen_bug_report_error_description_too_short">"Descrierea este prea scurtă, oferiți mai multe detalii despre ceea ce s-a întâmplat. Vă mulțumim!"</string>
   <string name="screen_bug_report_github_issue_description">"Puteți introduce numărul unui tichet GitHub asociat, dacă există."</string>
   <string name="screen_bug_report_github_issue_label">"Tichet GitHub"</string>
-  <string name="screen_bug_report_include_crash_logs">"Trimiteți log-uri"</string>
-  <string name="screen_bug_report_include_logs">"Permiteți log-uri"</string>
-  <string name="screen_bug_report_include_logs_error">"Jurnalele dumneavoastră sunt prea mari și nu pot fi incluse în acest raport. Vă rugăm să ni le trimiteți prin altă metodă."</string>
+  <string name="screen_bug_report_include_crash_logs">"Trimiteți jurnalele de blocări"</string>
+  <string name="screen_bug_report_include_logs">"Permiteți jurnale"</string>
+  <string name="screen_bug_report_include_logs_error">"Jurnalele dvs. sunt prea mari și nu pot fi incluse în acest raport. Vă rugăm să ni le trimiteți prin altă metodă."</string>
   <string name="screen_bug_report_include_screenshot">"Trimiteți captură de ecran"</string>
   <string name="screen_bug_report_logs_description">"Pentru a verifica că lucrurile funcționează conform așteptărilor, log-uri vor fi trimise împreună cu mesajul. Acestea vor fi private. Pentru a trimite doar mesajul, dezactivați această setare."</string>
-  <string name="screen_bug_report_rash_logs_alert_title">"%1$s s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport?"</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s s-a blocat ultima dată când a fost folosit. Doriți să ne trimiteți un raport de blocare?"</string>
   <string name="screen_bug_report_send_notification_settings_description">"Dacă întâmpinați probleme cu notificările, încărcarea setărilor notificărilor ne poate ajuta să identificăm cauza principală."</string>
   <string name="screen_bug_report_send_notification_settings_title">"Trimiteți setările notificărilor"</string>
-  <string name="screen_bug_report_view_logs">"Vizualizați log-urile"</string>
+  <string name="screen_bug_report_view_logs">"Vizualizați jurnalele"</string>
 </resources>

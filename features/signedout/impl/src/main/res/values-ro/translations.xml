@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"V-ați schimbat parola într-o altă sesiune"</string>
-  <string name="screen_signed_out_reason_2">"Ați șters sesiunea dintr-o altă sesiune"</string>
-  <string name="screen_signed_out_reason_3">"Administratorul serverului dumneavoastra v-a invalidat accesul"</string>
-  <string name="screen_signed_out_subtitle">"Este posibil să fi fost deconectat din unul dintre motivele enumerate mai jos. Vă rugăm să vă conectați din nou pentru a continua utilizarea%s."</string>
-  <string name="screen_signed_out_title">"Sunteți deconectat"</string>
+  <string name="screen_signed_out_reason_1">"Ați eliminat acest dispozitiv din contul dvs."</string>
+  <string name="screen_signed_out_reason_2">"V-ați schimbat parola pe un alt dispozitiv"</string>
+  <string name="screen_signed_out_reason_3">"Sesiunea de pe server a expirat sau administratorul v-a blocat accesul"</string>
+  <string name="screen_signed_out_subtitle">"Este posibil ca deconectarea să fi avut loc din unul dintre motivele de mai jos. Conectați din nou pentru a continua utilizarea %s."</string>
+  <string name="screen_signed_out_subtitle_v2">"Acest dispozitiv a fost eliminat din unul dintre motivele enumerate mai jos. Vă rugăm să vă conectați din nou pentru a reconecta acest dispozitiv la contul dvs."</string>
+  <string name="screen_signed_out_title">"Dispozitiv eliminat"</string>
 </resources>

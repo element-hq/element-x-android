@@ -37,8 +37,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Ha ki van kapcsolva, nem tud olvasási visszaigazolást vagy írási értesítést küldeni és fogadni"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Elrejtés mindig"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Megjelenítés mindig"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Privát szobákban"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"A rejtett médiatartalmak koppintással jeleníthetők meg"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Megjelenítés privát szobákban"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"A rejtett médiatartalmak mindig megjeleníthetők, ha rájuk koppint."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Média megjelenítése az idővonalon"</string>
   <string name="screen_advanced_settings_view_source_description">"Engedélyezze a beállítást az üzenet forrásának megjelenítéséhez az idővonalon."</string>
   <string name="screen_blocked_users_empty">"Nincsenek letiltott felhasználók"</string>
@@ -61,6 +61,9 @@
   <string name="screen_labs_header_description">"Próbálja ki legújabb fejlesztéseinket. Ezek a funkciók még nem véglegesek, instabilak lehetnek és változhatnak."</string>
   <string name="screen_labs_header_title">"Kísérletezni szeretne?"</string>
   <string name="screen_labs_title">"Kísérletek"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Meghívók"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Más felhasználók"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"A megjelenése"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"További beállítások"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Csengőhang"</string>
   <string name="screen_notification_settings_calls_label">"Hang- és videóhívások"</string>
@@ -89,6 +92,8 @@ Ha folytatja, egyes beállítások megváltozhatnak."</string>
   <string name="screen_notification_settings_mode_mentions">"Említések"</string>
   <string name="screen_notification_settings_notification_section_title">"Értesítés ezekről:"</string>
   <string name="screen_notification_settings_room_mention_label">@szoba említések</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Pontok vagy olvasatlan üzenetek száma"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Az összes tevékenység megjelenítése a szobalistában"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Egyedi"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Egyedi hang…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Hiba a fájl törlésekor"</string>
@@ -105,6 +110,7 @@ Ha folytatja, egyes beállítások megváltozhatnak."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"rendszerbeállításokat"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"A rendszerértesítések ki vannak kapcsolva"</string>
   <string name="screen_notification_settings_title">"Értesítések"</string>
+  <string name="screen_settings_add_account">"Fiók hozzáadása"</string>
   <string name="screen_settings_user_status_away">"Távol"</string>
   <string name="screen_settings_user_status_be_right_back">"Rögtön visszajövök"</string>
   <string name="screen_settings_user_status_custom">"Egyedi…"</string>

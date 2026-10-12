@@ -50,11 +50,17 @@
   <string name="screen_edit_profile_error_title">"Impossible de mettre à jour le profil"</string>
   <string name="screen_edit_profile_title">"Modifier le profil"</string>
   <string name="screen_edit_profile_updating_details">"Mise à jour du profil…"</string>
+  <string name="screen_labs_enable_gallery">"Gallerie d’images"</string>
+  <string name="screen_labs_enable_gallery_description">"Envoyez plusieurs images ou vidéos en un seul message. Fonctionne parfaitement sur mobile, mais pas encore supporté sur le web."</string>
+  <string name="screen_labs_enable_knocking_description">"Les utilisateurs peuvent demander l’accès à un salon privé. Stable sur mobile, une version web existe mais est encore expérimentale."</string>
   <string name="screen_labs_enable_threads">"Activez les fils de discussion."</string>
   <string name="screen_labs_enable_threads_description">"Un changement entraînera le redémarrage de l’application."</string>
   <string name="screen_labs_header_description">"Découvrez nos dernières idées en cours de développement. Ces fonctionnalités ne sont pas encore finalisées; elles peuvent être instables et évoluer."</string>
   <string name="screen_labs_header_title">"Envie d’expérimenter?"</string>
   <string name="screen_labs_title">"Expérimental"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Invitations"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Autres utilisateurs"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Votre apparence"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Réglages supplémentaires"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Sonnerie d’appel"</string>
   <string name="screen_notification_settings_calls_label">"Appels audio et vidéo"</string>
@@ -83,6 +89,8 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
   <string name="screen_notification_settings_notification_section_title">"Prévenez-moi pour"</string>
   <string name="screen_notification_settings_room_mention_label">"Un message qui contient @room"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Puce ou nombre de messages non lus"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Afficher toutes les activités dans la liste des salons"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Personnalisé"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Son personnalisé…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Erreur lors de la suppression du fichier"</string>
@@ -99,6 +107,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"paramètres du système"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="screen_settings_add_account">"Ajouter un compte"</string>
   <string name="screen_settings_user_status_away">"Absent"</string>
   <string name="screen_settings_user_status_be_right_back">"Je reviens tout de suite"</string>
   <string name="screen_settings_user_status_custom">"Personnalisé…"</string>

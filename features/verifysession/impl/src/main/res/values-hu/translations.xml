@@ -44,6 +44,7 @@
   <string name="screen_session_verification_use_another_device_title">"Nyissa meg az alkalmazást egy másik ellenőrzött eszközön"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"A fokozott biztonság érdekében ellenőrizze ezt a felhasználót az eszközökön megjelenő emodzsik összehasonlításával. Ehhez használjon megbízható kommunikációs csatornát."</string>
   <string name="screen_session_verification_user_initiator_title">"Ellenőrzi ezt a felhasználót?"</string>
+  <string name="screen_session_verification_user_requesting_verification">"A felhasználó hitelesítést kér:"</string>
   <string name="screen_session_verification_user_responder_subtitle">"A további biztonság érdekében egy másik felhasználó ellenőrizni szeretné személyazonosságát. Meg fog jelenni egy sor emodzsi, melyeket össze kell majd hasonlítania."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"A másik eszközön egy felugró ablaknak kell megjelennie. Kezdje el az ellenőrzést onnan."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Ellenőrzés megkezdése a másik eszközön"</string>

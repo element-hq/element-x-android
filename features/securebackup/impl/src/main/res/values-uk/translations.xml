@@ -42,10 +42,10 @@
   <string name="screen_custom_recovery_key_success_notice">"Щоб змінити ключ відновлення, перейдіть до Налаштування → Шифрування → Резервне копіювання"</string>
   <string name="screen_custom_recovery_key_success_subtitle">"Ви можете використовувати свій ключ відновлення для підтвердження нових пристроїв або відновлення зашифрованих бесід, якщо втратите доступ до всіх своїх пристроїв."</string>
   <string name="screen_custom_recovery_key_success_title">"Налаштування резервного копіювання завершено"</string>
-  <string name="screen_encryption_reset_action_continue_reset">"Продовжити скидання налаштувань"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Продовжити"</string>
   <string name="screen_encryption_reset_bullet_1">"Дані вашого облікового запису, контакти, налаштування й бесіди будуть збережені"</string>
   <string name="screen_encryption_reset_bullet_2">"Ви втратите свою наявну історію повідомлень"</string>
-  <string name="screen_encryption_reset_bullet_3">"Вам потрібно буде повторно звірити всі наявні пристрої та контакти"</string>
+  <string name="screen_encryption_reset_bullet_3">"Інші користувачі побачать, що вашу цифрову ідентичність було скинуто"</string>
   <string name="screen_encryption_reset_footer">"Скидайте свою цифрову ідентичність лише якщо у вас немає доступу до іншого звіреного пристрою та ключа відновлення."</string>
   <string name="screen_encryption_reset_title">"Не можете підтвердити? Вам доведеться скинути свою цифрову ідентичність."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Видалити"</string>

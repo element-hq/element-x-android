@@ -98,6 +98,7 @@
   <string name="action_choose_file">"Choisir un fichier"</string>
   <string name="action_choose_photo">"Choisir une photo"</string>
   <string name="action_clear">"Effacer"</string>
+  <string name="action_clear_all">"Tout effacer"</string>
   <string name="action_close">"Fermer"</string>
   <string name="action_complete_verification">"Terminer la vérification"</string>
   <string name="action_confirm">"Confirmer"</string>
@@ -108,6 +109,7 @@
   <string name="action_copy_link">"Copier le lien"</string>
   <string name="action_copy_link_to_message">"Copier le lien vers le message"</string>
   <string name="action_copy_text">"Copier le texte"</string>
+  <string name="action_copy_to_clipboard">"Copier dans le presse-papiers"</string>
   <string name="action_create">"Créer"</string>
   <string name="action_create_room">"Créer un salon"</string>
   <string name="action_create_space">"Créer un espace"</string>
@@ -135,6 +137,10 @@
   <string name="action_finish">"Terminer"</string>
   <string name="action_forgot_password">"Mot de passe oublié ?"</string>
   <string name="action_forward">"Transférer"</string>
+  <plurals name="action_forward_messages">
+    <item quantity="one">"Transférer %1$d message"</item>
+    <item quantity="other">"Transférer %1$d messages"</item>
+  </plurals>
   <string name="action_go_back">"Retour"</string>
   <string name="action_go_to_roles_and_permissions">"Accédez à l’écran « Rôles et autorisations »."</string>
   <string name="action_go_to_settings">"Ouvrir les paramètres"</string>
@@ -221,6 +227,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Mise à niveau disponible"</string>
   <string name="common_about">"À propos"</string>
   <string name="common_acceptable_use_policy">"Politique d’utilisation acceptable"</string>
+  <string name="common_account_settings">"Paramètres du compte"</string>
   <string name="common_add_account">"Ajouter un compte"</string>
   <string name="common_add_another_account">"Ajouter un autre compte"</string>
   <string name="common_adding_caption">"Ajout d’une légende"</string>
@@ -229,6 +236,7 @@
   <string name="common_analytics">"Statistiques d’utilisation"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Vous avez quitté le salon"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Vous avez été déconnecté de la session"</string>
+  <string name="common_app_settings">"Paramètres de l’application"</string>
   <string name="common_appearance">"Apparence"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_beta">"Bêta"</string>
@@ -239,6 +247,8 @@
   <string name="common_call_started">"Appel démarré"</string>
   <string name="common_call_you_declined">"Vous avez rejeté un appel"</string>
   <string name="common_chat_backup">"Sauvegarde des discussions"</string>
+  <string name="common_chats">"Conversations"</string>
+  <string name="common_code_block">"Bloc de code"</string>
   <string name="common_copied_to_clipboard">"Copié dans le presse-papiers"</string>
   <string name="common_copyright">"Droits d’auteur"</string>
   <string name="common_creating_room">"Création du salon…"</string>
@@ -278,6 +288,7 @@ Raison : %1$s."</string>
   <string name="common_file_saved">"Fichier enregistré"</string>
   <string name="common_file_saved_on_disk_android">"Fichier enregistré dans Téléchargements"</string>
   <string name="common_forward_message">"Transférer le message"</string>
+  <string name="common_forward_to">"Transférer à"</string>
   <string name="common_frequently_used">"Fréquemment utilisé"</string>
   <string name="common_gallery">"Galerie"</string>
   <plurals name="common_gallery_reply_attachments">
@@ -290,6 +301,7 @@ Raison : %1$s."</string>
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Appel de groupe en cours"</string>
+  <string name="common_header_rooms">"Salons"</string>
   <string name="common_image">"Image"</string>
   <string name="common_in_reply_to">"En réponse à %1$s"</string>
   <string name="common_install_apk_android">"Installer l’APK"</string>
@@ -303,10 +315,12 @@ Raison : %1$s."</string>
   <string name="common_live_location_ended">"Fin de localisation en direct"</string>
   <string name="common_loading">"Chargement…"</string>
   <string name="common_loading_more">"Chargement…"</string>
+  <string name="common_location_sharing">"Partage de position"</string>
   <plurals name="common_many_members">
     <item quantity="one">"%d autre"</item>
     <item quantity="other">"%d autres"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Qualité d’envoi des médias"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d Membre"</item>
     <item quantity="other">"%1$d Membres"</item>
@@ -316,6 +330,7 @@ Raison : %1$s."</string>
   <string name="common_message_failed_to_send">"Échec de l’envoi du message"</string>
   <string name="common_message_layout">"Mode d’affichage des messages"</string>
   <string name="common_message_removed">"Message supprimé"</string>
+  <string name="common_moderation_and_safety">"Modération &amp; sécurité"</string>
   <string name="common_modern">"Moderne"</string>
   <string name="common_mute">"Mettre en sourdine"</string>
   <string name="common_name">"Nom"</string>
@@ -401,6 +416,7 @@ Raison : %1$s."</string>
   <string name="common_shared_live_location">"Position en direct partagée"</string>
   <string name="common_shared_location">"Position partagée"</string>
   <string name="common_shared_space">"Espace partagé"</string>
+  <string name="common_signed_in">"Connecté"</string>
   <string name="common_signing_out">"Suppression de l’appareil"</string>
   <string name="common_something_went_wrong">"Une erreur s’est produite"</string>
   <string name="common_something_went_wrong_message">"Nous avons rencontré un problème. Veuillez réessayer."</string>
@@ -416,6 +432,7 @@ Raison : %1$s."</string>
   <string name="common_success">"Succès"</string>
   <string name="common_suggested">"Recommandé"</string>
   <string name="common_suggestions">"Suggestions"</string>
+  <string name="common_switch_accounts">"Changer de compte"</string>
   <string name="common_syncing">"Synchronisation"</string>
   <string name="common_text">"Texte"</string>
   <string name="common_third_party_notices">"Avis de tiers"</string>
@@ -455,6 +472,7 @@ Raison : %1$s."</string>
   <string name="common_waiting_live_location">"En attente de la position en temps réel…"</string>
   <string name="common_world_readable_history">"Tout le monde peut voir les anciens messages"</string>
   <string name="common_you">"Vous"</string>
+  <string name="common_your_account">"Votre compte"</string>
   <string name="content_scanner_not_found">"Téléchargement indisponible."</string>
   <string name="content_scanner_not_found_title">"Une erreur est survenue"</string>
   <string name="content_scanner_scanning">"Analyse en cours…"</string>
@@ -555,11 +573,20 @@ Raison : %1$s."</string>
   <string name="screen_room_grouped_state_events_expand">"Développer"</string>
   <string name="screen_room_grouped_state_events_reduce">"Réduire"</string>
   <string name="screen_room_live_location_banner">"Partage de la position en direct"</string>
+  <string name="screen_room_maximum_messages_selected">"Nombre maximal de messages sélectionnés"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"%1$d message transféré"</item>
+    <item quantity="other">"%1$d messages transférés"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"Vous êtes déjà dans ce salon!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s sur %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messages épinglés"</string>
   <string name="screen_room_pinned_banner_loading_description">"Chargement du message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Voir tout"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"%1$d message sélectionné"</item>
+    <item quantity="other">"%1$d messages sélectionnés"</item>
+  </plurals>
   <string name="screen_room_title">"Discussion"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
