@@ -11,6 +11,7 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileHandler
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileStep
 import io.element.android.libraries.matrix.api.logs.LoggerTags
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -48,8 +49,15 @@ class RustLinkMobileHandler(
                         }
                     }
                 }
-            )
-            // We emit Done in case the progress listener was deallocated before generate() sent the Done
+            ).use { task ->
+                try {
+                    task.wait()
+                } catch (e: CancellationException) {
+                    task.cancel()
+                    throw e
+                }
+            }
+            // We emit Done in case the progress listener was deallocated before the task sent the Done
             _linkMobileStep.emit(LinkMobileStep.Done)
         } catch (e: HumanQrGrantLoginException.Expired) {
             // Note: the SDK does not return this error, but is returning `.NotFound` instead when the QR code expires. We catch both just in case.
