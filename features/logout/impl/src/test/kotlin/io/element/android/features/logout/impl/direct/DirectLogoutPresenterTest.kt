@@ -73,6 +73,21 @@ class DirectLogoutPresenterTest {
     }
 
     @Test
+    fun `present - logout skipping the confirmation`() = runTest {
+        val presenter = createDirectLogoutPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = true))
+            val loadingState = awaitItem()
+            assertThat(loadingState.logoutAction).isInstanceOf(AsyncAction.Loading::class.java)
+            val successState = awaitItem()
+            assertThat(successState.logoutAction).isInstanceOf(AsyncAction.Success::class.java)
+        }
+    }
+
+    @Test
     fun `present - logout with error then cancel`() = runTest {
         val matrixClient = FakeMatrixClient().apply {
             logoutLambda = { _, _ ->

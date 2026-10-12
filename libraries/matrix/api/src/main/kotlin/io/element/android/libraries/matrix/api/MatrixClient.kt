@@ -173,6 +173,12 @@ interface MatrixClient : ClientUrlContentFetcher {
     suspend fun getJoinedRoomIds(): Result<Set<RoomId>>
 
     /**
+     * Whether the user has joined at least one encrypted room, as currently known by the client.
+     * Spaces, invited, knocked and left rooms are not taken into account.
+     */
+    suspend fun hasEncryptedRooms(): Result<Boolean>
+
+    /**
      * Adds [userId] to the ignore list of the account, which hides their events and makes [ignoredUsersFlow] emit.
      *
      * @param userId the user to ignore.

@@ -9,6 +9,13 @@
 package io.element.android.features.logout.api.direct
 
 sealed interface DirectLogoutEvent {
-    data class Logout(val ignoreSdkError: Boolean) : DirectLogoutEvent
+    /**
+     * @param ignoreSdkError whether to sign out locally even if the homeserver could not be notified.
+     * @param skipConfirmation whether to sign out right away instead of asking the user to confirm first.
+     */
+    data class Logout(
+        val ignoreSdkError: Boolean,
+        val skipConfirmation: Boolean = false,
+    ) : DirectLogoutEvent
     data object CloseDialogs : DirectLogoutEvent
 }

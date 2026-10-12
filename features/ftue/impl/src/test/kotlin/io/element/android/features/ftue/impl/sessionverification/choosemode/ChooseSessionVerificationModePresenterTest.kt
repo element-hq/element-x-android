@@ -121,7 +121,7 @@ class ChooseSessionVerificationModePresenterTest {
             val initial = awaitItem()
             initial.eventSink(ChooseSelfVerificationModeEvent.SignOut)
             logoutEventRecorder.assertions().isCalledOnce()
-                .with(value(DirectLogoutEvent.Logout(ignoreSdkError = false)))
+                .with(value(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = true)))
         }
     }
 

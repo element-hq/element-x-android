@@ -144,6 +144,7 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.UserProfile
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
+import uniffi.matrix_sdk_base.EncryptionState
 import java.io.File
 import java.util.Optional
 import java.util.concurrent.atomic.AtomicBoolean
@@ -443,6 +444,14 @@ class RustMatrixClient(
                 .filter { it.membership() == Membership.JOINED }
                 .map { RoomId(it.id()) }
                 .toSet()
+        }
+    }
+
+    override suspend fun hasEncryptedRooms(): Result<Boolean> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.rooms().any { room ->
+                room.membership() == Membership.JOINED && !room.isSpace() && room.encryptionState() == EncryptionState.ENCRYPTED
+            }
         }
     }
 
