@@ -111,6 +111,9 @@ class HomePresenter(
                     currentHomeNavigationBarItemOrdinal = event.item.ordinal
                 }
                 is HomeEvent.SwitchToAccount -> coroutineState.launch {
+                    // The user has switched account by swiping their avatar, so they know the gesture.
+                    // Do it before switching, since it can stop this coroutine.
+                    announcementService.onAnnouncementDismissed(Announcement.SwipeAvatarToSwitchAccount)
                     sessionStore.setLatestSession(event.sessionId.value)
                 }
                 HomeEvent.DismissMultiAccountAnnouncement -> coroutineState.launch {

@@ -253,7 +253,7 @@ private fun RoomsViewList(
                 }
             }
             // Banner precedence (top-to-bottom): full-screen-intent > battery-optimization >
-            // new-notification-sound > sound-unavailable. At most one renders at a time.
+            // new-notification-sound > swipe-avatar > sound-unavailable. At most one renders at a time.
             SecurityBannerState.None -> when {
                 state.fullScreenIntentPermissionsState.shouldDisplayBanner -> {
                     item {
@@ -269,6 +269,13 @@ private fun RoomsViewList(
                     item {
                         NewNotificationSoundBanner(
                             onDismissClick = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
+                        )
+                    }
+                }
+                state.showSwipeAvatarBanner -> {
+                    item {
+                        SwipeAvatarBanner(
+                            onDismissClick = { eventSink(RoomListEvent.DismissSwipeAvatarBanner) },
                         )
                     }
                 }

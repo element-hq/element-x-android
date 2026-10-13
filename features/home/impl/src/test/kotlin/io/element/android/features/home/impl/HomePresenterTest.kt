@@ -28,6 +28,8 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -39,7 +41,9 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -243,6 +247,36 @@ class HomePresenterTest {
             assertThat(awaitItem().showMultiAccountAnnouncement).isFalse()
             onAnnouncementDismissedResult.assertions().isCalledOnce()
                 .with(value(Announcement.MultiAccount))
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - switching account dismisses the swipe avatar announcement`() = runTest {
+        val onAnnouncementDismissedResult = lambdaRecorder<Announcement, Unit> { }
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val presenter = createHomePresenter(
+            client = FakeMatrixClient(sessionId = A_SESSION_ID),
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(sessionId = A_SESSION_ID.value),
+                    aSessionData(sessionId = A_SESSION_ID_2.value),
+                ),
+                updateUserProfileResult = { _, _, _, _ -> },
+                setLatestSessionResult = setLatestSessionResult,
+            ),
+            announcementService = FakeAnnouncementService(
+                onAnnouncementDismissedResult = onAnnouncementDismissedResult,
+            ),
+        )
+        presenter.test {
+            val state = expectMostRecentItem()
+            state.eventSink(HomeEvent.SwitchToAccount(A_SESSION_ID_2))
+            runCurrent()
+            onAnnouncementDismissedResult.assertions().isCalledOnce()
+                .with(value(Announcement.SwipeAvatarToSwitchAccount))
+            setLatestSessionResult.assertions().isCalledOnce()
+                .with(value(A_SESSION_ID_2.value))
         }
     }
 }

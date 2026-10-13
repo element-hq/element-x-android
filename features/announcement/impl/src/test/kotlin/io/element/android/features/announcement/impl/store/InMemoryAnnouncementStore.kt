@@ -17,10 +17,12 @@ class InMemoryAnnouncementStore(
     initialFullscreenAnnouncementStatus: AnnouncementStatus = AnnouncementStatus.NeverShown,
     initialNewNotificationSoundAnnouncementStatus: AnnouncementStatus = AnnouncementStatus.NeverShown,
     initialMultiAccountAnnouncementStatus: AnnouncementStatus = AnnouncementStatus.NeverShown,
+    initialSwipeAvatarToSwitchAccountAnnouncementStatus: AnnouncementStatus = AnnouncementStatus.NeverShown,
 ) : AnnouncementStore {
     private val fullScreenAnnouncement = MutableStateFlow(initialFullscreenAnnouncementStatus)
     private val newNotificationSoundAnnouncement = MutableStateFlow(initialNewNotificationSoundAnnouncementStatus)
     private val multiAccountAnnouncement = MutableStateFlow(initialMultiAccountAnnouncementStatus)
+    private val swipeAvatarToSwitchAccountAnnouncement = MutableStateFlow(initialSwipeAvatarToSwitchAccountAnnouncementStatus)
 
     override suspend fun setAnnouncementStatus(announcement: Announcement, status: AnnouncementStatus) {
         announcement.toMutableStateFlow().value = status
@@ -34,11 +36,13 @@ class InMemoryAnnouncementStore(
         fullScreenAnnouncement.value = AnnouncementStatus.NeverShown
         newNotificationSoundAnnouncement.value = AnnouncementStatus.NeverShown
         multiAccountAnnouncement.value = AnnouncementStatus.NeverShown
+        swipeAvatarToSwitchAccountAnnouncement.value = AnnouncementStatus.NeverShown
     }
 
     private fun Announcement.toMutableStateFlow() = when (this) {
         is Announcement.Fullscreen -> fullScreenAnnouncement
         Announcement.NewNotificationSound -> newNotificationSoundAnnouncement
         Announcement.MultiAccount -> multiAccountAnnouncement
+        Announcement.SwipeAvatarToSwitchAccount -> swipeAvatarToSwitchAccountAnnouncement
     }
 }

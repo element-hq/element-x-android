@@ -95,6 +95,27 @@ class RoomListViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `clicking on close swipe avatar banner emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<RoomListEvent>()
+        setRoomListView(
+            state = aRoomListState(
+                contentState = aRoomsContentState(showSwipeAvatarBanner = true),
+                // Ignore the visible range updates
+                eventSink = { event ->
+                    if (event !is RoomListEvent.UpdateVisibleRange) {
+                        eventsRecorder(event)
+                    }
+                },
+            )
+        )
+
+        eventsRecorder.assertEmpty()
+        val close = activity!!.getString(CommonStrings.action_close)
+        onNodeWithContentDescription(close).performClick()
+        eventsRecorder.assertSingle(RoomListEvent.DismissSwipeAvatarBanner)
+    }
+
+    @Test
     fun `clicking on continue recovery key banner invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomListEvent>()
         ensureCalledOnce { callback ->
