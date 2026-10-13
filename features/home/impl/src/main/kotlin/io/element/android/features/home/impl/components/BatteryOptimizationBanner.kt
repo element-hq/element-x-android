@@ -16,13 +16,11 @@ import io.element.android.libraries.designsystem.components.Announcement
 import io.element.android.libraries.designsystem.components.AnnouncementType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.push.api.battery.BatteryOptimizationEvent
-import io.element.android.libraries.push.api.battery.BatteryOptimizationState
-import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 
 @Composable
 internal fun BatteryOptimizationBanner(
-    state: BatteryOptimizationState,
+    onActionClick: () -> Unit,
+    onDismissClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Announcement(
@@ -31,8 +29,8 @@ internal fun BatteryOptimizationBanner(
         description = stringResource(R.string.banner_battery_optimization_content_android),
         type = AnnouncementType.Actionable(
             actionText = stringResource(R.string.banner_battery_optimization_submit_android),
-            onActionClick = { state.eventSink(BatteryOptimizationEvent.RequestDisableOptimizations) },
-            onDismissClick = { state.eventSink(BatteryOptimizationEvent.Dismiss) },
+            onActionClick = onActionClick,
+            onDismissClick = onDismissClick,
         ),
     )
 }
@@ -41,6 +39,7 @@ internal fun BatteryOptimizationBanner(
 @Composable
 internal fun BatteryOptimizationBannerPreview() = ElementPreview {
     BatteryOptimizationBanner(
-        state = aBatteryOptimizationState(),
+        onActionClick = {},
+        onDismissClick = {},
     )
 }

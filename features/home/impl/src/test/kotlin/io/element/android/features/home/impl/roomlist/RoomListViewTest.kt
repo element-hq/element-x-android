@@ -51,9 +51,10 @@ class RoomListViewTest : RobolectricTest() {
             )
         )
 
+        // The banner is not included in the range, only the rooms are
         eventsRecorder.assertList(
             listOf(
-                RoomListEvent.UpdateVisibleRange(0..5),
+                RoomListEvent.UpdateVisibleRange(0..4),
             )
         )
     }
@@ -64,15 +65,19 @@ class RoomListViewTest : RobolectricTest() {
         setRoomListView(
             state = aRoomListState(
                 contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation),
-                eventSink = eventsRecorder,
+                // Ignore the visible range updates, which are also emitted when the banner is shrinking
+                eventSink = { event ->
+                    if (event !is RoomListEvent.UpdateVisibleRange) {
+                        eventsRecorder(event)
+                    }
+                },
             )
         )
 
-        // Remove automatic initial events
-        eventsRecorder.clear()
-
         val close = activity!!.getString(CommonStrings.action_close)
         onNodeWithContentDescription(close).performClick()
+        // The event is emitted at the end of the animation
+        waitForIdle()
         eventsRecorder.assertSingle(RoomListEvent.DismissBanner)
     }
 
@@ -82,15 +87,19 @@ class RoomListViewTest : RobolectricTest() {
         setRoomListView(
             state = aRoomListState(
                 contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SetUpRecovery),
-                eventSink = eventsRecorder,
+                // Ignore the visible range updates, which are also emitted when the banner is shrinking
+                eventSink = { event ->
+                    if (event !is RoomListEvent.UpdateVisibleRange) {
+                        eventsRecorder(event)
+                    }
+                },
             )
         )
 
-        // Remove automatic initial events
-        eventsRecorder.clear()
-
         val close = activity!!.getString(CommonStrings.action_close)
         onNodeWithContentDescription(close).performClick()
+        // The event is emitted at the end of the animation
+        waitForIdle()
         eventsRecorder.assertSingle(RoomListEvent.DismissBanner)
     }
 
@@ -100,7 +109,7 @@ class RoomListViewTest : RobolectricTest() {
         setRoomListView(
             state = aRoomListState(
                 contentState = aRoomsContentState(showSwipeAvatarBanner = true),
-                // Ignore the visible range updates
+                // Ignore the visible range updates, which are also emitted when the banner is shrinking
                 eventSink = { event ->
                     if (event !is RoomListEvent.UpdateVisibleRange) {
                         eventsRecorder(event)
@@ -112,6 +121,8 @@ class RoomListViewTest : RobolectricTest() {
         eventsRecorder.assertEmpty()
         val close = activity!!.getString(CommonStrings.action_close)
         onNodeWithContentDescription(close).performClick()
+        // The event is emitted at the end of the animation
+        waitForIdle()
         eventsRecorder.assertSingle(RoomListEvent.DismissSwipeAvatarBanner)
     }
 

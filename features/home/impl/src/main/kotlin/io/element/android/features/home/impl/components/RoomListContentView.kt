@@ -52,6 +52,8 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalDivi
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
+import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvent
+import io.element.android.libraries.push.api.battery.BatteryOptimizationEvent
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -161,16 +163,24 @@ private fun EmptyView(
         Box {
             when (state.securityBannerState) {
                 SecurityBannerState.SetUpRecovery -> {
-                    SetUpRecoveryKeyBanner(
-                        onContinueClick = onSetUpRecoveryClick,
-                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
-                    )
+                    DismissibleBanner(
+                        onDismiss = { eventSink(RoomListEvent.DismissBanner) },
+                    ) { onDismissClick ->
+                        SetUpRecoveryKeyBanner(
+                            onContinueClick = onSetUpRecoveryClick,
+                            onDismissClick = onDismissClick,
+                        )
+                    }
                 }
                 SecurityBannerState.RecoveryKeyConfirmation -> {
-                    ConfirmRecoveryKeyBanner(
-                        onContinueClick = onConfirmRecoveryKeyClick,
-                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
-                    )
+                    DismissibleBanner(
+                        onDismiss = { eventSink(RoomListEvent.DismissBanner) },
+                    ) { onDismissClick ->
+                        ConfirmRecoveryKeyBanner(
+                            onContinueClick = onConfirmRecoveryKeyClick,
+                            onDismissClick = onDismissClick,
+                        )
+                    }
                 }
                 SecurityBannerState.None -> Unit
             }
@@ -228,60 +238,26 @@ private fun RoomsViewList(
     modifier: Modifier = Modifier,
 ) {
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
-        eventSink(RoomListEvent.UpdateVisibleRange(visibleRange))
+        // The first item of the list is the banner slot, remove it to get the range of the rooms
+        val roomsRange = (visibleRange.first - 1).coerceAtLeast(0)..(visibleRange.last - 1)
+        eventSink(RoomListEvent.UpdateVisibleRange(roomsRange))
     }
     LazyColumn(
         state = lazyListState,
         modifier = modifier,
         contentPadding = contentPadding,
     ) {
-        when (state.securityBannerState) {
-            SecurityBannerState.SetUpRecovery -> {
-                item {
-                    SetUpRecoveryKeyBanner(
-                        onContinueClick = onSetUpRecoveryClick,
-                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
-                    )
-                }
-            }
-            SecurityBannerState.RecoveryKeyConfirmation -> {
-                item {
-                    ConfirmRecoveryKeyBanner(
-                        onContinueClick = onConfirmRecoveryKeyClick,
-                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
-                    )
-                }
-            }
-            // Banner precedence (top-to-bottom): full-screen-intent > battery-optimization >
-            // new-notification-sound > swipe-avatar > sound-unavailable. At most one renders at a time.
-            SecurityBannerState.None -> when {
-                state.fullScreenIntentPermissionsState.shouldDisplayBanner -> {
-                    item {
-                        FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
-                    }
-                }
-                state.batteryOptimizationState.shouldDisplayBanner -> {
-                    item {
-                        BatteryOptimizationBanner(state = state.batteryOptimizationState)
-                    }
-                }
-                state.showNewNotificationSoundBanner -> {
-                    item {
-                        NewNotificationSoundBanner(
-                            onDismissClick = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
-                        )
-                    }
-                }
-                state.showSwipeAvatarBanner -> {
-                    item {
-                        SwipeAvatarBanner(
-                            onDismissClick = { eventSink(RoomListEvent.DismissSwipeAvatarBanner) },
-                        )
-                    }
-                }
-            }
+        // The banner slot is always the first item of the list, even when there is no banner to display,
+        // so that the rooms keep the same index when a banner is added or removed. Since the rooms do not
+        // have a key, this is required to keep the scroll position.
+        item {
+            RoomsViewBanner(
+                state = state,
+                eventSink = eventSink,
+                onSetUpRecoveryClick = onSetUpRecoveryClick,
+                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+            )
         }
-
         // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
         // is moved to the top of the list.
         itemsIndexed(
@@ -300,6 +276,79 @@ private fun RoomsViewList(
             )
             if (index != state.summaries.lastIndex) {
                 HorizontalDivider()
+            }
+        }
+    }
+}
+
+@Composable
+private fun RoomsViewBanner(
+    state: RoomListContentState.Rooms,
+    eventSink: (RoomListEvent) -> Unit,
+    onSetUpRecoveryClick: () -> Unit,
+    onConfirmRecoveryKeyClick: () -> Unit,
+) {
+    when (state.securityBannerState) {
+        SecurityBannerState.SetUpRecovery -> {
+            DismissibleBanner(
+                onDismiss = { eventSink(RoomListEvent.DismissBanner) },
+            ) { onDismissClick ->
+                SetUpRecoveryKeyBanner(
+                    onContinueClick = onSetUpRecoveryClick,
+                    onDismissClick = onDismissClick,
+                )
+            }
+        }
+        SecurityBannerState.RecoveryKeyConfirmation -> {
+            DismissibleBanner(
+                onDismiss = { eventSink(RoomListEvent.DismissBanner) },
+            ) { onDismissClick ->
+                ConfirmRecoveryKeyBanner(
+                    onContinueClick = onConfirmRecoveryKeyClick,
+                    onDismissClick = onDismissClick,
+                )
+            }
+        }
+        // Banner precedence (top-to-bottom): full-screen-intent > battery-optimization >
+        // new-notification-sound > swipe-avatar > sound-unavailable. At most one renders at a time.
+        SecurityBannerState.None -> when {
+            state.fullScreenIntentPermissionsState.shouldDisplayBanner -> {
+                DismissibleBanner(
+                    onDismiss = { state.fullScreenIntentPermissionsState.eventSink(FullScreenIntentPermissionsEvent.Dismiss) },
+                ) { onDismissClick ->
+                    FullScreenIntentPermissionBanner(
+                        onActionClick = { state.fullScreenIntentPermissionsState.eventSink(FullScreenIntentPermissionsEvent.OpenSettings) },
+                        onDismissClick = onDismissClick,
+                    )
+                }
+            }
+            state.batteryOptimizationState.shouldDisplayBanner -> {
+                DismissibleBanner(
+                    onDismiss = { state.batteryOptimizationState.eventSink(BatteryOptimizationEvent.Dismiss) },
+                ) { onDismissClick ->
+                    BatteryOptimizationBanner(
+                        onActionClick = { state.batteryOptimizationState.eventSink(BatteryOptimizationEvent.RequestDisableOptimizations) },
+                        onDismissClick = onDismissClick,
+                    )
+                }
+            }
+            state.showNewNotificationSoundBanner -> {
+                DismissibleBanner(
+                    onDismiss = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
+                ) { onDismissClick ->
+                    NewNotificationSoundBanner(
+                        onDismissClick = onDismissClick,
+                    )
+                }
+            }
+            state.showSwipeAvatarBanner -> {
+                DismissibleBanner(
+                    onDismiss = { eventSink(RoomListEvent.DismissSwipeAvatarBanner) },
+                ) { onDismissClick ->
+                    SwipeAvatarBanner(
+                        onDismissClick = onDismissClick,
+                    )
+                }
             }
         }
     }
