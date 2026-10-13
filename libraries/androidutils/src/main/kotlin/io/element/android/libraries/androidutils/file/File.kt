@@ -84,5 +84,9 @@ fun File.getSizeOfFiles(): Long {
             Timber.v("Get size of ${it.absolutePath}")
             true
         }
-        .sumOf { it.length() }
+        // Only sum the actual size of files, not directories, to avoid double counting or worse,
+        // since the docs mention that `length()` for directories is not reliable.
+        // For directories, we can assume a size of 4096 bytes (4 KiB) as a placeholder,
+        // which is a common block size on many file systems.
+        .sumOf { if (it.isFile) it.length() else 4096L }
 }
