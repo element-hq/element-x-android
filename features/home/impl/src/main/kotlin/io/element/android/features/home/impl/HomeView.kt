@@ -363,7 +363,7 @@ private fun HomeBottomBar(
                 tooltipLabel = stringResource(item.labelRes),
                 isSelected = isSelected,
                 onClick = { onItemClick(item) },
-                counter = if (item == HomeNavigationBarItem.Chats) totalUnreadCount.takeIf { it > 0 } else null
+                counter = totalUnreadCount.takeIf { item == HomeNavigationBarItem.Chats && it > 0 }
             )
         }
     }
