@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetH
 
 class FakeIdentityOAuthResetHandle(
     override val url: String = "",
+    override val session: String = "",
     var resetOAuthLambda: () -> Result<Unit> = { error("Not implemented") },
     var cancelLambda: () -> Unit = { error("Not implemented") },
 ) : IdentityOAuthResetHandle {
@@ -26,6 +27,7 @@ class FakeIdentityOAuthResetHandle(
 }
 
 class FakeIdentityPasswordResetHandle(
+    override val session: String = "",
     var resetPasswordLambda: (String) -> Result<Unit> = { _ -> error("Not implemented") },
     var cancelLambda: () -> Unit = { error("Not implemented") },
 ) : IdentityPasswordResetHandle {
