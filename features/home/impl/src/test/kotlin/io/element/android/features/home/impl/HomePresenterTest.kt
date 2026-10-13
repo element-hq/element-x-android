@@ -279,6 +279,16 @@ class HomePresenterTest {
                 .with(value(Announcement.MultiAccount))
         }
     }
+
+    @Test
+    fun `present - total unread count is loaded in the initial state`() = runTest {
+        val presenter = createHomePresenter(
+            client = FakeMatrixClient(totalUnreadCountResult = { Result.success(5) }),
+        )
+        presenter.test {
+            assertThat(awaitItem().totalUnreadCount).isEqualTo(5)
+        }
+    }
 }
 
 internal fun createHomePresenter(

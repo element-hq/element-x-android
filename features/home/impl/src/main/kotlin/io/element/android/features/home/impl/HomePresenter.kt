@@ -65,7 +65,7 @@ class HomePresenter(
         val coroutineState = rememberCoroutineScope()
         val matrixUser by client.userProfile.collectAsState()
 
-        val totalUnreadCount by produceState(0) {
+        val totalUnreadCount by produceState(client.totalUnreadCount().getOrDefault(0).toInt()) {
             syncService.heartBeat
                 // Delay the heartbeat so the SDK has time to update the unread count before we read it.
                 .debounce(100.milliseconds)
