@@ -124,6 +124,11 @@ interface EncryptionService {
  */
 sealed interface IdentityResetHandle {
     /**
+     * The value of the session key given by the homeserver.
+     */
+    val session: String
+
+    /**
      * Cancel the reset process and drops the existing handle in the SDK.
      */
     suspend fun cancel()
