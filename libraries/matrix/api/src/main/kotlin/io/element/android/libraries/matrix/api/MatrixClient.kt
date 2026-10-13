@@ -410,7 +410,7 @@ interface MatrixClient : ClientUrlContentFetcher {
 
     /**
      * Deactivates the account on the homeserver, then destroys this client and deletes every local trace of the session.
-     * The password is only sent if the homeserver asks for re-authentication, and on failure the session is left untouched.
+     * On failure the session is left untouched.
      *
      * @param password the account password, required to confirm the deactivation.
      * @param eraseData whether the homeserver should also erase the messages the user sent.
