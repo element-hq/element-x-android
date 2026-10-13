@@ -8,10 +8,21 @@
 
 package io.element.android.features.location.test
 
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.api.LocationService
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeLocationService(
-    private val isServiceAvailable: Boolean = false,
+    mapTilerConfig: MapTilerConfig? = null,
 ) : LocationService {
-    override fun isServiceAvailable() = isServiceAvailable
+    constructor(isServiceAvailable: Boolean) : this(
+        MapTilerConfig(
+            apiKey = "test_api_key",
+            lightStyleId = null,
+            darkStyleId = null,
+            baseUrl = null,
+        ).takeIf { isServiceAvailable }
+    )
+
+    override val mapTilerConfig = MutableStateFlow(mapTilerConfig)
 }
