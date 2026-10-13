@@ -530,7 +530,7 @@ class RustMatrixClient(
      * Store the user profile in the session storage, including a base64 encoded thumbnail of the avatar,
      * so that the avatar can be rendered without having to use this client.
      */
-    private suspend fun storeUserProfile(matrixUser: MatrixUser) {
+    private suspend fun storeUserProfile(matrixUser: MatrixUser) = withContext(sessionDispatcher) {
         val avatarUrl = matrixUser.avatarUrl
         val storedSession = sessionStore.getSession(sessionId.value)
         val avatarData = when {
