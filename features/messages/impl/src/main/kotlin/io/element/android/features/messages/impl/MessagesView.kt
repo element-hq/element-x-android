@@ -529,7 +529,6 @@ internal fun RowScope.MessagesMenuActions(
         roomCallState = roomCallState,
         onJoinCallClick = onJoinCallClick,
     )
-    Spacer(Modifier.width(8.dp))
 }
 
 @Composable
