@@ -13,7 +13,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -29,8 +28,11 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -122,22 +124,14 @@ internal fun TimelineItemRow(
         }
     }
     val selectableEvent = (timelineItem as? TimelineItem.Event)?.takeIf { selectionData.canBeSelected }
-    // Only start-aligned message bubbles slide to make room for the selection indicator:
-    //  - Outgoing (own) messages are end-aligned, opposite the indicator, so they already have room.
-    //  - Centered tiles (state events, call tiles, day dividers, grouped events) must stay put.
-    val isOutgoing = (timelineItem as? TimelineItem.Event)?.isMine == true
-    val shouldSlideContent = timelineItem.rendersAsBubble() && !isOutgoing
     val layoutDirection = LocalLayoutDirection.current
-    val contentSlide = if (shouldSlideContent) SELECTION_COLUMN_WIDTH * selectionProgress else 0.dp
     Layout(
         modifier = modifier.then(backgroundModifier),
         contents = listOf(
             {
                 TimelineItemRowContent(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .offset(x = contentSlide),
-                    selectionContentOffset = contentSlide,
+                    modifier = Modifier.fillMaxWidth(),
+                    selectionData = selectionData,
                     timelineItem = timelineItem,
                     timelineMode = timelineMode,
                     timelineRoomInfo = timelineRoomInfo,
@@ -177,11 +171,15 @@ internal fun TimelineItemRow(
             {
                 if (isSelectionModeActive) {
                     // In selection mode the whole row toggles selection.
-                    Box(modifier = Modifier.clickable(enabled = selectionData.canBeSelected, role = Role.Checkbox) {
-                        if (selectableEvent != null) {
-                            onContentClick(selectableEvent)
-                        }
-                    })
+                    Box(
+                        modifier = Modifier
+                            .clickable(enabled = selectionData.canBeSelected, role = Role.Checkbox) {
+                                if (selectableEvent != null) {
+                                    onContentClick(selectableEvent)
+                                }
+                            }
+                            .semantics { hideFromAccessibility() }
+                    )
                 }
             },
         ),
@@ -205,17 +203,6 @@ internal fun TimelineItemRow(
 
 /** Width reserved for the selection indicator : the row content slides by this amount. */
 private val SELECTION_COLUMN_WIDTH = 36.dp
-
-/**
- * Whether this item is rendered as a start/end-aligned message bubble, as opposed to a centered
- * tile (state event, legacy call invite, call/RTC notification, day divider, grouped events).
- * Mirrors the dispatch in [TimelineItemRowContent]: only bubbles shift to reveal the selection
- * indicator; centered tiles stay put.
- */
-private fun TimelineItem.rendersAsBubble(): Boolean = this is TimelineItem.Event &&
-    content !is TimelineItemStateContent &&
-    content !is TimelineItemLegacyCallInviteContent &&
-    content !is TimelineItemRtcNotificationContent
 
 @Suppress("LongMethod")
 @Composable
@@ -242,7 +229,7 @@ private fun TimelineItemRowContent(
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
-    selectionContentOffset: Dp = 0.dp,
+    selectionData: TimelineItemSelectionData = TimelineItemSelectionData(),
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
     Box(modifier) {
@@ -292,6 +279,10 @@ private fun TimelineItemRowContent(
                     }
                     else -> {
                         val a11yVoiceMessage = stringResource(CommonStrings.a11y_voice_message)
+                        val isSelectionToggle = selectionData.isSelectionModeActive && selectionData.canBeSelected
+                        // Only start-aligned message bubbles slide to make room for the selection indicator. Outgoing (own) messages are end-aligned,
+                        // opposite the indicator, so they already have room, and the centered tiles handled by the branches above never slide.
+                        val contentSlide = if (timelineItem.isMine) 0.dp else SELECTION_COLUMN_WIDTH * selectionData.progress
                         TimelineItemEventRow(
                             modifier = Modifier
                                 .semantics(mergeDescendants = true) {
@@ -301,6 +292,9 @@ private fun TimelineItemRowContent(
                                     } else {
                                         timelineItem.safeSenderName
                                     }
+                                    if (isSelectionToggle) {
+                                        toggleableState = ToggleableState(selectionData.isSelected)
+                                    }
                                     // For Polls, allow the answers to be traversed by Talkback
                                     isTraversalGroup = timelineItem.content is TimelineItemPollContent ||
                                         timelineItem.failedToSend ||
@@ -309,16 +303,18 @@ private fun TimelineItemRowContent(
                                 }
                                 // Custom clickable that applies over the whole item for accessibility
                                 .then(
-                                    if (isTalkbackActive()) {
-                                        Modifier
+                                    when {
+                                        !isTalkbackActive() -> Modifier
+                                        // While selecting, the row only toggles the selection. The context menu cannot be opened, so the long press
+                                        // that opens it is neither offered nor advertised.
+                                        isSelectionToggle -> Modifier.clickable { onContentClick(timelineItem) }
+                                        else -> Modifier
                                             .combinedClickable(
                                                 onClick = { onContentClick(timelineItem) },
                                                 onLongClick = { onLongClick(timelineItem) },
                                                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
                                             )
                                             .onKeyboardContextMenuAction { onLongClick(timelineItem) }
-                                    } else {
-                                        Modifier
                                     }
                                 ),
                             event = timelineItem,
@@ -340,7 +336,8 @@ private fun TimelineItemRowContent(
                             onSwipeToReply = { onSwipeToReply(timelineItem) },
                             onGalleryItemClick = { index -> onGalleryItemClick(timelineItem, index) },
                             eventSink = eventSink,
-                            selectionContentOffset = selectionContentOffset,
+                            selectionContentOffset = contentSlide,
+                            isSelectionToggle = isSelectionToggle,
                             eventContentView = { contentModifier, onContentLayoutChange ->
                                 eventContentView(timelineItem, contentModifier, onContentLayoutChange)
                             },
