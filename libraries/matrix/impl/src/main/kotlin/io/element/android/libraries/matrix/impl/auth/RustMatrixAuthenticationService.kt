@@ -345,7 +345,14 @@ class RustMatrixAuthenticationService(
                     it.scan(
                         qrCodeData = qrCodeData.rustQrCodeData,
                         progressListener = progressListener,
-                    )
+                    ).use { task ->
+                        try {
+                            task.wait()
+                        } catch (e: CancellationException) {
+                            task.cancel()
+                            throw e
+                        }
+                    }
                 }
                 // Ensure that the user is not already logged in with the same account
                 ensureNotAlreadyLoggedIn(client)
