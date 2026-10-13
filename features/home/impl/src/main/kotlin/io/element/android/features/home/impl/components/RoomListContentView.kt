@@ -239,7 +239,7 @@ private fun RoomsViewList(
 ) {
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
         // The first item of the list is the banner slot, remove it to get the range of the rooms
-        val roomsRange = (visibleRange.first - 1).coerceAtLeast(0)..(visibleRange.last - 1)
+        val roomsRange = (visibleRange.first - 1).coerceAtLeast(0)..<visibleRange.last
         eventSink(RoomListEvent.UpdateVisibleRange(roomsRange))
     }
     LazyColumn(
