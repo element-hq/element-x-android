@@ -11,6 +11,8 @@ package io.element.android.libraries.matrix.test.sync
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -32,6 +34,14 @@ class FakeSyncService(
     override val syncState: StateFlow<SyncState> = syncStateFlow
 
     override val isOnline: StateFlow<Boolean> = syncState.mapState { it != SyncState.Offline }
+
+    private val heartBeatFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+
+    override val heartBeat: Flow<Unit> = heartBeatFlow
+
+    suspend fun emitHeartBeat() {
+        heartBeatFlow.emit(Unit)
+    }
 
     suspend fun emitSyncState(syncState: SyncState) {
         syncStateFlow.emit(syncState)

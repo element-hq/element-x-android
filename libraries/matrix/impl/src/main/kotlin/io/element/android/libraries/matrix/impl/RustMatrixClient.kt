@@ -1024,6 +1024,10 @@ class RustMatrixClient(
         return RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities())
     }
 
+    override fun totalUnreadCount(): Result<Long> = runCatchingExceptions {
+        innerClient.totalUnreadNotifications().toLong()
+    }
+
     private fun scheduleBackgroundSearchBackfill() {
         featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageSearch)
             .distinctUntilChanged()
