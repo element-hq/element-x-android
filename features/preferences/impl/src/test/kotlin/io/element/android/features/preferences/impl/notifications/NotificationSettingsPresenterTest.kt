@@ -1177,7 +1177,7 @@ class NotificationSettingsPresenterTest {
             stringProvider = FakeStringProvider(),
             sessionCoroutineScope = backgroundScope,
             featureFlagService = featureFlagService,
-            dispatchers = testCoroutineDispatchers(),
+            dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
         )
     }
 }
