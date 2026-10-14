@@ -13,6 +13,8 @@ package io.element.android.features.preferences.impl.root
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.compound.theme.Theme
+import io.element.android.features.location.api.LocationService
+import io.element.android.features.location.test.FakeLocationService
 import io.element.android.features.preferences.impl.account.aPreferencesAccountState
 import io.element.android.features.preferences.impl.userstatus.aUserStatusState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
@@ -37,8 +39,6 @@ import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
-import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -78,7 +78,18 @@ class PreferencesRootPresenterTest {
             assertThat(loadedState.showAnalyticsSettings).isFalse()
             assertThat(loadedState.showDeveloperSettings).isTrue()
             assertThat(loadedState.showLabsItem).isFalse()
+            assertThat(loadedState.showLocationSettings).isTrue()
             assertThat(loadedState.snackbarMessage).isNull()
+        }
+    }
+
+    @Test
+    fun `present - location settings are hidden when the location service is not available`() = runTest {
+        createPreferencesRootPresenter(
+            locationService = FakeLocationService(isServiceAvailable = false),
+        ).test {
+            assertThat(awaitItem().showLocationSettings).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -163,24 +174,6 @@ class PreferencesRootPresenterTest {
                 loadedState.eventSink(PreferencesRootEvent.OnVersionInfoClick)
             }
             assertThat(awaitItem().showDeveloperSettings).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - switch session invoke method on the session store`() = runTest {
-        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
-        val sessionStore = InMemorySessionStore(
-            initialList = listOf(
-                aSessionData(sessionId = A_SESSION_ID.value),
-                aSessionData(sessionId = A_SESSION_ID_2.value),
-            ),
-            setLatestSessionResult = setLatestSessionResult,
-        )
-        createPreferencesRootPresenter(sessionStore = sessionStore).test {
-            val loadedState = awaitFirstItem()
-            loadedState.eventSink(PreferencesRootEvent.SwitchToSession(A_SESSION_ID_2))
-            setLatestSessionResult.assertions().isCalledOnce()
-                .with(value(A_SESSION_ID_2.value))
         }
     }
 
@@ -291,6 +284,7 @@ class PreferencesRootPresenterTest {
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         sessionStore: SessionStore = InMemorySessionStore(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+        locationService: LocationService = FakeLocationService(isServiceAvailable = true),
     ) = PreferencesRootPresenter(
         matrixClient = matrixClient,
         analyticsService = FakeAnalyticsService(),
@@ -298,6 +292,7 @@ class PreferencesRootPresenterTest {
         snackbarDispatcher = SnackbarDispatcher(),
         showDeveloperSettingsProvider = showDeveloperSettingsProvider,
         featureFlagService = featureFlagService,
+        locationService = locationService,
         sessionStore = sessionStore,
         appPreferencesStore = appPreferencesStore,
         userStatusPresenter = { aUserStatusState() },

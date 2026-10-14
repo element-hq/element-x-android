@@ -65,6 +65,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -79,6 +80,7 @@ fun PreferencesRootView(
     emojiPickerRenderer: EmojiPickerRenderer,
     onBackClick: () -> Unit,
     onAddAccountClick: () -> Unit,
+    onSwitchToSession: (SessionId) -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenLockScreenSettings: () -> Unit,
     onOpenAbout: () -> Unit,
@@ -124,6 +126,7 @@ fun PreferencesRootView(
                 MultiAccountSection(
                     state = state,
                     onAddAccountClick = onAddAccountClick,
+                    onSwitchToSession = onSwitchToSession,
                 )
             }
             HorizontalDivider(
@@ -208,6 +211,7 @@ private fun ColumnScope.UserStatusSection(
 private fun ColumnScope.MultiAccountSection(
     state: PreferencesRootState,
     onAddAccountClick: () -> Unit,
+    onSwitchToSession: (SessionId) -> Unit,
 ) {
     HorizontalDivider(
         thickness = 8.dp,
@@ -275,7 +279,7 @@ private fun ColumnScope.MultiAccountSection(
                     MatrixUserRow(
                         modifier = Modifier
                             .clickable {
-                                state.eventSink(PreferencesRootEvent.SwitchToSession(matrixUser.userId))
+                                onSwitchToSession(matrixUser.userId)
                             }
                             .padding(top = 2.dp, bottom = 2.dp, end = 8.dp),
                         matrixUser = matrixUser,
@@ -330,11 +334,13 @@ private fun AppSettingsSection(
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
             onClick = onOpenLockScreenSettings,
         )
-        ListItem(
-            content = { Text(stringResource(id = CommonStrings.common_location_sharing)) },
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.LocationPin())),
-            onClick = onOpenLocationSettings,
-        )
+        if (state.showLocationSettings) {
+            ListItem(
+                content = { Text(stringResource(id = CommonStrings.common_location_sharing)) },
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.LocationPin())),
+                onClick = onOpenLocationSettings,
+            )
+        }
     }
 }
 
@@ -425,6 +431,7 @@ private fun ContentToPreview(state: PreferencesRootState) {
         emojiPickerRenderer = NoOpEmojiPickerRenderer,
         onBackClick = {},
         onAddAccountClick = {},
+        onSwitchToSession = {},
         onOpenAnalytics = {},
         onOpenDeveloperSettings = {},
         onOpenLocationSettings = {},

@@ -19,9 +19,9 @@ import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
-import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.enterprise.test.remoteconfig.aMapTilerConfig
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.FakeUserLocationStateFactory
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
@@ -31,6 +31,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
+import io.element.android.features.location.test.FakeLocationService
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
 import io.element.android.libraries.matrix.api.core.EventId
@@ -89,7 +90,7 @@ class ShareLocationPresenterTest {
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         liveLocationStore: LiveLocationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId),
         client: FakeMatrixClient = fakeMatrixClient,
-        customMapTilerConfigProvider: () -> Result<MapTilerConfig?> = { Result.success(null) },
+        locationService: LocationService = FakeLocationService(mapTilerConfig = aMapTilerConfig()),
     ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = { fakePermissionsPresenter },
         room = joinedRoom,
@@ -103,7 +104,7 @@ class ShareLocationPresenterTest {
         liveLocationShareManager = liveLocationShareManager,
         liveLocationStore = liveLocationStore,
         userLocationStateFactory = FakeUserLocationStateFactory(),
-        customMapTilerConfigProvider = customMapTilerConfigProvider,
+        locationService = locationService,
     )
 
     @Test
@@ -118,26 +119,24 @@ class ShareLocationPresenterTest {
         val shareLocationPresenter = createShareLocationPresenter()
         shareLocationPresenter.test {
             val state = awaitFirstItem()
-            assertThat(state.customMapTilerConfig.isLoading()).isFalse()
+            assertThat(state.mapTilerConfig).isNotNull()
             assertThat(state.trackUserLocation).isTrue()
             assertThat(state.dialogState).isEqualTo(ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.None))
         }
     }
 
     @Test
-    fun `present - non-null customMapStyleUrl`() = runTest {
+    fun `present - mapTilerConfig is provided by the location service`() = runTest {
         val mapTilerConfig = aMapTilerConfig(apiKey = "A KEY")
         val shareLocationPresenter = createShareLocationPresenter(
             client = FakeMatrixClient(
                 sessionId = A_USER_ID,
             ),
-            customMapTilerConfigProvider = { Result.success(mapTilerConfig) }
+            locationService = FakeLocationService(mapTilerConfig = mapTilerConfig),
         )
         shareLocationPresenter.test {
-            val state = awaitItem()
-            assertThat(state.customMapTilerConfig.isLoading()).isTrue()
-            val finalState = awaitItem()
-            assertThat(finalState.customMapTilerConfig.dataOrNull()).isEqualTo(mapTilerConfig)
+            assertThat(awaitItem().mapTilerConfig).isEqualTo(mapTilerConfig)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

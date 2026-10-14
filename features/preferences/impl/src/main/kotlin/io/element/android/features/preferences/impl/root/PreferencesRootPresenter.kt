@@ -19,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.mapToTheme
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.preferences.impl.account.PreferencesAccountState
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
@@ -47,6 +48,7 @@ class PreferencesRootPresenter(
     private val snackbarDispatcher: SnackbarDispatcher,
     private val showDeveloperSettingsProvider: ShowDeveloperSettingsProvider,
     private val featureFlagService: FeatureFlagService,
+    private val locationService: LocationService,
     private val sessionStore: SessionStore,
     private val appPreferencesStore: AppPreferencesStore,
     private val userStatusPresenter: Presenter<UserStatusState>,
@@ -115,13 +117,12 @@ class PreferencesRootPresenter(
 
         val showDeveloperSettings by showDeveloperSettingsProvider.showDeveloperSettings.collectAsState()
 
+        val isLocationServiceAvailable by remember { locationService.isServiceAvailable() }.collectAsState()
+
         fun handleEvent(event: PreferencesRootEvent) {
             when (event) {
                 is PreferencesRootEvent.OnVersionInfoClick -> {
                     showDeveloperSettingsProvider.unlockDeveloperSettings(coroutineScope)
-                }
-                is PreferencesRootEvent.SwitchToSession -> coroutineScope.launch {
-                    sessionStore.setLatestSession(event.sessionId.value)
                 }
                 PreferencesRootEvent.ToggleOtherAccountsExpanded -> coroutineScope.launch {
                     appPreferencesStore.setOtherAccountsExpanded(!isOtherAccountsSectionExpanded)
@@ -150,6 +151,7 @@ class PreferencesRootPresenter(
             showAnalyticsSettings = hasAnalyticsProviders,
             showDeveloperSettings = showDeveloperSettings,
             showLabsItem = showLabsItem,
+            showLocationSettings = isLocationServiceAvailable,
             snackbarMessage = snackbarMessage,
             eventSink = ::handleEvent,
         )

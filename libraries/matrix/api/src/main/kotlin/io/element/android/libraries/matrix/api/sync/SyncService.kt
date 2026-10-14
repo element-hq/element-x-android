@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.matrix.api.sync
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -37,4 +38,10 @@ interface SyncService {
      * This is `false` only while the state is [SyncState.Offline]; an idle or errored sync still counts as online.
      */
     val isOnline: StateFlow<Boolean>
+
+    /**
+     * Flow that will emit every time the sync has received a response from the server, even if it was empty.
+     * Useful for triggering UI updates when the sync is running.
+     */
+    val heartBeat: Flow<Unit>
 }

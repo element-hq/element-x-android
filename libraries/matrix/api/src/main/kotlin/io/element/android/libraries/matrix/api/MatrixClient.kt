@@ -410,7 +410,7 @@ interface MatrixClient : ClientUrlContentFetcher {
 
     /**
      * Deactivates the account on the homeserver, then destroys this client and deletes every local trace of the session.
-     * The password is only sent if the homeserver asks for re-authentication, and on failure the session is left untouched.
+     * On failure the session is left untouched.
      *
      * @param password the account password, required to confirm the deactivation.
      * @param eraseData whether the homeserver should also erase the messages the user sent.
@@ -505,6 +505,12 @@ interface MatrixClient : ClientUrlContentFetcher {
 
     /** Returns a provider for the capabilities the homeserver advertises, such as whether the display name can be changed. */
     fun homeserverCapabilities(): HomeserverCapabilitiesProvider
+
+    /**
+     * Returns the total number of unread notifications across all rooms, as currently known by the client.
+     * This is a snapshot and may be out of date if the sync is running.
+     */
+    fun totalUnreadCount(): Result<Long>
 }
 
 /**

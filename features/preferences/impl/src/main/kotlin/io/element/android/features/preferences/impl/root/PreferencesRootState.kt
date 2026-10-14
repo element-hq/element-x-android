@@ -32,6 +32,7 @@ data class PreferencesRootState(
     val showAnalyticsSettings: Boolean,
     val showDeveloperSettings: Boolean,
     val showLabsItem: Boolean,
+    val showLocationSettings: Boolean,
     val snackbarMessage: SnackbarMessage?,
     val eventSink: (PreferencesRootEvent) -> Unit,
 )

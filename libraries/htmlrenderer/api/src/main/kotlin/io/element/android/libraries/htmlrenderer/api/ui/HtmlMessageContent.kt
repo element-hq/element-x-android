@@ -15,6 +15,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,8 +55,7 @@ import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.input.pointer.PointerEventTimeoutCancellationException
-import androidx.compose.ui.input.pointer.changedToUp
+import androidx.compose.ui.input.pointer.changedToUpIgnoreConsumed
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
@@ -565,34 +566,18 @@ private fun Modifier.linkTapHandler(
         val (url, urlText) = layoutResult.value?.urlAt(down.position, text) ?: return@awaitEachGesture
         down.consume()
 
-        val longPressTimeout = viewConfiguration.longPressTimeoutMillis
-
-        // Try detecting a long press by waiting for the long press timeout and checking if we received an up event before that.
-        // If we did, it's a tap, otherwise it's a long press.
-        // This warning is a false positive.
-        @Suppress("KotlinConstantConditions")
-        val isLongPress = try {
-            withTimeout(longPressTimeout) {
-                var receivedUp = false
-                while (!receivedUp) {
-                    val event = awaitPointerEvent()
-                    val up = event.changes.firstOrNull { it.id == down.id && it.changedToUp() }
-                    if (up != null) {
-                        receivedUp = true
-                        up.consume()
-                    }
-                }
-
-                !receivedUp
-            }
-        } catch (_: PointerEventTimeoutCancellationException) {
-            true
-        }
-
-        if (isLongPress) {
+        // Returns a non-null change if the long press timeout elapsed, or null if the gesture was canceled by movement beyond touch slop or by an up event.
+        if (awaitLongPressOrCancellation(down.id) != null) {
             context.onLinkLongClick(url, urlText)
+            // Swallow the rest of the gesture so parents don't react to the eventual release.
+            waitForUpOrCancellation()?.consume()
         } else {
-            context.onLinkClick(url, urlText)
+            // Either a tap (the pointer was released) or a drag (the user probably wanted to scroll).
+            val up = currentEvent.changes.firstOrNull { it.id == down.id && it.changedToUpIgnoreConsumed() }
+            if (up != null) {
+                up.consume()
+                context.onLinkClick(url, urlText)
+            }
         }
     }
 }

@@ -28,8 +28,6 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
-import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -43,10 +41,12 @@ import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
 
 class HomePresenterTest {
     @get:Rule
@@ -118,6 +118,40 @@ class HomePresenterTest {
             indicatorService.setShowRoomListTopBarIndicator(true)
             val finalState = awaitItem()
             assertThat(finalState.showAvatarIndicator).isTrue()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - total unread count is updated on sync heartbeat`() = runTest {
+        var unreadCount = 0L
+        val syncService = FakeSyncService()
+        val presenter = createHomePresenter(
+            client = FakeMatrixClient(totalUnreadCountResult = { Result.success(unreadCount) }),
+            syncService = syncService,
+        )
+        presenter.test {
+            assertThat(awaitItem().totalUnreadCount).isEqualTo(0)
+            unreadCount = 5
+            syncService.emitHeartBeat()
+            advanceTimeBy(200.milliseconds)
+            assertThat(awaitItem().totalUnreadCount).isEqualTo(5)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - total unread count defaults to 0 when the SDK call fails`() = runTest {
+        val syncService = FakeSyncService()
+        val presenter = createHomePresenter(
+            client = FakeMatrixClient(totalUnreadCountResult = { Result.failure(AN_EXCEPTION) }),
+            syncService = syncService,
+        )
+        presenter.test {
+            assertThat(awaitItem().totalUnreadCount).isEqualTo(0)
+            syncService.emitHeartBeat()
+            advanceTimeBy(200.milliseconds)
+            expectNoEvents()
         }
     }
 
@@ -252,31 +286,29 @@ class HomePresenterTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `present - switching account dismisses the swipe avatar announcement`() = runTest {
+    fun `present - dismissing the swipe avatar announcement`() = runTest {
         val onAnnouncementDismissedResult = lambdaRecorder<Announcement, Unit> { }
-        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
         val presenter = createHomePresenter(
-            client = FakeMatrixClient(sessionId = A_SESSION_ID),
-            sessionStore = InMemorySessionStore(
-                initialList = listOf(
-                    aSessionData(sessionId = A_SESSION_ID.value),
-                    aSessionData(sessionId = A_SESSION_ID_2.value),
-                ),
-                updateUserProfileResult = { _, _, _, _ -> },
-                setLatestSessionResult = setLatestSessionResult,
-            ),
             announcementService = FakeAnnouncementService(
                 onAnnouncementDismissedResult = onAnnouncementDismissedResult,
             ),
         )
         presenter.test {
             val state = expectMostRecentItem()
-            state.eventSink(HomeEvent.SwitchToAccount(A_SESSION_ID_2))
+            state.eventSink(HomeEvent.DismissSwipeAvatarAnnouncement)
             runCurrent()
             onAnnouncementDismissedResult.assertions().isCalledOnce()
                 .with(value(Announcement.SwipeAvatarToSwitchAccount))
-            setLatestSessionResult.assertions().isCalledOnce()
-                .with(value(A_SESSION_ID_2.value))
+        }
+    }
+
+    @Test
+    fun `present - total unread count is loaded in the initial state`() = runTest {
+        val presenter = createHomePresenter(
+            client = FakeMatrixClient(totalUnreadCountResult = { Result.success(5) }),
+        )
+        presenter.test {
+            assertThat(awaitItem().totalUnreadCount).isEqualTo(5)
         }
     }
 }

@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
@@ -52,13 +51,13 @@ import io.element.android.features.callnative.api.NativeCallHost
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.SessionEnterpriseService
-import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.linknewdevice.api.LinkNewDeviceEntryPoint
 import io.element.android.features.location.api.LocalMapTilerConfig
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
@@ -86,6 +85,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -153,7 +153,7 @@ class LoggedInFlowNode(
     private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val activeLiveLocationShareManager: ActiveLiveLocationShareManager,
-    private val customMapTilerConfigProvider: CustomMapTilerConfigProvider,
+    private val locationService: LocationService,
     private val loggedInEventProcessorFactory: LoggedInEventProcessor.Factory,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
@@ -170,6 +170,7 @@ class LoggedInFlowNode(
     interface Callback : Plugin {
         fun navigateToBugReport()
         fun navigateToAddAccount()
+        fun navigateToSession(sessionId: SessionId)
     }
 
     private val callback: Callback = callback()
@@ -357,6 +358,10 @@ class LoggedInFlowNode(
                     override fun navigateToAddAccount() {
                         callback.navigateToAddAccount()
                     }
+
+                    override fun navigateToSession(sessionId: SessionId) {
+                        callback.navigateToSession(sessionId)
+                    }
                 }
                 homeEntryPoint.createNode(
                     parentNode = this,
@@ -447,6 +452,10 @@ class LoggedInFlowNode(
                 val callback = object : PreferencesEntryPoint.Callback {
                     override fun navigateToAddAccount() {
                         callback.navigateToAddAccount()
+                    }
+
+                    override fun navigateToSession(sessionId: SessionId) {
+                        callback.navigateToSession(sessionId)
                     }
 
                     override fun navigateToLinkNewDevice() {
@@ -636,10 +645,7 @@ class LoggedInFlowNode(
             enterpriseService.semanticColorsFlow(sessionId = matrixClient.sessionId)
         }.collectAsState(SemanticColorsLightDark.default)
 
-        val currentMapTilerConfig = LocalMapTilerConfig.current
-        val updatedMapTilerConfig by produceState(currentMapTilerConfig) {
-            value = customMapTilerConfigProvider.get().getOrNull() ?: currentMapTilerConfig
-        }
+        val mapTilerConfig by locationService.mapTilerConfig.collectAsState()
 
         ElementThemeApp(
             appPreferencesStore = appPreferencesStore,
@@ -648,7 +654,7 @@ class LoggedInFlowNode(
             compoundDark = colors.dark,
             buildMeta = buildMeta,
         ) {
-            CompositionLocalProvider(LocalMapTilerConfig provides updatedMapTilerConfig) {
+            CompositionLocalProvider(LocalMapTilerConfig provides mapTilerConfig) {
                 val isOnline by syncService.isOnline.collectAsState()
                 // Outside the connectivity indicator so the two strips stack rather than fight: an
                 // offline banner during a call belongs under the call bar, not over it.

@@ -102,7 +102,7 @@ private fun ShowLocationViewContent(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val tileStyleUrl = rememberTileStyleUrl(state.customMapTilerConfig.dataOrNull())
+    val tileStyleUrl = rememberTileStyleUrl(state.mapTilerConfig)
     val mapState = rememberMapState(
         baseStyle = BaseStyle.Uri(tileStyleUrl),
         initialCameraPosition = MapDefaults.defaultCameraPosition,
@@ -178,7 +178,7 @@ private fun ShowLocationScaffold(
         }
     }
     MapBottomSheetScaffold(
-        isReady = state.customMapTilerConfig.isReady(),
+        isReady = state.mapTilerConfig != null,
         sheetDragHandle = if (state.isSheetDraggable) {
             { BottomSheetDefaults.DragHandle() }
         } else {

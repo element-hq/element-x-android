@@ -73,17 +73,17 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
       - name: ⚙️ Run unit tests
-        run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES --continue
 
       - name: ⚙️ Run screenshot tests
-        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES --continue
 
       - name: ⚙️ Generate kover coverage report
         run: ./gradlew :koverXmlReportMerged :koverHtmlReportMerged :koverVerifyAll -x testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: kover-error-report
           path: |
@@ -95,7 +95,7 @@ jobs:
 
       - name: 🚫 Upload test results on error
         if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: tests-and-screenshot-tests-results
           path: |
