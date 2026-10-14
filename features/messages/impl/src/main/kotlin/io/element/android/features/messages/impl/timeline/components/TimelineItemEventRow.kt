@@ -182,9 +182,11 @@ fun TimelineItemEventRow(
     onSwipeToReply: () -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
-    // Horizontal offset applied to this row's content by selection mode. The read receipts are
-    // anchored to the end edge and should stay pinned, so they are counter-offset by this amount.
+    // Horizontal offset by which selection mode slides this row's content aside, to make room for the tick. It is applied here, to the message and the
+    // thread summary, rather than to the row as a whole: that keeps the row's accessibility node spanning the whole row, tick included, so that a
+    // screen reader can focus it from anywhere on the row. The read receipts are anchored to the end edge and stay pinned, so they are not slid.
     selectionContentOffset: Dp = 0.dp,
+    isSelectionToggle: Boolean = false,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
         // Only pass down a custom clickable lambda if the content can be clicked separately
         val onContentClick = onEventClick.takeUnless { event.isWholeContentClickable }
@@ -226,6 +228,7 @@ fun TimelineItemEventRow(
 
     val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.canBeRepliedTo
     val accessibilityActions = rememberTimelineItemAccessibilityActions(
+        isEnabled = !isSelectionToggle,
         canReply = canReply,
         onLongClick = onLongClick,
         onSwipeToReply = onSwipeToReply,
@@ -247,7 +250,11 @@ fun TimelineItemEventRow(
             val swipeThresholdPx = 40.dp.toPx()
             val thresholdCrossed = abs(offset) > swipeThresholdPx
             SwipeSensitivity(3f) {
-                Box(Modifier.fillMaxWidth()) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .offset(x = selectionContentOffset)
+                ) {
                     Row(modifier = Modifier.matchParentSize()) {
                         ReplySwipeIndicator({ offset / 120 })
                     }
@@ -268,7 +275,7 @@ fun TimelineItemEventRow(
                             .absoluteOffset { IntOffset(x = offset.roundToInt(), y = 0) }
                             .draggable(
                                 orientation = Orientation.Horizontal,
-                                enabled = !state.isResettingOnRelease,
+                                enabled = !state.isResettingOnRelease && !isSelectionToggle,
                                 onDragStopped = {
                                     coroutineScope.launch {
                                         if (thresholdCrossed) {
@@ -286,6 +293,7 @@ fun TimelineItemEventRow(
             }
         } else {
             TimelineItemEventRowContent(
+                modifier = Modifier.offset(x = selectionContentOffset),
                 event = event,
                 timelineMode = timelineMode,
                 timelineProtectionState = timelineProtectionState,
@@ -311,7 +319,10 @@ fun TimelineItemEventRow(
                         .padding(end = 16.dp)
                 } else {
                     if (timelineRoomInfo.isDm) Modifier else Modifier.padding(start = 16.dp)
-                }.padding(top = 2.dp),
+                }
+                    .padding(top = 2.dp)
+                    .offset(x = selectionContentOffset)
+                    .hiddenFromAccessibilityWhile(isSelectionToggle),
                 threadSummary = event.threadInfo.summary,
                 latestEventText = event.threadInfo.latestEventText,
                 isOutgoing = event.isMine,
@@ -335,9 +346,21 @@ fun TimelineItemEventRow(
             // Counter the selection-mode content slide so the end-anchored read receipts stay pinned.
             modifier = Modifier
                 .padding(top = 4.dp)
-                .offset(x = -selectionContentOffset)
+                .hiddenFromAccessibilityWhile(isSelectionToggle)
         )
     }
+}
+
+/**
+ * Hides this element and its descendants from screen readers while [hidden] is true.
+ *
+ * A clickable descendant stays an accessibility node of its own even though the row merges its descendants, so while the row acts as a selection toggle
+ * it would otherwise still be reachable and activatable by a screen reader. Reactions already hide themselves this way at all times.
+ */
+private fun Modifier.hiddenFromAccessibilityWhile(hidden: Boolean): Modifier = if (hidden) {
+    semantics { hideFromAccessibility() }
+} else {
+    this
 }
 
 /**
@@ -346,6 +369,7 @@ fun TimelineItemEventRow(
  */
 @Composable
 private fun rememberTimelineItemAccessibilityActions(
+    isEnabled: Boolean,
     canReply: Boolean,
     onLongClick: () -> Unit,
     onSwipeToReply: () -> Unit,
@@ -354,8 +378,9 @@ private fun rememberTimelineItemAccessibilityActions(
     val replyLabel = stringResource(CommonStrings.action_reply)
     val latestOnLongClick by rememberUpdatedState(onLongClick)
     val latestOnSwipeToReply by rememberUpdatedState(onSwipeToReply)
-    return remember(canReply, messageActionsLabel, replyLabel) {
+    return remember(isEnabled, canReply, messageActionsLabel, replyLabel) {
         buildList {
+            if (!isEnabled) return@buildList
             add(
                 CustomAccessibilityAction(messageActionsLabel) {
                     latestOnLongClick()
