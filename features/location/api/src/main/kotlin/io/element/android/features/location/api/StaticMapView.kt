@@ -152,8 +152,8 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
         Triple(painter, state, ContentScale.Crop)
     } else {
         val painter = rememberAsyncImagePainter(
-            model = if (constraints.isZero) {
-                // Avoid building a URL if any of the size constraints is zero
+            model = if (builder == null || constraints.isZero) {
+                // Avoid building a URL if there is no map provider or if any of the size constraints is zero
                 null
             } else {
                 ImageRequest.Builder(context)
@@ -195,7 +195,7 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
         else -> {
             StaticMapPlaceholder(
                 painter = painterResource(R.drawable.blurred_map),
-                canReload = builder.isServiceAvailable() && state is AsyncImagePainter.State.Error,
+                canReload = builder?.isServiceAvailable() == true && state is AsyncImagePainter.State.Error,
                 contentDescription = contentDescription,
                 width = maxWidth,
                 height = maxHeight,
