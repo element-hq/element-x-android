@@ -29,7 +29,7 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
                 myUser = aMatrixUser(avatarUrl = "anAvatarUrl"),
                 version = "Version 1.1 (1)",
                 isMultiAccountEnabled = true,
-                otherSessions = aMatrixUserList().drop(1).take(1),
+                otherSessions = aMatrixUserList().drop(1).take(1).map { anOtherAccount(it) },
                 showAnalyticsSettings = true,
                 showLabsItem = true,
             ),
@@ -40,7 +40,7 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
             aPreferencesRootState(
                 isMultiAccountEnabled = true,
                 isOtherAccountsSectionExpanded = true,
-                otherSessions = aMatrixUserList().drop(1).take(3),
+                otherSessions = aMatrixUserList().drop(1).take(3).map { anOtherAccount(it) },
             ),
             aPreferencesRootState(
                 showLabsItem = true,
@@ -55,6 +55,14 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
             aPreferencesRootState(userStatusState = null),
             // Location sharing not available
             aPreferencesRootState(showLocationSettings = false),
+            // Other accounts with unread notifications
+            aPreferencesRootState(
+                isMultiAccountEnabled = true,
+                isOtherAccountsSectionExpanded = true,
+                otherSessions = aMatrixUserList().drop(1).take(3).zip(listOf(3, 0, 120)) { user, unreadCount ->
+                    anOtherAccount(user = user, unreadCount = unreadCount)
+                },
+            ),
         )
 }
 
@@ -66,7 +74,7 @@ fun aPreferencesRootState(
     isOtherAccountsSectionExpanded: Boolean = false,
     theme: ThemeOption = ThemeOption.System,
     availableThemeOptions: List<ThemeOption> = ThemeOption.entries,
-    otherSessions: List<MatrixUser> = emptyList(),
+    otherSessions: List<OtherAccount> = emptyList(),
     showAnalyticsSettings: Boolean = false,
     showDeveloperSettings: Boolean = false,
     showLabsItem: Boolean = false,
@@ -90,4 +98,12 @@ fun aPreferencesRootState(
     userStatusState = userStatusState,
     snackbarMessage = snackbarMessage,
     eventSink = eventSink,
+)
+
+fun anOtherAccount(
+    user: MatrixUser = aMatrixUser(),
+    unreadCount: Int = 0,
+) = OtherAccount(
+    user = user,
+    unreadCount = unreadCount,
 )

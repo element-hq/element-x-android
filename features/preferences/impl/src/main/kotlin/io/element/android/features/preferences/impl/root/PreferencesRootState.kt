@@ -28,7 +28,7 @@ data class PreferencesRootState(
     val version: String,
     val isMultiAccountEnabled: Boolean,
     val isOtherAccountsSectionExpanded: Boolean,
-    val otherSessions: ImmutableList<MatrixUser>,
+    val otherSessions: ImmutableList<OtherAccount>,
     val showAnalyticsSettings: Boolean,
     val showDeveloperSettings: Boolean,
     val showLabsItem: Boolean,

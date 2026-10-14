@@ -76,9 +76,11 @@ class PreferencesRootViewTest : RobolectricTest() {
                 isMultiAccountEnabled = true,
                 isOtherAccountsSectionExpanded = true,
                 otherSessions = listOf(
-                    aMatrixUser(
-                        id = A_USER_ID_2.value,
-                        displayName = "Bob",
+                    anOtherAccount(
+                        user = aMatrixUser(
+                            id = A_USER_ID_2.value,
+                            displayName = "Bob",
+                        ),
                     )
                 ),
                 eventSink = eventsRecorder,
@@ -89,6 +91,28 @@ class PreferencesRootViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `unread count of other session is displayed`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
+        setView(
+            aPreferencesRootState(
+                isMultiAccountEnabled = true,
+                isOtherAccountsSectionExpanded = true,
+                otherSessions = listOf(
+                    anOtherAccount(
+                        user = aMatrixUser(
+                            id = A_USER_ID_2.value,
+                            displayName = "Bob",
+                        ),
+                        unreadCount = 42,
+                    )
+                ),
+                eventSink = eventsRecorder,
+            ),
+        )
+        onNodeWithText("42").assertExists()
+    }
+
+    @Test
     fun `clicking on Switch accounts sends a ToggleOtherAccountsExpanded`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PreferencesRootEvent>()
         setView(
@@ -96,9 +120,11 @@ class PreferencesRootViewTest : RobolectricTest() {
                 isMultiAccountEnabled = true,
                 isOtherAccountsSectionExpanded = false,
                 otherSessions = listOf(
-                    aMatrixUser(
-                        id = A_USER_ID_2.value,
-                        displayName = "Bob",
+                    anOtherAccount(
+                        user = aMatrixUser(
+                            id = A_USER_ID_2.value,
+                            displayName = "Bob",
+                        ),
                     )
                 ),
                 eventSink = eventsRecorder,
@@ -116,9 +142,11 @@ class PreferencesRootViewTest : RobolectricTest() {
                 isMultiAccountEnabled = true,
                 isOtherAccountsSectionExpanded = false,
                 otherSessions = listOf(
-                    aMatrixUser(
-                        id = A_USER_ID_2.value,
-                        displayName = "Bob",
+                    anOtherAccount(
+                        user = aMatrixUser(
+                            id = A_USER_ID_2.value,
+                            displayName = "Bob",
+                        ),
                     )
                 ),
                 eventSink = eventsRecorder,
@@ -138,9 +166,11 @@ class PreferencesRootViewTest : RobolectricTest() {
                     isMultiAccountEnabled = true,
                     isOtherAccountsSectionExpanded = true,
                     otherSessions = listOf(
-                        aMatrixUser(
-                            id = A_USER_ID_2.value,
-                            displayName = "Bob",
+                        anOtherAccount(
+                            user = aMatrixUser(
+                                id = A_USER_ID_2.value,
+                                displayName = "Bob",
+                            ),
                         )
                     ),
                     eventSink = eventsRecorder,
