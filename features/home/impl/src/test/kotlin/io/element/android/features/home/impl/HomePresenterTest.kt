@@ -39,8 +39,10 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -292,6 +294,7 @@ class HomePresenterTest {
             announcementService = FakeAnnouncementService(
                 onAnnouncementDismissedResult = onAnnouncementDismissedResult,
             ),
+            appCoroutineScope = this,
         )
         presenter.test {
             val state = expectMostRecentItem()
@@ -313,7 +316,7 @@ class HomePresenterTest {
     }
 }
 
-internal fun createHomePresenter(
+internal fun TestScope.createHomePresenter(
     client: MatrixClient = FakeMatrixClient(),
     syncService: SyncService = FakeSyncService(),
     snackbarDispatcher: SnackbarDispatcher = SnackbarDispatcher(),
@@ -323,6 +326,7 @@ internal fun createHomePresenter(
     sessionStore: SessionStore = InMemorySessionStore(),
     announcementService: AnnouncementService = FakeAnnouncementService(),
     featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
+    appCoroutineScope: CoroutineScope = backgroundScope,
 ) = HomePresenter(
     client = client,
     syncService = syncService,
@@ -334,4 +338,5 @@ internal fun createHomePresenter(
     sessionStore = sessionStore,
     announcementService = announcementService,
     featureFlagService = featureFlagService,
+    appCoroutineScope = appCoroutineScope,
 )
