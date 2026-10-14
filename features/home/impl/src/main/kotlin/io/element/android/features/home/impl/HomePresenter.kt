@@ -126,9 +126,6 @@ class HomePresenter(
                 is HomeEvent.SelectHomeNavigationBarItem -> {
                     currentHomeNavigationBarItemOrdinal = event.item.ordinal
                 }
-                is HomeEvent.SwitchToAccount -> coroutineState.launch {
-                    sessionStore.setLatestSession(event.sessionId.value)
-                }
                 HomeEvent.DismissMultiAccountAnnouncement -> coroutineState.launch {
                     announcementService.onAnnouncementDismissed(Announcement.MultiAccount)
                 }

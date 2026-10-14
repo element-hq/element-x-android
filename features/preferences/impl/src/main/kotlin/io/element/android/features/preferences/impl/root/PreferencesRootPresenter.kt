@@ -124,9 +124,6 @@ class PreferencesRootPresenter(
                 is PreferencesRootEvent.OnVersionInfoClick -> {
                     showDeveloperSettingsProvider.unlockDeveloperSettings(coroutineScope)
                 }
-                is PreferencesRootEvent.SwitchToSession -> coroutineScope.launch {
-                    sessionStore.setLatestSession(event.sessionId.value)
-                }
                 PreferencesRootEvent.ToggleOtherAccountsExpanded -> coroutineScope.launch {
                     appPreferencesStore.setOtherAccountsExpanded(!isOtherAccountsSectionExpanded)
                 }

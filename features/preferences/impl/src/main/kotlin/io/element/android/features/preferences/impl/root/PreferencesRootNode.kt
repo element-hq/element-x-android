@@ -24,6 +24,7 @@ import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTa
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
+import io.element.android.libraries.matrix.api.core.SessionId
 
 @ContributesNode(SessionScope::class)
 @AssistedInject
@@ -35,6 +36,7 @@ class PreferencesRootNode(
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : PreferencesAccountCallback, Plugin {
         fun navigateToAddAccount()
+        fun navigateToSession(sessionId: SessionId)
         fun navigateToAnalyticsSettings()
         fun navigateToAbout()
         fun navigateToDeveloperSettings()
@@ -72,6 +74,7 @@ class PreferencesRootNode(
             modifier = modifier,
             onBackClick = this::navigateUp,
             onAddAccountClick = callback::navigateToAddAccount,
+            onSwitchToSession = callback::navigateToSession,
             onOpenAnalytics = callback::navigateToAnalyticsSettings,
             onOpenAbout = callback::navigateToAbout,
             onOpenDeveloperSettings = callback::navigateToDeveloperSettings,
