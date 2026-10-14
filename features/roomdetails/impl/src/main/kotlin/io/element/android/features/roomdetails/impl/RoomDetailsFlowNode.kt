@@ -28,6 +28,7 @@ import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
+import io.element.android.features.messageretention.api.MessageRetentionEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.poll.api.history.PollHistoryEntryPoint
 import io.element.android.features.reportroom.api.ReportRoomEntryPoint
@@ -86,6 +87,7 @@ class RoomDetailsFlowNode(
     private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,
     private val rolesAndPermissionsEntryPoint: RolesAndPermissionsEntryPoint,
     private val securityAndPrivacyEntryPoint: SecurityAndPrivacyEntryPoint,
+    private val messageRetentionEntryPoint: MessageRetentionEntryPoint,
     private val roomDetailsEditEntryPoint: RoomDetailsEditEntryPoint,
 ) : BaseFlowNode<RoomDetailsFlowNode.NavTarget>(
     backstack = BackStack(
@@ -140,6 +142,9 @@ class RoomDetailsFlowNode(
 
         @Parcelize
         data object SecurityAndPrivacy : NavTarget
+
+        @Parcelize
+        data object MessageRetention : NavTarget
 
         @Parcelize
         data class VerifyUser(val userId: UserId) : NavTarget
@@ -222,6 +227,10 @@ class RoomDetailsFlowNode(
 
                     override fun navigateToSecurityAndPrivacy() {
                         backstack.push(NavTarget.SecurityAndPrivacy)
+                    }
+
+                    override fun navigateToMessageRetention() {
+                        backstack.push(NavTarget.MessageRetention)
                     }
 
                     override fun navigateToRoomMemberDetails(userId: UserId) {
@@ -431,6 +440,18 @@ class RoomDetailsFlowNode(
                     }
                 }
                 securityAndPrivacyEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = callback,
+                )
+            }
+            NavTarget.MessageRetention -> {
+                val callback = object : MessageRetentionEntryPoint.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                messageRetentionEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
                     callback = callback,

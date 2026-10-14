@@ -46,6 +46,7 @@ data class RoomDetailsState(
     val canShowKnockRequests: Boolean,
     val knockRequestsCount: Int?,
     val canShowSecurityAndPrivacy: Boolean,
+    val canShowMessageRetention: Boolean,
     val hasMemberVerificationViolations: Boolean,
     val canReportRoom: Boolean,
     val isTombstoned: Boolean,

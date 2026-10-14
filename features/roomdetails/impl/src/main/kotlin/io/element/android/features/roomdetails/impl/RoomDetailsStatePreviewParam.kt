@@ -61,6 +61,8 @@ open class RoomDetailsStatePreviewParam : PreviewParameterProvider<RoomDetailsSt
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.Joined),
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.Shared),
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.WorldReadable),
+            aRoomDetailsState(canShowMessageRetention = true),
+            aRoomDetailsState(canShowMessageRetention = true, isEncrypted = false),
             // Add other state here
         )
 }
@@ -121,6 +123,7 @@ fun aRoomDetailsState(
     canShowKnockRequests: Boolean = false,
     knockRequestsCount: Int? = null,
     canShowSecurityAndPrivacy: Boolean = true,
+    canShowMessageRetention: Boolean = false,
     hasMemberVerificationViolations: Boolean = false,
     canReportRoom: Boolean = true,
     isTombstoned: Boolean = false,
@@ -152,6 +155,7 @@ fun aRoomDetailsState(
     canShowKnockRequests = canShowKnockRequests,
     knockRequestsCount = knockRequestsCount,
     canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
+    canShowMessageRetention = canShowMessageRetention,
     hasMemberVerificationViolations = hasMemberVerificationViolations,
     canReportRoom = canReportRoom,
     isTombstoned = isTombstoned,
