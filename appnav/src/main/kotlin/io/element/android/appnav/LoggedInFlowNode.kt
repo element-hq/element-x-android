@@ -85,6 +85,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -169,6 +170,7 @@ class LoggedInFlowNode(
     interface Callback : Plugin {
         fun navigateToBugReport()
         fun navigateToAddAccount()
+        fun navigateToSession(sessionId: SessionId)
     }
 
     private val callback: Callback = callback()
@@ -356,6 +358,10 @@ class LoggedInFlowNode(
                     override fun navigateToAddAccount() {
                         callback.navigateToAddAccount()
                     }
+
+                    override fun navigateToSession(sessionId: SessionId) {
+                        callback.navigateToSession(sessionId)
+                    }
                 }
                 homeEntryPoint.createNode(
                     parentNode = this,
@@ -446,6 +452,10 @@ class LoggedInFlowNode(
                 val callback = object : PreferencesEntryPoint.Callback {
                     override fun navigateToAddAccount() {
                         callback.navigateToAddAccount()
+                    }
+
+                    override fun navigateToSession(sessionId: SessionId) {
+                        callback.navigateToSession(sessionId)
                     }
 
                     override fun navigateToLinkNewDevice() {

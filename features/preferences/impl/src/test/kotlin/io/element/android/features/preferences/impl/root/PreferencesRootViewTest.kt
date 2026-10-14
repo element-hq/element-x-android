@@ -20,6 +20,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -69,23 +70,25 @@ class PreferencesRootViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `clicking on other session sends a SwitchToSession`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PreferencesRootEvent>()
-        setView(
-            aPreferencesRootState(
-                isMultiAccountEnabled = true,
-                isOtherAccountsSectionExpanded = true,
-                otherSessions = listOf(
-                    aMatrixUser(
-                        id = A_USER_ID_2.value,
-                        displayName = "Bob",
-                    )
+    fun `clicking on other session invokes the expected callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
+        ensureCalledOnceWithParam(A_USER_ID_2) { callback ->
+            setView(
+                aPreferencesRootState(
+                    isMultiAccountEnabled = true,
+                    isOtherAccountsSectionExpanded = true,
+                    otherSessions = listOf(
+                        aMatrixUser(
+                            id = A_USER_ID_2.value,
+                            displayName = "Bob",
+                        )
+                    ),
+                    eventSink = eventsRecorder,
                 ),
-                eventSink = eventsRecorder,
-            ),
-        )
-        onNodeWithText("Bob").performClick()
-        eventsRecorder.assertSingle(PreferencesRootEvent.SwitchToSession(A_USER_ID_2))
+                onSwitchToSession = callback,
+            )
+            onNodeWithText("Bob").performClick()
+        }
     }
 
     @Test
@@ -395,6 +398,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
     state: PreferencesRootState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
     onAddAccountClick: () -> Unit = EnsureNeverCalled(),
+    onSwitchToSession: (SessionId) -> Unit = EnsureNeverCalledWithParam(),
     onOpenAnalytics: () -> Unit = EnsureNeverCalled(),
     onOpenLockScreenSettings: () -> Unit = EnsureNeverCalled(),
     onOpenAbout: () -> Unit = EnsureNeverCalled(),
@@ -418,6 +422,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
             emojiPickerRenderer = NoOpEmojiPickerRenderer,
             onBackClick = onBackClick,
             onAddAccountClick = onAddAccountClick,
+            onSwitchToSession = onSwitchToSession,
             onOpenAnalytics = onOpenAnalytics,
             onOpenLockScreenSettings = onOpenLockScreenSettings,
             onOpenAbout = onOpenAbout,

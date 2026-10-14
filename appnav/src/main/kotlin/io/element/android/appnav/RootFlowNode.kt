@@ -416,6 +416,12 @@ class RootFlowNode(
                     override fun navigateToAddAccount() {
                         backstack.push(NavTarget.NotLoggedInFlow(null))
                     }
+
+                    override fun navigateToSession(sessionId: SessionId) {
+                        lifecycleScope.launch {
+                            sessionStore.setLatestSession(sessionId.value)
+                        }
+                    }
                 }
                 val savedNavState = extractSavedStateForNavTarget(navTarget, this.buildContext.savedStateMap)
                 val buildContext = if (savedNavState != null) {

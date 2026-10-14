@@ -305,6 +305,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomListView(
             onRoomClick = { roomId, _ -> onRoomClick(roomId) },
             onSettingsClick = onSettingsClick,
             onAddAccountClick = onAddAccountClick,
+            onSwitchToAccount = EnsureNeverCalledWithParam(),
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
             onStartChatClick = onCreateRoomClick,
