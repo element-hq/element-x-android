@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import com.bumble.appyx.core.children.nodeOrNull
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -23,6 +24,8 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.remove
+import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
@@ -45,6 +48,7 @@ import io.element.android.features.messages.impl.report.ReportMessageNode
 import io.element.android.features.messages.impl.threads.ThreadedMessagesNode
 import io.element.android.features.messages.impl.threads.list.ThreadsListNode
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.timeline.TimelineSelectionOwner
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
@@ -467,6 +471,10 @@ class MessagesFlowNode(
                 val params = ForwardEntryPoint.Params(navTarget.eventIds, timelineProvider)
                 val callback = object : ForwardEntryPoint.Callback {
                     override fun onDone(roomIds: List<RoomId>) {
+                        // Exit selection mode only if forwarding actually happened.
+                        if (roomIds.isNotEmpty()) {
+                            exitSelectionMode()
+                        }
                         backstack.pop()
                         roomIds.singleOrNull()?.let { roomId ->
                             callback.navigateToRoom(roomId)
@@ -937,6 +945,14 @@ class MessagesFlowNode(
         delay(10.milliseconds)
         // Then push the new threads screen on top
         backstack.push(NavTarget.Thread(threadId, focusedEventId))
+    }
+
+    private fun exitSelectionMode() {
+        val prevKey = backstack.elements.value
+            .lastOrNull { it.targetState == BackStack.State.STASHED }
+            ?.key
+        val timelineSelectionOwner = children.value[prevKey]?.nodeOrNull as? TimelineSelectionOwner
+        timelineSelectionOwner?.exitTimelineSelection()
     }
 
     @Composable

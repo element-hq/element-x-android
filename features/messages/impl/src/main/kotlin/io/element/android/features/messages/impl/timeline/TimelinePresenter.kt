@@ -137,6 +137,19 @@ class TimelinePresenter(
 
     private val focusRequestState: MutableState<FocusRequestState> = mutableStateOf(FocusRequestState.None)
 
+    /**
+     * Selection is held by the presenter instance, and not by the composition, so that it survives
+     * this timeline being stashed while another screen (i.e. the forward screen) is on top of it.
+     */
+    private val selectionState: MutableState<SelectionState> = mutableStateOf(SelectionState.Disabled)
+
+    /**
+     * Exit the selection mode. Can be called from outside the composition, see [TimelineSelectionOwner].
+     */
+    fun exitSelectionMode() {
+        selectionState.value = SelectionState.Disabled
+    }
+
     @Composable
     override fun present(): TimelineState {
         LaunchedEffect(Unit) {
@@ -180,15 +193,14 @@ class TimelinePresenter(
         }
 
         val isMultiSelectEnabled by produceState(false) {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageMultiSelect).collect { value = it }
-        }
-        var selectionState by remember { mutableStateOf<SelectionState>(SelectionState.Disabled) }
-
-        // When the feature flag is turned off, clear any active selection.
-        LaunchedEffect(isMultiSelectEnabled) {
-            if (!isMultiSelectEnabled) {
-                selectionState = SelectionState.Disabled
-            }
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageMultiSelect)
+                .collect { isEnabled ->
+                    value = isEnabled
+                    // When the feature flag is turned off, clear any active selection.
+                    if (!isEnabled) {
+                        exitSelectionMode()
+                    }
+                }
         }
 
         val timelineProtectionState = timelineProtectionPresenter.present()
@@ -273,12 +285,12 @@ class TimelinePresenter(
                 }
                 is TimelineEvent.EnterSelectionMode -> {
                     if (!isMultiSelectEnabled) return
-                    selectionState = SelectionState.Active(event.action, persistentSetOf(event.eventId))
+                    selectionState.value = SelectionState.Active(event.action, persistentSetOf(event.eventId))
                 }
                 is TimelineEvent.ToggleSelection -> {
-                    val current = selectionState as? SelectionState.Active ?: return
+                    val current = selectionState.value as? SelectionState.Active ?: return
                     val selected = current.selectedEventIds
-                    selectionState = when {
+                    selectionState.value = when {
                         // Deselecting the last event does not exit selection mode: it is only left explicitly, as on iOS.
                         event.eventId in selected -> current.deselect(setOf(event.eventId))
                         selected.size >= MAX_SELECTION_COUNT -> {
@@ -289,7 +301,7 @@ class TimelinePresenter(
                     }
                 }
                 is TimelineEvent.ExitSelectionMode -> {
-                    selectionState = SelectionState.Disabled
+                    exitSelectionMode()
                 }
                 TimelineEvent.HideShieldDialog -> messageShieldDialogData.value = null
                 TimelineEvent.MarkAllAsRead -> sessionCoroutineScope.launch {
@@ -384,10 +396,10 @@ class TimelinePresenter(
 
             // Drop the selected events which the action cannot be applied to anymore, for instance because the message has been deleted.
             timelineItemsFactory.timelineItems
-                .map { items -> selectionState.eventIdsToDeselect(items) }
+                .map { items -> selectionState.value.eventIdsToDeselect(items) }
                 .filter { eventIdsToDeselect -> eventIdsToDeselect.isNotEmpty() }
                 .flowOn(dispatchers.computation)
-                .onEach { eventIdsToDeselect -> selectionState = selectionState.deselect(eventIdsToDeselect) }
+                .onEach { eventIdsToDeselect -> selectionState.value = selectionState.value.deselect(eventIdsToDeselect) }
                 .launchIn(this)
 
             combine(
@@ -526,7 +538,7 @@ class TimelinePresenter(
             displayThreadSummaries = displayThreadSummaries,
             displayJumpToUnread = displayJumpToUnread,
             jumpToUnread = jumpToUnread.value,
-            selectionState = selectionState,
+            selectionState = selectionState.value,
             useNewTimelineEventRenderer = useNewTimelineEventRenderer,
             eventSink = ::handleEvent,
         )
