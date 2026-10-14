@@ -118,6 +118,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -320,7 +321,7 @@ class RustMatrixClient(
         override fun onUpdate(profile: UserProfile) {
             val matrixUser = profile.map()
             _userProfile.tryEmit(matrixUser)
-            sessionCoroutineScope.launch {
+            sessionCoroutineScope.launch(sessionDispatcher) {
                 storeUserProfile(matrixUser)
             }
         }
@@ -1013,6 +1014,8 @@ class RustMatrixClient(
                     searchBackfillService.cancelPeriodicSearchBackfill()
                 }
             }
+            // Checking the pending work is a blocking call, do not do it on the main thread
+            .flowOn(sessionDispatcher)
             .launchIn(sessionCoroutineScope)
     }
 }

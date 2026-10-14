@@ -26,6 +26,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -57,6 +58,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
@@ -76,6 +78,7 @@ class NotificationSettingsPresenter(
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
     private val featureFlagService: FeatureFlagService,
+    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<NotificationSettingsState> {
     // Serializes the pick → copy → persist → recreate pipeline per slot. The copier already locks
     // its `<slot>.tmp` file, but the persist+recreate window outside the copier is unprotected;
@@ -111,16 +114,19 @@ class NotificationSettingsPresenter(
         }
 
         // List of PushProvider -> Distributor
-        val distributors = remember {
-            pushService.getAvailablePushProviders()
-                .flatMap { pushProvider ->
-                    pushProvider.getDistributors().map { distributor ->
-                        pushProvider to distributor
+        // Getting the distributors can query the PackageManager and the Play Services, so do it off the main thread
+        val distributors by produceState(emptyList<Pair<PushProvider, Distributor>>()) {
+            value = withContext(dispatchers.io) {
+                pushService.getAvailablePushProviders()
+                    .flatMap { pushProvider ->
+                        pushProvider.getDistributors().map { distributor ->
+                            pushProvider to distributor
+                        }
                     }
-                }
+            }
         }
         // List of Distributors
-        val availableDistributors = remember {
+        val availableDistributors = remember(distributors) {
             distributors.map { it.second }.toImmutableList()
         }
 

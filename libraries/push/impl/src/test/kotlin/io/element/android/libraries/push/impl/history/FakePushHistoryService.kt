@@ -30,7 +30,7 @@ class FakePushHistoryService(
     private val getPendingPushRequests: (SessionId, Instant?) -> Result<List<PushRequest>> = { _, _ -> lambdaError() },
     private val removeOldPushRequests: (SessionId) -> Result<Unit> = { lambdaError() },
 ) : PushHistoryService {
-    override fun onPushResult(
+    override suspend fun onPushResult(
         providerInfo: String,
         eventId: EventId?,
         roomId: RoomId?,
