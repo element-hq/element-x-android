@@ -12,7 +12,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class FakeJoinedRoomTest {
+class RoomStateEventTest {
     @Test(expected = AssertionError::class)
     fun `sendStateEventRaw fails when no result is configured`() = runTest {
         val room = FakeJoinedRoom()
