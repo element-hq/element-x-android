@@ -43,6 +43,7 @@ import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.userstatus.UserStatusView
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
+import io.element.android.libraries.designsystem.atomic.atoms.CounterAtom
 import io.element.android.libraries.designsystem.components.async.AsyncActionIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.avatar.AvatarRow
@@ -244,7 +245,7 @@ private fun ColumnScope.MultiAccountSection(
                         AvatarRow(
                             avatarDataList = state.otherSessions
                                 .take(3)
-                                .map { it.getAvatarData(AvatarSize.OtherAccountItem) }
+                                .map { it.user.getAvatarData(AvatarSize.OtherAccountItem) }
                                 .toImmutableList(),
                             avatarType = AvatarType.User,
                             lastOnTop = true,
@@ -275,16 +276,21 @@ private fun ColumnScope.MultiAccountSection(
                     thickness = 1.dp,
                     color = ElementTheme.colors.bgSubtleSecondary,
                 )
-                state.otherSessions.forEach { matrixUser ->
+                state.otherSessions.forEach { otherAccount ->
                     MatrixUserRow(
                         modifier = Modifier
                             .clickable {
-                                onSwitchToSession(matrixUser.userId)
+                                onSwitchToSession(otherAccount.user.userId)
                             }
                             .padding(top = 2.dp, bottom = 2.dp, end = 8.dp),
-                        matrixUser = matrixUser,
+                        matrixUser = otherAccount.user,
                         avatarSize = AvatarSize.AccountItem,
                         verticalSpaceWidth = 16.dp,
+                        trailingContent = if (otherAccount.unreadCount > 0) {
+                            { CounterAtom(count = otherAccount.unreadCount) }
+                        } else {
+                            null
+                        },
                     )
                 }
                 AddAccountItem(onAddAccountClick)

@@ -24,13 +24,18 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_USER_ID_3
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -236,13 +241,59 @@ class PreferencesRootPresenterTest {
             assertThat(state.isMultiAccountEnabled).isTrue()
             assertThat(state.otherSessions).hasSize(1)
             assertThat(state.otherSessions[0]).isEqualTo(
-                MatrixUser(
-                    userId = A_SESSION_ID_2,
-                    displayName = "Bob",
-                    avatarUrl = "avatarUrl",
-                    avatarThumbnail = "avatarData",
+                OtherAccount(
+                    user = MatrixUser(
+                        userId = A_SESSION_ID_2,
+                        displayName = "Bob",
+                        avatarUrl = "avatarUrl",
+                        avatarThumbnail = "avatarData",
+                    ),
+                    unreadCount = 0,
                 )
             )
+        }
+    }
+
+    @Test
+    fun `present - other accounts keep the session store order and get their unread count`() = runTest {
+        var bobUnreadCount = 3L
+        val bobSyncService = FakeSyncService()
+        val bobClient = FakeMatrixClient(
+            sessionId = A_SESSION_ID_2,
+            syncService = bobSyncService,
+            totalUnreadCountResult = { Result.success(bobUnreadCount) },
+        )
+        createPreferencesRootPresenter(
+            matrixClient = FakeMatrixClient(sessionId = A_SESSION_ID),
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(sessionId = A_USER_ID_3.value),
+                    aSessionData(sessionId = A_SESSION_ID.value),
+                    aSessionData(sessionId = A_SESSION_ID_2.value),
+                )
+            ),
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                when (sessionId) {
+                    A_SESSION_ID_2 -> Result.success(bobClient)
+                    // Client for the third account is not in memory
+                    else -> Result.failure(AN_EXCEPTION)
+                }
+            },
+        ).test {
+            val state = consumeItemsUntilPredicate { it.otherSessions.isNotEmpty() }.last()
+            assertThat(state.otherSessions.map { it.user.userId to it.unreadCount }).containsExactly(
+                A_USER_ID_3 to 0,
+                A_SESSION_ID_2 to 3,
+            ).inOrder()
+            // The unread count is refreshed on sync heartbeat
+            bobUnreadCount = 5
+            bobSyncService.emitHeartBeat()
+            val updatedState = consumeItemsUntilPredicate { state -> state.otherSessions.any { it.unreadCount == 5 } }.last()
+            assertThat(updatedState.otherSessions.map { it.user.userId to it.unreadCount }).containsExactly(
+                A_USER_ID_3 to 0,
+                A_SESSION_ID_2 to 5,
+            ).inOrder()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -285,6 +336,7 @@ class PreferencesRootPresenterTest {
         sessionStore: SessionStore = InMemorySessionStore(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         locationService: LocationService = FakeLocationService(isServiceAvailable = true),
+        matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
     ) = PreferencesRootPresenter(
         matrixClient = matrixClient,
         analyticsService = FakeAnalyticsService(),
@@ -294,6 +346,7 @@ class PreferencesRootPresenterTest {
         featureFlagService = featureFlagService,
         locationService = locationService,
         sessionStore = sessionStore,
+        matrixClientProvider = matrixClientProvider,
         appPreferencesStore = appPreferencesStore,
         userStatusPresenter = { aUserStatusState() },
         preferencesAccountPresenter = { aPreferencesAccountState() },
