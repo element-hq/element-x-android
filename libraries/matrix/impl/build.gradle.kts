@@ -59,7 +59,11 @@ dependencies {
     implementation(platform("io.element.android:element-call-bom:$elementCallVersion"))
     implementation(libs.element.call.api)
     implementation(projects.features.callnative.api)
-    implementation(libs.element.call.matrix)
+    implementation(libs.element.call.matrix) {
+        if (usesLocalRustSdk) {
+            exclude(group = "org.matrix.rustcomponents", module = "sdk-android")
+        }
+    }
 
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)
