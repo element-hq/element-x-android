@@ -130,7 +130,7 @@ private fun ShareLocationViewContent(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val tileStyleUrl = rememberTileStyleUrl(state.customMapTilerConfig.dataOrNull())
+    val tileStyleUrl = rememberTileStyleUrl(state.mapTilerConfig)
     val mapState = rememberMapState(
         baseStyle = BaseStyle.Uri(tileStyleUrl),
         initialCameraPosition = MapDefaults.defaultCameraPosition,
@@ -181,7 +181,7 @@ private fun ShareLocationScaffold(
         )
     )
     MapBottomSheetScaffold(
-        isReady = state.customMapTilerConfig.isReady(),
+        isReady = state.mapTilerConfig != null,
         mapState = mapState,
         modifier = modifier,
         scaffoldState = scaffoldState,

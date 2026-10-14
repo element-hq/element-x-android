@@ -53,6 +53,8 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
             aPreferencesRootState(userStatusState = aUserStatusState(pickerState = UserStatusPickerState.ShowingPicker)),
             // Minimal state
             aPreferencesRootState(userStatusState = null),
+            // Location sharing not available
+            aPreferencesRootState(showLocationSettings = false),
         )
 }
 
@@ -68,6 +70,7 @@ fun aPreferencesRootState(
     showAnalyticsSettings: Boolean = false,
     showDeveloperSettings: Boolean = false,
     showLabsItem: Boolean = false,
+    showLocationSettings: Boolean = true,
     userStatusState: UserStatusState? = aUserStatusState(),
     snackbarMessage: SnackbarMessage? = null,
     eventSink: (PreferencesRootEvent) -> Unit = {},
@@ -83,6 +86,7 @@ fun aPreferencesRootState(
     showAnalyticsSettings = showAnalyticsSettings,
     showDeveloperSettings = showDeveloperSettings,
     showLabsItem = showLabsItem,
+    showLocationSettings = showLocationSettings,
     userStatusState = userStatusState,
     snackbarMessage = snackbarMessage,
     eventSink = eventSink,

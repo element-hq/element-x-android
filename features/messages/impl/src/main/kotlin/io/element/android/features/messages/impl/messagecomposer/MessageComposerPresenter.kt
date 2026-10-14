@@ -184,10 +184,7 @@ class MessageComposerPresenter(
 
         val cameraPermissionState = cameraPermissionPresenter.present()
 
-        val canShareLocation = remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            canShareLocation.value = locationService.isServiceAvailable()
-        }
+        val canShareLocation by remember { locationService.isServiceAvailable() }.collectAsState()
 
         val isSendGalleryMessagesEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SendGalleryMessages)
             .collectAsState(initial = false)
@@ -431,7 +428,7 @@ class MessageComposerPresenter(
             isInThreadTimeline = isInThread,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             showTextFormatting = showTextFormatting,
-            canShareLocation = canShareLocation.value,
+            canShareLocation = canShareLocation,
             suggestions = suggestions.toImmutableList(),
             resolveMentionDisplay = resolveMentionDisplay,
             resolveAtRoomMentionDisplay = resolveAtRoomMentionDisplay,

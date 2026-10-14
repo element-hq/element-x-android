@@ -22,8 +22,8 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.location.api.live.isCurrentlySharing
@@ -39,7 +39,6 @@ import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.userlocation.UserLocationState
 import io.element.android.features.location.impl.common.userlocation.toLocationMeasurement
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.core.meta.BuildMeta
@@ -68,7 +67,7 @@ class ShowLocationPresenter(
     private val joinedRoom: JoinedRoom,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
     private val userLocationStateFactory: UserLocationState.Factory,
-    private val customMapTilerConfigProvider: CustomMapTilerConfigProvider,
+    private val locationService: LocationService,
 ) : Presenter<ShowLocationState> {
     @AssistedFactory fun interface Factory {
         fun create(mode: ShowLocationMode): ShowLocationPresenter
@@ -86,10 +85,7 @@ class ShowLocationPresenter(
             mutableStateOf(LocationConstraintsDialogState.None)
         }
 
-        val customMapTilerConfig by produceState(AsyncData.Loading()) {
-            // Ignore errors
-            value = AsyncData.Success(customMapTilerConfigProvider.get().getOrNull())
-        }
+        val mapTilerConfig by locationService.mapTilerConfig.collectAsState()
 
         fun checkLocationConstraints() {
             val locationConstraints = checkLocationConstraints(
@@ -221,7 +217,7 @@ class ShowLocationPresenter(
             userLocationStateFactory.create(hasLocationPermission = permissionsState.isAnyGranted)
         }
         return ShowLocationState(
-            customMapTilerConfig = customMapTilerConfig,
+            mapTilerConfig = mapTilerConfig,
             dialogState = dialogState,
             locationShares = locationShares,
             focusedLocation = focusedLocation,

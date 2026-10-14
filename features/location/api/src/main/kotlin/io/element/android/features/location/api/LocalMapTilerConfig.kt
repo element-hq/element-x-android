@@ -11,13 +11,22 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 
 /**
- * Provides a [MapTilerConfig] for the MapLibre maps.
+ * Provides the [MapTilerConfig] for the MapLibre maps, or null if no map provider is configured.
  */
-val LocalMapTilerConfig = staticCompositionLocalOf {
-    MapTilerConfig(
-        apiKey = BuildConfig.MAPTILER_API_KEY,
-        lightStyleId = BuildConfig.MAPTILER_LIGHT_MAP_ID,
-        darkStyleId = BuildConfig.MAPTILER_DARK_MAP_ID,
-        baseUrl = BuildConfig.MAPTILER_BASE_URL
-    )
+val LocalMapTilerConfig = staticCompositionLocalOf { buildTimeMapTilerConfig() }
+
+/**
+ * The [MapTilerConfig] defined at build time, or null if no MapTiler API key has been provided.
+ */
+fun buildTimeMapTilerConfig(): MapTilerConfig? {
+    return BuildConfig.MAPTILER_API_KEY
+        .takeIf { it.isNotEmpty() }
+        ?.let { apiKey ->
+            MapTilerConfig(
+                apiKey = apiKey,
+                lightStyleId = BuildConfig.MAPTILER_LIGHT_MAP_ID,
+                darkStyleId = BuildConfig.MAPTILER_DARK_MAP_ID,
+                baseUrl = BuildConfig.MAPTILER_BASE_URL
+            )
+        }
 }
