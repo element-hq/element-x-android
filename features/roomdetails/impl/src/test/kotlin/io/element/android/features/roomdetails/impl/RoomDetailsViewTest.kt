@@ -410,6 +410,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomDetailView(
             onPinnedMessagesClick = onPinnedMessagesClick,
             onKnockRequestsClick = onKnockRequestsClick,
             onSecurityAndPrivacyClick = onSecurityAndPrivacyClick,
+            onMessageRetentionClick = {},
             onProfileClick = onProfileClick,
             onReportRoomClick = onReportRoomClick,
             leaveRoomView = {},

@@ -13,6 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.messageretention.api.MessageRetentionEntryPoint
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
@@ -63,9 +64,13 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.testWithLifecycleOwner
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -93,6 +98,7 @@ class RoomDetailsPresenterTest {
         navigator: RoomDetailsNavigator = FakeRoomDetailsNavigator(),
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
+        messageRetentionEntryPoint: MessageRetentionEntryPoint = mockk { every { isAvailable() } returns flowOf(false) },
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -123,6 +129,7 @@ class RoomDetailsPresenterTest {
             appPreferencesStore = appPreferencesStore,
             notificationCleaner = notificationCleaner,
             sessionPreferencesStore = sessionPreferencesStore,
+            messageRetentionEntryPoint = messageRetentionEntryPoint,
         )
     }
 
@@ -625,6 +632,24 @@ class RoomDetailsPresenterTest {
     }
 
     @Test
+    fun `retention requires both availability and permission`() = runTest {
+        for (available in listOf(false, true)) {
+            for (allowed in listOf(false, true)) {
+                val entryPoint = mockk<MessageRetentionEntryPoint> {
+                    every { isAvailable() } returns flowOf(available)
+                }
+                val room = aJoinedRoom(roomPermissions = roomPermissions(canChangeMessageRetention = allowed))
+                val presenter = createRoomDetailsPresenter(room = room, messageRetentionEntryPoint = entryPoint)
+                presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+                    advanceUntilIdle()
+                    assertThat(expectMostRecentItem().canShowMessageRetention).isEqualTo(available && allowed)
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
+        }
+    }
+
+    @Test
     fun `present - show security and privacy`() = runTest {
         val room = aJoinedRoom(
             roomPermissions = roomPermissions(),
@@ -750,6 +775,7 @@ class RoomDetailsPresenterTest {
         canChangeTopic: Boolean = true,
         canChangeAvatar: Boolean = true,
         canChangePowerLevels: Boolean = true,
+        canChangeMessageRetention: Boolean = true,
     ): RoomPermissions {
         return FakeRoomPermissions(
             canInvite = canInvite,
@@ -767,6 +793,7 @@ class RoomDetailsPresenterTest {
                     StateEventType.RoomName -> canChangeName
                     StateEventType.RoomTopic -> canChangeTopic
                     StateEventType.RoomPowerLevels -> canChangePowerLevels
+                    is StateEventType.Custom -> canChangeMessageRetention
                     else -> lambdaError()
                 }
             }
