@@ -11,4 +11,5 @@ package io.element.android.features.home.impl
 sealed interface HomeEvent {
     data class SelectHomeNavigationBarItem(val item: HomeNavigationBarItem) : HomeEvent
     data object DismissMultiAccountAnnouncement : HomeEvent
+    data object DismissSwipeAvatarAnnouncement : HomeEvent
 }

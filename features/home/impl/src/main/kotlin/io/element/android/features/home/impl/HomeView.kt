@@ -217,7 +217,11 @@ private fun HomeScaffold(
                 },
                 onMenuActionClick = onMenuActionClick,
                 onOpenSettings = onOpenSettings,
-                onAccountSwitch = onSwitchToAccount,
+                onAccountSwitch = { sessionId ->
+                    // The user has switched account by swiping their avatar, so they know the gesture.
+                    state.eventSink(HomeEvent.DismissSwipeAvatarAnnouncement)
+                    onSwitchToAccount(sessionId)
+                },
                 scrollBehavior = scrollBehavior,
                 displayFilters = state.displayRoomListFilters,
                 filtersState = roomListState.filtersState,

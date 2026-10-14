@@ -92,6 +92,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.filter
 
 @Composable
 fun HomeTopBar(
@@ -307,9 +308,12 @@ private fun NavigationIcon(
         // Listen to page changes and switch account if needed
         val latestOnAccountSwitch by rememberUpdatedState(onAccountSwitch)
         LaunchedEffect(pagerState) {
-            snapshotFlow { pagerState.settledPage }.collect { page ->
-                latestOnAccountSwitch(SessionId(currentUserAndNeighbors[page].userId.value))
-            }
+            snapshotFlow { pagerState.settledPage }
+                // The current account is on page 1, so there is nothing to switch to
+                .filter { page -> page != 1 }
+                .collect { page ->
+                    latestOnAccountSwitch(SessionId(currentUserAndNeighbors[page].userId.value))
+                }
         }
         VerticalPager(
             state = pagerState,
