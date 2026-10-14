@@ -61,6 +61,18 @@ enum class SecurityBannerState {
     RecoveryKeyConfirmation,
 }
 
+/**
+ * The banners which can be displayed at the top of the room list. At most one banner is displayed at a time.
+ */
+internal enum class RoomListBanner {
+    SetUpRecovery,
+    RecoveryKeyConfirmation,
+    FullScreenIntentPermission,
+    BatteryOptimization,
+    NewNotificationSound,
+    SwipeAvatar,
+}
+
 @Immutable
 sealed interface RoomListContentState {
     data class Skeleton(val count: Int) : RoomListContentState
@@ -80,3 +92,24 @@ sealed interface RoomListContentState {
         val showAllActivity: Boolean,
     ) : RoomListContentState
 }
+
+internal fun SecurityBannerState.toRoomListBanner(): RoomListBanner? = when (this) {
+    SecurityBannerState.SetUpRecovery -> RoomListBanner.SetUpRecovery
+    SecurityBannerState.RecoveryKeyConfirmation -> RoomListBanner.RecoveryKeyConfirmation
+    SecurityBannerState.None -> null
+}
+
+/**
+ * Banner precedence (top-to-bottom): security > full-screen-intent > battery-optimization >
+ * new-notification-sound > swipe-avatar. At most one renders at a time.
+ */
+internal fun RoomListContentState.Rooms.toRoomListBanner(): RoomListBanner? {
+    return securityBannerState.toRoomListBanner() ?: when {
+        fullScreenIntentPermissionsState.shouldDisplayBanner -> RoomListBanner.FullScreenIntentPermission
+        batteryOptimizationState.shouldDisplayBanner -> RoomListBanner.BatteryOptimization
+        showNewNotificationSoundBanner -> RoomListBanner.NewNotificationSound
+        showSwipeAvatarBanner -> RoomListBanner.SwipeAvatar
+        else -> null
+    }
+}
+

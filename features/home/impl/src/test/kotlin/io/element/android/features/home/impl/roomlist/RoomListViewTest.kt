@@ -76,8 +76,6 @@ class RoomListViewTest : RobolectricTest() {
 
         val close = activity!!.getString(CommonStrings.action_close)
         onNodeWithContentDescription(close).performClick()
-        // The event is emitted at the end of the animation
-        waitForIdle()
         eventsRecorder.assertSingle(RoomListEvent.DismissBanner)
     }
 
@@ -98,8 +96,6 @@ class RoomListViewTest : RobolectricTest() {
 
         val close = activity!!.getString(CommonStrings.action_close)
         onNodeWithContentDescription(close).performClick()
-        // The event is emitted at the end of the animation
-        waitForIdle()
         eventsRecorder.assertSingle(RoomListEvent.DismissBanner)
     }
 
@@ -121,8 +117,6 @@ class RoomListViewTest : RobolectricTest() {
         eventsRecorder.assertEmpty()
         val close = activity!!.getString(CommonStrings.action_close)
         onNodeWithContentDescription(close).performClick()
-        // The event is emitted at the end of the animation
-        waitForIdle()
         eventsRecorder.assertSingle(RoomListEvent.DismissSwipeAvatarBanner)
     }
 

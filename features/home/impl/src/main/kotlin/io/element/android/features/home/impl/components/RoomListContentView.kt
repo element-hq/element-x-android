@@ -8,6 +8,12 @@
 
 package io.element.android.features.home.impl.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +21,9 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -24,6 +32,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -39,10 +48,11 @@ import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.features.home.impl.filters.selection.FilterSelectionState
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
+import io.element.android.features.home.impl.roomlist.RoomListBanner
 import io.element.android.features.home.impl.roomlist.RoomListContentState
 import io.element.android.features.home.impl.roomlist.RoomListContentStatePreviewParam
 import io.element.android.features.home.impl.roomlist.RoomListEvent
-import io.element.android.features.home.impl.roomlist.SecurityBannerState
+import io.element.android.features.home.impl.roomlist.toRoomListBanner
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFiltersState
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -160,30 +170,20 @@ private fun EmptyView(
             },
             modifier = Modifier.align(Alignment.Center),
         )
-        Box {
-            when (state.securityBannerState) {
-                SecurityBannerState.SetUpRecovery -> {
-                    DismissibleBanner(
-                        onDismiss = { eventSink(RoomListEvent.DismissBanner) },
-                    ) { onDismissClick ->
-                        SetUpRecoveryKeyBanner(
-                            onContinueClick = onSetUpRecoveryClick,
-                            onDismissClick = onDismissClick,
-                        )
+        RoomListBannerContainer(
+            banner = state.securityBannerState.toRoomListBanner(),
+        ) { banner ->
+            RoomListBannerView(
+                banner = banner,
+                onActionClick = {
+                    when (banner) {
+                        RoomListBanner.SetUpRecovery -> onSetUpRecoveryClick()
+                        RoomListBanner.RecoveryKeyConfirmation -> onConfirmRecoveryKeyClick()
+                        else -> Unit
                     }
-                }
-                SecurityBannerState.RecoveryKeyConfirmation -> {
-                    DismissibleBanner(
-                        onDismiss = { eventSink(RoomListEvent.DismissBanner) },
-                    ) { onDismissClick ->
-                        ConfirmRecoveryKeyBanner(
-                            onContinueClick = onConfirmRecoveryKeyClick,
-                            onDismissClick = onDismissClick,
-                        )
-                    }
-                }
-                SecurityBannerState.None -> Unit
-            }
+                },
+                onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
+            )
         }
     }
 }
@@ -237,6 +237,10 @@ private fun RoomsViewList(
     lazyListState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
+    val banner = state.toRoomListBanner()
+    // The banner slot must never be 0px high, else the LazyColumn considers that it is not visible and it is
+    // removed from the composition. A new banner would then be added above the visible area of the list.
+    val bannerSlotMinHeight = with(LocalDensity.current) { 1.toDp() }
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
         // The first item of the list is the banner slot, remove it to get the range of the rooms
         val roomsRange = (visibleRange.first - 1).coerceAtLeast(0)..<visibleRange.last
@@ -251,12 +255,37 @@ private fun RoomsViewList(
         // so that the rooms keep the same index when a banner is added or removed. Since the rooms do not
         // have a key, this is required to keep the scroll position.
         item {
-            RoomsViewBanner(
-                state = state,
-                eventSink = eventSink,
-                onSetUpRecoveryClick = onSetUpRecoveryClick,
-                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-            )
+            RoomListBannerContainer(
+                banner = banner,
+                modifier = Modifier.heightIn(min = bannerSlotMinHeight),
+            ) { displayedBanner ->
+                RoomListBannerView(
+                    banner = displayedBanner,
+                    onActionClick = {
+                        when (displayedBanner) {
+                            RoomListBanner.SetUpRecovery -> onSetUpRecoveryClick()
+                            RoomListBanner.RecoveryKeyConfirmation -> onConfirmRecoveryKeyClick()
+                            RoomListBanner.FullScreenIntentPermission ->
+                                state.fullScreenIntentPermissionsState.eventSink(FullScreenIntentPermissionsEvent.OpenSettings)
+                            RoomListBanner.BatteryOptimization ->
+                                state.batteryOptimizationState.eventSink(BatteryOptimizationEvent.RequestDisableOptimizations)
+                            RoomListBanner.NewNotificationSound,
+                            RoomListBanner.SwipeAvatar -> Unit
+                        }
+                    },
+                    onDismissClick = {
+                        when (displayedBanner) {
+                            RoomListBanner.SetUpRecovery,
+                            RoomListBanner.RecoveryKeyConfirmation -> eventSink(RoomListEvent.DismissBanner)
+                            RoomListBanner.FullScreenIntentPermission ->
+                                state.fullScreenIntentPermissionsState.eventSink(FullScreenIntentPermissionsEvent.Dismiss)
+                            RoomListBanner.BatteryOptimization -> state.batteryOptimizationState.eventSink(BatteryOptimizationEvent.Dismiss)
+                            RoomListBanner.NewNotificationSound -> eventSink(RoomListEvent.DismissNewNotificationSoundBanner)
+                            RoomListBanner.SwipeAvatar -> eventSink(RoomListEvent.DismissSwipeAvatarBanner)
+                        }
+                    },
+                )
+            }
         }
         // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
         // is moved to the top of the list.
@@ -281,76 +310,70 @@ private fun RoomsViewList(
     }
 }
 
+/**
+ * Displays the [banner] at the top of the room list, and animates every change: when the banner is
+ * dismissed, when it is replaced by another banner, and when a banner appears.
+ * The size of the slot is animated, so that the items below it are not moved abruptly.
+ *
+ * @param banner the banner to display, or null if there is no banner to display.
+ * @param modifier the modifier to apply to the slot.
+ * @param content renders the given banner.
+ */
 @Composable
-private fun RoomsViewBanner(
-    state: RoomListContentState.Rooms,
-    eventSink: (RoomListEvent) -> Unit,
-    onSetUpRecoveryClick: () -> Unit,
-    onConfirmRecoveryKeyClick: () -> Unit,
+private fun RoomListBannerContainer(
+    banner: RoomListBanner?,
+    modifier: Modifier = Modifier,
+    content: @Composable (RoomListBanner) -> Unit,
 ) {
-    when (state.securityBannerState) {
-        SecurityBannerState.SetUpRecovery -> {
-            DismissibleBanner(
-                onDismiss = { eventSink(RoomListEvent.DismissBanner) },
-            ) { onDismissClick ->
-                SetUpRecoveryKeyBanner(
-                    onContinueClick = onSetUpRecoveryClick,
-                    onDismissClick = onDismissClick,
-                )
-            }
+    AnimatedContent(
+        targetState = banner,
+        // Fill the width so that only the height is animated
+        modifier = modifier.fillMaxWidth(),
+        transitionSpec = {
+            fadeIn(tween(durationMillis = HALF_DURATION_MILLIS, delayMillis = HALF_DURATION_MILLIS)) togetherWith
+                fadeOut(tween(durationMillis = HALF_DURATION_MILLIS)) using
+                SizeTransform { _, _ -> tween(durationMillis = 2 * HALF_DURATION_MILLIS) }
+        },
+        contentAlignment = Alignment.Center,
+        label = "RoomListBannerContainer",
+    ) { targetBanner ->
+        if (targetBanner != null) {
+            content(targetBanner)
         }
-        SecurityBannerState.RecoveryKeyConfirmation -> {
-            DismissibleBanner(
-                onDismiss = { eventSink(RoomListEvent.DismissBanner) },
-            ) { onDismissClick ->
-                ConfirmRecoveryKeyBanner(
-                    onContinueClick = onConfirmRecoveryKeyClick,
-                    onDismissClick = onDismissClick,
-                )
-            }
-        }
-        // Banner precedence (top-to-bottom): full-screen-intent > battery-optimization >
-        // new-notification-sound > swipe-avatar > sound-unavailable. At most one renders at a time.
-        SecurityBannerState.None -> when {
-            state.fullScreenIntentPermissionsState.shouldDisplayBanner -> {
-                DismissibleBanner(
-                    onDismiss = { state.fullScreenIntentPermissionsState.eventSink(FullScreenIntentPermissionsEvent.Dismiss) },
-                ) { onDismissClick ->
-                    FullScreenIntentPermissionBanner(
-                        onActionClick = { state.fullScreenIntentPermissionsState.eventSink(FullScreenIntentPermissionsEvent.OpenSettings) },
-                        onDismissClick = onDismissClick,
-                    )
-                }
-            }
-            state.batteryOptimizationState.shouldDisplayBanner -> {
-                DismissibleBanner(
-                    onDismiss = { state.batteryOptimizationState.eventSink(BatteryOptimizationEvent.Dismiss) },
-                ) { onDismissClick ->
-                    BatteryOptimizationBanner(
-                        onActionClick = { state.batteryOptimizationState.eventSink(BatteryOptimizationEvent.RequestDisableOptimizations) },
-                        onDismissClick = onDismissClick,
-                    )
-                }
-            }
-            state.showNewNotificationSoundBanner -> {
-                DismissibleBanner(
-                    onDismiss = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
-                ) { onDismissClick ->
-                    NewNotificationSoundBanner(
-                        onDismissClick = onDismissClick,
-                    )
-                }
-            }
-            state.showSwipeAvatarBanner -> {
-                DismissibleBanner(
-                    onDismiss = { eventSink(RoomListEvent.DismissSwipeAvatarBanner) },
-                ) { onDismissClick ->
-                    SwipeAvatarBanner(
-                        onDismissClick = onDismissClick,
-                    )
-                }
-            }
-        }
+    }
+}
+
+private const val HALF_DURATION_MILLIS = 150
+
+@Composable
+private fun RoomListBannerView(
+    banner: RoomListBanner,
+    onActionClick: () -> Unit,
+    onDismissClick: () -> Unit,
+) {
+    when (banner) {
+        RoomListBanner.SetUpRecovery -> SetUpRecoveryKeyBanner(
+            onContinueClick = onActionClick,
+            onDismissClick = onDismissClick,
+        )
+        RoomListBanner.RecoveryKeyConfirmation -> ConfirmRecoveryKeyBanner(
+            onContinueClick = onActionClick,
+            onDismissClick = onDismissClick,
+        )
+        RoomListBanner.FullScreenIntentPermission -> FullScreenIntentPermissionBanner(
+            onActionClick = onActionClick,
+            onDismissClick = onDismissClick,
+        )
+        RoomListBanner.BatteryOptimization -> BatteryOptimizationBanner(
+            onActionClick = onActionClick,
+            onDismissClick = onDismissClick,
+        )
+        RoomListBanner.NewNotificationSound -> NewNotificationSoundBanner(
+            onDismissClick = onDismissClick,
+        )
+        RoomListBanner.SwipeAvatar -> SwipeAvatarBanner(
+            onDismissClick = onDismissClick,
+        )
     }
 }
 
