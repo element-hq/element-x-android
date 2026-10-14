@@ -11,7 +11,6 @@ package io.element.android.features.location.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
 import io.element.android.features.enterprise.test.remoteconfig.aMapTilerConfig
-import io.element.android.features.location.api.BuildConfig
 import io.element.android.features.location.api.buildTimeMapTilerConfig
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +29,7 @@ class DefaultLocationServiceTest {
         )
         runCurrent()
         assertThat(locationService.mapTilerConfig.value).isEqualTo(buildTimeMapTilerConfig())
-        assertThat(locationService.isServiceAvailable().value).isEqualTo(BuildConfig.MAPTILER_API_KEY.isNotEmpty())
+        assertThat(locationService.isServiceAvailable().value).isEqualTo(buildTimeMapTilerConfig() != null)
     }
 
     @Test
@@ -40,7 +39,7 @@ class DefaultLocationServiceTest {
         )
         runCurrent()
         assertThat(locationService.mapTilerConfig.value).isEqualTo(buildTimeMapTilerConfig())
-        assertThat(locationService.isServiceAvailable().value).isEqualTo(BuildConfig.MAPTILER_API_KEY.isNotEmpty())
+        assertThat(locationService.isServiceAvailable().value).isEqualTo(buildTimeMapTilerConfig() != null)
     }
 
     @Test
