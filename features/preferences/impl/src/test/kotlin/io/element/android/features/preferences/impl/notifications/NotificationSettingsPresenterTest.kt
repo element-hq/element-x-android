@@ -40,6 +40,7 @@ import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -1176,6 +1177,7 @@ class NotificationSettingsPresenterTest {
             stringProvider = FakeStringProvider(),
             sessionCoroutineScope = backgroundScope,
             featureFlagService = featureFlagService,
+            dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
         )
     }
 }

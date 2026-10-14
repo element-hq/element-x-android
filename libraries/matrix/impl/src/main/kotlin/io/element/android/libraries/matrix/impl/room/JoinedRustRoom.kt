@@ -158,6 +158,7 @@ class JoinedRustRoom(
         inner = innerRoom.threadListService(),
         contentMapper = TimelineEventContentMapper(),
         roomCoroutineScope = roomCoroutineScope,
+        roomDispatcher = roomDispatcher,
     )
 
     override val syncUpdateFlow = flow {

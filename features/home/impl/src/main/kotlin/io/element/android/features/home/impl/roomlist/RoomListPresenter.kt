@@ -56,6 +56,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -64,6 +65,7 @@ import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -89,6 +91,7 @@ class RoomListPresenter(
     private val spaceFiltersPresenter: Presenter<SpaceFiltersState>,
     private val globalSearchPresenter: Presenter<GlobalSearchState>,
     private val featureFlagService: FeatureFlagService,
+    private val sessionStore: SessionStore,
 ) : Presenter<RoomListState> {
     private val encryptionService = client.encryptionService
 
@@ -112,6 +115,15 @@ class RoomListPresenter(
                 announcements.contains(Announcement.NewNotificationSound)
             }
         }.collectAsState(false)
+        val showSwipeAvatarBanner by remember {
+            combine(
+                announcementService.announcementsToShowFlow(),
+                sessionStore.sessionsFlow(),
+            ) { announcements, sessions ->
+                // The swipe gesture on the avatar is only available when there are several accounts
+                sessions.size >= 2 && announcements.contains(Announcement.SwipeAvatarToSwitchAccount)
+            }
+        }.collectAsState(false)
 
         // Avatar indicator
         val hideInvitesAvatar by client.rememberHideInvitesAvatar()
@@ -132,6 +144,9 @@ class RoomListPresenter(
                 RoomListEvent.DismissBanner -> securityBannerDismissed = true
                 RoomListEvent.DismissNewNotificationSoundBanner -> coroutineScope.launch {
                     announcementService.onAnnouncementDismissed(Announcement.NewNotificationSound)
+                }
+                RoomListEvent.DismissSwipeAvatarBanner -> coroutineScope.launch {
+                    announcementService.onAnnouncementDismissed(Announcement.SwipeAvatarToSwitchAccount)
                 }
                 RoomListEvent.ToggleSearchResults -> searchState.eventSink(RoomListSearchEvent.ToggleSearchVisibility)
                 is RoomListEvent.ShowContextMenu -> {
@@ -176,6 +191,7 @@ class RoomListPresenter(
         val contentState = roomListContentState(
             securityBannerDismissed,
             showNewNotificationSoundBanner,
+            showSwipeAvatarBanner,
             showUnreadCount,
             showAllActivity,
         )
@@ -235,6 +251,7 @@ class RoomListPresenter(
     private fun roomListContentState(
         securityBannerDismissed: Boolean,
         showNewNotificationSoundBanner: Boolean,
+        showSwipeAvatarBanner: Boolean,
         showUnreadCount: Boolean,
         showAllActivity: Boolean,
     ): RoomListContentState {
@@ -265,6 +282,7 @@ class RoomListPresenter(
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     showNewNotificationSoundBanner = showNewNotificationSoundBanner,
+                    showSwipeAvatarBanner = showSwipeAvatarBanner,
                     showUnreadCount = showUnreadCount,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
                     batteryOptimizationState = batteryOptimizationPresenter.present(),

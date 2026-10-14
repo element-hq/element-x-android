@@ -211,6 +211,7 @@
         "banner\\.set_up_recovery\\..*",
         "banner\\.battery_optimization\\..*",
         "banner\\.new_sound\\..*",
+        "banner\\.swipe_avatar\\..*",
         "full_screen_intent_banner_.*",
         "screen_migration_.*",
         "screen_invites_.*"

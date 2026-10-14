@@ -48,17 +48,17 @@ jobs:
           cache-read-only: false
 
       - name: ⚙️ Run unit tests, debug and release
-        run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES --continue
 
       - name: 📸 Run screenshot tests
-        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES --continue
 
       - name: 📈 Generate kover report and verify coverage
         run: ./gradlew :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug :app:koverVerifyAll $CI_GRADLE_ARG_PROPERTIES
 
       - name: ✅ Upload kover report
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: kover-results
           path: |
@@ -92,7 +92,7 @@ jobs:
         run: ./gradlew dependencyCheckAnalyze $CI_GRADLE_ARG_PROPERTIES
       - name: Upload dependency analysis
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: dependency-analysis
           path: build/reports/dependency-check-report.html

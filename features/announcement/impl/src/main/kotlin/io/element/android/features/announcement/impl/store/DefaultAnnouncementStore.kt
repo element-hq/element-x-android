@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.map
 private val spaceAnnouncementKey = intPreferencesKey("spaceAnnouncement")
 private val newNotificationSoundKey = intPreferencesKey("newNotificationSound")
 private val multiAccountKey = intPreferencesKey("multiAccountAnnouncement")
+private val swipeAvatarToSwitchAccountKey = intPreferencesKey("swipeAvatarToSwitchAccountAnnouncement")
 
 @ContributesBinding(AppScope::class)
 class DefaultAnnouncementStore(
@@ -42,10 +43,13 @@ class DefaultAnnouncementStore(
         // - NewNotificationSound is opted in by AppMigration08
         // - MultiAccount is NeverShown by default, which means pending. It is set to Shown when the user enters
         //   the login flow while the feature is enabled (see NotLoggedInFlowNode), or dismisses the announcement.
+        // - SwipeAvatarToSwitchAccount is NeverShown by default, which means pending. It is set to Shown when the user
+        //   dismisses the banner, or switches account by swiping their avatar.
         val defaultStatus = when (announcement) {
             Announcement.Fullscreen.Space -> AnnouncementStatus.Shown
             Announcement.NewNotificationSound -> AnnouncementStatus.Shown
             Announcement.MultiAccount -> AnnouncementStatus.NeverShown
+            Announcement.SwipeAvatarToSwitchAccount -> AnnouncementStatus.NeverShown
         }
         return store.data.map { prefs ->
             val ordinal = prefs[key] ?: defaultStatus.ordinal
@@ -62,4 +66,5 @@ private fun Announcement.toKey() = when (this) {
     Announcement.Fullscreen.Space -> spaceAnnouncementKey
     Announcement.NewNotificationSound -> newNotificationSoundKey
     Announcement.MultiAccount -> multiAccountKey
+    Announcement.SwipeAvatarToSwitchAccount -> swipeAvatarToSwitchAccountKey
 }

@@ -44,8 +44,6 @@ import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
-import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -181,24 +179,6 @@ class PreferencesRootPresenterTest {
                 loadedState.eventSink(PreferencesRootEvent.OnVersionInfoClick)
             }
             assertThat(awaitItem().showDeveloperSettings).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - switch session invoke method on the session store`() = runTest {
-        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
-        val sessionStore = InMemorySessionStore(
-            initialList = listOf(
-                aSessionData(sessionId = A_SESSION_ID.value),
-                aSessionData(sessionId = A_SESSION_ID_2.value),
-            ),
-            setLatestSessionResult = setLatestSessionResult,
-        )
-        createPreferencesRootPresenter(sessionStore = sessionStore).test {
-            val loadedState = awaitFirstItem()
-            loadedState.eventSink(PreferencesRootEvent.SwitchToSession(A_SESSION_ID_2))
-            setLatestSessionResult.assertions().isCalledOnce()
-                .with(value(A_SESSION_ID_2.value))
         }
     }
 

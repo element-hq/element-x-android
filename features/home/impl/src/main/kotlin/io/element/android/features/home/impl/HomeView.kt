@@ -69,6 +69,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
@@ -78,6 +79,7 @@ fun HomeView(
     onRoomClick: (RoomId, EventId?) -> Unit,
     onSettingsClick: () -> Unit,
     onAddAccountClick: () -> Unit,
+    onSwitchToAccount: (SessionId) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onStartChatClick: () -> Unit,
@@ -130,6 +132,7 @@ fun HomeView(
             onStartChatClick = { if (firstThrottler.canHandle()) onStartChatClick() },
             onCreateSpaceClick = { if (firstThrottler.canHandle()) onCreateSpaceClick() },
             onMenuActionClick = onMenuActionClick,
+            onSwitchToAccount = onSwitchToAccount,
         )
 
         if (state.globalSearchState.isEnabled) {
@@ -167,6 +170,7 @@ private fun HomeScaffold(
     onStartChatClick: () -> Unit,
     onCreateSpaceClick: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
+    onSwitchToAccount: (SessionId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onRoomClick(room: RoomListRoomSummary) {
@@ -213,8 +217,10 @@ private fun HomeScaffold(
                 },
                 onMenuActionClick = onMenuActionClick,
                 onOpenSettings = onOpenSettings,
-                onAccountSwitch = {
-                    state.eventSink(HomeEvent.SwitchToAccount(it))
+                onAccountSwitch = { sessionId ->
+                    // The user has switched account by swiping their avatar, so they know the gesture.
+                    state.eventSink(HomeEvent.DismissSwipeAvatarAnnouncement)
+                    onSwitchToAccount(sessionId)
                 },
                 scrollBehavior = scrollBehavior,
                 displayFilters = state.displayRoomListFilters,
@@ -379,6 +385,7 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStatePreviewParam::class) sta
         onRoomClick = { _, _ -> },
         onSettingsClick = {},
         onAddAccountClick = {},
+        onSwitchToAccount = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
         onStartChatClick = {},
@@ -400,6 +407,7 @@ internal fun HomeViewA11yPreview() = ElementPreview {
         onRoomClick = { _, _ -> },
         onSettingsClick = {},
         onAddAccountClick = {},
+        onSwitchToAccount = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
         onStartChatClick = {},

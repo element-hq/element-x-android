@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -45,6 +46,9 @@ import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfo
 import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardState
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=432-31813
+ */
 @Composable
 fun ChooseSelfVerificationModeView(
     state: ChooseSelfVerificationModeState,
@@ -65,7 +69,7 @@ fun ChooseSelfVerificationModeView(
                 title = {},
                 actions = {
                     TextButton(
-                        text = stringResource(CommonStrings.action_signout),
+                        text = stringResource(R.string.screen_identity_confirmation_sign_out),
                         onClick = { state.eventSink(ChooseSelfVerificationModeEvent.SignOut) }
                     )
                 }
@@ -141,6 +145,7 @@ private fun ChooseSelfVerificationModeButtons(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_identity_use_another_device),
                         onClick = onUseAnotherDevice,
+                        leadingIcon = IconSource.Vector(CompoundIcons.Devices()),
                     )
                 }
                 if (state.buttonsState.data.canUseRecoveryKey) {

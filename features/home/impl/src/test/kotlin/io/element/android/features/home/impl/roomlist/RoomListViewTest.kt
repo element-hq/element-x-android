@@ -51,9 +51,10 @@ class RoomListViewTest : RobolectricTest() {
             )
         )
 
+        // The banner is not included in the range, only the rooms are
         eventsRecorder.assertList(
             listOf(
-                RoomListEvent.UpdateVisibleRange(0..5),
+                RoomListEvent.UpdateVisibleRange(0..4),
             )
         )
     }
@@ -64,12 +65,14 @@ class RoomListViewTest : RobolectricTest() {
         setRoomListView(
             state = aRoomListState(
                 contentState = aRoomsContentState(securityBannerState = SecurityBannerState.RecoveryKeyConfirmation),
-                eventSink = eventsRecorder,
+                // Ignore the visible range updates, which are also emitted when the banner is shrinking
+                eventSink = { event ->
+                    if (event !is RoomListEvent.UpdateVisibleRange) {
+                        eventsRecorder(event)
+                    }
+                },
             )
         )
-
-        // Remove automatic initial events
-        eventsRecorder.clear()
 
         val close = activity!!.getString(CommonStrings.action_close)
         onNodeWithContentDescription(close).performClick()
@@ -82,16 +85,39 @@ class RoomListViewTest : RobolectricTest() {
         setRoomListView(
             state = aRoomListState(
                 contentState = aRoomsContentState(securityBannerState = SecurityBannerState.SetUpRecovery),
-                eventSink = eventsRecorder,
+                // Ignore the visible range updates, which are also emitted when the banner is shrinking
+                eventSink = { event ->
+                    if (event !is RoomListEvent.UpdateVisibleRange) {
+                        eventsRecorder(event)
+                    }
+                },
             )
         )
-
-        // Remove automatic initial events
-        eventsRecorder.clear()
 
         val close = activity!!.getString(CommonStrings.action_close)
         onNodeWithContentDescription(close).performClick()
         eventsRecorder.assertSingle(RoomListEvent.DismissBanner)
+    }
+
+    @Test
+    fun `clicking on close swipe avatar banner emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<RoomListEvent>()
+        setRoomListView(
+            state = aRoomListState(
+                contentState = aRoomsContentState(showSwipeAvatarBanner = true),
+                // Ignore the visible range updates, which are also emitted when the banner is shrinking
+                eventSink = { event ->
+                    if (event !is RoomListEvent.UpdateVisibleRange) {
+                        eventsRecorder(event)
+                    }
+                },
+            )
+        )
+
+        eventsRecorder.assertEmpty()
+        val close = activity!!.getString(CommonStrings.action_close)
+        onNodeWithContentDescription(close).performClick()
+        eventsRecorder.assertSingle(RoomListEvent.DismissSwipeAvatarBanner)
     }
 
     @Test
@@ -305,6 +331,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomListView(
             onRoomClick = { roomId, _ -> onRoomClick(roomId) },
             onSettingsClick = onSettingsClick,
             onAddAccountClick = onAddAccountClick,
+            onSwitchToAccount = EnsureNeverCalledWithParam(),
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
             onStartChatClick = onCreateRoomClick,

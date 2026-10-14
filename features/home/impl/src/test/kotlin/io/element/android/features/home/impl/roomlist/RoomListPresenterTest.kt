@@ -56,6 +56,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID_3
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
@@ -72,6 +73,9 @@ import io.element.android.libraries.preferences.test.InMemorySessionPreferencesS
 import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
+import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
@@ -646,6 +650,48 @@ class RoomListPresenterTest {
     }
 
     @Test
+    fun `present - swipe avatar banner`() = runTest {
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(aRoomSummary())),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))
+        )
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList },
+            subscribeToVisibleRoomsLambda = { },
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
+        val onAnnouncementDismissedResult = lambdaRecorder<Announcement, Unit> { }
+        val announcementService = FakeAnnouncementService(
+            initialAnnouncementsToShowFlowValue = listOf(Announcement.SwipeAvatarToSwitchAccount),
+            onAnnouncementDismissedResult = onAnnouncementDismissedResult,
+        )
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData(sessionId = A_SESSION_ID.value)),
+        )
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            announcementService = announcementService,
+            sessionStore = sessionStore,
+        )
+        presenter.test {
+            skipItems(2) // Skip initial state and intermediate event for loading the value of the feature flags
+            val state = awaitItem()
+            // Only one account, the banner is not displayed
+            assertThat(state.contentAsRooms().showSwipeAvatarBanner).isFalse()
+            sessionStore.addSession(aSessionData(sessionId = A_SESSION_ID_2.value))
+            assertThat(awaitItem().contentAsRooms().showSwipeAvatarBanner).isTrue()
+            state.eventSink(RoomListEvent.DismissSwipeAvatarBanner)
+            onAnnouncementDismissedResult.assertions().isCalledOnce()
+                .with(value(Announcement.SwipeAvatarToSwitchAccount))
+            // Simulate service updating the value
+            announcementService.emitAnnouncementsToShow(emptyList())
+            assertThat(awaitItem().contentAsRooms().showSwipeAvatarBanner).isFalse()
+        }
+    }
+
+    @Test
     fun `present - showAllActivity and showUnreadCount reflect the feature flag values`() = runTest {
         val roomList = FakeDynamicRoomList(
             summaries = MutableStateFlow(listOf(aRoomSummary())),
@@ -724,6 +770,7 @@ class RoomListPresenterTest {
         announcementService: AnnouncementService = FakeAnnouncementService(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         markRoomAsRead: MarkRoomAsRead? = null,
+        sessionStore: SessionStore = InMemorySessionStore(),
     ) = RoomListPresenter(
         client = client,
         leaveRoomPresenter = { leaveRoomState },
@@ -756,5 +803,6 @@ class RoomListPresenterTest {
         announcementService = announcementService,
         coldStartWatcher = FakeAnalyticsColdStartWatcher(),
         featureFlagService = featureFlagService,
+        sessionStore = sessionStore,
     )
 }
