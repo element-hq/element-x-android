@@ -48,10 +48,10 @@ jobs:
           cache-read-only: false
 
       - name: ⚙️ Run unit tests, debug and release
-        run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew test $CI_GRADLE_ARG_PROPERTIES --continue
 
       - name: 📸 Run screenshot tests
-        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES --continue
 
       - name: 📈 Generate kover report and verify coverage
         run: ./gradlew :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug :app:koverVerifyAll $CI_GRADLE_ARG_PROPERTIES
