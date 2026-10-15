@@ -82,6 +82,7 @@ dependencies {
     implementation(variantOf(libs.jna) { artifactType("aar") })
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.androidx.lifecycle.process)
 
     testCommonDependencies(libs)
     testImplementation(projects.features.enterprise.test)

@@ -8,6 +8,9 @@
 package io.element.android.libraries.matrix.impl.search.workmanager
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dev.zacsweers.metro.AppScope
@@ -34,14 +37,22 @@ class SearchBackfillWorker(
     @Assisted params: WorkerParameters,
     @ApplicationContext context: Context,
     private val matrixClientProvider: MatrixClientProvider,
+    private val processLifecycleOwner: LifecycleOwner,
 ) : CoroutineWorker(context, params) {
     companion object {
         const val SESSION_ID_PARAM = "session_id"
         private val TIMEOUT = 10.minutes
-        private val POLL_INTERVAL = 5.seconds
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+        internal val POLL_INTERVAL = 5.seconds
     }
 
     override suspend fun doWork(): Result {
+        val appLifecycle = processLifecycleOwner.lifecycle
+        if (appLifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            Timber.w("App is in foreground, skipping search backfill as it would degrade performance")
+            return Result.retry()
+        }
+
         Timber.d("Starting search backfill. This will run up to $TIMEOUT")
         val sessionId = inputData.getString(SESSION_ID_PARAM)?.let(::SessionId) ?: return Result.failure()
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return Result.failure()
@@ -62,6 +73,11 @@ class SearchBackfillWorker(
                 withTimeout(TIMEOUT) {
                     while (task.isRunning()) {
                         delay(POLL_INTERVAL)
+
+                        if (task.isRunning() && appLifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+                            Timber.w("App is now in foreground, cancelling search backfill as it would degrade performance")
+                            return@withTimeout
+                        }
                     }
                 }
                 Timber.d("Search backfill finished")

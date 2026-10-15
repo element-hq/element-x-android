@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.utils.LocalUiTestMode
 import io.element.android.libraries.htmlrenderer.api.ui.HtmlMessageContent
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
+import io.element.android.libraries.textcomposer.mentions.limitMentionPillWidth
 import io.element.android.libraries.ui.common.layout.ContentAvoidingLayout
 import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
 import io.element.android.wysiwyg.compose.EditorStyledText
@@ -93,7 +94,11 @@ fun TimelineItemTextView(
         LocalTextStyle provides textStyle
     ) {
         val text = getTextWithResolvedMentions(content)
-        Box(modifier.semantics { contentDescription = content.plainText }) {
+        Box(
+            modifier
+                .semantics { contentDescription = content.plainText }
+                .limitMentionPillWidth(text)
+        ) {
             EditorStyledText(
                 text = text,
                 onLinkClickedListener = onLinkClick,
