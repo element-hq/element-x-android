@@ -17,6 +17,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
+import com.google.testing.junit.testparameterinjector.TestParameter
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -28,11 +29,11 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
-import io.element.android.tests.testutils.robolectric.RobolectricTest
+import io.element.android.tests.testutils.robolectric.RobolectricTestParameter
 import org.junit.Test
 import org.robolectric.annotation.Config
 
-class NotificationSettingsViewTest : RobolectricTest() {
+class NotificationSettingsViewTest : RobolectricTestParameter() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
@@ -98,17 +99,9 @@ class NotificationSettingsViewTest : RobolectricTest() {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on disable notifications emits the expected events`() {
-        testNotificationToggle(true)
-    }
-
-    @Config(qualifiers = "h1024dp")
-    @Test
-    fun `clicking on enable notifications emits the expected events`() {
-        testNotificationToggle(false)
-    }
-
-    private fun testNotificationToggle(initialState: Boolean) = runAndroidComposeUiTest {
+    fun `clicking on notifications toggle emits the expected events`(
+        @TestParameter initialState: Boolean,
+    ) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
             state = aNotificationSettingsState(
@@ -127,17 +120,9 @@ class NotificationSettingsViewTest : RobolectricTest() {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on disable notify me on at room emits the expected events`() {
-        testAtRoomToggle(true)
-    }
-
-    @Config(qualifiers = "h1024dp")
-    @Test
-    fun `clicking on enable notify me on at room emits the expected events`() {
-        testAtRoomToggle(false)
-    }
-
-    private fun testAtRoomToggle(initialState: Boolean) = runAndroidComposeUiTest {
+    fun `clicking on notify me on at room toggle emits the expected events`(
+        @TestParameter initialState: Boolean,
+    ) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
             state = aNotificationSettingsState(
@@ -156,17 +141,9 @@ class NotificationSettingsViewTest : RobolectricTest() {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on disable notify me on invitation emits the expected events`() {
-        testInvitationToggle(true)
-    }
-
-    @Config(qualifiers = "h1024dp")
-    @Test
-    fun `clicking on enable notify me on invitation emits the expected events`() {
-        testInvitationToggle(false)
-    }
-
-    private fun testInvitationToggle(initialState: Boolean) = runAndroidComposeUiTest {
+    fun `clicking on notify me on invitation toggle emits the expected events`(
+        @TestParameter initialState: Boolean,
+    ) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
             state = aNotificationSettingsState(
@@ -185,17 +162,9 @@ class NotificationSettingsViewTest : RobolectricTest() {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on disable show all activity emits the expected events`() {
-        testShowAllActivityToggle(true)
-    }
-
-    @Config(qualifiers = "h1024dp")
-    @Test
-    fun `clicking on enable show all activity emits the expected events`() {
-        testShowAllActivityToggle(false)
-    }
-
-    private fun testShowAllActivityToggle(initialState: Boolean) = runAndroidComposeUiTest {
+    fun `clicking on show all activity toggle emits the expected events`(
+        @TestParameter initialState: Boolean,
+    ) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
             state = aNotificationSettingsState(
