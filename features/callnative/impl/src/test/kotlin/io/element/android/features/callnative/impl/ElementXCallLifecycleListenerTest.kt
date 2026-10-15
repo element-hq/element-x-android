@@ -9,6 +9,7 @@ package io.element.android.features.callnative.impl
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.call.api.ElementCallData
+import io.element.android.call.api.ElementCallEndReason
 import io.element.android.call.api.rtc.id.RoomId
 import io.element.android.features.call.api.CurrentCall
 import io.element.android.features.call.test.FakeCurrentCallTracker
@@ -30,7 +31,7 @@ class ElementXCallLifecycleListenerTest {
         val listener = createListener(currentCallTracker = currentCallTracker)
 
         listener.onCallStarted(A_CALL)
-        listener.onCallEnded(A_CALL)
+        listener.onCallEnded(A_CALL, ElementCallEndReason.LEFT)
 
         assertThat(currentCallTracker.calls).containsExactly(
             CurrentCall.RoomCall(A_ROOM_ID),
@@ -59,7 +60,7 @@ class ElementXCallLifecycleListenerTest {
             ringingCallTracker = ringingCallTracker,
         )
 
-        listener.onCallEnded(null)
+        listener.onCallEnded(null, ElementCallEndReason.LEFT)
         runCurrent()
 
         // The current call is always cleared; only the ring needs to know which call it was.
@@ -79,6 +80,6 @@ class ElementXCallLifecycleListenerTest {
     )
 
     private companion object {
-        val A_CALL = ElementCallData(roomId = RoomId(A_ROOM_ID.value), isAudioCall = true)
+        val A_CALL = ElementCallData(roomId = RoomId(A_ROOM_ID.value), isAudioCall = true, isStartingCall = true)
     }
 }

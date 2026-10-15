@@ -61,7 +61,8 @@ class RoomCallStatePresenter(
                         isAudioCall = roomInfo.activeCallIntentConsensus.isAudio(),
                     )
                     else -> {
-                        val isEmptyDm = roomInfo.isDm && roomInfo.activeMembersCount <= 1
+                        // Joined, not active: an invited member cannot be rung (feature-hq 030 R36).
+                        val isEmptyDm = roomInfo.isDm && roomInfo.joinedMembersCount <= 1
                         RoomCallState.StandBy(
                             canStartCall = canJoinCall && !isEmptyDm,
                             isDM = roomInfo.isDm
