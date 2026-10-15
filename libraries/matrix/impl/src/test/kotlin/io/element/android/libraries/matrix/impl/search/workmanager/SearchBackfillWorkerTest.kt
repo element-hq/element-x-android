@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.search.workmanager
 
+import androidx.lifecycle.Lifecycle
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.work.Data
 import androidx.work.ListenableWorker
@@ -24,6 +25,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.FakeSdkPendingTask
 import io.element.android.libraries.matrix.test.search.FakeSearchBackfillService
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
+import io.element.android.tests.testutils.FakeLifecycleOwner
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.robolectric.RobolectricTest
@@ -37,6 +39,7 @@ import java.util.UUID
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
@@ -120,9 +123,64 @@ class SearchBackfillWorkerTest : RobolectricTest() {
         closeLambda.assertions().isCalledOnce()
     }
 
+    @Test
+    fun `backfill will not run if the app is in foreground`() = runTest {
+        val startSearchBackfillLambda = lambdaRecorder<SearchBackfillStrategy, Result<SdkPendingTask>> {
+            Result.success(FakeSdkPendingTask(isRunningLambda = { true }))
+        }
+        val client = FakeMatrixClient(
+            searchBackfillService = FakeSearchBackfillService(
+                startSearchBackfillLambda = startSearchBackfillLambda,
+            ),
+        )
+
+        val lifecycleOwner = FakeLifecycleOwner(initialState = Lifecycle.State.RESUMED)
+        val deferred = async {
+            createWorker(client = client, lifecycleOwner = lifecycleOwner).doWork()
+        }
+
+        // Advance time to allow the worker to check the lifecycle state.
+        advanceTimeBy(1.milliseconds)
+        assertThat(deferred.isCompleted).isTrue()
+
+        // The worker should return 'retry' immediately without starting the backfill.
+        assertThat(deferred.await()).isEqualTo(ListenableWorker.Result.retry())
+        startSearchBackfillLambda.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `backfill will stop if the app comes to foreground while it's running`() = runTest {
+        val closeLambda = lambdaRecorder<Unit> { }
+        val startSearchBackfillLambda = lambdaRecorder<SearchBackfillStrategy, Result<SdkPendingTask>> {
+            Result.success(FakeSdkPendingTask(isRunningLambda = { true }, closeLambda = closeLambda))
+        }
+        val client = FakeMatrixClient(
+            searchBackfillService = FakeSearchBackfillService(
+                startSearchBackfillLambda = startSearchBackfillLambda,
+            ),
+        )
+
+        val lifecycleOwner = FakeLifecycleOwner(initialState = Lifecycle.State.CREATED)
+        val deferred = async {
+            createWorker(client = client, lifecycleOwner = lifecycleOwner).doWork()
+        }
+        advanceTimeBy(1.seconds)
+        assertThat(deferred.isCompleted).isFalse()
+
+        lifecycleOwner.givenState(Lifecycle.State.RESUMED)
+
+        advanceTimeBy(SearchBackfillWorker.POLL_INTERVAL)
+
+        assertThat(deferred.isCompleted).isTrue()
+        assertThat(deferred.await()).isEqualTo(ListenableWorker.Result.success())
+        startSearchBackfillLambda.assertions().isCalledOnce()
+        closeLambda.assertions().isCalledOnce()
+    }
+
     private fun TestScope.createWorker(
         input: String? = A_SESSION_ID.value,
         client: MatrixClient?,
+        lifecycleOwner: FakeLifecycleOwner = FakeLifecycleOwner(),
     ) = SearchBackfillWorker(
         params = createWorkerParams(
             inputData = input?.let { workDataOf(SearchBackfillWorker.SESSION_ID_PARAM to it) } ?: Data.EMPTY,
@@ -131,6 +189,7 @@ class SearchBackfillWorkerTest : RobolectricTest() {
         matrixClientProvider = FakeMatrixClientProvider(
             getClient = { client?.let { Result.success(it) } ?: Result.failure(IllegalStateException("No client")) }
         ),
+        processLifecycleOwner = lifecycleOwner,
     )
 
     private fun TestScope.createWorkerParams(

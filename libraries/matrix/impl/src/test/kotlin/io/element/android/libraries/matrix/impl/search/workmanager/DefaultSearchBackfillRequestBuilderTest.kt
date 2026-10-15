@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.impl.search.workmanager
 
 import android.net.NetworkCapabilities
+import androidx.work.BackoffPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.hasKeyWithValueOfType
 import com.google.common.truth.Truth.assertThat
@@ -34,9 +35,10 @@ class DefaultSearchBackfillRequestBuilderTest : RobolectricTest() {
             assertThat(this).isInstanceOf(PeriodicWorkRequest::class.java)
             assertThat(workSpec.isPeriodic).isTrue()
             assertThat(workSpec.intervalDuration).isEqualTo(1.hours.inWholeMilliseconds)
-            assertThat(workSpec.initialDelay).isEqualTo(5.minutes.inWholeMilliseconds)
             assertThat(workSpec.input.hasKeyWithValueOfType<String>(SearchBackfillWorker.SESSION_ID_PARAM)).isTrue()
             assertThat(workSpec.input.getString(SearchBackfillWorker.SESSION_ID_PARAM)).isEqualTo(A_SESSION_ID.value)
+            assertThat(workSpec.backoffPolicy).isEqualTo(BackoffPolicy.LINEAR)
+            assertThat(workSpec.backoffDelayDuration).isEqualTo(5.minutes.inWholeMilliseconds)
             assertThat(tags).contains(expectedTag)
             assertThat(workSpec.workerClassName).isEqualTo(SearchBackfillWorker::class.java.name)
         }

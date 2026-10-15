@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl.search.workmanager
 
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
@@ -28,8 +29,8 @@ import io.element.android.libraries.workmanager.api.WorkManagerWorkerType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
 interface SearchBackfillRequestBuilder : WorkManagerRequestBuilder {
@@ -76,11 +77,14 @@ class DefaultSearchBackfillRequestBuilder(
             .build()
 
         val request = PeriodicWorkRequestBuilder<SearchBackfillWorker>(1.hours.toJavaDuration())
-            // Add a delay before the first execution to avoid running the backfill immediately after the app starts
-            .setInitialDelay(5.minutes.toJavaDuration())
             .setInputData(workDataOf(SESSION_ID_PARAM to sessionId.value))
             .addTag(tag)
             .setConstraints(constraints)
+            .setBackoffCriteria(
+                backoffPolicy = BackoffPolicy.LINEAR,
+                backoffDelay = 5,
+                timeUnit = TimeUnit.MINUTES,
+            )
             .build()
 
         return Result.success(listOf(WorkManagerRequestWrapper(request, type)))
