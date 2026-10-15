@@ -16,7 +16,6 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.ptt.api.PttEnabledSource
 import io.element.android.libraries.androidutils.file.safeDelete
@@ -44,7 +43,6 @@ private val pttEnabledRoomsKey = stringSetPreferencesKey("pttEnabledRooms")
  */
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class DefaultPttEnabledSource(
     @ApplicationContext private val context: Context,
     @AppCoroutineScope private val appCoroutineScope: CoroutineScope,

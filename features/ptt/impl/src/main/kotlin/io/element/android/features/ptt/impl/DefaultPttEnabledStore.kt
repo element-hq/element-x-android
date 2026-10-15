@@ -8,7 +8,6 @@
 package io.element.android.features.ptt.impl
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.ptt.api.PttEnabledSource
 import io.element.android.libraries.di.SessionScope
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
  */
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-@Inject
 class DefaultPttEnabledStore(
     matrixClient: MatrixClient,
     private val source: PttEnabledSource,

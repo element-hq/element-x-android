@@ -11,7 +11,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Multibinds
 import io.element.android.features.ptt.api.PttChannelConfig
 import io.element.android.features.ptt.api.PttTransport
@@ -35,7 +34,6 @@ interface PttTransportFactoriesModule {
  * build, which the caller surfaces as "push-to-talk unavailable" rather than a crash.
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPttTransportFactory(
     private val factories: @JvmSuppressWildcards Map<PttTransportType, PttTransportFactory>,
 ) : PttTransportFactory {
