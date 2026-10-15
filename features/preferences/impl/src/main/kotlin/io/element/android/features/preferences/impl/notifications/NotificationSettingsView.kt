@@ -126,95 +126,33 @@ private fun NotificationSettingsContentView(
     onInviteForMeNotificationsChange: (Boolean) -> Unit,
     onTroubleshootNotificationsClick: () -> Unit,
 ) {
-    val context = LocalContext.current
     val systemSettings: NotificationSettingsState.AppSettings = state.appSettings
     if (systemSettings.appNotificationsEnabled && !systemSettings.systemNotificationsEnabled) {
-        ListItem(
-            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.NotificationsOffSolid())),
-            content = {
-                Text(stringResource(id = R.string.screen_notification_settings_system_notifications_turned_off))
-            },
-            supportingContent = {
-                Text(
-                    stringResource(
-                        id = R.string.screen_notification_settings_system_notifications_action_required,
-                        stringResource(id = R.string.screen_notification_settings_system_notifications_action_required_content_link)
-                    )
-                )
-            },
-            onClick = {
-                context.startNotificationSettingsIntent()
-            }
-        )
+        SystemNotificationOffItem()
     }
-
-    PreferenceSwitch(
-        title = stringResource(id = R.string.screen_notification_settings_enable_notifications),
-        isChecked = systemSettings.appNotificationsEnabled,
-        onCheckedChange = onNotificationsEnabledChange
+    MainNotificationSwitch(
+        appNotificationsEnabled = systemSettings.appNotificationsEnabled,
+        onNotificationsEnabledChange = onNotificationsEnabledChange,
     )
-
     if (systemSettings.appNotificationsEnabled) {
         if (!state.fullScreenIntentPermissionsState.permissionGranted) {
-            PreferenceCategory {
-                ListItem(
-                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VoiceCallSolid())),
-                    content = {
-                        Text(stringResource(id = R.string.full_screen_intent_banner_title))
-                    },
-                    supportingContent = {
-                        Text(stringResource(R.string.full_screen_intent_banner_message))
-                    },
-                    onClick = {
-                        state.fullScreenIntentPermissionsState.eventSink(FullScreenIntentPermissionsEvent.OpenSettings)
-                    }
-                )
-            }
-        }
-        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_notification_section_title)) {
-            ListItem(
-                content = {
-                    Text(stringResource(id = R.string.screen_notification_settings_group_chats))
-                },
-                supportingContent = {
-                    Text(getTitleForRoomNotificationMode(mode = matrixSettings.defaultGroupNotificationMode))
-                },
-                onClick = onGroupChatsClick
-            )
-            ListItem(
-                content = {
-                    Text(stringResource(id = R.string.screen_notification_settings_direct_chats))
-                },
-                supportingContent = {
-                    Text(getTitleForRoomNotificationMode(mode = matrixSettings.defaultOneToOneNotificationMode))
-                },
-                onClick = onDirectChatsClick
-            )
-            PreferenceSwitch(
-                modifier = Modifier,
-                title = stringResource(id = R.string.screen_notification_settings_invite_for_me_label),
-                isChecked = matrixSettings.inviteForMeNotificationsEnabled,
-                onCheckedChange = onInviteForMeNotificationsChange
-            )
-            PreferenceSwitch(
-                modifier = Modifier,
-                title = stringResource(id = R.string.screen_notification_settings_room_mention_label),
-                isChecked = matrixSettings.atRoomNotificationsEnabled,
-                onCheckedChange = onMentionNotificationsChange
+            FullScreenPermissionNotGrantedItem(
+                onClick = {
+                    state.fullScreenIntentPermissionsState.eventSink(FullScreenIntentPermissionsEvent.OpenSettings)
+                }
             )
         }
-
-        PreferenceCategory(
-            title = stringResource(id = R.string.screen_notification_settings_activity_section_title)
-        ) {
-            PreferenceSwitch(
-                title = stringResource(R.string.screen_notification_settings_show_all_activity_title),
-                subtitle = stringResource(R.string.screen_notification_settings_show_all_activity_subtitle),
-                isChecked = state.showAllActivityInRoomList,
-                onCheckedChange = { newValue -> state.eventSink(NotificationSettingsEvent.ToggleShowAllActivityInRoomList(newValue)) }
-            )
-        }
-
+        NotificationsCategory(
+            matrixSettings = matrixSettings,
+            onGroupChatsClick = onGroupChatsClick,
+            onDirectChatsClick = onDirectChatsClick,
+            onInviteForMeNotificationsChange = onInviteForMeNotificationsChange,
+            onMentionNotificationsChange = onMentionNotificationsChange,
+        )
+        ActivityCategory(
+            showAllActivityInRoomList = state.showAllActivityInRoomList,
+            onShowAllActivityInRoomListChange = { newValue -> state.eventSink(NotificationSettingsEvent.ToggleShowAllActivityInRoomList(newValue)) },
+        )
         SoundsPreferenceCategory(state = state)
         // TODO We are removing the call notification toggle until support for call notifications has been added
         // PreferenceSwitch(
@@ -224,66 +162,189 @@ private fun NotificationSettingsContentView(
         //     switchAlignment = Alignment.Top,
         //     onCheckedChange = onCallsNotificationsChanged
         // )
-        PreferenceCategory(title = stringResource(id = R.string.troubleshoot_notifications_entry_point_section)) {
-            ListItem(
-                content = {
-                    Text(stringResource(id = R.string.troubleshoot_notifications_entry_point_title))
-                },
-                onClick = onTroubleshootNotificationsClick
-            )
-        }
+        TroubleshootCategory(onTroubleshootNotificationsClick = onTroubleshootNotificationsClick)
         if (state.showAdvancedSettings) {
-            PreferenceCategory(title = stringResource(id = CommonStrings.common_advanced_settings)) {
-                ListItem(
-                    content = {
-                        Text(text = stringResource(id = R.string.screen_advanced_settings_push_provider_android))
-                    },
-                    trailingContent = when (state.currentPushDistributor) {
-                        AsyncData.Uninitialized,
-                        is AsyncData.Loading -> ListItemContent.Custom {
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .progressSemantics()
-                                    .size(20.dp),
-                                strokeWidth = 2.dp
-                            )
-                        }
-                        is AsyncData.Failure -> ListItemContent.Text(
-                            stringResource(id = CommonStrings.common_error)
-                        )
-                        is AsyncData.Success -> ListItemContent.Text(
-                            state.currentPushDistributor.dataOrNull()?.name ?: ""
-                        )
-                    },
-                    onClick = {
-                        if (state.currentPushDistributor.isReady()) {
-                            state.eventSink(NotificationSettingsEvent.ChangePushProvider)
-                        }
-                    }
-                )
-            }
-            if (state.showChangePushProviderDialog) {
-                SingleSelectionDialog(
-                    title = stringResource(id = R.string.screen_advanced_settings_choose_distributor_dialog_title_android),
-                    options = state.availablePushDistributors.map { distributor ->
-                        // If there are several distributors with the same name, use the full name
-                        val title = if (state.availablePushDistributors.count { it.name == distributor.name } > 1) {
-                            distributor.fullName
-                        } else {
-                            distributor.name
-                        }
-                        ListOption(title = title)
-                    }.toImmutableList(),
-                    initialSelection = state.availablePushDistributors.indexOf(state.currentPushDistributor.dataOrNull()),
-                    onSelectOption = { index ->
-                        state.eventSink(
-                            NotificationSettingsEvent.SetPushProvider(index)
-                        )
-                    },
-                    onDismissRequest = { state.eventSink(NotificationSettingsEvent.CancelChangePushProvider) },
-                )
-            }
+            AdvancedSettingsCategory(state = state)
         }
+    }
+}
+
+@Composable
+private fun SystemNotificationOffItem() {
+    val context = LocalContext.current
+    ListItem(
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.NotificationsOffSolid())),
+        content = {
+            Text(stringResource(id = R.string.screen_notification_settings_system_notifications_turned_off))
+        },
+        supportingContent = {
+            Text(
+                stringResource(
+                    id = R.string.screen_notification_settings_system_notifications_action_required,
+                    stringResource(id = R.string.screen_notification_settings_system_notifications_action_required_content_link)
+                )
+            )
+        },
+        onClick = {
+            context.startNotificationSettingsIntent()
+        }
+    )
+}
+
+@Composable
+private fun MainNotificationSwitch(
+    appNotificationsEnabled: Boolean,
+    onNotificationsEnabledChange: (Boolean) -> Unit
+) {
+    PreferenceSwitch(
+        title = stringResource(id = R.string.screen_notification_settings_enable_notifications),
+        isChecked = appNotificationsEnabled,
+        onCheckedChange = onNotificationsEnabledChange,
+    )
+}
+
+@Composable
+private fun FullScreenPermissionNotGrantedItem(
+    onClick: () -> Unit,
+) {
+    PreferenceCategory {
+        ListItem(
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VoiceCallSolid())),
+            content = {
+                Text(stringResource(id = R.string.full_screen_intent_banner_title))
+            },
+            supportingContent = {
+                Text(stringResource(R.string.full_screen_intent_banner_message))
+            },
+            onClick = onClick,
+        )
+    }
+}
+
+@Composable
+private fun NotificationsCategory(
+    matrixSettings: NotificationSettingsState.MatrixSettings.Valid,
+    onGroupChatsClick: () -> Unit,
+    onDirectChatsClick: () -> Unit,
+    onInviteForMeNotificationsChange: (Boolean) -> Unit,
+    onMentionNotificationsChange: (Boolean) -> Unit,
+) {
+    PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_notification_section_title)) {
+        ListItem(
+            content = {
+                Text(stringResource(id = R.string.screen_notification_settings_group_chats))
+            },
+            supportingContent = {
+                Text(getTitleForRoomNotificationMode(mode = matrixSettings.defaultGroupNotificationMode))
+            },
+            onClick = onGroupChatsClick
+        )
+        ListItem(
+            content = {
+                Text(stringResource(id = R.string.screen_notification_settings_direct_chats))
+            },
+            supportingContent = {
+                Text(getTitleForRoomNotificationMode(mode = matrixSettings.defaultOneToOneNotificationMode))
+            },
+            onClick = onDirectChatsClick
+        )
+        PreferenceSwitch(
+            title = stringResource(id = R.string.screen_notification_settings_invite_for_me_label),
+            isChecked = matrixSettings.inviteForMeNotificationsEnabled,
+            onCheckedChange = onInviteForMeNotificationsChange
+        )
+        PreferenceSwitch(
+            title = stringResource(id = R.string.screen_notification_settings_room_mention_label),
+            isChecked = matrixSettings.atRoomNotificationsEnabled,
+            onCheckedChange = onMentionNotificationsChange
+        )
+    }
+}
+
+@Composable
+private fun ActivityCategory(
+    showAllActivityInRoomList: Boolean,
+    onShowAllActivityInRoomListChange: (Boolean) -> Unit,
+) {
+    PreferenceCategory(
+        title = stringResource(id = R.string.screen_notification_settings_activity_section_title)
+    ) {
+        PreferenceSwitch(
+            title = stringResource(R.string.screen_notification_settings_show_all_activity_title),
+            subtitle = stringResource(R.string.screen_notification_settings_show_all_activity_subtitle),
+            isChecked = showAllActivityInRoomList,
+            onCheckedChange = onShowAllActivityInRoomListChange,
+        )
+    }
+}
+
+@Composable
+private fun TroubleshootCategory(
+    onTroubleshootNotificationsClick: () -> Unit,
+) {
+    PreferenceCategory(title = stringResource(id = R.string.troubleshoot_notifications_entry_point_section)) {
+        ListItem(
+            content = {
+                Text(stringResource(id = R.string.troubleshoot_notifications_entry_point_title))
+            },
+            onClick = onTroubleshootNotificationsClick
+        )
+    }
+}
+
+@Composable
+private fun AdvancedSettingsCategory(
+    state: NotificationSettingsState,
+) {
+    PreferenceCategory(title = stringResource(id = CommonStrings.common_advanced_settings)) {
+        ListItem(
+            content = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_push_provider_android))
+            },
+            trailingContent = when (state.currentPushDistributor) {
+                AsyncData.Uninitialized,
+                is AsyncData.Loading -> ListItemContent.Custom {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .progressSemantics()
+                            .size(20.dp),
+                        strokeWidth = 2.dp
+                    )
+                }
+                is AsyncData.Failure -> ListItemContent.Text(
+                    stringResource(id = CommonStrings.common_error)
+                )
+                is AsyncData.Success -> ListItemContent.Text(
+                    state.currentPushDistributor.dataOrNull()?.name ?: ""
+                )
+            },
+            onClick = {
+                if (state.currentPushDistributor.isReady()) {
+                    state.eventSink(NotificationSettingsEvent.ChangePushProvider)
+                }
+            }
+        )
+    }
+    if (state.showChangePushProviderDialog) {
+        SingleSelectionDialog(
+            title = stringResource(id = R.string.screen_advanced_settings_choose_distributor_dialog_title_android),
+            options = state.availablePushDistributors.map { distributor ->
+                // If there are several distributors with the same name, use the full name
+                val title = if (state.availablePushDistributors.count { it.name == distributor.name } > 1) {
+                    distributor.fullName
+                } else {
+                    distributor.name
+                }
+                ListOption(title = title)
+            }.toImmutableList(),
+            initialSelection = state.availablePushDistributors.indexOf(state.currentPushDistributor.dataOrNull()),
+            onSelectOption = { index ->
+                state.eventSink(
+                    NotificationSettingsEvent.SetPushProvider(index)
+                )
+            },
+            onDismissRequest = { state.eventSink(NotificationSettingsEvent.CancelChangePushProvider) },
+        )
     }
 }
 
