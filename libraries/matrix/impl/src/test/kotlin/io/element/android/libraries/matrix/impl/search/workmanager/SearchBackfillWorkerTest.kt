@@ -143,8 +143,8 @@ class SearchBackfillWorkerTest : RobolectricTest() {
         advanceTimeBy(1.milliseconds)
         assertThat(deferred.isCompleted).isTrue()
 
-        // The worker should return success immediately without starting the backfill.
-        assertThat(deferred.await()).isEqualTo(ListenableWorker.Result.success())
+        // The worker should return 'retry' immediately without starting the backfill.
+        assertThat(deferred.await()).isEqualTo(ListenableWorker.Result.retry())
         startSearchBackfillLambda.assertions().isNeverCalled()
     }
 

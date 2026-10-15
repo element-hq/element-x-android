@@ -50,7 +50,7 @@ class SearchBackfillWorker(
         val appLifecycle = processLifecycleOwner.lifecycle
         if (appLifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
             Timber.w("App is in foreground, skipping search backfill as it would degrade performance")
-            return Result.success()
+            return Result.retry()
         }
 
         Timber.d("Starting search backfill. This will run up to $TIMEOUT")
