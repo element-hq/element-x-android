@@ -20,8 +20,8 @@ import org.junit.Test
 class PttInputCoordinatorTest {
     @Test
     fun `start creates and starts available sources, stop releases them`() {
-        val source = FakeInputSource()
-        val factory = FakeInputSourceFactory(available = true, source = source)
+        val source = FakePttInputSource()
+        val factory = FakePttInputSourceFactory(available = true, source = source)
         val coordinator = createCoordinator(mapOf(factory.id to factory))
 
         coordinator.start()
@@ -34,8 +34,8 @@ class PttInputCoordinatorTest {
 
     @Test
     fun `an unavailable source is never created`() {
-        val source = FakeInputSource()
-        val factory = FakeInputSourceFactory(available = false, source = source)
+        val source = FakePttInputSource()
+        val factory = FakePttInputSourceFactory(available = false, source = source)
         val coordinator = createCoordinator(mapOf(factory.id to factory))
 
         coordinator.start()
@@ -46,8 +46,8 @@ class PttInputCoordinatorTest {
 
     @Test
     fun `start is idempotent`() {
-        val source = FakeInputSource()
-        val factory = FakeInputSourceFactory(available = true, source = source)
+        val source = FakePttInputSource()
+        val factory = FakePttInputSourceFactory(available = true, source = source)
         val coordinator = createCoordinator(mapOf(factory.id to factory))
 
         coordinator.start()
@@ -60,9 +60,9 @@ class PttInputCoordinatorTest {
     fun `a source press then release drives transmit once each`() {
         val pressRecorder = lambdaRecorder<Unit> { }
         val releaseRecorder = lambdaRecorder<Unit> { }
-        val source = FakeInputSource()
+        val source = FakePttInputSource()
         val coordinator = createCoordinator(
-            factories = mapOf(source.id to FakeInputSourceFactory(available = true, source = source)),
+            factories = mapOf(source.id to FakePttInputSourceFactory(available = true, source = source)),
             sessionManager = FakePttSessionManager(
                 pressToTalkLambda = pressRecorder,
                 releaseToTalkLambda = releaseRecorder,
@@ -81,9 +81,9 @@ class PttInputCoordinatorTest {
     fun `duplicate press and release are guarded`() {
         val pressRecorder = lambdaRecorder<Unit> { }
         val releaseRecorder = lambdaRecorder<Unit> { }
-        val source = FakeInputSource()
+        val source = FakePttInputSource()
         val coordinator = createCoordinator(
-            factories = mapOf(source.id to FakeInputSourceFactory(available = true, source = source)),
+            factories = mapOf(source.id to FakePttInputSourceFactory(available = true, source = source)),
             sessionManager = FakePttSessionManager(
                 pressToTalkLambda = pressRecorder,
                 releaseToTalkLambda = releaseRecorder,
@@ -102,8 +102,8 @@ class PttInputCoordinatorTest {
 
     @Test
     fun `refresh starts a source that became available after start`() {
-        val source = FakeInputSource()
-        val factory = FakeInputSourceFactory(available = false, source = source)
+        val source = FakePttInputSource()
+        val factory = FakePttInputSourceFactory(available = false, source = source)
         val coordinator = createCoordinator(mapOf(factory.id to factory))
 
         coordinator.start() // unavailable → not created yet
@@ -118,13 +118,34 @@ class PttInputCoordinatorTest {
 
     @Test
     fun `refresh is a no-op when the session has not started`() {
-        val source = FakeInputSource()
-        val factory = FakeInputSourceFactory(available = true, source = source)
+        val source = FakePttInputSource()
+        val factory = FakePttInputSourceFactory(available = true, source = source)
         val coordinator = createCoordinator(mapOf(factory.id to factory))
 
         coordinator.refresh()
 
         assertThat(source.started).isFalse()
+    }
+
+    @Test
+    fun `Bluetooth setup retry releases a held floor and reconnects only Bluetooth`() {
+        val releaseRecorder = lambdaRecorder<Unit> { }
+        val bluetooth = FakePttInputSource(PttInputSourceId.BleButton)
+        val media = FakePttInputSource()
+        val bluetoothFactory = FakePttInputSourceFactory(true, bluetooth, bluetooth.id)
+        val mediaFactory = FakePttInputSourceFactory(true, media)
+        val coordinator = createCoordinator(
+            mapOf(bluetooth.id to bluetoothFactory, media.id to mediaFactory),
+            FakePttSessionManager(releaseToTalkLambda = releaseRecorder),
+        )
+        coordinator.start()
+        bluetooth.pressDown()
+        coordinator.retryBluetoothButton()
+        releaseRecorder.assertions().isCalledOnce()
+        assertThat(bluetoothFactory.createCount).isEqualTo(2)
+        assertThat(mediaFactory.createCount).isEqualTo(1)
+        assertThat(bluetooth.stopped).isTrue()
+        assertThat(media.stopped).isFalse()
     }
 
     private fun createCoordinator(
@@ -137,7 +158,7 @@ class PttInputCoordinatorTest {
     )
 }
 
-private class FakeInputSource(
+private class FakePttInputSource(
     override val id: PttInputSourceId = PttInputSourceId.MediaButton,
 ) : PttInputSource {
     var started = false
@@ -159,9 +180,9 @@ private class FakeInputSource(
     fun pressUp() = onRelease?.invoke()
 }
 
-private class FakeInputSourceFactory(
+private class FakePttInputSourceFactory(
     var available: Boolean,
-    private val source: FakeInputSource,
+    private val source: FakePttInputSource,
     override val id: PttInputSourceId = PttInputSourceId.MediaButton,
 ) : PttInputSourceFactory {
     var createCount = 0

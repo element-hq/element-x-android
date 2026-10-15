@@ -68,6 +68,15 @@ class PttInputCoordinator(
         startAvailableSources()
     }
 
+    /** Retry device setup after returning from Bluetooth settings (the adapter may have been off). */
+    fun retryBluetoothButton() {
+        val bluetoothSources = activeSources.filter { it.id == PttInputSourceId.BleButton }
+        if (bluetoothSources.isNotEmpty()) onReleaseToTalk()
+        bluetoothSources.forEach { it.stop() }
+        activeSources.removeAll(bluetoothSources.toSet())
+        refresh()
+    }
+
     private fun startAvailableSources() {
         val activeIds = activeSources.mapTo(mutableSetOf()) { it.id }
         factories.values
