@@ -17,6 +17,6 @@ import io.element.android.libraries.architecture.createNode
 @ContributesBinding(AppScope::class)
 class DefaultPttEntryPoint : PttEntryPoint {
     override fun createNode(parentNode: Node, buildContext: BuildContext): Node {
-        return parentNode.createNode<PttPrototypeNode>(buildContext)
+        return parentNode.createNode<PttSettingsNode>(buildContext)
     }
 }

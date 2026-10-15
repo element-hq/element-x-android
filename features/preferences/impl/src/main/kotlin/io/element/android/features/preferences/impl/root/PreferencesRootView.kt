@@ -74,6 +74,7 @@ fun PreferencesRootView(
     onOpenBlockedUsers: () -> Unit,
     onSignOutClick: () -> Unit,
     onDeactivateClick: () -> Unit,
+    onOpenPttSettings: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -115,6 +116,7 @@ fun PreferencesRootView(
             ManageAppSection(
                 state = state,
                 onOpenNotificationSettings = onOpenNotificationSettings,
+                onOpenPttSettings = onOpenPttSettings,
                 onOpenLockScreenSettings = onOpenLockScreenSettings,
                 onSecureBackupClick = onSecureBackupClick,
             )
@@ -218,6 +220,7 @@ private fun ColumnScope.MultiAccountSection(
 
 @Composable
 private fun ColumnScope.ManageAppSection(
+    onOpenPttSettings: () -> Unit,
     state: PreferencesRootState,
     onOpenNotificationSettings: () -> Unit,
     onOpenLockScreenSettings: () -> Unit,
@@ -228,6 +231,14 @@ private fun ColumnScope.ManageAppSection(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Notifications())),
         onClick = onOpenNotificationSettings,
     )
+    if (state.showPttSettings) {
+        ListItem(
+            content = { Text(stringResource(CommonStrings.screen_ptt_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Resource(CommonDrawables.ic_ptt)),
+            trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChevronRight())),
+            onClick = onOpenPttSettings,
+        )
+    }
     ListItem(
         content = { Text(stringResource(id = CommonStrings.common_screen_lock)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),

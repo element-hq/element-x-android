@@ -36,6 +36,20 @@ import org.junit.Test
 
 class PreferencesRootViewTest : RobolectricTest() {
     @Test
+    fun `PTT settings row opens PTT settings`() = runAndroidComposeUiTest {
+        ensureCalledOnce { callback ->
+            setView(aPreferencesRootState().copy(showPttSettings = true), onOpenPttSettings = callback)
+            onNodeWithText(activity!!.getString(CommonStrings.screen_ptt_title)).performScrollTo().performClick()
+        }
+    }
+
+    @Test
+    fun `PTT settings row is absent when unavailable`() = runAndroidComposeUiTest {
+        setView(aPreferencesRootState().copy(showPttSettings = false))
+        onNodeWithText(activity!!.getString(CommonStrings.screen_ptt_title)).assertDoesNotExist()
+    }
+
+    @Test
     fun `clicking on back invokes back callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
@@ -453,6 +467,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
     onLinkNewDeviceClick: () -> Unit = EnsureNeverCalled(),
     onOpenAnalytics: () -> Unit = EnsureNeverCalled(),
     onOpenRageShake: () -> Unit = EnsureNeverCalled(),
+    onOpenPttSettings: () -> Unit = EnsureNeverCalled(),
     onOpenLockScreenSettings: () -> Unit = EnsureNeverCalled(),
     onOpenAbout: () -> Unit = EnsureNeverCalled(),
     onOpenDeveloperSettings: () -> Unit = EnsureNeverCalled(),
@@ -475,6 +490,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setView(
             onLinkNewDeviceClick = onLinkNewDeviceClick,
             onOpenAnalytics = onOpenAnalytics,
             onOpenRageShake = onOpenRageShake,
+            onOpenPttSettings = onOpenPttSettings,
             onOpenLockScreenSettings = onOpenLockScreenSettings,
             onOpenAbout = onOpenAbout,
             onOpenDeveloperSettings = onOpenDeveloperSettings,

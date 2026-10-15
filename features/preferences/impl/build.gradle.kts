@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.datastore.preferences)
     api(projects.features.preferences.api)
+    implementation(projects.features.ptt.api)
     implementation(libs.showkase)
 
     implementation(platform(libs.network.okhttp.bom))
@@ -116,6 +117,7 @@ dependencies {
     testImplementation(projects.features.lockscreen.test)
     testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.logout.test)
+    testImplementation(projects.features.ptt.test)
     testImplementation(projects.libraries.indicator.test)
     testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.libraries.cachestore.test)

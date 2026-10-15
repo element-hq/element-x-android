@@ -17,6 +17,7 @@ import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.preferences.impl.userstatus.aUserStatusState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
+import io.element.android.features.ptt.test.FakePttFeatureAvailability
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -320,6 +321,25 @@ class PreferencesRootPresenterTest {
         }
     }
 
+    @Test
+    fun `PTT settings visibility follows enterprise availability`() = runTest {
+        val availability = FakePttFeatureAvailability()
+        createPresenter(
+            matrixClient = FakeMatrixClient(
+                canDeactivateAccountResult = { false },
+                accountManagementUrlResult = { Result.success(null) },
+            ),
+            pttAvailability = availability,
+        ).test {
+            assertThat(awaitItem().showPttSettings).isFalse()
+            availability.isAvailable.value = true
+            while (!awaitItem().showPttSettings) { /* Wait for initial profile loading too. */ }
+            availability.isAvailable.value = false
+            while (awaitItem().showPttSettings) { /* Wait for the availability update. */ }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         skipItems(1)
         return awaitItem()
@@ -334,7 +354,9 @@ class PreferencesRootPresenterTest {
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         sessionStore: SessionStore = InMemorySessionStore(),
         sessionEnterpriseService: SessionEnterpriseService = FakeSessionEnterpriseService(),
+        pttAvailability: FakePttFeatureAvailability = FakePttFeatureAvailability(),
     ) = PreferencesRootPresenter(
+        pttFeatureAvailability = pttAvailability,
         matrixClient = matrixClient,
         sessionVerificationService = sessionVerificationService,
         analyticsService = FakeAnalyticsService(),

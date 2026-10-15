@@ -23,6 +23,7 @@ import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
+import io.element.android.features.ptt.api.PttFeatureAvailability
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -46,6 +47,7 @@ import kotlinx.coroutines.launch
 
 @Inject
 class PreferencesRootPresenter(
+    private val pttFeatureAvailability: PttFeatureAvailability,
     private val matrixClient: MatrixClient,
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,
@@ -63,6 +65,7 @@ class PreferencesRootPresenter(
     @Composable
     override fun present(): PreferencesRootState {
         val coroutineScope = rememberCoroutineScope()
+        val showPttSettings by pttFeatureAvailability.isAvailable.collectAsState(initial = false)
         val matrixUser = matrixClient.userProfile.collectAsState()
         LaunchedEffect(Unit) {
             // Force a refresh of the profile
@@ -142,6 +145,7 @@ class PreferencesRootPresenter(
         }
 
         return PreferencesRootState(
+            showPttSettings = showPttSettings,
             myUser = matrixUser.value,
             userStatusState = userStatusState,
             version = remember { versionFormatter.get() },

@@ -65,6 +65,7 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
                 canDeactivateAccount = true,
             ),
             aPreferencesRootState(userStatusState = aUserStatusState(pickerState = UserStatusPickerState.ShowingPicker)),
+            aPreferencesRootState().copy(showPttSettings = true),
             // Minimal state
             aPreferencesRootState(userStatusState = null),
         )
@@ -108,4 +109,5 @@ fun aPreferencesRootState(
     userStatusState = userStatusState,
     snackbarMessage = snackbarMessage,
     eventSink = eventSink,
+    showPttSettings = false,
 )

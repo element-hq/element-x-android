@@ -35,6 +35,7 @@ import io.element.android.features.preferences.impl.notifications.NotificationSe
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
+import io.element.android.features.ptt.api.PttEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.canPop
@@ -53,6 +54,7 @@ import kotlinx.parcelize.Parcelize
 class PreferencesFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val pttEntryPoint: PttEntryPoint,
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val notificationTroubleShootEntryPoint: NotificationTroubleShootEntryPoint,
     private val pushHistoryEntryPoint: PushHistoryEntryPoint,
@@ -70,6 +72,9 @@ class PreferencesFlowNode(
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Root : NavTarget
+
+        @Parcelize
+        data object PttSettings : NavTarget
 
         @Parcelize
         data object DeveloperSettings : NavTarget
@@ -149,6 +154,10 @@ class PreferencesFlowNode(
 
                     override fun navigateToNotificationSettings() {
                         backstack.push(NavTarget.NotificationSettings)
+                    }
+
+                    override fun navigateToPttSettings() {
+                        backstack.push(NavTarget.PttSettings)
                     }
 
                     override fun navigateToLockScreenSettings() {
@@ -291,6 +300,7 @@ class PreferencesFlowNode(
                 }
                 createNode<EditUserProfileNode>(buildContext, listOf(inputs, callback))
             }
+            NavTarget.PttSettings -> pttEntryPoint.createNode(this, buildContext)
             NavTarget.LockScreenSettings -> {
                 lockScreenEntryPoint.createNode(
                     parentNode = this,

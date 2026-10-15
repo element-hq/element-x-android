@@ -17,6 +17,7 @@ import io.element.android.features.licenses.test.FakeOpenSourceLicensesEntryPoin
 import io.element.android.features.lockscreen.test.FakeLockScreenEntryPoint
 import io.element.android.features.logout.test.FakeLogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
+import io.element.android.features.ptt.test.FakePttEntryPoint
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleShootEntryPoint
@@ -40,6 +41,7 @@ class DefaultPreferencesEntryPointTest {
             PreferencesFlowNode(
                 buildContext = buildContext,
                 plugins = plugins,
+                pttEntryPoint = FakePttEntryPoint(),
                 lockScreenEntryPoint = FakeLockScreenEntryPoint(),
                 notificationTroubleShootEntryPoint = FakeNotificationTroubleShootEntryPoint(),
                 pushHistoryEntryPoint = FakePushHistoryEntryPoint(),
