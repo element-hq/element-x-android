@@ -35,6 +35,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.Announcement
 import io.element.android.libraries.designsystem.components.AnnouncementType
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -45,8 +46,9 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
-import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewLight
+import io.element.android.libraries.designsystem.preview.PreviewWithExtraLargeHeight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
@@ -567,11 +569,21 @@ private fun InvalidNotificationSettingsView(
     }
 }
 
-@PreviewsDayNight
+@PreviewWithExtraLargeHeight
 @Composable
-internal fun NotificationSettingsViewPreview(
+internal fun NotificationSettingsViewLightPreview(
     @PreviewParameter(NotificationSettingsStatePreviewParam::class) state: NotificationSettingsState
-) = ElementPreview {
+) = ElementPreviewLight { ContentToPreview(state) }
+
+@PreviewWithExtraLargeHeight
+@Composable
+internal fun NotificationSettingsViewDarkPreview(
+    @PreviewParameter(NotificationSettingsStatePreviewParam::class) state: NotificationSettingsState
+) = ElementPreviewDark { ContentToPreview(state) }
+
+@ExcludeFromCoverage
+@Composable
+private fun ContentToPreview(state: NotificationSettingsState) {
     NotificationSettingsView(
         state = state,
         onBackClick = {},
