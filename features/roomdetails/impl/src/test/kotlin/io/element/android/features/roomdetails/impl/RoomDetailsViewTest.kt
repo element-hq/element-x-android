@@ -44,28 +44,21 @@ import org.junit.Test
 import org.robolectric.annotation.Config
 
 class RoomDetailsViewTest : RobolectricTest() {
-    @Config(qualifiers = "h1024dp")
     @Test
-    fun `room audio keeps video shortcut when video is selected`() = runAndroidComposeUiTest {
-        setRoomDetailView(state = aRoomDetailsState().copy(showRoomAudio = true))
-        onNodeWithText("Room Audio").assertExists()
-        onNodeWithText("Video Calls").assertExists()
-        onNodeWithText("Push to Talk").assertExists()
-        onNodeWithText("Video").assertExists().assertIsEnabled()
+    fun `extension section is rendered`() = runAndroidComposeUiTest {
+        setRoomDetailView(additionalSections = { io.element.android.libraries.designsystem.theme.components.Text("Extra section") })
+        onNodeWithText("Extra section").assertExists()
     }
 
-    @Config(qualifiers = "h1024dp")
     @Test
-    fun `room audio disables video shortcut when PTT is selected`() = runAndroidComposeUiTest {
-        setRoomDetailView(state = aRoomDetailsState().copy(showRoomAudio = true, isPttEnabled = true))
-        onNodeWithText("Room Audio").assertExists()
+    fun `call shortcut remains visible when disabled by extension`() = runAndroidComposeUiTest {
+        setRoomDetailView(state = aRoomDetailsState().copy(isCallActionEnabled = false))
         onNodeWithText("Video").assertExists().assertIsNotEnabled().performClick()
     }
 
     @Test
-    fun `room audio is hidden without the availability toggle`() = runAndroidComposeUiTest {
+    fun `call shortcut is enabled by default`() = runAndroidComposeUiTest {
         setRoomDetailView(state = aRoomDetailsState())
-        onNodeWithText("Room Audio").assertDoesNotExist()
         onNodeWithText("Video").assertExists().assertIsEnabled()
     }
 
@@ -409,7 +402,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomDetailView(
     onSecurityAndPrivacyClick: () -> Unit = EnsureNeverCalled(),
     onProfileClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
     onReportRoomClick: () -> Unit = EnsureNeverCalled(),
-    onPushToTalkClick: () -> Unit = EnsureNeverCalled(),
+    additionalSections: @androidx.compose.runtime.Composable () -> Unit = {},
 ) {
     setContent {
         RoomDetailsView(
@@ -430,7 +423,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomDetailView(
             onSecurityAndPrivacyClick = onSecurityAndPrivacyClick,
             onProfileClick = onProfileClick,
             onReportRoomClick = onReportRoomClick,
-            onPushToTalkClick = onPushToTalkClick,
+            additionalSections = additionalSections,
             leaveRoomView = {},
         )
     }

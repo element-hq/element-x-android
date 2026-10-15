@@ -11,6 +11,7 @@ package io.element.android.libraries.push.impl.notifications
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.ptt.api.PttEnabledSource
 import io.element.android.features.ptt.test.FakePttEnabledSource
+import io.element.android.features.ptt.test.FakePttFeatureAvailability
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.RtcNotificationType
@@ -178,7 +179,9 @@ class DefaultCallNotificationEventResolverTest {
             givenGetRoomResult(A_ROOM_ID, room)
         }
 
+        val availability = FakePttFeatureAvailability(true)
         val resolver = createDefaultNotifiableEventResolver(
+            pttAvailability = availability,
             clientProvider = FakeMatrixClientProvider(getClient = { Result.success(client) }),
             pttEnabledSource = FakePttEnabledSource(initialEnabledRoomIds = setOf(A_ROOM_ID)),
         )
@@ -207,6 +210,8 @@ class DefaultCallNotificationEventResolverTest {
         )
         val result = resolver.resolveEvent(A_SESSION_ID, notificationData)
         assertThat(result.getOrNull()).isEqualTo(expectedResult)
+        availability.isAvailable.value = false
+        assertThat(resolver.resolveEvent(A_SESSION_ID, notificationData).getOrNull()).isInstanceOf(NotifiableMessageEvent::class.java)
     }
 
     private fun createDefaultNotifiableEventResolver(
@@ -214,10 +219,12 @@ class DefaultCallNotificationEventResolverTest {
         appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(),
         clientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
         pttEnabledSource: PttEnabledSource = FakePttEnabledSource(),
+        pttAvailability: FakePttFeatureAvailability = FakePttFeatureAvailability(),
     ) = DefaultCallNotificationEventResolver(
         stringProvider = stringProvider,
         appForegroundStateService = appForegroundStateService,
         clientProvider = clientProvider,
         pttEnabledSource = pttEnabledSource,
+        pttAvailability = pttAvailability,
     )
 }

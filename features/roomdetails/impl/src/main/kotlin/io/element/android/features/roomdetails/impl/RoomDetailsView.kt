@@ -123,8 +123,8 @@ fun RoomDetailsView(
     onSecurityAndPrivacyClick: () -> Unit,
     onProfileClick: (UserId) -> Unit,
     onReportRoomClick: () -> Unit,
-    onPushToTalkClick: () -> Unit,
     modifier: Modifier = Modifier,
+    additionalSections: @Composable () -> Unit = {},
     leaveRoomView: @Composable () -> Unit,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -200,12 +200,7 @@ fun RoomDetailsView(
                 )
             }
 
-            if (state.showRoomAudio) {
-                RoomAudioSection(
-                    isPttEnabled = state.isPttEnabled,
-                    onPttEnabledChange = { state.eventSink(RoomDetailsEvent.SetPttEnabled(it)) },
-                )
-            }
+            additionalSections()
 
             PreferenceCategory {
                 if (state.hasNewContent) {
@@ -346,10 +341,6 @@ fun RoomDetailsView(
                     roomVersion = state.roomVersion,
                 )
             }
-            // Push-to-talk (Stage 1 prototype) — debug-only entry, kept last so it doesn't shift the list.
-            PushToTalkItem(
-                onClick = onPushToTalkClick
-            )
         }
     }
 }
@@ -451,7 +442,7 @@ private fun MainActionsSection(
                 title = stringResource(CommonStrings.common_video),
                 imageVector = CompoundIcons.VideoCall(),
                 onClick = { onCall(CallIntent.VIDEO) },
-                enabled = !state.isPttEnabled,
+                enabled = state.isCallActionEnabled,
             )
         }
         if (state.canInvite && state.roomType !is RoomDetailsType.Dm) {
@@ -839,18 +830,6 @@ private fun MediaGalleryItem(
     )
 }
 
-// NOTE: hard-coded label — debug-only Stage 1 PTT prototype entry, not localised.
-@Composable
-private fun PushToTalkItem(
-    onClick: () -> Unit,
-) {
-    ListItem(
-        content = { Text("Push-to-talk (prototype)") },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VoiceCall())),
-        onClick = onClick,
-    )
-}
-
 @Composable
 private fun OtherActionsSection(
     canReportRoom: Boolean,
@@ -967,7 +946,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onSecurityAndPrivacyClick = {},
         onProfileClick = {},
         onReportRoomClick = {},
-        onPushToTalkClick = {},
         leaveRoomView = {},
     )
 }

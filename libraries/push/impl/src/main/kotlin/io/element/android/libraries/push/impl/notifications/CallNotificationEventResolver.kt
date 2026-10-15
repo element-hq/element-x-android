@@ -11,6 +11,7 @@ package io.element.android.libraries.push.impl.notifications
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.ptt.api.PttEnabledSource
+import io.element.android.features.ptt.api.PttFeatureAvailability
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -25,6 +26,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.toolbox.api.strings.StringProvider
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
@@ -54,6 +56,7 @@ class DefaultCallNotificationEventResolver(
     private val appForegroundStateService: AppForegroundStateService,
     private val clientProvider: MatrixClientProvider,
     private val pttEnabledSource: PttEnabledSource,
+    private val pttAvailability: PttFeatureAvailability,
 ) : CallNotificationEventResolver {
     override suspend fun resolveEvent(
         sessionId: SessionId,
@@ -94,7 +97,7 @@ class DefaultCallNotificationEventResolver(
         // PTT-enabled rooms surface a full-screen alert regardless of the RING/NOTIFY type, since a
         // PTT session going live is a "channel is live" event we want the user to see immediately.
         val isPtt = runCatchingExceptions {
-            pttEnabledSource.isPttEnabled(sessionId, notificationData.roomId)
+            pttAvailability.isAvailable.first() && pttEnabledSource.isPttEnabled(sessionId, notificationData.roomId)
         }.getOrDefault(false)
 
         notificationData.run {

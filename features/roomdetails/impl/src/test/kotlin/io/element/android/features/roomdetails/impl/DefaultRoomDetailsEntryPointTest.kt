@@ -18,7 +18,6 @@ import io.element.android.features.changeroommemberroles.test.FakeRolesAndPermis
 import io.element.android.features.knockrequests.test.FakeKnockRequestsListEntryPoint
 import io.element.android.features.messages.test.FakeMessagesEntryPoint
 import io.element.android.features.poll.test.history.FakePollHistoryEntryPoint
-import io.element.android.features.ptt.test.FakePttEntryPoint
 import io.element.android.features.reportroom.test.FakeReportRoomEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
 import io.element.android.features.roomdetailsedit.test.FakeRoomDetailsEditEntryPoint
@@ -66,7 +65,6 @@ class DefaultRoomDetailsEntryPointTest {
                 rolesAndPermissionsEntryPoint = FakeRolesAndPermissionsEntryPoint(),
                 securityAndPrivacyEntryPoint = FakeSecurityAndPrivacyEntryPoint(),
                 roomDetailsEditEntryPoint = FakeRoomDetailsEditEntryPoint(),
-                pttEntryPoint = FakePttEntryPoint(),
             )
         }
         val callback = object : RoomDetailsEntryPoint.Callback {

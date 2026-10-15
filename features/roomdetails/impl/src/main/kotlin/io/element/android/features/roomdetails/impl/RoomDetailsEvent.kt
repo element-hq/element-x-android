@@ -13,7 +13,6 @@ sealed interface RoomDetailsEvent {
     data object MuteNotification : RoomDetailsEvent
     data object UnmuteNotification : RoomDetailsEvent
     data class CopyToClipboard(val text: String) : RoomDetailsEvent
-    data class SetPttEnabled(val enabled: Boolean) : RoomDetailsEvent
     data class SetFavorite(val isFavorite: Boolean) : RoomDetailsEvent
     data object MarkAsRead : RoomDetailsEvent
     data object MarkAsUnread : RoomDetailsEvent

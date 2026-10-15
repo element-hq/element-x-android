@@ -25,8 +25,8 @@ import io.element.android.features.knockrequests.api.KnockRequestPermissions
 import io.element.android.features.knockrequests.api.knockRequestPermissions
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.ptt.api.PttRoomService
 import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.features.roomdetails.api.RoomDetailsExtension
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetailsedit.api.RoomDetailsEditPermissions
 import io.element.android.features.roomdetailsedit.api.roomDetailsEditPermissions
@@ -77,7 +77,7 @@ class RoomDetailsPresenter(
     private val clipboardHelper: ClipboardHelper,
     private val appPreferencesStore: AppPreferencesStore,
     private val sessionPreferencesStore: SessionPreferencesStore,
-    private val pttRoomService: PttRoomService,
+    private val roomDetailsExtension: RoomDetailsExtension,
     private val notificationCleaner: NotificationCleaner,
 ) : Presenter<RoomDetailsState> {
     @AssistedFactory
@@ -123,8 +123,7 @@ class RoomDetailsPresenter(
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember?.userId)
         val roomType = getRoomType(dmMember)
         val roomCallState = roomCallStatePresenter.present()
-        val isPttAvailable by remember { pttRoomService.isPttAvailableFlow() }.collectAsState(initial = false)
-        val isPttEnabled by remember { pttRoomService.isPttEnabledFlow() }.collectAsState(initial = false)
+        val isCallActionEnabled by remember { roomDetailsExtension.isCallActionEnabledFlow() }.collectAsState(initial = true)
         val joinedMemberCount by remember { derivedStateOf { roomInfo.joinedMembersCount } }
 
         val topicState = remember(permissions.editDetailsPermissions.canEditTopic, roomTopic, roomType) {
@@ -169,9 +168,6 @@ class RoomDetailsPresenter(
                         notificationSettingsService.unmuteRoom(room.roomId, isEncrypted, room.isDm())
                     }
                 }
-                is RoomDetailsEvent.SetPttEnabled -> {
-                    if (isPttAvailable) scope.launch { pttRoomService.setPttEnabled(event.enabled) }
-                }
                 is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
                 is RoomDetailsEvent.CopyToClipboard -> {
                     clipboardHelper.copyPlainText(event.text)
@@ -203,8 +199,7 @@ class RoomDetailsPresenter(
             canInvite = permissions.canInvite,
             canEdit = roomType == RoomDetailsType.Room && permissions.editDetailsPermissions.hasAny,
             roomCallState = roomCallState,
-            showRoomAudio = isPttAvailable,
-            isPttEnabled = isPttEnabled,
+            isCallActionEnabled = isCallActionEnabled,
             roomType = roomType,
             dmOtherMemberDetailsState = dmOtherMemberDetailsState,
             leaveRoomState = leaveRoomState,

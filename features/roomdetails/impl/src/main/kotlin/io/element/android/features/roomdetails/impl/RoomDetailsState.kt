@@ -53,8 +53,7 @@ data class RoomDetailsState(
     val roomVersion: String?,
     val roomHistoryVisibility: RoomHistoryVisibility,
     val hasNewContent: Boolean,
-    val showRoomAudio: Boolean = false,
-    val isPttEnabled: Boolean = false,
+    val isCallActionEnabled: Boolean,
     val eventSink: (RoomDetailsEvent) -> Unit
 ) {
     val roomBadges = buildList {

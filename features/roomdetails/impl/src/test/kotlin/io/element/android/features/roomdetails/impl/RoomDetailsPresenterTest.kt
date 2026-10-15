@@ -8,13 +8,15 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.ptt.test.FakePttRoomService
 import io.element.android.features.roomcall.api.aStandByCallState
+import io.element.android.features.roomdetails.api.RoomDetailsExtension
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -63,6 +65,7 @@ import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.testWithLifecycleOwner
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -81,7 +84,7 @@ class RoomDetailsPresenterTest {
 
     private fun TestScope.createRoomDetailsPresenter(
         room: JoinedRoom = aJoinedRoom(),
-        pttRoomService: FakePttRoomService = FakePttRoomService(),
+        roomDetailsExtension: RoomDetailsExtension = NoopRoomDetailsExtension(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
@@ -108,7 +111,7 @@ class RoomDetailsPresenterTest {
             }
         }
         return RoomDetailsPresenter(
-            pttRoomService = pttRoomService,
+            roomDetailsExtension = roomDetailsExtension,
             navigator = navigator,
             client = matrixClient,
             room = room,
@@ -696,32 +699,20 @@ class RoomDetailsPresenterTest {
     }
 
     @Test
-    fun `room audio stays visible when switching back to video`() = runTest {
-        val service = FakePttRoomService().apply { isAvailable.value = true }
-        val presenter = createRoomDetailsPresenter(pttRoomService = service)
-        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
-            val video = consumeItemsUntilPredicate { it.showRoomAudio }.last()
-            assertThat(video.isPttEnabled).isFalse()
-            video.eventSink(RoomDetailsEvent.SetPttEnabled(true))
-            val ptt = consumeItemsUntilPredicate { it.isPttEnabled }.last()
-            ptt.eventSink(RoomDetailsEvent.SetPttEnabled(false))
-            val switchedBack = consumeItemsUntilPredicate { !it.isPttEnabled }.last()
-            assertThat(switchedBack.showRoomAudio).isTrue()
-            service.setPttAvailable(false)
-            consumeItemsUntilPredicate { !it.showRoomAudio }
-            cancelAndIgnoreRemainingEvents()
+    fun `extension can disable and restore the call action`() = runTest {
+        val enabled = MutableStateFlow(true)
+        val extension = object : RoomDetailsExtension {
+            @Composable
+            override fun Render(modifier: Modifier) = Unit
+            override fun isCallActionEnabledFlow() = enabled
         }
-    }
-
-    @Test
-    fun `room audio cannot enable PTT without availability`() = runTest {
-        val service = FakePttRoomService()
-        val presenter = createRoomDetailsPresenter(pttRoomService = service)
+        val presenter = createRoomDetailsPresenter(roomDetailsExtension = extension)
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
-            val state = awaitItem()
-            assertThat(state.showRoomAudio).isFalse()
-            state.eventSink(RoomDetailsEvent.SetPttEnabled(true))
-            assertThat(service.isEnabled.value).isFalse()
+            assertThat(awaitItem().isCallActionEnabled).isTrue()
+            enabled.value = false
+            consumeItemsUntilPredicate { !it.isCallActionEnabled }
+            enabled.value = true
+            consumeItemsUntilPredicate { it.isCallActionEnabled }
             cancelAndIgnoreRemainingEvents()
         }
     }
