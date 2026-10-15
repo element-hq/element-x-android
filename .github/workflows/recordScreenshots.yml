@@ -62,7 +62,7 @@ jobs:
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
-          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+          cache-read-only: true # Only the debug build and unit tests jobs write the Gradle cache, see build.yml
       - name: Record screenshots
         id: record
         run: ./.github/workflows/scripts/recordScreenshots.sh
