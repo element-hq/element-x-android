@@ -76,7 +76,7 @@ class SearchBackfillWorker(
 
                         if (task.isRunning() && appLifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
                             Timber.w("App is now in foreground, cancelling search backfill as it would degrade performance")
-                            return@withTimeout Result.success()
+                            return@withTimeout
                         }
                     }
                 }
