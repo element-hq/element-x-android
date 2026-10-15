@@ -162,6 +162,8 @@ fun aMessagesState(
     showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom,
     dmUserStatus = dmUserStatus,
     eventSink = eventSink,
+    isPttEnabled = false,
+    isPttSessionActive = false,
 )
 
 fun aRoomMemberModerationState(

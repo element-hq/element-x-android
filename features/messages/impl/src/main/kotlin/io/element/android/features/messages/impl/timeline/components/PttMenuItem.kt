@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -55,14 +57,12 @@ internal fun PttMenuItem(
     }
 }
 
-@PreviewsDayNight
-@Composable
-internal fun PttMenuItemStartPreview() = ElementPreview {
-    PttMenuItem(isInSession = false, onStartOrJoinClick = {}, onLeaveClick = {})
+internal class PttMenuItemBooleanPreviewParam : PreviewParameterProvider<Boolean> {
+    override val values = sequenceOf(false, true)
 }
 
 @PreviewsDayNight
 @Composable
-internal fun PttMenuItemInSessionPreview() = ElementPreview {
-    PttMenuItem(isInSession = true, onStartOrJoinClick = {}, onLeaveClick = {})
+internal fun PttMenuItemPreview(@PreviewParameter(PttMenuItemBooleanPreviewParam::class) isInSession: Boolean) = ElementPreview {
+    PttMenuItem(isInSession = isInSession, onStartOrJoinClick = {}, onLeaveClick = {})
 }

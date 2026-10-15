@@ -53,4 +53,7 @@
     <string name="screen_ptt_button_bluetooth_off">Bluetooth is off. Turn it on in settings, then try again.</string>
     <string name="screen_ptt_button_unsupported">This phone or button does not support this PTT setup. Currently tested with Pryme BT-PTT-Z-HD.</string>
     <string name="screen_ptt_button_failed">Could not connect. Keep the button nearby, press and release to wake it, then try again.</string>
+    <string name="a11y_ptt_button">Push to talk</string>
+    <string name="a11y_ptt_start">Start transmitting</string>
+    <string name="a11y_ptt_stop">Stop transmitting</string>
 </resources>

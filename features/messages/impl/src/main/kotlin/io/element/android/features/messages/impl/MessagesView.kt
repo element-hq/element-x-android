@@ -683,7 +683,7 @@ private fun MessagesViewComposerBottomSheetContents(
                         showPushToTalkButton = state.isPttEnabled &&
                             (state.roomCallState as? RoomCallState.OnGoing)?.isUserLocallyInTheCall == true,
                         // TODO wire transmit start/stop once Element Call exposes a mic control (Stage 2).
-                        onPushToTalkPress = {},
+                        onPushToTalkDown = {},
                         onPushToTalkRelease = {},
                     )
                 }

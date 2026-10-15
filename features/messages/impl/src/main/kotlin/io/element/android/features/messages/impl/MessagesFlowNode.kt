@@ -29,7 +29,6 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
-import io.element.android.features.ptt.api.PttSessionManager
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.LocationService
@@ -62,6 +61,7 @@ import io.element.android.features.messages.impl.timeline.model.event.blurHash
 import io.element.android.features.messages.impl.timeline.model.event.duration
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
+import io.element.android.features.ptt.api.PttSessionManager
 import io.element.android.libraries.androidutils.system.DeviceHasVulkanSupport
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode

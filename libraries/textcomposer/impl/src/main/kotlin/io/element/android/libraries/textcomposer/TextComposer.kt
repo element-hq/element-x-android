@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -134,7 +133,7 @@ fun TextComposer(
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     showPushToTalkButton: Boolean = false,
-    onPushToTalkPress: () -> Unit = {},
+    onPushToTalkDown: () -> Unit = {},
     onPushToTalkRelease: () -> Unit = {},
     isInThreadTimeline: Boolean = false,
 ) {
@@ -420,7 +419,7 @@ fun TextComposer(
             textInput = textInput,
             endButtonParams = endButtonParams,
             showPushToTalkButton = showPushToTalk,
-            onPushToTalkPress = onPushToTalkPress,
+            onPushToTalkDown = onPushToTalkDown,
             onPushToTalkRelease = onPushToTalkRelease,
             voiceRecording = voiceRecording,
             onAddAttachment = onAddAttachment,
@@ -474,7 +473,7 @@ private fun StandardLayout(
     voiceRecording: @Composable () -> Unit,
     endButtonParams: EndButtonParams,
     showPushToTalkButton: Boolean,
-    onPushToTalkPress: () -> Unit,
+    onPushToTalkDown: () -> Unit,
     onPushToTalkRelease: () -> Unit,
     onAddAttachment: () -> Unit,
     onDeleteVoiceMessage: () -> Unit,
@@ -561,7 +560,7 @@ private fun StandardLayout(
             }
             if (showPushToTalkButton) {
                 PushToTalkButton(
-                    onPress = onPushToTalkPress,
+                    onButtonDown = onPushToTalkDown,
                     onRelease = onPushToTalkRelease,
                     modifier = Modifier
                         .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)

@@ -14,7 +14,6 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.test.FakeElementCallEntryPoint
-import io.element.android.features.ptt.test.FakePttSessionManager
 import io.element.android.features.forward.test.FakeForwardEntryPoint
 import io.element.android.features.knockrequests.test.FakeKnockRequestsListEntryPoint
 import io.element.android.features.location.test.FakeLocationService
@@ -24,6 +23,7 @@ import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.pinned.banner.createPinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.createTimelineController
 import io.element.android.features.poll.test.create.FakeCreatePollEntryPoint
+import io.element.android.features.ptt.test.FakePttSessionManager
 import io.element.android.libraries.androidutils.system.DeviceHasVulkanSupport
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.EventId

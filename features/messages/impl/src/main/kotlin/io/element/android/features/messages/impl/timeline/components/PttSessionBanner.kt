@@ -111,7 +111,7 @@ internal fun PttSessionBanner(
 @PreviewsDayNight
 @Composable
 internal fun PttSessionBannerPreview(
-    @PreviewParameter(PttSessionBannerParticipantsProvider::class) participantCount: Int
+    @PreviewParameter(PttSessionBannerIntPreviewParam::class) participantCount: Int
 ) = ElementPreview {
     PttSessionBanner(
         participantCount = participantCount,
@@ -120,6 +120,6 @@ internal fun PttSessionBannerPreview(
     )
 }
 
-internal class PttSessionBannerParticipantsProvider : PreviewParameterProvider<Int> {
+internal class PttSessionBannerIntPreviewParam : PreviewParameterProvider<Int> {
     override val values: Sequence<Int> = sequenceOf(1, 9)
 }
