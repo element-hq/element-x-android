@@ -12,6 +12,7 @@ import android.content.Context
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import io.element.android.features.ptt.impl.PttLocalSettings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -31,6 +32,7 @@ object PttLockScreenAlert {
     private const val NOTIFICATION_ID = 90_211
 
     fun post(context: Context, sessionId: SessionId, roomId: RoomId, roomName: String) {
+        if (!PttLocalSettings.preferences(context).getBoolean("lock_screen", true)) return
         val notificationManager = NotificationManagerCompat.from(context)
         Timber.tag(loggerTag.value).d(
             "posting full-screen PTT alert for room %s (canUseFullScreenIntent=%b, notificationsEnabled=%b)",

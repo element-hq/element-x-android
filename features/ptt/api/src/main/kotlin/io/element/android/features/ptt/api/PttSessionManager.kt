@@ -20,9 +20,6 @@ interface PttSessionManager {
     /** The active session's state, or `null` when no channel is joined. */
     val sessionState: StateFlow<PttSessionState?>
 
-    /** Whether the user has opted in to hearing others (audio output). Off by default — silent. */
-    val isHearingEnabled: StateFlow<Boolean>
-
     /** Covert/silent master override: forces audio output off and suppresses all tones when on. */
     val isCovert: StateFlow<Boolean>
 
@@ -38,9 +35,6 @@ interface PttSessionManager {
     /** Release the floor and stop transmitting (talk button / hardware-key up). */
     fun releaseToTalk()
 
-    /** Opt in/out of hearing others; takes effect immediately on the live session. */
-    fun setHearingEnabled(enabled: Boolean)
-
-    /** Toggle covert/silent mode — hard-silences output and tones, overriding [isHearingEnabled]. */
+    /** Toggle covert mode — silences PTT output and tones when on; restores incoming audio when off. */
     fun setCovert(enabled: Boolean)
 }

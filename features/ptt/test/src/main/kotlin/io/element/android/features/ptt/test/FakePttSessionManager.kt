@@ -16,14 +16,11 @@ import kotlinx.coroutines.flow.StateFlow
 
 class FakePttSessionManager(
     private val sessionStateFlow: MutableStateFlow<PttSessionState?> = MutableStateFlow(null),
-    private val isHearingEnabledFlow: MutableStateFlow<Boolean> = MutableStateFlow(false),
     private val isCovertFlow: MutableStateFlow<Boolean> = MutableStateFlow(false),
     private val pressToTalkLambda: () -> Unit = {},
     private val releaseToTalkLambda: () -> Unit = {},
 ) : PttSessionManager {
     override val sessionState: StateFlow<PttSessionState?> = sessionStateFlow
-
-    override val isHearingEnabled: StateFlow<Boolean> = isHearingEnabledFlow
 
     override val isCovert: StateFlow<Boolean> = isCovertFlow
 
@@ -34,10 +31,6 @@ class FakePttSessionManager(
     override fun pressToTalk() = pressToTalkLambda()
 
     override fun releaseToTalk() = releaseToTalkLambda()
-
-    override fun setHearingEnabled(enabled: Boolean) {
-        isHearingEnabledFlow.value = enabled
-    }
 
     override fun setCovert(enabled: Boolean) {
         isCovertFlow.value = enabled

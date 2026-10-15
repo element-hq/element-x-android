@@ -27,12 +27,20 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import dev.zacsweers.metro.Inject
 import io.element.android.features.ptt.api.PttChannelConfig
+import io.element.android.features.ptt.impl.PttLocalSettings
 import io.element.android.features.ptt.impl.PttSessionController
 import io.element.android.features.ptt.impl.input.PttInputCoordinator
+import io.element.android.features.ptt.impl.lockscreen.PttLockScreenActivity
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.utils.CommonDrawables
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("PttSessionHostService")
@@ -71,6 +79,10 @@ class PttSessionHostService : Service() {
     @Inject lateinit var sessionController: PttSessionController
     @Inject lateinit var inputCoordinator: PttInputCoordinator
 
+    @Inject lateinit var settings: PttLocalSettings
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private var currentConfig: PttChannelConfig? = null
+
     private var overlayButton: PttOverlayButton? = null
 
     // Retry the overlay button when the app returns to foreground — e.g. after the user grants the
@@ -78,7 +90,7 @@ class PttSessionHostService : Service() {
     // ungranted, so this just makes the grant take effect without leaving and rejoining.
     private val foregroundObserver = LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_RESUME) {
-            overlayButton?.show()
+            updateOverlay()
             // The user may have just granted RECORD_AUDIO (e.g. from the transmit prompt or settings);
             // re-apply the foreground type so a warm special-use session is elevated to microphone.
             startAsForeground()
@@ -90,7 +102,14 @@ class PttSessionHostService : Service() {
     override fun onCreate() {
         super.onCreate()
         bindings<PttSessionHostBindings>().inject(this)
+        sessionController.setCovert(settings.covert)
         startAsForeground()
+        serviceScope.launch {
+            combine(settings.overlayEnabled, settings.lockScreenEnabled) { _, _ -> Unit }.collect {
+                updateOverlay()
+                startAsForeground()
+            }
+        }
         ProcessLifecycleOwner.get().lifecycle.addObserver(foregroundObserver)
     }
 
@@ -106,6 +125,8 @@ class PttSessionHostService : Service() {
             stopSelf()
             return START_NOT_STICKY
         }
+        currentConfig = config
+        startAsForeground()
         sessionController.startSession(config)
         // Catch hardware/accessory PTT buttons (media-key accessories today; OEM/BLE sources plug in
         // via the same coordinator) for the life of the session.
@@ -116,9 +137,18 @@ class PttSessionHostService : Service() {
                 context = this,
                 onPressStart = { sessionController.pressToTalk() },
                 onPressEnd = { sessionController.releaseToTalk() },
-            ).also { it.show() }
+            )
         }
+        updateOverlay()
         return START_STICKY
+    }
+
+    private fun updateOverlay() {
+        if (settings.overlayEnabled.value && android.provider.Settings.canDrawOverlays(this)) {
+            overlayButton?.show()
+        } else {
+            overlayButton?.hide()
+        }
     }
 
     private fun startAsForeground() {
@@ -138,6 +168,17 @@ class PttSessionHostService : Service() {
             .setContentTitle("Push-to-talk active")
             .setContentText("Connected to the PTT channel")
             .setOngoing(true)
+            .setVisibility(if (settings.lockScreenEnabled.value) NotificationCompat.VISIBILITY_PUBLIC else NotificationCompat.VISIBILITY_SECRET)
+            .apply {
+                currentConfig?.takeIf { settings.lockScreenEnabled.value }?.let { config ->
+                    setContentIntent(PendingIntent.getActivity(
+                        this@PttSessionHostService,
+                        0,
+                        PttLockScreenActivity.newIntent(this@PttSessionHostService, config.sessionId, config.roomId, ""),
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+                    ))
+                }
+            }
             .addAction(0, "Leave", hangupIntent)
             .build()
         runCatchingExceptions {
@@ -168,6 +209,7 @@ class PttSessionHostService : Service() {
 
     override fun onDestroy() {
         ProcessLifecycleOwner.get().lifecycle.removeObserver(foregroundObserver)
+        serviceScope.cancel()
         inputCoordinator.stop()
         overlayButton?.hide()
         overlayButton = null

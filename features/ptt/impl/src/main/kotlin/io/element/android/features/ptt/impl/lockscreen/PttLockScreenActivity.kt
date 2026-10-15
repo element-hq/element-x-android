@@ -34,6 +34,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.ptt.api.PttConnectionState
 import io.element.android.features.ptt.api.PttSessionManager
+import io.element.android.features.ptt.impl.PttLocalSettings
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -63,6 +64,10 @@ class PttLockScreenActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!PttLocalSettings.preferences(this).getBoolean("lock_screen", true)) {
+            finish()
+            return
+        }
         bindings<PttLockScreenBindings>().inject(this)
 
         // Show over the lock screen and turn the screen on, like an incoming call.

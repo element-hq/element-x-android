@@ -137,7 +137,10 @@ class PttOverlayButton(
     }
 
     fun hide() {
-        view?.let { current -> runCatchingExceptions { windowManager.removeView(current) } }
+        view?.let { current ->
+            onPressEnd()
+            runCatchingExceptions { windowManager.removeView(current) }
+        }
         view = null
     }
 

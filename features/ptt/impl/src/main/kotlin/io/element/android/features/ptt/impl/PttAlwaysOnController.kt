@@ -12,6 +12,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.ptt.api.PttEnabledSource
+import io.element.android.features.ptt.api.PttFeatureAvailability
 import io.element.android.features.ptt.api.PttTransportFactory
 import io.element.android.features.ptt.api.PttTransportType
 import io.element.android.features.ptt.impl.services.PttSessionHostService
@@ -37,7 +38,7 @@ private val loggerTag = LoggerTag("PttAlwaysOn")
 
 /**
  * Drives the always-on PTT presence: the foreground [PttSessionHostService] runs (connected, but
- * silent/warm — see the audio-output gate) whenever **≥1 room has PTT enabled** across any logged-in
+ * audible unless covert mode is enabled) whenever **≥1 room has PTT enabled** across any logged-in
  * session, and stops when the last one is disabled. This is what lets a user enable PTT on a room,
  * close the app, and keep receiving — the way Zello and similar radios stay connected in the
  * background.
@@ -56,6 +57,8 @@ class PttAlwaysOnController(
     private val sessionStore: SessionStore,
     private val pttEnabledSource: PttEnabledSource,
     private val sessionController: PttSessionController,
+    private val settings: PttLocalSettings,
+    private val availability: PttFeatureAvailability,
     factories: @JvmSuppressWildcards Map<PttTransportType, PttTransportFactory>,
 ) {
     private val transportAvailable = factories.containsKey(PttTransportType.Mumble)
@@ -75,8 +78,8 @@ class PttAlwaysOnController(
                 .map { it.firstOrNull() }
             // Reconcile the desired target against whether a session is actually live, so a dropped
             // or externally-stopped session is brought back while rooms remain enabled.
-            combine(targetFlow, sessionController.sessionState) { target, session ->
-                target to (session != null)
+            combine(targetFlow, sessionController.sessionState, availability.isAvailable) { target, session, available ->
+                target.takeIf { available } to (session != null)
             }
                 .distinctUntilChanged()
                 .collect { (target, isLive) ->
@@ -99,7 +102,7 @@ class PttAlwaysOnController(
     private fun startService(target: Pair<SessionId, RoomId>) {
         Timber.tag(loggerTag.value).d("Enabled room present; starting always-on PTT service")
         try {
-            PttSessionHostService.start(context, interimMumbleConfig(target.first, target.second))
+            PttSessionHostService.start(context, interimMumbleConfig(target.first, target.second, settings.server(target.first)))
         } catch (error: Exception) {
             // e.g. a background foreground-service start restriction — reboot/background auto-start is
             // handled separately (BOOT_COMPLETED is a later phase); don't crash app startup.

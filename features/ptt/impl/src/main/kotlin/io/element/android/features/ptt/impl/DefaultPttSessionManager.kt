@@ -10,16 +10,20 @@ package io.element.android.features.ptt.impl
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.ptt.api.PttChannelConfig
+import io.element.android.features.ptt.api.PttFeatureAvailability
 import io.element.android.features.ptt.api.PttSessionManager
 import io.element.android.features.ptt.api.PttSessionState
 import io.element.android.features.ptt.api.PttTransportType
 import io.element.android.features.ptt.impl.services.PttSessionHostService
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 /**
  * Facade over the foreground [PttSessionHostService] (session lifecycle) and the app-scoped
@@ -27,19 +31,27 @@ import kotlinx.coroutines.flow.StateFlow
  * [PttSessionManager] api without depending on the transport internals.
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPttSessionManager(
     @ApplicationContext private val context: Context,
     private val controller: PttSessionController,
+    private val settings: PttLocalSettings,
+    private val availability: PttFeatureAvailability,
+    @AppCoroutineScope private val coroutineScope: CoroutineScope,
 ) : PttSessionManager {
-    override val sessionState: StateFlow<PttSessionState?> = controller.sessionState
+    init {
+        controller.setCovert(settings.covert)
+    }
 
-    override val isHearingEnabled: StateFlow<Boolean> = controller.isHearingEnabled
+    override val sessionState: StateFlow<PttSessionState?> = controller.sessionState
 
     override val isCovert: StateFlow<Boolean> = controller.isCovert
 
     override fun start(sessionId: SessionId, roomId: RoomId) {
-        PttSessionHostService.start(context, interimMumbleConfig(sessionId, roomId))
+        coroutineScope.launch {
+            if (availability.isAvailable.first()) {
+                PttSessionHostService.start(context, interimMumbleConfig(sessionId, roomId, settings.server(sessionId)))
+            }
+        }
     }
 
     override fun stop() {
@@ -50,9 +62,10 @@ class DefaultPttSessionManager(
 
     override fun releaseToTalk() = controller.releaseToTalk()
 
-    override fun setHearingEnabled(enabled: Boolean) = controller.setHearingEnabled(enabled)
-
-    override fun setCovert(enabled: Boolean) = controller.setCovert(enabled)
+    override fun setCovert(enabled: Boolean) {
+        settings.setCovert(enabled)
+        controller.setCovert(enabled)
+    }
 }
 
 /**
@@ -60,15 +73,16 @@ class DefaultPttSessionManager(
  * event. Point [MURMUR_HOST] at your Murmur: `10.0.2.2` is the emulator's host-loopback alias; use
  * the host machine's LAN IP for physical devices.
  */
-private const val MURMUR_HOST = "10.0.2.2"
+internal const val MURMUR_HOST = "192.168.4.26"
 
-internal fun interimMumbleConfig(sessionId: SessionId, roomId: RoomId) = PttChannelConfig(
+internal fun interimMumbleConfig(sessionId: SessionId, roomId: RoomId, server: PttServerSettings = PttServerSettings()) = PttChannelConfig(
     sessionId = sessionId,
     roomId = roomId,
     transport = PttTransportType.Mumble,
     transportMetadata = mapOf(
-        "host" to MURMUR_HOST,
-        "port" to "64738",
-        "username" to sessionId.value.substringAfter("@").substringBefore(":"),
+        "host" to server.host.trim().ifEmpty { MURMUR_HOST },
+        "port" to server.port.trim(),
+        "password" to server.password,
+        "username" to server.username.trim().ifEmpty { sessionId.value.substringAfter("@").substringBefore(":") },
     ),
 )

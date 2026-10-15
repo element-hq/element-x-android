@@ -51,22 +51,16 @@ class PttSessionController(
     /** The active session's state, or `null` when no channel is joined. */
     val sessionState: StateFlow<PttSessionState?> = _sessionState.asStateFlow()
 
-    private val _isHearingEnabled = MutableStateFlow(false)
-
-    /** Whether the user has opted in to hearing others (audio output). Off by default — silent. */
-    val isHearingEnabled: StateFlow<Boolean> = _isHearingEnabled.asStateFlow()
-
     private val _isCovert = MutableStateFlow(false)
 
     /**
      * Covert/silent master override. When on, audio output is forced off and all cues (go/deny
-     * tones) are suppressed regardless of [isHearingEnabled] — the "my phone must not make a sound"
-     * switch.
+     * tones) are suppressed. Incoming audio is otherwise enabled by default.
      */
     val isCovert: StateFlow<Boolean> = _isCovert.asStateFlow()
 
-    // Audio plays only when the user opted in AND covert mode is off.
-    private fun effectiveAudioOutput(): Boolean = _isHearingEnabled.value && !_isCovert.value
+    // Incoming audio plays unless covert mode is on.
+    private fun effectiveAudioOutput(): Boolean = !_isCovert.value
 
     /** Create the transport for [config] and join it (fire-and-forget). Idempotent while live. */
     fun startSession(config: PttChannelConfig) {
@@ -80,7 +74,8 @@ class PttSessionController(
                 }
                 try {
                     newTransport.join(config)
-                    // Joins silent; apply the current listen preference (still off unless the user opted in).
+                    // The transport joins silent so covert sessions never briefly play audio.
+                    // Enable playback immediately for normal sessions.
                     newTransport.setAudioOutputEnabled(effectiveAudioOutput())
                 } catch (cancellation: CancellationException) {
                     throw cancellation
@@ -93,21 +88,14 @@ class PttSessionController(
         }
     }
 
-    /** Opt in/out of hearing others. Takes effect immediately on the live session (if any). */
-    fun setHearingEnabled(enabled: Boolean) {
-        _isHearingEnabled.value = enabled
-        applyAudioOutput()
-    }
-
-    /** Toggle covert/silent mode. Enabling it silences output immediately, overriding [isHearingEnabled]. */
+    /** Toggle covert mode, silencing output when enabled and restoring playback when disabled. */
     fun setCovert(enabled: Boolean) {
         _isCovert.value = enabled
         applyAudioOutput()
     }
 
     private fun applyAudioOutput() {
-        val enabled = effectiveAudioOutput()
-        coroutineScope.launch { mutex.withLock { transport?.setAudioOutputEnabled(enabled) } }
+        coroutineScope.launch { mutex.withLock { transport?.setAudioOutputEnabled(effectiveAudioOutput()) } }
     }
 
     /** Leave and release the channel (fire-and-forget). Idempotent. */
