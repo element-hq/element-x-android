@@ -820,7 +820,7 @@ class RustMatrixClient(
 
     override suspend fun getRoomInfo(roomId: RoomId): Result<RoomInfo?> = withContext(sessionDispatcher) {
         runCatchingExceptions {
-            innerRoomListService.roomOrNull(roomId.value)?.use { room ->
+            innerRoomListService.roomOrNull(roomId)?.use { room ->
                 roomInfoMapper.map(room.roomInfo())
             }
         }
@@ -828,7 +828,7 @@ class RustMatrixClient(
 
     override fun getRoomInfoFlow(roomId: RoomId): Flow<Optional<RoomInfo>> {
         return mxCallbackFlow {
-            val roomNotFound = innerRoomListService.roomOrNull(roomId.value).use { it == null }
+            val roomNotFound = innerRoomListService.roomOrNull(roomId).use { it == null }
             if (roomNotFound) {
                 channel.send(Optional.empty())
             }

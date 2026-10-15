@@ -49,7 +49,7 @@ class RoomContentForwarder(
             val message = content.content.kind as? MsgLikeKind.Message ?: throw ForwardEventException(toRoomIds)
             contentWithoutRelationFromMessage(message.content)
         }
-        val targetRooms = toRoomIds.toSet().mapNotNull { roomId -> roomListService.roomOrNull(roomId.value) }
+        val targetRooms = toRoomIds.toSet().mapNotNull { roomId -> roomListService.roomOrNull(roomId) }
         val failedForwardingTo = mutableSetOf<RoomId>()
         targetRooms.parallelMap { room ->
             room.use { targetRoom ->

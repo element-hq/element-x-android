@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.channels.Channel
@@ -109,10 +110,10 @@ internal fun RoomListServiceInterface.syncIndicator(): Flow<RoomListServiceSyncI
         )
     }.buffer(Channel.UNLIMITED)
 
-internal fun RoomListServiceInterface.roomOrNull(roomId: String): Room? {
+internal fun RoomListServiceInterface.roomOrNull(roomId: RoomId): Room? {
     return tryOrNull(
         onException = { Timber.e(it, "Failed finding room with id=$roomId.") }
     ) {
-        room(roomId)
+        room(roomId.value)
     }
 }
