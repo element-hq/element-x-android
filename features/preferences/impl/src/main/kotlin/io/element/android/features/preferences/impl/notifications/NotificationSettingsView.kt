@@ -63,6 +63,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 /**
  * A view that allows a user edit their global notification settings.
+ * Ref: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=4294-54110
  */
 @Composable
 fun NotificationSettingsView(
@@ -98,7 +99,7 @@ fun NotificationSettingsView(
                 onDirectChatsClick = { onOpenEditDefault(true) },
                 onMentionNotificationsChange = { state.eventSink(NotificationSettingsEvent.SetAtRoomNotificationsEnabled(it)) },
                 // TODO We are removing the call notification toggle until support for call notifications has been added
-//                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvent.SetCallNotificationsEnabled(it)) },
+                // onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvent.SetCallNotificationsEnabled(it)) },
                 onInviteForMeNotificationsChange = { state.eventSink(NotificationSettingsEvent.SetInviteForMeNotificationsEnabled(it)) },
                 onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
             )
@@ -121,7 +122,7 @@ private fun NotificationSettingsContentView(
     onDirectChatsClick: () -> Unit,
     onMentionNotificationsChange: (Boolean) -> Unit,
     // TODO We are removing the call notification toggle until support for call notifications has been added
-//    onCallsNotificationsChanged: (Boolean) -> Unit,
+    // onCallsNotificationsChanged: (Boolean) -> Unit,
     onInviteForMeNotificationsChange: (Boolean) -> Unit,
     onTroubleshootNotificationsClick: () -> Unit,
 ) {
@@ -189,9 +190,12 @@ private fun NotificationSettingsContentView(
                 },
                 onClick = onDirectChatsClick
             )
-        }
-
-        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_mode_mentions)) {
+            PreferenceSwitch(
+                modifier = Modifier,
+                title = stringResource(id = R.string.screen_notification_settings_invite_for_me_label),
+                isChecked = matrixSettings.inviteForMeNotificationsEnabled,
+                onCheckedChange = onInviteForMeNotificationsChange
+            )
             PreferenceSwitch(
                 modifier = Modifier,
                 title = stringResource(id = R.string.screen_notification_settings_room_mention_label),
@@ -200,7 +204,9 @@ private fun NotificationSettingsContentView(
             )
         }
 
-        PreferenceCategory {
+        PreferenceCategory(
+            title = stringResource(id = R.string.screen_notification_settings_activity_section_title)
+        ) {
             PreferenceSwitch(
                 title = stringResource(R.string.screen_notification_settings_show_all_activity_title),
                 subtitle = stringResource(R.string.screen_notification_settings_show_all_activity_subtitle),
@@ -210,22 +216,14 @@ private fun NotificationSettingsContentView(
         }
 
         SoundsPreferenceCategory(state = state)
-        PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_additional_settings_section_title)) {
-            // TODO We are removing the call notification toggle until support for call notifications has been added
-//                PreferenceSwitch(
-//                    modifier = Modifier,
-//                    title = stringResource(id = CommonStrings.screen_notification_settings_calls_label),
-//                    isChecked = matrixSettings.callNotificationsEnabled,
-//                    switchAlignment = Alignment.Top,
-//                    onCheckedChange = onCallsNotificationsChanged
-//                )
-            PreferenceSwitch(
-                modifier = Modifier,
-                title = stringResource(id = R.string.screen_notification_settings_invite_for_me_label),
-                isChecked = matrixSettings.inviteForMeNotificationsEnabled,
-                onCheckedChange = onInviteForMeNotificationsChange
-            )
-        }
+        // TODO We are removing the call notification toggle until support for call notifications has been added
+        // PreferenceSwitch(
+        //     modifier = Modifier,
+        //     title = stringResource(id = CommonStrings.screen_notification_settings_calls_label),
+        //     isChecked = matrixSettings.callNotificationsEnabled,
+        //     switchAlignment = Alignment.Top,
+        //     onCheckedChange = onCallsNotificationsChanged
+        // )
         PreferenceCategory(title = stringResource(id = R.string.troubleshoot_notifications_entry_point_section)) {
             ListItem(
                 content = {
@@ -510,9 +508,9 @@ private fun InvalidNotificationSettingsView(
 
 @PreviewsDayNight
 @Composable
-internal fun NotificationSettingsViewPreview(@PreviewParameter(
-    NotificationSettingsStatePreviewParam::class
-) state: NotificationSettingsState) = ElementPreview {
+internal fun NotificationSettingsViewPreview(
+    @PreviewParameter(NotificationSettingsStatePreviewParam::class) state: NotificationSettingsState
+) = ElementPreview {
     NotificationSettingsView(
         state = state,
         onBackClick = {},
