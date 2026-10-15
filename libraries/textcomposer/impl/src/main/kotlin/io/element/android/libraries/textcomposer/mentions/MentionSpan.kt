@@ -15,12 +15,14 @@ import android.graphics.Typeface
 import android.text.TextPaint
 import android.text.TextUtils
 import android.text.style.ReplacementSpan
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layout
 import androidx.core.text.getSpans
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.wysiwyg.view.spans.CustomMentionSpan
-import kotlin.math.roundToInt
+import kotlin.math.ceil
 
 /**
  * A span that represents a mention (user, room, etc.) in text.
@@ -38,8 +40,12 @@ class MentionSpan(
     private var endPadding: Int = 0
     private var typeface: Typeface = Typeface.DEFAULT
 
-    private var measuredTextWidth = 0
-    private var measuredTrailingWidth = 0
+    /**
+     * The widest the pill is allowed to be, in pixels. A pill wider than this is truncated, so that
+     * [getSize] never reports a width the line can't accommodate: the layout would then be unable to
+     * move the pill to the next line and would leave it overflowing the end of the current one.
+     */
+    private var maxWidth: Int = NO_MAX_WIDTH
 
     // The formatted display text, will be set by the formatter
     var displayText: CharSequence = ""
@@ -88,6 +94,50 @@ class MentionSpan(
         this.trailingText = trailingText
     }
 
+    /**
+     * Sets the widest this pill may be. Pass [NO_MAX_WIDTH] to leave it unbounded.
+     */
+    fun updateMaxWidth(maxWidthPx: Int) {
+        maxWidth = maxWidthPx
+    }
+
+    /**
+     * Measures the pill with [paint], truncating the display text so the result never exceeds
+     * [maxWidth].
+     *
+     * Both [getSize] and [draw] go through here: the layout reserves exactly what is painted. They
+     * can't share a cached measurement instead, because the platform skips [getSize] before [draw]
+     * for the last span of a line, and the same [MentionSpan] instance is reused across ranges and
+     * across layouts.
+     */
+    private fun measure(paint: Paint): Measurements {
+        textPaint.set(paint)
+        textPaint.typeface = typeface
+        val trailing = trailingText?.let { " $it" }
+        val trailingWidth = trailing?.let { textPaint.measureText(it) } ?: 0f
+        val availableForText = if (maxWidth == NO_MAX_WIDTH) {
+            Float.MAX_VALUE
+        } else {
+            (maxWidth - startPadding - endPadding - trailingWidth).coerceAtLeast(0f)
+        }
+        val fullTextWidth = textPaint.measureText(displayText, 0, displayText.length)
+        return if (fullTextWidth <= availableForText) {
+            Measurements(displayText, fullTextWidth, trailing, trailingWidth)
+        } else {
+            val truncated = TextUtils.ellipsize(displayText, textPaint, availableForText, TextUtils.TruncateAt.END)
+            Measurements(truncated, textPaint.measureText(truncated, 0, truncated.length), trailing, trailingWidth)
+        }
+    }
+
+    private inner class Measurements(
+        val text: CharSequence,
+        val textWidth: Float,
+        val trailing: String?,
+        val trailingWidth: Float,
+    ) {
+        val width: Float get() = textWidth + trailingWidth + startPadding + endPadding
+    }
+
     override fun getSize(
         paint: Paint,
         text: CharSequence?,
@@ -95,12 +145,7 @@ class MentionSpan(
         end: Int,
         fm: Paint.FontMetricsInt?
     ): Int {
-        textPaint.set(paint)
-        textPaint.typeface = typeface
-        // Measure the full text width without truncation
-        measuredTextWidth = textPaint.measureText(displayText, 0, displayText.length).roundToInt()
-        measuredTrailingWidth = trailingText?.let { textPaint.measureText(" $it").roundToInt() } ?: 0
-        return measuredTextWidth + measuredTrailingWidth + startPadding + endPadding
+        return ceil(measure(paint).width).toInt()
     }
 
     override fun draw(
@@ -114,13 +159,9 @@ class MentionSpan(
         bottom: Int,
         paint: Paint
     ) {
-        val availableWidth = (canvas.width - x).coerceAtLeast(0f)
-
-        val measuredWidth = measuredTextWidth + measuredTrailingWidth + startPadding + endPadding
-        val pillWidth = minOf(availableWidth, measuredWidth.toFloat())
-
+        val measurements = measure(paint)
         backgroundPaint.color = backgroundColor
-        val rect = RectF(x, top.toFloat(), x + pillWidth, bottom.toFloat())
+        val rect = RectF(x, top.toFloat(), x + measurements.width, bottom.toFloat())
         val radius = rect.height() / 2
         canvas.drawRoundRect(rect, radius, radius, backgroundPaint)
 
@@ -128,18 +169,14 @@ class MentionSpan(
         textPaint.color = textColor
         textPaint.typeface = typeface
 
-        val availableWidthForText = availableWidth - startPadding - endPadding - measuredTrailingWidth
-        val textToDraw = if (measuredTextWidth > availableWidthForText) {
-            TextUtils.ellipsize(displayText, textPaint, availableWidthForText, TextUtils.TruncateAt.END)
-        } else {
-            displayText
+        canvas.drawText(measurements.text, 0, measurements.text.length, x + startPadding, y.toFloat(), textPaint)
+        measurements.trailing?.let { trailing ->
+            canvas.drawText(trailing, x + startPadding + measurements.textWidth, y.toFloat(), textPaint)
         }
-        canvas.drawText(textToDraw, 0, textToDraw.length, x + startPadding, y.toFloat(), textPaint)
+    }
 
-        trailingText?.let {
-            val drawnTextWidth = minOf(availableWidthForText, measuredTextWidth.toFloat())
-            canvas.drawText(" $it", x + startPadding + drawnTextWidth, y.toFloat(), textPaint)
-        }
+    companion object {
+        const val NO_MAX_WIDTH = Int.MAX_VALUE
     }
 }
 
@@ -169,4 +206,18 @@ fun CharSequence.getMentionSpans(start: Int = 0, end: Int = length): List<Mentio
     } else {
         emptyList()
     }
+}
+
+/**
+ * Caps the [MentionSpan]s held by [text] to the width available to the text they are part of.
+ *
+ * A pill wider than a whole line can't be moved to the next line by the text layout, so it stays
+ * overflowing the end of the line it landed on. Capping it makes [MentionSpan.getSize] report a width a line can hold, so the layout moves
+ * the pill to the next line and the pill truncates its own text instead.
+ */
+fun Modifier.limitMentionPillWidth(text: CharSequence): Modifier = layout { measurable, constraints ->
+    val maxWidth = if (constraints.hasBoundedWidth) constraints.maxWidth else MentionSpan.NO_MAX_WIDTH
+    text.getMentionSpans().forEach { it.updateMaxWidth(maxWidth) }
+    val placeable = measurable.measure(constraints)
+    layout(placeable.width, placeable.height) { placeable.place(0, 0) }
 }
