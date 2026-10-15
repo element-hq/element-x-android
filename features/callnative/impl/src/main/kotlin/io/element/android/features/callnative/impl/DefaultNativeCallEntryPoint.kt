@@ -42,6 +42,8 @@ class DefaultNativeCallEntryPoint(
                 ElementCallData(
                     roomId = RoomId(callData.roomId.value),
                     isAudioCall = callData.isAudioCall,
+                    // Temporary, to be removed from the library soon: the core already skips the ring when anyone else is in the call.
+                    isStartingCall = true,
                 )
             )
             // The call screen asks for the microphone itself, and is where the answer normally comes
