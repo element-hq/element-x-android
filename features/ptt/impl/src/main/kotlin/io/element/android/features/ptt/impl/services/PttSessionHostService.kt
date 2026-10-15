@@ -105,7 +105,7 @@ class PttSessionHostService : Service() {
         sessionController.setCovert(settings.covert)
         startAsForeground()
         serviceScope.launch {
-            combine(settings.overlayEnabled, settings.lockScreenEnabled) { _, _ -> Unit }.collect {
+            combine(settings.overlayEnabled, settings.lockScreenEnabled) { _, _ -> }.collect {
                 updateOverlay()
                 startAsForeground()
             }

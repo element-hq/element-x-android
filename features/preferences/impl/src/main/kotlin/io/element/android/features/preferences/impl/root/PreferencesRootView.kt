@@ -74,8 +74,8 @@ fun PreferencesRootView(
     onOpenBlockedUsers: () -> Unit,
     onSignOutClick: () -> Unit,
     onDeactivateClick: () -> Unit,
-    onOpenPttSettings: () -> Unit = {},
     modifier: Modifier = Modifier,
+    onOpenPttSettings: () -> Unit = {},
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 

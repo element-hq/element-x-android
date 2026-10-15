@@ -40,6 +40,7 @@ class PttLocalSettingsTest : RobolectricTest() {
         assertThat(restored.host).isEqualTo("mumble.example.org")
         assertThat(restored.password).isEmpty()
         assertThat(PttLocalSettings.preferences(context).all.values).doesNotContain("secret")
+        assertThat(PttServerSettings(password = "secret").toString()).doesNotContain("secret")
     }
 
     @Test

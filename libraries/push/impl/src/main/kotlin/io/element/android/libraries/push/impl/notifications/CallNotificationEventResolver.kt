@@ -101,7 +101,8 @@ class DefaultCallNotificationEventResolver(
         }.getOrDefault(false)
 
         notificationData.run {
-            if ((isPtt || (content.type == RtcNotificationType.RING && isRoomCallActive)) && !forceNotify) {
+            val isRingingRoomCall = content.type == RtcNotificationType.RING && isRoomCallActive
+            if ((isPtt || isRingingRoomCall) && !forceNotify) {
                 Timber.d("Ringing call notification intent ${content.callIntent} in room $roomId (ptt=$isPtt)")
                 NotifiableRingingCallEvent(
                     sessionId = sessionId,

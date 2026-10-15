@@ -68,6 +68,8 @@ class PttLocalSettings(@ApplicationContext context: Context) {
 
 // Deliberately not a data class: its generated toString would expose the password.
 class PttServerSettings(val host: String = "", val port: String = "64738", val username: String = "", val password: String = "") {
+    override fun toString(): String = "PttServerSettings(redacted)"
+
     val isValid: Boolean get() = host.trim().let { it.isNotEmpty() && it.none(Char::isWhitespace) && '/' !in it } &&
-        port.trim().toIntOrNull() in 1..65535
+        port.trim().toIntOrNull() in 1..65_535
 }
