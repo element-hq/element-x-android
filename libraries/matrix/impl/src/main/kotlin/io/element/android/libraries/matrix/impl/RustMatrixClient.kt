@@ -737,6 +737,7 @@ class RustMatrixClient(
                 eventCacheStore = eventCacheStore?.bytes,
                 mediaStore = mediaStore?.bytes,
                 cryptoStore = cryptoStore?.bytes,
+                searchIndex = searchIndex?.bytes,
             )
         }
     }
