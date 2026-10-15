@@ -71,7 +71,13 @@ class DeveloperSettingsPresenterTest {
         val presenter = createDeveloperSettingsPresenter(
             databaseSizesUseCase = GetDatabaseSizesUseCase {
                 Result.success(
-                    SdkStoreSizes(stateStore = 10.megaBytes, eventCacheStore = 10.megaBytes, mediaStore = 10.megaBytes, cryptoStore = 10.megaBytes)
+                    SdkStoreSizes(
+                        stateStore = 10.megaBytes,
+                        eventCacheStore = 10.megaBytes,
+                        mediaStore = 10.megaBytes,
+                        cryptoStore = 10.megaBytes,
+                        searchIndex = 10.megaBytes,
+                    )
                 )
             }
         )
@@ -295,7 +301,7 @@ class DeveloperSettingsPresenterTest {
         clearCacheUseCase: FakeClearCacheUseCase = FakeClearCacheUseCase(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
         vacuumStoresUseCase: VacuumStoresUseCase = VacuumStoresUseCase {},
-        databaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null)) },
+        databaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null, null)) },
         markAllRoomsAsRead: FakeMarkAllRoomsAsRead = FakeMarkAllRoomsAsRead(),
         buildMeta: BuildMeta = aBuildMeta(),
         notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
