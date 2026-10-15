@@ -109,6 +109,22 @@ class DefaultPushHandlerTest {
     }
 
     @Test
+    fun `when classical PushData is received, the background work is told a push is queued`() = runTest {
+        val queuedPushRequestNotifier = QueuedPushRequestNotifier()
+        val defaultPushHandler = createDefaultPushHandler(
+            pushClientSecret = FakePushClientSecret(getUserIdFromSecretResult = { A_USER_ID }),
+            incrementPushCounterResult = {},
+            workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
+            pushHistoryService = FakePushHistoryService(enqueuePushRequest = { Result.success(Unit) }),
+            queuedPushRequestNotifier = queuedPushRequestNotifier,
+        )
+        queuedPushRequestNotifier.queued.test {
+            defaultPushHandler.handle(PushData(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, unread = 0, clientSecret = A_SECRET), A_PUSHER_INFO)
+            awaitItem()
+        }
+    }
+
+    @Test
     fun `when classical PushData is received, but notifications are disabled, nothing happen`() =
         runTest {
             val incrementPushCounterResult = lambdaRecorder<Unit> {}
@@ -222,6 +238,7 @@ class DefaultPushHandlerTest {
         diagnosticPushHandler: DiagnosticPushHandler = DiagnosticPushHandler(),
         pushHistoryService: PushHistoryService = FakePushHistoryService(),
         workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
+        queuedPushRequestNotifier: QueuedPushRequestNotifier = QueuedPushRequestNotifier(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         systemClock: FakeSystemClock = FakeSystemClock(),
         resultProcessor: FakeNotificationResultProcessor = FakeNotificationResultProcessor(
@@ -246,6 +263,7 @@ class DefaultPushHandlerTest {
             analyticsService = analyticsService,
             systemClock = systemClock,
             workManagerScheduler = workManagerScheduler,
+            queuedPushRequestNotifier = queuedPushRequestNotifier,
             resultProcessor = resultProcessor,
             syncPendingNotificationsRequestFactory = SyncPendingNotificationsRequestBuilder.Factory {
                 FakeSyncPendingNotificationsRequestBuilder()

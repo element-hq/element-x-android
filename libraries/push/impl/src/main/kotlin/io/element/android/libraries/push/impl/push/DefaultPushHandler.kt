@@ -54,6 +54,7 @@ class DefaultPushHandler(
     private val systemClock: SystemClock,
     private val workManagerScheduler: WorkManagerScheduler,
     private val syncPendingNotificationsRequestFactory: SyncPendingNotificationsRequestBuilder.Factory,
+    private val queuedPushRequestNotifier: QueuedPushRequestNotifier,
     resultProcessor: NotificationResultProcessor,
     private val dispatchers: CoroutineDispatchers,
 ) : PushHandler {
@@ -143,6 +144,7 @@ class DefaultPushHandler(
             Timber.d("Queueing notification: $pushRequest")
             pushHistoryService.insertOrUpdatePushRequest(pushRequest)
             Timber.d("Queueing notification finished")
+            queuedPushRequestNotifier.onPushRequestQueued()
 
             if (!workManagerScheduler.hasPendingWork(userId, WorkManagerRequestType.NOTIFICATION_SYNC)) {
                 Timber.d("No pending worker for push notifications found")

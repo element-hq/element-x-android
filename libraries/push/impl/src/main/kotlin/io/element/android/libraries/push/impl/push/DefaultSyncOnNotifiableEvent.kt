@@ -17,11 +17,17 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.db.PushRequest
+import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.services.appnavstate.api.AppForegroundStateService
-import kotlinx.coroutines.delay
+import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 @ContributesBinding(AppScope::class)
 class DefaultSyncOnNotifiableEvent(
@@ -29,6 +35,9 @@ class DefaultSyncOnNotifiableEvent(
     private val featureFlagService: FeatureFlagService,
     private val appForegroundStateService: AppForegroundStateService,
     private val dispatchers: CoroutineDispatchers,
+    private val pushHistoryService: PushHistoryService,
+    private val queuedPushRequestNotifier: QueuedPushRequestNotifier,
+    private val systemClock: SystemClock,
 ) : SyncOnNotifiableEvent {
     override suspend operator fun invoke(requests: List<PushRequest>) = withContext(dispatchers.io) {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
@@ -48,13 +57,27 @@ class DefaultSyncOnNotifiableEvent(
                 client.roomListService.subscribeToVisibleRooms(roomIds)
 
                 if (!appForegroundStateService.isInForeground.value) {
-                    // Give the sync some time to complete in background
-                    delay(10.seconds)
+                    // Give the sync some time to complete in background, but stop early if a new push is waiting: the work fetching it
+                    // can only start once this one is done, and an incoming call can't wait that long to ring.
+                    val newPushQueued = withTimeoutOrNull(10.seconds) {
+                        queuedPushRequestNotifier.queued
+                            // Also check once for pushes queued before we started waiting
+                            .onSubscription { emit(Unit) }
+                            .first { hasPendingPushRequests(SessionId(sessionId)) }
+                    } != null
+                    if (newPushQueued) {
+                        Timber.d("A new push is waiting to be fetched, ending the opportunistic sync early")
+                    }
                 }
             }
         } finally {
             Timber.d("Finished opportunistic room list sync")
             appForegroundStateService.updateIsSyncingNotificationEvent(false)
         }
+    }
+
+    private suspend fun hasPendingPushRequests(sessionId: SessionId): Boolean {
+        val since = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(1.days)
+        return pushHistoryService.getPendingPushRequests(sessionId, since).getOrNull().orEmpty().isNotEmpty()
     }
 }
