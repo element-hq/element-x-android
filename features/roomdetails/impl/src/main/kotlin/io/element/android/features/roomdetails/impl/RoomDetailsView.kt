@@ -440,6 +440,7 @@ private fun MainActionsSection(
                 title = stringResource(CommonStrings.common_video),
                 imageVector = CompoundIcons.VideoCall(),
                 onClick = { onCall(CallIntent.VIDEO) },
+                enabled = state.isCallActionEnabled,
             )
         }
         if (state.canInvite && state.roomType !is RoomDetailsType.Dm) {

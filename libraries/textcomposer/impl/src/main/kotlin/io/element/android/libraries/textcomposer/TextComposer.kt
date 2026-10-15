@@ -80,6 +80,7 @@ import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsPre
 import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.textcomposer.components.PushToTalkButton
 import io.element.android.libraries.textcomposer.components.SendButtonIcon
 import io.element.android.libraries.textcomposer.components.TextFormatting
 import io.element.android.libraries.textcomposer.components.VoiceMessageDeleteButtonIcon
@@ -131,6 +132,9 @@ fun TextComposer(
     resolveAtRoomMentionDisplay: () -> TextDisplay,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
+    showPushToTalkButton: Boolean = false,
+    onPushToTalkDown: () -> Unit = {},
+    onPushToTalkRelease: () -> Unit = {},
     isInThreadTimeline: Boolean = false,
 ) {
     val markdown = when (state) {
@@ -227,6 +231,12 @@ fun TextComposer(
             }
         }
     }
+
+    // The PTT button takes the microphone's slot (empty text, idle) when the user has joined a PTT session.
+    val showPushToTalk = showPushToTalkButton &&
+        !canSendTextMessage &&
+        voiceMessageState is VoiceMessageState.Idle &&
+        !composerMode.isEditing
 
     val textFormattingOptions: @Composable (() -> Unit)? = (state as? TextEditorState.Rich)?.let {
         @Composable { TextFormatting(state = it.richTextEditorState) }
@@ -409,6 +419,9 @@ fun TextComposer(
             modifier = layoutModifier,
             textInput = textInput,
             endButtonParams = endButtonParams,
+            showPushToTalkButton = showPushToTalk,
+            onPushToTalkDown = onPushToTalkDown,
+            onPushToTalkRelease = onPushToTalkRelease,
             voiceRecording = voiceRecording,
             onAddAttachment = onAddAttachment,
             onDeleteVoiceMessage = onDeleteVoiceMessage,
@@ -460,6 +473,9 @@ private fun StandardLayout(
     textInput: @Composable () -> Unit,
     voiceRecording: @Composable () -> Unit,
     endButtonParams: EndButtonParams,
+    showPushToTalkButton: Boolean,
+    onPushToTalkDown: () -> Unit,
+    onPushToTalkRelease: () -> Unit,
     onAddAttachment: () -> Unit,
     onDeleteVoiceMessage: () -> Unit,
     onVoiceRecorderEvent: (VoiceMessageRecorderEvent) -> Unit,
@@ -543,19 +559,30 @@ private fun StandardLayout(
                     movableVoiceRecording()
                 }
             }
-            // To avoid loosing keyboard focus, the IconButton has to be defined here and has to be always enabled.
-            val endButtonContentDescription = stringResource(endButtonParams.endButtonContentDescriptionResId)
-            IconButton(
-                modifier = Modifier
-                    .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                    .size(48.dp)
-                    .clearAndSetSemantics {
-                        contentDescription = endButtonContentDescription
-                        onClick(null, null)
-                    },
-                onClick = endButtonParams.endButtonClick,
-                content = endButtonParams.endButtonContent,
-            )
+            if (showPushToTalkButton) {
+                PushToTalkButton(
+                    onButtonDown = onPushToTalkDown,
+                    onRelease = onPushToTalkRelease,
+                    modifier = Modifier
+                        .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                        .requiredHeightIn(min = 42.dp)
+                        .width(96.dp),
+                )
+            } else {
+                // To avoid loosing keyboard focus, the IconButton has to be defined here and has to be always enabled.
+                val endButtonContentDescription = stringResource(endButtonParams.endButtonContentDescriptionResId)
+                IconButton(
+                    modifier = Modifier
+                        .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                        .size(48.dp)
+                        .clearAndSetSemantics {
+                            contentDescription = endButtonContentDescription
+                            onClick(null, null)
+                        },
+                    onClick = endButtonParams.endButtonClick,
+                    content = endButtonParams.endButtonContent,
+                )
+            }
         }
     }
 }

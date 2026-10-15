@@ -64,6 +64,10 @@ data class MessagesState(
     val threads: Threads,
     val showLiveLocationShareBanner: Boolean,
     val redactEventAction: AsyncAction<Unit>,
+    /** Whether PTT is enabled in this room — when true the PTT control replaces the call button. */
+    val isPttEnabled: Boolean,
+    /** Whether the local user currently has a PTT session — drives the control's start/leave state. */
+    val isPttSessionActive: Boolean,
     val eventSink: (MessagesEvent) -> Unit
 ) {
     val isTombstoned = successorRoom != null

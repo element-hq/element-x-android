@@ -61,6 +61,8 @@ open class RoomDetailsStatePreviewParam : PreviewParameterProvider<RoomDetailsSt
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.Joined),
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.Shared),
             aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.WorldReadable),
+            aRoomDetailsState().copy(isCallActionEnabled = true),
+            aRoomDetailsState().copy(isCallActionEnabled = false),
             // Add other state here
         )
 }
@@ -160,6 +162,7 @@ fun aRoomDetailsState(
     roomHistoryVisibility = roomHistoryVisibility,
     hasNewContent = hasNewContent,
     eventSink = eventSink,
+    isCallActionEnabled = true,
 )
 
 internal fun aLeaveRoomState(

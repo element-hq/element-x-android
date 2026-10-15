@@ -22,6 +22,18 @@ interface ElementCallEntryPoint {
     fun startCall(callData: CallData)
 
     /**
+     * Start (or join) a Push-to-Talk session for the given room, headlessly: the full-screen call
+     * UI is never shown and the user stays in the room. Audio-only.
+     * @param callData The data of the session to start.
+     */
+    fun startPttSession(callData: CallData)
+
+    /**
+     * Leave the current Push-to-Talk session (if any), tearing down the headless host.
+     */
+    fun stopPttSession()
+
+    /**
      * Handle an incoming call.
      * @param callData The data of call.
      * @param eventId The event id of the event that started the call.

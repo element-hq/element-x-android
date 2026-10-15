@@ -26,6 +26,7 @@ import io.element.android.x.info.logApplicationInfo
 import io.element.android.x.initializer.CacheCleanerInitializer
 import io.element.android.x.initializer.CrashInitializer
 import io.element.android.x.initializer.PlatformInitializer
+import io.element.android.x.initializer.PttAlwaysOnInitializer
 
 class ElementXApplication : Application(), DependencyInjectionGraphOwner, Configuration.Provider {
     override val graph: AppGraph = createGraphFactory<AppGraph.Factory>().create(this)
@@ -46,6 +47,7 @@ class ElementXApplication : Application(), DependencyInjectionGraphOwner, Config
             initializeComponent(CrashInitializer::class.java)
             initializeComponent(PlatformInitializer::class.java)
             initializeComponent(CacheCleanerInitializer::class.java)
+            initializeComponent(PttAlwaysOnInitializer::class.java)
         }
 
         bindings<ApplicationBindings>().inject(this)

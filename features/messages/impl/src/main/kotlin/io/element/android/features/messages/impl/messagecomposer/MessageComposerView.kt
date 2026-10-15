@@ -36,6 +36,9 @@ internal fun MessageComposerView(
     state: MessageComposerState,
     voiceMessageState: VoiceMessageComposerState,
     modifier: Modifier = Modifier,
+    showPushToTalkButton: Boolean = false,
+    onPushToTalkDown: () -> Unit = {},
+    onPushToTalkRelease: () -> Unit = {},
 ) {
     val view = LocalView.current
     fun sendMessage() {
@@ -117,6 +120,9 @@ internal fun MessageComposerView(
         onError = ::onError,
         onTyping = ::onTyping,
         onSelectRichContent = ::sendUri,
+        showPushToTalkButton = showPushToTalkButton,
+        onPushToTalkDown = onPushToTalkDown,
+        onPushToTalkRelease = onPushToTalkRelease,
     )
 
     AsyncActionView(

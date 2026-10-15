@@ -14,6 +14,7 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomcall.api.aStandByCallState
+import io.element.android.features.roomdetails.api.RoomCallActionPolicy
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -65,6 +66,7 @@ import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.testWithLifecycleOwner
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -82,6 +84,7 @@ class RoomDetailsPresenterTest {
 
     private fun TestScope.createRoomDetailsPresenter(
         room: JoinedRoom = aJoinedRoom(),
+        roomCallActionPolicy: RoomCallActionPolicy = NoopRoomCallActionPolicy(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
@@ -109,6 +112,7 @@ class RoomDetailsPresenterTest {
             }
         }
         return RoomDetailsPresenter(
+            roomCallActionPolicy = roomCallActionPolicy,
             navigator = navigator,
             client = matrixClient,
             room = room,
@@ -733,6 +737,23 @@ class RoomDetailsPresenterTest {
             }
             onDoneResult.assertions().isCalledOnce()
             assertThat(room.baseRoom.setUnreadFlagCalls).containsExactly(true)
+        }
+    }
+
+    @Test
+    fun `extension can disable and restore the call action`() = runTest {
+        val enabled = MutableStateFlow(true)
+        val extension = object : RoomCallActionPolicy {
+            override fun isCallActionEnabledFlow() = enabled
+        }
+        val presenter = createRoomDetailsPresenter(roomCallActionPolicy = extension)
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            assertThat(awaitItem().isCallActionEnabled).isTrue()
+            enabled.value = false
+            consumeItemsUntilPredicate { !it.isCallActionEnabled }
+            enabled.value = true
+            consumeItemsUntilPredicate { it.isCallActionEnabled }
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

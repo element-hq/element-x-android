@@ -26,6 +26,7 @@ import io.element.android.features.knockrequests.api.knockRequestPermissions
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomcall.api.RoomCallState
+import io.element.android.features.roomdetails.api.RoomCallActionPolicy
 import io.element.android.features.roomdetails.impl.members.details.RoomMemberDetailsPresenter
 import io.element.android.features.roomdetailsedit.api.RoomDetailsEditPermissions
 import io.element.android.features.roomdetailsedit.api.roomDetailsEditPermissions
@@ -78,6 +79,7 @@ class RoomDetailsPresenter(
     private val toastHelper: ToastHelper,
     private val appPreferencesStore: AppPreferencesStore,
     private val sessionPreferencesStore: SessionPreferencesStore,
+    private val roomCallActionPolicy: RoomCallActionPolicy,
     private val notificationCleaner: NotificationCleaner,
 ) : Presenter<RoomDetailsState> {
     @AssistedFactory
@@ -123,6 +125,7 @@ class RoomDetailsPresenter(
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember?.userId)
         val roomType = getRoomType(dmMember)
         val roomCallState = roomCallStatePresenter.present()
+        val isCallActionEnabled by remember { roomCallActionPolicy.isCallActionEnabledFlow() }.collectAsState(initial = true)
         val joinedMemberCount by remember { derivedStateOf { roomInfo.joinedMembersCount } }
 
         val topicState = remember(permissions.editDetailsPermissions.canEditTopic, roomTopic, roomType) {
@@ -204,6 +207,7 @@ class RoomDetailsPresenter(
             canInvite = permissions.canInvite,
             canEdit = roomType == RoomDetailsType.Room && permissions.editDetailsPermissions.hasAny,
             roomCallState = roomCallState,
+            isCallActionEnabled = isCallActionEnabled,
             roomType = roomType,
             dmOtherMemberDetailsState = dmOtherMemberDetailsState,
             leaveRoomState = leaveRoomState,

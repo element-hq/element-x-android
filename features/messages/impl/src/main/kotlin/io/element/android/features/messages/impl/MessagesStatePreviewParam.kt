@@ -167,6 +167,8 @@ fun aMessagesState(
     dmUserStatus = dmUserStatus,
     redactEventAction = redactEventAction,
     eventSink = eventSink,
+    isPttEnabled = false,
+    isPttSessionActive = false,
 )
 
 fun aRoomMemberModerationState(

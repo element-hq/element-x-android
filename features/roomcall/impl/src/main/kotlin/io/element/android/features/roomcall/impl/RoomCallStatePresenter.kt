@@ -59,6 +59,7 @@ class RoomCallStatePresenter(
                         isUserInTheCall = isUserInTheCall,
                         isUserLocallyInTheCall = isUserLocallyInTheCall,
                         isAudioCall = roomInfo.activeCallIntentConsensus.isAudio(),
+                        participantCount = roomInfo.activeRoomCallParticipants.size,
                     )
                     else -> {
                         val isEmptyDm = roomInfo.isDm && roomInfo.activeMembersCount <= 1

@@ -18,6 +18,6 @@ class CallDataTest {
     @Test
     fun `RoomCall stringification does not contain the URL`() {
         assertThat(CallData(A_SESSION_ID, A_ROOM_ID, false).toString())
-            .isEqualTo("CallData(sessionId=$A_SESSION_ID, roomId=$A_ROOM_ID, isAudioCall=false)")
+            .isEqualTo("CallData(sessionId=$A_SESSION_ID, roomId=$A_ROOM_ID, isAudioCall=false, skipLobby=false)")
     }
 }

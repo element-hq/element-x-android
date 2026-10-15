@@ -89,6 +89,7 @@ dependencies {
     implementation(projects.features.call.api)
     implementation(projects.features.enterprise.api)
     implementation(projects.features.lockscreen.api)
+    implementation(projects.features.ptt.api)
     implementation(projects.libraries.featureflag.api)
     api(projects.libraries.pushproviders.api)
     api(projects.libraries.pushstore.api)
@@ -100,6 +101,7 @@ dependencies {
 
     testCommonDependencies(libs)
     testImplementation(libs.coil.test)
+    testImplementation(projects.features.ptt.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.matrixmedia.test)
     testImplementation(projects.libraries.preferences.test)

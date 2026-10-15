@@ -339,6 +339,8 @@ licensee {
     // The rustls-platform-verifier dependency does not provide a license file in their maven repo, but there are MIT and Apache licenses in
     // the source code repo: see https://github.com/rustls/rustls-platform-verifier
     ignoreDependencies(groupId = "org.rustls", artifactId = "rustls-platform-verifier")
+    // Ridgeline-owned proprietary PTT libraries (Mumble AAR) — first-party, not a third-party licence.
+    ignoreDependencies(groupId = "com.ridgelineinternational.mumble")
 }
 
 fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {

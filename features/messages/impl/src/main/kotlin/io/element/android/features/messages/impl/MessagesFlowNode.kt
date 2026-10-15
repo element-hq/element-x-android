@@ -61,6 +61,7 @@ import io.element.android.features.messages.impl.timeline.model.event.blurHash
 import io.element.android.features.messages.impl.timeline.model.event.duration
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
+import io.element.android.features.ptt.api.PttSessionManager
 import io.element.android.libraries.androidutils.system.DeviceHasVulkanSupport
 import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -120,6 +121,7 @@ class MessagesFlowNode(
     private val showLocationEntryPoint: ShowLocationEntryPoint,
     private val createPollEntryPoint: CreatePollEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
+    private val pttSessionManager: PttSessionManager,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
     private val forwardEntryPoint: ForwardEntryPoint,
     private val analyticsService: AnalyticsService,
@@ -346,6 +348,16 @@ class MessagesFlowNode(
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(callData)
+                    }
+
+                    override fun navigateToPttSession(roomId: RoomId) {
+                        // Native Mumble session via the foreground host — no Element Call, no call
+                        // notification. The mic permission is requested on the PTT screen.
+                        pttSessionManager.start(sessionId, roomId)
+                    }
+
+                    override fun leavePttSession() {
+                        pttSessionManager.stop()
                     }
 
                     override fun navigateToPinnedMessagesList() {

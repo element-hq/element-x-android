@@ -189,6 +189,7 @@ class RoomCallStatePresenterTest {
                     canJoinCall = true,
                     isAudioCall = false,
                     isUserInTheCall = true,
+                    participantCount = 1,
                     isUserLocallyInTheCall = false,
                 )
             )
@@ -220,6 +221,7 @@ class RoomCallStatePresenterTest {
                     canJoinCall = true,
                     isAudioCall = false,
                     isUserInTheCall = true,
+                    participantCount = 1,
                     isUserLocallyInTheCall = true,
                 )
             )
@@ -347,6 +349,7 @@ class RoomCallStatePresenterTest {
                     canJoinCall = true,
                     isAudioCall = false,
                     isUserInTheCall = true,
+                    participantCount = 1,
                     isUserLocallyInTheCall = true,
                 )
             )
@@ -356,6 +359,7 @@ class RoomCallStatePresenterTest {
                     canJoinCall = true,
                     isAudioCall = false,
                     isUserInTheCall = true,
+                    participantCount = 1,
                     isUserLocallyInTheCall = false,
                 )
             )

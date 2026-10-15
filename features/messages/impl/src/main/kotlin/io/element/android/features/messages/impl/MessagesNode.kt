@@ -145,6 +145,8 @@ class MessagesNode(
         fun navigateToEditPoll(eventId: EventId)
         fun navigateToCurrentLiveLocation()
         fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean)
+        fun navigateToPttSession(roomId: RoomId)
+        fun leavePttSession()
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
         fun navigateToRoomDetails()
         fun navigateToPinnedMessagesList()
@@ -332,6 +334,8 @@ class MessagesNode(
                 onJoinCallClick = { isAudioCall ->
                     callback.navigateToRoomCall(room.roomId, isAudioCall)
                 },
+                onJoinPttSession = { callback.navigateToPttSession(room.roomId) },
+                onLeavePttSession = callback::leavePttSession,
                 onViewAllPinnedMessagesClick = callback::navigateToPinnedMessagesList,
                 modifier = modifier,
                 knockRequestsBannerView = {

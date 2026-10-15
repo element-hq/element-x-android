@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -49,6 +51,18 @@ class RoomDetailsViewTest : RobolectricTest() {
     fun `extension section is rendered`() = runAndroidComposeUiTest {
         setRoomDetailView(additionalSections = { Text("Extra section") })
         onNodeWithText("Extra section").assertExists()
+    }
+
+    @Test
+    fun `call shortcut remains visible when disabled by extension`() = runAndroidComposeUiTest {
+        setRoomDetailView(state = aRoomDetailsState().copy(isCallActionEnabled = false))
+        onNodeWithText("Video").assertExists().assertIsNotEnabled().performClick()
+    }
+
+    @Test
+    fun `call shortcut is enabled by default`() = runAndroidComposeUiTest {
+        setRoomDetailView(state = aRoomDetailsState())
+        onNodeWithText("Video").assertExists().assertIsEnabled()
     }
 
     @Test
@@ -412,8 +426,8 @@ private fun AndroidComposeUiTest<ComponentActivity>.setRoomDetailView(
             onSecurityAndPrivacyClick = onSecurityAndPrivacyClick,
             onProfileClick = onProfileClick,
             onReportRoomClick = onReportRoomClick,
-            leaveRoomView = {},
             additionalSections = additionalSections,
+            leaveRoomView = {},
         )
     }
 }
