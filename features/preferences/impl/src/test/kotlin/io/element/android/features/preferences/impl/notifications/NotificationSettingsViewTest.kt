@@ -38,7 +38,7 @@ class NotificationSettingsViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         ensureCalledOnce {
             setNotificationSettingsView(
-                state = aValidNotificationSettingsState(
+                state = aNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onBackClick = it
@@ -54,7 +54,7 @@ class NotificationSettingsViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         ensureCalledOnce {
             setNotificationSettingsView(
-                state = aValidNotificationSettingsState(
+                state = aNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onTroubleshootNotificationsClick = it
@@ -70,7 +70,7 @@ class NotificationSettingsViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         ensureCalledOnceWithParam(false) {
             setNotificationSettingsView(
-                state = aValidNotificationSettingsState(
+                state = aNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onOpenEditDefault = it
@@ -86,7 +86,7 @@ class NotificationSettingsViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         ensureCalledOnceWithParam(true) {
             setNotificationSettingsView(
-                state = aValidNotificationSettingsState(
+                state = aNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onOpenEditDefault = it
@@ -111,8 +111,8 @@ class NotificationSettingsViewTest : RobolectricTest() {
     private fun testNotificationToggle(initialState: Boolean) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aValidNotificationSettingsState(
-                appNotificationEnabled = initialState,
+            state = aNotificationSettingsState(
+                appSettings = anAppSettings(appNotificationsEnabled = initialState),
                 eventSink = eventsRecorder
             ),
         )
@@ -140,8 +140,8 @@ class NotificationSettingsViewTest : RobolectricTest() {
     private fun testAtRoomToggle(initialState: Boolean) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aValidNotificationSettingsState(
-                atRoomNotificationsEnabled = initialState,
+            state = aNotificationSettingsState(
+                matrixSettings = aValidMatrixSettings(atRoomNotificationsEnabled = initialState),
                 eventSink = eventsRecorder
             ),
         )
@@ -169,8 +169,8 @@ class NotificationSettingsViewTest : RobolectricTest() {
     private fun testInvitationToggle(initialState: Boolean) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aValidNotificationSettingsState(
-                inviteForMeNotificationsEnabled = initialState,
+            state = aNotificationSettingsState(
+                matrixSettings = aValidMatrixSettings(inviteForMeNotificationsEnabled = initialState),
                 eventSink = eventsRecorder
             ),
         )
@@ -198,7 +198,7 @@ class NotificationSettingsViewTest : RobolectricTest() {
     private fun testShowAllActivityToggle(initialState: Boolean) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aValidNotificationSettingsState(
+            state = aNotificationSettingsState(
                 showAllActivityInRoomList = initialState,
                 eventSink = eventsRecorder
             ),
@@ -217,7 +217,7 @@ class NotificationSettingsViewTest : RobolectricTest() {
     fun `with an error configuration, clicking on continue emits the expected events`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aValidNotificationSettingsState(
+            state = aNotificationSettingsState(
                 changeNotificationSettingAction = AsyncAction.Failure(AN_EXCEPTION),
                 eventSink = eventsRecorder
             ),
@@ -236,8 +236,8 @@ class NotificationSettingsViewTest : RobolectricTest() {
     fun `with invalid configuration, clicking on continue emits the expected events`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aInvalidNotificationSettingsState(
-                fixFailed = false,
+            state = aNotificationSettingsState(
+                matrixSettings = anInvalidMatrixSettings(),
                 eventSink = eventsRecorder
             ),
         )
@@ -255,8 +255,8 @@ class NotificationSettingsViewTest : RobolectricTest() {
     fun `with invalid configuration and error, clicking on OK emits the expected events`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aInvalidNotificationSettingsState(
-                fixFailed = true,
+            state = aNotificationSettingsState(
+                matrixSettings = anInvalidMatrixSettings(fixFailed = true),
                 eventSink = eventsRecorder
             ),
         )
@@ -274,7 +274,7 @@ class NotificationSettingsViewTest : RobolectricTest() {
     fun `clicking on Push notification provider emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aValidNotificationSettingsState(
+            state = aNotificationSettingsState(
                 availablePushDistributors = listOf(
                     aDistributor("Firebase"),
                     aDistributor("ntfy"),
@@ -295,7 +295,7 @@ class NotificationSettingsViewTest : RobolectricTest() {
     fun `clicking on a push provider emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aValidNotificationSettingsState(
+            state = aNotificationSettingsState(
                 eventSink = eventsRecorder,
                 showChangePushProviderDialog = true,
                 availablePushDistributors = listOf(aDistributor("P1"), aDistributor("P2"))
@@ -315,10 +315,10 @@ class NotificationSettingsViewTest : RobolectricTest() {
     fun `sounds preference category renders rows with current display names`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aValidNotificationSettingsState(
+            state = aNotificationSettingsState(
                 eventSink = eventsRecorder,
-                messageSoundDisplayName = "Pixel notification",
-                callRingtoneDisplayName = "Pixel ringtone",
+                messageSound = aSoundChannelUiState(displayName = "Pixel notification"),
+                callRingtone = aSoundChannelUiState(displayName = "Pixel ringtone"),
             ),
         )
         onNodeWithText("Sound").assertIsDisplayed()
@@ -333,7 +333,7 @@ class NotificationSettingsViewTest : RobolectricTest() {
     fun `clicking the message sound row opens the preset dialog`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
-            state = aValidNotificationSettingsState(eventSink = eventsRecorder),
+            state = aNotificationSettingsState(eventSink = eventsRecorder),
         )
         // The click now opens the in-app preset dialog instead of launching the system picker
         // directly; the picker only fires from the dialog's "Choose another sound..." option

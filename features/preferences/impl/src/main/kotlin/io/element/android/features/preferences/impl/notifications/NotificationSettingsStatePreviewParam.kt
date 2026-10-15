@@ -16,7 +16,6 @@ import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermis
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.pushproviders.api.Distributor
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 open class NotificationSettingsStatePreviewParam : PreviewParameterProvider<NotificationSettingsState> {
@@ -24,86 +23,108 @@ open class NotificationSettingsStatePreviewParam : PreviewParameterProvider<Noti
         get() = sequenceOf(
             // Uninitialized and invalid states
             listOf(
-                anUninitializedNotificationSettingsState(),
-                aInvalidNotificationSettingsState(),
-                aInvalidNotificationSettingsState(
-                    fixFailed = true
+                aNotificationSettingsState(
+                    matrixSettings = NotificationSettingsState.MatrixSettings.Uninitialized,
+                ),
+                aNotificationSettingsState(
+                    matrixSettings = anInvalidMatrixSettings(),
+                ),
+                aNotificationSettingsState(
+                    matrixSettings = anInvalidMatrixSettings(fixFailed = true),
                 ),
             ),
             // Global toggles
             listOf(
-                aValidNotificationSettingsState(),
-                aValidNotificationSettingsState(
-                    systemNotificationsEnabled = false,
+                aNotificationSettingsState(),
+                aNotificationSettingsState(
+                    appSettings = anAppSettings(systemNotificationsEnabled = false),
                 ),
-                aValidNotificationSettingsState(
-                    appNotificationEnabled = false,
+                aNotificationSettingsState(
+                    appSettings = anAppSettings(appNotificationsEnabled = false),
                 ),
-                aValidNotificationSettingsState(
+                aNotificationSettingsState(
                     fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(permissionGranted = false),
                 ),
             ),
             // Matrix settings
             listOf(
-                aValidNotificationSettingsState(
+                aNotificationSettingsState(
+                    matrixSettings = aValidMatrixSettings(
+                        inviteForMeNotificationsEnabled = false,
+                        atRoomNotificationsEnabled = false,
+                    ),
                     showAllActivityInRoomList = true,
-                    inviteForMeNotificationsEnabled = false,
-                    atRoomNotificationsEnabled = false,
                 ),
-                aValidNotificationSettingsState(
-                    defaultGroupNotificationMode = RoomNotificationMode.MUTE,
-                    defaultOneToOneNotificationMode = null,
+                aNotificationSettingsState(
+                    matrixSettings = aValidMatrixSettings(
+                        defaultGroupNotificationMode = RoomNotificationMode.MUTE,
+                        defaultOneToOneNotificationMode = null,
+                    ),
                 ),
             ),
             // Change notification setting action
             listOf(
-                aValidNotificationSettingsState(
+                aNotificationSettingsState(
                     changeNotificationSettingAction = AsyncAction.Loading,
                 ),
-                aValidNotificationSettingsState(
+                aNotificationSettingsState(
                     changeNotificationSettingAction = AsyncAction.Failure(RuntimeException("error")),
                 ),
             ),
             // Sound and ringtone settings
             listOf(
-                aValidNotificationSettingsState(
+                aNotificationSettingsState(
                     // Sentinel URIs — previews shouldn't depend on the host's content provider.
-                    messageSound = NotificationSound.Custom("preview://message-sound"),
-                    messageSoundDisplayName = "Pixel notification",
-                    callRingtone = NotificationSound.Custom("preview://call-ringtone"),
-                    callRingtoneDisplayName = "Pixel ringtone",
+                    messageSound = aSoundChannelUiState(
+                        sound = NotificationSound.Custom("preview://message-sound"),
+                        displayName = "Pixel notification",
+                    ),
+                    callRingtone = aSoundChannelUiState(
+                        sound = NotificationSound.Custom("preview://call-ringtone"),
+                        displayName = "Pixel ringtone",
+                    ),
                 ),
-                aValidNotificationSettingsState(
-                    messageSound = NotificationSound.Silent,
-                    messageSoundDisplayName = "Silent",
-                    callRingtone = NotificationSound.Silent,
-                    callRingtoneDisplayName = "Silent",
+                aNotificationSettingsState(
+                    messageSound = aSoundChannelUiState(
+                        sound = NotificationSound.Silent,
+                        displayName = "Silent",
+                    ),
+                    callRingtone = aSoundChannelUiState(
+                        sound = NotificationSound.Silent,
+                        displayName = "Silent",
+                    ),
                 ),
-                aValidNotificationSettingsState(
-                    messageSound = NotificationSound.ElementDefault,
-                    messageSoundDisplayName = "Element default",
+                aNotificationSettingsState(
+                    messageSound = aSoundChannelUiState(
+                        sound = NotificationSound.ElementDefault,
+                        displayName = "Element default",
+                    ),
                 ),
-                aValidNotificationSettingsState(
+                aNotificationSettingsState(
                     showMessageSoundDialog = true,
                 ),
-                aValidNotificationSettingsState(
-                    messageSound = NotificationSound.Custom("preview://message-sound"),
-                    messageSoundDisplayName = "Pixel notification",
+                aNotificationSettingsState(
+                    messageSound = aSoundChannelUiState(
+                        sound = NotificationSound.Custom("preview://message-sound"),
+                        displayName = "Pixel notification",
+                    ),
                     showMessageSoundDialog = true,
                 ),
-                aValidNotificationSettingsState(
+                aNotificationSettingsState(
                     showCallRingtoneDialog = true,
                 ),
-                aValidNotificationSettingsState(
-                    callRingtone = NotificationSound.Custom("preview://call-ringtone"),
-                    callRingtoneDisplayName = "Pixel ringtone",
+                aNotificationSettingsState(
+                    callRingtone = aSoundChannelUiState(
+                        sound = NotificationSound.Custom("preview://call-ringtone"),
+                        displayName = "Pixel ringtone",
+                    ),
                     showCallRingtoneDialog = true,
                 ),
-                aValidNotificationSettingsState(
-                    messageSoundCopyError = true,
+                aNotificationSettingsState(
+                    messageSound = aSoundChannelUiState(copyError = true),
                 ),
-                aValidNotificationSettingsState(
-                    callRingtoneCopyError = true,
+                aNotificationSettingsState(
+                    callRingtone = aSoundChannelUiState(copyError = true),
                 ),
             ),
             // Push distributors
@@ -113,85 +134,59 @@ open class NotificationSettingsStatePreviewParam : PreviewParameterProvider<Noti
                 aDistributor("ntfy", "app.id2"),
             ).let { distributors ->
                 listOf(
-                    aValidNotificationSettingsState(
+                    aNotificationSettingsState(
                         availablePushDistributors = distributors,
                     ),
-                    aValidNotificationSettingsState(
+                    aNotificationSettingsState(
                         availablePushDistributors = distributors,
                         showChangePushProviderDialog = true,
                     ),
-                    aValidNotificationSettingsState(
+                    aNotificationSettingsState(
                         availablePushDistributors = distributors,
                         currentPushDistributor = AsyncData.Loading(),
                     ),
-                    aValidNotificationSettingsState(
+                    aNotificationSettingsState(
                         availablePushDistributors = distributors,
                         currentPushDistributor = AsyncData.Failure(Exception("Failed to change distributor")),
                     ),
                 )
             } + listOf(
                 // Single distributor in failure state still shows the advanced settings
-                aValidNotificationSettingsState(
+                aNotificationSettingsState(
                     currentPushDistributor = AsyncData.Failure(Exception("Failed to get distributor")),
                 ),
             ),
         ).flatten()
 }
 
-fun aValidNotificationSettingsState(
+fun aNotificationSettingsState(
+    matrixSettings: NotificationSettingsState.MatrixSettings = aValidMatrixSettings(),
+    appSettings: NotificationSettingsState.AppSettings = anAppSettings(),
     changeNotificationSettingAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    atRoomNotificationsEnabled: Boolean = true,
-    callNotificationsEnabled: Boolean = true,
-    inviteForMeNotificationsEnabled: Boolean = true,
-    defaultGroupNotificationMode: RoomNotificationMode? = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
-    defaultOneToOneNotificationMode: RoomNotificationMode? = RoomNotificationMode.ALL_MESSAGES,
-    systemNotificationsEnabled: Boolean = true,
-    appNotificationEnabled: Boolean = true,
     currentPushDistributor: AsyncData<Distributor> = AsyncData.Success(aDistributor("Firebase")),
     availablePushDistributors: List<Distributor> = listOf(
         aDistributor("Firebase"),
     ),
     showChangePushProviderDialog: Boolean = false,
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
-    messageSound: NotificationSound = NotificationSound.SystemDefault,
-    messageSoundDisplayName: String = "System default",
-    messageSoundCopyError: Boolean = false,
-    callRingtone: NotificationSound = NotificationSound.SystemDefault,
-    callRingtoneDisplayName: String = "System default",
-    callRingtoneCopyError: Boolean = false,
+    messageSound: NotificationSettingsState.SoundChannelUiState = aSoundChannelUiState(),
+    callRingtone: NotificationSettingsState.SoundChannelUiState = aSoundChannelUiState(),
     showMessageSoundDialog: Boolean = false,
     showCallRingtoneDialog: Boolean = false,
-    showAllActivityInRoomList: Boolean = false,
     pendingMessageSoundPickerLaunch: Int = 0,
     pendingCallRingtonePickerLaunch: Int = 0,
+    showAllActivityInRoomList: Boolean = false,
     eventSink: (NotificationSettingsEvent) -> Unit = {},
 ) = NotificationSettingsState(
-    matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
-        atRoomNotificationsEnabled = atRoomNotificationsEnabled,
-        callNotificationsEnabled = callNotificationsEnabled,
-        inviteForMeNotificationsEnabled = inviteForMeNotificationsEnabled,
-        defaultGroupNotificationMode = defaultGroupNotificationMode,
-        defaultOneToOneNotificationMode = defaultOneToOneNotificationMode,
-    ),
-    appSettings = NotificationSettingsState.AppSettings(
-        systemNotificationsEnabled = systemNotificationsEnabled,
-        appNotificationsEnabled = appNotificationEnabled,
-    ),
+    matrixSettings = matrixSettings,
+    appSettings = appSettings,
     changeNotificationSettingAction = changeNotificationSettingAction,
     currentPushDistributor = currentPushDistributor,
     availablePushDistributors = availablePushDistributors.toImmutableList(),
     showChangePushProviderDialog = showChangePushProviderDialog,
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
-    messageSound = NotificationSettingsState.SoundChannelUiState(
-        sound = messageSound,
-        displayName = messageSoundDisplayName,
-        copyError = messageSoundCopyError,
-    ),
-    callRingtone = NotificationSettingsState.SoundChannelUiState(
-        sound = callRingtone,
-        displayName = callRingtoneDisplayName,
-        copyError = callRingtoneCopyError,
-    ),
+    messageSound = messageSound,
+    callRingtone = callRingtone,
     showMessageSoundDialog = showMessageSoundDialog,
     showCallRingtoneDialog = showCallRingtoneDialog,
     pendingMessageSoundPickerLaunch = pendingMessageSoundPickerLaunch,
@@ -200,42 +195,42 @@ fun aValidNotificationSettingsState(
     eventSink = eventSink,
 )
 
-fun anUninitializedNotificationSettingsState() = aValidNotificationSettingsState().copy(
-    matrixSettings = NotificationSettingsState.MatrixSettings.Uninitialized,
+fun aValidMatrixSettings(
+    atRoomNotificationsEnabled: Boolean = true,
+    callNotificationsEnabled: Boolean = true,
+    inviteForMeNotificationsEnabled: Boolean = true,
+    defaultGroupNotificationMode: RoomNotificationMode? = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY,
+    defaultOneToOneNotificationMode: RoomNotificationMode? = RoomNotificationMode.ALL_MESSAGES,
+) = NotificationSettingsState.MatrixSettings.Valid(
+    atRoomNotificationsEnabled = atRoomNotificationsEnabled,
+    callNotificationsEnabled = callNotificationsEnabled,
+    inviteForMeNotificationsEnabled = inviteForMeNotificationsEnabled,
+    defaultGroupNotificationMode = defaultGroupNotificationMode,
+    defaultOneToOneNotificationMode = defaultOneToOneNotificationMode,
 )
 
-fun aInvalidNotificationSettingsState(
+fun anInvalidMatrixSettings(
     fixFailed: Boolean = false,
-    eventSink: (NotificationSettingsEvent) -> Unit = {},
-) = NotificationSettingsState(
-    matrixSettings = NotificationSettingsState.MatrixSettings.Invalid(
-        fixFailed = fixFailed,
-    ),
-    appSettings = NotificationSettingsState.AppSettings(
-        systemNotificationsEnabled = false,
-        appNotificationsEnabled = true,
-    ),
-    changeNotificationSettingAction = AsyncAction.Uninitialized,
-    currentPushDistributor = AsyncData.Uninitialized,
-    availablePushDistributors = persistentListOf(),
-    showChangePushProviderDialog = false,
-    fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
-    messageSound = NotificationSettingsState.SoundChannelUiState(
-        sound = NotificationSound.SystemDefault,
-        displayName = "System default",
-        copyError = false,
-    ),
-    callRingtone = NotificationSettingsState.SoundChannelUiState(
-        sound = NotificationSound.SystemDefault,
-        displayName = "System default",
-        copyError = false,
-    ),
-    showMessageSoundDialog = false,
-    showCallRingtoneDialog = false,
-    pendingMessageSoundPickerLaunch = 0,
-    pendingCallRingtonePickerLaunch = 0,
-    showAllActivityInRoomList = false,
-    eventSink = eventSink,
+) = NotificationSettingsState.MatrixSettings.Invalid(
+    fixFailed = fixFailed,
+)
+
+fun anAppSettings(
+    systemNotificationsEnabled: Boolean = true,
+    appNotificationsEnabled: Boolean = true,
+) = NotificationSettingsState.AppSettings(
+    systemNotificationsEnabled = systemNotificationsEnabled,
+    appNotificationsEnabled = appNotificationsEnabled,
+)
+
+fun aSoundChannelUiState(
+    sound: NotificationSound = NotificationSound.SystemDefault,
+    displayName: String = "System default",
+    copyError: Boolean = false,
+) = NotificationSettingsState.SoundChannelUiState(
+    sound = sound,
+    displayName = displayName,
+    copyError = copyError,
 )
 
 fun aDistributor(
