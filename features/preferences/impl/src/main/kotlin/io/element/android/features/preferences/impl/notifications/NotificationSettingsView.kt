@@ -48,7 +48,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
-import io.element.android.libraries.designsystem.preview.PreviewWithExtraLargeHeight
+import io.element.android.libraries.designsystem.preview.PreviewWithHeight1280
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
@@ -569,13 +569,13 @@ private fun InvalidNotificationSettingsView(
     }
 }
 
-@PreviewWithExtraLargeHeight
+@PreviewWithHeight1280
 @Composable
 internal fun NotificationSettingsViewLightPreview(
     @PreviewParameter(NotificationSettingsStatePreviewParam::class) state: NotificationSettingsState
 ) = ElementPreviewLight { ContentToPreview(state) }
 
-@PreviewWithExtraLargeHeight
+@PreviewWithHeight1280
 @Composable
 internal fun NotificationSettingsViewDarkPreview(
     @PreviewParameter(NotificationSettingsStatePreviewParam::class) state: NotificationSettingsState

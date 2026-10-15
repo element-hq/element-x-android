@@ -275,6 +275,10 @@ class NotificationSettingsViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvent>()
         setNotificationSettingsView(
             state = aValidNotificationSettingsState(
+                availablePushDistributors = listOf(
+                    aDistributor("Firebase"),
+                    aDistributor("ntfy"),
+                ),
                 eventSink = eventsRecorder
             ),
         )
