@@ -171,7 +171,6 @@ private fun InvitePeopleContentView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InvitePeopleSearchBar(
     queryState: TextFieldState,

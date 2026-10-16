@@ -44,6 +44,7 @@
   <string name="screen_session_verification_use_another_device_title">"在另一台验证的设备上打开应用"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"为提高安全性，请通过比较设备上的一组 Emoji 以验证此用户。通过使用安全的方式比如面对面来实施此步骤。"</string>
   <string name="screen_session_verification_user_initiator_title">"验证此用户？"</string>
+  <string name="screen_session_verification_user_requesting_verification">"用户正在请求验证："</string>
   <string name="screen_session_verification_user_responder_subtitle">"为提高安全性，另一用户想要验证你的数字身份。你将看到一组 Emoij 供你比较。"</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"你应该会在另一台设备上看到一个弹出窗口。现在从该处开始验证。"</string>
   <string name="screen_session_verification_waiting_another_device_title">"在另一台设备上开始验证"</string>

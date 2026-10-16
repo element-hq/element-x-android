@@ -123,6 +123,8 @@ class TimelineItemEventFactory(
             reactionsState = currentTimelineItem.computeReactionsState(),
             readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers, renderReadReceipts),
             localSendState = currentTimelineItem.event.localSendState,
+            editSendState = currentTimelineItem.event.editSendState,
+            redactionSendState = currentTimelineItem.event.redactionSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo()?.map(permalinkParser = permalinkParser),
             threadInfo = mappedThreadInfo,
             origin = currentTimelineItem.event.origin,

@@ -11,7 +11,6 @@ package io.element.android.features.logout.api.direct
 import io.element.android.libraries.architecture.AsyncAction
 
 data class DirectLogoutState(
-    val canDoDirectSignOut: Boolean,
     val logoutAction: AsyncAction<Unit>,
     val eventSink: (DirectLogoutEvent) -> Unit,
 )

@@ -16,7 +16,7 @@ import org.matrix.rustcomponents.sdk.UserStatus
 internal fun aRustUserProfile(
     userId: String = A_USER_ID.value,
     displayName: String = "displayName",
-    avatarUrl: String = "avatarUrl",
+    avatarUrl: String? = "avatarUrl",
     status: UserStatus? = null,
     call: UserCall? = null,
 ) = UserProfile(

@@ -29,5 +29,11 @@ sealed interface GlobalSearchEvent {
     data class SaveRoomToHistory(val roomId: RoomId) : GlobalSearchEvent
 
     /** The user selected a search result from the search history. */
-    data class SearchHistoryResultSelected(val resultItem: SearchHistoryResultItem) : GlobalSearchEvent
+    data class SearchHistoryResultSelected(val resultItem: SearchHistoryListItem) : GlobalSearchEvent
+
+    /** The user removed a search history entry. */
+    data class RemoveSearchHistoryResult(val result: SearchHistoryListItem) : GlobalSearchEvent
+
+    /** The user cleared the search history. */
+    data object ClearSearchHistory : GlobalSearchEvent
 }

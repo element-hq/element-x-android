@@ -51,6 +51,10 @@
   <string name="screen_edit_profile_error_title">"無法更新個人檔案"</string>
   <string name="screen_edit_profile_title">"編輯個人檔案"</string>
   <string name="screen_edit_profile_updating_details">"正在更新個人檔案…"</string>
+  <string name="screen_labs_enable_gallery">"圖庫訊息"</string>
+  <string name="screen_labs_enable_gallery_description">"一次傳送多張圖片或影片。在行動裝置上可穩定運作，但網頁端尚不支援。"</string>
+  <string name="screen_labs_enable_knocking">"要求加入"</string>
+  <string name="screen_labs_enable_knocking_description">"使用者可以申請加入尚未對所有人開放的聊天室。此功能在行動裝置上已穩定運作，網頁版雖已實作，但仍處於實驗階段。"</string>
   <string name="screen_labs_enable_threads">"啟用討論串回覆"</string>
   <string name="screen_labs_enable_threads_description">"應用程式將會重新啟動以套用此變更。"</string>
   <string name="screen_labs_header_description">"試試我們正在開發中的最新構想。這些功能可能尚未完成，可能不夠穩定，也可能隨時變動。"</string>

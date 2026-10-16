@@ -26,6 +26,7 @@ import org.matrix.rustcomponents.sdk.HomeserverCapabilities
 import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.LoginWithQrCodeHandler
+import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
@@ -44,6 +45,7 @@ import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 import org.matrix.rustcomponents.sdk.UserProfile
+import uniffi.matrix_sdk.SearchBackfillStrategy
 import uniffi.matrix_sdk_base.MediaRetentionPolicy
 
 class FakeFfiClient(
@@ -70,8 +72,11 @@ class FakeFfiClient(
     private val isProfilesSlidingSyncExtensionSupportedResult: () -> Boolean = { false },
     private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
     private val getUrlResult: (String) -> ByteArray = { lambdaError() },
+    private val getMediaThumbnailResult: (MediaSource, ULong, ULong) -> ByteArray = { _, _, _ -> byteArrayOf() },
     private val contentScannerResult: () -> ContentScanner = { FakeFfiContentScanner() },
+    private val runSearchBackfillResult: (SearchBackfillStrategy) -> TaskHandle = { lambdaError() },
     private val closeResult: () -> Unit = {},
+    private val setDelegateResult: (ClientDelegate?) -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
@@ -81,7 +86,10 @@ class FakeFfiClient(
     override suspend fun getNotificationSettings(): NotificationSettings = notificationSettings
     override fun encryption(): Encryption = encryption
     override fun session(): Session = session
-    override fun setDelegate(delegate: ClientDelegate?): TaskHandle = FakeFfiTaskHandle()
+    override fun setDelegate(delegate: ClientDelegate?): TaskHandle {
+        setDelegateResult(delegate)
+        return FakeFfiTaskHandle()
+    }
     override suspend fun cachedAvatarUrl(): String? = null
     override suspend fun restoreSession(session: Session) = Unit
     override fun syncService(): SyncServiceBuilder = FakeFfiSyncServiceBuilder()
@@ -120,6 +128,10 @@ class FakeFfiClient(
 
     override suspend fun getProfile(userId: String): UserProfile {
         return getProfileResult(userId)
+    }
+
+    override suspend fun getMediaThumbnail(mediaSource: MediaSource, width: ULong, height: ULong): ByteArray {
+        return getMediaThumbnailResult(mediaSource, width, height)
     }
 
     override suspend fun homeserverLoginDetails(): HomeserverLoginDetails {
@@ -163,6 +175,8 @@ class FakeFfiClient(
     override suspend fun contentScanner(): ContentScanner = simulateLongTask {
         contentScannerResult()
     }
+
+    override fun runSearchBackfill(strategy: SearchBackfillStrategy): TaskHandle = runSearchBackfillResult(strategy)
 
     override fun close() = closeResult()
 }

@@ -14,7 +14,7 @@
   <string name="confirm_recovery_key_banner_title">"Penyimpanan kunci Anda tidak sinkron"</string>
   <string name="full_screen_intent_banner_message">"Untuk memastikan Anda tidak melewatkan panggilan penting, silakan ubah pengaturan Anda untuk memperbolehkan notifikasi layar penuh ketika ponsel Anda terkunci."</string>
   <string name="full_screen_intent_banner_title">"Tingkatkan pengalaman panggilan Anda"</string>
-  <string name="screen_home_tab_chats">"Semua Obrolan"</string>
+  <string name="screen_home_tab_chats">"Obrolan"</string>
   <string name="screen_home_tab_spaces">"Space"</string>
   <string name="screen_invites_decline_chat_message">"Apakah Anda yakin ingin menolak undangan untuk bergabung ke %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Tolak undangan"</string>
@@ -46,7 +46,7 @@ Untuk sementara, Anda dapat membatalkan pilihan saringan untuk melihat percakapa
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Selamat!
 Anda tidak memiliki pesan yang belum dibaca!"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Permintaan untuk bergabung dikirim"</string>
-  <string name="screen_roomlist_main_space_title">"Semua Obrolan"</string>
+  <string name="screen_roomlist_main_space_title">"Obrolan"</string>
   <string name="screen_roomlist_mark_as_read">"Tandai sebagai dibaca"</string>
   <string name="screen_roomlist_mark_as_unread">"Tandai sebagai belum dibaca"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ruangan ini telah ditingkatkan"</string>

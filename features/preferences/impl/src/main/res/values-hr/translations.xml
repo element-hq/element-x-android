@@ -38,7 +38,7 @@
   <string name="screen_advanced_settings_share_presence_description">"Ako je to isključeno, nećete moći slati ili primati potvrde o čitanju ili obavijesti o tipkanju."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Uvijek sakrij"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Uvijek prikaži"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"U privatnim sobama"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Prikaži u privatnim sobama"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"Skriveni medij uvijek se može prikazati tako se da se dodirne"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Prikaži medije na vremenskoj traci"</string>
   <string name="screen_advanced_settings_view_source_description">"Omogući opciju za prikaz izvora poruke na vremenskoj traci."</string>
@@ -62,6 +62,9 @@
   <string name="screen_labs_header_description">"Isprobajte naše najnovije ideje u razvoju. Ove značajke nisu finalizirane; mogu biti nestabilne i mijenjati se."</string>
   <string name="screen_labs_header_title">"Jeste li spremni za eksperimentiranje?"</string>
   <string name="screen_labs_title">"Laboratoriji"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Pozivnice"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Ostali korisnici"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Tvoj izgled"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Dodatne postavke"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Ton zvona"</string>
   <string name="screen_notification_settings_calls_label">"Audiopozivi i videopozivi"</string>
@@ -90,6 +93,8 @@ Ako nastavite, neke od vaših postavki mogu se promijeniti."</string>
   <string name="screen_notification_settings_mode_mentions">"Spominjanja"</string>
   <string name="screen_notification_settings_notification_section_title">"Obavijesti me za"</string>
   <string name="screen_notification_settings_room_mention_label">"Obavijesti me o sobi @soba"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Točke ili broj nepročitanih poruka"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Prikaži sve aktivnosti na popisu soba"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Prilagođeno"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Personalizirano zvono"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Pogreška pri brisanju datoteke"</string>
@@ -106,6 +111,7 @@ Ako nastavite, neke od vaših postavki mogu se promijeniti."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"postavke sustava"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Obavijesti sustava su isključene"</string>
   <string name="screen_notification_settings_title">"Obavijesti"</string>
+  <string name="screen_settings_add_account">"Dodaj još jedan račun"</string>
   <string name="screen_settings_user_status_away">"Odsutan/na"</string>
   <string name="screen_settings_user_status_be_right_back">"Odmah se vraćam"</string>
   <string name="screen_settings_user_status_custom">"Prilagođeno"</string>

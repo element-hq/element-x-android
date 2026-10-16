@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
-import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
@@ -114,16 +113,10 @@ private fun subtitle(state: SecureBackupSetupState): String {
 private fun Content(
     state: SecureBackupSetupState,
 ) {
-    val context = LocalContext.current
     val formattedRecoveryKey = state.recoveryKeyViewState.formattedRecoveryKey
-    val toastMessage = stringResource(R.string.screen_recovery_key_copied_to_clipboard)
     val clickLambda = if (formattedRecoveryKey != null) {
         {
-            context.copyToClipboard(
-                text = formattedRecoveryKey,
-                toastMessage = toastMessage,
-            )
-            state.eventSink.invoke(SecureBackupSetupEvent.RecoveryKeyHasBeenSaved)
+            state.eventSink.invoke(SecureBackupSetupEvent.CopyRecoveryKey)
         }
     } else {
         if (!state.recoveryKeyViewState.inProgress) {

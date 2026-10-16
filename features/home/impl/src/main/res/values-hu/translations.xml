@@ -24,6 +24,9 @@
   <string name="screen_invites_invited_you">"%1$s (%2$s) meghívta"</string>
   <string name="screen_migration_message">"Ez egy egyszeri folyamat, köszönjük a türelmét."</string>
   <string name="screen_migration_title">"A fiók beállítása."</string>
+  <string name="screen_multi_account_announcement_action">"Fiók hozzáadása"</string>
+  <string name="screen_multi_account_announcement_description">"Jelentkezzen be egy másik fiókba itt: %1$s . Ezután könnyedén válthat közöttük."</string>
+  <string name="screen_multi_account_announcement_title">"Mostantól több fiókot is hozzáadhat"</string>
   <string name="screen_roomlist_a11y_create_message">"Új beszélgetés vagy szoba létrehozása"</string>
   <string name="screen_roomlist_clear_filters">"Szűrők törlése"</string>
   <string name="screen_roomlist_empty_message">"Kezdje azzal, hogy üzenetet küld valakinek."</string>

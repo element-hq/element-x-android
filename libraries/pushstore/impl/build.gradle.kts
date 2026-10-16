@@ -13,7 +13,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.push.pushstore.impl"
+    namespace = "io.element.android.libraries.pushstore.impl"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

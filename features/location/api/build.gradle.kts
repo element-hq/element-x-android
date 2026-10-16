@@ -26,7 +26,7 @@ android {
     defaultConfig {
         buildConfigFieldStr(
             name = "MAPTILER_BASE_URL",
-            value = BuildTimeConfig.SERVICES_MAPTILER_BASE_URL ?: "https://api.maptiler.com/maps"
+            value = BuildTimeConfig.SERVICES_MAPTILER_BASE_URL,
         )
         buildConfigFieldStr(
             name = "MAPTILER_API_KEY",
@@ -35,8 +35,7 @@ android {
             } else {
                 System.getenv("ELEMENT_ANDROID_MAPTILER_API_KEY")
                     ?: readLocalProperty("services.maptiler.apikey")
-            }
-                ?: ""
+            },
         )
         buildConfigFieldStr(
             name = "MAPTILER_LIGHT_MAP_ID",
@@ -45,9 +44,7 @@ android {
             } else {
                 System.getenv("ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID")
                     ?: readLocalProperty("services.maptiler.lightMapId")
-            }
-            // fall back to maptiler's default light map.
-                ?: "basic-v2"
+            },
         )
         buildConfigFieldStr(
             name = "MAPTILER_DARK_MAP_ID",
@@ -56,9 +53,7 @@ android {
             } else {
                 System.getenv("ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID")
                     ?: readLocalProperty("services.maptiler.darkMapId")
-            }
-            // fall back to maptiler's default dark map.
-                ?: "basic-v2-dark"
+            },
         )
     }
 }
@@ -68,12 +63,9 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.wellknown.api)
     implementation(projects.features.enterprise.api)
     implementation(libs.coil.compose)
-    implementation(libs.datetime)
 
     testCommonDependencies(libs)
 }

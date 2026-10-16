@@ -12,7 +12,3 @@ plugins {
 android {
     namespace = "io.element.android.libraries.wellknown.api"
 }
-
-dependencies {
-    implementation(projects.libraries.matrix.api)
-}

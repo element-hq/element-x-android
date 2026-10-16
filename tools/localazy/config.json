@@ -15,6 +15,12 @@
       ]
     },
     {
+      "name" : ":libraries:roomselect:impl",
+      "includeRegex" : [
+        "screen\\.room_select\\..*"
+      ]
+    },
+    {
       "name" : ":features:rageshake:api",
       "includeRegex" : [
         "crash_detection_.*",
@@ -199,11 +205,13 @@
         "screen\\.home\\..*",
         "screen_roomlist_.*",
         "screen\\.roomlist\\..*",
+        "screen\\.multi_account_announcement\\..*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
         "banner\\.set_up_recovery\\..*",
         "banner\\.battery_optimization\\..*",
         "banner\\.new_sound\\..*",
+        "banner\\.swipe_avatar\\..*",
         "full_screen_intent_banner_.*",
         "screen_migration_.*",
         "screen_invites_.*"

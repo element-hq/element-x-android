@@ -21,7 +21,8 @@ class FakeNotificationCleaner(
     private val clearMessagesForThreadLambda: (SessionId, RoomId, ThreadId) -> Unit = { _, _, _ -> lambdaError() },
     private val clearEventLambda: (SessionId, EventId) -> Unit = { _, _ -> lambdaError() },
     private val clearMembershipNotificationForSessionLambda: (SessionId) -> Unit = { lambdaError() },
-    private val clearMembershipNotificationForRoomLambda: (SessionId, RoomId) -> Unit = { _, _ -> lambdaError() }
+    private val clearMembershipNotificationForRoomLambda: (SessionId, RoomId) -> Unit = { _, _ -> lambdaError() },
+    private val clearReadRoomsNotificationsLambda: (SessionId) -> Unit = { lambdaError() },
 ) : NotificationCleaner {
     override fun clearAllMessagesEvents(sessionId: SessionId) {
         clearAllMessagesEventsLambda(sessionId)
@@ -45,5 +46,9 @@ class FakeNotificationCleaner(
 
     override fun clearMembershipNotificationForRoom(sessionId: SessionId, roomId: RoomId) {
         clearMembershipNotificationForRoomLambda(sessionId, roomId)
+    }
+
+    override fun clearReadRoomsNotifications(sessionId: SessionId) {
+        clearReadRoomsNotificationsLambda(sessionId)
     }
 }

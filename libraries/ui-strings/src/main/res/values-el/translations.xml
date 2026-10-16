@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Προσθήκη avatar"</string>
   <string name="a11y_add_reaction">"Προσθήκη αντίδρασης: %1$s"</string>
   <string name="a11y_address">"Διεύθυνση"</string>
   <string name="a11y_avatar">"Εικόνα Προφίλ"</string>
+  <string name="a11y_clear_search_field">"Εκκαθάριση πεδίου αναζήτησης"</string>
   <string name="a11y_collapse_message_text_field">"Ελαχιστοποίηση πεδίου κειμένου μηνύματος"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"Μείωση επιτρεπόμενων ψήφων ανά άτομο"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"Αύξηση επιτρεπόμενων ψήφων ανά άτομο"</string>
+  <string name="a11y_custom_emoji">"Προσαρμοσμένο emoji"</string>
   <string name="a11y_delete">"Διαγραφή"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d ψηφίο εισήχθη"</item>
     <item quantity="other">"%1$d ψηφία εισήχθησαν"</item>
   </plurals>
+  <string name="a11y_duration">"Διάρκεια: %1$s"</string>
   <string name="a11y_edit_avatar">"Επεξεργασία Άβαταρ"</string>
   <string name="a11y_edit_room_address_hint">"Η πλήρης διεύθυνση θα είναι %1$s"</string>
   <string name="a11y_encryption_details">"Λεπτομέρειες κρυπτογράφησης"</string>
@@ -17,6 +23,8 @@
   <string name="a11y_info">"Πληροφορίες"</string>
   <string name="a11y_join_call">"Συμμετοχή στην κλήση"</string>
   <string name="a11y_jump_to_bottom">"Άλμα προς τα κάτω"</string>
+  <string name="a11y_jump_to_unread">"Μετάβαση σε μη αναγνωσμένα"</string>
+  <string name="a11y_jump_to_unread_messages">"Μετάβαση στο πρώτο μη αναγνωσμένο μήνυμα"</string>
   <string name="a11y_move_the_map_to_my_location">"Μετακινήστε τον χάρτη στην τοποθεσία μου"</string>
   <string name="a11y_notifications_mentions_only">"Αναφορές μόνο"</string>
   <string name="a11y_notifications_muted">"Σε σίγαση"</string>
@@ -27,12 +35,14 @@
   <string name="a11y_page_n">"Σελίδα %1$d"</string>
   <string name="a11y_pause">"Παύση"</string>
   <string name="a11y_paused_voice_message">"Φωνητικό μήνυμα, διάρκεια:%1$s, τρέχουσα θέση: %2$s"</string>
+  <string name="a11y_photo_preview">"Προεπισκόπηση φωτογραφίας"</string>
   <string name="a11y_pin_field">"Πεδίο PIN"</string>
   <string name="a11y_pinned_location">"Καρφιτσωμένη τοποθεσία"</string>
   <string name="a11y_play">"Αναπαραγωγή"</string>
   <string name="a11y_playback_speed">"Ταχύτητα αναπαραγωγής"</string>
   <string name="a11y_poll">"Δημοσκόπηση"</string>
   <string name="a11y_poll_end">"Ολοκληρωμένη δημοσκόπηση"</string>
+  <string name="a11y_position">"Θέση: %1$s"</string>
   <string name="a11y_qr_code">"Κωδικός QR"</string>
   <string name="a11y_react_with">"Αντέδρασε με %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Αντέδρασε με άλλα emoji"</string>
@@ -42,20 +52,26 @@
     <item quantity="other">"Διαβάστηκε από %1$s και %2$d ακόμη"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"Το προηγούμενο μήνυμα διαβάστηκε από %1$s"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"εμφάνιση όλων των αποδεικτικών ανάγνωσης"</string>
   <string name="a11y_remove_reaction">"Αφαίρεση αντίδρασης με %1$s"</string>
   <string name="a11y_remove_reaction_with">"Αφαιρέστε την αντίδραση με %1$s"</string>
   <string name="a11y_room_avatar">"Άβαταρ αίθουσας"</string>
   <string name="a11y_send_files">"Αποστολή αρχείων"</string>
   <string name="a11y_sender_location">"Τοποθεσία αποστολέα"</string>
+  <string name="a11y_sent_by_sender_at_date">"Απεστάλη από %1$s στις %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Απαιτείται ενέργεια περιορισμένης χρονικής διάρκειας, έχετε ένα λεπτό για επαλήθευση."</string>
   <string name="a11y_settings_with_required_action">"Ρυθμίσεις, απαιτείται ενέργεια"</string>
   <string name="a11y_show_password">"Εμφάνιση κωδικού πρόσβασης"</string>
   <string name="a11y_start_call">"Ξεκίνησε μια κλήση"</string>
   <string name="a11y_start_video_call">"Ξεκινήστε μια βιντεοκλήση"</string>
   <string name="a11y_start_voice_call">"Έναρξη φωνητικής κλήσης"</string>
+  <string name="a11y_status">"Κατάσταση"</string>
+  <string name="a11y_thread_in_room">"Νήμα στο %1$s"</string>
+  <string name="a11y_threads_in_room">"Νήματα στο %1$s"</string>
   <string name="a11y_tombstoned_room">"Θαμένη αίθουσα"</string>
   <string name="a11y_user_avatar">"Άβαταρ χρήστη"</string>
   <string name="a11y_user_menu">"Μενού χρήστη"</string>
+  <string name="a11y_video_preview">"Προεπισκόπηση βίντεο"</string>
   <string name="a11y_view_avatar">"Προβολή avatar"</string>
   <string name="a11y_view_details">"Προβολή λεπτομερειών"</string>
   <string name="a11y_voice_message">"Φωνητικό μήνυμα, διάρκεια: %1$s"</string>
@@ -92,6 +108,7 @@
   <string name="action_decline_and_block">"Απόρριψη και αποκλεισμός"</string>
   <string name="action_delete">"Διαγραφή"</string>
   <string name="action_delete_account">"Διαγραφή λογαριασμού"</string>
+  <string name="action_delete_file">"Διαγραφή αρχείου"</string>
   <string name="action_delete_poll">"Διαγραφή Δημοσκόπησης"</string>
   <string name="action_deselect_all">"Αποεπιλογή όλων"</string>
   <string name="action_disable">"Απενεργοποίηση"</string>
@@ -129,6 +146,7 @@
   <string name="action_manage_account_and_devices">"Διαχείριση λογαριασμού και συσκευών"</string>
   <string name="action_manage_devices">"Διαχείριση συσκευών"</string>
   <string name="action_manage_rooms">"Διαχείριση αίθουσών"</string>
+  <string name="action_mark_as_read">"Σήμανση ως αναγνωσμένου"</string>
   <string name="action_message">"Στείλε"</string>
   <string name="action_minimize">"Ελαχιστοποίηση"</string>
   <string name="action_next">"Επόμενο"</string>
@@ -183,9 +201,11 @@
   <string name="action_translate">"Μετάφραση"</string>
   <string name="action_try_again">"Προσπάθησε ξανά"</string>
   <string name="action_unpin">"Ξεκαρφίτσωμα"</string>
+  <string name="action_video_call">"Βιντεοκλήση"</string>
   <string name="action_view">"Προβολή"</string>
   <string name="action_view_in_timeline">"Προβολή στο χρονοδιάγραμμα"</string>
   <string name="action_view_source">"Προβολή πηγής"</string>
+  <string name="action_voice_call">"Φωνητική κλήση"</string>
   <string name="action_yes">"Ναι"</string>
   <string name="action_yes_try_again">"Ναι, δοκιμή ξανά"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Ο διακομιστής σου υποστηρίζει τώρα ένα νέο, ταχύτερο πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για αναβάθμιση τώρα. Κάνοντας αυτό τώρα θα σε βοηθήσει να αποφύγεις μια αναγκαστική αποσύνδεση όταν το παλιό πρωτόκολλο καταργηθεί αργότερα."</string>
@@ -206,6 +226,7 @@
   <string name="common_blocked_users">"Αποκλεισμένοι χρήστες"</string>
   <string name="common_bubbles">"Φυσαλίδες"</string>
   <string name="common_call_declined">"Η κλήση απορρίφθηκε"</string>
+  <string name="common_call_in_progress">"Κλήση σε εξέλιξη"</string>
   <string name="common_call_started">"Η κλήση ξεκίνησε"</string>
   <string name="common_call_you_declined">"Απορρίψατε μια κλήση"</string>
   <string name="common_chat_backup">"Αντίγραφο ασφαλείας συνομιλίας"</string>
@@ -249,7 +270,17 @@
   <string name="common_file_saved_on_disk_android">"Αρχείο αποθηκευμένο σε Λήψεις"</string>
   <string name="common_forward_message">"Προώθηση μηνύματος"</string>
   <string name="common_frequently_used">"Χρησιμοποιείται συχνά"</string>
+  <string name="common_gallery">"Γκαλερί"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d συνημμένο…"</item>
+    <item quantity="other">"%1$d συνημμένα…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d στοιχείο πολυμέσων…"</item>
+    <item quantity="other">"%1$d στοιχεία πολυμέσων…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Ομαδική κλήση σε εξέλιξη"</string>
   <string name="common_image">"Εικόνα"</string>
   <string name="common_in_reply_to">"Σε απάντηση στον χρήστη %1$s"</string>
   <string name="common_install_apk_android">"Εγκατάσταση APK"</string>
@@ -285,6 +316,7 @@
   <string name="common_no_space_name">"Δεν υπάρχει όνομα χώρου"</string>
   <string name="common_not_encrypted">"Χωρίς κρυπτογράφηση"</string>
   <string name="common_offline">"Εκτός σύνδεσης"</string>
+  <string name="common_on_a_call">"Σε κλήση"</string>
   <string name="common_open_source_licenses">"Άδειες ανοιχτού κώδικα"</string>
   <string name="common_or">"ή"</string>
   <string name="common_other_options">"Άλλες επιλογές"</string>
@@ -297,6 +329,7 @@
   <string name="common_please_wait">"Παρακαλώ περίμενε…"</string>
   <string name="common_poll_end_confirmation">"Θες σίγουρα να τερματίσεις αυτή τη δημοσκόπηση;"</string>
   <string name="common_poll_summary">"Δημοσκόπηση: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Δημοσκόπηση"</string>
   <string name="common_poll_total_votes">"Σύνολο ψήφων: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Τα αποτελέσματα θα εμφανιστούν μετά τη λήξη της ψηφοφορίας"</string>
   <plurals name="common_poll_votes_count">
@@ -391,6 +424,7 @@
   <string name="common_unmute">"Άρση σίγασης"</string>
   <string name="common_unsupported_call">"Μη υποστηριζόμενη κλήση"</string>
   <string name="common_unsupported_event">"Μη υποστηριζόμενο συμβάν"</string>
+  <string name="common_user_started_a_call">"Ο χρήστης %1$s ξεκίνησε μια κλήση"</string>
   <string name="common_username">"Όνομα χρήστη"</string>
   <string name="common_verification_cancelled">"Η επαλήθευση ακυρώθηκε"</string>
   <string name="common_verification_complete">"Η επαλήθευση ολοκληρώθηκε"</string>
@@ -412,6 +446,11 @@
   <string name="common_waiting_live_location">"Αναμονή για ζωντανή τοποθεσία…"</string>
   <string name="common_world_readable_history">"Οποιοσδήποτε μπορεί να δει το ιστορικό"</string>
   <string name="common_you">"Εσύ"</string>
+  <string name="content_scanner_not_found">"Η λήψη δεν είναι διαθέσιμη."</string>
+  <string name="content_scanner_not_found_title">"Κάτι πήγε στραβά"</string>
+  <string name="content_scanner_scanning">"Σάρωση…"</string>
+  <string name="content_scanner_unsafe_message">"Η προεπισκόπηση και η λήψη έχουν απενεργοποιηθεί."</string>
+  <string name="content_scanner_unsafe_title">"Το αρχείο δεν είναι ασφαλές"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) μοιράστηκε αυτό το μήνυμα, καθώς δεν ήσασταν στην αίθουσα όταν στάλθηκε."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s μοιράστηκε αυτό το μήνυμα, ενόσω δεν ήσασταν στην αίθουσα όταν στάλθηκε."</string>
   <string name="crypto_history_visible">"Αυτή η αίθουσα έχει διαμορφωθεί έτσι ώστε τα νέα μέλη να μπορούν να διαβάσουν το ιστορικό. %1$s"</string>
@@ -462,6 +501,9 @@
   <string name="error_unknown">"Λυπούμαστε, παρουσιάστηκε σφάλμα"</string>
   <string name="invite_friends_rich_title">"🔐️ Έλα μαζί μου στο %1$s"</string>
   <string name="invite_friends_text">"Γεια, μίλα μου στην εφαρμογή %1$s :%2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Κοινή χρήση τρέχουσας τοποθεσίας"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Κοινοποίηση τοποθεσίας σε εξέλιξη"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Ζωντανή τοποθεσία"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Κούνησε δυνατά τη συσκευή σου για να αναφέρεις κάποιο σφάλμα"</string>
   <string name="screen_bug_report_a11y_screenshot">"Στιγμιότυπο οθόνης"</string>
@@ -469,6 +511,7 @@
   <string name="screen_create_poll_options_section_title">"Επιλογές"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Αφαίρεση %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Ρυθμίσεις"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Επιτρεπόμενες ψήφοι ανά άτομο"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Κανείς δεν μοιράζεται την τοποθεσία του"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Κοινοποιείς την τοποθεσία σε πραγματικό χρόνο"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -476,6 +519,8 @@
     <item quantity="other">"%1$d άτομα"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"Στον χάρτη"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Ο αρχικός διακομιστής βρίσκεται στο τοπικό σας δίκτυο. Για να συνδεθεί, το %1$s χρειάζεται άδεια πρόσβασης σε συσκευές σε αυτό το δίκτυο."</string>
+  <string name="screen_local_network_opt_in_title">"Επιτρέψτε την πρόσβαση στο τοπικό δίκτυο"</string>
   <string name="screen_media_picker_error_failed_selection">"Αποτυχία επιλογής πολυμέσου, δοκίμασε ξανά."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Πάτα σε ένα μήνυμα και επέλεξε «%1$s» για να συμπεριληφθεί εδώ."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Καρφίτσωσε σημαντικά μηνύματα, ώστε να μπορούν να εντοπιστούν εύκολα"</string>
@@ -521,6 +566,10 @@
   <string name="screen_space_list_title">"Χώροι"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Κοινοποιήθηκε %1$s"</string>
   <string name="screen_static_location_sheet_title">"Στον χάρτη"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d συμμετέχον"</item>
+    <item quantity="other">"%1$d συμμετέχοντες"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Το μήνυμα δεν αποστάλη επειδή η επαληθευμένη ψηφιακή ταυτότητα του %1$s επαναφέρθηκε."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Το μήνυμα δεν στάλθηκε επειδή ο χρήστης %1$s δεν έχει επαληθεύσει όλες τις συσκευές."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Το μήνυμα δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου."</string>
@@ -532,4 +581,6 @@
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Δεν έχεις πρόσβαση σε αυτό το μήνυμα"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Δεν είναι δυνατή η αποκρυπτογράφηση μηνύματος"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Αυτό το μήνυμα αποκλείστηκε είτε επειδή δεν επαληθεύσατε τη συσκευή σας είτε επειδή ο αποστολέας πρέπει να επαληθεύσει την ψηφιακή σας ταυτότητα."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Η συσκευή σας είναι πολύ παλιά, απαιτείται συσκευή με Android 8 ή νεότερη έκδοση."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Η απόδοση χαρτών δεν υποστηρίζεται"</string>
 </resources>

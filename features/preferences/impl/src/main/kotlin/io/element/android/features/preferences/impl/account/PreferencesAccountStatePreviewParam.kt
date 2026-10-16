@@ -8,8 +8,6 @@
 package io.element.android.features.preferences.impl.account
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -56,7 +54,6 @@ fun aPreferencesAccountState(
     canReportBug: Boolean = false,
     showLinkNewDevice: Boolean = false,
     canDeactivateAccount: Boolean = false,
-    directLogoutState: DirectLogoutState = aDirectLogoutState(),
     snackbarMessage: SnackbarMessage? = null,
 ) = PreferencesAccountState(
     myUser = myUser,
@@ -66,6 +63,5 @@ fun aPreferencesAccountState(
     canReportBug = canReportBug,
     showLinkNewDevice = showLinkNewDevice,
     canDeactivateAccount = canDeactivateAccount,
-    directLogoutState = directLogoutState,
     snackbarMessage = snackbarMessage,
 )

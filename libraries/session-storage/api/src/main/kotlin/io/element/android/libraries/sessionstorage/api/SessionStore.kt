@@ -51,8 +51,9 @@ interface SessionStore {
      * @param sessionId the session to update.
      * @param displayName the new display name, or `null` when the user has none.
      * @param avatarUrl the new avatar, or `null` when the user has none.
+     * @param avatarData the thumbnail of the new avatar, base64 encoded, or `null` when the user has none or when it could not be loaded.
      */
-    suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?)
+    suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?, avatarData: String?)
 
     /**
      * Get the session data matching the userId, or null if not found.

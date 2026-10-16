@@ -71,7 +71,6 @@ fun MediaFileView(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = BigIcon.Style.Default(
                     vectorIcon = icon,
-                    usePrimaryTint = true,
                 ),
             )
             if (info != null) {

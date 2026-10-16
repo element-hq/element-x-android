@@ -220,4 +220,30 @@ class CurrentUserWithNeighborsBuilderTest {
             )
         )
     }
+
+    @Test
+    fun `other accounts use the data from db, including the avatar thumbnail`() {
+        val sut = CurrentUserWithNeighborsBuilder()
+        val matrixUser = aMatrixUser(id = A_USER_ID.value)
+        val list = listOf(
+            aSessionData(
+                sessionId = A_USER_ID.value,
+            ),
+            aSessionData(
+                sessionId = A_USER_ID_2.value,
+                userDisplayName = "Carol",
+                userAvatarUrl = "avatarUrl",
+                userAvatarData = "avatarData",
+            ),
+        )
+        val result = sut.build(matrixUser, list)
+        assertThat(result[0]).isEqualTo(
+            MatrixUser(
+                userId = A_USER_ID_2,
+                displayName = "Carol",
+                avatarUrl = "avatarUrl",
+                avatarThumbnail = "avatarData",
+            )
+        )
+    }
 }

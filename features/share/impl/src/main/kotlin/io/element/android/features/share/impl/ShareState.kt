@@ -10,8 +10,19 @@ package io.element.android.features.share.impl
 
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 
 data class ShareState(
-    val shareAction: AsyncAction<List<RoomId>>,
+    val shareAction: AsyncAction<ShareResult>,
     val eventSink: (ShareEvent) -> Unit
+)
+
+/**
+ * The result of a successful share.
+ * @param sessionId the session which has been used to share the data, it can be another session than the current one.
+ * @param roomIds the rooms the data has been shared to.
+ */
+data class ShareResult(
+    val sessionId: SessionId,
+    val roomIds: List<RoomId>,
 )

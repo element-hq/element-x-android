@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -92,7 +91,6 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Ref: https://www.figma.com/design/zftpgS6LjiczobJZ1GUNpt/Updates-to-Media---File-Upload?node-id=51-3514
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttachmentsPreviewView(
     state: AttachmentsPreviewState,
@@ -263,7 +261,7 @@ private fun AttachmentSendStateView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AttachmentPreviewContent(
     state: AttachmentsPreviewState,

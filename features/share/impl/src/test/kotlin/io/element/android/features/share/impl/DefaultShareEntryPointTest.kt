@@ -15,7 +15,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.share.api.ShareIntentData
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_MESSAGE
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.roomselect.test.FakeRoomSelectEntryPoint
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
@@ -42,9 +44,12 @@ class DefaultShareEntryPointTest {
             )
         }
         val callback = object : ShareEntryPoint.Callback {
-            override fun onDone(roomIds: List<RoomId>) = lambdaError()
+            override fun onDone(sessionId: SessionId, roomIds: List<RoomId>) = lambdaError()
+            override fun onCancel() = lambdaError()
+            override fun onSessionVerificationRequired(sessionId: SessionId) = lambdaError()
         }
         val params = ShareEntryPoint.Params(
+            sessionId = A_SESSION_ID,
             shareIntentData = ShareIntentData.PlainText(A_MESSAGE),
         )
         val result = entryPoint.createNode(
@@ -54,7 +59,7 @@ class DefaultShareEntryPointTest {
             callback = callback,
         )
         assertThat(result).isInstanceOf(ShareNode::class.java)
-        assertThat(result.plugins).contains(ShareNode.Inputs(params.shareIntentData))
+        assertThat(result.plugins).contains(ShareNode.Inputs(params.sessionId, params.shareIntentData))
         assertThat(result.plugins).contains(callback)
     }
 }

@@ -33,12 +33,14 @@ class MatrixUserExtensionsTest : RobolectricTest() {
             userId = A_USER_ID,
             displayName = "displayName",
             avatarUrl = "avatarUrl",
+            avatarThumbnail = "avatarThumbnail",
         )
         val expected = AvatarData(
             id = A_USER_ID.value,
             name = "displayName",
             url = "avatarUrl",
             size = AvatarSize.UserHeader,
+            thumbnail = "avatarThumbnail",
         )
         assertThat(matrixUser.getAvatarData(AvatarSize.UserHeader)).isEqualTo(expected)
     }

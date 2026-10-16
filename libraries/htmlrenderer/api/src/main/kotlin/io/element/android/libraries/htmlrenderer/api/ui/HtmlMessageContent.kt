@@ -13,7 +13,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +33,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.SideEffect
@@ -51,6 +55,7 @@ import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.input.pointer.changedToUpIgnoreConsumed
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
@@ -66,6 +71,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -215,7 +221,7 @@ private fun ParagraphView(
     TextBlock(
         text = node.text,
         inlineContent = node.inlineContent,
-        textStyle = ElementTheme.typography.fontBodyMdRegular,
+        textStyle = LocalTextStyle.current,
         context = context,
         modifier = modifier,
         onTextLayout = { measureLastLine?.invoke(it) },
@@ -327,10 +333,10 @@ private fun CodeBlockView(
         )
 
         // Previews and screenshots can't render the fading edge gradients properly, everything is obscured by them, so we skip them in the preview mode.
-        if (LocalInspectionMode.current.not()) {
+        if (LocalInspectionMode.current.not() && (scrollState.canScrollForward || scrollState.canScrollBackward)) {
             val progress by remember {
                 derivedStateOf {
-                    scrollState.value.toFloat() / scrollState.maxValue.coerceAtLeast(1)
+                    scrollState.value.toFloat() / scrollState.maxValue
                 }
             }
 
@@ -509,7 +515,7 @@ private fun Modifier.drawInlineCodeBackgrounds(
             val lineEnd = minOf(range.end, layout.getLineEnd(line, visibleEnd = true))
             if (lineEnd <= lineStart) continue
             val startX = layout.getHorizontalPosition(lineStart, usePrimaryDirection = true)
-            val endX = layout.getHorizontalPosition(lineEnd, usePrimaryDirection = true)
+            val endX = layout.getHorizontalPosition(lineEnd, usePrimaryDirection = true).takeUnless { it == 0f } ?: layout.getLineEndPosition(line)
             val left = minOf(startX, endX) - horizontalPadding
             val right = maxOf(startX, endX) + horizontalPadding
             val topLeft = Offset(left, layout.getLineTop(line))
@@ -536,21 +542,44 @@ private fun Modifier.drawInlineCodeBackgrounds(
     }
 }
 
+private fun TextLayoutResult.getLineEndPosition(line: Int): Float {
+    val lineEnd = getLineEnd(line, visibleEnd = true)
+    val direction = getParagraphDirection(lineEnd)
+    return if (direction == ResolvedTextDirection.Ltr) {
+        getLineRight(line)
+    } else {
+        getLineLeft(line)
+    }
+}
+
+/**
+ * Detects taps and long presses on link-annotated ranges ([LINK_ANNOTATION_TAG]) without consuming the touch events if none are detected, and invokes the
+ * appropriate callbacks in [context].
+ */
 private fun Modifier.linkTapHandler(
     text: AnnotatedString,
     layoutResult: State<TextLayoutResult?>,
     context: RenderContext,
 ): Modifier = pointerInput(text) {
-    detectTapGestures(
-        onTap = { offset ->
-            val (url, urlText) = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
-            context.onLinkClick(url, urlText)
-        },
-        onLongPress = { offset ->
-            val (url, urlText) = layoutResult.value?.urlAt(offset, text) ?: return@detectTapGestures
+    awaitEachGesture {
+        val down = awaitFirstDown(requireUnconsumed = true)
+        val (url, urlText) = layoutResult.value?.urlAt(down.position, text) ?: return@awaitEachGesture
+        down.consume()
+
+        // Returns a non-null change if the long press timeout elapsed, or null if the gesture was canceled by movement beyond touch slop or by an up event.
+        if (awaitLongPressOrCancellation(down.id) != null) {
             context.onLinkLongClick(url, urlText)
-        },
-    )
+            // Swallow the rest of the gesture so parents don't react to the eventual release.
+            waitForUpOrCancellation()?.consume()
+        } else {
+            // Either a tap (the pointer was released) or a drag (the user probably wanted to scroll).
+            val up = currentEvent.changes.firstOrNull { it.id == down.id && it.changedToUpIgnoreConsumed() }
+            if (up != null) {
+                up.consume()
+                context.onLinkClick(url, urlText)
+            }
+        }
+    }
 }
 
 private fun TextLayoutResult.urlAt(offset: Offset, text: AnnotatedString): Pair<String, String>? {
@@ -563,7 +592,7 @@ private val BlockSpacing: Dp = 8.dp
 private val ListItemSpacing: Dp = 4.dp
 private val ListMarkerWidth: Dp = 24.dp
 private val PillPaddingHorizontal: Dp = 6.dp
-private val PillPaddingVertical: Dp = 2.dp
+private val PillPaddingVertical: Dp = 0.dp
 
 /** Rounded, bordered box drawn behind inline code. */
 private val InlineCodeCornerRadius: Dp = 6.dp

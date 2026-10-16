@@ -40,6 +40,8 @@ internal fun aRustEventTimelineItem(
     canBeRepliedTo: Boolean = true,
     reactions: List<Reaction> = emptyList(),
     lazyProvider: LazyTimelineItemProvider = FakeFfiLazyTimelineItemProvider(),
+    editSendState: EventSendState? = null,
+    redactionSendState: EventSendState? = null,
 ) = EventTimelineItem(
     isRemote = isRemote,
     eventOrTransactionId = eventOrTransactionId,
@@ -59,4 +61,6 @@ internal fun aRustEventTimelineItem(
     canBeRepliedTo = canBeRepliedTo,
     reactions = reactions,
     lazyProvider = lazyProvider,
+    editSendState = editSendState,
+    redactionSendState = redactionSendState,
 )

@@ -14,9 +14,12 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.data.bytes
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.paths.SessionPaths
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
+import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
+import io.element.android.libraries.matrix.impl.search.workmanager.SearchBackfillRequestBuilder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -26,9 +29,11 @@ import io.element.android.libraries.matrix.test.scanner.FakeContentScanner
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
+import io.element.android.libraries.workmanager.api.WorkManagerRequestWrapper
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -39,9 +44,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.CreateRoomParameters
+import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.RoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.StoreSizes
-import org.matrix.rustcomponents.sdk.UserProfile
 import java.io.File
 
 private const val AN_ACCOUNT_DATA_EVENT_TYPE = "org.example.custom"
@@ -76,7 +81,8 @@ class RustMatrixClientTest {
     @Test
     fun `retrieving the UserProfile updates the database`() = runTest {
         val profilePersisted = CompletableDeferred<Unit>()
-        val updateUserProfileResult = lambdaRecorder<String, String?, String?, Unit> { _, _, _ -> profilePersisted.complete(Unit) }
+        val updateUserProfileResult = lambdaRecorder<String, String?, String?, String?, Unit> { _, _, _, _ -> profilePersisted.complete(Unit) }
+        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, ByteArray> { _, _, _ -> byteArrayOf(1, 2, 3) }
         val sessionStore = InMemorySessionStore(
             initialList = listOf(
                 aSessionData(
@@ -89,24 +95,160 @@ class RustMatrixClientTest {
         )
         val client = createRustMatrixClient(
             client = FakeFfiClient(
-                getProfileResult = { userId ->
-                    UserProfile(
-                        userId = userId,
-                        displayName = A_USER_NAME,
-                        avatarUrl = AN_AVATAR_URL,
-                        status = null,
-                        call = null,
-                    )
-                },
+                getProfileResult = { userId -> aRustUserProfile(userId = userId, displayName = A_USER_NAME, avatarUrl = AN_AVATAR_URL) },
+                getMediaThumbnailResult = getMediaThumbnailResult,
             ),
             sessionStore = sessionStore,
         )
         profilePersisted.await()
+        getMediaThumbnailResult.assertions().isCalledOnce()
+            .with(any(), value(240uL), value(240uL))
         updateUserProfileResult.assertions().isCalledOnce()
             .with(
                 value(A_USER_ID.value),
                 value(A_USER_NAME),
                 value(AN_AVATAR_URL),
+                value("AQID"),
+            )
+        client.destroy()
+    }
+
+    @Test
+    fun `retrieving the UserProfile does not download the avatar again if it has not changed`() = runTest {
+        val profilePersisted = CompletableDeferred<Unit>()
+        val updateUserProfileResult = lambdaRecorder<String, String?, String?, String?, Unit> { _, _, _, _ -> profilePersisted.complete(Unit) }
+        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, ByteArray> { _, _, _ -> byteArrayOf(1, 2, 3) }
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(
+                    sessionId = A_USER_ID.value,
+                    userDisplayName = A_USER_NAME,
+                    userAvatarUrl = AN_AVATAR_URL,
+                    userAvatarData = "storedData",
+                )
+            ),
+            updateUserProfileResult = updateUserProfileResult,
+        )
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                getProfileResult = { userId -> aRustUserProfile(userId = userId, displayName = A_USER_NAME, avatarUrl = AN_AVATAR_URL) },
+                getMediaThumbnailResult = getMediaThumbnailResult,
+            ),
+            sessionStore = sessionStore,
+        )
+        profilePersisted.await()
+        getMediaThumbnailResult.assertions().isNeverCalled()
+        updateUserProfileResult.assertions().isCalledOnce()
+            .with(
+                value(A_USER_ID.value),
+                value(A_USER_NAME),
+                value(AN_AVATAR_URL),
+                value("storedData"),
+            )
+        client.destroy()
+    }
+
+    @Test
+    fun `retrieving the UserProfile downloads the avatar again if the previous download failed`() = runTest {
+        val profilePersisted = CompletableDeferred<Unit>()
+        val updateUserProfileResult = lambdaRecorder<String, String?, String?, String?, Unit> { _, _, _, _ -> profilePersisted.complete(Unit) }
+        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, ByteArray> { _, _, _ -> byteArrayOf(1, 2, 3) }
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(
+                    sessionId = A_USER_ID.value,
+                    userDisplayName = A_USER_NAME,
+                    userAvatarUrl = AN_AVATAR_URL,
+                    userAvatarData = null,
+                )
+            ),
+            updateUserProfileResult = updateUserProfileResult,
+        )
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                getProfileResult = { userId -> aRustUserProfile(userId = userId, displayName = A_USER_NAME, avatarUrl = AN_AVATAR_URL) },
+                getMediaThumbnailResult = getMediaThumbnailResult,
+            ),
+            sessionStore = sessionStore,
+        )
+        profilePersisted.await()
+        getMediaThumbnailResult.assertions().isCalledOnce()
+        updateUserProfileResult.assertions().isCalledOnce()
+            .with(
+                value(A_USER_ID.value),
+                value(A_USER_NAME),
+                value(AN_AVATAR_URL),
+                value("AQID"),
+            )
+        client.destroy()
+    }
+
+    @Test
+    fun `retrieving the UserProfile clears the avatar data if the avatar download fails`() = runTest {
+        val profilePersisted = CompletableDeferred<Unit>()
+        val updateUserProfileResult = lambdaRecorder<String, String?, String?, String?, Unit> { _, _, _, _ -> profilePersisted.complete(Unit) }
+        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, ByteArray> { _, _, _ -> error("Download failed") }
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(
+                    sessionId = A_USER_ID.value,
+                    userDisplayName = A_USER_NAME,
+                    userAvatarUrl = "mxc://server.org/previousAvatar",
+                    userAvatarData = "previousData",
+                )
+            ),
+            updateUserProfileResult = updateUserProfileResult,
+        )
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                getProfileResult = { userId -> aRustUserProfile(userId = userId, displayName = A_USER_NAME, avatarUrl = AN_AVATAR_URL) },
+                getMediaThumbnailResult = getMediaThumbnailResult,
+            ),
+            sessionStore = sessionStore,
+        )
+        profilePersisted.await()
+        getMediaThumbnailResult.assertions().isCalledOnce()
+        updateUserProfileResult.assertions().isCalledOnce()
+            .with(
+                value(A_USER_ID.value),
+                value(A_USER_NAME),
+                value(AN_AVATAR_URL),
+                value(null),
+            )
+        client.destroy()
+    }
+
+    @Test
+    fun `retrieving the UserProfile without avatar clears the avatar data`() = runTest {
+        val profilePersisted = CompletableDeferred<Unit>()
+        val updateUserProfileResult = lambdaRecorder<String, String?, String?, String?, Unit> { _, _, _, _ -> profilePersisted.complete(Unit) }
+        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, ByteArray> { _, _, _ -> byteArrayOf(1, 2, 3) }
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(
+                    sessionId = A_USER_ID.value,
+                    userDisplayName = A_USER_NAME,
+                    userAvatarUrl = AN_AVATAR_URL,
+                    userAvatarData = "storedData",
+                )
+            ),
+            updateUserProfileResult = updateUserProfileResult,
+        )
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                getProfileResult = { userId -> aRustUserProfile(userId = userId, displayName = A_USER_NAME, avatarUrl = null) },
+                getMediaThumbnailResult = getMediaThumbnailResult,
+            ),
+            sessionStore = sessionStore,
+        )
+        profilePersisted.await()
+        getMediaThumbnailResult.assertions().isNeverCalled()
+        updateUserProfileResult.assertions().isCalledOnce()
+            .with(
+                value(A_USER_ID.value),
+                value(A_USER_NAME),
+                value(null),
+                value(null),
             )
         client.destroy()
     }
@@ -114,7 +256,15 @@ class RustMatrixClientTest {
     @Test
     fun `getDatabaseSizes returns the database sizes`() = runTest {
         val client = createRustMatrixClient(
-            client = FakeFfiClient(getStoreSizesResult = { StoreSizes(null, 10uL, 11uL, 12uL) })
+            client = FakeFfiClient(getStoreSizesResult = {
+                StoreSizes(
+                    cryptoStore = null,
+                    stateStore = 10uL,
+                    eventCacheStore = 11uL,
+                    mediaStore = 12uL,
+                    searchIndex = 13uL,
+                )
+            })
         )
 
         client.getDatabaseSizes().getOrThrow().run {
@@ -122,6 +272,7 @@ class RustMatrixClientTest {
             assertThat(stateStore).isEqualTo(10.bytes)
             assertThat(eventCacheStore).isEqualTo(11.bytes)
             assertThat(mediaStore).isEqualTo(12.bytes)
+            assertThat(searchIndex).isEqualTo(13.bytes)
         }
     }
 
@@ -169,7 +320,7 @@ class RustMatrixClientTest {
     private fun TestScope.createRustMatrixClient(
         client: Client = FakeFfiClient(),
         sessionStore: SessionStore = InMemorySessionStore(
-            updateUserProfileResult = { _, _, _ -> },
+            updateUserProfileResult = { _, _, _, _ -> },
         ),
     ) = RustMatrixClient(
         innerClient = client,
@@ -186,8 +337,19 @@ class RustMatrixClientTest {
         timelineEventFilterFactory = FakeTimelineEventFilterFactory(),
         featureFlagService = FakeFeatureFlagService(),
         analyticsService = FakeAnalyticsService(),
-        workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
+        workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}, cancelLambda = { _, _ -> }),
         contentScanner = FakeContentScanner(),
         isMessageSearchAvailable = false,
+        searchBackfillServiceFactory = object : RustSearchBackfillService.Factory {
+            override fun create(innerClient: Client) = RustSearchBackfillService(
+                innerClient = innerClient,
+                searchBackfillRequestBuilderFactory = {
+                    object : SearchBackfillRequestBuilder {
+                        override suspend fun build(): Result<List<WorkManagerRequestWrapper>> = Result.success(emptyList())
+                    }
+                },
+                workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}, cancelLambda = { _, _ -> }),
+            )
+        },
     )
 }

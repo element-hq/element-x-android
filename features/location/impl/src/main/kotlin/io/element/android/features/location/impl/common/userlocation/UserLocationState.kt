@@ -9,10 +9,10 @@ package io.element.android.features.location.impl.common.userlocation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import org.maplibre.compose.location.Location
+import org.maplibre.compose.location.LocationMeasurement
 
 @Immutable
-data class UserLocationState(val location: Location?) {
+data class UserLocationState(val location: LocationMeasurement?) {
     fun interface Factory {
         @Composable
         fun create(hasLocationPermission: Boolean): UserLocationState

@@ -8,7 +8,6 @@
 
 package io.element.android.features.messages.impl
 
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -39,6 +38,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
+import io.element.android.features.messages.impl.timeline.SelectionAction
+import io.element.android.features.messages.impl.timeline.SelectionState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -53,6 +54,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.captionOrNull
 import io.element.android.features.messages.impl.timeline.model.event.htmlCaptionOrNull
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.selectedEventIdsInTimelineOrder
 import io.element.android.features.messages.impl.voicemessages.composer.DefaultVoiceMessageComposerPresenter
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
@@ -84,6 +86,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
@@ -258,6 +261,17 @@ class MessagesPresenter(
                         redactEventAction = redactEventAction,
                     )
                 }
+                is MessagesEvent.ConfirmSelectionAction -> {
+                    val selection = timelineState.selectionState as? SelectionState.Active
+                    if (selection != null) {
+                        when (selection.action) {
+                            SelectionAction.Forward -> {
+                                navigator.forwardEvents(timelineState.selectedEventIdsInTimelineOrder(), timelineController)
+                            }
+                        }
+                        timelineState.eventSink(TimelineEvent.ExitSelectionMode)
+                    }
+                }
                 is MessagesEvent.ConfirmRedact -> {
                     val confirming = redactEventAction.value as? MessagesState.ConfirmingRedaction
                     redactEventAction.value = AsyncAction.Uninitialized
@@ -414,21 +428,27 @@ class MessagesPresenter(
                 }
             }
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
-            TimelineItemAction.Forward -> handleForwardAction(targetEvent)
+            TimelineItemAction.Forward -> {
+                val eventId = targetEvent.eventId ?: return@launch
+                if (featureFlagService.isFeatureEnabled(FeatureFlags.MessageMultiSelect)) {
+                    timelineState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, eventId))
+                } else {
+                    navigator.forwardEvents(listOf(eventId), timelineController)
+                }
+            }
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
             TimelineItemAction.RetrySending -> handleRetrySending(targetEvent)
+            TimelineItemAction.AbortSending -> handleActionAbortSend(targetEvent)
         }
     }
 
     private suspend fun handleRetrySending(targetEvent: TimelineItem.Event) {
-        val sendHandle = targetEvent.sendhandle ?: return Unit.also {
-            Timber.w("No send handle for event ${targetEvent.eventOrTransactionId}")
-        }
-        sendHandle.retry()
+        val (sendTarget, _) = targetEvent.pendingSend() ?: return
+        timelineController.retrySend(targetEvent.eventOrTransactionId, sendTarget)
             .onSuccess {
                 Timber.d("Succeed to add the message back to the send queue")
             }
@@ -518,11 +538,16 @@ class MessagesPresenter(
     private suspend fun handleActionRedact(event: TimelineItem.Event, redactEventAction: MutableState<AsyncAction<Unit>>) {
         val eventId = event.eventId
         if (eventId == null) {
-            // The message was never sent, so there is nobody to give a reason to.
-            redact(event.eventOrTransactionId, reason = null)
+            // The message (or its edit/redaction) was never sent, just remove it from the send queue.
+            handleActionAbortSend(event)
         } else {
             redactEventAction.value = MessagesState.ConfirmingRedaction(eventId)
         }
+    }
+
+    private suspend fun handleActionAbortSend(event: TimelineItem.Event) {
+        val sendTarget = event.pendingSend()?.first ?: SendTarget.Event
+        timelineController.abortSend(event.eventOrTransactionId, sendTarget).onFailure { Timber.e(it) }
     }
 
     private suspend fun redact(eventOrTransactionId: EventOrTransactionId, reason: String?) {
@@ -613,11 +638,6 @@ class MessagesPresenter(
         navigator.navigateToEventDebugInfo(event.eventId, event.debugInfo)
     }
 
-    private fun handleForwardAction(event: TimelineItem.Event) {
-        if (event.eventId == null) return
-        navigator.forwardEvent(eventId = event.eventId, timelineProvider = timelineController)
-    }
-
     private fun handleReportAction(event: TimelineItem.Event) {
         if (event.eventId == null) return
         navigator.navigateToReportMessage(event.eventId, event.senderId)
@@ -634,8 +654,9 @@ class MessagesPresenter(
         event.eventId ?: return
         room.getPermalinkFor(event.eventId).fold(
             onSuccess = { permalink ->
-                clipboardHelper.copyPlainText(permalink)
-                snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_link_copied_to_clipboard))
+                clipboardHelper.copyPlainText(permalink) {
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_link_copied_to_clipboard))
+                }
             },
             onFailure = {
                 Timber.e(it, "Failed to get permalink for event ${event.eventId}")
@@ -650,16 +671,14 @@ class MessagesPresenter(
             is TimelineItemStateContent -> event.content.body
             else -> return
         }
-        clipboardHelper.copyPlainText(content)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        clipboardHelper.copyPlainText(content) {
             snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_message_copied))
         }
     }
 
     private fun handleCopyCaption(event: TimelineItem.Event) {
         val content = event.content.captionOrNull() ?: return
-        clipboardHelper.copyPlainText(content)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        clipboardHelper.copyPlainText(content) {
             snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
         }
     }

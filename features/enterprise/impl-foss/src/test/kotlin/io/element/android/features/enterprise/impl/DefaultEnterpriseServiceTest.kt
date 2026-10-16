@@ -21,19 +21,21 @@ import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.test.accountprovider.anAccountProviderGeneric
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.Test
 
 class DefaultEnterpriseServiceTest {
     @Test
-    fun accountProviderAllowList() {
+    fun accountProviderAllowList() = runTest {
         val defaultEnterpriseService = createDefaultEnterpriseService()
         assertThat(defaultEnterpriseService.accountProviderAllowList()).isEmpty()
     }
 
     @Test
-    fun `canConnectToAnyAccountProvider is always true`() {
+    fun `canConnectToAnyAccountProvider is always true`() = runTest {
         val defaultEnterpriseService = createDefaultEnterpriseService()
         assertThat(defaultEnterpriseService.canConnectToAnyAccountProvider()).isTrue()
     }
@@ -132,11 +134,12 @@ class DefaultEnterpriseServiceTest {
         closeLambda.assertions().isCalledOnce()
     }
 
-    private fun createDefaultEnterpriseService(
+    private fun TestScope.createDefaultEnterpriseService(
         client: FakeTemporaryMatrixClient = FakeTemporaryMatrixClient(),
         jsonProvider: JsonProvider = { Json }
     ) = DefaultEnterpriseService(
         temporaryMatrixClientFactory = FakeTemporaryMatrixClientFactory(createResult = { Result.success(client) }),
         jsonProvider = jsonProvider,
+        dispatchers = testCoroutineDispatchers(),
     )
 }

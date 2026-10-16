@@ -48,9 +48,9 @@
   <string name="screen_room_attachment_source_poll">"Szavazás"</string>
   <string name="screen_room_attachment_text_formatting">"Szövegformázás"</string>
   <string name="screen_room_confirm_removal_reason_label">"Ok (nem kötelező)"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder">"Írja be…"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Indok beírása…"</string>
   <string name="screen_room_confirm_removal_reason_supporting_text">"(Választható)"</string>
-  <string name="screen_room_confirm_removal_title">"Eltávolítás megerősítése"</string>
+  <string name="screen_room_confirm_removal_title">"Üzenet törlése?"</string>
   <string name="screen_room_encrypted_history_banner">"Az üzenetelőzmények jelenleg nem érhetők el."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Az üzenetelőzmények nem érhetők el ebben a szobában. Ellenőrizze ezt az eszközt, hogy lássa az előzményeket."</string>
   <string name="screen_room_invite_again_alert_message">"Visszahívja?"</string>

@@ -31,5 +31,4 @@ dependencies {
 
     testCommonDependencies(libs)
     testImplementation(libs.coroutines.core)
-    testImplementation(projects.libraries.matrix.test)
 }

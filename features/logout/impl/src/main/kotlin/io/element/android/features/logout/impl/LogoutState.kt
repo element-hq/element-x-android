@@ -12,8 +12,10 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class LogoutState(
+    val currentUser: MatrixUser,
     val isLastDevice: Boolean,
     val backupState: BackupState,
     val doesBackupExistOnServer: Boolean,

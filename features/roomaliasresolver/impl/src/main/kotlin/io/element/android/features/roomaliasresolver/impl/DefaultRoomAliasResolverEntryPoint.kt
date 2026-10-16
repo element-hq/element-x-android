@@ -12,7 +12,7 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
+import io.element.android.features.roomaliasresolver.api.RoomAliasResolverEntryPoint
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)

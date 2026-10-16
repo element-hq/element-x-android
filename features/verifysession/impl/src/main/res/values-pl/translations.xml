@@ -44,6 +44,7 @@
   <string name="screen_session_verification_use_another_device_title">"Otwórz aplikację na drugim zweryfikowanym urządzeniu"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Dla dodatkowej ochrony, zweryfikuj tego użytkownika, porównując zestaw emoji na obu urządzeniach. Zrób to, korzystając z zaufanej metody komunikacji."</string>
   <string name="screen_session_verification_user_initiator_title">"Zweryfikować tego użytkownika?"</string>
+  <string name="screen_session_verification_user_requesting_verification">"Użytkownik proszący o weryfikację:"</string>
   <string name="screen_session_verification_user_responder_subtitle">"Dla dodatkowej ochrony, inny użytkownik chce zweryfikować Twoją tożsamość. Pojawi się unikalny zestaw emoji do porównania."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Powinno wyskoczyć okno na drugim urządzeniu. Rozpocznij tam weryfikację."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Rozpocznij weryfikację na drugim urządzeniu"</string>

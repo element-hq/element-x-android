@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationSer
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.robolectric.RobolectricTest
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -499,5 +500,6 @@ class DefaultElementClassicConnectionTest : RobolectricTest() {
         coroutineScope = coroutineScope,
         matrixAuthenticationService = matrixAuthenticationService,
         homeServerLoginCompatibilityChecker = homeServerLoginCompatibilityChecker,
+        dispatchers = testCoroutineDispatchers(),
     )
 }

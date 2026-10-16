@@ -11,6 +11,7 @@ package io.element.android.features.securebackup.impl.setup
 sealed interface SecureBackupSetupEvent {
     data object CreateRecoveryKey : SecureBackupSetupEvent
     data object RecoveryKeyHasBeenSaved : SecureBackupSetupEvent
+    data object CopyRecoveryKey : SecureBackupSetupEvent
     data object Done : SecureBackupSetupEvent
     data object DismissDialog : SecureBackupSetupEvent
 }

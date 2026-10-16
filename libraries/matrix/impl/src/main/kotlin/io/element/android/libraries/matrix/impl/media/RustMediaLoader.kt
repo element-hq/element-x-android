@@ -20,7 +20,6 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.use
 import java.io.File
-import org.matrix.rustcomponents.sdk.MediaSource as RustMediaSource
 
 class RustMediaLoader(
     private val baseCacheDirectory: File,
@@ -80,13 +79,4 @@ class RustMediaLoader(
                 }
             }
         }
-
-    private fun MediaSource.toRustMediaSource(): RustMediaSource {
-        val json = this.json
-        return if (json != null) {
-            RustMediaSource.fromJson(json)
-        } else {
-            RustMediaSource.fromUrl(safeUrl)
-        }
-    }
 }

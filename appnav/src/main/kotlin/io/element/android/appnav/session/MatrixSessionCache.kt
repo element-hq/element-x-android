@@ -21,6 +21,9 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.AnalyticsUserData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
@@ -41,6 +44,12 @@ class MatrixSessionCache(
     private val analyticsService: AnalyticsService,
 ) : MatrixClientProvider {
     private val sessionIdsToMatrixSession = ConcurrentHashMap<SessionId, InMemoryMatrixSession>()
+    private val _matrixClients = MutableStateFlow<List<MatrixClient>>(emptyList())
+
+    /**
+     * The [MatrixClient]s currently in the cache.
+     */
+    val matrixClients: StateFlow<List<MatrixClient>> = _matrixClients.asStateFlow()
     private val restoreMutex = Mutex()
 
     init {
@@ -51,10 +60,12 @@ class MatrixSessionCache(
 
     fun removeAll() {
         sessionIdsToMatrixSession.clear()
+        updateMatrixClients()
     }
 
     fun remove(sessionId: SessionId) {
         sessionIdsToMatrixSession.remove(sessionId)
+        updateMatrixClients()
     }
 
     override fun getOrNull(sessionId: SessionId): MatrixClient? {
@@ -122,7 +133,12 @@ class MatrixSessionCache(
             matrixClient = matrixClient,
             syncOrchestrator = syncOrchestrator,
         )
+        updateMatrixClients()
         syncOrchestrator.start()
+    }
+
+    private fun updateMatrixClients() {
+        _matrixClients.value = sessionIdsToMatrixSession.values.map { it.matrixClient }
     }
 }
 

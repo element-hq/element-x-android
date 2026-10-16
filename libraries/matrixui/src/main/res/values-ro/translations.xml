@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Trimiteți invitația"</string>
-  <string name="screen_bottom_sheet_create_dm_message">"Doriți să începeți o discuție cu %1$s?"</string>
+  <string name="screen_bottom_sheet_create_dm_message">"Doriți să începeți o conversație cu %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Trimiteți invitația?"</string>
-  <string name="screen_bottom_sheet_create_dm_unknown_user_content">"În prezent, nu aveți nicio chat cu această persoană. Confirmați invitația înainte de a continua."</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_content">"În prezent, nu aveți nicio conversație cu această persoană. Confirmați invitația înainte de a continua."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Începeți o conversație cu acest nou contact?"</string>
-  <string name="screen_invites_invited_you">"%1$s (%2$s) v-a invitat."</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) v-a trimis o invitație."</string>
 </resources>

@@ -7,7 +7,6 @@
 
 package io.element.android.features.preferences.impl.account
 
-import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
@@ -19,6 +18,5 @@ data class PreferencesAccountState(
     val canReportBug: Boolean,
     val showLinkNewDevice: Boolean,
     val canDeactivateAccount: Boolean,
-    val directLogoutState: DirectLogoutState,
     val snackbarMessage: SnackbarMessage?,
 )

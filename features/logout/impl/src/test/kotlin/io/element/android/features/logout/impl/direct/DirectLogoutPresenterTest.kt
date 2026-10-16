@@ -16,13 +16,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.direct.DirectLogoutEvent
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.encryption.BackupUploadState
-import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.tests.testutils.WarmUpRule
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -38,44 +34,6 @@ class DirectLogoutPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.canDoDirectSignOut).isTrue()
-            assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
-        }
-    }
-
-    @Test
-    fun `present - initial state - last session`() = runTest {
-        val presenter = createDirectLogoutPresenter(
-            encryptionService = FakeEncryptionService().apply {
-                emitIsLastDevice(true)
-            }
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitFirstItem()
-            assertThat(initialState.canDoDirectSignOut).isFalse()
-            assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
-        }
-    }
-
-    @Test
-    fun `present - initial state - backing up`() = runTest {
-        val encryptionService = FakeEncryptionService()
-        encryptionService.givenWaitForBackupUploadSteadyStateFlow(
-            flow {
-                emit(BackupUploadState.Waiting)
-            }
-        )
-        val presenter = createDirectLogoutPresenter(
-            encryptionService = encryptionService
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            val initialState = awaitFirstItem()
-            assertThat(initialState.canDoDirectSignOut).isFalse()
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
         }
     }
@@ -180,9 +138,7 @@ class DirectLogoutPresenterTest {
 
     private fun createDirectLogoutPresenter(
         matrixClient: MatrixClient = FakeMatrixClient(),
-        encryptionService: EncryptionService = FakeEncryptionService(),
     ): DirectLogoutPresenter = DirectLogoutPresenter(
         matrixClient = matrixClient,
-        encryptionService = encryptionService,
     )
 }

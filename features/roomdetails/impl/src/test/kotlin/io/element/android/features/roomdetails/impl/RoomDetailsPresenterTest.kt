@@ -19,6 +19,8 @@ import io.element.android.features.roomdetails.impl.members.details.RoomMemberDe
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
+import io.element.android.libraries.androidutils.toast.FakeToastHelper
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -49,6 +51,7 @@ import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
@@ -85,6 +88,7 @@ class RoomDetailsPresenterTest {
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
+        toastHelper: ToastHelper = FakeToastHelper(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         navigator: RoomDetailsNavigator = FakeRoomDetailsNavigator(),
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
@@ -115,10 +119,51 @@ class RoomDetailsPresenterTest {
             dispatchers = dispatchers,
             analyticsService = analyticsService,
             clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
             appPreferencesStore = appPreferencesStore,
             notificationCleaner = notificationCleaner,
             sessionPreferencesStore = sessionPreferencesStore,
         )
+    }
+
+    @Test
+    fun `present - copy room id on old device shows a toast`() = runTest {
+        val room = aJoinedRoom(
+            roomPermissions = roomPermissions(),
+        )
+        val clipboardHelper = FakeClipboardHelper(isOldDevice = true)
+        val toastHelper = FakeToastHelper()
+        val presenter = createRoomDetailsPresenter(
+            room = room,
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
+        )
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            awaitItem().eventSink(RoomDetailsEvent.CopyRoomId)
+            assertThat(clipboardHelper.clipboardContents).isEqualTo(room.roomId.value)
+            assertThat(toastHelper.shownToasts).containsExactly(CommonStrings.common_copied_to_clipboard)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - copy room id on new device does not show a toast`() = runTest {
+        val room = aJoinedRoom(
+            roomPermissions = roomPermissions(),
+        )
+        val clipboardHelper = FakeClipboardHelper(isOldDevice = false)
+        val toastHelper = FakeToastHelper()
+        val presenter = createRoomDetailsPresenter(
+            room = room,
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
+        )
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            awaitItem().eventSink(RoomDetailsEvent.CopyRoomId)
+            assertThat(clipboardHelper.clipboardContents).isEqualTo(room.roomId.value)
+            assertThat(toastHelper.shownToasts).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test

@@ -41,10 +41,10 @@
   <string name="screen_custom_recovery_key_success_notice">"Za promjenu ključa za oporavak, idite na Postavke → Šifriranje → Sigurnosna kopija"</string>
   <string name="screen_custom_recovery_key_success_subtitle">"Ključ za oporavak možete koristiti za potvrdu novih uređaja ili vraćanje šifriranih razgovora ako izgubite pristup svim svojim uređajima."</string>
   <string name="screen_custom_recovery_key_success_title">"Vaša sigurnosna kopija je sada potpuno postavljena"</string>
-  <string name="screen_encryption_reset_action_continue_reset">"Nastavi s poništavanjem"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Nastavi"</string>
   <string name="screen_encryption_reset_bullet_1">"Sačuvat će se podatci o vašem računu, kontakti, postavke i popis razgovora"</string>
   <string name="screen_encryption_reset_bullet_2">"Izgubit ćete svu povijest poruka koja je pohranjena samo na poslužitelju"</string>
-  <string name="screen_encryption_reset_bullet_3">"Morat ćete ponovno potvrditi sve svoje postojeće uređaje i kontakte"</string>
+  <string name="screen_encryption_reset_bullet_3">"Drugi će korisnici vidjeti da je vaš digitalni identitet poništen"</string>
   <string name="screen_encryption_reset_footer">"Poništite svoj identitet samo ako nemate pristup drugom prijavljenom uređaju i ako ste izgubili ključ za oporavak."</string>
   <string name="screen_encryption_reset_title">"Ne možete potvrditi? Morat ćete resetirati svoj digitalni identitet."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Izbriši"</string>

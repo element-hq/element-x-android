@@ -1,71 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="notification_channel_call">"Apel"</string>
-  <string name="notification_channel_listening_for_events">"Ascultare evenimente"</string>
+  <string name="notification_channel_listening_for_events">"Se așteaptă evenimente"</string>
   <string name="notification_channel_noisy">"Notificări zgomotoase"</string>
   <string name="notification_channel_ringing_calls">"Apeluri care sună"</string>
   <string name="notification_channel_silent">"Notificări silențioase"</string>
   <plurals name="notification_compat_summary_line_for_room">
     <item quantity="one">"%1$s: %2$d mesaj"</item>
-    <item quantity="other">"%1$s: %2$d mesaje"</item>
+    <item quantity="few">"%1$s: %2$d mesaje"</item>
+    <item quantity="other">"%1$s: %2$d de mesaje"</item>
   </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d notificare"</item>
-    <item quantity="other">"%d notificări"</item>
+    <item quantity="few">"%d notificări"</item>
+    <item quantity="other">"%d de notificări"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Distribuitorul de notificări UnifiedPush nu a putut fi înregistrat, așadar nu veți mai primi notificări. Verificați setările de notificări ale aplicației și starea distribuitorului push."</string>
   <string name="notification_fallback_content">"Aveți mesaje noi"</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"Aveți %d mesaj nou."</item>
     <item quantity="few">"Aveți %d mesaje noi."</item>
-    <item quantity="other">"Aveți %d mesaje noi."</item>
+    <item quantity="other">"Aveți %d de mesaje noi."</item>
   </plurals>
   <plurals name="notification_gallery_body">
     <item quantity="one">"%1$d atașament partajat"</item>
     <item quantity="few">"%1$d atașamente partajate"</item>
-    <item quantity="other">"%1$d atașamente partajate"</item>
+    <item quantity="other">"%1$d de atașamente partajate"</item>
   </plurals>
   <string name="notification_incoming_audio_call">"📞 Apel primit"</string>
-  <string name="notification_incoming_call">"Apel primit"</string>
-  <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
+  <string name="notification_incoming_call">"📹 Apel primit"</string>
+  <string name="notification_inline_reply_failed">"** Nu s-a putut trimite - deschideți camera"</string>
   <string name="notification_invitation_action_join">"Alăturați-vă"</string>
   <string name="notification_invitation_action_reject">"Respingeți"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d invitație"</item>
-    <item quantity="other">"%d invitații"</item>
+    <item quantity="few">"%d invitații"</item>
+    <item quantity="other">"%d de invitații"</item>
   </plurals>
-  <string name="notification_invite_body">"V-a invitat la o discuție"</string>
-  <string name="notification_invite_body_with_sender">"%1$s v-a invitat să discutați"</string>
-  <string name="notification_live_location_started_body">"A început să își partajeze locația live"</string>
+  <string name="notification_invite_body">"V-a invitat să conversați"</string>
+  <string name="notification_invite_body_with_sender">"%1$s v-a invitat să conversați"</string>
+  <string name="notification_knock_request_body">"A trimis o cerere de alăturare"</string>
+  <string name="notification_live_location_started_body">"A început să își partajeze locația în timp real"</string>
   <string name="notification_mentioned_you_body">"%1$s v-a menționat"</string>
   <string name="notification_new_messages">"Mesaje noi"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d mesaj nou"</item>
-    <item quantity="other">"%d mesaje noi"</item>
+    <item quantity="few">"%d mesaje noi"</item>
+    <item quantity="other">"%d de mesaje noi"</item>
   </plurals>
   <string name="notification_reaction_body">"A reacționat cu %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Marcați ca citită"</string>
-  <string name="notification_room_action_quick_reply">"Raspuns rapid"</string>
+  <string name="notification_room_action_quick_reply">"Răspuns rapid"</string>
   <string name="notification_room_invite_body">"V-a invitat să vă alăturați camerei"</string>
   <string name="notification_room_invite_body_with_sender">"%1$s v-a invitat să vă alăturați camerei"</string>
   <string name="notification_sender_me">"Eu"</string>
-  <string name="notification_sender_mention_reply">"%1$s v-a menționat sau răspuns"</string>
+  <string name="notification_sender_mention_reply">"%1$s v-a menționat sau a răspuns"</string>
   <string name="notification_space_invite_body">"V-a invitat să vă alăturați spațiului"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s v-a invitat să vă alăturați spațiului"</string>
-  <string name="notification_test_push_notification_content">"Vizualizați o notificare! Faceți clic pe mine!"</string>
-  <string name="notification_thread_in_room">"Fir în: %1$s"</string>
+  <string name="notification_test_push_notification_content">"Vizualizați o notificare! Atingeți-mă!"</string>
+  <string name="notification_thread_in_room">"Fir în %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="one">"%d mesaj notificat necitit"</item>
-    <item quantity="other">"%d mesaje notificate necitite"</item>
+    <item quantity="few">"%d mesaje notificate necitite"</item>
+    <item quantity="other">"%d de mesaje notificate necitite"</item>
   </plurals>
   <string name="notification_unread_notified_messages_and_invitation">"%1$s și %2$s"</string>
   <string name="notification_unread_notified_messages_in_room">"%1$s în %2$s"</string>
   <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s în %2$s și %3$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
     <item quantity="one">"%d cameră"</item>
-    <item quantity="other">"%d camere"</item>
+    <item quantity="few">"%d camere"</item>
+    <item quantity="other">"%d de camere"</item>
   </plurals>
   <string name="push_distributor_background_sync_android">"Sincronizare în fundal"</string>
   <string name="push_distributor_firebase_android">"Servicii Google"</string>
@@ -74,38 +81,39 @@
   <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Vizualizați utilizatorii blocați"</string>
   <string name="troubleshoot_notifications_test_blocked_users_result_none">"Niciun utilizator nu este blocat."</string>
   <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
-    <item quantity="one">"Ai blocat%1$d utilizator. Nu veți primi notificări pentru acest utilizator."</item>
-    <item quantity="few">"Ai blocat%1$d utilizatori. Nu veți primi notificări pentru acești utilizatori."</item>
-    <item quantity="other">"Ai blocat%1$d utilizatori. Nu veți primi notificări pentru acești utilizatori."</item>
+    <item quantity="one">"Ați blocat %1$d utilizator. Nu veți primi notificări pentru acest utilizator."</item>
+    <item quantity="few">"Ați blocat %1$d utilizatori. Nu veți primi notificări pentru acești utilizatori."</item>
+    <item quantity="other">"Ați blocat %1$d de utilizatori. Nu veți primi notificări pentru acești utilizatori."</item>
   </plurals>
   <string name="troubleshoot_notifications_test_blocked_users_title">"Utilizatori blocați"</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_description">"Obțineți numele furnizorului curent."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Obțineți numele furnizorului actual."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Niciun furnizor push selectat."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Furnizorul actual de push: %1$s și distribuitorul actual: %2$s. Dar distribuitorul %3$s nu este găsit. Poate că aplicația a fost dezinstalată?"</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Furnizor push actual: %1$s, dar nu au fost configurați distribuitori."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Furnizor de push actual: %1$s, dar nu au fost configurați distribuitori."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Furnizor de push actual: %1$s."</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Furnizor actual de push: %1$s (%2$s)"</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_title">"Furnizor de push curent"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Furnizor de push actual: %1$s (%2$s)"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Furnizor de push actual"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Asigurați-vă că aplicația are cel puțin un furnizor push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nu s-au găsit furnizori push."</string>
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
     <item quantity="one">"S-a găsit %1$d furnizor push: %2$s"</item>
     <item quantity="few">"S-au găsit %1$d furnizori push: %2$s"</item>
-    <item quantity="other">"S-au găsit %1$d furnizori push: %2$s"</item>
+    <item quantity="other">"S-au găsit %1$d de furnizori push: %2$s"</item>
   </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Aplicația a fost creată cu suport pentru: %1$s"</string>
-  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Detectați furnizorii push"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Furnizorii push acceptați"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Verificați dacă aplicația poate afișa notificări."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Notificarea nu a fost apăsată."</string>
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Nu s-a putut afișa notificarea."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Notificarea a fost apăsată!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Afișați notificarea"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Vă rugăm să faceți clic pe notificare pentru a continua testul."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Atingeți notificare pentru a continua testul."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Asigurați-vă că aplicația primește push-uri."</string>
-  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Eroare: pusher-ul a respins cererea."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Eroare: pusherul a respins cererea."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Eroare: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Eroare, nu se poate testa push-ul."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Eroare, timeout în așteptare pentru push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Eroare: gateway-ul push limitează rata de acces a acestui dispozitiv, astfel încât notificările nu vor fi fiabile. Configurați alt gateway push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Push-ul înapoi a durat %1$d ms."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Testați că push-ul se întoarce"</string>
 </resources>

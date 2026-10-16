@@ -245,6 +245,7 @@ class RustSessionVerificationService(
 
     fun destroy() {
         Timber.d("Destroying RustSessionVerificationService")
+        listener = null
         verificationStateListenerTaskHandle.cancelAndDestroy()
         recoveryStateListenerTaskHandle.cancelAndDestroy()
         if (this::verificationController.isInitialized) {

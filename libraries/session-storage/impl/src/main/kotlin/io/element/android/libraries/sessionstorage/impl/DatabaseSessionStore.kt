@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @SingleIn(AppScope::class)
@@ -51,83 +52,93 @@ class DatabaseSessionStore(
     }
 
     override suspend fun addSession(sessionData: SessionData) {
-        sessionDataMutex.withLock {
-            val lastUsageIndex = getLastUsageIndex()
-            database.sessionDataQueries.insertSessionData(
-                sessionData
-                    .copy(
-                        // position value does not really matter, so just use lastUsageIndex + 1 to ensure that
-                        // the value is always greater than value of any existing account
-                        position = lastUsageIndex + 1,
-                        lastUsageIndex = lastUsageIndex + 1,
-                    )
-                    .toDbModel()
-            )
+        withContext(dispatchers.io) {
+            sessionDataMutex.withLock {
+                val lastUsageIndex = getLastUsageIndex()
+                database.sessionDataQueries.insertSessionData(
+                    sessionData
+                        .copy(
+                            // position value does not really matter, so just use lastUsageIndex + 1 to ensure that
+                            // the value is always greater than value of any existing account
+                            position = lastUsageIndex + 1,
+                            lastUsageIndex = lastUsageIndex + 1,
+                        )
+                        .toDbModel()
+                )
+            }
         }
     }
 
     override suspend fun updateData(sessionData: SessionData) {
-        sessionDataMutex.withLock {
-            val result = database.sessionDataQueries.selectByUserId(sessionData.userId)
-                .executeAsOneOrNull()
-                ?.toApiModel()
+        withContext(dispatchers.io) {
+            sessionDataMutex.withLock {
+                val result = database.sessionDataQueries.selectByUserId(sessionData.userId)
+                    .executeAsOneOrNull()
+                    ?.toApiModel()
 
-            if (result == null) {
-                Timber.e("User ${sessionData.userId} not found in session database")
-                return
+                if (result == null) {
+                    Timber.e("User ${sessionData.userId} not found in session database")
+                    return@withContext
+                }
+                // Copy new data from SDK, but keep application data
+                database.sessionDataQueries.updateSession(
+                    sessionData.copy(
+                        loginTimestamp = result.loginTimestamp,
+                        position = result.position,
+                        lastUsageIndex = result.lastUsageIndex,
+                        userDisplayName = result.userDisplayName,
+                        userAvatarUrl = result.userAvatarUrl,
+                        userAvatarData = result.userAvatarData,
+                    ).toDbModel()
+                )
             }
-            // Copy new data from SDK, but keep application data
-            database.sessionDataQueries.updateSession(
-                sessionData.copy(
-                    loginTimestamp = result.loginTimestamp,
-                    position = result.position,
-                    lastUsageIndex = result.lastUsageIndex,
-                    userDisplayName = result.userDisplayName,
-                    userAvatarUrl = result.userAvatarUrl,
-                ).toDbModel()
-            )
         }
     }
 
-    override suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?) {
-        sessionDataMutex.withLock {
+    override suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?, avatarData: String?) {
+        withContext(dispatchers.io) {
+            sessionDataMutex.withLock {
+                val result = database.sessionDataQueries.selectByUserId(sessionId)
+                    .executeAsOneOrNull()
+                    ?.toApiModel()
+                if (result == null) {
+                    Timber.e("User $sessionId not found in session database")
+                    return@withContext
+                }
+                database.sessionDataQueries.updateSession(
+                    result.copy(
+                        userDisplayName = displayName,
+                        userAvatarUrl = avatarUrl,
+                        userAvatarData = avatarData,
+                    ).toDbModel()
+                )
+            }
+        }
+    }
+
+    override suspend fun setLatestSession(sessionId: String) {
+        withContext(dispatchers.io) {
+            val latestSession = getLatestSession()
+            if (latestSession?.userId == sessionId) {
+                // Already the latest session
+                return@withContext
+            }
+            val lastUsageIndex = latestSession?.lastUsageIndex ?: 0
             val result = database.sessionDataQueries.selectByUserId(sessionId)
                 .executeAsOneOrNull()
                 ?.toApiModel()
             if (result == null) {
                 Timber.e("User $sessionId not found in session database")
-                return
+                return@withContext
             }
-            database.sessionDataQueries.updateSession(
-                result.copy(
-                    userDisplayName = displayName,
-                    userAvatarUrl = avatarUrl,
-                ).toDbModel()
-            )
-        }
-    }
-
-    override suspend fun setLatestSession(sessionId: String) {
-        val latestSession = getLatestSession()
-        if (latestSession?.userId == sessionId) {
-            // Already the latest session
-            return
-        }
-        val lastUsageIndex = latestSession?.lastUsageIndex ?: 0
-        val result = database.sessionDataQueries.selectByUserId(sessionId)
-            .executeAsOneOrNull()
-            ?.toApiModel()
-        if (result == null) {
-            Timber.e("User $sessionId not found in session database")
-            return
-        }
-        sessionDataMutex.withLock {
-            // Update lastUsageIndex of the session
-            database.sessionDataQueries.updateSession(
-                result.copy(
-                    lastUsageIndex = lastUsageIndex + 1,
-                ).toDbModel()
-            )
+            sessionDataMutex.withLock {
+                // Update lastUsageIndex of the session
+                database.sessionDataQueries.updateSession(
+                    result.copy(
+                        lastUsageIndex = lastUsageIndex + 1,
+                    ).toDbModel()
+                )
+            }
         }
     }
 
@@ -138,32 +149,32 @@ class DatabaseSessionStore(
             ?: -1L
     }
 
-    override suspend fun getLatestSession(): SessionData? {
-        return sessionDataMutex.withLock {
+    override suspend fun getLatestSession(): SessionData? = withContext(dispatchers.io) {
+        sessionDataMutex.withLock {
             database.sessionDataQueries.selectLatest()
                 .executeAsOneOrNull()
                 ?.toApiModel()
         }
     }
 
-    override suspend fun getSession(sessionId: String): SessionData? {
-        return sessionDataMutex.withLock {
+    override suspend fun getSession(sessionId: String): SessionData? = withContext(dispatchers.io) {
+        sessionDataMutex.withLock {
             database.sessionDataQueries.selectByUserId(sessionId)
                 .executeAsOneOrNull()
                 ?.toApiModel()
         }
     }
 
-    override suspend fun getAllSessions(): List<SessionData> {
-        return sessionDataMutex.withLock {
+    override suspend fun getAllSessions(): List<SessionData> = withContext(dispatchers.io) {
+        sessionDataMutex.withLock {
             database.sessionDataQueries.selectAll()
                 .executeAsList()
                 .map { it.toApiModel() }
         }
     }
 
-    override suspend fun numberOfSessions(): Int {
-        return sessionDataMutex.withLock {
+    override suspend fun numberOfSessions(): Int = withContext(dispatchers.io) {
+        sessionDataMutex.withLock {
             database.sessionDataQueries.count()
                 .executeAsOneOrNull()
                 ?.toInt()
@@ -179,8 +190,10 @@ class DatabaseSessionStore(
     }
 
     override suspend fun removeSession(sessionId: String) {
-        sessionDataMutex.withLock {
-            database.sessionDataQueries.removeSession(sessionId)
+        withContext(dispatchers.io) {
+            sessionDataMutex.withLock {
+                database.sessionDataQueries.removeSession(sessionId)
+            }
         }
     }
 }

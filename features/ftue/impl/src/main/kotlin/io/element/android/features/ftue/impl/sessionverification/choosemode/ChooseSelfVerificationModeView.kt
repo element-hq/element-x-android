@@ -12,10 +12,10 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -36,13 +36,19 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCard
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardMode
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardState
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=432-31813
+ */
 @Composable
 fun ChooseSelfVerificationModeView(
     state: ChooseSelfVerificationModeState,
@@ -63,7 +69,7 @@ fun ChooseSelfVerificationModeView(
                 title = {},
                 actions = {
                     TextButton(
-                        text = stringResource(CommonStrings.action_signout),
+                        text = stringResource(R.string.screen_identity_confirmation_sign_out),
                         onClick = { state.eventSink(ChooseSelfVerificationModeEvent.SignOut) }
                     )
                 }
@@ -77,6 +83,7 @@ fun ChooseSelfVerificationModeView(
                 subTitle = stringResource(id = R.string.screen_identity_confirmation_subtitle)
             )
         },
+        isScrollable = true,
         footer = {
             ChooseSelfVerificationModeButtons(
                 state = state,
@@ -86,20 +93,31 @@ fun ChooseSelfVerificationModeView(
             )
         }
     ) {
-        Row(
+        Column(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            Text(
-                modifier = Modifier
-                    .clickable(onClick = onLearnMore)
-                    .padding(vertical = 4.dp, horizontal = 16.dp)
-                    .semantics {
-                        // Note: there is no Role.Link, so we use Role.Button for better accessibility support
-                        role = Role.Button
-                    },
-                text = stringResource(CommonStrings.action_learn_more),
-                style = ElementTheme.typography.fontBodyLgMedium
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    modifier = Modifier
+                        .clickable(onClick = onLearnMore)
+                        .padding(vertical = 4.dp, horizontal = 16.dp)
+                        .semantics {
+                            // Note: there is no Role.Link, so we use Role.Button for better accessibility support
+                            role = Role.Button
+                        },
+                    text = stringResource(CommonStrings.action_learn_more),
+                    style = ElementTheme.typography.fontBodyLgMedium
+                )
+            }
+            AccountInfoCard(
+                state = AccountInfoCardState(
+                    matrixUser = state.currentUser,
+                    mode = AccountInfoCardMode.Simple,
+                ),
             )
         }
     }
@@ -127,6 +145,7 @@ private fun ChooseSelfVerificationModeButtons(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(R.string.screen_identity_use_another_device),
                         onClick = onUseAnotherDevice,
+                        leadingIcon = IconSource.Vector(CompoundIcons.Devices()),
                     )
                 }
                 if (state.buttonsState.data.canUseRecoveryKey) {

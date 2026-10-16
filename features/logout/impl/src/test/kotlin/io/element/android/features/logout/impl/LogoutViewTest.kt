@@ -13,8 +13,11 @@ package io.element.android.features.logout.impl
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -25,8 +28,22 @@ import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressTag
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
+import org.robolectric.annotation.Config
 
 class LogoutViewTest : RobolectricTest() {
+    @Test
+    @Config(qualifiers = "h1024dp")
+    fun `the current user is displayed`() = runAndroidComposeUiTest {
+        setLogoutView(
+            aLogoutState(
+                currentUser = aMatrixUser(id = "@alice:server.org", displayName = "Alice"),
+                eventSink = EventsRecorder(expectEvents = false),
+            ),
+        )
+        onNodeWithText("Alice").assertIsDisplayed()
+        onNodeWithText("@alice:server.org").assertIsDisplayed()
+    }
+
     @Test
     fun `clicking on logout sends a LogoutEvent`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<LogoutEvent>()
@@ -88,8 +105,22 @@ class LogoutViewTest : RobolectricTest() {
                 eventSink = eventsRecorder
             ),
         )
-        clickOn(CommonStrings.action_cancel)
+        clickOn(CommonStrings.action_cancel, inDialog = true)
         eventsRecorder.assertSingle(LogoutEvent.CloseDialogs)
+    }
+
+    @Test
+    fun `clicking on cancel invoke back callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LogoutEvent>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            setLogoutView(
+                aLogoutState(
+                    eventSink = eventsRecorder
+                ),
+                onBackClick = callback,
+            )
+            clickOn(CommonStrings.action_cancel)
+        }
     }
 
     @Test

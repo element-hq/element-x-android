@@ -32,10 +32,12 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
     api(projects.libraries.roomselect.api)
 
     testCommonDependencies(libs, includeTestComposeView = true)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.sessionStorage.test)
 }

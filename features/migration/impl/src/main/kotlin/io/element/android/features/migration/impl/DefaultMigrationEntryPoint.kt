@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.api.MigrationEntryPoint
-import io.element.android.features.api.MigrationState
+import io.element.android.features.migration.api.MigrationEntryPoint
+import io.element.android.features.migration.api.MigrationState
 
 @ContributesBinding(AppScope::class)
 class DefaultMigrationEntryPoint(

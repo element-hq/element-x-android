@@ -22,7 +22,6 @@ dependencies {
     api(projects.libraries.voiceplayer.api)
 
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.audio.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
@@ -31,7 +30,6 @@ dependencies {
     implementation(projects.libraries.uiUtils)
     implementation(projects.services.analytics.api)
 
-    implementation(libs.androidx.annotationjvm)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.coroutines.core)
 

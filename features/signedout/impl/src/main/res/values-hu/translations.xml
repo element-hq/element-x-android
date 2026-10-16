@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"Megváltoztatta a jelszavát egy másik munkamenetben"</string>
-  <string name="screen_signed_out_reason_2">"Törölte a munkamenetet egy másik munkamenetből"</string>
-  <string name="screen_signed_out_reason_3">"A kiszolgáló adminisztrátora érvénytelenítette a hozzáférését"</string>
+  <string name="screen_signed_out_reason_1">"Ezt az eszközt eltávolította a fiókjából"</string>
+  <string name="screen_signed_out_reason_2">"Jelszavát egy másik eszközön módosította"</string>
+  <string name="screen_signed_out_reason_3">"A szerver munkamenete lejárt, vagy a rendszergazda letiltotta a hozzáférését"</string>
   <string name="screen_signed_out_subtitle">"Előfordulhat, hogy az alábbiakban felsorolt okok valamelyike miatt került kijelentkeztetésre. Jelentkezzen be újra, hogy folytatni tudja az %s használatát."</string>
-  <string name="screen_signed_out_title">"Kijelentkezett"</string>
+  <string name="screen_signed_out_subtitle_v2">"Ezt az eszközt az alább felsorolt ​​okok egyike miatt eltávolítottuk. Kérjük, jelentkezzen be újra, az eszközt fiókjához való csatlakoztatásához."</string>
+  <string name="screen_signed_out_title">"Eszköz eltávolítva"</string>
 </resources>

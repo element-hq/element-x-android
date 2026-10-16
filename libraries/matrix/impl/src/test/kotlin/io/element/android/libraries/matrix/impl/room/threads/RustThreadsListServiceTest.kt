@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -122,6 +123,7 @@ class RustThreadsListServiceTest {
     ) = RustThreadsListService(
         inner = inner,
         roomCoroutineScope = backgroundScope,
+        roomDispatcher = StandardTestDispatcher(testScheduler),
     )
 
     private fun aRustThreadListUpdate() = ThreadListUpdate.Append(

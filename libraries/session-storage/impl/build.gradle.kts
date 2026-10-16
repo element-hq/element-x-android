@@ -20,7 +20,6 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.encryptedDb)
     api(projects.libraries.sessionStorage.api)

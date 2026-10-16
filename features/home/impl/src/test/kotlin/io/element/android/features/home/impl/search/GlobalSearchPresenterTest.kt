@@ -33,13 +33,16 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.FakeSdkPendingTask
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.search.FakeMessageSearch
 import io.element.android.libraries.matrix.test.search.FakeMessageSearchService
+import io.element.android.libraries.matrix.test.search.FakeSearchBackfillService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
@@ -205,7 +208,9 @@ class GlobalSearchPresenterTest {
     @Test
     fun `present - message search results are mapped when the message search emits`() = runTest {
         val messageSearch = FakeMessageSearch()
-        val matrixClient = FakeMatrixClient().apply {
+        val matrixClient = FakeMatrixClient(
+            searchBackfillService = FakeSearchBackfillService(startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) }),
+        ).apply {
             getRoomInfoLambda = { Result.success(aRoomInfo()) }
         }
         val presenter = createGlobalSearchPresenter(
@@ -224,7 +229,7 @@ class GlobalSearchPresenterTest {
             val successState = consumeItemsUntilPredicate { it.results is AsyncData.Success }.last()
             val results = (successState.results.dataOrNull() as GlobalSearchResults.MessageSearchResults).results
             assertThat(results).hasSize(1)
-            assertThat(results.first()).isInstanceOf(MessageSearchResultItem.Message::class.java)
+            assertThat(results.first()).isInstanceOf(MessageSearchListItem.Message::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -232,7 +237,9 @@ class GlobalSearchPresenterTest {
     @Test
     fun `present - message search displays the uninitialized state after removing the query`() = runTest {
         val messageSearch = FakeMessageSearch()
-        val matrixClient = FakeMatrixClient().apply {
+        val matrixClient = FakeMatrixClient(
+            searchBackfillService = FakeSearchBackfillService(startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) }),
+        ).apply {
             getRoomInfoLambda = { Result.success(aRoomInfo()) }
         }
         val presenter = createGlobalSearchPresenter(
@@ -251,7 +258,7 @@ class GlobalSearchPresenterTest {
             val successState = consumeItemsUntilPredicate { it.results is AsyncData.Success }.last()
             val results = (successState.results.dataOrNull() as GlobalSearchResults.MessageSearchResults).results
             assertThat(results).hasSize(1)
-            assertThat(results.first()).isInstanceOf(MessageSearchResultItem.Message::class.java)
+            assertThat(results.first()).isInstanceOf(MessageSearchListItem.Message::class.java)
 
             // Remove the query
             successState.queryState.edit { replace(0, length, "") }
@@ -267,7 +274,9 @@ class GlobalSearchPresenterTest {
     @Test
     fun `present - UpdateVisibleRange triggers pagination for messages when near the end`() = runTest {
         val messageSearch = FakeMessageSearch()
-        val matrixClient = FakeMatrixClient().apply {
+        val matrixClient = FakeMatrixClient(
+            searchBackfillService = FakeSearchBackfillService(startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) }),
+        ).apply {
             getRoomInfoLambda = { Result.success(aRoomInfo()) }
         }
         val presenter = createGlobalSearchPresenter(
@@ -338,6 +347,71 @@ class GlobalSearchPresenterTest {
     }
 
     @Test
+    fun `present - RemoveSearchHistoryResult removes a query entry`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply {
+            add(SearchHistoryResult.Query("keep"))
+            add(SearchHistoryResult.Query("drop"))
+        }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(SearchHistoryListItem.Query("drop")))
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).containsExactly(SearchHistoryResult.Query("keep"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - RemoveSearchHistoryResult removes a room entry`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply {
+            add(SearchHistoryResult.Query("keep"))
+            add(SearchHistoryResult.Room(A_ROOM_ID))
+        }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(SearchHistoryListItem.Room(A_ROOM_ID, aRoomInfo())))
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).containsExactly(SearchHistoryResult.Query("keep"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - RemoveSearchHistoryResult with an unknown id does nothing`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply { add(SearchHistoryResult.Query("keep")) }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(SearchHistoryListItem.Query("query:unknown")))
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).containsExactly(SearchHistoryResult.Query("keep"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - ClearSearchHistory removes every entry`() = runTest {
+        val searchHistoryStore = FakeSearchHistoryStore().apply {
+            add(SearchHistoryResult.Query("a"))
+            add(SearchHistoryResult.Room(A_ROOM_ID))
+        }
+        val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(GlobalSearchEvent.ClearSearchHistory)
+            testScheduler.advanceUntilIdle()
+
+            assertThat(searchHistoryStore.history.first()).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - SearchHistoryResultSelected does nothing for a room result`() = runTest {
         val searchHistoryStore = FakeSearchHistoryStore()
         val presenter = createGlobalSearchPresenter(searchHistoryStore = searchHistoryStore)
@@ -345,7 +419,7 @@ class GlobalSearchPresenterTest {
             val initialState = awaitItem()
             skipItems(1)
 
-            initialState.eventSink(GlobalSearchEvent.SearchHistoryResultSelected(SearchHistoryResultItem.Room(A_ROOM_ID, aRoomInfo())))
+            initialState.eventSink(GlobalSearchEvent.SearchHistoryResultSelected(SearchHistoryListItem.Room(A_ROOM_ID, aRoomInfo())))
             testScheduler.advanceUntilIdle()
 
             ensureAllEventsConsumed()
@@ -361,10 +435,48 @@ class GlobalSearchPresenterTest {
             // Skip loading search results state
             skipItems(1)
 
-            initialState.eventSink(GlobalSearchEvent.SearchHistoryResultSelected(SearchHistoryResultItem.Query("Test")))
+            initialState.eventSink(GlobalSearchEvent.SearchHistoryResultSelected(SearchHistoryListItem.Query("Test")))
 
             assertThat(awaitItem().queryState.text.toString()).isEqualTo("Test")
             assertThat(awaitItem().results.isLoading()).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - will automatically start search backfill and it will be cancelled when the presenter is closed`() = runTest {
+        var isRunning = false
+        val closeLambda = lambdaRecorder<Unit> { isRunning = false }
+        val matrixClient = FakeMatrixClient(
+            searchBackfillService = FakeSearchBackfillService(
+                startSearchBackfillLambda = {
+                    isRunning = true
+                    Result.success(FakeSdkPendingTask(isRunningLambda = { isRunning }, closeLambda = closeLambda))
+                },
+            ),
+        )
+        val presenter = createGlobalSearchPresenter(
+            matrixClient = matrixClient,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.MessageSearch.key to true),
+            ),
+        )
+        presenter.test {
+            // Await the initial state, with the feature enabled
+            val initialState = consumeItemsUntilPredicate { it.isEnabled }.last()
+            assertThat(isRunning).isFalse()
+
+            // Opening the search starts the backfill
+            initialState.eventSink(GlobalSearchEvent.ToggleSearchVisibility)
+            consumeItemsUntilPredicate { it.isSearchActive }
+            // The backfill polling loop never ends while the task is running, so don't wait until the scheduler is idle
+            testScheduler.runCurrent()
+            assertThat(isRunning).isTrue()
+            closeLambda.assertions().isNeverCalled()
+
+            // Closing the presenter closes the task
+            cancelAndIgnoreRemainingEvents()
+            closeLambda.assertions().isCalledOnce()
+            assertThat(isRunning).isFalse()
         }
     }
 }
@@ -377,7 +489,8 @@ private fun TestScope.createGlobalSearchPresenter(
     dateFormatter: DateFormatter = FakeDateFormatter(),
     fileSizeFormatter: FileSizeFormatter = FakeFileSizeFormatter(),
     permalinkParser: PermalinkParser = FakePermalinkParser(),
-    matrixClient: MatrixClient = FakeMatrixClient(),
+    matrixClient: MatrixClient =
+    FakeMatrixClient(searchBackfillService = FakeSearchBackfillService(startSearchBackfillLambda = { Result.success(FakeSdkPendingTask()) })),
     searchHistoryStore: SearchHistoryStore = FakeSearchHistoryStore(),
 ): GlobalSearchPresenter {
     return GlobalSearchPresenter(

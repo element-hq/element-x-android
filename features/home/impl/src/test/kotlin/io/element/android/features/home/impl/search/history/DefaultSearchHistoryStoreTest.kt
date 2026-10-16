@@ -90,6 +90,31 @@ class DefaultSearchHistoryStoreTest {
     }
 
     @Test
+    fun `remove deletes only the given entry and persists the change`() = runTest {
+        val fileStore = FakeSearchHistoryFileStore()
+        val store = createStore(fileStore)
+        store.add(SearchHistoryResult.Query("a"))
+        store.add(SearchHistoryResult.Room(A_ROOM_ID))
+        store.add(SearchHistoryResult.Query("b"))
+
+        store.remove(SearchHistoryResult.Room(A_ROOM_ID))
+
+        val expected = listOf(SearchHistoryResult.Query("b"), SearchHistoryResult.Query("a"))
+        assertThat(store.history.first()).containsExactlyElementsIn(expected).inOrder()
+        assertThat(createStore(fileStore).history.first()).containsExactlyElementsIn(expected).inOrder()
+    }
+
+    @Test
+    fun `remove of an unknown entry leaves the history unchanged`() = runTest {
+        val store = createStore()
+        store.add(SearchHistoryResult.Query("a"))
+
+        store.remove(SearchHistoryResult.Query("unknown"))
+
+        assertThat(store.history.first()).containsExactly(SearchHistoryResult.Query("a"))
+    }
+
+    @Test
     fun `clear removes every entry and deletes the persisted content`() = runTest {
         val fileStore = FakeSearchHistoryFileStore()
         val store = createStore(fileStore)

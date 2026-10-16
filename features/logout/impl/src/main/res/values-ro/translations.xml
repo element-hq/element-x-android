@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signout_confirmation_dialog_content">"Sunteți sigur că vreți să vă deconectați?"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"Deconectați-vă"</string>
-  <string name="screen_signout_confirmation_dialog_title">"Deconectați-vă"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Deconectare în curs…"</string>
-  <string name="screen_signout_key_backup_disabled_subtitle">"Acesta este singurul dumneavoastră dispozitiv. Dacă îl eliminați, veți avea nevoie de o cheie de recuperare pentru a vă confirma identitatea digitală și a restaura mesajele criptate data viitoare când vă conectați."</string>
-  <string name="screen_signout_key_backup_disabled_title">"Sunteți pe cale să vă pierdeți accesul la mesajele dumneavoastră criptate."</string>
-  <string name="screen_signout_key_backup_offline_subtitle">"Cheile dumneavoastră erau încă în curs de backup atunci când ați fost deconectat. Reconectați-vă pentru ca cheile dumneavoastră să poată fi salvate înainte de a elimina acest dispozitiv."</string>
-  <string name="screen_signout_key_backup_offline_title">"Cheile dumneavoastră sunt încă în curs de backup"</string>
-  <string name="screen_signout_key_backup_ongoing_subtitle">"Vă rugăm să așteptați până la finalizarea acestui proces înainte de a vă deconecta."</string>
-  <string name="screen_signout_key_backup_ongoing_title">"Cheile dumneavoastră sunt încă în curs de backup"</string>
-  <string name="screen_signout_preference_item">"Deconectați-vă"</string>
-  <string name="screen_signout_recovery_disabled_subtitle">"Acesta este singurul dumneavoastră dispozitiv. Dacă îl eliminați, veți avea nevoie de o cheie de recuperare pentru a vă confirma identitatea digitală și a restaura chat-urile criptate data viitoare când vă conectați."</string>
-  <string name="screen_signout_recovery_disabled_title">"Sunteți pe cale să pierdeți accesul la mesajele dumneavoastră criptate"</string>
-  <string name="screen_signout_save_recovery_key_subtitle">"Acesta este singurul dumneavoastră dispozitiv. Dacă îl eliminați, veți avea nevoie de o cheie de recuperare pentru a vă confirma identitatea digitală și a restaura mesajele criptate data viitoare când vă conectați."</string>
+  <string name="screen_signout_confirmation_dialog_content">"Sigur doriți să eliminați acest dispozitiv?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Eliminați acest dispozitiv"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Eliminați acest dispozitiv"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Se elimină dispozitivul…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Acesta este singurul dvs. dispozitiv. Dacă îl eliminați, veți avea nevoie de o cheie de recuperare pentru a vă confirma identitatea digitală și a restabili conversațiile criptate data viitoare când vă conectați."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Sunteți pe cale să pierdeți accesul la conversațiile dvs. criptate"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Backupul cheilor dvs. era încă în curs atunci când v-ați deconectat. Reconectați-vă pentru ca cheile dvs. să poată fi salvate înainte de a elimina acest dispozitiv."</string>
+  <string name="screen_signout_key_backup_offline_title">"Backupul cheilor dvs. încă nu s-a finalizat"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Vă rugăm să așteptați până la finalizarea acestui proces înainte de a elimina acest dispozitiv."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Backupul cheilor dvs. încă nu s-a finalizat"</string>
+  <string name="screen_signout_preference_item">"Eliminați acest dispozitiv"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Acesta este singurul dvs. dispozitiv. Dacă îl eliminați, veți avea nevoie de o cheie de recuperare pentru a vă confirma identitatea digitală și a restabili conversațiile criptate data viitoare când vă conectați."</string>
+  <string name="screen_signout_recovery_disabled_title">"Sunteți pe cale să pierdeți accesul la conversațiile dvs. criptate"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Acesta este singurul dvs. dispozitiv. Dacă îl eliminați, veți avea nevoie de o cheie de recuperare pentru a vă confirma identitatea digitală și a restabili conversațiile criptate data viitoare când vă conectați."</string>
   <string name="screen_signout_save_recovery_key_title">"Asigurați-vă că aveți acces la cheia de recuperare înainte de a elimina acest dispozitiv."</string>
 </resources>

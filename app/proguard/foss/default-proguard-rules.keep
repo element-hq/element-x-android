@@ -1,2 +1,9 @@
 # Don't obfuscate anything for non-enterprise builds
 -dontobfuscate
+
+# Strip PostHog's Firebase push token integration. We don't use it and it breaks F-Droid.
+# Removing the contents of this method will mark the Firebase-related classes as unused,
+# which will allow R8 to remove them from the final build.
+-assumevalues class com.posthog.android.PostHogAndroidConfig {
+    boolean getCapturePushNotificationSubscriptions() return false;
+}

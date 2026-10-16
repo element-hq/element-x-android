@@ -99,6 +99,7 @@ fun aValidNotificationSettingsState(
     callRingtoneCopyError: Boolean = false,
     showMessageSoundDialog: Boolean = false,
     showCallRingtoneDialog: Boolean = false,
+    showAllActivityInRoomList: Boolean = false,
     pendingMessageSoundPickerLaunch: Int = 0,
     pendingCallRingtonePickerLaunch: Int = 0,
     eventSink: (NotificationSettingsEvent) -> Unit = {},
@@ -133,6 +134,7 @@ fun aValidNotificationSettingsState(
     showCallRingtoneDialog = showCallRingtoneDialog,
     pendingMessageSoundPickerLaunch = pendingMessageSoundPickerLaunch,
     pendingCallRingtonePickerLaunch = pendingCallRingtonePickerLaunch,
+    showAllActivityInRoomList = showAllActivityInRoomList,
     eventSink = eventSink,
 )
 
@@ -166,6 +168,7 @@ fun aInvalidNotificationSettingsState(
     showCallRingtoneDialog = false,
     pendingMessageSoundPickerLaunch = 0,
     pendingCallRingtonePickerLaunch = 0,
+    showAllActivityInRoomList = false,
     eventSink = eventSink,
 )
 

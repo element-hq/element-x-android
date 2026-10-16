@@ -26,7 +26,9 @@ import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
 import io.element.android.features.preferences.impl.tasks.MarkAllRoomsAsRead
 import io.element.android.features.preferences.impl.tasks.VacuumStoresUseCase
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -38,6 +40,7 @@ import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.CoroutineScope
@@ -61,6 +64,8 @@ class DeveloperSettingsPresenter(
     private val markAllRoomsAsRead: MarkAllRoomsAsRead,
     private val buildMeta: BuildMeta,
     private val notificationSettingsService: NotificationSettingsService,
+    private val clipboardHelper: ClipboardHelper,
+    private val toastHelper: ToastHelper,
 ) : Presenter<DeveloperSettingsState> {
     @AssistedFactory
     fun interface Factory {
@@ -129,6 +134,11 @@ class DeveloperSettingsPresenter(
                 DeveloperSettingsEvent.OpenPushRules -> coroutineScope.openPushRules(pushRulesAction)
                 DeveloperSettingsEvent.DismissPushRulesError -> {
                     pushRulesAction.value = AsyncAction.Uninitialized
+                }
+                is DeveloperSettingsEvent.CopyToClipboard -> {
+                    clipboardHelper.copyPlainText(event.text) {
+                        toastHelper.show(CommonStrings.common_copied_to_clipboard)
+                    }
                 }
             }
         }

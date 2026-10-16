@@ -14,43 +14,44 @@ import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import io.element.android.features.share.api.OnSharedData
 import io.element.android.features.share.api.ShareIntentData
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
-import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
-import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
-import io.element.android.services.appnavstate.api.ActiveRoomsHolder
+import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlin.coroutines.cancellation.CancellationException
 
 @AssistedInject
 class SharePresenter(
     @Assisted private val shareIntentData: ShareIntentData,
-    @SessionCoroutineScope
-    private val sessionCoroutineScope: CoroutineScope,
-    private val matrixClient: MatrixClient,
-    private val mediaSenderRoomFactory: MediaSenderRoomFactory,
-    private val activeRoomsHolder: ActiveRoomsHolder,
-    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
-    private val onSharedData: OnSharedData,
+    @AppCoroutineScope
+    private val appCoroutineScope: CoroutineScope,
+    private val matrixClientProvider: MatrixClientProvider,
+    private val shareDataSender: ShareDataSender,
 ) : Presenter<ShareState> {
     @AssistedFactory
     fun interface Factory {
         fun create(shareIntentData: ShareIntentData): SharePresenter
     }
 
-    private val shareActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
+    private val shareActionState: MutableState<AsyncAction<ShareResult>> = mutableStateOf(AsyncAction.Uninitialized)
 
-    fun onRoomSelected(roomIds: List<RoomId>) {
-        sessionCoroutineScope.share(shareIntentData, roomIds)
+    /**
+     * Share the data to the rooms with [roomIds], which belong to the session [sessionId]. It can be another session than the current one.
+     */
+    fun onRoomSelected(sessionId: SessionId, roomIds: List<RoomId>) {
+        if (shareActionState.value.isLoading()) return
+        appCoroutineScope.launch {
+            suspend {
+                val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
+                shareDataSender.send(client, shareIntentData, roomIds).getOrThrow()
+                ShareResult(sessionId = sessionId, roomIds = roomIds)
+            }.runCatchingUpdatingState(shareActionState)
+        }
     }
 
     @Composable
@@ -65,77 +66,5 @@ class SharePresenter(
             shareAction = shareActionState.value,
             eventSink = ::handleEvent,
         )
-    }
-
-    private suspend fun getJoinedRoom(roomId: RoomId): JoinedRoom? {
-        return activeRoomsHolder.getActiveRoom(matrixClient.sessionId)
-            ?.takeIf { it.roomId == roomId }
-            ?: matrixClient.getJoinedRoom(roomId)
-    }
-
-    private fun CoroutineScope.share(
-        shareIntentData: ShareIntentData,
-        roomIds: List<RoomId>,
-    ) = launch {
-        suspend {
-            val result = when (shareIntentData) {
-                is ShareIntentData.PlainText -> {
-                    roomIds
-                        .map { roomId ->
-                            getJoinedRoom(roomId)?.liveTimeline?.sendMessage(
-                                body = shareIntentData.content,
-                                htmlBody = null,
-                                intentionalMentions = emptyList(),
-                            )?.isSuccess.orFalse()
-                        }
-                        .all { it }
-                }
-                is ShareIntentData.Uris -> {
-                    val filesToShare = shareIntentData.uris
-                    if (filesToShare.isEmpty()) {
-                        false
-                    } else {
-                        roomIds
-                            .map { roomId ->
-                                val room = getJoinedRoom(roomId) ?: return@map false
-                                val mediaSender = mediaSenderRoomFactory.create(room = room)
-                                filesToShare
-                                    .map { fileToShare ->
-                                        val result = mediaSender.sendMedia(
-                                            caption = shareIntentData.text,
-                                            uri = fileToShare.uri,
-                                            mimeType = fileToShare.mimeType,
-                                            mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
-                                        )
-                                        // If the coroutine was cancelled, destroy the room and rethrow the exception
-                                        val cancellationException = result.exceptionOrNull() as? CancellationException
-                                        if (cancellationException != null) {
-                                            if (activeRoomsHolder.getActiveRoomMatching(matrixClient.sessionId, roomId) == null) {
-                                                room.destroy()
-                                            }
-                                            throw cancellationException
-                                        }
-                                        result.isSuccess
-                                    }
-                                    .all { isSuccess -> isSuccess }
-                                    .also {
-                                        if (activeRoomsHolder.getActiveRoomMatching(matrixClient.sessionId, roomId) == null) {
-                                            room.destroy()
-                                        }
-                                    }
-                            }
-                            .all { it }
-                    }
-                }
-            }
-
-            // Handle post-processing of shared data
-            onSharedData(shareIntentData)
-
-            if (!result) {
-                error("Failed to handle incoming share intent")
-            }
-            roomIds
-        }.runCatchingUpdatingState(shareActionState)
     }
 }

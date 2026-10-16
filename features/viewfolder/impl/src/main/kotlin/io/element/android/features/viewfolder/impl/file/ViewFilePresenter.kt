@@ -18,8 +18,11 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -30,6 +33,8 @@ class ViewFilePresenter(
     private val fileContentReader: FileContentReader,
     private val fileShare: FileShare,
     private val fileSave: FileSave,
+    private val clipboardHelper: ClipboardHelper,
+    private val toastHelper: ToastHelper,
 ) : Presenter<ViewFileState> {
     @AssistedFactory
     interface Factory {
@@ -48,6 +53,9 @@ class ViewFilePresenter(
             when (event) {
                 ViewFileEvent.Share -> coroutineScope.share(path)
                 ViewFileEvent.SaveOnDisk -> coroutineScope.save(path)
+                is ViewFileEvent.CopyToClipboard -> clipboardHelper.copyPlainText(event.text) {
+                    toastHelper.show(CommonStrings.common_line_copied_to_clipboard)
+                }
             }
         }
 

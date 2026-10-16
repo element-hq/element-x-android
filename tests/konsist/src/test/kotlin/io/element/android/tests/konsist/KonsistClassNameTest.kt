@@ -66,6 +66,7 @@ class KonsistClassNameTest {
                 "EditableAvatarViewUriPreviewParam",
                 "LoginModeViewErrorPreviewParam",
                 "OverlapRatioPreviewParam",
+                "SelectionCountPreviewParam",
                 "TextFileContentPreviewParam",
                 "HtmlMessageContentPreviewParam",
             )

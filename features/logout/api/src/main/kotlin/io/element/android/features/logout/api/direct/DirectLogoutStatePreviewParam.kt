@@ -23,11 +23,9 @@ open class DirectLogoutStatePreviewParam : PreviewParameterProvider<DirectLogout
 }
 
 fun aDirectLogoutState(
-    canDoDirectSignOut: Boolean = true,
     logoutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (DirectLogoutEvent) -> Unit = {},
 ) = DirectLogoutState(
-    canDoDirectSignOut = canDoDirectSignOut,
     logoutAction = logoutAction,
     eventSink = eventSink,
 )

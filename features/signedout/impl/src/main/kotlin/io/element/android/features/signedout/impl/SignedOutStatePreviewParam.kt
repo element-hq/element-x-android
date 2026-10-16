@@ -9,43 +9,21 @@
 package io.element.android.features.signedout.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.sessionstorage.api.LoginType
-import io.element.android.libraries.sessionstorage.api.SessionData
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 
 open class SignedOutStatePreviewParam : PreviewParameterProvider<SignedOutState> {
     override val values: Sequence<SignedOutState>
         get() = sequenceOf(
             aSignedOutState(),
-            // Add other states here
+            aSignedOutState(signedOutSession = aMatrixUser(id = "@alice:server.org", displayName = null)),
         )
 }
 
-private fun aSignedOutState() = SignedOutState(
-    appName = "AppName",
-    signedOutSession = aSessionData(),
-    eventSink = {},
+internal fun aSignedOutState(
+    signedOutSession: MatrixUser = aMatrixUser(id = "@alice:server.org", displayName = "Alice"),
+    eventSink: (SignedOutEvent) -> Unit = {},
+) = SignedOutState(
+    signedOutMatrixUser = signedOutSession,
+    eventSink = eventSink,
 )
-
-private fun aSessionData(
-    sessionId: String = "@alice:server.org",
-    isTokenValid: Boolean = false,
-): SessionData {
-    return SessionData(
-        userId = sessionId,
-        deviceId = "aDeviceId",
-        accessToken = "anAccessToken",
-        refreshToken = "aRefreshToken",
-        homeserverUrl = "aHomeserverUrl",
-        oAuthData = null,
-        loginTimestamp = null,
-        isTokenValid = isTokenValid,
-        loginType = LoginType.UNKNOWN,
-        passphrase = null,
-        sessionPath = "/a/path/to/a/session",
-        cachePath = "/a/path/to/a/cache",
-        position = 0,
-        lastUsageIndex = 0,
-        userDisplayName = null,
-        userAvatarUrl = null,
-    )
-}

@@ -10,12 +10,12 @@ package io.element.android.features.startchat.impl.root
 
 import androidx.compose.runtime.MutableState
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.invitepeople.test.FakeStartDMAction
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.startchat.api.StartDMAction
 import io.element.android.features.startchat.impl.userlist.FakeUserListPresenter
 import io.element.android.features.startchat.impl.userlist.FakeUserListPresenterFactory
 import io.element.android.features.startchat.impl.userlist.UserListDataStore
+import io.element.android.features.startchat.test.FakeStartDMAction
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId

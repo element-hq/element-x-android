@@ -19,7 +19,7 @@ import kotlinx.collections.immutable.ImmutableList
 
 interface MessagesNavigator {
     fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-    fun forwardEvent(eventId: EventId, timelineProvider: TimelineProvider)
+    fun forwardEvents(eventIds: List<EventId>, timelineProvider: TimelineProvider)
     fun navigateToReportMessage(eventId: EventId, senderId: UserId)
     fun navigateToEditPoll(eventId: EventId)
     fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)

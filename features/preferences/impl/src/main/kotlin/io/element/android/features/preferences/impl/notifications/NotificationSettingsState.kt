@@ -42,6 +42,10 @@ data class NotificationSettingsState(
      * auto-opens on screen entry.
      */
     val pendingCallRingtonePickerLaunch: Int,
+    /**
+     * Whether to show all activity indicators in the room list, using unread messages instead of notifications.
+     */
+    val showAllActivityInRoomList: Boolean,
     val eventSink: (NotificationSettingsEvent) -> Unit,
 ) {
     sealed interface MatrixSettings {

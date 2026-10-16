@@ -41,10 +41,10 @@
   <string name="screen_custom_recovery_key_success_notice">"A helyreállítási kulcs módosításához lépjen a Beállítások → Titkosítás → Biztonsági mentés menüpontra."</string>
   <string name="screen_custom_recovery_key_success_subtitle">"A helyreállítási kulcs segítségével megerősítheti az új eszközöket, vagy visszaállíthatja a titkosított csevegéseket, ha elveszítette a hozzáférését az összes eszközéhez."</string>
   <string name="screen_custom_recovery_key_success_title">"A biztonsági mentés most már teljesen be van állítva"</string>
-  <string name="screen_encryption_reset_action_continue_reset">"Visszaállítás folytatása"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Folytatás"</string>
   <string name="screen_encryption_reset_bullet_1">"A fiókadatok, a kapcsolatok, a beállítások és a csevegéslista megmarad"</string>
   <string name="screen_encryption_reset_bullet_2">"Elveszíti meglévő üzenetelőzményeit"</string>
-  <string name="screen_encryption_reset_bullet_3">"Újból ellenőriznie kell az összes meglévő eszközét és csevegőpartnerét"</string>
+  <string name="screen_encryption_reset_bullet_3">"A többi felhasználó számára látható lesz, hogy digitális identitása visszaállításra került"</string>
   <string name="screen_encryption_reset_footer">"Csak akkor állítsa alaphelyzetbe a személyazonosságát, ha nem fér hozzá más bejelentkezett eszközhöz, és elveszítette a helyreállítási kulcsát."</string>
   <string name="screen_encryption_reset_title">"Nem tudja megerősíteni? Alaphelyzetbe kell állítania a digitális személyazonosságát."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Törlés"</string>

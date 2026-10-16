@@ -45,7 +45,7 @@
   <string name="notification_sender_mention_reply">"%1$s disebut atau dibalas"</string>
   <string name="notification_space_invite_body">"Kami mengundang Anda untuk bergabung di ruang ini."</string>
   <string name="notification_space_invite_body_with_sender">"%1$s mengundang Anda untuk bergabung ke ruang ini."</string>
-  <string name="notification_test_push_notification_content">"Anda sedang melihat pemberitahuan ini! Klik saya!"</string>
+  <string name="notification_test_push_notification_content">"Anda sedang melihat notifikasi ini! Klik saya!"</string>
   <string name="notification_thread_in_room">"Diskusi di %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -87,7 +87,7 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Tidak dapat menampilkan notifikasi."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Notifikasi telah diklik!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Tampilan notifikasi"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Silakan klik pada notifikasi untuk melanjutkan tes."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Silakan klik notifikasi untuk melanjutkan tes."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Pastikan aplikasi menerima notifikasi dorongan."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Kesalahan: pendorong telah menolak permintaan."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Kesalahan: %1$s."</string>

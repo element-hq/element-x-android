@@ -22,6 +22,10 @@ class FakeSearchHistoryStore : SearchHistoryStore {
         }.take(MAX_SEARCH_HISTORY_SIZE)
     }
 
+    override suspend fun remove(result: SearchHistoryResult) {
+        state.value = state.value.filterNot { it == result }
+    }
+
     override suspend fun clear() {
         state.value = emptyList()
     }

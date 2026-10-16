@@ -37,7 +37,7 @@ PRs must meet these rules.
 
 - Create previews for **all main states** of a Composable.
 - Use `@PreviewsDayNight` for consistency.
-- Use `PreviewParameterProvider` (e.g., `FooStatePreviewParam`) to provide states.
+- Use `PreviewParameterProvider` (e.g., `FooStatePreviewParam`) to provide states. Always add new states to existing providers at the end of the sequence.
 - Wrap previews in `ElementPreview { ... }`.
 - When writing tests, never try to record the screenshots, the CI will do it.
 

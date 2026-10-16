@@ -11,6 +11,7 @@ package io.element.android.features.share.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 
 open class ShareStatePreviewParam : PreviewParameterProvider<ShareState> {
     override val values: Sequence<ShareState>
@@ -20,9 +21,7 @@ open class ShareStatePreviewParam : PreviewParameterProvider<ShareState> {
                 shareAction = AsyncAction.Loading,
             ),
             aShareState(
-                shareAction = AsyncAction.Success(
-                    listOf(RoomId("!room2:domain")),
-                )
+                shareAction = AsyncAction.Success(aShareResult())
             ),
             aShareState(
                 shareAction = AsyncAction.Failure(RuntimeException("error")),
@@ -30,10 +29,18 @@ open class ShareStatePreviewParam : PreviewParameterProvider<ShareState> {
         )
 }
 
-fun aShareState(
-    shareAction: AsyncAction<List<RoomId>> = AsyncAction.Uninitialized,
+private fun aShareState(
+    shareAction: AsyncAction<ShareResult> = AsyncAction.Uninitialized,
     eventSink: (ShareEvent) -> Unit = {}
 ) = ShareState(
     shareAction = shareAction,
     eventSink = eventSink
+)
+
+private fun aShareResult(
+    sessionId: SessionId = SessionId("@alice:server.org"),
+    roomIds: List<RoomId> = listOf(RoomId("!room2:domain")),
+) = ShareResult(
+    sessionId = sessionId,
+    roomIds = roomIds,
 )

@@ -14,6 +14,8 @@ import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.encryption.SteadyStateException
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 
 open class LogoutStatePreviewParam : PreviewParameterProvider<LogoutState> {
     override val values: Sequence<LogoutState>
@@ -39,10 +41,12 @@ open class LogoutStatePreviewParam : PreviewParameterProvider<LogoutState> {
                 backupUploadState = BackupUploadState.Waiting,
                 waitingForALongTime = true,
             ),
+            aLogoutState(currentUser = aMatrixUser(id = "@alice:server.org", displayName = null)),
         )
 }
 
 fun aLogoutState(
+    currentUser: MatrixUser = aMatrixUser(),
     isLastDevice: Boolean = false,
     backupState: BackupState = BackupState.ENABLED,
     doesBackupExistOnServer: Boolean = true,
@@ -52,6 +56,7 @@ fun aLogoutState(
     logoutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (LogoutEvent) -> Unit = {},
 ) = LogoutState(
+    currentUser = currentUser,
     isLastDevice = isLastDevice,
     backupState = backupState,
     doesBackupExistOnServer = doesBackupExistOnServer,

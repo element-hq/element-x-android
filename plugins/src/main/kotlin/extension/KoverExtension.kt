@@ -43,7 +43,6 @@ val excludedKoverSubProjects = listOf(
     ":libraries:core",
     ":libraries:coroutines",
     ":libraries:di",
-    ":libraries:rustls-tls",
     ":tests:detekt-rules",
     ":tests:konsist",
     ":tests:testutils",

@@ -38,8 +38,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Po wyłączeniu nie będzie można wysyłać ani odbierać potwierdzeń odczytu i powiadomień o pisaniu."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Zawsze ukrywaj"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Zawsze pokazuj"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"W pokojach prywatnych"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ukryte media można zawsze wyświetlić, dotykając ich"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Pokaż w pokojach prywatnych"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ukryte media można zawsze wyświetlić, dotykając ich."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Pokaż media na osi czasu"</string>
   <string name="screen_advanced_settings_view_source_description">"Włącz, aby móc wyświetlać źródło wiadomości na osi czasu."</string>
   <string name="screen_blocked_users_empty">"Nie blokujesz żadnych użytkowników"</string>
@@ -62,6 +62,9 @@
   <string name="screen_labs_header_description">"Wypróbuj nasze najnowsze pomysły w fazie rozwoju. Funkcje te nie są jeszcze sfinalizowane; mogą być niestabilne i ulec zmianie."</string>
   <string name="screen_labs_header_title">"Chcesz poeksperymentować?"</string>
   <string name="screen_labs_title">"Laboratoria"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Zaproszenia"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Pozostali użytkownicy"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Twój wygląd"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Dodatkowe ustawienia"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Dzwonek połączenia"</string>
   <string name="screen_notification_settings_calls_label">"Połączenia audio i wideo"</string>
@@ -90,6 +93,8 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_mode_mentions">"Wzmianki"</string>
   <string name="screen_notification_settings_notification_section_title">"Powiadamiaj mnie przez"</string>
   <string name="screen_notification_settings_room_mention_label">"Wzmianki @room"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Kropki lub liczba nieprzeczytanych wiadomości"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Pokaż całą aktywność na liście pokoi"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Własny"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Własny dźwięk…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Błąd usuwania pliku"</string>
@@ -106,6 +111,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"ustawienia systemowe"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Powiadomienia systemowe wyłączone"</string>
   <string name="screen_notification_settings_title">"Powiadomienia"</string>
+  <string name="screen_settings_add_account">"Dodaj konto"</string>
   <string name="screen_settings_user_status_away">"Z dala od urządzenia"</string>
   <string name="screen_settings_user_status_be_right_back">"Zaraz wracam"</string>
   <string name="screen_settings_user_status_custom">"Własny"</string>
@@ -117,7 +123,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="theme_black">"Czarny"</string>
   <string name="theme_dark">"Ciemny"</string>
   <string name="theme_light">"Jasny"</string>
-  <string name="theme_system">"System"</string>
+  <string name="theme_system">"Systemowy"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Historia powiadomień Push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Rozwiązywanie problemów"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Rozwiązywanie problemów powiadomień"</string>

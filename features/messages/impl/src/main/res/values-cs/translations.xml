@@ -7,6 +7,19 @@
   <string name="crypto_event_authenticity_unknown_device">"Šifrováno neznámým nebo smazaným zařízením."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Šifrováno neověřeným uživatelem."</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Otočit obrázek vodorovně"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Otočeno vodorovně"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Originál"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Otočit obrázek svisle"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Otočeno svisle "</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Originál"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Otočit obrázek doleva"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d stupeň"</item>
+    <item quantity="few">"%1$d stupně"</item>
+    <item quantity="other">"%1$d stupňů"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Upravit fotku"</string>
   <string name="screen_media_upload_preview_caption_warning">"Titulky nemusí být viditelné pro lidi, kteří používají starší aplikace."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Klepnutím změníte kvalitu nahrávání videa"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Soubor nelze nahrát."</string>
@@ -17,9 +30,10 @@
   <string name="screen_media_upload_preview_item_count">"Položka %1$d z %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimalizace kvality obrazu"</string>
   <string name="screen_media_upload_preview_processing">"Probíhá zpracování…"</string>
+  <string name="screen_media_upload_preview_title">"Přidat média"</string>
   <string name="screen_report_content_block_user">"Zablokovat uživatele"</string>
   <string name="screen_report_content_block_user_hint">"Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele"</string>
-  <string name="screen_report_content_explanation">"Tato zpráva bude nahlášena správci vašeho domovského serveru. Nebude si moci přečíst žádné šifrované zprávy."</string>
+  <string name="screen_report_content_explanation">"Tato zpráva bude nahlášena vašemu poskytovateli účtu. Nebude moci číst žádné šifrované zprávy."</string>
   <string name="screen_report_content_hint">"Důvod nahlášení tohoto obsahu"</string>
   <string name="screen_room_attachment_source_camera">"Fotoaparát"</string>
   <string name="screen_room_attachment_source_camera_photo">"Vyfotit"</string>
