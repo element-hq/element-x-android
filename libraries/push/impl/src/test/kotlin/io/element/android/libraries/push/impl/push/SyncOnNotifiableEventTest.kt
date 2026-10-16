@@ -14,6 +14,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
@@ -141,7 +142,7 @@ class SyncOnNotifiableEventTest {
         launch {
             delay(2_000)
             // An incoming call is pushed while the sync is running
-            pendingRequests = listOf(aPushRequest())
+            pendingRequests = listOf(aPushRequest(eventId = AN_EVENT_ID_2))
             queuedPushRequestNotifier.onPushRequestQueued()
         }
 
@@ -155,12 +156,26 @@ class SyncOnNotifiableEventTest {
         val sut = createSyncOnNotifiableEvent(
             client = client,
             appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = false),
-            pushHistoryService = FakePushHistoryService(getPendingPushRequests = { _, _ -> Result.success(listOf(aPushRequest())) }),
+            pushHistoryService = FakePushHistoryService(getPendingPushRequests = { _, _ -> Result.success(listOf(aPushRequest(eventId = AN_EVENT_ID_2))) }),
         )
 
         sut(listOf(notificationRequest))
 
         assertThat(currentTime).isEqualTo(0)
+    }
+
+    @Test
+    fun `when app is in background, a push handled by the current work and pending again doesn't end the sync early`() = runTest {
+        val sut = createSyncOnNotifiableEvent(
+            client = client,
+            appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = false),
+            // The push this work just handled is pending again, for instance after a network error
+            pushHistoryService = FakePushHistoryService(getPendingPushRequests = { _, _ -> Result.success(listOf(notificationRequest)) }),
+        )
+
+        sut(listOf(notificationRequest))
+
+        assertThat(currentTime).isEqualTo(10_000)
     }
 
     private fun TestScope.createSyncOnNotifiableEvent(

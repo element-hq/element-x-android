@@ -51,6 +51,11 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
+/**
+ * Pending push requests older than this are not fetched anymore.
+ */
+internal val PENDING_PUSH_REQUESTS_MAX_AGE = 1.days
+
 @AssistedInject
 class FetchPendingNotificationsWorker(
     @Assisted private val params: WorkerParameters,
@@ -92,7 +97,7 @@ class FetchPendingNotificationsWorker(
         }
 
         // Fetch pending requests in the last 24 hours
-        val fetchSince = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(1.days)
+        val fetchSince = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(PENDING_PUSH_REQUESTS_MAX_AGE)
         val requests = pushHistoryService.getPendingPushRequests(sessionId, fetchSince).getOrNull() ?: return Result.failure()
 
         pushHistoryService.removeOldPushRequests(sessionId).onFailure {

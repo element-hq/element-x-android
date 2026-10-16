@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.PushHistoryService
+import io.element.android.libraries.push.impl.workmanager.PENDING_PUSH_REQUESTS_MAX_AGE
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.flow.first
@@ -25,7 +26,6 @@ import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
-import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
@@ -63,7 +63,7 @@ class DefaultSyncOnNotifiableEvent(
                         queuedPushRequestNotifier.queued
                             // Also check once for pushes queued before we started waiting
                             .onSubscription { emit(Unit) }
-                            .first { hasPendingPushRequests(SessionId(sessionId)) }
+                            .first { hasNewPendingPushRequests(SessionId(sessionId), handled = events) }
                     } != null
                     if (newPushQueued) {
                         Timber.d("A new push is waiting to be fetched, ending the opportunistic sync early")
@@ -76,8 +76,13 @@ class DefaultSyncOnNotifiableEvent(
         }
     }
 
-    private suspend fun hasPendingPushRequests(sessionId: SessionId): Boolean {
-        val since = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(1.days)
-        return pushHistoryService.getPendingPushRequests(sessionId, since).getOrNull().orEmpty().isNotEmpty()
+    /**
+     * Whether a push is waiting to be fetched, other than the ones handled by the current work: those may be pending again after a
+     * network error, and they don't need another work to be fetched.
+     */
+    private suspend fun hasNewPendingPushRequests(sessionId: SessionId, handled: List<PushRequest>): Boolean {
+        val since = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(PENDING_PUSH_REQUESTS_MAX_AGE)
+        val pending = pushHistoryService.getPendingPushRequests(sessionId, since).getOrNull().orEmpty()
+        return pending.any { request -> handled.none { it.eventId == request.eventId && it.roomId == request.roomId } }
     }
 }
