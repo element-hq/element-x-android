@@ -41,6 +41,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.TimelineSelectionOwner
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
@@ -98,7 +99,7 @@ class ThreadedMessagesNode(
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
     private val emojiPickerRenderer: EmojiPickerRenderer,
     private val dispatchers: CoroutineDispatchers,
-) : Node(buildContext, plugins = plugins), MessagesNavigator {
+) : Node(buildContext, plugins = plugins), MessagesNavigator, TimelineSelectionOwner {
     data class Inputs(
         val threadRootEventId: ThreadId,
         val focusedEventId: EventId?,
@@ -109,6 +110,7 @@ class ThreadedMessagesNode(
 
     private var timelineController: TimelineController? by mutableStateOf(null)
     private var presenter: Presenter<MessagesState>? by mutableStateOf(null)
+    private var timelinePresenter: TimelinePresenter? = null
 
     /**
      * This should be fast to load, but not faster than several UI frames, which will cause ANRs.
@@ -123,10 +125,12 @@ class ThreadedMessagesNode(
             dispatchers = dispatchers,
         )
         this.timelineController = timelineController
+        val timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this)
+        this.timelinePresenter = timelinePresenter
         return presenterFactory.create(
             navigator = this,
             composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = inputs.threadRootEventId),
-            timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
+            timelinePresenter = timelinePresenter,
             // TODO add special processor for threaded timeline
             actionListPresenter = actionListPresenterFactory.create(
                 postProcessor = TimelineItemActionPostProcessor.Default,
@@ -229,6 +233,10 @@ class ThreadedMessagesNode(
 
     override fun forwardEvents(eventIds: List<EventId>, timelineProvider: TimelineProvider) {
         callback.handleForwardEventClick(eventIds, timelineProvider)
+    }
+
+    override fun exitTimelineSelection() {
+        timelinePresenter?.exitSelectionMode()
     }
 
     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
