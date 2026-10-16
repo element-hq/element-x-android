@@ -347,6 +347,7 @@ class RustMatrixClient(
 
         // The SDK does not restore the ignored users list from its store at startup, and the sync will usually not send
         // the account data again if it has not changed, so the list would stay empty. Fetch it from the server instead.
+        // This can be removed once https://github.com/matrix-org/matrix-rust-sdk/issues/7299 is fixed.
         sessionCoroutineScope.launch(sessionDispatcher) {
             refreshIgnoredUsers()
         }
