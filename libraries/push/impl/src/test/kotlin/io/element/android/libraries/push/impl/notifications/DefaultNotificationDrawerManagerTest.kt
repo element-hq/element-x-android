@@ -637,6 +637,43 @@ class DefaultNotificationDrawerManagerTest {
     }
 
     @Test
+    fun `clearReadRoomsNotifications cancels thread notifications of rooms without unread counts`() = runTest {
+        val cancelNotificationResult = lambdaRecorder<String?, Int, Unit> { _, _ -> }
+        val threadTag = "$A_ROOM_ID|$A_THREAD_ID"
+        val sut = createClearReadRoomsManager(
+            cancelNotificationResult = cancelNotificationResult,
+            notifications = listOf(
+                mockk<StatusBarNotification> {
+                    every { id } returns 1
+                    every { tag } returns threadTag
+                },
+            ),
+            roomInfo = aRoomInfo(id = A_ROOM_ID),
+        )
+        sut.clearReadRoomsNotifications(A_SESSION_ID)
+        runCurrent()
+        cancelNotificationResult.assertions().isCalledOnce().with(value(threadTag), value(1))
+    }
+
+    @Test
+    fun `clearReadRoomsNotifications ignores notifications whose tag is not a room id`() = runTest {
+        val cancelNotificationResult = lambdaRecorder<String?, Int, Unit> { _, _ -> }
+        val sut = createClearReadRoomsManager(
+            cancelNotificationResult = cancelNotificationResult,
+            notifications = listOf(
+                mockk<StatusBarNotification> {
+                    every { id } returns 1
+                    every { tag } returns AN_EVENT_ID.value
+                },
+            ),
+            roomInfo = aRoomInfo(id = A_ROOM_ID),
+        )
+        sut.clearReadRoomsNotifications(A_SESSION_ID)
+        runCurrent()
+        cancelNotificationResult.assertions().isNeverCalled()
+    }
+
+    @Test
     fun `clearReadRoomsNotifications clears the summary when it is the only notification left`() = runTest {
         val cancelNotificationResult = lambdaRecorder<String?, Int, Unit> { _, _ -> }
         val summaryId = NotificationIdProvider.getSummaryNotificationId(A_SESSION_ID)
@@ -681,7 +718,7 @@ class DefaultNotificationDrawerManagerTest {
         count: Int = notifications.size,
     ): DefaultNotificationDrawerManager {
         val matrixClient = FakeMatrixClient().apply {
-            getRoomInfoLambda = { Result.success(roomInfo) }
+            getRoomInfoLambda = { roomId -> Result.success(roomInfo?.takeIf { it.id == roomId }) }
         }
         return createDefaultNotificationDrawerManager(
             notificationDisplayer = FakeNotificationDisplayer(cancelNotificationResult = cancelNotificationResult),

@@ -12,7 +12,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.lockscreen.api.LockScreenService
-import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -191,7 +190,7 @@ class DefaultNotificationDrawerManager(
     override fun clearReadRoomsNotifications(sessionId: SessionId) {
         val notifications = activeNotificationsProvider.getNotificationsForSession(sessionId)
         val notificationsGroupedByRoomId = notifications.mapNotNull {
-            tryOrNull { RoomId(it.tag) }?.let { roomId -> roomId to it }
+            it.tag?.let(NotificationCreator::getMessageNotificationRoomId)?.let { roomId -> roomId to it }
         }
 
         if (notificationsGroupedByRoomId.isEmpty()) return

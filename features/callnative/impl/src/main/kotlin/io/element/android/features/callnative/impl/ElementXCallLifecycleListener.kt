@@ -8,6 +8,7 @@
 package io.element.android.features.callnative.impl
 
 import io.element.android.call.api.ElementCallData
+import io.element.android.call.api.ElementCallEndReason
 import io.element.android.call.api.ElementCallLifecycleListener
 import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.CurrentCall
@@ -19,6 +20,7 @@ import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Reports a native call back to the parts of Element X that already track calls.
@@ -47,7 +49,8 @@ class ElementXCallLifecycleListener(
         sessionCoroutineScope.launch { ringingCallTracker.onCallJoined(callData.toCallData()) }
     }
 
-    override fun onCallEnded(callData: ElementCallData?) {
+    override fun onCallEnded(callData: ElementCallData?, reason: ElementCallEndReason) {
+        Timber.i("Native call ended: $reason")
         currentCallTracker.onCallEnded()
         callData?.let { sessionCoroutineScope.launch { ringingCallTracker.onCallEnded(it.toCallData()) } }
     }
