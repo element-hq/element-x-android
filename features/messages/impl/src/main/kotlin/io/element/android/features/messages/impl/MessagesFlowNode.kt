@@ -464,7 +464,11 @@ class MessagesFlowNode(
             is NavTarget.ForwardEvent -> {
                 // If no timeline provider is received, assume the live timeline should be used
                 val timelineProvider = navTarget.timelineProvider ?: timelineController
-                val params = ForwardEntryPoint.Params(navTarget.eventIds, timelineProvider)
+                val params = ForwardEntryPoint.Params(
+                    eventIds = navTarget.eventIds,
+                    timelineProvider = timelineProvider,
+                    fromRoomId = room.roomId,
+                )
                 val callback = object : ForwardEntryPoint.Callback {
                     override fun onDone(roomIds: List<RoomId>) {
                         backstack.pop()

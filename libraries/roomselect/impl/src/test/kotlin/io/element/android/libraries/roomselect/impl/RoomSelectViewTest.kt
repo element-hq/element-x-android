@@ -84,6 +84,43 @@ class RoomSelectViewTest : RobolectricTest() {
         onNodeWithText("@alice:example.org").assertDoesNotExist()
     }
 
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `the suggestions are rendered above the room list`() = runAndroidComposeUiTest {
+        setRoomSelectView(
+            aRoomSelectState(
+                resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
+                suggestions = persistentListOf(
+                    aSelectRoomInfo(roomId = RoomId("!suggested:domain"), name = "Suggested room"),
+                ),
+            ),
+        )
+        onNodeWithText("Suggested room").assertIsDisplayed()
+        onNodeWithText(activity!!.getString(CommonStrings.common_suggestions)).assertIsDisplayed()
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `clicking on a suggested room emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<RoomSelectEvent>()
+        val suggestion = aSelectRoomInfo(roomId = RoomId("!suggested:domain"), name = "Suggested room")
+        setRoomSelectView(
+            aRoomSelectState(
+                resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
+                suggestions = persistentListOf(suggestion),
+                eventSink = eventsRecorder,
+            ),
+        )
+        onNodeWithText("Suggested room").performClick()
+        eventsRecorder.assertList(
+            listOf(
+                // 1 suggestion + 2 section headers are rendered before the room list, so the visible range is shifted by 3
+                RoomSelectEvent.UpdateVisibleRange(0..3),
+                RoomSelectEvent.ToggleSelectedRoom(suggestion),
+            )
+        )
+    }
+
     @Test
     fun `clicking on switch account emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomSelectEvent>()

@@ -56,6 +56,7 @@ class ForwardMessagesNode(
     data class Inputs(
         val eventIds: List<EventId>,
         val timelineProvider: TimelineProvider,
+        val fromRoomId: RoomId,
     ) : NodeInputs
 
     private val inputs = inputs<Inputs>()
@@ -83,7 +84,7 @@ class ForwardMessagesNode(
             buildContext = buildContext,
             params = RoomSelectEntryPoint.Params(
                 sessionId = sessionId,
-                mode = RoomSelectMode.Forward,
+                mode = RoomSelectMode.Forward(fromRoomId = inputs.fromRoomId),
                 maxNumberOfRooms = RoomSelectEntryPoint.DEFAULT_MAX_NUMBER_OF_ROOMS,
             ),
             callback = callback,
