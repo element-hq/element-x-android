@@ -125,6 +125,22 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
     }
 
     @Test
+    fun `a re-encoded image does not replace a processed file with the same name`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val existingFile = File(context.cacheDir, "image.jpeg").apply { writeText("existing") }
+        process(
+            asset = assetImageBmp,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = true,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+            sdkIntVersion = Build.VERSION_CODES.Q,
+            expectedFileName = "image (1).jpeg",
+        )
+        assertThat(existingFile.readText()).isEqualTo("existing")
+    }
+
+    @Test
     fun `an uncompressed bmp keeps its mime type and file name`() = runTest {
         val mediaUploadInfo = process(
             asset = assetImageBmp,
@@ -594,10 +610,12 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
         temporaryUriDeleter = temporaryUriDeleter,
     )
 
+    // Copied outside the root of the cache dir, where processed media are written, so that the source and output files never clash
     @Throws(IOException::class)
-    private fun getFileFromAssets(context: Context, fileName: String): File = File(context.cacheDir, fileName)
+    private fun getFileFromAssets(context: Context, fileName: String): File = File(context.cacheDir, "assets/$fileName")
         .also {
             if (!it.exists()) {
+                it.parentFile?.mkdirs()
                 it.outputStream().use { cache ->
                     context.assets.open(fileName).use { inputStream ->
                         inputStream.copyTo(cache)

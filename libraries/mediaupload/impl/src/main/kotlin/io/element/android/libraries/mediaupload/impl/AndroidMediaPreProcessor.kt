@@ -153,7 +153,7 @@ class AndroidMediaPreProcessor(
         } else {
             originalName
         }
-        val renamedFile = File(context.cacheDir, name).also {
+        val renamedFile = reserveFileInCacheDir(name).also {
             file.safeRenameTo(it)
         }
         return when (this) {
@@ -163,6 +163,25 @@ class AndroidMediaPreProcessor(
             is MediaUploadInfo.Video -> copy(file = renamedFile)
             is MediaUploadInfo.VoiceMessage -> copy(file = renamedFile)
         }
+    }
+
+    /**
+     * Several media can end up with the same name, e.g. `IMG_1.heic` re-encoded to `IMG_1.jpeg` in the same gallery as an actual `IMG_1.jpeg`, and renaming
+     * onto an existing file would silently replace it. Atomically claim a free name instead, adding a numbered suffix when needed.
+     */
+    private fun reserveFileInCacheDir(name: String): File {
+        val baseName = name.substringBeforeLast('.')
+        val extension = name.substringAfterLast('.', missingDelimiterValue = "")
+        return generateSequence(0) { it + 1 }
+            .map { index ->
+                when {
+                    index == 0 -> name
+                    extension.isEmpty() -> "$baseName ($index)"
+                    else -> "$baseName ($index).$extension"
+                }
+            }
+            .map { File(cacheDir, it) }
+            .first { it.createNewFile() }
     }
 
     /**
