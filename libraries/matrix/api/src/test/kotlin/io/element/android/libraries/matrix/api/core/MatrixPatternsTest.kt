@@ -65,6 +65,34 @@ class MatrixPatternsTest {
     }
 
     @Test
+    fun `findPatterns - does not return @room when it is part of a larger word`() {
+        val text = "Some @roomba, me@room and @room_1"
+        val patterns = MatrixPatterns.findPatterns(text, aPermalinkParser())
+        assertThat(patterns).isEmpty()
+    }
+
+    @Test
+    fun `findPatterns - returns @room followed by punctuation`() {
+        val text = "Hey @room: look (@room)"
+        val patterns = MatrixPatterns.findPatterns(text, aPermalinkParser())
+        assertThat(patterns).containsExactly(
+            MatrixPatternResult(MatrixPatternType.AT_ROOM, "@room", 4, 9),
+            MatrixPatternResult(MatrixPatternType.AT_ROOM, "@room", 17, 22),
+        )
+    }
+
+    @Test
+    fun `findPatterns - does not include trailing punctuation in raw ids`() {
+        val text = "Ask @user:server.com. Or @user2:server.com:8448, or #room:server.com-"
+        val patterns = MatrixPatterns.findPatterns(text, aPermalinkParser())
+        assertThat(patterns).containsExactly(
+            MatrixPatternResult(MatrixPatternType.USER_ID, "@user:server.com", 4, 20),
+            MatrixPatternResult(MatrixPatternType.USER_ID, "@user2:server.com:8448", 25, 47),
+            MatrixPatternResult(MatrixPatternType.ROOM_ALIAS, "#room:server.com", 52, 68),
+        )
+    }
+
+    @Test
     fun `findPatterns - returns user ids in permalinks`() {
         val text = "A [User](https://matrix.to/#/@user:server.com)"
         val permalinkParser = aPermalinkParser { _ ->
