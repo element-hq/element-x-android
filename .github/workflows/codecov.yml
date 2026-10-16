@@ -1,0 +1,46 @@
+name: Codecov
+
+# Reusable workflow, called from tests.yml. Uploads the kover coverage report generated there to codecov.
+on:
+  workflow_call:
+    secrets:
+      CODECOV_TOKEN:
+        required: false
+      ELEMENT_ENTERPRISE_DEPLOY_KEY:
+        required: false
+
+permissions: {}
+
+jobs:
+  codecov:
+    name: Upload coverage to codecov
+    runs-on: ubuntu-latest
+    steps:
+      # Having the source code while uploading the coverage report is necessary for codecov.
+      - name: ⏬ Checkout with LFS
+        uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
+        with:
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+      - name: Add SSH private keys for submodule repositories
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+        with:
+          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
+      - name: Clone submodules
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+        run: git submodule update --init --recursive
+      - name: ⏬ Download kover report from the tests job
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: kover-xml-report
+          path: build/reports/kover
+      # https://github.com/codecov/codecov-action
+      - name: ☂️ Upload coverage reports to codecov
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: build/reports/kover/reportMerged.xml
+          verbose: true
