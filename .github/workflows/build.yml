@@ -58,7 +58,11 @@ jobs:
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
-          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+          # The GitHub cache is limited to 10 GB per repository, and each job writing the cache adds several GB
+          # (dependencies, transforms and build cache), so older entries get evicted and jobs can restore an incomplete cache.
+          # To stay under the limit, only this job (debug variant) and the unit tests job (tests.yml) write the cache on develop.
+          # All the other jobs only read it.
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' || matrix.variant != 'debug' }}
       - name: Assemble debug APKs
         if: ${{ matrix.variant == 'debug' }}
         env:
