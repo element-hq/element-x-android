@@ -85,6 +85,7 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
         sdkIntVersion: Int = Build.VERSION_CODES.P,
         deleteOriginal: Boolean = false,
         mimeType: String = asset.mimeType,
+        expectedFileName: String = asset.filename,
     ): MediaUploadInfo {
         val context = InstrumentationRegistry.getInstrumentation().context
         val deleteCallback = lambdaRecorder<Uri?, Unit> {}
@@ -101,9 +102,41 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
             mediaOptimizationConfig = mediaOptimizationConfig,
         )
         val data = result.getOrThrow()
-        assertThat(data.file.path).endsWith(asset.filename)
+        assertThat(data.file.path).endsWith(expectedFileName)
         deleteCallback.assertions().isCalledExactly(if (deleteOriginal) 0 else 1)
         return data
+    }
+
+    @Test
+    fun `a compressed bmp is labelled and named as the jpeg it was re-encoded to`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageBmp,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = true,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+            sdkIntVersion = Build.VERSION_CODES.Q,
+            expectedFileName = "image.jpeg",
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.imageInfo.mimetype).isEqualTo(MimeTypes.Jpeg)
+        assertThat(info.imageInfo.width).isEqualTo(assetImageBmp.width)
+        assertThat(info.imageInfo.height).isEqualTo(assetImageBmp.height)
+    }
+
+    @Test
+    fun `an uncompressed bmp keeps its mime type and file name`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageBmp,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = false,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+            sdkIntVersion = Build.VERSION_CODES.Q,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.imageInfo.mimetype).isEqualTo(assetImageBmp.mimeType)
+        assertThat(info.imageInfo.size).isEqualTo(assetImageBmp.size)
     }
 
     @Test
