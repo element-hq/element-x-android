@@ -19,6 +19,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.getFileName
+import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.file.safeRenameTo
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.androidutils.media.runAndRelease
@@ -153,8 +154,11 @@ class AndroidMediaPreProcessor(
         } else {
             originalName
         }
-        val renamedFile = reserveFileInCacheDir(name).also {
-            file.safeRenameTo(it)
+        val renamedFile = tryOrNull { reserveFileInCacheDir(name) } ?: return this
+        if (!file.safeRenameTo(renamedFile)) {
+            // Keep pointing at the processed file rather than at a destination that was never written
+            renamedFile.safeDelete()
+            return this
         }
         return when (this) {
             is MediaUploadInfo.AnyFile -> copy(file = renamedFile)

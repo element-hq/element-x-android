@@ -141,6 +141,34 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
     }
 
     @Test
+    fun `a processed file that cannot be moved to its final name is still returned`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val sut = createAndroidMediaPreProcessor(
+            context = context,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(lambdaRecorder<Uri?, Unit> {}),
+        )
+        val file = getFileFromAssets(context, assetText.filename)
+        // Files are processed in the uploads dir, then moved to the root of the cache dir, which is made read-only here
+        File(context.cacheDir, "uploads").mkdirs()
+        context.cacheDir.setWritable(false)
+        try {
+            val mediaUploadInfo = sut.process(
+                uri = file.toUri(),
+                mimeType = assetText.mimeType,
+                deleteOriginal = false,
+                mediaOptimizationConfig = MediaOptimizationConfig(
+                    compressImages = true,
+                    videoCompressionPreset = VideoCompressionPreset.STANDARD,
+                ),
+            ).getOrThrow()
+            assertThat(mediaUploadInfo.file.exists()).isTrue()
+            assertThat(mediaUploadInfo.file.readText()).isEqualTo(file.readText())
+        } finally {
+            context.cacheDir.setWritable(true)
+        }
+    }
+
+    @Test
     fun `an uncompressed bmp keeps its mime type and file name`() = runTest {
         val mediaUploadInfo = process(
             asset = assetImageBmp,
