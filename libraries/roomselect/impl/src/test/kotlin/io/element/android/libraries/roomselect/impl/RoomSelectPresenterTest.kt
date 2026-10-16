@@ -8,11 +8,14 @@
 
 package io.element.android.libraries.roomselect.impl
 
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import app.cash.turbine.Event
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -21,10 +24,13 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
+import io.element.android.libraries.matrix.test.A_ROOM_ID_3
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
@@ -346,7 +352,7 @@ class RoomSelectPresenterTest {
     @Test
     fun `present - forward mode, no navigation to the verification of the session`() = runTest {
         val presenter = createRoomSelectPresenter(
-            mode = RoomSelectMode.Forward,
+            mode = RoomSelectMode.Forward(fromRoomId = A_ROOM_ID_3),
             initialSessionId = A_SESSION_ID_2,
             matrixClientProvider = FakeMatrixClientProvider { sessionId ->
                 Result.success(
@@ -395,13 +401,180 @@ class RoomSelectPresenterTest {
     @Test
     fun `present - forward mode with several accounts does not show the account switch`() = runTest {
         val presenter = createRoomSelectPresenter(
-            mode = RoomSelectMode.Forward,
+            mode = RoomSelectMode.Forward(fromRoomId = A_ROOM_ID_3),
             sessionStore = aSessionStoreWithTwoAccounts(),
         )
         presenter.test {
             val state = awaitLastSequentialItem()
             assertThat(state.otherAccounts).isNotEmpty()
             assertThat(state.showAccountSwitch).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - forward mode suggests the most recently visited rooms`() = runTest {
+        val client = aClientWithRecentlyVisitedRooms(listOf(A_ROOM_ID, A_ROOM_ID_2))
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Forward(fromRoomId = A_ROOM_ID_3),
+            matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
+        )
+        presenter.test {
+            // Initial state, without the suggestions
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.suggestions.map { it.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_2).inOrder()
+        }
+    }
+
+    @Test
+    fun `present - at most 5 rooms are suggested`() = runTest {
+        val roomIds = (1..8).map { RoomId("!room$it:domain") }
+        val client = aClientWithRecentlyVisitedRooms(roomIds)
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Forward(fromRoomId = A_ROOM_ID_3),
+            matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
+        )
+        presenter.test {
+            // Initial state, without the suggestions
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.suggestions.map { it.roomId }).isEqualTo(roomIds.take(5))
+        }
+    }
+
+    @Test
+    fun `present - spaces are never suggested`() = runTest {
+        val client = aClientWithRecentlyVisitedRooms(listOf(A_ROOM_ID, A_ROOM_ID_2), isSpace = { it == A_ROOM_ID })
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Forward(fromRoomId = A_ROOM_ID_3),
+            matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
+        )
+        presenter.test {
+            // Initial state, without the suggestions
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.suggestions.map { it.roomId }).containsExactly(A_ROOM_ID_2)
+        }
+    }
+
+    @Test
+    fun `present - share mode does not suggest any room`() = runTest {
+        val client = aClientWithRecentlyVisitedRooms(listOf(A_ROOM_ID, A_ROOM_ID_2))
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Share,
+            matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
+        )
+        presenter.test {
+            // The suggestions are never loaded, so there is no further state
+            val state = awaitItem()
+            assertThat(state.suggestions).isEmpty()
+        }
+    }
+
+    @Test
+    fun `present - the room the content is forwarded from is excluded from both lists`() = runTest {
+        val roomListService = aRoomListServiceWithRooms(listOf(A_ROOM_ID, A_ROOM_ID_2, A_ROOM_ID_3))
+        val client = aClientWithRecentlyVisitedRooms(listOf(A_ROOM_ID, A_ROOM_ID_2), roomListService = roomListService)
+        val presenter = createRoomSelectPresenter(
+            // The content is forwarded from A_ROOM_ID, which is also the most recently visited room
+            mode = RoomSelectMode.Forward(fromRoomId = A_ROOM_ID),
+            matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
+        )
+        presenter.test {
+            // Initial state, then the room list before the suggestions are loaded
+            skipItems(2)
+            val state = awaitItem()
+            assertThat(state.suggestions.map { it.roomId }).containsExactly(A_ROOM_ID_2)
+            val results = state.resultState as SearchBarResultState.Results
+            // A_ROOM_ID is excluded, and A_ROOM_ID_2 is already displayed as a suggestion
+            assertThat(results.results.map { it.roomId }).containsExactly(A_ROOM_ID_3)
+        }
+    }
+
+    @Test
+    fun `present - rooms displayed as suggestions are not repeated in the room list`() = runTest {
+        val roomListService = aRoomListServiceWithRooms(listOf(A_ROOM_ID, A_ROOM_ID_2))
+        val client = aClientWithRecentlyVisitedRooms(listOf(A_ROOM_ID), roomListService = roomListService)
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Forward(fromRoomId = A_ROOM_ID_3),
+            matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
+        )
+        presenter.test {
+            // Initial state, then the room list before the suggestions are loaded
+            skipItems(2)
+            val state = awaitItem()
+            assertThat(state.suggestions.map { it.roomId }).containsExactly(A_ROOM_ID)
+            val results = state.resultState as SearchBarResultState.Results
+            assertThat(results.results.map { it.roomId }).containsExactly(A_ROOM_ID_2)
+        }
+    }
+
+    @Test
+    fun `present - suggestions are hidden while searching, and their rooms are part of the room list again`() = runTest {
+        val roomListService = aRoomListServiceWithRooms(listOf(A_ROOM_ID, A_ROOM_ID_2))
+        val client = aClientWithRecentlyVisitedRooms(listOf(A_ROOM_ID), roomListService = roomListService)
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Forward(fromRoomId = A_ROOM_ID_3),
+            matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
+        )
+        presenter.test {
+            // Initial state, then the room list before the suggestions are loaded
+            skipItems(2)
+            val state = awaitItem()
+            assertThat(state.suggestions.map { it.roomId }).containsExactly(A_ROOM_ID)
+            state.searchQuery.setTextAndPlaceCursorAtEnd("query")
+            // Hiding the suggestions and putting their rooms back in the room list is a single state change
+            val searchingState = awaitItem()
+            assertThat(searchingState.suggestions).isEmpty()
+            val results = searchingState.resultState as SearchBarResultState.Results
+            assertThat(results.results.map { it.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_2).inOrder()
+        }
+    }
+
+    @Test
+    fun `present - the suggestions are restored without being loaded again when the search query is cleared`() = runTest {
+        val roomListService = aRoomListServiceWithRooms(listOf(A_ROOM_ID, A_ROOM_ID_2))
+        val client = aClientWithRecentlyVisitedRooms(listOf(A_ROOM_ID), roomListService = roomListService)
+        val presenter = createRoomSelectPresenter(
+            mode = RoomSelectMode.Forward(fromRoomId = A_ROOM_ID_3),
+            matrixClientProvider = FakeMatrixClientProvider { Result.success(client) },
+        )
+        presenter.test {
+            // Initial state, then the room list before the suggestions are loaded
+            skipItems(2)
+            val state = awaitItem()
+            assertThat(state.suggestions.map { it.roomId }).containsExactly(A_ROOM_ID)
+            state.searchQuery.setTextAndPlaceCursorAtEnd("query")
+            val searchingState = awaitItem()
+            assertThat(searchingState.suggestions).isEmpty()
+            // Visit another room: loading the suggestions again would now return it first
+            val aNewRoomId = RoomId("!aNewRoom:domain")
+            client.givenGetRoomResult(aNewRoomId, FakeBaseRoom(roomId = aNewRoomId, initialRoomInfo = aRoomInfo(id = aNewRoomId)))
+            client.trackRecentlyVisitedRoom(aNewRoomId)
+            searchingState.searchQuery.clearText()
+            val finalState = awaitItem()
+            // The suggestions were only hidden, not unloaded: the newly visited room is absent
+            assertThat(finalState.suggestions.map { it.roomId }).containsExactly(A_ROOM_ID)
+        }
+    }
+
+    private fun aRoomListServiceWithRooms(roomIds: List<RoomId>) = FakeRoomListService(
+        createRoomListLambda = {
+            FakeDynamicRoomList(summaries = MutableStateFlow(roomIds.map { aRoomSummary(roomId = it) }))
+        },
+    )
+
+    private suspend fun aClientWithRecentlyVisitedRooms(
+        roomIds: List<RoomId>,
+        isSpace: (RoomId) -> Boolean = { false },
+        roomListService: RoomListService = FakeRoomListService(),
+    ) = FakeMatrixClient(roomListService = roomListService).apply {
+        roomIds.reversed().forEach { roomId ->
+            givenGetRoomResult(
+                roomId = roomId,
+                result = FakeBaseRoom(roomId = roomId, initialRoomInfo = aRoomInfo(id = roomId, isSpace = isSpace(roomId))),
+            )
+            trackRecentlyVisitedRoom(roomId)
         }
     }
 
@@ -504,7 +677,7 @@ class RoomSelectPresenterTest {
 
 internal fun TestScope.createRoomSelectPresenter(
     initialSessionId: SessionId = A_SESSION_ID,
-    mode: RoomSelectMode = RoomSelectMode.Forward,
+    mode: RoomSelectMode = RoomSelectMode.Forward(fromRoomId = A_ROOM_ID_3),
     maxNumberOfRooms: Int = RoomSelectEntryPoint.DEFAULT_MAX_NUMBER_OF_ROOMS,
     roomListService: RoomListService = FakeRoomListService(),
     // The current session is always in the store
@@ -521,10 +694,15 @@ internal fun TestScope.createRoomSelectPresenter(
     maxNumberOfRooms = maxNumberOfRooms,
     navigator = navigator,
     dataSourceFactory = object : RoomSelectSearchDataSource.Factory {
-        override fun create(coroutineScope: CoroutineScope, roomListService: RoomListService): RoomSelectSearchDataSource {
+        override fun create(
+            coroutineScope: CoroutineScope,
+            client: MatrixClient,
+            mode: RoomSelectMode,
+        ): RoomSelectSearchDataSource {
             return RoomSelectSearchDataSource(
                 coroutineScope = coroutineScope,
-                roomListService = roomListService,
+                client = client,
+                mode = mode,
                 coroutineDispatchers = testCoroutineDispatchers(),
             )
         }

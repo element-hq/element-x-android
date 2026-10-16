@@ -19,7 +19,9 @@ data class RoomSelectState(
     val mode: RoomSelectMode,
     val maxNumberOfRooms: Int,
     val resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>>,
+    val suggestions: ImmutableList<SelectRoomInfo>,
     val searchQuery: TextFieldState,
+    val displayedSearchQuery: String,
     val selectedRooms: ImmutableList<SelectRoomInfo>,
     val selectedAccount: MatrixUser,
     /**
