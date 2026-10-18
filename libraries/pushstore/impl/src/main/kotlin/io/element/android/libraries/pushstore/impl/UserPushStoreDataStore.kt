@@ -56,7 +56,6 @@ class UserPushStoreDataStore(
     private val currentPushKey = stringPreferencesKey("currentPushKey")
     private val notificationEnabled = booleanPreferencesKey("notificationEnabled")
     private val ignoreRegistrationError = booleanPreferencesKey("ignoreRegistrationError")
-
     override suspend fun getPushProviderName(): String? {
         return store.data.first()[pushProviderName]
     }

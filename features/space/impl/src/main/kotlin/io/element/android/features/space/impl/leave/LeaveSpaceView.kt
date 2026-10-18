@@ -6,8 +6,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.space.impl.leave
 
 import androidx.annotation.StringRes
@@ -23,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -92,7 +89,7 @@ fun LeaveSpaceView(
                 showLeaveButton = state.showLeaveButton,
                 selectedRoomsCount = state.selectedRoomsCount,
                 onLeaveSpace = {
-                    state.eventSink(LeaveSpaceEvents.LeaveSpace)
+                    state.eventSink(LeaveSpaceEvent.LeaveSpace)
                 },
                 onCancel = onCancel,
                 showRolesAndPermissionsButton = state.needsOwnerChange && !state.areCreatorsPrivileged,
@@ -115,7 +112,7 @@ fun LeaveSpaceView(
                                         selectableSpaceRoom = selectableSpaceRoom,
                                         showCheckBox = state.hasOnlyLastAdminRoom.not(),
                                         onClick = {
-                                            state.eventSink(LeaveSpaceEvents.ToggleRoomSelection(selectableSpaceRoom.spaceRoom.roomId))
+                                            state.eventSink(LeaveSpaceEvent.ToggleRoomSelection(selectableSpaceRoom.spaceRoom.roomId))
                                         }
                                     )
                                 }
@@ -125,7 +122,7 @@ fun LeaveSpaceView(
                             AsyncFailure(
                                 throwable = state.selectableSpaceRooms.error,
                                 onRetry = {
-                                    state.eventSink(LeaveSpaceEvents.Retry)
+                                    state.eventSink(LeaveSpaceEvent.Retry)
                                 },
                             )
                         }
@@ -143,7 +140,7 @@ fun LeaveSpaceView(
         async = state.leaveSpaceAction,
         onSuccess = { /* Nothing to do, the screen will be dismissed automatically */ },
         errorMessage = { stringResource(CommonStrings.error_unknown) },
-        onErrorDismiss = { state.eventSink(LeaveSpaceEvents.CloseError) },
+        onErrorDismiss = { state.eventSink(LeaveSpaceEvent.CloseError) },
     )
 }
 
@@ -184,11 +181,11 @@ private fun LeaveSpaceHeader(
         if (state.showQuickAction) {
             if (state.areAllSelected) {
                 QuickActionButton(CommonStrings.action_deselect_all) {
-                    state.eventSink(LeaveSpaceEvents.DeselectAllRooms)
+                    state.eventSink(LeaveSpaceEvent.DeselectAllRooms)
                 }
             } else {
                 QuickActionButton(resId = CommonStrings.action_select_all) {
-                    state.eventSink(LeaveSpaceEvents.SelectAllRooms)
+                    state.eventSink(LeaveSpaceEvent.SelectAllRooms)
                 }
             }
         }
@@ -366,7 +363,7 @@ private fun SpaceItem(
 @PreviewsDayNight
 @Composable
 internal fun LeaveSpaceViewPreview(
-    @PreviewParameter(LeaveSpaceStateProvider::class) state: LeaveSpaceState,
+    @PreviewParameter(LeaveSpaceStatePreviewParam::class) state: LeaveSpaceState,
 ) = ElementPreview {
     LeaveSpaceView(
         state = state,

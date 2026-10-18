@@ -11,7 +11,6 @@ package io.element.android.features.viewfolder.impl.file
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,7 +29,6 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViewFileView(
     state: ViewFileState,
@@ -48,7 +46,7 @@ fun ViewFileView(
                 actions = {
                     IconButton(
                         onClick = {
-                            state.eventSink(ViewFileEvents.Share)
+                            state.eventSink(ViewFileEvent.Share)
                         },
                     ) {
                         Icon(
@@ -58,7 +56,7 @@ fun ViewFileView(
                     }
                     IconButton(
                         onClick = {
-                            state.eventSink(ViewFileEvents.SaveOnDisk)
+                            state.eventSink(ViewFileEvent.SaveOnDisk)
                         },
                     ) {
                         Icon(
@@ -82,6 +80,7 @@ fun ViewFileView(
                         modifier = Modifier.weight(1f),
                         lines = state.lines.data.toImmutableList(),
                         colorationMode = state.colorationMode,
+                        onLineClick = { state.eventSink(ViewFileEvent.CopyToClipboard(it)) },
                     )
                     is AsyncData.Failure -> AsyncFailure(throwable = state.lines.error, onRetry = null)
                 }
@@ -92,7 +91,7 @@ fun ViewFileView(
 
 @PreviewsDayNight
 @Composable
-internal fun ViewFileViewPreview(@PreviewParameter(ViewFileStateProvider::class) state: ViewFileState) = ElementPreview {
+internal fun ViewFileViewPreview(@PreviewParameter(ViewFileStatePreviewParam::class) state: ViewFileState) = ElementPreview {
     ViewFileView(
         state = state,
         onBackClick = {},

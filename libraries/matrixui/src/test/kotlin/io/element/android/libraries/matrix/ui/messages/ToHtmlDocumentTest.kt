@@ -16,12 +16,10 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class ToHtmlDocumentTest {
+class ToHtmlDocumentTest : RobolectricTest() {
     @Test
     fun `toHtmlDocument - returns null if format is not HTML`() {
         val body = FormattedBody(
@@ -104,5 +102,29 @@ class ToHtmlDocumentTest {
             }
         })
         assertThat(document?.text()).isEqualTo("Hey Alice!")
+    }
+
+    @Test
+    fun `toHtmlDocument - returns null if the body only contains unsupported tags`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<img data-mx-emoticon src=\"mxc://matrix.org/anImage\" height=\"32\" width=\"32\" alt=\"\uD83D\uDE1C\" />"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+
+        assertThat(document).isNull()
+    }
+
+    @Test
+    fun `toHtmlDocument - returns a Document if some text survives next to unsupported tags`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "Look at this <img src=\"mxc://matrix.org/anImage\" alt=\"cat\" />!"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+
+        assertThat(document?.text()).isEqualTo("Look at this !")
     }
 }

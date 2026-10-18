@@ -9,7 +9,6 @@
 package io.element.android.libraries.designsystem.theme.components.previews
 
 import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TimePickerLayoutType
 import androidx.compose.material3.rememberTimePickerState
@@ -22,7 +21,6 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.AlertDialogContent
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(widthDp = 600, group = PreviewGroup.DateTimePickers)
 @Composable
 internal fun TimePickerHorizontalPreview() {
@@ -44,7 +42,6 @@ internal fun TimePickerHorizontalPreview() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(group = PreviewGroup.DateTimePickers)
 @Composable
 internal fun TimePickerVerticalLightPreview() {
@@ -66,7 +63,6 @@ internal fun TimePickerVerticalLightPreview() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(group = PreviewGroup.DateTimePickers)
 @Composable
 internal fun TimePickerVerticalDarkPreview() {

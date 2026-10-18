@@ -71,6 +71,8 @@ fun aRoomInfo(
     privilegedCreatorRole: Boolean = false,
     isLowPriority: Boolean = false,
     activeCallIntentConsensus: CallIntentConsensus = CallIntentConsensus.None,
+    isDm: Boolean = false,
+    fullyReadEventId: EventId? = null,
 ) = RoomInfo(
     id = id,
     name = name,
@@ -109,4 +111,6 @@ fun aRoomInfo(
     privilegedCreatorRole = privilegedCreatorRole,
     isLowPriority = isLowPriority,
     activeCallIntentConsensus = activeCallIntentConsensus,
+    isDm = isDm,
+    fullyReadEventId = fullyReadEventId,
 )

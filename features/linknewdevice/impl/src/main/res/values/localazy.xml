@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"Scan the QR code with this device"</string>
   <string name="screen_link_new_device_desktop_submit">"Ready to scan"</string>
   <string name="screen_link_new_device_desktop_title">"Open %1$s on a desktop computer to get the QR code"</string>
+  <string name="screen_link_new_device_desktop_warning">"Only scan a QR code after following the steps above on your own device. Never scan a code sent by another person."</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"The numbers don’t match"</string>
   <string name="screen_link_new_device_enter_number_notice">"Enter 2-digit code"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"This will verify that the connection to your other device is secure."</string>

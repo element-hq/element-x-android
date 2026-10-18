@@ -11,7 +11,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.matrix.ui.media.api"
+    namespace = "io.element.android.libraries.matrixmedia.api"
 }
 
 dependencies {

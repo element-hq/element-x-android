@@ -28,7 +28,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
 import kotlinx.parcelize.Parcelize
 
 @Composable
@@ -132,7 +132,7 @@ data class AttachmentThumbnailInfo(
 
 @PreviewsDayNight
 @Composable
-internal fun AttachmentThumbnailPreview(@PreviewParameter(AttachmentThumbnailInfoProvider::class) data: AttachmentThumbnailInfo) = ElementPreview {
+internal fun AttachmentThumbnailPreview(@PreviewParameter(AttachmentThumbnailInfoPreviewParam::class) data: AttachmentThumbnailInfo) = ElementPreview {
     AttachmentThumbnail(
         info = data,
         modifier = Modifier

@@ -44,6 +44,7 @@
   <string name="screen_room_details_error_muting">"Ezin izan da gela mututu; saiatu berriro."</string>
   <string name="screen_room_details_error_unmuting">"Ezin izan da gela mututzeari utzi; saiatu berriro."</string>
   <string name="screen_room_details_invite_people_title">"Gonbidatu jendea"</string>
+  <string name="screen_room_details_invite_title">"Gonbidatu"</string>
   <string name="screen_room_details_leave_conversation_title">"Utzi elkarrizketa"</string>
   <string name="screen_room_details_leave_room_title">"Atera gelatik"</string>
   <string name="screen_room_details_media_gallery_title">"Multimedia eta fitxategiak"</string>
@@ -82,7 +83,6 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Errorea gertatu da jakinarazpen-ezarpenak kargatzean."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Zure zerbitzaria ez da bateragarria enkriptatutako gelen aukerarekin; litekeena da gela batzuetako jakinarazpenak ez jasotzea."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Mezu guztiak"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Aipamenak eta hitz gakoak soilik"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Gela honetan, jakinarazi"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratzaileak"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratzaileak eta jabeak"</string>
@@ -99,6 +99,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rolak"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Gelaren xehetasunak"</string>
   <string name="screen_room_roles_and_permissions_title">"Rolak eta baimenak"</string>
+  <string name="screen_roomlist_mark_as_read">"Markatu irakurritzat"</string>
+  <string name="screen_roomlist_mark_as_unread">"Markatu irakurri gabetzat"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Gehitu gelaren helbidea"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Bai, gaitu zifratzea"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Zifratzea"</string>

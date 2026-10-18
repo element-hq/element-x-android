@@ -8,6 +8,14 @@
 
 package io.element.android.libraries.matrix.api
 
+/**
+ * Exposes build information about the bundled `matrix-rust-sdk`.
+ *
+ * Mostly used to identify the exact SDK revision in bug reports and in the user agent.
+ */
 interface SdkMetadata {
+    /**
+     * The full git SHA of the commit the bundled `matrix-rust-sdk` was built from.
+     */
     val sdkGitSha: String
 }

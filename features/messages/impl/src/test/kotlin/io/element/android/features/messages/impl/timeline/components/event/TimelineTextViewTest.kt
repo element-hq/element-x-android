@@ -19,7 +19,6 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
@@ -39,13 +38,12 @@ import io.element.android.libraries.textcomposer.mentions.MentionType
 import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.wysiwyg.view.spans.CustomMentionSpan
 import kotlinx.coroutines.CompletableDeferred
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class TimelineTextViewTest {
+class TimelineTextViewTest : RobolectricTest() {
     private val mentionSpanTheme = MentionSpanTheme(currentUserId = A_USER_ID)
     private val formatLambda = lambdaRecorder<MentionType, CharSequence> { mentionType -> mentionType.toString() }
     private val mentionSpanFormatter = FakeMentionSpanFormatter(formatLambda)

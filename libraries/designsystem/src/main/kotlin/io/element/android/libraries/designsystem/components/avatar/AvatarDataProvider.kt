@@ -8,15 +8,19 @@
 
 package io.element.android.libraries.designsystem.components.avatar
 
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+
 fun anAvatarData(
-    // Let's the id not start with a 'a'.
+    // Let the id not start with a 'a'.
     id: String = "@id_of_alice:server.org",
-    name: String? = "Alice",
+    name: String? = USER_NAME_ALICE,
     url: String? = null,
     size: AvatarSize = AvatarSize.RoomListItem,
+    thumbnail: String? = null,
 ) = AvatarData(
     id = id,
     name = name,
     url = url,
     size = size,
+    thumbnail = thumbnail,
 )

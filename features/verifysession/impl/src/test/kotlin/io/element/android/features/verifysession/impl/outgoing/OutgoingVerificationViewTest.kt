@@ -14,7 +14,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.verifysession.impl.R
 import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificationData
 import io.element.android.libraries.architecture.AsyncData
@@ -24,14 +23,13 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBackKey
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class OutgoingVerificationViewTest {
+class OutgoingVerificationViewTest : RobolectricTest() {
     @Test
     fun `back key pressed - when canceled resets the flow`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvent>()
         setOutgoingVerificationView(
             anOutgoingVerificationState(
                 step = OutgoingVerificationState.Step.Canceled,
@@ -39,12 +37,12 @@ class OutgoingVerificationViewTest {
             ),
         )
         pressBackKey()
-        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.Reset)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvent.Reset)
     }
 
     @Test
     fun `back key pressed - when awaiting response cancels the verification`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvent>()
         setOutgoingVerificationView(
             anOutgoingVerificationState(
                 step = OutgoingVerificationState.Step.AwaitingOtherDeviceResponse,
@@ -52,12 +50,12 @@ class OutgoingVerificationViewTest {
             ),
         )
         pressBackKey()
-        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.Cancel)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvent.Cancel)
     }
 
     @Test
     fun `back key pressed - when ready to verify cancels the verification`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvent>()
         setOutgoingVerificationView(
             anOutgoingVerificationState(
                 step = OutgoingVerificationState.Step.Ready,
@@ -65,12 +63,12 @@ class OutgoingVerificationViewTest {
             ),
         )
         pressBackKey()
-        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.Cancel)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvent.Cancel)
     }
 
     @Test
     fun `back key pressed - when verifying and not loading declines the verification`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvent>()
         setOutgoingVerificationView(
             anOutgoingVerificationState(
                 step = OutgoingVerificationState.Step.Verifying(
@@ -81,12 +79,12 @@ class OutgoingVerificationViewTest {
             ),
         )
         pressBackKey()
-        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.DeclineVerification)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvent.DeclineVerification)
     }
 
     @Test
     fun `back key pressed - when verifying and loading does nothing`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvent>()
         setOutgoingVerificationView(
             anOutgoingVerificationState(
                 step = OutgoingVerificationState.Step.Verifying(
@@ -101,10 +99,10 @@ class OutgoingVerificationViewTest {
     }
 
     @Test
-    fun `back key pressed - on Completed exits the flow`() = runAndroidComposeUiTest {
+    fun `back key pressed - on Completed finishes the flow`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
             setOutgoingVerificationView(
-                onBack = callback,
+                onFinished = callback,
                 state = anOutgoingVerificationState(
                     step = OutgoingVerificationState.Step.Completed,
                 ),
@@ -114,8 +112,8 @@ class OutgoingVerificationViewTest {
     }
 
     @Test
-    fun `when flow is completed and the user clicks on the continue button, the expected callback is invoked`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>(expectEvents = false)
+    fun `when flow is completed and the user clicks on the done button, the expected callback is invoked`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setOutgoingVerificationView(
                 anOutgoingVerificationState(
@@ -124,13 +122,13 @@ class OutgoingVerificationViewTest {
                 ),
                 onFinished = callback,
             )
-            clickOn(CommonStrings.action_continue)
+            clickOn(CommonStrings.action_done)
         }
     }
 
     @Test
     fun `clicking on they match emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvent>()
         setOutgoingVerificationView(
             anOutgoingVerificationState(
                 step = OutgoingVerificationState.Step.Verifying(
@@ -141,12 +139,12 @@ class OutgoingVerificationViewTest {
             ),
         )
         clickOn(R.string.screen_session_verification_they_match)
-        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.ConfirmVerification)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvent.ConfirmVerification)
     }
 
     @Test
     fun `clicking on they do not match emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvents>()
+        val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvent>()
         setOutgoingVerificationView(
             anOutgoingVerificationState(
                 step = OutgoingVerificationState.Step.Verifying(
@@ -157,7 +155,7 @@ class OutgoingVerificationViewTest {
             ),
         )
         clickOn(R.string.screen_session_verification_they_dont_match)
-        eventsRecorder.assertSingle(OutgoingVerificationViewEvents.DeclineVerification)
+        eventsRecorder.assertSingle(OutgoingVerificationViewEvent.DeclineVerification)
     }
 
     private fun AndroidComposeUiTest<ComponentActivity>.setOutgoingVerificationView(

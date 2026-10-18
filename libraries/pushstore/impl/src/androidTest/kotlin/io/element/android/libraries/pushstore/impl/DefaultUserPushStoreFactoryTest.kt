@@ -18,7 +18,7 @@ import kotlin.concurrent.thread
 
 /**
  * Note: to clear the emulator, invoke:
- * adb uninstall io.element.android.libraries.push.pushstore.impl.test
+ * adb uninstall io.element.android.libraries.pushstore.impl.test
  */
 class DefaultUserPushStoreFactoryTest {
     /**

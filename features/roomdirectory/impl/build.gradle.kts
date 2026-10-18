@@ -30,12 +30,10 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.matrixui)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.testtags)
-    implementation(projects.services.analytics.api)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)

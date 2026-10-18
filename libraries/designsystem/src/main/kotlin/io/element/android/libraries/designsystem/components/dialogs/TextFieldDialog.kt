@@ -47,6 +47,7 @@ fun TextFieldDialog(
     maxLines: Int = minLines,
     content: String? = null,
     label: String? = null,
+    supportingText: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     submitText: String = stringResource(CommonStrings.action_ok),
     destructiveSubmit: Boolean = false,
@@ -84,6 +85,7 @@ fun TextFieldDialog(
             TextFieldListItem(
                 placeholder = placeholder.orEmpty(),
                 label = label,
+                supportingText = supportingText,
                 text = textFieldContents,
                 onTextChange = {
                     error = if (!validation(it.text)) onValidationErrorMessage else null

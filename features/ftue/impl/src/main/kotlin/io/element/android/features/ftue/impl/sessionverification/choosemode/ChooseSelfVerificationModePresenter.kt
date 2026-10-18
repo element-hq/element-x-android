@@ -15,21 +15,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
-import io.element.android.features.logout.api.direct.DirectLogoutEvents
+import io.element.android.features.logout.api.direct.DirectLogoutEvent
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 
 @Inject
 class ChooseSelfVerificationModePresenter(
+    private val matrixClient: MatrixClient,
     private val encryptionService: EncryptionService,
     private val directLogoutPresenter: Presenter<DirectLogoutState>,
 ) : Presenter<ChooseSelfVerificationModeState> {
     @Composable
     override fun present(): ChooseSelfVerificationModeState {
+        val currentUser by matrixClient.userProfile.collectAsState()
         val hasDevicesToVerifyAgainst by encryptionService.hasDevicesToVerifyAgainst.collectAsState()
         val canUseRecoveryKey by produceState<AsyncData<Boolean>>(AsyncData.Uninitialized) {
             encryptionService.recoveryStateStateFlow
@@ -67,11 +70,12 @@ class ChooseSelfVerificationModePresenter(
 
         fun handleEvent(event: ChooseSelfVerificationModeEvent) {
             when (event) {
-                ChooseSelfVerificationModeEvent.SignOut -> directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
+                ChooseSelfVerificationModeEvent.SignOut -> directLogoutState.eventSink(DirectLogoutEvent.Logout(ignoreSdkError = false))
             }
         }
 
         return ChooseSelfVerificationModeState(
+            currentUser = currentUser,
             buttonsState = buttonsState,
             directLogoutState = directLogoutState,
             eventSink = ::handleEvent,

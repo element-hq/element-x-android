@@ -12,17 +12,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -45,6 +51,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -52,14 +60,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddRoomToSpaceView(
     state: AddRoomToSpaceState,
     onBackClick: () -> Unit,
-    onRoomsAdded: () -> Unit,
+    onAddRoom: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val updatedOnAddRoom by rememberUpdatedState(onAddRoom)
     fun onRoomToggled(room: SelectRoomInfo) {
         state.eventSink(AddRoomToSpaceEvent.ToggleRoom(room))
     }
@@ -78,7 +86,7 @@ fun AddRoomToSpaceView(
     // Navigate back on success
     LaunchedEffect(state.saveAction) {
         if (state.saveAction is AsyncAction.Success) {
-            onRoomsAdded()
+            updatedOnAddRoom()
         }
     }
 
@@ -98,7 +106,8 @@ fun AddRoomToSpaceView(
                     )
                 }
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     ) { paddingValues ->
         Column(
             Modifier
@@ -106,7 +115,13 @@ fun AddRoomToSpaceView(
                 .consumeWindowInsets(paddingValues)
         ) {
             SearchBar(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        WindowInsets.safeDrawing
+                            .only(WindowInsetsSides.Horizontal)
+                            .asPaddingValues()
+                    ),
                 placeHolderTitle = stringResource(CommonStrings.action_search),
                 queryState = state.searchQuery,
                 active = state.isSearchActive,
@@ -127,7 +142,9 @@ fun AddRoomToSpaceView(
                 OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
                     state.eventSink(AddRoomToSpaceEvent.UpdateSearchVisibleRange(visibleRange))
                 }
-                LazyColumn {
+                LazyColumn(
+                    contentPadding = lazyColumnContentPadding,
+                ) {
                     items(rooms, key = { it.roomId }) { roomInfo ->
                         RoomListItem(
                             roomInfo = roomInfo,
@@ -139,23 +156,35 @@ fun AddRoomToSpaceView(
             }
 
             if (!state.isSearchActive) {
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = stringResource(R.string.screen_space_add_rooms_room_access_description),
-                    color = ElementTheme.colors.textSecondary,
-                    style = ElementTheme.typography.fontBodySmRegular,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-                if (state.selectedRooms.isNotEmpty()) {
-                    SelectedRoomsRow(
-                        selectedRooms = state.selectedRooms,
-                        onRemoveRoom = ::onRoomToggled,
-                        modifier = Modifier.padding(vertical = 16.dp)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            WindowInsets.safeDrawing
+                                .only(WindowInsetsSides.Horizontal)
+                                .asPaddingValues()
+                        )
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = stringResource(R.string.screen_space_add_rooms_room_access_description),
+                        color = ElementTheme.colors.textSecondary,
+                        style = ElementTheme.typography.fontBodySmRegular,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
+                    if (state.selectedRooms.isNotEmpty()) {
+                        SelectedRoomsRow(
+                            selectedRooms = state.selectedRooms,
+                            onRemoveRoom = ::onRoomToggled,
+                            modifier = Modifier.padding(vertical = 16.dp)
+                        )
+                    }
                 }
 
                 if (state.suggestions.isNotEmpty()) {
-                    LazyColumn {
+                    LazyColumn(
+                        contentPadding = lazyColumnContentPadding,
+                    ) {
                         item {
                             ListSectionHeader(
                                 title = stringResource(id = CommonStrings.common_suggestions),
@@ -242,11 +271,11 @@ private fun RoomListItem(
 @PreviewsDayNight
 @Composable
 internal fun AddRoomToSpaceViewPreview(
-    @PreviewParameter(AddRoomToSpaceStateProvider::class) state: AddRoomToSpaceState
+    @PreviewParameter(AddRoomToSpaceStatePreviewParam::class) state: AddRoomToSpaceState
 ) = ElementPreview {
     AddRoomToSpaceView(
         state = state,
         onBackClick = {},
-        onRoomsAdded = {},
+        onAddRoom = {},
     )
 }

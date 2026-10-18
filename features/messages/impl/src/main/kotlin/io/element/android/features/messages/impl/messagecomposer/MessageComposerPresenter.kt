@@ -31,10 +31,10 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.features.location.api.LocationService
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.attachments.Attachment.Media
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.RoomAliasSuggestionsDataSource
@@ -43,12 +43,16 @@ import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -57,11 +61,14 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.getDirectRoomMember
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.use
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.api.timeline.item.event.mediaSources
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
+import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.content
+import io.element.android.libraries.matrix.ui.messages.reply.eventId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
@@ -80,6 +87,7 @@ import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
 import io.element.android.libraries.textcomposer.model.Message
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.Suggestion
+import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.rememberMarkdownTextEditorState
 import io.element.android.services.analytics.api.AnalyticsService
@@ -97,10 +105,13 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
@@ -110,7 +121,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 class MessageComposerPresenter(
     @Assisted private val navigator: MessagesNavigator,
     @Assisted private val timelineController: TimelineController,
-    @Assisted private val isInThread: Boolean,
+    @Assisted private val threadRoot: ThreadId?,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
@@ -133,16 +144,21 @@ class MessageComposerPresenter(
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
     private val notificationConversationService: NotificationConversationService,
     private val slashCommandService: SlashCommandService,
+    private val featureFlagService: FeatureFlagService,
+    private val contentScannerService: ContentScannerService,
+    private val contentValidationCache: EventContentValidationCache,
+    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
         fun create(
             timelineController: TimelineController,
             navigator: MessagesNavigator,
-            isInThread: Boolean,
+            threadRoot: ThreadId?,
         ): MessageComposerPresenter
     }
 
+    private val isInThread = threadRoot != null
     private val mediaSender = mediaSenderFactory.create(timelineMode = timelineController.mainTimelineMode())
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
@@ -171,22 +187,28 @@ class MessageComposerPresenter(
 
         val cameraPermissionState = cameraPermissionPresenter.present()
 
-        val canShareLocation = remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            canShareLocation.value = locationService.isServiceAvailable()
-        }
+        val canShareLocation by remember { locationService.isServiceAvailable() }.collectAsState()
+
+        val isSendGalleryMessagesEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.SendGalleryMessages)
+            .collectAsState(initial = false)
 
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
-            handlePickedMedia(uri, mimeType)
+            localCoroutineScope.handlePickedMedia(uri, mimeType)
         }
-        val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri, mimeType ->
-            handlePickedMedia(uri, mimeType ?: MimeTypes.OctetStream)
+        val galleryMultiMediaPicker = mediaPickerProvider.registerGalleryMultiPicker { uris ->
+            localCoroutineScope.handlePickedMediaList(uris)
+        }
+        val filesPicker = mediaPickerProvider.registerFileMultiPicker(AnyMimeTypes) { uris ->
+            localCoroutineScope.handlePickedMediaList(uris, sendAsFile = true)
+        }
+        val fileSinglePicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri, mimeType ->
+            localCoroutineScope.handlePickedMedia(uri, mimeType ?: MimeTypes.OctetStream, sendAsFile = true)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
-            handlePickedMedia(uri, MimeTypes.Jpeg)
+            localCoroutineScope.handlePickedMedia(uri, MimeTypes.Jpeg)
         }
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
-            handlePickedMedia(uri, MimeTypes.Mp4)
+            localCoroutineScope.handlePickedMedia(uri, MimeTypes.Mp4)
         }
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
@@ -235,8 +257,7 @@ class MessageComposerPresenter(
         LaunchedEffect(Unit) {
             val draft = draftService.loadDraft(
                 roomId = room.roomId,
-                // TODO support threads in composer
-                threadRoot = null,
+                threadRoot = threadRoot,
                 isVolatile = false
             )
             if (draft != null) {
@@ -265,20 +286,18 @@ class MessageComposerPresenter(
                 }
                 is MessageComposerEvent.SendUri -> {
                     val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
-                    sessionCoroutineScope.sendAttachment(
-                        attachment = Media(
-                            localMedia = localMediaFactory.createFromUri(
-                                uri = event.uri,
-                                mimeType = null,
-                                name = null,
-                                formattedFileSize = null
-                            ),
-                        ),
-                        inReplyToEventId = inReplyToEventId,
-                    )
+                    sessionCoroutineScope.launch {
+                        val localMedia = createLocalMedia(
+                            uri = event.uri,
+                            mimeType = null,
+                        )
+                        sendAttachment(
+                            attachment = Attachment.Media(localMedia),
+                            inReplyToEventId = inReplyToEventId,
+                        )
+                    }
 
-                    // Reset composer since the attachment has been sent
-                    messageComposerContext.composerMode = MessageComposerMode.Normal
+                    resetComposerModeAfterAttaching()
                 }
                 is MessageComposerEvent.SetMode -> {
                     localCoroutineScope.setMode(event.composerMode, markdownTextEditorState, richTextEditorState)
@@ -289,11 +308,19 @@ class MessageComposerPresenter(
                 MessageComposerEvent.DismissAttachmentMenu -> showAttachmentSourcePicker = false
                 MessageComposerEvent.PickAttachmentSource.FromGallery -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
-                    galleryMediaPicker.launch()
+                    if (isSendGalleryMessagesEnabled) {
+                        galleryMultiMediaPicker.launch()
+                    } else {
+                        galleryMediaPicker.launch()
+                    }
                 }
                 MessageComposerEvent.PickAttachmentSource.FromFiles -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
-                    filesPicker.launch()
+                    if (isSendGalleryMessagesEnabled) {
+                        filesPicker.launch()
+                    } else {
+                        fileSinglePicker.launch()
+                    }
                 }
                 MessageComposerEvent.PickAttachmentSource.PhotoFromCamera -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
@@ -400,9 +427,10 @@ class MessageComposerPresenter(
             textEditorState = textEditorState,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
+            isInThreadTimeline = isInThread,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             showTextFormatting = showTextFormatting,
-            canShareLocation = canShareLocation.value,
+            canShareLocation = canShareLocation,
             suggestions = suggestions.toImmutableList(),
             resolveMentionDisplay = resolveMentionDisplay,
             resolveAtRoomMentionDisplay = resolveAtRoomMentionDisplay,
@@ -432,6 +460,14 @@ class MessageComposerPresenter(
             val mentionCompletionTrigger = suggestionSearchTrigger.debounce(0.3.seconds).filter { !it?.text.isNullOrEmpty() }
 
             val mentionTriggerFlow = merge(mentionStartTrigger, mentionCompletionTrigger)
+
+            // Refresh the room members, which are only loaded on demand, when a mention starts
+            launch {
+                suggestionSearchTrigger
+                    .distinctUntilChangedBy { it?.type }
+                    .filter { it?.type == SuggestionType.Mention }
+                    .collect { room.updateMembers() }
+            }
 
             val roomAliasSuggestionsFlow = roomAliasSuggestionsDataSource
                 .getAllRoomAliasSuggestions()
@@ -572,7 +608,7 @@ class MessageComposerPresenter(
         notificationConversationService.onSendMessage(
             sessionId = room.sessionId,
             roomId = roomInfo.id,
-            roomName = roomInfo.name ?: roomInfo.id.value,
+            roomName = roomInfo.name,
             roomIsDirect = roomInfo.isDm,
             roomAvatarUrl = roomInfo.avatarUrl ?: roomMembers.getDirectRoomMember(roomInfo = roomInfo, sessionId = room.sessionId)?.avatarUrl,
         )
@@ -603,23 +639,66 @@ class MessageComposerPresenter(
         }
     }
 
-    private fun handlePickedMedia(
-        uri: Uri?,
-        mimeType: String? = null,
-    ) {
-        uri ?: return
-        val localMedia = localMediaFactory.createFromUri(
+    // Creating the LocalMedia queries the ContentResolver and can decode the media, so do it off the main thread
+    private suspend fun createLocalMedia(
+        uri: Uri,
+        mimeType: String?,
+    ) = withContext(dispatchers.io) {
+        localMediaFactory.createFromUri(
             uri = uri,
             mimeType = mimeType,
             name = null,
-            formattedFileSize = null
+            formattedFileSize = null,
         )
-        val mediaAttachment = Attachment.Media(localMedia)
+    }
+
+    private fun CoroutineScope.handlePickedMedia(
+        uri: Uri?,
+        mimeType: String? = null,
+        sendAsFile: Boolean = false,
+    ) = launch {
+        uri ?: return@launch
+        val localMedia = createLocalMedia(
+            uri = uri,
+            mimeType = mimeType,
+        )
+        val mediaAttachment = Attachment.Media(localMedia, sendAsFile = sendAsFile)
         val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
         navigator.navigateToPreviewAttachments(persistentListOf(mediaAttachment), inReplyToEventId)
 
-        // Reset composer since the attachment will be sent in a separate flow
-        messageComposerContext.composerMode = MessageComposerMode.Normal
+        resetComposerModeAfterAttaching()
+    }
+
+    private fun CoroutineScope.handlePickedMediaList(
+        uris: List<Uri>,
+        sendAsFile: Boolean = false,
+    ) {
+        if (uris.isEmpty()) return
+        if (uris.size == 1) {
+            handlePickedMedia(uris.first(), sendAsFile = sendAsFile)
+            return
+        }
+        launch {
+            val attachments = uris.map { uri ->
+                val localMedia = createLocalMedia(
+                    uri = uri,
+                    mimeType = null,
+                )
+                Attachment.Media(localMedia, sendAsFile = sendAsFile)
+            }.toImmutableList()
+            val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
+            navigator.navigateToPreviewAttachments(attachments, inReplyToEventId)
+
+            resetComposerModeAfterAttaching()
+        }
+    }
+
+    private fun resetComposerModeAfterAttaching() {
+        // An attachment is sent as its own message, so a Reply/Normal mode is consumed and reset.
+        // An in-progress edit must survive: the typed text still edits the original on the next send.
+        if (!messageComposerContext.composerMode.isEditing) {
+            messageComposerContext.composerMode = MessageComposerMode.Normal
+        }
     }
 
     private suspend fun sendMedia(
@@ -652,8 +731,7 @@ class MessageComposerPresenter(
             roomId = room.roomId,
             draft = draft,
             isVolatile = isVolatile,
-            // TODO support threads in composer
-            threadRoot = null,
+            threadRoot = threadRoot,
         )
     }
 
@@ -799,6 +877,11 @@ class MessageComposerPresenter(
                 setText(newComposerMode.content, markdownTextEditorState, richTextEditorState, requestFocus = true)
             }
             else -> {
+                if (currentComposerMode is MessageComposerMode.Reply) {
+                    val mediaSources = currentComposerMode.replyToDetails.content()?.mediaSources() ?: return@launch
+                    val contentValidationState = contentValidationCache[currentComposerMode.replyToDetails.eventId()]
+                    contentScannerService.scan(mediaSources, contentValidationState)
+                }
                 // When coming from edit, just clear the composer as it'd be weird to reset a volatile draft in this scenario.
                 if (currentComposerMode.isEditing) {
                     setText("", markdownTextEditorState, richTextEditorState)
@@ -816,8 +899,7 @@ class MessageComposerPresenter(
         // Use the volatile draft only when coming from edit mode otherwise.
         val draft = draftService.loadDraft(
             roomId = room.roomId,
-            // TODO support threads in composer
-            threadRoot = null,
+            threadRoot = threadRoot,
             isVolatile = true
         ).takeIf { fromEdit }
         if (draft != null) {

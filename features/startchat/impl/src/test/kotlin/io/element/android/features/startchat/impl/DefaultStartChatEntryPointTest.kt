@@ -12,7 +12,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.createroom.api.FakeCreateRoomEntryPoint
+import io.element.android.features.createroom.test.FakeCreateRoomEntryPoint
 import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.tests.testutils.lambda.lambdaError

@@ -21,9 +21,12 @@ import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -55,7 +58,9 @@ fun ModalBottomSheet(
     onDismissRequest: () -> Unit,
     scrollable: Boolean,
     modifier: Modifier = Modifier,
-    sheetState: SheetState = rememberModalBottomSheetState(),
+    sheetState: SheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+    ),
     shape: Shape = BottomSheetDefaults.ExpandedShape,
     containerColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = contentColorFor(containerColor),
@@ -88,14 +93,15 @@ fun ModalBottomSheet(
         dragHandle = dragHandle,
         contentWindowInsets = contentWindowInsets,
     ) {
+        val movableContent = remember { movableContentOf { content() } }
         if (scrollable) {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
             ) {
-                content()
+                movableContent()
             }
         } else {
-            content()
+            movableContent()
         }
     }
 }

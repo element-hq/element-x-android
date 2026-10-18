@@ -11,7 +11,7 @@
   <string name="screen_create_room_private_option_title">"Ιδιωτικό"</string>
   <string name="screen_create_room_public_option_description">"Ο καθένας μπορεί να βρει αυτή την αίθουσα.
 Αυτό μπορείτε να το αλλάξετε ανά πάσα στιγμή στις ρυθμίσεις της αίθουσας."</string>
-  <string name="screen_create_room_public_option_short_description">"Οποιοσδήποτε μπορεί να συμμετάσχει."</string>
+  <string name="screen_create_room_public_option_short_description">"Οποιοσδήποτε μπορεί να συμμετάσχει, συμπεριλαμβανομένων ατόμων εκτός του οργανισμού σας."</string>
   <string name="screen_create_room_public_option_title">"Δημόσιο"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στην αίθουσα, αλλά ένας διαχειριστής ή ένας συντονιστής θα πρέπει να αποδεχτεί το αίτημα."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Επιτρέψτε την αίτηση συμμετοχής"</string>
@@ -19,7 +19,7 @@
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Αίτημα συμμετοχής"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Μόνο άτομα που έχουν προσκληθεί μπορούν να συμμετάσχουν."</string>
   <string name="screen_create_room_room_access_section_private_option_title">"Ιδιωτικό"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"Οποιοσδήποτε μπορεί να συμμετάσχει."</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Οποιοσδήποτε μπορεί να συμμετάσχει, συμπεριλαμβανομένων και ατόμων εκτός του οργανισμού σας."</string>
   <string name="screen_create_room_room_access_section_public_option_title">"Δημόσιο"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"Οποιοσδήποτε στο %1$s μπορεί να συμμετάσχει."</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"Πρότυπο"</string>

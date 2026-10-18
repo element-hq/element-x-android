@@ -10,17 +10,19 @@ package io.element.android.features.verifysession.impl.incoming
 
 import androidx.compose.runtime.Stable
 import io.element.android.libraries.matrix.api.core.DeviceId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationData
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 
 data class IncomingVerificationState(
     val step: Step,
     val request: VerificationRequest.Incoming,
-    val eventSink: (IncomingVerificationViewEvents) -> Unit,
+    val eventSink: (IncomingVerificationViewEvent) -> Unit,
 ) {
     @Stable
     sealed interface Step {
         data class Initial(
+            val currentUser: MatrixUser,
             val deviceDisplayName: String?,
             val deviceId: DeviceId,
             val formattedSignInTime: String,

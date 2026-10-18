@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,7 +28,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.DelayedVisibility
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
-import io.element.android.libraries.matrix.ui.room.LoadingRoomStateProvider
+import io.element.android.libraries.matrix.ui.room.LoadingRoomStatePreviewParam
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -68,7 +67,6 @@ fun LoadingRoomNodeView(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LoadingRoomTopBar(
     onBackClick: () -> Unit,
@@ -84,7 +82,7 @@ private fun LoadingRoomTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun LoadingRoomNodeViewPreview(@PreviewParameter(LoadingRoomStateProvider::class) state: LoadingRoomState) = ElementPreview {
+internal fun LoadingRoomNodeViewPreview(@PreviewParameter(LoadingRoomStatePreviewParam::class) state: LoadingRoomState) = ElementPreview {
     LoadingRoomNodeView(
         state = state,
         onBackClick = {}

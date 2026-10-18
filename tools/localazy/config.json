@@ -15,6 +15,12 @@
       ]
     },
     {
+      "name" : ":libraries:roomselect:impl",
+      "includeRegex" : [
+        "screen\\.room_select\\..*"
+      ]
+    },
+    {
       "name" : ":features:rageshake:api",
       "includeRegex" : [
         "crash_detection_.*",
@@ -81,6 +87,7 @@
       "name" : ":features:verifysession:impl",
       "includeRegex" : [
         "screen_session_verification_.*",
+        "screen\\.session_verification\\..*",
         "screen_signout_in_progress_dialog_content",
         "screen_identity_.*"
       ]
@@ -173,6 +180,7 @@
       "includeRegex" : [
         "screen_onboarding_.*",
         "screen\\.onboarding\\..*",
+        "screen\\.change_server\\..*",
         "screen\\.missing_key_backup\\..*",
         "screen_login_.*",
         "screen_server_confirmation_.*",
@@ -197,11 +205,13 @@
         "screen\\.home\\..*",
         "screen_roomlist_.*",
         "screen\\.roomlist\\..*",
+        "screen\\.multi_account_announcement\\..*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
         "banner\\.set_up_recovery\\..*",
         "banner\\.battery_optimization\\..*",
         "banner\\.new_sound\\..*",
+        "banner\\.swipe_avatar\\..*",
         "full_screen_intent_banner_.*",
         "screen_migration_.*",
         "screen_invites_.*"
@@ -221,6 +231,7 @@
         "screen_notification_settings_mentions_only_disclaimer",
         "screen_room_change_.*",
         "screen_room_roles_.*",
+        "screen_roomlist_mark_as_.*",
         "screen\\.edit_room_address\\..*",
         "screen\\.security_and_privacy\\..*"
       ]
@@ -260,7 +271,6 @@
     {
       "name" : ":features:messages:impl",
       "includeRegex" : [
-        "emoji_picker_category_.*",
         "screen_report_content_.*",
         "screen_room_attachment.*",
         "screen_room_encrypted.*",
@@ -270,8 +280,12 @@
         "screen_room_message.*",
         "screen_room_retry.*",
         "screen_room_timeline.*",
+        "screen\\.room\\.timeline.*",
+        "error\\.sending_failure\\..*",
         "screen\\.room_timeline.*",
+        "screen\\.room\\.confirm_removal.*",
         "screen_room_typing.*",
+        "screen\\.image_edition\\..*",
         "screen\\.media_upload.*"
       ]
     },
@@ -315,6 +329,7 @@
         "screen_chat_backup_.*",
         "screen_key_backup_disable_.*",
         "screen_recovery_key_.*",
+        "screen\\.custom_recovery_key\\..*",
         "screen_create_new_recovery_key_.*",
         "screen_encryption_reset.*",
         "screen_reset_encryption.*",
@@ -326,11 +341,15 @@
       "includeRegex" : [
         "screen_advanced_settings_.*",
         "screen\\.advanced_settings\\..*",
+        "screen\\.settings\\..*",
         "screen_edit_profile_.*",
         "screen_notification_settings_.*",
+        "screen\\.notification_settings\\..*",
+        "screen\\.moderation_and_safety\\..*",
         "screen_blocked_users_.*",
         "full_screen_intent_banner_.*",
         "troubleshoot_notifications_entry_point_.*",
+        "theme\\..*",
         "screen\\.labs\\..*"
       ]
     },
@@ -419,6 +438,12 @@
       "includeRegex" : [
         "screen\\.share_location\\..*",
         "screen\\.view_location\\..*"
+      ]
+    },
+    {
+      "name" : ":libraries:emoji:impl",
+      "includeRegex" : [
+        "emoji_picker_.*"
       ]
     }
   ]

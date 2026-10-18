@@ -15,7 +15,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -26,16 +25,19 @@ import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.libraries.androidutils.system.copyToClipboard
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
@@ -50,14 +52,18 @@ class PinnedMessagesListNode(
     actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
     private val permalinkParser: PermalinkParser,
+    private val emojiPickerRenderer: EmojiPickerRenderer,
+    private val clipboardHelper: ClipboardHelper,
+    private val toastHelper: ToastHelper,
 ) : Node(buildContext, plugins = plugins), PinnedMessagesListNavigator {
     interface Callback : Plugin {
         fun handleEventClick(event: TimelineItem.Event, canUseOverlay: Boolean)
+        fun handleGalleryItemClick(event: TimelineItem.Event, galleryItemIndex: Int, canUseOverlay: Boolean)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun viewInTimeline(eventId: EventId)
         fun handlePermalinkClick(data: PermalinkData.RoomLink)
         fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-        fun handleForwardEventClick(eventId: EventId)
+        fun handleForwardEventClick(eventId: EventId, timelineProvider: TimelineProvider)
         fun navigateToThread(threadRootId: ThreadId)
     }
 
@@ -95,8 +101,8 @@ class PinnedMessagesListNode(
         callback.navigateToEventDebugInfo(eventId, debugInfo)
     }
 
-    override fun forwardEvent(eventId: EventId) {
-        callback.handleForwardEventClick(eventId)
+    override fun forwardEvent(eventId: EventId, timelineProvider: TimelineProvider) {
+        callback.handleForwardEventClick(eventId, timelineProvider)
     }
 
     override fun navigateToThread(threadRootId: ThreadId) {
@@ -110,7 +116,6 @@ class PinnedMessagesListNode(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
         ) {
             val context = LocalContext.current
-            val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
             val view = LocalView.current
             val state = presenter.present()
             PinnedMessagesListView(
@@ -119,17 +124,20 @@ class PinnedMessagesListNode(
                 onEventClick = {
                     callback.handleEventClick(it, canUseOverlay)
                 },
+                onGalleryItemClick = { event, index ->
+                    callback.handleGalleryItemClick(event, index, canUseOverlay)
+                },
                 onUserDataClick = { callback.navigateToRoomMemberDetails(it.userId) },
                 onLinkClick = { link -> onLinkClick(context, link.url) },
                 onLinkLongClick = {
                     view.performHapticFeedback(
                         HapticFeedbackConstants.LONG_PRESS
                     )
-                    context.copyToClipboard(
-                        text = it.url,
-                        toastMessage = toastMessage,
-                    )
+                    clipboardHelper.copyPlainText(it.url) {
+                        toastHelper.show(CommonStrings.common_copied_to_clipboard)
+                    }
                 },
+                emojiPickerRenderer = emojiPickerRenderer,
                 modifier = modifier
             )
         }

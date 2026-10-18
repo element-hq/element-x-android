@@ -14,8 +14,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.features.logout.api.direct.DirectLogoutEvents
+import io.element.android.features.logout.api.direct.DirectLogoutEvent
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.architecture.AsyncAction
@@ -23,15 +22,14 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.pressBackKey
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Ignore
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class DefaultDirectLogoutViewTest {
+class DefaultDirectLogoutViewTest : RobolectricTest() {
     @Test
     fun `clicking on confirm logout sends expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DirectLogoutEvents>()
+        val eventsRecorder = EventsRecorder<DirectLogoutEvent>()
         setDefaultDirectLogoutView(
             state = aDirectLogoutState(
                 logoutAction = AsyncAction.ConfirmingNoParams,
@@ -39,12 +37,12 @@ class DefaultDirectLogoutViewTest {
             )
         )
         clickOn(CommonStrings.action_signout)
-        eventsRecorder.assertSingle(DirectLogoutEvents.Logout(false))
+        eventsRecorder.assertSingle(DirectLogoutEvent.Logout(false))
     }
 
     @Test
     fun `clicking on cancel logout sends expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DirectLogoutEvents>()
+        val eventsRecorder = EventsRecorder<DirectLogoutEvent>()
         setDefaultDirectLogoutView(
             state = aDirectLogoutState(
                 logoutAction = AsyncAction.ConfirmingNoParams,
@@ -52,13 +50,13 @@ class DefaultDirectLogoutViewTest {
             )
         )
         clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(DirectLogoutEvents.CloseDialogs)
+        eventsRecorder.assertSingle(DirectLogoutEvent.CloseDialogs)
     }
 
     @Ignore("Pressing back key should dismiss the dialog, and so generate the expected event, but it's not the case.")
     @Test
     fun `clicking on back invoke back callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DirectLogoutEvents>()
+        val eventsRecorder = EventsRecorder<DirectLogoutEvent>()
         setDefaultDirectLogoutView(
             state = aDirectLogoutState(
                 logoutAction = AsyncAction.ConfirmingNoParams,
@@ -66,12 +64,12 @@ class DefaultDirectLogoutViewTest {
             )
         )
         pressBackKey()
-        eventsRecorder.assertSingle(DirectLogoutEvents.CloseDialogs)
+        eventsRecorder.assertSingle(DirectLogoutEvent.CloseDialogs)
     }
 
     @Test
     fun `clicking on confirm after error sends expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DirectLogoutEvents>()
+        val eventsRecorder = EventsRecorder<DirectLogoutEvent>()
         setDefaultDirectLogoutView(
             state = aDirectLogoutState(
                 logoutAction = AsyncAction.Failure(Exception("Error")),
@@ -79,12 +77,12 @@ class DefaultDirectLogoutViewTest {
             )
         )
         clickOn(CommonStrings.action_signout_anyway)
-        eventsRecorder.assertSingle(DirectLogoutEvents.Logout(true))
+        eventsRecorder.assertSingle(DirectLogoutEvent.Logout(true))
     }
 
     @Test
     fun `clicking on cancel after error sends expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DirectLogoutEvents>()
+        val eventsRecorder = EventsRecorder<DirectLogoutEvent>()
         setDefaultDirectLogoutView(
             state = aDirectLogoutState(
                 logoutAction = AsyncAction.Failure(Exception("Error")),
@@ -92,7 +90,7 @@ class DefaultDirectLogoutViewTest {
             )
         )
         clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(DirectLogoutEvents.CloseDialogs)
+        eventsRecorder.assertSingle(DirectLogoutEvent.CloseDialogs)
     }
 }
 

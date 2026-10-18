@@ -9,7 +9,6 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRowScope
@@ -19,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.theme.ElementTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SingleChoiceSegmentedButtonRowScope.SegmentedButton(
     index: Int,

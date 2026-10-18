@@ -42,8 +42,10 @@ class DefaultIndicatorServiceTest {
     }
 
     @Test
-    fun `test - showSettingChatBackupIndicator is true when BackupState is UNKNOWN`() = runTest {
-        val encryptionService = FakeEncryptionService()
+    fun `test - showSettingChatBackupIndicator is true when BackupState is UNKNOWN and no backup exists on the server`() = runTest {
+        val encryptionService = FakeEncryptionService().apply {
+            givenDoesBackupExistOnServerResult(Result.success(false))
+        }
         val sessionVerificationService = FakeSessionVerificationService()
         val sut = DefaultIndicatorService(
             sessionVerificationService = sessionVerificationService,
@@ -58,6 +60,24 @@ class DefaultIndicatorServiceTest {
             assertThat(awaitItem()).isFalse()
             encryptionService.emitBackupState(BackupState.UNKNOWN)
             assertThat(awaitItem()).isTrue()
+        }
+    }
+
+    @Test
+    fun `test - showSettingChatBackupIndicator is false when BackupState is UNKNOWN but a backup exists on the server`() = runTest {
+        val encryptionService = FakeEncryptionService().apply {
+            givenDoesBackupExistOnServerResult(Result.success(true))
+        }
+        val sessionVerificationService = FakeSessionVerificationService()
+        val sut = DefaultIndicatorService(
+            sessionVerificationService = sessionVerificationService,
+            encryptionService = encryptionService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            sut.showSettingChatBackupIndicator().value
+        }.test {
+            assertThat(awaitItem()).isTrue()
+            assertThat(awaitItem()).isFalse()
         }
     }
 

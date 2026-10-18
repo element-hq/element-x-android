@@ -25,11 +25,10 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.login.impl.BuildConfig
 import io.element.android.libraries.androidutils.service.ServiceBinder
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.auth.ElementClassicSession
 import io.element.android.libraries.matrix.api.auth.HomeServerLoginCompatibilityChecker
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -71,7 +70,7 @@ class DefaultElementClassicConnection(
     private val coroutineScope: CoroutineScope,
     private val matrixAuthenticationService: MatrixAuthenticationService,
     private val homeServerLoginCompatibilityChecker: HomeServerLoginCompatibilityChecker,
-    private val featureFlagService: FeatureFlagService,
+    private val dispatchers: CoroutineDispatchers,
 ) : ElementClassicConnection {
     // Messenger for communicating with the service.
     private var messenger: Messenger? = null
@@ -119,10 +118,6 @@ class DefaultElementClassicConnection(
     override fun start() {
         Timber.tag(loggerTag.value).d("start()")
         coroutineScope.launch {
-            if (!featureFlagService.isFeatureEnabled(FeatureFlags.SignInWithClassic)) {
-                Timber.tag(loggerTag.value).d("Login with Element Classic is disabled, not starting connection")
-                return@launch
-            }
             // Establish a connection with the service. We use an explicit
             // class name because there is no reason to be able to let other
             // applications replace our component.
@@ -158,11 +153,6 @@ class DefaultElementClassicConnection(
     override fun requestSession() {
         Timber.tag(loggerTag.value).d("requestSession()")
         coroutineScope.launch {
-            if (!featureFlagService.isFeatureEnabled(FeatureFlags.SignInWithClassic)) {
-                Timber.tag(loggerTag.value).d("Login with Element Classic is disabled")
-                emitState(ElementClassicConnectionState.Error("The feature is disabled"))
-                return@launch
-            }
             val finalMessenger = messenger
             if (finalMessenger == null) {
                 Timber.tag(loggerTag.value).d("The messenger is null, can't request data")
@@ -233,7 +223,7 @@ class DefaultElementClassicConnection(
     fun onSessionReceived(data: Bundle) {
         // The data must be extracted from the bundle before we launch the coroutine, else the bundle will be emptied
         val state = data.toElementClassicConnectionState()
-        coroutineScope.launch {
+        coroutineScope.launch(dispatchers.io) {
             val updatedState = ensureHomeserverIsSupported(state)
             emitState(updatedState)
             val userId = (updatedState as? ElementClassicConnectionState.ElementClassicReady)?.elementClassicSession?.userId

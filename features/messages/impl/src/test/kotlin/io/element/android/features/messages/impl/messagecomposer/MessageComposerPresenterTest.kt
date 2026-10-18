@@ -34,6 +34,8 @@ import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -59,6 +61,7 @@ import io.element.android.libraries.matrix.test.A_CAPTION
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_REPLY
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_TRANSACTION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
@@ -73,6 +76,7 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InMemoryEventContentValidationCache
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediapickers.test.FakePickerProvider
@@ -107,7 +111,9 @@ import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.collections.immutable.ImmutableList
@@ -118,14 +124,10 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import uniffi.wysiwyg_composer.MentionsState
 import java.io.File
 
-@Suppress("LargeClass")
-@RunWith(RobolectricTestRunner::class)
-class MessageComposerPresenterTest {
+class MessageComposerPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -147,9 +149,22 @@ class MessageComposerPresenterTest {
             assertThat(initialState.isFullScreen).isFalse()
             assertThat(initialState.textEditorState.messageHtml()).isEqualTo("")
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
+            assertThat(initialState.isInThreadTimeline).isFalse()
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
             assertThat(initialState.canShareLocation).isTrue()
             assertThat(initialState.slashCommandAction).isEqualTo(AsyncAction.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - when a threadRoot is provided, isInThreadTimeline is true`() = runTest {
+        val presenter = createPresenter(
+            threadRoot = A_THREAD_ID,
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
+            assertThat(initialState.isInThreadTimeline).isTrue()
         }
     }
 
@@ -760,6 +775,79 @@ class MessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - Pick media from gallery while editing keeps the edit pending`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(navigator = navigator)
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        presenter.test {
+            var state = awaitFirstItem()
+            val editMode = anEditMode()
+            state.eventSink(MessageComposerEvent.SetMode(editMode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(editMode)
+            // The media is sent as a new message while the edit stays active. If the mode reset,
+            // a Normal-mode state would be emitted and expectNoEvents() below would fail.
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            expectNoEvents()
+            assertThat(state.mode).isEqualTo(editMode)
+        }
+    }
+
+    @Test
+    fun `present - Pick media from gallery while replying clears the reply mode`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(navigator = navigator)
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        presenter.test {
+            var state = awaitFirstItem()
+            state.eventSink(MessageComposerEvent.SetMode(aReplyMode()))
+            state = awaitItem()
+            assertThat(state.mode).isInstanceOf(MessageComposerMode.Reply::class.java)
+            // The media becomes the reply, so the reply intent is consumed and the composer resets.
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(MessageComposerMode.Normal)
+        }
+    }
+
+    @Test
+    fun `present - Pick multiple media from gallery while editing keeps the edit pending`() = runTest {
+        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val navigator = FakeMessagesNavigator(
+            onPreviewAttachmentLambda = onPreviewAttachmentLambda
+        )
+        val presenter = createPresenter(
+            navigator = navigator,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.SendGalleryMessages.key to true)
+            ),
+        )
+        pickerProvider.givenMimeType(MimeTypes.Images)
+        // Two Uris take the multi-item branch (handlePickedMediaList) instead of delegating to the
+        // single-item path, so the edit is preserved for gallery messages too.
+        pickerProvider.givenMultipleResults(listOf(mockk(), mockk()))
+        presenter.test {
+            var state = awaitFirstItem()
+            val editMode = anEditMode()
+            state.eventSink(MessageComposerEvent.SetMode(editMode))
+            state = awaitItem()
+            assertThat(state.mode).isEqualTo(editMode)
+            state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery)
+            onPreviewAttachmentLambda.assertions().isCalledOnce()
+            expectNoEvents()
+            assertThat(state.mode).isEqualTo(editMode)
+        }
+    }
+
+    @Test
     fun `present - Pick media from gallery & cancel does nothing`() = runTest {
         val presenter = createPresenter()
         with(pickerProvider) {
@@ -968,7 +1056,8 @@ class MessageComposerPresenterTest {
             baseRoom = FakeBaseRoom(
                 roomPermissions = FakeRoomPermissions(
                     canTriggerRoomNotification = true,
-                )
+                ),
+                updateMembersResult = {},
             ),
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
@@ -1016,6 +1105,55 @@ class MessageComposerPresenterTest {
     }
 
     @Test
+    fun `present - mention suggestions refresh the room members`() = runTest {
+        val currentUser = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.JOIN)
+        val bob = aRoomMember(userId = A_USER_ID_2, membership = RoomMembershipState.JOIN)
+        val updateMembersResult = lambdaRecorder<Unit> { }
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = FakeRoomPermissions(
+                    canTriggerRoomNotification = true,
+                ),
+                updateMembersResult = updateMembersResult,
+            ),
+            typingNoticeResult = { Result.success(Unit) }
+        ).apply {
+            givenRoomMembersState(
+                RoomMembersState.Ready(
+                    persistentListOf(currentUser, bob),
+                )
+            )
+            givenRoomInfo(aRoomInfo(isDirect = false))
+        }
+        val presenter = createPresenter(
+            room = room,
+            slashCommandService = FakeSlashCommandService(
+                getSuggestionsResult = { _, _ -> emptyList() },
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            skipItems(1)
+            assertThat(awaitItem().suggestions).containsExactly(ResolvedSuggestion.AtRoom, ResolvedSuggestion.Member(bob))
+            updateMembersResult.assertions().isCalledOnce()
+
+            // Typing after the `@` must not refresh the members again
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 1, SuggestionType.Mention, "b")))
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 2, SuggestionType.Mention, "bo")))
+            advanceUntilIdle()
+            updateMembersResult.assertions().isCalledOnce()
+
+            // Starting a new mention refreshes them again
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(null))
+            initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "")))
+            advanceUntilIdle()
+            updateMembersResult.assertions().isCalledExactly(2)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - room mention suggestions no permission`() = runTest {
         val currentUser = aRoomMember(userId = A_USER_ID, membership = RoomMembershipState.JOIN)
         val invitedUser = aRoomMember(userId = A_USER_ID_3, membership = RoomMembershipState.INVITE)
@@ -1025,7 +1163,8 @@ class MessageComposerPresenterTest {
             baseRoom = FakeBaseRoom(
                 roomPermissions = FakeRoomPermissions(
                     canTriggerRoomNotification = false,
-                )
+                ),
+                updateMembersResult = {},
             ),
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
@@ -1056,6 +1195,7 @@ class MessageComposerPresenterTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
                 roomPermissions = FakeRoomPermissions(canTriggerRoomNotification = true),
+                updateMembersResult = {},
             ),
             typingNoticeResult = { Result.success(Unit) }
         ).apply {
@@ -1066,7 +1206,7 @@ class MessageComposerPresenterTest {
             )
             givenRoomInfo(
                 aRoomInfo(
-                    isDirect = true,
+                    isDm = true,
                     activeMembersCount = 2,
                 )
             )
@@ -1534,12 +1674,13 @@ class MessageComposerPresenterTest {
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
-        isInThread: Boolean = false,
+        threadRoot: ThreadId? = null,
         slashCommandService: SlashCommandService = FakeSlashCommandService(),
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
     ) = MessageComposerPresenter(
         navigator = navigator,
         sessionCoroutineScope = this,
-        isInThread = isInThread,
+        threadRoot = threadRoot,
         room = room,
         mediaPickerProvider = pickerProvider,
         sessionPreferencesStore = sessionPreferencesStore,
@@ -1566,7 +1707,12 @@ class MessageComposerPresenterTest {
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,
-        timelineController = TimelineController(room, timeline),
+        timelineController = TimelineController(
+            room = room,
+            liveTimeline = timeline,
+            roomCoroutineScope = backgroundScope,
+            dispatchers = testCoroutineDispatchers(),
+        ),
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
@@ -1574,6 +1720,10 @@ class MessageComposerPresenterTest {
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         notificationConversationService = notificationConversationService,
         slashCommandService = slashCommandService,
+        featureFlagService = featureFlagService,
+        contentScannerService = { _, _ -> },
+        contentValidationCache = InMemoryEventContentValidationCache(),
+        dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

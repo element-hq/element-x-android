@@ -7,14 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Bilinmeyen veya silinmiş bir cihaz tarafından şifrelenmiştir."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Sahibi tarafından doğrulanmamış bir cihaz tarafından şifrelenmiştir."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Doğrulanmamış bir kullanıcı tarafından şifrelenmiştir."</string>
-  <string name="emoji_picker_category_activity">"Aktiviteler"</string>
-  <string name="emoji_picker_category_flags">"Bayraklar"</string>
-  <string name="emoji_picker_category_foods">"Yiyecek ve İçecek"</string>
-  <string name="emoji_picker_category_nature">"Hayvanlar ve Doğa"</string>
-  <string name="emoji_picker_category_objects">"Nesneler"</string>
-  <string name="emoji_picker_category_people">"İfadeler ve İnsanlar"</string>
-  <string name="emoji_picker_category_places">"Seyahat ve Yerler"</string>
-  <string name="emoji_picker_category_symbols">"Simgeler"</string>
   <string name="screen_media_upload_preview_caption_warning">"Açıklamalar, eski uygulamaları kullanan kişiler tarafından görülemeyebilir."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Medya yüklenemedi, lütfen tekrar deneyin."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Medya yüklenemedi, lütfen tekrar deneyin."</string>

@@ -20,12 +20,13 @@ fun String.isValidUrl(): Boolean {
 }
 
 /**
- * Ensure string starts with "http". If it is not the case, "https://" is added, only if the String is not empty
+ * Ensure string starts with "http" (case-insensitively, so "HTTP://" / "HTTPS://" are respected). If it is
+ * not the case, "https://" is added, only if the String is not empty.
  */
 fun String.ensureProtocol(): String {
     return when {
         isEmpty() -> this
-        !startsWith("http") -> "https://$this"
+        !startsWith("http", ignoreCase = true) -> "https://$this"
         else -> this
     }
 }

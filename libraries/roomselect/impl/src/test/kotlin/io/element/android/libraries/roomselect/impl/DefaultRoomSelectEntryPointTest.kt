@@ -9,22 +9,22 @@
 package io.element.android.libraries.roomselect.impl
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class DefaultRoomSelectEntryPointTest {
+class DefaultRoomSelectEntryPointTest : RobolectricTest() {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -33,21 +33,29 @@ class DefaultRoomSelectEntryPointTest {
     fun `test node builder`() = runTest {
         val entryPoint = DefaultRoomSelectEntryPoint()
         val testMode = RoomSelectMode.Share
+        val testMaxNumberOfRooms = 12
         val parentNode = TestParentNode.create { buildContext, plugins ->
             RoomSelectNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenterFactory = { mode ->
+                presenterFactory = { initialSessionId, mode, maxNumberOfRooms, _ ->
+                    assertThat(initialSessionId).isEqualTo(A_SESSION_ID)
                     assertThat(mode).isEqualTo(testMode)
-                    createRoomSelectPresenter(mode)
+                    assertThat(maxNumberOfRooms).isEqualTo(testMaxNumberOfRooms)
+                    createRoomSelectPresenter(mode = mode, maxNumberOfRooms = maxNumberOfRooms)
                 },
             )
         }
         val callback = object : RoomSelectEntryPoint.Callback {
-            override fun onRoomSelected(roomIds: List<RoomId>) = lambdaError()
+            override fun onRoomSelected(sessionId: SessionId, roomIds: List<RoomId>) = lambdaError()
             override fun onCancel() = lambdaError()
+            override fun onSessionVerificationRequired(sessionId: SessionId) = lambdaError()
         }
-        val params = RoomSelectEntryPoint.Params(testMode)
+        val params = RoomSelectEntryPoint.Params(
+            sessionId = A_SESSION_ID,
+            mode = testMode,
+            maxNumberOfRooms = testMaxNumberOfRooms,
+        )
         val result = entryPoint.createNode(
             parentNode = parentNode,
             buildContext = BuildContext.root(null),
@@ -55,7 +63,7 @@ class DefaultRoomSelectEntryPointTest {
             callback = callback,
         )
         assertThat(result).isInstanceOf(RoomSelectNode::class.java)
-        assertThat(result.plugins).contains(RoomSelectNode.Inputs(params.mode))
+        assertThat(result.plugins).contains(RoomSelectNode.Inputs(params.sessionId, params.mode, params.maxNumberOfRooms))
         assertThat(result.plugins).contains(callback)
     }
 }

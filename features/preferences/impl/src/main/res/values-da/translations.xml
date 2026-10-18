@@ -84,6 +84,9 @@ Hvis du fortsætter, kan nogle af dine indstillinger blive ændret."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systemindstillinger"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systemmeddelelser slået fra"</string>
   <string name="screen_notification_settings_title">"Notifikationer"</string>
+  <string name="theme_dark">"Mørkt tema"</string>
+  <string name="theme_light">"Lyst tema"</string>
+  <string name="theme_system">"System"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Push-historik"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Fejlfind"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Fejlfinding af meddelelser"</string>

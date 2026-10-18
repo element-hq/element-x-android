@@ -12,11 +12,17 @@ package io.element.android.features.preferences.impl.developer.appsettings
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
+import io.element.android.libraries.androidutils.toast.FakeToastHelper
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -46,6 +52,7 @@ class AppDeveloperSettingsPresenterTest {
         )
         presenter.test {
             awaitItem().also { state ->
+                assertThat(state.isDeveloperModeEnabled).isFalse()
                 assertThat(state.features).isEmpty()
                 assertThat(state.customElementCallBaseUrlState).isNotNull()
                 assertThat(state.customElementCallBaseUrlState.baseUrl).isNull()
@@ -53,6 +60,8 @@ class AppDeveloperSettingsPresenterTest {
                 assertThat(state.rageshakeState.isSupported).isTrue()
                 assertThat(state.rageshakeState.sensitivity).isEqualTo(0.3f)
                 assertThat(state.tracingLogLevel).isEqualTo(AsyncData.Uninitialized)
+                assertThat(state.gitBranch).isEqualTo("feature/awesome-feature")
+                assertThat(state.gitSha).isEqualTo("1234567890")
             }
             awaitItem().also { state ->
                 assertThat(state.features).isNotEmpty()
@@ -127,6 +136,58 @@ class AppDeveloperSettingsPresenterTest {
         }
     }
 
+    @Test
+    fun `present - developer mode on off`() = runTest {
+        val preferences = InMemoryAppPreferencesStore()
+        val presenter = createAppDeveloperSettingsPresenter(preferencesStore = preferences)
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.isDeveloperModeEnabled).isFalse()
+                state.eventSink(AppDeveloperSettingsEvent.SetDeveloperModeEnabled(true))
+            }
+            awaitItem().also { state ->
+                assertThat(state.isDeveloperModeEnabled).isTrue()
+                state.eventSink(AppDeveloperSettingsEvent.SetDeveloperModeEnabled(false))
+            }
+            awaitItem().also { state ->
+                assertThat(state.isDeveloperModeEnabled).isFalse()
+            }
+        }
+    }
+
+    @Test
+    fun `present - copy to clipboard on old device shows a toast`() = runTest {
+        val clipboardHelper = FakeClipboardHelper(isOldDevice = true)
+        val toastHelper = FakeToastHelper()
+        val presenter = createAppDeveloperSettingsPresenter(
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
+        )
+        presenter.test {
+            awaitItem().eventSink(AppDeveloperSettingsEvent.CopyToClipboard("text"))
+            assertThat(clipboardHelper.clipboardContents).isEqualTo("text")
+            assertThat(toastHelper.shownToasts).containsExactly(CommonStrings.common_copied_to_clipboard)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - copy to clipboard on new device does not show a toast`() = runTest {
+        val clipboardHelper = FakeClipboardHelper(isOldDevice = false)
+        val toastHelper = FakeToastHelper()
+        val presenter = createAppDeveloperSettingsPresenter(
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
+        )
+        presenter.test {
+            awaitItem().eventSink(AppDeveloperSettingsEvent.CopyToClipboard("text"))
+            assertThat(clipboardHelper.clipboardContents).isEqualTo("text")
+            assertThat(toastHelper.shownToasts).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private fun createAppDeveloperSettingsPresenter(
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(
             getAvailableFeaturesResult = { _, _ ->
@@ -140,11 +201,19 @@ class AppDeveloperSettingsPresenterTest {
             }
         ),
         preferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
+        clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
+        toastHelper: ToastHelper = FakeToastHelper(),
     ): AppDeveloperSettingsPresenter {
         return AppDeveloperSettingsPresenter(
             featureFlagService = featureFlagService,
             rageshakePresenter = { aRageshakePreferencesState() },
             appPreferencesStore = preferencesStore,
+            buildMeta = aBuildMeta(
+                gitRevision = "1234567890",
+                gitBranchName = "feature/awesome-feature"
+            ),
+            clipboardHelper = clipboardHelper,
+            toastHelper = toastHelper,
         )
     }
 }

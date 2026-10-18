@@ -16,6 +16,7 @@ sealed interface RoomListEvent {
     data object DismissRequestVerificationPrompt : RoomListEvent
     data object DismissBanner : RoomListEvent
     data object DismissNewNotificationSoundBanner : RoomListEvent
+    data object DismissSwipeAvatarBanner : RoomListEvent
     data object ToggleSearchResults : RoomListEvent
     data class ShowContextMenu(val roomSummary: RoomListRoomSummary) : RoomListEvent
 
@@ -30,5 +31,4 @@ sealed interface RoomListEvent {
     data class MarkAsRead(val roomId: RoomId) : ContextMenuEvent
     data class MarkAsUnread(val roomId: RoomId) : ContextMenuEvent
     data class SetRoomIsFavorite(val roomId: RoomId, val isFavorite: Boolean) : ContextMenuEvent
-    data class ClearCacheOfRoom(val roomId: RoomId) : ContextMenuEvent
 }

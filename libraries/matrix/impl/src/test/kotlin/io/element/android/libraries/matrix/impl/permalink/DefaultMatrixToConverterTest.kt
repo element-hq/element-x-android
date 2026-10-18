@@ -10,12 +10,10 @@ package io.element.android.libraries.matrix.impl.permalink
 
 import android.net.Uri
 import com.google.common.truth.Truth.assertThat
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultMatrixToConverterTest {
+class DefaultMatrixToConverterTest : RobolectricTest() {
     @Test
     fun `converting a matrix-to url does nothing`() {
         val url = Uri.parse("https://matrix.to/#/#element-android:matrix.org")

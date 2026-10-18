@@ -10,27 +10,12 @@ package io.element.android.libraries.mediaviewer.impl.gallery.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.Multibinds
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import kotlin.reflect.KClass
-
-/**
- * Container that declares the [MediaItemPresenterFactory] map multi binding.
- *
- * Its sole purpose is to support the case of an empty map multibinding.
- */
-@BindingContainer
-@ContributesTo(RoomScope::class)
-interface MediaItemPresenterFactoriesModule {
-    @Multibinds
-    fun multiBindMediaItemPresenterFactories(): @JvmSuppressWildcards Map<KClass<out MediaItem.Event>, MediaItemPresenterFactory<*, *>>
-}
 
 /**
  * Room level caching layer for the [MediaItemPresenterFactory] instances.

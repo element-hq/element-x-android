@@ -11,8 +11,24 @@ package io.element.android.libraries.usersearch.api
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
+/**
+ * Low-level access to the homeserver's user directory; see [UserRepository] for the search used by the UI.
+ */
 interface UserListDataSource {
-    // TODO should probably have a flow
+    /**
+     * Searches the user directory, returning an empty list rather than failing when the request does not succeed.
+     * TODO should probably have a flow
+     *
+     * @param query the text to look for in user ids and display names.
+     * @param count the maximum number of results to return.
+     */
     suspend fun search(query: String, count: Long): List<MatrixUser>
+
+    /**
+     * Fetches one user's profile.
+     *
+     * @param userId the user whose profile is requested.
+     * @return the profile, or `null` when it could not be retrieved.
+     */
     suspend fun getProfile(userId: UserId): MatrixUser?
 }

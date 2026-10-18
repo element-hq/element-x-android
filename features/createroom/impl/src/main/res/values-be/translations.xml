@@ -3,9 +3,15 @@
   <string name="screen_create_room_action_create_room">"Новы пакой"</string>
   <string name="screen_create_room_add_people_title">"Запрасіць карыстальнікаў"</string>
   <string name="screen_create_room_error_creating_room">"Пры стварэнні пакоя адбылася памылка"</string>
+  <string name="screen_create_room_name_placeholder">"Дадаць імя…"</string>
+  <string name="screen_create_room_new_room_title">"Новы пакой"</string>
+  <string name="screen_create_room_new_space_title">"Новая прастора"</string>
   <string name="screen_create_room_private_option_description">"Толькі запрошаныя людзі могуць атрымаць доступ да гэтага пакоя. Усе паведамленні абаронены end-to-end шыфраваннем."</string>
   <string name="screen_create_room_public_option_description">"Любы можа знайсці гэты пакой. 
 Вы можаце змяніць гэта ў любы час у наладах пакоя."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Папрасіце далучыцца"</string>
+  <string name="screen_create_room_room_address_section_title">"Адрас"</string>
+  <string name="screen_create_room_space_selection_sheet_title">"Дадаць у прастору"</string>
   <string name="screen_create_room_topic_label">"Тэма (неабавязкова)"</string>
+  <string name="screen_create_room_topic_placeholder">"Дадаць апісанне…"</string>
 </resources>

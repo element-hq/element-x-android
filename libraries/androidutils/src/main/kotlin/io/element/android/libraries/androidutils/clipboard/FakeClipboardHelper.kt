@@ -8,10 +8,21 @@
 
 package io.element.android.libraries.androidutils.clipboard
 
-class FakeClipboardHelper : ClipboardHelper {
+class FakeClipboardHelper(
+    private val isOldDevice: Boolean = true,
+) : ClipboardHelper {
     var clipboardContents: Any? = null
+    var isSensitive: Boolean? = null
 
-    override fun copyPlainText(text: String) {
+    override fun copyPlainText(
+        text: String,
+        isSensitive: Boolean,
+        onSuccessOnOldDevice: () -> Unit,
+    ) {
         clipboardContents = text
+        this.isSensitive = isSensitive
+        if (isOldDevice) {
+            onSuccessOnOldDevice()
+        }
     }
 }

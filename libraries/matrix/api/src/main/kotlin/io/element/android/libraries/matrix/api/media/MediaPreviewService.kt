@@ -10,6 +10,11 @@ package io.element.android.libraries.matrix.api.media
 
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * Reads and writes the account settings that decide whether media previews and invite avatars are shown.
+ *
+ * These are account data settings shared across clients, so the local value is only updated once the server has accepted the change.
+ */
 interface MediaPreviewService {
     /**
      * Will fetch the media preview config from the server.
@@ -24,11 +29,15 @@ interface MediaPreviewService {
 
     /**
      * Set the media preview display policy. This will update the value on the server and update the local value when successful.
+     *
+     * @param mediaPreviewValue whether media previews are shown always, never, or only in private rooms.
      */
     suspend fun setMediaPreviewValue(mediaPreviewValue: MediaPreviewValue): Result<Unit>
 
     /**
      * Set the invite avatars display policy. This will update the value on the server and update the local value when successful.
+     *
+     * @param hide true to hide the avatars of users and rooms the user has been invited by.
      */
     suspend fun setHideInviteAvatars(hide: Boolean): Result<Unit>
 }

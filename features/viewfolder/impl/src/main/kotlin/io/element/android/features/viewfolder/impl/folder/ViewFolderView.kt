@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.SubdirectoryArrowLeft
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -39,7 +38,6 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViewFolderView(
     state: ViewFolderState,
@@ -100,7 +98,7 @@ private fun ItemRow(
         Item.Parent -> {
             ListItem(
                 leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Outlined.SubdirectoryArrowLeft)),
-                headlineContent = {
+                content = {
                     Text(
                         text = "..",
                         modifier = Modifier.padding(16.dp),
@@ -113,7 +111,7 @@ private fun ItemRow(
         is Item.Folder -> {
             ListItem(
                 leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Outlined.Folder)),
-                headlineContent = {
+                content = {
                     Text(
                         text = item.name,
                         modifier = Modifier.padding(16.dp),
@@ -126,7 +124,7 @@ private fun ItemRow(
         is Item.File -> {
             ListItem(
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Document())),
-                headlineContent = {
+                content = {
                     Text(
                         text = item.name,
                         modifier = Modifier.padding(16.dp),
@@ -142,7 +140,7 @@ private fun ItemRow(
 
 @PreviewsDayNight
 @Composable
-internal fun ViewFolderViewPreview(@PreviewParameter(ViewFolderStateProvider::class) state: ViewFolderState) = ElementPreview {
+internal fun ViewFolderViewPreview(@PreviewParameter(ViewFolderStatePreviewParam::class) state: ViewFolderState) = ElementPreview {
     ViewFolderView(
         state = state,
         onNavigateTo = {},

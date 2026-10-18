@@ -15,9 +15,21 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
 
 interface CreateRoomEntryPoint : FeatureEntryPoint {
+    /**
+     * Configures the create-room flow before it is started, since it serves rooms and spaces from the same screens.
+     */
     interface Builder {
+        /**
+         * @param isSpace true to create a space rather than a room.
+         */
         fun setIsSpace(isSpace: Boolean): Builder
+
+        /**
+         * @param parentSpaceId the space the new room should be added to once created.
+         */
         fun setParentSpace(parentSpaceId: RoomId): Builder
+
+        /** Builds the node with the options configured so far. */
         fun build(): Node
     }
 

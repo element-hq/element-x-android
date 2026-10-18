@@ -45,6 +45,19 @@ class JoinedExtKtTest {
         assertThat(aRoom(isDirect = true).toAnalyticsJoinedRoom(null))
             .isEqualTo(
                 JoinedRoom(
+                    isDM = false,
+                    isSpace = false,
+                    roomSize = JoinedRoom.RoomSize.One,
+                    trigger = null
+                )
+            )
+    }
+
+    @Test
+    fun `test isDm parameter mapping`() = runTest {
+        assertThat(aRoom(isDm = true).toAnalyticsJoinedRoom(null))
+            .isEqualTo(
+                JoinedRoom(
                     isDM = true,
                     isSpace = false,
                     roomSize = JoinedRoom.RoomSize.One,
@@ -80,12 +93,13 @@ class JoinedExtKtTest {
     }
 
     private fun aRoom(
+        isDm: Boolean = false,
         isDirect: Boolean = false,
         isSpace: Boolean = false,
         joinedMemberCount: Long = 0
     ): FakeBaseRoom {
         return FakeBaseRoom().apply {
-            givenRoomInfo(aRoomInfo(isDirect = isDirect, isSpace = isSpace, joinedMembersCount = joinedMemberCount))
+            givenRoomInfo(aRoomInfo(isDm = isDm, isDirect = isDirect, isSpace = isSpace, joinedMembersCount = joinedMemberCount))
         }
     }
 }

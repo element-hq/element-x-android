@@ -46,7 +46,7 @@ fun SpaceHeaderRootView(
         )
         Text(
             text = stringResource(CommonStrings.screen_space_list_title),
-            style = ElementTheme.typography.fontHeadingLgBold,
+            style = ElementTheme.typography.fontHeadingMdBold,
             color = ElementTheme.colors.textPrimary,
             textAlign = TextAlign.Center,
         )

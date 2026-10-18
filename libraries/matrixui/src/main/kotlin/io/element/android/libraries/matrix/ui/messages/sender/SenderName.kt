@@ -9,12 +9,15 @@
 package io.element.android.libraries.matrix.ui.messages.sender
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -24,6 +27,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
+import io.element.android.libraries.matrix.ui.model.toEmojiText
 
 // https://www.figma.com/file/Ni6Ii8YKtmXCKYNE90cC67/Timeline-(new)?type=design&node-id=917-80169&mode=design&t=A0CJCBbMqR8NOwUQ-0
 @Composable
@@ -54,6 +58,19 @@ fun SenderName(
                         SecondaryText(text = senderId.value, mode = senderNameMode)
                     }
                 }
+                val userStatus = senderProfile.displayedStatus
+                if (senderNameMode is SenderNameMode.Timeline && userStatus != null) {
+                    Text(
+                        modifier = Modifier
+                            .clipToBounds()
+                            .alignByBaseline(),
+                        text = userStatus.toEmojiText(),
+                        style = ElementTheme.typography.fontBodyMdMedium,
+                        color = ElementTheme.colors.textSecondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
     }
@@ -74,13 +91,16 @@ private fun RowScope.MainText(
         SenderNameMode.ActionList,
         SenderNameMode.Reply -> Modifier
     }
+
     val color = when (mode) {
         is SenderNameMode.Timeline -> mode.mainColor
         SenderNameMode.ActionList,
         SenderNameMode.Reply -> ElementTheme.colors.textPrimary
     }
     Text(
-        modifier = modifier.clipToBounds(),
+        modifier = modifier
+            .clipToBounds()
+            .weight(1f, fill = false),
         text = text,
         style = style,
         color = color,
@@ -117,11 +137,29 @@ private fun RowScope.SecondaryText(
 @PreviewsDayNight
 @Composable
 internal fun SenderNamePreview(
-    @PreviewParameter(SenderNameDataProvider::class) senderNameData: SenderNameData,
+    @PreviewParameter(SenderNameDataPreviewParam::class) senderNameData: SenderNameData,
 ) = ElementPreview {
-    SenderName(
-        senderId = senderNameData.userId,
-        senderProfile = senderNameData.profileDetails,
-        senderNameMode = senderNameData.senderNameMode,
-    )
+    Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        sequenceOf(
+            SenderNameMode.Timeline(mainColor = Color.Red),
+            SenderNameMode.Reply,
+            SenderNameMode.ActionList,
+        ).forEach { mode ->
+            Column {
+                Text(
+                    "Rendering in mode ${mode::class.simpleName}:",
+                    style = ElementTheme.typography.fontBodyXsRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+                SenderName(
+                    senderId = senderNameData.userId,
+                    senderProfile = senderNameData.profileDetails,
+                    senderNameMode = mode,
+                )
+            }
+        }
+    }
 }

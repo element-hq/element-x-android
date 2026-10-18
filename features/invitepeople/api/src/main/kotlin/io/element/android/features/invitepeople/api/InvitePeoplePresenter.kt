@@ -13,7 +13,14 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 
 interface InvitePeoplePresenter : Presenter<InvitePeopleState> {
+    /**
+     * Creates a presenter for one invite flow.
+     */
     interface Factory {
+        /**
+         * @param joinedRoom the room to invite into, or `null` when the room does not exist yet, as when inviting from a direct message.
+         * @param roomId the id of the room to invite into.
+         */
         fun create(
             joinedRoom: JoinedRoom?,
             roomId: RoomId,

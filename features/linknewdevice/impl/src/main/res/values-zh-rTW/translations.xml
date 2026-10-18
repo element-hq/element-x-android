@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"使用此裝置掃描 QR code"</string>
   <string name="screen_link_new_device_desktop_submit">"準備掃描"</string>
   <string name="screen_link_new_device_desktop_title">"在桌上型電腦上開啟 %1$s 以取得 QR code"</string>
+  <string name="screen_link_new_device_desktop_warning">"請務必先在您的裝置上完成上述步驟，之後才掃描 QR code。切勿掃描他人傳送的 QR code。"</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"數字不符"</string>
   <string name="screen_link_new_device_enter_number_notice">"輸入兩位數代碼"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"這將確認您與另一台裝置之間的連線是否安全。"</string>

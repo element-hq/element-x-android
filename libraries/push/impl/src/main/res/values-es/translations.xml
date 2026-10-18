@@ -13,7 +13,17 @@
     <item quantity="one">"%d notificación"</item>
     <item quantity="other">"%d notificaciones"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"No se pudo registrar el distribuidor de notificaciones de UnifiedPush, así que no recibirás más notificaciones. Comprueba los ajustes de notificaciones de la aplicación y el estado del distribuidor de push."</string>
   <string name="notification_fallback_content">"Tienes nuevos mensajes."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Tienes %d mensaje nuevo."</item>
+    <item quantity="other">"Tienes %d mensajes nuevos."</item>
+  </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Se ha compartido %1$d archivo adjunto"</item>
+    <item quantity="other">"Se han compartido %1$d archivos adjuntos"</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Llamada entrante"</string>
   <string name="notification_incoming_call">"📹 Llamada entrante"</string>
   <string name="notification_inline_reply_failed">"** No se ha podido enviar - por favor, abre la sala"</string>
   <string name="notification_invitation_action_join">"Unirse"</string>
@@ -24,6 +34,7 @@
   </plurals>
   <string name="notification_invite_body">"Te invitó a chatear"</string>
   <string name="notification_invite_body_with_sender">"%1$s te invitó a chatear"</string>
+  <string name="notification_live_location_started_body">"Comenzó a compartir su ubicación en tiempo real"</string>
   <string name="notification_mentioned_you_body">"Te mencionó: %1$s"</string>
   <string name="notification_new_messages">"Mensajes nuevos"</string>
   <plurals name="notification_new_messages_for_room">
@@ -37,7 +48,10 @@
   <string name="notification_room_invite_body_with_sender">"%1$s te invitó a unirte a la sala"</string>
   <string name="notification_sender_me">"Yo"</string>
   <string name="notification_sender_mention_reply">"%1$s mencionó o respondió"</string>
+  <string name="notification_space_invite_body">"Te invitó a unirte al espacio"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s te invitó a unirte al espacio"</string>
   <string name="notification_test_push_notification_content">"¡Estás viendo la notificación! ¡Haz clic en mí!"</string>
+  <string name="notification_thread_in_room">"Hilo en %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -54,10 +68,20 @@
   <string name="push_distributor_background_sync_android">"Sincronización en segundo plano"</string>
   <string name="push_distributor_firebase_android">"Servicios de Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"No se han encontrado Servicios de Google Play válidos. Es posible que las notificaciones no funcionen correctamente."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Comprobando usuarios bloqueados"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Ver usuarios bloqueados"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"No hay usuarios bloqueados."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Has bloqueado %1$d usuario. No recibirás notificaciones de este usuario."</item>
+    <item quantity="other">"Has bloqueado %1$d usuarios. No recibirás notificaciones de estos usuarios."</item>
+  </plurals>
   <string name="troubleshoot_notifications_test_blocked_users_title">"Usuarios bloqueados"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Obtener el nombre del proveedor actual."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"No se ha seleccionado ningún proveedor de push."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Proveedor de push actual: %1$s y distribuidor actual: %2$s. Pero no se encuentra el distribuidor %3$s. ¿Quizás se ha desinstalado la aplicación?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Proveedor de push actual: %1$s, pero no se ha configurado ningún distribuidor."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Proveedor de push actual: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Proveedor de push actual: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Proveedor de push actual"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Asegurarse de que la aplicación tiene al menos un proveedor de push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"No se encontró ningún proveedor de push."</string>

@@ -76,6 +76,7 @@ class IntentResolver(
 }
 
 private fun Intent.canBeIgnored(): Boolean {
+    if (flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY != 0) return true
     return action == Intent.ACTION_MAIN &&
         categories?.contains(Intent.CATEGORY_LAUNCHER) == true
 }

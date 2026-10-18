@@ -51,9 +51,9 @@ interface PinCodeManager {
     fun hasPinCode(): Flow<Boolean>
 
     /**
-     * @return the size of the saved pin code.
+     * @return the size of the saved pin code. Return null if no pin code is saved.
      */
-    suspend fun getPinCodeSize(): Int
+    suspend fun getPinCodeSize(): Int?
 
     /**
      * Creates a new encrypted pin code.

@@ -46,6 +46,7 @@
   <string name="screen_room_details_error_muting">"Không thể tắt tiếng phòng này, vui lòng thử lại."</string>
   <string name="screen_room_details_error_unmuting">"Không thể bật tiếng cho phòng này. Vui lòng thử lại."</string>
   <string name="screen_room_details_invite_people_title">"Mời ai đó"</string>
+  <string name="screen_room_details_invite_title">"Mời"</string>
   <string name="screen_room_details_leave_conversation_title">"Rời khỏi cuộc trò chuyện"</string>
   <string name="screen_room_details_leave_room_title">"Rời phòng"</string>
   <string name="screen_room_details_notification_mode_custom">"Tùy chỉnh"</string>
@@ -89,8 +90,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Không thể khôi phục chế độ mặc định, vui lòng thử lại."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Không thể thiết lập chế độ, hãy thử lại nhé."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Máy chủ không hỗ trợ tùy chọn này trong phòng mã hóa, bạn sẽ không nhận thông báo ở đây."</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Tất cả tin nhắn."</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Chỉ đề cập và từ khóa"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Trong phòng này, thông báo cho tôi khi"</string>
   <string name="screen_room_roles_and_permissions_admins">"Quản trị viên"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Thay đổi vai trò của tôi"</string>
@@ -105,6 +104,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Vai trò"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Chi tiết phòng"</string>
   <string name="screen_room_roles_and_permissions_title">"Vai trò và quyền hạn"</string>
+  <string name="screen_roomlist_mark_as_read">"Đánh dấu đã đọc"</string>
+  <string name="screen_roomlist_mark_as_unread">"Đánh dấu chưa đọc"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Sau khi được kích hoạt, mã hóa cho một phòng chat không thể tắt được. Lịch sử tin nhắn chỉ hiển thị cho các thành viên phòng chat kể từ khi họ được mời hoặc kể từ khi họ tham gia phòng chat.
 Không ai ngoài các thành viên phòng chat có thể đọc tin nhắn. Điều này có thể ngăn chặn bot và các thiết bị kết nối hoạt động đúng cách.
 Chúng tôi không khuyến khích bật mã hóa cho các phòng chat mà bất kỳ ai cũng có thể tìm thấy và tham gia."</string>

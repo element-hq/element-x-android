@@ -81,7 +81,7 @@ class TimelineEventContentMapper(
                             )
                         }
                         is MsgLikeKind.Redacted -> {
-                            RedactedContent
+                            RedactedContent(threadInfo = extractThreadInfo(it.content))
                         }
                         is MsgLikeKind.Poll -> {
                             PollContent(
@@ -153,7 +153,11 @@ class TimelineEventContentMapper(
                         CallIntent.AUDIO
                     } else {
                         CallIntent.VIDEO
-                    }
+                    },
+                    declinedBy = it.declinedBy.map(::UserId),
+                    activeMembers = it.activeMembers.map(::UserId),
+                    callStartTsMillis = it.callStartTsMillis?.toLong(),
+                    isJoined = it.isJoined
                 )
             }
         }

@@ -11,15 +11,16 @@ package io.element.android.features.location.impl.common.permissions
 import androidx.compose.runtime.Composable
 
 class FakePermissionsPresenter : PermissionsPresenter {
-    val events = mutableListOf<PermissionsEvents>()
+    val events = mutableListOf<PermissionsEvent>()
 
-    private fun handleEvent(event: PermissionsEvents) {
+    private fun handleEvent(event: PermissionsEvent) {
         events += event
     }
 
     private var state = PermissionsState(
         permissions = PermissionsState.Permissions.NoneGranted,
         shouldShowRationale = false,
+        permissionsAlreadyRequested = false,
         eventSink = ::handleEvent,
     )
         set(value) {

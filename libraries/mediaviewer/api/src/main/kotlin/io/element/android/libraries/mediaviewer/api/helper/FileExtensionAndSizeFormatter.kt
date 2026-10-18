@@ -12,8 +12,8 @@ fun formatFileExtensionAndSize(extension: String, size: String?): String {
     return buildString {
         append(extension.uppercase())
         if (size != null) {
-            append(' ')
-            append("($size)")
+            append(" • ")
+            append(size)
         }
     }
 }

@@ -1,0 +1,4 @@
+-- Migrate DB from version 12
+-- Add the thumbnail of the user avatar, base64 encoded, so that the avatar can be rendered without a Matrix client.
+
+ALTER TABLE SessionData ADD COLUMN userAvatarData TEXT;

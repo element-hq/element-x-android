@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"アバターを追加"</string>
   <string name="a11y_add_reaction">"リアクションを追加: %1$s"</string>
   <string name="a11y_address">"アドレス"</string>
   <string name="a11y_avatar">"アバター"</string>
+  <string name="a11y_clear_search_field">"検索欄をクリア"</string>
   <string name="a11y_collapse_message_text_field">"入力欄を縮小"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"一人あたりの投票権を減らす"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"一人あたりの投票権を増やす"</string>
+  <string name="a11y_custom_emoji">"任意の絵文字"</string>
   <string name="a11y_delete">"削除"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"%1$d 桁入力済"</item>
   </plurals>
+  <string name="a11y_duration">"長さ: %1$s"</string>
   <string name="a11y_edit_avatar">"アバターを編集"</string>
   <string name="a11y_edit_room_address_hint">"完全なアドレスは %1$s になります。"</string>
   <string name="a11y_encryption_details">"暗号化の詳細"</string>
   <string name="a11y_expand_message_text_field">"入力欄を拡大"</string>
+  <string name="a11y_gallery_attachment">"ギャラリー 添付ファイル %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"ギャラリーで読み込み失敗 %1$d"</string>
+  <string name="a11y_gallery_image">"ギャラリー 画像 %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="other">"ギャラリー その他メディア %1$d"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"ギャラリー 読込中 %1$d"</string>
+  <string name="a11y_gallery_video">"ギャラリー 動画 %1$d"</string>
   <string name="a11y_hide_password">"パスワードを非表示"</string>
   <string name="a11y_info">"情報"</string>
   <string name="a11y_join_call">"通話に参加"</string>
   <string name="a11y_jump_to_bottom">"一番下へ"</string>
+  <string name="a11y_jump_to_unread">"未読に移動"</string>
+  <string name="a11y_jump_to_unread_messages">"最初の未読のメッセージに移動"</string>
   <string name="a11y_move_the_map_to_my_location">"現在地に移動"</string>
   <string name="a11y_notifications_mentions_only">"メンションのみ"</string>
   <string name="a11y_notifications_muted">"ミュート有効"</string>
@@ -26,12 +42,14 @@
   <string name="a11y_page_n">"%1$d ページ"</string>
   <string name="a11y_pause">"一時停止"</string>
   <string name="a11y_paused_voice_message">"音声メッセージ 長さ: %1$s 再生位置: %2$s"</string>
+  <string name="a11y_photo_preview">"画像のプレビュー"</string>
   <string name="a11y_pin_field">"PIN入力欄"</string>
   <string name="a11y_pinned_location">"ピン留めした位置情報"</string>
   <string name="a11y_play">"再生"</string>
   <string name="a11y_playback_speed">"再生速度"</string>
   <string name="a11y_poll">"投票"</string>
   <string name="a11y_poll_end">"投票終了"</string>
+  <string name="a11y_position">"位置: %1$s"</string>
   <string name="a11y_qr_code">"QRコード"</string>
   <string name="a11y_react_with">"リアクション: %1$s"</string>
   <string name="a11y_react_with_other_emojis">"他の絵文字でリアクション"</string>
@@ -40,21 +58,26 @@
     <item quantity="other">"既読: %1$s ほか %2$d 人"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s 既読"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"タップしてすべて表示"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"既読のユーザーを全て表示"</string>
   <string name="a11y_remove_reaction">"%1$s リアクションを削除"</string>
   <string name="a11y_remove_reaction_with">"%1$s リアクションを削除"</string>
   <string name="a11y_room_avatar">"ルームのアバター"</string>
   <string name="a11y_send_files">"ファイルを送信"</string>
   <string name="a11y_sender_location">"送信者の位置情報"</string>
+  <string name="a11y_sent_by_sender_at_date">"%2$s に %1$s が送信"</string>
   <string name="a11y_session_verification_time_limited_action_required">"1分以内に検証を完了してください"</string>
   <string name="a11y_settings_with_required_action">"処置が必要な設定"</string>
   <string name="a11y_show_password">"パスワードを表示"</string>
   <string name="a11y_start_call">"通話を開始"</string>
   <string name="a11y_start_video_call">"ビデオ通話を開始"</string>
   <string name="a11y_start_voice_call">"音声通話を開始"</string>
+  <string name="a11y_status">"ステータス"</string>
+  <string name="a11y_thread_in_room">"%1$s のスレッド"</string>
+  <string name="a11y_threads_in_room">"%1$s のスレッド"</string>
   <string name="a11y_tombstoned_room">"埋没したルーム"</string>
   <string name="a11y_user_avatar">"ユーザーのアバター"</string>
   <string name="a11y_user_menu">"ユーザーメニュー"</string>
+  <string name="a11y_video_preview">"動画のプレビュー"</string>
   <string name="a11y_view_avatar">"アバターを表示"</string>
   <string name="a11y_view_details">"詳細を表示"</string>
   <string name="a11y_voice_message">"音声メッセージ 長さ: %1$s"</string>
@@ -91,6 +114,7 @@
   <string name="action_decline_and_block">"拒否してブロック"</string>
   <string name="action_delete">"削除"</string>
   <string name="action_delete_account">"アカウントを削除"</string>
+  <string name="action_delete_file">"ファイルを削除"</string>
   <string name="action_delete_poll">"投票を削除"</string>
   <string name="action_deselect_all">"全ての選択を解除"</string>
   <string name="action_disable">"無効化"</string>
@@ -128,6 +152,7 @@
   <string name="action_manage_account_and_devices">"アカウントと端末を管理"</string>
   <string name="action_manage_devices">"端末を管理"</string>
   <string name="action_manage_rooms">"ルームを管理"</string>
+  <string name="action_mark_as_read">"既読にする"</string>
   <string name="action_message">"メッセージ"</string>
   <string name="action_minimize">"最小化"</string>
   <string name="action_next">"次へ"</string>
@@ -182,9 +207,11 @@
   <string name="action_translate">"翻訳"</string>
   <string name="action_try_again">"もう一度やり直してください"</string>
   <string name="action_unpin">"ピン留めを解除"</string>
+  <string name="action_video_call">"ビデオ通話"</string>
   <string name="action_view">"表示"</string>
   <string name="action_view_in_timeline">"タイムラインで表示"</string>
   <string name="action_view_source">"ソースコードを表示"</string>
+  <string name="action_voice_call">"音声通話"</string>
   <string name="action_yes">"はい"</string>
   <string name="action_yes_try_again">"再試行する"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"使用しているサーバーがより高速な新しいプロトコルに対応しました。将来、古いプロトコルへの対応が打ち切られ、強制的にログアウトされる可能性があるため、今すぐにログアウトし、再度ログインし直すことを推奨します。"</string>
@@ -197,7 +224,6 @@
   <string name="common_advanced_settings">"高度な設定"</string>
   <string name="common_an_image">"画像"</string>
   <string name="common_analytics">"分析"</string>
-  <string name="common_android_fetching_notifications_title">"通知を同期中…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"あなたがルームを退出"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"セッションからログアウトされました"</string>
   <string name="common_appearance">"テーマ"</string>
@@ -206,6 +232,7 @@
   <string name="common_blocked_users">"ブロックしたユーザー"</string>
   <string name="common_bubbles">"ふきだし"</string>
   <string name="common_call_declined">"通話を拒否しました"</string>
+  <string name="common_call_in_progress">"通話が進行中"</string>
   <string name="common_call_started">"通話を開始しました"</string>
   <string name="common_call_you_declined">"通話を拒否しました"</string>
   <string name="common_chat_backup">"チャットをバックアップ"</string>
@@ -217,7 +244,6 @@
   <string name="common_current_user_left_room">"ルームを退出しました"</string>
   <string name="common_current_user_left_space">"スペースから退出しました"</string>
   <string name="common_current_user_rejected_invite">"招待は却下されました"</string>
-  <string name="common_dark">"ダーク"</string>
   <string name="common_decryption_error">"復号化エラー"</string>
   <string name="common_description">"詳細"</string>
   <string name="common_developer_options">"開発者向けオプション"</string>
@@ -243,20 +269,28 @@
   <string name="common_failed">"失敗"</string>
   <string name="common_favourite">"お気に入り"</string>
   <string name="common_favourited">"お気に入り"</string>
+  <string name="common_fetching_notifications_title_android">"通知を同期中…"</string>
   <string name="common_file">"ファイル"</string>
   <string name="common_file_deleted">"ファイルを削除しました"</string>
   <string name="common_file_saved">"ファイルを保存しました"</string>
   <string name="common_file_saved_on_disk_android">"ファイルはダウンロードに保存されました"</string>
   <string name="common_forward_message">"メッセージを転送"</string>
   <string name="common_frequently_used">"頻繁に使用"</string>
+  <string name="common_gallery">"ギャラリー"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="other">"%1$dの添付ファイル…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="other">"%1$dのメディアアイテム…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"グループ通話が進行中"</string>
   <string name="common_image">"画像"</string>
   <string name="common_in_reply_to">"%1$s に返信"</string>
   <string name="common_install_apk_android">"APK をインストール"</string>
   <string name="common_invite_unknown_profile">"このMatrix IDは見つからないため、招待が届かない可能性があります。"</string>
   <string name="common_leaving_room">"ルームを退出しています"</string>
   <string name="common_leaving_space">"スペースを退出しています"</string>
-  <string name="common_light">"ライト"</string>
   <string name="common_line_copied_to_clipboard">"行をクリップボードにコピーしました"</string>
   <string name="common_link_copied_to_clipboard">"リンクをクリップボードにコピーしました"</string>
   <string name="common_link_new_device">"新しい端末から接続"</string>
@@ -274,7 +308,7 @@
   <string name="common_message_actions">"メッセージアクション"</string>
   <string name="common_message_failed_to_send">"メッセージの送信に失敗"</string>
   <string name="common_message_layout">"メッセージのレイアウト"</string>
-  <string name="common_message_removed">"メッセージは削除されました"</string>
+  <string name="common_message_removed">"メッセージが削除されました"</string>
   <string name="common_modern">"モダン"</string>
   <string name="common_mute">"ミュート"</string>
   <string name="common_name">"名前"</string>
@@ -284,11 +318,12 @@
   <string name="common_no_space_name">"スペース名なし"</string>
   <string name="common_not_encrypted">"暗号化されていません"</string>
   <string name="common_offline">"オフライン"</string>
+  <string name="common_on_a_call">"通話中"</string>
   <string name="common_open_source_licenses">"オープンソースライセンス"</string>
   <string name="common_or">"または"</string>
   <string name="common_other_options">"他のオプション"</string>
   <string name="common_password">"パスワード"</string>
-  <string name="common_people">"人々"</string>
+  <string name="common_people">"ユーザー"</string>
   <string name="common_permalink">"固定リンク"</string>
   <string name="common_permission">"権限"</string>
   <string name="common_pinned">"ピン留め"</string>
@@ -296,6 +331,7 @@
   <string name="common_please_wait">"お待ちください…"</string>
   <string name="common_poll_end_confirmation">"本当に投票を終了しますか？"</string>
   <string name="common_poll_summary">"投票: %1$s"</string>
+  <string name="common_poll_summary_prefix">"投票"</string>
   <string name="common_poll_total_votes">"総投票数:%1$s"</string>
   <string name="common_poll_undisclosed_text">"結果は投票終了後に表示されます"</string>
   <plurals name="common_poll_votes_count">
@@ -319,7 +355,6 @@
     <item quantity="other">"%1$d 件の返信"</item>
   </plurals>
   <string name="common_replying_to">"%1$s に返信"</string>
-  <string name="common_report_a_bug">"バグを報告"</string>
   <string name="common_report_a_problem">"問題を報告"</string>
   <string name="common_report_submitted">"報告は送信されました"</string>
   <string name="common_rich_text_editor">"リッチテキストエディター"</string>
@@ -360,7 +395,7 @@
   <string name="common_something_went_wrong_message">"問題が発生しました。再度お試しください。"</string>
   <string name="common_space">"スペース"</string>
   <string name="common_space_members">"スペースのメンバー"</string>
-  <string name="common_space_topic_placeholder">"このスペースは何についてのものですか?"</string>
+  <string name="common_space_topic_placeholder">"このスペースは何についてのものですか？"</string>
   <plurals name="common_spaces">
     <item quantity="other">"%1$d 個のスペース"</item>
   </plurals>
@@ -370,7 +405,6 @@
   <string name="common_suggested">"推奨される"</string>
   <string name="common_suggestions">"提案"</string>
   <string name="common_syncing">"同期中"</string>
-  <string name="common_system">"システム"</string>
   <string name="common_text">"テキスト"</string>
   <string name="common_third_party_notices">"第三者に関する通知"</string>
   <string name="common_thread">"スレッド"</string>
@@ -387,6 +421,7 @@
   <string name="common_unmute">"ミュート解除"</string>
   <string name="common_unsupported_call">"非対応の通話"</string>
   <string name="common_unsupported_event">"非対応のイベント"</string>
+  <string name="common_user_started_a_call">"%1$s が通話を開始"</string>
   <string name="common_username">"ユーザー名"</string>
   <string name="common_verification_cancelled">"検証がキャンセルされました"</string>
   <string name="common_verification_complete">"検証完了"</string>
@@ -406,8 +441,13 @@
   <string name="common_waiting">"待機中…"</string>
   <string name="common_waiting_for_decryption_key">"メッセージを待機中"</string>
   <string name="common_waiting_live_location">"ライブ位置情報を待機中…"</string>
-  <string name="common_world_readable_history">"誰でも履歴を閲覧できます"</string>
+  <string name="common_world_readable_history">"誰でも過去のメッセージを閲覧できます"</string>
   <string name="common_you">"あなた"</string>
+  <string name="content_scanner_not_found">"ダウンロードは使用できません。"</string>
+  <string name="content_scanner_not_found_title">"問題が発生しました"</string>
+  <string name="content_scanner_scanning">"スキャン中…"</string>
+  <string name="content_scanner_unsafe_message">"プレビューとダウンロードは無効に設定されています。"</string>
+  <string name="content_scanner_unsafe_title">"このファイルは安全ではありません"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"あなたが参加する以前に送信されたメッセージを、%1$s (%2$s) が共有しました。"</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"あなたが参加する以前に送信されたメッセージを、%1$s が共有しました。"</string>
   <string name="crypto_history_visible">"このルームは新しいメンバーが過去の内容を確認できるように設定されています。%1$s"</string>
@@ -438,11 +478,10 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"アップロードできる最大サイズは %1$s です。"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"アップロードする画質を選択してください。"</string>
   <string name="dialog_video_quality_selector_title">"動画のアップロード品質を選択"</string>
-  <string name="emoji_picker_search_placeholder">"絵文字を検索"</string>
   <string name="error_account_already_logged_in">"この端末では既に %1$s としてログインしています。"</string>
-  <string name="error_account_creation_not_possible">"Matrix Authentication Service とアカウント作成に対応するため、このホームサーバーはアップグレードが必要です。"</string>
+  <string name="error_account_creation_not_possible">"Matrix Authentication Service とアカウント作成に対応させるため、アカウント提供元のアップグレードが必要です。"</string>
   <string name="error_failed_creating_the_permalink">"固定リンクの作成に失敗しました"</string>
-  <string name="error_failed_loading_map">"%1$s でマップを読み込めません。時間を置いて再度お試しください。"</string>
+  <string name="error_failed_loading_map">"%1$s で地図を読み込めません。時間を置いて再度お試しください。"</string>
   <string name="error_failed_loading_messages">"メッセージの読み込みに失敗しました"</string>
   <string name="error_failed_locating_user">"%1$s は現在地にアクセスできませんでした。時間を置いて再度お試しください。"</string>
   <string name="error_failed_uploading_voice_message">"音声メッセージの送信に失敗しました。"</string>
@@ -459,6 +498,9 @@
   <string name="error_unknown">"申し訳ありません。エラーが発生しました。"</string>
   <string name="invite_friends_rich_title">"🔐️ %1$s に参加してください"</string>
   <string name="invite_friends_text">"%1$s で話しましょう: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"ライブ位置情報共有"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"位置情報を共有しています"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s ライブ位置情報"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"開発者にバグを報告するには端末を振ってください。"</string>
   <string name="screen_bug_report_a11y_screenshot">"スクリーンショット"</string>
@@ -466,12 +508,15 @@
   <string name="screen_create_poll_options_section_title">"選択肢"</string>
   <string name="screen_create_poll_remove_accessibility_label">"%1$s を削除"</string>
   <string name="screen_create_poll_settings_section_title">"設定"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"一人あたりの投票数"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"誰も位置情報を共有していません"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"ライブ位置情報を共有しています"</string>
   <plurals name="screen_live_location_sheet_subtitle">
     <item quantity="other">"%1$d 人"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"地図上"</string>
+  <string name="screen_local_network_opt_in_subtitle">"ホームサーバーがローカルネットワーク上に存在しています。接続するには %1$s はこのネットワークへアクセスする権限が必要です。"</string>
+  <string name="screen_local_network_opt_in_title">"ローカルネットワークへのアクセスを許可"</string>
   <string name="screen_media_picker_error_failed_selection">"ファイルの選択に失敗しました。再試行してください。"</string>
   <string name="screen_pinned_timeline_empty_state_description">"メッセージを長押しし \"%1$s\" を選択してください"</string>
   <string name="screen_pinned_timeline_empty_state_headline">"重要なメッセージをピン留めして容易に見つけられるようにします"</string>
@@ -496,11 +541,15 @@
   <string name="screen_room_grouped_state_events_expand">"展開"</string>
   <string name="screen_room_grouped_state_events_reduce">"縮小"</string>
   <string name="screen_room_live_location_banner">"ライブ位置情報を共有中"</string>
+  <string name="screen_room_maximum_messages_selected">"最大数のメッセージを選択中"</string>
   <string name="screen_room_permalink_same_room_android">"すでにこのルームを表示しています"</string>
   <string name="screen_room_pinned_banner_indicator">"%2$s 個のうち %1$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s 個のピン留めされたメッセージ"</string>
   <string name="screen_room_pinned_banner_loading_description">"メッセージを読み込み中…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"すべて表示"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="other">"%1$d件のメッセージを選択中"</item>
+  </plurals>
   <string name="screen_room_title">"チャット"</string>
   <string name="screen_share_location_title">"場所を共有"</string>
   <string name="screen_share_my_location_action">"現在地を共有する"</string>
@@ -515,7 +564,10 @@
   <string name="screen_space_list_parent_space">"%1$s スペース"</string>
   <string name="screen_space_list_title">"スペース"</string>
   <string name="screen_static_location_sheet_timestamp_description">"%1$s 共有"</string>
-  <string name="screen_static_location_sheet_title">"マップ上"</string>
+  <string name="screen_static_location_sheet_title">"地図上"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="other">"%1$d が参加"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"%1$s の検証済みのデジタルIDがリセットされたため、メッセージは送信されませんでした。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"%1$s に未検証の端末が存在するため、メッセージは送信されませんでした。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"未検証の端末が存在するため、メッセージは送信されませんでした。"</string>
@@ -527,4 +579,6 @@
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"このメッセージにアクセスできません"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"メッセージの復号化に失敗"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"この端末を検証していないか、送信者があなたのデジタルIDを検証していないため、このメッセージはブロックされました。"</string>
+  <string name="vulkan_not_supported_dialog_content_android">"使用している端末が古すぎます。Android 8以上が必要です。"</string>
+  <string name="vulkan_not_supported_dialog_title_android">"地図のレンダリングに対応していません"</string>
 </resources>

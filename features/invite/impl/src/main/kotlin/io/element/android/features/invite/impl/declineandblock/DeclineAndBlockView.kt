@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -41,11 +40,11 @@ import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeclineAndBlockView(
     state: DeclineAndBlockState,
     onBackClick: () -> Unit,
+    onDeclineSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -53,10 +52,10 @@ fun DeclineAndBlockView(
     val isDeclining = state.declineAction is AsyncAction.Loading
     AsyncActionView(
         async = state.declineAction,
-        onSuccess = { onBackClick() },
+        onSuccess = { onDeclineSuccess() },
         errorMessage = { stringResource(CommonStrings.error_unknown) },
-        onRetry = { state.eventSink(DeclineAndBlockEvents.Decline) },
-        onErrorDismiss = { state.eventSink(DeclineAndBlockEvents.ClearDeclineAction) }
+        onRetry = { state.eventSink(DeclineAndBlockEvent.Decline) },
+        onErrorDismiss = { state.eventSink(DeclineAndBlockEvent.ClearDeclineAction) }
     )
 
     Scaffold(
@@ -81,14 +80,14 @@ fun DeclineAndBlockView(
         ) {
             ListItem(
                 modifier = Modifier.padding(end = 8.dp),
-                headlineContent = {
+                content = {
                     Text(text = stringResource(R.string.screen_decline_and_block_block_user_option_title))
                 },
                 supportingContent = {
                     Text(text = stringResource(R.string.screen_decline_and_block_block_user_option_description))
                 },
                 onClick = {
-                    state.eventSink(DeclineAndBlockEvents.ToggleBlockUser)
+                    state.eventSink(DeclineAndBlockEvent.ToggleBlockUser)
                 },
                 trailingContent = ListItemContent.Switch(checked = state.blockUser)
             )
@@ -96,14 +95,14 @@ fun DeclineAndBlockView(
             Spacer(modifier = Modifier.height(24.dp))
             ListItem(
                 modifier = Modifier.padding(end = 8.dp),
-                headlineContent = {
+                content = {
                     Text(text = stringResource(CommonStrings.action_report_room))
                 },
                 supportingContent = {
                     Text(text = stringResource(R.string.screen_decline_and_block_report_user_option_description))
                 },
                 onClick = {
-                    state.eventSink(DeclineAndBlockEvents.ToggleReportRoom)
+                    state.eventSink(DeclineAndBlockEvent.ToggleReportRoom)
                 },
                 trailingContent = ListItemContent.Switch(checked = state.reportRoom)
             )
@@ -112,7 +111,7 @@ fun DeclineAndBlockView(
                 Spacer(modifier = Modifier.height(24.dp))
                 TextField(
                     value = state.reportReason,
-                    onValueChange = { state.eventSink(DeclineAndBlockEvents.UpdateReportReason(it)) },
+                    onValueChange = { state.eventSink(DeclineAndBlockEvent.UpdateReportReason(it)) },
                     placeholder = stringResource(R.string.screen_decline_and_block_report_user_reason_placeholder),
                     minLines = 3,
                     enabled = !isDeclining,
@@ -131,7 +130,7 @@ fun DeclineAndBlockView(
                 enabled = !isDeclining && state.canDecline,
                 onClick = {
                     focusManager.clearFocus(force = true)
-                    state.eventSink(DeclineAndBlockEvents.Decline)
+                    state.eventSink(DeclineAndBlockEvent.Decline)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -144,10 +143,11 @@ fun DeclineAndBlockView(
 @PreviewsDayNight
 @Composable
 internal fun DeclineAndBlockViewPreview(
-    @PreviewParameter(DeclineAndBlockStateProvider::class) state: DeclineAndBlockState
+    @PreviewParameter(DeclineAndBlockStatePreviewParam::class) state: DeclineAndBlockState
 ) = ElementPreview {
     DeclineAndBlockView(
         state = state,
         onBackClick = {},
+        onDeclineSuccess = {},
     )
 }

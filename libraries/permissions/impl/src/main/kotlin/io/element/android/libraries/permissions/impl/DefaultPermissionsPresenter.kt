@@ -112,6 +112,9 @@ class DefaultPermissionsPresenter(
                         permissionState.launchPermissionRequest()
                     }
                 }
+                PermissionsEvent.ForceRequestPermissions -> {
+                    permissionState.launchPermissionRequest()
+                }
                 PermissionsEvent.OpenSystemSettingAndCloseDialog -> {
                     permissionActions.openSettings(permission)
                     showDialog.value = false

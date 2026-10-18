@@ -8,7 +8,6 @@
 
 package io.element.android.features.messages.impl
 
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -27,6 +26,8 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.PinUnpinAction
 import io.element.android.appconfig.MessageComposerConfig
+import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
+import io.element.android.features.location.api.live.isCurrentlySharing
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.MessagesState.Threads
 import io.element.android.features.messages.impl.actionlist.ActionListState
@@ -37,6 +38,8 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
+import io.element.android.features.messages.impl.timeline.SelectionAction
+import io.element.android.features.messages.impl.timeline.SelectionState
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineState
@@ -45,16 +48,19 @@ import io.element.android.features.messages.impl.timeline.components.reactionsum
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.features.messages.impl.timeline.model.event.captionOrNull
+import io.element.android.features.messages.impl.timeline.model.event.htmlCaptionOrNull
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.features.messages.impl.timeline.selectedEventIdsInTimelineOrder
 import io.element.android.features.messages.impl.voicemessages.composer.DefaultVoiceMessageComposerPresenter
 import io.element.android.features.roomcall.api.RoomCallState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -67,6 +73,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatch
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.emoji.api.recentemojis.AddRecentEmoji
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.toThreadId
@@ -77,13 +84,15 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
+import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
+import io.element.android.libraries.matrix.ui.model.dmUserStatus
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
-import io.element.android.libraries.recentemojis.api.AddRecentEmoji
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
@@ -126,6 +135,7 @@ class MessagesPresenter(
     private val featureFlagService: FeatureFlagService,
     private val addRecentEmoji: AddRecentEmoji,
     private val markAsFullyRead: MarkAsFullyRead,
+    private val liveLocationShareManager: ActiveLiveLocationShareManager,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<MessagesState> {
     @AssistedFactory
@@ -171,7 +181,8 @@ class MessagesPresenter(
                 .collectLatest { value = it.toImmutableList() }
         }
 
-        val canOpenThreadList by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomThreadList).collectAsState(initial = false)
+        val canOpenThreadList by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Threads).collectAsState(initial = false)
+        val isCurrentlySharingLiveLocationInRoom by remember { liveLocationShareManager.isCurrentlySharing(room.roomId) }.collectAsState()
 
         val userEventPermissions by room.permissionsAsState(UserEventPermissions.DEFAULT) { perms ->
             perms.userEventPermissions()
@@ -235,6 +246,8 @@ class MessagesPresenter(
             onPauseOrDispose {}
         }
 
+        val redactEventAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+
         fun handleEvent(event: MessagesEvent) {
             when (event) {
                 is MessagesEvent.HandleAction -> {
@@ -245,7 +258,30 @@ class MessagesPresenter(
                         enableTextFormatting = composerState.showTextFormatting,
                         timelineState = timelineState,
                         timelineProtectionState = timelineProtectionState,
+                        redactEventAction = redactEventAction,
                     )
+                }
+                is MessagesEvent.ConfirmSelectionAction -> {
+                    val selection = timelineState.selectionState as? SelectionState.Active
+                    if (selection != null) {
+                        when (selection.action) {
+                            SelectionAction.Forward -> {
+                                navigator.forwardEvents(timelineState.selectedEventIdsInTimelineOrder(), timelineController)
+                            }
+                        }
+                    }
+                }
+                is MessagesEvent.ConfirmRedact -> {
+                    val confirming = redactEventAction.value as? MessagesState.ConfirmingRedaction
+                    redactEventAction.value = AsyncAction.Uninitialized
+                    if (confirming != null) {
+                        localCoroutineScope.launch {
+                            redact(confirming.eventId.toEventOrTransactionId(), event.reason?.takeIf { it.isNotBlank() })
+                        }
+                    }
+                }
+                MessagesEvent.CancelRedact -> {
+                    redactEventAction.value = AsyncAction.Uninitialized
                 }
                 is MessagesEvent.ToggleReaction -> {
                     localCoroutineScope.toggleReaction(event.emoji, event.eventOrTransactionId)
@@ -258,7 +294,19 @@ class MessagesPresenter(
                     }
                 }
                 is MessagesEvent.OnUserClicked -> {
-                    roomMemberModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.user))
+                    roomMemberModerationState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(event.user))
+                }
+                MessagesEvent.StopLiveLocationShare -> {
+                    localCoroutineScope.launch {
+                        liveLocationShareManager.stopShare(room.roomId)
+                            .onFailure {
+                                Timber.e(it, "Failed to stop live location share for roomId=${room.roomId}")
+                                snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+                            }
+                    }
+                }
+                MessagesEvent.ShowLiveLocationShare -> {
+                    navigator.navigateToCurrentLiveLocation()
                 }
                 is MessagesEvent.MarkAsFullyReadAndExit -> if (!markingAsReadAndExiting.getAndSet(true)) {
                     coroutineScope.launch {
@@ -303,6 +351,7 @@ class MessagesPresenter(
             appName = buildMeta.applicationName,
             pinnedMessagesBannerState = pinnedMessagesBannerState,
             dmUserVerificationState = dmUserVerificationState,
+            dmUserStatus = roomInfo.dmUserStatus(),
             roomMemberModerationState = roomMemberModerationState,
             topBarSharedHistoryIcon = topBarSharedHistoryIcon,
             successorRoom = roomInfo.successorRoom,
@@ -311,6 +360,8 @@ class MessagesPresenter(
                 // TODO calculate this properly based on the thread list and the read state of each thread
                 hasUnreadThreads = false,
             ),
+            showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom && timelineState.timelineMode !is Timeline.Mode.Thread,
+            redactEventAction = redactEventAction.value,
             eventSink = ::handleEvent,
         )
     }
@@ -349,16 +400,17 @@ class MessagesPresenter(
         timelineProtectionState: TimelineProtectionState,
         enableTextFormatting: Boolean,
         timelineState: TimelineState,
+        redactEventAction: MutableState<AsyncAction<Unit>>,
     ) = launch {
         when (action) {
             TimelineItemAction.CopyText -> handleCopyContents(targetEvent)
             TimelineItemAction.CopyCaption -> handleCopyCaption(targetEvent)
             TimelineItemAction.CopyLink -> handleCopyLink(targetEvent)
-            TimelineItemAction.Redact -> handleActionRedact(targetEvent)
+            TimelineItemAction.Redact -> handleActionRedact(targetEvent, redactEventAction)
             TimelineItemAction.Edit,
             TimelineItemAction.EditPoll -> handleActionEdit(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.AddCaption -> handleActionAddCaption(targetEvent, composerState)
-            TimelineItemAction.EditCaption -> handleActionEditCaption(targetEvent, composerState)
+            TimelineItemAction.EditCaption -> handleActionEditCaption(targetEvent, composerState, enableTextFormatting)
             TimelineItemAction.RemoveCaption -> handleRemoveCaption(targetEvent)
             TimelineItemAction.Reply -> handleActionReply(targetEvent, composerState, timelineProtectionState)
             TimelineItemAction.ReplyInThread -> {
@@ -375,13 +427,33 @@ class MessagesPresenter(
                 }
             }
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
-            TimelineItemAction.Forward -> handleForwardAction(targetEvent)
+            TimelineItemAction.Forward -> {
+                val eventId = targetEvent.eventId ?: return@launch
+                if (featureFlagService.isFeatureEnabled(FeatureFlags.MessageMultiSelect)) {
+                    timelineState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, eventId))
+                } else {
+                    navigator.forwardEvents(listOf(eventId), timelineController)
+                }
+            }
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
+            TimelineItemAction.RetrySending -> handleRetrySending(targetEvent)
+            TimelineItemAction.AbortSending -> handleActionAbortSend(targetEvent)
         }
+    }
+
+    private suspend fun handleRetrySending(targetEvent: TimelineItem.Event) {
+        val (sendTarget, _) = targetEvent.pendingSend() ?: return
+        timelineController.retrySend(targetEvent.eventOrTransactionId, sendTarget)
+            .onSuccess {
+                Timber.d("Succeed to add the message back to the send queue")
+            }
+            .onFailure {
+                Timber.e(it, "Failed to add the message back to the send queue")
+            }
     }
 
     private suspend fun handleRemoveCaption(targetEvent: TimelineItem.Event) {
@@ -462,9 +534,24 @@ class MessagesPresenter(
         )
     }
 
-    private suspend fun handleActionRedact(event: TimelineItem.Event) {
+    private suspend fun handleActionRedact(event: TimelineItem.Event, redactEventAction: MutableState<AsyncAction<Unit>>) {
+        val eventId = event.eventId
+        if (eventId == null) {
+            // The message (or its edit/redaction) was never sent, just remove it from the send queue.
+            handleActionAbortSend(event)
+        } else {
+            redactEventAction.value = MessagesState.ConfirmingRedaction(eventId)
+        }
+    }
+
+    private suspend fun handleActionAbortSend(event: TimelineItem.Event) {
+        val sendTarget = event.pendingSend()?.first ?: SendTarget.Event
+        timelineController.abortSend(event.eventOrTransactionId, sendTarget).onFailure { Timber.e(it) }
+    }
+
+    private suspend fun redact(eventOrTransactionId: EventOrTransactionId, reason: String?) {
         timelineController.invokeOnCurrentTimeline {
-            redactEvent(eventOrTransactionId = event.eventOrTransactionId, reason = null)
+            redactEvent(eventOrTransactionId = eventOrTransactionId, reason = reason)
                 .onFailure { Timber.e(it) }
         }
     }
@@ -513,10 +600,15 @@ class MessagesPresenter(
     private suspend fun handleActionEditCaption(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
+        enableTextFormatting: Boolean,
     ) {
         val composerMode = MessageComposerMode.EditCaption(
             eventOrTransactionId = targetEvent.eventOrTransactionId,
-            content = (targetEvent.content as? TimelineItemEventContentWithAttachment)?.caption.orEmpty(),
+            content = if (enableTextFormatting) {
+                targetEvent.content.htmlCaptionOrNull() ?: targetEvent.content.captionOrNull()
+            } else {
+                targetEvent.content.captionOrNull()
+            }.orEmpty(),
         )
         composerState.eventSink(
             MessageComposerEvent.SetMode(composerMode)
@@ -533,7 +625,7 @@ class MessagesPresenter(
             val replyToDetails = loadReplyDetails(targetEvent.eventId).map(permalinkParser)
             val composerMode = MessageComposerMode.Reply(
                 replyToDetails = replyToDetails,
-                hideImage = timelineProtectionState.hideMediaContent(targetEvent.eventId),
+                hideImage = timelineProtectionState.hideMediaContent(targetEvent.eventId, targetEvent.isMine),
             )
             composerState.eventSink(
                 MessageComposerEvent.SetMode(composerMode)
@@ -543,11 +635,6 @@ class MessagesPresenter(
 
     private fun handleShowDebugInfoAction(event: TimelineItem.Event) {
         navigator.navigateToEventDebugInfo(event.eventId, event.debugInfo)
-    }
-
-    private fun handleForwardAction(event: TimelineItem.Event) {
-        if (event.eventId == null) return
-        navigator.forwardEvent(event.eventId)
     }
 
     private fun handleReportAction(event: TimelineItem.Event) {
@@ -566,8 +653,9 @@ class MessagesPresenter(
         event.eventId ?: return
         room.getPermalinkFor(event.eventId).fold(
             onSuccess = { permalink ->
-                clipboardHelper.copyPlainText(permalink)
-                snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_link_copied_to_clipboard))
+                clipboardHelper.copyPlainText(permalink) {
+                    snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_link_copied_to_clipboard))
+                }
             },
             onFailure = {
                 Timber.e(it, "Failed to get permalink for event ${event.eventId}")
@@ -582,16 +670,14 @@ class MessagesPresenter(
             is TimelineItemStateContent -> event.content.body
             else -> return
         }
-        clipboardHelper.copyPlainText(content)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        clipboardHelper.copyPlainText(content) {
             snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_timeline_message_copied))
         }
     }
 
     private fun handleCopyCaption(event: TimelineItem.Event) {
-        val content = (event.content as? TimelineItemEventContentWithAttachment)?.caption ?: return
-        clipboardHelper.copyPlainText(content)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        val content = event.content.captionOrNull() ?: return
+        clipboardHelper.copyPlainText(content) {
             snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
         }
     }

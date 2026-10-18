@@ -19,7 +19,7 @@ dependencies {
     api(projects.libraries.pushproviders.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.workmanager.api)
     implementation(projects.tests.testutils)
     implementation(libs.androidx.core)

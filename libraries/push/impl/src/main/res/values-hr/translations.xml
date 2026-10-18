@@ -21,6 +21,10 @@
     <item quantity="one">"Imate%d novu poruku."</item>
     <item quantity="other">"Imate %d novi poruka."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Dijeljeni privitak %1$d"</item>
+    <item quantity="other">"Dijeljeni prilozi %1$d"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Dolazni poziv"</string>
   <string name="notification_incoming_call">"📹 Dolazni poziv"</string>
   <string name="notification_inline_reply_failed">"** Slanje nije uspjelo – otvorite sobu"</string>
@@ -33,6 +37,8 @@
   </plurals>
   <string name="notification_invite_body">"Pozvao/la te na razgovor"</string>
   <string name="notification_invite_body_with_sender">"%1$s pozvao/la te na razgovor"</string>
+  <string name="notification_knock_request_body">"Zatraženo pridruživanje"</string>
+  <string name="notification_live_location_started_body">"Počeli su dijeliti svoju lokaciju uživo"</string>
   <string name="notification_mentioned_you_body">"Korisnik vas je spomenuo: %1$s"</string>
   <string name="notification_new_messages">"Nove poruke"</string>
   <plurals name="notification_new_messages_for_room">
@@ -105,6 +111,7 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Pogreška: %1$s ."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Pogreška, nije moguće testirati push obavijesti."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Pogreška, isteklo je vrijeme čekanja na push obavijest."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Pogreška: push gateway ograničava brzinu slanja obavijesti na ovom uređaju, pa obavijesti neće biti pouzdane. Postavite drugi push gateway."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Povratna push obavijest trajala je %1$d ms."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Testiraj povratnu push obavijest"</string>
 </resources>

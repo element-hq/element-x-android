@@ -28,7 +28,7 @@
   <string name="screen_change_server_subtitle">"Qual é o endereço do seu servidor?"</string>
   <string name="screen_change_server_title">"Selecione seu servidor"</string>
   <string name="screen_create_account_title">"Criar conta"</string>
-  <string name="screen_login_error_deactivated_account">"Essa conta foi desativada."</string>
+  <string name="screen_login_error_deactivated_account">"Essa conta foi apagada."</string>
   <string name="screen_login_error_invalid_credentials">"Nome de usuário e/ou senha incorretos"</string>
   <string name="screen_login_error_invalid_user_id">"Esse não é um identificador de usuário válido. Formato esperado: \'@usuário:servidor.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Este servidor está configurado para usar tokens recarregados. Não há suporte a eles ao entrar por uma senha."</string>

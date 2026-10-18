@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"Zmieniono hasło w innej sesji"</string>
-  <string name="screen_signed_out_reason_2">"Sesja została usunięta z innej sesji"</string>
-  <string name="screen_signed_out_reason_3">"Administrator serwera unieważnił Twój dostęp"</string>
+  <string name="screen_signed_out_reason_1">"Usunięto urządzenie ze swojego konta"</string>
+  <string name="screen_signed_out_reason_2">"Hasło zostało zmienione na innym urządzeniu"</string>
+  <string name="screen_signed_out_reason_3">"Sesja serwera wygasła lub administrator zablokował Twój dostęp"</string>
   <string name="screen_signed_out_subtitle">"Mogłeś zostać wylogowany z powodów wymienionych poniżej. Zaloguj się ponownie, aby dalej korzystać z %s."</string>
-  <string name="screen_signed_out_title">"Zostałeś wylogowany"</string>
+  <string name="screen_signed_out_subtitle_v2">"Urządzenie zostało usunięte przez jedną z poniższych przyczyn. Zaloguj się ponownie, aby powiązać to urządzenie ze swoim kontem."</string>
+  <string name="screen_signed_out_title">"Urządzenie usunięte"</string>
 </resources>

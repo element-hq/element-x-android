@@ -11,16 +11,18 @@ package io.element.android.features.createroom.impl.addpeople
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.createroom.impl.R
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.features.invitepeople.api.InvitePeopleState
-import io.element.android.features.invitepeople.api.InvitePeopleStateProvider
+import io.element.android.features.invitepeople.api.InvitePeopleStatePreviewParam
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -36,6 +38,13 @@ fun AddPeopleView(
     modifier: Modifier = Modifier,
     invitePeopleView: @Composable () -> Unit,
 ) {
+    val currentOnFinish by rememberUpdatedState(onFinish)
+    LaunchedEffect(state.sendInvitesAction, state.createRoomFromDmAction) {
+        if (state.sendInvitesAction.isSuccess() || state.createRoomFromDmAction.isSuccess()) {
+            currentOnFinish()
+        }
+    }
+
     HeaderFooterPage(
         modifier = modifier,
         contentPadding = PaddingValues(0.dp),
@@ -46,8 +55,7 @@ fun AddPeopleView(
             Button(
                 text = stringResource(CommonStrings.action_finish),
                 onClick = {
-                    state.eventSink(InvitePeopleEvents.SendInvites)
-                    onFinish()
+                    state.eventSink(InvitePeopleEvent.SendInvites)
                 },
                 enabled = state.canInvite,
                 modifier = Modifier
@@ -59,7 +67,6 @@ fun AddPeopleView(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AddPeopleTopBar(
     onSkipClick: () -> Unit,
@@ -77,7 +84,7 @@ private fun AddPeopleTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun AddPeopleViewPreview(@PreviewParameter(InvitePeopleStateProvider::class) state: InvitePeopleState) = ElementPreview {
+internal fun AddPeopleViewPreview(@PreviewParameter(InvitePeopleStatePreviewParam::class) state: InvitePeopleState) = ElementPreview {
     AddPeopleView(
         state = state,
         invitePeopleView = {},

@@ -14,19 +14,18 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
+import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class ChooseSessionVerificationModeViewTest {
+class ChooseSessionVerificationModeViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on learn more invokes the expected callback`() = runAndroidComposeUiTest {
@@ -73,6 +72,16 @@ class ChooseSessionVerificationModeViewTest {
             )
             clickOn(R.string.screen_identity_confirmation_cannot_confirm)
         }
+    }
+
+    @Test
+    fun `clicking on sign out emits the expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<ChooseSelfVerificationModeEvent>()
+        setChooseSelfVerificationModeView(
+            aChooseSelfVerificationModeState(eventSink = eventsRecorder),
+        )
+        clickOn(R.string.screen_identity_confirmation_sign_out)
+        eventsRecorder.assertSingle(ChooseSelfVerificationModeEvent.SignOut)
     }
 
     private fun AndroidComposeUiTest<ComponentActivity>.setChooseSelfVerificationModeView(

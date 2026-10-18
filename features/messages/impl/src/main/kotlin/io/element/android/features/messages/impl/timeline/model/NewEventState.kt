@@ -8,12 +8,15 @@
 
 package io.element.android.features.messages.impl.timeline.model
 
+import androidx.compose.runtime.Immutable
+
 /**
  * Model if there is a new event in the timeline and if it is from me or from other.
  * This can be used to scroll to the bottom of the list when a new event is added.
  */
-enum class NewEventState {
-    None,
-    FromMe,
-    FromOther
+@Immutable
+sealed interface NewEventState {
+    data object None : NewEventState
+    data object FromMe : NewEventState
+    data object FromOther : NewEventState
 }

@@ -8,6 +8,9 @@
 
 package io.element.android.libraries.matrix.api.mxc
 
+/**
+ * Helpers to work with Matrix Content (`mxc://`) URIs.
+ */
 interface MxcTools {
     /**
      * Sanitizes an mxcUri to be used as a relative file path.

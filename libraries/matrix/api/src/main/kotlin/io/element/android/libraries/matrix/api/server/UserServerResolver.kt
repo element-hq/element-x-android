@@ -8,6 +8,10 @@
 
 package io.element.android.libraries.matrix.api.server
 
+/**
+ * Resolves the server name of the logged in user, which is the part of their user id after the colon.
+ */
 interface UserServerResolver {
+    /** Returns the server name, for instance `matrix.org` for `@alice:matrix.org`. */
     fun resolve(): String
 }

@@ -45,7 +45,7 @@ class RolesAndPermissionPresenterTest {
         val presenter = createRolesAndPermissionsPresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(RolesAndPermissionsEvents.ChangeOwnRole)
+            initialState.eventSink(RolesAndPermissionsEvent.ChangeOwnRole)
             assertThat(awaitItem().changeOwnRoleAction).isEqualTo(AsyncAction.ConfirmingNoParams)
         }
     }
@@ -62,7 +62,7 @@ class RolesAndPermissionPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
+            initialState.eventSink(RolesAndPermissionsEvent.DemoteSelfTo(RoomMember.Role.Moderator))
 
             runCurrent()
             assertThat(awaitItem().changeOwnRoleAction).isEqualTo(AsyncAction.Loading)
@@ -82,7 +82,7 @@ class RolesAndPermissionPresenterTest {
         val presenter = createRolesAndPermissionsPresenter(room = room, dispatchers = testCoroutineDispatchers())
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
+            initialState.eventSink(RolesAndPermissionsEvent.DemoteSelfTo(RoomMember.Role.Moderator))
 
             runCurrent()
             assertThat(awaitItem().changeOwnRoleAction).isEqualTo(AsyncAction.Loading)
@@ -90,7 +90,7 @@ class RolesAndPermissionPresenterTest {
             runCurrent()
             assertThat(awaitItem().changeOwnRoleAction).isInstanceOf(AsyncAction.Failure::class.java)
 
-            initialState.eventSink(RolesAndPermissionsEvents.CancelPendingAction)
+            initialState.eventSink(RolesAndPermissionsEvent.CancelPendingAction)
             assertThat(awaitItem().changeOwnRoleAction).isEqualTo(AsyncAction.Uninitialized)
         }
     }
@@ -100,8 +100,8 @@ class RolesAndPermissionPresenterTest {
         val presenter = createRolesAndPermissionsPresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(RolesAndPermissionsEvents.ChangeOwnRole)
-            awaitItem().eventSink(RolesAndPermissionsEvents.CancelPendingAction)
+            initialState.eventSink(RolesAndPermissionsEvent.ChangeOwnRole)
+            awaitItem().eventSink(RolesAndPermissionsEvent.CancelPendingAction)
 
             assertThat(awaitItem().changeOwnRoleAction).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -119,9 +119,9 @@ class RolesAndPermissionPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(RolesAndPermissionsEvents.ResetPermissions)
+            initialState.eventSink(RolesAndPermissionsEvent.ResetPermissions)
             // Confirmation
-            awaitItem().eventSink(RolesAndPermissionsEvents.ResetPermissions)
+            awaitItem().eventSink(RolesAndPermissionsEvent.ResetPermissions)
 
             assertThat(awaitItem().resetPermissionsAction).isEqualTo(AsyncAction.Loading)
             assertThat(awaitItem().resetPermissionsAction).isEqualTo(AsyncAction.Success(Unit))
@@ -134,8 +134,8 @@ class RolesAndPermissionPresenterTest {
         val presenter = createRolesAndPermissionsPresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(RolesAndPermissionsEvents.ResetPermissions)
-            awaitItem().eventSink(RolesAndPermissionsEvents.CancelPendingAction)
+            initialState.eventSink(RolesAndPermissionsEvent.ResetPermissions)
+            awaitItem().eventSink(RolesAndPermissionsEvent.CancelPendingAction)
 
             assertThat(awaitItem().resetPermissionsAction).isEqualTo(AsyncAction.Uninitialized)
         }

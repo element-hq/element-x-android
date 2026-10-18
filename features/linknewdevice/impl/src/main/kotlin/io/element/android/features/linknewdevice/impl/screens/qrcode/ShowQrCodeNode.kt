@@ -20,11 +20,19 @@ import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 
+/**
+ * Max number of QrCode rotation.
+ * When QrCode is rotated this number of time, a TimeOut error is emitted.
+ * Set to 0 to disable QrCode rotation.
+ */
+private const val MAX_QR_CODE_ROTATION = 0
+
 @ContributesNode(SessionScope::class)
 @AssistedInject
 class ShowQrCodeNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    showQrCodePresenterFactory: ShowQrCodePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     class Inputs(
         val data: String,
@@ -36,11 +44,16 @@ class ShowQrCodeNode(
 
     private val inputs: Inputs = inputs<Inputs>()
     private val callback: Callback = callback()
+    private val showQrCodePresenter: ShowQrCodePresenter = showQrCodePresenterFactory.create(
+        initialData = inputs.data,
+        maxQrCodeRotation = MAX_QR_CODE_ROTATION,
+    )
 
     @Composable
     override fun View(modifier: Modifier) {
+        val state = showQrCodePresenter.present()
         ShowQrCodeView(
-            data = inputs.data,
+            state = state,
             modifier = modifier,
             onBackClick = callback::navigateBack,
         )

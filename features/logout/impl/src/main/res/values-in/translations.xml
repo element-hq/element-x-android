@@ -5,14 +5,14 @@
   <string name="screen_signout_confirmation_dialog_title">"Hapus device dari akun"</string>
   <string name="screen_signout_in_progress_dialog_content">"Mengeluarkan device dari akun…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Anda akan keluar dari sesi terakhir Anda. Jika Anda keluar sekarang, Anda akan kehilangan akses ke pesan terenkripsi Anda."</string>
-  <string name="screen_signout_key_backup_disabled_title">"Anda telah menonaktifkan pencadangan"</string>
-  <string name="screen_signout_key_backup_offline_subtitle">"Kunci Anda masih dicadangkan saat Anda luring. Sambungkan kembali sehingga kunci Anda dapat dicadangkan sebelum keluar."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Anda akan segera kehilangan akses ke obrolan terenkripsi Anda."</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Kunci Anda masih dalam proses pencadangan saat Anda offline. Sambungkan kembali agar kunci Anda dapat dicadangkan sebelum Anda menghapus perangkat ini."</string>
   <string name="screen_signout_key_backup_offline_title">"Kunci Anda masih dicadangkan"</string>
-  <string name="screen_signout_key_backup_ongoing_subtitle">"Mohon tunggu hingga proses ini selesai sebelum keluar."</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Harap tunggu hingga proses ini selesai sebelum melepas perangkat ini."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Kunci Anda masih dicadangkan"</string>
   <string name="screen_signout_preference_item">"Hapus device dari akun"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"Anda akan keluar dari sesi Anda yang terakhir. Jika Anda keluar sekarang, Anda akan kehilangan akses ke pesan terenkripsi Anda."</string>
-  <string name="screen_signout_recovery_disabled_title">"Pemulihan belum disiapkan"</string>
+  <string name="screen_signout_recovery_disabled_title">"Anda akan segera kehilangan akses ke obrolan terenkripsi Anda."</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Anda akan keluar dari sesi terakhir Anda. Jika Anda keluar sekarang, Anda mungkin kehilangan akses ke pesan terenkripsi Anda."</string>
-  <string name="screen_signout_save_recovery_key_title">"Apakah Anda sudah menyimpan kunci pemulihan Anda?"</string>
+  <string name="screen_signout_save_recovery_key_title">"Pastikan Anda memiliki akses ke kunci pemulihan sebelum mencabut perangkat ini."</string>
 </resources>

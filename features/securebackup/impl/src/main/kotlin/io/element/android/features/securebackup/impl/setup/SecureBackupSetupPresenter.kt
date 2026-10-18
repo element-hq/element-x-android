@@ -22,9 +22,12 @@ import com.freeletics.flowredux.compose.rememberStateAndDispatch
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.loggerTagSetup
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
@@ -38,6 +41,8 @@ class SecureBackupSetupPresenter(
     @Assisted private val isChangeRecoveryKeyUserStory: Boolean,
     private val stateMachine: SecureBackupSetupStateMachine,
     private val encryptionService: EncryptionService,
+    private val clipboardHelper: ClipboardHelper,
+    private val toastHelper: ToastHelper,
 ) : Presenter<SecureBackupSetupState> {
     @AssistedFactory
     interface Factory {
@@ -53,18 +58,25 @@ class SecureBackupSetupPresenter(
         }
         var showSaveConfirmationDialog by remember { mutableStateOf(false) }
 
-        fun handleEvent(event: SecureBackupSetupEvents) {
+        fun handleEvent(event: SecureBackupSetupEvent) {
             when (event) {
-                SecureBackupSetupEvents.CreateRecoveryKey -> {
+                SecureBackupSetupEvent.CreateRecoveryKey -> {
                     coroutineScope.createOrChangeRecoveryKey(stateAndDispatch)
                 }
-                SecureBackupSetupEvents.RecoveryKeyHasBeenSaved ->
+                SecureBackupSetupEvent.RecoveryKeyHasBeenSaved ->
                     stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.UserSavedKey)
-                SecureBackupSetupEvents.DismissDialog -> {
+                SecureBackupSetupEvent.CopyRecoveryKey -> {
+                    val recoveryKey = setupState.recoveryKey() ?: return
+                    clipboardHelper.copyPlainText(recoveryKey, isSensitive = true) {
+                        toastHelper.show(R.string.screen_recovery_key_copied_to_clipboard)
+                    }
+                    stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.UserSavedKey)
+                }
+                SecureBackupSetupEvent.DismissDialog -> {
                     showSaveConfirmationDialog = false
                     stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.ClearError)
                 }
-                SecureBackupSetupEvents.Done -> {
+                SecureBackupSetupEvent.Done -> {
                     showSaveConfirmationDialog = true
                 }
             }

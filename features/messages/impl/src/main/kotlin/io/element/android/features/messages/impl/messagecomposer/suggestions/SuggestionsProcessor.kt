@@ -115,13 +115,26 @@ class SuggestionsProcessor(
                 .filterUpTo(MAX_BATCH_ITEMS) { member ->
                     isJoinedMemberAndNotSelf(member) && memberMatchesQuery(member, query)
                 }
+                .sortedBy { member -> matchRank(member, query) }
                 .map(ResolvedSuggestion::Member)
 
-            if ("room".contains(query) && canSendRoomMention) {
+            if ("room".startsWith(query, ignoreCase = true) && canSendRoomMention) {
                 listOf(ResolvedSuggestion.AtRoom) + matchingMembers
             } else {
                 matchingMembers
             }
+        }
+    }
+
+    /**
+     * Members whose display name starts with the query come first, then members whose user id
+     * localpart starts with it, then the remaining matches on any other part of the name or id.
+     */
+    private fun matchRank(member: RoomMember, query: String): Int {
+        return when {
+            member.displayName?.startsWith(query, ignoreCase = true) == true -> 0
+            member.userId.extractedDisplayName.startsWith(query, ignoreCase = true) -> 1
+            else -> 2
         }
     }
 

@@ -19,10 +19,10 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
-import io.element.android.libraries.matrix.ui.media.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
-import io.element.android.libraries.matrix.ui.media.test.FakeImageLoader
-import io.element.android.libraries.matrix.ui.media.test.FakeInitialsAvatarBitmapGenerator
+import io.element.android.libraries.matrixmedia.api.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
+import io.element.android.libraries.matrixmedia.test.FakeImageLoader
+import io.element.android.libraries.matrixmedia.test.FakeInitialsAvatarBitmapGenerator
 import io.element.android.libraries.push.impl.notifications.factories.MARK_AS_READ_ACTION_TITLE
 import io.element.android.libraries.push.impl.notifications.factories.QUICK_REPLY_ACTION_TITLE
 import io.element.android.libraries.push.impl.notifications.factories.aNotificationAccountParams
@@ -31,18 +31,16 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiable
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 private const val A_ROOM_AVATAR = "mxc://roomAvatar"
 private const val A_USER_AVATAR_1 = "mxc://userAvatar1"
 private const val A_USER_AVATAR_2 = "mxc://userAvatar2"
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultBaseRoomGroupMessageCreatorTest {
+class DefaultBaseRoomGroupMessageCreatorTest : RobolectricTest() {
     @Test
     fun `test createRoomMessage with one Event`() = runTest {
         val sut = createRoomGroupMessageCreator()

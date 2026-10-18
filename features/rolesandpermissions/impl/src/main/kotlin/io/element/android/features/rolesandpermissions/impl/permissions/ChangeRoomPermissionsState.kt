@@ -65,6 +65,7 @@ data class ChangeRoomPermissionsState(
             RoomPermissionType.ROOM_AVATAR -> currentPermissions.roomAvatar
             RoomPermissionType.ROOM_TOPIC -> currentPermissions.roomTopic
             RoomPermissionType.SPACE_MANAGE_ROOMS -> currentPermissions.spaceChild
+            RoomPermissionType.SHARE_LIVE_LOCATION -> maxOf(currentPermissions.beacon, currentPermissions.beaconInfo)
         }
     }
 }
@@ -104,4 +105,5 @@ enum class RoomPermissionType {
     ROOM_AVATAR,
     ROOM_TOPIC,
     SPACE_MANAGE_ROOMS,
+    SHARE_LIVE_LOCATION,
 }

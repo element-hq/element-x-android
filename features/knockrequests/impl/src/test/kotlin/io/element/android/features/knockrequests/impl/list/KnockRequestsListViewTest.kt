@@ -14,7 +14,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.knockrequests.impl.R
 import io.element.android.features.knockrequests.impl.data.aKnockRequestPresentable
 import io.element.android.libraries.architecture.AsyncAction
@@ -25,15 +24,14 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class KnockRequestsListViewTest {
+class KnockRequestsListViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invoke the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsListEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<KnockRequestsListEvent>(expectEvents = false)
         ensureCalledOnce {
             setKnockRequestsListView(
                 aKnockRequestsListState(
@@ -47,7 +45,7 @@ class KnockRequestsListViewTest {
 
     @Test
     fun `clicking on accept emit the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
+        val eventsRecorder = EventsRecorder<KnockRequestsListEvent>()
         val knockRequest = aKnockRequestPresentable()
         setKnockRequestsListView(
             aKnockRequestsListState(
@@ -56,12 +54,12 @@ class KnockRequestsListViewTest {
             ),
         )
         clickOn(CommonStrings.action_accept)
-        eventsRecorder.assertSingle(KnockRequestsListEvents.Accept(knockRequest))
+        eventsRecorder.assertSingle(KnockRequestsListEvent.Accept(knockRequest))
     }
 
     @Test
     fun `clicking on decline emit the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
+        val eventsRecorder = EventsRecorder<KnockRequestsListEvent>()
         val knockRequest = aKnockRequestPresentable()
         setKnockRequestsListView(
             aKnockRequestsListState(
@@ -70,12 +68,12 @@ class KnockRequestsListViewTest {
             ),
         )
         clickOn(CommonStrings.action_decline)
-        eventsRecorder.assertSingle(KnockRequestsListEvents.Decline(knockRequest))
+        eventsRecorder.assertSingle(KnockRequestsListEvent.Decline(knockRequest))
     }
 
     @Test
     fun `clicking on decline and ban emit the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
+        val eventsRecorder = EventsRecorder<KnockRequestsListEvent>()
         val knockRequest = aKnockRequestPresentable()
         setKnockRequestsListView(
             aKnockRequestsListState(
@@ -84,12 +82,12 @@ class KnockRequestsListViewTest {
             ),
         )
         clickOn(R.string.screen_knock_requests_list_decline_and_ban_action_title)
-        eventsRecorder.assertSingle(KnockRequestsListEvents.DeclineAndBan(knockRequest))
+        eventsRecorder.assertSingle(KnockRequestsListEvent.DeclineAndBan(knockRequest))
     }
 
     @Test
     fun `clicking on accept all emit the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
+        val eventsRecorder = EventsRecorder<KnockRequestsListEvent>()
         val knockRequests = persistentListOf(aKnockRequestPresentable(), aKnockRequestPresentable())
         setKnockRequestsListView(
             aKnockRequestsListState(
@@ -98,12 +96,12 @@ class KnockRequestsListViewTest {
             ),
         )
         clickOn(R.string.screen_knock_requests_list_accept_all_button_title)
-        eventsRecorder.assertSingle(KnockRequestsListEvents.AcceptAll)
+        eventsRecorder.assertSingle(KnockRequestsListEvent.AcceptAll)
     }
 
     @Test
     fun `retry on async view retry emit the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
+        val eventsRecorder = EventsRecorder<KnockRequestsListEvent>()
         val knockRequests = persistentListOf(aKnockRequestPresentable(), aKnockRequestPresentable())
         setKnockRequestsListView(
             aKnockRequestsListState(
@@ -114,12 +112,12 @@ class KnockRequestsListViewTest {
             ),
         )
         clickOn(CommonStrings.action_retry)
-        eventsRecorder.assertSingle(KnockRequestsListEvents.RetryCurrentAction)
+        eventsRecorder.assertSingle(KnockRequestsListEvent.RetryCurrentAction)
     }
 
     @Test
     fun `canceling async view emit the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
+        val eventsRecorder = EventsRecorder<KnockRequestsListEvent>()
         val knockRequests = persistentListOf(aKnockRequestPresentable(), aKnockRequestPresentable())
         setKnockRequestsListView(
             aKnockRequestsListState(
@@ -130,12 +128,12 @@ class KnockRequestsListViewTest {
             ),
         )
         clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(KnockRequestsListEvents.ResetCurrentAction)
+        eventsRecorder.assertSingle(KnockRequestsListEvent.ResetCurrentAction)
     }
 
     @Test
     fun `confirming async view emit the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<KnockRequestsListEvents>()
+        val eventsRecorder = EventsRecorder<KnockRequestsListEvent>()
         val knockRequests = persistentListOf(aKnockRequestPresentable(), aKnockRequestPresentable())
         setKnockRequestsListView(
             aKnockRequestsListState(
@@ -146,7 +144,7 @@ class KnockRequestsListViewTest {
             ),
         )
         clickOn(R.string.screen_knock_requests_list_accept_all_alert_confirm_button_title)
-        eventsRecorder.assertSingle(KnockRequestsListEvents.ConfirmCurrentAction)
+        eventsRecorder.assertSingle(KnockRequestsListEvent.ConfirmCurrentAction)
     }
 }
 

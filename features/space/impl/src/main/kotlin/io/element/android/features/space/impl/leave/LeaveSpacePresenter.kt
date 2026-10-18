@@ -67,7 +67,7 @@ class LeaveSpacePresenter(
                 .orEmpty()
                 .partition { it.spaceRoom.roomId == leaveSpaceHandle.id }
             // By default select all rooms that can be left
-            val otherRoomsExcludingDm = otherRooms.filter { it.spaceRoom.isDirect != true }
+            val otherRoomsExcludingDm = otherRooms.filter { it.spaceRoom.isDm != true }
             selectedRoomIds = otherRoomsExcludingDm
                 .filter { it.isLastOwner.not() }
                 .map { it.spaceRoom.roomId }
@@ -99,33 +99,33 @@ class LeaveSpacePresenter(
             }
         }
 
-        fun handleEvent(event: LeaveSpaceEvents) {
+        fun handleEvent(event: LeaveSpaceEvent) {
             when (event) {
-                LeaveSpaceEvents.Retry -> {
+                LeaveSpaceEvent.Retry -> {
                     leaveSpaceRooms = AsyncData.Loading()
                     retryCount += 1
                 }
-                LeaveSpaceEvents.DeselectAllRooms -> {
+                LeaveSpaceEvent.DeselectAllRooms -> {
                     selectedRoomIds = persistentSetOf()
                 }
-                LeaveSpaceEvents.SelectAllRooms -> {
+                LeaveSpaceEvent.SelectAllRooms -> {
                     selectedRoomIds = selectableSpaceRooms.dataOrNull()
                         .orEmpty()
                         .filter { it.isLastOwner.not() }
                         .map { it.spaceRoom.roomId }
                 }
-                is LeaveSpaceEvents.ToggleRoomSelection -> {
+                is LeaveSpaceEvent.ToggleRoomSelection -> {
                     selectedRoomIds = if (selectedRoomIds.contains(event.roomId)) {
                         selectedRoomIds - event.roomId
                     } else {
                         selectedRoomIds + event.roomId
                     }
                 }
-                LeaveSpaceEvents.LeaveSpace -> coroutineScope.leaveSpace(
+                LeaveSpaceEvent.LeaveSpace -> coroutineScope.leaveSpace(
                     leaveSpaceAction = leaveSpaceAction,
                     selectedRoomIds = selectedRoomIds,
                 )
-                LeaveSpaceEvents.CloseError -> {
+                LeaveSpaceEvent.CloseError -> {
                     leaveSpaceAction.value = AsyncAction.Uninitialized
                 }
             }

@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"작업이 완료될 때까지 앱을 닫지 마세요."</string>
   <string name="screen_room_details_invite_people_preparing">"초대 준비중…"</string>
   <string name="screen_room_details_invite_people_title">"사람 초대하기"</string>
+  <string name="screen_room_details_invite_title">"초대"</string>
   <string name="screen_room_details_leave_conversation_title">"대화에서 나가기"</string>
   <string name="screen_room_details_leave_room_title">"방 떠나기"</string>
   <string name="screen_room_details_media_gallery_title">"미디어 및 파일"</string>
@@ -110,7 +111,6 @@
   <string name="screen_room_notification_settings_error_setting_mode">"모드 설정이 실패했습니다. 다시 시도해 주세요."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"귀하의 홈 서버는 암호화된 방에서 이 옵션을 지원하지 않으므로, 이 방에서 알림을 받지 못합니다."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"모든 메시지"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"언급 및 키워드만"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"이 방에서, 알림을 주세요"</string>
   <string name="screen_room_roles_and_permissions_admins">"관리자"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"관리자 및 소유자"</string>
@@ -128,6 +128,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"역할"</string>
   <string name="screen_room_roles_and_permissions_room_details">"방 세부 정보"</string>
   <string name="screen_room_roles_and_permissions_title">"역할 및 권한"</string>
+  <string name="screen_roomlist_mark_as_read">"읽음으로 표시"</string>
+  <string name="screen_roomlist_mark_as_unread">"읽지 않음으로 표시"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"주소 추가"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"승인된 스페이스의 멤버는 누구나 참여할 수 있지만, 그 외의 인원은 액세스 요청을 해야 합니다."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"모든 사용자가 액세스 권한을 요청해야 합니다."</string>

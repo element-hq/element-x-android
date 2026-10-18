@@ -16,5 +16,7 @@ android {
 
 dependencies {
     implementation(libs.appyx.core)
+    implementation(projects.libraries.core)
     implementation(projects.libraries.designsystem)
+    implementation(projects.libraries.uiStrings)
 }

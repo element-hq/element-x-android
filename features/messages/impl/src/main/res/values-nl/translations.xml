@@ -6,14 +6,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Versleuteld door een onbekend of verwijderd apparaat."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Versleuteld door een apparaat dat niet is geverifieerd door de eigenaar."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Versleuteld door een niet-geverifieerde gebruiker."</string>
-  <string name="emoji_picker_category_activity">"Activiteiten"</string>
-  <string name="emoji_picker_category_flags">"Vlaggen"</string>
-  <string name="emoji_picker_category_foods">"Eten &amp; Drinken"</string>
-  <string name="emoji_picker_category_nature">"Dieren &amp; Natuur"</string>
-  <string name="emoji_picker_category_objects">"Voorwerpen"</string>
-  <string name="emoji_picker_category_people">"Smileys &amp; Mensen"</string>
-  <string name="emoji_picker_category_places">"Reizen &amp; Locaties"</string>
-  <string name="emoji_picker_category_symbols">"Symbolen"</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Het verwerken van media voor uploaden is mislukt. Probeer het opnieuw."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Het uploaden van media is mislukt. Probeer het opnieuw."</string>
   <string name="screen_report_content_block_user">"Gebruiker blokkeren"</string>

@@ -28,5 +28,6 @@
   <string name="rich_text_editor_remove_link">"برداشتن پیوند"</string>
   <string name="rich_text_editor_unindent">"تونرفتگی"</string>
   <string name="rich_text_editor_url_placeholder">"پیوند"</string>
+  <string name="screen_media_upload_preview_caption_warning">"ممکن است زیرنویس‌ها برای افرادی که از برنامه‌های قدیمی‌تر استفاده می‌کنند قابل مشاهده نباشند."</string>
   <string name="screen_room_voice_message_tooltip">"نگه داشتن برای ضبط"</string>
 </resources>

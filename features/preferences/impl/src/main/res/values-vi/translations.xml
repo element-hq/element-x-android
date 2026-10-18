@@ -61,6 +61,9 @@ Nếu bạn tiếp tục, một số cài đặt của bạn có thể thay đ�
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"cài đặt hệ thống"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Thông báo hệ thống đã tắt"</string>
   <string name="screen_notification_settings_title">"Thông báo"</string>
+  <string name="theme_dark">"Tối"</string>
+  <string name="theme_light">"Sáng"</string>
+  <string name="theme_system">"Hệ thống"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Khắc phục sự cố"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Khắc phục sự cố thông báo"</string>
 </resources>

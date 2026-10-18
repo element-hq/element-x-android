@@ -66,7 +66,7 @@ fun LinkView(
 
 @PreviewsDayNight
 @Composable
-internal fun LinkViewPreview(@PreviewParameter(LinkStateProvider::class) state: LinkState) = ElementPreview {
+internal fun LinkViewPreview(@PreviewParameter(LinkStatePreviewParam::class) state: LinkState) = ElementPreview {
     LinkView(
         state = state,
         onLinkValid = {},

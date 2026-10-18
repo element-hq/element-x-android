@@ -8,20 +8,33 @@
 
 package io.element.android.features.home.impl.components
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -33,9 +46,9 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import io.element.android.appconfig.RoomListConfig
 import io.element.android.compound.theme.ElementTheme
@@ -57,7 +70,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.backgroundVerticalGradient
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.text.AdaptativeTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -65,18 +79,21 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.matrix.ui.model.toEmojiText
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.filter
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopBar(
     selectedNavigationItem: HomeNavigationBarItem,
@@ -94,13 +111,15 @@ fun HomeTopBar(
     spaceFiltersState: SpaceFiltersState,
     modifier: Modifier = Modifier,
 ) {
+    val contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()
     Column(modifier) {
         TopAppBar(
             modifier = Modifier
                 .backgroundVerticalGradient(
                     isVisible = !areSearchResultsDisplayed,
                 )
-                .statusBarsPadding(),
+                .statusBarsPadding()
+                .padding(contentPadding),
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,
                 scrolledContainerColor = Color.Transparent,
@@ -113,15 +132,21 @@ fun HomeTopBar(
                             else -> stringResource(selectedNavigationItem.labelRes)
                         }
                     }
-                    HomeNavigationBarItem.Spaces -> stringResource(selectedNavigationItem.labelRes)
+                    HomeNavigationBarItem.Spaces -> null
                 }
-                Text(
-                    modifier = Modifier.semantics {
-                        heading()
-                    },
-                    style = ElementTheme.typography.aliasScreenTitle,
-                    text = displayTitle,
-                )
+                displayTitle?.let {
+                    val style = when (spaceFiltersState) {
+                        // Space name
+                        is SpaceFiltersState.Selected -> ElementTheme.typography.fontHeadingSmMedium
+                        // "Chats"
+                        else -> ElementTheme.typography.fontHeadingLgBold
+                    }
+                    AdaptativeTitle(
+                        title = displayTitle,
+                        style = style,
+                        twoLinesStyle = ElementTheme.typography.fontHeadingSmMedium,
+                    )
+                }
             },
             navigationIcon = {
                 NavigationIcon(
@@ -143,7 +168,7 @@ fun HomeTopBar(
             },
             // We want a 16dp left padding for the navigationIcon :
             // 4dp from default TopAppBarHorizontalPadding
-            // 8dp from AccountIcon default padding (because of IconButton)
+            // 8dp from AccountIcon default padding (48dp touch target around 32dp avatar)
             // 4dp extra padding using left insets
             windowInsets = WindowInsets(left = 4.dp),
         )
@@ -151,7 +176,9 @@ fun HomeTopBar(
             TopAppBarScrollBehaviorLayout(scrollBehavior = scrollBehavior) {
                 RoomListFiltersView(
                     state = filtersState,
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .padding(contentPadding)
                 )
             }
         }
@@ -159,7 +186,7 @@ fun HomeTopBar(
 }
 
 @Composable
-private fun RoomListMenuItems(
+private fun RowScope.RoomListMenuItems(
     onToggleSearch: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     canReportBug: Boolean,
@@ -264,11 +291,15 @@ private fun NavigationIcon(
     onAccountSwitch: (SessionId) -> Unit,
     onClick: () -> Unit,
 ) {
+    // Reserve the status emoji slot for all the accounts, else the width of the navigation icon,
+    // and so the position of the title, would change while scrolling the pager.
+    val reserveStatusEmojiSlot = currentUserAndNeighbors.any { it.displayedStatus != null }
     if (currentUserAndNeighbors.size == 1) {
         AccountIcon(
             matrixUser = currentUserAndNeighbors.single(),
             isCurrentAccount = true,
             showAvatarIndicator = showAvatarIndicator,
+            reserveStatusEmojiSlot = reserveStatusEmojiSlot,
             onClick = onClick,
         )
     } else {
@@ -277,9 +308,12 @@ private fun NavigationIcon(
         // Listen to page changes and switch account if needed
         val latestOnAccountSwitch by rememberUpdatedState(onAccountSwitch)
         LaunchedEffect(pagerState) {
-            snapshotFlow { pagerState.settledPage }.collect { page ->
-                latestOnAccountSwitch(SessionId(currentUserAndNeighbors[page].userId.value))
-            }
+            snapshotFlow { pagerState.settledPage }
+                // The current account is on page 1, so there is nothing to switch to
+                .filter { page -> page != 1 }
+                .collect { page ->
+                    latestOnAccountSwitch(SessionId(currentUserAndNeighbors[page].userId.value))
+                }
         }
         VerticalPager(
             state = pagerState,
@@ -289,6 +323,7 @@ private fun NavigationIcon(
                 matrixUser = currentUserAndNeighbors[page],
                 isCurrentAccount = page == 1,
                 showAvatarIndicator = page == 1 && showAvatarIndicator,
+                reserveStatusEmojiSlot = reserveStatusEmojiSlot,
                 onClick = if (page == 1) {
                     onClick
                 } else {
@@ -304,15 +339,32 @@ private fun AccountIcon(
     matrixUser: MatrixUser,
     isCurrentAccount: Boolean,
     showAvatarIndicator: Boolean,
+    reserveStatusEmojiSlot: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val testTag = if (isCurrentAccount) Modifier.testTag(TestTags.homeScreenSettings) else Modifier
-    IconButton(
-        modifier = modifier.then(testTag),
-        onClick = onClick,
+    val interactionSource = remember { MutableInteractionSource() }
+    Row(
+        modifier = modifier
+            .then(testTag)
+            .clickable(
+                interactionSource = interactionSource,
+                onClick = onClick,
+                // The ripple is rendered on the avatar only, see below.
+                indication = null,
+            ),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box {
+        Box(
+            modifier = Modifier
+                .minimumInteractiveComponentSize()
+                .indication(
+                    interactionSource = interactionSource,
+                    indication = ripple(bounded = false),
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
             val avatarData by remember(matrixUser) {
                 derivedStateOf {
                     matrixUser.getAvatarData(size = AvatarSize.CurrentUserTopBar)
@@ -337,16 +389,52 @@ private fun AccountIcon(
                 )
             }
         }
+        if (reserveStatusEmojiSlot) {
+            StatusEmoji(
+                emoji = matrixUser.displayedStatus?.toEmojiText(),
+                modifier = Modifier.offset(x = statusEmojiStartOffset),
+            )
+        }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+private val statusEmojiSize = 20.dp
+
+// The avatar is centered inside a 48dp touch target, so there is already 8dp of free space
+// on its trailing side. Compensate it to end up with a 4dp gap after the avatar itself.
+private val statusEmojiStartOffset = 4.dp - (48.dp - AvatarSize.CurrentUserTopBar.dp) / 2
+
+@Composable
+private fun StatusEmoji(
+    emoji: String?,
+    modifier: Modifier = Modifier,
+) {
+    val density = LocalDensity.current
+    // Ensure the emoji size is not affected by the user's font scale settings
+    val fixedFontScaleDensity = remember(density.density) {
+        Density(density = density.density, fontScale = 1f)
+    }
+    Box(
+        modifier = modifier.size(statusEmojiSize),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (emoji != null) {
+            CompositionLocalProvider(LocalDensity provides fixedFontScaleDensity) {
+                Text(
+                    text = emoji,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                )
+            }
+        }
+    }
+}
+
 @PreviewsDayNight
 @Composable
 internal fun HomeTopBarPreview() = ElementPreview {
     HomeTopBar(
         selectedNavigationItem = HomeNavigationBarItem.Chats,
-        currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
+        currentUserAndNeighbors = persistentListOf(aMatrixUser(id = "@id:domain", displayName = USER_NAME_ALICE)),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
@@ -361,13 +449,12 @@ internal fun HomeTopBarPreview() = ElementPreview {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
 internal fun HomeTopBarSpaceFiltersSelectedPreview() = ElementPreview {
     HomeTopBar(
         selectedNavigationItem = HomeNavigationBarItem.Chats,
-        currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
+        currentUserAndNeighbors = persistentListOf(aMatrixUser(id = "@id:domain", displayName = USER_NAME_ALICE)),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
@@ -382,13 +469,12 @@ internal fun HomeTopBarSpaceFiltersSelectedPreview() = ElementPreview {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
 internal fun HomeTopBarSpacesPreview() = ElementPreview {
     HomeTopBar(
         selectedNavigationItem = HomeNavigationBarItem.Spaces,
-        currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
+        currentUserAndNeighbors = persistentListOf(aMatrixUser(id = "@id:domain", displayName = USER_NAME_ALICE)),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
@@ -403,13 +489,12 @@ internal fun HomeTopBarSpacesPreview() = ElementPreview {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
 internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
     HomeTopBar(
         selectedNavigationItem = HomeNavigationBarItem.Chats,
-        currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
+        currentUserAndNeighbors = persistentListOf(aMatrixUser(id = "@id:domain", displayName = USER_NAME_ALICE)),
         showAvatarIndicator = true,
         areSearchResultsDisplayed = false,
         scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
@@ -424,7 +509,32 @@ internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@PreviewsDayNight
+@Composable
+internal fun HomeTopBarWithStatusPreview() = ElementPreview {
+    HomeTopBar(
+        selectedNavigationItem = HomeNavigationBarItem.Chats,
+        currentUserAndNeighbors = persistentListOf(
+            aMatrixUser(
+                id = "@id:domain",
+                displayName = USER_NAME_ALICE,
+                displayedStatus = DisplayedStatus.UserSet(UserStatus(emoji = "🌴", text = "Away")),
+            )
+        ),
+        showAvatarIndicator = false,
+        areSearchResultsDisplayed = false,
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
+        onOpenSettings = {},
+        onAccountSwitch = {},
+        onToggleSearch = {},
+        canReportBug = true,
+        displayFilters = true,
+        filtersState = aRoomListFiltersState(),
+        spaceFiltersState = anUnselectedSpaceFiltersState(),
+        onMenuActionClick = {},
+    )
+}
+
 @PreviewsDayNight
 @Composable
 internal fun HomeTopBarMultiAccountPreview() = ElementPreview {

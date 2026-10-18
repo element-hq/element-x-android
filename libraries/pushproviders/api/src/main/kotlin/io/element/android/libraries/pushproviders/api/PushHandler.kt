@@ -8,6 +8,9 @@
 
 package io.element.android.libraries.pushproviders.api
 
+/**
+ * Entry point for the pushes coming from any provider, which resolves them into notifications.
+ */
 interface PushHandler {
     /**
      * Handle a push received from the provider.
@@ -22,7 +25,10 @@ interface PushHandler {
     ): Boolean
 
     /**
-     * Handle an invalid push received from the provider.
+     * Handle an invalid push received from the provider, which is recorded in the push history so it can be diagnosed.
+     *
+     * @param providerInfo an identifier of the provider that sent the push, for logging and debugging purposes.
+     * @param data the raw payload that could not be understood.
      */
     suspend fun handleInvalid(
         providerInfo: String,

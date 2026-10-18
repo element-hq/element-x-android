@@ -24,7 +24,7 @@ import timber.log.Timber
 private val loggerTag = LoggerTag("VectorFirebaseMessagingService", LoggerTag.PushLoggerTag)
 
 class VectorFirebaseMessagingService : FirebaseMessagingService() {
-    @Inject lateinit var firebaseNewTokenHandler: FirebaseNewTokenHandler
+    @Inject lateinit var firebaseNewInstallationIdHandler: FirebaseNewInstallationIdHandler
     @Inject lateinit var pushParser: FirebasePushParser
     @Inject lateinit var pushHandler: PushHandler
     @Inject lateinit var fetchPushForegroundServiceManager: FetchPushForegroundServiceManager
@@ -36,10 +36,12 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
         bindings<VectorFirebaseMessagingServiceBindings>().inject(this)
     }
 
-    override fun onNewToken(token: String) {
-        Timber.tag(loggerTag.value).w("New Firebase token")
+    override fun onRegistered(installationId: String) {
+        super.onRegistered(installationId)
+
+        Timber.tag(loggerTag.value).w("New Firebase installation id")
         coroutineScope.launch {
-            firebaseNewTokenHandler.handle(token)
+            firebaseNewInstallationIdHandler.handle(installationId)
         }
     }
 

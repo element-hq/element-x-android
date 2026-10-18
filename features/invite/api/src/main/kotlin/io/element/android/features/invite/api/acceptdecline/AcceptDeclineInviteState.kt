@@ -14,5 +14,5 @@ import io.element.android.libraries.matrix.api.core.RoomId
 data class AcceptDeclineInviteState(
     val acceptAction: AsyncAction<RoomId>,
     val declineAction: AsyncAction<RoomId>,
-    val eventSink: (AcceptDeclineInviteEvents) -> Unit,
+    val eventSink: (AcceptDeclineInviteEvent) -> Unit,
 )

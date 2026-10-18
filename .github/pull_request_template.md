@@ -52,6 +52,7 @@ Uncomment this markdown table below and edit the last line `|||`:
 
 <!-- Depending on the Pull Request content, it can be acceptable if some of the following checkboxes stay unchecked. -->
 
+- [ ] I am aware of the [etiquette](https://github.com/element-hq/element-x-android/blob/develop/CONTRIBUTING.md#etiquette).
 - This PR was made with the help of AI:
     - [ ] Yes. In this case, please request a review by Copilot.
     - [ ] No.

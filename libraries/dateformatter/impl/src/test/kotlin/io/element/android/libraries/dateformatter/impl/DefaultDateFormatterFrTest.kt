@@ -9,17 +9,15 @@
 package io.element.android.libraries.dateformatter.impl
 
 import android.os.Build
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import kotlin.time.Instant
 
-@RunWith(AndroidJUnit4::class)
 @Config(qualifiers = "fr", sdk = [Build.VERSION_CODES.TIRAMISU])
-class DefaultDateFormatterFrTest {
+class DefaultDateFormatterFrTest : RobolectricTest() {
     @Test
     fun `test null`() {
         val now = "1980-04-06T18:35:24.00Z"

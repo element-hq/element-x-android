@@ -69,6 +69,9 @@ class JoinRoomFlowNode(
                 parentNode = this,
                 buildContext = buildContext,
                 inviteData = navTarget.inviteData,
+                callback = object : DeclineInviteAndBlockEntryPoint.Callback {
+                    override fun onDeclineSuccess() = navigateUp()
+                },
             )
             NavTarget.Root -> rootNode(buildContext)
         }
@@ -99,7 +102,7 @@ class JoinRoomFlowNode(
             acceptDeclineInviteView.Render(
                 state = state.acceptDeclineInviteState,
                 onAcceptInviteSuccess = {},
-                onDeclineInviteSuccess = {},
+                onDeclineInviteSuccess = { navigateUp() },
                 modifier = Modifier
             )
         }

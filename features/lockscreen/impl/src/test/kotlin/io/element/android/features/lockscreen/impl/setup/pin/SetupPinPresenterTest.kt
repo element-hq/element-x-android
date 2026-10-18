@@ -8,9 +8,6 @@
 
 package io.element.android.features.lockscreen.impl.setup.pin
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.fixtures.aLockScreenConfig
@@ -24,6 +21,7 @@ import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPin
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -43,9 +41,7 @@ class SetupPinPresenterTest {
             }
         }
         val presenter = createSetupPinPresenter(callback)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitItem().also { state ->
                 state.choosePinEntry.assertEmpty()
                 state.confirmPinEntry.assertEmpty()
@@ -63,7 +59,7 @@ class SetupPinPresenterTest {
             awaitLastSequentialItem().also { state ->
                 state.choosePinEntry.assertText(forbiddenPin)
                 assertThat(state.setupPinFailure).isEqualTo(SetupPinFailure.ForbiddenPin)
-                state.eventSink(SetupPinEvents.ClearFailure)
+                state.eventSink(SetupPinEvent.ClearFailure)
             }
             awaitLastSequentialItem().also { state ->
                 state.choosePinEntry.assertEmpty()
@@ -82,7 +78,7 @@ class SetupPinPresenterTest {
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertText(mismatchedPin)
                 assertThat(state.setupPinFailure).isEqualTo(SetupPinFailure.PinsDoNotMatch)
-                state.eventSink(SetupPinEvents.ClearFailure)
+                state.eventSink(SetupPinEvent.ClearFailure)
             }
             awaitLastSequentialItem().also { state ->
                 state.choosePinEntry.assertEmpty()
@@ -108,7 +104,7 @@ class SetupPinPresenterTest {
     }
 
     private fun SetupPinState.onPinEntryChanged(pinEntry: String) {
-        eventSink(SetupPinEvents.OnPinEntryChanged(pinEntry, isConfirmationStep))
+        eventSink(SetupPinEvent.OnPinEntryChanged(pinEntry, isConfirmationStep))
     }
 
     private fun createSetupPinPresenter(

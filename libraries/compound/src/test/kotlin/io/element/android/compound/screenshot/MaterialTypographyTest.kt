@@ -8,22 +8,18 @@
 
 package io.element.android.compound.screenshot
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.previews.TypographyPreview
-import io.element.android.compound.screenshot.utils.screenshotFile
+import io.element.android.compound.screenshot.utils.createPaparazziRule
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@RunWith(AndroidJUnit4::class)
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
 class MaterialTypographyTest {
+    @get:Rule
+    val paparazzi = createPaparazziRule()
+
     @Test
-    @Config(sdk = [35], qualifiers = "h2048dp-xxhdpi")
     fun screenshots() {
-        captureRoboImage(file = screenshotFile("Material Typography.png")) {
+        paparazzi.snapshot(name = "Material Typography") {
             TypographyPreview()
         }
     }

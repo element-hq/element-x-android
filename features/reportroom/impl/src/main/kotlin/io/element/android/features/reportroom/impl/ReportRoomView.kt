@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -40,7 +39,6 @@ import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportRoomView(
     state: ReportRoomState,
@@ -66,9 +64,9 @@ fun ReportRoomView(
             }
         },
         onRetry = {
-            state.eventSink(ReportRoomEvents.Report)
+            state.eventSink(ReportRoomEvent.Report)
         },
-        onErrorDismiss = { state.eventSink(ReportRoomEvents.ClearReportAction) }
+        onErrorDismiss = { state.eventSink(ReportRoomEvent.ClearReportAction) }
     )
 
     Scaffold(
@@ -93,7 +91,7 @@ fun ReportRoomView(
         ) {
             TextField(
                 value = state.reason,
-                onValueChange = { state.eventSink(ReportRoomEvents.UpdateReason(it)) },
+                onValueChange = { state.eventSink(ReportRoomEvent.UpdateReason(it)) },
                 placeholder = stringResource(R.string.screen_report_room_reason_placeholder),
                 minLines = 3,
                 enabled = !isReporting,
@@ -108,11 +106,11 @@ fun ReportRoomView(
 
             ListItem(
                 modifier = Modifier.padding(end = 8.dp),
-                headlineContent = {
+                content = {
                     Text(text = stringResource(CommonStrings.action_leave_room))
                 },
                 onClick = {
-                    state.eventSink(ReportRoomEvents.ToggleLeaveRoom)
+                    state.eventSink(ReportRoomEvent.ToggleLeaveRoom)
                 },
                 trailingContent = ListItemContent.Switch(checked = state.leaveRoom)
             )
@@ -126,7 +124,7 @@ fun ReportRoomView(
                 showProgress = isReporting,
                 onClick = {
                     focusManager.clearFocus(force = true)
-                    state.eventSink(ReportRoomEvents.Report)
+                    state.eventSink(ReportRoomEvent.Report)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -139,7 +137,7 @@ fun ReportRoomView(
 @PreviewsDayNight
 @Composable
 internal fun ReportRoomViewPreview(
-    @PreviewParameter(ReportRoomStateProvider::class) state: ReportRoomState
+    @PreviewParameter(ReportRoomStatePreviewParam::class) state: ReportRoomState
 ) = ElementPreview {
     ReportRoomView(
         state = state,

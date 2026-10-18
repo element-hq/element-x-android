@@ -20,8 +20,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,11 +44,14 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.strings.Strings
 
+/**
+ * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=4168-7384
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaDeleteConfirmationBottomSheet(
@@ -59,7 +63,10 @@ fun MediaDeleteConfirmationBottomSheet(
     ModalBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        sheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        ),
         scrollable = false,
     ) {
         Column(
@@ -164,8 +171,8 @@ private fun MediaRow(
 @PreviewsDayNight
 @Composable
 internal fun MediaDeleteConfirmationBottomSheetPreview(
-    @PreviewParameter(provider = MediaBottomSheetStateDeleteConfirmationProvider::class) state: MediaBottomSheetState.DeleteConfirmation,
-) = ElementPreview {
+    @PreviewParameter(provider = MediaBottomSheetStateDeleteConfirmationPreviewParam::class) state: MediaBottomSheetState.DeleteConfirmation,
+) = ElementPreview(fillMaxSize = true) {
     MediaDeleteConfirmationBottomSheet(
         state = state,
         onDelete = {},

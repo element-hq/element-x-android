@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Ikke lukk appen før den er ferdig."</string>
   <string name="screen_room_details_invite_people_preparing">"Forbereder invitasjoner…"</string>
   <string name="screen_room_details_invite_people_title">"Inviter folk"</string>
+  <string name="screen_room_details_invite_title">"Inviter"</string>
   <string name="screen_room_details_leave_conversation_title">"Forlat samtalen"</string>
   <string name="screen_room_details_leave_room_title">"Forlat rommet"</string>
   <string name="screen_room_details_media_gallery_title">"Medier og filer"</string>
@@ -113,7 +114,6 @@
   <string name="screen_room_notification_settings_error_setting_mode">"Innstilling av modus mislyktes, prøv igjen."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Hjemmeserveren din støtter ikke dette alternativet i krypterte rom, og du vil ikke bli varslet i dette rommet."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Alle meldinger"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Bare omtaler og nøkkelord"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"I dette rommet, varsle meg om"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratorer"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratorer og eiere"</string>
@@ -131,6 +131,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Romdetaljer"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller og tillatelser"</string>
+  <string name="screen_roomlist_mark_as_read">"Marker som lest"</string>
+  <string name="screen_roomlist_mark_as_unread">"Merk som ulest"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Legg til adresse"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Alle i autoriserte områder kan bli med, men alle andre må be om tilgang."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Alle må be om tilgang."</string>

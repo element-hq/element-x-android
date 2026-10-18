@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"Όνομα αρχείου"</string>
   <string name="screen_media_details_no_more_files_to_show">"Δεν υπάρχουν άλλα αρχεία για εμφάνιση"</string>
   <string name="screen_media_details_no_more_media_to_show">"Δεν υπάρχουν άλλα μέσα για εμφάνιση"</string>
+  <string name="screen_media_details_title">"Πληροφορίες αρχείου"</string>
   <string name="screen_media_details_uploaded_by">"Μεταφορτώθηκε από"</string>
   <string name="screen_media_details_uploaded_on">"Μεταφορτώθηκε στις"</string>
 </resources>

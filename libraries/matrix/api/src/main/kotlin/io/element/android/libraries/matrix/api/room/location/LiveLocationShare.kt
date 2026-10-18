@@ -21,6 +21,8 @@ data class LiveLocationShare(
     val startTimestamp: Long,
     /** The timestamp when location sharing ends, in milliseconds. */
     val endTimestamp: Long,
+    /** The event id from the beacon info. */
+    val beaconId: BeaconId
 )
 
 data class LastLocation(

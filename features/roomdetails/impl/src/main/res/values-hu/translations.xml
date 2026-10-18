@@ -42,6 +42,9 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Mentetlen módosításai vannak."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Menti a módosításokat?"</string>
   <string name="screen_room_details_add_topic_title">"Téma hozzáadása"</string>
+  <string name="screen_room_details_audio_push_to_talk">"Adó-vevő"</string>
+  <string name="screen_room_details_audio_title">"Hang szoba"</string>
+  <string name="screen_room_details_audio_video_calls">"Videohívások"</string>
   <string name="screen_room_details_badge_encrypted">"Titkosított"</string>
   <string name="screen_room_details_badge_not_encrypted">"Nem titkosított"</string>
   <string name="screen_room_details_badge_public">"Nyilvános szoba"</string>
@@ -56,6 +59,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Ne zárja be az alkalmazást, amíg nem végzett."</string>
   <string name="screen_room_details_invite_people_preparing">"Meghívók előkészítése…"</string>
   <string name="screen_room_details_invite_people_title">"Ismerősök meghívása"</string>
+  <string name="screen_room_details_invite_title">"Meghívás"</string>
   <string name="screen_room_details_leave_conversation_title">"Beszélgetés elhagyása"</string>
   <string name="screen_room_details_leave_room_title">"Szoba elhagyása"</string>
   <string name="screen_room_details_media_gallery_title">"Média és fájlok"</string>
@@ -66,6 +70,9 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Csatlakozási kérelem"</string>
   <string name="screen_room_details_roles_and_permissions">"Szerepkörök és jogosultságok"</string>
+  <string name="screen_room_details_room_audio_ptt">"Adó-vevő"</string>
+  <string name="screen_room_details_room_audio_title">"Hang szoba"</string>
+  <string name="screen_room_details_room_audio_video_calls">"Videohívások"</string>
   <string name="screen_room_details_room_name_label">"Név"</string>
   <string name="screen_room_details_security_and_privacy_title">"Biztonság és adatvédelem"</string>
   <string name="screen_room_details_security_title">"Biztonság"</string>
@@ -111,9 +118,10 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Hiba történt az értesítési beállítások betöltésekor."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Nem sikerült visszaállítani az alapértelmezett módot, próbálja újra."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Nem sikerült a mód beállítása, próbálja újra."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, egyes szobákban nem fog értesítéseket kapni."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"A Matrix-kiszolgálója nem támogatja ezt a beállítást a titkosított szobákban, ebből a csevegésből nem fog értesítést kapni."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Összes üzenet"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Csak említések és kulcsszavak"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Csak említések és válaszok"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Némítás"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Ebben a szobában, értesítés ezekről:"</string>
   <string name="screen_room_roles_and_permissions_admins">"Adminisztrátorok"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Adminisztrátorok és tulajdonosok"</string>
@@ -131,6 +139,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Szerepkörök"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Szoba részletei"</string>
   <string name="screen_room_roles_and_permissions_title">"Szerepkörök és jogosultságok"</string>
+  <string name="screen_roomlist_mark_as_read">"Megjelölés olvasottként"</string>
+  <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Cím hozzáadása"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Bárki csatlakozhat, az engedélyezett terekből, és mindenki másnak hozzáférést kell kérnie."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Mindenkinek hozzáférést kell kérnie."</string>
@@ -144,7 +154,7 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_encryption_section_footer">"Engedélyezés után a titkosítás nem tiltható le."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Titkosítás"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Végpontok közötti titkosítás engedélyezése"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Bárki csatlakozhat."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Bárki csatlakozhat, beleértve a szervezeten kívülieket is."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Bárki"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Válassza ki, hogy mely terek tagjai csatlakozhatnak ehhez a szobához meghívás nélkül.%1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Terek kezelése"</string>

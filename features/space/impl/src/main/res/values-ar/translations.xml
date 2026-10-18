@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"اختيار المالكين"</string>
+  <string name="screen_leave_space_last_admin_info">"%1$s (مسؤول)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="zero">"مغادرة %1$d غرف والمساحة"</item>
+    <item quantity="one">"مغادرة %1$d غرفة والمساحة"</item>
+    <item quantity="two">"مغادرة %1$d غرفتين والمساحة"</item>
+    <item quantity="few">"مغادرة %1$d غرف والمساحة"</item>
+    <item quantity="many">"مغادرة %1$d غرفة والمساحة"</item>
+    <item quantity="other">"مغادرة %1$d غرفة والمساحة"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"اختر الغرف التي تريد مغادرتها، والتي لست المسؤول الوحيد عنها:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"يجب أن تعيّن مسؤولًا آخر لهذه المساحة قبل أن تتمكن من المغادرة."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"أنت المالك الوحيد لـ %1$s. يجب أن تنقل الملكية إلى شخص آخر قبل المغادرة."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"لن تتم إزالتك من الغرف التالية لأنك المسؤول الوحيد:"</string>
+  <string name="screen_leave_space_title">"مغادرة %1$s؟"</string>
+  <string name="screen_leave_space_title_last_admin">"أنت المسؤول الوحيد عن %1$s"</string>
+  <string name="screen_leave_space_title_last_owner">"نقل الملكية"</string>
+  <string name="screen_space_add_room_action">"غرفة"</string>
+  <string name="screen_space_add_rooms_room_access_description">"لن تؤثر إضافة غرفة على إمكانية الوصول إلى الغرفة. لتغيير الوصول، انتقل إلى إعدادات الغرفة &gt; الأمان والخصوصية."</string>
+  <string name="screen_space_empty_state_title">"أضف غرفتك الأولى"</string>
+  <string name="screen_space_menu_action_members">"عرض الأعضاء"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"لن تؤثر إزالة غرفة على إمكانية الوصول إلى الغرفة. لتغيير الوصول، انتقل إلى معلومات الغرفة &gt; الخصوصية والأمان."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="zero">"إزالة %1$d غرف من %2$s"</item>
+    <item quantity="one">"إزالة %1$d غرفة من %2$s"</item>
+    <item quantity="two">"إزالة %1$d غرفتين من %2$s"</item>
+    <item quantity="few">"إزالة %1$d غرف من %2$s"</item>
+    <item quantity="many">"إزالة %1$d غرفة من %2$s"</item>
+    <item quantity="other">"إزالة %1$d غرفة من %2$s"</item>
+  </plurals>
+  <string name="screen_space_settings_leave_space">"مغادرة المساحة"</string>
+  <string name="screen_space_settings_roles_and_permissions">"الأدوار والصلاحيات"</string>
+  <string name="screen_space_settings_security_and_privacy">"الأمان والخصوصية"</string>
+</resources>

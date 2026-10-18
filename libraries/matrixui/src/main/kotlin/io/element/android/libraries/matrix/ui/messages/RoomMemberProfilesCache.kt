@@ -13,6 +13,7 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.drop
@@ -30,5 +31,9 @@ class RoomMemberProfilesCache {
 
     fun getDisplayName(userId: UserId): String? {
         return cache.value[userId]?.disambiguatedDisplayName
+    }
+
+    fun getDisplayedStatus(userId: UserId): DisplayedStatus? {
+        return cache.value[userId]?.displayedStatus
     }
 }

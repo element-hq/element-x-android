@@ -13,17 +13,14 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
-import dev.zacsweers.metro.Inject
-import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.push.impl.di.PushBindings
-import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -34,6 +31,12 @@ private const val NOTIFICATION_ID = 1001
 // This kind of foreground service can only last up to 3 minutes before onTimeout is called
 private val wakelockTimeout = 3.minutes.inWholeMilliseconds
 
+// The channel ID to use for the notification of the foreground service.
+private const val CHANNEL_ID = "fetch_push_notification_channel"
+
+// The tag to use for the wakelock, this is used for debugging purposes and should be unique to this service.
+private const val WAKELOCK_TAG = "FetchPushService:WakeLock"
+
 /**
  * Foreground service used to ensure the device stays awake while we handle the pushes and schedule and run the work to fetch the notification content.
  */
@@ -42,28 +45,35 @@ class FetchPushForegroundService : Service() {
         return null
     }
 
-    @Inject lateinit var notificationChannels: NotificationChannels
-    @Inject @AppCoroutineScope lateinit var coroutineScope: CoroutineScope
-
     private val wakelock: PowerManager.WakeLock by lazy {
         val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-        powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "FetchPushService:WakeLock").apply {
+        powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG).apply {
             setReferenceCounted(false)
         }
     }
 
     private var isOnForeground = false
 
+    private fun ensureNotificationChannelExists() {
+        NotificationManagerCompat.from(this).createNotificationChannelsCompat(
+            listOf(
+                NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_LOW)
+                    .setName(getString(CommonStrings.common_fetching_notifications_title_android).ifEmpty { "Syncing notifications…" })
+                    .setVibrationEnabled(false)
+                    .setSound(null, null)
+                    .build()
+            )
+        )
+    }
+
     override fun onCreate() {
-        Timber.d("Creating FetchPushForegroundService")
+        Timber.i("Creating FetchPushForegroundService to handle incoming push, acquiring wakelock for up to $wakelockTimeout ms")
+        ensureNotificationChannelExists()
 
-        bindings<PushBindings>().inject(this)
-
-        Timber.d("Starting FetchPushForegroundService with wakelock timeout of $wakelockTimeout ms")
         // Start the foreground service as soon as possible
-        val notificationCompat = NotificationCompat.Builder(this, notificationChannels.getSilentChannelId())
+        val notificationCompat = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(CommonDrawables.ic_notification)
-            .setContentTitle(getString(CommonStrings.common_android_fetching_notifications_title))
+            .setContentTitle(getString(CommonStrings.common_fetching_notifications_title_android).ifEmpty { "Syncing notifications…" })
             .setProgress(0, 0, true)
             .setVibrate(longArrayOf(0))
             .setSound(null)
@@ -103,7 +113,7 @@ class FetchPushForegroundService : Service() {
 
         // The timeout is not automatic before Android 15, so we need to schedule it ourselves
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            coroutineScope.launch {
+            MainScope().launch {
                 delay(wakelockTimeout)
                 onTimeoutAction(calledByTheSystem = false)
             }
@@ -112,13 +122,18 @@ class FetchPushForegroundService : Service() {
         return START_NOT_STICKY
     }
 
-    override fun stopService(intent: Intent?): Boolean {
-        if (isOnForeground) {
-            wakelock.release()
-            ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
 
-        return super.stopService(intent)
+        if (isOnForeground) {
+            Timber.i("Destroying FetchPushForegroundService, releasing wakelock and stopping foreground")
+            if (wakelock.isHeld) {
+                wakelock.release()
+            }
+            ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
+        } else {
+            Timber.w("Destroying FetchPushForegroundService that was not running in foreground, this is unexpected")
+        }
     }
 
     override fun onTimeout(startId: Int) {
@@ -127,9 +142,9 @@ class FetchPushForegroundService : Service() {
     }
 
     private fun onTimeoutAction(calledByTheSystem: Boolean) {
-        Timber.d("onTimeoutAction, calledByTheSystem: $calledByTheSystem, isOnForeground: $isOnForeground")
+        Timber.w("onTimeoutAction, calledByTheSystem: $calledByTheSystem, isOnForeground: $isOnForeground")
         if (isOnForeground) {
-            Timber.d("Wakelock timeout reached, stopping FetchPushForegroundService")
+            Timber.w("Wakelock timeout reached, stopping FetchPushForegroundService")
             stopSelf()
         }
     }

@@ -34,11 +34,14 @@ internal object VideoCompressorConfigFactory {
         val newFrameRate = min(originalFrameRate, DEFAULT_FRAME_RATE)
 
         // If we need to resize the video, we also want to recalculate the bitrate
-        val newBitrate = resizer.calculateOptimalBitrate(Size(width, height), newFrameRate)
+        val optimalBitrate = resizer.calculateOptimalBitrate(Size(width, height), newFrameRate).toInt()
+
+        val sourceBitrate = metadata?.bitrate?.takeIf { it > 0 }
+        val newBitrate = sourceBitrate?.let { min(optimalBitrate.toLong(), it).toInt() } ?: optimalBitrate
 
         return VideoCompressorConfig(
             videoCompressorHelper = resizer,
-            newBitRate = newBitrate.toInt(),
+            newBitRate = newBitrate,
             newFrameRate = newFrameRate,
         )
     }

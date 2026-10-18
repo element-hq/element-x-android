@@ -6,8 +6,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.libraries.matrix.ui.components
 
 import androidx.activity.compose.BackHandler
@@ -18,7 +16,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -47,8 +46,9 @@ fun AvatarActionBottomSheet(
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
     )
 
     BackHandler(enabled = isVisible) {
@@ -94,7 +94,7 @@ private fun AvatarActionBottomSheetContent(
         ) { action ->
             ListItem(
                 modifier = Modifier.clickable { onActionClick(action) },
-                headlineContent = {
+                content = {
                     Text(
                         text = stringResource(action.titleResId),
                         style = ElementTheme.typography.fontBodyLgRegular,
@@ -104,7 +104,7 @@ private fun AvatarActionBottomSheetContent(
                 leadingContent = ListItemContent.Icon(IconSource.Resource(action.iconResourceId)),
                 style = when {
                     action.destructive -> ListItemStyle.Destructive
-                    else -> ListItemStyle.Primary
+                    else -> ListItemStyle.Default
                 }
             )
         }
@@ -113,7 +113,7 @@ private fun AvatarActionBottomSheetContent(
 
 @PreviewsDayNight
 @Composable
-internal fun AvatarActionBottomSheetPreview() = ElementPreview {
+internal fun AvatarActionBottomSheetPreview() = ElementPreview(fillMaxSize = true) {
     AvatarActionBottomSheet(
         actions = persistentListOf(AvatarAction.TakePhoto, AvatarAction.ChoosePhoto, AvatarAction.Remove),
         isVisible = true,

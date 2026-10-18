@@ -16,8 +16,8 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.features.login.impl.accountprovider.anAccountProvider
+import io.element.android.features.login.impl.accountprovider.anAccountProviderManaged
+import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -28,15 +28,14 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class ChooseAccountProviderViewTest {
+class ChooseAccountProviderViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<ChooseAccountProviderEvents>(expectEvents = false)
+        val eventSink = EventsRecorder<ChooseAccountProviderEvent>(expectEvents = false)
         ensureCalledOnce {
             setChooseAccountProviderView(
                 state = aChooseAccountProviderState(
@@ -51,32 +50,32 @@ class ChooseAccountProviderViewTest {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `selecting an account provider emits the the expected event`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<ChooseAccountProviderEvents>()
+        val eventSink = EventsRecorder<ChooseAccountProviderEvent>()
         setChooseAccountProviderView(
             state = aChooseAccountProviderState(
                 accountProviders = listOf(
                     ChooseAccountProviderPresenterTest.accountProvider1,
                     ChooseAccountProviderPresenterTest.accountProvider2,
                 ),
-                selectedAccountProvider = anAccountProvider(),
+                selectedAccountProvider = anAccountProviderManaged(),
                 eventSink = eventSink,
             ),
         )
-        onNodeWithText(ChooseAccountProviderPresenterTest.accountProvider1.title).performClick()
-        eventSink.assertSingle(ChooseAccountProviderEvents.SelectAccountProvider(ChooseAccountProviderPresenterTest.accountProvider1))
+        onNodeWithText(ChooseAccountProviderPresenterTest.accountProvider1.friendlyServerName()).performClick()
+        eventSink.assertSingle(ChooseAccountProviderEvent.SelectAccountProvider(ChooseAccountProviderPresenterTest.accountProvider1))
     }
 
     @Test
     fun `when error is displayed - closing the dialog emits the expected event`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<ChooseAccountProviderEvents>()
+        val eventSink = EventsRecorder<ChooseAccountProviderEvent>()
         setChooseAccountProviderView(
             state = aChooseAccountProviderState(
-                loginMode = AsyncData.Failure(AN_EXCEPTION),
+                loginModeState = aLoginModeState(loginMode = AsyncData.Failure(AN_EXCEPTION)),
                 eventSink = eventSink,
             ),
         )
         clickOn(CommonStrings.action_ok)
-        eventSink.assertSingle(ChooseAccountProviderEvents.ClearError)
+        eventSink.assertSingle(ChooseAccountProviderEvent.ClearError)
     }
 
     private fun AndroidComposeUiTest<ComponentActivity>.setChooseAccountProviderView(
@@ -85,7 +84,6 @@ class ChooseAccountProviderViewTest {
         onOAuthDetails: (OAuthDetails) -> Unit = EnsureNeverCalledWithParam(),
         onNeedLoginPassword: () -> Unit = EnsureNeverCalled(),
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
-        onCreateAccountContinue: (url: String) -> Unit = EnsureNeverCalledWithParam(),
     ) {
         setContent {
             ChooseAccountProviderView(
@@ -94,7 +92,6 @@ class ChooseAccountProviderViewTest {
                 onOAuthDetails = onOAuthDetails,
                 onNeedLoginPassword = onNeedLoginPassword,
                 onLearnMoreClick = onLearnMoreClick,
-                onCreateAccountContinue = onCreateAccountContinue,
             )
         }
     }

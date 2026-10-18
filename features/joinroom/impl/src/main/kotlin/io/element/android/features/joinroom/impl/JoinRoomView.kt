@@ -24,7 +24,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.invite.api.InviteData
+import io.element.android.libraries.designsystem.atomic.atoms.CopiableTextAtom
 import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
-import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewAliasAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAtom
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
@@ -115,33 +114,33 @@ fun JoinRoomView(
                     contentState = state.contentState,
                     knockMessage = state.knockMessage,
                     hideAvatarsImages = state.hideAvatarsImages,
-                    onKnockMessageUpdate = { state.eventSink(JoinRoomEvents.UpdateKnockMessage(it)) },
+                    onKnockMessageUpdate = { state.eventSink(JoinRoomEvent.UpdateKnockMessage(it)) },
                 )
             },
             footer = {
                 JoinRoomFooter(
                     joinAuthorisationStatus = state.joinAuthorisationStatus,
                     onAcceptInvite = { inviteData ->
-                        state.eventSink(JoinRoomEvents.AcceptInvite(inviteData))
+                        state.eventSink(JoinRoomEvent.AcceptInvite(inviteData))
                     },
                     onDeclineInvite = { inviteData, blockUser ->
                         if (state.canReportRoom && blockUser) {
                             onDeclineInviteAndBlockUser(inviteData)
                         } else {
-                            state.eventSink(JoinRoomEvents.DeclineInvite(inviteData, blockUser = blockUser))
+                            state.eventSink(JoinRoomEvent.DeclineInvite(inviteData, blockUser = blockUser))
                         }
                     },
                     onJoinRoom = {
-                        state.eventSink(JoinRoomEvents.JoinRoom)
+                        state.eventSink(JoinRoomEvent.JoinRoom)
                     },
                     onKnockRoom = {
-                        state.eventSink(JoinRoomEvents.KnockRoom)
+                        state.eventSink(JoinRoomEvent.KnockRoom)
                     },
                     onCancelKnock = {
-                        state.eventSink(JoinRoomEvents.CancelKnock(requiresConfirmation = true))
+                        state.eventSink(JoinRoomEvent.CancelKnock(requiresConfirmation = true))
                     },
                     onForgetRoom = {
-                        state.eventSink(JoinRoomEvents.ForgetRoom)
+                        state.eventSink(JoinRoomEvent.ForgetRoom)
                     },
                     onGoBack = onBackClick,
                 )
@@ -152,9 +151,9 @@ fun JoinRoomView(
         RetryDialog(
             title = stringResource(R.string.screen_join_room_loading_alert_title),
             content = stringResource(CommonStrings.error_network_or_server_issue),
-            onRetry = { state.eventSink(JoinRoomEvents.RetryFetchingContent) },
+            onRetry = { state.eventSink(JoinRoomEvent.RetryFetchingContent) },
             onDismiss = {
-                state.eventSink(JoinRoomEvents.DismissErrorAndHideContent)
+                state.eventSink(JoinRoomEvent.DismissErrorAndHideContent)
                 onBackClick()
             }
         )
@@ -166,7 +165,7 @@ fun JoinRoomView(
             errorTitle = { stringResource(CommonStrings.common_something_went_wrong) },
             errorMessage = { stringResource(CommonStrings.error_network_or_server_issue) },
             onSuccess = { onJoinSuccess() },
-            onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
+            onErrorDismiss = { state.eventSink(JoinRoomEvent.ClearActionStates) },
         )
     }
     AsyncActionView(
@@ -174,19 +173,19 @@ fun JoinRoomView(
         errorTitle = { stringResource(CommonStrings.common_something_went_wrong) },
         errorMessage = { stringResource(CommonStrings.error_network_or_server_issue) },
         onSuccess = { onKnockSuccess() },
-        onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
+        onErrorDismiss = { state.eventSink(JoinRoomEvent.ClearActionStates) },
     )
     AsyncActionView(
         async = state.forgetAction,
         errorTitle = { stringResource(CommonStrings.common_something_went_wrong) },
         errorMessage = { stringResource(CommonStrings.error_network_or_server_issue) },
         onSuccess = { onForgetSuccess() },
-        onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
+        onErrorDismiss = { state.eventSink(JoinRoomEvent.ClearActionStates) },
     )
     AsyncActionView(
         async = state.cancelKnockAction,
         onSuccess = { onCancelKnockSuccess() },
-        onErrorDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
+        onErrorDismiss = { state.eventSink(JoinRoomEvent.ClearActionStates) },
         errorTitle = { stringResource(CommonStrings.common_something_went_wrong) },
         errorMessage = { stringResource(CommonStrings.error_network_or_server_issue) },
         confirmationDialog = {
@@ -195,8 +194,8 @@ fun JoinRoomView(
                 title = stringResource(R.string.screen_join_room_cancel_knock_alert_title),
                 submitText = stringResource(R.string.screen_join_room_cancel_knock_alert_confirmation),
                 cancelText = stringResource(CommonStrings.action_no),
-                onSubmitClick = { state.eventSink(JoinRoomEvents.CancelKnock(requiresConfirmation = false)) },
-                onDismiss = { state.eventSink(JoinRoomEvents.ClearActionStates) },
+                onSubmitClick = { state.eventSink(JoinRoomEvent.CancelKnock(requiresConfirmation = false)) },
+                onDismiss = { state.eventSink(JoinRoomEvent.ClearActionStates) },
             )
         },
     )
@@ -514,7 +513,7 @@ private fun IncompleteContent(
         title = {
             when (roomIdOrAlias) {
                 is RoomIdOrAlias.Alias -> {
-                    RoomPreviewAliasAtom(roomIdOrAlias.identifier)
+                    CopiableTextAtom(roomIdOrAlias.identifier)
                 }
                 is RoomIdOrAlias.Id -> {
                     PlaceholderAtom(width = 200.dp, height = 22.dp)
@@ -567,7 +566,7 @@ private fun DefaultLoadedContent(
         },
         subtitle = {
             if (contentState.alias != null) {
-                RoomPreviewAliasAtom(contentState.alias.value)
+                CopiableTextAtom(contentState.alias.value)
             }
             if (contentState.details is LoadedDetails.Space) {
                 Spacer(Modifier.height(8.dp))
@@ -593,7 +592,6 @@ private fun DefaultLoadedContent(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun JoinRoomTopBar(
     contentState: ContentState,
@@ -609,6 +607,7 @@ private fun JoinRoomTopBar(
                 val roundedCornerShape = RoundedCornerShape(8.dp)
                 val titleModifier = Modifier
                     .clip(roundedCornerShape)
+                    .semantics { heading() }
                 if (contentState.name != null) {
                     Row(
                         modifier = titleModifier,
@@ -621,10 +620,7 @@ private fun JoinRoomTopBar(
                         )
                         Text(
                             modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .semantics {
-                                    heading()
-                                },
+                                .padding(horizontal = 8.dp),
                             text = contentState.name,
                             style = ElementTheme.typography.fontBodyLgMedium,
                             maxLines = 1,
@@ -644,7 +640,7 @@ private fun JoinRoomTopBar(
 
 @PreviewsDayNight
 @Composable
-internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStateProvider::class) state: JoinRoomState) = ElementPreview {
+internal fun JoinRoomViewPreview(@PreviewParameter(JoinRoomStatePreviewParam::class) state: JoinRoomState) = ElementPreview {
     JoinRoomView(
         state = state,
         onBackClick = { },

@@ -45,15 +45,13 @@ import io.element.android.services.analytics.test.watchers.FakeAnalyticsSendMess
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class JoinedRoomLoadedFlowNodeTest {
+class JoinedRoomLoadedFlowNodeTest : RobolectricTest() {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 

@@ -21,7 +21,9 @@ import com.google.testing.junit.testparameterinjector.KotlinTestParameters.named
 import com.google.testing.junit.testparameterinjector.TestParameter
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.aLoginModeState
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -32,15 +34,13 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTestParameter
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestParameterInjector
 
-@RunWith(RobolectricTestParameterInjector::class)
-class OnboardingViewTest {
+class OnboardingViewTest : RobolectricTestParameter() {
     @Test
     fun `when can create account - clicking on create account calls the expected callback`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        val eventSink = EventsRecorder<OnBoardingEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
@@ -59,7 +59,7 @@ class OnboardingViewTest {
 
     @Test
     fun `when can go back - clicking on back calls the expected callback`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        val eventSink = EventsRecorder<OnBoardingEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
@@ -74,7 +74,7 @@ class OnboardingViewTest {
 
     @Test
     fun `when can login with QR code - clicking on sign in with QR code calls the expected callback`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        val eventSink = EventsRecorder<OnBoardingEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
@@ -94,7 +94,7 @@ class OnboardingViewTest {
             "cannot search account provider" to true,
         )
     ) = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        val eventSink = EventsRecorder<OnBoardingEvent>(expectEvents = false)
         ensureCalledOnceWithParam(mustChooseAccountProvider) { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
@@ -115,7 +115,7 @@ class OnboardingViewTest {
             "cannot search account provider" to true,
         )
     ) = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        val eventSink = EventsRecorder<OnBoardingEvent>(expectEvents = false)
         ensureCalledOnceWithParam(mustChooseAccountProvider) { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
@@ -132,35 +132,35 @@ class OnboardingViewTest {
 
     @Test
     fun `when sign in to pre defined account provider - clicking on button emits the expected event`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>()
+        val eventSink = EventsRecorder<OnBoardingEvent>()
         setOnboardingView(
             state = anOnBoardingState(
-                defaultAccountProvider = "element.io",
+                defaultAccountProvider = AccountProvider.Generic("element.io"),
                 eventSink = eventSink,
             ),
         )
         val buttonText = activity!!.getString(R.string.screen_onboarding_sign_in_to, "element.io")
         onNodeWithText(buttonText).performClick()
-        eventSink.assertSingle(OnBoardingEvents.OnSignIn("element.io"))
+        eventSink.assertSingle(OnBoardingEvent.OnSignIn(AccountProvider.Generic("element.io")))
     }
 
     @Test
     fun `when error is displayed - closing the dialog emits the expected event`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>()
+        val eventSink = EventsRecorder<OnBoardingEvent>()
         setOnboardingView(
             state = anOnBoardingState(
-                defaultAccountProvider = "element.io",
-                loginMode = AsyncData.Failure(AN_EXCEPTION),
+                defaultAccountProvider = AccountProvider.Generic("element.io"),
+                loginModeState = aLoginModeState(loginMode = AsyncData.Failure(AN_EXCEPTION)),
                 eventSink = eventSink,
             ),
         )
         clickOn(CommonStrings.action_ok)
-        eventSink.assertSingle(OnBoardingEvents.ClearError)
+        eventSink.assertSingle(OnBoardingEvent.ClearError)
     }
 
     @Test
     fun `clicking on report a problem calls the sign in callback`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        val eventSink = EventsRecorder<OnBoardingEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
@@ -177,7 +177,7 @@ class OnboardingViewTest {
 
     @Test
     fun `clicking on settings calls the developer settings callback`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        val eventSink = EventsRecorder<OnBoardingEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
@@ -193,7 +193,7 @@ class OnboardingViewTest {
 
     @Test
     fun `cannot report a problem when the feature is disabled`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        val eventSink = EventsRecorder<OnBoardingEvent>(expectEvents = false)
         setOnboardingView(
             state = anOnBoardingState(
                 canReportBug = false,
@@ -206,49 +206,33 @@ class OnboardingViewTest {
 
     @Test
     fun `when success PasswordLogin - the expected callback is invoked and the event is received`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>()
+        val eventSink = EventsRecorder<OnBoardingEvent>()
         ensureCalledOnce { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.PasswordLogin),
+                    loginModeState = aLoginModeState(loginMode = AsyncData.Success(LoginMode.PasswordLogin)),
                     eventSink = eventSink,
                 ),
                 onNeedLoginPassword = callback,
             )
         }
-        eventSink.assertSingle(OnBoardingEvents.ClearError)
+        eventSink.assertSingle(OnBoardingEvent.ClearError)
     }
 
     @Test
     fun `when success Oidc - the expected callback is invoked and the event is received`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>()
+        val eventSink = EventsRecorder<OnBoardingEvent>()
         val oAuthDetails = OAuthDetails("aUrl")
         ensureCalledOnceWithParam(oAuthDetails) { callback ->
             setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.OAuth(oAuthDetails)),
+                    loginModeState = aLoginModeState(loginMode = AsyncData.Success(LoginMode.OAuth(oAuthDetails))),
                     eventSink = eventSink,
                 ),
                 onOAuthDetails = callback,
             )
         }
-        eventSink.assertSingle(OnBoardingEvents.ClearError)
-    }
-
-    @Test
-    fun `when success AccountCreation - the expected callback is invoked and the event is received`() = runAndroidComposeUiTest {
-        val eventSink = EventsRecorder<OnBoardingEvents>()
-        val oAuthDetails = OAuthDetails("aUrl")
-        ensureCalledOnceWithParam(oAuthDetails.url) { callback ->
-            setOnboardingView(
-                state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.AccountCreation("aUrl")),
-                    eventSink = eventSink,
-                ),
-                onCreateAccountContinue = callback,
-            )
-        }
-        eventSink.assertSingle(OnBoardingEvents.ClearError)
+        eventSink.assertSingle(OnBoardingEvent.ClearError)
     }
 
     private fun AndroidComposeUiTest<ComponentActivity>.setOnboardingView(
@@ -262,7 +246,6 @@ class OnboardingViewTest {
         onOAuthDetails: (OAuthDetails) -> Unit = EnsureNeverCalledWithParam(),
         onNeedLoginPassword: () -> Unit = EnsureNeverCalled(),
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
-        onCreateAccountContinue: (url: String) -> Unit = EnsureNeverCalledWithParam(),
     ) {
         setContent {
             OnBoardingView(
@@ -276,7 +259,6 @@ class OnboardingViewTest {
                 onOAuthDetails = onOAuthDetails,
                 onNeedLoginPassword = onNeedLoginPassword,
                 onLearnMoreClick = onLearnMoreClick,
-                onCreateAccountContinue = onCreateAccountContinue,
             )
         }
     }

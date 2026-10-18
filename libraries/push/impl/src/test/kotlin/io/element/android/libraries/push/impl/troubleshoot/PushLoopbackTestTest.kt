@@ -60,6 +60,25 @@ class PushLoopbackTestTest {
     }
 
     @Test
+    fun `test PushLoopbackTest RateLimited error`() = runTest {
+        val sut = createPushLoopbackTest(
+            pushService = FakePushService(
+                testPushBlock = {
+                    throw PushGatewayFailure.RateLimited()
+                }
+            ),
+            stringProvider = FakeStringProvider(A_FAILURE_REASON),
+        )
+        sut.runAndTestState {
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.Idle(true))
+            assertThat(awaitItem().status).isEqualTo(NotificationTroubleshootTestState.Status.InProgress)
+            val lastItem = awaitItem()
+            assertThat(lastItem.status).isEqualTo(NotificationTroubleshootTestState.Status.Failure())
+            assertThat(lastItem.description).isEqualTo(A_FAILURE_REASON)
+        }
+    }
+
+    @Test
     fun `test PushLoopbackTest PusherRejected error with quick fix`() = runTest {
         val rotateTokenLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val sut = createPushLoopbackTest(

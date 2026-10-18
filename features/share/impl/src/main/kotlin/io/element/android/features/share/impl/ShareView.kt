@@ -13,12 +13,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.matrix.api.core.RoomId
 
 @Composable
 fun ShareView(
     state: ShareState,
-    onShareSuccess: (List<RoomId>) -> Unit,
+    onShareSuccess: (ShareResult) -> Unit,
 ) {
     AsyncActionView(
         async = state.shareAction,
@@ -26,14 +25,14 @@ fun ShareView(
             onShareSuccess(it)
         },
         onErrorDismiss = {
-            state.eventSink(ShareEvents.ClearError)
+            state.eventSink(ShareEvent.ClearError)
         },
     )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun ShareViewPreview(@PreviewParameter(ShareStateProvider::class) state: ShareState) = ElementPreview {
+internal fun ShareViewPreview(@PreviewParameter(ShareStatePreviewParam::class) state: ShareState) = ElementPreview {
     ShareView(
         state = state,
         onShareSuccess = {}

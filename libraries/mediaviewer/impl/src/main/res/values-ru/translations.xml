@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"Имя файла"</string>
   <string name="screen_media_details_no_more_files_to_show">"Больше нет файлов для отображения"</string>
   <string name="screen_media_details_no_more_media_to_show">"Больше нет медиа для отображения"</string>
+  <string name="screen_media_details_title">"Информация о файле"</string>
   <string name="screen_media_details_uploaded_by">"Загружено"</string>
   <string name="screen_media_details_uploaded_on">"Загружено"</string>
 </resources>

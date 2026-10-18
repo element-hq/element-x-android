@@ -12,23 +12,27 @@ import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.GalleryItemInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.impl.media.GalleryMediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.toInner
@@ -44,6 +48,7 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.TypingNot
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -65,11 +70,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EditedContent
 import org.matrix.rustcomponents.sdk.FormattedBody
+import org.matrix.rustcomponents.sdk.GalleryUploadParameters
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.PollData
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
 import org.matrix.rustcomponents.sdk.UploadParameters
 import org.matrix.rustcomponents.sdk.UploadSource
+import org.matrix.rustcomponents.sdk.createCaptionEdit
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.PaginationStatus
@@ -82,7 +89,7 @@ private const val PAGINATION_SIZE = 50
 class RustTimeline(
     private val inner: InnerTimeline,
     override val mode: Timeline.Mode,
-    private val systemClock: SystemClock,
+    systemClock: SystemClock,
     private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
@@ -121,6 +128,13 @@ class RustTimeline(
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(mode)
     private val typingNotificationPostProcessor = TypingNotificationPostProcessor(mode)
+
+    private data class RoomTimelineInfo(
+        val roomCreators: ImmutableList<UserId>,
+        val isDm: Boolean,
+        val joinRule: JoinRule?,
+        val isEncrypted: Boolean?,
+    )
 
     override val backwardPaginationStatus = MutableStateFlow(
         Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = mode != Timeline.Mode.PinnedEvents)
@@ -221,14 +235,15 @@ class RustTimeline(
         _timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        joinedRoom.roomInfoFlow.map { it.creators to it.isDm }.distinctUntilChanged(),
+        joinedRoom.roomInfoFlow.map { RoomTimelineInfo(it.creators, it.isDm, it.joinRule, it.isEncrypted) }.distinctUntilChanged(),
     ) {
         timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        (roomCreators, isDm),
+        roomInfo,
         ->
         withContext(dispatcher) {
+            val (roomCreators, isDm, joinRule, isEncrypted) = roomInfo
             timelineItems
                 .let { items ->
                     roomBeginningPostProcessor.process(
@@ -328,7 +343,7 @@ class RustTimeline(
         formattedCaption: String?,
     ): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions<Unit> {
-            val editedContent = EditedContent.MediaCaption(
+            val editedContent = createCaptionEdit(
                 caption = caption,
                 formattedCaption = formattedCaption?.let {
                     FormattedBody(body = it, format = MessageFormat.Html)
@@ -352,7 +367,7 @@ class RustTimeline(
         fromNotification: Boolean,
         msgType: MsgType,
     ): Result<Unit> = withContext(dispatcher) {
-        runCatchingExceptions {
+        runCatchingExceptions<Unit> {
             val msg = MessageEventContent.from(
                 body = body,
                 htmlBody = htmlBody,
@@ -475,9 +490,9 @@ class RustTimeline(
         }
     }
 
-    override suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit> = withContext(dispatcher) {
+    override suspend fun forwardEvents(eventIds: List<EventId>, roomIds: List<RoomId>): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions {
-            roomContentForwarder.forward(fromTimeline = inner, eventId = eventId, toRoomIds = roomIds)
+            roomContentForwarder.forward(fromTimeline = inner, eventIds = eventIds, toRoomIds = roomIds)
         }.onFailure {
             Timber.tag(loggerTag).e(it)
         }
@@ -522,6 +537,42 @@ class RustTimeline(
                 audioInfo = audioInfo.map(),
                 waveform = waveform,
             )
+        }
+    }
+
+    override suspend fun sendGallery(
+        items: List<GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ): Result<MediaUploadHandler> {
+        Timber.d("Sending gallery with ${items.size} items")
+        val allFiles = items.flatMap { item ->
+            when (item) {
+                is GalleryItemInfo.Image -> listOfNotNull(item.file, item.thumbnailFile)
+                is GalleryItemInfo.Video -> listOfNotNull(item.file, item.thumbnailFile)
+                is GalleryItemInfo.Audio -> listOf(item.file)
+                is GalleryItemInfo.MediaFile -> listOf(item.file)
+            }
+        }
+        return sendGalleryAttachment(allFiles) {
+            inner.sendGallery(
+                params = GalleryUploadParameters(
+                    caption = caption,
+                    formattedCaption = formattedCaption?.let {
+                        FormattedBody(body = it, format = MessageFormat.Html)
+                    },
+                    mentions = null,
+                    inReplyTo = inReplyToEventId?.value,
+                ),
+                itemInfos = items.map { it.map() },
+            )
+        }
+    }
+
+    private fun sendGalleryAttachment(files: List<File>, handle: () -> org.matrix.rustcomponents.sdk.SendGalleryJoinHandle): Result<MediaUploadHandler> {
+        return runCatchingExceptions {
+            GalleryMediaUploadHandlerImpl(files, handle())
         }
     }
 
@@ -611,6 +662,24 @@ class RustTimeline(
         }
     }
 
+    override suspend fun isEventLoaded(eventId: EventId): Boolean = withContext(dispatcher) {
+        val isInLoadedItems = _timelineItems.replayCache.firstOrNull().orEmpty().any { timelineItem ->
+            timelineItem is MatrixTimelineItem.Event && timelineItem.eventId == eventId
+        }
+        if (isInLoadedItems) {
+            // Displayed events are caught above. The SDK-level list still holds events the display
+            // layer later drops, so this avoids the FFI call for in-window-but-not-rendered events.
+            true
+        } else {
+            // getEventTimelineItemByEventId throws when the event isn't in the loaded window.
+            // EventTimelineItem is a Disposable wrapping a native handle, so release it once we've
+            // confirmed presence — otherwise the handle lingers until the GC cleaner runs.
+            runCatchingExceptions {
+                inner.getEventTimelineItemByEventId(eventId.value).use { /* presence is all we need */ }
+            }.isSuccess
+        }
+    }
+
     override suspend fun pinEvent(eventId: EventId): Result<Boolean> = withContext(dispatcher) {
         runCatchingExceptions {
             inner.pinEvent(eventId = eventId.value)
@@ -626,6 +695,18 @@ class RustTimeline(
     override suspend fun getLatestEventId(): Result<EventId?> = withContext(dispatcher) {
         runCatchingExceptions {
             inner.latestEventId()?.let(::EventId)
+        }
+    }
+
+    override suspend fun retrySend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.retrySend(eventOrTransactionId.toRustEventOrTransactionId(), sendTarget.map())
+        }
+    }
+
+    override suspend fun abortSend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.abortSend(eventOrTransactionId.toRustEventOrTransactionId(), sendTarget.map())
         }
     }
 

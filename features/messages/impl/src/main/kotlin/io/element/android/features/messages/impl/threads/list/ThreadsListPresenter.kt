@@ -9,8 +9,10 @@ package io.element.android.features.messages.impl.threads.list
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.factories.event.TimelineItemContentFactory
@@ -18,10 +20,10 @@ import io.element.android.features.messages.impl.utils.messagesummary.MessageSum
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.threads.ThreadListPaginationStatus
-import kotlinx.collections.immutable.ImmutableList
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.onStart
@@ -95,15 +97,20 @@ class ThreadsListPresenter(
 
         val roomInfo by room.roomInfoFlow.collectAsState()
 
-        fun handleEvent(event: ThreadsListEvents) {
+        val heroes by remember {
+            derivedStateOf { roomInfo.heroes.map { it.getAvatarData(AvatarSize.CurrentUserTopBar) }.toImmutableList() }
+        }
+
+        fun handleEvent(event: ThreadsListEvent) {
             when (event) {
-                ThreadsListEvents.Paginate -> if ((paginationStatus as? ThreadListPaginationStatus.Idle)?.hasMoreToLoad == true) {
+                ThreadsListEvent.Paginate -> if ((paginationStatus as? ThreadListPaginationStatus.Idle)?.hasMoreToLoad == true) {
                     coroutineScope.launch {
                         Timber.d("Paginating thread list: $paginationStatus")
                         threadsListService.paginate()
+                            .onFailure { Timber.w(it, "Failed to paginate thread list") }
                     }
                 } else {
-                    Timber.d("Not paginating since there is nothing else to load, current status: $paginationStatus")
+                    Timber.d("Not paginating, current status: $paginationStatus")
                 }
             }
         }
@@ -114,20 +121,8 @@ class ThreadsListPresenter(
             roomName = roomInfo.name ?: room.roomId.value,
             roomAvatarUrl = roomInfo.avatarUrl,
             isRoomTombstoned = roomInfo.successorRoom != null,
+            heroes = heroes,
             eventSink = ::handleEvent,
         )
     }
-}
-
-data class ThreadsListState(
-    val roomId: RoomId,
-    val roomName: String,
-    val roomAvatarUrl: String?,
-    val isRoomTombstoned: Boolean,
-    val threads: ImmutableList<ThreadListRowItem>,
-    val eventSink: (ThreadsListEvents) -> Unit,
-)
-
-sealed interface ThreadsListEvents {
-    data object Paginate : ThreadsListEvents
 }

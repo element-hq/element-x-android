@@ -11,11 +11,17 @@ package io.element.android.libraries.matrix.impl.fixtures.factories
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_USER_ID
 import org.matrix.rustcomponents.sdk.RoomHero
+import org.matrix.rustcomponents.sdk.UserCall
+import org.matrix.rustcomponents.sdk.UserStatus
 
 internal fun aRustRoomHero(
     userId: UserId = A_USER_ID,
+    status: UserStatus? = null,
+    call: UserCall? = null,
 ) = RoomHero(
     userId = userId.value,
     displayName = "displayName",
     avatarUrl = "avatarUrl",
+    status = status,
+    call = call,
 )

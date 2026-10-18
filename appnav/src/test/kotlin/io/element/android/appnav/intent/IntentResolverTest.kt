@@ -29,19 +29,35 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.oauth.api.OAuthAction
 import io.element.android.libraries.oauth.test.FakeOAuthIntentResolver
 import io.element.android.tests.testutils.lambda.lambdaError
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-@RunWith(RobolectricTestRunner::class)
-class IntentResolverTest {
+class IntentResolverTest : RobolectricTest() {
     @Test
     fun `resolve launcher intent should return null`() {
         val sut = createIntentResolver()
         val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
             action = Intent.ACTION_MAIN
             addCategory(Intent.CATEGORY_LAUNCHER)
+        }
+        val result = sut.resolve(intent)
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun `resolve intent replayed from the history should return null`() {
+        val sut = createIntentResolver(
+            deeplinkParserResult = DeeplinkData.Room(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                threadId = null,
+                eventId = null,
+            )
+        )
+        val intent = Intent(RuntimeEnvironment.getApplication(), Activity::class.java).apply {
+            action = Intent.ACTION_VIEW
+            addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY)
         }
         val result = sut.resolve(intent)
         assertThat(result).isNull()

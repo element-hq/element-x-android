@@ -32,9 +32,6 @@ val SemanticColors.roomListRoomMessage
 val SemanticColors.roomListRoomMessageDate
     get() = textSecondary
 
-val SemanticColors.unreadIndicator
-    get() = iconAccentTertiary
-
 val SemanticColors.placeholderBackground
     get() = bgSubtleSecondary
 
@@ -52,11 +49,6 @@ val SemanticColors.messageFromOtherBackground
 @OptIn(CoreColorToken::class)
 val SemanticColors.progressIndicatorTrackColor
     get() = if (isLight) LightColorTokens.colorAlphaGray500 else DarkColorTokens.colorAlphaGray500
-
-// This color is not present in Semantic color, so put hard-coded value for now
-@OptIn(CoreColorToken::class)
-val SemanticColors.bgSubtleTertiary
-    get() = if (isLight) LightColorTokens.colorGray100 else DarkColorTokens.colorGray100
 
 // Temporary color, which is not in the token right now
 val SemanticColors.temporaryColorBgSpecial
@@ -88,7 +80,6 @@ internal fun ColorAliasesPreview() = ElementPreview {
             "roomListRoomName" to ElementTheme.colors.roomListRoomName,
             "roomListRoomMessage" to ElementTheme.colors.roomListRoomMessage,
             "roomListRoomMessageDate" to ElementTheme.colors.roomListRoomMessageDate,
-            "unreadIndicator" to ElementTheme.colors.unreadIndicator,
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,

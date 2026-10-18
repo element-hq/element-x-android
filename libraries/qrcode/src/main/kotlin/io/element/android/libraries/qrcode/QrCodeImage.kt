@@ -57,8 +57,8 @@ private fun BitMatrix.toBitmap(
 @Composable
 fun QrCodeImage(
     data: String,
-    forceMaxBrightness: Boolean = true,
     modifier: Modifier = Modifier,
+    forceMaxBrightness: Boolean = true,
 ) {
     if (forceMaxBrightness) {
         ForceMaxBrightness()

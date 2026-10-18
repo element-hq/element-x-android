@@ -41,6 +41,7 @@ class LogoutPresenter(
     @Composable
     override fun present(): LogoutState {
         val localCoroutineScope = rememberCoroutineScope()
+        val currentUser by matrixClient.userProfile.collectAsState()
         val logoutAction: MutableState<AsyncAction<Unit>> = remember {
             mutableStateOf(AsyncAction.Uninitialized)
         }
@@ -74,22 +75,23 @@ class LogoutPresenter(
             }
         }
 
-        fun handleEvent(event: LogoutEvents) {
+        fun handleEvent(event: LogoutEvent) {
             when (event) {
-                is LogoutEvents.Logout -> {
+                is LogoutEvent.Logout -> {
                     if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
                         localCoroutineScope.logout(logoutAction, event.ignoreSdkError)
                     } else {
                         logoutAction.value = AsyncAction.ConfirmingNoParams
                     }
                 }
-                LogoutEvents.CloseDialogs -> {
+                LogoutEvent.CloseDialogs -> {
                     logoutAction.value = AsyncAction.Uninitialized
                 }
             }
         }
 
         return LogoutState(
+            currentUser = currentUser,
             isLastDevice = isLastDevice,
             backupState = backupState,
             doesBackupExistOnServer = doesBackupExistOnServerAction.value.dataOrNull().orTrue(),

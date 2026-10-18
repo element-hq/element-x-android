@@ -43,6 +43,7 @@ fun TimelineEventTimestampView(
     event: TimelineItem.Event,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    isLayoutDirectionMismatched: Boolean = false,
 ) {
     val formattedTime = event.sentTime
     val hasError = event.failedToSend
@@ -54,12 +55,20 @@ fun TimelineEventTimestampView(
     val shield = event.messageShield
     val isVerifiedUserSendFailure = event.localSendState is LocalEventSendState.Failed.VerifiedUser
     val onClickLabel = when {
+        hasError -> stringResource(CommonStrings.a11y_view_details)
         shield != null -> stringResource(CommonStrings.a11y_view_details)
-        hasError && isVerifiedUserSendFailure -> stringResource(CommonStrings.action_open_context_menu)
+        isVerifiedUserSendFailure -> stringResource(CommonStrings.action_open_context_menu)
         else -> null
     }
-    val clickableModifier = remember(shield, hasError) {
+    val clickableModifier = remember(event) {
         when {
+            hasError -> {
+                Modifier.clickable(
+                    onClickLabel = onClickLabel,
+                ) {
+                    eventSink(TimelineEvent.ShowSendFailureDialog(event))
+                }
+            }
             shield != null -> {
                 Modifier.clickable(
                     onClickLabel = onClickLabel,
@@ -67,19 +76,19 @@ fun TimelineEventTimestampView(
                     eventSink(TimelineEvent.ShowShieldDialog(shield))
                 }
             }
-            hasError -> Modifier
-                .clickable(
-                    enabled = isVerifiedUserSendFailure,
-                    onClickLabel = onClickLabel,
-                ) {
-                    eventSink(TimelineEvent.ComputeVerifiedUserSendFailure(event))
-                }
             else -> Modifier
         }
     }
+
+    val padding = if (!isLayoutDirectionMismatched) {
+        PaddingValues(start = TimelineEventTimestampViewDefaults.spacing)
+    } else {
+        PaddingValues(end = TimelineEventTimestampViewDefaults.spacing)
+    }
+
     Row(
         modifier = Modifier
-            .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
+            .padding(padding)
             // For a better click target, make the corners rounded
             .clip(RoundedCornerShape(8.dp))
             .then(clickableModifier)
@@ -126,7 +135,9 @@ fun TimelineEventTimestampView(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineEventTimestampViewPreview(@PreviewParameter(TimelineItemEventForTimestampViewProvider::class) event: TimelineItem.Event) = ElementPreview {
+internal fun TimelineEventTimestampViewPreview(@PreviewParameter(
+    TimelineItemEventForTimestampViewPreviewParam::class
+) event: TimelineItem.Event) = ElementPreview {
     TimelineEventTimestampView(
         event = event,
         eventSink = {},

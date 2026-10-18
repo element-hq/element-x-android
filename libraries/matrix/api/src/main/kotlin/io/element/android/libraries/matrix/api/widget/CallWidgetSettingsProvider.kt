@@ -10,7 +10,18 @@ package io.element.android.libraries.matrix.api.widget
 
 import java.util.UUID
 
+/**
+ * Builds the widget settings used to embed Element Call in a room, applying the app's own preferences on top of the SDK defaults.
+ */
 interface CallWidgetSettingsProvider {
+    /**
+     * @param baseUrl the URL Element Call is served from.
+     * @param widgetId a unique identifier for this widget instance.
+     * @param encrypted whether the room the call takes place in is encrypted.
+     * @param direct whether the call happens in a direct message room.
+     * @param isAudioCall whether the call should start without video.
+     * @param hasActiveCall whether a call is already ongoing in the room, which affects whether the user joins straight away.
+     */
     suspend fun provide(
         baseUrl: String,
         widgetId: String = UUID.randomUUID().toString(),

@@ -13,3 +13,7 @@ plugins {
 android {
     namespace = "io.element.android.libraries.cryptography.api"
 }
+
+dependencies {
+    implementation(libs.coroutines.core)
+}

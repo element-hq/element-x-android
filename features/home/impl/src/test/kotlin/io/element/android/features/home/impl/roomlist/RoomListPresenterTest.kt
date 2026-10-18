@@ -12,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
+import io.element.android.features.announcement.test.FakeAnnouncementService
 import io.element.android.features.home.impl.FakeDateTimeObserver
 import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.datasource.aRoomListRoomSummaryFactory
@@ -20,22 +21,27 @@ import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.features.home.impl.model.createRoomListRoomSummary
 import io.element.android.features.home.impl.search.RoomListSearchEvent
 import io.element.android.features.home.impl.search.RoomListSearchState
+import io.element.android.features.home.impl.search.aGlobalSearchState
 import io.element.android.features.home.impl.search.aRoomListSearchState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.aDisabledSpaceFiltersState
 import io.element.android.features.invite.api.SeenInvitesStore
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
-import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
+import io.element.android.features.preferences.impl.tasks.MarkRoomAsRead
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.api.ShowAllActivityInRoomListFeature
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -50,6 +56,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID_3
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
@@ -61,13 +68,14 @@ import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
-import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
-import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
+import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
@@ -215,6 +223,10 @@ class RoomListPresenterTest {
         val presenter = createRoomListPresenter(client = client)
         presenter.test {
             val initialState = awaitItem()
+
+            // Skip intermediate event for loading the value of the feature flags
+            skipItems(1)
+
             val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvent.ShowContextMenu(summary))
 
@@ -227,7 +239,6 @@ class RoomListPresenterTest {
                             isDm = false,
                             isFavorite = false,
                             hasNewContent = false,
-                            displayClearRoomCacheAction = false,
                         )
                     )
             }
@@ -244,35 +255,6 @@ class RoomListPresenterTest {
                             isDm = false,
                             isFavorite = true,
                             hasNewContent = false,
-                            displayClearRoomCacheAction = false,
-                        )
-                    )
-            }
-        }
-    }
-
-    @Test
-    fun `present - show context menu with view source on`() = runTest {
-        val presenter = createRoomListPresenter(
-            appPreferencesStore = InMemoryAppPreferencesStore(
-                isDeveloperModeEnabled = true,
-            )
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            val summary = createRoomListRoomSummary()
-            initialState.eventSink(RoomListEvent.ShowContextMenu(summary))
-            awaitItem().also { state ->
-                assertThat(state.contextMenu)
-                    .isEqualTo(
-                        RoomListState.ContextMenu.Shown(
-                            roomId = summary.roomId,
-                            roomName = summary.name,
-                            isDm = false,
-                            isFavorite = false,
-                            // true here.
-                            hasNewContent = false,
-                            displayClearRoomCacheAction = true,
                         )
                     )
             }
@@ -288,6 +270,10 @@ class RoomListPresenterTest {
         val presenter = createRoomListPresenter(client = client)
         presenter.test {
             val initialState = awaitItem()
+
+            // Skip intermediate event for loading the value of the feature flags
+            skipItems(1)
+
             val summary = createRoomListRoomSummary()
             initialState.eventSink(RoomListEvent.ShowContextMenu(summary))
 
@@ -300,7 +286,6 @@ class RoomListPresenterTest {
                         isDm = false,
                         isFavorite = false,
                         hasNewContent = false,
-                        displayClearRoomCacheAction = false,
                     )
                 )
 
@@ -338,6 +323,10 @@ class RoomListPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
+
+            // Skip intermediate event for loading the value of the feature flags
+            skipItems(1)
+
             eventRecorder.assertEmpty()
             initialState.eventSink(RoomListEvent.ToggleSearchResults)
             eventRecorder.assertSingle(
@@ -427,6 +416,7 @@ class RoomListPresenterTest {
             client = matrixClient,
         )
         presenter.test {
+            skipItems(1) // Skip initial state
             assertThat(awaitItem().contentState).isInstanceOf(RoomListContentState.Empty::class.java)
         }
     }
@@ -457,11 +447,17 @@ class RoomListPresenterTest {
         val notificationCleaner = FakeNotificationCleaner(
             clearMessagesForRoomLambda = clearMessagesForRoomLambda,
         )
+        val markRoomAsRead = createTestMarkRoomAsRead(
+            client = matrixClient,
+            notificationCleaner = notificationCleaner,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
         val presenter = createRoomListPresenter(
             client = matrixClient,
             sessionPreferencesStore = sessionPreferencesStore,
             analyticsService = analyticsService,
             notificationCleaner = notificationCleaner,
+            markRoomAsRead = markRoomAsRead,
         )
         presenter.test {
             val initialState = awaitItem()
@@ -496,7 +492,7 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - when a room is invited then accept and decline events are sent to acceptDeclinePresenter`() = runTest {
-        val eventSinkRecorder = lambdaRecorder { _: AcceptDeclineInviteEvents -> }
+        val eventSinkRecorder = lambdaRecorder { _: AcceptDeclineInviteEvent -> }
         val acceptDeclinePresenter = Presenter {
             anAcceptDeclineInviteState(eventSink = eventSinkRecorder)
         }
@@ -535,8 +531,8 @@ class RoomListPresenterTest {
             assert(eventSinkRecorder)
                 .isCalledExactly(2)
                 .withSequence(
-                    listOf(value(AcceptDeclineInviteEvents.AcceptInvite(inviteData))),
-                    listOf(value(AcceptDeclineInviteEvents.DeclineInvite(inviteData, blockUser = false, shouldConfirm = false))),
+                    listOf(value(AcceptDeclineInviteEvent.AcceptInvite(inviteData))),
+                    listOf(value(AcceptDeclineInviteEvent.DeclineInvite(inviteData, blockUser = false, shouldConfirm = false))),
                 )
         }
     }
@@ -639,7 +635,7 @@ class RoomListPresenterTest {
         )
         presenter.test {
             assertThat(announcementService.announcementsToShowFlow().first()).isEmpty()
-            skipItems(1)
+            skipItems(2) // Skip initial state and intermediate event for loading the value of the feature flags
             val state = awaitItem()
             assertThat(state.contentAsRooms().showNewNotificationSoundBanner).isFalse()
             announcementService.emitAnnouncementsToShow(listOf(Announcement.NewNotificationSound))
@@ -650,6 +646,111 @@ class RoomListPresenterTest {
             // Simulate service updating the value
             announcementService.emitAnnouncementsToShow(emptyList())
             assertThat(awaitItem().contentAsRooms().showNewNotificationSoundBanner).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - swipe avatar banner`() = runTest {
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(aRoomSummary())),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))
+        )
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList },
+            subscribeToVisibleRoomsLambda = { },
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
+        val onAnnouncementDismissedResult = lambdaRecorder<Announcement, Unit> { }
+        val announcementService = FakeAnnouncementService(
+            initialAnnouncementsToShowFlowValue = listOf(Announcement.SwipeAvatarToSwitchAccount),
+            onAnnouncementDismissedResult = onAnnouncementDismissedResult,
+        )
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData(sessionId = A_SESSION_ID.value)),
+        )
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            announcementService = announcementService,
+            sessionStore = sessionStore,
+        )
+        presenter.test {
+            skipItems(2) // Skip initial state and intermediate event for loading the value of the feature flags
+            val state = awaitItem()
+            // Only one account, the banner is not displayed
+            assertThat(state.contentAsRooms().showSwipeAvatarBanner).isFalse()
+            sessionStore.addSession(aSessionData(sessionId = A_SESSION_ID_2.value))
+            assertThat(awaitItem().contentAsRooms().showSwipeAvatarBanner).isTrue()
+            state.eventSink(RoomListEvent.DismissSwipeAvatarBanner)
+            onAnnouncementDismissedResult.assertions().isCalledOnce()
+                .with(value(Announcement.SwipeAvatarToSwitchAccount))
+            // Simulate service updating the value
+            announcementService.emitAnnouncementsToShow(emptyList())
+            assertThat(awaitItem().contentAsRooms().showSwipeAvatarBanner).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - showAllActivity and showUnreadCount reflect the feature flag values`() = runTest {
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(aRoomSummary())),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1)),
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = FakeRoomListService(createRoomListLambda = { roomList }),
+        )
+        val featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(
+                ShowAllActivityInRoomListFeature.key to true,
+                FeatureFlags.UnreadIndicatorCount.key to true,
+            )
+        )
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            featureFlagService = featureFlagService,
+        )
+        presenter.test {
+            val enabledState = consumeItemsUntilPredicate { state ->
+                state.contentState is RoomListContentState.Rooms &&
+                    state.contentAsRooms().showAllActivity &&
+                    state.contentAsRooms().showUnreadCount
+            }.last()
+            assertThat(enabledState.contentAsRooms().showAllActivity).isTrue()
+            assertThat(enabledState.contentAsRooms().showUnreadCount).isTrue()
+
+            featureFlagService.setFeatureEnabled(ShowAllActivityInRoomListFeature, false)
+            val allActivityDisabledState = consumeItemsUntilPredicate { state ->
+                state.contentState is RoomListContentState.Rooms && !state.contentAsRooms().showAllActivity
+            }.last()
+            assertThat(allActivityDisabledState.contentAsRooms().showAllActivity).isFalse()
+            assertThat(allActivityDisabledState.contentAsRooms().showUnreadCount).isTrue()
+
+            featureFlagService.setFeatureEnabled(FeatureFlags.UnreadIndicatorCount, false)
+            val unreadCountDisabledState = consumeItemsUntilPredicate { state ->
+                state.contentState is RoomListContentState.Rooms && !state.contentAsRooms().showUnreadCount
+            }.last()
+            assertThat(unreadCountDisabledState.contentAsRooms().showAllActivity).isFalse()
+            assertThat(unreadCountDisabledState.contentAsRooms().showUnreadCount).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    private fun createTestMarkRoomAsRead(
+        client: MatrixClient,
+        notificationCleaner: NotificationCleaner,
+        sessionPreferencesStore: SessionPreferencesStore,
+    ): MarkRoomAsRead = FakeMarkRoomAsRead { roomId ->
+        notificationCleaner.clearMessagesForRoom(client.sessionId, roomId)
+        val room = client.getRoom(roomId) ?: return@FakeMarkRoomAsRead Result.failure(IllegalStateException("Room not found"))
+        room.use {
+            it.setUnreadFlag(isUnread = false)
+            val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+                ReceiptType.READ
+            } else {
+                ReceiptType.READ_PRIVATE
+            }
+            it.markAsRead(receiptType)
         }
     }
 
@@ -665,9 +766,11 @@ class RoomListPresenterTest {
         spaceFiltersPresenter: Presenter<SpaceFiltersState> = Presenter { aDisabledSpaceFiltersState() },
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
-        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
         announcementService: AnnouncementService = FakeAnnouncementService(),
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
+        markRoomAsRead: MarkRoomAsRead? = null,
+        sessionStore: SessionStore = InMemorySessionStore(),
     ) = RoomListPresenter(
         client = client,
         leaveRoomPresenter = { leaveRoomState },
@@ -684,17 +787,22 @@ class RoomListPresenterTest {
             analyticsService = FakeAnalyticsService(),
         ),
         searchPresenter = searchPresenter,
-        sessionPreferencesStore = sessionPreferencesStore,
+        globalSearchPresenter = { aGlobalSearchState() },
         filtersPresenter = filtersPresenter,
         spaceFiltersPresenter = spaceFiltersPresenter,
         analyticsService = analyticsService,
         acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
         fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
         batteryOptimizationPresenter = { aBatteryOptimizationState() },
-        notificationCleaner = notificationCleaner,
-        appPreferencesStore = appPreferencesStore,
+        markRoomAsRead = markRoomAsRead ?: createTestMarkRoomAsRead(
+            client = client,
+            notificationCleaner = notificationCleaner,
+            sessionPreferencesStore = sessionPreferencesStore,
+        ),
         seenInvitesStore = seenInvitesStore,
         announcementService = announcementService,
         coldStartWatcher = FakeAnalyticsColdStartWatcher(),
+        featureFlagService = featureFlagService,
+        sessionStore = sessionStore,
     )
 }

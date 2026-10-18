@@ -35,16 +35,16 @@ class SetupBiometricPresenter(
         val coroutineScope = rememberCoroutineScope()
         val biometricUnlock = biometricAuthenticatorManager.rememberConfirmBiometricAuthenticator()
 
-        fun handleEvent(event: SetupBiometricEvents) {
+        fun handleEvent(event: SetupBiometricEvent) {
             when (event) {
-                SetupBiometricEvents.AllowBiometric -> coroutineScope.launch {
+                SetupBiometricEvent.AllowBiometric -> coroutineScope.launch {
                     biometricUnlock.setup()
                     if (biometricUnlock.authenticate() == BiometricAuthenticator.AuthenticationResult.Success) {
                         lockScreenStore.setIsBiometricUnlockAllowed(true)
                         isBiometricSetupDone = true
                     }
                 }
-                SetupBiometricEvents.UsePin -> coroutineScope.launch {
+                SetupBiometricEvent.UsePin -> coroutineScope.launch {
                     lockScreenStore.setIsBiometricUnlockAllowed(false)
                     isBiometricSetupDone = true
                 }

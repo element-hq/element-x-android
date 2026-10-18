@@ -26,12 +26,8 @@ class RolesAndPermissionsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: RolesAndPermissionsPresenter,
-) : Node(buildContext, plugins = plugins), RolesAndPermissionsNavigator {
+) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin, RolesAndPermissionsNavigator {
-        override fun openAdminList()
-        override fun openModeratorList()
-        override fun openEditPermissions()
-
         override fun onBackClick() {}
     }
 
@@ -56,8 +52,8 @@ class RolesAndPermissionsNode(
 }
 
 interface RolesAndPermissionsNavigator {
-    fun onBackClick() {}
-    fun openAdminList() {}
-    fun openModeratorList() {}
-    fun openEditPermissions() {}
+    fun onBackClick()
+    fun openAdminList()
+    fun openModeratorList()
+    fun openEditPermissions()
 }

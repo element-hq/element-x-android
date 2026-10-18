@@ -44,7 +44,7 @@ fun PreferenceSwitch(
             iconResourceId = iconResourceId,
             showIconAreaIfNoIcon = showIconAreaIfNoIcon,
         ),
-        headlineContent = {
+        content = {
             Text(
                 style = ElementTheme.typography.fontBodyLgRegular,
                 text = title,

@@ -8,6 +8,7 @@
 package io.element.android.features.securityandprivacy.impl.root
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.securityandprivacy.impl.FakeSecurityAndPrivacyNavigator
 import io.element.android.features.securityandprivacy.impl.SecurityAndPrivacyNavigator
 import io.element.android.features.securityandprivacy.impl.manageauthorizedspaces.SpaceSelectionStateHolder
@@ -33,6 +34,8 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
 import io.element.android.libraries.previewutils.room.aSpaceRoom
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -42,7 +45,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-@Suppress("LargeClass")
 class SecurityAndPrivacyPresenterTest {
     @Test
     fun `present - initial states`() = runTest {
@@ -1046,6 +1048,59 @@ class SecurityAndPrivacyPresenterTest {
         }
     }
 
+    @Test
+    fun `present - showEncryptionSection is false if the HS disabled encryption`() = runTest {
+        val sessionEnterpriseService = FakeSessionEnterpriseService(
+            isEncryptionDisabledResult = { true },
+            arePublicRoomsDisabledResult = { false },
+        )
+        val presenter = createSecurityAndPrivacyPresenter(
+            sessionEnterpriseService = sessionEnterpriseService,
+        )
+        presenter.test {
+            skipItems(1)
+
+            // The HS has disabled encryption, so the encryption section should not be shown
+            assertThat(awaitItem().showEncryptionSection).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - showAnyoneOption is false if the HS disabled public rooms`() = runTest {
+        val presenter = createSecurityAndPrivacyPresenter(
+            sessionEnterpriseService = FakeSessionEnterpriseService(
+                isEncryptionDisabledResult = { false },
+                arePublicRoomsDisabledResult = { true },
+            ),
+        )
+        presenter.test {
+            consumeItemsUntilPredicate { !it.showAnyoneOption }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - showAnyoneOption is true if the HS disabled public rooms but the room is already public`() = runTest {
+        val presenter = createSecurityAndPrivacyPresenter(
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = roomPermissions(),
+                    getRoomVisibilityResult = { Result.success(RoomVisibility.Public) },
+                    initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Public)
+                ),
+            ),
+            sessionEnterpriseService = FakeSessionEnterpriseService(
+                isEncryptionDisabledResult = { false },
+                arePublicRoomsDisabledResult = { true },
+            ),
+        )
+        presenter.test {
+            val states = consumeItemsUntilTimeout()
+            assertThat(states).isNotEmpty()
+            assertThat(states.all { it.showAnyoneOption }).isTrue()
+        }
+    }
+
     private fun roomPermissions(
         canChangeRoomAccess: Boolean = true,
         canChangeHistoryVisibility: Boolean = true,
@@ -1084,6 +1139,10 @@ class SecurityAndPrivacyPresenterTest {
             ),
         ),
         spaceSelectionStateHolder: SpaceSelectionStateHolder = SpaceSelectionStateHolder(),
+        sessionEnterpriseService: FakeSessionEnterpriseService = FakeSessionEnterpriseService(
+            isEncryptionDisabledResult = { false },
+            arePublicRoomsDisabledResult = { false },
+        )
     ): SecurityAndPrivacyPresenter {
         return SecurityAndPrivacyPresenter(
             room = room,
@@ -1091,6 +1150,7 @@ class SecurityAndPrivacyPresenterTest {
             navigator = navigator,
             featureFlagService = featureFlagService,
             spaceSelectionStateHolder = spaceSelectionStateHolder,
+            sessionEnterpriseService = sessionEnterpriseService,
         )
     }
 }

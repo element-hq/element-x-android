@@ -74,6 +74,9 @@ if [[ ! -d ${buildToolsPath} ]]; then
     exit 1
 fi
 
+# Check that the Matrix Rust SDK is not a nightly version
+./tools/release/check_no_nightly_sdk.sh || exit 1
+
 # Check if git flow is enabled
 gitFlowDevelop=$(git config gitflow.branch.develop)
 if [[ ${gitFlowDevelop} != "" ]]
@@ -151,12 +154,20 @@ sed "s/private const val versionMonth = .*/private const val versionMonth = ${ve
 sed "s/private const val versionReleaseNumber = .*/private const val versionReleaseNumber = ${versionReleaseNumber}/" ${versionsFileBak} > ${versionsFile}
 rm ${versionsFileBak}
 
+printf -v versionReleaseNumber2Digits "%02d" "${versionReleaseNumber}"
+versionCode="20${versionYear}${versionMonth}${versionReleaseNumber2Digits}0"
+
+# Update the file aaptDump.txt with the new version
+aaptDumpFile="./tools/manifest/gplay/release/aaptDump.txt"
+sed "s/versionCode='[0-9]*'/versionCode='${versionCode}'/" ${aaptDumpFile} > ${aaptDumpFile}.bak
+sed "s/versionName='[0-9]*\.[0-9]*\.[0-9]*'/versionName='${version}'/" ${aaptDumpFile}.bak > ${aaptDumpFile}
+rm ${aaptDumpFile}.bak
+
 git commit -a -m "Setting version for the release ${version}"
 
 printf "\n================================================================================\n"
 printf "Creating fastlane file...\n"
-printf -v versionReleaseNumber2Digits "%02d" "${versionReleaseNumber}"
-fastlaneFile="20${versionYear}${versionMonth}${versionReleaseNumber2Digits}0.txt"
+fastlaneFile="${versionCode}.txt"
 fastlanePathFile="./fastlane/metadata/android/en-US/changelogs/${fastlaneFile}"
 printf "Main changes in this version: bug fixes and improvements.\nFull changelog: https://github.com/element-hq/element-x-android/releases" > "${fastlanePathFile}"
 
@@ -216,15 +227,6 @@ printf "Unzipping the F-Droid artifact...\n"
 
 fdroidTargetPath="${targetPath}/fdroid"
 unzip "${targetPath}"/elementx-app-fdroid-apks-unsigned.zip -d "${fdroidTargetPath}"
-
-printf "\n================================================================================\n"
-printf "Patching the FDroid APKs using inplace-fix.py...\n"
-
-inplaceFixScript="./tools/release/inplace-fix.py"
-python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-arm64-v8a-release.apk   '0000000'
-python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-armeabi-v7a-release.apk '0000000'
-python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-x86-release.apk         '0000000'
-python3 "${inplaceFixScript}" --page-size 16 fix-pg-map-id "${fdroidTargetPath}"/app-fdroid-x86_64-release.apk      '0000000'
 
 printf "\n================================================================================\n"
 printf "Signing the FDroid APKs...\n"

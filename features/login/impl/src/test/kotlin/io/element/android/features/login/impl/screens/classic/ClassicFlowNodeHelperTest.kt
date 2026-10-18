@@ -10,7 +10,6 @@
 package io.element.android.features.login.impl.screens.classic
 
 import androidx.core.graphics.createBitmap
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.classic.ElementClassicConnection
@@ -26,16 +25,15 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
-// Use AndroidJUnit4 for the test with the Bitmap.
-@RunWith(AndroidJUnit4::class)
-class ClassicFlowNodeHelperTest {
+// Use RobolectricTest for the test with the Bitmap.
+class ClassicFlowNodeHelperTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 

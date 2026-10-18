@@ -14,10 +14,14 @@ import androidx.core.text.toSpannable
 import dev.zacsweers.metro.Inject
 import io.element.android.features.location.api.Location
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
+import io.element.android.features.messages.impl.timeline.model.event.AttachmentItem
+import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
@@ -29,12 +33,17 @@ import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryItemType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
@@ -65,8 +74,10 @@ class TimelineItemContentMessageFactory(
     private val htmlConverterProvider: HtmlConverterProvider,
     private val permalinkParser: PermalinkParser,
     private val textPillificationHelper: TextPillificationHelper,
+    private val htmlMessageParser: HtmlMessageParser,
+    private val featureFlagService: FeatureFlagService,
 ) {
-    fun create(
+    suspend fun create(
         content: MessageContent,
         senderId: UserId,
         senderProfile: ProfileDetails,
@@ -87,6 +98,28 @@ class TimelineItemContentMessageFactory(
                     htmlDocument = dom,
                     formattedBody = formattedBody,
                     isEdited = content.isEdited,
+                    messageTree = if (featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)) {
+                        dom?.let(htmlMessageParser::parse)
+                    } else {
+                        null
+                    },
+                )
+            }
+            is TextMessageType -> {
+                val body = messageType.body.trimEnd()
+                val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
+                val formattedBody = htmlDocument?.let(::parseHtml)
+                    ?: textPillificationHelper.pillify(body).safeLinkify()
+                TimelineItemTextContent(
+                    body = body,
+                    htmlDocument = htmlDocument,
+                    formattedBody = formattedBody,
+                    isEdited = content.isEdited,
+                    messageTree = if (featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)) {
+                        htmlDocument?.let(htmlMessageParser::parse)
+                    } else {
+                        null
+                    },
                 )
             }
             is ImageMessageType -> {
@@ -102,6 +135,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
+                    htmlCaption = messageType.formattedCaption?.body,
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
@@ -126,6 +160,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
+                    htmlCaption = messageType.formattedCaption?.body,
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
@@ -168,6 +203,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
+                    htmlCaption = messageType.formattedCaption?.body,
                     isEdited = content.isEdited,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mediaSource = messageType.source,
@@ -192,6 +228,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
+                    htmlCaption = messageType.formattedCaption?.body,
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     duration = messageType.info?.duration ?: Duration.ZERO,
@@ -210,6 +247,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
+                    htmlCaption = messageType.formattedCaption?.body,
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     duration = messageType.info?.duration ?: Duration.ZERO,
@@ -229,6 +267,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
+                    htmlCaption = messageType.formattedCaption?.body,
                     isEdited = content.isEdited,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mediaSource = messageType.source,
@@ -239,29 +278,156 @@ class TimelineItemContentMessageFactory(
             }
             is NoticeMessageType -> {
                 val body = messageType.body.trimEnd()
-                val dom = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
-                val formattedBody = dom?.let(::parseHtml)
-                    ?: textPillificationHelper.pillify(body).safeLinkify()
                 val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
+                val formattedBody = htmlDocument?.let(::parseHtml)
+                    ?: textPillificationHelper.pillify(body).safeLinkify()
                 TimelineItemNoticeContent(
                     body = body,
                     htmlDocument = htmlDocument,
                     formattedBody = formattedBody,
                     isEdited = content.isEdited,
+                    messageTree = htmlDocument?.let(htmlMessageParser::parse),
                 )
             }
-            is TextMessageType -> {
-                val body = messageType.body.trimEnd()
+            is GalleryMessageType -> {
                 val dom = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
-                val formattedBody = dom?.let(::parseHtml)
-                    ?: textPillificationHelper.pillify(body).safeLinkify()
-                val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
-                TimelineItemTextContent(
-                    body = body,
-                    htmlDocument = htmlDocument,
-                    formattedBody = formattedBody,
-                    isEdited = content.isEdited,
-                )
+                val formattedCaption = dom?.let(::parseHtml)
+                    ?: messageType.body.withLinks()
+                val galleryItems = messageType.items.mapNotNull { item ->
+                    when (item) {
+                        is GalleryItemType.Image -> {
+                            GalleryItem(
+                                filename = item.content.filename,
+                                mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
+                                mediaSource = item.content.source,
+                                type = GalleryItem.Type.Image,
+                                thumbnailSource = item.content.info?.thumbnailSource,
+                                width = item.content.info?.width?.toInt(),
+                                height = item.content.info?.height?.toInt(),
+                                thumbnailWidth = item.content.info?.thumbnailInfo?.width?.toInt(),
+                                thumbnailHeight = item.content.info?.thumbnailInfo?.height?.toInt(),
+                                blurhash = item.content.info?.blurhash,
+                            )
+                        }
+                        is GalleryItemType.Video -> {
+                            GalleryItem(
+                                filename = item.content.filename,
+                                mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
+                                mediaSource = item.content.source,
+                                type = GalleryItem.Type.Video,
+                                thumbnailSource = item.content.info?.thumbnailSource,
+                                width = item.content.info?.width?.toInt(),
+                                height = item.content.info?.height?.toInt(),
+                                thumbnailWidth = item.content.info?.thumbnailInfo?.width?.toInt(),
+                                thumbnailHeight = item.content.info?.thumbnailInfo?.height?.toInt(),
+                                blurhash = item.content.info?.blurhash,
+                                duration = item.content.info?.duration ?: Duration.ZERO,
+                            )
+                        }
+                        is GalleryItemType.Audio -> {
+                            GalleryItem(
+                                filename = item.content.filename,
+                                mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
+                                mediaSource = item.content.source,
+                                type = GalleryItem.Type.Audio,
+                                thumbnailSource = null,
+                                width = null,
+                                height = null,
+                                thumbnailWidth = null,
+                                thumbnailHeight = null,
+                                blurhash = null,
+                                duration = item.content.info?.duration ?: Duration.ZERO,
+                            )
+                        }
+                        is GalleryItemType.File -> {
+                            GalleryItem(
+                                filename = item.content.filename,
+                                mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
+                                mediaSource = item.content.source,
+                                type = GalleryItem.Type.File,
+                                thumbnailSource = item.content.info?.thumbnailSource,
+                                width = null,
+                                height = null,
+                                thumbnailWidth = null,
+                                thumbnailHeight = null,
+                                blurhash = null,
+                            )
+                        }
+                        is GalleryItemType.Other -> null
+                    }
+                }
+                val hasPreviews = galleryItems.any { it.thumbnailSource != null }
+                val isOnlyVisualMedia = galleryItems.all { item ->
+                    item.type.isVisualMedia()
+                }
+                if (isOnlyVisualMedia && hasPreviews) {
+                    TimelineItemGalleryContent(
+                        body = messageType.body,
+                        caption = messageType.body.trimEnd().takeIf { it.isNotEmpty() },
+                        formattedCaption = formattedCaption,
+                        htmlCaption = messageType.formatted?.body,
+                        isEdited = content.isEdited,
+                        items = galleryItems.toImmutableList(),
+                    )
+                } else {
+                    val attachments = messageType.items.mapNotNull { item ->
+                        when (item) {
+                            is GalleryItemType.File -> {
+                                AttachmentItem(
+                                    filename = item.content.filename,
+                                    mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
+                                    mediaSource = item.content.source,
+                                    thumbnailSource = item.content.info?.thumbnailSource,
+                                    fileSize = item.content.info?.size,
+                                    formattedFileSize = fileSizeFormatter.format(item.content.info?.size ?: 0L),
+                                    fileExtension = fileExtensionExtractor.extractFromName(item.content.filename),
+                                )
+                            }
+                            is GalleryItemType.Image -> {
+                                AttachmentItem(
+                                    filename = item.content.filename,
+                                    mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
+                                    mediaSource = item.content.source,
+                                    thumbnailSource = item.content.info?.thumbnailSource,
+                                    fileSize = item.content.info?.size,
+                                    formattedFileSize = fileSizeFormatter.format(item.content.info?.size ?: 0L),
+                                    fileExtension = fileExtensionExtractor.extractFromName(item.content.filename),
+                                )
+                            }
+                            is GalleryItemType.Video -> {
+                                AttachmentItem(
+                                    filename = item.content.filename,
+                                    mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
+                                    mediaSource = item.content.source,
+                                    thumbnailSource = item.content.info?.thumbnailSource,
+                                    fileSize = item.content.info?.size,
+                                    formattedFileSize = fileSizeFormatter.format(item.content.info?.size ?: 0L),
+                                    fileExtension = fileExtensionExtractor.extractFromName(item.content.filename),
+                                )
+                            }
+                            is GalleryItemType.Audio -> {
+                                AttachmentItem(
+                                    filename = item.content.filename,
+                                    mimeType = item.content.info?.mimetype ?: MimeTypes.OctetStream,
+                                    mediaSource = item.content.source,
+                                    thumbnailSource = null,
+                                    fileSize = item.content.info?.size,
+                                    formattedFileSize = fileSizeFormatter.format(item.content.info?.size ?: 0L),
+                                    fileExtension = fileExtensionExtractor.extractFromName(item.content.filename),
+                                )
+                            }
+                            is GalleryItemType.Other -> null
+                        }
+                    }
+                    TimelineItemAttachmentsContent(
+                        body = messageType.body,
+                        caption = messageType.body.trimEnd().takeIf { it.isNotEmpty() },
+                        formattedCaption = formattedCaption,
+                        htmlCaption = messageType.formatted?.body,
+                        isEdited = content.isEdited,
+                        attachments = attachments.toImmutableList(),
+                    )
+                }
             }
             is OtherMessageType -> {
                 val body = messageType.body.trimEnd()

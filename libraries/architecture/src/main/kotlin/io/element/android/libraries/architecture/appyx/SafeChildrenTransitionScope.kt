@@ -186,6 +186,7 @@ class SafeChildrenTransitionScope<T : Any, S>(
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
+@Suppress("ContentSlotReused")
 @Composable
 inline fun <reified NavTarget : Any, State> ParentNode<NavTarget>.SafeChildren(
     navModel: NavModel<NavTarget, State>,

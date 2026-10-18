@@ -10,15 +10,16 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAnimatedImage
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
-import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrixmedia.api.MAX_THUMBNAIL_HEIGHT
+import io.element.android.libraries.matrixmedia.api.MAX_THUMBNAIL_WIDTH
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
 
 data class TimelineItemImageContent(
     override val filename: String,
     override val fileSize: Long?,
     override val caption: String?,
     override val formattedCaption: CharSequence?,
+    override val htmlCaption: String? = null,
     override val isEdited: Boolean,
     override val mediaSource: MediaSource,
     val thumbnailSource: MediaSource?,

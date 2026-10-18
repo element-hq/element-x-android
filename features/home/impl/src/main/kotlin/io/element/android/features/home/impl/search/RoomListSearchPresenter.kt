@@ -39,7 +39,7 @@ class RoomListSearchPresenter(
         val dataSource = remember { dataSourceFactory.create(coroutineScope) }
 
         LaunchedEffect(searchQuery.text) {
-            dataSource.setSearchQuery(searchQuery.text.toString())
+            dataSource.setSearchQuery(searchQuery = searchQuery.text.toString(), additionalFilters = null)
         }
 
         fun handleEvent(event: RoomListSearchEvent) {

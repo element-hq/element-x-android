@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -66,7 +65,7 @@ fun UserDefinedRoomNotificationSettingsView(
             }
 
             ListItem(
-                headlineContent = { Text(stringResource(R.string.screen_room_notification_settings_edit_remove_setting)) },
+                content = { Text(stringResource(R.string.screen_room_notification_settings_edit_remove_setting)) },
                 style = ListItemStyle.Destructive,
                 onClick = {
                     state.eventSink(RoomNotificationSettingsEvent.DeleteCustomNotification)
@@ -90,7 +89,6 @@ fun UserDefinedRoomNotificationSettingsView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UserDefinedRoomNotificationSettingsTopBar(
     roomName: String,
@@ -105,7 +103,7 @@ private fun UserDefinedRoomNotificationSettingsTopBar(
 @PreviewsDayNight
 @Composable
 internal fun UserDefinedRoomNotificationSettingsViewPreview(
-    @PreviewParameter(UserDefinedRoomNotificationSettingsStateProvider::class) state: RoomNotificationSettingsState
+    @PreviewParameter(UserDefinedRoomNotificationSettingsStatePreviewParam::class) state: RoomNotificationSettingsState
 ) = ElementPreview {
     UserDefinedRoomNotificationSettingsView(
         state = state,

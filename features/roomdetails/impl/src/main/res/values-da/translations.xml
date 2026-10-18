@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Luk ikke appen, før den er færdig."</string>
   <string name="screen_room_details_invite_people_preparing">"Forbereder invitationer…"</string>
   <string name="screen_room_details_invite_people_title">"Invitér andre"</string>
+  <string name="screen_room_details_invite_title">"Invitér"</string>
   <string name="screen_room_details_leave_conversation_title">"Forlad samtalen"</string>
   <string name="screen_room_details_leave_room_title">"Forlad rum"</string>
   <string name="screen_room_details_media_gallery_title">"Medier og filer"</string>
@@ -112,8 +113,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Gendannelse af standardtilstanden mislykkedes. Prøv igen."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Kunne ikke indstille tilstanden. Prøv igen."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"Din hjemmeserver understøtter ikke denne indstilling i krypterede rum, du får ikke besked i dette rum."</string>
-  <string name="screen_room_notification_settings_mode_all_messages">"Alle beskeder"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Kun omtaler og nøgleord"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Giv mig besked i dette rum for"</string>
   <string name="screen_room_roles_and_permissions_admins">"Administratorer"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Administratorer og ejere"</string>
@@ -131,6 +130,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Detaljer om rummet"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller og tilladelser"</string>
+  <string name="screen_roomlist_mark_as_read">"Marker som læst"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marker som ulæst"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Tilføj adresse"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Alle i autoriserede klynger kan deltage, men alle andre skal anmode om adgang."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Alle skal anmode om adgang."</string>

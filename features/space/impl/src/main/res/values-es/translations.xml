@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"Elegir propietarios"</string>
+  <string name="screen_leave_space_last_admin_info">"%1$s (Admin.)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Salir de %1$d sala y del espacio"</item>
+    <item quantity="other">"Salir de %1$d salas y del espacio"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Elige las salas de las que quieras salir en las que no eres el único administrador:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Debes designar otro administrador para este espacio antes de poder salir."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"Eres el único propietario de %1$s. Debes transferir la propiedad a otra persona antes de salir."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"No se te eliminará de las siguientes salas porque eres el único administrador:"</string>
+  <string name="screen_leave_space_title">"¿Salir de %1$s?"</string>
+  <string name="screen_leave_space_title_last_admin">"Eres el único administrador de %1$s"</string>
+  <string name="screen_leave_space_title_last_owner">"Transferencia de propiedad"</string>
+  <string name="screen_space_add_room_action">"Sala"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Añadir una sala no afectará a su configuración de acceso. Para cambiar el acceso, ve a Ajustes de la sala &gt; Seguridad y privacidad."</string>
+  <string name="screen_space_empty_state_title">"Añade tu primera sala"</string>
+  <string name="screen_space_menu_action_members">"Ver miembros"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Eliminar una sala no afectará a su configuración de acceso. Para cambiar el acceso, ve a Información de la sala &gt; Privacidad y seguridad."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Eliminar %1$d sala de %2$s"</item>
+    <item quantity="other">"Eliminar %1$d salas de %2$s"</item>
+  </plurals>
+  <string name="screen_space_settings_leave_space">"Salir del espacio"</string>
   <string name="screen_space_settings_roles_and_permissions">"Roles y permisos"</string>
   <string name="screen_space_settings_security_and_privacy">"Seguridad y privacidad"</string>
 </resources>

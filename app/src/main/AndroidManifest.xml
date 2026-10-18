@@ -8,9 +8,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- To be able to install APK from the application -->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-
     <application
         android:name=".ElementXApplication"
         android:allowBackup="false"
@@ -56,9 +53,10 @@
         -->
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|uiMode"
             android:exported="true"
             android:launchMode="singleTask"
+            android:supportsPictureInPicture="true"
             android:theme="@style/Theme.ElementX.Splash"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -142,6 +140,12 @@
                 <data android:host="user" />
                 <data android:host="room" />
             </intent-filter>
+            <!--
+              Conversation shortcuts offered in the Direct Share row of the system share sheet.
+            -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
             <!-- Incoming share simple -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

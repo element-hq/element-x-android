@@ -70,6 +70,9 @@ Os ewch ymlaen, efallai y bydd rhai o\'ch gosodiadau\'n newid."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"gosodiadau system"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Hysbysiadau system wedi\'u diffodd"</string>
   <string name="screen_notification_settings_title">"Hysbysiadau"</string>
+  <string name="theme_dark">"Tywyll"</string>
+  <string name="theme_light">"Golau"</string>
+  <string name="theme_system">"System"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Hanes gwthio"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Datrys Problemau"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Hysbysiadau datrys problemau"</string>

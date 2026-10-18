@@ -10,7 +10,11 @@ package io.element.android.features.leaveroom.api
 
 import androidx.compose.runtime.Immutable
 
+/**
+ * State of the leave room flow, which is only the confirmation dialogs: the screen it is hosted in owns the rest of the UI.
+ */
 @Immutable
 interface LeaveRoomState {
+    /** Where the host screen sends its events to start or confirm leaving a room. */
     val eventSink: (LeaveRoomEvent) -> Unit
 }

@@ -23,9 +23,9 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.ui.media.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
-import io.element.android.libraries.matrix.ui.media.InitialsAvatarBitmapGenerator
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrixmedia.api.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
+import io.element.android.libraries.matrixmedia.api.InitialsAvatarBitmapGenerator
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import timber.log.Timber

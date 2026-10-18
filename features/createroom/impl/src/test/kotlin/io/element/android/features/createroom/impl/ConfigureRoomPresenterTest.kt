@@ -12,7 +12,7 @@ import androidx.core.net.toUri
 import app.cash.turbine.TurbineTestContext
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.CreatedRoom
-import io.element.android.features.createroom.impl.configureroom.ConfigureRoomEvents
+import io.element.android.features.createroom.impl.configureroom.ConfigureRoomEvent
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomPresenter
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomState
 import io.element.android.features.createroom.impl.configureroom.CreateRoomConfig
@@ -20,11 +20,13 @@ import io.element.android.features.createroom.impl.configureroom.CreateRoomConfi
 import io.element.android.features.createroom.impl.configureroom.JoinRuleItem
 import io.element.android.features.createroom.impl.configureroom.RoomAddress
 import io.element.android.features.createroom.impl.configureroom.RoomVisibilityState
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
@@ -55,7 +57,10 @@ import io.element.android.libraries.previewutils.room.aSpaceRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.matching
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.test
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentMapOf
@@ -66,8 +71,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import java.io.File
 import java.util.Optional
 
@@ -75,8 +78,7 @@ private const val AN_URI_FROM_CAMERA = "content://uri_from_camera"
 private const val AN_URI_FROM_CAMERA_2 = "content://uri_from_camera_2"
 private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 
-@RunWith(RobolectricTestRunner::class)
-class ConfigureRoomPresenterTest {
+class ConfigureRoomPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -105,14 +107,14 @@ class ConfigureRoomPresenterTest {
             assertThat(initialState.isValid).isFalse()
 
             // Room name not empty
-            initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
+            initialState.eventSink(ConfigureRoomEvent.RoomNameChanged(A_ROOM_NAME))
             var newState: ConfigureRoomState = awaitItem()
             config = config.copy(roomName = A_ROOM_NAME)
             assertThat(newState.config).isEqualTo(config)
             assertThat(newState.isValid).isTrue()
 
             // Clear room name
-            newState.eventSink(ConfigureRoomEvents.RoomNameChanged(""))
+            newState.eventSink(ConfigureRoomEvent.RoomNameChanged(""))
             newState = awaitItem()
             config = config.copy(roomName = null)
             assertThat(newState.config).isEqualTo(config)
@@ -135,13 +137,13 @@ class ConfigureRoomPresenterTest {
             var expectedConfig = CreateRoomConfig()
             assertThat(initialState.config).isEqualTo(expectedConfig)
             // Room name
-            initialState.eventSink(ConfigureRoomEvents.RoomNameChanged(A_ROOM_NAME))
+            initialState.eventSink(ConfigureRoomEvent.RoomNameChanged(A_ROOM_NAME))
             var newState = awaitItem()
             expectedConfig = expectedConfig.copy(roomName = A_ROOM_NAME)
             assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room topic
-            newState.eventSink(ConfigureRoomEvents.TopicChanged(A_MESSAGE))
+            newState.eventSink(ConfigureRoomEvent.TopicChanged(A_MESSAGE))
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(topic = A_MESSAGE)
             assertThat(newState.config).isEqualTo(expectedConfig)
@@ -152,7 +154,7 @@ class ConfigureRoomPresenterTest {
             // From gallery
             val uriFromGallery = AN_URI_FROM_GALLERY
             pickerProvider.givenResult(uriFromGallery.toUri())
-            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.ChoosePhoto))
+            newState.eventSink(ConfigureRoomEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(avatarUri = uriFromGallery)
             assertThat(newState.config).isEqualTo(expectedConfig)
@@ -160,7 +162,7 @@ class ConfigureRoomPresenterTest {
             val uriFromCamera = AN_URI_FROM_CAMERA
             pickerProvider.givenResult(uriFromCamera.toUri())
             assertThat(newState.cameraPermissionState.permissionGranted).isFalse()
-            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            newState.eventSink(ConfigureRoomEvent.HandleAvatarAction(AvatarAction.TakePhoto))
             newState = awaitItem()
             assertThat(newState.cameraPermissionState.showDialog).isTrue()
             permissionsPresenter.setPermissionGranted()
@@ -172,18 +174,18 @@ class ConfigureRoomPresenterTest {
             // Do it again, no permission is requested
             val uriFromCamera2 = AN_URI_FROM_CAMERA_2
             pickerProvider.givenResult(uriFromCamera2.toUri())
-            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.TakePhoto))
+            newState.eventSink(ConfigureRoomEvent.HandleAvatarAction(AvatarAction.TakePhoto))
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(avatarUri = uriFromCamera2)
             assertThat(newState.config).isEqualTo(expectedConfig)
             // Remove
-            newState.eventSink(ConfigureRoomEvents.HandleAvatarAction(AvatarAction.Remove))
+            newState.eventSink(ConfigureRoomEvent.HandleAvatarAction(AvatarAction.Remove))
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(avatarUri = null)
             assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room privacy
-            newState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
+            newState.eventSink(ConfigureRoomEvent.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(
                 visibilityState = RoomVisibilityState.Public(
@@ -207,7 +209,7 @@ class ConfigureRoomPresenterTest {
 
             matrixClient.givenCreateRoomResult(createRoomResult)
 
-            initialState.eventSink(ConfigureRoomEvents.CreateRoom)
+            initialState.eventSink(ConfigureRoomEvent.CreateRoom)
             assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
             val stateAfterCreateRoom = awaitItem()
             assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(AsyncAction.Success::class.java)
@@ -238,13 +240,13 @@ class ConfigureRoomPresenterTest {
 
             // Use a public parent space so AskToJoin is a valid option
             val parentSpace = aSpaceRoom(joinRule = JoinRule.Public)
-            initialState.eventSink(ConfigureRoomEvents.SetParentSpace(parentSpace))
+            initialState.eventSink(ConfigureRoomEvent.SetParentSpace(parentSpace))
             assertThat(awaitItem().config.parentSpace).isEqualTo(parentSpace)
 
-            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.AskToJoin))
+            initialState.eventSink(ConfigureRoomEvent.JoinRuleChanged(JoinRuleItem.PublicVisibility.AskToJoin))
             assertThat(awaitItem().config.visibilityState.joinRuleItem).isEqualTo(JoinRuleItem.PublicVisibility.AskToJoin)
 
-            initialState.eventSink(ConfigureRoomEvents.CreateRoom)
+            initialState.eventSink(ConfigureRoomEvent.CreateRoom)
             assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
             val stateAfterCreateRoom = awaitItem()
 
@@ -281,13 +283,13 @@ class ConfigureRoomPresenterTest {
 
             // Use a public parent space so AskToJoin is a valid option
             val parentSpace = aSpaceRoom(joinRule = JoinRule.Public)
-            initialState.eventSink(ConfigureRoomEvents.SetParentSpace(parentSpace))
+            initialState.eventSink(ConfigureRoomEvent.SetParentSpace(parentSpace))
             assertThat(awaitItem().config.parentSpace).isEqualTo(parentSpace)
 
-            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.AskToJoin))
+            initialState.eventSink(ConfigureRoomEvent.JoinRuleChanged(JoinRuleItem.PublicVisibility.AskToJoin))
             assertThat(awaitItem().config.visibilityState.joinRuleItem).isEqualTo(JoinRuleItem.PublicVisibility.AskToJoin)
 
-            initialState.eventSink(ConfigureRoomEvents.CreateRoom)
+            initialState.eventSink(ConfigureRoomEvent.CreateRoom)
 
             // We immediately receive the room power levels info needed for adding the child to a space
             val powerLevels = RoomPowerLevels(
@@ -338,7 +340,7 @@ class ConfigureRoomPresenterTest {
 
             matrixClient.givenCreateRoomResult(createRoomResult)
 
-            initialState.eventSink(ConfigureRoomEvents.CreateRoom)
+            initialState.eventSink(ConfigureRoomEvent.CreateRoom)
             skipItems(2)
 
             val analyticsEvent = analyticsService.capturedEvents.filterIsInstance<CreatedRoom>().firstOrNull()
@@ -368,14 +370,14 @@ class ConfigureRoomPresenterTest {
                 mediaPreProcessor.givenResult(Result.success(MediaUploadInfo.Image(file, mockk(), mockk())))
                 matrixClient.givenUploadMediaResult(Result.failure(AN_EXCEPTION))
 
-                initialState.eventSink(ConfigureRoomEvents.CreateRoom)
+                initialState.eventSink(ConfigureRoomEvent.CreateRoom)
                 assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
                 val stateAfterCreateRoom = awaitItem()
                 assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(AsyncAction.Failure::class.java)
                 assertThat(analyticsService.capturedEvents.filterIsInstance<CreatedRoom>()).isEmpty()
 
                 matrixClient.givenUploadMediaResult(Result.success(AN_AVATAR_URL))
-                stateAfterCreateRoom.eventSink(ConfigureRoomEvents.CreateRoom)
+                stateAfterCreateRoom.eventSink(ConfigureRoomEvent.CreateRoom)
                 assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
                 assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
                 assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Success::class.java)
@@ -398,14 +400,14 @@ class ConfigureRoomPresenterTest {
             fakeMatrixClient.givenCreateRoomResult(createRoomResult)
 
             // Create
-            initialState.eventSink(ConfigureRoomEvents.CreateRoom)
+            initialState.eventSink(ConfigureRoomEvent.CreateRoom)
             assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
             val stateAfterCreateRoom = awaitItem()
             assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(AsyncAction.Failure::class.java)
             assertThat((stateAfterCreateRoom.createRoomAction as? AsyncAction.Failure)?.error).isEqualTo(createRoomResult.exceptionOrNull())
 
             // Retry
-            stateAfterCreateRoom.eventSink(ConfigureRoomEvents.CreateRoom)
+            stateAfterCreateRoom.eventSink(ConfigureRoomEvent.CreateRoom)
             assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
             val stateAfterRetry = awaitItem()
@@ -413,7 +415,7 @@ class ConfigureRoomPresenterTest {
             assertThat((stateAfterRetry.createRoomAction as? AsyncAction.Failure)?.error).isEqualTo(createRoomResult.exceptionOrNull())
 
             // Cancel
-            stateAfterRetry.eventSink(ConfigureRoomEvents.CancelCreateRoom)
+            stateAfterRetry.eventSink(ConfigureRoomEvent.CancelCreateRoom)
             assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
         }
     }
@@ -429,9 +431,9 @@ class ConfigureRoomPresenterTest {
         )
         presenter.test {
             val initialState = initialState()
-            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
+            initialState.eventSink(ConfigureRoomEvent.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
             skipItems(1)
-            initialState.eventSink(ConfigureRoomEvents.RoomAddressChanged("invalid address"))
+            initialState.eventSink(ConfigureRoomEvent.RoomAddressChanged("invalid address"))
             skipItems(1)
             advanceUntilIdle()
             awaitItem().also { state ->
@@ -449,9 +451,9 @@ class ConfigureRoomPresenterTest {
         )
         presenter.test {
             val initialState = initialState()
-            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
+            initialState.eventSink(ConfigureRoomEvent.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
             skipItems(1)
-            initialState.eventSink(ConfigureRoomEvents.RoomAddressChanged("address"))
+            initialState.eventSink(ConfigureRoomEvent.RoomAddressChanged("address"))
             skipItems(1)
             advanceUntilIdle()
             awaitItem().also { state ->
@@ -469,9 +471,9 @@ class ConfigureRoomPresenterTest {
         )
         presenter.test {
             val initialState = initialState()
-            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
+            initialState.eventSink(ConfigureRoomEvent.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
             skipItems(1)
-            initialState.eventSink(ConfigureRoomEvents.RoomAddressChanged("address"))
+            initialState.eventSink(ConfigureRoomEvent.RoomAddressChanged("address"))
             skipItems(1)
             advanceUntilIdle()
             awaitItem().also { state ->
@@ -487,22 +489,22 @@ class ConfigureRoomPresenterTest {
             val initialState = initialState()
 
             // First change the join rule to public
-            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
+            initialState.eventSink(ConfigureRoomEvent.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
             assertThat(awaitItem().config.visibilityState).isInstanceOf(RoomVisibilityState.Public::class.java)
 
             // Then check changing the parent space resets it to private
             // (via LaunchedEffect fallback since Public is not in availableJoinRules for non-public parent)
-            initialState.eventSink(ConfigureRoomEvents.SetParentSpace(aSpaceRoom()))
+            initialState.eventSink(ConfigureRoomEvent.SetParentSpace(aSpaceRoom()))
             skipItems(1) // Skip intermediate state
             assertThat(awaitItem().config.visibilityState).isEqualTo(RoomVisibilityState.Private(JoinRuleItem.PrivateVisibility.Private))
 
             // If we change the join rule back to public
-            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
+            initialState.eventSink(ConfigureRoomEvent.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
             skipItems(1) // Skip intermediate state (Public is still invalid)
             assertThat(awaitItem().config.visibilityState).isEqualTo(RoomVisibilityState.Private(JoinRuleItem.PrivateVisibility.Private))
 
             // Then remove the parent space, the join rule stays private
-            initialState.eventSink(ConfigureRoomEvents.SetParentSpace(null))
+            initialState.eventSink(ConfigureRoomEvent.SetParentSpace(null))
             assertThat(awaitItem().config.visibilityState).isEqualTo(RoomVisibilityState.Private(JoinRuleItem.PrivateVisibility.Private))
         }
     }
@@ -513,9 +515,68 @@ class ConfigureRoomPresenterTest {
         presenter.test {
             val initialState = initialState()
 
-            initialState.eventSink(ConfigureRoomEvents.SetParentSpace(aSpaceRoom()))
+            initialState.eventSink(ConfigureRoomEvent.SetParentSpace(aSpaceRoom()))
 
             assertThat(awaitError())
+        }
+    }
+
+    @Test
+    fun `present - creating a private room when encryption is disabled by the HS creates it unencrypted`() = runTest {
+        val sessionEnterpriseService = FakeSessionEnterpriseService(
+            isEncryptionDisabledResult = { true },
+            arePublicRoomsDisabledResult = { false },
+        )
+        val createRoomLambda = lambdaRecorder<CreateRoomParameters, Result<RoomId>> { Result.success(A_ROOM_ID) }
+        val matrixClient = createMatrixClient().apply {
+            createRoomResult = createRoomLambda
+        }
+        val presenter = createConfigureRoomPresenter(
+            matrixClient = matrixClient,
+            sessionEnterpriseService = sessionEnterpriseService,
+        )
+        presenter.test {
+            val initialState = initialState()
+
+            initialState.eventSink(ConfigureRoomEvent.JoinRuleChanged(JoinRuleItem.PrivateVisibility.Private))
+            initialState.eventSink(ConfigureRoomEvent.CreateRoom)
+
+            assertThat(awaitItem().createRoomAction.isLoading()).isTrue()
+            assertThat(awaitItem().createRoomAction.isSuccess()).isTrue()
+
+            createRoomLambda.assertions().isCalledOnce().with(matching<CreateRoomParameters> { !it.isEncrypted })
+        }
+    }
+
+    @Test
+    fun `present - when public rooms are disabled by the HS, the public join rule is not available`() = runTest {
+        val presenter = createConfigureRoomPresenter(
+            sessionEnterpriseService = FakeSessionEnterpriseService(
+                isEncryptionDisabledResult = { false },
+                arePublicRoomsDisabledResult = { true },
+            ),
+        )
+        presenter.test {
+            val expectedJoinRules = listOf(JoinRuleItem.PublicVisibility.AskToJoin, JoinRuleItem.PrivateVisibility.Private)
+            val state = consumeItemsUntilPredicate { it.availableJoinRules == expectedJoinRules }.last()
+            assertThat(state.availableJoinRules).containsExactlyElementsIn(expectedJoinRules).inOrder()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - when public rooms are disabled by the HS, only the private join rule is available for a space`() = runTest {
+        val presenter = createConfigureRoomPresenter(
+            isSpace = true,
+            sessionEnterpriseService = FakeSessionEnterpriseService(
+                isEncryptionDisabledResult = { false },
+                arePublicRoomsDisabledResult = { true },
+            ),
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate { it.availableJoinRules == listOf(JoinRuleItem.PrivateVisibility.Private) }.last()
+            assertThat(state.config.visibilityState).isEqualTo(RoomVisibilityState.Private(JoinRuleItem.PrivateVisibility.Private))
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -554,6 +615,10 @@ class ConfigureRoomPresenterTest {
         permissionsPresenter: PermissionsPresenter = FakePermissionsPresenter(),
         isKnockFeatureEnabled: Boolean = true,
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+        sessionEnterpriseService: FakeSessionEnterpriseService = FakeSessionEnterpriseService(
+            isEncryptionDisabledResult = { false },
+            arePublicRoomsDisabledResult = { false },
+        ),
     ) = ConfigureRoomPresenter(
         isSpace = isSpace,
         initialParentSpaceId = initialParenSpaceId,
@@ -568,5 +633,6 @@ class ConfigureRoomPresenterTest {
             mapOf(FeatureFlags.Knock.key to isKnockFeatureEnabled)
         ),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
+        sessionEnterpriseService = sessionEnterpriseService,
     )
 }

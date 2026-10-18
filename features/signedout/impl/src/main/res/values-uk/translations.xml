@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"Ви змінили пароль під час іншого сеансу"</string>
-  <string name="screen_signed_out_reason_2">"Ви видалили сеанс з іншого сеансу"</string>
-  <string name="screen_signed_out_reason_3">"Адміністратор вашого сервера визнав ваш доступ недійсним"</string>
+  <string name="screen_signed_out_reason_1">"Ви вилучили цей пристрій зі свого облікового запису"</string>
+  <string name="screen_signed_out_reason_2">"Ви змінили пароль на іншому пристрої"</string>
+  <string name="screen_signed_out_reason_3">"Термін дії сеансу на вашому сервері закінчився або адміністратор заблокував ваш доступ"</string>
   <string name="screen_signed_out_subtitle">"Можливо, ви вийшли з системи з однієї з причин, наведених нижче. Будь ласка, увійдіть знову, щоб продовжити використання %s."</string>
-  <string name="screen_signed_out_title">"Ви вийшли з системи"</string>
+  <string name="screen_signed_out_subtitle_v2">"Цей пристрій було видалено з однієї з наведених нижче причин. Будь ласка, увійдіть знову, щоб підключити цей пристрій до вашого облікового запису."</string>
+  <string name="screen_signed_out_title">"Пристрій вилучено"</string>
 </resources>

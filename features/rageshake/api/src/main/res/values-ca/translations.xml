@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crash_detection_dialog_content">"%1$s ha fallat l\'últim cop que es va utilitzar. Vols enviar un informe d\'errors?"</string>
+  <string name="rageshake_detection_dialog_content">"Sembla que sacseges el telèfon amb frustració. Vols obrir la pantalla d\'informe d\'errors?"</string>
+  <string name="settings_rageshake">"La sacsejada de frustració és quan mous i sacseges el mòbil per informar d\'un error. L\'aplicació ja no és compatible amb aquesta funcionalitat però el nom encara s\'utilitza per raons històriques."</string>
+  <string name="settings_rageshake_detection_threshold">"Llindar de detecció"</string>
+</resources>

@@ -19,7 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewAliasAtom
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.atomic.atoms.CopiableTextAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAtom
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
@@ -30,6 +31,11 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.SPACE_NAME
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
+import io.element.android.libraries.designsystem.preview.USER_NAME_CHARLIE
+import io.element.android.libraries.designsystem.preview.USER_NAME_DAVID
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomVisibility
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -63,11 +69,15 @@ fun SpaceHeaderView(
         },
         title = {
             if (name != null) {
-                RoomPreviewTitleAtom(title = name)
+                RoomPreviewTitleAtom(
+                    title = name,
+                    style = ElementTheme.typography.fontHeadingMdBold,
+                )
             } else {
                 RoomPreviewTitleAtom(
                     title = stringResource(id = CommonStrings.common_no_space_name),
-                    fontStyle = FontStyle.Italic
+                    fontStyle = FontStyle.Italic,
+                    style = ElementTheme.typography.fontHeadingMdBold,
                 )
             }
         },
@@ -77,7 +87,7 @@ fun SpaceHeaderView(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 if (alias != null) {
-                    RoomPreviewAliasAtom(alias = alias.value)
+                    CopiableTextAtom(text = alias.value)
                 }
                 SpaceInfoRow(visibility = visibility)
             }
@@ -115,15 +125,15 @@ internal fun SpaceHeaderViewPreview() = ElementPreview {
             size = AvatarSize.SpaceHeader,
         ),
         alias = RoomAlias("#spaceAlias:matrix.org"),
-        name = "Space name",
+        name = SPACE_NAME,
         topic = "Space topic: " + LoremIpsum(40).values.first(),
         topicMaxLines = 2,
         visibility = SpaceRoomVisibility.Public,
         heroes = persistentListOf(
-            aMatrixUser(id = "@1:d", displayName = "Alice", avatarUrl = "aUrl"),
-            aMatrixUser(id = "@2:d", displayName = "Bob"),
-            aMatrixUser(id = "@3:d", displayName = "Charlie", avatarUrl = "aUrl"),
-            aMatrixUser(id = "@4:d", displayName = "Dave"),
+            aMatrixUser(id = "@1:d", displayName = USER_NAME_ALICE, avatarUrl = "aUrl"),
+            aMatrixUser(id = "@2:d", displayName = USER_NAME_BOB),
+            aMatrixUser(id = "@3:d", displayName = USER_NAME_CHARLIE, avatarUrl = "aUrl"),
+            aMatrixUser(id = "@4:d", displayName = USER_NAME_DAVID),
         ),
         numberOfMembers = 999,
     )

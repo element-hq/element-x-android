@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"Le mot de passe de votre compte a été modifié sur un autre appareil"</string>
-  <string name="screen_signed_out_reason_2">"Cette session a été supprimée depuis un autre appareil"</string>
-  <string name="screen_signed_out_reason_3">"L’administrateur de votre serveur a révoqué votre accès."</string>
+  <string name="screen_signed_out_reason_1">"Vous avez supprimé cet appareil de votre compte."</string>
+  <string name="screen_signed_out_reason_2">"Vous avez modifié votre mot de passe sur un autre appareil"</string>
+  <string name="screen_signed_out_reason_3">"Votre session a expiré ou l’administrateur de votre serveur a révoqué votre accès."</string>
   <string name="screen_signed_out_subtitle">"La déconnexion peut être due à une des raisons ci-dessous. Veuillez vous connecter à nouveau pour continuer à utiliser %s."</string>
-  <string name="screen_signed_out_title">"Vous avez été déconnecté"</string>
+  <string name="screen_signed_out_subtitle_v2">"Cet appareil a été supprimé pour l’une des raisons indiquées ci-dessous. Vous devez vous reconnecter pour associer cet appareil à votre compte."</string>
+  <string name="screen_signed_out_title">"Appareil supprimé"</string>
 </resources>

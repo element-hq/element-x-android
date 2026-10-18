@@ -24,7 +24,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.features.invitepeople.api.InvitePeoplePresenter
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.libraries.architecture.AsyncAction
@@ -38,12 +38,17 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.createroom.CreateRoomParameters
+import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.filterMembers
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.recent.getRecentDirectRooms
+import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.usersearch.api.UserRepository
@@ -83,11 +88,12 @@ class DefaultInvitePeoplePresenter(
     override fun present(): InvitePeopleState {
         val roomMembers = remember { mutableStateOf<AsyncData<ImmutableList<RoomMember>>>(AsyncData.Loading()) }
         val selectedUsers = remember { mutableStateOf<ImmutableList<MatrixUser>>(persistentListOf()) }
-        val searchResults = remember { mutableStateOf<SearchBarResultState<ImmutableList<InvitableUser>>>(SearchBarResultState.Initial()) }
+        val searchResults = remember { mutableStateOf<SearchBarResultState<ImmutableList<InvitableUser>>>(SearchBarResultState.Initial) }
         val queryState = rememberTextFieldState()
         var searchActive by rememberSaveable { mutableStateOf(false) }
         val showSearchLoader = rememberSaveable { mutableStateOf(false) }
         val sendInvitesAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+        val createRoomFromDmAction = remember { mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized) }
 
         val recentDirectRooms by produceState(emptyList(), roomMembers.value) {
             if (roomMembers.value.isSuccess()) {
@@ -173,26 +179,26 @@ class DefaultInvitePeoplePresenter(
             )
         }
 
-        fun handleEvent(event: InvitePeopleEvents) {
+        fun handleEvent(event: InvitePeopleEvent) {
             when (event) {
                 // Dedicated `when` for exhaustivity.
-                is DefaultInvitePeopleEvents -> when (event) {
-                    is DefaultInvitePeopleEvents.OnSearchActiveChanged -> {
+                is DefaultInvitePeopleEvent -> when (event) {
+                    is DefaultInvitePeopleEvent.OnSearchActiveChanged -> {
                         searchActive = event.active
                         if (!event.active) {
                             queryState.clearText()
                         }
                     }
 
-                    is DefaultInvitePeopleEvents.ToggleUser -> {
+                    is DefaultInvitePeopleEvent.ToggleUser -> {
                         selectedUsers.toggleUser(event.user)
                         searchResults.toggleUser(event.user)
                         // suggestions will automatically update via derivedStateOf when selectedUsers changes
                     }
-                    is DefaultInvitePeopleEvents.DismissUnknownUsersModal -> {
+                    is DefaultInvitePeopleEvent.DismissUnknownUsersModal -> {
                         sendInvitesAction.value = AsyncAction.Uninitialized
                     }
-                    is DefaultInvitePeopleEvents.RemoveUnknownUsers -> {
+                    is DefaultInvitePeopleEvent.RemoveUnknownUsers -> {
                         val usersToRemove = selectedUsers.value.filter { it in unknownUsers }
                         usersToRemove.forEach { user ->
                             selectedUsers.toggleUser(user)
@@ -201,20 +207,30 @@ class DefaultInvitePeoplePresenter(
                         sendInvitesAction.value = AsyncAction.Uninitialized
                     }
                 }
-                is InvitePeopleEvents.SendInvites -> {
+                is InvitePeopleEvent.SendInvites -> {
                     if (unknownUsers.isNotEmpty() && sendInvitesAction.value !is ConfirmingUnknownUserInvitation) {
                         sendInvitesAction.value = ConfirmingUnknownUserInvitation(
                             unknownUsers
                         )
                     } else {
                         room.dataOrNull()?.let {
-                            sessionCoroutineScope.sendInvites(it, selectedUsers.value, sendInvitesAction)
+                            sessionCoroutineScope.launch {
+                                if (it.isDm()) {
+                                    createRoomFromDm(it, selectedUsers.value, createRoomFromDmAction)
+                                } else {
+                                    sendInvites(it, selectedUsers.value, sendInvitesAction)
+                                }
+                            }
                         }
                     }
                 }
-                is InvitePeopleEvents.CloseSearch -> {
+                is InvitePeopleEvent.CloseSearch -> {
                     searchActive = false
                     queryState.clearText()
+                }
+                is InvitePeopleEvent.ClearError -> {
+                    sendInvitesAction.value = AsyncAction.Uninitialized
+                    createRoomFromDmAction.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -228,6 +244,7 @@ class DefaultInvitePeoplePresenter(
             searchResults = searchResults.value,
             showSearchLoader = showSearchLoader.value,
             sendInvitesAction = sendInvitesAction.value,
+            createRoomFromDmAction = createRoomFromDmAction.value,
             suggestions = suggestions,
             eventSink = ::handleEvent,
         )
@@ -251,6 +268,35 @@ class DefaultInvitePeoplePresenter(
             }
 
             Result.success(Unit)
+        }
+    }
+
+    private fun CoroutineScope.createRoomFromDm(
+        currentRoom: JoinedRoom,
+        selectedUsers: List<MatrixUser>,
+        createRoomFromDmAction: MutableState<AsyncAction<RoomId>>,
+    ) = launch {
+        createRoomFromDmAction.runUpdatingState {
+            val currentUsers = currentRoom.getMembers(limit = 100).getOrNull().orEmpty()
+                .filter { it.membership.isActive() }
+            val invitees = (currentUsers.map { it.userId } + selectedUsers.map { it.userId })
+                .filter { it != matrixClient.sessionId }
+                .distinct()
+            matrixClient.createRoom(
+                CreateRoomParameters(
+                    name = null,
+                    topic = null,
+                    isEncrypted = true,
+                    isDirect = false,
+                    visibility = RoomVisibility.Private,
+                    preset = RoomPreset.PRIVATE_CHAT,
+                    invite = invitees,
+                    avatar = null,
+                    joinRuleOverride = JoinRule.Invite,
+                    historyVisibilityOverride = RoomHistoryVisibility.Invited,
+                    isSpace = false,
+                )
+            )
         }
     }
 
@@ -286,15 +332,15 @@ class DefaultInvitePeoplePresenter(
         showSearchLoader: MutableState<Boolean>,
         searchQuery: String,
     ) = withContext(coroutineDispatchers.io) {
-        searchResults.value = SearchBarResultState.Initial()
+        searchResults.value = SearchBarResultState.Initial
         showSearchLoader.value = false
         val joinedMembers = roomMembers.value.dataOrNull().orEmpty()
 
         userRepository.search(searchQuery).onEach { state ->
             showSearchLoader.value = state.isSearching
             searchResults.value = when {
-                state.results.isEmpty() && state.isSearching -> SearchBarResultState.Initial()
-                state.results.isEmpty() && !state.isSearching -> SearchBarResultState.NoResultsFound()
+                state.results.isEmpty() && state.isSearching -> SearchBarResultState.Initial
+                state.results.isEmpty() && !state.isSearching -> SearchBarResultState.NoResultsFound
                 else -> SearchBarResultState.Results(state.results.map { result ->
                     val existingMembership = joinedMembers.firstOrNull { j -> j.userId == result.matrixUser.userId }?.membership
                     val isJoined = existingMembership == RoomMembershipState.JOIN

@@ -67,7 +67,7 @@ fun SingleSelectionListItem(
 
     ListItem(
         modifier = modifier,
-        headlineContent = { Text(text = headline) },
+        content = { Text(text = headline) },
         supportingContent = decoratedSupportedText,
         leadingContent = leadingContent,
         trailingContent = trailingContent,

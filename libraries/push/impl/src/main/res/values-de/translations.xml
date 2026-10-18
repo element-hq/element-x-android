@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="notification_channel_call">"Anruf"</string>
-  <string name="notification_channel_listening_for_events">"Auf Ereignisse achten"</string>
+  <string name="notification_channel_listening_for_events">"Warten auf Events"</string>
   <string name="notification_channel_noisy">"Laute Benachrichtigungen"</string>
   <string name="notification_channel_ringing_calls">"Klingelnde Anrufe"</string>
   <string name="notification_channel_silent">"Stumme Benachrichtigungen"</string>
@@ -19,9 +19,13 @@
     <item quantity="one">"Du hast %d neue Nachricht."</item>
     <item quantity="other">"Du hast %d neue Nachrichten."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Hat %1$d Anhang geteilt"</item>
+    <item quantity="other">"Hat %1$d Anhänge geteilt"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Eingehender Anruf"</string>
   <string name="notification_incoming_call">"Eingehender Anruf"</string>
-  <string name="notification_inline_reply_failed">"** Fehler beim Senden - bitte Chat öffnen"</string>
+  <string name="notification_inline_reply_failed">"** Fehler beim Senden – bitte Chat öffnen"</string>
   <string name="notification_invitation_action_join">"Beitreten"</string>
   <string name="notification_invitation_action_reject">"Ablehnen"</string>
   <plurals name="notification_invitations">
@@ -30,7 +34,9 @@
   </plurals>
   <string name="notification_invite_body">"Du wurdest zu einem Chat eingeladen"</string>
   <string name="notification_invite_body_with_sender">"%1$s hat dich zum Chatten eingeladen"</string>
-  <string name="notification_mentioned_you_body">"Hat Dich erwähnt: %1$s"</string>
+  <string name="notification_knock_request_body">"Hat um Beitritt gebeten"</string>
+  <string name="notification_live_location_started_body">"Hat begonnen, den Live-Standort zu teilen"</string>
+  <string name="notification_mentioned_you_body">"Hat dich erwähnt: %1$s"</string>
   <string name="notification_new_messages">"Neue Nachrichten"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d neue Nachricht"</item>
@@ -39,13 +45,13 @@
   <string name="notification_reaction_body">"Reagiert mit %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Als gelesen markieren"</string>
   <string name="notification_room_action_quick_reply">"Schnelle Antwort"</string>
-  <string name="notification_room_invite_body">"Du wurdest eingeladen, den Chat zu betreten"</string>
+  <string name="notification_room_invite_body">"Du wurdest eingeladen, dem Chat beizutreten"</string>
   <string name="notification_room_invite_body_with_sender">"%1$s hat dich eingeladen, dem Chat beizutreten"</string>
   <string name="notification_sender_me">"Ich"</string>
-  <string name="notification_sender_mention_reply">"%1$s hat Dich erwähnt oder geantwortet"</string>
+  <string name="notification_sender_mention_reply">"%1$s hat dich erwähnt oder geantwortet"</string>
   <string name="notification_space_invite_body">"Einladung zum Space"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s hat dich eingeladen, dem Space beizutreten"</string>
-  <string name="notification_test_push_notification_content">"Du siehst dir die Benachrichtigung an! Klicke hier!"</string>
+  <string name="notification_test_push_notification_content">"Du siehst dir die Benachrichtigung an! Tippe hier!"</string>
   <string name="notification_thread_in_room">"Thread in %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -63,7 +69,7 @@
   <string name="push_distributor_background_sync_android">"Hintergrundsynchronisation"</string>
   <string name="push_distributor_firebase_android">"Google-Dienste"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Keine gültigen Google Play-Dienste gefunden. Benachrichtigungen funktionieren möglicherweise nicht richtig."</string>
-  <string name="troubleshoot_notifications_test_blocked_users_description">"Überprüfen von gesperrten Nutzern"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Gesperrte Nutzer werden überprüft"</string>
   <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Gesperrte Nutzer ansehen"</string>
   <string name="troubleshoot_notifications_test_blocked_users_result_none">"Keine Nutzer sind gesperrt."</string>
   <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
@@ -82,7 +88,7 @@
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Keine Unterstützung für Push-Dienst gefunden."</string>
   <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
     <item quantity="one">"%1$d Push-Dienst gefunden: %2$s"</item>
-    <item quantity="other">"%1$d Push-Dienst gefunden: %2$s"</item>
+    <item quantity="other">"%1$d Push-Dienste gefunden: %2$s"</item>
   </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Die Anwendung bietet Unterstützung für: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Unterstützung für Push-Dienst"</string>
@@ -91,12 +97,13 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Die Benachrichtigung kann nicht angezeigt werden."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Die Benachrichtigung wurde angeklickt!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Benachrichtigung anzeigen"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Bitte klicke auf die Benachrichtigung, um den Test fortzusetzen."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Bitte tippe auf die Benachrichtigung, um den Test fortzusetzen."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Stelle sicher, dass die App Push-Benachrichtigungen empfängt."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Fehler: Der Pusher hat die Anfrage abgelehnt."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Fehler:%1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Fehler: Push kann nicht getestet werden."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Fehler: Timeout beim Warten auf Push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Fehler: Das Push-Gateway drosselt die Benachrichtigungsrate dieses Geräts, daher sind Benachrichtigungen nicht zuverlässig. Bitte richte ein anderes Push-Gateway ein."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Push-Loop-Back Dauer: %1$d ms."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Teste Push-Loop-Back"</string>
 </resources>

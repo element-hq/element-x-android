@@ -44,6 +44,10 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentErrorView
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
+import io.element.android.libraries.matrix.ui.media.contentvalidation.NotFoundContentView
 import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -55,21 +59,25 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun InReplyToView(
     inReplyTo: InReplyToDetails,
     hideImage: Boolean,
+    contentValidationValue: ContentValidationValue,
     modifier: Modifier = Modifier,
     maxLines: Int = 2,
 ) {
     when (inReplyTo) {
-        is InReplyToDetails.Ready -> {
-            ReplyToReadyContent(
+        is InReplyToDetails.Ready -> when (contentValidationValue) {
+            ContentValidationValue.Valid -> ReplyToReadyContent(
                 senderId = inReplyTo.senderId,
                 senderProfile = inReplyTo.senderProfile,
                 metadata = inReplyTo.metadata(hideImage),
                 maxLines = maxLines,
                 modifier = modifier,
             )
+            ContentValidationValue.Invalid -> ReplyToInvalidContent()
+            is ContentValidationValue.UnrecoverableError -> ReplyToNotFoundContent()
+            else -> ReplyToLoadingContent(modifier = modifier)
         }
         is InReplyToDetails.Error ->
-            ReplyToErrorContent(data = inReplyTo, maxLines = maxLines, modifier = modifier)
+            ReplyToErrorContent(modifier = modifier)
         is InReplyToDetails.Loading ->
             ReplyToLoadingContent(modifier = modifier)
     }
@@ -86,7 +94,7 @@ private fun ReplyToReadyContent(
     val paddings = if (metadata is InReplyToMetadata.Thumbnail) {
         PaddingValues(end = 8.dp)
     } else {
-        PaddingValues(start = 8.dp, end = 8.dp)
+        PaddingValues(horizontal = 8.dp)
     }
     Row(
         modifier
@@ -142,24 +150,15 @@ private fun ReplyToLoadingContent(
 
 @Composable
 private fun ReplyToErrorContent(
-    data: InReplyToDetails.Error,
-    maxLines: Int,
     modifier: Modifier = Modifier,
 ) {
-    val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
-    Row(
-        modifier
-            .background(ElementTheme.colors.bgCanvasDefault)
-            .padding(paddings)
-    ) {
-        Text(
-            text = data.message,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = ElementTheme.colors.textCriticalPrimary,
-            maxLines = maxLines,
-            overflow = TextOverflow.Ellipsis,
-        )
-    }
+    ContentErrorView(
+        title = stringResource(CommonStrings.error_message_not_found),
+        message = null,
+        modifier = modifier,
+        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp),
+        onTextLayout = null,
+    )
 }
 
 @Composable
@@ -213,11 +212,50 @@ private fun ReplyToContentText(
     }
 }
 
+@Composable
+private fun ReplyToInvalidContent(
+    modifier: Modifier = Modifier
+) {
+    InvalidContentView(
+        modifier = modifier,
+        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp),
+        onTextLayout = null,
+    )
+}
+
+@Composable
+private fun ReplyToNotFoundContent(
+    modifier: Modifier = Modifier
+) {
+    NotFoundContentView(
+        modifier = modifier,
+        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 8.dp),
+        onTextLayout = null,
+    )
+}
+
 @PreviewsDayNight
 @Composable
-internal fun InReplyToViewPreview(@PreviewParameter(provider = InReplyToDetailsProvider::class) inReplyTo: InReplyToDetails) = ElementPreview {
+internal fun InReplyToViewPreview(@PreviewParameter(provider = InReplyToDetailsPreviewParam::class) inReplyTo: InReplyToDetails) = ElementPreview {
     InReplyToView(
         inReplyTo = inReplyTo,
         hideImage = false,
+        contentValidationValue = ContentValidationValue.Valid,
     )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ReplyToInvalidContentPreview() {
+    ElementPreview {
+        ReplyToInvalidContent(modifier = Modifier.padding(10.dp))
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ReplyToNotFoundContentPreview() {
+    ElementPreview {
+        ReplyToNotFoundContent(modifier = Modifier.padding(10.dp))
+    }
 }

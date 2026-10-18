@@ -8,6 +8,7 @@
 
 package io.element.android.features.location.api
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -24,33 +25,41 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.createBitmap
 import coil3.Extras
+import coil3.asImage
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
+import coil3.request.SuccessResult
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.api.internal.StaticMapPlaceholder
-import io.element.android.features.location.api.internal.StaticMapUrlBuilder
 import io.element.android.features.location.api.internal.centerBottomEdge
+import io.element.android.features.location.api.internal.rememberStaticMapBuilder
 import io.element.android.libraries.designsystem.components.LocationPin
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 /**
  * Shows a static map image downloaded via a third party service's static maps API.
  *
- * Handles 4 distinct cases:
+ * Handles 5 distinct cases:
  * 1. Stale location (pinVariant is StaleLocation) - shows stale map with stale pin, no fetching
  * 2. Null location - shows blurred placeholder, no pin, no loading
- * 3. Loading (location != null, fetching) - shows blurred placeholder with loading indicator
- * 4. Success (location != null, loaded) - shows actual map with pin
+ * 3. Null mapTilerConfig (no map provider configured) - shows blurred placeholder, no pin, no fetching
+ * 4. Loading (location != null, fetching) - shows blurred placeholder with loading indicator
+ * 5. Success (location != null, loaded) - shows actual map with pin
  */
 @Composable
 fun StaticMapView(
+    mapTilerConfig: MapTilerConfig?,
     location: Location?,
     zoom: Double,
     pinVariant: PinVariant,
@@ -76,7 +85,8 @@ fun StaticMapView(
                 )
             }
             // Case 2: Null location - show blurred placeholder, no pin, no loading
-            location == null -> {
+            // Case 3: No map provider configured - show blurred placeholder, no pin, no fetching
+            location == null || mapTilerConfig == null && !LocalInspectionMode.current -> {
                 StaticMapPlaceholder(
                     painter = painterResource(R.drawable.blurred_map),
                     canReload = false,
@@ -86,8 +96,9 @@ fun StaticMapView(
                     onLoadMapClick = {}
                 )
             }
-            // Cases 3 & 4: Non-null location - fetch map
+            // Cases 4 & 5: Non-null location - fetch map
             else -> LoadableMapContent(
+                mapTilerConfig = mapTilerConfig,
                 location = location,
                 zoom = zoom,
                 pinVariant = pinVariant,
@@ -118,6 +129,7 @@ private fun BoxWithConstraintsScope.StaleMapContent(
 
 @Composable
 private fun BoxWithConstraintsScope.LoadableMapContent(
+    mapTilerConfig: MapTilerConfig?,
     location: Location,
     zoom: Double,
     pinVariant: PinVariant,
@@ -126,34 +138,48 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
 ) {
     val context = LocalContext.current
     var retryHash by remember { mutableIntStateOf(0) }
-    val builder = remember { StaticMapUrlBuilder() }
+    val builder = rememberStaticMapBuilder(mapTilerConfig)
 
-    val painter = rememberAsyncImagePainter(
-        model = if (constraints.isZero) {
-            // Avoid building a URL if any of the size constraints is zero
-            null
-        } else {
-            ImageRequest.Builder(context)
-                .data(
-                    builder.build(
-                        lat = location.lat,
-                        lon = location.lon,
-                        zoom = zoom,
-                        darkMode = darkMode,
-                        width = constraints.maxWidth,
-                        height = constraints.maxHeight,
-                        density = LocalDensity.current.density,
+    val (painter, state, contentScale) = if (LocalInspectionMode.current) {
+        val painter = painterResource(CommonDrawables.sample_map)
+        val state = AsyncImagePainter.State.Success(
+            painter = painter,
+            result = SuccessResult(
+                image = createBitmap(1, 1, Bitmap.Config.ALPHA_8).asImage(),
+                request = ImageRequest.Builder(context).build()
+            )
+        )
+        Triple(painter, state, ContentScale.Crop)
+    } else {
+        val painter = rememberAsyncImagePainter(
+            model = if (builder == null || constraints.isZero) {
+                // Avoid building a URL if there is no map provider or if any of the size constraints is zero
+                null
+            } else {
+                ImageRequest.Builder(context)
+                    .data(
+                        builder.build(
+                            lat = location.lat,
+                            lon = location.lon,
+                            zoom = zoom,
+                            darkMode = darkMode,
+                            width = constraints.maxWidth,
+                            height = constraints.maxHeight,
+                            density = LocalDensity.current.density,
+                        )
                     )
-                )
-                .size(width = constraints.maxWidth, height = constraints.maxHeight)
-                .apply {
-                    extras.set(Extras.Key("retry_hash"), retryHash).build()
-                }
-                .build()
-        }
-    )
+                    .size(width = constraints.maxWidth, height = constraints.maxHeight)
+                    .apply {
+                        extras.set(Extras.Key("retry_hash"), retryHash).build()
+                    }
+                    .build()
+            }
+        )
 
-    val state by painter.state.collectAsState()
+        val state by painter.state.collectAsState()
+        Triple(painter, state, ContentScale.Fit)
+    }
+
     when (state) {
         is AsyncImagePainter.State.Success -> {
             Image(
@@ -162,14 +188,14 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
                 modifier = Modifier.size(width = maxWidth, height = maxHeight),
                 // The returned image can be smaller than the requested size due to the static maps API having
                 // a max width and height of 2048 px. We apply ContentScale.Fit to handle this.
-                contentScale = ContentScale.Fit,
+                contentScale = contentScale,
             )
             LocationPin(variant = pinVariant, modifier = Modifier.centerBottomEdge(this))
         }
         else -> {
             StaticMapPlaceholder(
                 painter = painterResource(R.drawable.blurred_map),
-                canReload = builder.isServiceAvailable() && state is AsyncImagePainter.State.Error,
+                canReload = builder?.isServiceAvailable() == true && state is AsyncImagePainter.State.Error,
                 contentDescription = contentDescription,
                 width = maxWidth,
                 height = maxHeight,
@@ -183,6 +209,7 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
 @Composable
 internal fun StaticMapViewPreview() = ElementPreview {
     StaticMapView(
+        mapTilerConfig = null,
         location = Location(0.0, 0.0),
         zoom = 0.0,
         contentDescription = null,

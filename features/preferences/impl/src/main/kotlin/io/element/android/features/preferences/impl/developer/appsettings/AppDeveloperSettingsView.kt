@@ -22,6 +22,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDropdown
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
@@ -33,19 +34,31 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.featureflag.ui.FeatureListView
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AppDeveloperSettingsView(
     state: AppDeveloperSettingsState,
-    onOpenShowkase: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
         // Note: this is OK to hardcode strings in this debug screen.
+        ListItem(
+            content = {
+                Text(text = stringResource(id = CommonStrings.action_view_source))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_view_source_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.isDeveloperModeEnabled,
+            ),
+            onClick = { state.eventSink(AppDeveloperSettingsEvent.SetDeveloperModeEnabled(!state.isDeveloperModeEnabled)) }
+        )
         PreferenceCategory(
             title = "Feature flags",
             showTopDivider = false,
@@ -79,33 +92,42 @@ fun AppDeveloperSettingsView(
                 )
             }
         }
-        PreferenceCategory(title = "Showkase") {
-            ListItem(
-                headlineContent = {
-                    Text("Open Showkase browser")
-                },
-                onClick = onOpenShowkase
-            )
-        }
-        PreferenceCategory(title = "Crash") {
-            ListItem(
-                headlineContent = {
-                    Text("Crash the app 💥")
-                },
-                onClick = { error("This crash is a test.") }
-            )
-        }
         RageshakePreferencesView(
             state = state.rageshakeState,
         )
         PreferenceCategory(title = "Crash") {
             ListItem(
-                headlineContent = {
+                content = {
                     Text("Crash the app 💥")
                 },
                 onClick = { error("This crash is a test.") }
             )
         }
+        GitCategory(
+            gitBranch = state.gitBranch,
+            gitSha = state.gitSha,
+            onCopyToClipboard = { state.eventSink(AppDeveloperSettingsEvent.CopyToClipboard(it)) },
+        )
+    }
+}
+
+@Composable
+private fun GitCategory(
+    gitBranch: String,
+    gitSha: String,
+    onCopyToClipboard: (String) -> Unit,
+) {
+    PreferenceCategory(title = "Git") {
+        ListItem(
+            content = { Text("Git branch") },
+            supportingContent = { Text(text = gitBranch) },
+            onClick = { onCopyToClipboard(gitBranch) }
+        )
+        ListItem(
+            content = { Text("Git SHA") },
+            supportingContent = { Text(text = gitSha) },
+            onClick = { onCopyToClipboard(gitSha) }
+        )
     }
 }
 
@@ -152,10 +174,9 @@ private fun FeatureListContent(
 @PreviewsDayNight
 @Composable
 internal fun AppDeveloperSettingsViewPreview(
-    @PreviewParameter(AppDeveloperSettingsStateProvider::class) state: AppDeveloperSettingsState
+    @PreviewParameter(AppDeveloperSettingsStatePreviewParam::class) state: AppDeveloperSettingsState
 ) = ElementPreview {
     AppDeveloperSettingsView(
         state = state,
-        onOpenShowkase = {},
     )
 }

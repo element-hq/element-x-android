@@ -28,6 +28,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.MessagesEvent
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.MessagesPresenter
 import io.element.android.features.messages.impl.MessagesState
@@ -40,11 +41,13 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.TimelineSelectionOwner
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.roommembermoderation.api.ModerationAction
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
@@ -52,8 +55,10 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -66,8 +71,9 @@ import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.mediaplayer.api.MediaPlayer
+import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.services.analytics.api.AnalyticsService
@@ -88,11 +94,12 @@ class ThreadedMessagesNode(
     private val presenterFactory: MessagesPresenter.Factory,
     private val actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
-    private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
     private val appNavigationStateService: AppNavigationStateService,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
-) : Node(buildContext, plugins = plugins), MessagesNavigator {
+    private val emojiPickerRenderer: EmojiPickerRenderer,
+    private val dispatchers: CoroutineDispatchers,
+) : Node(buildContext, plugins = plugins), MessagesNavigator, TimelineSelectionOwner {
     data class Inputs(
         val threadRootEventId: ThreadId,
         val focusedEventId: EventId?,
@@ -103,6 +110,7 @@ class ThreadedMessagesNode(
 
     private var timelineController: TimelineController? by mutableStateOf(null)
     private var presenter: Presenter<MessagesState>? by mutableStateOf(null)
+    private var timelinePresenter: TimelinePresenter? = null
 
     /**
      * This should be fast to load, but not faster than several UI frames, which will cause ANRs.
@@ -110,12 +118,19 @@ class ThreadedMessagesNode(
      */
     private suspend fun createPresenter(): Presenter<MessagesState> {
         val threadedTimeline = room.createTimeline(CreateTimelineParams.Threaded(threadRootEventId = inputs.threadRootEventId)).getOrThrow()
-        val timelineController = TimelineController(room, threadedTimeline)
+        val timelineController = TimelineController(
+            room,
+            liveTimeline = threadedTimeline,
+            roomCoroutineScope = room.roomCoroutineScope,
+            dispatchers = dispatchers,
+        )
         this.timelineController = timelineController
+        val timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this)
+        this.timelinePresenter = timelinePresenter
         return presenterFactory.create(
             navigator = this,
-            composerPresenter = messageComposerPresenterFactory.create(timelineController, this, isInThread = true),
-            timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
+            composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = inputs.threadRootEventId),
+            timelinePresenter = timelinePresenter,
             // TODO add special processor for threaded timeline
             actionListPresenter = actionListPresenterFactory.create(
                 postProcessor = TimelineItemActionPostProcessor.Default,
@@ -127,18 +142,22 @@ class ThreadedMessagesNode(
 
     interface Callback : Plugin {
         fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean
+        fun handleGalleryItemClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, galleryItemIndex: Int, canUseOverlay: Boolean): Boolean
         fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
         fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-        fun handleForwardEventClick(eventId: EventId)
+        fun handleForwardEventClick(eventIds: List<EventId>, timelineProvider: TimelineProvider)
         fun navigateToReportMessage(eventId: EventId, senderId: UserId)
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
         fun navigateToEditPoll(eventId: EventId)
+        fun navigateToCurrentLiveLocation()
         fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean)
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
         fun navigateToDeveloperSettings()
+
+        fun navigateToAvatarPreview(username: String, avatarUrl: String)
     }
 
     override fun onBuilt() {
@@ -156,9 +175,6 @@ class ThreadedMessagesNode(
             onStop = {
                 appNavigationStateService.onLeavingThread(id)
             },
-            onDestroy = {
-                mediaPlayer.close()
-            }
         )
     }
 
@@ -215,8 +231,12 @@ class ThreadedMessagesNode(
         callback.navigateToEventDebugInfo(eventId, debugInfo)
     }
 
-    override fun forwardEvent(eventId: EventId) {
-        callback.handleForwardEventClick(eventId)
+    override fun forwardEvents(eventIds: List<EventId>, timelineProvider: TimelineProvider) {
+        callback.handleForwardEventClick(eventIds, timelineProvider)
+    }
+
+    override fun exitTimelineSelection() {
+        timelinePresenter?.exitSelectionMode()
     }
 
     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
@@ -246,6 +266,11 @@ class ThreadedMessagesNode(
 
     override fun navigateToDeveloperSettings() {
         callback.navigateToDeveloperSettings()
+    }
+
+    override fun navigateToCurrentLiveLocation() {
+        // Shouldn't happen because LiveLocationSharingBanner is not shown in threads.
+        callback.navigateToCurrentLiveLocation()
     }
 
     override fun close() = navigateUp()
@@ -285,6 +310,20 @@ class ThreadedMessagesNode(
                             }
                         } == true
                     },
+                    onGalleryEventItemClick = { isLive, event, index ->
+                        timelineController?.let { controller ->
+                            if (isLive) {
+                                callback.handleGalleryItemClick(controller.mainTimelineMode(), event, index, canUseOverlay)
+                            } else {
+                                val detachedTimelineMode = controller.detachedTimelineMode()
+                                if (detachedTimelineMode != null) {
+                                    callback.handleGalleryItemClick(detachedTimelineMode, event, index, canUseOverlay)
+                                } else {
+                                    false
+                                }
+                            }
+                        } == true
+                    },
                     onUserDataClick = callback::navigateToRoomMemberDetails,
                     onLinkClick = { url, customTab ->
                         onLinkClick(
@@ -303,6 +342,15 @@ class ThreadedMessagesNode(
                     onViewAllPinnedMessagesClick = {},
                     modifier = modifier,
                     knockRequestsBannerView = {},
+                    customReactionBottomSheet = {
+                        CustomReactionBottomSheet(
+                            state = state.customReactionState,
+                            onSelectEmoji = { uniqueId, emoji ->
+                                state.eventSink(MessagesEvent.ToggleReaction(emoji.unicode, uniqueId))
+                            },
+                            emojiPickerRenderer = emojiPickerRenderer,
+                        )
+                    },
                     onThreadsListClick = {},
                 )
 
@@ -311,7 +359,12 @@ class ThreadedMessagesNode(
                     onSelectAction = { action, target ->
                         when (action) {
                             is ModerationAction.DisplayProfile -> callback.navigateToRoomMemberDetails(target.userId)
-                            else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
+                            else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvent.ProcessAction(action, target))
+                        }
+                    },
+                    onAvatarClick = { user ->
+                        user.avatarUrl?.let { url ->
+                            callback.navigateToAvatarPreview(user.getBestName(), url)
                         }
                     },
                     modifier = Modifier,

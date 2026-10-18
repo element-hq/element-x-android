@@ -8,7 +8,17 @@
 
 package io.element.android.libraries.sessionstorage.api.observer
 
+/**
+ * Notifies interested components when a session is created or deleted, so they can set up or clean up their own per-session data.
+ */
 interface SessionObserver {
+    /**
+     * @param listener the listener to notify from now on.
+     */
     fun addListener(listener: SessionListener)
+
+    /**
+     * @param listener the listener to stop notifying.
+     */
     fun removeListener(listener: SessionListener)
 }

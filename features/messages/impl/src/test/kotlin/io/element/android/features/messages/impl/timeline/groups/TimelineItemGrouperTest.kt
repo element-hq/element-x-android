@@ -15,10 +15,14 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -39,6 +43,8 @@ class TimelineItemGrouperTest {
         reactionsState = aTimelineItemReactions(count = 0),
         readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),
         localSendState = LocalEventSendState.Sent(AN_EVENT_ID),
+        editSendState = null,
+        redactionSendState = null,
         isEditable = false,
         canBeRepliedTo = false,
         inReplyTo = null,
@@ -168,5 +174,48 @@ class TimelineItemGrouperTest {
         val actualGroupId = sut.group(groupableItems).first().identifier()
         // Then
         assertThat(actualGroupId).isEqualTo(expectedGroupId)
+    }
+
+    @Test
+    fun `a run of three or more redacted events is collapsed into a single group as a final step`() {
+        val r0 = aGroupableItem.copy(id = UniqueId("r0"), content = TimelineItemRedactedContent)
+        val r1 = aGroupableItem.copy(id = UniqueId("r1"), content = TimelineItemRedactedContent)
+        val r2 = aGroupableItem.copy(id = UniqueId("r2"), content = TimelineItemRedactedContent)
+        val result = sut.group(listOf(r0, r1, r2))
+        assertThat(result).isEqualTo(
+            listOf(
+                TimelineItem.GroupedEvents(
+                    id = computeGroupIdWith(r2),
+                    // Stored oldest-first (the input is newest-first) with the id keyed by the
+                    // oldest member through the shared registry, like the other groups.
+                    events = listOf(r2, r1, r0).toImmutableList(),
+                    aggregatedReadReceipts = emptyList<ReadReceiptData>().toImmutableList(),
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `a deleted message that still heads a thread is left out of the removed messages group`() {
+        val threadRoot = aGroupableItem.copy(
+            id = UniqueId("r1"),
+            content = TimelineItemRedactedContent,
+            threadInfo = TimelineItemThreadInfo.ThreadRoot(
+                summary = ThreadSummary(latestEvent = AsyncData.Uninitialized, numberOfReplies = 2),
+                latestEventText = null,
+            ),
+        )
+        val r0 = aGroupableItem.copy(id = UniqueId("r0"), content = TimelineItemRedactedContent)
+        val r2 = aGroupableItem.copy(id = UniqueId("r2"), content = TimelineItemRedactedContent)
+        val result = sut.group(listOf(r0, threadRoot, r2))
+        assertThat(result).isEqualTo(listOf(r0, threadRoot, r2))
+    }
+
+    @Test
+    fun `a run of fewer than three redacted events is left untouched`() {
+        val r0 = aGroupableItem.copy(id = UniqueId("r0"), content = TimelineItemRedactedContent)
+        val r1 = aGroupableItem.copy(id = UniqueId("r1"), content = TimelineItemRedactedContent)
+        val result = sut.group(listOf(r0, r1))
+        assertThat(result).isEqualTo(listOf(r0, r1))
     }
 }

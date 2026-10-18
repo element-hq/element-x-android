@@ -10,5 +10,5 @@ package io.element.android.features.lockscreen.impl.setup.biometric
 
 data class SetupBiometricState(
     val isBiometricSetupDone: Boolean,
-    val eventSink: (SetupBiometricEvents) -> Unit
+    val eventSink: (SetupBiometricEvent) -> Unit
 )

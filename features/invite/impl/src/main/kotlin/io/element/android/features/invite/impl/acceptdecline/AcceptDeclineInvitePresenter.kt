@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.features.invite.api.InviteData
-import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
+import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvent
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.ConfirmingDeclineInvite
 import io.element.android.features.invite.impl.AcceptInvite
@@ -40,13 +40,13 @@ class AcceptDeclineInvitePresenter(
         val declinedAction: MutableState<AsyncAction<RoomId>> =
             remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvent(event: AcceptDeclineInviteEvents) {
+        fun handleEvent(event: AcceptDeclineInviteEvent) {
             when (event) {
-                is AcceptDeclineInviteEvents.AcceptInvite -> {
+                is AcceptDeclineInviteEvent.AcceptInvite -> {
                     localCoroutineScope.acceptInvite(event.invite.roomId, acceptedAction)
                 }
 
-                is AcceptDeclineInviteEvents.DeclineInvite -> {
+                is AcceptDeclineInviteEvent.DeclineInvite -> {
                     val inviteData = event.invite
                     if (event.shouldConfirm) {
                         declinedAction.value = ConfirmingDeclineInvite(inviteData, event.blockUser)
@@ -58,11 +58,11 @@ class AcceptDeclineInvitePresenter(
                         )
                     }
                 }
-                is InternalAcceptDeclineInviteEvents.ClearAcceptActionState -> {
+                is InternalAcceptDeclineInviteEvent.ClearAcceptActionState -> {
                     acceptedAction.value = AsyncAction.Uninitialized
                 }
 
-                is InternalAcceptDeclineInviteEvents.ClearDeclineActionState -> {
+                is InternalAcceptDeclineInviteEvent.ClearDeclineActionState -> {
                     declinedAction.value = AsyncAction.Uninitialized
                 }
             }

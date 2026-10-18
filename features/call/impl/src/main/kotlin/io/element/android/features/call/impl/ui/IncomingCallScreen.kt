@@ -161,7 +161,7 @@ private fun ActionButton(
 @PreviewsDayNight
 @Composable
 internal fun IncomingCallScreenPreview(
-    @PreviewParameter(CallNotificationDataProvider::class) state: CallNotificationData,
+    @PreviewParameter(CallNotificationDataPreviewParam::class) state: CallNotificationData,
 ) = ElementPreview {
     IncomingCallScreen(
         notificationData = state,

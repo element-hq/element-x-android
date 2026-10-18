@@ -19,6 +19,8 @@ import io.element.android.features.logout.test.FakeLogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.mediaviewer.test.FakeFileViewerEntryPoint
 import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleShootEntryPoint
 import io.element.android.libraries.troubleshoot.test.FakePushHistoryEntryPoint
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -43,6 +45,7 @@ class DefaultPreferencesEntryPointTest {
                 lockScreenEntryPoint = FakeLockScreenEntryPoint(),
                 notificationTroubleShootEntryPoint = FakeNotificationTroubleShootEntryPoint(),
                 pushHistoryEntryPoint = FakePushHistoryEntryPoint(),
+                fileViewerEntryPoint = FakeFileViewerEntryPoint(),
                 logoutEntryPoint = FakeLogoutEntryPoint(),
                 openSourceLicensesEntryPoint = FakeOpenSourceLicensesEntryPoint(),
                 accountDeactivationEntryPoint = FakeAccountDeactivationEntryPoint(),
@@ -50,6 +53,7 @@ class DefaultPreferencesEntryPointTest {
         }
         val callback = object : PreferencesEntryPoint.Callback {
             override fun navigateToAddAccount() = lambdaError()
+            override fun navigateToSession(sessionId: SessionId) = lambdaError()
             override fun navigateToLinkNewDevice() = lambdaError()
             override fun navigateToBugReport() = lambdaError()
             override fun navigateToSecureBackup() = lambdaError()

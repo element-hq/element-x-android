@@ -33,6 +33,7 @@
   <string name="screen_room_details_error_muting">"Неуспешно заглушаване на тази стая, моля, опитайте отново."</string>
   <string name="screen_room_details_error_unmuting">"Неуспешно раззаглушаване на тази стая, моля, опитайте отново."</string>
   <string name="screen_room_details_invite_people_title">"Поканване на хора"</string>
+  <string name="screen_room_details_invite_title">"Поканване"</string>
   <string name="screen_room_details_leave_conversation_title">"Напускане на разговора"</string>
   <string name="screen_room_details_leave_room_title">"Напускане на стаята"</string>
   <string name="screen_room_details_media_gallery_title">"Медия и файлове"</string>
@@ -67,7 +68,6 @@
   <string name="screen_room_notification_settings_error_restoring_default">"Неуспешно възстановяване на режима по подразбиране, моля, опитайте отново."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Неуспешно задаване на режима, моля, опитайте отново."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Всички съобщения"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Само споменавания и ключови думи"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"В тази стая, да бъда известяван за"</string>
   <string name="screen_room_roles_and_permissions_admins">"Администратори"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Промяна на моята роля"</string>
@@ -78,6 +78,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Роли"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Подробности за стаята"</string>
   <string name="screen_room_roles_and_permissions_title">"Роли и разрешения"</string>
+  <string name="screen_roomlist_mark_as_read">"Отбелязване като прочетено"</string>
+  <string name="screen_roomlist_mark_as_unread">"Отбелязване като непрочетено"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Добавяне на адрес"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Да, включване на шифроването"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_title">"Да се включи ли шифроването?"</string>

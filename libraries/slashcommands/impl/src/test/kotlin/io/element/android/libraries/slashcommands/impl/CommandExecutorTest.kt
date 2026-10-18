@@ -14,7 +14,6 @@ import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
@@ -185,10 +184,18 @@ class CommandExecutorTest {
     }
 
     @Test
-    fun `change display name for room is not supported`() = runTest {
-        val sut = createCommandExecutor()
-        val res = sut.proceedAdmin(SlashCommand.ChangeDisplayNameForRoom(A_USER_NAME))
-        assertThat(res.isFailure).isTrue()
+    fun `change display name for room delegates to joined room`() = runTest {
+        var capturedDisplayName: String? = null
+        val joinedRoom = FakeJoinedRoom(
+            setOwnMemberDisplayNameResult = { displayName ->
+                capturedDisplayName = displayName
+                Result.success(Unit)
+            }
+        )
+        val sut = createCommandExecutor(joinedRoom = joinedRoom)
+        val res = sut.proceedAdmin(SlashCommand.ChangeDisplayNameForRoom("room nick"))
+        assertThat(res.isSuccess).isTrue()
+        assertThat(capturedDisplayName).isEqualTo("room nick")
     }
 
     @Test

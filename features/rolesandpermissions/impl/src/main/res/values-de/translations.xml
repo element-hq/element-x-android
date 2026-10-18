@@ -5,7 +5,8 @@
   <string name="screen_room_change_permissions_change_settings">"Einstellungen ändern"</string>
   <string name="screen_room_change_permissions_delete_messages">"Nachrichten entfernen"</string>
   <string name="screen_room_change_permissions_everyone">"Mitglied"</string>
-  <string name="screen_room_change_permissions_invite_people">"Mitglieder hinzufügen"</string>
+  <string name="screen_room_change_permissions_invite_people">"Personen einladen"</string>
+  <string name="screen_room_change_permissions_live_location">"Live-Standort teilen"</string>
   <string name="screen_room_change_permissions_manage_space">"Space konfigurieren"</string>
   <string name="screen_room_change_permissions_manage_space_rooms">"Chats und Gruppen konfigurieren"</string>
   <string name="screen_room_change_permissions_member_moderation">"Mitglieder verwalten"</string>
@@ -42,7 +43,7 @@
     <item quantity="one">"%1$d gesperrt"</item>
     <item quantity="other">"%1$d gesperrt"</item>
   </plurals>
-  <string name="screen_room_member_list_empty_search_subtitle">"Überprüfe die Schreibweise oder versuch\'s mit einer neuen Suche"</string>
+  <string name="screen_room_member_list_empty_search_subtitle">"Überprüfe die Schreibweise oder versuche eine neue Suche"</string>
   <string name="screen_room_member_list_empty_search_title">"Keine Ergebnisse für „%1$s“"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d Person"</item>
@@ -64,7 +65,7 @@
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_role_owner">"Eigentümer"</string>
   <string name="screen_room_member_list_room_members_header_title">"Mitglieder"</string>
-  <string name="screen_room_member_list_unbanning_user">"%1$s wird entsperrt."</string>
+  <string name="screen_room_member_list_unbanning_user">"Die Sperre für %1$s wird aufgehoben"</string>
   <string name="screen_room_roles_and_permissions_admins">"Admins"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Admins und Eigentümer"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"Ändere meine Rolle"</string>

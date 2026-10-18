@@ -126,7 +126,7 @@ private fun RoomListDeclineInviteMenuContent(
 @PreviewsDayNight
 @Composable
 internal fun RoomListDeclineInviteMenuPreview(
-    @PreviewParameter(RoomListStateDeclineInviteMenuShownProvider::class) menu: RoomListState.DeclineInviteMenu.Shown,
+    @PreviewParameter(RoomListStateDeclineInviteMenuShownPreviewParam::class) menu: RoomListState.DeclineInviteMenu.Shown,
 ) = ElementPreview {
     RoomListDeclineInviteMenu(
         menu = menu,

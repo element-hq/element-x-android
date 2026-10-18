@@ -2,12 +2,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Не можете підтвердити?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Створити новий ключ відновлення"</string>
-  <string name="screen_identity_confirmation_subtitle">"Верифікуйте цей пристрій, щоб налаштувати безпечний обмін повідомленнями."</string>
-  <string name="screen_identity_confirmation_title">"Підтвердьте, що це ви"</string>
+  <string name="screen_identity_confirmation_subtitle">"Виберіть спосіб звіряння, щоб налаштувати безпечний обмін повідомленнями."</string>
+  <string name="screen_identity_confirmation_title">"Підтвердьте свою цифрову ідентичність"</string>
   <string name="screen_identity_confirmation_use_another_device">"Використовуйте інший пристрій"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Використовуйте ключ відновлення"</string>
   <string name="screen_identity_confirmed_subtitle">"Тепер ви можете безпечно читати або надсилати повідомлення, і кожен, з ким ви спілкуєтесь, також може довіряти цьому пристрою."</string>
-  <string name="screen_identity_confirmed_title">"Пристрій перевірено"</string>
+  <string name="screen_identity_confirmed_title">"Пристрій звірено"</string>
   <string name="screen_identity_use_another_device">"Використовуйте інший пристрій"</string>
   <string name="screen_identity_waiting_on_other_device">"Чекає на інше пристрій…"</string>
   <string name="screen_notification_optin_subtitle">"Ви можете змінити свої налаштування пізніше."</string>

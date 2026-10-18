@@ -17,7 +17,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_FORMATTED_DATE
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -26,14 +25,13 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class PushHistoryViewTest {
+class PushHistoryViewTest : RobolectricTest() {
     @Test
-    fun `clicking on Reset sends a PushHistoryEvents`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PushHistoryEvents>()
+    fun `clicking on Reset sends a PushHistoryEvent`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<PushHistoryEvent>()
         setPushHistoryView(
             aPushHistoryState(
                 pushCounter = 123,
@@ -43,14 +41,14 @@ class PushHistoryViewTest {
         val menuContentDescription = activity!!.getString(CommonStrings.a11y_user_menu)
         onNodeWithContentDescription(menuContentDescription).performClick()
         clickOn(CommonStrings.action_reset)
-        eventsRecorder.assertSingle(PushHistoryEvents.Reset(requiresConfirmation = true))
+        eventsRecorder.assertSingle(PushHistoryEvent.Reset(requiresConfirmation = true))
         // Also check that the push counter is rendered
         onNodeWithText("123").assertExists()
     }
 
     @Test
-    fun `clicking on show only errors sends a PushHistoryEvents(true)`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PushHistoryEvents>()
+    fun `clicking on show only errors sends a PushHistoryEvent(true)`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<PushHistoryEvent>()
         setPushHistoryView(
             aPushHistoryState(
                 showOnlyErrors = false,
@@ -60,12 +58,12 @@ class PushHistoryViewTest {
         val menuContentDescription = activity!!.getString(CommonStrings.a11y_user_menu)
         onNodeWithContentDescription(menuContentDescription).performClick()
         onNodeWithText("Show only errors").performClick()
-        eventsRecorder.assertSingle(PushHistoryEvents.SetShowOnlyErrors(showOnlyErrors = true))
+        eventsRecorder.assertSingle(PushHistoryEvent.SetShowOnlyErrors(showOnlyErrors = true))
     }
 
     @Test
-    fun `clicking on show only errors sends a PushHistoryEvents(false)`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PushHistoryEvents>()
+    fun `clicking on show only errors sends a PushHistoryEvent(false)`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<PushHistoryEvent>()
         setPushHistoryView(
             aPushHistoryState(
                 showOnlyErrors = true,
@@ -75,12 +73,12 @@ class PushHistoryViewTest {
         val menuContentDescription = activity!!.getString(CommonStrings.a11y_user_menu)
         onNodeWithContentDescription(menuContentDescription).performClick()
         onNodeWithText("Show only errors").performClick()
-        eventsRecorder.assertSingle(PushHistoryEvents.SetShowOnlyErrors(showOnlyErrors = false))
+        eventsRecorder.assertSingle(PushHistoryEvent.SetShowOnlyErrors(showOnlyErrors = false))
     }
 
     @Test
     fun `clicking on an invalid event has no effect`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PushHistoryEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<PushHistoryEvent>(expectEvents = false)
         setPushHistoryView(
             aPushHistoryState(
                 pushHistoryItems = listOf(
@@ -97,7 +95,7 @@ class PushHistoryViewTest {
 
     @Test
     fun `clicking on a valid event emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<PushHistoryEvents>()
+        val eventsRecorder = EventsRecorder<PushHistoryEvent>()
         setPushHistoryView(
             aPushHistoryState(
                 pushHistoryItems = listOf(
@@ -113,7 +111,7 @@ class PushHistoryViewTest {
         )
         onNodeWithText(A_FORMATTED_DATE).performClick()
         eventsRecorder.assertSingle(
-            PushHistoryEvents.NavigateTo(
+            PushHistoryEvent.NavigateTo(
                 sessionId = A_SESSION_ID,
                 roomId = A_ROOM_ID,
                 eventId = AN_EVENT_ID,

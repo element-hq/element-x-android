@@ -6,7 +6,8 @@
   * [I want to help translating Element](#i-want-to-help-translating-element)
   * [I want to fix a bug](#i-want-to-fix-a-bug)
   * [I want to add a new feature or enhancement](#i-want-to-add-a-new-feature-or-enhancement)
-* [Developer onboarding](#developer-onboarding)
+  * [Etiquette](#etiquette)
+  * [Developer onboarding](#developer-onboarding)
   * [Submitting the PRs](#submitting-the-prs)
   * [Android Studio settings](#android-studio-settings)
   * [Compilation](#compilation)
@@ -63,7 +64,27 @@ Once we know that you want to contribute and have confirmed that the new feature
 
 Only once all of the above is met should you open a PR with your proposed changes.
 
-## Developer onboarding
+### Etiquette
+
+* As stated above all significant changes should be communicated through an issue before opening a PR
+* We are happy to receive contributions but features always require maintenance, so depending on the change we might not be willing to accept it
+* We are also fine with AI led contributions within reasonable bounds
+    * You are completely responsible for the quality of the PR
+    * If the PR doesn't show minimal effort (code does not compile, code does not work as expected, etc.) on your part it will be closed
+    * Please write the description yourself, we don't have the bandwidth to read LLM essays. The code needs to speak for itself.
+* We use git for version control and GitHub for reviews, so in order to make everybody's life easier please:
+    * Keep the existing pull request template
+    * Don't submit large PRs, especially if not previously talked about. Anything above 200 lines is large (excluding generated code e.g. tests, translations, mocks)
+    * Please don't open unfinished PRs and expect us to fill in the details
+    * If you would like our opinion/direction on unfinished code please link your branch or idea in the ticket
+    * Please limit the number of commits in a single PR. We are perfectly happy with splitting work across multiple sessions as long as they're logically independant and show promise of progress (ideally expressed through a ticket)
+    * Each and every commit should stand on its own, clearly explaining what it does and why
+* Once a PR goes into review please don't rewrite the history unless agreed so with the reviewer.
+    * Tweaks and fixes following review can be directly committed (to be interactively rebased later) or as fixups
+
+*The reviewer's response time will generally match yours. Switching contexts is very hard so please act accordingly. You are responsible for making the reviewers job enjoyable!*
+
+### Developer onboarding
 
 For a detailed overview of the project, see [Developer Onboarding](./docs/_developer_onboarding.md).
 

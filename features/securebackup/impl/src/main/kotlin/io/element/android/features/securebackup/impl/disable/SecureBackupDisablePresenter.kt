@@ -37,10 +37,10 @@ class SecureBackupDisablePresenter(
         Timber.tag(loggerTagDisable.value).d("backupState: $backupState")
         val disableAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val coroutineScope = rememberCoroutineScope()
-        fun handleEvent(event: SecureBackupDisableEvents) {
+        fun handleEvent(event: SecureBackupDisableEvent) {
             when (event) {
-                is SecureBackupDisableEvents.DisableBackup -> coroutineScope.disableBackup(disableAction)
-                SecureBackupDisableEvents.DismissDialogs -> {
+                is SecureBackupDisableEvent.DisableBackup -> coroutineScope.disableBackup(disableAction)
+                SecureBackupDisableEvent.DismissDialogs -> {
                     disableAction.value = AsyncAction.Uninitialized
                 }
             }

@@ -2,4 +2,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_share_location_live_location_disclaimer_title">"История вашего местоположения в режиме реального времени будет сохранена в комнате и станет доступна участникам после окончания сессии."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Выберите, как долго вы будете делиться своим местоположением в режиме реального времени."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"У тебя нет прав на то, чтобы делиться своим текущим местоположением в этой комнате"</string>
 </resources>

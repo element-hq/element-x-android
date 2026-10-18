@@ -12,7 +12,10 @@ package io.element.android.features.lockscreen.impl.unlock.keypad
 
 import android.view.KeyEvent
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.input.InputMode
+import androidx.compose.ui.input.InputModeManager
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.platform.LocalInputModeManager
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
@@ -28,12 +31,10 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class PinKeypadTest {
+class PinKeypadTest : RobolectricTest() {
     @Test
     fun `clicking on a number emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinKeypadModel>()
@@ -54,7 +55,9 @@ class PinKeypadTest {
     @Test
     fun `typing using the hardware keyboard emits the expected events`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinKeypadModel>()
-        setPinKeyPad(onClick = eventsRecorder)
+        val inputModeManager = setPinKeyPad(onClick = eventsRecorder)
+        // Like a hardware keyboard would do, leave the touch mode, else the keys are not focusable.
+        runOnIdle { inputModeManager.requestInputMode(InputMode.Keyboard) }
         onNodeWithText("1").requestFocus()
         onAllNodes(isRoot())[0].performKeyInput {
             val keys = listOf(
@@ -117,13 +120,16 @@ class PinKeypadTest {
 
     private fun AndroidComposeUiTest<ComponentActivity>.setPinKeyPad(
         onClick: (PinKeypadModel) -> Unit = EnsureNeverCalledWithParam(),
-    ) {
+    ): InputModeManager {
+        lateinit var inputModeManager: InputModeManager
         setContent {
+            inputModeManager = LocalInputModeManager.current
             PinKeypad(
                 onClick = onClick,
                 maxWidth = 1000.dp,
                 maxHeight = 1000.dp,
             )
         }
+        return inputModeManager
     }
 }

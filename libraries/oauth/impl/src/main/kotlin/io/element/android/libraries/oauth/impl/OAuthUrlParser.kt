@@ -12,6 +12,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.matrix.api.auth.OAuthRedirectUrlProvider
 import io.element.android.libraries.oauth.api.OAuthAction
+import timber.log.Timber
 
 fun interface OAuthUrlParser {
     fun parse(url: String): OAuthAction?
@@ -38,7 +39,8 @@ class DefaultOAuthUrlParser(
         if (url.contains("error=access_denied")) return OAuthAction.GoBack()
         if (url.contains("code=")) return OAuthAction.Success(url)
 
-        // Other case not supported, let's crash the app for now
-        error("Not supported: $url")
+        // Other cases are not supported, log an error and return null
+        Timber.w("Unsupported OAuth url")
+        return null
     }
 }

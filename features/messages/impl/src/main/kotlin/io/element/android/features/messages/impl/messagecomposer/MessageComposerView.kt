@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
-import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerStateProvider
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerStatePreviewParam
 import io.element.android.features.messages.api.timeline.voicemessages.composer.aVoiceMessageComposerState
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -102,6 +102,7 @@ internal fun MessageComposerView(
         onRequestFocus = ::onRequestFocus,
         onSendMessage = ::sendMessage,
         composerMode = state.mode,
+        isInThreadTimeline = state.isInThreadTimeline,
         showTextFormatting = state.showTextFormatting,
         onResetComposerMode = ::onCloseSpecialMode,
         onAddAttachment = ::onAddAttachment,
@@ -128,7 +129,7 @@ internal fun MessageComposerView(
 @PreviewsDayNight
 @Composable
 internal fun MessageComposerViewPreview(
-    @PreviewParameter(MessageComposerStateProvider::class) state: MessageComposerState,
+    @PreviewParameter(MessageComposerStatePreviewParam::class) state: MessageComposerState,
 ) = ElementPreview {
     Column {
         MessageComposerView(
@@ -148,7 +149,7 @@ internal fun MessageComposerViewPreview(
 @PreviewsDayNight
 @Composable
 internal fun MessageComposerViewVoicePreview(
-    @PreviewParameter(VoiceMessageComposerStateProvider::class) state: VoiceMessageComposerState,
+    @PreviewParameter(VoiceMessageComposerStatePreviewParam::class) state: VoiceMessageComposerState,
 ) = ElementPreview {
     Column {
         MessageComposerView(

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <plurals name="a11y_polls_percent_of_total">
+    <item quantity="one">"درصد %1$d از کل آرا"</item>
+    <item quantity="other">"درصد %1$d از کل آرا"</item>
+  </plurals>
   <string name="a11y_polls_will_remove_selection">"گزینش پیشین را برخواهد داشت"</string>
   <string name="a11y_polls_winning_answer">"این پاسخ برنده است"</string>
 </resources>

@@ -29,18 +29,6 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class) class KnockRequestsBannerPresenterTest {
     @Test
-    fun `present - when feature is disabled then the banner should be hidden`() = runTest {
-        val knockRequests = flowOf(listOf(FakeKnockRequest()))
-        val presenter = createKnockRequestsBannerPresenter(isFeatureEnabled = false, knockRequestsFlow = knockRequests)
-        presenter.test {
-            skipItems(1)
-            awaitItem().also { state ->
-                assertThat(state.isVisible).isFalse()
-            }
-        }
-    }
-
-    @Test
     fun `present - when empty knock request list then the banner should be hidden`() = runTest {
         val knockRequests = flowOf(emptyList<KnockRequest>())
         val presenter = createKnockRequestsBannerPresenter(knockRequestsFlow = knockRequests)
@@ -158,7 +146,7 @@ import org.junit.Test
         presenter.test {
             skipItems(2)
             awaitItem().also { state ->
-                state.eventSink(KnockRequestsBannerEvents.AcceptSingleRequest)
+                state.eventSink(KnockRequestsBannerEvent.AcceptSingleRequest)
             }
             awaitItem().also { state ->
                 assertThat(state.isVisible).isFalse()
@@ -194,7 +182,7 @@ import org.junit.Test
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.knockRequests).hasSize(1)
-                state.eventSink(KnockRequestsBannerEvents.AcceptSingleRequest)
+                state.eventSink(KnockRequestsBannerEvent.AcceptSingleRequest)
             }
             awaitItem().also { state ->
                 assertThat(state.isVisible).isFalse()
@@ -218,7 +206,7 @@ import org.junit.Test
         presenter.test {
             skipItems(2)
             awaitItem().also { state ->
-                state.eventSink(KnockRequestsBannerEvents.Dismiss)
+                state.eventSink(KnockRequestsBannerEvent.Dismiss)
             }
             advanceUntilIdle()
             assert(markAsSeenLambda).isCalledExactly(3)
@@ -229,12 +217,10 @@ import org.junit.Test
 private fun TestScope.createKnockRequestsBannerPresenter(
     knockRequestsFlow: Flow<List<KnockRequest>> = flowOf(emptyList()),
     canAcceptKnockRequests: Boolean = true,
-    isFeatureEnabled: Boolean = true,
 ): KnockRequestsBannerPresenter {
     val knockRequestsService = KnockRequestsService(
         knockRequestsFlow = knockRequestsFlow,
         coroutineScope = backgroundScope,
-        isKnockFeatureEnabledFlow = flowOf(isFeatureEnabled),
         permissionsFlow = flowOf(KnockRequestPermissions(canAcceptKnockRequests, canAcceptKnockRequests, canAcceptKnockRequests)),
     )
     return KnockRequestsBannerPresenter(

@@ -24,6 +24,11 @@ android {
     }
 
     defaultConfig {
+        buildConfigField(
+            name = "OAUTH_CLIENT_URI_PATH",
+            type = "String",
+            value = BuildTimeConfig.OAUTH_CLIENT_URL_PATH?.let { "\"$it\"" } ?: "null",
+        )
         buildConfigFieldStr(
             name = "CLIENT_URI",
             value = BuildTimeConfig.URL_WEBSITE ?: "https://element.io"
@@ -48,8 +53,8 @@ dependencies {
     implementation(libs.serialization.json)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.services.analytics.api)
+    implementation(projects.libraries.sessionStorage.api)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)

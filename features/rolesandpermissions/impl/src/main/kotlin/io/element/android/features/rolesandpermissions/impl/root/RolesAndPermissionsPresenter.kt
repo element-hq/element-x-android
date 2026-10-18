@@ -63,20 +63,20 @@ class RolesAndPermissionsPresenter(
         val changeOwnRoleAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val resetPermissionsAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
-        fun handleEvent(event: RolesAndPermissionsEvents) {
+        fun handleEvent(event: RolesAndPermissionsEvent) {
             when (event) {
-                is RolesAndPermissionsEvents.ChangeOwnRole -> {
+                is RolesAndPermissionsEvent.ChangeOwnRole -> {
                     changeOwnRoleAction.value = AsyncAction.ConfirmingNoParams
                 }
-                is RolesAndPermissionsEvents.CancelPendingAction -> {
+                is RolesAndPermissionsEvent.CancelPendingAction -> {
                     changeOwnRoleAction.value = AsyncAction.Uninitialized
                     resetPermissionsAction.value = AsyncAction.Uninitialized
                 }
-                is RolesAndPermissionsEvents.DemoteSelfTo -> coroutineScope.demoteSelfTo(
+                is RolesAndPermissionsEvent.DemoteSelfTo -> coroutineScope.demoteSelfTo(
                     role = event.role,
                     changeOwnRoleAction = changeOwnRoleAction,
                 )
-                is RolesAndPermissionsEvents.ResetPermissions -> if (resetPermissionsAction.value.isConfirming()) {
+                is RolesAndPermissionsEvent.ResetPermissions -> if (resetPermissionsAction.value.isConfirming()) {
                     coroutineScope.resetPermissions(resetPermissionsAction)
                 } else {
                     resetPermissionsAction.value = AsyncAction.ConfirmingNoParams

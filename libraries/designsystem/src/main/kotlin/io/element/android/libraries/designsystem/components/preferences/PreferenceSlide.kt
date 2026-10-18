@@ -46,7 +46,7 @@ fun PreferenceSlide(
             iconResourceId = iconResourceId,
             showIconAreaIfNoIcon = showIconAreaIfNoIcon,
         ),
-        headlineContent = {
+        content = {
             Column {
                 Text(
                     style = ElementTheme.typography.fontBodyLgRegular,

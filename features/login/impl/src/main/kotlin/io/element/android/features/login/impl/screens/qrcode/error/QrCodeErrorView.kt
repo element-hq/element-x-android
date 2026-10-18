@@ -125,7 +125,7 @@ private fun Content(errorScreenType: QrCodeErrorScreenType) {
 }
 
 @Composable
-private fun Buttons(
+private fun ColumnScope.Buttons(
     onRetry: () -> Unit,
     onCancel: () -> Unit,
 ) {
@@ -143,7 +143,7 @@ private fun Buttons(
 
 @PreviewsDayNight
 @Composable
-internal fun QrCodeErrorViewPreview(@PreviewParameter(QrCodeErrorScreenTypeProvider::class) errorScreenType: QrCodeErrorScreenType) {
+internal fun QrCodeErrorViewPreview(@PreviewParameter(QrCodeErrorScreenTypePreviewParam::class) errorScreenType: QrCodeErrorScreenType) {
     ElementPreview {
         QrCodeErrorView(
             errorScreenType = errorScreenType,
@@ -154,7 +154,7 @@ internal fun QrCodeErrorViewPreview(@PreviewParameter(QrCodeErrorScreenTypeProvi
     }
 }
 
-class QrCodeErrorScreenTypeProvider : PreviewParameterProvider<QrCodeErrorScreenType> {
+class QrCodeErrorScreenTypePreviewParam : PreviewParameterProvider<QrCodeErrorScreenType> {
     override val values: Sequence<QrCodeErrorScreenType> = sequenceOf(
         QrCodeErrorScreenType.Cancelled,
         QrCodeErrorScreenType.Declined,

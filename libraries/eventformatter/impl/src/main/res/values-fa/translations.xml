@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"چهرک اتاق را برداشتید"</string>
   <string name="state_event_room_ban">"%2$s به دست %1$s مسدود کرد"</string>
   <string name="state_event_room_ban_by_you">"%1$s را مسدود کردید"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"شما %1$s: %2$s را محروم کردید"</string>
+  <string name="state_event_room_ban_with_reason">"%1$s محروم شد %2$s: %3$s"</string>
   <string name="state_event_room_created">"%1$s اتاق را ایجاد کرد"</string>
   <string name="state_event_room_created_by_you">"اتاق را ساختید"</string>
   <string name="state_event_room_invite">"%1$s از %2$s دعوت کرد"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"دعوت را رد کردید"</string>
   <string name="state_event_room_remove">"%2$s به دست %1$s برداشته شد"</string>
   <string name="state_event_room_remove_by_you">"%1$s را برداشتید"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"شما %1$s: %2$s را حذف کردید"</string>
+  <string name="state_event_room_remove_with_reason">"%1$s حذف شد %2$s: %3$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s دعوتی برای پیوستن %2$s به اتاق فرستاد"</string>
   <string name="state_event_room_third_party_invite_by_you">"برای %1$s دعوت پیوستن به اتاق فرستادید"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s دعوت پیوستن به اتاق %2$s را باطل کرد"</string>

@@ -5,12 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.linknewdevice.impl.screens.root
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -41,7 +38,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun LinkNewDeviceRootView(
     state: LinkNewDeviceRootState,
     onBackClick: () -> Unit,
-    onLinkDesktopDeviceClick: () -> Unit,
+    onUnlockDevice: (type: LinkDeviceType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val (title, subtitle, iconStyle) = if (state.isSupported.dataOrNull() == false) {
@@ -57,6 +54,7 @@ fun LinkNewDeviceRootView(
             BigIcon.Style.Default(CompoundIcons.Devices())
         )
     }
+
     FlowStepPage(
         onBackClick = onBackClick,
         title = title,
@@ -83,40 +81,37 @@ fun LinkNewDeviceRootView(
                 }
                 is AsyncData.Success -> {
                     if (state.isSupported.data) {
-                        when (state.qrCodeData) {
-                            AsyncData.Uninitialized,
-                            is AsyncData.Failure -> {
-                                Button(
-                                    onClick = { state.eventSink(LinkNewDeviceRootEvent.LinkMobileDevice) },
-                                    text = stringResource(id = R.string.screen_link_new_device_root_mobile_device),
-                                    modifier = Modifier.fillMaxWidth(),
-                                    leadingIcon = IconSource.Vector(CompoundIcons.Mobile()),
-                                )
-                                Button(
-                                    onClick = onLinkDesktopDeviceClick,
-                                    text = stringResource(id = R.string.screen_link_new_device_root_desktop_computer),
-                                    modifier = Modifier.fillMaxWidth(),
-                                    leadingIcon = IconSource.Vector(CompoundIcons.Computer()),
-                                )
-                            }
-                            is AsyncData.Loading,
-                            is AsyncData.Success -> {
-                                Button(
-                                    onClick = { state.eventSink(LinkNewDeviceRootEvent.LinkMobileDevice) },
-                                    text = stringResource(id = R.string.screen_link_new_device_root_loading_qr_code),
-                                    showProgress = true,
-                                    enabled = false,
-                                    modifier = Modifier.fillMaxWidth(),
-                                )
-                                Button(
-                                    onClick = onLinkDesktopDeviceClick,
-                                    text = stringResource(id = R.string.screen_link_new_device_root_desktop_computer),
-                                    modifier = Modifier.fillMaxWidth(),
-                                    enabled = false,
-                                    leadingIcon = IconSource.Vector(CompoundIcons.Computer()),
-                                )
-                            }
-                        }
+                        val canClick = state.qrCodeData is AsyncData.Uninitialized
+                        val isLoading = state.qrCodeData is AsyncData.Loading || state.qrCodeData is AsyncData.Success
+                        Button(
+                            onClick = {
+                                if (canClick) {
+                                    onUnlockDevice(LinkDeviceType.Mobile)
+                                }
+                            },
+                            text = stringResource(
+                                id = if (isLoading) {
+                                    R.string.screen_link_new_device_root_loading_qr_code
+                                } else {
+                                    R.string.screen_link_new_device_root_mobile_device
+                                }
+                            ),
+                            showProgress = isLoading,
+                            enabled = !isLoading,
+                            modifier = Modifier.fillMaxWidth(),
+                            leadingIcon = IconSource.Vector(CompoundIcons.Mobile()),
+                        )
+                        Button(
+                            onClick = {
+                                if (canClick) {
+                                    onUnlockDevice(LinkDeviceType.Desktop)
+                                }
+                            },
+                            text = stringResource(id = R.string.screen_link_new_device_root_desktop_computer),
+                            enabled = !isLoading,
+                            modifier = Modifier.fillMaxWidth(),
+                            leadingIcon = IconSource.Vector(CompoundIcons.Computer()),
+                        )
                     } else {
                         Button(
                             onClick = onBackClick,
@@ -142,11 +137,11 @@ fun LinkNewDeviceRootView(
 @PreviewsDayNight
 @Composable
 internal fun LinkNewDeviceRootViewPreview(
-    @PreviewParameter(LinkNewDeviceRootStateProvider::class) state: LinkNewDeviceRootState
+    @PreviewParameter(LinkNewDeviceRootStatePreviewParam::class) state: LinkNewDeviceRootState
 ) = ElementPreview {
     LinkNewDeviceRootView(
         state = state,
         onBackClick = { },
-        onLinkDesktopDeviceClick = { },
+        onUnlockDevice = { },
     )
 }

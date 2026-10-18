@@ -8,22 +8,19 @@
 
 package io.element.android.compound.screenshot
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.takahirom.roborazzi.captureRoboImage
-import io.element.android.compound.screenshot.utils.screenshotFile
+import io.element.android.compound.screenshot.utils.createPaparazziRule
 import io.element.android.compound.theme.MaterialTextPreview
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@RunWith(AndroidJUnit4::class)
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
 class MaterialTextTest {
+    // MaterialTextPreview relies on `weight`/`fillMaxSize`, so it needs a bounded frame to lay out.
+    @get:Rule
+    val paparazzi = createPaparazziRule(widthDp = 420, heightDp = 1200)
+
     @Test
-    @Config(sdk = [35], qualifiers = "w480dp-h1200dp-xxhdpi")
     fun screenshots() {
-        captureRoboImage(file = screenshotFile("MaterialText Colors.png")) {
+        paparazzi.snapshot(name = "MaterialText Colors") {
             MaterialTextPreview()
         }
     }

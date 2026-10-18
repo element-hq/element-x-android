@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Cifragem com origem num dispositivo eliminado ou desconhecido."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Cifragem com origem num dispositivo não verificado pelo seu dono."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Cifragem com origem num utilizador não verificado."</string>
-  <string name="emoji_picker_category_activity">"Atividades"</string>
-  <string name="emoji_picker_category_flags">"Bandeiras"</string>
-  <string name="emoji_picker_category_foods">"Comidas e Bebidas"</string>
-  <string name="emoji_picker_category_nature">"Animais e Natureza"</string>
-  <string name="emoji_picker_category_objects">"Objetos"</string>
-  <string name="emoji_picker_category_people">"Caras e Pessoas"</string>
-  <string name="emoji_picker_category_places">"Viagens e Lugares"</string>
-  <string name="emoji_picker_category_recent">"Emojis recentes"</string>
-  <string name="emoji_picker_category_symbols">"Símbolos"</string>
   <string name="screen_media_upload_preview_caption_warning">"As legendas poderão não ser visíveis em versões mais antigas da aplicação."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Toca para alterar a qualidade de carregamento do vídeo"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Não foi possível enviar o ficheiro"</string>

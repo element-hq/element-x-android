@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 import org.jsoup.nodes.Document
 
@@ -16,6 +17,7 @@ data class TimelineItemNoticeContent(
     override val htmlDocument: Document?,
     override val formattedBody: CharSequence,
     override val isEdited: Boolean,
+    override val messageTree: DocumentNode? = null,
 ) : TimelineItemTextBasedContent {
     override val type: String = "TimelineItemNoticeContent"
     override val plainText: String = htmlDocument?.toPlainText() ?: body

@@ -12,6 +12,9 @@ package io.element.android.services.analytics.api.watchers
  * the app was previously running and we just returned to it.
  */
 interface AnalyticsRoomListStateWatcher {
+    /** Begins watching the room list state, to be called when the app returns to the foreground. */
     fun start()
+
+    /** Stops watching, to be called when the app leaves the foreground. */
     fun stop()
 }

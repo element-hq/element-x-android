@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Толькі адміністратары"</string>
+  <string name="screen_room_change_permissions_administrators">"Адміністратар"</string>
   <string name="screen_room_change_permissions_ban_people">"Заблакіраваць людзей"</string>
   <string name="screen_room_change_permissions_delete_messages">"Выдаліць паведамленні"</string>
-  <string name="screen_room_change_permissions_invite_people">"Запрашайце людзей і прымайце запыты на далучэнне"</string>
+  <string name="screen_room_change_permissions_everyone">"Удзельнік"</string>
+  <string name="screen_room_change_permissions_invite_people">"Запрасіць людзей"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Паведамленні і змест"</string>
-  <string name="screen_room_change_permissions_moderators">"Адміністратары і мадэратары"</string>
+  <string name="screen_room_change_permissions_moderators">"Мадэратар"</string>
   <string name="screen_room_change_permissions_remove_people">"Выдаляйце людзей і адхіляйце запыты на далучэнне"</string>
   <string name="screen_room_change_permissions_room_avatar">"Змяніць аватар пакоя"</string>
   <string name="screen_room_change_permissions_room_details">"Рэдагаваць пакой"</string>
@@ -39,8 +40,8 @@
   <string name="screen_room_member_list_manage_member_unban_message">"Яны змогуць зноў далучыцца да гэтага пакоя, калі іх запросяць."</string>
   <string name="screen_room_member_list_mode_banned">"Заблакіраваныя"</string>
   <string name="screen_room_member_list_mode_members">"Удзельнікі"</string>
-  <string name="screen_room_member_list_role_administrator">"Толькі адміністратары"</string>
-  <string name="screen_room_member_list_role_moderator">"Адміністратары і мадэратары"</string>
+  <string name="screen_room_member_list_role_administrator">"Адміністратар"</string>
+  <string name="screen_room_member_list_role_moderator">"Мадэратар"</string>
   <string name="screen_room_member_list_room_members_header_title">"Удзельнікі пакоя"</string>
   <string name="screen_room_member_list_unbanning_user">"Разблакіроўка %1$s"</string>
   <string name="screen_room_roles_and_permissions_admins">"Адміністратары"</string>

@@ -8,6 +8,8 @@
   <string name="screen_bug_report_editor_placeholder">"Beskriv problemet…"</string>
   <string name="screen_bug_report_editor_supporting">"Hvis mulig, vennligst skriv beskrivelsen på engelsk."</string>
   <string name="screen_bug_report_error_description_too_short">"Beskrivelsen er for kort, vennligst gi flere detaljer om hva som skjedde. Takk skal du ha!"</string>
+  <string name="screen_bug_report_github_issue_description">"Du kan oppgi nummeret på en tilknyttet GitHub-sak, hvis det finnes."</string>
+  <string name="screen_bug_report_github_issue_label">"GitHub-sak"</string>
   <string name="screen_bug_report_include_crash_logs">"Send krasjlogger"</string>
   <string name="screen_bug_report_include_logs">"Tillat logger"</string>
   <string name="screen_bug_report_include_logs_error">"Loggene dine er for store og kan derfor ikke inkluderes i denne rapporten. Vennligst send dem til oss på en annen måte."</string>

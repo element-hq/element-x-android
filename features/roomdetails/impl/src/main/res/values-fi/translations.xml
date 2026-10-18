@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Tarvitset osoitteen, jotta se näkyy julkisessa hakemistossa."</string>
   <string name="screen_edit_room_address_title">"Muokkaa osoitetta"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Ilmoitusasetusten muokkaamisessa tapahtui virhe."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Kotipalvelimesi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et ehkä saa ilmoitusta joissakin huoneissa."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Palveluntarjoajasi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et ehkä saa ilmoitusta joissakin huoneissa."</string>
   <string name="screen_polls_history_title">"Kyselyt"</string>
   <string name="screen_room_change_permissions_administrators">"Ylläpitäjä"</string>
   <string name="screen_room_change_permissions_ban_people">"Porttikieltojen antaminen"</string>
@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Älä sulje sovellusta ennen kuin se on valmis."</string>
   <string name="screen_room_details_invite_people_preparing">"Valmistellaan kutsuja…"</string>
   <string name="screen_room_details_invite_people_title">"Kutsu henkilöitä"</string>
+  <string name="screen_room_details_invite_title">"Kutsu"</string>
   <string name="screen_room_details_leave_conversation_title">"Poistu keskustelusta"</string>
   <string name="screen_room_details_leave_room_title">"Poistu huoneesta"</string>
   <string name="screen_room_details_media_gallery_title">"Media ja tiedostot"</string>
@@ -111,9 +112,10 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Ilmoitusasetusten lataamisessa tapahtui virhe."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Oletustilan palauttaminen epäonnistui, yritä uudelleen."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Tilan asettaminen epäonnistui, yritä uudelleen."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Kotipalvelimesi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et saa ilmoituksia tästä huoneesta."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Palveluntarjoajasi ei tue tätä vaihtoehtoa salatuissa huoneissa, joten et saa ilmoituksia tästä huoneesta."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Kaikista viesteistä"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Vain maininnoista ja avainsanoista"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Vain maininnoista ja vastauksista"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Mykistä"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"Ilmoita minulle tässä huoneessa"</string>
   <string name="screen_room_roles_and_permissions_admins">"Ylläpitäjät"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Ylläpitäjät ja omistajat"</string>
@@ -131,6 +133,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roolit"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Huoneen tiedot"</string>
   <string name="screen_room_roles_and_permissions_title">"Roolit ja oikeudet"</string>
+  <string name="screen_roomlist_mark_as_read">"Merkitse luetuksi"</string>
+  <string name="screen_roomlist_mark_as_unread">"Merkitse lukemattomaksi"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Lisää osoite"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Kuka tahansa valtuutetuissa tiloissa voi liittyä, mutta kaikkien muiden on pyydettävä pääsyä."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Kaikkien on pyydettävä pääsyä."</string>
@@ -144,7 +148,7 @@ Emme suosittele salauksen ottamista käyttöön huoneissa, jotka kuka tahansa vo
   <string name="screen_security_and_privacy_encryption_section_footer">"Kun salaus on kerran otettu käyttöön, sitä ei voi poistaa käytöstä."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Salaus"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Ota päästä päähän -salaus käyttöön"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Kuka tahansa voi liittyä."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Kuka tahansa voi liittyä, myös organisaatiosi ulkopuoliset henkilöt."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Kuka tahansa"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Valitse, minkä tilojen jäsenet voivat liittyä tähän huoneeseen ilman kutsua. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Hallitse tiloja"</string>

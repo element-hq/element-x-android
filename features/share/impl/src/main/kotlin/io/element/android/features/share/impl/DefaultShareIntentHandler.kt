@@ -42,7 +42,8 @@ class DefaultShareIntentHandler(
         val uris = getIncomingUris(intent, type)
         return when {
             uris.isEmpty() && type == MimeTypes.PlainText -> handlePlainText(intent)
-            type.isMimeTypeImage() ||
+            uris.isNotEmpty() ||
+                type.isMimeTypeImage() ||
                 type.isMimeTypeVideo() ||
                 type.isMimeTypeAudio() ||
                 type.isMimeTypeApplication() ||

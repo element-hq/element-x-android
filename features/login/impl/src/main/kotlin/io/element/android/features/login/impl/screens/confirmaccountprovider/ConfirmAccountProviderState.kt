@@ -8,15 +8,29 @@
 
 package io.element.android.features.login.impl.screens.confirmaccountprovider
 
-import io.element.android.features.login.impl.accountprovider.AccountProvider
-import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.changeserver.ChangeServerState
+import io.element.android.features.login.impl.login.LoginModeState
 import io.element.android.libraries.architecture.AsyncData
 
 data class ConfirmAccountProviderState(
-    val accountProvider: AccountProvider,
+    val accountProviderInput: String,
+    // The full account provider from history that the current input is a prefix of, offered as inline autocomplete.
+    val accountProviderSuggestion: String?,
     val isAccountCreation: Boolean,
-    val loginMode: AsyncData<LoginMode>,
-    val eventSink: (ConfirmAccountProviderEvents) -> Unit
+    val loginModeState: LoginModeState,
+    val changeServerState: ChangeServerState,
+    val eventSink: (ConfirmAccountProviderEvent) -> Unit
 ) {
-    val submitEnabled: Boolean get() = accountProvider.url.isNotEmpty() && (loginMode is AsyncData.Uninitialized || loginMode is AsyncData.Loading)
+    val submitEnabled: Boolean
+        get() = accountProviderInput.isNotBlank() &&
+            loginModeState.loginMode is AsyncData.Uninitialized &&
+            changeServerState.changeServerAction is AsyncData.Uninitialized
+
+    val isLoading: Boolean
+        get() = loginModeState.loginMode is AsyncData.Loading ||
+            changeServerState.changeServerAction is AsyncData.Loading
+
+    val isShowingError: Boolean
+        get() = loginModeState.loginMode is AsyncData.Failure ||
+            changeServerState.changeServerAction is AsyncData.Failure
 }

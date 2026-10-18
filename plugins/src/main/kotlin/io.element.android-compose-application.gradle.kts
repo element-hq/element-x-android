@@ -9,9 +9,9 @@
 /**
  * This will generate the plugin "io.element.android-compose-application" to use by app
  */
-import extension.androidConfig
+import extension.androidAppConfig
 import extension.commonDependencies
-import extension.composeConfig
+import extension.composeAppConfig
 import extension.composeDependencies
 import extension.setupKover
 import org.gradle.accessors.dm.LibrariesForLibs
@@ -19,14 +19,13 @@ import org.gradle.accessors.dm.LibrariesForLibs
 val libs = the<LibrariesForLibs>()
 plugins {
     id("com.android.application")
-    id("kotlin-android")
     id("com.autonomousapps.dependency-analysis")
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
-    androidConfig(project)
-    composeConfig()
+    androidAppConfig(project)
+    composeAppConfig()
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }

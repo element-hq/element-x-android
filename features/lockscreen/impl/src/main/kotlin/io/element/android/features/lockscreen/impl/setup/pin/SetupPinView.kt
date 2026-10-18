@@ -6,8 +6,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.features.lockscreen.impl.setup.pin
 
 import androidx.compose.foundation.layout.Column
@@ -17,7 +15,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
@@ -107,7 +104,7 @@ private fun SetupPinContent(
         pinEntry = state.activePinEntry,
         isSecured = true,
         onValueChange = { entry ->
-            state.eventSink(SetupPinEvents.OnPinEntryChanged(entry, state.isConfirmationStep))
+            state.eventSink(SetupPinEvent.OnPinEntryChanged(entry, state.isConfirmationStep))
         },
         modifier = Modifier
             .focusRequester(focusRequester)
@@ -119,7 +116,7 @@ private fun SetupPinContent(
             title = state.setupPinFailure.title(),
             content = state.setupPinFailure.content(),
             onSubmit = {
-                state.eventSink(SetupPinEvents.ClearFailure)
+                state.eventSink(SetupPinEvent.ClearFailure)
             }
         )
     }
@@ -145,7 +142,7 @@ private fun SetupPinFailure.title(): String {
 
 @Composable
 @PreviewsDayNight
-internal fun SetupPinViewPreview(@PreviewParameter(SetupPinStateProvider::class) state: SetupPinState) {
+internal fun SetupPinViewPreview(@PreviewParameter(SetupPinStatePreviewParam::class) state: SetupPinState) {
     ElementPreview {
         SetupPinView(
             state = state,

@@ -32,6 +32,7 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -46,12 +47,9 @@ import okhttp3.mockwebserver.RecordedRequest
 import okio.buffer
 import okio.source
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultBugReporterTest {
+class DefaultBugReporterTest : RobolectricTest() {
     @Test
     fun `test sendBugReport success`() = runTest {
         val server = MockWebServer()
@@ -311,6 +309,68 @@ class DefaultBugReporterTest {
         assertThat(foundValues["label"]).isEqualTo("crash")
     }
 
+    @Test
+    fun `test sendBugReport truncates a description which is too long`() = runTest {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+        )
+        server.start()
+        val hugeCrashCallStack = "a".repeat(RageshakeConfig.MAX_DESCRIPTION_SIZE * 2)
+        val sut = createDefaultBugReporter(
+            server = server,
+            crashDataStore = FakeCrashDataStore(hugeCrashCallStack, true),
+        )
+
+        sut.sendBugReport(
+            withDevicesLogs = true,
+            withCrashLogs = true,
+            withScreenshot = true,
+            problemDescription = "a bug occurred",
+            canContact = true,
+            listener = NoopBugReporterListener(),
+        )
+        val request = server.takeRequest()
+
+        val text = collectValuesFromFormData(request)["text"]!!
+        assertThat(text).startsWith("a bug occurred")
+        assertThat(text).contains("truncated")
+        assertThat(text.length).isAtMost(RageshakeConfig.MAX_DESCRIPTION_SIZE + TRUNCATION_MARKER_MAX_SIZE)
+        assertThat(text.length).isLessThan(GITHUB_MAX_ISSUE_BODY_SIZE)
+        server.shutdown()
+    }
+
+    @Test
+    fun `test sendBugReport does not truncate a description which fits`() = runTest {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+        )
+        server.start()
+        val sut = createDefaultBugReporter(
+            server = server,
+            crashDataStore = FakeCrashDataStore("I did crash", true),
+        )
+
+        sut.sendBugReport(
+            withDevicesLogs = true,
+            withCrashLogs = true,
+            withScreenshot = true,
+            problemDescription = "a bug occurred",
+            canContact = true,
+            listener = NoopBugReporterListener(),
+        )
+        val request = server.takeRequest()
+
+        val text = collectValuesFromFormData(request)["text"]!!
+        assertThat(text).startsWith("a bug occurred")
+        assertThat(text).endsWith("I did crash")
+        assertThat(text).doesNotContain("truncated")
+        server.shutdown()
+    }
+
     private fun collectValuesFromFormData(request: RecordedRequest): HashMap<String, String> {
         val boundary = request.headers["Content-Type"]!!.split("=").last()
         val foundValues = HashMap<String, String>()
@@ -536,6 +596,8 @@ class DefaultBugReporterTest {
     }
 
     companion object {
-        private const val EXPECTED_NUMBER_OF_PROGRESS_VALUE = 17
+        private const val EXPECTED_NUMBER_OF_PROGRESS_VALUE = 18
+        private const val GITHUB_MAX_ISSUE_BODY_SIZE = 65_536
+        private const val TRUNCATION_MARKER_MAX_SIZE = 200
     }
 }

@@ -1,0 +1,41 @@
+/*
+ * Copyright (c) 2026 Element Creations Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.libraries.htmlrenderer.api
+
+import io.element.android.libraries.designsystem.components.LINK_TAG
+import org.jsoup.nodes.Document
+
+/**
+ * Parses the HTML [Document] of a formatted message body into a tree of [MessageNode]s
+ * that a Compose renderer can turn into composables.
+ *
+ * The [Document] is expected to have already been sanitized (e.g. via
+ * `FormattedBody.toHtmlDocument`) so that only supported tags remain.
+ */
+interface HtmlMessageParser {
+    /**
+     * Converts [document] into a [DocumentNode]. Never throws: unknown or empty content
+     * yields a [DocumentNode] with no children.
+     */
+    fun parse(document: Document): DocumentNode
+
+    companion object {
+        /**
+         * Tag used for the string annotation attached to link (`<a href>`) text ranges in a
+         * [ParagraphNode.text]. The annotation value is the link target URL.
+         */
+        const val LINK_ANNOTATION_TAG = LINK_TAG
+
+        /**
+         * Tag used for the string annotation attached to inline code (`<code>`) text ranges in a
+         * [ParagraphNode.text]. The annotation value is empty; only the range matters. A `<code>`
+         * nested inside a `<pre>` is part of the [CodeBlockNode] and is never annotated this way.
+         */
+        const val INLINE_CODE_ANNOTATION_TAG = "inline_code"
+    }
+}

@@ -17,7 +17,6 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import org.matrix.rustcomponents.sdk.NotificationEvent
@@ -37,10 +36,6 @@ class NotificationMapper(
     ): Result<NotificationData> {
         return runCatchingExceptions {
             notificationItem.use { item ->
-                val isDm = isDm(
-                    isDirect = item.roomInfo.isDirect,
-                    activeMembersCount = item.roomInfo.joinedMembersCount.toInt(),
-                )
                 val timestamp = item.timestamp() ?: clock.epochMillis()
                 NotificationData(
                     sessionId = sessionId,
@@ -50,10 +45,10 @@ class NotificationMapper(
                     senderAvatarUrl = item.senderInfo.avatarUrl,
                     senderDisplayName = item.senderInfo.displayName,
                     senderIsNameAmbiguous = item.senderInfo.isNameAmbiguous,
-                    roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { isDm },
+                    roomAvatarUrl = item.roomInfo.avatarUrl ?: item.senderInfo.avatarUrl.takeIf { item.roomInfo.isDm },
                     roomDisplayName = item.roomInfo.displayName,
                     isDirect = item.roomInfo.isDirect,
-                    isDm = isDm,
+                    isDm = item.roomInfo.isDm,
                     isSpace = item.roomInfo.isSpace,
                     isEncrypted = item.roomInfo.isEncrypted.orFalse(),
                     isNoisy = item.isNoisy.orFalse(),

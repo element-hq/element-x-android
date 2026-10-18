@@ -50,7 +50,7 @@
   <string name="notification_sender_mention_reply">"%1$s zmínil(a) nebo odpověděl(a)"</string>
   <string name="notification_space_invite_body">"Pozvali vás do prostoru"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s vás pozvali do prostoru"</string>
-  <string name="notification_test_push_notification_content">"Prohlížíte si oznámení! Klikněte na mě!"</string>
+  <string name="notification_test_push_notification_content">"Prohlížíte si oznámení! Klepněte na mě!"</string>
   <string name="notification_thread_in_room">"Vlákno v %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -100,7 +100,7 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Oznámení nelze zobrazit."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Na oznámení bylo kliknuto!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Zobrazit oznámení"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Kliknutím na oznámení pokračujte v testu."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Klepnutím na oznámení pokračujte v testu."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Ujistěte se, že aplikace přijímá push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Chyba: pusher odmítl požadavek."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Chyba: %1$s."</string>

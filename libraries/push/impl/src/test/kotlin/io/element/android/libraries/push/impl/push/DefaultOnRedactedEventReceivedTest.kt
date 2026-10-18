@@ -30,15 +30,13 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultOnRedactedEventReceivedTest {
+class DefaultOnRedactedEventReceivedTest : RobolectricTest() {
     private val fakePerson = Person.Builder().setName(A_USER_NAME).setKey(A_USER_ID.value).build()
     private val fakeMessage = NotificationCompat.MessagingStyle.Message("A message", 0L, fakePerson).also {
         it.extras.putString(DefaultNotificationCreator.MESSAGE_EVENT_ID, AN_EVENT_ID.value)

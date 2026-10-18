@@ -8,11 +8,15 @@
   <string name="screen_bug_report_editor_placeholder">"Jelaskan masalah tersebut…"</string>
   <string name="screen_bug_report_editor_supporting">"Jika memungkinkan, silakan tulis deskripsi dalam bahasa Inggris."</string>
   <string name="screen_bug_report_error_description_too_short">"Deskripsinya terlalu pendek, silakan menyediakan detail tambahan tentang apa yang terjadi. Terima kasih!"</string>
+  <string name="screen_bug_report_github_issue_description">"Anda dapat memasukkan nomor masalah GitHub terkait, jika ada."</string>
+  <string name="screen_bug_report_github_issue_label">"Masalah GitHub"</string>
   <string name="screen_bug_report_include_crash_logs">"Kirim log kerusakan"</string>
   <string name="screen_bug_report_include_logs">"Izinkan log"</string>
   <string name="screen_bug_report_include_logs_error">"Log Anda terlalu besar sehingga tidak dapat dimasukkan dalam laporan ini, kirimkan kepada kami dengan cara lain."</string>
   <string name="screen_bug_report_include_screenshot">"Kirim tangkapan layar"</string>
   <string name="screen_bug_report_logs_description">"Log akan disertakan dengan pesan Anda untuk memastikan bahwa semuanya berfungsi dengan baik. Untuk mengirimkan pesan Anda tanpa log, matikan pengaturan ini."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s mengalami kemogokan saat terakhir kali digunakan. Apakah Anda ingin berbagi laporan kerusakan dengan kami?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Jika Anda mengalami masalah dengan notifikasi, mengunggah aturan push notifikasi dapat membantu kami menemukan penyebab utamanya. Perlu diingat bahwa aturan ini dapat berisi informasi pribadi, seperti nama tampilan Anda atau kata kunci yang ingin Anda terima notifikasinya."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Pengaturan notifikasi pengiriman"</string>
   <string name="screen_bug_report_view_logs">"Tampilkan catatan"</string>
 </resources>

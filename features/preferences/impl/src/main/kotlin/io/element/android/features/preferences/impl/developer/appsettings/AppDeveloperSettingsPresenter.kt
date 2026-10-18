@@ -22,12 +22,16 @@ import io.element.android.features.preferences.impl.developer.tracing.toLogLevel
 import io.element.android.features.preferences.impl.developer.tracing.toLogLevelItem
 import io.element.android.features.preferences.impl.model.EnabledFeature
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
+import io.element.android.libraries.androidutils.clipboard.ClipboardHelper
+import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -42,9 +46,15 @@ class AppDeveloperSettingsPresenter(
     private val featureFlagService: FeatureFlagService,
     private val rageshakePresenter: Presenter<RageshakePreferencesState>,
     private val appPreferencesStore: AppPreferencesStore,
+    private val buildMeta: BuildMeta,
+    private val clipboardHelper: ClipboardHelper,
+    private val toastHelper: ToastHelper,
 ) : Presenter<AppDeveloperSettingsState> {
     @Composable
     override fun present(): AppDeveloperSettingsState {
+        val isDeveloperModeEnabled by remember {
+            appPreferencesStore.isDeveloperModeEnabledFlow()
+        }.collectAsState(initial = false)
         val rageshakeState = rageshakePresenter.present()
         val enabledFeatures = remember {
             mutableStateListOf<EnabledFeature>()
@@ -77,6 +87,9 @@ class AppDeveloperSettingsPresenter(
 
         fun handleEvent(event: AppDeveloperSettingsEvent) {
             when (event) {
+                is AppDeveloperSettingsEvent.SetDeveloperModeEnabled -> coroutineScope.launch {
+                    appPreferencesStore.setDeveloperModeEnabled(event.enabled)
+                }
                 is AppDeveloperSettingsEvent.UpdateEnabledFeature -> coroutineScope.updateEnabledFeature(
                     enabledFeatures = enabledFeatures,
                     featureKey = event.feature.key,
@@ -98,10 +111,16 @@ class AppDeveloperSettingsPresenter(
                     }
                     appPreferencesStore.setTracingLogPacks(currentPacks)
                 }
+                is AppDeveloperSettingsEvent.CopyToClipboard -> {
+                    clipboardHelper.copyPlainText(event.text) {
+                        toastHelper.show(CommonStrings.common_copied_to_clipboard)
+                    }
+                }
             }
         }
 
         return AppDeveloperSettingsState(
+            isDeveloperModeEnabled = isDeveloperModeEnabled,
             features = featureUiModels,
             rageshakeState = rageshakeState,
             customElementCallBaseUrlState = CustomElementCallBaseUrlState(
@@ -110,6 +129,8 @@ class AppDeveloperSettingsPresenter(
             ),
             tracingLogLevel = tracingLogLevel,
             tracingLogPacks = tracingLogPacks,
+            gitBranch = buildMeta.gitBranchName,
+            gitSha = buildMeta.gitRevision,
             eventSink = ::handleEvent,
         )
     }

@@ -4,9 +4,12 @@ appId: ${MAESTRO_APP_ID}
     id: "home_screen-settings"
 - assertVisible: "Settings"
 - takeScreenshot: build/maestro/600-Settings
+
+## Account settings
 - tapOn:
-    text: "Analytics"
-- assertVisible: "Share analytics data"
+    id: "settings-user_profile"
+- assertVisible: "Edit profile"
+- takeScreenshot: build/maestro/610-AccountEditProfile
 - back
 
 - tapOn:
@@ -15,15 +18,26 @@ appId: ${MAESTRO_APP_ID}
 - back
 
 - tapOn:
+    text: "Encryption"
+- assertVisible: "Key storage"
+- back
+
+- tapOn:
+    text: "Moderation & safety"
+- assertVisible: "Your appearance"
+- back
+
+- tapOn:
     text: "Report a problem"
 - assertVisible: "Report a problem"
 - back
 
+## App settings section
+- assertVisible: "Appearance"
+
 - tapOn:
-    text: "About"
-- assertVisible: "Copyright"
-- assertVisible: "Acceptable use policy"
-- assertVisible: "Privacy policy"
+    text: "Media upload quality"
+- assertVisible: "Media upload quality"
 - back
 
 - tapOn:
@@ -32,14 +46,53 @@ appId: ${MAESTRO_APP_ID}
 - hideKeyboard
 - back
 
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "Location sharing"
 - tapOn:
-    text: "Advanced settings"
-- assertVisible: "View source"
+    text: "Location sharing"
+- assertVisible: "Live location updates"
 - back
 
+## General section
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "Analytics"
+- tapOn:
+    text: "Analytics"
+- assertVisible: "Share analytics data"
+- back
+
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "Labs"
+- tapOn:
+    text: "Labs"
+- assertVisible: "Feeling experimental?"
+- back
+
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "About"
+- tapOn:
+    text: "About"
+- assertVisible: "Copyright"
+- assertVisible: "Acceptable use policy"
+- assertVisible: "Privacy policy"
+- back
+
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: "Developer options"
 - tapOn:
     text: "Developer options"
 - assertVisible: "Feature flags"
+- assertVisible: "View source"
 - back
 
 - back

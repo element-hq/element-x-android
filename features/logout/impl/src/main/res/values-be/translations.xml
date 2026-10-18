@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signout_confirmation_dialog_content">"Вы ўпэўнены, што хочаце выйсці?"</string>
+  <string name="screen_signout_confirmation_dialog_content">"Вы ўпэўненыя, што хочаце выдаліць гэту прыладу?"</string>
   <string name="screen_signout_confirmation_dialog_submit">"Выйсці"</string>
   <string name="screen_signout_confirmation_dialog_title">"Выйсці"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Выхад…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Выдаленне прылады…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў."</string>
   <string name="screen_signout_key_backup_disabled_title">"Вы адключылі рэзервовае капіраванне"</string>
   <string name="screen_signout_key_backup_offline_subtitle">"Вашы ключы ўсё яшчэ захоўваліся, калі вы выйшлі з сеткі. Паўторна падключыцеся, каб можна было стварыць рэзервовую копію вашых ключоў перад выхадам."</string>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Adjunta captura de pantalla"</string>
+  <string name="screen_bug_report_contact_me">"Pots contactar amb mi si tens comentaris addicionals."</string>
+  <string name="screen_bug_report_contact_me_title">"Contacta\'m"</string>
+  <string name="screen_bug_report_edit_screenshot">"Edita captura de pantalla"</string>
+  <string name="screen_bug_report_editor_description">"Descriu el problema. Què has fet? Què esperaves que passés? Què va has passat realment? Si us plau, explica-ho el més detalladament possible."</string>
+  <string name="screen_bug_report_editor_placeholder">"Descriu el problema…"</string>
+  <string name="screen_bug_report_editor_supporting">"Si és possible, escriu la descripció en anglès."</string>
+  <string name="screen_bug_report_error_description_too_short">"Descripció massa curta. Si us plau, proporciona més detalls sobre què ha passat. Gràcies!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Envia registre de fallada"</string>
+  <string name="screen_bug_report_include_logs">"Permet registres"</string>
+  <string name="screen_bug_report_include_screenshot">"Envia captura de pantalla"</string>
+  <string name="screen_bug_report_logs_description">"Els registres s\'inclouran amb el missatge per intentar resoldre el problema correctament. Per enviar el missatge sense registres, desactiva aquesta opció."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s ha fallat l\'últim cop que es va utilitzar. Vols enviar un informe d\'errors?"</string>
+  <string name="screen_bug_report_view_logs">"Veure registres"</string>
+</resources>

@@ -48,9 +48,8 @@ class DefaultAudioFocus(
                 }
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                    // For recording, ignore transient focus losses (e.g., notification sounds).
-                    // The AudioRecord API keeps capturing regardless.
-                    if (requester != AudioFocusRequester.RecordVoiceMessage) {
+                    Timber.d("AudioFocus: transient loss ($it)")
+                    if (requester.pausesOnTransientFocusLoss()) {
                         onFocusLost()
                     }
                 }
@@ -96,8 +95,8 @@ class DefaultAudioFocus(
 private fun AudioFocusRequester.toAudioUsage(): Int {
     return when (this) {
         AudioFocusRequester.ElementCall,
-        AudioFocusRequester.VoiceMessage,
         AudioFocusRequester.RecordVoiceMessage -> AudioAttributes.USAGE_VOICE_COMMUNICATION
+        AudioFocusRequester.VoiceMessage,
         AudioFocusRequester.MediaViewer -> AudioAttributes.USAGE_MEDIA
     }
 }
@@ -105,9 +104,19 @@ private fun AudioFocusRequester.toAudioUsage(): Int {
 private fun AudioFocusRequester.toAudioStream(): Int {
     return when (this) {
         AudioFocusRequester.ElementCall,
-        AudioFocusRequester.VoiceMessage,
         AudioFocusRequester.RecordVoiceMessage -> AudioManager.STREAM_VOICE_CALL
+        AudioFocusRequester.VoiceMessage,
         AudioFocusRequester.MediaViewer -> AudioManager.STREAM_MUSIC
+    }
+}
+
+private fun AudioFocusRequester.pausesOnTransientFocusLoss(): Boolean {
+    return when (this) {
+        // The AudioRecord API keeps capturing regardless.
+        AudioFocusRequester.RecordVoiceMessage,
+        AudioFocusRequester.VoiceMessage -> false
+        AudioFocusRequester.ElementCall,
+        AudioFocusRequester.MediaViewer -> true
     }
 }
 

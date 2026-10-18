@@ -10,7 +10,6 @@ package io.element.android.libraries.pushproviders.firebase
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 
 interface FirebaseTroubleshooter {
     suspend fun troubleshoot(): Result<Unit>
@@ -21,13 +20,9 @@ interface FirebaseTroubleshooter {
  */
 @ContributesBinding(AppScope::class)
 class DefaultFirebaseTroubleshooter(
-    private val newTokenHandler: FirebaseNewTokenHandler,
-    private val firebaseTokenGetter: FirebaseTokenGetter,
+    private val rotateFirebaseSession: RotateFirebaseSession,
 ) : FirebaseTroubleshooter {
     override suspend fun troubleshoot(): Result<Unit> {
-        return runCatchingExceptions {
-            val token = firebaseTokenGetter.get()
-            newTokenHandler.handle(token)
-        }
+        return rotateFirebaseSession()
     }
 }

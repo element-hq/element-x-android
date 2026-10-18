@@ -55,7 +55,7 @@ fun FocusRequestStateView(
 @PreviewsDayNight
 @Composable
 internal fun FocusRequestStateViewPreview(
-    @PreviewParameter(FocusRequestStateProvider::class) state: FocusRequestState,
+    @PreviewParameter(FocusRequestStatePreviewParam::class) state: FocusRequestState,
 ) = ElementPreview {
     FocusRequestStateView(
         focusRequestState = state,

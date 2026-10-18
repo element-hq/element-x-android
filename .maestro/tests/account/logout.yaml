@@ -6,10 +6,19 @@ appId: ${MAESTRO_APP_ID}
 - takeScreenshot: build/maestro/900-SignOutScreen
 - back
 - tapOn: "Remove this device"
+# Ensure pressing back cancels
+- back
+- tapOn: "Remove this device"
 # Ensure cancel cancels
+- tapOn: "Cancel"
+- tapOn: "Remove this device"
+- tapOn:
+    id: "sign-out-submit"
+# Cancel the dialog cancels the logout
 - tapOn:
     id: "dialog-negative"
-- tapOn: "Remove this device"
+- tapOn:
+    id: "sign-out-submit"
 - tapOn:
     id: "dialog-positive"
 - runFlow: ../assertions/assertInitDisplayed.yaml

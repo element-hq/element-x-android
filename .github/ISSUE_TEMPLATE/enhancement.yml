@@ -1,11 +1,11 @@
 name: Enhancement request
-description: Do you have a suggestion or feature request?
+description: Do you have a suggestion or feature request? Please open issue on the repo element-hq/element-meta if the request is global to all Element clients.
 labels: [T-Enhancement]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for taking the time to propose an enhancement to an existing feature. If you would like to propose a new feature or a major cross-platform change, please [start a discussion here](https://github.com/element-hq/element-meta/discussions/new?category=ideas).
+        Thank you for taking the time to propose an enhancement to an existing feature. If you would like to propose a new feature or a major cross-platform change, please open an issue on the [element-meta repository](https://github.com/element-hq/element-meta/issues/new?template=enhancement.yml) instead.
   - type: textarea
     id: usecase
     attributes:

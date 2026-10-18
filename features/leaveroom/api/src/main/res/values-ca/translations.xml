@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Segur que vols sortir d\'aquest xat? El xat no és públic i no t\'hi podràs tornar a unir sense una invitació."</string>
+  <string name="leave_room_alert_empty_subtitle">"Segur que vols sortir d\'aquesta sala? N\'ets l\'única persona. Si en surts, ningú s\'hi podrà unir i tu tampoc."</string>
+  <string name="leave_room_alert_private_subtitle">"Segur que vols sortir d\'aquesta sala? La sala no és pública i no podràs tornar a unir-t\'hi sense una invitació."</string>
+  <string name="leave_room_alert_subtitle">"Segur que vols sortir de la sala?"</string>
+</resources>

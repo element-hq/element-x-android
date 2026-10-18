@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"Nazwa pliku"</string>
   <string name="screen_media_details_no_more_files_to_show">"Brak plików do pokazania"</string>
   <string name="screen_media_details_no_more_media_to_show">"Brak mediów do pokazania"</string>
+  <string name="screen_media_details_title">"Informacje pliku"</string>
   <string name="screen_media_details_uploaded_by">"Przesłane przez"</string>
   <string name="screen_media_details_uploaded_on">"Przesłane w dniu"</string>
 </resources>

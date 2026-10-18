@@ -16,7 +16,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalRippleConfiguration
+import androidx.compose.material3.LocalRippleThemeConfiguration
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RippleConfiguration
+import androidx.compose.material3.RippleThemeConfiguration
 import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -28,11 +32,14 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import io.element.android.compound.annotations.CoreColorToken
 import io.element.android.compound.tokens.compoundTypography
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.compound.tokens.generated.TypographyTokens
 import io.element.android.compound.tokens.generated.compoundColorsDark
 import io.element.android.compound.tokens.generated.compoundColorsLight
+import io.element.android.compound.tokens.generated.internal.DarkColorTokens
 
 /**
  * Inspired from https://medium.com/@lucasyujideveloper/54cbcbde1ace
@@ -89,6 +96,7 @@ internal val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLigh
  * @param typography the Material 3 [Typography] tokens to use. It'll use [compoundTypography] by default.
  * @param content the content to apply the theme to.
  */
+@OptIn(CoreColorToken::class)
 @Composable
 fun ElementTheme(
     theme: Theme = if (isSystemInDarkTheme()) Theme.Dark else Theme.Light,
@@ -106,7 +114,10 @@ fun ElementTheme(
     val darkTheme = theme.isDark()
     val currentCompoundColor = when {
         darkTheme -> if (theme == Theme.Black) {
-            compoundDark.copy(bgCanvasDefault = Color.Black)
+            compoundDark.copy(
+                bgCanvasDefault = Color.Black,
+                separatorSecondary = DarkColorTokens.colorGray400,
+            )
         } else {
             compoundDark
         }
@@ -159,6 +170,26 @@ fun ElementTheme(
     CompositionLocalProvider(
         LocalCompoundColors provides currentCompoundColor,
         LocalContentColor provides colorScheme.onSurface,
+        // Configure the keyboard focus style: Draw a blue inset ring around the focused component.
+        // Ref: https://www.figma.com/design/hlbsmSekQorGRN1t2R9JEy/Accessibility-checks?node-id=271-42066
+        // By default, a semi-transparent black overlay is used
+        LocalRippleThemeConfiguration provides RippleThemeConfiguration(
+            RippleThemeConfiguration.Focus.InsetRing(
+                outerStrokeInset = 0.dp,
+                outerStrokeWidth = 2.dp,
+                innerStrokeInset = 0.dp,
+                innerStrokeWidth = 0.dp,
+            )
+        ),
+        // Configure the keyboard focus color.
+        // By default, ColorScheme.secondary is used
+        LocalRippleConfiguration provides
+            RippleConfiguration(
+                focus = RippleConfiguration.Focus.InsetRing(
+                    outerStrokeColor = ElementTheme.colors.borderFocused,
+                    innerStrokeColor = Color.Transparent,
+                )
+            ),
     ) {
         MaterialTheme(
             colorScheme = colorScheme,

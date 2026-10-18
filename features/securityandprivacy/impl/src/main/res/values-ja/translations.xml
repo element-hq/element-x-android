@@ -20,7 +20,7 @@
   <string name="screen_security_and_privacy_encryption_section_footer">"一度有効にすると元に戻すことはできません。"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"暗号化"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"エンドツーエンド暗号化を有効にする"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"誰でも参加できます"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"あなたの組織外のユーザーを含め誰でも参加できます。"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"全員"</string>
   <string name="screen_security_and_privacy_room_access_footer">"招待無しで参加できるユーザーが所属するルームを選択してください。%1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"スペースを管理"</string>

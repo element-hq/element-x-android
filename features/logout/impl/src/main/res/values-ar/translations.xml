@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"أمتأكد من إزالة هذا الجهاز؟"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"إزالة هذا الجهاز"</string>
+  <string name="screen_signout_confirmation_dialog_title">"إزالة هذا الجهاز"</string>
+  <string name="screen_signout_in_progress_dialog_content">"تجري إزالة الجهاز…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"هذا هو جهازك الوحيد. إذا أزلته، فستحتاج إلى مفتاح استرداد لتأكيد هويتك الرقمية واستعادة محادثاتك المشفّرة في المرة التالية التي تسجّل فيها الدخول."</string>
+  <string name="screen_signout_key_backup_disabled_title">"أنت على وشك فقدان الوصول إلى محادثاتك المشفّرة"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"كان النسخ الاحتياطي لمفاتيحك لا يزال جاريًا عندما أصبحت غير متصل. أعد الاتصال حتى يمكن نسخ مفاتيحك احتياطيًا قبل إزالة هذا الجهاز."</string>
+  <string name="screen_signout_key_backup_offline_title">"لا يزال النسخ الاحتياطي لمفاتيحك جاريًا"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"يُرجى الانتظار حتى تكتمل هذه العملية قبل إزالة هذا الجهاز."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"لا يزال النسخ الاحتياطي لمفاتيحك جاريًا"</string>
+  <string name="screen_signout_preference_item">"إزالة هذا الجهاز"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"هذا هو جهازك الوحيد. إذا أزلته، فستحتاج إلى مفتاح استرداد لتأكيد هويتك الرقمية واستعادة محادثاتك المشفّرة في المرة التالية التي تسجّل فيها الدخول."</string>
+  <string name="screen_signout_recovery_disabled_title">"أنت على وشك فقدان الوصول إلى محادثاتك المشفّرة"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"هذا هو جهازك الوحيد. إذا أزلته، فستحتاج إلى مفتاح استرداد لتأكيد هويتك الرقمية واستعادة محادثاتك المشفّرة في المرة التالية التي تسجّل فيها الدخول."</string>
+  <string name="screen_signout_save_recovery_key_title">"تأكد من أن لديك إمكانية الوصول إلى مفتاح الاسترداد الخاص بك قبل إزالة هذا الجهاز"</string>
+</resources>

@@ -11,28 +11,27 @@ package io.element.android.features.messages.impl.attachments
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
 import io.element.android.features.messages.impl.attachments.preview.aMediaUploadInfo
-import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import org.junit.Test
 
 class SendActionStateTest {
     @Test
-    fun `mediaUploadInfo() should return the value from Uploading class`() {
-        val mediaUploadInfo: MediaUploadInfo = aMediaUploadInfo()
-        val state: SendActionState = SendActionState.Sending.Uploading(mediaUploadInfo = aMediaUploadInfo())
-        assertThat(state.mediaUploadInfo()).isEqualTo(mediaUploadInfo)
+    fun `mediaUploadInfoList() should return the value from Uploading class`() {
+        val data = listOf(aMediaUploadInfo())
+        val state: SendActionState = SendActionState.Sending.Uploading(mediaInfos = data)
+        assertThat(state.mediaUploadInfoList()).isEqualTo(data)
     }
 
     @Test
-    fun `mediaUploadInfo() should return the value from ReadyToUpload class`() {
-        val mediaUploadInfo: MediaUploadInfo = aMediaUploadInfo()
-        val state: SendActionState = SendActionState.Sending.ReadyToUpload(mediaInfo = aMediaUploadInfo())
-        assertThat(state.mediaUploadInfo()).isEqualTo(mediaUploadInfo)
+    fun `mediaUploadInfoList() should return the value from ReadyToUpload class`() {
+        val data = listOf(aMediaUploadInfo())
+        val state: SendActionState = SendActionState.Sending.ReadyToUpload(mediaInfos = data)
+        assertThat(state.mediaUploadInfoList()).isEqualTo(data)
     }
 
     @Test
-    fun `mediaUploadInfo() should return the value from Failure class`() {
-        val mediaUploadInfo: MediaUploadInfo = aMediaUploadInfo()
-        val state: SendActionState = SendActionState.Failure(error = IllegalStateException("An error"), mediaUploadInfo = aMediaUploadInfo())
-        assertThat(state.mediaUploadInfo()).isEqualTo(mediaUploadInfo)
+    fun `mediaUploadInfoList() should return the value from Failure class`() {
+        val data = listOf(aMediaUploadInfo())
+        val state: SendActionState = SendActionState.Failure(error = IllegalStateException("An error"), mediaInfos = data)
+        assertThat(state.mediaUploadInfoList()).isEqualTo(data)
     }
 }

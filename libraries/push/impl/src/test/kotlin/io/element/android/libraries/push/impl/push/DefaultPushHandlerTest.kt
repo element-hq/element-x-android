@@ -52,7 +52,6 @@ import kotlin.time.Duration.Companion.milliseconds
 
 private const val A_PUSHER_INFO = "info"
 
-@Suppress("LargeClass")
 class DefaultPushHandlerTest {
     @Test
     fun `check handleInvalid behavior`() = runTest {

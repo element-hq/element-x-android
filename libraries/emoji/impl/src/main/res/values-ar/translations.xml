@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"أنشطة"</string>
+  <string name="emoji_picker_category_flags">"أعلام"</string>
+  <string name="emoji_picker_category_foods">"أكل وشرب"</string>
+  <string name="emoji_picker_category_nature">"حيوانات وطبيعة"</string>
+  <string name="emoji_picker_category_objects">"أشياء"</string>
+  <string name="emoji_picker_category_people">"الابتسامات والأشخاص"</string>
+  <string name="emoji_picker_category_places">"سفر وأماكن"</string>
+  <string name="emoji_picker_category_recent">"الرموز التعبيرية الأخيرة"</string>
+  <string name="emoji_picker_category_symbols">"رموز"</string>
+  <string name="emoji_picker_search_placeholder">"البحث عن رموز تعبيرية"</string>
+</resources>

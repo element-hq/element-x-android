@@ -27,7 +27,7 @@
   <string name="screen_join_room_loading_alert_title">"Δεν μπορέσαμε να εμφανίσουμε αυτή την προεπισκόπηση αίθουσας"</string>
   <string name="screen_join_room_space_not_supported_description">"Το %1$s δεν υποστηρίζει ακόμα χώρους. Μπορείς να έχεις πρόσβαση σε χώρους στον ιστό."</string>
   <string name="screen_join_room_space_not_supported_title">"Οι Χώροι δεν υποστηρίζονται ακόμα"</string>
-  <string name="screen_join_room_subtitle_knock">"Κάντε κλικ στο παρακάτω κουμπί και θα ειδοποιηθεί ένας διαχειριστής της αίθουσας. Μόλις εγκριθείτε, θα μπορείτε να συμμετάσχετε στη συζήτηση."</string>
+  <string name="screen_join_room_subtitle_knock">"Πατήστε το παρακάτω κουμπί και θα ειδοποιηθεί ένας διαχειριστής της συνομιλίας. Θα μπορείτε να συμμετάσχετε στη συζήτηση μόλις εγκριθεί η αίτησή σας."</string>
   <string name="screen_join_room_subtitle_no_preview">"Πρέπει να είστε μέλος αυτής της αίθουσας για να δείτε το ιστορικό των μηνυμάτων."</string>
   <string name="screen_join_room_title_knock">"Θέλετε να συμμετάσχετε σε αυτή την αίθουσα;"</string>
   <string name="screen_join_room_title_no_preview">"Η προεπισκόπηση δεν είναι διαθέσιμη"</string>

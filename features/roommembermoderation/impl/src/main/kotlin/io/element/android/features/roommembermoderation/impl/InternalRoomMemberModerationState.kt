@@ -9,7 +9,7 @@
 package io.element.android.features.roommembermoderation.impl
 
 import io.element.android.features.roommembermoderation.api.ModerationActionState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncAction
@@ -23,7 +23,7 @@ data class InternalRoomMemberModerationState(
     val kickUserAsyncAction: AsyncAction<Unit>,
     val banUserAsyncAction: AsyncAction<Unit>,
     val unbanUserAsyncAction: AsyncAction<Unit>,
-    override val eventSink: (RoomMemberModerationEvents) -> Unit,
+    override val eventSink: (RoomMemberModerationEvent) -> Unit,
 ) : RoomMemberModerationState {
     val canDisplayActions = actions.isNotEmpty()
 }

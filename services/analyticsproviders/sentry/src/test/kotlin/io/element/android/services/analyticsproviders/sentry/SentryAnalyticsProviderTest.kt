@@ -9,7 +9,6 @@
 
 package io.element.android.services.analyticsproviders.sentry
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
@@ -27,15 +26,14 @@ import io.element.android.services.analyticsproviders.api.AnalyticsUserData
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.NavigationState
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.sentry.Sentry
 import io.sentry.SentryTracer
 import io.sentry.protocol.SentryId
 import io.sentry.protocol.SentryTransaction
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class SentryAnalyticsProviderTest {
+class SentryAnalyticsProviderTest : RobolectricTest() {
     @Test
     fun `init enables Sentry if DSN is present`() {
         createSentryAnalyticsProvider().run {
@@ -144,7 +142,13 @@ class SentryAnalyticsProviderTest {
         createSentryAnalyticsProvider(
             getDatabaseSizesUseCase = GetDatabaseSizesUseCase {
                 Result.success(
-                    SdkStoreSizes(stateStore = 10.megaBytes, eventCacheStore = 11.megaBytes, mediaStore = 12.megaBytes, cryptoStore = 13.megaBytes)
+                    SdkStoreSizes(
+                        stateStore = 10.megaBytes,
+                        eventCacheStore = 11.megaBytes,
+                        mediaStore = 12.megaBytes,
+                        cryptoStore = 13.megaBytes,
+                        searchIndex = 14.megaBytes,
+                    )
                 )
             },
             appNavigationStateService = FakeAppNavigationStateService(
@@ -169,6 +173,9 @@ class SentryAnalyticsProviderTest {
             assertThat(result.getExtra(AnalyticsUserData.EVENT_CACHE_SIZE)).isEqualTo(11)
             assertThat(result.getExtra(AnalyticsUserData.MEDIA_STORE_SIZE)).isEqualTo(12)
             assertThat(result.getExtra(AnalyticsUserData.CRYPTO_STORE_SIZE)).isEqualTo(13)
+
+            // The search index size won't be included
+            assertThat(result.getExtra(AnalyticsUserData.SEARCH_INDEX_SIZE)).isNull()
         }
     }
 
@@ -177,7 +184,13 @@ class SentryAnalyticsProviderTest {
         createSentryAnalyticsProvider(
             getDatabaseSizesUseCase = GetDatabaseSizesUseCase {
                 Result.success(
-                    SdkStoreSizes(stateStore = 10.megaBytes, eventCacheStore = 11.megaBytes, mediaStore = 12.megaBytes, cryptoStore = 13.megaBytes)
+                    SdkStoreSizes(
+                        stateStore = 10.megaBytes,
+                        eventCacheStore = 11.megaBytes,
+                        mediaStore = 12.megaBytes,
+                        cryptoStore = 13.megaBytes,
+                        searchIndex = 14.megaBytes,
+                    )
                 )
             },
             appNavigationStateService = FakeAppNavigationStateService(
@@ -198,7 +211,7 @@ class SentryAnalyticsProviderTest {
         createSentryAnalyticsProvider(
             getDatabaseSizesUseCase = GetDatabaseSizesUseCase {
                 Result.success(
-                    SdkStoreSizes(stateStore = null, eventCacheStore = null, mediaStore = null, cryptoStore = null)
+                    SdkStoreSizes(stateStore = null, eventCacheStore = null, mediaStore = null, cryptoStore = null, searchIndex = null)
                 )
             },
             appNavigationStateService = FakeAppNavigationStateService(
@@ -218,7 +231,7 @@ class SentryAnalyticsProviderTest {
     private fun createSentryAnalyticsProvider(
         sentryDsn: SentryDsn? = SentryDsn("https://1234@sentry.com/a"),
         buildMeta: BuildMeta = aBuildMeta(),
-        getDatabaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null)) },
+        getDatabaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null, null)) },
         appNavigationStateService: FakeAppNavigationStateService = FakeAppNavigationStateService(
             initialAppNavigationState = AppNavigationState(NavigationState.Session("owner", A_SESSION_ID), isInForeground = true)
         )

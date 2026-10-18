@@ -10,12 +10,12 @@ package io.element.android.features.share.impl
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.di.SessionScope
 
-@ContributesBinding(SessionScope::class)
+@ContributesBinding(AppScope::class)
 class DefaultShareEntryPoint : ShareEntryPoint {
     override fun createNode(
         parentNode: Node,
@@ -26,7 +26,10 @@ class DefaultShareEntryPoint : ShareEntryPoint {
         return parentNode.createNode<ShareNode>(
             buildContext = buildContext,
             plugins = listOf(
-                ShareNode.Inputs(shareIntentData = params.shareIntentData),
+                ShareNode.Inputs(
+                    sessionId = params.sessionId,
+                    shareIntentData = params.shareIntentData,
+                ),
                 callback,
             )
         )

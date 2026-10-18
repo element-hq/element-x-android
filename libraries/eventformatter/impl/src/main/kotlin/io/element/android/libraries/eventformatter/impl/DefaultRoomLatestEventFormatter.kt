@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
@@ -54,6 +55,7 @@ class DefaultRoomLatestEventFormatter(
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
+    private val rtcNotificationContentFormatter: RtcNotificationContentFormatter,
     private val permalinkParser: PermalinkParser,
 ) : RoomLatestEventFormatter {
     override fun format(
@@ -87,13 +89,13 @@ class DefaultRoomLatestEventFormatter(
     ): CharSequence? {
         return when (content) {
             is MessageContent -> content.process(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
-            RedactedContent -> {
+            is RedactedContent -> {
                 val message = sp.getString(CommonStrings.common_message_removed)
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is StickerContent -> {
-                val message = sp.getString(CommonStrings.common_sticker) + " (" + content.bestDescription + ")"
-                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
+                content.bestDescription.prefixWith(sp.getString(CommonStrings.common_sticker))
+                    .prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is UnableToDecryptContent -> {
                 val message = sp.getString(CommonStrings.common_waiting_for_decryption_key)
@@ -109,8 +111,8 @@ class DefaultRoomLatestEventFormatter(
                 stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.RoomList)
             }
             is PollContent -> {
-                val message = sp.getString(CommonStrings.common_poll_summary, content.question)
-                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
+                content.question.prefixWith(sp.getString(CommonStrings.common_poll_summary_prefix))
+                    .prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
                 val message = sp.getString(CommonStrings.common_unsupported_event)
@@ -121,7 +123,7 @@ class DefaultRoomLatestEventFormatter(
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_unsupported_call)
-            is CallNotifyContent -> sp.getString(CommonStrings.common_call_started)
+            is CallNotifyContent -> rtcNotificationContentFormatter.format(content, isDmRoom)
         }?.take(DEFAULT_SAFE_LENGTH)
     }
 
@@ -133,7 +135,7 @@ class DefaultRoomLatestEventFormatter(
         val message = when (val messageType: MessageType = type) {
             // Doesn't need a prefix
             is EmoteMessageType -> {
-                return "* $senderDisambiguatedDisplayName ${messageType.body}"
+                return "* ${senderDisambiguatedDisplayName.bidiIsolate()} ${messageType.body}"
             }
             is TextMessageType -> {
                 messageType.toPlainText(permalinkParser)
@@ -166,6 +168,9 @@ class DefaultRoomLatestEventFormatter(
             is OtherMessageType -> {
                 messageType.body
             }
+            is GalleryMessageType -> {
+                messageType.body.prefixWith(sp.getString(CommonStrings.common_gallery))
+            }
             is NoticeMessageType -> {
                 messageType.body
             }
@@ -184,7 +189,7 @@ class DefaultRoomLatestEventFormatter(
             if (isOutgoing) {
                 sp.getString(CommonStrings.common_you)
             } else {
-                senderDisambiguatedDisplayName
+                senderDisambiguatedDisplayName.bidiIsolate()
             }
         )
     }

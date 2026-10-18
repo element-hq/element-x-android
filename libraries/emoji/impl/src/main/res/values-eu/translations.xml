@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Jarduerak"</string>
+  <string name="emoji_picker_category_flags">"Banderak"</string>
+  <string name="emoji_picker_category_foods">"Jana eta edana"</string>
+  <string name="emoji_picker_category_nature">"Animaliak eta natura"</string>
+  <string name="emoji_picker_category_objects">"Objektuak"</string>
+  <string name="emoji_picker_category_people">"Irribartxoak eta jendea"</string>
+  <string name="emoji_picker_category_places">"Bidaiak eta tokiak"</string>
+  <string name="emoji_picker_category_symbols">"Ikurrak"</string>
+</resources>

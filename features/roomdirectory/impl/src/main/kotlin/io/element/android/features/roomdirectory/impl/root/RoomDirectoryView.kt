@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -52,6 +51,8 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
+import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -76,11 +77,11 @@ fun RoomDirectoryView(
                     .padding(padding)
                     .consumeWindowInsets(padding)
             )
-        }
+        },
+        contentWindowInsets = scaffoldScrollableContentInsets,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomDirectoryTopBar(
     onBackClick: () -> Unit,
@@ -104,7 +105,7 @@ private fun RoomDirectoryContent(
     Column(modifier = modifier) {
         SearchTextField(
             query = state.query,
-            onQueryChange = { state.eventSink(RoomDirectoryEvents.Search(it)) },
+            onQueryChange = { state.eventSink(RoomDirectoryEvent.Search(it)) },
             placeholder = stringResource(id = CommonStrings.action_search),
             modifier = Modifier.fillMaxWidth(),
         )
@@ -113,7 +114,7 @@ private fun RoomDirectoryContent(
             displayLoadMoreIndicator = state.displayLoadMoreIndicator,
             displayEmptyState = state.displayEmptyState,
             onResultClick = onResultClick,
-            onReachedLoadMore = { state.eventSink(RoomDirectoryEvents.LoadMore) },
+            onReachedLoadMore = { state.eventSink(RoomDirectoryEvent.LoadMore) },
         )
     }
 }
@@ -127,7 +128,10 @@ private fun RoomDirectoryRoomList(
     onReachedLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = lazyColumnContentPadding,
+    ) {
         items(roomDescriptions) { roomDescription ->
             RoomDirectoryRoomRow(
                 roomDescription = roomDescription,
@@ -272,7 +276,7 @@ private fun RoomDirectoryRoomRow(
 
 @PreviewsDayNight
 @Composable
-internal fun RoomDirectoryViewPreview(@PreviewParameter(RoomDirectoryStateProvider::class) state: RoomDirectoryState) = ElementPreview {
+internal fun RoomDirectoryViewPreview(@PreviewParameter(RoomDirectoryStatePreviewParam::class) state: RoomDirectoryState) = ElementPreview {
     RoomDirectoryView(
         state = state,
         onResultClick = {},

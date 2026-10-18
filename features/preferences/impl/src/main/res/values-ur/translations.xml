@@ -53,6 +53,9 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"نظام کی ترتیبات"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"نظام کی اطلاعات بند کر دی گئیں"</string>
   <string name="screen_notification_settings_title">"اطلاعات"</string>
+  <string name="theme_dark">"اندھیرا"</string>
+  <string name="theme_light">"روشنی"</string>
+  <string name="theme_system">"نظام"</string>
   <string name="troubleshoot_notifications_entry_point_section">"ازالہ کریں"</string>
   <string name="troubleshoot_notifications_entry_point_title">"اطلاعات کا ازالہ کریں"</string>
 </resources>

@@ -7,15 +7,18 @@
   <string name="crypto_event_authenticity_unknown_device">"Kryptert av en ukjent eller slettet enhet."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Kryptert med en enhet som ikke er verifisert av eieren."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Kryptert av en ubekreftet bruker."</string>
-  <string name="emoji_picker_category_activity">"Aktiviteter"</string>
-  <string name="emoji_picker_category_flags">"Flagg"</string>
-  <string name="emoji_picker_category_foods">"Mat og drikke"</string>
-  <string name="emoji_picker_category_nature">"Dyr og natur"</string>
-  <string name="emoji_picker_category_objects">"Gjenstander"</string>
-  <string name="emoji_picker_category_people">"Smilefjes og mennesker"</string>
-  <string name="emoji_picker_category_places">"Reising og steder"</string>
-  <string name="emoji_picker_category_recent">"Nylige emojier"</string>
-  <string name="emoji_picker_category_symbols">"Symboler"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Snu bildet horisontalt"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Vendt horisontalt"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Opprinnelig"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Snu bildet vertikalt"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Vendt vertikalt"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Opprinnelig"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Roter bildet mot venstre"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d grad"</item>
+    <item quantity="other">"%1$d grader"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Rediger bilde"</string>
   <string name="screen_media_upload_preview_caption_warning">"Teksting er kanskje ikke synlig for personer som bruker eldre apper."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Trykk for å endre kvaliteten på videoopplastingen"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Filen kunne ikke lastes opp."</string>
@@ -26,6 +29,7 @@
   <string name="screen_media_upload_preview_item_count">"Fil %1$d av %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimaliser bildekvaliteten"</string>
   <string name="screen_media_upload_preview_processing">"Behandler…"</string>
+  <string name="screen_media_upload_preview_title">"Legg til medier"</string>
   <string name="screen_report_content_block_user">"Blokker bruker"</string>
   <string name="screen_report_content_block_user_hint">"Kryss av for om du vil skjule alle nåværende og fremtidige meldinger fra denne brukeren"</string>
   <string name="screen_report_content_explanation">"Denne meldingen vil bli rapportert til hjemmeserverens administratorer. De vil ikke kunne lese noen krypterte meldinger."</string>
@@ -35,7 +39,7 @@
   <string name="screen_room_attachment_source_camera_video">"Ta opp video"</string>
   <string name="screen_room_attachment_source_files">"Vedlegg"</string>
   <string name="screen_room_attachment_source_gallery">"Foto- og videobibliotek"</string>
-  <string name="screen_room_attachment_source_location">"Del posisjon"</string>
+  <string name="screen_room_attachment_source_location">"Del lokasjon"</string>
   <string name="screen_room_attachment_source_poll">"Avstemning"</string>
   <string name="screen_room_attachment_text_formatting">"Tekstformatering"</string>
   <string name="screen_room_encrypted_history_banner">"Meldingshistorikken er for øyeblikket ikke tilgjengelig."</string>
@@ -66,6 +70,10 @@
   <string name="screen_room_timeline_reactions_show_more">"Vis mer"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Vis sammendrag av reaksjoner"</string>
   <string name="screen_room_timeline_read_marker_title">"Ny"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d fjernet meldingen"</item>
+    <item quantity="other">"%1$d fjernet meldinger"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d romendring"</item>
     <item quantity="other">"%1$d romendringer"</item>

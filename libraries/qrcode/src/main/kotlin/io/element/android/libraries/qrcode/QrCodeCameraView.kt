@@ -18,6 +18,7 @@ import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -114,7 +115,8 @@ fun QrCodeCameraView(
     Box(modifier.clipToBounds()) {
         if (LocalInspectionMode.current) {
             Box(
-                modifier = modifier
+                modifier = Modifier
+                    .fillMaxSize()
                     .background(color = ElementTheme.colors.bgSubtlePrimary),
                 contentAlignment = Alignment.Center,
             ) {

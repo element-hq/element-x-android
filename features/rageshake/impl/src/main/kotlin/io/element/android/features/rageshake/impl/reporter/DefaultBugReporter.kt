@@ -14,7 +14,6 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.RageshakeConfig
 import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
@@ -77,7 +76,7 @@ class DefaultBugReporter(
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val okHttpClient: Provider<OkHttpClient>,
+    private val okHttpClient: () -> OkHttpClient,
     private val userAgentProvider: UserAgentProvider,
     private val sessionStore: SessionStore,
     private val buildMeta: BuildMeta,
@@ -124,6 +123,7 @@ class DefaultBugReporter(
         problemDescription: String,
         canContact: Boolean,
         sendPushRules: Boolean,
+        ghIssueNumber: Int?,
         listener: BugReporterListener,
     ) {
         val url = bugReporterUrlProvider.provide().first()
@@ -145,11 +145,14 @@ class DefaultBugReporter(
                 val crashCallStack = crashDataStore.crashInfo().first()
                 val bugDescription = buildString {
                     append(problemDescription)
+                    ghIssueNumber?.let {
+                        append("\n\nhttps://github.com/element-hq/element-x-android/issues/$it")
+                    }
                     if (crashCallStack.isNotEmpty() && withCrashLogs) {
                         append("\n\n\n\n--------------------------------- crash call stack ---------------------------------\n")
                         append(crashCallStack)
                     }
-                }
+                }.truncateDescription()
                 val gzippedFiles = mutableListOf<File>()
                 var filesTooBig = emptyList<String>()
 
@@ -182,6 +185,7 @@ class DefaultBugReporter(
                     .addFormDataPart("device", Build.MODEL.trim())
                     .addFormDataPart("locale", Locale.getDefault().toString())
                     .addFormDataPart("sdk_sha", sdkMetadata.sdkGitSha)
+                    .addFormDataPart("sha", buildMeta.gitRevision)
                     .addFormDataPart("local_time", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME))
                     .addFormDataPart("utc_time", LocalDateTime.ofInstant(Instant.now(), ZoneOffset.UTC).format(DateTimeFormatter.ISO_DATE_TIME))
                     .addFormDataPart("app_id", buildMeta.applicationId)
@@ -489,5 +493,14 @@ class DefaultBugReporter(
 
     private fun countLogLines(file: File): Int {
         return file.reader().useLines { it.count() }
+    }
+
+    private fun String.truncateDescription(): String {
+        return if (length <= RageshakeConfig.MAX_DESCRIPTION_SIZE) {
+            this
+        } else {
+            take(RageshakeConfig.MAX_DESCRIPTION_SIZE) +
+                "\n\n--------------------------------- truncated, see the attached logs ---------------------------------"
+        }
     }
 }

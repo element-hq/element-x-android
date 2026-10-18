@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_avatar">"Aggiungi avatar"</string>
   <string name="a11y_add_reaction">"Aggiungi reazione: %1$s"</string>
   <string name="a11y_address">"Indirizzo"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_clear_search_field">"Cancella campo di ricerca"</string>
   <string name="a11y_collapse_message_text_field">"Riduci al minimo il campo di testo del messaggio"</string>
+  <string name="a11y_create_poll_votes_allowed_decrease">"Riduci il numero di voti consentiti per persona"</string>
+  <string name="a11y_create_poll_votes_allowed_increase">"Aumenta il numero di voti consentiti per persona"</string>
+  <string name="a11y_custom_emoji">"Emoji personalizzata"</string>
   <string name="a11y_delete">"Elimina"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d cifra inserita"</item>
     <item quantity="other">"%1$d cifre inserite"</item>
   </plurals>
+  <string name="a11y_duration">"Durata: %1$s"</string>
   <string name="a11y_edit_avatar">"Modifica avatar"</string>
   <string name="a11y_edit_room_address_hint">"L\'indirizzo completo sarà %1$s"</string>
   <string name="a11y_encryption_details">"Dettagli sulla crittografia"</string>
   <string name="a11y_expand_message_text_field">"Allarga il campo di testo del messaggio"</string>
+  <string name="a11y_gallery_attachment">"Galleria, allegato %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Galleria, scansione non riuscita %1$d"</string>
+  <string name="a11y_gallery_image">"Galleria, immagine %1$d"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Galleria, %1$d altro media"</item>
+    <item quantity="other">"Galleria, %1$d altri media"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galleria, scansione %1$d"</string>
+  <string name="a11y_gallery_video">"Galleria, video %1$d"</string>
   <string name="a11y_hide_password">"Nascondi password"</string>
+  <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Entra in chiamata"</string>
   <string name="a11y_jump_to_bottom">"Vai alla fine"</string>
+  <string name="a11y_jump_to_unread">"Vai ai messaggi non letti"</string>
+  <string name="a11y_jump_to_unread_messages">"Vai al primo messaggio non letto"</string>
   <string name="a11y_move_the_map_to_my_location">"Sposta la mappa sulla mia posizione"</string>
   <string name="a11y_notifications_mentions_only">"Solo menzioni"</string>
   <string name="a11y_notifications_muted">"Silenziato"</string>
@@ -26,35 +44,43 @@
   <string name="a11y_page_n">"Pagina %1$d"</string>
   <string name="a11y_pause">"Pausa"</string>
   <string name="a11y_paused_voice_message">"Messaggio vocale, durata: %1$s, posizione attuale: %2$s"</string>
+  <string name="a11y_photo_preview">"Anteprima foto"</string>
   <string name="a11y_pin_field">"Campo del PIN"</string>
   <string name="a11y_pinned_location">"Posizione fissata"</string>
   <string name="a11y_play">"Riproduci"</string>
   <string name="a11y_playback_speed">"Velocità di riproduzione"</string>
   <string name="a11y_poll">"Sondaggio"</string>
   <string name="a11y_poll_end">"Sondaggio terminato"</string>
+  <string name="a11y_position">"Posizione: %1$s"</string>
   <string name="a11y_qr_code">"Codice QR"</string>
   <string name="a11y_react_with">"Reagisci con %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagisci con altri emoji"</string>
-  <string name="a11y_read_receipts_multiple">"Visualizzato da %1$s e %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"Messaggio precedente letto da %1$s e %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Visualizzato da %1$s e %2$d altro"</item>
-    <item quantity="other">"Visualizzato da %1$s e altri %2$d"</item>
+    <item quantity="one">"Messaggio precedente letto da %1$s e %2$d altro"</item>
+    <item quantity="other">"Messaggio precedente letto da %1$s e %2$d altri"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Visualizzato da %1$s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"Tocca per mostrare tutti"</string>
+  <string name="a11y_read_receipts_single">"Messaggio precedente letto da %1$s"</string>
+  <string name="a11y_read_receipts_tap_to_show_all_android">"mostra tutte le conferme di lettura"</string>
   <string name="a11y_remove_reaction">"Rimuovi la reazione con %1$s"</string>
   <string name="a11y_remove_reaction_with">"Rimuovere la reazione con %1$s"</string>
   <string name="a11y_room_avatar">"Avatar della stanza"</string>
   <string name="a11y_send_files">"Invia file"</string>
   <string name="a11y_sender_location">"Posizione del mittente"</string>
+  <string name="a11y_sent_by_sender_at_date">"Inviato da %1$s alle %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Azione richiesta a tempo limitato, hai un minuto per la verifica"</string>
+  <string name="a11y_settings_with_required_action">"Impostazioni, azione richiesta"</string>
   <string name="a11y_show_password">"Mostra password"</string>
   <string name="a11y_start_call">"Avvia una chiamata"</string>
   <string name="a11y_start_video_call">"Avvia una videochiamata"</string>
   <string name="a11y_start_voice_call">"Avvia una chiamata vocale"</string>
+  <string name="a11y_status">"Stato"</string>
+  <string name="a11y_thread_in_room">"Discussione in %1$s"</string>
+  <string name="a11y_threads_in_room">"Discussioni in %1$s"</string>
   <string name="a11y_tombstoned_room">"Stanza obsoleta"</string>
   <string name="a11y_user_avatar">"Avatar utente"</string>
   <string name="a11y_user_menu">"Menu utente"</string>
+  <string name="a11y_video_preview">"Anteprima video"</string>
   <string name="a11y_view_avatar">"Visualizza avatar"</string>
   <string name="a11y_view_details">"Visualizza dettagli"</string>
   <string name="a11y_voice_message">"Messaggio vocale, durata: %1$s"</string>
@@ -69,6 +95,7 @@
   <string name="action_call">"Chiama"</string>
   <string name="action_cancel">"Annulla"</string>
   <string name="action_cancel_for_now">"Annulla per ora"</string>
+  <string name="action_choose_file">"Scegli il file"</string>
   <string name="action_choose_photo">"Scegli foto"</string>
   <string name="action_clear">"Cancella"</string>
   <string name="action_close">"Chiudi"</string>
@@ -88,12 +115,16 @@
   <string name="action_deactivate_account">"Disattiva account"</string>
   <string name="action_decline">"Rifiuta"</string>
   <string name="action_decline_and_block">"Rifiuta e blocca"</string>
+  <string name="action_delete">"Elimina"</string>
+  <string name="action_delete_account">"Elimina account"</string>
+  <string name="action_delete_file">"Elimina file"</string>
   <string name="action_delete_poll">"Elimina sondaggio"</string>
   <string name="action_deselect_all">"Deseleziona tutti"</string>
   <string name="action_disable">"Disabilita"</string>
   <string name="action_discard">"Annulla"</string>
   <string name="action_dismiss">"Chiudi"</string>
   <string name="action_done">"Fine"</string>
+  <string name="action_download">"Scarica"</string>
   <string name="action_edit">"Modifica"</string>
   <string name="action_edit_caption">"Modifica didascalia"</string>
   <string name="action_edit_poll">"Modifica sondaggio"</string>
@@ -124,6 +155,7 @@
   <string name="action_manage_account_and_devices">"Gestisci account &amp; dispositivi"</string>
   <string name="action_manage_devices">"Gestisci dispositivi"</string>
   <string name="action_manage_rooms">"Gestisci le stanze"</string>
+  <string name="action_mark_as_read">"Segna come letto"</string>
   <string name="action_message">"Invia messaggio"</string>
   <string name="action_minimize">"Riduci"</string>
   <string name="action_next">"Avanti"</string>
@@ -178,9 +210,11 @@
   <string name="action_translate">"Traduci"</string>
   <string name="action_try_again">"Riprova"</string>
   <string name="action_unpin">"Rimuovi dai fissati"</string>
+  <string name="action_video_call">"Videochiamata"</string>
   <string name="action_view">"Visualizza"</string>
   <string name="action_view_in_timeline">"Visualizza nella conversazione"</string>
   <string name="action_view_source">"Vedi codice sorgente"</string>
+  <string name="action_voice_call">"Chiamata vocale"</string>
   <string name="action_yes">"Sì"</string>
   <string name="action_yes_try_again">"Sì, riprova"</string>
   <string name="banner_migrate_to_native_sliding_sync_description">"Il tuo server ora supporta un nuovo protocollo più veloce. Esci e rientra per effettuare l\'aggiornamento. Se lo fai ora, eviterai una disconnessione forzata quando il vecchio protocollo verrà rimosso in seguito."</string>
@@ -193,7 +227,6 @@
   <string name="common_advanced_settings">"Impostazioni avanzate"</string>
   <string name="common_an_image">"un\'immagine"</string>
   <string name="common_analytics">"Statistiche di utilizzo"</string>
-  <string name="common_android_fetching_notifications_title">"Sincronizzazione delle notifiche…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Hai lasciato la stanza"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sei stato disconnesso dalla sessione"</string>
   <string name="common_appearance">"Aspetto"</string>
@@ -201,7 +234,10 @@
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Utenti bloccati"</string>
   <string name="common_bubbles">"Fumetti"</string>
+  <string name="common_call_declined">"Chiamata rifiutata"</string>
+  <string name="common_call_in_progress">"Chiamata in corso"</string>
   <string name="common_call_started">"Chiamata avviata"</string>
+  <string name="common_call_you_declined">"Hai rifiutato una chiamata"</string>
   <string name="common_chat_backup">"Backup della chat"</string>
   <string name="common_copied_to_clipboard">"Copiato negli appunti"</string>
   <string name="common_copyright">"Copyright"</string>
@@ -211,7 +247,6 @@
   <string name="common_current_user_left_room">"Hai lasciato la stanza"</string>
   <string name="common_current_user_left_space">"Hai lasciato lo spazio"</string>
   <string name="common_current_user_rejected_invite">"Invito rifiutato"</string>
-  <string name="common_dark">"Scuro"</string>
   <string name="common_decryption_error">"Errore di decrittazione"</string>
   <string name="common_description">"Descrizione"</string>
   <string name="common_developer_options">"Opzioni sviluppatore"</string>
@@ -237,20 +272,30 @@ Motivo:. %1$s"</string>
   <string name="common_failed">"Fallito"</string>
   <string name="common_favourite">"Preferiti"</string>
   <string name="common_favourited">"Preferita"</string>
+  <string name="common_fetching_notifications_title_android">"Sincronizzazione delle notifiche…"</string>
   <string name="common_file">"File"</string>
   <string name="common_file_deleted">"File eliminato"</string>
   <string name="common_file_saved">"File salvato"</string>
   <string name="common_file_saved_on_disk_android">"File salvato"</string>
   <string name="common_forward_message">"Inoltra messaggio"</string>
   <string name="common_frequently_used">"Usati di frequente"</string>
+  <string name="common_gallery">"Galleria"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d allegato…"</item>
+    <item quantity="other">"%1$d allegati…"</item>
+  </plurals>
+  <plurals name="common_gallery_reply_media_items">
+    <item quantity="one">"%1$d elemento multimediale…"</item>
+    <item quantity="other">"%1$d elementi multimediali…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
+  <string name="common_group_call_in_progress">"Chiamata di gruppo in corso"</string>
   <string name="common_image">"Immagine"</string>
   <string name="common_in_reply_to">"In risposta a %1$s"</string>
   <string name="common_install_apk_android">"Installa APK"</string>
   <string name="common_invite_unknown_profile">"Questo ID Matrix non può essere trovato, quindi l\'invito potrebbe non essere ricevuto."</string>
   <string name="common_leaving_room">"Lascio la stanza"</string>
   <string name="common_leaving_space">"Uscendo dallo spazio"</string>
-  <string name="common_light">"Chiaro"</string>
   <string name="common_line_copied_to_clipboard">"Riga copiata negli appunti"</string>
   <string name="common_link_copied_to_clipboard">"Collegamento copiato negli appunti"</string>
   <string name="common_link_new_device">"Collega un nuovo dispositivo"</string>
@@ -280,6 +325,7 @@ Motivo:. %1$s"</string>
   <string name="common_no_space_name">"Spazio senza nome"</string>
   <string name="common_not_encrypted">"Non cifrato"</string>
   <string name="common_offline">"Non in linea"</string>
+  <string name="common_on_a_call">"In chiamata"</string>
   <string name="common_open_source_licenses">"Licenze open source"</string>
   <string name="common_or">"o"</string>
   <string name="common_other_options">"Altre opzioni"</string>
@@ -292,6 +338,7 @@ Motivo:. %1$s"</string>
   <string name="common_please_wait">"Attendere prego…"</string>
   <string name="common_poll_end_confirmation">"Vuoi davvero terminare questo sondaggio?"</string>
   <string name="common_poll_summary">"Sondaggio: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Sondaggio"</string>
   <string name="common_poll_total_votes">"Voti totali: %1$s"</string>
   <string name="common_poll_undisclosed_text">"I risultati verranno mostrati al termine del sondaggio"</string>
   <plurals name="common_poll_votes_count">
@@ -317,7 +364,6 @@ Motivo:. %1$s"</string>
     <item quantity="other">"%1$d risposte"</item>
   </plurals>
   <string name="common_replying_to">"Risposta a %1$s"</string>
-  <string name="common_report_a_bug">"Segnala un problema"</string>
   <string name="common_report_a_problem">"Segnala un problema"</string>
   <string name="common_report_submitted">"Segnalazione inviata"</string>
   <string name="common_rich_text_editor">"Editor di testo avanzato"</string>
@@ -371,7 +417,6 @@ Motivo:. %1$s"</string>
   <string name="common_suggested">"Suggeriti"</string>
   <string name="common_suggestions">"Suggerimenti"</string>
   <string name="common_syncing">"Sincronizzazione"</string>
-  <string name="common_system">"Sistema"</string>
   <string name="common_text">"Testo"</string>
   <string name="common_third_party_notices">"Comunicazioni di terze parti"</string>
   <string name="common_thread">"Discussione"</string>
@@ -388,6 +433,7 @@ Motivo:. %1$s"</string>
   <string name="common_unmute">"Annulla silenzioso"</string>
   <string name="common_unsupported_call">"Chiamata non supportata"</string>
   <string name="common_unsupported_event">"Evento non supportato"</string>
+  <string name="common_user_started_a_call">"%1$s ha avviato una chiamata"</string>
   <string name="common_username">"Nome utente"</string>
   <string name="common_verification_cancelled">"Verifica annullata"</string>
   <string name="common_verification_complete">"Verifica completata"</string>
@@ -409,6 +455,11 @@ Motivo:. %1$s"</string>
   <string name="common_waiting_live_location">"In attesa della posizione in tempo reale…"</string>
   <string name="common_world_readable_history">"Chiunque può vedere la cronologia"</string>
   <string name="common_you">"Tu"</string>
+  <string name="content_scanner_not_found">"Download non disponibile."</string>
+  <string name="content_scanner_not_found_title">"File non trovato"</string>
+  <string name="content_scanner_scanning">"Scansione…"</string>
+  <string name="content_scanner_unsafe_message">"L\'anteprima e il download sono stati disabilitati."</string>
+  <string name="content_scanner_unsafe_title">"Il file non è sicuro"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) ha condiviso questo messaggio poiché non eri nella stanza quando è stato inviato."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s ha condiviso questo messaggio poiché non eri nella stanza quando è stato inviato."</string>
   <string name="crypto_history_visible">"Questa stanza è stata configurata in modo che i nuovi membri possano leggere la cronologia. %1$s"</string>
@@ -439,9 +490,8 @@ Sei sicuro di voler continuare?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"La dimensione massima consentita per il file è: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Seleziona la qualità del video che vuoi caricare."</string>
   <string name="dialog_video_quality_selector_title">"Seleziona la qualità di caricamento del video"</string>
-  <string name="emoji_picker_search_placeholder">"Cerca emoji"</string>
   <string name="error_account_already_logged_in">"Hai già effettuato l\'accesso su questo dispositivo come %1$s ."</string>
-  <string name="error_account_creation_not_possible">"Il tuo homeserver deve essere aggiornato per supportare il Matrix Authentication Service e la creazione di account."</string>
+  <string name="error_account_creation_not_possible">"Il tuo gestore dell\'account deve essere aggiornato per supportare il servizio di autenticazione Matrix e la creazione di account."</string>
   <string name="error_failed_creating_the_permalink">"Impossibile creare il collegamento permanente"</string>
   <string name="error_failed_loading_map">"%1$s non è riuscito a caricare la mappa. Riprova più tardi."</string>
   <string name="error_failed_loading_messages">"Caricamento dei messaggi non riuscito"</string>
@@ -460,6 +510,9 @@ Sei sicuro di voler continuare?"</string>
   <string name="error_unknown">"Siamo spiacenti, si è verificato un errore"</string>
   <string name="invite_friends_rich_title">"🔐️ Unisciti a me su %1$s"</string>
   <string name="invite_friends_text">"Ehi, parliamo su %1$s: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Condivisione posizione in tempo reale"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Condivisione della posizione in corso"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Posizione in tempo reale"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Scuoti per segnalare un problema"</string>
   <string name="screen_bug_report_a11y_screenshot">"Istantanea schermo"</string>
@@ -467,6 +520,16 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_create_poll_options_section_title">"Risposte"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Rimuovi %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Impostazioni"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Voti consentiti per persona"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Nessuno sta condividendo la propria posizione"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Condivisione posizione in tempo reale"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d persona"</item>
+    <item quantity="other">"%1$d persone"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Sulla mappa"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Il tuo homeserver si trova sulla tua rete locale. Per connettersi, %1$s necessita dell\'autorizzazione per raggiungere i dispositivi su questa rete."</string>
+  <string name="screen_local_network_opt_in_title">"Consenti l\'accesso alla rete locale"</string>
   <string name="screen_media_picker_error_failed_selection">"Selezione del file multimediale fallita, riprova."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Premi su un messaggio e scegli “%1$s” per includerlo qui."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fissa i messaggi importanti così che possano essere trovati facilmente"</string>
@@ -491,6 +554,7 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_room_event_pill">"Messaggio in %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Espandi"</string>
   <string name="screen_room_grouped_state_events_reduce">"Riduci"</string>
+  <string name="screen_room_live_location_banner">"Condivisione posizione in tempo reale"</string>
   <string name="screen_room_permalink_same_room_android">"Stai già visualizzando questa stanza!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s di %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messaggi fissati"</string>
@@ -511,6 +575,10 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_space_list_title">"Spazi"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Condivisa %1$s"</string>
   <string name="screen_static_location_sheet_title">"Sulla mappa"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d si è unito"</item>
+    <item quantity="other">"%1$d si sono uniti"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Il messaggio non è stato inviato perché l\'identità digitale verificata di %1$sè stata reimpostata."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Messaggio non inviato perché %1$s non ha verificato tutti i dispositivi."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Messaggio non inviato perché non hai verificato uno o più dispositivi."</string>
@@ -522,4 +590,6 @@ Sei sicuro di voler continuare?"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Non hai accesso a questo messaggio"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Impossibile decifrare il messaggio"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Questo messaggio è stato bloccato perché non hai verificato il tuo dispositivo o perché il mittente deve verificare la tua identità digitale."</string>
+  <string name="vulkan_not_supported_dialog_content_android">"Il tuo dispositivo è troppo vecchio, è necessario un dispositivo con Android 8 o versioni successive."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Il rendering delle mappe non è supportato"</string>
 </resources>

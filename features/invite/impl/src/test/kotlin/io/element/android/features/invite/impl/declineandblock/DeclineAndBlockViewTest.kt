@@ -16,22 +16,21 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.invite.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class DeclineAndBlockViewTest {
+class DeclineAndBlockViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invoke the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>(expectEvents = false)
         ensureCalledOnce {
             setDeclineAndBlockView(
                 aDeclineAndBlockState(
@@ -44,8 +43,22 @@ class DeclineAndBlockViewTest {
     }
 
     @Test
+    fun `a successful decline invokes the expected callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>(expectEvents = false)
+        ensureCalledOnce {
+            setDeclineAndBlockView(
+                aDeclineAndBlockState(
+                    declineAction = AsyncAction.Success(Unit),
+                    eventSink = eventsRecorder,
+                ),
+                onDeclineSuccess = it,
+            )
+        }
+    }
+
+    @Test
     fun `clicking on decline when enabled emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>()
         setDeclineAndBlockView(
             aDeclineAndBlockState(
                 blockUser = true,
@@ -53,12 +66,12 @@ class DeclineAndBlockViewTest {
             ),
         )
         clickOn(CommonStrings.action_decline)
-        eventsRecorder.assertSingle(DeclineAndBlockEvents.Decline)
+        eventsRecorder.assertSingle(DeclineAndBlockEvent.Decline)
     }
 
     @Test
     fun `clicking on decline when disabled does not emit event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>(expectEvents = false)
         setDeclineAndBlockView(
             aDeclineAndBlockState(
                 blockUser = false,
@@ -72,7 +85,7 @@ class DeclineAndBlockViewTest {
 
     @Test
     fun `clicking on block option emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>()
         setDeclineAndBlockView(
             aDeclineAndBlockState(
                 blockUser = true,
@@ -80,12 +93,12 @@ class DeclineAndBlockViewTest {
             ),
         )
         clickOn(R.string.screen_decline_and_block_block_user_option_title)
-        eventsRecorder.assertSingle(DeclineAndBlockEvents.ToggleBlockUser)
+        eventsRecorder.assertSingle(DeclineAndBlockEvent.ToggleBlockUser)
     }
 
     @Test
     fun `clicking on report room option emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>()
         setDeclineAndBlockView(
             aDeclineAndBlockState(
                 reportRoom = true,
@@ -93,12 +106,12 @@ class DeclineAndBlockViewTest {
             ),
         )
         clickOn(CommonStrings.action_report_room)
-        eventsRecorder.assertSingle(DeclineAndBlockEvents.ToggleReportRoom)
+        eventsRecorder.assertSingle(DeclineAndBlockEvent.ToggleReportRoom)
     }
 
     @Test
     fun `typing text in the reason field emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<DeclineAndBlockEvents>()
+        val eventsRecorder = EventsRecorder<DeclineAndBlockEvent>()
         setDeclineAndBlockView(
             aDeclineAndBlockState(
                 reportRoom = true,
@@ -107,18 +120,20 @@ class DeclineAndBlockViewTest {
             ),
         )
         onNodeWithText("").performTextInput("Spam!")
-        eventsRecorder.assertSingle(DeclineAndBlockEvents.UpdateReportReason("Spam!"))
+        eventsRecorder.assertSingle(DeclineAndBlockEvent.UpdateReportReason("Spam!"))
     }
 }
 
 private fun AndroidComposeUiTest<ComponentActivity>.setDeclineAndBlockView(
     state: DeclineAndBlockState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
+    onDeclineSuccess: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         DeclineAndBlockView(
             state = state,
             onBackClick = onBackClick,
+            onDeclineSuccess = onDeclineSuccess,
         )
     }
 }

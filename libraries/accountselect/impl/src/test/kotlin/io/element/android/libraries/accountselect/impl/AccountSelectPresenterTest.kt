@@ -44,6 +44,7 @@ class AccountSelectPresenterTest {
                         sessionId = A_SESSION_ID_2.value,
                         userDisplayName = "Bob",
                         userAvatarUrl = "avatarUrl",
+                        userAvatarData = "avatarData",
                     ),
                 )
             )
@@ -66,6 +67,7 @@ class AccountSelectPresenterTest {
                     userId = A_SESSION_ID_2,
                     displayName = "Bob",
                     avatarUrl = "avatarUrl",
+                    avatarThumbnail = "avatarData",
                 )
             )
         }

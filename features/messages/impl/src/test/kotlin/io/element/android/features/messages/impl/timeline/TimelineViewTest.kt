@@ -13,16 +13,19 @@ package io.element.android.features.messages.impl.timeline
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
@@ -30,23 +33,29 @@ import io.element.android.features.messages.impl.timeline.protection.aTimelinePr
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.setSafeContent
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Ignore
 import org.junit.Test
-import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
-class TimelineViewTest {
+class TimelineViewTest : RobolectricTest() {
     @Test
     fun `reaching the end of the timeline with more events to load emits a LoadMore event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
@@ -69,7 +78,7 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 eventSink = eventsRecorder,
             ),
         )
@@ -81,7 +90,7 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 isLive = true,
                 eventSink = eventsRecorder,
             ),
@@ -100,7 +109,7 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 isLive = false,
                 eventSink = eventsRecorder,
             ),
@@ -135,7 +144,7 @@ class TimelineViewTest {
                 timelineItems = persistentListOf<TimelineItem>(
                     aTimelineItemEvent(
                         // Do not use a Text because EditorStyledText cannot be used in UI test.
-                        content = aTimelineItemImageContent(),
+                        content = aTimelineItemTextContent(),
                         messageShield = MessageShield.UnverifiedIdentity(true),
                     ),
                 ),
@@ -157,7 +166,7 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemTextContent())),
                 isLive = false,
                 eventSink = eventsRecorder,
                 messageShield = aCriticalShield(),
@@ -168,6 +177,101 @@ class TimelineViewTest {
 
         clickOn(CommonStrings.action_ok)
         eventsRecorder.assertSingle(TimelineEvent.HideShieldDialog)
+    }
+
+    @Test
+    fun `clicking on the send failure indicator emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
+        val timelineItem = aTimelineItemEvent(
+            content = aTimelineItemTextContent(),
+            sendState = LocalEventSendState.Failed.Unknown("Error"),
+        )
+        setTimelineView(
+            state = aTimelineState(
+                timelineItems = persistentListOf(timelineItem),
+                eventSink = eventsRecorder,
+            ),
+        )
+        eventsRecorder.clear()
+
+        val contentDescription = activity!!.getString(CommonStrings.common_sending_failed)
+        onNodeWithContentDescription(contentDescription).performClick()
+        eventsRecorder.assertSingle(TimelineEvent.ShowSendFailureDialog(timelineItem))
+    }
+
+    @Test
+    fun `clicking on the send failure indicator of a verified user failure emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
+        val timelineItem = aTimelineItemEvent(
+            content = aTimelineItemTextContent(),
+            sendState = LocalEventSendState.Failed.VerifiedUserChangedIdentity(users = listOf(A_USER_ID)),
+        )
+        setTimelineView(
+            state = aTimelineState(
+                timelineItems = persistentListOf(timelineItem),
+                eventSink = eventsRecorder,
+            ),
+        )
+        eventsRecorder.clear()
+
+        val contentDescription = activity!!.getString(CommonStrings.common_sending_failed)
+        onNodeWithContentDescription(contentDescription).performClick()
+        eventsRecorder.assertSingle(TimelineEvent.ShowSendFailureDialog(timelineItem))
+    }
+
+    @Test
+    fun `clicking on a reply to a loaded event emits the expected Event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
+        setTimelineView(
+            state = aTimelineState(
+                timelineItems = persistentListOf(
+                    aTimelineItemEvent(
+                        content = aTimelineItemTextContent(),
+                        inReplyTo = InReplyToDetails.Ready(
+                            eventId = AN_EVENT_ID,
+                            senderId = A_USER_ID,
+                            senderProfile = aProfileDetailsReady(),
+                            eventContent = MessageContent(
+                                body = "Replied message",
+                                inReplyTo = null,
+                                isEdited = false,
+                                threadInfo = null,
+                                type = TextMessageType("Replied message", null),
+                            ),
+                            textContent = "Replied message",
+                        ),
+                    ),
+                ),
+                eventSink = eventsRecorder,
+            ),
+        )
+        eventsRecorder.clear()
+
+        onAllNodesWithText("Replied message").onFirst().performClick()
+        eventsRecorder.assertSingle(TimelineEvent.FocusOnEvent(AN_EVENT_ID))
+    }
+
+    @Test
+    fun `a reply to an event which could not be loaded renders a placeholder and does not emit any Event when clicked`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
+        setTimelineView(
+            state = aTimelineState(
+                timelineItems = persistentListOf(
+                    aTimelineItemEvent(
+                        content = aTimelineItemTextContent(),
+                        inReplyTo = InReplyToDetails.Error(eventId = AN_EVENT_ID, message = "Failed to fetch the event"),
+                    ),
+                ),
+                eventSink = eventsRecorder,
+            ),
+            onMessageClick = {},
+        )
+        eventsRecorder.assertSingle(TimelineEvent.OnScrollFinished(firstIndex = 0))
+        eventsRecorder.clear()
+
+        onNodeWithText("Failed to fetch the event").assertDoesNotExist()
+        onNodeWithText(activity!!.getString(CommonStrings.error_message_not_found)).assertIsDisplayed().performClick()
+        eventsRecorder.assertEmpty()
     }
 
     @Ignore(
@@ -218,7 +322,9 @@ private fun AndroidComposeUiTest<ComponentActivity>.setTimelineView(
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit = EnsureNeverCalledWithTwoParams(),
     onMoreReactionsClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onReadReceiptClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
+    onGalleryItemClick: (TimelineItem.Event, Int) -> Unit = EnsureNeverCalledWithTwoParams(),
     forceJumpToBottomVisibility: Boolean = false,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit = EnsureNeverCalledWithParam(),
 ) {
     setSafeContent(clearAndroidUiDispatcher = true) {
         TimelineView(
@@ -233,7 +339,9 @@ private fun AndroidComposeUiTest<ComponentActivity>.setTimelineView(
             onReactionLongClick = onReactionLongClick,
             onMoreReactionsClick = onMoreReactionsClick,
             onReadReceiptClick = onReadReceiptClick,
+            onGalleryItemClick = onGalleryItemClick,
             forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+            onJoinCallClick = onJoinCallClick,
         )
     }
 }

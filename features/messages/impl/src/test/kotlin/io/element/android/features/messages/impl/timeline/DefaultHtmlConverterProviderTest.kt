@@ -21,12 +21,10 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultHtmlConverterProviderTest {
+class DefaultHtmlConverterProviderTest : RobolectricTest() {
     private val provider = DefaultHtmlConverterProvider(
         mentionSpanProvider = MentionSpanProvider(
             permalinkParser = FakePermalinkParser(),

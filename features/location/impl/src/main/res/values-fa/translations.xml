@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"سابقه موقعیت مکانی زنده شما در اتاق ذخیره می‌شود و پس از پایان جلسه برای اعضا قابل مشاهده خواهد بود."</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"مدت زمان اشتراک‌گذاری موقعیت مکانی زنده خود را انتخاب کنید."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"شما مجوز اشتراک‌گذاری موقعیت مکانی زنده خود را در این اتاق ندارید"</string>
+</resources>

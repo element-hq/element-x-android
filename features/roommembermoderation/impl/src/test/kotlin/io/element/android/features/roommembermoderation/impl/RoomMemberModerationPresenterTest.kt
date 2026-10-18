@@ -12,7 +12,7 @@ import app.cash.turbine.TurbineTestContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.ModerationActionState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncAction
@@ -73,7 +73,7 @@ class RoomMemberModerationPresenterTest {
         )
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
-            initialState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(targetUser))
+            initialState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(targetUser))
             skipItems(1)
             val updatedState = awaitState()
             assertThat(updatedState.selectedUser).isEqualTo(targetUser)
@@ -93,7 +93,7 @@ class RoomMemberModerationPresenterTest {
         )
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
-            initialState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(targetUser))
+            initialState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(targetUser))
             skipItems(2)
             val updatedState = awaitState()
             assertThat(updatedState.selectedUser).isEqualTo(targetUser)
@@ -115,7 +115,7 @@ class RoomMemberModerationPresenterTest {
         )
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
-            initialState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(targetUser))
+            initialState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(targetUser))
             skipItems(2)
             val updatedState = awaitState()
             assertThat(updatedState.selectedUser).isEqualTo(targetUser)
@@ -137,7 +137,7 @@ class RoomMemberModerationPresenterTest {
         )
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
-            initialState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(targetUser))
+            initialState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(targetUser))
             skipItems(2)
             val updatedState = awaitState()
             assertThat(updatedState.selectedUser).isEqualTo(targetUser)
@@ -159,7 +159,7 @@ class RoomMemberModerationPresenterTest {
         )
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
-            initialState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(targetUser))
+            initialState.eventSink(RoomMemberModerationEvent.ShowActionsForUser(targetUser))
             skipItems(2)
             val updatedState = awaitState()
             assertThat(updatedState.selectedUser).isEqualTo(targetUser)
@@ -175,7 +175,7 @@ class RoomMemberModerationPresenterTest {
         createRoomMemberModerationPresenter(room = aJoinedRoom()).test {
             val initialState = awaitState()
             initialState.eventSink(
-                RoomMemberModerationEvents.ProcessAction(
+                RoomMemberModerationEvent.ProcessAction(
                     targetUser = targetUser,
                     action = ModerationAction.KickUser
                 )
@@ -192,7 +192,7 @@ class RoomMemberModerationPresenterTest {
         createRoomMemberModerationPresenter(room = aJoinedRoom()).test {
             val initialState = awaitState()
             initialState.eventSink(
-                RoomMemberModerationEvents.ProcessAction(
+                RoomMemberModerationEvent.ProcessAction(
                     targetUser = targetUser,
                     action = ModerationAction.BanUser
                 )
@@ -209,7 +209,7 @@ class RoomMemberModerationPresenterTest {
         createRoomMemberModerationPresenter(room = aJoinedRoom()).test {
             val initialState = awaitState()
             initialState.eventSink(
-                RoomMemberModerationEvents.ProcessAction(
+                RoomMemberModerationEvent.ProcessAction(
                     targetUser = targetUser,
                     action = ModerationAction.UnbanUser
                 )
@@ -235,13 +235,13 @@ class RoomMemberModerationPresenterTest {
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
             initialState.eventSink(
-                RoomMemberModerationEvents.ProcessAction(
+                RoomMemberModerationEvent.ProcessAction(
                     targetUser = targetUser,
                     action = ModerationAction.KickUser
                 )
             )
             skipItems(2)
-            initialState.eventSink(InternalRoomMemberModerationEvents.DoKickUser("Reason"))
+            initialState.eventSink(InternalRoomMemberModerationEvent.DoKickUser("Reason"))
             skipItems(1)
             val loadingState = awaitState()
             assertThat(loadingState.kickUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
@@ -265,13 +265,13 @@ class RoomMemberModerationPresenterTest {
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
             initialState.eventSink(
-                RoomMemberModerationEvents.ProcessAction(
+                RoomMemberModerationEvent.ProcessAction(
                     targetUser = targetUser,
                     action = ModerationAction.BanUser
                 )
             )
             skipItems(2)
-            initialState.eventSink(InternalRoomMemberModerationEvents.DoBanUser("Reason"))
+            initialState.eventSink(InternalRoomMemberModerationEvent.DoBanUser("Reason"))
             skipItems(1)
             val loadingState = awaitState()
             assertThat(loadingState.banUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
@@ -295,13 +295,13 @@ class RoomMemberModerationPresenterTest {
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
             initialState.eventSink(
-                RoomMemberModerationEvents.ProcessAction(
+                RoomMemberModerationEvent.ProcessAction(
                     targetUser = targetUser,
                     action = ModerationAction.UnbanUser
                 )
             )
             skipItems(2)
-            initialState.eventSink(InternalRoomMemberModerationEvents.DoUnbanUser("Reason"))
+            initialState.eventSink(InternalRoomMemberModerationEvent.DoUnbanUser("Reason"))
             skipItems(1)
             val loadingState = awaitState()
             assertThat(loadingState.unbanUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
@@ -320,13 +320,13 @@ class RoomMemberModerationPresenterTest {
         createRoomMemberModerationPresenter(room = room).test {
             val initialState = awaitState()
             initialState.eventSink(
-                RoomMemberModerationEvents.ProcessAction(
+                RoomMemberModerationEvent.ProcessAction(
                     targetUser = targetUser,
                     action = ModerationAction.KickUser
                 )
             )
             skipItems(2)
-            initialState.eventSink(InternalRoomMemberModerationEvents.DoKickUser("Reason"))
+            initialState.eventSink(InternalRoomMemberModerationEvent.DoKickUser("Reason"))
             skipItems(1)
             val loadingState = awaitState()
             assertThat(loadingState.kickUserAsyncAction).isInstanceOf(AsyncAction.Loading::class.java)
@@ -340,10 +340,10 @@ class RoomMemberModerationPresenterTest {
         createRoomMemberModerationPresenter(room = aJoinedRoom()).test {
             val initialState = awaitState()
             initialState.eventSink(
-                RoomMemberModerationEvents.ProcessAction(targetUser = targetUser, action = ModerationAction.BanUser)
+                RoomMemberModerationEvent.ProcessAction(targetUser = targetUser, action = ModerationAction.BanUser)
             )
             skipItems(2)
-            initialState.eventSink(InternalRoomMemberModerationEvents.Reset)
+            initialState.eventSink(InternalRoomMemberModerationEvent.Reset)
             skipItems(1)
             val resetState = awaitState()
             assertThat(resetState.selectedUser).isNull()

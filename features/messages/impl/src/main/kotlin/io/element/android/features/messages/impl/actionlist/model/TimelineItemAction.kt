@@ -36,4 +36,8 @@ enum class TimelineItemAction(
     EndPoll(CommonStrings.action_end_poll, CompoundDrawables.ic_compound_polls_end),
     Pin(CommonStrings.action_pin, CompoundDrawables.ic_compound_pin),
     Unpin(CommonStrings.action_unpin, CompoundDrawables.ic_compound_unpin),
+
+    // Note: these actions are not used in UI for now
+    RetrySending(CommonStrings.action_retry, CompoundDrawables.ic_compound_send_solid),
+    AbortSending(CommonStrings.action_cancel, CompoundDrawables.ic_compound_send_solid),
 }

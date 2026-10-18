@@ -19,6 +19,10 @@
     <item quantity="one">"Hai %d nuovo messaggio."</item>
     <item quantity="other">"Hai %d nuovi messaggi."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Condiviso %1$d allegato"</item>
+    <item quantity="other">"Condivisi %1$d allegati"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Chiamata in arrivo"</string>
   <string name="notification_incoming_call">"📹 Chiamata in arrivo"</string>
   <string name="notification_inline_reply_failed">"** Invio fallito - si prega di aprire la stanza"</string>
@@ -30,6 +34,8 @@
   </plurals>
   <string name="notification_invite_body">"Ti ha invitato ad una conversazione"</string>
   <string name="notification_invite_body_with_sender">"%1$s ti ha invitato ad una conversazione"</string>
+  <string name="notification_knock_request_body">"Richiesta di accesso"</string>
+  <string name="notification_live_location_started_body">"Ha iniziato a condividere la posizione in tempo reale"</string>
   <string name="notification_mentioned_you_body">"Ti ha menzionato: %1$s"</string>
   <string name="notification_new_messages">"Nuovi messaggi"</string>
   <plurals name="notification_new_messages_for_room">
@@ -97,6 +103,7 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Errore: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Errore, impossibile testare le notifiche push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Errore, tempo scaduto in attesa della notifica push."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Errore: il gateway push sta limitando la frequenza delle notifiche su questo dispositivo, pertanto le notifiche non saranno affidabili. Si prega di configurare un gateway push diverso."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Il test push loop back ha impiegato %1$d ms."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Prova invio notifica push loop back"</string>
 </resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"لا يمكنك التأكيد؟"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"إنشاء مفتاح استرداد جديد"</string>
+  <string name="screen_identity_confirmation_subtitle">"اختر طريقة التحقق لإعداد المراسلة الآمنة."</string>
+  <string name="screen_identity_confirmation_title">"تأكيد هويتك الرقمية"</string>
+  <string name="screen_identity_confirmation_use_another_device">"استخدام جهاز آخر"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"استخدام مفتاح الاسترداد"</string>
+  <string name="screen_identity_confirmed_subtitle">"يمكنك الآن قراءة الرسائل أو إرسالها بأمان، ويمكن لأي شخص تدردش معه أن يثق بهذا الجهاز أيضًا."</string>
+  <string name="screen_identity_confirmed_title">"تم التحقق من الجهاز"</string>
+  <string name="screen_identity_use_another_device">"استخدام جهاز آخر"</string>
+  <string name="screen_identity_waiting_on_other_device">"في انتظار الجهاز الآخر…"</string>
+  <string name="screen_notification_optin_subtitle">"يمكنك تغيير إعداداتك لاحقاً."</string>
+  <string name="screen_notification_optin_title">"السماح بالإشعارات وعدم تفويت أي رسالة"</string>
+</resources>

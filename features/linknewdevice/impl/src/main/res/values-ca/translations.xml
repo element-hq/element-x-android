@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_link_new_device_desktop_scanning_title">"Escaneja el QR"</string>
+  <string name="screen_link_new_device_desktop_step3">"Escaneja el codi QR amb aquest dispositiu"</string>
+  <string name="screen_link_new_device_desktop_submit">"Preparat per escanejar"</string>
+  <string name="screen_link_new_device_error_app_not_supported_subtitle">"El proveïdor del teu compte no admet %1$s."</string>
+  <string name="screen_link_new_device_error_app_not_supported_title">"%1$s no és compatible"</string>
+  <string name="screen_link_new_device_error_not_supported_title">"Codi QR no compatible"</string>
+  <string name="screen_link_new_device_error_request_cancelled_subtitle">"L\'inici de sessió s\'ha cancel·lat a l\'altre dispositiu."</string>
+  <string name="screen_link_new_device_error_request_cancelled_title">"Sol·licitud d\'inici de sessió cancel·lada"</string>
+  <string name="screen_link_new_device_error_request_timeout_subtitle">"Inici de sessió ha caducat. Torna-ho a provar."</string>
+  <string name="screen_link_new_device_error_request_timeout_title">"L\'inici de sessió no s\'ha completat a temps"</string>
+  <string name="screen_link_new_device_mobile_step2">"Selecciona %1$s"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_description">"No s\'ha pogut establir una connexió segura amb el dispositiu nou. Els dispositius existents continuen sent segurs, no te n\'has de preocupar."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_header">"I ara què?"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Prova de tornar a iniciar sessió mitjançant un codi QR si es tracta d\'un problema de xarxa."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Si es repeteix el mateix problema, prova una xarxa wifi diferent o utilitza les dades mòbils en lloc del wifi."</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Si no funciona, inicia sessió manualment"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_title">"Connexió no segura"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Se\'t demanarà que introdueixis els dos dígits mostrats en aquest dispositiu."</string>
+  <string name="screen_qr_code_login_device_code_title">"Introdueix el número següent a l\'altre dispositiu"</string>
+  <string name="screen_qr_code_login_error_cancelled_subtitle">"L\'inici de sessió s\'ha cancel·lat a l\'altre dispositiu."</string>
+  <string name="screen_qr_code_login_error_cancelled_title">"Sol·licitud d\'inici de sessió cancel·lada"</string>
+  <string name="screen_qr_code_login_error_declined_subtitle">"L\'inici de sessió s\'ha rebutjat a l\'altre dispositiu."</string>
+  <string name="screen_qr_code_login_error_declined_title">"Inici de sessió rebutjat"</string>
+  <string name="screen_qr_code_login_error_expired_subtitle">"Inici de sessió ha caducat. Torna-ho a provar."</string>
+  <string name="screen_qr_code_login_error_expired_title">"L\'inici de sessió no s\'ha completat a temps"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"El teu altre dispositiu no admet l\'inici de sessió a %s amb codis QR.
+
+Prova d\'iniciar la sessió manualment o escaneja el QR amb un altre dispositiu."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"Codi QR no compatible"</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"El proveïdor del teu compte no admet %1$s."</string>
+  <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s no és compatible"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_description">"Utilitza el codi QR que es mostra a l\'altre dispositiu."</string>
+  <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Torna-ho a intentar"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Codi QR incorrecte"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_description">"Per continuar, has donar permís a %1$s per poder utilitzar la càmera del dispositiu."</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_title">"Permet l\'accés a la càmera per poder escanejar el codi QR"</string>
+  <string name="screen_qr_code_login_unknown_error_description">"S\'ha produït un error inesperat. Torna-ho a provar."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Esperant el teu altre dispositiu"</string>
+</resources>

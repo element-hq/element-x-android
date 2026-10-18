@@ -8,9 +8,11 @@
 
 package io.element.android.libraries.designsystem.components.avatar
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+@Immutable
 enum class AvatarSize(val dp: Dp) {
     CurrentUserTopBar(32.dp),
     CurrentRoomTopBar(32.dp),
@@ -18,6 +20,7 @@ enum class AvatarSize(val dp: Dp) {
     IncomingCall(140.dp),
     RoomDetailsHeader(96.dp),
     RoomListItem(52.dp),
+    SearchRoomListItem(32.dp),
     ThreadsListItem(52.dp),
 
     SpaceListItem(52.dp),
@@ -28,6 +31,7 @@ enum class AvatarSize(val dp: Dp) {
 
     UserHeader(96.dp),
     UserListItem(36.dp),
+    AccountInfoUser(36.dp),
 
     SelectedUser(52.dp),
     SelectedRoom(56.dp),
@@ -69,8 +73,6 @@ enum class AvatarSize(val dp: Dp) {
 
     DmCreationConfirmation(64.dp),
 
-    UserVerification(52.dp),
-
     OrganizationHeader(64.dp),
     SpaceHeader(64.dp),
     RoomPreviewHeader(64.dp),
@@ -79,5 +81,7 @@ enum class AvatarSize(val dp: Dp) {
     LeaveSpaceRoom(32.dp),
     SelectParentSpace(32.dp),
     AccountItem(32.dp),
-    LocationPin(32.dp)
+    OtherAccountItem(20.dp),
+    LocationPin(32.dp),
+    ActiveCallItem(20.dp)
 }

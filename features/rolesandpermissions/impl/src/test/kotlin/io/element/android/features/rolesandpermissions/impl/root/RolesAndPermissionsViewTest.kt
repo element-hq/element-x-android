@@ -14,7 +14,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.rolesandpermissions.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -25,13 +24,12 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledTimes
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.setSafeContent
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class RolesAndPermissionsViewTest {
+class RolesAndPermissionsViewTest : RobolectricTest() {
     @Test
     fun `click on back invokes expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
@@ -94,19 +92,19 @@ class RolesAndPermissionsViewTest {
     @Test
     @Config(qualifiers = "h640dp")
     fun `tapping on reset permissions triggers ResetPermissions event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 eventSink = recorder,
             ),
         )
         clickOn(R.string.screen_room_roles_and_permissions_reset)
-        recorder.assertSingle(RolesAndPermissionsEvents.ResetPermissions)
+        recorder.assertSingle(RolesAndPermissionsEvent.ResetPermissions)
     }
 
     @Test
     fun `tapping on Reset in the reset permissions confirmation dialog triggers ResetPermissions event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 resetPermissionsAction = AsyncAction.ConfirmingNoParams,
@@ -114,12 +112,12 @@ class RolesAndPermissionsViewTest {
             ),
         )
         clickOn(CommonStrings.action_reset)
-        recorder.assertSingle(RolesAndPermissionsEvents.ResetPermissions)
+        recorder.assertSingle(RolesAndPermissionsEvent.ResetPermissions)
     }
 
     @Test
     fun `tapping on Cancel in the reset permissions confirmation dialog triggers CancelPendingAction event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 resetPermissionsAction = AsyncAction.ConfirmingNoParams,
@@ -127,12 +125,12 @@ class RolesAndPermissionsViewTest {
             ),
         )
         clickOn(CommonStrings.action_cancel)
-        recorder.assertSingle(RolesAndPermissionsEvents.CancelPendingAction)
+        recorder.assertSingle(RolesAndPermissionsEvent.CancelPendingAction)
     }
 
     @Test
     fun `tapping on 'Demote to moderator' in the demote self bottom sheet triggers the right event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 changeOwnRoleAction = AsyncAction.ConfirmingNoParams,
@@ -141,12 +139,12 @@ class RolesAndPermissionsViewTest {
         )
         clickOn(R.string.screen_room_roles_and_permissions_change_role_demote_to_moderator)
         mainClock.advanceTimeBy(1_000L)
-        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
+        recorder.assertSingle(RolesAndPermissionsEvent.DemoteSelfTo(RoomMember.Role.Moderator))
     }
 
     @Test
     fun `tapping on 'Demote to member' in the demote self bottom sheet triggers the right event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 changeOwnRoleAction = AsyncAction.ConfirmingNoParams,
@@ -155,12 +153,12 @@ class RolesAndPermissionsViewTest {
         )
         clickOn(R.string.screen_room_roles_and_permissions_change_role_demote_to_member)
         mainClock.advanceTimeBy(1_000L)
-        recorder.assertSingle(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.User))
+        recorder.assertSingle(RolesAndPermissionsEvent.DemoteSelfTo(RoomMember.Role.User))
     }
 
     @Test
     fun `tapping on 'Cancel' in the demote self bottom sheet triggers the right event`() = runAndroidComposeUiTest {
-        val recorder = EventsRecorder<RolesAndPermissionsEvents>()
+        val recorder = EventsRecorder<RolesAndPermissionsEvent>()
         setRolesAndPermissionsView(
             state = aRolesAndPermissionsState(
                 changeOwnRoleAction = AsyncAction.ConfirmingNoParams,
@@ -169,7 +167,7 @@ class RolesAndPermissionsViewTest {
         )
         clickOn(CommonStrings.action_cancel)
         mainClock.advanceTimeBy(1_000L)
-        recorder.assertSingle(RolesAndPermissionsEvents.CancelPendingAction)
+        recorder.assertSingle(RolesAndPermissionsEvent.CancelPendingAction)
     }
 }
 

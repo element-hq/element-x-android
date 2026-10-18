@@ -14,10 +14,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -43,11 +46,13 @@ import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.matrix.ui.components.DisplayNameWithStatus
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -55,7 +60,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MessagesViewTopBar(
     roomName: String?,
@@ -64,13 +68,14 @@ internal fun MessagesViewTopBar(
     heroes: ImmutableList<AvatarData>,
     dmUserIdentityState: IdentityState?,
     sharedHistoryIcon: SharedHistoryIcon,
+    dmUserStatus: DisplayedStatus?,
     onRoomDetailsClick: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     menuActions: @Composable RowScope.() -> Unit,
 ) {
     TopAppBar(
-        modifier = modifier,
+        modifier = modifier.padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()),
         navigationIcon = {
             BackButton(onClick = onBackClick)
         },
@@ -78,8 +83,10 @@ internal fun MessagesViewTopBar(
             val roundedCornerShape = RoundedCornerShape(8.dp)
             Row(
                 modifier = Modifier
+                    .heightIn(min = 48.dp)
                     .clip(roundedCornerShape)
-                    .clickable { onRoomDetailsClick() },
+                    .clickable { onRoomDetailsClick() }
+                    .semantics { heading() },
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -89,6 +96,7 @@ internal fun MessagesViewTopBar(
                     roomAvatar = roomAvatar,
                     isTombstoned = isTombstoned,
                     heroes = heroes,
+                    dmUserStatus = dmUserStatus,
                     modifier = titleModifier
                 )
 
@@ -142,6 +150,7 @@ private fun RoomAvatarAndNameRow(
     roomAvatar: AvatarData,
     heroes: ImmutableList<AvatarData>,
     isTombstoned: Boolean,
+    dmUserStatus: DisplayedStatus?,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -155,17 +164,13 @@ private fun RoomAvatarAndNameRow(
                 isTombstoned = isTombstoned,
             ),
         )
-        Text(
-            modifier = Modifier
-                .padding(start = 8.dp)
-                .semantics {
-                    heading()
-                },
-            text = roomName ?: stringResource(CommonStrings.common_no_room_name),
+        DisplayNameWithStatus(
+            name = roomName ?: stringResource(CommonStrings.common_no_room_name),
+            status = dmUserStatus,
+            modifier = Modifier.padding(start = 8.dp),
             style = ElementTheme.typography.fontBodyLgMedium,
-            fontStyle = FontStyle.Italic.takeIf { roomName == null },
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            nameColor = ElementTheme.colors.textPrimary,
+            nameFontStyle = FontStyle.Italic.takeIf { roomName == null },
         )
     }
 }
@@ -175,9 +180,9 @@ private fun RoomAvatarAndNameRow(
 internal fun MessagesViewTopBarPreview() = ElementPreview {
     @Composable
     fun AMessagesViewTopBar(
-        roomName: String? = "Room name",
+        roomName: String? = ROOM_NAME,
         roomAvatar: AvatarData = anAvatarData(
-            name = "Room name",
+            name = ROOM_NAME,
             size = AvatarSize.TimelineRoom,
         ),
         isTombstoned: Boolean = false,
@@ -185,6 +190,7 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         roomCallState: RoomCallState = RoomCallState.Unavailable,
         dmUserIdentityState: IdentityState? = null,
         sharedHistoryIcon: SharedHistoryIcon = SharedHistoryIcon.NONE,
+        dmUserStatus: DisplayedStatus? = null,
         displayThreads: Boolean = false,
     ) = MessagesViewTopBar(
         roomName = roomName,
@@ -193,6 +199,7 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         heroes = heroes,
         dmUserIdentityState = dmUserIdentityState,
         sharedHistoryIcon = sharedHistoryIcon,
+        dmUserStatus = dmUserStatus,
         onRoomDetailsClick = {},
         onBackClick = {},
         menuActions = {
@@ -246,6 +253,12 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         HorizontalDivider()
         AMessagesViewTopBar(
             displayThreads = true,
+        )
+        HorizontalDivider()
+        AMessagesViewTopBar(
+            roomName = "A DM with a very very very long name",
+            dmUserIdentityState = IdentityState.Verified,
+            dmUserStatus = DisplayedStatus.InCall(0L)
         )
     }
 }

@@ -33,6 +33,11 @@ class DefaultConsoleMessageLogger : ConsoleMessageLogger {
             else -> Log.DEBUG
         }
 
+        // Avoid logging any messages that contain "password" to prevent leaking sensitive information
+        if (consoleMessage.message().contains("password=")) {
+            return
+        }
+
         val message = buildString {
             append(consoleMessage.sourceId())
             append(":")
@@ -41,20 +46,6 @@ class DefaultConsoleMessageLogger : ConsoleMessageLogger {
             append(consoleMessage.message())
         }
 
-        // Avoid logging any messages that contain "password" to prevent leaking sensitive information
-        if (message.contains("password=")) {
-            return
-        }
-
-        Timber.tag(tag).log(
-            priority = priority,
-            message = buildString {
-                append(consoleMessage.sourceId())
-                append(":")
-                append(consoleMessage.lineNumber())
-                append(" ")
-                append(consoleMessage.message())
-            },
-        )
+        Timber.tag(tag).log(priority = priority, message = message)
     }
 }

@@ -16,20 +16,18 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class TroubleshootNotificationsViewTest {
+class TroubleshootNotificationsViewTest : RobolectricTest() {
     @Test
     fun `press menu back invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<TroubleshootNotificationsEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<TroubleshootNotificationsEvent>(expectEvents = false)
         ensureCalledOnce {
             setTroubleshootNotificationsView(
                 state = aTroubleshootNotificationsState(
@@ -43,20 +41,20 @@ class TroubleshootNotificationsViewTest {
 
     @Test
     fun `clicking on run test emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<TroubleshootNotificationsEvents>()
+        val eventsRecorder = EventsRecorder<TroubleshootNotificationsEvent>()
         setTroubleshootNotificationsView(
             aTroubleshootNotificationsState(
                 eventSink = eventsRecorder
             ),
         )
         onNodeWithText("Run tests").performClick()
-        eventsRecorder.assertSingle(TroubleshootNotificationsEvents.StartTests)
+        eventsRecorder.assertSingle(TroubleshootNotificationsEvent.StartTests)
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on run test again emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<TroubleshootNotificationsEvents>()
+        val eventsRecorder = EventsRecorder<TroubleshootNotificationsEvent>()
         setTroubleshootNotificationsView(
             aTroubleshootNotificationsState(
                 tests = listOf(
@@ -70,8 +68,8 @@ class TroubleshootNotificationsViewTest {
         onNodeWithText("Run tests again").performClick()
         eventsRecorder.assertList(
             listOf(
-                TroubleshootNotificationsEvents.RetryFailedTests,
-                TroubleshootNotificationsEvents.StartTests,
+                TroubleshootNotificationsEvent.RetryFailedTests,
+                TroubleshootNotificationsEvent.StartTests,
             )
         )
     }
@@ -79,7 +77,7 @@ class TroubleshootNotificationsViewTest {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on quick fix emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<TroubleshootNotificationsEvents>()
+        val eventsRecorder = EventsRecorder<TroubleshootNotificationsEvent>()
         setTroubleshootNotificationsView(
             aTroubleshootNotificationsState(
                 tests = listOf(
@@ -93,8 +91,8 @@ class TroubleshootNotificationsViewTest {
         onNodeWithText("Attempt to fix").performClick()
         eventsRecorder.assertList(
             listOf(
-                TroubleshootNotificationsEvents.RetryFailedTests,
-                TroubleshootNotificationsEvents.QuickFix(0),
+                TroubleshootNotificationsEvent.RetryFailedTests,
+                TroubleshootNotificationsEvent.QuickFix(0),
             )
         )
     }

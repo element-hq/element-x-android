@@ -41,7 +41,7 @@ class AddRoomToSpaceNode(
         AddRoomToSpaceView(
             state = state,
             onBackClick = callback::onFinish,
-            onRoomsAdded = callback::onFinish,
+            onAddRoom = callback::onFinish,
             modifier = modifier
         )
     }

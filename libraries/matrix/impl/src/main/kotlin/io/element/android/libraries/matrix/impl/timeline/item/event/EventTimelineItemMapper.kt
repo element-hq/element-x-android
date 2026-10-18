@@ -21,7 +21,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetail
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.impl.core.RustSendHandle
+import io.element.android.libraries.matrix.impl.user.from
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -29,7 +31,6 @@ import org.matrix.rustcomponents.sdk.EventOrTransactionId
 import org.matrix.rustcomponents.sdk.QueueWedgeError
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.ShieldState
-import org.matrix.rustcomponents.sdk.TimelineItemContent
 import uniffi.matrix_sdk_ui.TimelineEventShieldStateCode
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
@@ -50,7 +51,9 @@ class EventTimelineItemMapper(
             isOwn = isOwn,
             isRemote = isRemote,
             localSendState = localSendState?.map(),
-            reactions = (content as? TimelineItemContent.MsgLike)?.content?.reactions.map(),
+            editSendState = editSendState?.map(),
+            redactionSendState = redactionSendState?.map(),
+            reactions = reactions.map(),
             receipts = readReceipts.map(),
             sender = UserId(sender),
             senderProfile = senderProfile.map(),
@@ -74,7 +77,8 @@ fun RustProfileDetails.map(): ProfileDetails {
         is RustProfileDetails.Ready -> ProfileDetails.Ready(
             displayName = displayName,
             displayNameAmbiguous = displayNameAmbiguous,
-            avatarUrl = avatarUrl
+            avatarUrl = avatarUrl,
+            displayedStatus = DisplayedStatus.from(status, call),
         )
     }
 }
@@ -111,17 +115,17 @@ fun RustEventSendState?.map(): LocalEventSendState? {
                     )
                 }
                 is QueueWedgeError.GenericApiError -> {
-                    if (isRecoverable) {
-                        LocalEventSendState.Sending.Event
-                    } else {
-                        LocalEventSendState.Failed.Unknown(queueWedgeError.msg)
-                    }
+                    LocalEventSendState.Failed.Unknown(queueWedgeError.msg)
                 }
                 is QueueWedgeError.InvalidMimeType -> {
                     LocalEventSendState.Failed.InvalidMimeType(queueWedgeError.mimeType)
                 }
                 is QueueWedgeError.MissingMediaContent -> {
                     LocalEventSendState.Failed.MissingMediaContent
+                }
+                is QueueWedgeError.ExpiredAccessToken -> {
+                    // This will automatically recover, so map it to the sending state
+                    LocalEventSendState.Sending.Event
                 }
             }
         }

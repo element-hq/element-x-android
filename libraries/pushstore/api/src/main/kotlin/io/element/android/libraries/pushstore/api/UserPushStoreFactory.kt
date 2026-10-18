@@ -14,5 +14,10 @@ import io.element.android.libraries.matrix.api.core.SessionId
  * Store data related to push about a user.
  */
 interface UserPushStoreFactory {
+    /**
+     * Returns the push store of a user, creating it on first use.
+     *
+     * @param userId the user whose store is requested.
+     */
     fun getOrCreate(userId: SessionId): UserPushStore
 }

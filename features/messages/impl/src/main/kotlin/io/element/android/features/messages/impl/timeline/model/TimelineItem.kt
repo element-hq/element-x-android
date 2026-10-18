@@ -10,7 +10,9 @@ package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -24,6 +26,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -90,6 +93,8 @@ sealed interface TimelineItem {
         val reactionsState: TimelineItemReactions,
         val readReceiptState: TimelineItemReadReceipts,
         val localSendState: LocalEventSendState?,
+        private val editSendState: LocalEventSendState?,
+        private val redactionSendState: LocalEventSendState?,
         val inReplyTo: InReplyToDetails?,
         val threadInfo: TimelineItemThreadInfo?,
         val origin: TimelineItemEventOrigin?,
@@ -108,7 +113,7 @@ sealed interface TimelineItem {
 
         val safeSenderName: String = senderProfile.getDisambiguatedDisplayName(senderId)
 
-        val failedToSend: Boolean = localSendState is LocalEventSendState.Failed
+        val failedToSend: Boolean = listOf(localSendState, editSendState, redactionSendState).any { it is LocalEventSendState.Failed }
 
         val isTextMessage: Boolean = content is TimelineItemTextBasedContent
 
@@ -124,6 +129,8 @@ sealed interface TimelineItem {
             is TimelineItemStickerContent -> content.formattedCaption == null && content.caption == null
             is TimelineItemImageContent -> content.formattedCaption == null && content.caption == null
             is TimelineItemVideoContent -> content.formattedCaption == null && content.caption == null
+            is TimelineItemGalleryContent -> false
+            is TimelineItemAttachmentsContent -> false
             else -> true
         }
 
@@ -139,6 +146,18 @@ sealed interface TimelineItem {
             get() = timelineItemDebugInfoProvider()
 
         val sendhandle: SendHandle? get() = sendHandleProvider()
+
+        /**
+         * Returns the first pending send state, if any, along with the corresponding [SendTarget].
+         */
+        fun pendingSend(): Pair<SendTarget, LocalEventSendState>? {
+            return when {
+                localSendState != null -> SendTarget.Event to localSendState
+                editSendState != null -> SendTarget.Edit to editSendState
+                redactionSendState != null -> SendTarget.Redaction to redactionSendState
+                else -> null
+            }
+        }
     }
 
     data class GroupedEvents(

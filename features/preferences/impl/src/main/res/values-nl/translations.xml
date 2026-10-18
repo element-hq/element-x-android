@@ -54,6 +54,9 @@ Als je doorgaat, kunnen sommige van je instellingen veranderen."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeeminstellingen"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systeemmeldingen uitgeschakeld"</string>
   <string name="screen_notification_settings_title">"Meldingen"</string>
+  <string name="theme_dark">"Donker"</string>
+  <string name="theme_light">"Licht"</string>
+  <string name="theme_system">"Systeem"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Problemen oplossen"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Problemen met meldingen oplossen"</string>
 </resources>

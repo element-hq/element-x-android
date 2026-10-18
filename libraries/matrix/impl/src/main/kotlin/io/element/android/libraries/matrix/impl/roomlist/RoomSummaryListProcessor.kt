@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -43,7 +44,7 @@ class RoomSummaryListProcessor(
     suspend fun rebuildRoomSummaries() {
         updateRoomSummaries(emptyList()) {
             forEachIndexed { i, summary ->
-                val result = buildRoomSummaryForIdentifier(summary.roomId.value)
+                val result = buildRoomSummaryForIdentifier(summary.roomId)
                 if (result != null) {
                     this[i] = result
                 }
@@ -103,8 +104,8 @@ class RoomSummaryListProcessor(
         return entry.use { roomSummaryFactory.create(room = it) }
     }
 
-    private suspend fun buildRoomSummaryForIdentifier(identifier: String): RoomSummary? {
-        return roomListService.roomOrNull(identifier)?.let { room ->
+    private suspend fun buildRoomSummaryForIdentifier(roomId: RoomId): RoomSummary? {
+        return roomListService.roomOrNull(roomId)?.let { room ->
             buildSummaryForRoomListEntry(room)
         }
     }
@@ -112,6 +113,11 @@ class RoomSummaryListProcessor(
     private suspend fun updateRoomSummaries(updates: List<RoomListEntriesUpdate>, block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(
         coroutineContext
     ) {
+        // Capture the description before applying updates: applyUpdate consumes each Room via
+        // `entry.use { ... }` which destroys it, and the duplicate-detection branch below reads
+        // id() through `describe()`. Without this capture the trackError call crashes before it
+        // can be reported.
+        val updatesDescription = updates.description()
         mutex.withLock {
             val current = roomSummaries.replayCache.lastOrNull()
             val mutableRoomSummaries = current.orEmpty().toMutableList()
@@ -126,7 +132,7 @@ class RoomSummaryListProcessor(
                     analyticsService.trackError(
                         IllegalStateException(
                             "Found duplicates in room summaries after a list update from the SDK: $duplicates. " +
-                                "Updates: ${updates.description()}"
+                                "Updates: $updatesDescription"
                         )
                     )
                 }

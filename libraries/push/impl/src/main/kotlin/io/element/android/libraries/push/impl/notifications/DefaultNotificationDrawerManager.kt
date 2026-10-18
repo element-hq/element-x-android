@@ -11,6 +11,7 @@ package io.element.android.libraries.push.impl.notifications
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -18,7 +19,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
+import io.element.android.libraries.matrixmedia.api.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
@@ -37,6 +38,7 @@ import io.element.android.services.appnavstate.api.currentRoomId
 import io.element.android.services.appnavstate.api.currentSessionId
 import io.element.android.services.appnavstate.api.currentThreadId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -51,10 +53,11 @@ class DefaultNotificationDrawerManager(
     private val notificationRenderer: NotificationRenderer,
     private val appNavigationStateService: AppNavigationStateService,
     @AppCoroutineScope
-    coroutineScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val activeNotificationsProvider: ActiveNotificationsProvider,
+    private val lockScreenService: LockScreenService,
     sessionObserver: SessionObserver,
 ) : NotificationCleaner {
     // TODO EAx add a setting per user for this
@@ -184,6 +187,31 @@ class DefaultNotificationDrawerManager(
         clearSummaryNotificationIfNeeded(sessionId)
     }
 
+    override fun clearReadRoomsNotifications(sessionId: SessionId) {
+        val notifications = activeNotificationsProvider.getNotificationsForSession(sessionId)
+        val notificationsGroupedByRoomId = notifications.mapNotNull {
+            it.tag?.let(NotificationCreator::getMessageNotificationRoomId)?.let { roomId -> roomId to it }
+        }
+
+        if (notificationsGroupedByRoomId.isEmpty()) return
+
+        coroutineScope.launch {
+            val client = matrixClientProvider.getOrRestore(sessionId).getOrElse { return@launch }
+
+            notificationsGroupedByRoomId.forEach { (roomId, notification) ->
+                val roomInfo = client.getRoomInfo(roomId).getOrNull() ?: return@forEach
+
+                if (roomInfo.numUnreadNotifications > 0L || roomInfo.numUnreadMessages > 0 || roomInfo.numUnreadMentions > 0) {
+                    return@forEach
+                }
+
+                notificationDisplayer.cancelNotification(notification.tag, notification.id)
+            }
+
+            clearSummaryNotificationIfNeeded(sessionId)
+        }
+    }
+
     private fun clearSummaryNotificationIfNeeded(sessionId: SessionId) {
         val summaryNotification = activeNotificationsProvider.getSummaryNotification(sessionId)
         if (summaryNotification != null && activeNotificationsProvider.count(sessionId) == 1) {
@@ -197,6 +225,8 @@ class DefaultNotificationDrawerManager(
             it.sessionId
         }
 
+        val isAppLocked = lockScreenService.isPinSetup().first()
+
         for ((sessionId, notifiableEvents) in eventsForSessions) {
             val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
             val imageLoader = imageLoaderHolder.get(client)
@@ -207,7 +237,25 @@ class DefaultNotificationDrawerManager(
             } else {
                 client.getUserProfile().getOrNull() ?: MatrixUser(sessionId)
             }
-            notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents, imageLoader)
+            if (isAppLocked) {
+                // When the app is locked, show a single fallback notification with event count
+                // instead of per-room notifications with message content/sender info.
+                clearAllMessagesEvents(sessionId)
+                val fallbackEvents = notifiableEvents.mapNotNull { it.toFallbackNotifiableEvent() }
+                notificationRenderer.render(
+                    currentUser = currentUser,
+                    useCompleteNotificationFormat = false,
+                    eventsToProcess = fallbackEvents,
+                    imageLoader = imageLoader,
+                )
+            } else {
+                notificationRenderer.render(
+                    currentUser = currentUser,
+                    useCompleteNotificationFormat = useCompleteNotificationFormat,
+                    eventsToProcess = notifiableEvents,
+                    imageLoader = imageLoader,
+                )
+            }
         }
     }
 }
@@ -237,4 +285,37 @@ private fun AppNavigationState.shouldIgnoreEvent(event: NotifiableEvent): Boolea
                     event.threadId == navigationState.currentThreadId()
             }
         }
+}
+
+/**
+ * Convert a [NotifiableEvent] into a [FallbackNotifiableEvent], stripping all content and sender info.
+ * Used when notification content should be hidden (app locked with PIN).
+ */
+private fun NotifiableEvent.toFallbackNotifiableEvent(): FallbackNotifiableEvent? {
+    val timestamp = when (this) {
+        is NotifiableMessageEvent -> timestamp
+        is InviteNotifiableEvent -> timestamp
+        is SimpleNotifiableEvent -> timestamp
+        is FallbackNotifiableEvent -> timestamp
+        is NotifiableRingingCallEvent -> return null
+    }
+    val noisy = when (this) {
+        is NotifiableMessageEvent -> noisy
+        is InviteNotifiableEvent -> noisy
+        is SimpleNotifiableEvent -> noisy
+        is FallbackNotifiableEvent -> noisy
+    }
+    return FallbackNotifiableEvent(
+        sessionId = sessionId,
+        roomId = roomId,
+        eventId = eventId,
+        editedEventId = null,
+        description = null,
+        canBeReplaced = false,
+        isRedacted = false,
+        isUpdated = false,
+        noisy = noisy,
+        timestamp = timestamp,
+        cause = null,
+    )
 }

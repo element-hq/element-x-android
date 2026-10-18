@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Ήδη μέλος"</string>
   <string name="screen_invite_users_already_invited">"Ήδη προσκεκλημένος"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Προς το παρόν δεν έχετε καμία συνομιλία με αυτές τις επαφές. Επιβεβαιώστε την πρόσκλησή τους σε αυτήν την αίθουσα πριν συνεχίσετε."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Προς το παρόν δεν έχετε καμία συνομιλία με αυτήν την επαφή. Επιβεβαιώστε την πρόσκληση σε αυτήν την αίθουσα συνομιλίας πριν συνεχίσετε."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Πρόσκληση νέων επαφών σε αυτη την αίθουσα;"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Θέλετε να προσκαλέσετε νέα επαφή σε αυτήν την αίθουσα;"</string>
 </resources>

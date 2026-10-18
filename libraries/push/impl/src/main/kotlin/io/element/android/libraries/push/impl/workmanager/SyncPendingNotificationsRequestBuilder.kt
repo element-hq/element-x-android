@@ -91,10 +91,11 @@ class DefaultSyncPendingNotificationsRequestBuilder(
         val request = OneTimeWorkRequestBuilder<FetchPendingNotificationsWorker>()
             .setInputData(workDataOf(SESSION_ID to sessionId.value))
             .apply {
-                // Expedited workers aren't needed on Android 12 or lower:
-                // They force displaying a foreground sync notification for no good reason, since they sync almost immediately anyway
+                // Before Android 12 (API 31), WorkManager runs expedited work as a foreground service with a visible notification, which we
+                // don't want and don't support (no `getForegroundInfo` implementation). From API 31 on, expedited work is a native JobScheduler
+                // expedited job: it starts sooner and is less affected by Doze and App Standby, so use it wherever it is available.
                 // See https://developer.android.com/develop/background-work/background-tasks/persistent/getting-started/define-work#backwards-compat
-                if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
+                if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.S)) {
                     setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 }
             }

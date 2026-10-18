@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -28,7 +29,7 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.tests.testutils.lambda.lambdaError
 
-fun aRoom(
+fun aFakeBaseRoom(
     sessionId: SessionId = A_SESSION_ID,
     roomId: RoomId = A_ROOM_ID,
     displayName: String = A_ROOM_NAME,
@@ -49,6 +50,7 @@ fun aRoom(
     getUpdatedMemberResult: (UserId) -> Result<RoomMember> = { lambdaError() },
     userRoleResult: () -> Result<RoomMember.Role> = { lambdaError() },
     setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
+    markAsReadResult: (ReceiptType) -> Result<Unit> = { lambdaError() },
 ) = FakeBaseRoom(
     sessionId = sessionId,
     roomId = roomId,
@@ -57,6 +59,7 @@ fun aRoom(
     getUpdatedMemberResult = getUpdatedMemberResult,
     userRoleResult = userRoleResult,
     setIsFavoriteResult = setIsFavoriteResult,
+    markAsReadResult = markAsReadResult,
     roomPermissions = roomPermissions,
     initialRoomInfo = aRoomInfo(
         name = displayName,
@@ -106,6 +109,7 @@ fun aJoinedRoom(
     publishRoomAliasInRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
     removeRoomAliasFromRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
     setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
+    markAsReadResult: (ReceiptType) -> Result<Unit> = { lambdaError() },
 ) = FakeJoinedRoom(
     roomNotificationSettingsService = notificationSettingsService,
     setNameResult = setNameResult,
@@ -118,7 +122,7 @@ fun aJoinedRoom(
     updateCanonicalAliasResult = updateCanonicalAliasResult,
     publishRoomAliasInRoomDirectoryResult = publishRoomAliasInRoomDirectoryResult,
     removeRoomAliasFromRoomDirectoryResult = removeRoomAliasFromRoomDirectoryResult,
-    baseRoom = aRoom(
+    baseRoom = aFakeBaseRoom(
         sessionId = sessionId,
         roomId = roomId,
         roomPermissions = roomPermissions,
@@ -139,5 +143,6 @@ fun aJoinedRoom(
         joinedMemberCount = joinedMemberCount,
         activeMemberCount = activeMemberCount,
         invitedMemberCount = invitedMemberCount,
+        markAsReadResult = markAsReadResult,
     )
 )

@@ -16,12 +16,15 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsValuesMapper
 import io.element.android.libraries.matrix.impl.room.tombstone.map
+import io.element.android.libraries.matrix.impl.user.from
+import io.element.android.libraries.matrix.impl.user.into
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import org.matrix.rustcomponents.sdk.Membership
@@ -43,6 +46,7 @@ class RoomInfoMapper {
             avatarUrl = it.avatarUrl,
             isPublic = it.isPublic,
             isDirect = it.isDirect,
+            isDm = it.isDm,
             isEncrypted = when (it.encryptionState) {
                 EncryptionState.ENCRYPTED -> true
                 EncryptionState.NOT_ENCRYPTED -> false
@@ -76,6 +80,7 @@ class RoomInfoMapper {
             privilegedCreatorRole = it.privilegedCreatorsRole,
             isLowPriority = it.isLowPriority,
             activeCallIntentConsensus = it.activeRoomCallConsensusIntent.map(),
+            fullyReadEventId = it.fullyReadEventId?.let(::EventId)
         )
     }
 }
@@ -100,7 +105,9 @@ fun RustRoomNotificationMode.map(): RoomNotificationMode = when (this) {
 fun RoomHero.map(): MatrixUser = MatrixUser(
     userId = UserId(userId),
     displayName = displayName,
-    avatarUrl = avatarUrl
+    avatarUrl = avatarUrl,
+    displayedStatus = DisplayedStatus.from(status, call),
+    rawStatus = status?.into(),
 )
 
 fun mapPowerLevels(roomPowerLevels: RustRoomPowerLevels): RoomPowerLevels {

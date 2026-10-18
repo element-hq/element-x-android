@@ -12,15 +12,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
-import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContentPreviewParam
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationValue
+import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
 
 @Composable
 fun TimelineItemAudioView(
     content: TimelineItemAudioContent,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+    contentValidationValue: ContentValidationValue,
     modifier: Modifier = Modifier,
 ) {
     TimelineItemAttachmentView(
@@ -28,18 +30,19 @@ fun TimelineItemAudioView(
         iconContentDescription = null,
         filename = content.filename,
         fileExtensionAndSize = content.fileExtensionAndSize,
-        caption = content.caption,
         onContentLayoutChange = onContentLayoutChange,
         modifier = modifier,
+        contentValidationValue = contentValidationValue,
     )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineItemAudioViewPreview(@PreviewParameter(TimelineItemAudioContentProvider::class) content: TimelineItemAudioContent) =
+internal fun TimelineItemAudioViewPreview(@PreviewParameter(TimelineItemAudioContentPreviewParam::class) content: TimelineItemAudioContent) =
     ElementTimelineItemPreview {
         TimelineItemAudioView(
             content,
             onContentLayoutChange = {},
+            contentValidationValue = ContentValidationValue.Valid,
         )
     }

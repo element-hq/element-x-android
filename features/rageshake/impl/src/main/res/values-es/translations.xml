@@ -8,11 +8,15 @@
   <string name="screen_bug_report_editor_placeholder">"Describe el problema…"</string>
   <string name="screen_bug_report_editor_supporting">"Si es posible, escribe la descripción en inglés."</string>
   <string name="screen_bug_report_error_description_too_short">"La descripción es demasiado corta. Proporciona más detalles sobre lo sucedido. ¡Gracias!"</string>
+  <string name="screen_bug_report_github_issue_description">"Puedes introducir el número de una incidencia de GitHub asociada, si la hubiere."</string>
+  <string name="screen_bug_report_github_issue_label">"Incidencia de GitHub"</string>
   <string name="screen_bug_report_include_crash_logs">"Enviar registros de fallos"</string>
   <string name="screen_bug_report_include_logs">"Permitir registros"</string>
   <string name="screen_bug_report_include_logs_error">"Tus registros de errores son demasiado grandes y no pueden añadirse a este informe, por favor envíanoslos de otra manera."</string>
   <string name="screen_bug_report_include_screenshot">"Enviar captura de pantalla"</string>
   <string name="screen_bug_report_logs_description">"Los registros se incluirán con tu mensaje para asegurarse de que todo funciona correctamente. Para enviar tu mensaje sin registros, desactiva esta opción."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s se cerró inesperadamente la última vez que se lo usaste. ¿Quieres compartir un informe de error con nosotros?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Si tienes problemas con las notificaciones, enviar las reglas de notificaciones push puede ayudarnos a identificar la causa raíz. Ten en cuenta que estas reglas pueden contener información privada, como tu nombre público o las palabras clave para las que quieres recibir notificaciones."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Enviar ajustes de notificación"</string>
   <string name="screen_bug_report_view_logs">"Ver los registros"</string>
 </resources>

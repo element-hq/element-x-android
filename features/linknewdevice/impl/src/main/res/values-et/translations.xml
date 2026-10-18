@@ -5,6 +5,7 @@
   <string name="screen_link_new_device_desktop_step3">"Skaneeri QR-koodi selle seadmega"</string>
   <string name="screen_link_new_device_desktop_submit">"Skaneerimiseks valmis"</string>
   <string name="screen_link_new_device_desktop_title">"QR-koodi laadimiseks ava %1$s süle- või lauaarvutis"</string>
+  <string name="screen_link_new_device_desktop_warning">"Skaneeri QR-koodi peale järgnevate sammude läbitegemist oma seadmes. Ära iialgi skaneeri QR-koodi, mille on saatnud keegi teine."</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"Numbrid ei klapi"</string>
   <string name="screen_link_new_device_enter_number_notice">"Sisesta kahekohaline kood"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"Sellega verifitseerime, et ühendus sinu teise seadmega on turvaline."</string>

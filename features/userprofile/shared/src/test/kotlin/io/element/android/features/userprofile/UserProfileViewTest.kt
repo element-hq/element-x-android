@@ -16,8 +16,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileEvent
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.R
@@ -42,12 +41,11 @@ import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.ensureCalledOnceWithTwoParams
 import io.element.android.tests.testutils.pressBack
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class UserProfileViewTest {
+class UserProfileViewTest : RobolectricTest() {
     @Test
     fun `on back button click - the expected callback is called`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
@@ -91,7 +89,7 @@ class UserProfileViewTest {
 
     @Test
     fun `on Message clicked - the StartDm event is emitted`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setUserProfileView(
             state = aUserProfileState(
                 dmRoomId = A_ROOM_ID,
@@ -99,7 +97,7 @@ class UserProfileViewTest {
             ),
         )
         clickOn(CommonStrings.action_message)
-        eventsRecorder.assertSingle(UserProfileEvents.StartDM)
+        eventsRecorder.assertSingle(UserProfileEvent.StartDM)
     }
 
     @Test
@@ -133,19 +131,19 @@ class UserProfileViewTest {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `on Block user clicked - a BlockUser event is emitted with needsConfirmation`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setUserProfileView(
             state = aUserProfileState(
                 eventSink = eventsRecorder,
             ),
         )
         clickOn(R.string.screen_dm_details_block_user)
-        eventsRecorder.assertSingle(UserProfileEvents.BlockUser(needsConfirmation = true))
+        eventsRecorder.assertSingle(UserProfileEvent.BlockUser(needsConfirmation = true))
     }
 
     @Test
     fun `on confirming block user - a BlockUser event is emitted without needsConfirmation`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setUserProfileView(
             state = aUserProfileState(
                 displayConfirmationDialog = UserProfileState.ConfirmationDialog.Block,
@@ -153,12 +151,12 @@ class UserProfileViewTest {
             ),
         )
         clickOn(R.string.screen_dm_details_block_alert_action)
-        eventsRecorder.assertSingle(UserProfileEvents.BlockUser(needsConfirmation = false))
+        eventsRecorder.assertSingle(UserProfileEvent.BlockUser(needsConfirmation = false))
     }
 
     @Test
     fun `on canceling blocking a user - a ClearConfirmationDialog event is emitted`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setUserProfileView(
             state = aUserProfileState(
                 displayConfirmationDialog = UserProfileState.ConfirmationDialog.Block,
@@ -166,13 +164,13 @@ class UserProfileViewTest {
             ),
         )
         clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(UserProfileEvents.ClearConfirmationDialog)
+        eventsRecorder.assertSingle(UserProfileEvent.ClearConfirmationDialog)
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
     fun `on Unblock user clicked - an UnblockUser event is emitted with needsConfirmation`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setUserProfileView(
             state = aUserProfileState(
                 isBlocked = AsyncData.Success(true),
@@ -180,12 +178,12 @@ class UserProfileViewTest {
             ),
         )
         clickOn(R.string.screen_dm_details_unblock_user)
-        eventsRecorder.assertSingle(UserProfileEvents.UnblockUser(needsConfirmation = true))
+        eventsRecorder.assertSingle(UserProfileEvent.UnblockUser(needsConfirmation = true))
     }
 
     @Test
     fun `on confirming Unblock user - an UnblockUser event is emitted without needsConfirmation`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setUserProfileView(
             state = aUserProfileState(
                 isBlocked = AsyncData.Success(true),
@@ -194,12 +192,12 @@ class UserProfileViewTest {
             ),
         )
         clickOn(R.string.screen_dm_details_unblock_alert_action)
-        eventsRecorder.assertSingle(UserProfileEvents.UnblockUser(needsConfirmation = false))
+        eventsRecorder.assertSingle(UserProfileEvent.UnblockUser(needsConfirmation = false))
     }
 
     @Test
     fun `on canceling unblocking a user - a ClearConfirmationDialog event is emitted`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<UserProfileEvents>()
+        val eventsRecorder = EventsRecorder<UserProfileEvent>()
         setUserProfileView(
             state = aUserProfileState(
                 isBlocked = AsyncData.Success(true),
@@ -208,7 +206,7 @@ class UserProfileViewTest {
             ),
         )
         clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(UserProfileEvents.ClearConfirmationDialog)
+        eventsRecorder.assertSingle(UserProfileEvent.ClearConfirmationDialog)
     }
 
     @Test

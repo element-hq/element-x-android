@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_category_activity">"Tegevused"</string>
+  <string name="emoji_picker_category_flags">"Lipud"</string>
+  <string name="emoji_picker_category_foods">"Toit ja jook"</string>
+  <string name="emoji_picker_category_nature">"Loomad ja loodus"</string>
+  <string name="emoji_picker_category_objects">"Esemed"</string>
+  <string name="emoji_picker_category_people">"Emotikonid ja inimesed"</string>
+  <string name="emoji_picker_category_places">"Reisimine ja kohad"</string>
+  <string name="emoji_picker_category_recent">"Hiljutised emojid"</string>
+  <string name="emoji_picker_category_symbols">"Sümbolid"</string>
+  <string name="emoji_picker_search_placeholder">"Otsi emojisid"</string>
+</resources>

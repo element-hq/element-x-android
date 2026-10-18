@@ -70,12 +70,12 @@ class FakeNotificationSettingsService(
         }
     }
 
-    override suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isOneToOne: Boolean): Result<Unit> {
+    override suspend fun setDefaultRoomNotificationMode(isEncrypted: Boolean, mode: RoomNotificationMode, isDM: Boolean): Result<Unit> {
         val error = setDefaultNotificationModeError
         if (error != null) {
             return Result.failure(error)
         }
-        if (isOneToOne) {
+        if (isDM) {
             if (isEncrypted) {
                 defaultEncryptedOneToOneRoomNotificationMode = mode
             } else {

@@ -31,7 +31,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
@@ -63,9 +64,11 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.features.messages.impl.timeline.a11y.a11yReactionAction
 import io.element.android.features.messages.impl.timeline.components.MessageShieldView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -109,7 +112,9 @@ fun ActionListView(
     onVerifiedUserSendFailureClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberBottomSheetState(
+        initialValue = SheetValue.Hidden,
+    )
     val coroutineScope = rememberCoroutineScope()
     val targetItem = (state.target as? ActionListState.Target.Success)?.event
 
@@ -243,13 +248,13 @@ private fun ActionListViewContent(
                         modifier = Modifier.clickable {
                             onActionClick(action)
                         },
-                        headlineContent = {
+                        content = {
                             Text(text = stringResource(id = action.titleRes))
                         },
                         leadingContent = ListItemContent.Icon(IconSource.Resource(action.icon)),
                         style = when {
                             action.destructive -> ListItemStyle.Destructive
-                            else -> ListItemStyle.Primary
+                            else -> ListItemStyle.Default
                         }
                     )
                 }
@@ -298,6 +303,12 @@ private fun MessageSummary(
         }
         is TimelineItemImageContent -> {
             content = { ContentForBody(event.content.bestDescription) }
+        }
+        is TimelineItemGalleryContent -> {
+            content = { ContentForBody(event.content.body) }
+        }
+        is TimelineItemAttachmentsContent -> {
+            content = { ContentForBody(event.content.body) }
         }
         is TimelineItemStickerContent -> {
             content = { ContentForBody(event.content.bestDescription) }
@@ -401,7 +412,9 @@ private fun EmojiReactionsRow(
         }
 
         Box(
-            modifier = Modifier.padding(end = 10.dp).requiredSize(48.dp),
+            modifier = Modifier
+                .padding(end = 10.dp)
+                .requiredSize(48.dp),
             contentAlignment = Alignment.CenterEnd,
         ) {
             Icon(
@@ -448,7 +461,7 @@ private fun VerifiedUserSendFailureView(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ErrorSolid())),
         trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChevronRight())),
-        headlineContent = {
+        content = {
             Text(
                 text = sendFailure.headline(),
                 style = ElementTheme.typography.fontBodySmMedium,
@@ -501,7 +514,7 @@ private fun EmojiButton(
 @PreviewsDayNight
 @Composable
 internal fun ActionListViewContentPreview(
-    @PreviewParameter(ActionListStateProvider::class) state: ActionListState
+    @PreviewParameter(ActionListStatePreviewParam::class) state: ActionListState
 ) = ElementPreview {
     ActionListViewContent(
         state = state,

@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.push.impl.workmanager
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.work.Data
 import androidx.work.ListenableWorker
@@ -32,14 +31,15 @@ import io.element.android.libraries.push.test.push.FakeFetchPushForegroundServic
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.util.UUID
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
@@ -48,14 +48,21 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(AndroidJUnit4::class)
-class FetchPendingNotificationWorkerTest {
+class FetchPendingNotificationWorkerTest : RobolectricTest() {
     @Test
     fun `test - success`() = runTest {
+        val callOrder = mutableListOf<String>()
         var synced = false
-        val syncOnNotifiableEventLambda = SyncOnNotifiableEvent { synced = true }
-        val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> {}
+        val syncOnNotifiableEventLambda = SyncOnNotifiableEvent {
+            synced = true
+            callOrder += "sync"
+        }
+        val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> { callOrder += "emit" }
         val processor = FakeNotificationResultProcessor(emit = emitResultLambda)
+        val stopForegroundServiceLambda = lambdaRecorder<Boolean> {
+            callOrder += "stop"
+            true
+        }
 
         val getPendingResultsLambda = lambdaRecorder<SessionId, Instant?, Result<List<PushRequest>>> { _, _ -> Result.success(listOf(aPushRequest())) }
         val replacePushRequestsLambda = lambdaRecorder<List<PushRequest>, Result<Unit>> { Result.success(Unit) }
@@ -71,6 +78,7 @@ class FetchPendingNotificationWorkerTest {
             pushHistoryService = pushHistoryService,
             resultProcessor = processor,
             syncOnNotifiableEvent = syncOnNotifiableEventLambda,
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(unlock = stopForegroundServiceLambda),
         )
 
         val result = worker.doWork()
@@ -88,16 +96,61 @@ class FetchPendingNotificationWorkerTest {
 
         // An opportunistic sync was triggered
         assertThat(synced).isTrue()
+
+        // The foreground service is released once, after the results were handed over and before the opportunistic sync
+        stopForegroundServiceLambda.assertions().isCalledOnce()
+        assertThat(callOrder).containsExactly("emit", "stop", "sync").inOrder()
+    }
+
+    @Test
+    fun `test - before Android 12 the foreground service is released as soon as the work runs`() = runTest {
+        val callOrder = mutableListOf<String>()
+        val syncOnNotifiableEventLambda = SyncOnNotifiableEvent { callOrder += "sync" }
+        val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> { callOrder += "emit" }
+        val processor = FakeNotificationResultProcessor(emit = emitResultLambda)
+        val stopForegroundServiceLambda = lambdaRecorder<Boolean> {
+            callOrder += "stop"
+            true
+        }
+        val pushHistoryService = FakePushHistoryService(
+            getPendingPushRequests = { _, _ -> Result.success(listOf(aPushRequest())) },
+            replacePushRequests = { Result.success(Unit) },
+            removeOldPushRequests = { Result.success(Unit) },
+        )
+
+        val worker = createWorker(
+            input = "@alice:matrix.org",
+            pushHistoryService = pushHistoryService,
+            resultProcessor = processor,
+            syncOnNotifiableEvent = syncOnNotifiableEventLambda,
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(unlock = stopForegroundServiceLambda),
+            buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(30),
+        )
+
+        val result = worker.doWork()
+
+        assertThat(result).isEqualTo(ListenableWorker.Result.success())
+
+        // The foreground service is released once, before the events are resolved, since its notification would be displayed immediately
+        stopForegroundServiceLambda.assertions().isCalledOnce()
+        assertThat(callOrder).containsExactly("stop", "emit", "sync").inOrder()
     }
 
     @Test
     fun `test - invalid input fails the work`() = runTest {
-        val worker = createWorker(input = "!alice:matrix.org")
+        val stopForegroundServiceLambda = lambdaRecorder<Boolean> { true }
+        val worker = createWorker(
+            input = "!alice:matrix.org",
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(unlock = stopForegroundServiceLambda),
+        )
 
         val result = worker.doWork()
 
         // The process failed
         assertThat(result).isEqualTo(ListenableWorker.Result.failure())
+
+        // The foreground service is still stopped
+        stopForegroundServiceLambda.assertions().isCalledOnce()
     }
 
     @Test
@@ -110,11 +163,13 @@ class FetchPendingNotificationWorkerTest {
             replacePushRequests = { Result.success(Unit) },
             removeOldPushRequests = { Result.success(Unit) },
         )
+        val stopForegroundServiceLambda = lambdaRecorder<Boolean> { true }
         val worker = createWorker(
             input = "@alice:matrix.org",
             networkMonitor = networkMonitor,
             resultProcessor = processor,
             pushHistoryService = pushHistoryService,
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(unlock = stopForegroundServiceLambda),
         )
 
         val result = worker.doWork()
@@ -123,6 +178,9 @@ class FetchPendingNotificationWorkerTest {
 
         // The process failed due to a timeout in getting the network connectivity, a retry is scheduled
         assertThat(result).isEqualTo(ListenableWorker.Result.retry())
+
+        // The foreground service is still stopped
+        stopForegroundServiceLambda.assertions().isCalledOnce()
     }
 
     @Test
@@ -240,6 +298,7 @@ class FetchPendingNotificationWorkerTest {
         resultProcessor: FakeNotificationResultProcessor = FakeNotificationResultProcessor(),
         systemClock: FakeSystemClock = FakeSystemClock(),
         pushHandlingWakeLock: FakeFetchPushForegroundServiceManager = FakeFetchPushForegroundServiceManager(),
+        buildVersionSdkIntProvider: FakeBuildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
     ) = FetchPendingNotificationsWorker(
         params = createWorkerParams(workDataOf("session_id" to input)),
         context = InstrumentationRegistry.getInstrumentation().context,
@@ -251,6 +310,7 @@ class FetchPendingNotificationWorkerTest {
         resultProcessor = resultProcessor,
         systemClock = systemClock,
         fetchPushForegroundServiceManager = pushHandlingWakeLock,
+        buildVersionSdkIntProvider = buildVersionSdkIntProvider,
     )
 
     private fun TestScope.createWorkerParams(

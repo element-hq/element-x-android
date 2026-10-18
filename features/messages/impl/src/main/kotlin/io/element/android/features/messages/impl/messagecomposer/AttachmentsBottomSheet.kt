@@ -16,7 +16,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,7 +35,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
-import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -73,8 +73,9 @@ internal fun AttachmentsBottomSheet(
     if (isVisible) {
         ModalBottomSheet(
             modifier = modifier,
-            sheetState = rememberModalBottomSheetState(
-                skipPartiallyExpanded = true
+            sheetState = rememberBottomSheetState(
+                initialValue = SheetValue.Hidden,
+                enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
             ),
             onDismissRequest = { isVisible = false },
             scrollable = false,
@@ -105,26 +106,22 @@ private fun AttachmentSourcePickerMenu(
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.PickAttachmentSource.PhotoFromCamera) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TakePhoto())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
-            style = ListItemStyle.Primary,
+            content = { Text(stringResource(R.string.screen_room_attachment_source_camera_photo)) },
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.PickAttachmentSource.VideoFromCamera) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VideoCall())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
-            style = ListItemStyle.Primary,
+            content = { Text(stringResource(R.string.screen_room_attachment_source_camera_video)) },
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.PickAttachmentSource.FromGallery) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Image())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
-            style = ListItemStyle.Primary,
+            content = { Text(stringResource(R.string.screen_room_attachment_source_gallery)) },
         )
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.PickAttachmentSource.FromFiles) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Attachment())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
-            style = ListItemStyle.Primary,
+            content = { Text(stringResource(R.string.screen_room_attachment_source_files)) },
         )
         if (state.canShareLocation) {
             ListItem(
@@ -133,8 +130,7 @@ private fun AttachmentSourcePickerMenu(
                     onSendLocationClick()
                 },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.LocationPin())),
-                headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
-                style = ListItemStyle.Primary,
+                content = { Text(stringResource(R.string.screen_room_attachment_source_location)) },
             )
         }
         ListItem(
@@ -143,15 +139,13 @@ private fun AttachmentSourcePickerMenu(
                 onCreatePollClick()
             },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Polls())),
-            headlineContent = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
-            style = ListItemStyle.Primary,
+            content = { Text(stringResource(R.string.screen_room_attachment_source_poll)) },
         )
         if (enableTextFormatting) {
             ListItem(
                 modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.ToggleTextFormatting(enabled = true)) },
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TextFormatting())),
-                headlineContent = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
-                style = ListItemStyle.Primary,
+                content = { Text(stringResource(R.string.screen_room_attachment_text_formatting)) },
             )
         }
     }
@@ -159,10 +153,11 @@ private fun AttachmentSourcePickerMenu(
 
 @PreviewsDayNight
 @Composable
-internal fun AttachmentSourcePickerMenuPreview() = ElementPreview {
-    AttachmentSourcePickerMenu(
+internal fun AttachmentsBottomSheetPreview() = ElementPreview(fillMaxSize = true) {
+    AttachmentsBottomSheet(
         state = aMessageComposerState(
             canShareLocation = true,
+            showAttachmentSourcePicker = true,
         ),
         onSendLocationClick = {},
         onCreatePollClick = {},

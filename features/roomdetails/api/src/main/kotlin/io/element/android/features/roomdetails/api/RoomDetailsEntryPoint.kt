@@ -38,9 +38,10 @@ interface RoomDetailsEntryPoint : FeatureEntryPoint {
     data class Params(val initialElement: InitialTarget) : NodeInputs
 
     interface Callback : Plugin {
+        fun onDone()
         fun navigateToGlobalNotificationSettings()
         fun navigateToDeveloperSettings()
-        fun navigateToRoom(roomId: RoomId, serverNames: List<String>)
+        fun navigateToRoom(roomId: RoomId, serverNames: List<String>, clearBackStack: Boolean = false)
         fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun startForwardEventFlow(eventId: EventId, fromPinnedEvents: Boolean)
     }

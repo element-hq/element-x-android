@@ -6,6 +6,7 @@
   <string name="screen_room_change_permissions_delete_messages">"Fjern meldinger"</string>
   <string name="screen_room_change_permissions_everyone">"Medlem"</string>
   <string name="screen_room_change_permissions_invite_people">"Inviter folk"</string>
+  <string name="screen_room_change_permissions_live_location">"Del lokasjon i sanntid"</string>
   <string name="screen_room_change_permissions_manage_space">"Administrer området"</string>
   <string name="screen_room_change_permissions_manage_space_rooms">"Administrer rom"</string>
   <string name="screen_room_change_permissions_member_moderation">"Administrer medlemmer"</string>

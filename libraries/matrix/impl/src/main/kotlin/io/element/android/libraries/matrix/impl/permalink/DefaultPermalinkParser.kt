@@ -8,11 +8,13 @@
 
 package io.element.android.libraries.matrix.impl.permalink
 
+import android.net.Uri
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.MatrixPatterns
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -51,6 +53,10 @@ class DefaultPermalinkParser(
             matrixToConverter.convert(uri) ?: return PermalinkData.FallbackLink(uri)
         }
 
+        matrixToUri.userIdWithSlash()?.let { userId ->
+            return PermalinkData.UserLink(userId = userId)
+        }
+
         val result = runCatchingExceptions {
             parseMatrixEntityFrom(matrixToUri.toString())
         }.getOrNull()
@@ -83,4 +89,18 @@ class DefaultPermalinkParser(
             }
         }
     }
+}
+
+/**
+ * A slash is allowed in the local part of a user id, but it also separates an identifier from an
+ * event id in a permalink, so [parseMatrixEntityFrom] cannot tell the two apart. Only a user id can
+ * start with an `@`, so recover it here rather than letting the ambiguity reach the SDK.
+ */
+private fun Uri.userIdWithSlash(): UserId? {
+    val identifier = fragment
+        ?.removePrefix("/")
+        ?.substringBefore('?')
+        ?: return null
+    if (!identifier.startsWith("@") || !identifier.contains('/')) return null
+    return identifier.takeIf { MatrixPatterns.isUserId(it) }?.let(::UserId)
 }

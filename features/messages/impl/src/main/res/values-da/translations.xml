@@ -7,15 +7,6 @@
   <string name="crypto_event_authenticity_unknown_device">"Krypteret af en ukendt eller slettet enhed."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Krypteret af en enhed, der ikke er verificeret af sin ejer."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Krypteret af en ikke-verificeret bruger."</string>
-  <string name="emoji_picker_category_activity">"Aktiviteter"</string>
-  <string name="emoji_picker_category_flags">"Flag"</string>
-  <string name="emoji_picker_category_foods">"Mad og drikke"</string>
-  <string name="emoji_picker_category_nature">"Dyr og natur"</string>
-  <string name="emoji_picker_category_objects">"Objekter"</string>
-  <string name="emoji_picker_category_people">"Smileys og personer"</string>
-  <string name="emoji_picker_category_places">"Rejser og steder"</string>
-  <string name="emoji_picker_category_recent">"Seneste emojis"</string>
-  <string name="emoji_picker_category_symbols">"Symboler"</string>
   <string name="screen_media_upload_preview_caption_warning">"Billedtekster er muligvis ikke synlige for personer, der bruger ældre apps."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tryk for at ændre videokvaliteten i uploadet"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Filen kunne ikke uploades."</string>

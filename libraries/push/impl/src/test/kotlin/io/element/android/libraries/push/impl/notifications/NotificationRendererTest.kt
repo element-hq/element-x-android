@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.ui.media.test.FakeImageLoader
+import io.element.android.libraries.matrixmedia.test.FakeImageLoader
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
@@ -32,10 +32,9 @@ import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
 private const val MY_USER_DISPLAY_NAME = "display-name"
 private const val MY_USER_AVATAR_URL = "avatar-url"
@@ -45,8 +44,7 @@ private val A_SUMMARY_NOTIFICATION = SummaryNotification.Update(A_NOTIFICATION)
 private val ONE_SHOT_NOTIFICATION =
     OneShotNotification(notification = A_NOTIFICATION, tag = "ignored", isNoisy = false, timestamp = -1)
 
-@RunWith(RobolectricTestRunner::class)
-class NotificationRendererTest {
+class NotificationRendererTest : RobolectricTest() {
     private val notificationDisplayer = FakeNotificationDisplayer()
 
     private val notificationCreator = FakeNotificationCreator()

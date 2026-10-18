@@ -56,8 +56,9 @@ class DefaultAnalyticsColdStartWatcher(
 
     override fun onRoomListVisible() {
         if (isColdStart.getAndSet(false)) {
-            Timber.d("Room list is visible, finishing cold start check")
-            analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStart)
+            analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStart) {
+                Timber.d("Room list is visible, finishing cold start check after ${it.duration}")
+            }
         }
     }
 }

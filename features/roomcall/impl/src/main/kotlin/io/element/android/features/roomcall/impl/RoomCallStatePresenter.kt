@@ -23,7 +23,6 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.CallIntentConsensus
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.canCall
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 
@@ -61,10 +60,13 @@ class RoomCallStatePresenter(
                         isUserLocallyInTheCall = isUserLocallyInTheCall,
                         isAudioCall = roomInfo.activeCallIntentConsensus.isAudio(),
                     )
-                    else -> RoomCallState.StandBy(
-                        canStartCall = canJoinCall,
-                        isDM = roomInfo.isDm
-                    )
+                    else -> {
+                        val isEmptyDm = roomInfo.isDm && roomInfo.joinedMembersCount <= 1
+                        RoomCallState.StandBy(
+                            canStartCall = canJoinCall && !isEmptyDm,
+                            isDM = roomInfo.isDm
+                        )
+                    }
                 }
             }
         }

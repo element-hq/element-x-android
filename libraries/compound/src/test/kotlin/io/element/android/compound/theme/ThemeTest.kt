@@ -11,19 +11,22 @@ package io.element.android.compound.theme
 import android.content.res.Configuration
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.robolectric.RuntimeEnvironment
 
-class ThemeTest {
+class ThemeTest : RobolectricTest() {
     @Test
     fun `isDark for System dark returns true`() {
         `isDark for System`(
-            uiMode = Configuration.UI_MODE_NIGHT_YES,
+            systemUiMode = Configuration.UI_MODE_NIGHT_YES,
             expected = true,
         )
     }
@@ -31,21 +34,38 @@ class ThemeTest {
     @Test
     fun `isDark for System light return false`() {
         `isDark for System`(
-            uiMode = Configuration.UI_MODE_NIGHT_NO,
+            systemUiMode = Configuration.UI_MODE_NIGHT_NO,
             expected = false,
         )
     }
 
-    fun `isDark for System`(
-        uiMode: Int,
+    @Test
+    fun `isDark for System ignores the night mode AppCompat forced on the activity`() {
+        `isDark for System`(
+            systemUiMode = Configuration.UI_MODE_NIGHT_YES,
+            activityUiMode = Configuration.UI_MODE_NIGHT_NO,
+            expected = true,
+        )
+        `isDark for System`(
+            systemUiMode = Configuration.UI_MODE_NIGHT_NO,
+            activityUiMode = Configuration.UI_MODE_NIGHT_YES,
+            expected = false,
+        )
+    }
+
+    private fun `isDark for System`(
+        systemUiMode: Int,
+        activityUiMode: Int = systemUiMode,
         expected: Boolean,
     ) = runTest {
+        val application = RuntimeEnvironment.getApplication()
+        application.resources.configuration.uiMode = systemUiMode
         moleculeFlow(RecompositionMode.Immediate) {
             var result: Boolean? = null
             CompositionLocalProvider(
-                // Let set the system to dark
+                LocalContext provides application,
                 LocalConfiguration provides Configuration().apply {
-                    this.uiMode = uiMode
+                    this.uiMode = activityUiMode
                 },
             ) {
                 result = Theme.System.isDark()

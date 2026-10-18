@@ -6,6 +6,7 @@
   <string name="screen_room_change_permissions_delete_messages">"Üzenetek eltávolítása"</string>
   <string name="screen_room_change_permissions_everyone">"Tag"</string>
   <string name="screen_room_change_permissions_invite_people">"Emberek meghívása"</string>
+  <string name="screen_room_change_permissions_live_location">"Valós idejű hely megosztása"</string>
   <string name="screen_room_change_permissions_manage_space">"Tér kezelése"</string>
   <string name="screen_room_change_permissions_manage_space_rooms">"Szobák kezelése"</string>
   <string name="screen_room_change_permissions_member_moderation">"Tagok kezelése"</string>

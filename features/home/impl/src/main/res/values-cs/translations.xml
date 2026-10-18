@@ -14,7 +14,7 @@
   <string name="confirm_recovery_key_banner_title">"Vaše úložiště klíčů není synchronizováno"</string>
   <string name="full_screen_intent_banner_message">"Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen."</string>
   <string name="full_screen_intent_banner_title">"Vylepšete si zážitek z volání"</string>
-  <string name="screen_home_tab_chats">"Všechny chaty"</string>
+  <string name="screen_home_tab_chats">"Chaty"</string>
   <string name="screen_home_tab_spaces">"Prostory"</string>
   <string name="screen_invites_decline_chat_message">"Opravdu chcete odmítnout pozvánku do %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Odmítnout pozvání"</string>
@@ -46,7 +46,7 @@ Prozatím můžete zrušit výběr filtrů, abyste viděli své další chaty"</
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Gratulujeme!
 Nemáte žádné nepřečtené zprávy!"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Žádost o vstup odeslána"</string>
-  <string name="screen_roomlist_main_space_title">"Všechny chaty"</string>
+  <string name="screen_roomlist_main_space_title">"Chaty"</string>
   <string name="screen_roomlist_mark_as_read">"Označit jako přečtené"</string>
   <string name="screen_roomlist_mark_as_unread">"Označit jako nepřečtené"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Tato místnost byla aktualizována"</string>

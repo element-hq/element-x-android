@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"إرسال دعوة"</string>
+  <string name="screen_bottom_sheet_create_dm_message">"هل تريد بدء دردشة مع %1$s؟"</string>
+  <string name="screen_bottom_sheet_create_dm_title">"إرسال دعوة؟"</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_content">"ليست لديك حاليًا أي دردشات مع هذا الشخص. أكّد دعوته قبل المتابعة."</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_title">"هل تريد بدء دردشة مع جهة الاتصال الجديدة هذه؟"</string>
+  <string name="screen_invites_invited_you">"دعاك %1$s (%2$s)"</string>
+</resources>

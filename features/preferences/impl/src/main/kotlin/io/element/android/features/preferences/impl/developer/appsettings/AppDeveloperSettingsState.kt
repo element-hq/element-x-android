@@ -15,11 +15,14 @@ import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import kotlinx.collections.immutable.ImmutableList
 
 data class AppDeveloperSettingsState(
+    val isDeveloperModeEnabled: Boolean,
     val features: ImmutableList<FeatureUiModel>,
     val rageshakeState: RageshakePreferencesState,
     val customElementCallBaseUrlState: CustomElementCallBaseUrlState,
     val tracingLogLevel: AsyncData<LogLevelItem>,
     val tracingLogPacks: ImmutableList<TraceLogPack>,
+    val gitBranch: String,
+    val gitSha: String,
     val eventSink: (AppDeveloperSettingsEvent) -> Unit
 )
 

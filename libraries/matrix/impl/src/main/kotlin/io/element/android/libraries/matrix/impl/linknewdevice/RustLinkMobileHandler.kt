@@ -11,6 +11,7 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileHandler
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileStep
 import io.element.android.libraries.matrix.api.logs.LoggerTags
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -48,9 +49,29 @@ class RustLinkMobileHandler(
                         }
                     }
                 }
-            )
-            // We emit Done in case the progress listener was deallocated before generate() sent the Done
+            ).use { task ->
+                try {
+                    task.wait()
+                } catch (e: CancellationException) {
+                    task.cancel()
+                    throw e
+                }
+            }
+            // We emit Done in case the progress listener was deallocated before the task sent the Done
             _linkMobileStep.emit(LinkMobileStep.Done)
+        } catch (e: HumanQrGrantLoginException.Expired) {
+            // Note: the SDK does not return this error, but is returning `.NotFound` instead when the QR code expires. We catch both just in case.
+            Timber.tag(tag.value).w(e, "QR code has expired")
+            _linkMobileStep.emit(LinkMobileStep.QrRotating)
+        } catch (e: HumanQrGrantLoginException.NotFound) {
+            Timber.tag(tag.value).w(e, "Error during QR login grant")
+            // Catch timeout here?
+            if (_linkMobileStep.value is LinkMobileStep.QrReady) {
+                Timber.tag(tag.value).d("Emit QrRotating due to HumanQrGrantLoginException.NotFound")
+                _linkMobileStep.emit(LinkMobileStep.QrRotating)
+            } else {
+                _linkMobileStep.emit(LinkMobileStep.Error(e.map()))
+            }
         } catch (e: HumanQrGrantLoginException) {
             Timber.tag(tag.value).w(e, "Error during QR login grant")
             _linkMobileStep.emit(LinkMobileStep.Error(e.map()))
@@ -71,7 +92,13 @@ class RustLinkMobileHandler(
             )
             GrantGeneratedQrLoginProgress.Starting -> LinkMobileStep.Starting
             GrantGeneratedQrLoginProgress.SyncingSecrets -> LinkMobileStep.SyncingSecrets
-            is GrantGeneratedQrLoginProgress.WaitingForAuth -> LinkMobileStep.WaitingForAuth(verificationUri)
+            is GrantGeneratedQrLoginProgress.WaitingForAuth -> LinkMobileStep.WaitingForAuth(
+                verificationUri = verificationUri,
+                continuationMessageSender = RustContinuationMessageSender(
+                    inner = continuationSender,
+                    sessionDispatcher = sessionDispatcher,
+                )
+            )
         }
     }
 }

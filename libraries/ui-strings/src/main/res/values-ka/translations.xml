@@ -23,7 +23,6 @@
     <item quantity="other">"წაკითხულია %1$s და %2$d-ს ადამიანის მიერ"</item>
   </plurals>
   <string name="a11y_read_receipts_single">"წაიკითხეს: %s"</string>
-  <string name="a11y_read_receipts_tap_to_show_all">"შეეხეთ ყველაფრის საჩვენებლად"</string>
   <string name="a11y_remove_reaction">"%1$s რეაქციის წაშლა"</string>
   <string name="a11y_send_files">"ფაილების გაგზავნა"</string>
   <string name="a11y_show_password">"პაროლის ჩვენება"</string>
@@ -122,7 +121,6 @@
   <string name="common_copyright">"საავტორო უფლება"</string>
   <string name="common_creating_room">"ოთახის შექმნა…"</string>
   <string name="common_current_user_left_room">"დატოვა ოთახი"</string>
-  <string name="common_dark">"მუქი"</string>
   <string name="common_decryption_error">"გაშიფვრის შეცდომა"</string>
   <string name="common_developer_options">"დეველოპერის პარამეტრები"</string>
   <string name="common_direct_chat">"პირდაპირი ჩატი"</string>
@@ -145,7 +143,6 @@
   <string name="common_install_apk_android">"დააინსტალირეთ APK"</string>
   <string name="common_invite_unknown_profile">"ეს Matrix ID ვერ მოიძებნა, ამიტომ მოწვევა შეიძლება არ იყოს მიღებული."</string>
   <string name="common_leaving_room">"ოთახის დატოვება"</string>
-  <string name="common_light">"ღია"</string>
   <string name="common_link_copied_to_clipboard">"ბმული კოპირებულია გაცვლის ბუფერში"</string>
   <string name="common_loading">"იტვირთება…"</string>
   <plurals name="common_many_members">
@@ -186,7 +183,6 @@
   </string>
   <string name="common_refreshing">"განახლება…"</string>
   <string name="common_replying_to">"პასუხი %1$s-ს"</string>
-  <string name="common_report_a_bug">"ხარვეზის შეტყობინება"</string>
   <string name="common_report_a_problem">"შეტყობინება პრობლემაზე"</string>
   <string name="common_report_submitted">"რეპორტი გაგზავნილია"</string>
   <string name="common_rich_text_editor">"მდიდარი ტექსტის რედაქტორი"</string>
@@ -213,7 +209,6 @@
   <string name="common_success">"წარმატება"</string>
   <string name="common_suggestions">"შეთავაზებები"</string>
   <string name="common_syncing">"სინქრონიზაცია"</string>
-  <string name="common_system">"სისტემა"</string>
   <string name="common_text">"ტექსტი"</string>
   <string name="common_third_party_notices">"მესამე პირის შენიშვნები"</string>
   <string name="common_thread">"თემა"</string>

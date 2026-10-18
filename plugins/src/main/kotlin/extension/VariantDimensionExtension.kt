@@ -10,14 +10,17 @@ package extension
 
 import com.android.build.api.dsl.VariantDimension
 
+/**
+ * Adds a String field to the generated BuildConfig class. If [value] is null, the field will be null.
+ */
 fun VariantDimension.buildConfigFieldStr(
     name: String,
-    value: String,
+    value: String?,
 ) {
     buildConfigField(
         type = "String",
         name = name,
-        value = "\"$value\""
+        value = value?.let { "\"$it\"" } ?: "null"
     )
 }
 

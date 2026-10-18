@@ -160,7 +160,7 @@ class RoomNotificationSettingsPresenter(
         suspend {
             val isEncrypted = room.info().isEncrypted ?: room.getUpdatedIsEncrypted().getOrThrow()
             pendingModeState.value = null
-            notificationSettingsService.getRoomNotificationSettings(room.roomId, isEncrypted, room.isOneToOne).getOrThrow()
+            notificationSettingsService.getRoomNotificationSettings(room.roomId, isEncrypted, room.isDm()).getOrThrow()
         }.runCatchingUpdatingState(roomNotificationSettings)
     }
 
@@ -170,7 +170,7 @@ class RoomNotificationSettingsPresenter(
         val isEncrypted = room.info().isEncrypted ?: room.getUpdatedIsEncrypted().getOrThrow()
         defaultRoomNotificationMode.value = notificationSettingsService.getDefaultRoomNotificationMode(
             isEncrypted,
-            room.isOneToOne
+            room.isDm()
         ).getOrThrow()
     }
 

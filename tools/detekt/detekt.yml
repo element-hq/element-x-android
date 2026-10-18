@@ -150,7 +150,7 @@ exceptions:
   TooGenericExceptionCaught:
     active: false
   SwallowedException:
-    active: true
+    active: false
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
   TooGenericExceptionThrown:
@@ -175,6 +175,8 @@ complexity:
     active: true
   LargeClass:
     active: true
+    # Do not report large test classes.
+    excludes: [ '**/test/**', '**/androidTest/**' ]
 
 naming:
   VariableNaming:
@@ -224,12 +226,30 @@ comments:
 Compose:
   CompositionLocalAllowlist:
     active: true
+    # You can optionally define a list of CompositionLocals that are allowed here
+    allowedCompositionLocals:
+      - LocalCompoundColors
+      - LocalEventContentValidationState
+      - LocalSnackbarDispatcher
+      - LocalCameraPositionState
+      - LocalMapTilerConfig
+      - LocalMediaItemPresenterFactories
+      - LocalTimelineItemPresenterFactories
+      - LocalRoomMemberProfilesCache
+      - LocalMentionSpanUpdater
+      - LocalAnalyticsService
+      - LocalBuildMeta
+      - LocalUiTestMode
+      - LocalSdkIntVersionProvider
+      - LocalTimelineEventRendererConfig
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:
     active: true
     # You can optionally add your own composables here
     # contentEmitters: MyComposable,MyOtherComposable
+  ModifierComposable:
+    active: true
   ModifierMissing:
     active: true
   ModifierReused:
@@ -252,6 +272,8 @@ Compose:
     active: true
   PreviewPublic:
     active: true
+    # You can optionally disable that only previews with @PreviewParameter are flagged
+    previewPublicOnlyIfParams: false
   RememberMissing:
     active: true
   UnstableCollections:

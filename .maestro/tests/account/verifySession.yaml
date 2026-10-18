@@ -16,4 +16,4 @@ appId: ${MAESTRO_APP_ID}
       - extendedWaitUntil:
           visible: "Device verified"
           timeout: 30000
-- tapOn: "Continue"
+- tapOn: "Done"

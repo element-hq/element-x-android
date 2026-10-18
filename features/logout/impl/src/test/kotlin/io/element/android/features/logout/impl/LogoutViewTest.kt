@@ -13,9 +13,11 @@ package io.element.android.features.logout.impl
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -24,26 +26,39 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressTag
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
-@RunWith(AndroidJUnit4::class)
-class LogoutViewTest {
+class LogoutViewTest : RobolectricTest() {
     @Test
-    fun `clicking on logout sends a LogoutEvents`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LogoutEvents>()
+    @Config(qualifiers = "h1024dp")
+    fun `the current user is displayed`() = runAndroidComposeUiTest {
+        setLogoutView(
+            aLogoutState(
+                currentUser = aMatrixUser(id = "@alice:server.org", displayName = "Alice"),
+                eventSink = EventsRecorder(expectEvents = false),
+            ),
+        )
+        onNodeWithText("Alice").assertIsDisplayed()
+        onNodeWithText("@alice:server.org").assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking on logout sends a LogoutEvent`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LogoutEvent>()
         setLogoutView(
             aLogoutState(
                 eventSink = eventsRecorder
             ),
         )
         clickOn(CommonStrings.action_signout)
-        eventsRecorder.assertSingle(LogoutEvents.Logout(false))
+        eventsRecorder.assertSingle(LogoutEvent.Logout(false))
     }
 
     @Test
-    fun `confirming logout sends a LogoutEvents`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LogoutEvents>()
+    fun `confirming logout sends a LogoutEvent`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LogoutEvent>()
         setLogoutView(
             aLogoutState(
                 logoutAction = AsyncAction.ConfirmingNoParams,
@@ -51,12 +66,12 @@ class LogoutViewTest {
             ),
         )
         pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(LogoutEvents.Logout(false))
+        eventsRecorder.assertSingle(LogoutEvent.Logout(false))
     }
 
     @Test
     fun `clicking on back invoke back callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<LogoutEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setLogoutView(
                 aLogoutState(
@@ -69,8 +84,8 @@ class LogoutViewTest {
     }
 
     @Test
-    fun `clicking on confirm after error sends a LogoutEvents`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LogoutEvents>()
+    fun `clicking on confirm after error sends a LogoutEvent`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LogoutEvent>()
         setLogoutView(
             aLogoutState(
                 logoutAction = AsyncAction.Failure(Exception("Failed to logout")),
@@ -78,25 +93,39 @@ class LogoutViewTest {
             ),
         )
         clickOn(CommonStrings.action_signout_anyway)
-        eventsRecorder.assertSingle(LogoutEvents.Logout(true))
+        eventsRecorder.assertSingle(LogoutEvent.Logout(true))
     }
 
     @Test
-    fun `clicking on cancel after error sends a LogoutEvents`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LogoutEvents>()
+    fun `clicking on cancel after error sends a LogoutEvent`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LogoutEvent>()
         setLogoutView(
             aLogoutState(
                 logoutAction = AsyncAction.Failure(Exception("Failed to logout")),
                 eventSink = eventsRecorder
             ),
         )
-        clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(LogoutEvents.CloseDialogs)
+        clickOn(CommonStrings.action_cancel, inDialog = true)
+        eventsRecorder.assertSingle(LogoutEvent.CloseDialogs)
+    }
+
+    @Test
+    fun `clicking on cancel invoke back callback`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<LogoutEvent>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            setLogoutView(
+                aLogoutState(
+                    eventSink = eventsRecorder
+                ),
+                onBackClick = callback,
+            )
+            clickOn(CommonStrings.action_cancel)
+        }
     }
 
     @Test
     fun `last session setting button invoke onChangeRecoveryKeyClicked`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<LogoutEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<LogoutEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setLogoutView(
                 aLogoutState(

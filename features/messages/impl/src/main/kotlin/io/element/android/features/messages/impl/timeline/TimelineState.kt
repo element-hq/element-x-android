@@ -13,28 +13,36 @@ import io.element.android.features.messages.impl.crypto.sendfailure.resolve.Reso
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.sendfailure.SendFailureDialogState
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.time.Duration
 
 data class TimelineState(
     val timelineItems: ImmutableList<TimelineItem>,
     val timelineRoomInfo: TimelineRoomInfo,
     val timelineMode: Timeline.Mode,
-    val renderReadReceipts: Boolean,
     val newEventState: NewEventState,
     val isLive: Boolean,
     val focusRequestState: FocusRequestState,
     // If not null, info will be rendered in a dialog
     val messageShieldDialogData: MessageShieldData?,
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
+    val sendFailureDialogState: SendFailureDialogState,
     val displayThreadSummaries: Boolean,
-    val displayFloatingDateBadge: Boolean,
+    val displayJumpToUnread: Boolean,
+    val jumpToUnread: JumpToUnreadState,
+    val selectionState: SelectionState,
+    // When true, formatted message bodies are rendered with the native Compose renderer.
+    val useNewTimelineEventRenderer: Boolean,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
@@ -74,6 +82,7 @@ sealed interface FocusRequestState {
 }
 
 data class TimelineRoomInfo(
+    val currentUserId: UserId,
     val isDm: Boolean,
     val name: String?,
     val userHasPermissionToSendMessage: Boolean,
@@ -83,3 +92,58 @@ data class TimelineRoomInfo(
     val typingNotificationState: TypingNotificationState,
     val predecessorRoom: PredecessorRoom?,
 )
+
+/**
+ * Whether the jump-to-unread FAB should be shown, and if so, how tapping it
+ * should bring the user to the read marker.
+ */
+@Immutable
+sealed interface JumpToUnreadState {
+    data object Hidden : JumpToUnreadState
+
+    /** The read marker is materialised at [index] in the loaded timeline — smooth scroll to it. */
+    data class InWindow(val index: Int) : JumpToUnreadState
+
+    /** The read marker event is older than the loaded window — load it via focused-event navigation. */
+    data class OutOfWindow(val eventId: EventId) : JumpToUnreadState
+}
+
+val TimelineState.isSelectionModeActive: Boolean
+    get() = selectionState is SelectionState.Active
+
+val TimelineState.selectedCount: Int
+    get() = (selectionState as? SelectionState.Active)?.selectedEventIds?.size ?: 0
+
+fun TimelineState.isSelected(item: TimelineItem): Boolean {
+    val selection = selectionState as? SelectionState.Active ?: return false
+    return when (item) {
+        is TimelineItem.Event -> selection.selectedEventIds.contains(item.eventId)
+        else -> false
+    }
+}
+
+/**
+ * Whether [item] can be selected right now: selection mode must be active, and the action it was entered for must accept this event.
+ */
+fun TimelineState.canSelect(item: TimelineItem): Boolean {
+    val selection = selectionState as? SelectionState.Active ?: return false
+    return when (item) {
+        is TimelineItem.Event -> selection.action.canApplyTo(item)
+        else -> false
+    }
+}
+
+/**
+ * The selected event ids, sorted from the oldest to the most recent one, as they appear in the timeline.
+ * The selection itself is stored as a set, in the order the events were tapped, which is not necessarily the order they must be acted on.
+ */
+fun TimelineState.selectedEventIdsInTimelineOrder(): ImmutableList<EventId> {
+    val selectedEventIds = (selectionState as? SelectionState.Active)?.selectedEventIds ?: return persistentListOf()
+    return timelineItems
+        .filterIsInstance<TimelineItem.Event>()
+        .mapNotNull { it.eventId }
+        .filter { it in selectedEventIds }
+        // Most recent item is first in the timeline, so reverse the result.
+        .reversed()
+        .toImmutableList()
+}

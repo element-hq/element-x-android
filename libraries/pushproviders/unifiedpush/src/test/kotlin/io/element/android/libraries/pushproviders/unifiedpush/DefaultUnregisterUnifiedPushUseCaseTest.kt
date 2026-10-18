@@ -18,13 +18,11 @@ import io.element.android.libraries.push.test.FakePusherSubscriber
 import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
-class DefaultUnregisterUnifiedPushUseCaseTest {
+class DefaultUnregisterUnifiedPushUseCaseTest : RobolectricTest() {
     @Test
     fun `test un registration successful`() = runTest {
         val lambda = lambdaRecorder { _: MatrixClient, _: String, _: String -> Result.success(Unit) }

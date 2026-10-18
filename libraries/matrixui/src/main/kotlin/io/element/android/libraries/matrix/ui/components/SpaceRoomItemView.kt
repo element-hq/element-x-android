@@ -44,7 +44,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomVisibility
@@ -78,7 +77,7 @@ fun SpaceRoomItemView(
             indication = ripple(),
             interactionSource = remember { MutableInteractionSource() }
         )
-        .onKeyboardContextMenuAction { onLongClick }
+        .onKeyboardContextMenuAction(onLongClick)
     Column(
         modifier = modifier
             .then(clickModifier)
@@ -168,9 +167,7 @@ private fun NameAndIndicatorRow(
             overflow = TextOverflow.Ellipsis
         )
         if (showIndicator) {
-            UnreadIndicatorAtom(
-                color = ElementTheme.colors.unreadIndicator
-            )
+            UnreadIndicatorAtom(count = 0)
         }
     }
 }
@@ -210,7 +207,7 @@ private fun SpaceRoomItemScaffold(
 
 @Composable
 @PreviewsDayNight
-internal fun SpaceRoomItemViewPreview(@PreviewParameter(SpaceRoomProvider::class) spaceRoom: SpaceRoom) = ElementPreview {
+internal fun SpaceRoomItemViewPreview(@PreviewParameter(SpaceRoomPreviewParam::class) spaceRoom: SpaceRoom) = ElementPreview {
     SpaceRoomItemView(
         spaceRoom = spaceRoom,
         showUnreadIndicator = spaceRoom.state == CurrentUserMembership.INVITED,

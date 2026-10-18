@@ -15,9 +15,9 @@
   <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Используйте %1$s для разблокировки приложения"</string>
   <string name="screen_app_lock_setup_choose_pin">"Выберите PIN-код"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Подтвердите PIN-код"</string>
-  <string name="screen_app_lock_setup_pin_context">"Установите блокировку на %1$s, чтобы повысить безопасность ваших чатов.
+  <string name="screen_app_lock_setup_pin_context">"Установите блокировку на %1$s, чтобы повысить безопасность Ваших чатов.
 
-Выберите код, который трудно забыть. Если вы забудете PIN-код, вам придется выйти из приложения."</string>
+Выберите код, который трудно забыть. Если Вы забудете PIN-код, Вам придется выйти из аккаунта."</string>
   <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Этот PIN-код небезопасен."</string>
   <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Выбрать другой PIN-код"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Повторите PIN-код"</string>
@@ -25,14 +25,14 @@
   <string name="screen_app_lock_signout_alert_message">"Чтобы продолжить, вам необходимо повторно войти в систему и создать новый PIN-код"</string>
   <string name="screen_app_lock_signout_alert_title">"Это устройство удаляется"</string>
   <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"У вас осталась %1$d попытка разблокировки"</item>
-    <item quantity="few">"У вас остались %1$d попытки разблокировки"</item>
-    <item quantity="many">"У вас осталось %1$d попыток разблокировки"</item>
+    <item quantity="one">"У Вас осталась %1$d попытка разблокировки"</item>
+    <item quantity="few">"У Вас остались %1$d попытки разблокировки"</item>
+    <item quantity="many">"У Вас осталось %1$d попыток разблокировки"</item>
   </plurals>
   <plurals name="screen_app_lock_subtitle_wrong_pin">
-    <item quantity="one">"Неверный PIN-код. У вас осталась %1$d попытка"</item>
-    <item quantity="few">"Неверный PIN-код. У вас остались %1$d попытки"</item>
-    <item quantity="many">"Неверный PIN-код. У вас осталось %1$d попыток"</item>
+    <item quantity="one">"Неверный PIN-код. У Вас осталась %1$d попытка"</item>
+    <item quantity="few">"Неверный PIN-код. У Вас остались %1$d попытки"</item>
+    <item quantity="many">"Неверный PIN-код. У Вас осталось %1$d попыток"</item>
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Использовать биометрию"</string>
   <string name="screen_app_lock_use_pin_android">"Использовать PIN-код"</string>

@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,7 +52,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PollHistoryView(
     state: PollHistoryState,
@@ -62,15 +60,15 @@ fun PollHistoryView(
     modifier: Modifier = Modifier,
 ) {
     fun onLoadMore() {
-        state.eventSink(PollHistoryEvents.LoadMore)
+        state.eventSink(PollHistoryEvent.LoadMore)
     }
 
-    fun onSelectAnswer(pollStartId: EventId, answerId: String) {
-        state.eventSink(PollHistoryEvents.SelectPollAnswer(pollStartId, answerId))
+    fun onSendPollResponse(pollStartId: EventId, answerIds: List<String>) {
+        state.eventSink(PollHistoryEvent.SendPollResponse(pollStartId, answerIds))
     }
 
     fun onEndPoll(pollStartId: EventId) {
-        state.eventSink(PollHistoryEvents.EndPoll(pollStartId))
+        state.eventSink(PollHistoryEvent.EndPoll(pollStartId))
     }
 
     Scaffold(
@@ -97,7 +95,7 @@ fun PollHistoryView(
             }
             PollHistoryFilterButtons(
                 activeFilter = state.activeFilter,
-                onSelectFilter = { state.eventSink(PollHistoryEvents.SelectFilter(it)) },
+                onSelectFilter = { state.eventSink(PollHistoryEvent.SelectFilter(it)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -114,7 +112,7 @@ fun PollHistoryView(
                     pollHistoryItems = pollHistoryItems,
                     hasMoreToLoad = state.hasMoreToLoad,
                     isLoading = state.isLoading,
-                    onSelectAnswer = ::onSelectAnswer,
+                    onSendPollResponse = ::onSendPollResponse,
                     onEditPoll = onEditPoll,
                     onEndPoll = ::onEndPoll,
                     onLoadMore = ::onLoadMore,
@@ -125,7 +123,6 @@ fun PollHistoryView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PollHistoryFilterButtons(
     activeFilter: PollHistoryFilter,
@@ -151,7 +148,7 @@ private fun PollHistoryList(
     pollHistoryItems: ImmutableList<PollHistoryItem>,
     hasMoreToLoad: Boolean,
     isLoading: Boolean,
-    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onSendPollResponse: (pollStartId: EventId, answerIds: List<String>) -> Unit,
     onEditPoll: (pollStartId: EventId) -> Unit,
     onEndPoll: (pollStartId: EventId) -> Unit,
     onLoadMore: () -> Unit,
@@ -166,7 +163,7 @@ private fun PollHistoryList(
         items(pollHistoryItems) { pollHistoryItem ->
             PollHistoryItemRow(
                 pollHistoryItem = pollHistoryItem,
-                onSelectAnswer = onSelectAnswer,
+                onSendPollResponse = onSendPollResponse,
                 onEditPoll = onEditPoll,
                 onEndPoll = onEndPoll,
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
@@ -222,7 +219,7 @@ private fun LoadMoreButton(isLoading: Boolean, onClick: () -> Unit) {
 @Composable
 private fun PollHistoryItemRow(
     pollHistoryItem: PollHistoryItem,
-    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onSendPollResponse: (pollStartId: EventId, answerIds: List<String>) -> Unit,
     onEditPoll: (pollStartId: EventId) -> Unit,
     onEndPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
@@ -244,7 +241,7 @@ private fun PollHistoryItemRow(
             Spacer(modifier = Modifier.height(4.dp))
             PollContentView(
                 state = pollHistoryItem.state,
-                onSelectAnswer = onSelectAnswer,
+                onSendPollResponse = onSendPollResponse,
                 onEditPoll = onEditPoll,
                 onEndPoll = onEndPoll,
             )
@@ -255,7 +252,7 @@ private fun PollHistoryItemRow(
 @PreviewsDayNight
 @Composable
 internal fun PollHistoryViewPreview(
-    @PreviewParameter(PollHistoryStateProvider::class) state: PollHistoryState
+    @PreviewParameter(PollHistoryStatePreviewParam::class) state: PollHistoryState
 ) = ElementPreview {
     PollHistoryView(
         state = state,

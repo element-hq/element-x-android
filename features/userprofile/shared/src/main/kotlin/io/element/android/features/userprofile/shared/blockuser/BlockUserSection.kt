@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileEvent
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.shared.R
 import io.element.android.libraries.architecture.AsyncData
@@ -50,13 +50,13 @@ fun BlockUserSection(
     if (isBlocked is AsyncData.Failure) {
         RetryDialog(
             content = stringResource(CommonStrings.error_unknown),
-            onDismiss = { state.eventSink(UserProfileEvents.ClearBlockUserError) },
+            onDismiss = { state.eventSink(UserProfileEvent.ClearBlockUserError) },
             onRetry = {
                 val event = when (isBlocked.prevData) {
-                    true -> UserProfileEvents.UnblockUser(needsConfirmation = false)
-                    false -> UserProfileEvents.BlockUser(needsConfirmation = false)
+                    true -> UserProfileEvent.UnblockUser(needsConfirmation = false)
+                    false -> UserProfileEvent.BlockUser(needsConfirmation = false)
                     // null case Should not happen
-                    null -> UserProfileEvents.ClearBlockUserError
+                    null -> UserProfileEvent.ClearBlockUserError
                 }
                 state.eventSink(event)
             },
@@ -68,7 +68,7 @@ fun BlockUserSection(
 private fun PreferenceBlockUser(
     isBlocked: Boolean?,
     isLoading: Boolean,
-    eventSink: (UserProfileEvents) -> Unit,
+    eventSink: (UserProfileEvent) -> Unit,
 ) {
     val loadingCurrentValue = @Composable { _: Boolean ->
         CircularProgressIndicator(
@@ -80,18 +80,17 @@ private fun PreferenceBlockUser(
     }
     if (isBlocked.orFalse()) {
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_dm_details_unblock_user)) },
+            content = { Text(stringResource(R.string.screen_dm_details_unblock_user)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
-            onClick = { if (!isLoading) eventSink(UserProfileEvents.UnblockUser(needsConfirmation = true)) },
+            onClick = { if (!isLoading) eventSink(UserProfileEvent.UnblockUser(needsConfirmation = true)) },
             trailingContent = if (isLoading) ListItemContent.Custom(loadingCurrentValue) else null,
-            style = ListItemStyle.Primary,
         )
     } else {
         ListItem(
-            headlineContent = { Text(stringResource(R.string.screen_dm_details_block_user)) },
+            content = { Text(stringResource(R.string.screen_dm_details_block_user)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
             style = ListItemStyle.Destructive,
-            onClick = { if (!isLoading) eventSink(UserProfileEvents.BlockUser(needsConfirmation = true)) },
+            onClick = { if (!isLoading) eventSink(UserProfileEvent.BlockUser(needsConfirmation = true)) },
             trailingContent = if (isLoading) ListItemContent.Custom(loadingCurrentValue) else null,
         )
     }

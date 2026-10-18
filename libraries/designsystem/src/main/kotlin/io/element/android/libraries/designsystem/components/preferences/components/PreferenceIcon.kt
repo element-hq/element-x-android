@@ -86,7 +86,7 @@ private fun PreferenceIcon(
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceIconPreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) =
+internal fun PreferenceIconPreview(@PreviewParameter(ImageVectorPreviewParam::class) content: ImageVector?) =
     ElementThemedPreview {
         PreferenceIcon(
             icon = content,
@@ -96,7 +96,7 @@ internal fun PreferenceIconPreview(@PreviewParameter(ImageVectorProvider::class)
 
 @Preview(group = PreviewGroup.Preferences)
 @Composable
-internal fun PreferenceIconWithBadgePreview(@PreviewParameter(ImageVectorProvider::class) content: ImageVector?) =
+internal fun PreferenceIconWithBadgePreview(@PreviewParameter(ImageVectorPreviewParam::class) content: ImageVector?) =
     ElementThemedPreview {
         PreferenceIcon(
             icon = content,

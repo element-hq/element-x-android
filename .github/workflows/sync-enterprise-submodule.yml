@@ -1,0 +1,85 @@
+name: Sync Enterprise submodule
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ develop ]
+    paths: [ enterprise ]
+  schedule:
+    # At 06:00 UTC every day
+    - cron: '0 6 * * *'
+
+permissions: {}
+
+jobs:
+  sync-enterprise-submodule:
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'element-hq/element-x-android'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Add SSH private keys for submodule repositories
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
+      - name: Check enterprise submodule reference
+        id: check
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          current=$(git ls-tree HEAD enterprise | awk '{print $3}')
+          # Do not init the submodule: the current commit may be on a deleted branch.
+          git init -q "$RUNNER_TEMP/enterprise"
+          git -C "$RUNNER_TEMP/enterprise" fetch -q git@github.com:element-hq/element-android-enterprise.git main
+          main=$(git -C "$RUNNER_TEMP/enterprise" rev-parse FETCH_HEAD)
+          if git -C "$RUNNER_TEMP/enterprise" merge-base --is-ancestor "$current" "$main" 2>/dev/null; then
+            on_main=true
+          else
+            on_main=false
+          fi
+          echo "Current: $current, main: $main, current is on main: $on_main"
+
+          if [ "$current" = "$main" ]; then
+            echo "Submodule is already up to date."
+            echo "update=false" >> "$GITHUB_OUTPUT"
+          elif [ "$EVENT_NAME" = "push" ] && [ "$on_main" = "true" ]; then
+            echo "Submodule targets a commit on main, nothing to do."
+            echo "update=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "update=true" >> "$GITHUB_OUTPUT"
+          fi
+
+          {
+            echo "body<<EOF"
+            if [ "$on_main" = "true" ]; then
+              # Do not list the commit messages, the enterprise repository is private.
+              count=$(git -C "$RUNNER_TEMP/enterprise" rev-list --count "$current..$main")
+              echo "Update the \`enterprise\` submodule from \`$current\` to the latest commit of \`main\` (\`$main\`), $count new commit(s)."
+            else
+              echo "The \`enterprise\` submodule targets \`$current\`, which is not on the \`main\` branch."
+              echo
+              echo "Update it to the latest commit of \`main\` (\`$main\`)."
+            fi
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+          if [ "$current" != "$main" ]; then
+            # Update the submodule reference without cloning it.
+            git update-index --cacheinfo "160000,$main,enterprise"
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "Update enterprise submodule to latest main" -m "Update to $main"
+          fi
+      - name: Create Pull Request to update the enterprise submodule
+        # On schedule and manual runs, also run when there is nothing to update, so that a stale PR gets closed.
+        if: ${{ steps.check.outputs.update == 'true' || github.event_name != 'push' }}
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+          title: Update enterprise submodule to latest main
+          body: ${{ steps.check.outputs.body }}
+          branch: sync-enterprise-submodule
+          base: develop
+          delete-branch: true
+          labels: PR-Element-Pro

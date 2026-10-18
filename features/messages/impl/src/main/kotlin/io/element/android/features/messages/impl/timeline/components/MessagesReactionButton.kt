@@ -41,7 +41,7 @@ import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.a11y.a11yReactionAction
 import io.element.android.features.messages.impl.timeline.a11y.a11yReactionDetails
 import io.element.android.features.messages.impl.timeline.model.AggregatedReaction
-import io.element.android.features.messages.impl.timeline.model.AggregatedReactionProvider
+import io.element.android.features.messages.impl.timeline.model.AggregatedReactionPreviewParam
 import io.element.android.features.messages.impl.timeline.model.aTimelineItemReactions
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
@@ -52,7 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -199,7 +199,7 @@ private fun ReactionContent(
 
 @PreviewsDayNight
 @Composable
-internal fun MessagesReactionButtonPreview(@PreviewParameter(AggregatedReactionProvider::class) reaction: AggregatedReaction) = ElementPreview {
+internal fun MessagesReactionButtonPreview(@PreviewParameter(AggregatedReactionPreviewParam::class) reaction: AggregatedReaction) = ElementPreview {
     MessagesReactionButton(
         content = MessagesReactionsButtonContent.Reaction(reaction),
         onClick = {},

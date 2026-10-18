@@ -43,7 +43,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.model.LatestEvent
 import io.element.android.features.home.impl.model.RoomListRoomSummary
-import io.element.android.features.home.impl.model.RoomListRoomSummaryProvider
+import io.element.android.features.home.impl.model.RoomListRoomSummaryPreviewParam
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.libraries.core.extensions.orEmpty
@@ -60,9 +60,10 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
-import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.matrix.ui.components.DisplayNameWithStatus
 import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -76,8 +77,10 @@ internal fun RoomSummaryRow(
     hideInviteAvatars: Boolean,
     isInviteSeen: Boolean,
     onClick: (RoomListRoomSummary) -> Unit,
-    eventSink: (RoomListEvent) -> Unit,
     modifier: Modifier = Modifier,
+    showUnreadCount: Boolean = false,
+    showAllActivity: Boolean = false,
+    eventSink: (RoomListEvent) -> Unit,
 ) {
     Box(modifier = modifier) {
         when (room.displayType) {
@@ -125,9 +128,10 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = room.timestamp,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        dmUserStatus = room.dmUserStatus,
                     )
-                    MessagePreviewAndIndicatorRow(room = room)
+                    MessagePreviewAndIndicatorRow(room = room, showUnreadCount = showUnreadCount, showAllActivity = showAllActivity)
                 }
             }
             RoomSummaryDisplayType.KNOCKED -> {
@@ -141,7 +145,8 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = null,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        dmUserStatus = null,
                     )
                     if (room.canonicalAlias != null) {
                         Text(
@@ -217,29 +222,28 @@ private fun NameAndTimestampRow(
     name: String?,
     timestamp: String?,
     isHighlighted: Boolean,
+    dmUserStatus: DisplayedStatus?,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = spacedBy(16.dp)
     ) {
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .clipToBounds(),
+        val displayName = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name)
+        DisplayNameWithStatus(
+            name = displayName,
+            status = dmUserStatus,
+            modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyLgMedium,
-            text = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name),
-            fontStyle = FontStyle.Italic.takeIf { name == null },
-            color = ElementTheme.colors.roomListRoomName,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            nameColor = ElementTheme.colors.roomListRoomName,
+            nameFontStyle = FontStyle.Italic.takeIf { name == null },
         )
         // Timestamp
         Text(
             text = timestamp ?: "",
             style = ElementTheme.typography.fontBodySmMedium,
             color = if (isHighlighted) {
-                ElementTheme.colors.unreadIndicator
+                ElementTheme.colors.textActionAccent
             } else {
                 ElementTheme.colors.roomListRoomMessageDate
             },
@@ -273,6 +277,8 @@ private fun InviteSubtitle(
 @Composable
 private fun MessagePreviewAndIndicatorRow(
     room: RoomListRoomSummary,
+    showUnreadCount: Boolean,
+    showAllActivity: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -340,20 +346,20 @@ private fun MessagePreviewAndIndicatorRow(
         // Call and unread
         Row(
             modifier = Modifier
-                .height(16.dp)
                 // Used to force this line to be read aloud earlier than the latest event when using Talkback
                 .zIndex(-1f),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val tint = if (room.isHighlighted) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
+            val tint = if (room.isHighlighted) ElementTheme.colors.textActionAccent else ElementTheme.colors.iconQuaternary
             if (room.hasRoomCall) {
                 OnGoingCallIcon(
                     color = tint,
                     isAudio = room.activeCallIntent == CallIntent.AUDIO
                 )
             }
-            if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
+            val isMuted = room.userDefinedNotificationMode == RoomNotificationMode.MUTE
+            if (isMuted) {
                 NotificationOffIndicatorAtom()
             } else if (room.numberOfUnreadMentions > 0) {
                 MentionIndicatorAtom()
@@ -362,10 +368,32 @@ private fun MessagePreviewAndIndicatorRow(
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
                 UnreadIndicatorAtom(
                     color = tint,
+                    count = room.unreadIndicatorCount(showUnreadCount = showUnreadCount, showAllActivity = showAllActivity),
                     contentDescription = contentDescription,
                 )
             }
         }
+    }
+}
+
+/**
+ * Computes the value to pass to [UnreadIndicatorAtom] as `count`.
+ * - `null`: nothing is displayed.
+ * - `0`: dot indicator without a count.
+ * - `> 0`: the number to display.
+ */
+internal fun RoomListRoomSummary.unreadIndicatorCount(
+    showUnreadCount: Boolean,
+    showAllActivity: Boolean,
+): Long? {
+    val isMuted = userDefinedNotificationMode == RoomNotificationMode.MUTE
+    return when {
+        // Show only unread notifications when the room is not muted and there are unread notifications
+        !isMuted && numberOfUnreadNotifications > 0 -> if (showUnreadCount) numberOfUnreadNotifications else 0
+        // Otherwise, show a dot for unread messages when showAllActivity is true and there are unread messages
+        showAllActivity -> if (numberOfUnreadMessages > 0) 0 else null
+        // Or don't display anything
+        else -> null
     }
 }
 
@@ -392,9 +420,7 @@ private fun InviteNameAndIndicatorRow(
             overflow = TextOverflow.Ellipsis
         )
         if (!isInviteSeen) {
-            UnreadIndicatorAtom(
-                color = ElementTheme.colors.unreadIndicator
-            )
+            UnreadIndicatorAtom(count = 0)
         }
     }
 }
@@ -428,13 +454,13 @@ private fun MentionIndicatorAtom() {
         modifier = Modifier.size(16.dp),
         contentDescription = stringResource(CommonStrings.a11y_notifications_new_mentions),
         imageVector = CompoundIcons.Mention(),
-        tint = ElementTheme.colors.unreadIndicator,
+        tint = ElementTheme.colors.iconAccentPrimary,
     )
 }
 
 @PreviewsDayNight
 @Composable
-internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider::class) data: RoomListRoomSummary) = ElementPreview {
+internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryPreviewParam::class) data: RoomListRoomSummary) = ElementPreview {
     RoomSummaryRow(
         room = data,
         hideInviteAvatars = false,
@@ -442,5 +468,7 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider
         isInviteSeen = data.name == "Bob",
         onClick = {},
         eventSink = {},
+        showUnreadCount = data.numberOfUnreadNotifications > 0,
+        showAllActivity = true,
     )
 }

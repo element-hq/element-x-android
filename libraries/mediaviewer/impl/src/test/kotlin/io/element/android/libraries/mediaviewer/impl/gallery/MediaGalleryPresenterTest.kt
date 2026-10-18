@@ -137,6 +137,7 @@ class MediaGalleryPresenterTest {
             val state = awaitItem()
             assertThat(state.mediaBottomSheetState).isEqualTo(
                 MediaBottomSheetState.Details(
+                    fromGallery = true,
                     eventId = AN_EVENT_ID,
                     canDelete = canDeleteOwn,
                     mediaInfo = item.mediaInfo,
@@ -184,6 +185,7 @@ class MediaGalleryPresenterTest {
             val state = awaitItem()
             assertThat(state.mediaBottomSheetState).isEqualTo(
                 MediaBottomSheetState.Details(
+                    fromGallery = true,
                     eventId = AN_EVENT_ID,
                     canDelete = canDeleteOther,
                     mediaInfo = item.mediaInfo,
@@ -532,6 +534,7 @@ class MediaGalleryPresenterTest {
             mediaLoader = matrixMediaLoader,
             localMediaActions = localMediaActions,
             snackbarDispatcher = snackbarDispatcher,
+            contentScannerService = { _, _ -> },
         )
     }
 }

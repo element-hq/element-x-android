@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"És necessària una adreça perquè sigui visible al directori públic."</string>
+  <string name="screen_edit_room_address_title">"Edita adreça"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Afegeix adreça"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Tothom ha de sol·licitar l\'accés."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Sol·licita unir-t\'hi"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Sí, activa el xifrat"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"Un cop activat, el xifrat d\'una sala no es pot desactivar. L\'històric de missatges només serà visible per als membres de la sala des que van ser convidats o des que s\'hi van unir.
+Ningú a part dels membres de la sala podrà llegir els missatges. Això pot impedir que els bots i els ponts (\'bridges\') funcionin correctament.
+No es recomana activar el xifrat a les sales que tothom pot trobar i unir-se."</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"Vols activar el xifrat?"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"Un cop activat, el xifrat no es pot desactivar."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Xifrat"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"Activa el xifrat d\'extrem a extrem"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Tothom pot unir-s\'hi."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Tothom"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Només s\'hi poden unir les persones convidades."</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Només amb invitació"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Accés"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Actualment els espais no són compatibles"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"És necessària una adreça perquè sigui visible al directori públic."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Adreça"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Permet trobar aquesta sala cercant %1$s al directori públic de sales"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Visible al directori públic"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Tothom (historial públic)"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Qui pot llegir l\'historial?"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Membres, des de quan es van convidar"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Membres (historial complet)"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"Les adreces de sala són maneres de trobar i accedir a les sales. Això també garanteix que puguis compartir fàcilment la teva sala amb altres persones.
+Pots optar per publicar la teva sala al directori públic de sales del teu servidor local."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Visibilitat"</string>
+  <string name="screen_security_and_privacy_title">"Seguretat i privadesa"</string>
+</resources>

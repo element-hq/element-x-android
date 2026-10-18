@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"You’ll need an address in order to make it visible in the public directory."</string>
   <string name="screen_edit_room_address_title">"Edit address"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Your account provider does not support this option in encrypted chats, you may not get notified in some chats."</string>
   <string name="screen_polls_history_title">"Polls"</string>
   <string name="screen_room_change_permissions_administrators">"Admin"</string>
   <string name="screen_room_change_permissions_ban_people">"Ban people"</string>
@@ -42,6 +42,9 @@
   <string name="screen_room_change_role_unsaved_changes_description">"You have unsaved changes."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Save changes?"</string>
   <string name="screen_room_details_add_topic_title">"Add topic"</string>
+  <string name="screen_room_details_audio_push_to_talk">"Push to talk"</string>
+  <string name="screen_room_details_audio_title">"Room Audio"</string>
+  <string name="screen_room_details_audio_video_calls">"Video calls"</string>
   <string name="screen_room_details_badge_encrypted">"Encrypted"</string>
   <string name="screen_room_details_badge_not_encrypted">"Not encrypted"</string>
   <string name="screen_room_details_badge_public">"Public room"</string>
@@ -56,6 +59,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Don\'t close the app until finished."</string>
   <string name="screen_room_details_invite_people_preparing">"Preparing invitations…"</string>
   <string name="screen_room_details_invite_people_title">"Invite people"</string>
+  <string name="screen_room_details_invite_title">"Invite"</string>
   <string name="screen_room_details_leave_conversation_title">"Leave conversation"</string>
   <string name="screen_room_details_leave_room_title">"Leave room"</string>
   <string name="screen_room_details_media_gallery_title">"Media and files"</string>
@@ -66,6 +70,9 @@
   <string name="screen_room_details_profile_row_title">"Profile"</string>
   <string name="screen_room_details_requests_to_join_title">"Requests to join"</string>
   <string name="screen_room_details_roles_and_permissions">"Roles &amp; permissions"</string>
+  <string name="screen_room_details_room_audio_ptt">"Push to talk"</string>
+  <string name="screen_room_details_room_audio_title">"Room Audio"</string>
+  <string name="screen_room_details_room_audio_video_calls">"Video calls"</string>
   <string name="screen_room_details_room_name_label">"Name"</string>
   <string name="screen_room_details_security_and_privacy_title">"Security &amp; privacy"</string>
   <string name="screen_room_details_security_title">"Security"</string>
@@ -111,9 +118,10 @@
   <string name="screen_room_notification_settings_error_loading_settings">"An error occurred while loading notification settings."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Failed restoring the default mode, please try again."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Failed setting the mode, please try again."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you won\'t get notified in this room."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Your account provider does not support this option in encrypted chats, you won\'t get notified in this chat."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"All messages"</string>
-  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and Keywords only"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mentions and replies only"</string>
+  <string name="screen_room_notification_settings_mode_mute">"Mute"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"In this room, notify me for"</string>
   <string name="screen_room_roles_and_permissions_admins">"Admins"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"Admins and owners"</string>
@@ -131,6 +139,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roles"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Room details"</string>
   <string name="screen_room_roles_and_permissions_title">"Roles &amp; permissions"</string>
+  <string name="screen_roomlist_mark_as_read">"Mark as read"</string>
+  <string name="screen_roomlist_mark_as_unread">"Mark as unread"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Add address"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Anyone in authorised spaces can join, but everyone else must request access."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Everyone must request access."</string>
@@ -144,7 +154,7 @@ We do not recommend enabling encryption for rooms that anyone can find and join.
   <string name="screen_security_and_privacy_encryption_section_footer">"Once enabled, encryption cannot be disabled."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Encryption"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Enable end-to-end encryption"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Anyone can join."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Anyone can join, including people outside your organisation."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Anyone"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Choose which spaces’ members can join this room without an invitation. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Manage spaces"</string>

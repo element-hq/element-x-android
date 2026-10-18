@@ -45,13 +45,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    Knock(
-        key = "feature.knock",
-        title = "Ask to join",
-        description = "Allow creating rooms which users can request access to.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     PrintLogsToLogcat(
         key = "feature.print_logs_to_logcat",
         title = "Print logs to logcat",
@@ -93,24 +86,10 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    SignInWithClassic(
-        key = "feature.signin_with_classic",
-        title = "Sign in with Element Classic",
-        description = "Allow the application to sign in to the current Element Classic account.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     AllowBlackTheme(
         key = "feature.allow_black_theme",
-        title = "Allow black theme",
+        title = "Black theme",
         description = "Allow selecting the black appearance theme for battery saving on OLED.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
-    LiveLocationSharing(
-        key = "feature.liveLocationSharing",
-        title = "Live location sharing",
-        description = "Allow sharing live location in rooms.",
         defaultValue = { false },
         isFinished = false,
     ),
@@ -122,10 +101,11 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
-    FloatingDateBadge(
-        key = "feature.floating_date_badge",
-        title = "Display sticky date headers in the timeline",
-        description = "When scrolling, a sticky date badge will be displayed so you can easily know on which date the messages you're seeing were sent.",
+    JumpToUnread(
+        key = "feature.jump_to_unread",
+        title = "Jump to unread messages",
+        description = "Show a button to jump to the read marker, plus a count badge on the scroll-to-bottom button " +
+            "when new messages arrive while scrolled away.",
         defaultValue = { false },
         isFinished = false,
     ),
@@ -136,19 +116,80 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    RoomThreadList(
-        key = "feature.room_thread_list",
-        title = "Add a list of threads in a room",
-        description = "Add a new screen with a list of threads in a room.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     AutomaticBackPagination(
         key = "feature.automatic_back_pagination",
         title = "Automatic back pagination of rooms",
         description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
             "\nRequires an app restart to take effect.",
+        defaultValue = { true },
+        isFinished = false,
+    ),
+    UnreadIndicatorCount(
+        key = "feature.unread_indicator_count",
+        title = "Unread indicator count",
+        description = "Show the number of unread messages on the unread indicator in the room list.",
+        defaultValue = { true },
+        isFinished = false,
+    ),
+    SendGalleryMessages(
+        key = "feature.send_gallery_messages",
+        title = "Send gallery messages",
+        description = "Allow sending multiple media items in a single message.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = true,
+    ),
+    Knock(
+        key = "feature.knock",
+        title = "Ask to join",
+        description = "Allow creating rooms which users can request access to.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = true,
+    ),
+    MessageSearch(
+        key = "feature.message_search",
+        title = "Message search",
+        description = "Index messages locally so they can be searched. Only messages received while enabled are indexed.",
+        defaultValue = { true },
+        isFinished = false,
+    ),
+    MessageMultiSelect(
+        key = "feature.message_multi_select",
+        title = "Multi-select messages",
+        description = "The Forward action enters a selection mode, to pick and forward up to 10 messages at once.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = false,
+    ),
+    NewTimelineEventRenderer(
+        key = "feature.new_timeline_event_renderer",
+        title = "New timeline event renderer",
+        description = "Render formatted message bodies natively with Jetpack Compose instead of the rich text editor view.",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = false,
+    ),
+    NativeCall(
+        key = "feature.native_call",
+        title = "Native calls (experimental)",
+        description = "Place calls with the native MatrixRTC stack instead of the Element Call WebView.",
         defaultValue = { false },
         isFinished = false,
     ),
+}
+
+/**
+ * Feature flag to show all activity indicators in the room list, using unread messages instead of notifications.
+ *
+ * This is separate from the [FeatureFlags] enum because it is not a feature flag that can be toggled in developer options,
+ * but rather a setting that can be toggled in the app settings.
+ */
+object ShowAllActivityInRoomListFeature : Feature {
+    override val key: String = "feature.show_all_activity_in_room_list"
+    override val title: String = "Show all activity in room list"
+    override val description: String = "Show all activity indicators in the room list, using unread messages instead of notifications."
+    override val defaultValue: (BuildMeta) -> Boolean = { true }
+    override val isFinished: Boolean = false
+    override val isInLabs: Boolean = false
 }

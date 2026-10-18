@@ -24,6 +24,9 @@
   <string name="screen_invites_invited_you">"Pozvao vas je korisnik %1$s (%2$s)"</string>
   <string name="screen_migration_message">"Ovaj se postupak izvodi samo jednom, hvala na čekanju."</string>
   <string name="screen_migration_title">"Postavljanje vašeg računa."</string>
+  <string name="screen_multi_account_announcement_action">"Dodaj još jedan račun"</string>
+  <string name="screen_multi_account_announcement_description">"Idite na %1$s da biste se prijavili na drugi račun. Zatim možete jednostavno prelaziti između njih."</string>
+  <string name="screen_multi_account_announcement_title">"Sada možete dodati više računa"</string>
   <string name="screen_roomlist_a11y_create_message">"Stvori novi razgovor ili sobu"</string>
   <string name="screen_roomlist_clear_filters">"Ukloni filtre"</string>
   <string name="screen_roomlist_empty_message">"Započnite tako da nekome pošaljete poruku."</string>
@@ -36,6 +39,8 @@ Zasad možete poništiti odabir filtara kako biste vidjeli ostale razgovore."</s
   <string name="screen_roomlist_filter_invites_empty_state_title">"Nemate pozivnica na čekanju."</string>
   <string name="screen_roomlist_filter_low_priority">"Nizak prioritet"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"Još nemate razgovora niskog prioriteta"</string>
+  <string name="screen_roomlist_filter_mention">"Spomeni"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"Nemate nepročitanih spominjanja"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Možete poništiti odabir filtara kako biste vidjeli ostale razgovore"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Nemate razgovora za ovaj odabir"</string>
   <string name="screen_roomlist_filter_people">"Osobe"</string>
