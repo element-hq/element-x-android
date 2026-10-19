@@ -567,14 +567,6 @@ Jeste li sigurni da želite nastaviti?"</string>
     <item quantity="other">"%1$d prikvačenih poruka"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Prikvačene poruke"</string>
-  <string name="screen_ptt_settings_battery_optimization">"Zanemari optimizaciju baterije"</string>
-  <string name="screen_ptt_settings_battery_optimization_description">"Održavaj aktivnost u pozadini"</string>
-  <string name="screen_ptt_settings_covert_mode">"Prikriveni način rada"</string>
-  <string name="screen_ptt_settings_covert_mode_description">"Utišaj sve kanale"</string>
-  <string name="screen_ptt_settings_lock_screen">"Prikaži na zaključanom zaslonu"</string>
-  <string name="screen_ptt_settings_lock_screen_description">"Pristup sa zaključanog zaslona"</string>
-  <string name="screen_ptt_settings_system_overlay">"Omogući preklapanje sustava"</string>
-  <string name="screen_ptt_settings_system_overlay_description">"Pristup plutajućem gumbu za radnju"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Spremate se otići u svoj %1$s račun kako biste poništili identitet. Nakon toga bit ćete vraćeni u aplikaciju."</string>
   <string name="screen_reset_identity_confirmation_title">"Ne možete potvrditi? Idite na svoj račun kako biste poništili svoj identitet."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Povuci potvrdu i pošalji"</string>

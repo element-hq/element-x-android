@@ -70,9 +70,6 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Csatlakozási kérelem"</string>
   <string name="screen_room_details_roles_and_permissions">"Szerepkörök és jogosultságok"</string>
-  <string name="screen_room_details_room_audio_ptt">"Adó-vevő"</string>
-  <string name="screen_room_details_room_audio_title">"Hang szoba"</string>
-  <string name="screen_room_details_room_audio_video_calls">"Videohívások"</string>
   <string name="screen_room_details_room_name_label">"Név"</string>
   <string name="screen_room_details_security_and_privacy_title">"Biztonság és adatvédelem"</string>
   <string name="screen_room_details_security_title">"Biztonság"</string>

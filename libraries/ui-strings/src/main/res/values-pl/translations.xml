@@ -573,14 +573,6 @@ Czy na pewno chcesz kontynuować?"</string>
     <item quantity="many">"%1$d przypiętych wiadomości"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Przypięte wiadomości"</string>
-  <string name="screen_ptt_settings_battery_optimization">"Ignoruj ​​optymalizację baterii"</string>
-  <string name="screen_ptt_settings_battery_optimization_description">"Pozostań aktywny w tle"</string>
-  <string name="screen_ptt_settings_covert_mode">"Tryb ukryty"</string>
-  <string name="screen_ptt_settings_covert_mode_description">"Wycisz wszystkie kanały"</string>
-  <string name="screen_ptt_settings_lock_screen">"Pokaż na ekranie blokady"</string>
-  <string name="screen_ptt_settings_lock_screen_description">"Dostęp z ekranu blokady"</string>
-  <string name="screen_ptt_settings_system_overlay">"Włącz nakładkę systemową"</string>
-  <string name="screen_ptt_settings_system_overlay_description">"Uzyskaj dostęp do pływającego przycisku akcji"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Zostaniesz przeniesiony na swoje konto %1$s, aby zresetować tożsamość. Wrócisz do aplikacji po zakończeniu."</string>
   <string name="screen_reset_identity_confirmation_title">"Nie możesz potwierdzić? Przejdź do swojego konta i zresetuj swoją tożsamość."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Wycofaj weryfikację i wyślij"</string>

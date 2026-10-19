@@ -70,9 +70,6 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Demandes en attente"</string>
   <string name="screen_room_details_roles_and_permissions">"Rôles &amp; autorisations"</string>
-  <string name="screen_room_details_room_audio_ptt">"Appuyer pour parler"</string>
-  <string name="screen_room_details_room_audio_title">"Audio du salon"</string>
-  <string name="screen_room_details_room_audio_video_calls">"Appels vidéo"</string>
   <string name="screen_room_details_room_name_label">"Nom"</string>
   <string name="screen_room_details_security_and_privacy_title">"Sécurité &amp; confidentialité"</string>
   <string name="screen_room_details_security_title">"Sécurité"</string>
