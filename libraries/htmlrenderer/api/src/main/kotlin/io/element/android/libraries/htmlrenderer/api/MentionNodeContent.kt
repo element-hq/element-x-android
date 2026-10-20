@@ -7,9 +7,11 @@
 
 package io.element.android.libraries.htmlrenderer.api
 
+import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
+import kotlinx.parcelize.Parcelize
 
 /**
  * Describes a mention "pill" referenced from a [ParagraphNode].
@@ -19,23 +21,26 @@ import io.element.android.libraries.matrix.api.core.UserId
  * and draws the corresponding pill.
  */
 @Immutable
-sealed interface MentionNodeContent {
+sealed interface MentionNodeContent : Parcelable {
     /** The text shown inside the pill (e.g. a display name, prefixed with `@` for users). */
     val displayText: String
 
     /** A mention of a specific user (`<a href="matrix.to/#/@user:server">`). */
+    @Parcelize
     data class User(
         override val displayText: String,
         val userId: UserId,
     ) : MentionNodeContent
 
     /** A mention of a room (`<a href="matrix.to/#/#room:server">`). */
+    @Parcelize
     data class Room(
         override val displayText: String,
         val roomIdOrAlias: RoomIdOrAlias,
     ) : MentionNodeContent
 
     /** An `@room` mention notifying everyone in the room. */
+    @Parcelize
     data class Everyone(
         override val displayText: String,
     ) : MentionNodeContent

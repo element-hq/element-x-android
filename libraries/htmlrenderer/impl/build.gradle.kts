@@ -10,6 +10,7 @@ import extension.testCommonDependencies
 
 plugins {
     id("io.element.android-compose-library")
+    id("kotlin-parcelize")
 }
 
 android {

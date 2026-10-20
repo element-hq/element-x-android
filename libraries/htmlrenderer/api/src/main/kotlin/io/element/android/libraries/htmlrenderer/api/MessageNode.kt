@@ -7,11 +7,15 @@
 
 package io.element.android.libraries.htmlrenderer.api
 
+import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.AnnotatedString
+import io.element.android.libraries.htmlrenderer.api.parcel.AnnotatedStringParceler
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.TypeParceler
 
 /**
  * A node in the parsed representation of a formatted (HTML) message body.
@@ -22,7 +26,7 @@ import kotlinx.collections.immutable.persistentMapOf
  * that carries the actual text.
  */
 @Immutable
-sealed interface MessageNode
+sealed interface MessageNode : Parcelable
 
 /** A block-level node, laid out vertically by the renderer. */
 @Immutable
@@ -32,6 +36,7 @@ sealed interface BlockNode : MessageNode
  * The root of a parsed message: an ordered list of block-level children.
  */
 @Immutable
+@Parcelize
 data class DocumentNode(
     val children: ImmutableList<BlockNode>,
 ) : BlockNode
@@ -49,6 +54,8 @@ data class DocumentNode(
  * placeholder id to the [MentionNodeContent] the renderer needs to draw the pill.
  */
 @Immutable
+@Parcelize
+@TypeParceler<AnnotatedString, AnnotatedStringParceler>()
 data class ParagraphNode(
     val text: AnnotatedString,
     val inlineContent: ImmutableMap<String, MentionNodeContent> = persistentMapOf(),
@@ -60,6 +67,8 @@ data class ParagraphNode(
  * to pick the typography.
  */
 @Immutable
+@Parcelize
+@TypeParceler<AnnotatedString, AnnotatedStringParceler>()
 data class HeaderNode(
     val level: Int,
     val text: AnnotatedString,
@@ -71,6 +80,7 @@ data class HeaderNode(
  * scrollable container. The text is kept raw: no inline styling is applied inside it.
  */
 @Immutable
+@Parcelize
 data class CodeBlockNode(
     val code: String,
 ) : BlockNode
@@ -79,6 +89,7 @@ data class CodeBlockNode(
  * A block quote (`<blockquote>`). Quotes can nest and can contain any block content.
  */
 @Immutable
+@Parcelize
 data class QuoteNode(
     val children: ImmutableList<BlockNode>,
 ) : BlockNode
@@ -91,6 +102,7 @@ data class QuoteNode(
  * @param items the list items, in document order.
  */
 @Immutable
+@Parcelize
 data class ListNode(
     val ordered: Boolean,
     val startIndex: Int,
@@ -102,6 +114,7 @@ data class ListNode(
  * paragraphs, nested lists or quotes.
  */
 @Immutable
+@Parcelize
 data class ListItemNode(
     val children: ImmutableList<BlockNode>,
 ) : MessageNode
