@@ -87,6 +87,7 @@ class FakeMatrixClient(
     override val sessionCoroutineScope: CoroutineScope = TestScope(),
     private val userDisplayName: String? = A_USER_NAME,
     private val userAvatarUrl: String? = AN_AVATAR_URL,
+    private val userDisplayedStatus: DisplayedStatus? = null,
     override val roomListService: RoomListService = FakeRoomListService(),
     override val spaceService: SpaceService = FakeSpaceService(),
     override val matrixMediaLoader: MatrixMediaLoader = FakeMatrixMediaLoader(),
@@ -156,7 +157,9 @@ class FakeMatrixClient(
     var isUserStatusSupportedResult: Result<Boolean> = Result.success(true)
     var isProfilesSlidingSyncExtensionSupportedResult: Result<Boolean> = Result.success(true)
 
-    private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(MatrixUser(sessionId, userDisplayName, userAvatarUrl))
+    private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
+        MatrixUser(sessionId, userDisplayName, userAvatarUrl, displayedStatus = userDisplayedStatus)
+    )
     override val userProfile: StateFlow<MatrixUser> = _userProfile
 
     var createRoomResult: (CreateRoomParameters) -> Result<RoomId> = { Result.success(A_ROOM_ID) }
@@ -247,7 +250,8 @@ class FakeMatrixClient(
     }
 
     override suspend fun getUserProfile(): Result<MatrixUser> = simulateLongTask {
-        val result = getProfileResults[sessionId]?.getOrNull() ?: MatrixUser(sessionId, userDisplayName, userAvatarUrl)
+        val result = getProfileResults[sessionId]?.getOrNull()
+            ?: MatrixUser(sessionId, userDisplayName, userAvatarUrl, displayedStatus = userDisplayedStatus)
         _userProfile.tryEmit(result)
         return Result.success(result)
     }
