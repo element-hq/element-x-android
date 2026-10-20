@@ -62,7 +62,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import java.util.Optional
@@ -76,7 +75,6 @@ class RoomFlowNodeTest : RobolectricTest() {
 
     private val joinedRoomInfo = aRoomInfo(currentUserMembership = CurrentUserMembership.JOINED)
 
-    @Ignore("Leaves the joined room on a transient invited state — passes with the fix in this PR")
     @Test
     fun `a joined room briefly reported as invited stays open`() = runTest {
         val joinedRoom = FakeJoinedRoom(baseRoom = FakeBaseRoom(initialRoomInfo = joinedRoomInfo, updateMembersResult = {}))
@@ -97,7 +95,6 @@ class RoomFlowNodeTest : RobolectricTest() {
         assertThat(roomFlowNode.backstack.activeElement).isInstanceOf(RoomFlowNode.NavTarget.JoinedRoom::class.java)
     }
 
-    @Ignore("Stuck on the join screen after rejoining — passes with the fix in this PR")
     @Test
     fun `a room left from elsewhere then joined again goes back to the joined room`() = runTest {
         val joinedRoom = FakeJoinedRoom(baseRoom = FakeBaseRoom(initialRoomInfo = joinedRoomInfo, updateMembersResult = {}))
