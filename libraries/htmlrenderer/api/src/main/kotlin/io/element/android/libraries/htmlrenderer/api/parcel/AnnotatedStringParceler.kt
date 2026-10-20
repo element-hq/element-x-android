@@ -211,7 +211,7 @@ private fun Parcel.readSpanStyle(): SpanStyle {
         color = if (fields has FIELD_COLOR) readColor() else Color.Unspecified,
         fontSize = if (fields has FIELD_FONT_SIZE) readTextUnit() else TextUnit.Unspecified,
         fontWeight = if (fields has FIELD_FONT_WEIGHT) FontWeight(readInt()) else null,
-        fontStyle = if (fields has FIELD_FONT_STYLE) FontStyle(readInt()) else null,
+        fontStyle = if (fields has FIELD_FONT_STYLE) FontStyle.values().first { it.value == readInt() } else null,
         fontFamily = if (fields has FIELD_FONT_FAMILY) genericFontFamilies.getOrNull(readInt()) else null,
         fontFeatureSettings = if (fields has FIELD_FONT_FEATURE_SETTINGS) readString() else null,
         letterSpacing = if (fields has FIELD_LETTER_SPACING) readTextUnit() else TextUnit.Unspecified,
