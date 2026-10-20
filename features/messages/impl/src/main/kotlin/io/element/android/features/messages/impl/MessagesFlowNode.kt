@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
@@ -83,6 +85,8 @@ import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorState
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.htmlrenderer.api.LocalMentionDisplayNames
+import io.element.android.libraries.htmlrenderer.api.MentionDisplayNames
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -985,8 +989,15 @@ class MessagesFlowNode(
             RenderingMapsNotSupportedDialog { displayVulkanNotSupportedError = false }
         }
 
+        val userDisplayNames by roomMemberProfilesCache.displayNames.collectAsState()
+        val roomDisplayNames by roomNamesCache.displayNames.collectAsState()
+        val mentionDisplayNames = remember(userDisplayNames, roomDisplayNames) {
+            MentionDisplayNames(users = userDisplayNames, rooms = roomDisplayNames)
+        }
+
         CompositionLocalProvider(
-            LocalMentionSpanUpdater provides mentionSpanUpdater
+            LocalMentionSpanUpdater provides mentionSpanUpdater,
+            LocalMentionDisplayNames provides mentionDisplayNames,
         ) {
             Box(modifier = modifier) {
                 BackstackView()
