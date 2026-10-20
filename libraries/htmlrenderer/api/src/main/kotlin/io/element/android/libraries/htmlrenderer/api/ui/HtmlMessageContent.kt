@@ -460,8 +460,11 @@ private fun rememberMentionInlineContent(
     val pillTextStyle = ElementTheme.typography.fontBodyLgMedium
     val density = LocalDensity.current
     val mentionDisplayNames = LocalMentionDisplayNames.current
-    // Only the display texts of these mentions matter, unrelated display name changes won't trigger a new measure pass
-    val displayTexts = mentions.mapValues { (_, mention) -> mentionDisplayNames.displayTextFor(mention) }
+    // Only the display texts of these mentions matter: since `derivedStateOf` only notifies its readers when its value changes,
+    // unrelated display name changes won't recompose this text nor trigger a new measure pass
+    val displayTexts by remember(mentions, mentionDisplayNames) {
+        derivedStateOf { mentions.mapValues { (_, mention) -> mentionDisplayNames.displayTextFor(mention) } }
+    }
     return remember(mentions, displayTexts, context, textMeasurer, pillTextStyle, density) {
         buildMentionInlineContent(mentions, displayTexts, context, textMeasurer, pillTextStyle, density)
     }
