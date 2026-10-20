@@ -992,8 +992,9 @@ class MessagesFlowNode(
         // The State instances are passed as is, so the provided value stays the same when the display names change
         val userDisplayNames = roomMemberProfilesCache.displayNames.collectAsState()
         val roomDisplayNames = roomNamesCache.displayNames.collectAsState()
-        val mentionDisplayNames = remember(userDisplayNames, roomDisplayNames) {
-            MentionDisplayNames(users = userDisplayNames, rooms = roomDisplayNames)
+        val userStatuses = roomMemberProfilesCache.displayedStatusEmojis.collectAsState()
+        val mentionDisplayNames = remember(userDisplayNames, roomDisplayNames, userStatuses) {
+            MentionDisplayNames(users = userDisplayNames, rooms = roomDisplayNames, userStatuses = userStatuses)
         }
 
         CompositionLocalProvider(

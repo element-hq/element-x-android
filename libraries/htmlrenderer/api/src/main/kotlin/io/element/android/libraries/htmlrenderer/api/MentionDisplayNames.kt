@@ -26,11 +26,13 @@ import kotlinx.collections.immutable.persistentMapOf
  *
  * @param users the display names of the room members, by user id.
  * @param rooms the room names, by room id or alias.
+ * @param userStatuses the emoji of the displayed status of the room members (i.e. 🎧 when in a call), by user id.
  */
 @Stable
 class MentionDisplayNames(
     private val users: State<ImmutableMap<UserId, String>>,
     private val rooms: State<ImmutableMap<RoomIdOrAlias, String>>,
+    private val userStatuses: State<ImmutableMap<UserId, String>> = mutableStateOf(persistentMapOf()),
 ) {
     /**
      * Creates an instance with fixed display names, i.e. for previews and tests.
@@ -38,7 +40,8 @@ class MentionDisplayNames(
     constructor(
         users: ImmutableMap<UserId, String> = persistentMapOf(),
         rooms: ImmutableMap<RoomIdOrAlias, String> = persistentMapOf(),
-    ) : this(users = mutableStateOf(users), rooms = mutableStateOf(rooms))
+        userStatuses: ImmutableMap<UserId, String> = persistentMapOf(),
+    ) : this(users = mutableStateOf(users), rooms = mutableStateOf(rooms), userStatuses = mutableStateOf(userStatuses))
 
     /**
      * Returns the text to display in the pill for [mention]: the user or room display name if known,
@@ -51,6 +54,17 @@ class MentionDisplayNames(
         is MentionNodeContent.Room -> rooms.value[mention.roomIdOrAlias]?.let { "#$it" }
         is MentionNodeContent.Everyone -> null
     } ?: mention.displayText
+
+    /**
+     * Returns the full text of the pill for [mention]: its [displayTextFor] followed by the user status emoji, if any.
+     *
+     * This reads snapshot state: call it from a `derivedStateOf` block so readers are only notified when the result changes.
+     */
+    fun pillTextFor(mention: MentionNodeContent): String {
+        val displayText = displayTextFor(mention)
+        val status = (mention as? MentionNodeContent.User)?.let { userStatuses.value[it.userId] }
+        return if (status != null) "$displayText $status" else displayText
+    }
 }
 
 /**

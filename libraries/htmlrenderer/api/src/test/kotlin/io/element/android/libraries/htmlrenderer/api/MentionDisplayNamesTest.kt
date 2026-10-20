@@ -20,6 +20,7 @@ class MentionDisplayNamesTest {
     private val displayNames = MentionDisplayNames(
         users = persistentMapOf(alice to "Alice"),
         rooms = persistentMapOf(room to "A room"),
+        userStatuses = persistentMapOf(alice to "🎧", UserId("@carol:example.org") to "🌴"),
     )
 
     @Test
@@ -52,5 +53,27 @@ class MentionDisplayNamesTest {
     fun `an everyone mention always keeps its display text`() {
         val mention = MentionNodeContent.Everyone(displayText = "@room")
         assertThat(displayNames.displayTextFor(mention)).isEqualTo("@room")
+    }
+
+    @Test
+    fun `the pill text of a user with a status ends with the status emoji`() {
+        val mention = MentionNodeContent.User(displayText = alice.value, userId = alice, permalinkUrl = "")
+        assertThat(displayNames.pillTextFor(mention)).isEqualTo("@Alice 🎧")
+    }
+
+    @Test
+    fun `the status emoji is added even if the display name is unknown`() {
+        val carol = UserId("@carol:example.org")
+        val mention = MentionNodeContent.User(displayText = carol.value, userId = carol, permalinkUrl = "")
+        assertThat(displayNames.pillTextFor(mention)).isEqualTo("@carol:example.org 🌴")
+    }
+
+    @Test
+    fun `the pill text without status is the display text`() {
+        val bob = UserId("@bob:example.org")
+        assertThat(displayNames.pillTextFor(MentionNodeContent.User(displayText = "Bob", userId = bob, permalinkUrl = ""))).isEqualTo("Bob")
+        assertThat(displayNames.pillTextFor(MentionNodeContent.Room(displayText = room.identifier, roomIdOrAlias = room, permalinkUrl = "")))
+            .isEqualTo("#A room")
+        assertThat(displayNames.pillTextFor(MentionNodeContent.Everyone(displayText = "@room"))).isEqualTo("@room")
     }
 }
