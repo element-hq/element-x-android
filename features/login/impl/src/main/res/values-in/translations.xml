@@ -19,7 +19,7 @@
   <string name="screen_change_server_error_invalid_homeserver">"Kami tidak dapat menjangkau server ini. Periksa apakah Anda telah memasukkan URL homeserver dengan benar. Jika URL sudah benar, hubungi administrator homeserver Anda untuk bantuan lebih lanjut."</string>
   <string name="screen_change_server_error_invalid_well_known">"Server tidak tersedia karena ada masalah dalam berkas .well-known:
 %1$s"</string>
-  <string name="screen_change_server_error_no_sliding_sync_message">"Penyedia akun yang dipilih tidak mendukung sinkronisasi geser. Peningkatan server diperlukan untuk digunakan %1$s."</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Penyedia akun yang dipilih tidak mendukung sliding sync. Peningkatan server diperlukan untuk digunakan %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s tidak diizinkan untuk terhubung ke %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Aplikasi ini telah diatur untuk mengizinkan: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Penyedia akun %1$s tidak diizinkan."</string>
@@ -52,6 +52,8 @@
   <string name="screen_missing_key_backup_step_4">"Ikuti petunjuk berikut untuk mengaktifkan penyimpanan kunci Anda"</string>
   <string name="screen_missing_key_backup_step_5">"Kembali ke %1$s"</string>
   <string name="screen_missing_key_backup_title">"Aktifkan penyimpanan kunci Anda sebelum melanjutkan ke %1$s"</string>
+  <string name="screen_onboarding_add_account_subtitle">"Anda dapat menambahkan beberapa akun ke aplikasi ini dan beralih di antara akun-akun tersebut dengan mudah."</string>
+  <string name="screen_onboarding_add_account_title">"Masuk ke akun lain"</string>
   <string name="screen_onboarding_app_version">"Versi %1$s"</string>
   <string name="screen_onboarding_checking_account">"Memeriksa akun…"</string>
   <string name="screen_onboarding_sign_in_manually">"Masuk secara manual"</string>

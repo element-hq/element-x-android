@@ -336,6 +336,7 @@ Raison : %1$s."</string>
   <string name="common_name">"Nom"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Aucun résultat"</string>
+  <string name="common_no_results_for">"Aucun résultat pour « %1$s ». Essayez un autre terme de recherche."</string>
   <string name="common_no_room_name">"Salon sans nom"</string>
   <string name="common_no_space_name">"Espace sans nom"</string>
   <string name="common_not_encrypted">"Non chiffré"</string>
@@ -381,6 +382,7 @@ Raison : %1$s."</string>
   <string name="common_replying_to">"En réponse à %1$s"</string>
   <string name="common_report_a_problem">"Remonter un problème"</string>
   <string name="common_report_submitted">"Rapport soumis"</string>
+  <string name="common_results_for">"Résultats pour « %1$s »"</string>
   <string name="common_rich_text_editor">"Éditeur de texte enrichi"</string>
   <string name="common_role">"Rôle"</string>
   <string name="common_room">"Salon"</string>
@@ -508,7 +510,8 @@ Raison : %1$s."</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"La taille maximale de fichier autorisée est: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Sélectionnez la qualité des vidéos que vous souhaitez envoyer."</string>
   <string name="dialog_video_quality_selector_title">"Sélectionnez la qualité d’envoi des vidéos"</string>
-  <string name="error_account_already_logged_in">"Vous êtes déjà connecté sur cet appareil en tant que %1$s."</string>
+  <string name="error_account_already_logged_in">"Vous êtes déjà connecté en tant que %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Connexion en double"</string>
   <string name="error_account_creation_not_possible">"Votre fournisseur de compte doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
@@ -588,6 +591,12 @@ Raison : %1$s."</string>
     <item quantity="other">"%1$d messages sélectionnés"</item>
   </plurals>
   <string name="screen_room_title">"Discussion"</string>
+  <string name="screen_search_empty_state_message">"Rechercher des discussions et des messages"</string>
+  <string name="screen_search_empty_state_title">"Commencez la recherche"</string>
+  <string name="screen_search_no_results_message">"Aucun résultat pour « %1$@ ». Essayez un autre terme de recherche."</string>
+  <string name="screen_search_recent_searches">"Recherches récentes"</string>
+  <string name="screen_search_tab_chats">"Salons"</string>
+  <string name="screen_search_tab_messages">"Messages"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>

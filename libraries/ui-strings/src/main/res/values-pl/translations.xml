@@ -523,7 +523,8 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maksymalny dozwolony rozmiar pliku to: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Wybierz jakość filmu, który chcesz przesłać."</string>
   <string name="dialog_video_quality_selector_title">"Wybierz jakość przesyłania wideo"</string>
-  <string name="error_account_already_logged_in">"Jesteś już zalogowany na tym urządzeniu jako %1$s."</string>
+  <string name="error_account_already_logged_in">"Jesteś już zalogowany jako %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Konto już zalogowane"</string>
   <string name="error_account_creation_not_possible">"Twój dostawca konta wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont."</string>
   <string name="error_failed_creating_the_permalink">"Nie udało się utworzyć linku bezpośredniego"</string>
   <string name="error_failed_loading_map">"%1$s nie mogło wczytać mapy. Spróbuj ponownie później."</string>
@@ -573,14 +574,6 @@ Czy na pewno chcesz kontynuować?"</string>
     <item quantity="many">"%1$d przypiętych wiadomości"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Przypięte wiadomości"</string>
-  <string name="screen_ptt_settings_battery_optimization">"Ignoruj ​​optymalizację baterii"</string>
-  <string name="screen_ptt_settings_battery_optimization_description">"Pozostań aktywny w tle"</string>
-  <string name="screen_ptt_settings_covert_mode">"Tryb ukryty"</string>
-  <string name="screen_ptt_settings_covert_mode_description">"Wycisz wszystkie kanały"</string>
-  <string name="screen_ptt_settings_lock_screen">"Pokaż na ekranie blokady"</string>
-  <string name="screen_ptt_settings_lock_screen_description">"Dostęp z ekranu blokady"</string>
-  <string name="screen_ptt_settings_system_overlay">"Włącz nakładkę systemową"</string>
-  <string name="screen_ptt_settings_system_overlay_description">"Uzyskaj dostęp do pływającego przycisku akcji"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Zostaniesz przeniesiony na swoje konto %1$s, aby zresetować tożsamość. Wrócisz do aplikacji po zakończeniu."</string>
   <string name="screen_reset_identity_confirmation_title">"Nie możesz potwierdzić? Przejdź do swojego konta i zresetuj swoją tożsamość."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Wycofaj weryfikację i wyślij"</string>
@@ -615,6 +608,12 @@ Czy na pewno chcesz kontynuować?"</string>
     <item quantity="many">"Zaznaczono %1$d wiadomości"</item>
   </plurals>
   <string name="screen_room_title">"Czat"</string>
+  <string name="screen_search_empty_state_message">"Szukaj czatów i wiadomości"</string>
+  <string name="screen_search_empty_state_title">"Rozpocznij wyszukiwanie"</string>
+  <string name="screen_search_no_results_message">"Nie znaleziono wyników dla \"%1$@\". Spróbuj wpisać nowe zapytanie."</string>
+  <string name="screen_search_recent_searches">"Ostatnie wyszukiwania"</string>
+  <string name="screen_search_tab_chats">"Czaty"</string>
+  <string name="screen_search_tab_messages">"Wiadomości"</string>
   <string name="screen_share_location_title">"Udostępnij lokalizację"</string>
   <string name="screen_share_my_location_action">"Udostępnij moją lokalizację"</string>
   <string name="screen_share_open_apple_maps">"Otwórz w Apple Maps"</string>
