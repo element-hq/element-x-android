@@ -573,14 +573,6 @@
     <item quantity="many">"%1$d Закріплених повідомлення"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Закріплені повідомлення"</string>
-  <string name="screen_ptt_settings_battery_optimization">"Ігнорувати оптимізацію заряду акумулятора"</string>
-  <string name="screen_ptt_settings_battery_optimization_description">"Залишати активним у фоновому режимі"</string>
-  <string name="screen_ptt_settings_covert_mode">"Прихований режим"</string>
-  <string name="screen_ptt_settings_covert_mode_description">"Вимкнути звук усіх каналів"</string>
-  <string name="screen_ptt_settings_lock_screen">"Показувати на екрані блокування"</string>
-  <string name="screen_ptt_settings_lock_screen_description">"Доступ з екрана блокування"</string>
-  <string name="screen_ptt_settings_system_overlay">"Увімкнути системне накладання"</string>
-  <string name="screen_ptt_settings_system_overlay_description">"Доступ до рухомої кнопки дій"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Ви збираєтеся перейти до свого облікового запису %1$s, щоб скинути свою цифрову ідентичність. Після цього ви повернетеся до застосунку."</string>
   <string name="screen_reset_identity_confirmation_title">"Не можете підтвердити? Перейдіть до свого облікового запису, щоб скинути цифрову ідентичність."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Відкликати верифікацію та відправити"</string>

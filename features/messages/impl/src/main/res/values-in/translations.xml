@@ -46,6 +46,10 @@
   <string name="screen_room_attachment_source_location">"Membagi Lokasi"</string>
   <string name="screen_room_attachment_source_poll">"Jajak pendapat"</string>
   <string name="screen_room_attachment_text_formatting">"Pemformatan Teks"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Alasan (opsional)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Masukkan alasan"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Opsional)"</string>
+  <string name="screen_room_confirm_removal_title">"Hapus pesan?"</string>
   <string name="screen_room_encrypted_history_banner">"Riwayat pesan saat ini tidak tersedia di ruangan ini"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Riwayat pesan tidak tersedia di ruangan ini. Verifikasi perangkat ini untuk melihat riwayat pesan."</string>
   <string name="screen_room_invite_again_alert_message">"Apakah Anda ingin mengundang mereka kembali?"</string>

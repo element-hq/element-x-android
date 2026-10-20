@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Nie możesz potwierdzić?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Utwórz nowy klucz przywracania"</string>
+  <string name="screen_identity_confirmation_sign_out">"Wyloguj"</string>
   <string name="screen_identity_confirmation_subtitle">"Wybierz sposób weryfikacji, aby skonfigurować bezpieczne wiadomości."</string>
   <string name="screen_identity_confirmation_title">"Potwierdź swoją tożsamość cyfrową"</string>
   <string name="screen_identity_confirmation_use_another_device">"Użyj innego urządzenia"</string>

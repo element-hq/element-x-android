@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Confirmation impossible ?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Créer une nouvelle clé de récupération"</string>
+  <string name="screen_identity_confirmation_sign_out">"Se déconnecter"</string>
   <string name="screen_identity_confirmation_subtitle">"Choisissez comment vérifier afin de configurer votre messagerie sécurisée."</string>
   <string name="screen_identity_confirmation_title">"Confirmez votre identité numérique"</string>
   <string name="screen_identity_confirmation_use_another_device">"Utiliser une autre session"</string>

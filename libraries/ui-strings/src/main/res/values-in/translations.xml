@@ -19,6 +19,7 @@
   <string name="a11y_encryption_details">"Detail enkripsi"</string>
   <string name="a11y_expand_message_text_field">"Perluas kolom teks pesan"</string>
   <string name="a11y_gallery_attachment">"Galeri, lampiran %1$d"</string>
+  <string name="a11y_gallery_failed_scan">"Galeri, pemindaian gagal %1$d"</string>
   <string name="a11y_gallery_image">"Galeri, gambar %1$d"</string>
   <plurals name="a11y_gallery_more_media">
     <item quantity="other">"Galeri, %1$d media lainnya"</item>
@@ -94,6 +95,7 @@
   <string name="action_choose_file">"Pilih Berkas"</string>
   <string name="action_choose_photo">"Pilih foto"</string>
   <string name="action_clear">"Hapus"</string>
+  <string name="action_clear_all">"Hapus semua"</string>
   <string name="action_close">"Tutup"</string>
   <string name="action_complete_verification">"Selesaikan verifikasi"</string>
   <string name="action_confirm">"Konfirmasi"</string>
@@ -104,6 +106,7 @@
   <string name="action_copy_link">"Salin tautan"</string>
   <string name="action_copy_link_to_message">"Salin tautan ke pesan"</string>
   <string name="action_copy_text">"Salin teks"</string>
+  <string name="action_copy_to_clipboard">"Salin ke clipboard"</string>
   <string name="action_create">"Buat"</string>
   <string name="action_create_room">"Buat room"</string>
   <string name="action_create_space">"Ciptakan ruang"</string>
@@ -131,6 +134,9 @@
   <string name="action_finish">"Selesai"</string>
   <string name="action_forgot_password">"Lupa kata sandi?"</string>
   <string name="action_forward">"Teruskan"</string>
+  <plurals name="action_forward_messages">
+    <item quantity="other">"Teruskan pesan %1$d"</item>
+  </plurals>
   <string name="action_go_back">"Kembali"</string>
   <string name="action_go_to_roles_and_permissions">"Buka role &amp;amp; permission"</string>
   <string name="action_go_to_settings">"Buka Pengaturan"</string>
@@ -217,6 +223,7 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Peningkatan tersedia"</string>
   <string name="common_about">"Tentang"</string>
   <string name="common_acceptable_use_policy">"Kebijakan penggunaan wajar"</string>
+  <string name="common_account_settings">"Pengaturan Akun"</string>
   <string name="common_add_account">"Tambahkan akun"</string>
   <string name="common_add_another_account">"Tambahkan akun lainnya"</string>
   <string name="common_adding_caption">"Menambahkan keterangan"</string>
@@ -225,6 +232,7 @@
   <string name="common_analytics">"Analitik"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Anda keluar dari ruangan"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Anda telah keluar dari sesi."</string>
+  <string name="common_app_settings">"Pengaturan aplikasi"</string>
   <string name="common_appearance">"Penampilan"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_beta">"Beta"</string>
@@ -235,6 +243,8 @@
   <string name="common_call_started">"Panggilan dimulai"</string>
   <string name="common_call_you_declined">"Anda menolak panggilan"</string>
   <string name="common_chat_backup">"Pencadangan percakapan"</string>
+  <string name="common_chats">"Obrolan"</string>
+  <string name="common_code_block">"Blok kode"</string>
   <string name="common_copied_to_clipboard">"Disalin ke papan klip"</string>
   <string name="common_copyright">"Hak cipta"</string>
   <string name="common_creating_room">"Membuat ruangan…"</string>
@@ -274,6 +284,7 @@ Alasan: %1$s."</string>
   <string name="common_file_saved">"Berkas disimpan"</string>
   <string name="common_file_saved_on_disk_android">"Berkas disimpan ke Unduhan"</string>
   <string name="common_forward_message">"Teruskan pesan"</string>
+  <string name="common_forward_to">"Teruskan ke"</string>
   <string name="common_frequently_used">"Sering digunakan"</string>
   <string name="common_gallery">"Galeri"</string>
   <plurals name="common_gallery_reply_attachments">
@@ -284,6 +295,7 @@ Alasan: %1$s."</string>
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Panggilan grup sedang berlangsung"</string>
+  <string name="common_header_rooms">"Kamar"</string>
   <string name="common_image">"Gambar"</string>
   <string name="common_in_reply_to">"Membalas kepada %1$s"</string>
   <string name="common_install_apk_android">"Pasang APK"</string>
@@ -297,9 +309,11 @@ Alasan: %1$s."</string>
   <string name="common_live_location_ended">"Lokasi langsung berakhir"</string>
   <string name="common_loading">"Memuat…"</string>
   <string name="common_loading_more">"Memuat lebih banyak…"</string>
+  <string name="common_location_sharing">"Berbagi lokasi"</string>
   <plurals name="common_many_members">
     <item quantity="other">"%d lainnya"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Kualitas unggahan media"</string>
   <plurals name="common_member_count">
     <item quantity="other">"%1$d Anggota"</item>
   </plurals>
@@ -308,11 +322,13 @@ Alasan: %1$s."</string>
   <string name="common_message_failed_to_send">"Pesan Gagal Terkitim"</string>
   <string name="common_message_layout">"Tata letak pesan"</string>
   <string name="common_message_removed">"Pesan dihapus"</string>
+  <string name="common_moderation_and_safety">"Moderasi &amp; keamanan"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Bisukan"</string>
   <string name="common_name">"Nama"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Tidak ada hasil"</string>
+  <string name="common_no_results_for">"Tidak ada hasil untuk “%1$s”. Coba gunakan kata kunci pencarian yang lain."</string>
   <string name="common_no_room_name">"Tidak ada nama ruangan"</string>
   <string name="common_no_space_name">"Tidak ada nama ruang"</string>
   <string name="common_not_encrypted">"Tidak terenkripsi"</string>
@@ -356,6 +372,7 @@ Alasan: %1$s."</string>
   <string name="common_replying_to">"Membalas %1$s"</string>
   <string name="common_report_a_problem">"Laporkan masalah"</string>
   <string name="common_report_submitted">"Laporan terkirim"</string>
+  <string name="common_results_for">"Hasil untuk: %1$s"</string>
   <string name="common_rich_text_editor">"Penyunting teks kaya"</string>
   <string name="common_role">"Peran"</string>
   <string name="common_room">"Ruangan"</string>
@@ -389,6 +406,7 @@ Alasan: %1$s."</string>
   <string name="common_shared_live_location">"Lokasi langsung yang dibagikan"</string>
   <string name="common_shared_location">"Lokasi terbagi"</string>
   <string name="common_shared_space">"Ruang bersama"</string>
+  <string name="common_signed_in">"Masuk"</string>
   <string name="common_signing_out">"Melepaskan perangkat"</string>
   <string name="common_something_went_wrong">"Ada yang salah"</string>
   <string name="common_something_went_wrong_message">"Kami mengalami masalah. Silakan coba lagi."</string>
@@ -403,6 +421,7 @@ Alasan: %1$s."</string>
   <string name="common_success">"Berhasil"</string>
   <string name="common_suggested">"Disarankan"</string>
   <string name="common_suggestions">"Saran"</string>
+  <string name="common_switch_accounts">"Beralih akun"</string>
   <string name="common_syncing">"Menyinkronkan"</string>
   <string name="common_text">"Teks"</string>
   <string name="common_third_party_notices">"Pemberitahuan pihak ketiga"</string>
@@ -442,6 +461,7 @@ Alasan: %1$s."</string>
   <string name="common_waiting_live_location">"Menunggu lokasi real-time…"</string>
   <string name="common_world_readable_history">"Siapa pun dapat melihat riwayat"</string>
   <string name="common_you">"Anda"</string>
+  <string name="common_your_account">"Akun Anda"</string>
   <string name="content_scanner_not_found">"Unduhan tidak tersedia."</string>
   <string name="content_scanner_not_found_title">"File tidak ditemukan"</string>
   <string name="content_scanner_scanning">"Memindai…"</string>
@@ -477,8 +497,9 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Ukuran file maksimum yang diizinkan adalah: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Pilih kualitas video yang ingin Anda unggah."</string>
   <string name="dialog_video_quality_selector_title">"Pilih kualitas unggahan video"</string>
-  <string name="error_account_already_logged_in">"Anda sudah masuk ke akun di perangkat ini sebagai%1$s ."</string>
-  <string name="error_account_creation_not_possible">"Homeserver Anda perlu ditingkatkan untuk mendukung Matrix Authentication Service dan pembuatan akun."</string>
+  <string name="error_account_already_logged_in">"Anda sudah masuk sebagai %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Login ganda"</string>
+  <string name="error_account_creation_not_possible">"Penyedia akun Anda perlu ditingkatkan agar mendukung Matrix Authentication Service dan pembuatan akun."</string>
   <string name="error_failed_creating_the_permalink">"Gagal membuat tautan permanen"</string>
   <string name="error_failed_loading_map">"%1$s tidak dapat memuat peta. Silakan coba lagi nanti."</string>
   <string name="error_failed_loading_messages">"Gagal memuat pesan"</string>
@@ -514,6 +535,7 @@ Apakah Anda yakin ingin melanjutkan?"</string>
     <item quantity="other">"%1$d orang"</item>
   </plurals>
   <string name="screen_live_location_sheet_title">"Di peta"</string>
+  <string name="screen_local_network_opt_in_subtitle">"Homeserver Anda berada di jaringan lokal Anda. Untuk terhubung, %1$s memerlukan izin untuk mengakses perangkat di jaringan ini."</string>
   <string name="screen_local_network_opt_in_title">"Izinkan akses ke jaringan lokal"</string>
   <string name="screen_media_picker_error_failed_selection">"Gagal memilih media, silakan coba lagi."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Tekan pesan dan pilih “%1$s” untuk disertakan di sini."</string>
@@ -539,11 +561,18 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="screen_room_grouped_state_events_expand">"Buka"</string>
   <string name="screen_room_grouped_state_events_reduce">"Kurangi"</string>
   <string name="screen_room_live_location_banner">"Berbagi lokasi secara langsung"</string>
+  <string name="screen_room_maximum_messages_selected">"Memilih maksimum, pesan"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="other">"%1$d pesan diteruskan"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"Sudah melihat ruangan ini!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s dari %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Pesan yang disematkan"</string>
   <string name="screen_room_pinned_banner_loading_description">"Memuat pesan…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Lihat Semua"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="other">"%1$d pesan terpilih"</item>
+  </plurals>
   <string name="screen_room_title">"Obrolan"</string>
   <string name="screen_share_location_title">"Bagikan lokasi"</string>
   <string name="screen_share_my_location_action">"Bagikan lokasi saya"</string>

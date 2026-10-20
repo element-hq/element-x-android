@@ -70,9 +70,6 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Cereri de alăturare"</string>
   <string name="screen_room_details_roles_and_permissions">"Roluri și permisiuni"</string>
-  <string name="screen_room_details_room_audio_ptt">"Push-to-talk"</string>
-  <string name="screen_room_details_room_audio_title">"Audio în cameră"</string>
-  <string name="screen_room_details_room_audio_video_calls">"Apeluri video"</string>
   <string name="screen_room_details_room_name_label">"Nume"</string>
   <string name="screen_room_details_security_and_privacy_title">"Securitate și confidențialitate"</string>
   <string name="screen_room_details_security_title">"Securitate"</string>

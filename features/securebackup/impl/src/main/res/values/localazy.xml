@@ -45,7 +45,12 @@
   <string name="screen_encryption_reset_bullet_1">"Your account details, contacts, preferences, and chat list will be kept"</string>
   <string name="screen_encryption_reset_bullet_2">"You will lose any message history that’s stored only on the server"</string>
   <string name="screen_encryption_reset_bullet_3">"Other users will see that your digital identity has been reset"</string>
+  <string name="screen_encryption_reset_bullet_4">"Any devices you’re signed in to will need to be reconfirmed"</string>
   <string name="screen_encryption_reset_footer">"Only reset your digital identity if you don\'t have access to another verified device and you don\'t have your recovery key."</string>
+  <string name="screen_encryption_reset_no_chats_message">"It looks like you don’t have any chats yet. If this is correct, you can safely proceed with resetting your digital identity"</string>
+  <string name="screen_encryption_reset_no_options_subtitle">"You don’t have access to any other verified devices or a recovery key, so you’ll need to reset your digital identity to continue using the app."</string>
+  <string name="screen_encryption_reset_no_options_title">"You need to reset your digital identity"</string>
+  <string name="screen_encryption_reset_subtitle">"If you don’t have access to any other verified devices and you don’t have your recovery key, then you’ll need to reset your digital identity to continue using the app."</string>
   <string name="screen_encryption_reset_title">"Can\'t confirm? You’ll need to reset your digital identity."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Delete"</string>
   <string name="screen_key_backup_disable_confirmation_description">"You will lose your encrypted chat history and need to reset your digital identity if you remove all your devices."</string>

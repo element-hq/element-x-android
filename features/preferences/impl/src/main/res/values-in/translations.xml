@@ -36,7 +36,7 @@
   <string name="screen_advanced_settings_share_presence_description">"Jika dimatikan, Anda tidak akan dapat mengirim atau menerima laporan dibaca atau notifikasi pengetikan"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Selalu sembunyikan"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Selalu tampilkan"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Dalam ruangan privat"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Tampilkan di room pribadi"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"Media tersembunyi selalu dapat ditampilkan dengan mengetuknya"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Tampilkan media pada lini masa"</string>
   <string name="screen_advanced_settings_view_source_description">"Aktifkan opsi untuk melihat sumber pesan dalam lini masa."</string>
@@ -51,11 +51,19 @@
   <string name="screen_edit_profile_error_title">"Tidak dapat memperbarui profil"</string>
   <string name="screen_edit_profile_title">"Edit profil"</string>
   <string name="screen_edit_profile_updating_details">"Memperbarui profil…"</string>
+  <string name="screen_labs_enable_gallery">"Galeri, pesan"</string>
+  <string name="screen_labs_enable_gallery_description">"Kirim beberapa gambar atau video sekaligus. Stabil di perangkat seluler, namun belum didukung oleh versi web."</string>
+  <string name="screen_labs_enable_knocking">"Ajukan permohonan untuk bergabung"</string>
+  <string name="screen_labs_enable_knocking_description">"Pengguna dapat meminta akses ke room obrolan yang tidak terbuka untuk siapa pun. Stabil di perangkat seluler, implementasi web tersedia namun masih dalam tahap percobaan."</string>
   <string name="screen_labs_enable_threads">"Aktifkan balasan utas"</string>
   <string name="screen_labs_enable_threads_description">"Aplikasi akan dimulai ulang untuk menerapkan perubahan ini."</string>
   <string name="screen_labs_header_description">"Cobalah ide-ide terbaru kami yang sedang dikembangkan. Fitur-fitur ini belum final; mungkin masih tidak stabil dan dapat berubah."</string>
   <string name="screen_labs_header_title">"Merasa ingin bereksperimen?"</string>
   <string name="screen_labs_title">"Uji Coba"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Undangan"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Pengguna lainnya"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Penampilan Anda"</string>
+  <string name="screen_notification_settings_activity_section_title">"Aktivitas"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Pengaturan tambahan"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Nada dering panggilan"</string>
   <string name="screen_notification_settings_calls_label">"Panggilan audio dan video"</string>
@@ -76,7 +84,7 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"Pengaturan belum diperbaiki, silakan coba lagi."</string>
   <string name="screen_notification_settings_group_chats">"Obrolan grup"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Undangan"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Homeserver Anda tidak mendukung opsi ini dalam ruangan terenkripsi, Anda mungkin tidak diberi tahu dalam beberapa ruangan."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Penyedia akun Anda tidak mendukung opsi ini dalam obrolan terenkripsi, sehingga Anda mungkin tidak menerima pemberitahuan dalam beberapa obrolan."</string>
   <string name="screen_notification_settings_mentions_section_title">"Sebutan"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Pilih suara lain…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Saat ini menggunakan %1$s"</string>
@@ -86,6 +94,8 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_mode_mentions">"Sebutan"</string>
   <string name="screen_notification_settings_notification_section_title">"Beri tahu saya tentang"</string>
   <string name="screen_notification_settings_room_mention_label">"Penyebutan @room"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Titik atau jumlah, pesan yang belum dibaca"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Tampilkan semua aktivitas di daftar room"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Kustom"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Suara kustom"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Terjadi kesalahan saat menghapus file."</string>
@@ -102,6 +112,7 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"pengaturan sistem"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Pemberitahuan sistem dimatikan"</string>
   <string name="screen_notification_settings_title">"Notifikasi"</string>
+  <string name="screen_settings_add_account">"Tambahkan akun"</string>
   <string name="screen_settings_user_status_away">"Pergi"</string>
   <string name="screen_settings_user_status_be_right_back">"Sebentar lagi kembali"</string>
   <string name="screen_settings_user_status_custom">"Kustom"</string>
