@@ -125,14 +125,14 @@ private fun ShowLocationViewContent(
         if (state.focusedLocation != null && !hasAnimatedToFocusedLocation) {
             hasAnimatedToFocusedLocation = true
             val position = CameraPosition(
-                target = Position(latitude = state.focusedLocation.location.lat, longitude = state.focusedLocation.location.lon),
+                center = Position(latitude = state.focusedLocation.location.lat, longitude = state.focusedLocation.location.lon),
                 zoom = MapDefaults.DEFAULT_ZOOM
             )
             mapState.setCameraPosition(position)
         }
     }
     LaunchedEffect(mapState.isCameraMoving) {
-        if (mapState.cameraMoveReason == CameraMoveReason.GESTURE) {
+        if (mapState.cameraMoveReason == CameraMoveReason.Gesture) {
             state.eventSink(ShowLocationEvent.TrackMyLocation(false))
         }
     }
@@ -144,13 +144,13 @@ private fun ShowLocationViewContent(
         onLocationShareClick = { locationShare ->
             state.eventSink(ShowLocationEvent.TrackMyLocation(false))
             val position = CameraPosition(
-                target = Position(locationShare.location.lon, locationShare.location.lat),
+                center = Position(locationShare.location.lon, locationShare.location.lat),
                 // Force pointing to NORTH
                 bearing = 0.0,
                 zoom = mapState.cameraPosition.zoom.coerceAtLeast(MapDefaults.DEFAULT_ZOOM),
             )
             coroutineScope.launch {
-                mapState.animateCamera(update = position.toCameraUpdate(), animation = CameraAnimation.Fly())
+                mapState.animateCamera(update = position.toCameraUpdate(), animation = CameraAnimation.Fly.Standard)
             }
         },
         modifier = modifier,
