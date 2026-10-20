@@ -93,6 +93,7 @@ internal fun HtmlMessageContentWithMentionDisplayNamesPreview() = ElementPreview
         LocalMentionDisplayNames provides MentionDisplayNames(
             users = persistentMapOf(alice to "Alice"),
             rooms = persistentMapOf(room to "Element X Android"),
+            userStatuses = persistentMapOf(alice to "🎧"),
         )
     ) {
         HtmlMessageContent(
