@@ -35,6 +35,7 @@ import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -99,11 +100,7 @@ class TimelineItemContentMessageFactory(
                     htmlDocument = dom,
                     formattedBody = formattedBody,
                     isEdited = content.isEdited,
-                    messageTree = if (featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)) {
-                        dom?.let(htmlMessageParser::parse)
-                    } else {
-                        null
-                    },
+                    messageTree = parseMessageTree(dom),
                 )
             }
             is TextMessageType -> {
@@ -116,11 +113,7 @@ class TimelineItemContentMessageFactory(
                     htmlDocument = htmlDocument,
                     formattedBody = formattedBody,
                     isEdited = content.isEdited,
-                    messageTree = if (featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)) {
-                        htmlDocument?.let(htmlMessageParser::parse)
-                    } else {
-                        null
-                    },
+                    messageTree = parseMessageTree(htmlDocument),
                 )
             }
             is ImageMessageType -> {
@@ -137,6 +130,7 @@ class TimelineItemContentMessageFactory(
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
                     htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
+                    captionTree = parseMessageTree(dom),
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
@@ -162,6 +156,7 @@ class TimelineItemContentMessageFactory(
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
                     htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
+                    captionTree = parseMessageTree(dom),
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
@@ -205,6 +200,7 @@ class TimelineItemContentMessageFactory(
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
                     htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
+                    captionTree = parseMessageTree(dom),
                     isEdited = content.isEdited,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mediaSource = messageType.source,
@@ -230,6 +226,7 @@ class TimelineItemContentMessageFactory(
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
                     htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
+                    captionTree = parseMessageTree(dom),
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     duration = messageType.info?.duration ?: Duration.ZERO,
@@ -249,6 +246,7 @@ class TimelineItemContentMessageFactory(
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
                     htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
+                    captionTree = parseMessageTree(dom),
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     duration = messageType.info?.duration ?: Duration.ZERO,
@@ -269,6 +267,7 @@ class TimelineItemContentMessageFactory(
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
                     htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
+                    captionTree = parseMessageTree(dom),
                     isEdited = content.isEdited,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mediaSource = messageType.source,
@@ -287,13 +286,14 @@ class TimelineItemContentMessageFactory(
                     htmlDocument = htmlDocument,
                     formattedBody = formattedBody,
                     isEdited = content.isEdited,
-                    messageTree = htmlDocument?.let(htmlMessageParser::parse),
+                    messageTree = parseMessageTree(htmlDocument),
                 )
             }
             is GalleryMessageType -> {
                 val dom = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
                 val formattedCaption = dom?.let(::parseHtml)
                     ?: messageType.body.withLinks()
+                val captionTree = parseMessageTree(dom)
                 val galleryItems = messageType.items.mapNotNull { item ->
                     when (item) {
                         is GalleryItemType.Image -> {
@@ -367,6 +367,7 @@ class TimelineItemContentMessageFactory(
                         caption = messageType.body.trimEnd().takeIf { it.isNotEmpty() },
                         formattedCaption = formattedCaption,
                         htmlCaption = messageType.formatted?.body?.takeIf { messageType.formatted?.format == MessageFormat.HTML },
+                        captionTree = captionTree,
                         isEdited = content.isEdited,
                         items = galleryItems.toImmutableList(),
                     )
@@ -425,6 +426,7 @@ class TimelineItemContentMessageFactory(
                         caption = messageType.body.trimEnd().takeIf { it.isNotEmpty() },
                         formattedCaption = formattedCaption,
                         htmlCaption = messageType.formatted?.body?.takeIf { messageType.formatted?.format == MessageFormat.HTML },
+                        captionTree = captionTree,
                         isEdited = content.isEdited,
                         attachments = attachments.toImmutableList(),
                     )
@@ -450,6 +452,18 @@ class TimelineItemContentMessageFactory(
         }
 
         return result?.takeIf { it.isFinite() }
+    }
+
+    /**
+     * Parse the [document] into a tree of [DocumentNode] for the native Compose renderer, only if the new timeline event renderer is enabled.
+     */
+    private suspend fun parseMessageTree(document: Document?): DocumentNode? {
+        if (document == null) return null
+        return if (featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)) {
+            htmlMessageParser.parse(document)
+        } else {
+            null
+        }
     }
 
     private fun parseHtml(document: Document): CharSequence? {
