@@ -559,6 +559,9 @@ class RootFlowNode(
                 accountSelectEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
+                    params = AccountSelectEntryPoint.Params(
+                        permalinkData = navTarget.permalinkData,
+                    ),
                     callback = callback,
                 )
             }

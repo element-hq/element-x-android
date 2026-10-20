@@ -12,5 +12,9 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class AccountSelectState(
+    /**
+     * The text of the pill representing the link to open, or null if the link must not be rendered.
+     */
+    val linkPillText: String?,
     val accounts: ImmutableList<MatrixUser>,
 )

@@ -9,9 +9,13 @@
 package io.element.android.libraries.accountselect.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -30,7 +34,18 @@ class AccountSelectPresenterTest {
         val presenter = createAccountSelectPresenter()
         presenter.test {
             val initialState = awaitItem()
+            assertThat(initialState.linkPillText).isEqualTo(A_ROOM_ALIAS.value)
             assertThat(initialState.accounts).isEmpty()
+        }
+    }
+
+    @Test
+    fun `present - user link is rendered as a pill`() = runTest {
+        val presenter = createAccountSelectPresenter(
+            permalinkData = PermalinkData.UserLink(A_USER_ID),
+        )
+        presenter.test {
+            assertThat(awaitItem().linkPillText).isEqualTo(A_USER_ID.value)
         }
     }
 
@@ -75,7 +90,9 @@ class AccountSelectPresenterTest {
 }
 
 internal fun createAccountSelectPresenter(
+    permalinkData: PermalinkData = PermalinkData.RoomLink(RoomIdOrAlias.Alias(A_ROOM_ALIAS)),
     sessionStore: SessionStore = InMemorySessionStore(),
 ) = AccountSelectPresenter(
+    permalinkData = permalinkData,
     sessionStore = sessionStore,
 )
