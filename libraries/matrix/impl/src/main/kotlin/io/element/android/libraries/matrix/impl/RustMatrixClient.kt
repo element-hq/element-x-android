@@ -113,8 +113,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -123,7 +123,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -327,18 +326,16 @@ class RustMatrixClient(
         }
     }
 
-    override val ignoredUsersFlow = mxCallbackFlow<ImmutableList<UserId>> {
-        // Fetch the initial value manually, the SDK won't return it automatically
-        channel.trySend(innerClient.ignoredUsers().map(::UserId).toImmutableList())
+    private val _ignoredUsersFlow = MutableStateFlow<ImmutableList<UserId>>(persistentListOf())
+    override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = _ignoredUsersFlow.asStateFlow()
 
-        innerClient.subscribeToIgnoredUsers(object : IgnoredUsersListener {
-            override fun call(ignoredUserIds: List<String>) {
-                channel.trySend(ignoredUserIds.map(::UserId).toImmutableList())
-            }
-        })
-    }
-        .buffer(Channel.UNLIMITED)
-        .stateIn(sessionCoroutineScope, started = SharingStarted.Eagerly, initialValue = persistentListOf())
+    // Subscribe before fetching the ignored users from the server: the SDK immediately emits its in-memory value, which is
+    // empty until the account data is received by the sync, so it must not override the value fetched from the server.
+    private val ignoredUsersTaskHandle: TaskHandle = innerClient.subscribeToIgnoredUsers(object : IgnoredUsersListener {
+        override fun call(ignoredUserIds: List<String>) {
+            _ignoredUsersFlow.value = ignoredUserIds.map(::UserId).toImmutableList()
+        }
+    })
 
     private val _isShuttingDown = AtomicBoolean(false)
     override val isShuttingDown: Boolean
@@ -347,6 +344,13 @@ class RustMatrixClient(
     init {
         // Make sure the session delegate has a reference to the client to be able to logout on auth error
         sessionDelegate.bindClient(this)
+
+        // The SDK does not restore the ignored users list from its store at startup, and the sync will usually not send
+        // the account data again if it has not changed, so the list would stay empty. Fetch it from the server instead.
+        // This can be removed once https://github.com/matrix-org/matrix-rust-sdk/issues/7299 is fixed.
+        sessionCoroutineScope.launch(sessionDispatcher) {
+            refreshIgnoredUsers()
+        }
 
         sessionCoroutineScope.launch {
             // Start notification settings
@@ -454,6 +458,16 @@ class RustMatrixClient(
     override suspend fun unignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.unignoreUser(userId.value)
+        }
+    }
+
+    private suspend fun refreshIgnoredUsers() {
+        runCatchingExceptions {
+            innerClient.ignoredUsers()
+        }.onSuccess { ignoredUserIds ->
+            _ignoredUsersFlow.value = ignoredUserIds.map(::UserId).toImmutableList()
+        }.onFailure {
+            Timber.w(it, "Failed to fetch the ignored users")
         }
     }
 
@@ -715,6 +729,7 @@ class RustMatrixClient(
         sessionCoroutineScope.cancel()
         clientDelegateTaskHandle?.cancelAndDestroy()
         ownProfileTaskHandle?.cancelAndDestroy()
+        ignoredUsersTaskHandle.cancelAndDestroy()
         searchBackfillService.cancelSearchBackfill()
         sessionVerificationService.destroy()
 
