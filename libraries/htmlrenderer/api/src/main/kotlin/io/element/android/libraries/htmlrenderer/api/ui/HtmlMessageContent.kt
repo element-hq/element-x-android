@@ -61,6 +61,7 @@ import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
@@ -76,6 +77,7 @@ import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.linkify
@@ -448,7 +450,8 @@ private fun MentionPill(
  * the placeholder reserves exactly the space the pill needs.
  *
  * The pill text is resolved using [LocalMentionDisplayNames], so the pills are measured again
- * whenever the display name of one of the mentioned users or rooms changes.
+ * whenever the display name of one of the mentioned users or rooms changes. The text sizes are
+ * cached in [PillTextSizeCache], so the same pill text is only measured once for all messages.
  */
 @Composable
 private fun rememberMentionInlineContent(
@@ -459,14 +462,15 @@ private fun rememberMentionInlineContent(
     val textMeasurer = rememberTextMeasurer()
     val pillTextStyle = ElementTheme.typography.fontBodyLgMedium
     val density = LocalDensity.current
+    val layoutDirection = LocalLayoutDirection.current
     val mentionDisplayNames = LocalMentionDisplayNames.current
     // Only the display texts of these mentions matter: since `derivedStateOf` only notifies its readers when its value changes,
     // unrelated display name changes won't recompose this text nor trigger a new measure pass
     val displayTexts by remember(mentions, mentionDisplayNames) {
         derivedStateOf { mentions.mapValues { (_, mention) -> mentionDisplayNames.displayTextFor(mention) } }
     }
-    return remember(mentions, displayTexts, context, textMeasurer, pillTextStyle, density) {
-        buildMentionInlineContent(mentions, displayTexts, context, textMeasurer, pillTextStyle, density)
+    return remember(mentions, displayTexts, context, textMeasurer, pillTextStyle, density, layoutDirection) {
+        buildMentionInlineContent(mentions, displayTexts, context, textMeasurer, pillTextStyle, density, layoutDirection)
     }
 }
 
@@ -477,12 +481,13 @@ private fun buildMentionInlineContent(
     textMeasurer: TextMeasurer,
     pillTextStyle: TextStyle,
     density: Density,
+    layoutDirection: LayoutDirection,
 ): ImmutableMap<String, InlineTextContent> {
     return mentions.mapValues { (id, mention) ->
         val displayText = displayTexts[id] ?: mention.displayText
-        val measured = textMeasurer.measure(displayText, pillTextStyle)
-        val width = with(density) { measured.size.width.toDp() + PillPaddingHorizontal * 2 }
-        val height = with(density) { measured.size.height.toDp() + PillPaddingVertical * 2 }
+        val textSize = PillTextSizeCache.getOrMeasure(displayText, pillTextStyle, density, layoutDirection, textMeasurer)
+        val width = with(density) { textSize.width.toDp() + PillPaddingHorizontal * 2 }
+        val height = with(density) { textSize.height.toDp() + PillPaddingVertical * 2 }
         InlineTextContent(
             placeholder = Placeholder(
                 width = with(density) { width.toSp() },
