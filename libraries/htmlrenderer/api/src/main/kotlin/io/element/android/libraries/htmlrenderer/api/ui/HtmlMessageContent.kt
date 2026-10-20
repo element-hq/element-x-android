@@ -449,8 +449,8 @@ private fun MentionPill(
  * Builds an [InlineTextContent] entry for each mention placeholder. Each pill is measured so
  * the placeholder reserves exactly the space the pill needs.
  *
- * The pill text is resolved using [LocalMentionDisplayNames], so the pills are measured again
- * whenever the display name of one of the mentioned users or rooms changes. The text sizes are
+ * The pill text (display name and user status) is resolved using [LocalMentionDisplayNames], so the pills are measured again
+ * whenever the display name or status of one of the mentioned users or rooms changes. The text sizes are
  * cached in [PillTextSizeCache], so the same pill text is only measured once for all messages.
  */
 @Composable
@@ -467,7 +467,7 @@ private fun rememberMentionInlineContent(
     // Only the display texts of these mentions matter: since `derivedStateOf` only notifies its readers when its value changes,
     // unrelated display name changes won't recompose this text nor trigger a new measure pass
     val displayTexts by remember(mentions, mentionDisplayNames) {
-        derivedStateOf { mentions.mapValues { (_, mention) -> mentionDisplayNames.displayTextFor(mention) } }
+        derivedStateOf { mentions.mapValues { (_, mention) -> mentionDisplayNames.pillTextFor(mention) } }
     }
     return remember(mentions, displayTexts, context, textMeasurer, pillTextStyle, density, layoutDirection) {
         buildMentionInlineContent(mentions, displayTexts, context, textMeasurer, pillTextStyle, density, layoutDirection)

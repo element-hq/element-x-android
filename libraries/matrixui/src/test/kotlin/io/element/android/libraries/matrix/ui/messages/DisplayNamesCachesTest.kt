@@ -12,6 +12,8 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import kotlinx.coroutines.test.runTest
@@ -37,6 +39,28 @@ class DisplayNamesCachesTest {
             "Alice",
             bob,
             "Bob (@bob:server.org)",
+        )
+    }
+
+    @Test
+    fun `RoomMemberProfilesCache - displayedStatusEmojis contains the status emojis of members with a displayed status`() = runTest {
+        val cache = RoomMemberProfilesCache()
+        assertThat(cache.displayedStatusEmojis.value).isEmpty()
+        val alice = UserId("@alice:server.org")
+        val bob = UserId("@bob:server.org")
+        val carol = UserId("@carol:server.org")
+        cache.replace(
+            listOf(
+                aRoomMember(userId = alice, displayedStatus = DisplayedStatus.InCall(callJoinedTs = null)),
+                aRoomMember(userId = bob, displayedStatus = DisplayedStatus.UserSet(UserStatus(emoji = "🌴", text = "On holidays"))),
+                aRoomMember(userId = carol, displayedStatus = null),
+            )
+        )
+        assertThat(cache.displayedStatusEmojis.value).containsExactly(
+            alice,
+            "🎧",
+            bob,
+            "🌴",
         )
     }
 
