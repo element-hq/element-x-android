@@ -30,17 +30,17 @@ class DefaultUserLocationStateFactory : UserLocationState.Factory {
             rememberNotGrantedLocationProvider()
         }
         val locationFlow = remember(locationProvider) {
-            val locationRequest = LocationRequest(
-                accuracy = LocationAccuracy.High,
-                minimumInterval = 5.seconds,
-                minimumDistance = 5.meters,
-            )
+            val locationRequest = LocationRequest {
+                accuracy = LocationAccuracy.High
+                minimumInterval = 5.seconds
+                minimumDistance = 5.meters
+            }
             locationProvider
                 .updates(locationRequest)
                 .mapNotNull { event ->
                     when (event) {
                         is LocationEvent.Update -> event.measurement
-                        is LocationEvent.Unavailable -> null
+                        else -> null
                     }
                 }
         }

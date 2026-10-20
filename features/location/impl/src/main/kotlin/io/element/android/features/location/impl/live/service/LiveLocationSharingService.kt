@@ -93,11 +93,11 @@ class LiveLocationSharingService : Service() {
         val locationProvider = createLocationProvider(context = applicationContext)
         appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow()
             .flatMapLatest { minDistanceMeters ->
-                val locationRequest = LocationRequest(
-                    accuracy = LocationAccuracy.Balanced,
-                    minimumInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
+                val locationRequest = LocationRequest {
+                    accuracy = LocationAccuracy.Balanced
+                    minimumInterval = UPDATE_INTERVAL_IN_SECOND.seconds
                     minimumDistance = minDistanceMeters.meters
-                )
+                }
                 locationProvider.updates(locationRequest)
             }
             .onEach { locationEvent ->
@@ -116,9 +116,13 @@ class LiveLocationSharingService : Service() {
                             LocationUnavailableReason.TemporarilyUnavailable -> Unit
                             LocationUnavailableReason.Unsupported,
                             LocationUnavailableReason.PermissionDenied,
-                            LocationUnavailableReason.UnexpectedFailure -> coordinator.dispatchUnrecoverableError()
+                            // The provider has no classification for the failure, it is unexpected.
+                            null -> coordinator.dispatchUnrecoverableError()
+                            // Reasons added in a future library version: keep sharing rather than hard failing.
+                            else -> Timber.w("Unhandled location unavailable reason: ${locationEvent.reason}")
                         }
                     }
+                    else -> Timber.w("Unhandled location event: $locationEvent")
                 }
             }
             .launchIn(coroutineScope)

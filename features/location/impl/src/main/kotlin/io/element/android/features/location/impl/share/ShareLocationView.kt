@@ -143,7 +143,7 @@ private fun ShareLocationViewContent(
         enabled = state.trackUserLocation,
     )
     LaunchedEffect(mapState.isCameraMoving) {
-        if (mapState.cameraMoveReason == CameraMoveReason.GESTURE) {
+        if (mapState.cameraMoveReason == CameraMoveReason.Gesture) {
             state.eventSink(ShareLocationEvent.StopTrackingUserLocation)
         }
     }
@@ -152,7 +152,7 @@ private fun ShareLocationViewContent(
         mapState = mapState,
         navigateUp = navigateUp,
         onSharePinLocation = {
-            val positionTarget = mapState.cameraPosition.target
+            val positionTarget = mapState.cameraPosition.center
             state.eventSink(
                 ShareLocationEvent.ShareStaticLocation(
                     location = Location(lat = positionTarget.latitude, lon = positionTarget.longitude),
