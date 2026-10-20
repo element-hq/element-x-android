@@ -11,8 +11,10 @@ package io.element.android.features.messages.impl
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
@@ -76,6 +78,8 @@ import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.htmlrenderer.api.LocalMentionDisplayNames
+import io.element.android.libraries.htmlrenderer.api.MentionDisplayNames
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -965,8 +969,15 @@ class MessagesFlowNode(
             RenderingMapsNotSupportedDialog { displayVulkanNotSupportedError = false }
         }
 
+        val userDisplayNames by roomMemberProfilesCache.displayNames.collectAsState()
+        val roomDisplayNames by roomNamesCache.displayNames.collectAsState()
+        val mentionDisplayNames = remember(userDisplayNames, roomDisplayNames) {
+            MentionDisplayNames(users = userDisplayNames, rooms = roomDisplayNames)
+        }
+
         CompositionLocalProvider(
-            LocalMentionSpanUpdater provides mentionSpanUpdater
+            LocalMentionSpanUpdater provides mentionSpanUpdater,
+            LocalMentionDisplayNames provides mentionDisplayNames,
         ) {
             BackstackWithOverlayBox(modifier)
         }

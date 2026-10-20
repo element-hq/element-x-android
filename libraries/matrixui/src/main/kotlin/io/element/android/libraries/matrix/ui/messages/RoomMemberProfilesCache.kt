@@ -14,8 +14,13 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.runningFold
 
@@ -25,8 +30,19 @@ class RoomMemberProfilesCache {
     private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
     val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
 
+    private val _displayNames = MutableStateFlow<ImmutableMap<UserId, String>>(persistentMapOf())
+
+    /**
+     * The disambiguated display names of the room members, by user id. Members without a display name are not included.
+     */
+    val displayNames: StateFlow<ImmutableMap<UserId, String>> = _displayNames.asStateFlow()
+
     suspend fun replace(items: List<RoomMember>) = coroutineScope {
         cache.value = items.associateBy { it.userId }
+        _displayNames.value = items
+            .filter { it.displayName != null }
+            .associate { it.userId to it.disambiguatedDisplayName }
+            .toImmutableMap()
     }
 
     fun getDisplayName(userId: UserId): String? {
