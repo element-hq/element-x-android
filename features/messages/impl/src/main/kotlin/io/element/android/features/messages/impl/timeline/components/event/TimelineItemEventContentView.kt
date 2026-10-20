@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannedString
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalContentColor
@@ -21,8 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.timeline.LocalTimelineEventRendererConfig
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.rememberPresenter
@@ -45,12 +49,15 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.captionOrNull
+import io.element.android.features.messages.impl.timeline.model.event.captionTreeOrNull
 import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
 import io.element.android.features.messages.impl.timeline.model.event.formattedCaptionOrNull
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.components.EqualWidthColumn
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.api.ui.HtmlMessageContent
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.InvalidContentView
@@ -247,6 +254,7 @@ fun TimelineItemEventContentView(
                 modifier = Modifier.padding(padding),
                 caption = caption,
                 formattedCaption = content.formattedCaptionOrNull(),
+                captionTree = content.captionTreeOrNull(),
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
                 onContentLayoutChange = onContentLayoutChange,
@@ -259,29 +267,53 @@ fun TimelineItemEventContentView(
 private fun CaptionView(
     caption: String,
     formattedCaption: CharSequence?,
+    captionTree: DocumentNode?,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val caption = if (LocalInspectionMode.current) {
-        SpannedString(caption)
+    // When the new timeline event renderer is enabled and the caption has a parsed tree, render it
+    // natively with Compose. Otherwise fall back to the legacy rich text editor view below.
+    if (LocalTimelineEventRendererConfig.current.isComposeRendererEnabled && captionTree != null) {
+        Box(modifier.semantics { contentDescription = caption }) {
+            HtmlMessageContent(
+                node = captionTree,
+                currentUserId = LocalTimelineEventRendererConfig.current.currentUserId,
+                onLinkClick = { url, text -> onLinkClick(Link(url = url, text = text)) },
+                onLinkLongClick = { url, text -> onLinkLongClick(Link(url = url, text = text)) },
+                onContentLayoutChange = { data ->
+                    onContentLayoutChange(
+                        ContentAvoidingLayoutData(
+                            contentWidth = data.contentWidth,
+                            contentHeight = data.contentHeight,
+                            nonOverlappingContentWidth = data.nonOverlappingContentWidth,
+                            nonOverlappingContentHeight = data.nonOverlappingContentHeight,
+                        )
+                    )
+                },
+            )
+        }
     } else {
-        formattedCaption ?: SpannedString(caption)
-    }
-    CompositionLocalProvider(
-        LocalContentColor provides ElementTheme.colors.textPrimary,
-        LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
-    ) {
-        EditorStyledText(
-            modifier = modifier,
-            text = caption,
-            style = ElementRichTextEditorStyle.textStyle(),
-            onLinkClickedListener = onLinkClick,
-            onLinkLongClickedListener = onLinkLongClick,
-            releaseOnDetach = false,
-            onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
-        )
+        val caption = if (LocalInspectionMode.current) {
+            SpannedString(caption)
+        } else {
+            formattedCaption ?: SpannedString(caption)
+        }
+        CompositionLocalProvider(
+            LocalContentColor provides ElementTheme.colors.textPrimary,
+            LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
+        ) {
+            EditorStyledText(
+                modifier = modifier,
+                text = caption,
+                style = ElementRichTextEditorStyle.textStyle(),
+                onLinkClickedListener = onLinkClick,
+                onLinkLongClickedListener = onLinkLongClick,
+                releaseOnDetach = false,
+                onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
+            )
+        }
     }
 }
 
