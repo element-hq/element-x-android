@@ -11,7 +11,6 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.core.text.HtmlCompat
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
@@ -326,7 +325,7 @@ fun aMediaViewerPageData(
     mediaInfo: MediaInfo = anImageMediaInfo(),
     mediaSource: MediaSource = MediaSource(""),
     validationState: ContentValidationState = NoopContentValidationState(),
-    formattedCaption: CharSequence? = mediaInfo.htmlCaption?.let { HtmlCompat.fromHtml(it, HtmlCompat.FROM_HTML_MODE_COMPACT) },
+    formattedCaption: CharSequence? = mediaInfo.htmlCaption,
 ): MediaViewerPageData.MediaViewerData = MediaViewerPageData.MediaViewerData(
     eventId = null,
     mediaInfo = mediaInfo,
