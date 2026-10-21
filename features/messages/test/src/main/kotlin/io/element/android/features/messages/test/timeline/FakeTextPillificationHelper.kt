@@ -6,7 +6,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.utils
+package io.element.android.features.messages.test.timeline
+
+import io.element.android.features.messages.api.timeline.TextPillificationHelper
 
 class FakeTextPillificationHelper(
     private val pillifyLambda: (CharSequence, Boolean) -> CharSequence = { text, _ -> text }

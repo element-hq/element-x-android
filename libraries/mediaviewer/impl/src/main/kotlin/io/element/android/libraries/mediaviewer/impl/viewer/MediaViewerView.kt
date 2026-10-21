@@ -657,7 +657,7 @@ private fun MediaViewerBottomBar(
                     .heightIn(max = if (hasCompactHeightWindowSize()) maxCaptionHeightLandscape else maxCaptionHeightPortrait)
                     .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()),
             ) {
-                val textToRender = remember (caption, formattedCaption) {
+                val textToRender = remember(caption, formattedCaption) {
                     when {
                         formattedCaption != null -> formattedCaption
                         caption != null -> caption.safeLinkify().toSpannable()

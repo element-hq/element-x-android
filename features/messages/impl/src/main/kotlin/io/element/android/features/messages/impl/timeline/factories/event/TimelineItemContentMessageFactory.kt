@@ -14,6 +14,7 @@ import androidx.core.text.toSpannable
 import dev.zacsweers.metro.Inject
 import io.element.android.features.location.api.Location
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
+import io.element.android.features.messages.api.timeline.TextPillificationHelper
 import io.element.android.features.messages.impl.timeline.model.event.AttachmentItem
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
@@ -29,7 +30,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
-import io.element.android.features.messages.impl.utils.TextPillificationHelper
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.core.mimetype.MimeTypes
