@@ -11,6 +11,7 @@
 package io.element.android.libraries.push.impl.push
 
 import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.EventId
@@ -120,7 +121,7 @@ class DefaultPushHandlerTest {
         )
         queuedPushRequestNotifier.queued.test {
             defaultPushHandler.handle(PushData(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, unread = 0, clientSecret = A_SECRET), A_PUSHER_INFO)
-            awaitItem()
+            assertThat(awaitItem()).isEqualTo(A_USER_ID)
         }
     }
 

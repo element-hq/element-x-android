@@ -50,8 +50,9 @@ class DefaultSyncOnNotifiableEvent(
             appForegroundStateService.updateIsSyncingNotificationEvent(true)
             Timber.d("Starting opportunistic room list sync | In foreground: ${appForegroundStateService.isInForeground.value}")
 
-            for ((sessionId, events) in eventsBySession) {
-                val client = matrixClientProvider.getOrRestore(SessionId(sessionId)).getOrNull() ?: continue
+            for ((sessionIdValue, events) in eventsBySession) {
+                val sessionId = SessionId(sessionIdValue)
+                val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: continue
                 val roomIds = events.map { RoomId(it.roomId) }.distinct()
 
                 client.roomListService.subscribeToVisibleRooms(roomIds)
@@ -61,9 +62,10 @@ class DefaultSyncOnNotifiableEvent(
                     // can only start once this one is done, and an incoming call can't wait that long to ring.
                     val newPushQueued = withTimeoutOrNull(10.seconds) {
                         queuedPushRequestNotifier.queued
-                            // Also check once for pushes queued before we started waiting
-                            .onSubscription { emit(Unit) }
-                            .first { hasNewPendingPushRequests(SessionId(sessionId), handled = events) }
+                            // Check once as soon as we listen too: a push queued before that sent its signal to nobody. Checking
+                            // any earlier would miss one queued between the check and the subscription, and make it wait 10 seconds.
+                            .onSubscription { emit(sessionId) }
+                            .first { queuedFor -> queuedFor == sessionId && hasNewPendingPushRequests(sessionId, handled = events) }
                     } != null
                     if (newPushQueued) {
                         Timber.d("A new push is waiting to be fetched, ending the opportunistic sync early")

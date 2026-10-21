@@ -16,6 +16,8 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
@@ -143,12 +145,30 @@ class SyncOnNotifiableEventTest {
             delay(2_000)
             // An incoming call is pushed while the sync is running
             pendingRequests = listOf(aPushRequest(eventId = AN_EVENT_ID_2))
-            queuedPushRequestNotifier.onPushRequestQueued()
+            queuedPushRequestNotifier.onPushRequestQueued(A_SESSION_ID)
         }
 
         sut(listOf(notificationRequest))
 
         assertThat(currentTime).isEqualTo(2_000)
+    }
+
+    @Test
+    fun `when app is in background, a push queued for another session doesn't end the sync early`() = runTest {
+        val queuedPushRequestNotifier = QueuedPushRequestNotifier()
+        val sut = createSyncOnNotifiableEvent(
+            client = client,
+            appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = false),
+            queuedPushRequestNotifier = queuedPushRequestNotifier,
+        )
+        launch {
+            delay(2_000)
+            queuedPushRequestNotifier.onPushRequestQueued(A_SESSION_ID_2)
+        }
+
+        sut(listOf(notificationRequest))
+
+        assertThat(currentTime).isEqualTo(10_000)
     }
 
     @Test
