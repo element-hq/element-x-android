@@ -383,6 +383,7 @@ class RustMatrixAuthenticationService(
     private suspend fun finalizeClientCreation(sessionData: SessionData): SessionId {
         // Close the client which was used to perform the login before creating the final client.
         // Both use the same session paths, so their SQLite stores must never be opened at the same time.
+        // The login client does not set up the backup and the cross-signing, the final client will do it.
         clear()
 
         val matrixClient = restoreSession(sessionData)
@@ -416,6 +417,7 @@ class RustMatrixAuthenticationService(
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
                 isMessageSearchAvailable = isMessageSearchAvailable(),
                 sessionDelegate = NoOpClientSessionDelegate,
+                autoEnableEncryption = false,
             )
             .config()
             .build()
@@ -450,6 +452,7 @@ class RustMatrixAuthenticationService(
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
                 isMessageSearchAvailable = isMessageSearchAvailable(),
                 sessionDelegate = NoOpClientSessionDelegate,
+                autoEnableEncryption = false,
             )
             .serverNameOrHomeserverUrl(baseUrlOrServerName)
             .build()
