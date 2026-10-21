@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.telephoto.flick)
 
     implementation(projects.features.enterprise.api)
+    implementation(projects.features.messages.api)
     implementation(projects.features.viewfolder.api)
     implementation(projects.features.contentscanner.api)
     implementation(projects.libraries.androidutils)
@@ -62,6 +63,7 @@ dependencies {
 
     testCommonDependencies(libs, true)
     testImplementation(projects.features.enterprise.test)
+    testImplementation(projects.features.messages.test)
     testImplementation(projects.libraries.audio.test)
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.matrix.test)

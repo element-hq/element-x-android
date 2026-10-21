@@ -28,6 +28,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInv
 import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -196,7 +197,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
-                            formattedCaption = type.formattedCaption?.body,
+                            htmlCaption = type.formattedCaption?.takeIf { it.format == MessageFormat.HTML }?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
@@ -218,7 +219,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
-                            formattedCaption = type.formattedCaption?.body,
+                            htmlCaption = type.formattedCaption?.takeIf { it.format == MessageFormat.HTML }?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
@@ -241,7 +242,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
-                            formattedCaption = type.formattedCaption?.body,
+                            htmlCaption = type.formattedCaption?.takeIf { it.format == MessageFormat.HTML }?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
@@ -265,7 +266,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
-                            formattedCaption = type.formattedCaption?.body,
+                            htmlCaption = type.formattedCaption?.takeIf { it.format == MessageFormat.HTML }?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
@@ -289,7 +290,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
-                            formattedCaption = type.formattedCaption?.body,
+                            htmlCaption = type.formattedCaption?.takeIf { it.format == MessageFormat.HTML }?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
@@ -313,7 +314,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
-                            formattedCaption = type.formattedCaption?.body,
+                            htmlCaption = type.formattedCaption?.takeIf { it.format == MessageFormat.HTML }?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
