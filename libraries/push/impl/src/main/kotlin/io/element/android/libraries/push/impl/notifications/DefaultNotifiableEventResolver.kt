@@ -158,7 +158,8 @@ class DefaultNotifiableEventResolver(
         userId: SessionId,
         otherSessionUserIds: Set<UserId>,
     ): Result<ResolvedPushEvent> = runCatchingExceptions {
-        if (content.senderIdOrNull() in otherSessionUserIds) {
+        val canReceiveNotificationsFromOtherSignedInAccounts = featureFlagService.isFeatureEnabled(FeatureFlags.ReceiveNotificationsFromOtherSignedInAccounts)
+        if (!canReceiveNotificationsFromOtherSignedInAccounts && content.senderIdOrNull() in otherSessionUserIds) {
             throw NotificationResolverException.EventFilteredOut
         }
         when (val content = this.content) {
