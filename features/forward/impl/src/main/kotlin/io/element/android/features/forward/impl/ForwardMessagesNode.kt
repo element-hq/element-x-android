@@ -34,6 +34,8 @@ import io.element.android.libraries.roomselect.api.RoomSelectEntryPoint
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.parcelize.Parcelize
 
+private const val MAX_NUMBER_OF_ROOMS = 5
+
 @ContributesNode(SessionScope::class)
 @AssistedInject
 class ForwardMessagesNode(
@@ -85,7 +87,7 @@ class ForwardMessagesNode(
             params = RoomSelectEntryPoint.Params(
                 sessionId = sessionId,
                 mode = RoomSelectMode.Forward(fromRoomId = inputs.fromRoomId),
-                maxNumberOfRooms = RoomSelectEntryPoint.DEFAULT_MAX_NUMBER_OF_ROOMS,
+                maxNumberOfRooms = MAX_NUMBER_OF_ROOMS,
             ),
             callback = callback,
         )
