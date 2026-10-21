@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -44,7 +43,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
-import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
  * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=1294-7832
@@ -62,7 +60,7 @@ fun AccountSelectView(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                titleStr = stringResource(CommonStrings.common_select_account),
+                title = {},
                 navigationIcon = {
                     BackButton(onClick = { onDismiss() })
                 },
