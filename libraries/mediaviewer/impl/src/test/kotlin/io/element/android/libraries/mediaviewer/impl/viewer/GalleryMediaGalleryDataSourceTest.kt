@@ -286,6 +286,7 @@ class GalleryMediaGalleryDataSourceTest {
         filename = filename,
         fileSize = null,
         caption = "A caption",
+        htmlCaption = null,
         mimeType = mimeType,
         formattedFileSize = "",
         fileExtension = filename.substringAfterLast('.', ""),
