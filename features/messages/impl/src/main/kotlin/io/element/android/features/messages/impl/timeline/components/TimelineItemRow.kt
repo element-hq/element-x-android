@@ -34,7 +34,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -107,7 +109,6 @@ internal fun TimelineItemRow(
         },
 ) {
     val isSelectionModeActive = selectionData.isSelectionModeActive
-    val selectionProgress = selectionData.progress
     val isSelected = selectionData.isSelected
     val backgroundModifier = when {
         timelineItem.isEvent(focusedEventId) && !isSelectionModeActive -> {
@@ -157,12 +158,15 @@ internal fun TimelineItemRow(
                 )
             },
             {
-                if (selectableEvent != null && selectionProgress > 0f) {
+                // Selection mode is the only state in which an event can be selected, so canBeSelected alone gates the indicator.
+                if (selectableEvent != null) {
                     val slideSign = if (layoutDirection == LayoutDirection.Ltr) -1f else 1f
+                    val selectionProgress = selectionData.progress
                     SelectionIndicator(
                         selected = isSelected,
                         modifier = Modifier
-                            .graphicsLayer { translationX = slideSign * SELECTION_COLUMN_WIDTH.toPx() * (1f - selectionProgress) }
+                            // Read inside the layer block, so the indicator slides in the draw phase without recomposing the row.
+                            .graphicsLayer { translationX = slideSign * SELECTION_COLUMN_WIDTH.toPx() * (1f - selectionProgress()) }
                             .padding(start = 16.dp)
                             .size(24.dp),
                     )
@@ -282,7 +286,13 @@ private fun TimelineItemRowContent(
                         val isSelectionToggle = selectionData.isSelectionModeActive && selectionData.canBeSelected
                         // Only start-aligned message bubbles slide to make room for the selection indicator. Outgoing (own) messages are end-aligned,
                         // opposite the indicator, so they already have room, and the centered tiles handled by the branches above never slide.
-                        val contentSlide = if (timelineItem.isMine) 0.dp else SELECTION_COLUMN_WIDTH * selectionData.progress
+                        // The progress is read from inside the lambda, so the slide is resolved in the layout phase, on every layout pass.
+                        val selectionProgress = selectionData.progress
+                        val contentSlide: Density.() -> IntOffset = if (timelineItem.isMine) {
+                            NoSelectionOffset
+                        } else {
+                            { IntOffset(x = (SELECTION_COLUMN_WIDTH * selectionProgress()).roundToPx(), y = 0) }
+                        }
                         TimelineItemEventRow(
                             modifier = Modifier
                                 .semantics(mergeDescendants = true) {

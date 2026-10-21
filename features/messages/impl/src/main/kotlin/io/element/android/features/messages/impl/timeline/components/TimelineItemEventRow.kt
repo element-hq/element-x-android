@@ -60,7 +60,7 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
@@ -160,6 +160,9 @@ val SENDER_AVATAR_BORDER_WIDTH = 3.dp
 
 private val BUBBLE_INCOMING_OFFSET = 16.dp
 
+/** Shared instance so that rows which never slide keep comparing equal, and keep skipping. */
+internal val NoSelectionOffset: Density.() -> IntOffset = { IntOffset.Zero }
+
 @Composable
 fun TimelineItemEventRow(
     event: TimelineItem.Event,
@@ -184,8 +187,9 @@ fun TimelineItemEventRow(
     modifier: Modifier = Modifier,
     // Horizontal offset by which selection mode slides this row's content aside, to make room for the tick. It is applied here, to the message and the
     // thread summary, rather than to the row as a whole: that keeps the row's accessibility node spanning the whole row, tick included, so that a
-    // screen reader can focus it from anywhere on the row. The read receipts are anchored to the end edge and stay pinned, so they are not slid.
-    selectionContentOffset: Dp = 0.dp,
+    // screen reader can focus it from anywhere on the row. The read receipts live outside it, anchored to the end edge, so they stay pinned.
+    // It is resolved in the layout phase, so that the animated slide does not need a recomposition to be applied.
+    selectionContentOffset: Density.() -> IntOffset = NoSelectionOffset,
     isSelectionToggle: Boolean = false,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
         // Only pass down a custom clickable lambda if the content can be clicked separately
@@ -253,7 +257,7 @@ fun TimelineItemEventRow(
                 Box(
                     Modifier
                         .fillMaxWidth()
-                        .offset(x = selectionContentOffset)
+                        .offset(selectionContentOffset)
                 ) {
                     Row(modifier = Modifier.matchParentSize()) {
                         ReplySwipeIndicator({ offset / 120 })
@@ -293,7 +297,7 @@ fun TimelineItemEventRow(
             }
         } else {
             TimelineItemEventRowContent(
-                modifier = Modifier.offset(x = selectionContentOffset),
+                modifier = Modifier.offset(selectionContentOffset),
                 event = event,
                 timelineMode = timelineMode,
                 timelineProtectionState = timelineProtectionState,
@@ -321,7 +325,7 @@ fun TimelineItemEventRow(
                     if (timelineRoomInfo.isDm) Modifier else Modifier.padding(start = 16.dp)
                 }
                     .padding(top = 2.dp)
-                    .offset(x = selectionContentOffset)
+                    .offset(selectionContentOffset)
                     .hiddenFromAccessibilityWhile(isSelectionToggle),
                 threadSummary = event.threadInfo.summary,
                 latestEventText = event.threadInfo.latestEventText,
@@ -343,7 +347,7 @@ fun TimelineItemEventRow(
                 receipts = event.readReceiptState.receipts,
             ),
             onReadReceiptsClick = { onReadReceiptClick(event) },
-            // Counter the selection-mode content slide so the end-anchored read receipts stay pinned.
+            // Not slid: the read receipts sit outside the slid content, so they stay pinned to the end edge in selection mode.
             modifier = Modifier
                 .padding(top = 4.dp)
                 .hiddenFromAccessibilityWhile(isSelectionToggle)
