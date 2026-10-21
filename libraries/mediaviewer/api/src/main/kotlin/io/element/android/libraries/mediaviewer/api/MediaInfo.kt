@@ -34,7 +34,7 @@ data class AvatarInfo(
 data class MediaInfo(
     val filename: String,
     val caption: String?,
-    val htmlCaption: String? = null,
+    val htmlCaption: String?,
     val mimeType: String,
     val fileSize: Long?,
     val formattedFileSize: String,

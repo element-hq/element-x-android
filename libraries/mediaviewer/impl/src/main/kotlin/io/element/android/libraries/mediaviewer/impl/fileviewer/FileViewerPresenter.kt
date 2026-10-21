@@ -97,6 +97,7 @@ class FileViewerPresenter(
             info = MediaInfo(
                 filename = params.filename,
                 caption = null,
+                htmlCaption = null,
                 mimeType = params.mimeType,
                 fileSize = file.length(),
                 formattedFileSize = fileSizeFormatter.format(file.length()),

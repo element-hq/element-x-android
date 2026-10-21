@@ -47,6 +47,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessag
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
@@ -135,7 +136,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
-                    htmlCaption = messageType.formattedCaption?.body,
+                    htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
@@ -160,7 +161,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
-                    htmlCaption = messageType.formattedCaption?.body,
+                    htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     thumbnailSource = messageType.info?.thumbnailSource,
@@ -203,7 +204,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
-                    htmlCaption = messageType.formattedCaption?.body,
+                    htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
                     isEdited = content.isEdited,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mediaSource = messageType.source,
@@ -228,7 +229,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
-                    htmlCaption = messageType.formattedCaption?.body,
+                    htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     duration = messageType.info?.duration ?: Duration.ZERO,
@@ -247,7 +248,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
-                    htmlCaption = messageType.formattedCaption?.body,
+                    htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
                     isEdited = content.isEdited,
                     mediaSource = messageType.source,
                     duration = messageType.info?.duration ?: Duration.ZERO,
@@ -267,7 +268,7 @@ class TimelineItemContentMessageFactory(
                     fileSize = messageType.info?.size ?: 0,
                     caption = messageType.caption?.trimEnd(),
                     formattedCaption = formattedCaption,
-                    htmlCaption = messageType.formattedCaption?.body,
+                    htmlCaption = messageType.formattedCaption?.body?.takeIf { messageType.formattedCaption?.format == MessageFormat.HTML },
                     isEdited = content.isEdited,
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mediaSource = messageType.source,
@@ -365,7 +366,7 @@ class TimelineItemContentMessageFactory(
                         body = messageType.body,
                         caption = messageType.body.trimEnd().takeIf { it.isNotEmpty() },
                         formattedCaption = formattedCaption,
-                        htmlCaption = messageType.formatted?.body,
+                        htmlCaption = messageType.formatted?.body?.takeIf { messageType.formatted?.format == MessageFormat.HTML },
                         isEdited = content.isEdited,
                         items = galleryItems.toImmutableList(),
                     )
@@ -423,7 +424,7 @@ class TimelineItemContentMessageFactory(
                         body = messageType.body,
                         caption = messageType.body.trimEnd().takeIf { it.isNotEmpty() },
                         formattedCaption = formattedCaption,
-                        htmlCaption = messageType.formatted?.body,
+                        htmlCaption = messageType.formatted?.body?.takeIf { messageType.formatted?.format == MessageFormat.HTML },
                         isEdited = content.isEdited,
                         attachments = attachments.toImmutableList(),
                     )
