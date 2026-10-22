@@ -12,6 +12,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.hasJoined
 import io.element.android.libraries.sessionstorage.api.SessionStore
 
 /**
@@ -32,9 +33,7 @@ class DefaultRoomSharedWithOtherAccountChecker(
             .filter { it != sessionId }
             .any { otherSessionId ->
                 matrixClientProvider.getOrRestore(otherSessionId).getOrNull()
-                    ?.getJoinedRoomIds()
-                    ?.getOrNull()
-                    ?.contains(roomId)
+                    ?.hasJoined(roomId)
                     ?: false
             }
     }
