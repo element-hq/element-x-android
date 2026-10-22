@@ -9,12 +9,15 @@
 package io.element.android.features.messages.impl
 
 import android.os.Parcelable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.children.nodeOrNull
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -64,8 +67,9 @@ import io.element.android.features.messages.impl.timeline.model.event.duration
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.androidutils.system.DeviceHasVulkanSupport
-import io.element.android.libraries.architecture.BackstackWithOverlayBox
+import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.OverlayView
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.Overlay
@@ -75,6 +79,9 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
+import io.element.android.libraries.designsystem.components.async.AsyncIndicator
+import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
+import io.element.android.libraries.designsystem.components.async.AsyncIndicatorState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -100,6 +107,7 @@ import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpanUpdater
+import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
@@ -217,6 +225,7 @@ class MessagesFlowNode(
     }
 
     private val callback: MessagesEntryPoint.Callback = callback()
+    private val asyncIndicatorState = AsyncIndicatorState()
 
     private var displayVulkanNotSupportedError by mutableStateOf(false)
 
@@ -478,8 +487,17 @@ class MessagesFlowNode(
                             exitSelectionMode()
                         }
                         backstack.pop()
-                        roomIds.singleOrNull()?.let { roomId ->
-                            callback.navigateToRoom(roomId)
+                        val singleRoomId = roomIds.singleOrNull()
+                        when {
+                            singleRoomId != null -> callback.navigateToRoom(singleRoomId)
+                            roomIds.isNotEmpty() -> {
+                                val numberOfMessages = navTarget.eventIds.size
+                                asyncIndicatorState.enqueue(durationMs = AsyncIndicator.DURATION_SHORT) {
+                                    AsyncIndicator.Custom(
+                                        text = pluralStringResource(CommonPlurals.screen_room_messages_forwarded, numberOfMessages, numberOfMessages),
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -968,7 +986,11 @@ class MessagesFlowNode(
         CompositionLocalProvider(
             LocalMentionSpanUpdater provides mentionSpanUpdater
         ) {
-            BackstackWithOverlayBox(modifier)
+            Box(modifier = modifier) {
+                BackstackView()
+                OverlayView()
+                AsyncIndicatorHost(modifier = Modifier.statusBarsPadding(), state = asyncIndicatorState)
+            }
         }
     }
 }
