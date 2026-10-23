@@ -411,8 +411,8 @@ class JoinedRustRoom(
         }
     }
 
-    override suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit> {
-        return runCatchingExceptions {
+    override suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit> = withContext(roomDispatcher) {
+        runCatchingExceptions {
             val powerLevelChanges = changes.map { UserPowerLevelUpdate(it.userId.value, it.powerLevel) }
             innerRoom.updatePowerLevelsForUsers(powerLevelChanges)
         }
