@@ -760,10 +760,12 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun clearCache(): Unit = withContext(sessionDispatcher) {
-        _isShuttingDown.set(true)
-        innerClient.clearCaches(innerSyncService)
-        destroy()
+    override suspend fun clearCache() {
+        withContext(sessionDispatcher) {
+            _isShuttingDown.set(true)
+            innerClient.clearCaches(innerSyncService)
+            destroy()
+        }
     }
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {
