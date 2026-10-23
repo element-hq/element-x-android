@@ -7,7 +7,7 @@
  */
 
 plugins {
-    id("io.element.android-compose-library")
+    id("io.element.android-library")
     id("kotlin-parcelize")
 }
 
