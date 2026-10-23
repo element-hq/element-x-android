@@ -126,7 +126,7 @@ fun WaveformPlaybackView(
         seekGeneration = seekGeneration,
         referenceProgress = referenceProgress,
         progressAnimated = progressAnimated,
-        onDisableAnimations = { animationsEnabled = false },
+        onUpdateAnimationState = { animationsEnabled = it },
     )
 
     val progress = seekProgress.value ?: progressAnimated.value
@@ -292,7 +292,8 @@ private fun ApplyPlayerProgressToCursor(
  * (after a snap or user seek) or [referenceProgress] (new player sample) restarts the tween.
  *
  * The tween runs in real time, ignoring the system animator duration scale, since the cursor tracks
- * the audio. If the system disables animations, no tween is run and [onDisableAnimations] is called.
+ * the audio. If the system disables animations, no tween is run. [onUpdateAnimationState] is called with
+ * the current state each time the effect runs, so that animations are re-enabled at the next player sample.
  *
  * @param isPlaying Whether media is currently playing. Animation only runs while this is true.
  * @param durationMs Total media duration in milliseconds. Must be `> 0` to animate.
@@ -300,7 +301,7 @@ private fun ApplyPlayerProgressToCursor(
  * @param seekGeneration Counter incremented when the cursor jumps, used to restart this effect.
  * @param referenceProgress Latest player progress (or seek target), from 0 to 1, used to time the tween.
  * @param progressAnimated Animated cursor progress, tweened toward `1`.
- * @param onDisableAnimations Called when the system has disabled animations.
+ * @param onUpdateAnimationState Called with whether the system currently allows animations.
  */
 @Composable
 private fun AnimateCursorWhilePlaying(
@@ -310,14 +311,13 @@ private fun AnimateCursorWhilePlaying(
     seekGeneration: Int,
     referenceProgress: Float,
     progressAnimated: Animatable<Float, AnimationVector1D>,
-    onDisableAnimations: () -> Unit,
+    onUpdateAnimationState: (Boolean) -> Unit,
 ) {
-    val latestOnDisableAnimations by rememberUpdatedState(onDisableAnimations)
+    val latestOnUpdateAnimationState by rememberUpdatedState(onUpdateAnimationState)
     LaunchedEffect(isPlaying, durationMs, playbackSpeed, seekGeneration, referenceProgress) {
-        if (coroutineContext[MotionDurationScale]?.scaleFactor == 0f) {
-            latestOnDisableAnimations()
-            return@LaunchedEffect
-        }
+        val animationsEnabled = coroutineContext[MotionDurationScale]?.scaleFactor != 0f
+        latestOnUpdateAnimationState(animationsEnabled)
+        if (!animationsEnabled) return@LaunchedEffect
         if (isPlaying && durationMs > 0L) {
             val remainingMs = remainingPlaybackAnimationMs(
                 progress = referenceProgress,
