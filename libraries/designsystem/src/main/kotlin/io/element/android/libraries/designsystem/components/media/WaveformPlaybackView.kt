@@ -143,7 +143,7 @@ fun WaveformPlaybackView(
 
     val density = LocalDensity.current
     val waveformWidthPx by remember {
-        derivedStateOf { with(density) { normalizedWaveformData.size * (lineWidth + linePadding).roundToPx().toFloat() } }
+        derivedStateOf { with(density) { normalizedWaveformData.size * (lineWidth + linePadding).toPx() } }
     }
 
     val requestDisallowInterceptTouchEvent = remember { RequestDisallowInterceptTouchEvent() }
@@ -158,6 +158,8 @@ fun WaveformPlaybackView(
                         action = e.action,
                         x = e.x,
                         waveformWidthPx = waveformWidthPx,
+                        lineWidthPx = with(density) { lineWidth.toPx() },
+                        linePaddingPx = with(density) { linePadding.toPx() },
                         currentSeekProgress = seekProgress.value,
                         onDisallowParentIntercept = { requestDisallowInterceptTouchEvent.invoke(it) },
                         onUpdateSeekProgress = { seekProgress.value = it },
@@ -189,7 +191,7 @@ fun WaveformPlaybackView(
         drawRect(
             brush = progressBrush,
             size = Size(
-                width = progress * waveformWidthPx,
+                width = progress.coerceIn(0f, 1f) * waveformWidthPx,
                 height = canvasSizePx.height
             ),
             blendMode = BlendMode.SrcAtop
@@ -198,7 +200,12 @@ fun WaveformPlaybackView(
             drawRoundRect(
                 brush = cursorBrush,
                 topLeft = Offset(
-                    x = progress * waveformWidthPx,
+                    x = cursorOffsetPx(
+                        progress = progress,
+                        waveformWidthPx = waveformWidthPx,
+                        lineWidthPx = lineWidth.toPx(),
+                        linePaddingPx = linePadding.toPx(),
+                    ),
                     y = 1f
                 ),
                 size = Size(
