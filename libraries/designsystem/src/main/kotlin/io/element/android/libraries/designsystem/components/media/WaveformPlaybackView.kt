@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -49,6 +51,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
@@ -94,6 +97,10 @@ fun WaveformPlaybackView(
     var canvasSize by remember { mutableStateOf(DpSize(0.dp, 0.dp)) }
     var canvasSizePx by remember { mutableStateOf(Size(0f, 0f)) }
     val progressAnimated = remember { Animatable(playbackProgress) }
+    // Latest player progress applied to the cursor (or the seek target), used to time the linear animation.
+    var referenceProgress by remember { mutableFloatStateOf(playbackProgress) }
+    // False when the system disables animations; the cursor then follows player samples only.
+    var animationsEnabled by remember { mutableStateOf(true) }
     // Bumped after a snap or user seek so AnimateCursorWhilePlaying restarts its tween.
     var seekGeneration by remember { mutableIntStateOf(0) }
     val coroutineScope = rememberCoroutineScope()
@@ -106,7 +113,9 @@ fun WaveformPlaybackView(
         pendingSeek = pendingSeek,
         seekProgress = seekProgress,
         progressAnimated = progressAnimated,
+        animationsEnabled = animationsEnabled,
         onAcknowledgePendingSeek = { pendingSeek = null },
+        onApplyPlayerProgress = { referenceProgress = it },
         onCursorSnap = { seekGeneration++ },
     )
 
@@ -115,7 +124,9 @@ fun WaveformPlaybackView(
         durationMs = durationMs,
         playbackSpeed = playbackSpeed,
         seekGeneration = seekGeneration,
+        referenceProgress = referenceProgress,
         progressAnimated = progressAnimated,
+        onUpdateAnimationState = { animationsEnabled = it },
     )
 
     val progress = seekProgress.value ?: progressAnimated.value
@@ -132,7 +143,7 @@ fun WaveformPlaybackView(
 
     val density = LocalDensity.current
     val waveformWidthPx by remember {
-        derivedStateOf { with(density) { normalizedWaveformData.size * (lineWidth + linePadding).roundToPx().toFloat() } }
+        derivedStateOf { with(density) { normalizedWaveformData.size * (lineWidth + linePadding).toPx() } }
     }
 
     val requestDisallowInterceptTouchEvent = remember { RequestDisallowInterceptTouchEvent() }
@@ -147,11 +158,14 @@ fun WaveformPlaybackView(
                         action = e.action,
                         x = e.x,
                         waveformWidthPx = waveformWidthPx,
+                        lineWidthPx = with(density) { lineWidth.toPx() },
+                        linePaddingPx = with(density) { linePadding.toPx() },
                         currentSeekProgress = seekProgress.value,
                         onDisallowParentIntercept = { requestDisallowInterceptTouchEvent.invoke(it) },
                         onUpdateSeekProgress = { seekProgress.value = it },
                         onCommitSeek = { seek ->
                             pendingSeek = seek
+                            referenceProgress = seek
                             onSeek(seek)
                             coroutineScope.launch {
                                 progressAnimated.snapTo(seek)
@@ -177,7 +191,7 @@ fun WaveformPlaybackView(
         drawRect(
             brush = progressBrush,
             size = Size(
-                width = progress * waveformWidthPx,
+                width = progress.coerceIn(0f, 1f) * waveformWidthPx,
                 height = canvasSizePx.height
             ),
             blendMode = BlendMode.SrcAtop
@@ -186,7 +200,12 @@ fun WaveformPlaybackView(
             drawRoundRect(
                 brush = cursorBrush,
                 topLeft = Offset(
-                    x = progress * waveformWidthPx,
+                    x = cursorOffsetPx(
+                        progress = progress,
+                        waveformWidthPx = waveformWidthPx,
+                        lineWidthPx = lineWidth.toPx(),
+                        linePaddingPx = linePadding.toPx(),
+                    ),
                     y = 1f
                 ),
                 size = Size(
@@ -214,7 +233,9 @@ fun WaveformPlaybackView(
  * @param pendingSeek Target progress of an in-flight user seek, or `null` if none.
  * @param seekProgress Progress while the user is dragging the cursor; non-null means a drag is in progress.
  * @param progressAnimated Animated cursor progress.
+ * @param animationsEnabled Whether the cursor is animated between samples. If not, every sample is applied immediately.
  * @param onAcknowledgePendingSeek Called when a player sample has caught up to [pendingSeek].
+ * @param onApplyPlayerProgress Called with each player sample that is applied to the cursor.
  * @param onCursorSnap Called after the cursor jumps, so the playing animation can restart from the new position.
  */
 @Composable
@@ -226,12 +247,15 @@ private fun ApplyPlayerProgressToCursor(
     pendingSeek: Float?,
     seekProgress: State<Float?>,
     progressAnimated: Animatable<Float, AnimationVector1D>,
+    animationsEnabled: Boolean,
     onAcknowledgePendingSeek: () -> Unit,
+    onApplyPlayerProgress: (Float) -> Unit,
     onCursorSnap: () -> Unit,
 ) {
     val latestOnAcknowledgePendingSeek by rememberUpdatedState(onAcknowledgePendingSeek)
+    val latestOnApplyPlayerProgress by rememberUpdatedState(onApplyPlayerProgress)
     val latestOnCursorSnap by rememberUpdatedState(onCursorSnap)
-    LaunchedEffect(playbackProgress, isPlaying, durationMs, playbackSpeed, pendingSeek) {
+    LaunchedEffect(playbackProgress, isPlaying, durationMs, playbackSpeed, pendingSeek, animationsEnabled) {
         if (seekProgress.value != null) return@LaunchedEffect
         if (!shouldApplyPlayerProgress(
                 playbackProgress = playbackProgress,
@@ -243,10 +267,11 @@ private fun ApplyPlayerProgressToCursor(
             return@LaunchedEffect
         }
         latestOnAcknowledgePendingSeek()
+        latestOnApplyPlayerProgress(playbackProgress)
         if (shouldSnapToPlayer(
                 playbackProgress = playbackProgress,
                 animatedProgress = progressAnimated.value,
-                isPlaying = isPlaying,
+                isPlaying = isPlaying && animationsEnabled,
                 durationMs = durationMs,
                 playbackSpeed = playbackSpeed,
             )
@@ -261,14 +286,22 @@ private fun ApplyPlayerProgressToCursor(
  * Animates the cursor linearly from its current position to the end of the media.
  *
  * Player samples are relatively infrequent, so between them we interpolate using the remaining
- * duration and [playbackSpeed]. Changing [seekGeneration] (after a snap or user seek) cancels
- * the current tween and starts a new one from the updated cursor position.
+ * duration and [playbackSpeed]. The tween duration is computed from [referenceProgress] (the player
+ * position) rather than from the cursor, so a cursor ahead of the player slows down and a cursor
+ * behind speeds up, and it never reaches the end before the media does. Changing [seekGeneration]
+ * (after a snap or user seek) or [referenceProgress] (new player sample) restarts the tween.
+ *
+ * The tween runs in real time, ignoring the system animator duration scale, since the cursor tracks
+ * the audio. If the system disables animations, no tween is run. [onUpdateAnimationState] is called with
+ * the current state each time the effect runs, so that animations are re-enabled at the next player sample.
  *
  * @param isPlaying Whether media is currently playing. Animation only runs while this is true.
  * @param durationMs Total media duration in milliseconds. Must be `> 0` to animate.
  * @param playbackSpeed Current playback rate (`1` = realtime). Faster speeds shorten the tween.
  * @param seekGeneration Counter incremented when the cursor jumps, used to restart this effect.
+ * @param referenceProgress Latest player progress (or seek target), from 0 to 1, used to time the tween.
  * @param progressAnimated Animated cursor progress, tweened toward `1`.
+ * @param onUpdateAnimationState Called with whether the system currently allows animations.
  */
 @Composable
 private fun AnimateCursorWhilePlaying(
@@ -276,25 +309,40 @@ private fun AnimateCursorWhilePlaying(
     durationMs: Long,
     playbackSpeed: Float,
     seekGeneration: Int,
+    referenceProgress: Float,
     progressAnimated: Animatable<Float, AnimationVector1D>,
+    onUpdateAnimationState: (Boolean) -> Unit,
 ) {
-    LaunchedEffect(isPlaying, durationMs, playbackSpeed, seekGeneration) {
+    val latestOnUpdateAnimationState by rememberUpdatedState(onUpdateAnimationState)
+    LaunchedEffect(isPlaying, durationMs, playbackSpeed, seekGeneration, referenceProgress) {
+        val animationsEnabled = coroutineContext[MotionDurationScale]?.scaleFactor != 0f
+        latestOnUpdateAnimationState(animationsEnabled)
+        if (!animationsEnabled) return@LaunchedEffect
         if (isPlaying && durationMs > 0L) {
             val remainingMs = remainingPlaybackAnimationMs(
-                progress = progressAnimated.value,
+                progress = referenceProgress,
                 durationMs = durationMs,
                 playbackSpeed = playbackSpeed,
             )
             if (remainingMs == 0) {
                 progressAnimated.snapTo(1f)
             } else {
-                progressAnimated.animateTo(
-                    targetValue = 1f,
-                    animationSpec = tween(durationMillis = remainingMs, easing = LinearEasing),
-                )
+                withContext(RealTimeMotionDurationScale) {
+                    progressAnimated.animateTo(
+                        targetValue = 1f,
+                        animationSpec = tween(durationMillis = remainingMs, easing = LinearEasing),
+                    )
+                }
             }
         }
     }
+}
+
+/**
+ * Makes the cursor animation run in real time, whatever the system animator duration scale is.
+ */
+private object RealTimeMotionDurationScale : MotionDurationScale {
+    override val scaleFactor: Float = 1f
 }
 
 @PreviewsDayNight

@@ -83,6 +83,19 @@ class WaveformPlaybackViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `playing cursor is re-timed when the player lags behind`() = runAndroidComposeUiTest {
+        val playbackProgress = mutableFloatStateOf(0.5f)
+        setWaveformPlaybackView(
+            playbackProgress = { playbackProgress.value },
+            isPlaying = true,
+            durationMs = 10_000L,
+        )
+        mainClock.advanceTimeBy(2_000L)
+        playbackProgress.value = 0.6f
+        waitForIdle()
+    }
+
+    @Test
     fun `an empty waveform still renders with a cursor`() = runAndroidComposeUiTest {
         setWaveformPlaybackView(
             waveform = persistentListOf(),
