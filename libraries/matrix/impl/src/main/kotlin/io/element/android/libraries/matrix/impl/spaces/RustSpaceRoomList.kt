@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import uniffi.matrix_sdk_ui.SpaceRoomListPaginationState
 import java.util.Optional
@@ -32,6 +34,7 @@ class RustSpaceRoomList(
     override val spaceId: RoomId,
     private val innerProvider: suspend () -> InnerSpaceRoomList,
     private val coroutineScope: CoroutineScope,
+    private val dispatcher: CoroutineDispatcher,
     spaceRoomMapper: SpaceRoomMapper,
     private val analyticsService: AnalyticsService,
 ) : SpaceRoomList {
@@ -75,14 +78,14 @@ class RustSpaceRoomList(
         }
     }
 
-    override suspend fun paginate(): Result<Unit> {
-        return runCatchingExceptions {
+    override suspend fun paginate(): Result<Unit> = withContext(dispatcher) {
+        runCatchingExceptions {
             innerCompletable.await().paginate()
         }
     }
 
-    override suspend fun reset(): Result<Unit> {
-        return runCatchingExceptions {
+    override suspend fun reset(): Result<Unit> = withContext(dispatcher) {
+        runCatchingExceptions {
             innerCompletable.await().reset()
         }
     }
