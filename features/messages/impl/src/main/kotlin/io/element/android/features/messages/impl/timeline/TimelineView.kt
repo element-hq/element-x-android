@@ -188,10 +188,13 @@ fun TimelineView(
     val isSelectionModeActive = state.isSelectionModeActive
     // Animate once here (shared by every row) rather than per-row: the value is identical for all
     // rows since it only depends on the timeline-wide selection mode.
-    val selectionProgress by animateFloatAsState(
+    val selectionProgress = animateFloatAsState(
         targetValue = if (isSelectionModeActive) 1f else 0f,
         label = "selectionProgress",
     )
+    // Hand the rows a reader rather than the value: they read it when they lay out and draw, so a frame of the animation does not recompose every
+    // visible row, and the slide cannot desynchronise from the indicator.
+    val selectionProgressProvider = remember(selectionProgress) { { selectionProgress.value } }
     fun onToggleSelection(event: TimelineItem.Event) {
         val eventId = event.eventId ?: return
         state.eventSink(TimelineEvent.ToggleSelection(eventId))
@@ -231,7 +234,7 @@ fun TimelineView(
                             displayThreadSummaries = state.displayThreadSummaries,
                             selectionData = TimelineItemSelectionData(
                                 isSelectionModeActive = isSelectionModeActive,
-                                progress = selectionProgress,
+                                progress = selectionProgressProvider,
                                 isSelected = state.isSelected(timelineItem),
                                 canBeSelected = state.canSelect(timelineItem),
                             ),

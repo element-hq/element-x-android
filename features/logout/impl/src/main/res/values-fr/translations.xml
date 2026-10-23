@@ -10,9 +10,12 @@
   <string name="screen_signout_key_backup_offline_title">"Vos clés sont en cours de sauvegarde"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Veuillez attendre que cela se termine avant de supprimer cet appareil."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Vos clés sont en cours de sauvegarde"</string>
+  <string name="screen_signout_other_verified_device_dialog_content">"Assurez-vous de toujours avoir accès à un autre appareil vérifié ou à votre clé de récupération afin d’éviter de perdre l’historique de vos discussions chiffrées."</string>
+  <string name="screen_signout_other_verified_device_dialog_title">"Êtes-vous sûr de vouloir supprimer cet appareil ?"</string>
   <string name="screen_signout_preference_item">"Supprimer cet appareil"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"Il s’agit de votre seul appareil. Si vous le supprimer, vous aurez besoin d’une clé de récupération pour confirmer votre identité numérique et restaurer vos conversations chiffrées lors de votre prochaine connexion."</string>
   <string name="screen_signout_recovery_disabled_title">"Vous êtes sur le point de perdre l’accès à vos conversations chiffrées."</string>
+  <string name="screen_signout_save_recovery_key_action_continue">"Continuez la suppression de cet appareil"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Il s’agit de votre seul appareil. Si vous le supprimer, vous aurez besoin d’une clé de récupération pour confirmer votre identité numérique et restaurer vos conversations chiffrées lors de votre prochaine connexion."</string>
   <string name="screen_signout_save_recovery_key_title">"Assurez-vous d’avoir accès à votre clé de récupération avant de supprimer cet appareil."</string>
 </resources>

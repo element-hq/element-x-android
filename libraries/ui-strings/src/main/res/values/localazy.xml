@@ -510,7 +510,8 @@ Are you sure you want to continue?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"The max file size allowed is: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Select the quality of the video you want to upload."</string>
   <string name="dialog_video_quality_selector_title">"Select video upload quality"</string>
-  <string name="error_account_already_logged_in">"You\'re already logged in on this device as %1$s."</string>
+  <string name="error_account_already_logged_in">"You’re already signed in as %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Duplicate sign-in"</string>
   <string name="error_account_creation_not_possible">"Your account provider needs to be upgraded to support Matrix Authentication Service and account creation."</string>
   <string name="error_failed_creating_the_permalink">"Failed creating the permalink"</string>
   <string name="error_failed_loading_map">"%1$s could not load the map. Please try again later."</string>
@@ -558,14 +559,6 @@ Are you sure you want to continue?"</string>
     <item quantity="other">"%1$d Pinned messages"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Pinned messages"</string>
-  <string name="screen_ptt_settings_battery_optimization">"Ignore battery optimisation"</string>
-  <string name="screen_ptt_settings_battery_optimization_description">"Stay active in background"</string>
-  <string name="screen_ptt_settings_covert_mode">"Covert mode"</string>
-  <string name="screen_ptt_settings_covert_mode_description">"Mute all channels"</string>
-  <string name="screen_ptt_settings_lock_screen">"Show on lock screen"</string>
-  <string name="screen_ptt_settings_lock_screen_description">"Access from the lock screen"</string>
-  <string name="screen_ptt_settings_system_overlay">"Enable system overlay"</string>
-  <string name="screen_ptt_settings_system_overlay_description">"Access a floating action button"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"You\'re about to go to your %1$s account to reset your digital identity. Afterwards you\'ll be taken back to the app."</string>
   <string name="screen_reset_identity_confirmation_title">"Can\'t confirm? Go to your account to reset your digital identity."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Withdraw verification and send"</string>
@@ -598,6 +591,12 @@ Are you sure you want to continue?"</string>
     <item quantity="other">"%1$d messages selected"</item>
   </plurals>
   <string name="screen_room_title">"Chat"</string>
+  <string name="screen_search_empty_state_message">"Search for chats and messages"</string>
+  <string name="screen_search_empty_state_title">"Start searching"</string>
+  <string name="screen_search_no_results_message">"There are no results for “%1$@.” Try a new search term."</string>
+  <string name="screen_search_recent_searches">"Recent searches"</string>
+  <string name="screen_search_tab_chats">"Chats"</string>
+  <string name="screen_search_tab_messages">"Messages"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>

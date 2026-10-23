@@ -77,6 +77,8 @@ class FakeFfiClient(
     private val runSearchBackfillResult: (SearchBackfillStrategy) -> TaskHandle = { lambdaError() },
     private val closeResult: () -> Unit = {},
     private val setDelegateResult: (ClientDelegate?) -> Unit = {},
+    private val ignoredUsersResult: () -> List<String> = { emptyList() },
+    private val subscribeToIgnoredUsersResult: (IgnoredUsersListener) -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
@@ -109,11 +111,10 @@ class FakeFfiClient(
     override suspend fun clearCaches(syncService: SyncService?) = simulateLongTask { clearCachesResult() }
     override suspend fun setUtdDelegate(utdDelegate: UnableToDecryptDelegate) = withUtdHook(utdDelegate)
     override suspend fun getSessionVerificationController(): SessionVerificationController = FakeFfiSessionVerificationController()
-    override suspend fun ignoredUsers(): List<String> {
-        return emptyList()
-    }
+    override suspend fun ignoredUsers(): List<String> = simulateLongTask { ignoredUsersResult() }
 
     override fun subscribeToIgnoredUsers(listener: IgnoredUsersListener): TaskHandle {
+        subscribeToIgnoredUsersResult(listener)
         return FakeFfiTaskHandle()
     }
 

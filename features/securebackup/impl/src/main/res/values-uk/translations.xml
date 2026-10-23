@@ -46,7 +46,12 @@
   <string name="screen_encryption_reset_bullet_1">"Дані вашого облікового запису, контакти, налаштування й бесіди будуть збережені"</string>
   <string name="screen_encryption_reset_bullet_2">"Ви втратите свою наявну історію повідомлень"</string>
   <string name="screen_encryption_reset_bullet_3">"Інші користувачі побачать, що вашу цифрову ідентичність було скинуто"</string>
+  <string name="screen_encryption_reset_bullet_4">"Всі пристрої, на яких ви ввійшли, потребуватимуть повторного підтвердження"</string>
   <string name="screen_encryption_reset_footer">"Скидайте свою цифрову ідентичність лише якщо у вас немає доступу до іншого звіреного пристрою та ключа відновлення."</string>
+  <string name="screen_encryption_reset_no_chats_message">"Схоже, у вас ще немає чатів. Якщо це так, ви можете сміливо скинути свою цифрову ідентичність."</string>
+  <string name="screen_encryption_reset_no_options_subtitle">"У вас немає доступу до інших звірених пристроїв або ключа відновлення, тому вам доведеться скинути свою цифрову ідентичність, щоб продовжити користуватися застосунком."</string>
+  <string name="screen_encryption_reset_no_options_title">"Вам потрібно скинути налаштування вашої цифрової ідентичності"</string>
+  <string name="screen_encryption_reset_subtitle">"Якщо у вас немає доступу до інших звірених пристроїв і ви не маєте ключа відновлення, вам доведеться скинути свою цифрову ідентичність, щоб продовжити користуватися застосунком."</string>
   <string name="screen_encryption_reset_title">"Не можете підтвердити? Вам доведеться скинути свою цифрову ідентичність."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Видалити"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Якщо ви вилучите всі свої пристрої, ви втратите історію зашифрованих бесід і вам доведеться скинути свою цифрову ідентичність."</string>

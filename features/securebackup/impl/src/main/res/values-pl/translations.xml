@@ -46,7 +46,12 @@
   <string name="screen_encryption_reset_bullet_1">"Szczegóły konta, kontakty, preferencje i lista czatów zostaną zachowane"</string>
   <string name="screen_encryption_reset_bullet_2">"Utracisz istniejącą historię wiadomości"</string>
   <string name="screen_encryption_reset_bullet_3">"Pozostali użytkownicy zobaczą, że Twoja tożsamość cyfrowa została zresetowana"</string>
+  <string name="screen_encryption_reset_bullet_4">"Wszystkie urządzenia, na których jesteś zalogowany, będą wymagały ponownego potwierdzenia"</string>
   <string name="screen_encryption_reset_footer">"Zresetuj swoją tożsamość tylko wtedy, gdy nie posiadasz dostępu do żadnego innego zweryfikowanego urządzenia i straciłeś swój klucz przywracania."</string>
+  <string name="screen_encryption_reset_no_chats_message">"Wygląda na to, że nie prowadzisz jeszcze żadnych czatów. Jeśli tak, możesz bezpiecznie zresetować swoją tożsamość cyfrową."</string>
+  <string name="screen_encryption_reset_no_options_subtitle">"Nie masz dostępu do żadnych innych zweryfikowanych urządzeń ani klucza przywracania. Jeśli chcesz nadal korzystać z aplikacji, prosimy o zresetowanie swojej tożsamości cyfrowej."</string>
+  <string name="screen_encryption_reset_no_options_title">"Musisz zresetować swoją tożsamość cyfrową"</string>
+  <string name="screen_encryption_reset_subtitle">"Jeśli nie masz dostępu do innych zweryfikowanych urządzeń, ani nie posiadasz klucza przywracania, musisz zresetować swoją tożsamość cyfrową, aby móc nadal korzystać z aplikacji."</string>
   <string name="screen_encryption_reset_title">"Nie możesz potwierdzić? Zresetuj swoją tożsamość cyfrową."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Usuń"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Jeśli usuniesz wszystkie swoje urządzenia, stracisz zaszyfrowaną historię wiadomości i będziesz musiał zresetować swoją tożsamość cyfrową."</string>

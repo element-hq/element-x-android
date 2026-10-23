@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 open class RoomSelectStatePreviewParam : PreviewParameterProvider<RoomSelectState> {
     override val values: Sequence<RoomSelectState>
@@ -66,13 +67,18 @@ open class RoomSelectStatePreviewParam : PreviewParameterProvider<RoomSelectStat
                 otherAccounts = anOtherAccountList(),
                 hasRoomListError = true,
             ),
+            aRoomSelectState(
+                resultState = SearchBarResultState.Results(aRoomSelectRoomList().subList(2, 4).toImmutableList()),
+                suggestions = aRoomSelectRoomList().subList(0, 2).toImmutableList(),
+            ),
         )
 }
 
 internal fun aRoomSelectState(
-    mode: RoomSelectMode = RoomSelectMode.Forward,
+    mode: RoomSelectMode = RoomSelectMode.Forward(fromRoomId = RoomId("!fromRoom:domain")),
     maxNumberOfRooms: Int = 10,
     resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>> = SearchBarResultState.Initial,
+    suggestions: ImmutableList<SelectRoomInfo> = persistentListOf(),
     searchQuery: String = "",
     selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
     selectedAccount: MatrixUser = MatrixUser(UserId("@alice:example.org")),
@@ -84,7 +90,9 @@ internal fun aRoomSelectState(
     mode = mode,
     maxNumberOfRooms = maxNumberOfRooms,
     resultState = resultState,
+    suggestions = suggestions,
     searchQuery = TextFieldState(initialText = searchQuery),
+    displayedSearchQuery = searchQuery,
     selectedRooms = selectedRooms,
     selectedAccount = selectedAccount,
     hasRoomListError = hasRoomListError,

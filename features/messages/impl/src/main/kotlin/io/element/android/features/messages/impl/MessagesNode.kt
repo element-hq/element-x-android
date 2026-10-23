@@ -38,6 +38,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
+import io.element.android.features.messages.impl.timeline.TimelineSelectionOwner
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
@@ -106,7 +107,7 @@ class MessagesNode(
     private val eventContentValidationCache: EventContentValidationCache,
     private val emojiPickerRenderer: EmojiPickerRenderer,
     private val dispatchers: CoroutineDispatchers,
-) : Node(buildContext, plugins = plugins), MessagesNavigator {
+) : Node(buildContext, plugins = plugins), MessagesNavigator, TimelineSelectionOwner {
     data class Inputs(
         val focusedEventId: EventId?,
     ) : NodeInputs
@@ -120,10 +121,11 @@ class MessagesNode(
         roomCoroutineScope = room.roomCoroutineScope,
         dispatchers = dispatchers,
     )
+    private val timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this)
     private val presenter = presenterFactory.create(
         navigator = this,
         composerPresenter = messageComposerPresenterFactory.create(timelineController, this, threadRoot = null),
-        timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
+        timelinePresenter = timelinePresenter,
         actionListPresenter = actionListPresenterFactory.create(
             postProcessor = TimelineItemActionPostProcessor.Default,
             timelineMode = timelineController.mainTimelineMode(),
@@ -223,6 +225,10 @@ class MessagesNode(
 
     override fun forwardEvents(eventIds: List<EventId>, timelineProvider: TimelineProvider) {
         callback.forwardEvents(eventIds, timelineProvider)
+    }
+
+    override fun exitTimelineSelection() {
+        timelinePresenter.exitSelectionMode()
     }
 
     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {

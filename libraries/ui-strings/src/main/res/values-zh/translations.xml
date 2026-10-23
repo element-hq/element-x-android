@@ -328,7 +328,7 @@
   <string name="common_name">"名称"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"没有结果"</string>
-  <string name="common_no_results_for">"未找到与“%1$s”相关的搜索结果。尝试其它搜索条件。"</string>
+  <string name="common_no_results_for">"未找到与“%1$s”相关的搜索结果。尝试其它搜索关键词。"</string>
   <string name="common_no_room_name">"无房间名称"</string>
   <string name="common_no_space_name">"未命名空间"</string>
   <string name="common_not_encrypted">"未加密"</string>
@@ -497,7 +497,8 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"允许的最大文件大小为：%1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"选择你要上传的视频的质量。"</string>
   <string name="dialog_video_quality_selector_title">"选择视频上传质量"</string>
-  <string name="error_account_already_logged_in">"你已在此设备以 %1$s 的身份登录。"</string>
+  <string name="error_account_already_logged_in">"你已作为 %1$s 的身份登录。"</string>
+  <string name="error_account_already_logged_in_title">"检测到重复登录"</string>
   <string name="error_account_creation_not_possible">"你的账户提供者需要升级以支持 Matrix 认证服务和账户创建。"</string>
   <string name="error_failed_creating_the_permalink">"永久链接创建失败"</string>
   <string name="error_failed_loading_map">"%1$s 无法加载地图，请稍后再试。"</string>
@@ -543,14 +544,6 @@
     <item quantity="other">"%1$d 条已置顶的消息"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"已置顶的消息"</string>
-  <string name="screen_ptt_settings_battery_optimization">"忽略电池优化"</string>
-  <string name="screen_ptt_settings_battery_optimization_description">"保持后台活跃"</string>
-  <string name="screen_ptt_settings_covert_mode">"隐蔽模式"</string>
-  <string name="screen_ptt_settings_covert_mode_description">"静默所有频道"</string>
-  <string name="screen_ptt_settings_lock_screen">"在锁屏上显示"</string>
-  <string name="screen_ptt_settings_lock_screen_description">"从锁屏访问"</string>
-  <string name="screen_ptt_settings_system_overlay">"启用系统叠加层"</string>
-  <string name="screen_ptt_settings_system_overlay_description">"访问浮动操作按钮"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"你即将被重定向到你在 %1$s 上的账户以重置数字身份。之后将被带回 app。"</string>
   <string name="screen_reset_identity_confirmation_title">"无法确认？请转到你的账户重置数字身份。"</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"撤回验证并发送"</string>
@@ -581,6 +574,12 @@
     <item quantity="other">"已选择 %1$d 条消息"</item>
   </plurals>
   <string name="screen_room_title">"聊天"</string>
+  <string name="screen_search_empty_state_message">"在聊天与消息中搜索"</string>
+  <string name="screen_search_empty_state_title">"开始搜索"</string>
+  <string name="screen_search_no_results_message">"未找到与“%1$@”相关的搜索结果。尝试其它搜索关键词。"</string>
+  <string name="screen_search_recent_searches">"最近搜索"</string>
+  <string name="screen_search_tab_chats">"聊天"</string>
+  <string name="screen_search_tab_messages">"消息"</string>
   <string name="screen_share_location_title">"共享位置"</string>
   <string name="screen_share_my_location_action">"共享我的位置"</string>
   <string name="screen_share_open_apple_maps">"在 Apple Maps 中打开"</string>

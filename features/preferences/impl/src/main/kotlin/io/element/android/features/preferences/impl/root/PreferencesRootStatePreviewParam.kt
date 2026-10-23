@@ -15,7 +15,9 @@ import io.element.android.features.preferences.impl.userstatus.UserStatusPickerS
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.userstatus.aUserStatusState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -61,6 +63,20 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
                 isOtherAccountsSectionExpanded = true,
                 otherSessions = aMatrixUserList().drop(1).take(3).zip(listOf(3, 0, 120)) { user, unreadCount ->
                     anOtherAccount(user = user, unreadCount = unreadCount)
+                },
+            ),
+            // Other accounts with a status
+            aPreferencesRootState(
+                isMultiAccountEnabled = true,
+                isOtherAccountsSectionExpanded = true,
+                otherSessions = aMatrixUserList().drop(1).take(3).zip(
+                    listOf(
+                        DisplayedStatus.UserSet(UserStatus(emoji = "🌴", text = "On holiday")),
+                        DisplayedStatus.InCall(callJoinedTs = null),
+                        null
+                    )
+                ) { user, displayedStatus ->
+                    anOtherAccount(user = user.copy(displayedStatus = displayedStatus))
                 },
             ),
         )

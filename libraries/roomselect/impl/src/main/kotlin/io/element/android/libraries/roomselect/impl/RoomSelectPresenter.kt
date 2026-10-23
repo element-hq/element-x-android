@@ -11,7 +11,6 @@ package io.element.android.libraries.roomselect.impl
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -34,7 +33,6 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -122,7 +120,13 @@ class RoomSelectPresenter(
                 }
                 val client = clientResult?.getOrNull()
                 val dataSource = remember(client) {
-                    client?.let { dataSourceFactory.create(dataSourceCoroutineScope, it.roomListService) }
+                    client?.let {
+                        dataSourceFactory.create(
+                            coroutineScope = dataSourceCoroutineScope,
+                            client = it,
+                            mode = mode,
+                        )
+                    }
                 }
                 // Content cannot be shared with a session which is not verified. The initial session is verified, since the FTUE is complete.
                 val sessionVerifiedStatus by remember(client) {
@@ -147,14 +151,22 @@ class RoomSelectPresenter(
         }
 
         // Use a key so that the rooms of the previously selected session are not rendered while loading the new ones
-        val roomSummaryDetailsList by key(dataSource) {
-            (dataSource?.roomInfoList ?: flowOf(persistentListOf())).collectAsState(initial = persistentListOf())
+        val rooms by key(dataSource) {
+            (dataSource?.rooms ?: flowOf(RoomSelectRooms.Empty)).collectAsState(initial = RoomSelectRooms.Empty)
         }
 
-        val searchResults by remember<State<SearchBarResultState<ImmutableList<SelectRoomInfo>>>>(dataSource) {
+        val suggestions by remember(dataSource) {
             derivedStateOf {
+                if (queryState.text.isBlank()) rooms.suggestions else persistentListOf()
+            }
+        }
+
+        val searchResults by remember(dataSource) {
+            derivedStateOf {
+                // While searching the suggestions are hidden, so their rooms have to be part of the results
+                val displayedRooms = if (queryState.text.isBlank()) rooms.roomsWithoutSuggestions else rooms.allRooms
                 when {
-                    roomSummaryDetailsList.isNotEmpty() -> SearchBarResultState.Results(roomSummaryDetailsList.toImmutableList())
+                    displayedRooms.isNotEmpty() -> SearchBarResultState.Results(displayedRooms)
                     queryState.text.isNotBlank() -> SearchBarResultState.NoResultsFound
                     else -> SearchBarResultState.Initial
                 }
@@ -188,7 +200,9 @@ class RoomSelectPresenter(
             mode = mode,
             maxNumberOfRooms = maxNumberOfRooms,
             resultState = searchResults,
+            suggestions = suggestions,
             searchQuery = queryState,
+            displayedSearchQuery = searchQuery,
             selectedRooms = selectedRooms,
             selectedAccount = selectedAccount,
             hasRoomListError = hasRoomListError,

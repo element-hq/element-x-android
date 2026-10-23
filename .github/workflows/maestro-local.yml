@@ -55,7 +55,7 @@ jobs:
       - name: Configure gradle
         uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
-          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+          cache-read-only: true # Only the debug build and unit tests jobs write the Gradle cache, see build.yml
       - name: Assemble debug APK
         run: ./gradlew :app:assembleGplayDebug $CI_GRADLE_ARG_PROPERTIES
         env:
@@ -92,7 +92,7 @@ jobs:
           ref: ${{ github.ref }}
           persist-credentials: false
       - name: Download APK artifact from previous job
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: elementx-apk-maestro
       - name: Enable KVM group perms
@@ -128,7 +128,7 @@ jobs:
         if: always()
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
-          python-version: 3.14
+          python-version: 3.15
       - name: End all the remaining sessions of the Maestro account
         if: always()
         continue-on-error: true

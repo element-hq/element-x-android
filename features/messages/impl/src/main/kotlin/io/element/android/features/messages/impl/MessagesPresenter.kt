@@ -269,7 +269,6 @@ class MessagesPresenter(
                                 navigator.forwardEvents(timelineState.selectedEventIdsInTimelineOrder(), timelineController)
                             }
                         }
-                        timelineState.eventSink(TimelineEvent.ExitSelectionMode)
                     }
                 }
                 is MessagesEvent.ConfirmRedact -> {

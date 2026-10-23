@@ -21,6 +21,7 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.test.FakeLocationService
+import io.element.android.features.messages.api.timeline.TextPillificator
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -29,8 +30,7 @@ import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.FakeMentionSpanFormatter
-import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
-import io.element.android.features.messages.impl.utils.TextPillificationHelper
+import io.element.android.features.messages.test.timeline.FakeTextPillificator
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -1670,7 +1670,7 @@ class MessageComposerPresenterTest : RobolectricTest() {
             mentionSpanFormatter = FakeMentionSpanFormatter(),
             mentionSpanTheme = MentionSpanTheme(A_USER_ID)
         ),
-        textPillificationHelper: TextPillificationHelper = FakeTextPillificationHelper(),
+        textPillificator: TextPillificator = FakeTextPillificator(),
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
@@ -1715,7 +1715,7 @@ class MessageComposerPresenterTest : RobolectricTest() {
         ),
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
-        pillificationHelper = textPillificationHelper,
+        pillificationHelper = textPillificator,
         suggestionsProcessor = SuggestionsProcessor(slashCommandService = slashCommandService),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         notificationConversationService = notificationConversationService,

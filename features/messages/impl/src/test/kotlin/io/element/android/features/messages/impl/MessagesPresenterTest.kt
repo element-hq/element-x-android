@@ -1547,7 +1547,8 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvent.ConfirmSelectionAction)
             onForwardEventClickLambda.assertions().isCalledOnce().with(value(listOf(AN_EVENT_ID, AN_EVENT_ID_2)), any())
-            timelineEventSink.assertions().isCalledOnce().with(value(TimelineEvent.ExitSelectionMode))
+            // Selection mode is not exited here: this is done by the parent node, and only if the forward actually happened.
+            timelineEventSink.assertions().isNeverCalled()
             cancelAndIgnoreRemainingEvents()
         }
     }

@@ -23,16 +23,23 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.messages.api.timeline.HtmlConverterProvider
+import io.element.android.features.messages.api.timeline.TextPillificator
+import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
+import io.element.android.libraries.matrix.ui.messages.toHtmlDocument
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.R
@@ -56,6 +63,9 @@ class MediaViewerPresenter(
     @Assisted private val dataSource: MediaViewerDataSource,
     private val room: JoinedRoom,
     private val localMediaActions: LocalMediaActions,
+    private val htmlConverterProvider: HtmlConverterProvider,
+    private val permalinkParser: PermalinkParser,
+    private val textPillificator: TextPillificator,
 ) : Presenter<MediaViewerState> {
     @AssistedFactory
     fun interface Factory {
@@ -72,10 +82,14 @@ class MediaViewerPresenter(
     private val eventId = inputs.eventId()
     private val mediaSource = inputs.mediaSource()
 
+    // Keep the converted captions so the same instances are reused when the list is updated, which keeps the page data equality stable
+    private val formattedCaptions = mutableMapOf<String, CharSequence?>()
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
+        htmlConverterProvider.Update()
         val currentIndex = remember {
             val firstIndex = if (inputs is MediaViewerEntryPoint.Params.EventGallery) {
                 // Order is reversed so we have to reverse the index
@@ -86,7 +100,8 @@ class MediaViewerPresenter(
             mutableIntStateOf(firstIndex)
         }
         val data = dataSource.produceState { flow ->
-            flow.collectLatest { new ->
+            flow.collectLatest { items ->
+                val new = items.map { it.withFormattedCaption() }
                 val existingItem = value.getOrNull(currentIndex.intValue)
                 val newItem = new.getOrNull(currentIndex.intValue)
                 if (existingItem is MediaViewerPageData.MediaViewerData && existingItem.eventId == eventId && newItem != existingItem) {
@@ -207,6 +222,19 @@ class MediaViewerPresenter(
             mediaBottomSheetState = mediaBottomSheetState,
             eventSink = ::handleEvent,
         )
+    }
+
+    private fun MediaViewerPageData.withFormattedCaption(): MediaViewerPageData {
+        if (this !is MediaViewerPageData.MediaViewerData) return this
+        val htmlCaption = mediaInfo.htmlCaption ?: return this
+        val formattedCaption = formattedCaptions.getOrPut(htmlCaption) {
+            FormattedBody(format = MessageFormat.HTML, body = htmlCaption)
+                .toHtmlDocument(permalinkParser = permalinkParser)
+                ?.let { htmlConverterProvider.provide().fromDocumentToSpans(it) }
+                ?.let { textPillificator.pillify(it) }
+                ?.safeLinkify()
+        }
+        return copy(formattedCaption = formattedCaption)
     }
 
     @Composable

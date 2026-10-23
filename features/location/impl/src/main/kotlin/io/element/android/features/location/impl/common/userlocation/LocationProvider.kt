@@ -37,7 +37,7 @@ import org.maplibre.compose.location.LocationEvent
 import org.maplibre.compose.location.LocationProvider
 import org.maplibre.compose.location.LocationRequest
 import org.maplibre.compose.location.LocationUnavailableReason
-import org.maplibre.compose.location.asMapLibreLocationUpdate
+import org.maplibre.compose.location.asMaplibreLocationUpdate
 import org.maplibre.spatialk.units.extensions.inMeters
 import java.util.ServiceLoader
 
@@ -75,7 +75,7 @@ class PlatformLocationProvider(
         val locationManager = context.getSystemService(LocationManager::class.java)
         val listener = object : LocationListenerCompat {
             override fun onLocationChanged(location: Location) {
-                trySend(location.asMapLibreLocationUpdate())
+                trySend(location.asMaplibreLocationUpdate())
             }
 
             override fun onProviderDisabled(provider: String) {
@@ -100,7 +100,7 @@ class PlatformLocationProvider(
                 return
             }
             locationManager.getLastKnownLocation(provider)?.let { location ->
-                trySend(location.asMapLibreLocationUpdate())
+                trySend(location.asMaplibreLocationUpdate())
             }
             val locationRequestCompat = LocationRequestCompat.Builder(request.minimumInterval.inWholeMilliseconds)
                 .setQuality(request.accuracy.toLocationRequestQuality())
@@ -126,7 +126,7 @@ class PlatformLocationProvider(
                     trySend(LocationEvent.Unavailable(LocationUnavailableReason.PermissionDenied, error))
                     close()
                 } catch (error: IllegalArgumentException) {
-                    trySend(LocationEvent.Unavailable(LocationUnavailableReason.UnexpectedFailure, error))
+                    trySend(LocationEvent.Unavailable(reason = null, cause = error))
                     close()
                 }
             }
@@ -147,7 +147,7 @@ class PlatformLocationProvider(
             trySend(LocationEvent.Unavailable(LocationUnavailableReason.PermissionDenied, error))
             close()
         } catch (error: IllegalArgumentException) {
-            trySend(LocationEvent.Unavailable(LocationUnavailableReason.UnexpectedFailure, error))
+            trySend(LocationEvent.Unavailable(reason = null, cause = error))
             close()
         }
         awaitClose {

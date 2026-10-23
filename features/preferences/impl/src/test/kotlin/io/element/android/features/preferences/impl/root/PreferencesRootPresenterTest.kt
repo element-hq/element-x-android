@@ -25,7 +25,9 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -293,6 +295,57 @@ class PreferencesRootPresenterTest {
                 A_USER_ID_3 to 0,
                 A_SESSION_ID_2 to 5,
             ).inOrder()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - other accounts render the status of their client, and keep their stored user data`() = runTest {
+        val bobStatus = DisplayedStatus.UserSet(UserStatus(emoji = "🌴", text = "Away"))
+        createPreferencesRootPresenter(
+            matrixClient = FakeMatrixClient(sessionId = A_SESSION_ID),
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(sessionId = A_SESSION_ID.value),
+                    aSessionData(
+                        sessionId = A_SESSION_ID_2.value,
+                        userDisplayName = "Bob",
+                        userAvatarUrl = "avatarUrl",
+                        userAvatarData = "avatarData",
+                    ),
+                    aSessionData(sessionId = A_USER_ID_3.value),
+                )
+            ),
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                when (sessionId) {
+                    A_SESSION_ID_2 -> Result.success(
+                        FakeMatrixClient(
+                            sessionId = A_SESSION_ID_2,
+                            // The client knows about the status, but not about the avatar thumbnail
+                            userDisplayName = "Bob from the client",
+                            userDisplayedStatus = bobStatus,
+                        )
+                    )
+                    // Client for the third account cannot be restored
+                    else -> Result.failure(AN_EXCEPTION)
+                }
+            },
+        ).test {
+            val state = consumeItemsUntilPredicate { it.otherSessions.size == 2 }.last()
+            assertThat(state.otherSessions[0]).isEqualTo(
+                OtherAccount(
+                    user = MatrixUser(
+                        userId = A_SESSION_ID_2,
+                        displayName = "Bob",
+                        avatarUrl = "avatarUrl",
+                        avatarThumbnail = "avatarData",
+                        displayedStatus = bobStatus,
+                    ),
+                    unreadCount = 0,
+                )
+            )
+            // No client, so no status
+            assertThat(state.otherSessions[1].user.displayedStatus).isNull()
             cancelAndIgnoreRemainingEvents()
         }
     }

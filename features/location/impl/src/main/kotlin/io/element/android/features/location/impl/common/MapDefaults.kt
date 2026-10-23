@@ -17,7 +17,7 @@ import org.maplibre.spatialk.geojson.Position
  */
 object MapDefaults {
     val defaultCameraPosition = CameraPosition(
-        target = Position(0.0, 0.0),
+        center = Position(0.0, 0.0),
         zoom = 0.0,
     )
     const val DEFAULT_ZOOM = 15.0

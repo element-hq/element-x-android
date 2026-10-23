@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -97,6 +98,7 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -143,7 +145,7 @@ fun RoomSelectView(
         onBack = ::onBackButton,
     )
 
-    val searchQuery = state.searchQuery.text.toString()
+    val searchQuery = state.displayedSearchQuery
     // Use a new list state when the selected account changes, so that the list of rooms is scrolled to the top
     val lazyListState = key(state.selectedAccount.userId) { rememberLazyListState() }
     // Scroll the list of rooms to the top when the search query changes
@@ -169,7 +171,14 @@ fun RoomSelectView(
         }
     }
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
-        state.eventSink(RoomSelectEvent.UpdateVisibleRange(visibleRange))
+        // Keep an empty range empty: shifting both bounds independently would turn it into a range of one item.
+        val roomListVisibleRange = if (visibleRange.isEmpty()) {
+            visibleRange
+        } else {
+            val offset = if (state.suggestions.isEmpty()) 1 else state.suggestions.size + 2
+            (visibleRange.first - offset).coerceAtLeast(0)..(visibleRange.last - offset).coerceAtLeast(0)
+        }
+        state.eventSink(RoomSelectEvent.UpdateVisibleRange(roomListVisibleRange))
     }
 
     Scaffold(
@@ -177,7 +186,7 @@ fun RoomSelectView(
         topBar = {
             TopAppBar(
                 titleStr = when (state.mode) {
-                    RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_to)
+                    is RoomSelectMode.Forward -> stringResource(CommonStrings.common_forward_to)
                     RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                 },
                 navigationIcon = {
@@ -242,40 +251,55 @@ fun RoomSelectView(
             )
             when {
                 state.hasRoomListError -> RoomListError()
-                state.resultState is SearchBarResultState.NoResultsFound -> NoResultsView(searchQuery = searchQuery)
-                state.resultState is SearchBarResultState.Results -> {
+                state.resultState is SearchBarResultState.NoResultsFound -> NoResultsView(searchQuery = state.displayedSearchQuery)
+                else -> {
+                    val rooms = (state.resultState as? SearchBarResultState.Results)?.results ?: persistentListOf()
                     LazyColumn(
                         state = lazyListState,
                         contentPadding = lazyColumnContentPadding,
                     ) {
-                        if (state.resultState.results.isNotEmpty()) {
+                        if (state.suggestions.isNotEmpty()) {
                             item {
-                                val headerText = if (searchQuery.isBlank()) {
+                                ListSectionHeader(
+                                    title = stringResource(CommonStrings.common_suggestions),
+                                    hasDivider = false,
+                                )
+                            }
+                            roomSummaryItems(state = state, rooms = state.suggestions, keyPrefix = "suggestion_")
+                        }
+                        if (rooms.isNotEmpty()) {
+                            item {
+                                val headerText = if (state.displayedSearchQuery.isBlank()) {
                                     stringResource(CommonStrings.common_header_rooms)
                                 } else {
-                                    stringResource(CommonStrings.common_results_for, searchQuery)
+                                    stringResource(CommonStrings.common_results_for, state.displayedSearchQuery)
                                 }
                                 ListSectionHeader(
                                     title = headerText,
                                     hasDivider = false,
                                 )
                             }
-                        }
-                        items(state.resultState.results, key = { it.roomId.value }) { roomSummary ->
-                            RoomSummaryView(
-                                roomSummary,
-                                isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
-                                onSelection = { roomSummary ->
-                                    state.eventSink(RoomSelectEvent.ToggleSelectedRoom(roomSummary))
-                                },
-                                canBeSelected = state.canSelectMoreRooms,
-                            )
+                            roomSummaryItems(state = state, rooms = rooms)
                         }
                     }
                 }
-                else -> Unit
             }
         }
+    }
+}
+
+private fun LazyListScope.roomSummaryItems(
+    state: RoomSelectState,
+    rooms: ImmutableList<SelectRoomInfo>,
+    keyPrefix: String = "",
+) {
+    items(rooms, key = { "$keyPrefix${it.roomId.value}" }) { roomSummary ->
+        RoomSummaryView(
+            roomInfo = roomSummary,
+            isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
+            onSelection = { state.eventSink(RoomSelectEvent.ToggleSelectedRoom(it)) },
+            canBeSelected = state.canSelectMoreRooms,
+        )
     }
 }
 

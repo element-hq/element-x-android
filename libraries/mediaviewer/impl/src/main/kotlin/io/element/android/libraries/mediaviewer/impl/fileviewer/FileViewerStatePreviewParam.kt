@@ -48,6 +48,7 @@ fun aJsonMediaInfo(
 ) = MediaInfo(
     filename = filename,
     caption = null,
+    htmlCaption = null,
     mimeType = MimeTypes.Json,
     fileSize = 2 * 1024,
     formattedFileSize = "2kB",

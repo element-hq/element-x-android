@@ -15,6 +15,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.timeline.FakeTimelineProvider
 import io.element.android.libraries.roomselect.test.FakeRoomSelectEntryPoint
@@ -49,6 +50,7 @@ class DefaultForwardEntryPointTest {
         val params = ForwardEntryPoint.Params(
             eventIds = listOf(AN_EVENT_ID),
             timelineProvider = FakeTimelineProvider(),
+            fromRoomId = A_ROOM_ID,
         )
         val result = entryPoint.createNode(
             parentNode = parentNode,
@@ -61,6 +63,7 @@ class DefaultForwardEntryPointTest {
             ForwardMessagesNode.Inputs(
                 eventIds = params.eventIds,
                 timelineProvider = params.timelineProvider,
+                fromRoomId = params.fromRoomId,
             )
         )
         assertThat(result.plugins).contains(callback)

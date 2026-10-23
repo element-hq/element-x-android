@@ -288,7 +288,7 @@ fun MediaViewerView(
                             MediaViewerBottomBar(
                                 showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
                                 caption = dataForPage.mediaInfo.caption,
-                                formattedCaption = dataForPage.mediaInfo.formattedCaption,
+                                formattedCaption = dataForPage.formattedCaption,
                                 onHeightChange = { bottomPaddingInPixels = it },
                             )
                         }
@@ -657,10 +657,12 @@ private fun MediaViewerBottomBar(
                     .heightIn(max = if (hasCompactHeightWindowSize()) maxCaptionHeightLandscape else maxCaptionHeightPortrait)
                     .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()),
             ) {
-                val textToRender = when {
-                    formattedCaption != null -> formattedCaption
-                    caption != null -> caption.safeLinkify().toSpannable()
-                    else -> null
+                val textToRender = remember(caption, formattedCaption) {
+                    when {
+                        formattedCaption != null -> formattedCaption
+                        caption != null -> caption.safeLinkify().toSpannable()
+                        else -> null
+                    }
                 }
                 if (textToRender != null) {
                     CompositionLocalProvider(

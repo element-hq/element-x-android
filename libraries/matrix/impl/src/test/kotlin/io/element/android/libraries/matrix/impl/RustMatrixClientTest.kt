@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.scanner.FakeContentScanner
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -40,10 +41,13 @@ import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.CreateRoomParameters
+import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.RoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.StoreSizes
@@ -315,6 +319,57 @@ class RustMatrixClientTest {
         assertThat(client.setAccountData(AN_ACCOUNT_DATA_EVENT_TYPE, AN_ACCOUNT_DATA_CONTENT).isSuccess).isTrue()
         setAccountDataResult.assertions().isCalledOnce().with(value(AN_ACCOUNT_DATA_EVENT_TYPE), value(AN_ACCOUNT_DATA_CONTENT))
         client.destroy()
+    }
+
+    @Test
+    fun `ignoredUsersFlow uses the value from the server even if the SDK first emits an empty list`() = runTest {
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                ignoredUsersResult = { listOf(A_USER_ID.value, A_USER_ID_2.value) },
+                // The SDK emits its in-memory value immediately, which is empty until the account data is received by the sync
+                subscribeToIgnoredUsersResult = { listener -> listener.call(emptyList()) },
+            )
+        )
+        runInitialIgnoredUsersFetch()
+        assertThat(client.ignoredUsersFlow.value).containsExactly(A_USER_ID, A_USER_ID_2).inOrder()
+        client.destroy()
+    }
+
+    @Test
+    fun `ignoredUsersFlow emits the values received from the SDK listener`() = runTest {
+        var ignoredUsersListener: IgnoredUsersListener? = null
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                subscribeToIgnoredUsersResult = { listener -> ignoredUsersListener = listener },
+            )
+        )
+        runInitialIgnoredUsersFetch()
+        assertThat(client.ignoredUsersFlow.value).isEmpty()
+        ignoredUsersListener!!.call(listOf(A_USER_ID.value))
+        assertThat(client.ignoredUsersFlow.value).containsExactly(A_USER_ID)
+        client.destroy()
+    }
+
+    @Test
+    fun `ignoredUsersFlow still emits the values received from the SDK listener if the initial fetch fails`() = runTest {
+        var ignoredUsersListener: IgnoredUsersListener? = null
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                ignoredUsersResult = { error("Network error") },
+                subscribeToIgnoredUsersResult = { listener -> ignoredUsersListener = listener },
+            )
+        )
+        runInitialIgnoredUsersFetch()
+        assertThat(client.ignoredUsersFlow.value).isEmpty()
+        ignoredUsersListener!!.call(listOf(A_USER_ID.value))
+        assertThat(client.ignoredUsersFlow.value).containsExactly(A_USER_ID)
+        client.destroy()
+    }
+
+    // The initial fetch of the ignored users runs in the background scope, with a simulated delay
+    private fun TestScope.runInitialIgnoredUsersFetch() {
+        advanceTimeBy(1)
+        runCurrent()
     }
 
     private fun TestScope.createRustMatrixClient(

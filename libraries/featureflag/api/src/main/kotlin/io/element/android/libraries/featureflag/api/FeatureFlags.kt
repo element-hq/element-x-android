@@ -177,6 +177,14 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    ReceiveNotificationsFromOtherSignedInAccounts(
+        key = "feature.receive_notifications_from_other_signed_in_accounts",
+        title = "Receive notifications from other signed-in accounts",
+        description = "Receive push notifications for events sent from other signed-in accounts on this device. " +
+            "Note this may result in duplicate notifications if you have multiple accounts signed in on the same device, it should only be used for testing.",
+        defaultValue = { false },
+        isFinished = false,
+    )
 }
 
 /**
