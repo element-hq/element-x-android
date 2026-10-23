@@ -15,7 +15,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.withFrameMillis
+import androidx.compose.ui.MotionDurationScale
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * Remembers a [SmoothPlaybackProgressState], fed with the player progress samples.
@@ -48,7 +52,8 @@ internal fun rememberSmoothPlaybackProgressState(
  * elapsed since then and the playback speed. Each new player sample or user seek becomes the new start point, so the progress
  * cannot drift away from the player, and a seek is shown immediately without waiting for the player to report it.
  *
- * The frame loop is not affected by the system animator duration scale, since the cursor tracks the audio.
+ * If the system disables animations, the progress only follows the player samples and seeks, and the extrapolation restarts when
+ * they are enabled again. Other animator duration scales are ignored, since the cursor tracks the audio.
  */
 @Stable
 internal class SmoothPlaybackProgressState(initialProgress: Float) {
@@ -74,11 +79,24 @@ internal class SmoothPlaybackProgressState(initialProgress: Float) {
         restartFrom(seekProgress)
     }
 
-    /** Extrapolates [progress] on every frame while [isPlaying]. */
+    /** Extrapolates [progress] on every frame while [isPlaying] and animations are enabled. */
     suspend fun animate(isPlaying: Boolean, durationMs: Long, playbackSpeed: Float) {
         // Restart from the displayed progress, so that time spent paused, or at a previous speed, is not counted.
         restartFrom(progress)
         if (!isPlaying || durationMs <= 0L) return
+        val motionDurationScale = currentCoroutineContext()[MotionDurationScale]
+        snapshotFlow { motionDurationScale?.scaleFactor != 0f }.collectLatest { animationsEnabled ->
+            if (animationsEnabled) {
+                restartFrom(progress)
+                extrapolateOnEachFrame(durationMs = durationMs, playbackSpeed = playbackSpeed)
+            } else {
+                // Display the latest player sample or seek.
+                restartFrom(startProgress)
+            }
+        }
+    }
+
+    private suspend fun extrapolateOnEachFrame(durationMs: Long, playbackSpeed: Float): Nothing {
         while (true) {
             withFrameMillis { frameTimeMs ->
                 val startTimeMs = startTimeMs ?: frameTimeMs.also { startTimeMs = it }
