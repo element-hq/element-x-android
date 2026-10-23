@@ -17,7 +17,6 @@ import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.utils.FakeActiveCallManager
 import io.element.android.features.call.impl.utils.FakeCallWidgetProvider
 import io.element.android.features.call.impl.utils.FakeWidgetMessageInterceptor
-import io.element.android.features.call.impl.utils.WidgetMessageSerializer
 import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -29,6 +28,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.network.useragent.UserAgentProvider
+import io.element.android.libraries.widget.WidgetMessageSerializer
 import io.element.android.services.analytics.api.ScreenTracker
 import io.element.android.services.analytics.test.FakeScreenTracker
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService

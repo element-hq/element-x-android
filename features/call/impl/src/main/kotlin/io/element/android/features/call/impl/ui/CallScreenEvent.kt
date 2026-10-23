@@ -8,7 +8,7 @@
 
 package io.element.android.features.call.impl.ui
 
-import io.element.android.features.call.impl.utils.WidgetMessageInterceptor
+import io.element.android.libraries.widget.WidgetMessageInterceptor
 
 sealed interface CallScreenEvent {
     data object Hangup : CallScreenEvent

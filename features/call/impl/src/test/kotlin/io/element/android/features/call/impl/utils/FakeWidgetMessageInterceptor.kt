@@ -8,6 +8,7 @@
 
 package io.element.android.features.call.impl.utils
 
+import io.element.android.libraries.widget.WidgetMessageInterceptor
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 class FakeWidgetMessageInterceptor : WidgetMessageInterceptor {
