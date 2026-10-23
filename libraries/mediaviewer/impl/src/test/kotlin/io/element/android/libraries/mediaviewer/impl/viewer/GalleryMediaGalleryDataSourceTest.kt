@@ -273,7 +273,7 @@ class GalleryMediaGalleryDataSourceTest {
 
     private fun aGalleryInfo() = GalleryInfo(
         caption = "A caption",
-        formattedCaption = null,
+        htmlCaption = null,
         senderId = A_USER_ID,
         senderName = "Alice",
         senderAvatar = null,
@@ -286,6 +286,7 @@ class GalleryMediaGalleryDataSourceTest {
         filename = filename,
         fileSize = null,
         caption = "A caption",
+        htmlCaption = null,
         mimeType = mimeType,
         formattedFileSize = "",
         fileExtension = filename.substringAfterLast('.', ""),

@@ -48,6 +48,7 @@ class AndroidLocalMediaFactoryTest : RobolectricTest() {
                 // MediaFile does not provide file size in this test
                 fileSize = 0L,
                 caption = null,
+                htmlCaption = null,
                 mimeType = MimeTypes.Jpeg,
                 formattedFileSize = "4MB",
                 fileExtension = "jpg",

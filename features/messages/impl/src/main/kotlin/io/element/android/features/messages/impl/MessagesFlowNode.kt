@@ -839,6 +839,7 @@ class MessagesFlowNode(
             is TimelineItemGalleryContent -> {
                 val galleryInfo = GalleryInfo(
                     caption = event.content.caption,
+                    htmlCaption = event.content.htmlCaption,
                     senderId = event.senderId,
                     senderName = event.safeSenderName,
                     senderAvatar = event.senderAvatar.url,
@@ -873,6 +874,7 @@ class MessagesFlowNode(
             is TimelineItemAttachmentsContent -> {
                 val galleryInfo = GalleryInfo(
                     caption = event.content.caption,
+                    htmlCaption = event.content.htmlCaption,
                     senderId = event.senderId,
                     senderName = event.safeSenderName,
                     senderAvatar = event.senderAvatar.url,
@@ -932,7 +934,7 @@ class MessagesFlowNode(
                 filename = content.filename,
                 fileSize = content.fileSize,
                 caption = content.caption,
-                formattedCaption = content.formattedCaption,
+                htmlCaption = content.htmlCaption,
                 mimeType = content.mimeType,
                 formattedFileSize = content.formattedFileSize,
                 fileExtension = content.fileExtension,
