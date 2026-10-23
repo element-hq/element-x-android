@@ -45,6 +45,16 @@ class DefaultMediaOptimizationSelectorPresenter(
     private val videoCompressionPresetSelector: VideoCompressionPresetSelector,
     mediaExtractorFactory: VideoMetadataExtractor.Factory,
 ) : MediaOptimizationSelectorPresenter {
+    companion object {
+        /**
+         * Approximate bitrate (in bits per second) used by the AAC audio encoder for compressed videos.
+         * The video pre-processor doesn't override the audio encoder settings, so this should track
+         * whatever the platform default AAC bitrate ends up being. Used to avoid under-estimating the
+         * final file size, since the video bitrate alone doesn't account for the audio track.
+         */
+        private const val ASSUMED_AUDIO_BITRATE = 128_000
+    }
+
     @ContributesBinding(SessionScope::class)
     @AssistedFactory
     interface Factory : MediaOptimizationSelectorPresenter.Factory {
@@ -109,9 +119,12 @@ class DefaultMediaOptimizationSelectorPresenter(
 
             val sizeEstimations = VideoCompressionPreset.entries
                 .map { preset ->
-                    val bitRateAsBytes = preset.compressorHelper().calculateOptimalBitrate(videoDimensions, 30) / 8f
+                    val videoBitRate = preset.compressorHelper().calculateOptimalBitrate(videoDimensions, 30)
+                    // The output always includes an AAC audio track too; ignoring it made the estimate
+                    // systematically lower than the actual compressed file size.
+                    val combinedBitRateAsBytes = (videoBitRate + ASSUMED_AUDIO_BITRATE) / 8f
                     val durationInSeconds = duration.inWholeSeconds.toFloat()
-                    val calculatedSize = (bitRateAsBytes * durationInSeconds * 1.1f).roundToLong() // Adding 10% overhead for safety
+                    val calculatedSize = (combinedBitRateAsBytes * durationInSeconds * 1.1f).roundToLong() // Adding 10% overhead for safety
                     VideoUploadEstimation(
                         preset = preset,
                         sizeInBytes = calculatedSize,
