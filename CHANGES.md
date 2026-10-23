@@ -1,3 +1,46 @@
+Changes in Element X v26.10.1
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.10.1 -->
+
+## What's Changed
+### ✨ Features
+* Add pillification to the new timeline renderer by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7761
+* Allow getting notifications from other sessions in the same device by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7977
+### 🙌 Improvements
+* Keep timeline selection when forwarding is cancelled by @ganfra in https://github.com/element-hq/element-x-android/pull/7925
+* Add room suggestions when forwarding content by @ganfra in https://github.com/element-hq/element-x-android/pull/7951
+* Iterate on the Notification settings screen to match the design by @bmarty in https://github.com/element-hq/element-x-android/pull/7941
+* Render user status of other accounts in settings by @ganfra in https://github.com/element-hq/element-x-android/pull/7961
+* Pass media captions as HTML to the media viewer by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7970
+### 🐛 Bugfixes
+* Fix blocked users not displayed after restart and list not refreshed after unblocking by @bmarty in https://github.com/element-hq/element-x-android/pull/7953
+* Fix duplicate key backup and lost cross-signing keys after creating a new account by @bmarty in https://github.com/element-hq/element-x-android/pull/7972
+* Fixes few issues on timeline multi select and forwarding by @ganfra in https://github.com/element-hq/element-x-android/pull/7978
+* Fix crash on the login screen when the Element Classic avatar is very large by @bmarty in https://github.com/element-hq/element-x-android/pull/7989
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/7964
+### 🧱 Build
+* Reduce the size of the Gradle cache on CI by @bmarty in https://github.com/element-hq/element-x-android/pull/7944
+* Update Gradle Wrapper from 9.8.1 to 9.8.2 by @ElementBot in https://github.com/element-hq/element-x-android/pull/7958
+### 🚧 In development 🚧
+* Add tests for login link handling when sessions exist by @bmarty in https://github.com/element-hq/element-x-android/pull/7954
+### Dependency upgrades
+* Update dependency androidx.compose.material3:material3 to v1.5.0-beta01 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7926
+* Update dependency python to 3.15 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7962
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.10.20 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7939
+* Update maplibre.compose to v0.20.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7963
+* Revert "Update dependency io.element.android:element-call-embedded to v0.28.0" by @jmartinesp in https://github.com/element-hq/element-x-android/pull/7971
+* Downgrade embedded Element Call to 0.26.1 by @ganfra in https://github.com/element-hq/element-x-android/pull/7984
+* Update actions/download-artifact action to v8.0.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7920
+* Update zizmorcore/zizmor-action action to v0.7.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7983
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.10.23 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/7995
+### Others
+* Iterate wording on duplicate sign in by @bmarty in https://github.com/element-hq/element-x-android/pull/7952
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.10.0...v26.10.1
+
 Changes in Element X v26.10.0
 =============================
 
