@@ -54,11 +54,14 @@ import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.transformWhile
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -149,8 +152,21 @@ class RoomFlowNode(
 
     private fun subscribeToRoomInfoFlow(roomId: RoomId, serverNames: List<String>) {
         val joinedRoom = (inputs.initialElement as? RoomNavigationTarget.Root)?.joinedRoom
-        val roomInfoFlow = joinedRoom?.roomInfoFlow?.map { Optional.of(it) }
-            ?: client.getRoomInfoFlow(roomId)
+        val roomInfoFlow = if (joinedRoom != null) {
+            // The joined room is destroyed when navigating away from the JoinedRoom target, and its room info is no longer updated after that:
+            // use it while the room is joined, then switch to the room info from the client.
+            flow {
+                emitAll(
+                    joinedRoom.roomInfoFlow.transformWhile { roomInfo ->
+                        emit(Optional.of(roomInfo))
+                        roomInfo.currentUserMembership == CurrentUserMembership.JOINED
+                    }
+                )
+                emitAll(client.getRoomInfoFlow(roomId))
+            }
+        } else {
+            client.getRoomInfoFlow(roomId)
+        }
 
         // This observes the local membership changes for the room
         val membershipUpdateFlow = membershipObserver.updates
@@ -172,6 +188,9 @@ class RoomFlowNode(
                     return@onEach
                 }
                 backstack.newRoot(NavTarget.JoinedRoom(roomId))
+            } else if (membership == CurrentUserMembership.INVITED && backstack.active?.key?.navTarget is NavTarget.JoinedRoom) {
+                // Right after a join, the SDK can briefly report the room as invited again: don't leave the joined room for that
+                Timber.w("Room $roomId reported as invited while joined, ignoring")
             } else {
                 val leavingFromCurrentDevice =
                     membership == CurrentUserMembership.LEFT &&
