@@ -12,9 +12,12 @@ package io.element.android.libraries.designsystem.components.media
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -142,6 +145,56 @@ class WaveformPlaybackViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `smooth progress only follows the player samples when animations are disabled`() {
+        val motionDurationScale = TestMotionDurationScale(scaleFactor = 0f)
+        runAndroidComposeUiTest(effectContext = motionDurationScale) {
+            val playbackProgress = mutableFloatStateOf(0.2f)
+            val smoothProgress = setSmoothPlaybackProgress(
+                playbackProgress = { playbackProgress.floatValue },
+                isPlaying = true,
+                durationMs = 10_000L,
+            )
+            mainClock.advanceTimeBy(1_000L)
+            assertThat(smoothProgress.progress).isEqualTo(0.2f)
+            playbackProgress.floatValue = 0.3f
+            Snapshot.sendApplyNotifications()
+            mainClock.advanceTimeByFrame()
+            assertThat(smoothProgress.progress).isEqualTo(0.3f)
+            mainClock.advanceTimeBy(1_000L)
+            assertThat(smoothProgress.progress).isEqualTo(0.3f)
+        }
+    }
+
+    @Test
+    fun `smooth progress restarts when animations are enabled again`() {
+        val motionDurationScale = TestMotionDurationScale(scaleFactor = 1f)
+        runAndroidComposeUiTest(effectContext = motionDurationScale) {
+            val playbackProgress = mutableFloatStateOf(0.2f)
+            val smoothProgress = setSmoothPlaybackProgress(
+                playbackProgress = { playbackProgress.floatValue },
+                isPlaying = true,
+                durationMs = 10_000L,
+            )
+            mainClock.advanceTimeBy(1_000L)
+            assertThat(smoothProgress.progress).isWithin(0.01f).of(0.3f)
+            // Disabling animations goes back to the latest player sample.
+            motionDurationScale.scaleFactor = 0f
+            Snapshot.sendApplyNotifications()
+            mainClock.advanceTimeByFrame()
+            assertThat(smoothProgress.progress).isEqualTo(0.2f)
+            playbackProgress.floatValue = 0.5f
+            Snapshot.sendApplyNotifications()
+            mainClock.advanceTimeBy(1_000L)
+            assertThat(smoothProgress.progress).isEqualTo(0.5f)
+            // Enabling animations again extrapolates from the latest player sample.
+            motionDurationScale.scaleFactor = 1f
+            Snapshot.sendApplyNotifications()
+            mainClock.advanceTimeBy(1_000L)
+            assertThat(smoothProgress.progress).isWithin(0.01f).of(0.6f)
+        }
+    }
+
+    @Test
     fun `smooth progress stops at the end of the media`() = runAndroidComposeUiTest {
         val smoothProgress = setSmoothPlaybackProgress(
             playbackProgress = { 0.9f },
@@ -177,6 +230,10 @@ class WaveformPlaybackViewTest : RobolectricTest() {
         setWaveformPlaybackView(waveform = persistentListOf(0.2f, 0.4f, 0.6f))
         waitForIdle()
     }
+}
+
+private class TestMotionDurationScale(scaleFactor: Float) : MotionDurationScale {
+    override var scaleFactor by mutableFloatStateOf(scaleFactor)
 }
 
 /**
