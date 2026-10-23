@@ -58,6 +58,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.onVisibilityChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -76,6 +77,7 @@ import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.audio.api.AudioFocus
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
@@ -93,6 +95,9 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.hasCompactHeightWindowSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.api.ui.HtmlMessageContent
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectMediaState
 import io.element.android.libraries.matrixmedia.api.MediaRequestData
@@ -112,6 +117,7 @@ import kotlinx.coroutines.delay
 import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
 import me.saket.telephoto.zoomable.rememberZoomableState
+import timber.log.Timber
 
 val topAppBarHeight = 112.dp
 
@@ -289,6 +295,8 @@ fun MediaViewerView(
                                 showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
                                 caption = dataForPage.mediaInfo.caption,
                                 formattedCaption = dataForPage.formattedCaption,
+                                captionTree = dataForPage.captionTree,
+                                currentUserId = state.currentUserId,
                                 onHeightChange = { bottomPaddingInPixels = it },
                             )
                         }
@@ -633,6 +641,8 @@ private fun MediaViewerTopBar(
 private fun MediaViewerBottomBar(
     caption: String?,
     formattedCaption: CharSequence?,
+    captionTree: DocumentNode?,
+    currentUserId: UserId?,
     showDivider: Boolean,
     onHeightChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -657,6 +667,11 @@ private fun MediaViewerBottomBar(
                     .heightIn(max = if (hasCompactHeightWindowSize()) maxCaptionHeightLandscape else maxCaptionHeightPortrait)
                     .padding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()),
             ) {
+                val textModifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .verticalScroll(scrollState)
+                    .navigationBarsPadding()
                 val textToRender = remember(caption, formattedCaption) {
                     when {
                         formattedCaption != null -> formattedCaption
@@ -664,17 +679,25 @@ private fun MediaViewerBottomBar(
                         else -> null
                     }
                 }
-                if (textToRender != null) {
+                if (captionTree != null) {
+                    // When the new timeline event renderer is enabled, the caption has a parsed tree: render it natively with Compose
+                    val uriHandler = LocalUriHandler.current
+                    HtmlMessageContent(
+                        node = captionTree,
+                        modifier = textModifier,
+                        currentUserId = currentUserId,
+                        onLinkClick = { url, _ ->
+                            runCatchingExceptions { uriHandler.openUri(url) }
+                                .onFailure { Timber.e(it, "Failed to open link") }
+                        },
+                    )
+                } else if (textToRender != null) {
                     CompositionLocalProvider(
                         LocalContentColor provides ElementTheme.colors.textPrimary,
                         LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
                     ) {
                         EditorStyledText(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                                .verticalScroll(scrollState)
-                                .navigationBarsPadding(),
+                            modifier = textModifier,
                             text = textToRender,
                             style = ElementRichTextEditorStyle.textStyle(),
                             releaseOnDetach = false,

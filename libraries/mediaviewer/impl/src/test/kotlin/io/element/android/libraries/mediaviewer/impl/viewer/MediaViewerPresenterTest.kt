@@ -18,6 +18,10 @@ import io.element.android.features.messages.api.timeline.TextPillificator
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
 import io.element.android.features.messages.test.timeline.FakeTextPillificator
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.test.FakeHtmlMessageParser
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -26,6 +30,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransa
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
@@ -106,6 +111,7 @@ class MediaViewerPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+            assertThat(initialState.currentUserId).isEqualTo(A_SESSION_ID)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -253,6 +259,43 @@ class MediaViewerPresenterTest {
             assertThat(item.mediaInfo.htmlCaption).isEqualTo("<b>caption</b>")
             assertThat(item.formattedCaption.toString()).isEqualTo("pillified formatted: caption")
         }
+    }
+
+    @Test
+    fun `present - html caption is parsed to a caption tree only if the feature flag is enabled`() = runTest {
+        suspend fun captionTreeFor(isFeatureEnabled: Boolean): DocumentNode? {
+            val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+                startLambda = { },
+            )
+            val presenter = createMediaViewerPresenter(
+                localMediaFactory = localMediaFactory,
+                mediaGalleryDataSource = mediaGalleryDataSource,
+                featureFlagService = FakeFeatureFlagService(
+                    initialState = mapOf(FeatureFlags.NewTimelineEventRenderer.key to isFeatureEnabled)
+                ),
+            )
+            val anImage = aMediaItemImage().let {
+                it.copy(mediaInfo = it.mediaInfo.copy(caption = "caption", htmlCaption = "<b>caption</b>"))
+            }
+            var captionTree: DocumentNode? = null
+            presenter.test {
+                awaitFirstItem()
+                mediaGalleryDataSource.emitGroupedMediaItems(
+                    AsyncData.Success(
+                        GroupedMediaItems(
+                            imageAndVideoItems = persistentListOf(anImage),
+                            fileItems = persistentListOf(),
+                        )
+                    )
+                )
+                val item = awaitFirstItem().listData.first() as MediaViewerPageData.MediaViewerData
+                captionTree = item.captionTree
+            }
+            return captionTree
+        }
+
+        assertThat(captionTreeFor(isFeatureEnabled = true)).isNotNull()
+        assertThat(captionTreeFor(isFeatureEnabled = false)).isNull()
     }
 
     @Test
@@ -988,6 +1031,7 @@ internal fun TestScope.createMediaViewerPresenter(
     ),
     htmlConverterProvider: HtmlConverterProvider = FakeHtmlConverterProvider(),
     textPillificator: TextPillificator = FakeTextPillificator(),
+    featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
 ): MediaViewerPresenter {
     val actualInputs = inputs ?: createMediaViewerEntryPointParams(eventId = eventId, mode = mode)
     val actualMode = when (actualInputs) {
@@ -1015,6 +1059,8 @@ internal fun TestScope.createMediaViewerPresenter(
         htmlConverterProvider = htmlConverterProvider,
         permalinkParser = FakePermalinkParser(),
         textPillificator = textPillificator,
+        htmlMessageParser = FakeHtmlMessageParser(parseResult = { DocumentNode(persistentListOf()) }),
+        featureFlagService = featureFlagService,
     )
 }
 
