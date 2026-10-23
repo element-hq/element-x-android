@@ -89,9 +89,10 @@ class VoiceMessagePresenter(
                 }.milliseconds.formatShort()
             }
         }
+        // Keep the cursor once playback has started, including when it has ended, to match the progress drawn on the waveform.
         val showCursor by remember {
             derivedStateOf {
-                !play.value.isUninitialized() && !playerState.isEnded
+                !play.value.isUninitialized()
             }
         }
 
