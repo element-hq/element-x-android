@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -97,6 +98,7 @@ class RustSpaceRoomListTest {
             spaceId = roomId,
             innerProvider = innerProvider,
             coroutineScope = backgroundScope,
+            dispatcher = StandardTestDispatcher(testScheduler),
             spaceRoomMapper = spaceRoomMapper,
             analyticsService = FakeAnalyticsService(),
         )
