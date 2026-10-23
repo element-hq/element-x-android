@@ -103,6 +103,7 @@ class RustSpaceService(
             spaceRoomMapper = spaceRoomMapper,
             roomMembershipObserver = roomMembershipObserver,
             sessionCoroutineScope = sessionCoroutineScope,
+            dispatcher = sessionDispatcher,
         ) {
             innerSpaceService.leaveSpace(spaceId.value)
         }

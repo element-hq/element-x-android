@@ -144,7 +144,7 @@ class JoinedRustRoom(
     override val knockRequestsFlow: Flow<List<KnockRequest>> = mxCallbackFlow {
         innerRoom.subscribeToKnockRequests(object : KnockRequestsListener {
             override fun call(joinRequests: List<InnerKnockRequest>) {
-                val knockRequests = joinRequests.map { RustKnockRequest(it) }
+                val knockRequests = joinRequests.map { RustKnockRequest(it, roomDispatcher) }
                 channel.trySend(knockRequests)
             }
         })
