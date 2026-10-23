@@ -12,6 +12,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -51,6 +52,8 @@ sealed interface MediaViewerPageData {
         val mediaInfo: MediaInfo,
         /** The [MediaInfo.htmlCaption] converted to styled text, if any. */
         val formattedCaption: CharSequence? = null,
+        /** The [MediaInfo.htmlCaption] parsed into a tree for the native Compose renderer, only when the new timeline event renderer is enabled. */
+        val captionTree: DocumentNode? = null,
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
         val downloadedMedia: State<AsyncData<LocalMedia>>,
