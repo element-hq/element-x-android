@@ -11,6 +11,7 @@
 package io.element.android.libraries.push.impl.push
 
 import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.EventId
@@ -106,6 +107,22 @@ class DefaultPushHandlerTest {
 
         incrementPushCounterResult.assertions()
             .isCalledOnce()
+    }
+
+    @Test
+    fun `when classical PushData is received, the background work is told a push is queued`() = runTest {
+        val queuedPushRequestNotifier = QueuedPushRequestNotifier()
+        val defaultPushHandler = createDefaultPushHandler(
+            pushClientSecret = FakePushClientSecret(getUserIdFromSecretResult = { A_USER_ID }),
+            incrementPushCounterResult = {},
+            workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
+            pushHistoryService = FakePushHistoryService(enqueuePushRequest = { Result.success(Unit) }),
+            queuedPushRequestNotifier = queuedPushRequestNotifier,
+        )
+        queuedPushRequestNotifier.queued.test {
+            defaultPushHandler.handle(PushData(eventId = AN_EVENT_ID, roomId = A_ROOM_ID, unread = 0, clientSecret = A_SECRET), A_PUSHER_INFO)
+            assertThat(awaitItem()).isEqualTo(A_USER_ID)
+        }
     }
 
     @Test
@@ -222,6 +239,7 @@ class DefaultPushHandlerTest {
         diagnosticPushHandler: DiagnosticPushHandler = DiagnosticPushHandler(),
         pushHistoryService: PushHistoryService = FakePushHistoryService(),
         workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
+        queuedPushRequestNotifier: QueuedPushRequestNotifier = QueuedPushRequestNotifier(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         systemClock: FakeSystemClock = FakeSystemClock(),
         resultProcessor: FakeNotificationResultProcessor = FakeNotificationResultProcessor(
@@ -246,6 +264,7 @@ class DefaultPushHandlerTest {
             analyticsService = analyticsService,
             systemClock = systemClock,
             workManagerScheduler = workManagerScheduler,
+            queuedPushRequestNotifier = queuedPushRequestNotifier,
             resultProcessor = resultProcessor,
             syncPendingNotificationsRequestFactory = SyncPendingNotificationsRequestBuilder.Factory {
                 FakeSyncPendingNotificationsRequestBuilder()

@@ -17,11 +17,17 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.db.PushRequest
+import io.element.android.libraries.push.impl.history.PushHistoryService
+import io.element.android.libraries.push.impl.workmanager.PENDING_PUSH_REQUESTS_MAX_AGE
 import io.element.android.services.appnavstate.api.AppForegroundStateService
-import kotlinx.coroutines.delay
+import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 @ContributesBinding(AppScope::class)
 class DefaultSyncOnNotifiableEvent(
@@ -29,6 +35,9 @@ class DefaultSyncOnNotifiableEvent(
     private val featureFlagService: FeatureFlagService,
     private val appForegroundStateService: AppForegroundStateService,
     private val dispatchers: CoroutineDispatchers,
+    private val pushHistoryService: PushHistoryService,
+    private val queuedPushRequestNotifier: QueuedPushRequestNotifier,
+    private val systemClock: SystemClock,
 ) : SyncOnNotifiableEvent {
     override suspend operator fun invoke(requests: List<PushRequest>) = withContext(dispatchers.io) {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
@@ -41,20 +50,41 @@ class DefaultSyncOnNotifiableEvent(
             appForegroundStateService.updateIsSyncingNotificationEvent(true)
             Timber.d("Starting opportunistic room list sync | In foreground: ${appForegroundStateService.isInForeground.value}")
 
-            for ((sessionId, events) in eventsBySession) {
-                val client = matrixClientProvider.getOrRestore(SessionId(sessionId)).getOrNull() ?: continue
+            for ((sessionIdValue, events) in eventsBySession) {
+                val sessionId = SessionId(sessionIdValue)
+                val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: continue
                 val roomIds = events.map { RoomId(it.roomId) }.distinct()
 
                 client.roomListService.subscribeToVisibleRooms(roomIds)
 
                 if (!appForegroundStateService.isInForeground.value) {
-                    // Give the sync some time to complete in background
-                    delay(10.seconds)
+                    // Give the sync some time to complete in background, but stop early if a new push is waiting: the work fetching it
+                    // can only start once this one is done, and an incoming call can't wait that long to ring.
+                    val newPushQueued = withTimeoutOrNull(10.seconds) {
+                        queuedPushRequestNotifier.queued
+                            // Check once as soon as we listen too: a push queued before that sent its signal to nobody. Checking
+                            // any earlier would miss one queued between the check and the subscription, and make it wait 10 seconds.
+                            .onSubscription { emit(sessionId) }
+                            .first { queuedFor -> queuedFor == sessionId && hasNewPendingPushRequests(sessionId, handled = events) }
+                    } != null
+                    if (newPushQueued) {
+                        Timber.d("A new push is waiting to be fetched, ending the opportunistic sync early")
+                    }
                 }
             }
         } finally {
             Timber.d("Finished opportunistic room list sync")
             appForegroundStateService.updateIsSyncingNotificationEvent(false)
         }
+    }
+
+    /**
+     * Whether a push is waiting to be fetched, other than the ones handled by the current work: those may be pending again after a
+     * network error, and they don't need another work to be fetched.
+     */
+    private suspend fun hasNewPendingPushRequests(sessionId: SessionId, handled: List<PushRequest>): Boolean {
+        val since = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(PENDING_PUSH_REQUESTS_MAX_AGE)
+        val pending = pushHistoryService.getPendingPushRequests(sessionId, since).getOrNull().orEmpty()
+        return pending.any { request -> handled.none { it.eventId == request.eventId && it.roomId == request.roomId } }
     }
 }
