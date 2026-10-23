@@ -14,9 +14,9 @@ import android.net.Uri
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
-import io.element.android.features.messages.api.timeline.TextPillificationHelper
+import io.element.android.features.messages.api.timeline.TextPillificator
 import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
-import io.element.android.features.messages.test.timeline.FakeTextPillificationHelper
+import io.element.android.features.messages.test.timeline.FakeTextPillificator
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -233,7 +233,7 @@ class MediaViewerPresenterTest {
             localMediaFactory = localMediaFactory,
             mediaGalleryDataSource = mediaGalleryDataSource,
             htmlConverterProvider = FakeHtmlConverterProvider(transformDom = { "formatted: ${it.text()}" }),
-            textPillificationHelper = FakeTextPillificationHelper(pillifyLambda = { text, _ -> "pillified $text" }),
+            textPillificator = FakeTextPillificator(pillifyLambda = { text, _ -> "pillified $text" }),
         )
         val anImage = aMediaItemImage().let {
             it.copy(mediaInfo = it.mediaInfo.copy(caption = "caption", htmlCaption = "<b>caption</b>"))
@@ -987,7 +987,7 @@ internal fun TestScope.createMediaViewerPresenter(
         liveTimeline = FakeTimeline(),
     ),
     htmlConverterProvider: HtmlConverterProvider = FakeHtmlConverterProvider(),
-    textPillificationHelper: TextPillificationHelper = FakeTextPillificationHelper(),
+    textPillificator: TextPillificator = FakeTextPillificator(),
 ): MediaViewerPresenter {
     val actualInputs = inputs ?: createMediaViewerEntryPointParams(eventId = eventId, mode = mode)
     val actualMode = when (actualInputs) {
@@ -1014,7 +1014,7 @@ internal fun TestScope.createMediaViewerPresenter(
         localMediaActions = localMediaActions,
         htmlConverterProvider = htmlConverterProvider,
         permalinkParser = FakePermalinkParser(),
-        textPillificationHelper = textPillificationHelper,
+        textPillificator = textPillificator,
     )
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  * Copyright 2024, 2025 New Vector Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
@@ -11,6 +11,6 @@ package io.element.android.features.messages.api.timeline
 /**
  * Replaces Matrix ids, room aliases, `@room` and Matrix permalinks found in a text with mention pills.
  */
-interface TextPillificationHelper {
+interface TextPillificator {
     fun pillify(text: CharSequence, pillifyPermalinks: Boolean = true): CharSequence
 }

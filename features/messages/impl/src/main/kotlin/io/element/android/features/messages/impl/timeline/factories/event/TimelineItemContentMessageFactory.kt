@@ -14,7 +14,7 @@ import androidx.core.text.toSpannable
 import dev.zacsweers.metro.Inject
 import io.element.android.features.location.api.Location
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
-import io.element.android.features.messages.api.timeline.TextPillificationHelper
+import io.element.android.features.messages.api.timeline.TextPillificator
 import io.element.android.features.messages.impl.timeline.model.event.AttachmentItem
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
@@ -74,7 +74,7 @@ class TimelineItemContentMessageFactory(
     private val fileExtensionExtractor: FileExtensionExtractor,
     private val htmlConverterProvider: HtmlConverterProvider,
     private val permalinkParser: PermalinkParser,
-    private val textPillificationHelper: TextPillificationHelper,
+    private val textPillificator: TextPillificator,
     private val htmlMessageParser: HtmlMessageParser,
     private val featureFlagService: FeatureFlagService,
 ) {
@@ -93,7 +93,7 @@ class TimelineItemContentMessageFactory(
                     prefix = "* $senderDisambiguatedDisplayName",
                 )
                 val formattedBody = dom?.let(::parseHtml)
-                    ?: textPillificationHelper.pillify(emoteBody).safeLinkify()
+                    ?: textPillificator.pillify(emoteBody).safeLinkify()
                 TimelineItemEmoteContent(
                     body = emoteBody,
                     htmlDocument = dom,
@@ -110,7 +110,7 @@ class TimelineItemContentMessageFactory(
                 val body = messageType.body.trimEnd()
                 val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
                 val formattedBody = htmlDocument?.let(::parseHtml)
-                    ?: textPillificationHelper.pillify(body).safeLinkify()
+                    ?: textPillificator.pillify(body).safeLinkify()
                 TimelineItemTextContent(
                     body = body,
                     htmlDocument = htmlDocument,
@@ -281,7 +281,7 @@ class TimelineItemContentMessageFactory(
                 val body = messageType.body.trimEnd()
                 val htmlDocument = messageType.formatted?.toHtmlDocument(permalinkParser = permalinkParser)
                 val formattedBody = htmlDocument?.let(::parseHtml)
-                    ?: textPillificationHelper.pillify(body).safeLinkify()
+                    ?: textPillificator.pillify(body).safeLinkify()
                 TimelineItemNoticeContent(
                     body = body,
                     htmlDocument = htmlDocument,
@@ -435,7 +435,7 @@ class TimelineItemContentMessageFactory(
                 TimelineItemTextContent(
                     body = body,
                     htmlDocument = null,
-                    formattedBody = textPillificationHelper.pillify(body).safeLinkify(),
+                    formattedBody = textPillificator.pillify(body).safeLinkify(),
                     isEdited = content.isEdited,
                 )
             }
@@ -455,7 +455,7 @@ class TimelineItemContentMessageFactory(
     private fun parseHtml(document: Document): CharSequence? {
         return htmlConverterProvider.provide()
             .fromDocumentToSpans(document)
-            .let { textPillificationHelper.pillify(it) }
+            .let { textPillificator.pillify(it) }
             .safeLinkify()
     }
 }

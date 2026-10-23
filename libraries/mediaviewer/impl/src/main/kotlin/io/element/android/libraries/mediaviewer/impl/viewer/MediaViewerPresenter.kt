@@ -24,7 +24,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
-import io.element.android.features.messages.api.timeline.TextPillificationHelper
+import io.element.android.features.messages.api.timeline.TextPillificator
 import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -65,7 +65,7 @@ class MediaViewerPresenter(
     private val localMediaActions: LocalMediaActions,
     private val htmlConverterProvider: HtmlConverterProvider,
     private val permalinkParser: PermalinkParser,
-    private val textPillificationHelper: TextPillificationHelper,
+    private val textPillificator: TextPillificator,
 ) : Presenter<MediaViewerState> {
     @AssistedFactory
     fun interface Factory {
@@ -231,7 +231,7 @@ class MediaViewerPresenter(
             FormattedBody(format = MessageFormat.HTML, body = htmlCaption)
                 .toHtmlDocument(permalinkParser = permalinkParser)
                 ?.let { htmlConverterProvider.provide().fromDocumentToSpans(it) }
-                ?.let { textPillificationHelper.pillify(it) }
+                ?.let { textPillificator.pillify(it) }
                 ?.safeLinkify()
         }
         return copy(formattedCaption = formattedCaption)

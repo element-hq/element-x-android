@@ -8,11 +8,11 @@
 
 package io.element.android.features.messages.test.timeline
 
-import io.element.android.features.messages.api.timeline.TextPillificationHelper
+import io.element.android.features.messages.api.timeline.TextPillificator
 
-class FakeTextPillificationHelper(
+class FakeTextPillificator(
     private val pillifyLambda: (CharSequence, Boolean) -> CharSequence = { text, _ -> text }
-) : TextPillificationHelper {
+) : TextPillificator {
     override fun pillify(text: CharSequence, pillifyPermalinks: Boolean): CharSequence {
         return pillifyLambda(text, pillifyPermalinks)
     }
