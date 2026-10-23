@@ -9,6 +9,9 @@ package io.element.android.features.callnative.impl
 
 import android.Manifest
 import android.app.Application
+import android.content.ComponentName
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.call.test.FakeElementCallController
@@ -84,8 +87,34 @@ class DefaultNativeCallEntryPointTest : RobolectricTest() {
         assertThat(controller.startedCalls).isEmpty()
     }
 
+    @Test
+    fun `starting a call brings the app to the front`() = runTest {
+        grantMicrophonePermission()
+        registerLauncherActivity()
+        val entryPoint = createEntryPoint(FakeElementCallController())
+
+        entryPoint.startCall(A_CALL_DATA)
+        runCurrent()
+
+        // The call screen is an overlay of the main Activity: answered from a notification or the
+        // ringing screen, the call would otherwise run with nothing on screen. The app counts as in
+        // the foreground while the ringing screen shows, so this must not depend on that.
+        val started = shadowOf(RuntimeEnvironment.getApplication()).nextStartedActivity
+        assertThat(started.component).isEqualTo(A_LAUNCHER_ACTIVITY)
+        assertThat(started.flags and Intent.FLAG_ACTIVITY_NEW_TASK).isNotEqualTo(0)
+    }
+
     private fun grantMicrophonePermission() {
         shadowOf(RuntimeEnvironment.getApplication()).grantPermissions(Manifest.permission.RECORD_AUDIO)
+    }
+
+    private fun registerLauncherActivity() {
+        val packageManager = shadowOf(RuntimeEnvironment.getApplication().packageManager)
+        packageManager.addActivityIfNotPresent(A_LAUNCHER_ACTIVITY)
+        packageManager.addIntentFilterForActivity(
+            A_LAUNCHER_ACTIVITY,
+            IntentFilter(Intent.ACTION_MAIN).apply { addCategory(Intent.CATEGORY_LAUNCHER) },
+        )
     }
 
     private fun TestScope.createEntryPoint(
@@ -99,5 +128,7 @@ class DefaultNativeCallEntryPointTest : RobolectricTest() {
 
     private companion object {
         val A_CALL_DATA = CallData(sessionId = A_SESSION_ID, roomId = A_ROOM_ID, isAudioCall = true)
+        val A_LAUNCHER_ACTIVITY: ComponentName
+            get() = ComponentName(RuntimeEnvironment.getApplication().packageName, "io.element.android.x.MainActivity")
     }
 }
