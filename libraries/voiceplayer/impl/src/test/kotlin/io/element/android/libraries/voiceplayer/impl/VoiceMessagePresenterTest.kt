@@ -189,6 +189,7 @@ class VoiceMessagePresenterTest {
                 assertThat(it.buttonType).isEqualTo(VoiceMessageState.ButtonType.Play)
                 assertThat(it.progress).isEqualTo(0f)
                 assertThat(it.time).isEqualTo("0:10")
+                assertThat(it.showCursor).isFalse()
             }
 
             initialState.eventSink(VoiceMessageEvent.Seek(0.5f))
@@ -197,6 +198,7 @@ class VoiceMessagePresenterTest {
                 assertThat(it.buttonType).isEqualTo(VoiceMessageState.ButtonType.Play)
                 assertThat(it.progress).isEqualTo(0.5f)
                 assertThat(it.time).isEqualTo("0:05")
+                assertThat(it.showCursor).isTrue()
             }
         }
     }
