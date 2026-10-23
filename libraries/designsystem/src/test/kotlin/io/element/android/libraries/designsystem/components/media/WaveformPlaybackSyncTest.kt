@@ -18,14 +18,14 @@ class WaveformPlaybackSyncTest {
 
     @Test
     fun `progress advances with the elapsed time`() {
-        assertThat(extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = 1_000L, durationMs = 10_000L, playbackSpeed = 1f))
-            .isWithin(0.0001f).of(0.4f)
+        val progress = extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = 1_000L, durationMs = 10_000L, playbackSpeed = 1f)
+        assertThat(progress).isWithin(0.0001f).of(0.4f)
     }
 
     @Test
     fun `progress advances faster with a higher playback speed`() {
-        assertThat(extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = 1_000L, durationMs = 10_000L, playbackSpeed = 2f))
-            .isWithin(0.0001f).of(0.5f)
+        val progress = extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = 1_000L, durationMs = 10_000L, playbackSpeed = 2f)
+        assertThat(progress).isWithin(0.0001f).of(0.5f)
     }
 
     @Test

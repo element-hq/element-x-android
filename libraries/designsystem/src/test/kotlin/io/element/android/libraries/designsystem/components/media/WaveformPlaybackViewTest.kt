@@ -12,7 +12,6 @@ package io.element.android.libraries.designsystem.components.media
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Modifier
@@ -52,14 +51,14 @@ class WaveformPlaybackViewTest : RobolectricTest() {
     fun `smooth progress follows a new player sample when paused`() = runAndroidComposeUiTest {
         val playbackProgress = mutableFloatStateOf(0.2f)
         val smoothProgress = setSmoothPlaybackProgress(playbackProgress = { playbackProgress.floatValue })
-        assertThat(smoothProgress()).isEqualTo(0.2f)
+        assertThat(smoothProgress.progress).isEqualTo(0.2f)
         playbackProgress.floatValue = 0.8f
         // No frame is requested while paused, so notify the change before advancing the clock.
         Snapshot.sendApplyNotifications()
         mainClock.advanceTimeByFrame()
-        assertThat(smoothProgress()).isEqualTo(0.8f)
+        assertThat(smoothProgress.progress).isEqualTo(0.8f)
         mainClock.advanceTimeBy(1_000L)
-        assertThat(smoothProgress()).isEqualTo(0.8f)
+        assertThat(smoothProgress.progress).isEqualTo(0.8f)
     }
 
     @Test
@@ -72,7 +71,7 @@ class WaveformPlaybackViewTest : RobolectricTest() {
         )
         mainClock.advanceTimeBy(1_000L)
         // 1 second at 2x speed of a 10 second media is 0.2 of progress. Allow a few frames of error.
-        assertThat(smoothProgress()).isWithin(0.01f).of(0.4f)
+        assertThat(smoothProgress.progress).isWithin(0.01f).of(0.4f)
     }
 
     @Test
@@ -84,13 +83,39 @@ class WaveformPlaybackViewTest : RobolectricTest() {
             durationMs = 10_000L,
         )
         mainClock.advanceTimeBy(2_000L)
-        assertThat(smoothProgress()).isWithin(0.01f).of(0.7f)
+        assertThat(smoothProgress.progress).isWithin(0.01f).of(0.7f)
         // The player is behind the estimate: follow the player.
         playbackProgress.floatValue = 0.6f
         mainClock.advanceTimeByFrame()
-        assertThat(smoothProgress()).isWithin(0.01f).of(0.6f)
+        assertThat(smoothProgress.progress).isWithin(0.01f).of(0.6f)
         mainClock.advanceTimeBy(1_000L)
-        assertThat(smoothProgress()).isWithin(0.01f).of(0.7f)
+        assertThat(smoothProgress.progress).isWithin(0.01f).of(0.7f)
+    }
+
+    @Test
+    fun `smooth progress continues from a seek while playing`() = runAndroidComposeUiTest {
+        val smoothProgress = setSmoothPlaybackProgress(
+            playbackProgress = { 0.2f },
+            isPlaying = true,
+            durationMs = 10_000L,
+        )
+        mainClock.advanceTimeBy(1_000L)
+        assertThat(smoothProgress.progress).isWithin(0.01f).of(0.3f)
+        smoothProgress.seekTo(0.8f)
+        assertThat(smoothProgress.progress).isEqualTo(0.8f)
+        // The player has not reported the new position yet: the progress must not go back to where it was playing.
+        mainClock.advanceTimeByFrame()
+        assertThat(smoothProgress.progress).isWithin(0.01f).of(0.8f)
+        mainClock.advanceTimeBy(1_000L)
+        assertThat(smoothProgress.progress).isWithin(0.01f).of(0.9f)
+    }
+
+    @Test
+    fun `smooth progress continues from a seek while paused`() = runAndroidComposeUiTest {
+        val smoothProgress = setSmoothPlaybackProgress(playbackProgress = { 0.2f })
+        smoothProgress.seekTo(0.8f)
+        mainClock.advanceTimeBy(1_000L)
+        assertThat(smoothProgress.progress).isEqualTo(0.8f)
     }
 
     @Test
@@ -101,7 +126,7 @@ class WaveformPlaybackViewTest : RobolectricTest() {
             durationMs = 1_000L,
         )
         mainClock.advanceTimeBy(1_000L)
-        assertThat(smoothProgress()).isEqualTo(1f)
+        assertThat(smoothProgress.progress).isEqualTo(1f)
     }
 
     @Test
@@ -112,7 +137,7 @@ class WaveformPlaybackViewTest : RobolectricTest() {
             durationMs = 0L,
         )
         mainClock.advanceTimeBy(1_000L)
-        assertThat(smoothProgress()).isEqualTo(0.3f)
+        assertThat(smoothProgress.progress).isEqualTo(0.3f)
     }
 
     @Test
@@ -132,7 +157,7 @@ class WaveformPlaybackViewTest : RobolectricTest() {
 }
 
 /**
- * Sets [rememberSmoothPlaybackProgress] as content and returns a function to read its current value.
+ * Sets [rememberSmoothPlaybackProgressState] as content and returns the state.
  * The main clock is not advanced automatically.
  */
 private fun AndroidComposeUiTest<ComponentActivity>.setSmoothPlaybackProgress(
@@ -140,11 +165,11 @@ private fun AndroidComposeUiTest<ComponentActivity>.setSmoothPlaybackProgress(
     isPlaying: Boolean = false,
     durationMs: Long = 0L,
     playbackSpeed: Float = 1f,
-): () -> Float {
+): SmoothPlaybackProgressState {
     mainClock.autoAdvance = false
-    var state: MutableFloatState? = null
+    var state: SmoothPlaybackProgressState? = null
     setSafeContent {
-        state = rememberSmoothPlaybackProgress(
+        state = rememberSmoothPlaybackProgressState(
             playbackProgress = playbackProgress(),
             isPlaying = isPlaying,
             durationMs = durationMs,
@@ -152,7 +177,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setSmoothPlaybackProgress(
         )
     }
     mainClock.advanceTimeByFrame()
-    return { requireNotNull(state).floatValue }
+    return requireNotNull(state)
 }
 
 private fun AndroidComposeUiTest<ComponentActivity>.setWaveformPlaybackView(

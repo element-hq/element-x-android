@@ -13,15 +13,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableFloatState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -85,7 +81,7 @@ fun WaveformPlaybackView(
     val seekProgress = remember { mutableStateOf<Float?>(null) }
     var canvasSize by remember { mutableStateOf(DpSize(0.dp, 0.dp)) }
     var canvasSizePx by remember { mutableStateOf(Size(0f, 0f)) }
-    val smoothProgress = rememberSmoothPlaybackProgress(
+    val smoothProgress = rememberSmoothPlaybackProgressState(
         playbackProgress = playbackProgress,
         isPlaying = isPlaying,
         durationMs = durationMs,
@@ -125,8 +121,7 @@ fun WaveformPlaybackView(
                         onDisallowParentIntercept = { requestDisallowInterceptTouchEvent.invoke(it) },
                         onUpdateSeekProgress = { seekProgress.value = it },
                         onCommitSeek = { seek ->
-                            // Show the seek target until the player reports its new position.
-                            smoothProgress.floatValue = seek
+                            smoothProgress.seekTo(seek)
                             onSeek(seek)
                         },
                     )
@@ -137,7 +132,7 @@ fun WaveformPlaybackView(
         canvasSize = size.toDpSize()
         canvasSizePx = size
         // Read in the draw phase, so that the smooth progress only redraws the canvas on each frame.
-        val progress = seekProgress.value ?: smoothProgress.floatValue
+        val progress = seekProgress.value ?: smoothProgress.progress
         val cornerRadius = lineWidth / 2
         // Calculate the size of the waveform by summing the width of all the lines and paddings
         drawWaveform(
@@ -176,46 +171,6 @@ fun WaveformPlaybackView(
             )
         }
     }
-}
-
-/**
- * Playback progress that moves smoothly while playing.
- *
- * Player samples are relatively infrequent, so on every frame the progress is extrapolated from the latest sample, using
- * the time elapsed since it was received and [playbackSpeed]. Each new sample becomes the new starting point, so the
- * progress cannot drift away from the player. When not playing, the progress is the latest sample.
- *
- * The frame loop is not affected by the system animator duration scale, since the cursor tracks the audio.
- *
- * @param playbackProgress Latest player progress, from 0 to 1.
- * @param isPlaying Whether media is currently playing. Progress is only extrapolated while this is true.
- * @param durationMs Total media duration in milliseconds. Must be `> 0` to extrapolate.
- * @param playbackSpeed Current playback rate (`1` = realtime).
- */
-@Composable
-internal fun rememberSmoothPlaybackProgress(
-    playbackProgress: Float,
-    isPlaying: Boolean,
-    durationMs: Long,
-    playbackSpeed: Float,
-): MutableFloatState {
-    val progress = remember { mutableFloatStateOf(playbackProgress) }
-    LaunchedEffect(playbackProgress, isPlaying, durationMs, playbackSpeed) {
-        progress.floatValue = playbackProgress
-        if (!isPlaying || durationMs <= 0L) return@LaunchedEffect
-        val sampleTimeMs = withFrameMillis { it }
-        while (true) {
-            withFrameMillis { frameTimeMs ->
-                progress.floatValue = extrapolatePlaybackProgress(
-                    progress = playbackProgress,
-                    elapsedMs = frameTimeMs - sampleTimeMs,
-                    durationMs = durationMs,
-                    playbackSpeed = playbackSpeed,
-                )
-            }
-        }
-    }
-    return progress
 }
 
 @PreviewsDayNight
