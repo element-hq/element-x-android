@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.room.threads.ThreadsListService
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetCapabilitiesPolicy
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import kotlinx.coroutines.flow.Flow
@@ -255,9 +256,13 @@ interface JoinedRoom : BaseRoom {
     /**
      * Get a [MatrixWidgetDriver] for the provided [widgetSettings].
      * @param widgetSettings The widget settings to use.
+     * @param capabilitiesPolicy The policy used to decide which requested widget capabilities are granted.
      * @return The resulting [MatrixWidgetDriver], or a failure.
      */
-    fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver>
+    fun getWidgetDriver(
+        widgetSettings: MatrixWidgetSettings,
+        capabilitiesPolicy: MatrixWidgetCapabilitiesPolicy,
+    ): Result<MatrixWidgetDriver>
 
     /**
      * Enables or disables the send queue of this room only; see [io.element.android.libraries.matrix.api.MatrixClient.setAllSendQueuesEnabled]
