@@ -229,6 +229,7 @@ class MediaViewerPresenter(
             snackbarMessage = snackbarMessage,
             canShowInfo = inputs !is MediaViewerEntryPoint.Params.Avatar,
             mediaBottomSheetState = mediaBottomSheetState,
+            currentUserId = room.sessionId,
             eventSink = ::handleEvent,
         )
     }

@@ -97,6 +97,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.api.ui.HtmlMessageContent
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectMediaState
 import io.element.android.libraries.matrixmedia.api.MediaRequestData
@@ -295,6 +296,7 @@ fun MediaViewerView(
                                 caption = dataForPage.mediaInfo.caption,
                                 formattedCaption = dataForPage.formattedCaption,
                                 captionTree = dataForPage.captionTree,
+                                currentUserId = state.currentUserId,
                                 onHeightChange = { bottomPaddingInPixels = it },
                             )
                         }
@@ -640,6 +642,7 @@ private fun MediaViewerBottomBar(
     caption: String?,
     formattedCaption: CharSequence?,
     captionTree: DocumentNode?,
+    currentUserId: UserId?,
     showDivider: Boolean,
     onHeightChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -682,6 +685,7 @@ private fun MediaViewerBottomBar(
                     HtmlMessageContent(
                         node = captionTree,
                         modifier = textModifier,
+                        currentUserId = currentUserId,
                         onLinkClick = { url, _ ->
                             runCatchingExceptions { uriHandler.openUri(url) }
                                 .onFailure { Timber.e(it, "Failed to open link") }

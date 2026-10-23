@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransa
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
@@ -110,6 +111,7 @@ class MediaViewerPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+            assertThat(initialState.currentUserId).isEqualTo(A_SESSION_ID)
 
             cancelAndIgnoreRemainingEvents()
         }
