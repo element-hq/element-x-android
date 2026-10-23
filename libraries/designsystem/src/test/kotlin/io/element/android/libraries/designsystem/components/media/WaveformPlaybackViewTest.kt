@@ -15,8 +15,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.compose.ui.unit.dp
 import com.google.common.truth.Truth.assertThat
@@ -32,6 +35,26 @@ class WaveformPlaybackViewTest : RobolectricTest() {
     fun `seeking can be disabled`() = runAndroidComposeUiTest {
         setWaveformPlaybackView(seekEnabled = false)
         waitForIdle()
+    }
+
+    @Test
+    fun `dragging the cursor reports the seek progress, then the seek`() = runAndroidComposeUiTest {
+        val seekProgressChanges = mutableListOf<Float?>()
+        val seeks = mutableListOf<Float>()
+        setWaveformPlaybackView(
+            // An empty waveform fills the whole width.
+            waveform = persistentListOf(),
+            onSeekProgressChange = { seekProgressChanges += it },
+            onSeek = { seeks += it },
+        )
+        onRoot().performTouchInput { down(centerLeft + Offset(1f, 0f)) }
+        onRoot().performTouchInput { moveTo(center) }
+        onRoot().performTouchInput { up() }
+        assertThat(seekProgressChanges).hasSize(3)
+        assertThat(seekProgressChanges[0]).isWithin(0.05f).of(0f)
+        assertThat(seekProgressChanges[1]).isWithin(0.05f).of(0.5f)
+        assertThat(seekProgressChanges[2]).isNull()
+        assertThat(seeks).containsExactly(seekProgressChanges[1])
     }
 
     @Test
@@ -188,6 +211,8 @@ private fun AndroidComposeUiTest<ComponentActivity>.setWaveformPlaybackView(
     durationMs: Long = 0L,
     playbackSpeed: Float = 1f,
     seekEnabled: Boolean = true,
+    onSeek: (Float) -> Unit = {},
+    onSeekProgressChange: (Float?) -> Unit = {},
 ) {
     setSafeContent {
         ElementTheme {
@@ -195,7 +220,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setWaveformPlaybackView(
                 playbackProgress = playbackProgress(),
                 showCursor = showCursor,
                 waveform = waveform,
-                onSeek = {},
+                onSeek = onSeek,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(34.dp),
@@ -203,6 +228,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setWaveformPlaybackView(
                 durationMs = durationMs,
                 playbackSpeed = playbackSpeed,
                 seekEnabled = seekEnabled,
+                onSeekProgressChange = onSeekProgressChange,
             )
         }
     }
