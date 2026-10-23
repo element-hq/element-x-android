@@ -241,7 +241,7 @@ class RustMatrixAuthenticationService(
                     deviceId = null,
                     additionalScopes = emptyList(),
                 )
-                val getUrlResolver = RustTemporaryMatrixClient(client, sessionPaths)
+                val getUrlResolver = RustTemporaryMatrixClient(client, sessionPaths, coroutineDispatchers.io)
                 val url = oAuthAuthorizationData.loginUrl()
                     .let {
                         enterpriseService.tweakMasUrl(
