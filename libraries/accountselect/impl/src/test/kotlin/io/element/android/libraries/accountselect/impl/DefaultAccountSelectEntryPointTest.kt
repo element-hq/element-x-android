@@ -13,6 +13,8 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import org.junit.Rule
@@ -29,19 +31,24 @@ class DefaultAccountSelectEntryPointTest {
             AccountSelectNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenter = createAccountSelectPresenter(),
+                presenterFactory = { permalinkData -> createAccountSelectPresenter(permalinkData = permalinkData) },
             )
         }
         val callback = object : AccountSelectEntryPoint.Callback {
             override fun onAccountSelected(sessionId: SessionId) = lambdaError()
             override fun onCancel() = lambdaError()
         }
+        val params = AccountSelectEntryPoint.Params(
+            permalinkData = PermalinkData.UserLink(A_USER_ID),
+        )
         val result = entryPoint.createNode(
             parentNode = parentNode,
             buildContext = BuildContext.root(null),
+            params = params,
             callback = callback,
         )
         assertThat(result).isInstanceOf(AccountSelectNode::class.java)
+        assertThat(result.plugins).contains(AccountSelectNode.Inputs(params.permalinkData))
         assertThat(result.plugins).contains(callback)
     }
 }

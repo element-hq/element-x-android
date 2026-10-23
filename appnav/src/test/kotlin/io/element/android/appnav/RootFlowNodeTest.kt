@@ -21,7 +21,9 @@ import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
 import com.bumble.appyx.utils.customisations.NodeCustomisationDirectoryImpl
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appnav.intent.FakePermalinkSessionResolver
 import io.element.android.appnav.intent.IntentResolver
+import io.element.android.appnav.intent.PermalinkSessionResolver
 import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.session.FakeSyncOrchestratorFactory
@@ -44,6 +46,12 @@ import io.element.android.libraries.architecture.AssistedNodeFactory
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
@@ -65,12 +73,17 @@ import io.element.android.tests.testutils.node.FakeNodeFactoriesBindings
 import io.element.android.tests.testutils.node.FakeParentNode
 import io.element.android.tests.testutils.presenter.NotUsedPresenter
 import io.element.android.tests.testutils.robolectric.RobolectricTest
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+
+private const val A_PERMALINK = "https://matrix.to/#/!aRoomId:domain"
 
 private const val A_LOGIN_LINK = "https://mobile.element.io/element/?account_provider=example.com&login_hint=mxid:@alice:example.com"
 
@@ -175,6 +188,77 @@ class RootFlowNodeTest : RobolectricTest() {
         assertThat(rootFlowNode.backstack.activeElement).isEqualTo(RootFlowNode.NavTarget.NotLoggedInFlow(null))
     }
 
+    @Test
+    fun `given several sessions, when a room permalink is handled and a session has joined the room, then this session is used`() = runTest {
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val resolveResult = lambdaRecorder<RoomIdOrAlias, List<SessionId>, SessionId?> { _, _ -> SessionId("@bob:example.com") }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = twoSessionsStore(setLatestSessionResult),
+            loginIntentResolverResult = { null },
+            permalinkParser = FakePermalinkParser { aRoomLink() },
+            permalinkSessionResolver = FakePermalinkSessionResolver { roomIdOrAlias, sessionIds -> resolveResult(roomIdOrAlias, sessionIds) },
+        )
+        rootFlowNode.parentNodeTestHelper()
+        // handleIntent suspends until the logged in flow is attached, which never happens here
+        backgroundScope.launch(start = CoroutineStart.UNDISPATCHED) { rootFlowNode.handleIntent(aPermalinkIntent()) }
+        resolveResult.assertions().isCalledOnce().with(
+            value(RoomIdOrAlias.Id(A_ROOM_ID)),
+            value(listOf(SessionId("@alice:example.com"), SessionId("@bob:example.com"))),
+        )
+        setLatestSessionResult.assertions().isCalledOnce().with(value("@bob:example.com"))
+    }
+
+    @Test
+    fun `given several sessions, when a room permalink is handled and no session has joined the room, then the latest session is used`() = runTest {
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val resolveResult = lambdaRecorder<RoomIdOrAlias, List<SessionId>, SessionId?> { _, _ -> null }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = twoSessionsStore(setLatestSessionResult),
+            loginIntentResolverResult = { null },
+            permalinkParser = FakePermalinkParser { aRoomLink() },
+            permalinkSessionResolver = FakePermalinkSessionResolver { roomIdOrAlias, sessionIds -> resolveResult(roomIdOrAlias, sessionIds) },
+        )
+        rootFlowNode.parentNodeTestHelper()
+        // handleIntent suspends until the logged in flow is attached, which never happens here
+        backgroundScope.launch(start = CoroutineStart.UNDISPATCHED) { rootFlowNode.handleIntent(aPermalinkIntent()) }
+        resolveResult.assertions().isCalledOnce()
+        setLatestSessionResult.assertions().isCalledOnce().with(value("@alice:example.com"))
+    }
+
+    @Test
+    fun `given several sessions, when a user permalink is handled, then the session resolver is not used`() = runTest {
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = twoSessionsStore(setLatestSessionResult),
+            loginIntentResolverResult = { null },
+            permalinkParser = FakePermalinkParser { PermalinkData.UserLink(A_USER_ID) },
+        )
+        rootFlowNode.parentNodeTestHelper()
+        // handleIntent suspends until the logged in flow is attached, which never happens here
+        backgroundScope.launch(start = CoroutineStart.UNDISPATCHED) { rootFlowNode.handleIntent(aPermalinkIntent()) }
+        setLatestSessionResult.assertions().isCalledOnce().with(value("@alice:example.com"))
+    }
+
+    private fun twoSessionsStore(setLatestSessionResult: (String) -> Unit) = InMemorySessionStore(
+        initialList = listOf(
+            aSessionData(sessionId = "@alice:example.com"),
+            aSessionData(sessionId = "@bob:example.com"),
+        ),
+        setLatestSessionResult = setLatestSessionResult,
+    )
+
+    private fun aRoomLink() = PermalinkData.RoomLink(
+        roomIdOrAlias = RoomIdOrAlias.Id(A_ROOM_ID),
+        eventId = null,
+        threadId = null,
+        viaParameters = persistentListOf(),
+    )
+
+    private fun aPermalinkIntent() = Intent(Intent.ACTION_VIEW, Uri.parse(A_PERMALINK))
+
     private fun aLoginIntent() = Intent(Intent.ACTION_VIEW, Uri.parse(A_LOGIN_LINK))
 
     private fun TestScope.createRootFlowNode(
@@ -182,6 +266,9 @@ class RootFlowNodeTest : RobolectricTest() {
         sessionStore: SessionStore = InMemorySessionStore(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         accountProviderAccessControl: AccountProviderAccessControl = FakeAccountProviderAccessControl { true },
+        loginIntentResolverResult: (String) -> LoginParams? = { A_LOGIN_PARAMS },
+        permalinkParser: PermalinkParser = FakePermalinkParser(),
+        permalinkSessionResolver: PermalinkSessionResolver = FakePermalinkSessionResolver(),
     ): RootFlowNode {
         val matrixSessionCache = MatrixSessionCache(
             authenticationService = FakeMatrixAuthenticationService(),
@@ -234,11 +321,12 @@ class RootFlowNodeTest : RobolectricTest() {
             accountSelectEntryPoint = FakeAccountSelectEntryPoint(),
             intentResolver = IntentResolver(
                 deeplinkParser = { null },
-                loginIntentResolver = FakeLoginIntentResolver { A_LOGIN_PARAMS },
+                loginIntentResolver = FakeLoginIntentResolver(loginIntentResolverResult),
                 oAuthIntentResolver = FakeOAuthIntentResolver { null },
-                permalinkParser = FakePermalinkParser(),
+                permalinkParser = permalinkParser,
                 shareIntentHandler = FakeShareIntentHandler(),
             ),
+            permalinkSessionResolver = permalinkSessionResolver,
             oAuthActionFlow = FakeOAuthActionFlow(),
             featureFlagService = featureFlagService,
             announcementService = FakeAnnouncementService(),

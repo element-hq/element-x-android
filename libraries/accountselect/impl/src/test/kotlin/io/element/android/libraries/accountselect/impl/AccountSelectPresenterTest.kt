@@ -9,9 +9,19 @@
 package io.element.android.libraries.accountselect.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
+import io.element.android.libraries.matrix.test.AN_EXCEPTION
+import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -30,7 +40,18 @@ class AccountSelectPresenterTest {
         val presenter = createAccountSelectPresenter()
         presenter.test {
             val initialState = awaitItem()
+            assertThat(initialState.linkPillText).isEqualTo(A_ROOM_ALIAS.value)
             assertThat(initialState.accounts).isEmpty()
+        }
+    }
+
+    @Test
+    fun `present - user link is rendered as a pill`() = runTest {
+        val presenter = createAccountSelectPresenter(
+            permalinkData = PermalinkData.UserLink(A_USER_ID),
+        )
+        presenter.test {
+            assertThat(awaitItem().linkPillText).isEqualTo(A_USER_ID.value)
         }
     }
 
@@ -72,10 +93,46 @@ class AccountSelectPresenterTest {
             )
         }
     }
+
+    @Test
+    fun `present - the status of the accounts is observed from the clients in memory`() = runTest {
+        val userStatus = UserStatus(emoji = "\uD83C\uDFD6\uFE0F", text = "On holiday")
+        val matrixClient = FakeMatrixClient(sessionId = A_SESSION_ID).apply {
+            setUserStatus(userStatus)
+        }
+        val presenter = createAccountSelectPresenter(
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(sessionId = A_SESSION_ID.value),
+                    aSessionData(sessionId = A_SESSION_ID_2.value),
+                )
+            ),
+            matrixClientProvider = FakeMatrixClientProvider { sessionId ->
+                if (sessionId == A_SESSION_ID) Result.success(matrixClient) else Result.failure(AN_EXCEPTION)
+            },
+        )
+        presenter.test {
+            skipItems(1)
+            val accounts = awaitItem().accounts
+            assertThat(accounts[0].displayedStatus).isEqualTo(DisplayedStatus.UserSet(userStatus))
+            assertThat(accounts[0].rawStatus).isEqualTo(userStatus)
+            assertThat(accounts[1].displayedStatus).isNull()
+            assertThat(accounts[1].rawStatus).isNull()
+            // The status is updated live
+            matrixClient.clearUserStatus()
+            val updatedAccounts = awaitItem().accounts
+            assertThat(updatedAccounts[0].displayedStatus).isNull()
+            assertThat(updatedAccounts[0].rawStatus).isNull()
+        }
+    }
 }
 
 internal fun createAccountSelectPresenter(
+    permalinkData: PermalinkData = PermalinkData.RoomLink(RoomIdOrAlias.Alias(A_ROOM_ALIAS)),
     sessionStore: SessionStore = InMemorySessionStore(),
+    matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider { Result.failure(AN_EXCEPTION) },
 ) = AccountSelectPresenter(
+    permalinkData = permalinkData,
     sessionStore = sessionStore,
+    matrixClientProvider = matrixClientProvider,
 )
