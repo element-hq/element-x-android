@@ -266,6 +266,7 @@ class RustMatrixClient(
         client = innerClient,
         isSyncServiceReady = syncService.syncState.map { it == SyncState.Running },
         sessionCoroutineScope = sessionCoroutineScope,
+        sessionDispatcher = sessionDispatcher,
     )
 
     private val roomInfoMapper = RoomInfoMapper()
@@ -701,7 +702,7 @@ class RustMatrixClient(
                     var room = (roomId?.let { roomFactory.getJoinedRoomOrPreview(it, serverNames) } as? GetRoomResult.NotJoined)?.notJoinedRoom
                     if (room == null) {
                         val preview = innerClient.getRoomPreviewFromRoomAlias(roomIdOrAlias.roomAlias.value)
-                        room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()))
+                        room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()), sessionDispatcher)
                     }
                     room
                 }
@@ -710,7 +711,7 @@ class RustMatrixClient(
 
                     if (room == null) {
                         val preview = innerClient.getRoomPreviewFromRoomId(roomIdOrAlias.roomId.value, serverNames)
-                        room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()))
+                        room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()), sessionDispatcher)
                     }
                     room
                 }
@@ -745,19 +746,21 @@ class RustMatrixClient(
         return getCacheSize(includeCryptoDb = false)
     }
 
-    override suspend fun getDatabaseSizes(): Result<SdkStoreSizes> = runCatchingExceptions {
-        innerClient.getStoreSizes().run {
-            SdkStoreSizes(
-                stateStore = stateStore?.bytes,
-                eventCacheStore = eventCacheStore?.bytes,
-                mediaStore = mediaStore?.bytes,
-                cryptoStore = cryptoStore?.bytes,
-                searchIndex = searchIndex?.bytes,
-            )
+    override suspend fun getDatabaseSizes(): Result<SdkStoreSizes> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.getStoreSizes().run {
+                SdkStoreSizes(
+                    stateStore = stateStore?.bytes,
+                    eventCacheStore = eventCacheStore?.bytes,
+                    mediaStore = mediaStore?.bytes,
+                    cryptoStore = cryptoStore?.bytes,
+                    searchIndex = searchIndex?.bytes,
+                )
+            }
         }
     }
 
-    override suspend fun clearCache() {
+    override suspend fun clearCache(): Unit = withContext(sessionDispatcher) {
         _isShuttingDown.set(true)
         innerClient.clearCaches(innerSyncService)
         destroy()
@@ -968,8 +971,8 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun resetWellKnownConfig(): Result<Unit> {
-        return runCatchingExceptions {
+    override suspend fun resetWellKnownConfig(): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
             Timber.d("Resetting well-known config for session $sessionId")
             innerClient.resetWellKnown()
         }
@@ -1013,7 +1016,7 @@ class RustMatrixClient(
     }
 
     override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
-        return RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities())
+        return RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities(), sessionDispatcher)
     }
 
     override fun totalUnreadCount(): Result<Long> = runCatchingExceptions {
