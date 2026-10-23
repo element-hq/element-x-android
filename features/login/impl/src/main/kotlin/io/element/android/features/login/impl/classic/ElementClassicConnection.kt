@@ -240,8 +240,11 @@ class DefaultElementClassicConnection(
     fun onAvatarReceived(data: Bundle) {
         val currentState = stateFlow.value
         if (currentState is ElementClassicConnectionState.ElementClassicReady) {
-            // Check that the userId is still the same
-            val userId = data.getString(KEY_USER_ID_STR)
+            // Check that the userId is still the same.
+            // Before Android 13, the first access unparcels the whole bundle, including the avatar, so it must be guarded too.
+            val userId = runCatchingExceptions { data.getString(KEY_USER_ID_STR) }
+                .onFailure { Timber.tag(loggerTag.value).e(it, "Failed to read the avatar data") }
+                .getOrElse { return }
             if (userId != currentState.elementClassicSession.userId.value) {
                 Timber.tag(loggerTag.value).w(
                     "Received profile data for userId $userId but current" +
