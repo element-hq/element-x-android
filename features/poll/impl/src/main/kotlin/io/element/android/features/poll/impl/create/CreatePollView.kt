@@ -234,7 +234,7 @@ private fun CreatePollTopAppBar(
             TextButton(
                 text = when (mode) {
                     CreatePollState.Mode.New -> stringResource(id = CommonStrings.action_create)
-                    CreatePollState.Mode.Edit -> stringResource(id = CommonStrings.action_done)
+                    CreatePollState.Mode.Edit -> stringResource(id = CommonStrings.action_save)
                 },
                 onClick = onSaveClick,
                 enabled = saveEnabled,
