@@ -80,6 +80,7 @@ class ShowLocationPresenter(
         val coroutineScope = rememberCoroutineScope()
         val permissionsState: PermissionsState = permissionsPresenter.present()
         var isTrackMyLocation by remember { mutableStateOf(false) }
+        var isTrackMyLocationRequested by remember { mutableStateOf(false) }
         val appName by remember { derivedStateOf { buildMeta.applicationName } }
         var dialogState: LocationConstraintsDialogState by remember {
             mutableStateOf(LocationConstraintsDialogState.None)
@@ -102,7 +103,9 @@ class ShowLocationPresenter(
         }
 
         LaunchedEffect(permissionsState) {
-            checkLocationConstraints()
+            if (isTrackMyLocationRequested) {
+                checkLocationConstraints()
+            }
         }
 
         fun handleEvent(event: ShowLocationEvent) {
@@ -111,6 +114,7 @@ class ShowLocationPresenter(
                     locationActions.share(event.location, null)
                 }
                 is ShowLocationEvent.TrackMyLocation -> {
+                    isTrackMyLocationRequested = event.enabled
                     if (event.enabled) {
                         checkLocationConstraints()
                     } else {
