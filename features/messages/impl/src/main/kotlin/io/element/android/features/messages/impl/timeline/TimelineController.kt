@@ -8,13 +8,9 @@
 
 package io.element.android.features.messages.impl.timeline
 
-import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.SingleIn
-import dev.zacsweers.metro.binding
 import io.element.android.features.messages.impl.timeline.di.LiveTimeline
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
-import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.RoomCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -48,8 +44,6 @@ import java.util.Optional
  * This controller is responsible of using the right timeline to display messages and make associated actions.
  * It can be focused on the live timeline or on a detached timeline (focusing an unknown event).
  */
-@SingleIn(RoomScope::class)
-@ContributesBinding(RoomScope::class, binding = binding<TimelineProvider>())
 class TimelineController(
     private val room: JoinedRoom,
     @LiveTimeline private val liveTimeline: Timeline,
@@ -100,9 +94,7 @@ class TimelineController(
                     }
 
                     detachedTimelineFlow.getAndUpdate { current ->
-                        if (current.isPresent) {
-                            current.get().close()
-                        }
+                        current.ifPresent { it.close() }
                         Optional.of(newDetachedTimeline)
                     }
                     EventFocusResult.FocusedOnLive
