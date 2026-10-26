@@ -108,6 +108,7 @@ class ThreadedMessagesNode(
     private val inputs = inputs<Inputs>()
     private val callback: Callback = callback()
 
+    private lateinit var threadedTimeline: Timeline
     private var timelineController: TimelineController? by mutableStateOf(null)
     private var presenter: Presenter<MessagesState>? by mutableStateOf(null)
     private var timelinePresenter: TimelinePresenter? = null
@@ -117,7 +118,7 @@ class ThreadedMessagesNode(
      * We'll load the [presenter] in an async way to prevent this.
      */
     private suspend fun createPresenter(): Presenter<MessagesState> {
-        val threadedTimeline = room.createTimeline(CreateTimelineParams.Threaded(threadRootEventId = inputs.threadRootEventId)).getOrThrow()
+        threadedTimeline = room.createTimeline(CreateTimelineParams.Threaded(threadRootEventId = inputs.threadRootEventId)).getOrThrow()
         val timelineController = TimelineController(
             room,
             liveTimeline = threadedTimeline,
@@ -175,6 +176,12 @@ class ThreadedMessagesNode(
             onStop = {
                 appNavigationStateService.onLeavingThread(id)
             },
+            onDestroy = {
+                if (this::threadedTimeline.isInitialized) {
+                    threadedTimeline.close()
+                }
+                timelineController?.close()
+            }
         )
     }
 

@@ -8,13 +8,9 @@
 
 package io.element.android.features.messages.impl.timeline
 
-import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.SingleIn
-import dev.zacsweers.metro.binding
 import io.element.android.features.messages.impl.timeline.di.LiveTimeline
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
-import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.RoomCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -40,6 +36,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
 import java.io.Closeable
 import java.util.Optional
 
@@ -47,8 +44,6 @@ import java.util.Optional
  * This controller is responsible of using the right timeline to display messages and make associated actions.
  * It can be focused on the live timeline or on a detached timeline (focusing an unknown event).
  */
-@SingleIn(RoomScope::class)
-@ContributesBinding(RoomScope::class, binding = binding<TimelineProvider>())
 class TimelineController(
     private val room: JoinedRoom,
     @LiveTimeline private val liveTimeline: Timeline,
@@ -92,10 +87,14 @@ class TimelineController(
                     }
                 }
                 .map { newDetachedTimeline ->
+                    // If the coroutine scope is not active anymore, we don't want to keep the newly created detached timeline open.
+                    if (!coroutineScope.isActive) {
+                        newDetachedTimeline.close()
+                        return@map EventFocusResult.FocusedOnLive
+                    }
+
                     detachedTimelineFlow.getAndUpdate { current ->
-                        if (current.isPresent) {
-                            current.get().close()
-                        }
+                        current.ifPresent { it.close() }
                         Optional.of(newDetachedTimeline)
                     }
                     EventFocusResult.FocusedOnLive
