@@ -92,13 +92,31 @@ class ShowLocationPresenterTest {
     }
 
     @Test
-    fun `emits initial state with partial location permission`() = runTest {
+    fun `does not track user location on initial state with partial location permission`() = runTest {
         fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.SomeGranted))
 
         val presenter = createShowLocationPresenter()
         presenter.test {
             assertThat(awaitItem().isTrackMyLocation).isFalse()
-            assertThat(awaitItem().isTrackMyLocation).isTrue()
+            assertThat(fakePermissionsPresenter.events).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `does not request location permission on initial state`() = runTest {
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.NoneGranted,
+                permissionsRequested = false,
+            )
+        )
+
+        val presenter = createShowLocationPresenter()
+        presenter.test {
+            assertThat(awaitItem().isTrackMyLocation).isFalse()
+            assertThat(fakePermissionsPresenter.events).isEmpty()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -209,6 +227,29 @@ class ShowLocationPresenterTest {
 
             assertThat(fakePermissionsPresenter.events).contains(PermissionsEvent.RequestPermissions)
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `starts tracking user location after requested permission is granted`() = runTest {
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.NoneGranted,
+                shouldShowRationale = false,
+                permissionsRequested = false,
+            )
+        )
+
+        val presenter = createShowLocationPresenter()
+        presenter.test {
+            val initialState = awaitItem()
+
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
+            assertThat(fakePermissionsPresenter.events).contains(PermissionsEvent.RequestPermissions)
+
+            fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
+            assertThat(awaitItem().isTrackMyLocation).isFalse()
+            assertThat(awaitItem().isTrackMyLocation).isTrue()
         }
     }
 
