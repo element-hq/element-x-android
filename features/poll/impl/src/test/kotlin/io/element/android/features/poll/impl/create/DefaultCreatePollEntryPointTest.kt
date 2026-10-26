@@ -17,7 +17,6 @@ import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.features.poll.impl.data.PollRepository
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
-import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.node.TestParentNode
 import org.junit.Rule
@@ -38,7 +37,7 @@ class DefaultCreatePollEntryPointTest {
                     CreatePollPresenter(
                         repositoryFactory = {
                             val room = FakeJoinedRoom()
-                            PollRepository(room, LiveTimelineProvider(room), timelineMode)
+                            PollRepository(room, timelineMode)
                         },
                         analyticsService = FakeAnalyticsService(),
                         messageComposerContext = FakeMessageComposerContext(),

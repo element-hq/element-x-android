@@ -18,7 +18,6 @@ import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.SendTarget
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import kotlinx.coroutines.CancellationException
@@ -49,7 +48,7 @@ class TimelineController(
     @LiveTimeline private val liveTimeline: Timeline,
     @RoomCoroutineScope private val roomCoroutineScope: CoroutineScope,
     dispatchers: CoroutineDispatchers,
-) : Closeable, TimelineProvider {
+) : Closeable {
     private val coroutineScope = roomCoroutineScope.childScope(dispatchers.computation, "TimelineController")
 
     private val liveTimelineFlow = flowOf(liveTimeline)
@@ -151,7 +150,7 @@ class TimelineController(
         }
     }.stateIn(coroutineScope, SharingStarted.Eagerly, room.liveTimeline)
 
-    override fun activeTimelineFlow(): StateFlow<Timeline> {
+    fun activeTimelineFlow(): StateFlow<Timeline> {
         return currentTimelineFlow
     }
 }

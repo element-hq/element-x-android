@@ -29,9 +29,9 @@ import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTran
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -54,7 +54,9 @@ class CreatePollPresenterTest {
         timelineItems = aPollTimelineItems(mapOf(pollEventId to existingPoll))
     )
     private val fakeJoinedRoom = FakeJoinedRoom(
-        liveTimeline = timeline
+        liveTimeline = timeline,
+        // Existing polls are loaded, edited and deleted from a timeline focused on them
+        createTimelineResult = { Result.success(timeline) },
     )
     private val fakeAnalyticsService = FakeAnalyticsService()
     private val fakeMessageComposerContext = FakeMessageComposerContext()
@@ -83,13 +85,16 @@ class CreatePollPresenterTest {
     @Test
     fun `in edit mode, if poll doesn't exist, error is tracked and screen is closed`() = runTest {
         val room = FakeJoinedRoom(
-            liveTimeline = FakeTimeline()
+            liveTimeline = FakeTimeline(),
+            createTimelineResult = { Result.success(FakeTimeline()) },
         )
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(AN_EVENT_ID), room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitDefaultItem()
+            // Let the timeline focused on the poll be created
+            advanceUntilIdle()
             assertThat(fakeAnalyticsService.trackedErrors.filterIsInstance<CreatePollException.GetPollFailed>()).isNotEmpty()
             assertThat(navUpInvocationsCount).isEqualTo(1)
         }
@@ -262,6 +267,7 @@ class CreatePollPresenterTest {
         val presenter = createCreatePollPresenter(
             room = FakeJoinedRoom(
                 liveTimeline = timeline,
+                createTimelineResult = { Result.success(timeline) },
             ),
             mode = CreatePollMode.EditPoll(pollEventId),
         )
@@ -512,6 +518,7 @@ class CreatePollPresenterTest {
             awaitPollLoaded().apply {
                 assertThat(showDeleteConfirmation).isFalse()
             }
+            advanceUntilIdle()
             assert(redactEventLambda)
                 .isCalledOnce()
                 .with(value(pollEventId.toEventOrTransactionId()), any())
@@ -541,7 +548,8 @@ class CreatePollPresenterTest {
         newAnswer1: String? = null,
         newAnswer2: String? = null,
     ) =
-        awaitItem().also { state ->
+        // The loaded poll is written in 2 steps (initial and current form state), so skip the intermediate state
+        consumeItemsUntilPredicate { it.canSave }.last().also { state ->
             assertThat(state.canSave).isTrue()
             assertThat(state.canAddAnswer).isTrue()
             assertThat(state.question).isEqualTo(newQuestion ?: existingPoll.question)
@@ -559,7 +567,7 @@ class CreatePollPresenterTest {
     ): CreatePollPresenter = CreatePollPresenter(
         repositoryFactory = object : PollRepository.Factory {
             override fun create(timelineMode: Timeline.Mode): PollRepository {
-                return PollRepository(room, LiveTimelineProvider(room), timelineMode)
+                return PollRepository(room, timelineMode)
             }
         },
         analyticsService = fakeAnalyticsService,

@@ -37,7 +37,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
@@ -63,7 +62,7 @@ class PinnedMessagesListNode(
         fun viewInTimeline(eventId: EventId)
         fun handlePermalinkClick(data: PermalinkData.RoomLink)
         fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-        fun handleForwardEventClick(eventId: EventId, timelineProvider: TimelineProvider)
+        fun handleForwardEventClick(eventId: EventId)
         fun navigateToThread(threadRootId: ThreadId)
     }
 
@@ -101,8 +100,8 @@ class PinnedMessagesListNode(
         callback.navigateToEventDebugInfo(eventId, debugInfo)
     }
 
-    override fun forwardEvent(eventId: EventId, timelineProvider: TimelineProvider) {
-        callback.handleForwardEventClick(eventId, timelineProvider)
+    override fun forwardEvent(eventId: EventId) {
+        callback.handleForwardEventClick(eventId)
     }
 
     override fun navigateToThread(threadRootId: ThreadId) {

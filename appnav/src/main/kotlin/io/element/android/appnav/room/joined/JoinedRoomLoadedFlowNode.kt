@@ -163,8 +163,8 @@ class JoinedRoomLoadedFlowNode(
                 callback.handlePermalinkClick(data, pushToBackstack)
             }
 
-            override fun startForwardEventFlow(eventId: EventId, fromPinnedEvents: Boolean) {
-                backstack.push(NavTarget.ForwardEvent(eventId, fromPinnedEvents))
+            override fun startForwardEventFlow(eventId: EventId) {
+                backstack.push(NavTarget.ForwardEvent(eventId))
             }
         }
         return roomDetailsEntryPoint.createNode(
@@ -196,14 +196,8 @@ class JoinedRoomLoadedFlowNode(
                 createSpaceNode(buildContext)
             }
             is NavTarget.ForwardEvent -> {
-                val timelineProvider = if (navTarget.fromPinnedEvents) {
-                    (graph as TimelineBindings).pinnedEventsTimelineProvider
-                } else {
-                    (graph as TimelineBindings).timelineProvider
-                }
                 val params = ForwardEntryPoint.Params(
                     eventIds = listOf(navTarget.eventId),
-                    timelineProvider = timelineProvider,
                     fromRoomId = inputs.room.roomId,
                 )
                 val callback = object : ForwardEntryPoint.Callback {
@@ -259,8 +253,8 @@ class JoinedRoomLoadedFlowNode(
                 callback.handlePermalinkClick(data, pushToBackstack)
             }
 
-            override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
-                backstack.push(NavTarget.ForwardEvent(eventId, fromPinnedEvents))
+            override fun forwardEvent(eventId: EventId) {
+                backstack.push(NavTarget.ForwardEvent(eventId))
             }
 
             override fun navigateToRoom(roomId: RoomId) {
@@ -301,7 +295,7 @@ class JoinedRoomLoadedFlowNode(
         data class RoomMemberDetails(val userId: UserId) : NavTarget
 
         @Parcelize
-        data class ForwardEvent(val eventId: EventId, val fromPinnedEvents: Boolean) : NavTarget
+        data class ForwardEvent(val eventId: EventId) : NavTarget
 
         @Parcelize
         data object RoomNotificationSettings : NavTarget

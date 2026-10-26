@@ -266,7 +266,7 @@ class MessagesPresenter(
                     if (selection != null) {
                         when (selection.action) {
                             SelectionAction.Forward -> {
-                                navigator.forwardEvents(timelineState.selectedEventIdsInTimelineOrder(), timelineController)
+                                navigator.forwardEvents(timelineState.selectedEventIdsInTimelineOrder())
                             }
                         }
                     }
@@ -432,7 +432,7 @@ class MessagesPresenter(
                 if (featureFlagService.isFeatureEnabled(FeatureFlags.MessageMultiSelect)) {
                     timelineState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, eventId))
                 } else {
-                    navigator.forwardEvents(listOf(eventId), timelineController)
+                    navigator.forwardEvents(listOf(eventId))
                 }
             }
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
