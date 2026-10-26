@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
 import java.io.Closeable
 import java.util.Optional
 
@@ -92,6 +93,12 @@ class TimelineController(
                     }
                 }
                 .map { newDetachedTimeline ->
+                    // If the coroutine scope is not active anymore, we don't want to keep the newly created detached timeline open.
+                    if (!coroutineScope.isActive) {
+                        newDetachedTimeline.close()
+                        return@map EventFocusResult.FocusedOnLive
+                    }
+
                     detachedTimelineFlow.getAndUpdate { current ->
                         if (current.isPresent) {
                             current.get().close()
