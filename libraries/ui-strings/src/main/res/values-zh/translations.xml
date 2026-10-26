@@ -500,6 +500,7 @@
   <string name="error_account_already_logged_in">"你已作为 %1$s 的身份登录。"</string>
   <string name="error_account_already_logged_in_title">"检测到重复登录"</string>
   <string name="error_account_creation_not_possible">"你的账户提供者需要升级以支持 Matrix 认证服务和账户创建。"</string>
+  <string name="error_camera_unavailable">"摄像头不可用"</string>
   <string name="error_failed_creating_the_permalink">"永久链接创建失败"</string>
   <string name="error_failed_loading_map">"%1$s 无法加载地图，请稍后再试。"</string>
   <string name="error_failed_loading_messages">"消息加载失败"</string>
