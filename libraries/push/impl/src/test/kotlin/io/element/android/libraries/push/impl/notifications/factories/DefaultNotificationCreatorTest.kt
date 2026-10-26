@@ -45,6 +45,7 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiable
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
@@ -402,11 +403,65 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
         assertThat(result.messageTexts()).containsExactly("test", "A caption").inOrder()
     }
 
+    @Test
+    fun `test createMessagesListNotification for a room not joined by another account is a conversation without account info`() = runTest {
+        val sut = createNotificationCreator()
+        val result = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent()),
+            // Several accounts are signed in, but the room is only joined by one of them
+            notificationAccountParams = aNotificationAccountParams(showSessionId = true),
+            showSessionId = false,
+        )
+        assertThat(NotificationCompat.getShortcutId(result)).isEqualTo(createShortcutId(A_SESSION_ID, A_ROOM_ID))
+        assertThat(result.subText()).isNull()
+        assertThat(result.conversationTitle()).isEqualTo("roomDisplayName")
+    }
+
+    @Test
+    fun `test createMessagesListNotification for a room joined by another account is not a conversation and shows the account info`() = runTest {
+        val sut = createNotificationCreator()
+        val result = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent()),
+            notificationAccountParams = aNotificationAccountParams(showSessionId = true),
+            showSessionId = true,
+        )
+        assertThat(NotificationCompat.getShortcutId(result)).isNull()
+        assertThat(result.subText()).isEqualTo(A_SESSION_ID.value)
+        assertThat(result.conversationTitle()).isEqualTo("${A_SESSION_ID.value} · roomDisplayName")
+    }
+
+    @Test
+    fun `test createMessagesListNotification updates the account info of an existing notification`() = runTest {
+        val sut = createNotificationCreator()
+        val existingNotification = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent(body = "A message")),
+            showSessionId = false,
+        )
+        val sharedResult = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID_2, body = "Another message")),
+            existingNotification = existingNotification,
+            showSessionId = true,
+        )
+        assertThat(NotificationCompat.getShortcutId(sharedResult)).isNull()
+        assertThat(sharedResult.subText()).isEqualTo(A_SESSION_ID.value)
+        assertThat(sharedResult.conversationTitle()).isEqualTo("${A_SESSION_ID.value} · roomDisplayName")
+        val notSharedResult = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID_2, body = "Another message")),
+            existingNotification = sharedResult,
+            showSessionId = false,
+        )
+        assertThat(NotificationCompat.getShortcutId(notSharedResult)).isEqualTo(createShortcutId(A_SESSION_ID, A_ROOM_ID))
+        assertThat(notSharedResult.subText()).isNull()
+        assertThat(notSharedResult.conversationTitle()).isEqualTo("roomDisplayName")
+    }
+
     private suspend fun NotificationCreator.createRoomNotification(
         events: List<NotifiableMessageEvent>,
         existingNotification: Notification? = null,
+        notificationAccountParams: NotificationAccountParams = aNotificationAccountParams(),
+        showSessionId: Boolean = false,
     ) = createMessagesListNotification(
-        notificationAccountParams = aNotificationAccountParams(),
+        notificationAccountParams = notificationAccountParams,
         roomInfo = RoomEventGroupInfo(
             sessionId = A_SESSION_ID,
             roomId = A_ROOM_ID,
@@ -415,6 +470,7 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
             shouldBing = false,
             customSound = null,
             isUpdated = false,
+            showSessionId = showSessionId,
         ),
         threadId = null,
         largeIcon = null,
@@ -424,6 +480,11 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
         imageLoader = FakeImageLoader(),
         events = events,
     )
+
+    private fun Notification.conversationTitle(): String? =
+        NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(this)?.conversationTitle?.toString()
+
+    private fun Notification.subText(): String? = extras.getCharSequence(NotificationCompat.EXTRA_SUB_TEXT)?.toString()
 
     private fun Notification.messageTexts(): List<String?> {
         val messagingStyle = checkNotNull(NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(this))
