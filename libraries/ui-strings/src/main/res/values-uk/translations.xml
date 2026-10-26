@@ -523,8 +523,10 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально дозволений розмір файлу: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Виберіть якість відео, яке ви хочете вивантажити."</string>
   <string name="dialog_video_quality_selector_title">"Виберіть якість вивантажуваного відео"</string>
-  <string name="error_account_already_logged_in">"Ви вже ввійшли на цьому пристрої як %1$s."</string>
+  <string name="error_account_already_logged_in">"Ви вже ввійшли як %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Дублікат входу"</string>
   <string name="error_account_creation_not_possible">"Постачальника послуг облікового запису потрібно оновити для підтримки Matrix Authentication Service та створення облікових записів."</string>
+  <string name="error_camera_unavailable">"Камера недоступна"</string>
   <string name="error_failed_creating_the_permalink">"Не вдалося створити постійне посилання"</string>
   <string name="error_failed_loading_map">"%1$s не може завантажити мапу. Повторіть спробу пізніше."</string>
   <string name="error_failed_loading_messages">"Не вдалося завантажити повідомлення"</string>
@@ -607,6 +609,11 @@
     <item quantity="many">"Вибрано %1$d повідомлень"</item>
   </plurals>
   <string name="screen_room_title">"Бесіда"</string>
+  <string name="screen_search_empty_state_message">"Пошук бесід і повідомлень"</string>
+  <string name="screen_search_empty_state_title">"Розпочати пошук"</string>
+  <string name="screen_search_no_results_message">"За запитом «%1$@» нічого не знайдено. Спробуйте ввести інший термін."</string>
+  <string name="screen_search_recent_searches">"Недавні пошукові запити"</string>
+  <string name="screen_search_tab_chats">"Бесіди"</string>
   <string name="screen_share_location_title">"Поділитися розташуванням"</string>
   <string name="screen_share_my_location_action">"Поділитися моїм розташуванням"</string>
   <string name="screen_share_open_apple_maps">"Відкрити в Apple Maps"</string>
