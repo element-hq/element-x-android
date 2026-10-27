@@ -13,13 +13,23 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 
 class FakeFfiRoomListDynamicEntriesController : RoomListDynamicEntriesController(NoHandle) {
     val filters = mutableListOf<RoomListEntriesDynamicFilterKind>()
+    var isDestroyed = false
+        private set
 
     override fun setFilter(kind: RoomListEntriesDynamicFilterKind): Boolean {
+        checkNotDestroyed()
         filters.add(kind)
         return true
     }
 
-    override fun resetToOnePage() = Unit
+    override fun resetToOnePage() = checkNotDestroyed()
 
-    override fun addOnePage() = Unit
+    override fun addOnePage() = checkNotDestroyed()
+
+    override fun destroy() {
+        isDestroyed = true
+    }
+
+    // Same failure as the generated bindings when a destroyed object is used
+    private fun checkNotDestroyed() = check(!isDestroyed) { "RoomListDynamicEntriesController object has already been destroyed" }
 }
