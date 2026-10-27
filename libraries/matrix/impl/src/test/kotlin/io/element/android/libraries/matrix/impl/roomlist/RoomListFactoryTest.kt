@@ -19,7 +19,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -39,7 +38,6 @@ class RoomListFactoryTest {
         }
     }
 
-    @Ignore("Crash when loading more rooms after the room list scope is cancelled — passes with the fix in this PR")
     @Test
     fun `when the room list scope is cancelled, the destroyed controller is not used anymore`() = runTest {
         val controller = FakeFfiRoomListDynamicEntriesController()

@@ -66,7 +66,10 @@ internal class RoomListFactory(
                     initialFilterKind = RoomListFilterMapper.toRustFilter(initialFilter),
                     onControllerCreated = { controller ->
                         dynamicRoomList.onControllerCreated(controller, initialFilter)
-                    }
+                    },
+                    onControllerDestroyed = { controller ->
+                        dynamicRoomList.onControllerDestroyed(controller)
+                    },
                 ).onEach { update ->
                     if (!firstRoomsTransaction.isFinished()) {
                         analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.FirstRoomsDisplayed)
