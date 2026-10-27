@@ -82,6 +82,9 @@ fun AccountSelectView(
             ) {
                 SelectAccountHeader(state)
                 if (state.currentAccount != null) {
+                    HorizontalDivider(
+                        color = ElementTheme.colors.bgSubtleSecondary,
+                    )
                     MatrixUserHeader(
                         matrixUser = state.currentAccount,
                     )
@@ -98,10 +101,6 @@ fun AccountSelectView(
                         onToggleExpand = { state.eventSink(AccountSelectEvent.ToggleAccountListExpanded) },
                         onSelectAccount = { state.eventSink(AccountSelectEvent.SelectAccount(it)) },
                         onAddAccountClick = {},
-                    )
-                    HorizontalDivider(
-                        thickness = 8.dp,
-                        color = ElementTheme.colors.bgSubtleSecondary,
                     )
                 }
             }

@@ -97,7 +97,6 @@ class AccountSelectPresenter(
                 AccountSelectEvent.ToggleAccountListExpanded -> isAccountListExpanded = !isAccountListExpanded
                 is AccountSelectEvent.SelectAccount -> {
                     currentSessionId = event.sessionId
-                    isAccountListExpanded = false
                 }
             }
         }

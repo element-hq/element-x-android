@@ -138,11 +138,11 @@ class AccountSelectPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.currentAccount?.userId).isEqualTo(A_SESSION_ID)
             initialState.eventSink(AccountSelectEvent.SelectAccount(A_SESSION_ID_2))
-            val finalState = consumeItemsUntilPredicate { it.currentAccount?.userId == A_SESSION_ID_2 && !it.isAccountListExpanded }.last()
+            val finalState = consumeItemsUntilPredicate { it.currentAccount?.userId == A_SESSION_ID_2 }.last()
             assertThat(finalState.currentAccount?.userId).isEqualTo(A_SESSION_ID_2)
             assertThat(finalState.otherAccounts.map { it.user.userId }).containsExactly(A_SESSION_ID)
-            // The list is collapsed
-            assertThat(finalState.isAccountListExpanded).isFalse()
+            // The list is still expanded
+            assertThat(finalState.isAccountListExpanded).isTrue()
         }
     }
 
