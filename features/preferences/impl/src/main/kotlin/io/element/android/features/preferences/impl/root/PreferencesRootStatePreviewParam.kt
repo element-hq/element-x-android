@@ -20,6 +20,8 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
+import io.element.android.libraries.matrix.ui.components.switchaccount.anOtherAccount
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
@@ -114,12 +116,4 @@ fun aPreferencesRootState(
     userStatusState = userStatusState,
     snackbarMessage = snackbarMessage,
     eventSink = eventSink,
-)
-
-fun anOtherAccount(
-    user: MatrixUser = aMatrixUser(),
-    unreadCount: Int = 0,
-) = OtherAccount(
-    user = user,
-    unreadCount = unreadCount,
 )

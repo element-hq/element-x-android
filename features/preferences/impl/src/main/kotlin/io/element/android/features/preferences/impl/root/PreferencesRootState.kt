@@ -17,6 +17,7 @@ import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.libraries.designsystem.components.preferences.DropdownOption
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
 import kotlinx.collections.immutable.ImmutableList
 
 data class PreferencesRootState(

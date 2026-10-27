@@ -17,6 +17,8 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aSelectRoomInfo
+import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
+import io.element.android.libraries.matrix.ui.components.switchaccount.anOtherAccount
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
@@ -83,7 +85,7 @@ internal fun aRoomSelectState(
     selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
     selectedAccount: MatrixUser = MatrixUser(UserId("@alice:example.org")),
     hasRoomListError: Boolean = false,
-    otherAccounts: ImmutableList<MatrixUser> = persistentListOf(),
+    otherAccounts: ImmutableList<OtherAccount> = persistentListOf(),
     isAccountListExpanded: Boolean = false,
     eventSink: (RoomSelectEvent) -> Unit = {},
 ) = RoomSelectState(
@@ -102,8 +104,8 @@ internal fun aRoomSelectState(
 )
 
 private fun anOtherAccountList() = persistentListOf(
-    aMatrixUser(id = "@bob:example.org", displayName = "Bob"),
-    aMatrixUser(id = "@carol:server.org", displayName = "Carol"),
+    anOtherAccount(aMatrixUser(id = "@bob:example.org", displayName = "Bob")),
+    anOtherAccount(aMatrixUser(id = "@carol:server.org", displayName = "Carol")),
 )
 
 internal fun aRoomSelectRoomList() = persistentListOf(

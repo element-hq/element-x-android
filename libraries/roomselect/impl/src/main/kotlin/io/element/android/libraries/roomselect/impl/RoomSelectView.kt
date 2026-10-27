@@ -9,17 +9,10 @@
 package io.element.android.libraries.roomselect.impl
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animate
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -50,24 +43,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.TopAppBarScrollBehaviorLayout
 import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarRow
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -75,7 +64,6 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
-import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -88,11 +76,9 @@ import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffec
 import io.element.android.libraries.designsystem.utils.lazyColumnContentPadding
 import io.element.android.libraries.designsystem.utils.scaffoldScrollableContentInsets
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
-import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
+import io.element.android.libraries.matrix.ui.components.switchaccount.AccountSwitchSection
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.roomselect.api.RoomSelectMode
@@ -235,13 +221,27 @@ fun RoomSelectView(
                 // Keep this space outside the collapsing section, so that the section does not touch the search field when it is collapsing
                 Spacer(modifier = Modifier.height(8.dp))
                 TopAppBarScrollBehaviorLayout(scrollBehavior = accountSwitchScrollBehavior) {
-                    AccountSwitchSection(
-                        selectedAccount = state.selectedAccount,
-                        otherAccounts = state.otherAccounts,
-                        isExpanded = state.isAccountListExpanded,
-                        onToggleExpand = { state.eventSink(RoomSelectEvent.ToggleAccountListExpanded) },
-                        onSelectAccount = { state.eventSink(RoomSelectEvent.SelectAccount(it)) },
-                    )
+                    Column {
+                        MatrixUserHeader(
+                            matrixUser = state.selectedAccount,
+                        )
+                        HorizontalDivider(
+                            thickness = 8.dp,
+                            color = ElementTheme.colors.bgSubtleSecondary,
+                        )
+                        AccountSwitchSection(
+                            otherAccounts = state.otherAccounts,
+                            isExpanded = state.isAccountListExpanded,
+                            canAddAccount = false,
+                            onToggleExpand = { state.eventSink(RoomSelectEvent.ToggleAccountListExpanded) },
+                            onSelectAccount = { state.eventSink(RoomSelectEvent.SelectAccount(it)) },
+                            onAddAccountClick = {},
+                        )
+                        HorizontalDivider(
+                            thickness = 8.dp,
+                            color = ElementTheme.colors.bgSubtleSecondary,
+                        )
+                    }
                 }
             }
             SelectedRoomsHelper(
@@ -346,102 +346,6 @@ private fun RoomListError() {
         subTitle = stringResource(R.string.screen_room_select_error_cannot_load_rooms),
         iconStyle = BigIcon.Style.AlertSolid,
     )
-}
-
-/**
- * Similar to the MultiAccountSection of the PreferencesRootView.
- * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=5414-4759
- */
-@Composable
-private fun AccountSwitchSection(
-    selectedAccount: MatrixUser,
-    otherAccounts: ImmutableList<MatrixUser>,
-    isExpanded: Boolean,
-    onToggleExpand: () -> Unit,
-    onSelectAccount: (SessionId) -> Unit,
-) {
-    Column {
-        MatrixUserHeader(
-            matrixUser = selectedAccount,
-        )
-        HorizontalDivider(
-            thickness = 8.dp,
-            color = ElementTheme.colors.bgSubtleSecondary,
-        )
-        val expandedStateDescription = if (isExpanded) {
-            stringResource(CommonStrings.a11y_state_expanded)
-        } else {
-            stringResource(CommonStrings.a11y_state_collapsed)
-        }
-        ListItem(
-            modifier = Modifier.semantics {
-                stateDescription = expandedStateDescription
-            },
-            content = { Text(stringResource(CommonStrings.common_switch_account)) },
-            onClick = onToggleExpand,
-            trailingContent = ListItemContent.Custom { _ ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    AnimatedVisibility(
-                        visible = !isExpanded,
-                        enter = fadeIn(),
-                        exit = fadeOut(),
-                    ) {
-                        AvatarRow(
-                            avatarDataList = otherAccounts
-                                .take(3)
-                                .map { it.getAvatarData(AvatarSize.OtherAccountItem) }
-                                .toImmutableList(),
-                            avatarType = AvatarType.User,
-                            lastOnTop = true,
-                        )
-                    }
-                    // Animate the chevron icon to rotate when the section is expanded/collapsed
-                    val rotation: Float by animateFloatAsState(
-                        targetValue = if (isExpanded) -180f else 0f,
-                        animationSpec = tween(
-                            delayMillis = 0,
-                            durationMillis = 300,
-                        ),
-                        label = "chevron"
-                    )
-                    Icon(
-                        modifier = Modifier.rotate(rotation),
-                        imageVector = CompoundIcons.ChevronDown(),
-                        contentDescription = null,
-                    )
-                }
-            },
-        )
-        AnimatedVisibility(
-            visible = isExpanded,
-        ) {
-            Column {
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = ElementTheme.colors.bgSubtleSecondary,
-                )
-                otherAccounts.forEach { matrixUser ->
-                    MatrixUserRow(
-                        modifier = Modifier
-                            .clickable {
-                                onSelectAccount(matrixUser.userId)
-                            }
-                            .padding(top = 2.dp, bottom = 2.dp, end = 8.dp),
-                        matrixUser = matrixUser,
-                        avatarSize = AvatarSize.AccountItem,
-                        verticalSpaceWidth = 16.dp,
-                    )
-                }
-            }
-        }
-        HorizontalDivider(
-            thickness = 8.dp,
-            color = ElementTheme.colors.bgSubtleSecondary,
-        )
-    }
 }
 
 @Composable

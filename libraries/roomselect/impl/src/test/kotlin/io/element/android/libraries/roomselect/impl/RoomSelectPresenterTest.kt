@@ -143,7 +143,7 @@ class RoomSelectPresenterTest {
             val state = awaitLastSequentialItem()
             assertThat(state.selectedAccount.userId).isEqualTo(A_SESSION_ID)
             assertThat(state.selectedAccount.displayName).isEqualTo("Alice")
-            assertThat(state.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+            assertThat(state.otherAccounts.map { it.user.userId }).containsExactly(A_SESSION_ID_2)
             assertThat(state.showAccountSwitch).isTrue()
             state.eventSink(RoomSelectEvent.ToggleAccountListExpanded)
             assertThat(awaitItem().isAccountListExpanded).isTrue()
@@ -169,13 +169,13 @@ class RoomSelectPresenterTest {
         )
         presenter.test {
             val state = awaitLastSequentialItem()
-            assertThat(state.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+            assertThat(state.otherAccounts.map { it.user.userId }).containsExactly(A_SESSION_ID_2)
             assertThat(state.hasRoomListError).isFalse()
             state.eventSink(RoomSelectEvent.SelectAccount(A_SESSION_ID_2))
             val errorState = consumeItemsUntilPredicate { it.selectedAccount.userId == A_SESSION_ID_2 && it.hasRoomListError }.last()
             // The account information is still available
             assertThat(errorState.selectedAccount.displayName).isEqualTo("Bob")
-            assertThat(errorState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID)
+            assertThat(errorState.otherAccounts.map { it.user.userId }).containsExactly(A_SESSION_ID)
         }
     }
 
@@ -213,7 +213,7 @@ class RoomSelectPresenterTest {
             errorState.eventSink(RoomSelectEvent.SelectAccount(A_SESSION_ID))
             val finalState = consumeItemsUntilPredicate { it.selectedAccount.userId == A_SESSION_ID && !it.hasRoomListError }.last()
             assertThat(finalState.showAccountSwitch).isTrue()
-            assertThat(finalState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+            assertThat(finalState.otherAccounts.map { it.user.userId }).containsExactly(A_SESSION_ID_2)
         }
     }
 
@@ -236,7 +236,7 @@ class RoomSelectPresenterTest {
             assertThat(errorState.selectedAccount.userId).isEqualTo(A_SESSION_ID)
             assertThat(errorState.resultState).isInstanceOf(SearchBarResultState.Initial::class.java)
             // The user can switch to the other account
-            assertThat(errorState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+            assertThat(errorState.otherAccounts.map { it.user.userId }).containsExactly(A_SESSION_ID_2)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -250,13 +250,13 @@ class RoomSelectPresenterTest {
         )
         presenter.test {
             val state = awaitLastSequentialItem()
-            assertThat(state.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+            assertThat(state.otherAccounts.map { it.user.userId }).containsExactly(A_SESSION_ID_2)
             sessionStore.updateData(sessionStore.getSession(A_SESSION_ID_2.value)!!.copy(isTokenValid = false))
             testScheduler.advanceUntilIdle()
             // The state may not change at all
             val finalState = cancelAndConsumeRemainingEvents().filterIsInstance<Event.Item<RoomSelectState>>().lastOrNull()?.value ?: state
             assertThat(finalState.selectedAccount.userId).isEqualTo(A_SESSION_ID)
-            assertThat(finalState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID_2)
+            assertThat(finalState.otherAccounts.map { it.user.userId }).containsExactly(A_SESSION_ID_2)
             assertThat(finalState.hasRoomListError).isFalse()
             assertThat(finalState.showAccountSwitch).isTrue()
         }
@@ -290,7 +290,7 @@ class RoomSelectPresenterTest {
                     (it.resultState as? SearchBarResultState.Results)?.results?.map { room -> room.roomId } == listOf(A_ROOM_ID_2)
             }.last()
             assertThat(finalState.selectedAccount.userId).isEqualTo(A_SESSION_ID_2)
-            assertThat(finalState.otherAccounts.map { it.userId }).containsExactly(A_SESSION_ID)
+            assertThat(finalState.otherAccounts.map { it.user.userId }).containsExactly(A_SESSION_ID)
             assertThat(finalState.selectedRooms).isEmpty()
             assertThat(finalState.isAccountListExpanded).isFalse()
             assertThat((finalState.resultState as SearchBarResultState.Results).results.map { it.roomId }).containsExactly(A_ROOM_ID_2)

@@ -11,6 +11,7 @@ package io.element.android.libraries.roomselect.impl
 import androidx.compose.foundation.text.input.TextFieldState
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
@@ -28,7 +29,7 @@ data class RoomSelectState(
      * True if the rooms of the selected account cannot be loaded.
      */
     val hasRoomListError: Boolean,
-    val otherAccounts: ImmutableList<MatrixUser>,
+    val otherAccounts: ImmutableList<OtherAccount>,
     val isAccountListExpanded: Boolean,
     val eventSink: (RoomSelectEvent) -> Unit,
 ) {
