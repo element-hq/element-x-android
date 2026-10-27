@@ -10,7 +10,6 @@ package io.element.android.libraries.accountselect.impl
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,13 +17,14 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -37,12 +37,15 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
+import io.element.android.libraries.matrix.ui.components.switchaccount.AccountSwitchSection
+import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
  * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=1294-7832
@@ -72,26 +75,46 @@ fun AccountSelectView(
                 .padding(paddingValues)
                 .consumeWindowInsets(paddingValues)
         ) {
-            SelectAccountHeader(state)
-            LazyColumn {
-                item {
-                    HorizontalDivider()
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                SelectAccountHeader(state)
+                if (state.currentAccount != null) {
+                    MatrixUserHeader(
+                        matrixUser = state.currentAccount,
+                    )
                 }
-                items(state.accounts, key = { it.userId }) { matrixUser ->
-                    Column {
-                        MatrixUserRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    onSelectAccount(matrixUser.userId)
-                                }
-                                .padding(vertical = 8.dp),
-                            matrixUser = matrixUser,
-                        )
-                        HorizontalDivider()
-                    }
+                if (state.otherAccounts.isNotEmpty()) {
+                    HorizontalDivider(
+                        thickness = 8.dp,
+                        color = ElementTheme.colors.bgSubtleSecondary,
+                    )
+                    AccountSwitchSection(
+                        otherAccounts = state.otherAccounts,
+                        isExpanded = state.isAccountListExpanded,
+                        canAddAccount = false,
+                        onToggleExpand = { state.eventSink(AccountSelectEvent.ToggleAccountListExpanded) },
+                        onSelectAccount = { state.eventSink(AccountSelectEvent.SelectAccount(it)) },
+                        onAddAccountClick = {},
+                    )
+                    HorizontalDivider(
+                        thickness = 8.dp,
+                        color = ElementTheme.colors.bgSubtleSecondary,
+                    )
                 }
             }
+            Button(
+                text = stringResource(CommonStrings.action_continue),
+                enabled = state.currentAccount != null,
+                onClick = {
+                    state.currentAccount?.let { onSelectAccount(it.userId) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            )
         }
     }
 }

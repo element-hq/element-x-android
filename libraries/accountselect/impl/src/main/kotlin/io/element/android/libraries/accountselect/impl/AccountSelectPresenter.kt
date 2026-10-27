@@ -9,16 +9,21 @@
 package io.element.android.libraries.accountselect.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.user.toMatrixUser
+import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -40,7 +45,12 @@ class AccountSelectPresenter(
 
     @Composable
     override fun present(): AccountSelectState {
+        // Only used by this screen, the current account of the application is not changed.
+        var currentSessionId by remember { mutableStateOf<SessionId?>(null) }
+        var isAccountListExpanded by remember { mutableStateOf(true) }
         val accounts by produceState(persistentListOf()) {
+            // Default to the account currently used by the application.
+            currentSessionId = sessionStore.getLatestSession()?.userId?.let(::SessionId)
             // Do not use sessionStore.sessionsFlow() to not make it change when an account is selected.
             val accountFlows = sessionStore.getAllSessions().map { sessionData ->
                 val matrixUser = sessionData.toMatrixUser()
@@ -68,9 +78,36 @@ class AccountSelectPresenter(
             permalinkData.toPillText()
         }
 
+        val currentAccount by remember {
+            derivedStateOf {
+                accounts.find { it.userId == currentSessionId } ?: accounts.firstOrNull()
+            }
+        }
+        val otherAccounts by remember {
+            derivedStateOf {
+                accounts
+                    .filter { it.userId != currentAccount?.userId }
+                    .map { OtherAccount(user = it, unreadCount = 0) }
+                    .toImmutableList()
+            }
+        }
+
+        fun handleEvent(event: AccountSelectEvent) {
+            when (event) {
+                AccountSelectEvent.ToggleAccountListExpanded -> isAccountListExpanded = !isAccountListExpanded
+                is AccountSelectEvent.SelectAccount -> {
+                    currentSessionId = event.sessionId
+                    isAccountListExpanded = false
+                }
+            }
+        }
+
         return AccountSelectState(
             linkPillText = linkPillText,
-            accounts = accounts,
+            currentAccount = currentAccount,
+            otherAccounts = otherAccounts,
+            isAccountListExpanded = isAccountListExpanded,
+            eventSink = ::handleEvent,
         )
     }
 }
