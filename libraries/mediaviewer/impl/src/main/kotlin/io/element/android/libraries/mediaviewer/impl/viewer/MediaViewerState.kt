@@ -49,6 +49,8 @@ sealed interface MediaViewerPageData {
     data class MediaViewerData(
         val eventId: EventId?,
         val mediaInfo: MediaInfo,
+        /** The [MediaInfo.htmlCaption] converted to styled text, if any. */
+        val formattedCaption: CharSequence? = null,
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
         val downloadedMedia: State<AsyncData<LocalMedia>>,

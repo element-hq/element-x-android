@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.preferences.impl.root
+package io.element.android.libraries.matrix.ui.components.switchaccount
 
 import io.element.android.libraries.matrix.api.user.MatrixUser
 

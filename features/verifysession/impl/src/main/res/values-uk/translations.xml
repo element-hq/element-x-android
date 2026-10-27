@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Не можете підтвердити?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Створити новий ключ відновлення"</string>
+  <string name="screen_identity_confirmation_sign_out">"Вийти"</string>
   <string name="screen_identity_confirmation_subtitle">"Виберіть спосіб звіряння, щоб налаштувати безпечний обмін повідомленнями."</string>
   <string name="screen_identity_confirmation_title">"Підтвердьте свою цифрову ідентичність"</string>
   <string name="screen_identity_confirmation_use_another_device">"Використовуйте інший пристрій"</string>

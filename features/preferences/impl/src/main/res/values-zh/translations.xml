@@ -63,6 +63,7 @@
   <string name="screen_moderation_and_safety_invites_heading">"邀请"</string>
   <string name="screen_moderation_and_safety_other_users_heading">"其他用户"</string>
   <string name="screen_moderation_and_safety_share_presence_heading">"你的形象"</string>
+  <string name="screen_notification_settings_activity_section_title">"活动"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"更多设置"</string>
   <string name="screen_notification_settings_call_ringtone_label">"来电铃声"</string>
   <string name="screen_notification_settings_calls_label">"音视频通话"</string>

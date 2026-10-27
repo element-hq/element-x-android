@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
@@ -543,4 +544,12 @@ fun MatrixClient.totalUnreadCountFlow(): Flow<Int> {
         .onStart { emit(Unit) }
         .map { totalUnreadCount().getOrDefault(0).toInt() }
         .distinctUntilChanged()
+}
+
+/**
+ * Returns true if the current user has joined the room with the given [roomId].
+ * Note that this is based on the local data, which may be outdated if the client has not synced recently.
+ */
+suspend fun MatrixClient.hasJoined(roomId: RoomId): Boolean {
+    return getRoomInfo(roomId).getOrNull()?.currentUserMembership == CurrentUserMembership.JOINED
 }

@@ -265,7 +265,7 @@ class TimelinePresenter(
                 is TimelineEvent.StopLiveLocationShare -> sessionCoroutineScope.launch {
                     liveLocationShareManager.stopShare(room.roomId)
                 }
-                is TimelineEvent.FocusOnEvent -> sessionCoroutineScope.launch {
+                is TimelineEvent.FocusOnEvent -> room.roomCoroutineScope.launch {
                     focusRequestState.value = FocusRequestState.Requested(event.eventId, event.debounce)
                     delay(event.debounce)
                     Timber.tag(tag).d("Started focus on ${event.eventId}")

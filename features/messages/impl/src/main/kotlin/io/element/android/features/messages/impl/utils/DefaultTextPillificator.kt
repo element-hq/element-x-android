@@ -15,6 +15,7 @@ import android.text.style.URLSpan
 import android.util.Patterns
 import androidx.core.text.getSpans
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.features.messages.api.timeline.TextPillificator
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.MatrixPatternType
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
@@ -30,16 +31,12 @@ import io.element.android.wysiwyg.view.spans.InlineCodeSpan
 
 private val MATRIX_URI_REGEX = Regex("""matrix:(?:u|user|r|room|roomid|e|event)/\S*[^\s.,;:!?)]""", RegexOption.IGNORE_CASE)
 
-interface TextPillificationHelper {
-    fun pillify(text: CharSequence, pillifyPermalinks: Boolean = true): CharSequence
-}
-
 @ContributesBinding(RoomScope::class)
-class DefaultTextPillificationHelper(
+class DefaultTextPillificator(
     private val mentionSpanProvider: MentionSpanProvider,
     private val permalinkParser: PermalinkParser,
     private val permalinkBuilder: PermalinkBuilder,
-) : TextPillificationHelper {
+) : TextPillificator {
     @Suppress("LoopWithTooManyJumpStatements")
     override fun pillify(text: CharSequence, pillifyPermalinks: Boolean): CharSequence {
         return SpannableStringBuilder(text).apply {

@@ -32,6 +32,7 @@
   <string name="a11y_play">"Prehrať"</string>
   <string name="a11y_poll">"Anketa"</string>
   <string name="a11y_poll_end">"Ukončená anketa"</string>
+  <string name="a11y_qr_code">"QR kód"</string>
   <string name="a11y_react_with">"Reagovať s %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagovať s inými emotikonmi"</string>
   <string name="a11y_read_receipts_multiple">"Prečítal/a %1$s a %2$s"</string>
@@ -50,6 +51,7 @@
   <string name="a11y_start_call">"Začať hovor"</string>
   <string name="a11y_start_video_call">"Začať videohovor"</string>
   <string name="a11y_start_voice_call">"Začať hlasový hovor"</string>
+  <string name="a11y_status">"Stav"</string>
   <string name="a11y_tombstoned_room">"Opustená miestnosť"</string>
   <string name="a11y_user_avatar">"Profilový obrázok"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
@@ -190,6 +192,7 @@
   <string name="common_analytics">"Analytika"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Opustili ste miestnosť"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Boli ste odhlásení zo relácie."</string>
+  <string name="common_app_settings">"Nastavenia aplikácie"</string>
   <string name="common_appearance">"Vzhľad"</string>
   <string name="common_audio">"Zvuk"</string>
   <string name="common_beta">"Beta"</string>
@@ -235,7 +238,13 @@ Dôvod: %1$s."</string>
   <string name="common_file_saved_on_disk_android">"Súbor bol uložený do priečinka Stiahnuté súbory"</string>
   <string name="common_forward_message">"Preposlať správu"</string>
   <string name="common_frequently_used">"Často používané"</string>
+  <plurals name="common_gallery_reply_attachments">
+    <item quantity="one">"%1$d príloha …"</item>
+    <item quantity="few">"%1$d prílohy…"</item>
+    <item quantity="other">"%1$d príloh…"</item>
+  </plurals>
   <string name="common_gif">"GIF"</string>
+  <string name="common_header_rooms">"Miestnosti"</string>
   <string name="common_image">"Obrázok"</string>
   <string name="common_in_reply_to">"V odpovedi na %1$s"</string>
   <string name="common_install_apk_android">"Inštalovať APK"</string>

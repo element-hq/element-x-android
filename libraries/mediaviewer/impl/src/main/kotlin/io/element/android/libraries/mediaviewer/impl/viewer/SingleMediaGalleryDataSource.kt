@@ -55,7 +55,7 @@ class SingleMediaGalleryDataSource(
                         mediaInfo = MediaInfo(
                             filename = params.avatarInfo.filename,
                             caption = null,
-                            formattedCaption = null,
+                            htmlCaption = null,
                             mimeType = MimeTypes.Images,
                             fileSize = null,
                             formattedFileSize = "",

@@ -42,6 +42,7 @@
   <string name="action_leave">"Išeiti"</string>
   <string name="action_leave_conversation">"Palikti pokalbį"</string>
   <string name="action_leave_room">"Išeiti iš kambario"</string>
+  <string name="action_leave_space">"Išeiti iš erdvės"</string>
   <string name="action_load_more">"Įkelti daugiau"</string>
   <string name="action_next">"Tolesnis"</string>
   <string name="action_no">"Ne"</string>
@@ -112,6 +113,7 @@
   <string name="common_modern">"Modernus"</string>
   <string name="common_mute">"Nutildyti"</string>
   <string name="common_no_results">"Nėra rezultatų"</string>
+  <string name="common_no_space_name">"Nėra erdvės pavadinimo"</string>
   <string name="common_offline">"Neprisijungta"</string>
   <string name="common_password">"Slaptažodis"</string>
   <string name="common_people">"Žmonės"</string>
@@ -123,6 +125,8 @@
   </plurals>
   <string name="common_privacy_policy">"Privatumo politika"</string>
   <string name="common_private_room">"Privatus kambarys"</string>
+  <string name="common_private_space">"Privati erdvė"</string>
+  <string name="common_public_space">"Vieša erdvė"</string>
   <string name="common_reactions">"Reakcijos"</string>
   <string name="common_refreshing">"Atnaujinama…"</string>
   <string name="common_replying_to">"Atsakant %1$s"</string>
@@ -133,11 +137,19 @@
   <string name="common_search_results">"Paieškos rezultatai"</string>
   <string name="common_security">"Saugumas"</string>
   <string name="common_sending">"Siunčiama…"</string>
+  <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Serveris nepalaikomas"</string>
   <string name="common_server_url">"Serverio URL"</string>
   <string name="common_settings">"Nustatymai"</string>
+  <string name="common_share_space">"Bendrinti erdvę"</string>
   <string name="common_shared_location">"Bendrinta vieta"</string>
   <string name="common_signing_out">"Atsijungiama"</string>
+  <string name="common_space">"Erdvė"</string>
+  <plurals name="common_spaces">
+    <item quantity="one">"%1$d erdvė"</item>
+    <item quantity="few">"%1$d erdvės"</item>
+    <item quantity="other">"%1$d erdvių"</item>
+  </plurals>
   <string name="common_starting_chat">"Pradedamas pokalbis…"</string>
   <string name="common_sticker">"Lipdukas"</string>
   <string name="common_success">"Pavyko"</string>
@@ -177,6 +189,10 @@
   <string name="screen_share_open_google_maps">"Atverti „Google“ žemėlapiuose"</string>
   <string name="screen_share_open_osm_maps">"Atverti programoje „OpenStreetMap“"</string>
   <string name="screen_share_this_location_action">"Bendrinti pasirinktą vietą"</string>
+  <string name="screen_space_list_description">"Erdvės, kurias sukūrėte arba prie kurių prisijungėte."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"„%1$s“ erdvė"</string>
+  <string name="screen_space_list_title">"Erdvės"</string>
   <string name="screen_view_location_title">"Vieta"</string>
   <string name="settings_version_number">"Versija: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"lt"</string>

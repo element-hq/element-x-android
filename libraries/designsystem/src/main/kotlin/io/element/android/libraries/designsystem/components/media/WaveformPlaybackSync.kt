@@ -7,155 +7,132 @@
 
 package io.element.android.libraries.designsystem.components.media
 
-import kotlin.math.abs
-import kotlin.math.roundToInt
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.withFrameMillis
+import androidx.compose.ui.MotionDurationScale
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.flow.collectLatest
 
 /**
- * Maximum gap, in wall-clock milliseconds, between two progress values that we still treat as
- * "the same place" while audio is playing.
- *
- * Player progress is sampled on a timer, while the waveform cursor is animated every frame.
- * A gap smaller than this is expected sampling lag and should be ignored. A larger gap means a
- * real jump (seek acknowledged, pause, or the animation has drifted) and the cursor should snap.
- *
- * The comparison uses wall-clock time, so faster playback makes the same progress-fraction
- * delta count as a smaller time gap.
- */
-internal const val PLAYING_SYNC_THRESHOLD_MS = 200L
-
-/**
- * When media duration is unknown (`durationMs <= 0`), progress is compared as a 0–1 fraction
- * instead of milliseconds. Values this close are treated as equal.
- */
-private const val ZERO_DURATION_PROGRESS_EPSILON = 0.01f
-
-/**
- * Whether a player progress sample should update the cursor, or be ignored because a user seek
- * has not been acknowledged yet.
- *
- * After a seek, the player can keep emitting samples from the old position. Those are dropped
- * until a sample is close enough to [pendingSeek].
+ * Remembers a [SmoothPlaybackProgressState], fed with the player progress samples.
  *
  * @param playbackProgress Latest player progress, from 0 to 1.
- * @param pendingSeek Target progress of an in-flight user seek, or `null` if none.
- * @param durationMs Total media duration in milliseconds. Used to convert a progress delta into time.
- * @param playbackSpeed Current playback rate (`1` = realtime). Used when converting the delta to wall-clock time.
- * @param syncThresholdMs How close the sample must be to [pendingSeek], in milliseconds. See [PLAYING_SYNC_THRESHOLD_MS].
- */
-internal fun shouldApplyPlayerProgress(
-    playbackProgress: Float,
-    pendingSeek: Float?,
-    durationMs: Long,
-    playbackSpeed: Float,
-    syncThresholdMs: Long = PLAYING_SYNC_THRESHOLD_MS,
-): Boolean {
-    if (pendingSeek == null) return true
-    return hasCaughtUpToSeek(
-        playbackProgress = playbackProgress,
-        pendingSeek = pendingSeek,
-        durationMs = durationMs,
-        playbackSpeed = playbackSpeed,
-        syncThresholdMs = syncThresholdMs,
-    )
-}
-
-/**
- * Whether [playbackProgress] is close enough to [pendingSeek] that the player has likely applied
- * the seek.
- *
- * @param playbackProgress Latest player progress, from 0 to 1.
- * @param pendingSeek Target progress of the in-flight user seek, from 0 to 1.
- * @param durationMs Total media duration in milliseconds. If `<= 0`, [ZERO_DURATION_PROGRESS_EPSILON] is used instead.
+ * @param isPlaying Whether media is currently playing. Progress is only extrapolated while this is true.
+ * @param durationMs Total media duration in milliseconds. Must be `> 0` to extrapolate.
  * @param playbackSpeed Current playback rate (`1` = realtime).
- * @param syncThresholdMs Allowed wall-clock gap in milliseconds. See [PLAYING_SYNC_THRESHOLD_MS].
  */
-internal fun hasCaughtUpToSeek(
+@Composable
+internal fun rememberSmoothPlaybackProgressState(
     playbackProgress: Float,
-    pendingSeek: Float,
-    durationMs: Long,
-    playbackSpeed: Float,
-    syncThresholdMs: Long = PLAYING_SYNC_THRESHOLD_MS,
-): Boolean {
-    val delta = abs(playbackProgress - pendingSeek)
-    if (durationMs <= 0L) {
-        return delta <= ZERO_DURATION_PROGRESS_EPSILON
-    }
-    val deltaMs = delta * durationMs / playbackSpeed.coerceAtLeast(0.01f)
-    return deltaMs <= syncThresholdMs
-}
-
-/** Player progress at or below this is treated as "at the start" when detecting a loop/restart. */
-private const val RESTART_PROGRESS_EPSILON = 0.01f
-
-/** Animated cursor at or above this is treated as "at the end" when detecting a loop/restart. */
-private const val RESTART_ANIMATED_PROGRESS = 0.9f
-
-/**
- * Whether the animated cursor should jump to the latest player sample instead of continuing its
- * linear animation.
- *
- * Returns `true` when:
- * - playback is paused or duration is unknown (there is no animation to follow)
- * - the player is ahead of the cursor by more than [syncThresholdMs]
- * - playback restarted from the beginning (cursor near the end, player near the start)
- *
- * Returns `false` when the values already match, or when the player is only slightly ahead
- * (or slightly behind) so the in-flight animation can catch up without a visible jump.
- *
- * @param playbackProgress Latest player progress, from 0 to 1.
- * @param animatedProgress Current animated cursor progress, from 0 to 1.
- * @param isPlaying Whether media is currently playing.
- * @param durationMs Total media duration in milliseconds. Used to convert a progress delta into time.
- * @param playbackSpeed Current playback rate (`1` = realtime). Used when converting the delta to wall-clock time.
- * @param syncThresholdMs Drift that is still ignored while playing, in milliseconds. See [PLAYING_SYNC_THRESHOLD_MS].
- */
-internal fun shouldSnapToPlayer(
-    playbackProgress: Float,
-    animatedProgress: Float,
     isPlaying: Boolean,
     durationMs: Long,
     playbackSpeed: Float,
-    syncThresholdMs: Long = PLAYING_SYNC_THRESHOLD_MS,
-): Boolean {
-    val delta = abs(playbackProgress - animatedProgress)
-    if (delta == 0f) return false
-    if (!isPlaying || durationMs <= 0L) return true
-    val deltaMs = delta * durationMs / playbackSpeed.coerceAtLeast(0.01f)
-    if (playbackProgress < animatedProgress) {
-        return isPlaybackRestart(playbackProgress, animatedProgress)
+): SmoothPlaybackProgressState {
+    val state = remember { SmoothPlaybackProgressState(playbackProgress) }
+    // Applied before the next draw, so a new sample is never shown late.
+    SideEffect { state.onPlayerProgress(playbackProgress) }
+    LaunchedEffect(state, isPlaying, durationMs, playbackSpeed) {
+        state.animate(isPlaying = isPlaying, durationMs = durationMs, playbackSpeed = playbackSpeed)
     }
-    return deltaMs > syncThresholdMs
+    return state
 }
 
 /**
- * Detects a loop: the player has wrapped to the start while the cursor is still near the end.
+ * Playback progress that moves smoothly while playing.
+ *
+ * Player samples are relatively infrequent, so on every frame the progress is extrapolated from a start point, using the time
+ * elapsed since then and the playback speed. Each new player sample or user seek becomes the new start point, so the progress
+ * cannot drift away from the player, and a seek is shown immediately without waiting for the player to report it.
+ *
+ * If the system disables animations, the progress only follows the player samples and seeks, and the extrapolation restarts when
+ * they are enabled again. Other animator duration scales are ignored, since the cursor tracks the audio.
  */
-private fun isPlaybackRestart(
-    playbackProgress: Float,
-    animatedProgress: Float,
-): Boolean {
-    return playbackProgress <= RESTART_PROGRESS_EPSILON && animatedProgress >= RESTART_ANIMATED_PROGRESS
+@Stable
+internal class SmoothPlaybackProgressState(initialProgress: Float) {
+    /** The progress to display, from 0 to 1. */
+    var progress by mutableFloatStateOf(initialProgress)
+        private set
+
+    private var lastPlayerProgress = initialProgress
+
+    // Progress the extrapolation starts from, and its frame time, or null to start at the next frame.
+    private var startProgress = initialProgress
+    private var startTimeMs: Long? = null
+
+    /** Restarts from a new player sample. A sample equal to the previous one is ignored, so it does not undo a seek. */
+    fun onPlayerProgress(playbackProgress: Float) {
+        if (playbackProgress == lastPlayerProgress) return
+        lastPlayerProgress = playbackProgress
+        restartFrom(playbackProgress)
+    }
+
+    /** Restarts from a user seek, until the player reports its new position. */
+    fun seekTo(seekProgress: Float) {
+        restartFrom(seekProgress)
+    }
+
+    /** Extrapolates [progress] on every frame while [isPlaying] and animations are enabled. */
+    suspend fun animate(isPlaying: Boolean, durationMs: Long, playbackSpeed: Float) {
+        // Restart from the displayed progress, so that time spent paused, or at a previous speed, is not counted.
+        restartFrom(progress)
+        if (!isPlaying || durationMs <= 0L) return
+        val motionDurationScale = currentCoroutineContext()[MotionDurationScale]
+        snapshotFlow { motionDurationScale?.scaleFactor != 0f }.collectLatest { animationsEnabled ->
+            if (animationsEnabled) {
+                restartFrom(progress)
+                extrapolateOnEachFrame(durationMs = durationMs, playbackSpeed = playbackSpeed)
+            } else {
+                // Display the latest player sample or seek.
+                restartFrom(startProgress)
+            }
+        }
+    }
+
+    private suspend fun extrapolateOnEachFrame(durationMs: Long, playbackSpeed: Float): Nothing {
+        while (true) {
+            withFrameMillis { frameTimeMs ->
+                val startTimeMs = startTimeMs ?: frameTimeMs.also { startTimeMs = it }
+                progress = extrapolatePlaybackProgress(
+                    progress = startProgress,
+                    elapsedMs = frameTimeMs - startTimeMs,
+                    durationMs = durationMs,
+                    playbackSpeed = playbackSpeed,
+                )
+            }
+        }
+    }
+
+    private fun restartFrom(startProgress: Float) {
+        this.startProgress = startProgress
+        startTimeMs = null
+        progress = startProgress
+    }
 }
 
 /**
- * Remaining wall-clock milliseconds to tween the cursor from [progress] to the end of the media.
+ * Estimated playback progress [elapsedMs] after the player reported [progress], assuming playback continued at [playbackSpeed].
  *
- * Used to time the linear playback animation between infrequent player samples. A result of `0`
- * means the cursor is already at (or past) the end and should snap rather than tween.
- *
- * @param progress Current cursor progress, from 0 to 1.
- * @param durationMs Total media duration in milliseconds.
- * @param playbackSpeed Current playback rate (`1` = realtime). Faster speeds shorten the result.
+ * @param progress Latest player progress, from 0 to 1.
+ * @param elapsedMs Wall-clock milliseconds since [progress] was received.
+ * @param durationMs Total media duration in milliseconds. If `<= 0`, [progress] is returned unchanged.
+ * @param playbackSpeed Current playback rate (`1` = realtime).
+ * @return The estimated progress, never past `1`.
  */
-internal fun remainingPlaybackAnimationMs(
+internal fun extrapolatePlaybackProgress(
     progress: Float,
+    elapsedMs: Long,
     durationMs: Long,
     playbackSpeed: Float,
-): Int {
-    if (!progress.isFinite() || !playbackSpeed.isFinite() || durationMs <= 0L) return 0
-    val remainingProgress = (1f - progress).coerceIn(0f, 1f)
-    val speed = playbackSpeed.coerceAtLeast(0.01f)
-    return (remainingProgress * durationMs / speed)
-        .roundToInt()
-        .coerceAtLeast(0)
+): Float {
+    if (durationMs <= 0L || !playbackSpeed.isFinite()) return progress
+    val elapsedProgress = elapsedMs.coerceAtLeast(0L) * playbackSpeed.coerceAtLeast(0f) / durationMs
+    return (progress + elapsedProgress).coerceAtMost(1f)
 }

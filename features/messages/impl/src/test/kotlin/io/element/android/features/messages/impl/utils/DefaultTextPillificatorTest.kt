@@ -13,6 +13,7 @@ import android.text.Spanned
 import android.text.style.URLSpan
 import androidx.core.text.getSpans
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.api.timeline.TextPillificator
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -32,7 +33,7 @@ import io.element.android.libraries.textcomposer.mentions.getMentionSpans
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 
-class DefaultTextPillificationHelperTest : RobolectricTest() {
+class DefaultTextPillificatorTest : RobolectricTest() {
     @Test
     fun `pillify - adds pills for matrix uri user links`() {
         val text = "Hello matrix:u/someone:example.com"
@@ -290,13 +291,13 @@ class DefaultTextPillificationHelperTest : RobolectricTest() {
         permalinkParser: PermalinkParser = FakePermalinkParser(),
         permalinkBuilder: FakePermalinkBuilder = FakePermalinkBuilder(),
         mentionSpanFormatter: MentionSpanFormatter = FakeMentionSpanFormatter(),
-    ): TextPillificationHelper {
+    ): TextPillificator {
         val mentionSpanProvider = MentionSpanProvider(
             permalinkParser = permalinkParser,
             mentionSpanFormatter = mentionSpanFormatter,
             mentionSpanTheme = MentionSpanTheme(A_USER_ID),
         )
-        return DefaultTextPillificationHelper(
+        return DefaultTextPillificator(
             mentionSpanProvider = mentionSpanProvider,
             permalinkBuilder = permalinkBuilder,
             permalinkParser = permalinkParser,

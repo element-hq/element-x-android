@@ -65,6 +65,7 @@
   <string name="screen_moderation_and_safety_invites_heading">"Zaproszenia"</string>
   <string name="screen_moderation_and_safety_other_users_heading">"Pozostali użytkownicy"</string>
   <string name="screen_moderation_and_safety_share_presence_heading">"Twój wygląd"</string>
+  <string name="screen_notification_settings_activity_section_title">"Aktywność"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Dodatkowe ustawienia"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Dzwonek połączenia"</string>
   <string name="screen_notification_settings_calls_label">"Połączenia audio i wideo"</string>

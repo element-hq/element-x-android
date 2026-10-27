@@ -13,6 +13,10 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import android.net.Uri
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.api.timeline.HtmlConverterProvider
+import io.element.android.features.messages.api.timeline.TextPillificator
+import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
+import io.element.android.features.messages.test.timeline.FakeTextPillificator
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -26,6 +30,7 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
@@ -216,6 +221,37 @@ class MediaViewerPresenterTest {
             assertThat(item.mediaSource).isEqualTo(anImage.mediaSource)
             assertThat(item.thumbnailSource).isEqualTo(anImage.thumbnailSource)
             assertThat(item.downloadedMedia.value).isEqualTo(AsyncData.Uninitialized)
+        }
+    }
+
+    @Test
+    fun `present - html caption is converted to a pillified formatted caption`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            localMediaFactory = localMediaFactory,
+            mediaGalleryDataSource = mediaGalleryDataSource,
+            htmlConverterProvider = FakeHtmlConverterProvider(transformDom = { "formatted: ${it.text()}" }),
+            textPillificator = FakeTextPillificator(pillifyLambda = { text, _ -> "pillified $text" }),
+        )
+        val anImage = aMediaItemImage().let {
+            it.copy(mediaInfo = it.mediaInfo.copy(caption = "caption", htmlCaption = "<b>caption</b>"))
+        }
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitFirstItem()
+            val item = updatedState.listData.first() as MediaViewerPageData.MediaViewerData
+            assertThat(item.mediaInfo.htmlCaption).isEqualTo("<b>caption</b>")
+            assertThat(item.formattedCaption.toString()).isEqualTo("pillified formatted: caption")
         }
     }
 
@@ -950,6 +986,8 @@ internal fun TestScope.createMediaViewerPresenter(
     room: JoinedRoom = FakeJoinedRoom(
         liveTimeline = FakeTimeline(),
     ),
+    htmlConverterProvider: HtmlConverterProvider = FakeHtmlConverterProvider(),
+    textPillificator: TextPillificator = FakeTextPillificator(),
 ): MediaViewerPresenter {
     val actualInputs = inputs ?: createMediaViewerEntryPointParams(eventId = eventId, mode = mode)
     val actualMode = when (actualInputs) {
@@ -974,6 +1012,9 @@ internal fun TestScope.createMediaViewerPresenter(
         ),
         room = room,
         localMediaActions = localMediaActions,
+        htmlConverterProvider = htmlConverterProvider,
+        permalinkParser = FakePermalinkParser(),
+        textPillificator = textPillificator,
     )
 }
 

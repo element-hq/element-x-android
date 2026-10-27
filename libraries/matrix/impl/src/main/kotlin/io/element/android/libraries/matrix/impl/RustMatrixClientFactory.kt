@@ -99,6 +99,7 @@ class RustMatrixClientFactory(
             slidingSyncType = ClientBuilderSlidingSync.Restored,
             isMessageSearchAvailable = isMessageSearchAvailable,
             sessionDelegate = sessionDelegate,
+            autoEnableEncryption = true,
         )
             .homeserverUrl(sessionData.homeserverUrl)
             .enableAutomaticBackPagination(featureFlagService.isFeatureEnabled(FeatureFlags.AutomaticBackPagination))
@@ -153,6 +154,7 @@ class RustMatrixClientFactory(
         slidingSyncType: ClientBuilderSlidingSync,
         isMessageSearchAvailable: Boolean,
         sessionDelegate: ClientSessionDelegate,
+        autoEnableEncryption: Boolean,
     ): ClientBuilder {
         return clientBuilderProvider.provide()
             .run {
@@ -162,8 +164,10 @@ class RustMatrixClientFactory(
             }
             .setSessionDelegate(sessionDelegate)
             .userAgent(userAgentProvider.provide())
-            .autoEnableBackups(true)
-            .autoEnableCrossSigning(true)
+            // Only the final client must set up the backup and the cross-signing. A client used to login shares the same store,
+            // and its SDK initialization task could still be running when the final client is created.
+            .autoEnableBackups(autoEnableEncryption)
+            .autoEnableCrossSigning(autoEnableEncryption)
             .roomKeyRecipientStrategy(
                 strategy = if (featureFlagService.isFeatureEnabled(FeatureFlags.OnlySignedDeviceIsolationMode)) {
                     CollectStrategy.IDENTITY_BASED_STRATEGY

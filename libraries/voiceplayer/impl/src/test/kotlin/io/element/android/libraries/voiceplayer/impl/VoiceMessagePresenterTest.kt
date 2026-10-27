@@ -142,6 +142,29 @@ class VoiceMessagePresenterTest {
     }
 
     @Test
+    fun `cursor stays visible when playback ends`() = runTest {
+        val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 1_000, fakePlayedDurationMs = 1_000),
+            duration = 1_000.milliseconds,
+        )
+        presenter.test {
+            val initialState = awaitItem().also {
+                assertThat(it.showCursor).isFalse()
+            }
+
+            initialState.eventSink(VoiceMessageEvent.PlayPause)
+
+            var endedState = awaitItem()
+            while (endedState.progress < 1f || endedState.buttonType != VoiceMessageState.ButtonType.Play) {
+                endedState = awaitItem()
+            }
+            assertThat(endedState.buttonType).isEqualTo(VoiceMessageState.ButtonType.Play)
+            assertThat(endedState.progress).isEqualTo(1f)
+            assertThat(endedState.showCursor).isTrue()
+        }
+    }
+
+    @Test
     fun `content with null eventId shows disabled button`() = runTest {
         val presenter = createVoiceMessagePresenter(
             eventId = null,
@@ -166,6 +189,7 @@ class VoiceMessagePresenterTest {
                 assertThat(it.buttonType).isEqualTo(VoiceMessageState.ButtonType.Play)
                 assertThat(it.progress).isEqualTo(0f)
                 assertThat(it.time).isEqualTo("0:10")
+                assertThat(it.showCursor).isFalse()
             }
 
             initialState.eventSink(VoiceMessageEvent.Seek(0.5f))
@@ -174,6 +198,7 @@ class VoiceMessagePresenterTest {
                 assertThat(it.buttonType).isEqualTo(VoiceMessageState.ButtonType.Play)
                 assertThat(it.progress).isEqualTo(0.5f)
                 assertThat(it.time).isEqualTo("0:05")
+                assertThat(it.showCursor).isTrue()
             }
         }
     }

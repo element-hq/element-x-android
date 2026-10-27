@@ -65,6 +65,7 @@
   <string name="screen_moderation_and_safety_invites_heading">"Запрошення"</string>
   <string name="screen_moderation_and_safety_other_users_heading">"Інші користувачі"</string>
   <string name="screen_moderation_and_safety_share_presence_heading">"Як вас бачать інші"</string>
+  <string name="screen_notification_settings_activity_section_title">"Діяльність"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Додаткові налаштування"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Мелодія виклику"</string>
   <string name="screen_notification_settings_calls_label">"Аудіо та відеовиклики"</string>

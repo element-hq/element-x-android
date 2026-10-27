@@ -27,12 +27,14 @@ sealed interface MentionNodeContent {
     data class User(
         override val displayText: String,
         val userId: UserId,
+        val permalinkUrl: String,
     ) : MentionNodeContent
 
     /** A mention of a room (`<a href="matrix.to/#/#room:server">`). */
     data class Room(
         override val displayText: String,
         val roomIdOrAlias: RoomIdOrAlias,
+        val permalinkUrl: String,
     ) : MentionNodeContent
 
     /** An `@room` mention notifying everyone in the room. */

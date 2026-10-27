@@ -6,7 +6,7 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Supaya ruangan ini terlihat di direktori ruangan publik, Anda memerlukan alamat ruangan."</string>
   <string name="screen_edit_room_address_title">"Edit alamat"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Terjadi kesalahan saat memperbarui pengaturan pemberitahuan."</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Homeserver Anda tidak mendukung opsi ini dalam ruangan terenkripsi, Anda mungkin tidak diberi tahu dalam beberapa ruangan."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Penyedia akun Anda tidak mendukung opsi ini dalam obrolan terenkripsi, sehingga Anda mungkin tidak menerima pemberitahuan dalam beberapa obrolan."</string>
   <string name="screen_polls_history_title">"Jajak pendapat"</string>
   <string name="screen_room_change_permissions_administrators">"Hanya admin"</string>
   <string name="screen_room_change_permissions_ban_people">"Cekal orang-orang"</string>
@@ -42,6 +42,9 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Anda memiliki perubahan yang belum disimpan."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Simpan perubahan?"</string>
   <string name="screen_room_details_add_topic_title">"Tambahkan topik"</string>
+  <string name="screen_room_details_audio_push_to_talk">"Tekan untuk Bicara"</string>
+  <string name="screen_room_details_audio_title">"Audio Ruangan"</string>
+  <string name="screen_room_details_audio_video_calls">"Panggilan video"</string>
   <string name="screen_room_details_badge_encrypted">"Terenkripsi"</string>
   <string name="screen_room_details_badge_not_encrypted">"Tidak terenkripsi"</string>
   <string name="screen_room_details_badge_public">"Ruangan publik"</string>
@@ -109,7 +112,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Terjadi kesalahan saat memuat pengaturan pemberitahuan."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Gagal memulihkan mode bawaan, silakan coba lagi."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Gagal mengatur mode, silakan coba lagi."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Homeserver Anda tidak mendukung opsi ini dalam ruangan terenkripsi, Anda tidak akan diberi tahu dalam ruangan ini."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Penyedia akun Anda tidak mendukung opsi ini dalam obrolan terenkripsi, sehingga Anda tidak akan menerima pemberitahuan dalam obrolan ini."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Semua pesan"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Disebut dan balasan saja"</string>
   <string name="screen_room_notification_settings_mode_mute">"Bisukan"</string>
@@ -145,7 +148,7 @@ Kami tidak menyarankan untuk mengaktifkan enkripsi untuk ruangan yang dapat dite
   <string name="screen_security_and_privacy_encryption_section_footer">"Setelah diaktifkan, enkripsi tidak dapat dinonaktifkan."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Enkripsi"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktifkan enkripsi ujung ke ujung"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Siapa pun dapat menemukan dan bergabung"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Siapa saja dapat menemukan dan bergabung."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Semua orang"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Pilih ruang mana yang anggotanya dapat bergabung ke ruangan ini tanpa undangan. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Kelola ruang"</string>

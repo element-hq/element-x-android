@@ -103,7 +103,12 @@ internal class HtmlMessageContentPreviewParam : PreviewParameterProvider<Documen
                 append(".")
             },
             inlineContent = persistentMapOf(
-                MENTION_ID to MentionNodeContent.User(displayText = "@alice", userId = UserId("@alice:example.org")),
+                MENTION_ID to
+                    MentionNodeContent.User(
+                        displayText = "@alice",
+                        userId = UserId("@alice:example.org"),
+                        permalinkUrl = "https://matrix.to/#/@alice:example.org"
+                    ),
             ),
         ),
     )
@@ -175,7 +180,12 @@ internal class HtmlMessageContentPreviewParam : PreviewParameterProvider<Documen
                 append(", welcome!")
             },
             inlineContent = persistentMapOf(
-                MENTION_ID to MentionNodeContent.User(displayText = "@alice", userId = UserId("@alice:example.org")),
+                MENTION_ID to
+                    MentionNodeContent.User(
+                        displayText = "@alice",
+                        userId = UserId("@alice:example.org"),
+                        permalinkUrl = "https://matrix.to/#/@alice:example.org"
+                    ),
             ),
         ),
     )
@@ -188,7 +198,8 @@ internal class HtmlMessageContentPreviewParam : PreviewParameterProvider<Documen
                 append(", welcome!")
             },
             inlineContent = persistentMapOf(
-                MENTION_ID to MentionNodeContent.User(displayText = "@me", userId = UserId("@me:example.org")),
+                MENTION_ID to
+                    MentionNodeContent.User(displayText = "@me", userId = UserId("@me:example.org"), permalinkUrl = "https://matrix.to/#/@me:example.org"),
             ),
         ),
     )

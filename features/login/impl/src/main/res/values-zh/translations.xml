@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_account_provider_change">"更改账户提供者"</string>
   <string name="screen_account_provider_form_hint">"主服务器地址"</string>
-  <string name="screen_account_provider_form_notice">"输入搜索词或域名地址。"</string>
+  <string name="screen_account_provider_form_notice">"输入搜索关键词或域名地址。"</string>
   <string name="screen_account_provider_form_subtitle">"搜索公司、社区或私有服务器。"</string>
   <string name="screen_account_provider_form_title">"查找账户提供者"</string>
   <string name="screen_account_provider_signin_subtitle">"这是你的对话将存在的地方，就像你使用邮件提供者来存储电子邮件那样。"</string>
@@ -52,6 +52,8 @@
   <string name="screen_missing_key_backup_step_4">"按指示启用密钥存储"</string>
   <string name="screen_missing_key_backup_step_5">"返回到 %1$s"</string>
   <string name="screen_missing_key_backup_title">"请先启用密钥存储再继续处理 %1$s"</string>
+  <string name="screen_onboarding_add_account_subtitle">"你可以在 app 中添加多个账户并轻松在它们之间切换。"</string>
+  <string name="screen_onboarding_add_account_title">"登录另一账户"</string>
   <string name="screen_onboarding_app_version">"版本%1$s"</string>
   <string name="screen_onboarding_checking_account">"正在检查账户"</string>
   <string name="screen_onboarding_sign_in_manually">"手动登录"</string>

@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Tidak dapat mengonfirmasi?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Buat kunci pemulihan baru"</string>
+  <string name="screen_identity_confirmation_sign_out">"Keluar"</string>
   <string name="screen_identity_confirmation_subtitle">"Pilih cara verifikasi untuk mengatur pengiriman pesan yang aman."</string>
   <string name="screen_identity_confirmation_title">"Konfirmasi bahwa ini Anda"</string>
   <string name="screen_identity_confirmation_use_another_device">"Gunakan perangkat lain"</string>
@@ -38,10 +39,13 @@
   <string name="screen_session_verification_request_title">"Verifikasi diminta"</string>
   <string name="screen_session_verification_they_dont_match">"Mereka tidak cocok"</string>
   <string name="screen_session_verification_they_match">"Mereka cocok"</string>
+  <string name="screen_session_verification_unavailable_subtitle">"Silakan gunakan perangkat atau kunci pemulihan lain."</string>
+  <string name="screen_session_verification_unavailable_title">"Verifikasi dengan device ini saat ini tidak tersedia"</string>
   <string name="screen_session_verification_use_another_device_subtitle">"Pastikan Anda membuka aplikasi di perangkat lain sebelum memulai verifikasi dari sini."</string>
   <string name="screen_session_verification_use_another_device_title">"Buka aplikasi di perangkat terverifikasi lain"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Untuk keamanan tambahan, verifikasi pengguna ini dengan membandingkan satu set emoji di perangkat Anda. Lakukan ini dengan menggunakan cara tepercaya untuk berkomunikasi."</string>
   <string name="screen_session_verification_user_initiator_title">"Verifikasi pengguna ini?"</string>
+  <string name="screen_session_verification_user_requesting_verification">"Pengguna yang meminta verifikasi:"</string>
   <string name="screen_session_verification_user_responder_subtitle">"Untuk keamanan tambahan, pengguna lain ingin memverifikasi identitas Anda. Anda akan ditampilkan satu set emoji untuk dibandingkan."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Anda akan melihat popup di perangkat lain. Mulai verifikasi dari sana sekarang."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Mulai verifikasi di perangkat lain"</string>
