@@ -34,7 +34,7 @@ test_core = "1.7.0"
 
 # Jetbrain
 datetime = "0.8.0"
-serialization_json = "1.11.0"
+serialization_json = "1.12.0"
 
 #other
 coil = "3.6.3"
