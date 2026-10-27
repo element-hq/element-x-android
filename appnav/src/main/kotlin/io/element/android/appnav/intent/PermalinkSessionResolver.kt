@@ -9,12 +9,10 @@ package io.element.android.appnav.intent
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.hasJoined
 import timber.log.Timber
 
 /**
@@ -54,9 +52,5 @@ class DefaultPermalinkSessionResolver(
             .firstOrNull { client -> client.hasJoined(roomId) }
             ?.sessionId
             .also { Timber.d("Session for room $roomId: $it") }
-    }
-
-    private suspend fun MatrixClient.hasJoined(roomId: RoomId): Boolean {
-        return getRoomInfo(roomId).getOrNull()?.currentUserMembership == CurrentUserMembership.JOINED
     }
 }
