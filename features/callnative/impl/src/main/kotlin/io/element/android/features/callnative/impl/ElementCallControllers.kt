@@ -17,9 +17,10 @@ import io.element.android.call.api.ElementCallOptions
 import io.element.android.call.api.rtc.MatrixRtcLogLevel
 import io.element.android.call.api.rtc.MatrixRtcLoggingConfiguration
 import io.element.android.call.impl.ElementCallStack
+import io.element.android.call.ui.ElementCallActivity
 import io.element.android.features.call.api.CurrentCallTracker
 import io.element.android.features.call.api.RingingCallTracker
-import io.element.android.features.callnative.api.ElementCallTransportFactory
+import io.element.android.features.callnative.api.MatrixRtcBackendFactory
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -89,7 +90,7 @@ interface ElementCallControllers {
 class DefaultElementCallControllers(
     @ApplicationContext private val context: Context,
     private val matrixClientProvider: MatrixClientProvider,
-    private val transportFactory: ElementCallTransportFactory,
+    private val backendFactory: MatrixRtcBackendFactory,
     private val currentCallTracker: CurrentCallTracker,
     private val ringingCallTracker: RingingCallTracker,
     private val appForegroundStateService: AppForegroundStateService,
@@ -131,7 +132,7 @@ class DefaultElementCallControllers(
         }
 
     private suspend fun build(client: MatrixClient): ElementCallStack =
-        ElementCallStack.Builder(context, transportFactory.create(client))
+        ElementCallStack.Builder(context, backendFactory.create(client))
             .lifecycleListener(
                 ElementXCallLifecycleListener(
                     sessionId = client.sessionId,
@@ -151,6 +152,8 @@ class DefaultElementCallControllers(
             // The same id the WebView call's foreground service uses, so that the two paths cannot
             // leave two ongoing-call notifications in the shade.
             notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.ONGOING_CALL),
+            // The call screen itself, which shows over the lock screen, rather than the launcher Activity.
+            contentIntent = ElementCallActivity::pendingIntent,
         ),
     )
 
