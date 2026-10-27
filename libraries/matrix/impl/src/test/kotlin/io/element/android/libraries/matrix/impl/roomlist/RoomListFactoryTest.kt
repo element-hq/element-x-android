@@ -8,10 +8,18 @@
 
 package io.element.android.libraries.matrix.impl.roomlist
 
+import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomList
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListDynamicEntriesController
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListEntriesWithDynamicAdaptersResult
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListService
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import org.junit.Ignore
 import org.junit.Test
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -29,5 +37,30 @@ class RoomListFactoryTest {
         ) {
             FakeFfiRoomList()
         }
+    }
+
+    @Ignore("Crash when loading more rooms after the room list scope is cancelled — passes with the fix in this PR")
+    @Test
+    fun `when the room list scope is cancelled, the destroyed controller is not used anymore`() = runTest {
+        val controller = FakeFfiRoomListDynamicEntriesController()
+        val roomListScope = CoroutineScope(coroutineContext + Job())
+        val sut = RoomListFactory(
+            innerRoomListService = FakeFfiRoomListService(),
+            analyticsService = FakeAnalyticsService(),
+        )
+        val roomList = sut.createRoomList(
+            pageSize = 10,
+            coroutineContext = EmptyCoroutineContext,
+            coroutineScope = roomListScope,
+        ) {
+            FakeFfiRoomList(
+                entriesWithDynamicAdaptersResult = { FakeFfiRoomListEntriesWithDynamicAdaptersResult(controller) },
+            )
+        }
+        runCurrent()
+        roomListScope.cancel()
+        runCurrent()
+        assertThat(controller.isDestroyed).isTrue()
+        roomList.loadMore()
     }
 }
