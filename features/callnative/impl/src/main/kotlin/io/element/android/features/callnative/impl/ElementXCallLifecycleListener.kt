@@ -34,12 +34,15 @@ class ElementXCallLifecycleListener(
     private val currentCallTracker: CurrentCallTracker,
     private val ringingCallTracker: RingingCallTracker,
     private val sessionCoroutineScope: CoroutineScope,
-    appForegroundStateService: AppForegroundStateService,
+    private val appForegroundStateService: AppForegroundStateService,
 ) : ElementCallLifecycleListener {
     override val isAppInForeground: Flow<Boolean> = appForegroundStateService.isInForeground
 
     override fun onCallStarted(callData: ElementCallData) {
         currentCallTracker.onCallStarted(CurrentCall.RoomCall(callData.roomId()))
+        // Keeps the sync running with the app in the background: the call's membership, its to-device media keys
+        // and the client's offline state all come through it, and SyncOrchestrator stops it otherwise.
+        appForegroundStateService.updateIsInCallState(true)
     }
 
     override fun onCallJoined(callData: ElementCallData) {
@@ -52,6 +55,7 @@ class ElementXCallLifecycleListener(
     override fun onCallEnded(callData: ElementCallData?, reason: ElementCallEndReason) {
         Timber.i("Native call ended: $reason")
         currentCallTracker.onCallEnded()
+        appForegroundStateService.updateIsInCallState(false)
         callData?.let { sessionCoroutineScope.launch { ringingCallTracker.onCallEnded(it.toCallData()) } }
     }
 
