@@ -9,12 +9,18 @@ package io.element.android.appnav.intent
 
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakePermalinkSessionResolver(
-    private val resolveResult: (RoomIdOrAlias, List<SessionId>) -> SessionId? = { _, _ -> lambdaError() },
+    private val resolveForRoomResult: (RoomIdOrAlias, List<SessionId>) -> SessionId? = { _, _ -> lambdaError() },
+    private val resolveForUserResult: (UserId, List<SessionId>) -> SessionId? = { _, _ -> lambdaError() },
 ) : PermalinkSessionResolver {
-    override suspend fun resolve(roomIdOrAlias: RoomIdOrAlias, sessionIds: List<SessionId>): SessionId? {
-        return resolveResult(roomIdOrAlias, sessionIds)
+    override suspend fun resolveForRoom(roomIdOrAlias: RoomIdOrAlias, sessionIds: List<SessionId>): SessionId? {
+        return resolveForRoomResult(roomIdOrAlias, sessionIds)
+    }
+
+    override suspend fun resolveForUser(userId: UserId, sessionIds: List<SessionId>): SessionId? {
+        return resolveForUserResult(userId, sessionIds)
     }
 }

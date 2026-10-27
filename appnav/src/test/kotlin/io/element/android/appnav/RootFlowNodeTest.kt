@@ -48,6 +48,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -197,7 +198,9 @@ class RootFlowNodeTest : RobolectricTest() {
             sessionStore = twoSessionsStore(setLatestSessionResult),
             loginIntentResolverResult = { null },
             permalinkParser = FakePermalinkParser { aRoomLink() },
-            permalinkSessionResolver = FakePermalinkSessionResolver { roomIdOrAlias, sessionIds -> resolveResult(roomIdOrAlias, sessionIds) },
+            permalinkSessionResolver = FakePermalinkSessionResolver(
+                resolveForRoomResult = { roomIdOrAlias, sessionIds -> resolveResult(roomIdOrAlias, sessionIds) },
+            ),
         )
         rootFlowNode.parentNodeTestHelper()
         // handleIntent suspends until the logged in flow is attached, which never happens here
@@ -218,7 +221,9 @@ class RootFlowNodeTest : RobolectricTest() {
             sessionStore = twoSessionsStore(setLatestSessionResult),
             loginIntentResolverResult = { null },
             permalinkParser = FakePermalinkParser { aRoomLink() },
-            permalinkSessionResolver = FakePermalinkSessionResolver { roomIdOrAlias, sessionIds -> resolveResult(roomIdOrAlias, sessionIds) },
+            permalinkSessionResolver = FakePermalinkSessionResolver(
+                resolveForRoomResult = { roomIdOrAlias, sessionIds -> resolveResult(roomIdOrAlias, sessionIds) },
+            ),
         )
         rootFlowNode.parentNodeTestHelper()
         // handleIntent suspends until the logged in flow is attached, which never happens here
@@ -228,17 +233,45 @@ class RootFlowNodeTest : RobolectricTest() {
     }
 
     @Test
-    fun `given several sessions, when a user permalink is handled, then the session resolver is not used`() = runTest {
+    fun `given several sessions, when a user permalink is handled and a session has a DM with the user, then this session is used`() = runTest {
         val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val resolveResult = lambdaRecorder<UserId, List<SessionId>, SessionId?> { _, _ -> SessionId("@bob:example.com") }
         val rootFlowNode = createRootFlowNode(
             loginEntryPoint = FakeLoginEntryPoint(),
             sessionStore = twoSessionsStore(setLatestSessionResult),
             loginIntentResolverResult = { null },
             permalinkParser = FakePermalinkParser { PermalinkData.UserLink(A_USER_ID) },
+            permalinkSessionResolver = FakePermalinkSessionResolver(
+                resolveForUserResult = { userId, sessionIds -> resolveResult(userId, sessionIds) },
+            ),
         )
         rootFlowNode.parentNodeTestHelper()
         // handleIntent suspends until the logged in flow is attached, which never happens here
         backgroundScope.launch(start = CoroutineStart.UNDISPATCHED) { rootFlowNode.handleIntent(aPermalinkIntent()) }
+        resolveResult.assertions().isCalledOnce().with(
+            value(A_USER_ID),
+            value(listOf(SessionId("@alice:example.com"), SessionId("@bob:example.com"))),
+        )
+        setLatestSessionResult.assertions().isCalledOnce().with(value("@bob:example.com"))
+    }
+
+    @Test
+    fun `given several sessions, when a user permalink is handled and no session has a DM with the user, then the latest session is used`() = runTest {
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val resolveResult = lambdaRecorder<UserId, List<SessionId>, SessionId?> { _, _ -> null }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = twoSessionsStore(setLatestSessionResult),
+            loginIntentResolverResult = { null },
+            permalinkParser = FakePermalinkParser { PermalinkData.UserLink(A_USER_ID) },
+            permalinkSessionResolver = FakePermalinkSessionResolver(
+                resolveForUserResult = { userId, sessionIds -> resolveResult(userId, sessionIds) },
+            ),
+        )
+        rootFlowNode.parentNodeTestHelper()
+        // handleIntent suspends until the logged in flow is attached, which never happens here
+        backgroundScope.launch(start = CoroutineStart.UNDISPATCHED) { rootFlowNode.handleIntent(aPermalinkIntent()) }
+        resolveResult.assertions().isCalledOnce()
         setLatestSessionResult.assertions().isCalledOnce().with(value("@alice:example.com"))
     }
 

@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.aRoomInfo
@@ -39,7 +40,7 @@ class DefaultPermalinkSessionResolverTest {
             A_SESSION_ID to aClient(A_SESSION_ID, membership = null),
             A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = CurrentUserMembership.JOINED),
         )
-        assertThat(resolver.resolve(RoomIdOrAlias.Id(A_ROOM_ID), sessionIds)).isEqualTo(A_SESSION_ID_2)
+        assertThat(resolver.resolveForRoom(RoomIdOrAlias.Id(A_ROOM_ID), sessionIds)).isEqualTo(A_SESSION_ID_2)
     }
 
     @Test
@@ -48,7 +49,7 @@ class DefaultPermalinkSessionResolverTest {
             A_SESSION_ID to aClient(A_SESSION_ID, membership = CurrentUserMembership.JOINED),
             A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = CurrentUserMembership.JOINED),
         )
-        assertThat(resolver.resolve(RoomIdOrAlias.Id(A_ROOM_ID), sessionIds)).isEqualTo(A_SESSION_ID)
+        assertThat(resolver.resolveForRoom(RoomIdOrAlias.Id(A_ROOM_ID), sessionIds)).isEqualTo(A_SESSION_ID)
     }
 
     @Test
@@ -57,7 +58,7 @@ class DefaultPermalinkSessionResolverTest {
             A_SESSION_ID to aClient(A_SESSION_ID, membership = CurrentUserMembership.INVITED),
             A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = CurrentUserMembership.LEFT),
         )
-        assertThat(resolver.resolve(RoomIdOrAlias.Id(A_ROOM_ID), sessionIds)).isNull()
+        assertThat(resolver.resolveForRoom(RoomIdOrAlias.Id(A_ROOM_ID), sessionIds)).isNull()
     }
 
     @Test
@@ -66,7 +67,7 @@ class DefaultPermalinkSessionResolverTest {
             A_SESSION_ID to aClient(A_SESSION_ID, membership = null),
             A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = null),
         )
-        assertThat(resolver.resolve(RoomIdOrAlias.Id(A_ROOM_ID), sessionIds)).isNull()
+        assertThat(resolver.resolveForRoom(RoomIdOrAlias.Id(A_ROOM_ID), sessionIds)).isNull()
     }
 
     @Test
@@ -80,7 +81,7 @@ class DefaultPermalinkSessionResolverTest {
                 }
             },
         )
-        assertThat(resolver.resolve(RoomIdOrAlias.Id(A_ROOM_ID), sessionIds)).isEqualTo(A_SESSION_ID_2)
+        assertThat(resolver.resolveForRoom(RoomIdOrAlias.Id(A_ROOM_ID), sessionIds)).isEqualTo(A_SESSION_ID_2)
     }
 
     @Test
@@ -92,7 +93,7 @@ class DefaultPermalinkSessionResolverTest {
             A_SESSION_ID to aClient(A_SESSION_ID, membership = null, roomId = A_ROOM_ID_2, resolveRoomAliasResult = { resolveRoomAliasResult(it) }),
             A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = CurrentUserMembership.JOINED, roomId = A_ROOM_ID_2),
         )
-        assertThat(resolver.resolve(RoomIdOrAlias.Alias(A_ROOM_ALIAS), sessionIds)).isEqualTo(A_SESSION_ID_2)
+        assertThat(resolver.resolveForRoom(RoomIdOrAlias.Alias(A_ROOM_ALIAS), sessionIds)).isEqualTo(A_SESSION_ID_2)
         resolveRoomAliasResult.assertions().isCalledOnce()
     }
 
@@ -102,7 +103,54 @@ class DefaultPermalinkSessionResolverTest {
             A_SESSION_ID to aClient(A_SESSION_ID, membership = CurrentUserMembership.JOINED, resolveRoomAliasResult = { Result.failure(AN_EXCEPTION) }),
             A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = CurrentUserMembership.JOINED, resolveRoomAliasResult = { Result.success(Optional.empty()) }),
         )
-        assertThat(resolver.resolve(RoomIdOrAlias.Alias(A_ROOM_ALIAS), sessionIds)).isNull()
+        assertThat(resolver.resolveForRoom(RoomIdOrAlias.Alias(A_ROOM_ALIAS), sessionIds)).isNull()
+    }
+
+    @Test
+    fun `when only the second session has joined a DM with the user, then the second session is returned`() = runTest {
+        val resolver = createResolver(
+            A_SESSION_ID to aClient(A_SESSION_ID, membership = null, dmRoomId = null),
+            A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = CurrentUserMembership.JOINED, dmRoomId = A_ROOM_ID),
+        )
+        assertThat(resolver.resolveForUser(A_USER_ID, sessionIds)).isEqualTo(A_SESSION_ID_2)
+    }
+
+    @Test
+    fun `when both sessions have joined a DM with the user, then the most recently used session is returned`() = runTest {
+        val resolver = createResolver(
+            A_SESSION_ID to aClient(A_SESSION_ID, membership = CurrentUserMembership.JOINED, dmRoomId = A_ROOM_ID),
+            A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = CurrentUserMembership.JOINED, dmRoomId = A_ROOM_ID),
+        )
+        assertThat(resolver.resolveForUser(A_USER_ID, sessionIds)).isEqualTo(A_SESSION_ID)
+    }
+
+    @Test
+    fun `when no session has a DM with the user, then null is returned`() = runTest {
+        val resolver = createResolver(
+            A_SESSION_ID to aClient(A_SESSION_ID, membership = null, dmRoomId = null),
+            A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = null, dmRoomId = null),
+        )
+        assertThat(resolver.resolveForUser(A_USER_ID, sessionIds)).isNull()
+    }
+
+    @Test
+    fun `when the DMs with the user are not joined, then null is returned`() = runTest {
+        val resolver = createResolver(
+            A_SESSION_ID to aClient(A_SESSION_ID, membership = CurrentUserMembership.INVITED, dmRoomId = A_ROOM_ID),
+            A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = CurrentUserMembership.LEFT, dmRoomId = A_ROOM_ID),
+        )
+        assertThat(resolver.resolveForUser(A_USER_ID, sessionIds)).isNull()
+    }
+
+    @Test
+    fun `when finding the DM fails, then the session is skipped`() = runTest {
+        val resolver = createResolver(
+            A_SESSION_ID to aClient(A_SESSION_ID, membership = CurrentUserMembership.JOINED).apply {
+                givenFindDmResult(Result.failure(AN_EXCEPTION))
+            },
+            A_SESSION_ID_2 to aClient(A_SESSION_ID_2, membership = CurrentUserMembership.JOINED, dmRoomId = A_ROOM_ID),
+        )
+        assertThat(resolver.resolveForUser(A_USER_ID, sessionIds)).isEqualTo(A_SESSION_ID_2)
     }
 
     private fun createResolver(vararg clients: Pair<SessionId, MatrixClient>): DefaultPermalinkSessionResolver {
@@ -116,6 +164,7 @@ class DefaultPermalinkSessionResolverTest {
         sessionId: SessionId,
         membership: CurrentUserMembership?,
         roomId: RoomId = A_ROOM_ID,
+        dmRoomId: RoomId? = null,
         resolveRoomAliasResult: suspend (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
             Result.success(Optional.of(ResolvedRoomAlias(roomId, emptyList())))
         },
@@ -131,5 +180,6 @@ class DefaultPermalinkSessionResolverTest {
             }
             Result.success(roomInfo)
         }
+        givenFindDmResult(Result.success(dmRoomId))
     }
 }

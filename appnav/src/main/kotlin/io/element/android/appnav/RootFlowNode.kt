@@ -646,31 +646,49 @@ class RootFlowNode(
                 // wait for the current session to be restored
                 attachSession(latestSessionId)
             }
-            is PermalinkData.RoomLink,
-            is PermalinkData.UserLink -> {
-                val sessionId = if (sessionIds.size == 1) {
-                    // Only one account, use it.
-                    latestSessionId
-                } else if (permalinkData is PermalinkData.RoomLink) {
-                    // Several accounts, use the most recently used one which has joined the room, if any.
-                    permalinkSessionResolver.resolve(permalinkData.roomIdOrAlias, sessionIds)
-                } else {
-                    null
-                }
-                if (sessionId != null) {
-                    // Directly attach the room or the user node.
-                    attachSession(sessionId).attachPermalinkData(permalinkData)
-                } else {
-                    // Let the user choose which account to use
-                    attachSession(latestSessionId)
-                    backstack.push(
-                        NavTarget.AccountSelect(
-                            currentSessionId = latestSessionId,
-                            permalinkData = permalinkData,
-                        )
-                    )
-                }
+            is PermalinkData.RoomLink -> openPermalink(permalinkData, sessionIds) {
+                // Several accounts, use the most recently used one which has joined the room, if any.
+                permalinkSessionResolver.resolveForRoom(permalinkData.roomIdOrAlias, sessionIds)
             }
+            is PermalinkData.UserLink -> openPermalink(permalinkData, sessionIds) {
+                // Several accounts, use the most recently used one which has a direct message room with the user, if any.
+                permalinkSessionResolver.resolveForUser(permalinkData.userId, sessionIds)
+            }
+        }
+    }
+
+    /**
+     * Open a room or a user permalink.
+     *
+     * @param permalinkData the permalink to open.
+     * @param sessionIds the session ids, ordered from the most recently used to the least recently used. Must not be empty.
+     * @param resolveSessionId invoked when there are several sessions, to find the session to use. If it returns null, the user is asked
+     * to choose the session.
+     */
+    private suspend fun openPermalink(
+        permalinkData: PermalinkData,
+        sessionIds: List<SessionId>,
+        resolveSessionId: suspend () -> SessionId?,
+    ) {
+        val latestSessionId = sessionIds.first()
+        val sessionId = if (sessionIds.size == 1) {
+            // Only one account, use it.
+            latestSessionId
+        } else {
+            resolveSessionId()
+        }
+        if (sessionId != null) {
+            // Directly attach the room or the user node.
+            attachSession(sessionId).attachPermalinkData(permalinkData)
+        } else {
+            // Let the user choose which account to use
+            attachSession(latestSessionId)
+            backstack.push(
+                NavTarget.AccountSelect(
+                    currentSessionId = latestSessionId,
+                    permalinkData = permalinkData,
+                )
+            )
         }
     }
 
