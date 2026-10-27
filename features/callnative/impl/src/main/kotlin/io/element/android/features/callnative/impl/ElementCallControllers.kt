@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.job
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
@@ -113,6 +114,7 @@ class DefaultElementCallControllers(
         }
         build(client).also { stack ->
             stacks.update { it + (sessionId to stack) }
+            client.sessionCoroutineScope.launch { stack.controller.followConnectivity(client.syncService.isOnline) }
             // The client's scope is the stack's lifetime: the component has no shutdown of its own, so
             // cancelling this at logout is what stops the RTC core. Closing here only releases the
             // component's own reference, so a dead stack is not left behind it.
