@@ -15,12 +15,19 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.call.api.ElementCallData
 import io.element.android.call.api.rtc.id.RoomId
+import io.element.android.call.ui.ElementCallActivity
 import io.element.android.features.call.api.CallData
 import io.element.android.features.callnative.api.NativeCallEntryPoint
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
+
+private val CALL_STATE_TIMEOUT = 5.seconds
 
 /**
  * Starts a call on the native MatrixRTC stack.
@@ -53,6 +60,17 @@ class DefaultNativeCallEntryPoint(
             // already hold is idempotent, so the screen asking again later costs nothing.
             if (hasMicrophonePermission()) {
                 controller.setMicrophonePermissionGranted(true)
+            }
+            // The call screen is an Activity of its own, and it closes at once when it finds no call, so it
+            // is opened only once the controller has one. From the app the overlay would open it as well;
+            // answering from the ringing screen or its notification has no overlay in front, so this is
+            // what shows the call there, over the lock screen if need be. It is `singleTask`, so the
+            // overlay opening it too brings back the same screen.
+            val hasCall = withTimeoutOrNull(CALL_STATE_TIMEOUT) { controller.state.first { it != null } } != null
+            if (hasCall) {
+                ElementCallActivity.start(context)
+            } else {
+                Timber.w("NativeCall: no call state after $CALL_STATE_TIMEOUT, not opening the call screen")
             }
         }
     }
