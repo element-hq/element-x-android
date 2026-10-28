@@ -42,10 +42,11 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.plus
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.CallDeclineListener
-import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_base.EncryptionState
@@ -76,13 +77,9 @@ class RustBaseRoom(
 
     override val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
 
-    override val roomInfoFlow: StateFlow<RoomInfo> = mxCallbackFlow {
-        innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
-            override fun call(roomInfo: org.matrix.rustcomponents.sdk.RoomInfo) {
-                channel.trySend(roomInfoMapper.map(roomInfo))
-            }
-        })
-    }.stateIn(roomCoroutineScope, started = SharingStarted.Lazily, initialValue = initialRoomInfo)
+    override val roomInfoFlow: StateFlow<RoomInfo> = innerRoom.roomInfoUpdates(coroutineDispatchers)
+        .map { roomInfoMapper.map(it) }
+        .stateIn(roomCoroutineScope + coroutineDispatchers.io, started = SharingStarted.Lazily, initialValue = initialRoomInfo)
 
     override fun predecessorRoom(): PredecessorRoom? {
         return runCatchingExceptions { innerRoom.predecessorRoom()?.map() }
