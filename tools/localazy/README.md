@@ -11,6 +11,7 @@ Localazy is used to host the source strings and their translations.
 * [CLI Installation](#cli-installation)
 * [Download translations](#download-translations)
 * [Add translations to a specific module](#add-translations-to-a-specific-module)
+* [Check unused strings](#check-unused-strings)
 
 <!--- END -->
 
@@ -74,3 +75,13 @@ To also include the translations, i.e. the `translations.xml` files, add `--all`
 Edit the file [config.json](./config.json) to add a new module, or add a new item in `includeRegex` arrays, then run the script again to see the effect.
 
 [generateLocalazyConfig.py](generateLocalazyConfig.py) is the Python script that convert `config.json` to a localazy configuration file. Generally you should not edit this file.
+
+## Check unused strings
+
+To generate a report of the strings which are used neither by Element X Android nor by Element X iOS, clone the [Element X iOS project](https://github.com/element-hq/element-x-ios) next to this project, and from the root folder of this project, run:
+
+```shell
+./tools/localazy/checkUnusedStrings.py
+```
+
+It will generate the file `unusedStrings.md`, with a link to Localazy for each unused string. Use `--ios` to set the path to the Element X iOS project and `--output` to set the path of the generated file.
