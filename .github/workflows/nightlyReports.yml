@@ -15,7 +15,7 @@ env:
 
 jobs:
   nightlyReports:
-    name: Create kover report artifact and upload sonar result.
+    name: Create kover report artifact
     runs-on: ubuntu-latest
     if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
@@ -64,17 +64,11 @@ jobs:
           path: |
             **/build/reports/kover
 
-      - name: 🔊 Publish results to Sonar
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
-        run: ./gradlew assembleDebug createFullJarDebugTestFixtures :app:createFullJarGplayDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
-
-  # Gradle dependency analysis using https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin
+  # Dependency vulnerability analysis using https://github.com/dependency-check/dependency-check-gradle
   dependency-analysis:
     name: Dependency analysis
     runs-on: ubuntu-latest
+    if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

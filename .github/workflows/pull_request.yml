@@ -1,11 +1,13 @@
 name: Pull Request
 on:
-  pull_request_target:
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
     types: [ opened, edited, labeled, unlabeled, synchronize ]
-  workflow_call: # zizmor: ignore[dangerous-triggers]
+  workflow_call:
     secrets:
       ELEMENT_BOT_TOKEN:
         required: true
+      ELEMENT_BOT_TOKEN_READ_ORG:
+        required: false
 
 permissions: {}
 
@@ -70,7 +72,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "Thanks for opening this pull request, unfortunately we do not accept contributions from the main" +
+              body: "Thanks for opening this pull request, unfortunately we do not accept contributions from the develop" +
                 " branch of your fork, please re-open once you switch to an alternative branch for everyone's sanity.",
             });
             
