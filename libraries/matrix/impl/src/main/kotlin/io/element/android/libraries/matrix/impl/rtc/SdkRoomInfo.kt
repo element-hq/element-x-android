@@ -9,9 +9,8 @@ package io.element.android.libraries.matrix.impl.rtc
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import kotlinx.coroutines.channels.awaitClose
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flowOn
@@ -31,7 +30,7 @@ import uniffi.matrix_sdk_base.EncryptionState
  * The current value is sent first: the SDK's subscription only reports what changes *after* it exists,
  * and a room whose name never changes during a call would otherwise never be named.
  */
-internal fun Room.roomInfoUpdates(dispatchers: CoroutineDispatchers): Flow<RoomInfo> = callbackFlow {
+internal fun Room.roomInfoUpdates(dispatchers: CoroutineDispatchers): Flow<RoomInfo> = mxCallbackFlow {
     val handle = subscribeToRoomInfoUpdates(
         object : RoomInfoListener {
             override fun call(roomInfo: RoomInfo) {
@@ -40,10 +39,7 @@ internal fun Room.roomInfoUpdates(dispatchers: CoroutineDispatchers): Flow<RoomI
         }
     )
     trySend(roomInfo())
-    awaitClose {
-        handle.cancel()
-        handle.close()
-    }
+    handle
 }.flowOn(dispatchers.io)
 
 /**
