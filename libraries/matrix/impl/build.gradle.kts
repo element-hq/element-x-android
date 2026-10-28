@@ -34,7 +34,8 @@ dependencies {
     } else {
         debugImplementation(libs.matrix.sdk)
     }
-    implementation(variantOf(libs.rustls.platform.verifier) { artifactType("aar") })
+    // Disabled until the platform verifier is ready for production. See CertificateVerifier.kt.
+//    implementation(variantOf(libs.rustls.platform.verifier) { artifactType("aar") })
 
     // The native call's MatrixBackend, over the SDK client. Only this module may hand it a raw SDK client.
     // element-call carries the RTC core, where MatrixBackend lives, as an api dependency.
