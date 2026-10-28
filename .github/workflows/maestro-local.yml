@@ -136,9 +136,8 @@ jobs:
       - name: Update summary (failure)
         if: steps.maestro_test.outcome != 'success'
         run: |
-          LOG_FILE=$(find ~/.maestro/tests/ -name maestro.log)
-          echo "Log file: $LOG_FILE"
-          LOG_LINES="$(tail -n 30 "$LOG_FILE")"
+          # There can be several log files
+          LOG_LINES="$(find ~/.maestro/tests/ -name maestro.log -exec tail -n 30 {} +)"
           echo "### :x: Maestro tests failed...
           
           \`\`\`
