@@ -43,6 +43,10 @@ class AccountSelectPresenter(
         fun create(permalinkData: PermalinkData): AccountSelectPresenter
     }
 
+    // The permalink cannot change, so these values are computed once.
+    private val linkPillText = permalinkData.toPillText()
+    private val isRoomLink = permalinkData is PermalinkData.RoomLink
+
     @Composable
     override fun present(): AccountSelectState {
         // Only used by this screen, the current account of the application is not changed.
@@ -74,10 +78,6 @@ class AccountSelectPresenter(
             }
         }
 
-        val linkPillText = remember {
-            permalinkData.toPillText()
-        }
-
         val currentAccount by remember {
             derivedStateOf {
                 accounts.find { it.userId == currentSessionId } ?: accounts.firstOrNull()
@@ -103,6 +103,7 @@ class AccountSelectPresenter(
 
         return AccountSelectState(
             linkPillText = linkPillText,
+            isRoomLink = isRoomLink,
             currentAccount = currentAccount,
             otherAccounts = otherAccounts,
             isAccountListExpanded = isAccountListExpanded,

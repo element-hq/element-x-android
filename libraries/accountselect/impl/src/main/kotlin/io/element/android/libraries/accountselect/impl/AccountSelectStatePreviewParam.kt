@@ -27,11 +27,13 @@ open class AccountSelectStatePreviewParam : PreviewParameterProvider<AccountSele
             ),
             anAccountSelectState(
                 linkPillText = "#room:matrix.org",
+                isRoomLink = true,
                 currentAccount = aMatrixUserList().first(),
                 otherAccounts = anOtherAccountList().take(1),
             ),
             anAccountSelectState(
                 linkPillText = "\uD83D\uDCAC > #room:matrix.org",
+                isRoomLink = true,
                 currentAccount = aMatrixUserList().first(),
                 otherAccounts = anOtherAccountList(),
             ),
@@ -42,6 +44,7 @@ open class AccountSelectStatePreviewParam : PreviewParameterProvider<AccountSele
             ),
             anAccountSelectState(
                 linkPillText = "#room:matrix.org",
+                isRoomLink = true,
                 currentAccount = aMatrixUserList().first().copy(
                     displayedStatus = DisplayedStatus.UserSet(UserStatus("\uD83C\uDFD6\uFE0F", "On holiday")),
                 ),
@@ -52,6 +55,7 @@ open class AccountSelectStatePreviewParam : PreviewParameterProvider<AccountSele
             ),
             anAccountSelectState(
                 linkPillText = "#room:matrix.org",
+                isRoomLink = true,
                 currentAccount = aMatrixUserList().first(),
                 otherAccounts = anOtherAccountList(),
                 isAccountListExpanded = false,
@@ -63,12 +67,14 @@ private fun anOtherAccountList() = aMatrixUserList().drop(1).map { anOtherAccoun
 
 internal fun anAccountSelectState(
     linkPillText: String? = null,
+    isRoomLink: Boolean = false,
     currentAccount: MatrixUser? = null,
     otherAccounts: List<OtherAccount> = emptyList(),
     isAccountListExpanded: Boolean = true,
     eventSink: (AccountSelectEvent) -> Unit = {},
 ) = AccountSelectState(
     linkPillText = linkPillText,
+    isRoomLink = isRoomLink,
     currentAccount = currentAccount,
     otherAccounts = otherAccounts.toImmutableList(),
     isAccountListExpanded = isAccountListExpanded,

@@ -132,7 +132,7 @@ private fun SelectAccountHeader(state: AccountSelectState) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Select an account to open the link:",
+            text = stringResource(R.string.screen_select_account_permalink_title),
             modifier = Modifier
                 .semantics {
                     heading()
@@ -147,6 +147,15 @@ private fun SelectAccountHeader(state: AccountSelectState) {
                 text = state.linkPillText,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally),
+            )
+        }
+        if (state.isRoomLink) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.screen_select_account_permalink_room_subtitle),
+                textAlign = TextAlign.Center,
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = ElementTheme.colors.textSecondary,
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

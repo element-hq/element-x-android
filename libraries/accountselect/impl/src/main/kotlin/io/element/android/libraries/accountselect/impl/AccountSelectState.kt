@@ -18,6 +18,10 @@ data class AccountSelectState(
      */
     val linkPillText: String?,
     /**
+     * True if the link to open is a room or a message link.
+     */
+    val isRoomLink: Boolean,
+    /**
      * The account which will be used to open the link, or null until the accounts are loaded.
      * Changing it only impacts this screen, not the current account of the application.
      */

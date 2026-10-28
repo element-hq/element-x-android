@@ -65,6 +65,18 @@ class AccountSelectViewTest : RobolectricTest() {
     }
 
     @Test
+    fun `the explanation is displayed for a room link`() = runAndroidComposeUiTest {
+        setAccountSelectView(aTwoAccountsState(isRoomLink = true))
+        onNodeWithText(activity!!.getString(R.string.screen_select_account_permalink_room_subtitle)).assertExists()
+    }
+
+    @Test
+    fun `the explanation is not displayed for a user link`() = runAndroidComposeUiTest {
+        setAccountSelectView(aTwoAccountsState(isRoomLink = false))
+        onNodeWithText(activity!!.getString(R.string.screen_select_account_permalink_room_subtitle)).assertDoesNotExist()
+    }
+
+    @Test
     fun `pressing back invokes the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
             setAccountSelectView(
@@ -77,8 +89,10 @@ class AccountSelectViewTest : RobolectricTest() {
 }
 
 private fun aTwoAccountsState(
+    isRoomLink: Boolean = false,
     eventSink: (AccountSelectEvent) -> Unit = {},
 ) = anAccountSelectState(
+    isRoomLink = isRoomLink,
     currentAccount = aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
     otherAccounts = listOf(anOtherAccount(aMatrixUser(id = "@bob:example.org", displayName = "Bob"))),
     eventSink = eventSink,

@@ -43,6 +43,7 @@ class AccountSelectPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.linkPillText).isEqualTo(A_ROOM_ALIAS.value)
+            assertThat(initialState.isRoomLink).isTrue()
             assertThat(initialState.currentAccount).isNull()
             assertThat(initialState.otherAccounts).isEmpty()
             assertThat(initialState.isAccountListExpanded).isTrue()
@@ -55,7 +56,9 @@ class AccountSelectPresenterTest {
             permalinkData = PermalinkData.UserLink(A_USER_ID),
         )
         presenter.test {
-            assertThat(awaitItem().linkPillText).isEqualTo(A_USER_ID.value)
+            val state = awaitItem()
+            assertThat(state.linkPillText).isEqualTo(A_USER_ID.value)
+            assertThat(state.isRoomLink).isFalse()
         }
     }
 
