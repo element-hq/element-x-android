@@ -14,7 +14,6 @@ env:
   DEVICE: pixel_7_pro
   API_LEVEL: 33
   TARGET: google_apis
-  MAESTRO_VERSION: 2.11.0
 
 jobs:
   build-apk:
