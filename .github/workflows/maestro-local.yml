@@ -14,11 +14,13 @@ env:
   DEVICE: pixel_7_pro
   API_LEVEL: 33
   TARGET: google_apis
+  MAESTRO_VERSION: 2.11.0
 
 jobs:
   build-apk:
     name: Build APK
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     # Secrets are not available to pull_request runs from forks, so the Maestro job below
     # cannot run for them; skip the build too, as its only consumer is that job.
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
@@ -71,9 +73,10 @@ jobs:
           overwrite: true
           if-no-files-found: error
 
-  maestro-cloud:
+  maestro:
     name: Maestro test suite
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     needs: [ build-apk ]
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
     # Allow only one to run at a time, since they use the same environment.
@@ -154,7 +157,7 @@ jobs:
         run: |
           LOG_FILE=$(find ~/.maestro/tests/ -name maestro.log)
           echo "Log file: $LOG_FILE"
-          LOG_LINES="$(tail -n 30 $LOG_FILE)"
+          LOG_LINES="$(tail -n 30 "$LOG_FILE")"
           echo "### :x: Maestro tests failed...
           
           \`\`\`

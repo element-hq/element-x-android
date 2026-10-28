@@ -29,10 +29,6 @@ jobs:
           project-url: https://github.com/orgs/element-hq/projects/91
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
           labeled: X-Needs-Info
-      - name: Print itemId
-        run: echo ${STEPS_ADDITEM_OUTPUTS_ITEMID}
-        env:
-          STEPS_ADDITEM_OUTPUTS_ITEMID: ${{ steps.addItem.outputs.itemId }}
       - uses: kalgurn/update-project-item-status@31e54df46a2cdaef4f85c31ac839fbcd2fd7c3a2 # 0.0.3
         if: ${{ steps.addItem.outputs.itemId }}
         with:
@@ -45,7 +41,7 @@ jobs:
     name: Add labelled issues to X-Plorer project
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'Team: Element X Feature')
+      github.event.label.name == 'Team: Element X Feature'
     steps:
       - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
@@ -56,7 +52,7 @@ jobs:
     name: Add labelled issues to Verticals Feature project
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'Team: Verticals Feature')
+      github.event.label.name == 'Team: Verticals Feature'
     steps:
       - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
@@ -67,8 +63,8 @@ jobs:
     name: Add labelled issues to QA project
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'Team: QA') ||
-      contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
+      github.event.label.name == 'Team: QA' ||
+      github.event.label.name == 'X-Needs-Signoff'
     steps:
       - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
@@ -79,7 +75,7 @@ jobs:
     name: Add labelled issues to signoff project
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
+      github.event.label.name == 'X-Needs-Signoff'
     steps:
       - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:

@@ -13,12 +13,14 @@ permissions: {}
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx8g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g
   CI_GRADLE_ARG_PROPERTIES: --stacktrace --warn -Dsonar.gradle.skipCompile=true --no-configuration-cache
-  GROUP: ${{ format('sonar-{0}', github.ref) }}
 
 jobs:
   sonar:
     name: Sonar Quality Checks
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # Skip in forks, the SONAR_TOKEN secret is not available there
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ format('sonar-{0}', github.ref) }}

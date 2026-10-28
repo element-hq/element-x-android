@@ -16,6 +16,7 @@ jobs:
   nightly:
     name: Build and publish nightly bundle to Firebase
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -60,7 +61,7 @@ jobs:
       - name: Additionally upload Nightly APK to browserstack for testing
         continue-on-error: true # don't block anything by this upload failing (for now)
         run: |
-          curl -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_PASSWORD" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@app/build/outputs/apk/gplay/nightly/app-gplay-universal-nightly.apk" -F "custom_id=element-x-android-nightly"
+          curl --fail -u "$BROWSERSTACK_USERNAME:$BROWSERSTACK_PASSWORD" -X POST "https://api-cloud.browserstack.com/app-automate/upload" -F "file=@app/build/outputs/apk/gplay/nightly/app-gplay-universal-nightly.apk" -F "custom_id=element-x-android-nightly"
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_USERNAME }}
           BROWSERSTACK_PASSWORD: ${{ secrets.ELEMENT_ANDROID_BROWSERSTACK_ACCESS_KEY }}

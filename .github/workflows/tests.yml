@@ -18,6 +18,7 @@ jobs:
   tests:
     name: Runs unit tests
     runs-on: ubuntu-latest
+    timeout-minutes: 90
 
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
@@ -51,6 +52,7 @@ jobs:
       - name: ⏬ Checkout with LFS
         uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
         with:
+          persist-credentials: false
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
@@ -88,10 +90,6 @@ jobs:
           name: kover-error-report
           path: |
             build/reports/kover
-
-      - name: ✅ Upload kover report (disabled)
-        if: always()
-        run: echo "This is now done only once a day, see nightlyReports.yml"
 
       - name: 🚫 Upload test results on error
         if: failure()
