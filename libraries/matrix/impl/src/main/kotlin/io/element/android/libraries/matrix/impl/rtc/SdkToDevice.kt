@@ -8,11 +8,10 @@
 package io.element.android.libraries.matrix.impl.rtc
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import org.matrix.rtc.FfiToDeviceDelivery
 import org.matrix.rtc.FfiToDeviceMessageIn
@@ -26,8 +25,8 @@ import org.matrix.rustcomponents.sdk.ToDeviceMessageListener
  * encryption info; the SDK drops what it could not decrypt. Unbounded: a dropped media key is a
  * participant nobody can hear.
  */
-internal fun Client.toDeviceMessages(eventTypes: List<String>, dispatchers: CoroutineDispatchers): Flow<FfiToDeviceMessageIn> = callbackFlow {
-    val handle = subscribeToCustomToDeviceMessages(
+internal fun Client.toDeviceMessages(eventTypes: List<String>, dispatchers: CoroutineDispatchers): Flow<FfiToDeviceMessageIn> = mxCallbackFlow {
+    subscribeToCustomToDeviceMessages(
         eventTypes,
         object : ToDeviceMessageListener {
             override fun onMessage(message: ToDeviceMessage) {
@@ -35,10 +34,6 @@ internal fun Client.toDeviceMessages(eventTypes: List<String>, dispatchers: Coro
             }
         },
     )
-    awaitClose {
-        handle.cancel()
-        handle.close()
-    }
 }
     .buffer(Channel.UNLIMITED)
     .flowOn(dispatchers.io)

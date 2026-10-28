@@ -8,11 +8,10 @@
 package io.element.android.libraries.matrix.impl.rtc
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import org.matrix.rtc.FfiEventEncryption
 import org.matrix.rtc.FfiEventIn
@@ -30,8 +29,8 @@ import uniffi.ruma_events.stateEventTypeFromString
  * `required_state`. Ruma treats `m.call.member` and `org.matrix.msc3401.call.member` as one type, so each
  * spelling gets the events of both, as from the core's own SDK backend.
  */
-internal fun Room.stateEventSets(eventType: String, dispatchers: CoroutineDispatchers): Flow<List<FfiEventIn>> = callbackFlow {
-    val handle = subscribeToStateEvents(
+internal fun Room.stateEventSets(eventType: String, dispatchers: CoroutineDispatchers): Flow<List<FfiEventIn>> = mxCallbackFlow {
+    subscribeToStateEvents(
         stateEventTypeFromString(eventType),
         object : RoomStateEventsListener {
             override fun onUpdate(events: List<RoomStateEvent>) {
@@ -39,10 +38,6 @@ internal fun Room.stateEventSets(eventType: String, dispatchers: CoroutineDispat
             }
         },
     )
-    awaitClose {
-        handle.cancel()
-        handle.close()
-    }
 }
     .buffer(Channel.CONFLATED)
     .flowOn(dispatchers.io)

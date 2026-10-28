@@ -9,11 +9,10 @@ package io.element.android.libraries.matrix.impl.rtc
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.serialization.json.Json
@@ -32,8 +31,8 @@ internal const val REDACTION_EVENT_TYPE = "m.room.redaction"
  * The message-like events of [eventType] as syncs bring them, decrypted. Unbounded: a reaction dropped
  * is a raised hand nobody sees.
  */
-internal fun Room.messageLikeEvents(eventType: String, dispatchers: CoroutineDispatchers): Flow<FfiEventIn> = callbackFlow {
-    val handle = subscribeToMessageLikeEvents(
+internal fun Room.messageLikeEvents(eventType: String, dispatchers: CoroutineDispatchers): Flow<FfiEventIn> = mxCallbackFlow {
+    subscribeToMessageLikeEvents(
         messageLikeEventTypeFromString(eventType),
         object : RoomMessageLikeEventsListener {
             override fun onEvent(event: RoomMessageLikeEvent) {
@@ -41,10 +40,6 @@ internal fun Room.messageLikeEvents(eventType: String, dispatchers: CoroutineDis
             }
         },
     )
-    awaitClose {
-        handle.cancel()
-        handle.close()
-    }
 }
     .buffer(Channel.UNLIMITED)
     .flowOn(dispatchers.io)

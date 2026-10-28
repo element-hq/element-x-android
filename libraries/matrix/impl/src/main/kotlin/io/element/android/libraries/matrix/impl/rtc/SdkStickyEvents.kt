@@ -9,9 +9,8 @@ package io.element.android.libraries.matrix.impl.rtc
 
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import kotlinx.coroutines.channels.awaitClose
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -27,19 +26,15 @@ import org.matrix.rustcomponents.sdk.StickyKey
 import timber.log.Timber
 
 /** The room's live sticky events as complete sets, the first one as soon as it is collected. */
-internal fun Room.stickyEventSets(dispatchers: CoroutineDispatchers): Flow<List<FfiEventIn>> = callbackFlow {
+internal fun Room.stickyEventSets(dispatchers: CoroutineDispatchers): Flow<List<FfiEventIn>> = mxCallbackFlow {
     val set = StickyEventSet()
-    val handle = subscribeToStickyEvents(
+    subscribeToStickyEvents(
         object : StickyEventsListener {
             override fun onUpdate(update: StickyEventsUpdate) {
                 trySend(set.apply(update))
             }
         }
     )
-    awaitClose {
-        handle.cancel()
-        handle.close()
-    }
 }.flowOn(dispatchers.io)
 
 /** Folds the SDK's resets and changes into the whole set, which is what the core wants. */
