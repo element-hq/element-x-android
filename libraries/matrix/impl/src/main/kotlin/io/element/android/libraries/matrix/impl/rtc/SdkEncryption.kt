@@ -11,6 +11,9 @@ import org.matrix.rtc.FfiEventEncryption
 import org.matrix.rustcomponents.sdk.EventEncryptionInfo
 import org.matrix.rustcomponents.sdk.ShieldState
 
+/** An event sent in the clear: no sending device to name, and no sender to confirm. */
+internal val ClearText = FfiEventEncryption(encrypted = false, senderDeviceId = null, senderConfirmed = null)
+
 /**
  * How the SDK says an event arrived; no encryption info is cleartext.
  *
@@ -19,6 +22,6 @@ import org.matrix.rustcomponents.sdk.ShieldState
  * what remains, the client confirms the sender unless its shield is red.
  */
 internal fun EventEncryptionInfo?.toFfi(): FfiEventEncryption = when (this) {
-    null -> FfiEventEncryption(encrypted = false, senderDeviceId = null, senderConfirmed = null)
+    null -> ClearText
     else -> FfiEventEncryption(encrypted = true, senderDeviceId = senderDeviceId, senderConfirmed = shieldState !is ShieldState.Red)
 }

@@ -13,7 +13,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.flowOn
-import org.matrix.rtc.FfiEventEncryption
 import org.matrix.rtc.FfiEventIn
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomStateEvent
@@ -54,6 +53,6 @@ internal fun RoomStateEvent.toFfiEventIn(eventType: String): FfiEventIn? {
         stateKey = stateKey,
         originServerTs = timestamp ?: return null,
         contentJson = contentJson,
-        encryption = FfiEventEncryption(encrypted = false, senderDeviceId = null, senderConfirmed = null),
+        encryption = ClearText,
     )
 }
