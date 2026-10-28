@@ -9,25 +9,19 @@
 package io.element.android.x
 
 import android.app.Application
-import android.content.Context
-import android.content.Intent
 import android.os.StrictMode
-import androidx.activity.ComponentActivity
 import androidx.compose.material3.ComposeMaterial3Flags.isAnchoredDraggableComponentsStrictOffsetCheckEnabled
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
 import androidx.startup.AppInitializer
 import androidx.work.Configuration
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.createGraphFactory
-import io.element.android.call.api.ElementCallController
 import io.element.android.call.ui.ElementCallActivity
-import io.element.android.call.ui.theme.ElementCallStyle
-import io.element.android.features.callnative.api.NativeCallScreenHost
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.matrix.api.SdkMetadata
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
+import io.element.android.x.call.ElementCallActivityHostDelegate
 import io.element.android.x.di.AppBindings
 import io.element.android.x.di.AppGraph
 import io.element.android.x.di.ApplicationBindings
@@ -36,23 +30,17 @@ import io.element.android.x.initializer.CacheCleanerInitializer
 import io.element.android.x.initializer.CrashInitializer
 import io.element.android.x.initializer.PlatformInitializer
 
-class ElementXApplication : Application(), DependencyInjectionGraphOwner, Configuration.Provider, ElementCallActivity.Host {
+// The private constructor is there so the native call screen's host can be a delegate: Android instantiates
+// the Application through the public no-arg one.
+class ElementXApplication private constructor(
+    private val elementCallActivityHost: ElementCallActivityHostDelegate,
+) : Application(),
+    DependencyInjectionGraphOwner,
+    Configuration.Provider,
+    ElementCallActivity.Host by elementCallActivityHost {
+    constructor() : this(ElementCallActivityHostDelegate())
+
     override val graph: AppGraph = createGraphFactory<AppGraph.Factory>().create(this)
-
-    // The native call screen looks for its host on the Application; the call stack lives behind this binding.
-    private val nativeCallScreenHost: NativeCallScreenHost by lazy { bindings<AppBindings>().nativeCallScreenHost() }
-
-    override val elementCallController: ElementCallController?
-        get() = nativeCallScreenHost.elementCallController
-
-    override fun leaveCallScreenIntent(context: Context): Intent = nativeCallScreenHost.leaveCallScreenIntent(context)
-
-    override fun onCallActivityCreated(activity: ComponentActivity, controller: ElementCallController) =
-        nativeCallScreenHost.onCallActivityCreated(activity, controller)
-
-    @Composable
-    override fun CallScreenContent(content: @Composable (style: ElementCallStyle?) -> Unit) =
-        nativeCallScreenHost.CallScreenContent(content)
 
     override val workManagerConfiguration: Configuration = Configuration.Builder()
         .setWorkerFactory(MetroWorkerFactory(graph.workerProviders))
@@ -73,6 +61,7 @@ class ElementXApplication : Application(), DependencyInjectionGraphOwner, Config
         }
 
         bindings<ApplicationBindings>().inject(this)
+        elementCallActivityHost.bind { bindings<AppBindings>().nativeCallScreenHost() }
         logApplicationInfo(this, sdkMetadata.sdkGitSha)
 
         // Disable the strict offset check for anchored draggable components, as it can cause issues with bottom sheets.
