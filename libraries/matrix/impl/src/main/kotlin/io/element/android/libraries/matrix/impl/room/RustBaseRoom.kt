@@ -76,7 +76,7 @@ class RustBaseRoom(
 
     override val roomCoroutineScope = sessionCoroutineScope.childScope(coroutineDispatchers.main, "RoomScope-$roomId")
 
-    override val roomInfoFlow: StateFlow<RoomInfo> = mxCallbackFlow {
+    override val roomInfoFlow: StateFlow<RoomInfo> = mxCallbackFlow {innerRoom.activeHumanMemberIdsNoSync()
         innerRoom.subscribeToRoomInfoUpdates(object : RoomInfoListener {
             override fun call(roomInfo: org.matrix.rustcomponents.sdk.RoomInfo) {
                 channel.trySend(roomInfoMapper.map(roomInfo))
