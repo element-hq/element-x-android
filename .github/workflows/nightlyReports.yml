@@ -15,7 +15,7 @@ env:
 
 jobs:
   nightlyReports:
-    name: Create kover report artifact
+    name: Create kover report artifact and upload sonar result
     runs-on: ubuntu-latest
     timeout-minutes: 120
     if: ${{ github.repository == 'element-hq/element-x-android' }}
@@ -36,7 +36,8 @@ jobs:
         run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES --continue
 
       - name: 📈 Generate kover report and verify coverage
-        run: ./gradlew :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug :app:koverVerifyAll $CI_GRADLE_ARG_PROPERTIES
+        # The merged XML report is imported by Sonar, see the `sonar` block in build.gradle.kts
+        run: ./gradlew :koverXmlReportMerged :app:koverXmlReportGplayDebug :app:koverHtmlReportGplayDebug :app:koverVerifyAll $CI_GRADLE_ARG_PROPERTIES --continue
 
       - name: ✅ Upload kover report
         if: always()
@@ -45,6 +46,18 @@ jobs:
           name: kover-results
           path: |
             **/build/reports/kover
+
+      # This is the only analysis of the develop branch including the code coverage and the unit test results, so it
+      # is not done by sonar.yml, which runs on each push, else the coverage would be reset to 0% on the next push.
+      - name: 🔊 Publish results to Sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
+        if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' }}
+        # The sources must be built before running the analysis, since `sonar.gradle.skipCompile` is set.
+        run: |
+          ./gradlew assembleGplayDebug createFullJarDebugTestFixtures :app:createFullJarGplayDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
 
   # Dependency vulnerability analysis using https://github.com/dependency-check/dependency-check-gradle
   dependency-analysis:
