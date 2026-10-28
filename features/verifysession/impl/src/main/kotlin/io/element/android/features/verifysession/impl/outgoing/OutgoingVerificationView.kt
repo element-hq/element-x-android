@@ -289,25 +289,34 @@ private fun OutgoingVerificationBottomMenu(
             }
         }
         is Step.Verifying -> {
-            val isVerifying = step.state.isLoading()
+            val isLoading = step.state.isLoading()
             VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_session_verification_they_match),
-                    enabled = !isVerifying,
-                    showProgress = isVerifying,
+                    text = stringResource(
+                        if (isLoading) {
+                            R.string.screen_session_verification_positive_button_verifying_ongoing
+                        } else {
+                            R.string.screen_session_verification_they_match
+                        }
+                    ),
+                    enabled = !isLoading,
+                    showProgress = isLoading,
                     onClick = {
                         eventSink(OutgoingVerificationViewEvent.ConfirmVerification)
                     },
                 )
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_session_verification_they_dont_match),
-                    enabled = !isVerifying,
-                    onClick = {
-                        eventSink(OutgoingVerificationViewEvent.DeclineVerification)
-                    },
-                )
+                if (isLoading) {
+                    InvisibleButton()
+                } else {
+                    TextButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.screen_session_verification_they_dont_match),
+                        onClick = {
+                            eventSink(OutgoingVerificationViewEvent.DeclineVerification)
+                        },
+                    )
+                }
             }
         }
         is Step.Completed -> {
