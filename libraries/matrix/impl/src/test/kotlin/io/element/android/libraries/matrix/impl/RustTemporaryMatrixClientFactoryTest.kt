@@ -9,6 +9,7 @@ package io.element.android.libraries.matrix.impl
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -42,6 +43,7 @@ class RustTemporaryMatrixClientFactoryTest {
         return RustTemporaryMatrixClientFactory(
             sessionPathsFactory = sessionPathsFactory,
             rustMatrixClientFactory = rustMatrixClientFactory,
+            coroutineDispatchers = testCoroutineDispatchers(),
         )
     }
 }

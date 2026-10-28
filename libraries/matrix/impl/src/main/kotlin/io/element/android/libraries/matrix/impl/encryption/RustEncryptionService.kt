@@ -245,7 +245,7 @@ class RustEncryptionService(
         runCatchingExceptions {
             service.resetIdentity()
         }.flatMap { handle ->
-            RustIdentityResetHandleFactory.create(sessionId, handle)
+            RustIdentityResetHandleFactory.create(sessionId, handle, dispatchers.io)
         }
     }
 
