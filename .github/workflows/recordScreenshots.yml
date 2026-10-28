@@ -24,20 +24,6 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'Record-Screenshots'
 
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
-        with:
-          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-          tool-cache: true
-          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
-          android: false
-          dotnet: true
-          haskell: true
-          # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
-          large-packages: false
-          docker-images: true
-          swap-storage: false
-
       - name: Remove Record-Screenshots label
         if: github.event.label.name == 'Record-Screenshots'
         uses: actions-ecosystem/action-remove-labels@2ce5d41b4b6aa8503e285553f75ed56e0a40bae0 # v1.3.0
@@ -54,16 +40,10 @@ jobs:
         uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
         with:
           persist-credentials: false
-      - name: ☕️ Use JDK 21
-        uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      # Add gradle cache, this should speed up the process
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: true # Only the debug build and unit tests jobs write the Gradle cache, see build.yml
+          free-disk-space: 'true'
       - name: Record screenshots
         id: record
         run: ./.github/workflows/scripts/recordScreenshots.sh
