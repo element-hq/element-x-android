@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.push.PushRequestStatus
+import kotlinx.coroutines.flow.Flow
 import kotlin.time.Instant
 
 interface PushHistoryService {
@@ -45,6 +46,11 @@ interface PushHistoryService {
      * A [since] param can optionally be provided to only return those received after that date.
      */
     suspend fun getPendingPushRequests(sessionId: SessionId, since: Instant?): Result<List<PushRequest>>
+
+    /**
+     * Observes the [PushRequestStatus.PENDING] push requests from the local database for a [SessionId], received after [since].
+     */
+    fun getPendingPushRequestsFlow(sessionId: SessionId, since: Instant): Flow<List<PushRequest>>
 
     /**
      * Removes the oldest push requests for a [SessionId].
