@@ -27,7 +27,7 @@ runs:
   steps:
     - name: Free Disk Space (Ubuntu)
       if: ${{ inputs.free-disk-space == 'true' }}
-      uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
+      uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
       with:
         # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
         tool-cache: true
