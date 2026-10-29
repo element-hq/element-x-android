@@ -16,6 +16,7 @@
   <string name="screen_signout_recovery_disabled_subtitle">"This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in."</string>
   <string name="screen_signout_recovery_disabled_title">"You’re about to lose access to your encrypted chats"</string>
   <string name="screen_signout_save_recovery_key_action_continue">"Continue to remove this device"</string>
+  <string name="screen_signout_save_recovery_key_action_generate">"Generate new recovery key"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"This is your only device. If you remove it you’ll need a recovery key in order to confirm your digital identity and restore your encrypted chats the next time you sign in."</string>
   <string name="screen_signout_save_recovery_key_title">"Make sure you have access to your recovery key before removing this device"</string>
 </resources>
