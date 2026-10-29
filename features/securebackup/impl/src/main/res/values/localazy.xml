@@ -86,6 +86,7 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Do not share this with anyone!"</string>
   <string name="screen_recovery_key_setup_success">"Recovery setup successful"</string>
   <string name="screen_recovery_key_setup_title">"Get recovery key"</string>
+  <string name="screen_recovery_key_success_title">"Your new recovery key is now active"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Yes, reset now"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"This process is irreversible."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Are you sure you want to reset your digital identity?"</string>

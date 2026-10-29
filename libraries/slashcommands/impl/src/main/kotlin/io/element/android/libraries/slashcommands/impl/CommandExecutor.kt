@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.slashcommands.api.MessagePrefix
 import io.element.android.libraries.slashcommands.api.SlashCommand
 import io.element.android.libraries.slashcommands.impl.rainbow.RainbowGenerator
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 @Inject
@@ -81,7 +82,7 @@ class CommandExecutor(
     }
 
     private suspend fun sendSpoiler(slashCommand: SlashCommand.SendSpoiler, timeline: Timeline): Result<Unit> {
-        val text = "[${stringProvider.getString(R.string.common_spoiler)}](${slashCommand.message})"
+        val text = "[${stringProvider.getString(CommonStrings.common_spoiler)}](${slashCommand.message})"
         val formattedText = "<span data-mx-spoiler>${slashCommand.message}</span>"
         return timeline.sendMessage(
             body = text,

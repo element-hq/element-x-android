@@ -51,6 +51,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -96,6 +97,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
+/**
+ * Ref: https://www.figma.com/design/jFIZitqmUlE7P2tUIwXphe/Global-Search?node-id=1007-21507
+ */
 @Composable
 fun GlobalSearchView(
     state: GlobalSearchState,
@@ -222,7 +226,9 @@ private fun SearchTopAppBarContent(state: GlobalSearchState) {
         trailingIcon = if (state.queryState.text.isNotEmpty()) {
             @Composable {
                 IconButton(
-                    modifier = Modifier.clip(CircleShape).size(20.dp),
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(20.dp),
                     onClick = { state.eventSink(GlobalSearchEvent.ClearQuery) },
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = ElementTheme.colors.iconSecondary,
@@ -263,7 +269,7 @@ private fun SearchTargetSelector(state: GlobalSearchState) {
             count = 2,
             selected = state.currentTarget == GlobalSearchTarget.ROOMS,
             onClick = { state.eventSink(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.ROOMS)) },
-            text = stringResource(R.string.search_section_chats),
+            text = stringResource(R.string.screen_search_tab_chats),
         )
 
         SegmentedButton(
@@ -271,7 +277,7 @@ private fun SearchTargetSelector(state: GlobalSearchState) {
             count = 2,
             selected = state.currentTarget == GlobalSearchTarget.MESSAGES,
             onClick = { state.eventSink(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.MESSAGES)) },
-            text = stringResource(R.string.search_section_messages),
+            text = stringResource(R.string.screen_search_tab_messages),
         )
     }
 }
@@ -282,8 +288,8 @@ private fun LazyListScope.startSearching() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(40.dp),
-            title = stringResource(R.string.start_searching_title),
-            subTitle = stringResource(R.string.start_searching_subtitle),
+            title = stringResource(R.string.screen_search_empty_state_title),
+            subTitle = stringResource(R.string.screen_search_empty_state_message),
             iconStyle = BigIcon.Style.Default(CompoundIcons.Search()),
         )
     }
@@ -301,8 +307,13 @@ private fun LazyListScope.searchHistory(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                modifier = Modifier.padding(start = 16.dp).weight(1f),
-                text = stringResource(R.string.screen_search_recent_searches_section_title),
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .weight(1f)
+                    .semantics {
+                        heading()
+                    },
+                text = stringResource(R.string.screen_search_recent_searches),
                 style = ElementTheme.typography.fontBodyLgMedium,
                 color = ElementTheme.colors.textPrimary,
             )
@@ -322,7 +333,7 @@ private fun LazyListScope.searchHistory(
         val twoLineHeight =
             // Vertical padding
             12.dp * 2 +
-            // Text line heights
+                // Text line heights
                 ElementTheme.typography.fontBodyMdRegular.lineHeight.toDp() +
                 ElementTheme.typography.fontBodyLgRegular.lineHeight.toDp()
         Row(
@@ -337,7 +348,8 @@ private fun LazyListScope.searchHistory(
             when (result) {
                 is SearchHistoryListItem.Query -> {
                     Icon(
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier
+                            .size(32.dp)
                             .clip(RoundedCornerShape(8.dp))
                             .background(ElementTheme.colors.bgSubtleSecondary)
                             .padding(6.dp),
@@ -400,7 +412,8 @@ private fun LazyListScope.searchHistory(
             }
 
             Icon(
-                modifier = Modifier.minimumInteractiveComponentSize()
+                modifier = Modifier
+                    .minimumInteractiveComponentSize()
                     .niceClickable {
                         onRemoveResult(result)
                     },
@@ -424,8 +437,8 @@ private fun LazyListScope.emptySearchResults(query: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(40.dp),
-            title = stringResource(R.string.search_no_results_title),
-            subTitle = stringResource(R.string.search_no_results_subtitle, query),
+            title = stringResource(CommonStrings.common_no_results),
+            subTitle = stringResource(R.string.screen_search_no_results_message, query),
             iconStyle = BigIcon.Style.Default(CompoundIcons.Search()),
         )
     }
@@ -500,8 +513,12 @@ private fun LazyListScope.messageSearchResults(
     if (results.isNotEmpty()) {
         item {
             Text(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                text = stringResource(R.string.search_from_your_messages_header),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .semantics {
+                        heading()
+                    },
+                text = stringResource(R.string.screen_search_from_your_messages_header),
                 style = ElementTheme.typography.fontBodyMdMedium,
                 color = ElementTheme.colors.textSecondary,
             )

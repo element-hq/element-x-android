@@ -59,6 +59,11 @@
   <string name="screen_roomlist_mark_as_unread">"Позначити непрочитаним"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Цю кімнату оновлено"</string>
   <string name="screen_roomlist_your_spaces">"Ваші простори"</string>
+  <string name="screen_search_empty_state_message">"Пошук бесід і повідомлень"</string>
+  <string name="screen_search_empty_state_title">"Розпочати пошук"</string>
+  <string name="screen_search_no_results_message">"За запитом «%1$s» нічого не знайдено. Спробуйте ввести інший термін."</string>
+  <string name="screen_search_recent_searches">"Недавні пошукові запити"</string>
+  <string name="screen_search_tab_chats">"Бесіди"</string>
   <string name="session_verification_banner_message">"Здається, ви використовуєте новий пристрій. Звірте його за допомогою іншого пристрою, щоб отримати доступ до своїх зашифрованих повідомлень."</string>
   <string name="session_verification_banner_title">"Підтвердьте, що це ви"</string>
 </resources>

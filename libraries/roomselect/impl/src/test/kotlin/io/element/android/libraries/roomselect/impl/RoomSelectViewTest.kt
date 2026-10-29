@@ -133,7 +133,7 @@ class RoomSelectViewTest : RobolectricTest() {
                 eventSink = eventsRecorder,
             ),
         )
-        clickOn(CommonStrings.common_switch_account)
+        clickOn(CommonStrings.common_switch_accounts)
         // The first event is the initial UpdateVisibleRange
         eventsRecorder.assertList(listOf(RoomSelectEvent.UpdateVisibleRange(0..-1), RoomSelectEvent.ToggleAccountListExpanded))
     }
@@ -163,7 +163,7 @@ class RoomSelectViewTest : RobolectricTest() {
                 selectedAccount = aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
             ),
         )
-        onNodeWithText(activity!!.getString(CommonStrings.common_switch_account)).assertDoesNotExist()
+        onNodeWithText(activity!!.getString(CommonStrings.common_switch_accounts)).assertDoesNotExist()
     }
 
     @Test

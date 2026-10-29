@@ -27,6 +27,7 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.services.toolbox.api)
+    implementation(projects.libraries.uiStrings)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.featureflag.test)
