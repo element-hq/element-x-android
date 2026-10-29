@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_active">"Active"</string>
   <string name="a11y_add_avatar">"Add avatar"</string>
   <string name="a11y_add_reaction">"Add reaction: %1$s"</string>
   <string name="a11y_address">"Address"</string>
@@ -29,6 +30,7 @@
   <string name="a11y_gallery_scanning">"Gallery, scanning %1$d"</string>
   <string name="a11y_gallery_video">"Gallery, video %1$d"</string>
   <string name="a11y_hide_password">"Hide password"</string>
+  <string name="a11y_inactive">"Inactive"</string>
   <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
@@ -74,6 +76,8 @@
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_start_video_call">"Start a video call"</string>
   <string name="a11y_start_voice_call">"Start a voice call"</string>
+  <string name="a11y_state_collapsed">"Collapsed"</string>
+  <string name="a11y_state_expanded">"Expanded"</string>
   <string name="a11y_status">"Status"</string>
   <string name="a11y_thread_in_room">"Thread in %1$s"</string>
   <string name="a11y_threads_in_room">"Threads in %1$s"</string>
@@ -594,10 +598,12 @@ Are you sure you want to continue?"</string>
   <string name="screen_room_title">"Chat"</string>
   <string name="screen_search_empty_state_message">"Search for chats and messages"</string>
   <string name="screen_search_empty_state_title">"Start searching"</string>
-  <string name="screen_search_no_results_message">"There are no results for “%1$@.” Try a new search term."</string>
+  <string name="screen_search_no_results_message">"There are no results for “%1$s.” Try a new search term."</string>
   <string name="screen_search_recent_searches">"Recent searches"</string>
   <string name="screen_search_tab_chats">"Chats"</string>
   <string name="screen_search_tab_messages">"Messages"</string>
+  <string name="screen_select_account_permalink_room_subtitle">"None of your accounts have joined this room yet, choose which one to use."</string>
+  <string name="screen_select_account_permalink_title">"Select an account to open the link:"</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>
