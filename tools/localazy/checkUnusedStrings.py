@@ -67,9 +67,19 @@ def getIosStrings(iosRoot):
             result[match.group(1)] = match.group(2)
     children = list(ET.parse(os.path.join(localizations, "Localizable.stringsdict")).getroot().find("dict"))
     for i in range(0, len(children), 2):
-        values = list(children[i + 1].iter("string"))
-        result.setdefault(children[i].text, values[-1].text if values else "")
+        result.setdefault(children[i].text, getIosPluralValue(children[i + 1]))
     return result
+
+
+def getIosPluralValue(element):
+    # Read the plural forms from the variable dict, e.g. {"one": "...", "other": "..."}
+    for variable in element.findall("dict"):
+        entries = list(variable)
+        forms = {entries[j].text: entries[j + 1].text for j in range(0, len(entries) - 1, 2) if entries[j].tag == "key"}
+        forms = {quantity: value for quantity, value in forms.items() if not quantity.startswith("NSString")}
+        if forms:
+            return forms.get("other") or next(iter(forms.values()), "")
+    return ""
 
 
 def getIosAccessors(iosRoot):
