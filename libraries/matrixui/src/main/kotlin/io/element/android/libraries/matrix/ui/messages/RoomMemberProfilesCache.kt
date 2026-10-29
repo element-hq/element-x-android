@@ -14,8 +14,9 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.runningFold
 
@@ -24,8 +25,9 @@ import kotlinx.coroutines.flow.runningFold
 class RoomMemberProfilesCache {
     private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
     val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
+    val membersFlow: StateFlow<Map<UserId, RoomMember>> = cache.asStateFlow()
 
-    suspend fun replace(items: List<RoomMember>) = coroutineScope {
+    fun replace(items: List<RoomMember>) {
         cache.value = items.associateBy { it.userId }
     }
 
