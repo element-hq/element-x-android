@@ -23,6 +23,8 @@ IOS_GENERATED_STRINGS = "ElementX/Sources/Generated/Strings.swift"
 IOS_SKIPPED_ROOT_DIRS = ("UnitTests", "UITests", "PreviewTests", "IntegrationTests", "AccessibilityTests")
 
 
+# Yield the paths of the files under root with one of the given extensions, ignoring hidden and build folders,
+# and the folders for which isSkipped(path relative to root) returns True.
 def walk(root, extensions, isSkipped):
     for directory, dirs, files in os.walk(root):
         dirs[:] = [d for d in dirs if not d.startswith(".") and d != "build"]
@@ -33,6 +35,10 @@ def walk(root, extensions, isSkipped):
                 yield os.path.join(directory, file)
 
 
+# Return the set of words and the set of string literals found in the files.
+# Example: the line `Text(stringResource(CommonStrings.action_copy), tag = "a11y.copy")`
+# gives the words {"Text", "stringResource", "CommonStrings", "action_copy", "tag", "a11y", "copy"}
+# and the literals {"a11y.copy"}.
 def readWords(files):
     words = set()
     literals = set()
@@ -44,6 +50,15 @@ def readWords(files):
     return words, literals
 
 
+# Return a dict of the English Android strings, from all the `src/main/res/values/localazy.xml` files.
+# Example:
+#   <string name="action_copy">"Copy"</string>
+#   <plurals name="common_member_count">
+#     <item quantity="one">"%1$d member"</item>
+#     <item quantity="other">"%1$d members"</item>
+#   </plurals>
+# gives {"action_copy": "\"Copy\"", "common_member_count": "\"%1$d members\""}.
+# For plurals, the "other" form is used.
 def getAndroidStrings():
     result = {}
     for directory, dirs, files in os.walk(ANDROID_ROOT):
@@ -59,6 +74,9 @@ def getAndroidStrings():
     return result
 
 
+# Return a dict of the English iOS strings, from the files `Localizable.strings` and `Localizable.stringsdict`.
+# Example: the line `"a11y.encryption_details" = "Encryption details";` of `Localizable.strings`
+# gives {"a11y.encryption_details": "Encryption details"}. See getIosPluralValue() for `Localizable.stringsdict`.
 def getIosStrings(iosRoot):
     result = {}
     localizations = os.path.join(iosRoot, IOS_LOCALIZATIONS)
@@ -71,8 +89,25 @@ def getIosStrings(iosRoot):
     return result
 
 
+# Return the "other" form of a plural from `Localizable.stringsdict`, ignoring the `NSString*` entries.
+# Example: for the key `a11y_digits_entered`, element is:
+#   <dict>
+#     <key>COUNT</key>
+#     <dict>
+#       <key>NSStringFormatSpecTypeKey</key>
+#       <string>NSStringPluralRuleType</string>
+#       <key>NSStringFormatValueTypeKey</key>
+#       <string>d</string>
+#       <key>one</key>
+#       <string>%1$d digit entered</string>
+#       <key>other</key>
+#       <string>%1$d digits entered</string>
+#     </dict>
+#     <key>NSStringLocalizedFormatKey</key>
+#     <string>%#@COUNT@</string>
+#   </dict>
+# and the result is "%1$d digits entered".
 def getIosPluralValue(element):
-    # Read the plural forms from the variable dict, e.g. {"one": "...", "other": "..."}
     for variable in element.findall("dict"):
         entries = list(variable)
         forms = {entries[j].text: entries[j + 1].text for j in range(0, len(entries) - 1, 2) if entries[j].tag == "key"}
@@ -82,8 +117,13 @@ def getIosPluralValue(element):
     return ""
 
 
+# Return a dict mapping each iOS key to its SwiftGen accessor, from the generated file `Strings.swift`.
+# Example: the lines
+#   internal static var actionCopy: String { return L10n.tr("Localizable", "action_copy") }
+#   internal static func a11yDigitsEntered(_ p1: Int) -> String {
+#     return L10n.tr("Localizable", "a11y_digits_entered", p1)
+# give {"action_copy": "actionCopy", "a11y_digits_entered": "a11yDigitsEntered"}.
 def getIosAccessors(iosRoot):
-    # Map each key to its SwiftGen accessor, e.g. "action_copy" -> "actionCopy"
     with open(os.path.join(iosRoot, IOS_GENERATED_STRINGS), encoding="utf-8") as f:
         content = f.read()
     result = {}
@@ -92,6 +132,8 @@ def getIosAccessors(iosRoot):
     return result
 
 
+# Return the set of words found in the Android production code (`.kt`, `.kts` and `.xml` files), excluding the
+# string resource files, the test code and the tools folder. A key is used if it is in this set.
 def getAndroidUsedWords():
     def isSkipped(path):
         return (
@@ -105,6 +147,8 @@ def getAndroidUsedWords():
     return words
 
 
+# Return the sets of words and of string literals found in the iOS production code (`.swift` files), excluding the
+# generated code and the test code. A key is used if its accessor is in the words, or if the key is in the literals.
 def getIosUsedWordsAndLiterals(iosRoot):
     def isSkipped(path):
         return path.split("/")[0] in IOS_SKIPPED_ROOT_DIRS or "Sources/Generated" in path
@@ -112,10 +156,14 @@ def getIosUsedWordsAndLiterals(iosRoot):
     return readWords(walk(iosRoot, (".swift",), isSkipped))
 
 
+# Return the short hash of the current commit of the git repository.
 def getSha(repo):
     return subprocess.check_output(["git", "-C", repo, "rev-parse", "--short", "HEAD"], text=True).strip()
 
 
+# Format a string value so that it fits in a Markdown table cell: remove the surrounding quotes, replace the line breaks
+# with spaces, escape the pipes, unescape the quotes and truncate to 120 characters.
+# Example: `"Don\'t | stop\nnow"` gives `Don't \| stop now`.
 def formatValue(value):
     value = (value or "").strip()
     if len(value) >= 2 and value[0] == value[-1] == '"':
@@ -125,6 +173,7 @@ def formatValue(value):
     return value if len(value) <= 120 else value[:117] + "…"
 
 
+# Find the keys used neither on Android nor on iOS, and write the Markdown report.
 def main():
     parser = argparse.ArgumentParser(description="Generate a report of the Localazy strings unused by both Element X Android and Element X iOS.")
     parser.add_argument("--ios", default=os.path.join(ANDROID_ROOT, "..", "element-x-ios"), help="Path to the Element X iOS project")
