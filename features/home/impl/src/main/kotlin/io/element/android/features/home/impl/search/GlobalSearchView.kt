@@ -51,6 +51,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
@@ -225,7 +226,9 @@ private fun SearchTopAppBarContent(state: GlobalSearchState) {
         trailingIcon = if (state.queryState.text.isNotEmpty()) {
             @Composable {
                 IconButton(
-                    modifier = Modifier.clip(CircleShape).size(20.dp),
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(20.dp),
                     onClick = { state.eventSink(GlobalSearchEvent.ClearQuery) },
                     colors = IconButtonDefaults.iconButtonColors(
                         containerColor = ElementTheme.colors.iconSecondary,
@@ -304,7 +307,12 @@ private fun LazyListScope.searchHistory(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                modifier = Modifier.padding(start = 16.dp).weight(1f),
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .weight(1f)
+                    .semantics {
+                        heading()
+                    },
                 text = stringResource(R.string.screen_search_recent_searches),
                 style = ElementTheme.typography.fontBodyLgMedium,
                 color = ElementTheme.colors.textPrimary,
@@ -325,7 +333,7 @@ private fun LazyListScope.searchHistory(
         val twoLineHeight =
             // Vertical padding
             12.dp * 2 +
-            // Text line heights
+                // Text line heights
                 ElementTheme.typography.fontBodyMdRegular.lineHeight.toDp() +
                 ElementTheme.typography.fontBodyLgRegular.lineHeight.toDp()
         Row(
@@ -340,7 +348,8 @@ private fun LazyListScope.searchHistory(
             when (result) {
                 is SearchHistoryListItem.Query -> {
                     Icon(
-                        modifier = Modifier.size(32.dp)
+                        modifier = Modifier
+                            .size(32.dp)
                             .clip(RoundedCornerShape(8.dp))
                             .background(ElementTheme.colors.bgSubtleSecondary)
                             .padding(6.dp),
@@ -403,7 +412,8 @@ private fun LazyListScope.searchHistory(
             }
 
             Icon(
-                modifier = Modifier.minimumInteractiveComponentSize()
+                modifier = Modifier
+                    .minimumInteractiveComponentSize()
                     .niceClickable {
                         onRemoveResult(result)
                     },
@@ -503,7 +513,11 @@ private fun LazyListScope.messageSearchResults(
     if (results.isNotEmpty()) {
         item {
             Text(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .semantics {
+                        heading()
+                    },
                 text = stringResource(R.string.screen_search_from_your_messages_header),
                 style = ElementTheme.typography.fontBodyMdMedium,
                 color = ElementTheme.colors.textSecondary,
