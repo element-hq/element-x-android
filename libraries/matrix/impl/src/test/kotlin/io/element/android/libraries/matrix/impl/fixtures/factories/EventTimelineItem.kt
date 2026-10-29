@@ -42,6 +42,7 @@ internal fun aRustEventTimelineItem(
     lazyProvider: LazyTimelineItemProvider = FakeFfiLazyTimelineItemProvider(),
     editSendState: EventSendState? = null,
     redactionSendState: EventSendState? = null,
+    redactionReason: String? = null,
 ) = EventTimelineItem(
     isRemote = isRemote,
     eventOrTransactionId = eventOrTransactionId,
@@ -63,4 +64,5 @@ internal fun aRustEventTimelineItem(
     lazyProvider = lazyProvider,
     editSendState = editSendState,
     redactionSendState = redactionSendState,
+    redactionReason = redactionReason,
 )
