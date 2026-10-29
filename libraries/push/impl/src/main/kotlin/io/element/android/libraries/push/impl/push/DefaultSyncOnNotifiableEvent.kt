@@ -14,7 +14,6 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.PushHistoryService
@@ -40,16 +39,21 @@ class DefaultSyncOnNotifiableEvent(
         }
 
         try {
-            val eventsBySession = requests.groupBy { it.sessionId }
+            val sessionIds = requests.map { it.sessionId }.distinct()
 
             appForegroundStateService.updateIsSyncingNotificationEvent(true)
             Timber.d("Starting opportunistic room list sync | In foreground: ${appForegroundStateService.isInForeground.value}")
 
-            for ((sessionId, events) in eventsBySession) {
+            for (sessionId in sessionIds) {
                 val client = matrixClientProvider.getOrRestore(SessionId(sessionId)).getOrNull() ?: continue
-                val roomIds = events.map { RoomId(it.roomId) }.distinct()
 
-                client.roomListService.subscribeToVisibleRooms(roomIds)
+                if (client.syncService.startSync().isFailure) {
+                    Timber.w("Failed to start sync for session $sessionId")
+                    continue
+                }
+
+                val mostRecentRoomIds = client.roomListService.allRooms.summaries.first().take(50).map { it.roomId }
+                client.roomListService.subscribeToVisibleRooms(mostRecentRoomIds)
 
                 if (!appForegroundStateService.isInForeground.value) {
                     // Give the sync some time to complete in background, but stop early if a newer push is waiting: the work fetching it can only
