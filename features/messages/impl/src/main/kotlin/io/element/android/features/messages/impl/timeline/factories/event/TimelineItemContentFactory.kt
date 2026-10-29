@@ -21,8 +21,6 @@ import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
@@ -41,7 +39,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 
@@ -61,14 +58,13 @@ class TimelineItemContentFactory(
     private val dateFormatter: DateFormatter,
     private val stringProvider: StringProvider,
 ) {
-    suspend fun create(eventTimelineItem: EventTimelineItem, roomMembers: List<RoomMember>): TimelineItemEventContent {
+    suspend fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
         return create(
             itemContent = eventTimelineItem.content,
             eventId = eventTimelineItem.eventId,
             isEditable = eventTimelineItem.isEditable,
             sender = eventTimelineItem.sender,
             senderProfile = eventTimelineItem.senderProfile,
-            roomMembers = roomMembers,
         )
     }
 
@@ -78,7 +74,6 @@ class TimelineItemContentFactory(
         isEditable: Boolean,
         sender: UserId,
         senderProfile: ProfileDetails,
-        roomMembers: List<RoomMember> = emptyList(),
     ): TimelineItemEventContent {
         val isOutgoing = sessionId == sender
         return when (itemContent) {
@@ -114,11 +109,7 @@ class TimelineItemContentFactory(
                 state = when {
                     itemContent.activeMembers.isNotEmpty() -> {
                         RtcNotificationState.Active(
-                            joinedMembers = itemContent.activeMembers.map { active ->
-                                roomMembers.find {
-                                    it.userId == active
-                                }?.toMatrixUser() ?: MatrixUser(active)
-                            },
+                            joinedMemberIds = itemContent.activeMembers,
                             isJoined = itemContent.isJoined,
                             callStartTsMillis = itemContent.callStartTsMillis,
                             callIntent = itemContent.callIntent
