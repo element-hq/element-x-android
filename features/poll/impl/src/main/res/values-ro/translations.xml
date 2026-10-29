@@ -6,9 +6,14 @@
   <string name="screen_create_poll_answer_hint">"Opțiune %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Modificările dvs. nu au fost salvate. Sigur doriți să reveniți?"</string>
   <string name="screen_create_poll_delete_option_a11y">"Ștergeți opțiunea %1$s"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Opțiuni"</string>
   <string name="screen_create_poll_question_desc">"Întrebare sau subiect"</string>
   <string name="screen_create_poll_question_hint">"Despre ce este sondajul?"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Ștergeți %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Setări"</string>
   <string name="screen_create_poll_title">"Creați un sondaj"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Voturi permise per persoană"</string>
   <string name="screen_edit_poll_delete_confirmation">"Sigur doriți să ștergeți acest sondaj?"</string>
   <string name="screen_edit_poll_delete_confirmation_title">"Ștergeți sondajul"</string>
   <string name="screen_edit_poll_title">"Editați sondajul"</string>
