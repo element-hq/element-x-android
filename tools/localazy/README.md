@@ -84,4 +84,4 @@ To generate a report of the strings which are used neither by Element X Android 
 ./tools/localazy/checkUnusedStrings.py
 ```
 
-It will generate the file `unusedStrings.md`, with a link to Localazy for each unused string. Use `--ios` to set the path to the Element X iOS project and `--output` to set the path of the generated file.
+It will generate the file `unusedStrings.md`, with a link to Localazy for each unused string. The [Localazy CLI](#cli-installation) is used to get the actual Localazy keys for the links. Use `--ios` to set the path to the Element X iOS project and `--output` to set the path of the generated file.

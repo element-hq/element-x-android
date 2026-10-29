@@ -6,18 +6,22 @@
 # Please see LICENSE files in the repository root for full details.
 
 # Generate a Markdown report of the Localazy strings which are not used by Element X Android nor by Element X iOS.
-# Requires a local checkout of the Element X iOS project.
+# Requires a local checkout of the Element X iOS project, and the Localazy CLI to get the actual Localazy keys.
 # Usage: ./tools/localazy/checkUnusedStrings.py [--ios ../element-x-ios] [--output unusedStrings.md]
 
 import argparse
 import datetime
+import json
 import os
 import re
 import subprocess
 import sys
+import tempfile
 import xml.etree.ElementTree as ET
 
 ANDROID_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+LOCALAZY_READ_KEY = "a7876306080832595063-aa37154bb3772f6146890fca868d155b2228b492c56c91f67abdcdfb74d6142d"
+PLURAL_QUANTITIES = ("zero", "one", "two", "few", "many", "other")
 IOS_LOCALIZATIONS = "ElementX/Resources/Localizations/en.lproj"
 IOS_GENERATED_STRINGS = "ElementX/Sources/Generated/Strings.swift"
 IOS_SKIPPED_ROOT_DIRS = ("UnitTests", "UITests", "PreviewTests", "IntegrationTests", "AccessibilityTests")
@@ -156,6 +160,43 @@ def getIosUsedWordsAndLiterals(iosRoot):
     return readWords(walk(iosRoot, (".swift",), isSkipped))
 
 
+# Return a dict mapping each flattened key to the actual Localazy key, by downloading the English source strings.
+# The keys are flattened with underscores by both platforms, but Localazy keys can contain dots.
+# Example: the downloaded JSON
+#   {"action": {"copy_link": "Copy link"}, "a11y.encryption_details": "Encryption details",
+#    "a11y": {"digits_entered": {"one": "%1$d digit entered", "other": "%1$d digits entered"}}}
+# gives {"action_copy_link": "action.copy_link", "a11y_encryption_details": "a11y.encryption_details",
+#        "a11y_digits_entered": "a11y.digits_entered", "action": "action", "a11y": "a11y"}.
+# The intermediate nodes are kept, because a key can also be the parent of other keys, e.g.
+# `screen.custom_recovery_key.input.strength` and `screen.custom_recovery_key.input.strength.weak`,
+# and in this case, the JSON only contains the children.
+# Return an empty dict if the Localazy CLI is not available.
+def getLocalazyKeys():
+    result = {}
+
+    def collect(node, path):
+        if path:
+            result.setdefault("_".join(path).replace(".", "_"), ".".join(path))
+        if isinstance(node, dict) and not (node and all(quantity in PLURAL_QUANTITIES for quantity in node)):
+            for key, value in node.items():
+                collect(value, path + [key])
+
+    with tempfile.TemporaryDirectory() as directory:
+        with open(os.path.join(directory, "localazy.json"), "w") as f:
+            json.dump({
+                "readKey": LOCALAZY_READ_KEY,
+                "download": {"files": [{"conditions": ["equals: ${languageCode}, en"], "output": "en_${file}"}]},
+            }, f)
+        try:
+            subprocess.run(["localazy", "download"], cwd=directory, check=True, capture_output=True)
+        except (OSError, subprocess.CalledProcessError) as e:
+            print(f"Warning: cannot download the keys from Localazy ({e}), the links may use wrong keys", file=sys.stderr)
+            return result
+        with open(os.path.join(directory, "en_content.json"), encoding="utf-8") as f:
+            collect(json.load(f), [])
+    return result
+
+
 # Return the short hash of the current commit of the git repository.
 def getSha(repo):
     return subprocess.check_output(["git", "-C", repo, "rev-parse", "--short", "HEAD"], text=True).strip()
@@ -188,6 +229,7 @@ def main():
     iosAccessors = getIosAccessors(iosRoot)
     androidWords = getAndroidUsedWords()
     iosWords, iosLiterals = getIosUsedWordsAndLiterals(iosRoot)
+    localazyKeys = getLocalazyKeys()
 
     missingAccessors = [key for key in iosStrings if key not in iosAccessors]
     if missingAccessors:
@@ -230,8 +272,8 @@ def main():
         "|---|---|---|---|---|",
     ]
     for key in unusedKeys:
-        displayKey = displayKeys[key]
-        value = androidStrings[key] if key in androidStrings else iosStrings.get(displayKey)
+        value = androidStrings[key] if key in androidStrings else iosStrings.get(displayKeys[key])
+        displayKey = localazyKeys.get(key, displayKeys[key])
         lines.append(
             f"| `{displayKey}` | {formatValue(value)} "
             f"| {'present' if key in androidStrings else 'absent'} "
