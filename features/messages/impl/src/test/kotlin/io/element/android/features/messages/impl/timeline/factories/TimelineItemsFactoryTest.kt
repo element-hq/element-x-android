@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
+import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
@@ -253,6 +254,38 @@ class TimelineItemsFactoryTest {
         factory.replaceWith(timelineItems = items)
         val second = factory.timelineItems.first().filterIsInstance<TimelineItem.Event>()
         assertThat(first).containsExactlyElementsIn(second)
+    }
+
+    @Test
+    fun `an unchanged virtual item does not invalidate the events around it`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(computeReadReceipts = true, computeReactions = true),
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(sender = A_USER_ID, content = aMessageContent(body = "Message 0")),
+            ),
+            MatrixTimelineItem.Virtual(
+                uniqueId = UniqueId("day-divider"),
+                virtual = VirtualTimelineItem.DayDivider(timestamp = 0L),
+            ),
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-1"),
+                event = anEventTimelineItem(sender = A_USER_ID, content = aMessageContent(body = "Message 1")),
+            ),
+        )
+
+        factory.replaceWith(timelineItems = items)
+        val first = factory.timelineItems.first().filterIsInstance<TimelineItem.Event>()
+
+        factory.replaceWith(timelineItems = items)
+        val second = factory.timelineItems.first().filterIsInstance<TimelineItem.Event>()
+
+        assertThat(second).hasSize(first.size)
+        second.forEachIndexed { index, item ->
+            assertThat(item).isSameInstanceAs(first[index])
+        }
     }
 
     private suspend fun TestScope.groupPositionsOf(timestamps: List<Long>): List<TimelineItemGroupPosition> {
