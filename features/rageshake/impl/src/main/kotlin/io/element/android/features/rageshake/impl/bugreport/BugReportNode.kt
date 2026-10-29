@@ -53,7 +53,8 @@ class BugReportNode(
             onViewLogs = {
                 // Force a logcat dump
                 bugReporter.saveLogCat()
-                callback.navigateToViewLogs(bugReporter.logDirectory().absolutePath)
+                // Show all the log folders, so that logs which cannot be sent can still be accessed manually
+                callback.navigateToViewLogs(bugReporter.logRootDirectory().absolutePath)
             }
         )
     }

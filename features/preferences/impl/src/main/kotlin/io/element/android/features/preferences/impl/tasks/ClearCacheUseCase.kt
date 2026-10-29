@@ -52,7 +52,7 @@ class DefaultClearCacheUseCase(
         // Clear app cache
         context.cacheDir?.listFiles {
             // But keep the logs
-            it.name != "logs"
+            it.name != "logs2"
         }?.onEach {
             it.deleteRecursively()
         }
