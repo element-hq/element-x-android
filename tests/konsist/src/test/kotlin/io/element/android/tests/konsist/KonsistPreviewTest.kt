@@ -153,6 +153,7 @@ class KonsistPreviewTest {
         "TextComposerSimplePreview",
         "TextComposerVoiceNotEncryptedPreview",
         "TextComposerVoicePreview",
+        "TextComposerWithEmojiButtonPreview",
         "TextFieldDialogWithErrorPreview",
         "TimelineItemAttachmentsViewScanningContentFailedPreview",
         "TimelineItemAudioViewScanningContentPreview",

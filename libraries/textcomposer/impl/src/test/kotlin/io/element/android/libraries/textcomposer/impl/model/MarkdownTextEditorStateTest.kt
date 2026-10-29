@@ -35,6 +35,49 @@ import org.junit.Test
 
 class MarkdownTextEditorStateTest : RobolectricTest() {
     @Test
+    fun `insertText - inserts at the cursor position and moves the cursor after the inserted text`() {
+        val state = aMarkdownTextEditorState(initialText = "Hello world", initialFocus = true).apply {
+            selection = 5..5
+        }
+        state.insertText("😀")
+        assertThat(state.text.value().toString()).isEqualTo("Hello😀 world")
+        assertThat(state.selection).isEqualTo(7..7)
+    }
+
+    @Test
+    fun `insertText - replaces the selected text`() {
+        val state = aMarkdownTextEditorState(initialText = "Hello world", initialFocus = true).apply {
+            selection = 6..11
+        }
+        state.insertText("😀")
+        assertThat(state.text.value().toString()).isEqualTo("Hello 😀")
+        assertThat(state.selection).isEqualTo(8..8)
+    }
+
+    @Test
+    fun `insertText - replaces the text selected backwards`() {
+        val state = aMarkdownTextEditorState(initialText = "Hello world", initialFocus = true).apply {
+            selection = IntRange(start = 11, endInclusive = 6)
+        }
+        state.insertText("😀")
+        assertThat(state.text.value().toString()).isEqualTo("Hello 😀")
+        assertThat(state.selection).isEqualTo(8..8)
+    }
+
+    @Test
+    fun `insertText - keeps the existing mentions`() {
+        val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true).apply {
+            currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Mention, text = "")
+        }
+        val member = aRoomMember()
+        val permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(member.userId) })
+        state.insertSuggestion(ResolvedSuggestion.Member(member), aMentionSpanProvider(permalinkParser = permalinkParser))
+        state.insertText("😀")
+        assertThat(state.text.value().toString()).isEqualTo("Hello @ 😀")
+        assertThat(state.getMentions()).hasSize(1)
+    }
+
+    @Test
     fun `insertMention - room alias - getMentions return empty list`() {
         val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true)
         val suggestion = aRoomAliasSuggestion()
