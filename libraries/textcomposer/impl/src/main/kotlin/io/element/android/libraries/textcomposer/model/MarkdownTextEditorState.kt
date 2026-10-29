@@ -44,6 +44,20 @@ class MarkdownTextEditorState(
     var lineCount by mutableIntStateOf(1)
     var currentSuggestion by mutableStateOf<Suggestion?>(null)
 
+    /**
+     * Inserts [value] at the current cursor position, replacing any selected text, and places the cursor after it.
+     */
+    fun insertText(value: String) {
+        val currentText = SpannableStringBuilder(text.value())
+        // The selection is reversed when the text was selected backwards.
+        val start = minOf(selection.first, selection.last).coerceIn(0, currentText.length)
+        val end = maxOf(selection.first, selection.last).coerceIn(start, currentText.length)
+        currentText.replace(start, end, value)
+        text.update(currentText, true)
+        val cursor = start + value.length
+        selection = IntRange(cursor, cursor)
+    }
+
     fun insertSuggestion(
         resolvedSuggestion: ResolvedSuggestion,
         mentionSpanProvider: MentionSpanProvider,
