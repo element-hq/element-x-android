@@ -64,7 +64,7 @@ internal fun aHomeState(
     homeSpacesState: HomeSpacesState = aHomeSpacesState(),
     canReportBug: Boolean = true,
     showMultiAccountAnnouncement: Boolean = false,
-    totalUnreadCount: Int = 0,
+    totalUnreadCount: Long = 0L,
     eventSink: (HomeEvent) -> Unit = {}
 ) = HomeState(
     currentUserAndNeighbors = currentUserAndNeighbors.toImmutableList(),

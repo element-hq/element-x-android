@@ -32,7 +32,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.api.totalUnreadCountFlow
 import io.element.android.libraries.matrix.api.user.toMatrixUser
 import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -190,7 +189,7 @@ class PreferencesRootPresenter(
                     // Don't use userProfile directly so we don't lose avatarThumbnail
                     OtherAccount(
                         user = user.copy(displayedStatus = profile.displayedStatus, rawStatus = profile.rawStatus),
-                        unreadCount = unreadCount,
+                        unreadCount = unreadCount.toInt(),
                     )
                 }
             )
