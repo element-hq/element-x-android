@@ -87,7 +87,7 @@ class DefaultPusherSubscriber(
      * Ex: {"cs":"sfvsdv"}.
      */
     private fun createDefaultPayload(secretForUser: String): String {
-        return "{\"cs\":\"$secretForUser\"}"
+        return """{"cs":"$secretForUser"}"""
     }
 
     override suspend fun unregisterPusher(

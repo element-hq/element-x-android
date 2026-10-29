@@ -101,7 +101,7 @@ class DefaultPusherSubscriberTest {
                         deviceDisplayName = "MyDevice",
                         profileTag = null,
                         lang = "en",
-                        defaultPayload = "{\"cs\":\"$A_SECRET\"}",
+                        defaultPayload = """{"cs":"$A_SECRET"}""",
                         append = false,
                     ),
                 )
