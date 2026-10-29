@@ -675,8 +675,8 @@ private fun MessagesViewComposerBottomSheetContents(
     state: MessagesState,
     onRoomSuccessorClick: (RoomId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
-    composerEmojiPicker: @Composable (height: Dp) -> Unit,
     emojiPickerHeight: Dp,
+    composerEmojiPicker: @Composable (height: Dp) -> Unit,
 ) {
     val contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()
     when {
