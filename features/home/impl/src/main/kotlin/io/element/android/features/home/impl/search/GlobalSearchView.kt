@@ -96,6 +96,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
+/**
+ * Ref: https://www.figma.com/design/jFIZitqmUlE7P2tUIwXphe/Global-Search?node-id=1007-21507
+ */
 @Composable
 fun GlobalSearchView(
     state: GlobalSearchState,
