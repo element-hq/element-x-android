@@ -433,6 +433,7 @@ Reason: %1$s."</string>
     <item quantity="one">"%1$d Space"</item>
     <item quantity="other">"%1$d Spaces"</item>
   </plurals>
+  <string name="common_spoiler">"Spoiler"</string>
   <string name="common_starting_chat">"Starting chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Success"</string>
