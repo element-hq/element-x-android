@@ -26,12 +26,14 @@ open class BugReportStatePreviewParam : PreviewParameterProvider<BugReportState>
             aBugReportState(sending = AsyncAction.Loading),
             aBugReportState(sending = AsyncAction.Success(Unit)),
             aBugReportState(sending = AsyncAction.Failure(BugReportFormError.DescriptionTooShort)),
+            aBugReportState(canIncludeLogs = false),
         )
 }
 
 private fun aBugReportState(
     formState: BugReportFormState = BugReportFormState.Default,
     hasCrashLogs: Boolean = false,
+    canIncludeLogs: Boolean = true,
     screenshotUri: String? = null,
     sendingProgress: Float = 0F,
     sending: AsyncAction<Unit> = AsyncAction.Uninitialized,
@@ -39,6 +41,7 @@ private fun aBugReportState(
 ) = BugReportState(
     formState = formState,
     hasCrashLogs = hasCrashLogs,
+    canIncludeLogs = canIncludeLogs,
     screenshotUri = screenshotUri,
     sendingProgress = sendingProgress,
     sending = sending,

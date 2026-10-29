@@ -34,15 +34,22 @@ class DefaultBugReporterUrlProvider(
     override fun provide(): Flow<HttpUrl?> {
         if (bugReportAppNameProvider.provide().isEmpty()) return flowOf(null)
         return sessionStore.sessionIdFlow().flatMapLatest { sessionId ->
-            enterpriseService.bugReportUrlFlow(sessionId?.let(::SessionId))
-                .map { bugReportUrl ->
-                    when (bugReportUrl) {
-                        is BugReportUrl.Custom -> bugReportUrl.url
-                        BugReportUrl.Disabled -> null
-                        BugReportUrl.UseDefault -> RageshakeConfig.BUG_REPORT_URL.takeIf { it.isNotEmpty() }
-                    }
-                }
-                .map { it?.toHttpUrl() }
+            enterpriseService.bugReportHttpUrlFlow(sessionId?.let(::SessionId))
         }
     }
+}
+
+/**
+ * Resolve the URL where bug reports of the given session should be sent, or null if bug reports are disabled for this session.
+ */
+internal fun EnterpriseService.bugReportHttpUrlFlow(sessionId: SessionId?): Flow<HttpUrl?> {
+    return bugReportUrlFlow(sessionId)
+        .map { bugReportUrl ->
+            when (bugReportUrl) {
+                is BugReportUrl.Custom -> bugReportUrl.url
+                BugReportUrl.Disabled -> null
+                BugReportUrl.UseDefault -> RageshakeConfig.BUG_REPORT_URL.takeIf { it.isNotEmpty() }
+            }
+        }
+        .map { it?.toHttpUrl() }
 }
