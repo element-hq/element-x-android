@@ -266,7 +266,7 @@ private fun SearchTargetSelector(state: GlobalSearchState) {
             count = 2,
             selected = state.currentTarget == GlobalSearchTarget.ROOMS,
             onClick = { state.eventSink(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.ROOMS)) },
-            text = stringResource(R.string.search_section_chats),
+            text = stringResource(R.string.screen_search_tab_chats),
         )
 
         SegmentedButton(
@@ -274,7 +274,7 @@ private fun SearchTargetSelector(state: GlobalSearchState) {
             count = 2,
             selected = state.currentTarget == GlobalSearchTarget.MESSAGES,
             onClick = { state.eventSink(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.MESSAGES)) },
-            text = stringResource(R.string.search_section_messages),
+            text = stringResource(R.string.screen_search_tab_messages),
         )
     }
 }
@@ -285,8 +285,8 @@ private fun LazyListScope.startSearching() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(40.dp),
-            title = stringResource(R.string.start_searching_title),
-            subTitle = stringResource(R.string.start_searching_subtitle),
+            title = stringResource(R.string.screen_search_empty_state_title),
+            subTitle = stringResource(R.string.screen_search_empty_state_message),
             iconStyle = BigIcon.Style.Default(CompoundIcons.Search()),
         )
     }
@@ -305,7 +305,7 @@ private fun LazyListScope.searchHistory(
         ) {
             Text(
                 modifier = Modifier.padding(start = 16.dp).weight(1f),
-                text = stringResource(R.string.screen_search_recent_searches_section_title),
+                text = stringResource(R.string.screen_search_recent_searches),
                 style = ElementTheme.typography.fontBodyLgMedium,
                 color = ElementTheme.colors.textPrimary,
             )
@@ -427,8 +427,8 @@ private fun LazyListScope.emptySearchResults(query: String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(40.dp),
-            title = stringResource(R.string.search_no_results_title),
-            subTitle = stringResource(R.string.search_no_results_subtitle, query),
+            title = stringResource(CommonStrings.common_no_results),
+            subTitle = stringResource(R.string.screen_search_no_results_message, query),
             iconStyle = BigIcon.Style.Default(CompoundIcons.Search()),
         )
     }
@@ -504,7 +504,7 @@ private fun LazyListScope.messageSearchResults(
         item {
             Text(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                text = stringResource(R.string.search_from_your_messages_header),
+                text = stringResource(R.string.screen_search_from_your_messages_header),
                 style = ElementTheme.typography.fontBodyMdMedium,
                 color = ElementTheme.colors.textSecondary,
             )

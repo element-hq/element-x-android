@@ -586,12 +586,6 @@ Raison : %1$s."</string>
     <item quantity="other">"%1$d messages sélectionnés"</item>
   </plurals>
   <string name="screen_room_title">"Discussion"</string>
-  <string name="screen_search_empty_state_message">"Rechercher des discussions et des messages"</string>
-  <string name="screen_search_empty_state_title">"Commencez la recherche"</string>
-  <string name="screen_search_no_results_message">"Aucun résultat pour « %1$@ ». Essayez un autre terme de recherche."</string>
-  <string name="screen_search_recent_searches">"Recherches récentes"</string>
-  <string name="screen_search_tab_chats">"Salons"</string>
-  <string name="screen_search_tab_messages">"Messages"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>

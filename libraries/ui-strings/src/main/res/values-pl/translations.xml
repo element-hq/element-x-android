@@ -603,12 +603,6 @@ Czy na pewno chcesz kontynuować?"</string>
     <item quantity="many">"Zaznaczono %1$d wiadomości"</item>
   </plurals>
   <string name="screen_room_title">"Czat"</string>
-  <string name="screen_search_empty_state_message">"Szukaj czatów i wiadomości"</string>
-  <string name="screen_search_empty_state_title">"Rozpocznij wyszukiwanie"</string>
-  <string name="screen_search_no_results_message">"Nie znaleziono wyników dla \"%1$@\". Spróbuj wpisać nowe zapytanie."</string>
-  <string name="screen_search_recent_searches">"Ostatnie wyszukiwania"</string>
-  <string name="screen_search_tab_chats">"Czaty"</string>
-  <string name="screen_search_tab_messages">"Wiadomości"</string>
   <string name="screen_share_location_title">"Udostępnij lokalizację"</string>
   <string name="screen_share_my_location_action">"Udostępnij moją lokalizację"</string>
   <string name="screen_share_open_apple_maps">"Otwórz w Apple Maps"</string>

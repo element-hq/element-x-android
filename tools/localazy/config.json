@@ -206,6 +206,7 @@
         "screen_roomlist_.*",
         "screen\\.roomlist\\..*",
         "screen\\.multi_account_announcement\\..*",
+        "screen_search_.*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
         "banner\\.set_up_recovery\\..*",

@@ -604,11 +604,6 @@
     <item quantity="many">"Вибрано %1$d повідомлень"</item>
   </plurals>
   <string name="screen_room_title">"Бесіда"</string>
-  <string name="screen_search_empty_state_message">"Пошук бесід і повідомлень"</string>
-  <string name="screen_search_empty_state_title">"Розпочати пошук"</string>
-  <string name="screen_search_no_results_message">"За запитом «%1$@» нічого не знайдено. Спробуйте ввести інший термін."</string>
-  <string name="screen_search_recent_searches">"Недавні пошукові запити"</string>
-  <string name="screen_search_tab_chats">"Бесіди"</string>
   <string name="screen_share_location_title">"Поділитися розташуванням"</string>
   <string name="screen_share_my_location_action">"Поділитися моїм розташуванням"</string>
   <string name="screen_share_open_apple_maps">"Відкрити в Apple Maps"</string>
