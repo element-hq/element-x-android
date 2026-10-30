@@ -9,8 +9,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Introdueix clau de recuperació"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Has oblidat la clau de recuperació?"</string>
   <string name="confirm_recovery_key_banner_title">"L\'emmagatzematge de claus no està sincronitzat"</string>
-  <string name="full_screen_intent_banner_message">"Per assegurar que mai et perdis una trucada important, canvia la configuració per permetre les notificacions en pantalla completa quan el telèfon està bloquejat."</string>
-  <string name="full_screen_intent_banner_title">"Millora l\'experiència de les trucades"</string>
+  <string name="full_screen_intent_banner_message_android">"Per assegurar que mai et perdis una trucada important, canvia la configuració per permetre les notificacions en pantalla completa quan el telèfon està bloquejat."</string>
+  <string name="full_screen_intent_banner_title_android">"Millora l\'experiència de les trucades"</string>
   <string name="screen_home_tab_chats">"Xats"</string>
   <string name="screen_invites_decline_chat_message">"Segur que vols rebutjar la invitació per unir-te a %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Rebutja invitació"</string>

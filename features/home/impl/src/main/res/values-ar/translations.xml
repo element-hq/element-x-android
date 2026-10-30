@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"أدخل مفتاح الاسترداد"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"هل نسيت مفتاح الاسترداد؟"</string>
   <string name="confirm_recovery_key_banner_title">"تخزين المفاتيح لديك غير متزامن"</string>
-  <string name="full_screen_intent_banner_message">"للتأكد من عدم تفويت أي مكالمة مهمة، يُرجى تغيير إعداداتك للسماح بإشعارات ملء الشاشة عندما يكون هاتفك مقفلاً."</string>
-  <string name="full_screen_intent_banner_title">"حسّن تجربة مكالماتك"</string>
+  <string name="full_screen_intent_banner_message_android">"للتأكد من عدم تفويت أي مكالمة مهمة، يُرجى تغيير إعداداتك للسماح بإشعارات ملء الشاشة عندما يكون هاتفك مقفلاً."</string>
+  <string name="full_screen_intent_banner_title_android">"حسّن تجربة مكالماتك"</string>
   <string name="screen_home_tab_chats">"المحادثات"</string>
   <string name="screen_home_tab_spaces">"المساحات"</string>
   <string name="screen_invites_decline_chat_message">"أمتأكد من رغبتك برفض دعوة للانضمام إلى %1$s؟"</string>

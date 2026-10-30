@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Inserisci la tua chiave di recupero"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Hai dimenticato la chiave di recupero?"</string>
   <string name="confirm_recovery_key_banner_title">"L\'archiviazione delle chiavi non è sincronizzata"</string>
-  <string name="full_screen_intent_banner_message">"Per non perdere mai una chiamata importante, modifica le impostazioni per consentire le notifiche a schermo intero quando il telefono è bloccato."</string>
-  <string name="full_screen_intent_banner_title">"Migliora la tua esperienza di chiamata"</string>
+  <string name="full_screen_intent_banner_message_android">"Per non perdere mai una chiamata importante, modifica le impostazioni per consentire le notifiche a schermo intero quando il telefono è bloccato."</string>
+  <string name="full_screen_intent_banner_title_android">"Migliora la tua esperienza di chiamata"</string>
   <string name="screen_home_tab_chats">"Conversazioni"</string>
   <string name="screen_home_tab_spaces">"Spazi"</string>
   <string name="screen_invites_decline_chat_message">"Vuoi davvero rifiutare l\'invito ad entrare in %1$s?"</string>

@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Sisesta oma taastevõti"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Kas unustasid oma taastevõtme?"</string>
   <string name="confirm_recovery_key_banner_title">"Sinu võtmehoidla pole sünkroonis"</string>
-  <string name="full_screen_intent_banner_message">"Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused."</string>
-  <string name="full_screen_intent_banner_title">"Sinu tõhusad telefonikõned"</string>
+  <string name="full_screen_intent_banner_message_android">"Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused."</string>
+  <string name="full_screen_intent_banner_title_android">"Sinu tõhusad telefonikõned"</string>
   <string name="screen_home_tab_chats">"Vestlused"</string>
   <string name="screen_home_tab_spaces">"Kogukonnad"</string>
   <string name="screen_invites_decline_chat_message">"Kas sa oled kindel, et soovid keelduda liitumiskutsest: %1$s?"</string>

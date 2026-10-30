@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
-  <string name="full_screen_intent_banner_title">"Popraw jakość swoich rozmów"</string>
+  <string name="full_screen_intent_banner_message_android">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
+  <string name="full_screen_intent_banner_title_android">"Popraw jakość swoich rozmów"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Wybierz sposób otrzymywania powiadomień"</string>
   <string name="screen_advanced_settings_developer_mode">"Tryb programisty"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Włącz, aby uzyskać dostęp do funkcji dla deweloperów."</string>

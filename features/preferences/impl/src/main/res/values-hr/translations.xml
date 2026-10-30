@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Kako biste bili sigurni da nikada nećete propustiti važan poziv, promijenite postavke kako biste omogućili obavijesti preko cijelog zaslona kada je telefon zaključan."</string>
-  <string name="full_screen_intent_banner_title">"Poboljšajte svoje iskustvo poziva"</string>
+  <string name="full_screen_intent_banner_message_android">"Kako biste bili sigurni da nikada nećete propustiti važan poziv, promijenite postavke kako biste omogućili obavijesti preko cijelog zaslona kada je telefon zaključan."</string>
+  <string name="full_screen_intent_banner_title_android">"Poboljšajte svoje iskustvo poziva"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Odaberite kako želite primati obavijesti"</string>
   <string name="screen_advanced_settings_developer_mode">"Način rada za razvojne inženjere"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Omogućite pristup značajkama i funkcionalnostima za razvojne inženjere."</string>

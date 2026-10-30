@@ -8,8 +8,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Kurtarma anahtarınızı girin"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Kurtarma anahtarınızı mı unuttunuz?"</string>
   <string name="confirm_recovery_key_banner_title">"Anahtar depolama alanınız senkronize değil"</string>
-  <string name="full_screen_intent_banner_message">"Önemli bir aramayı asla kaçırmamak için, telefonunuz kilitliyken tam ekran bildirimlere izin vermek üzere ayarlarınızı değiştirin."</string>
-  <string name="full_screen_intent_banner_title">"Arama deneyiminizi geliştirin"</string>
+  <string name="full_screen_intent_banner_message_android">"Önemli bir aramayı asla kaçırmamak için, telefonunuz kilitliyken tam ekran bildirimlere izin vermek üzere ayarlarınızı değiştirin."</string>
+  <string name="full_screen_intent_banner_title_android">"Arama deneyiminizi geliştirin"</string>
   <string name="screen_home_tab_chats">"Sohbetler"</string>
   <string name="screen_home_tab_spaces">"Alanlar"</string>
   <string name="screen_invites_decline_chat_message">"%1$s katılma davetini reddetmek istediğinizden emin misiniz?"</string>

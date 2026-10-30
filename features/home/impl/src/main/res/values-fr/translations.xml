@@ -14,8 +14,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Saisissez votre clé de récupération"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Clé de récupération oubliée ?"</string>
   <string name="confirm_recovery_key_banner_title">"Le stockage de vos clés n’est pas synchronisé"</string>
-  <string name="full_screen_intent_banner_message">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>
-  <string name="full_screen_intent_banner_title">"Améliorez votre expérience d’appel"</string>
+  <string name="full_screen_intent_banner_message_android">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>
+  <string name="full_screen_intent_banner_title_android">"Améliorez votre expérience d’appel"</string>
   <string name="screen_home_tab_chats">"Conversations"</string>
   <string name="screen_home_tab_search">"Recherche"</string>
   <string name="screen_home_tab_spaces">"Espaces"</string>

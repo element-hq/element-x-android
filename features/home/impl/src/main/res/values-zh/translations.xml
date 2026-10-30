@@ -14,8 +14,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"输入恢复密钥"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"忘记了恢复密钥？"</string>
   <string name="confirm_recovery_key_banner_title">"你的密钥存储已不同步"</string>
-  <string name="full_screen_intent_banner_message">"为确保你不会错过重要来电，请更改设置以允许锁屏时的全屏通知。"</string>
-  <string name="full_screen_intent_banner_title">"提升通话体验"</string>
+  <string name="full_screen_intent_banner_message_android">"为确保你不会错过重要来电，请更改设置以允许锁屏时的全屏通知。"</string>
+  <string name="full_screen_intent_banner_title_android">"提升通话体验"</string>
   <string name="screen_home_tab_chats">"聊天"</string>
   <string name="screen_home_tab_search">"搜索"</string>
   <string name="screen_home_tab_spaces">"空间"</string>

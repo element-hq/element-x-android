@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Για να διασφαλίσετε ότι δεν θα χάσετε ποτέ μια σημαντική κλήση, αλλάξτε τις ρυθμίσεις σας ώστε να επιτρέπονται οι ειδοποιήσεις πλήρους οθόνης όταν το τηλέφωνό σας είναι κλειδωμένο."</string>
-  <string name="full_screen_intent_banner_title">"Βελτίωσε την εμπειρία κλήσεων"</string>
+  <string name="full_screen_intent_banner_message_android">"Για να διασφαλίσετε ότι δεν θα χάσετε ποτέ μια σημαντική κλήση, αλλάξτε τις ρυθμίσεις σας ώστε να επιτρέπονται οι ειδοποιήσεις πλήρους οθόνης όταν το τηλέφωνό σας είναι κλειδωμένο."</string>
+  <string name="full_screen_intent_banner_title_android">"Βελτίωσε την εμπειρία κλήσεων"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Επέλεξε τον τρόπο λήψης ειδοποιήσεων"</string>
   <string name="screen_advanced_settings_developer_mode">"Λειτουργία προγραμματιστή"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Ενεργοποίησε την πρόσβαση σε δυνατότητες και λειτουργικότητα για προγραμματιστές."</string>

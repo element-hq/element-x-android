@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"للتأكد من عدم تفويت أي مكالمة مهمة، يُرجى تغيير إعداداتك للسماح بإشعارات ملء الشاشة عندما يكون هاتفك مقفلاً."</string>
-  <string name="full_screen_intent_banner_title">"حسّن تجربة مكالماتك"</string>
+  <string name="full_screen_intent_banner_message_android">"للتأكد من عدم تفويت أي مكالمة مهمة، يُرجى تغيير إعداداتك للسماح بإشعارات ملء الشاشة عندما يكون هاتفك مقفلاً."</string>
+  <string name="full_screen_intent_banner_title_android">"حسّن تجربة مكالماتك"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"اختر طريقة استقبال الإشعارات"</string>
   <string name="screen_advanced_settings_developer_mode">"وضع المطوّر"</string>
   <string name="screen_advanced_settings_developer_mode_description">"فعّله للوصول إلى الميزات والوظائف الخاصة بالمطورين."</string>

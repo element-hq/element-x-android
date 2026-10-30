@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Pentru a vă asigura că nu pierdeți niciodată un apel important, modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat."</string>
-  <string name="full_screen_intent_banner_title">"Îmbunătățiți-vă experiența în timpul unui apel"</string>
+  <string name="full_screen_intent_banner_message_android">"Pentru a vă asigura că nu pierdeți niciodată un apel important, modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat."</string>
+  <string name="full_screen_intent_banner_title_android">"Îmbunătățiți-vă experiența în timpul unui apel"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Alegeți cum doriți să primiți notificări"</string>
   <string name="screen_advanced_settings_developer_mode">"Modul dezvoltator"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Activați pentru a avea acces la funcționalități pentru dezvoltatori."</string>

@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Qayta tiklash kalitingizni kiriting"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Tiklash kalitini unutdingizmi?"</string>
   <string name="confirm_recovery_key_banner_title">"Kalit saqlash joyi sinxronlashmagan"</string>
-  <string name="full_screen_intent_banner_message">"Muhim qoʻngʻiroqlarni oʻtkazib yubormasligingiz uchun telefoningiz qulflangan holatida toʻliq ekranli bildirishnomalarni ko‘rsatishga ruxsat beradigan qilib sozlamalaringizni oʻzgartiring."</string>
-  <string name="full_screen_intent_banner_title">"Qoʻngʻiroq tajribangizni yaxshilang"</string>
+  <string name="full_screen_intent_banner_message_android">"Muhim qoʻngʻiroqlarni oʻtkazib yubormasligingiz uchun telefoningiz qulflangan holatida toʻliq ekranli bildirishnomalarni ko‘rsatishga ruxsat beradigan qilib sozlamalaringizni oʻzgartiring."</string>
+  <string name="full_screen_intent_banner_title_android">"Qoʻngʻiroq tajribangizni yaxshilang"</string>
   <string name="screen_home_tab_chats">"Suhbatlar"</string>
   <string name="screen_home_tab_spaces">"Maydonlar"</string>
   <string name="screen_invites_decline_chat_message">"Haqiqatan ham qo\'shilish taklifini rad qilmoqchimisiz%1$s ?"</string>

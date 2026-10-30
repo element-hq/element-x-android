@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Dei garrantzitsurik galduko ez duzula ziurtatzeko, aldatu ezarpenak telefonoa blokeatuta dagoenean pantaila osoko jakinarazpenak baimentzeko."</string>
-  <string name="full_screen_intent_banner_title">"Hobetu deien esperientzia"</string>
+  <string name="full_screen_intent_banner_message_android">"Dei garrantzitsurik galduko ez duzula ziurtatzeko, aldatu ezarpenak telefonoa blokeatuta dagoenean pantaila osoko jakinarazpenak baimentzeko."</string>
+  <string name="full_screen_intent_banner_title_android">"Hobetu deien esperientzia"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Aukeratu jakinarazpenak nola jaso"</string>
   <string name="screen_advanced_settings_developer_mode">"Garatzaile modua"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Gaitu garatzaileentzako ezaugarrietarako eta funtzionalitateetarako sarbidea izateko."</string>

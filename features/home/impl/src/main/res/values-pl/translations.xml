@@ -14,8 +14,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Wprowadź klucz przywracania"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Zapomniałeś klucza przywracania?"</string>
   <string name="confirm_recovery_key_banner_title">"Magazyn kluczy nie jest zsynchronizowany"</string>
-  <string name="full_screen_intent_banner_message">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
-  <string name="full_screen_intent_banner_title">"Popraw jakość swoich rozmów"</string>
+  <string name="full_screen_intent_banner_message_android">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
+  <string name="full_screen_intent_banner_title_android">"Popraw jakość swoich rozmów"</string>
   <string name="screen_home_tab_chats">"Czaty"</string>
   <string name="screen_home_tab_search">"Szukaj"</string>
   <string name="screen_home_tab_spaces">"Przestrzenie"</string>

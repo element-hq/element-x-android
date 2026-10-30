@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Para asegurarte de que nunca te pierdas una llamada importante, modifica tus ajustes para permitir notificaciones a pantalla completa cuando el teléfono esté bloqueado."</string>
-  <string name="full_screen_intent_banner_title">"Mejora tu experiencia de llamada"</string>
+  <string name="full_screen_intent_banner_message_android">"Para asegurarte de que nunca te pierdas una llamada importante, modifica tus ajustes para permitir notificaciones a pantalla completa cuando el teléfono esté bloqueado."</string>
+  <string name="full_screen_intent_banner_title_android">"Mejora tu experiencia de llamada"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Elige cómo recibir las notificaciones"</string>
   <string name="screen_advanced_settings_developer_mode">"Modo desarrollador"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Habilita para tener acceso a características y funcionalidades para desarrolladores."</string>
