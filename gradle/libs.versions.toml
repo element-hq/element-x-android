@@ -5,13 +5,13 @@
 # Project
 android_gradle_plugin = "9.3.2"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 kotlinpoet = "2.4.0"
 ksp = "2.3.12"
 firebaseAppDistribution = "5.3.0"
 
 # AndroidX
-core = "1.18.0"
+core = "1.19.1"
 datastore = "1.2.1"
 constraintlayout_compose = "1.1.2"
 lifecycle = "2.11.0"
@@ -34,7 +34,7 @@ test_core = "1.7.0"
 
 # Jetbrain
 datetime = "0.8.0"
-serialization_json = "1.11.0"
+serialization_json = "1.12.0"
 
 #other
 coil = "3.6.3"
@@ -64,7 +64,7 @@ ktlint = "1.8.0"
 androidx-test-ext-junit = "1.3.0"
 kover = "0.9.11"
 # The native MatrixRTC call component, https://github.com/element-hq/element-call-android
-element_call = "0.1.0-rc.8"
+element_call = "0.1.0-rc.9"
 
 [libraries]
 # Project
@@ -82,11 +82,11 @@ kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlin
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:35.0.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:35.1.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
-google_tink = "com.google.crypto.tink:tink-android:1.23.0"
+google_tink = "com.google.crypto.tink:tink-android:1.24.0"
 jna = "net.java.dev.jna:jna:5.19.1"
 
 # AndroidX
@@ -120,10 +120,10 @@ androidx_activity_activity = { module = "androidx.activity:activity", version.re
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = "androidx.startup:startup-runtime:1.2.0"
 androidx_preference = "androidx.preference:preference:1.2.1"
-androidx_webkit = "androidx.webkit:webkit:1.17.1"
+androidx_webkit = "androidx.webkit:webkit:1.18.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
-androidx_compose_material3 = { module = "androidx.compose.material3:material3", version = '1.5.0-beta01' }
+androidx_compose_material3 = { module = "androidx.compose.material3:material3", version = '1.5.0-beta02' }
 androidx_compose_material3_windowsizeclass = { module = "androidx.compose.material3:material3-window-size-class" }
 androidx_compose_material3_adaptive = "androidx.compose.material3:material3-adaptive-android:1.0.0-alpha06"
 androidx_compose_ui = { module = "androidx.compose.ui:ui" }
@@ -169,7 +169,7 @@ test_mockk = "io.mockk:mockk:1.14.11"
 test_konsist = "com.github.jmartinesp:konsist:0.18.0"
 test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.5"
-test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.24"
+test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.25"
 test_robolectric = "org.robolectric:robolectric:4.17"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.9.3"
@@ -182,11 +182,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-# `strictly` because element-call-matrix is a published AAR compiled against one SDK version and declares
-# it as a plain `require`: without this, a library built against a newer SDK would silently drag this app
-# onto it. With it, this pin always wins, and a library that needs something newer fails at configuration
-# time naming both versions instead of at runtime with NoSuchMethodError.
-matrix_sdk = { module = "org.matrix.rustcomponents:sdk-android", version = { strictly = "26.10.23" } }
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.10.28-nightly"
 rustls_platform_verifier = "org.rustls:rustls-platform-verifier:0.2.0"
 
 # Others
@@ -227,7 +223,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.60.7"
-sentry = "io.sentry:sentry-android:8.59.0"
+sentry = "io.sentry:sentry-android:8.61.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.38.0"
 
@@ -239,13 +235,12 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.26.1"
+element_call_embedded = "io.element.android:element-call-embedded:0.28.1-rc.2"
 # The native MatrixRTC call component. Versions come from the BOM, so every artifact moves together.
 element_call_bom = { module = "io.element.android:element-call-bom", version.ref = "element_call" }
 element_call_api = { module = "io.element.android:element-call-api" }
 element_call_impl = { module = "io.element.android:element-call" }
 element_call_ui = { module = "io.element.android:element-call-ui" }
-element_call_matrix = { module = "io.element.android:element-call-matrix" }
 element_call_test = { module = "io.element.android:element-call-test" }
 
 # Auto services

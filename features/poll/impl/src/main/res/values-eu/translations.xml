@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Ezkutatu botoak"</string>
   <string name="screen_create_poll_answer_hint">"%1$d. aukera"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Zure aldaketak ez dira gorde. Ziur itzuli nahi duzula?"</string>
+  <string name="screen_create_poll_options_section_title">"Aukerak"</string>
   <string name="screen_create_poll_question_desc">"Galdera edo gaia"</string>
   <string name="screen_create_poll_question_hint">"Zeri buruzko inkesta da?"</string>
   <string name="screen_create_poll_title">"Sortu inkesta"</string>

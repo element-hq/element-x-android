@@ -354,7 +354,6 @@ Ziur jarraitu nahi duzula?"</string>
   <string name="invite_friends_rich_title">"🔐️ Zatoz nirekin %1$s(e)ra"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Astindu erroreen berri emateko"</string>
-  <string name="screen_create_poll_options_section_title">"Aukerak"</string>
   <string name="screen_media_picker_error_failed_selection">"Huts egin du multimedia aukeratzeak, saiatu berriro."</string>
   <plurals name="screen_pinned_timeline_screen_title">
     <item quantity="one">"Finkatutako mezu %1$d"</item>

@@ -140,7 +140,7 @@ class RustMatrixClientFactory(
             innerClient = client,
             innerSyncService = syncService,
             baseCacheDirectory = cacheDirectory,
-            contentScanner = client.contentScanner()?.let { RustContentScanner(client, it) },
+            contentScanner = client.contentScanner()?.let { RustContentScanner(client, it, coroutineDispatchers.io) },
             isMessageSearchAvailable = isMessageSearchAvailable,
             sessionDelegate = sessionDelegate,
         ).also {

@@ -12,7 +12,9 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
@@ -28,6 +30,8 @@ data class MediaViewerState(
     val snackbarMessage: SnackbarMessage?,
     val canShowInfo: Boolean,
     val mediaBottomSheetState: MediaBottomSheetState,
+    /** The current user ID, used to display UI sent by/owned by the current user differently in the formatted captions. */
+    val currentUserId: UserId?,
     val eventSink: (MediaViewerEvent) -> Unit,
 )
 
@@ -51,6 +55,8 @@ sealed interface MediaViewerPageData {
         val mediaInfo: MediaInfo,
         /** The [MediaInfo.htmlCaption] converted to styled text, if any. */
         val formattedCaption: CharSequence? = null,
+        /** The [MediaInfo.htmlCaption] parsed into a tree for the native Compose renderer, only when the new timeline event renderer is enabled. */
+        val captionTree: DocumentNode? = null,
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
         val downloadedMedia: State<AsyncData<LocalMedia>>,

@@ -233,38 +233,44 @@ class RustEncryptionService(
         }
     }
 
-    override suspend fun deviceCurve25519(): String? {
-        return runCatchingExceptions { service.curve25519Key() }.getOrNull()
+    override suspend fun deviceCurve25519(): String? = withContext(dispatchers.io) {
+        runCatchingExceptions { service.curve25519Key() }.getOrNull()
     }
 
-    override suspend fun deviceEd25519(): String? {
-        return runCatchingExceptions { service.ed25519Key() }.getOrNull()
+    override suspend fun deviceEd25519(): String? = withContext(dispatchers.io) {
+        runCatchingExceptions { service.ed25519Key() }.getOrNull()
     }
 
-    override suspend fun startIdentityReset(): Result<IdentityResetHandle?> {
-        return runCatchingExceptions {
+    override suspend fun startIdentityReset(): Result<IdentityResetHandle?> = withContext(dispatchers.io) {
+        runCatchingExceptions {
             service.resetIdentity()
         }.flatMap { handle ->
-            RustIdentityResetHandleFactory.create(sessionId, handle)
+            RustIdentityResetHandleFactory.create(sessionId, handle, dispatchers.io)
         }
     }
 
-    override suspend fun pinUserIdentity(userId: UserId): Result<Unit> = runCatchingExceptions {
-        getUserIdentityInternal(userId).pin()
+    override suspend fun pinUserIdentity(userId: UserId): Result<Unit> = withContext(dispatchers.io) {
+        runCatchingExceptions {
+            getUserIdentityInternal(userId).pin()
+        }
     }
 
-    override suspend fun withdrawVerification(userId: UserId): Result<Unit> = runCatchingExceptions {
-        getUserIdentityInternal(userId).withdrawVerification()
+    override suspend fun withdrawVerification(userId: UserId): Result<Unit> = withContext(dispatchers.io) {
+        runCatchingExceptions {
+            getUserIdentityInternal(userId).withdrawVerification()
+        }
     }
 
-    override suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean): Result<IdentityState?> = runCatchingExceptions {
-        val identity = getUserIdentityInternal(userId, fallbackToServer)
-        val isVerified = identity.isVerified()
-        when {
-            identity.hasVerificationViolation() -> IdentityState.VerificationViolation
-            isVerified -> IdentityState.Verified
-            !isVerified -> IdentityState.Pinned
-            else -> null
+    override suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean): Result<IdentityState?> = withContext(dispatchers.io) {
+        runCatchingExceptions {
+            val identity = getUserIdentityInternal(userId, fallbackToServer)
+            val isVerified = identity.isVerified()
+            when {
+                identity.hasVerificationViolation() -> IdentityState.VerificationViolation
+                isVerified -> IdentityState.Verified
+                !isVerified -> IdentityState.Pinned
+                else -> null
+            }
         }
     }
 

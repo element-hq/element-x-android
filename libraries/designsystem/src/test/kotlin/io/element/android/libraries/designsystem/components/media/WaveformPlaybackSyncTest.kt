@@ -12,269 +12,40 @@ import org.junit.Test
 
 class WaveformPlaybackSyncTest {
     @Test
-    fun `paused cursor always snaps to a different player sample`() {
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0.5f,
-                animatedProgress = 0.2f,
-                isPlaying = false,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isTrue()
+    fun `progress is unchanged when no time has elapsed`() {
+        assertThat(extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = 0L, durationMs = 10_000L, playbackSpeed = 1f)).isEqualTo(0.3f)
     }
 
     @Test
-    fun `paused cursor does not snap when it already matches the player`() {
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0.5f,
-                animatedProgress = 0.5f,
-                isPlaying = false,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isFalse()
+    fun `progress advances with the elapsed time`() {
+        val progress = extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = 1_000L, durationMs = 10_000L, playbackSpeed = 1f)
+        assertThat(progress).isWithin(0.0001f).of(0.4f)
     }
 
     @Test
-    fun `playing cursor ignores drift under the sync threshold`() {
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0.21f,
-                animatedProgress = 0.2f,
-                isPlaying = true,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isFalse()
+    fun `progress advances faster with a higher playback speed`() {
+        val progress = extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = 1_000L, durationMs = 10_000L, playbackSpeed = 2f)
+        assertThat(progress).isWithin(0.0001f).of(0.5f)
     }
 
     @Test
-    fun `playing cursor snaps when the player is ahead beyond the sync threshold`() {
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0.3f,
-                animatedProgress = 0.2f,
-                isPlaying = true,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isTrue()
+    fun `progress does not go past the end`() {
+        assertThat(extrapolatePlaybackProgress(progress = 0.9f, elapsedMs = 5_000L, durationMs = 10_000L, playbackSpeed = 1f)).isEqualTo(1f)
     }
 
     @Test
-    fun `playing cursor does not snap back when the player lags behind the animation`() {
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0f,
-                animatedProgress = 0.05f,
-                isPlaying = true,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isFalse()
+    fun `progress is unchanged when the duration is unknown`() {
+        assertThat(extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = 1_000L, durationMs = 0L, playbackSpeed = 1f)).isEqualTo(0.3f)
     }
 
     @Test
-    fun `playing cursor snaps back when playback restarts from the beginning`() {
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0f,
-                animatedProgress = 1f,
-                isPlaying = true,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isTrue()
+    fun `progress is unchanged with an invalid playback speed`() {
+        assertThat(extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = 1_000L, durationMs = 10_000L, playbackSpeed = Float.NaN)).isEqualTo(0.3f)
+        assertThat(extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = 1_000L, durationMs = 10_000L, playbackSpeed = -1f)).isEqualTo(0.3f)
     }
 
     @Test
-    fun `stale player samples are ignored until they catch up to a pending seek`() {
-        assertThat(
-            shouldApplyPlayerProgress(
-                playbackProgress = 0.2f,
-                pendingSeek = 0.8f,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isFalse()
-        assertThat(
-            shouldApplyPlayerProgress(
-                playbackProgress = 0.8f,
-                pendingSeek = 0.8f,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isTrue()
-    }
-
-    @Test
-    fun `player samples apply immediately when there is no pending seek`() {
-        assertThat(
-            shouldApplyPlayerProgress(
-                playbackProgress = 0.2f,
-                pendingSeek = null,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isTrue()
-    }
-
-    @Test
-    fun `playing cursor snaps when duration is unknown`() {
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0.5f,
-                animatedProgress = 0.2f,
-                isPlaying = true,
-                durationMs = 0,
-                playbackSpeed = 1f,
-            )
-        ).isTrue()
-    }
-
-    @Test
-    fun `playing cursor does not snap when drift is exactly the sync threshold`() {
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0.22f,
-                animatedProgress = 0.2f,
-                isPlaying = true,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isFalse()
-    }
-
-    @Test
-    fun `playing cursor snaps back at the restart progress boundary`() {
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0.01f,
-                animatedProgress = 0.9f,
-                isPlaying = true,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isTrue()
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0.011f,
-                animatedProgress = 0.9f,
-                isPlaying = true,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isFalse()
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0f,
-                animatedProgress = 0.89f,
-                isPlaying = true,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isFalse()
-    }
-
-    @Test
-    fun `faster playback treats the same progress delta as a smaller time gap`() {
-        assertThat(
-            shouldSnapToPlayer(
-                playbackProgress = 0.3f,
-                animatedProgress = 0.2f,
-                isPlaying = true,
-                durationMs = 10_000,
-                playbackSpeed = 8f,
-            )
-        ).isFalse()
-    }
-
-    @Test
-    fun `a pending seek is acknowledged when duration is unknown and the sample is close`() {
-        assertThat(
-            hasCaughtUpToSeek(
-                playbackProgress = 0.8f,
-                pendingSeek = 0.8f,
-                durationMs = 0,
-                playbackSpeed = 1f,
-            )
-        ).isTrue()
-        assertThat(
-            hasCaughtUpToSeek(
-                playbackProgress = 0.82f,
-                pendingSeek = 0.8f,
-                durationMs = 0,
-                playbackSpeed = 1f,
-            )
-        ).isFalse()
-        assertThat(
-            shouldApplyPlayerProgress(
-                playbackProgress = 0.805f,
-                pendingSeek = 0.8f,
-                durationMs = 0,
-                playbackSpeed = 1f,
-            )
-        ).isTrue()
-    }
-
-    @Test
-    fun `a pending seek is acknowledged at the exact sync threshold`() {
-        assertThat(
-            hasCaughtUpToSeek(
-                playbackProgress = 0.82f,
-                pendingSeek = 0.8f,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isTrue()
-    }
-
-    @Test
-    fun `zero playback speed still produces a finite remaining animation duration`() {
-        assertThat(
-            remainingPlaybackAnimationMs(
-                progress = 0.5f,
-                durationMs = 10_000,
-                playbackSpeed = 0f,
-            )
-        ).isEqualTo(500_000)
-    }
-
-    @Test
-    fun `remaining animation duration is zero when the cursor is already at the end`() {
-        assertThat(
-            remainingPlaybackAnimationMs(
-                progress = 1f,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isEqualTo(0)
-        assertThat(
-            remainingPlaybackAnimationMs(
-                progress = 1.2f,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isEqualTo(0)
-    }
-
-    @Test
-    fun `remaining animation duration scales with leftover progress and speed`() {
-        assertThat(
-            remainingPlaybackAnimationMs(
-                progress = 0.25f,
-                durationMs = 10_000,
-                playbackSpeed = 1f,
-            )
-        ).isEqualTo(7_500)
-        assertThat(
-            remainingPlaybackAnimationMs(
-                progress = 0.25f,
-                durationMs = 10_000,
-                playbackSpeed = 2f,
-            )
-        ).isEqualTo(3_750)
+    fun `negative elapsed time does not move progress backward`() {
+        assertThat(extrapolatePlaybackProgress(progress = 0.3f, elapsedMs = -1_000L, durationMs = 10_000L, playbackSpeed = 1f)).isEqualTo(0.3f)
     }
 }

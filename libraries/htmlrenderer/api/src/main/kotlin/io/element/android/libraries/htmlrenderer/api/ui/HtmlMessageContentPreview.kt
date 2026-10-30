@@ -10,6 +10,7 @@ package io.element.android.libraries.htmlrenderer.api.ui
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -31,11 +32,15 @@ import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.LINK_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.ListItemNode
 import io.element.android.libraries.htmlrenderer.api.ListNode
+import io.element.android.libraries.htmlrenderer.api.LocalMentionDisplayNames
+import io.element.android.libraries.htmlrenderer.api.MentionDisplayNames
 import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ParagraphNode
 import io.element.android.libraries.htmlrenderer.api.QuoteNode
 import io.element.android.libraries.htmlrenderer.api.spans.InlineCodeSpanStyle
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
@@ -51,6 +56,52 @@ internal fun HtmlMessageContentPreview(
         currentUserId = UserId("@me:example.org"),
         modifier = Modifier.padding(16.dp),
     )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun HtmlMessageContentWithMentionDisplayNamesPreview() = ElementPreview {
+    val alice = UserId("@alice:example.org")
+    val room = RoomAlias("#room:example.org").toRoomIdOrAlias()
+    val node = DocumentNode(
+        persistentListOf(
+            ParagraphNode(
+                text = buildAnnotatedString {
+                    append("Hey ")
+                    appendInlineContent("mention_0", alice.value)
+                    append(" and ")
+                    appendInlineContent("mention_1", "@bob:example.org")
+                    append(", join ")
+                    appendInlineContent("mention_2", room.identifier)
+                    append("!")
+                },
+                inlineContent = persistentMapOf(
+                    "mention_0" to MentionNodeContent.User(displayText = alice.value, userId = alice, permalinkUrl = "https://matrix.to/#/${alice.value}"),
+                    // No display name is known for this user, the raw user id will be displayed
+                    "mention_1" to MentionNodeContent.User(
+                        displayText = "@bob:example.org",
+                        userId = UserId("@bob:example.org"),
+                        permalinkUrl = "https://matrix.to/#/@bob:example.org",
+                    ),
+                    "mention_2" to
+                        MentionNodeContent.Room(displayText = room.identifier, roomIdOrAlias = room, permalinkUrl = "https://matrix.to/#/#room:example.org"),
+                ),
+            ),
+        )
+    )
+    CompositionLocalProvider(
+        LocalMentionDisplayNames provides MentionDisplayNames(
+            users = persistentMapOf(alice to "Alice"),
+            rooms = persistentMapOf(room to "Element X Android"),
+            userStatuses = persistentMapOf(alice to "🎧"),
+        )
+    ) {
+        HtmlMessageContent(
+            node = node,
+            currentUserId = UserId("@me:example.org"),
+            modifier = Modifier.padding(16.dp),
+        )
+    }
 }
 
 internal class HtmlMessageContentPreviewParam : PreviewParameterProvider<DocumentNode> {

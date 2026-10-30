@@ -88,7 +88,6 @@ import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
 import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
-import io.element.android.libraries.matrix.impl.search.map
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
 import io.element.android.libraries.matrix.impl.sync.map
@@ -113,7 +112,9 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -123,6 +124,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -139,6 +141,7 @@ import org.matrix.rustcomponents.sdk.ProfileListener
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.TotalUnreadNotificationsListener
 import org.matrix.rustcomponents.sdk.UserProfile
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -148,7 +151,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.io.encoding.Base64
 import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
@@ -266,6 +271,7 @@ class RustMatrixClient(
         client = innerClient,
         isSyncServiceReady = syncService.syncState.map { it == SyncState.Running },
         sessionCoroutineScope = sessionCoroutineScope,
+        sessionDispatcher = sessionDispatcher,
     )
 
     private val roomInfoMapper = RoomInfoMapper()
@@ -340,6 +346,20 @@ class RustMatrixClient(
     private val _isShuttingDown = AtomicBoolean(false)
     override val isShuttingDown: Boolean
         get() = _isShuttingDown.get()
+
+    override val totalUnreadCountFlow: StateFlow<Long> =
+        mxCallbackFlow {
+            val listener = object : TotalUnreadNotificationsListener {
+                override fun onUpdate(count: ULong) {
+                    trySend(count.toLong())
+                }
+            }
+            innerClient.observeTotalUnreadNotifications(listener, 100.milliseconds.toJavaDuration())
+        }.stateIn(
+            scope = sessionCoroutineScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = runCatchingExceptions { innerClient.totalUnreadNotifications().toLong() }.getOrDefault(0L),
+        )
 
     init {
         // Make sure the session delegate has a reference to the client to be able to logout on auth error
@@ -701,7 +721,7 @@ class RustMatrixClient(
                     var room = (roomId?.let { roomFactory.getJoinedRoomOrPreview(it, serverNames) } as? GetRoomResult.NotJoined)?.notJoinedRoom
                     if (room == null) {
                         val preview = innerClient.getRoomPreviewFromRoomAlias(roomIdOrAlias.roomAlias.value)
-                        room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()))
+                        room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()), sessionDispatcher)
                     }
                     room
                 }
@@ -710,7 +730,7 @@ class RustMatrixClient(
 
                     if (room == null) {
                         val preview = innerClient.getRoomPreviewFromRoomId(roomIdOrAlias.roomId.value, serverNames)
-                        room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()))
+                        room = NotJoinedRustRoom(sessionId, null, RoomPreviewInfoMapper.map(preview.info()), sessionDispatcher)
                     }
                     room
                 }
@@ -745,22 +765,26 @@ class RustMatrixClient(
         return getCacheSize(includeCryptoDb = false)
     }
 
-    override suspend fun getDatabaseSizes(): Result<SdkStoreSizes> = runCatchingExceptions {
-        innerClient.getStoreSizes().run {
-            SdkStoreSizes(
-                stateStore = stateStore?.bytes,
-                eventCacheStore = eventCacheStore?.bytes,
-                mediaStore = mediaStore?.bytes,
-                cryptoStore = cryptoStore?.bytes,
-                searchIndex = searchIndex?.bytes,
-            )
+    override suspend fun getDatabaseSizes(): Result<SdkStoreSizes> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.getStoreSizes().run {
+                SdkStoreSizes(
+                    stateStore = stateStore?.bytes,
+                    eventCacheStore = eventCacheStore?.bytes,
+                    mediaStore = mediaStore?.bytes,
+                    cryptoStore = cryptoStore?.bytes,
+                    searchIndex = searchIndex?.bytes,
+                )
+            }
         }
     }
 
     override suspend fun clearCache() {
-        _isShuttingDown.set(true)
-        innerClient.clearCaches(innerSyncService)
-        destroy()
+        withContext(sessionDispatcher) {
+            _isShuttingDown.set(true)
+            innerClient.clearCaches(innerSyncService)
+            destroy()
+        }
     }
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {
@@ -968,8 +992,8 @@ class RustMatrixClient(
         }
     }
 
-    override suspend fun resetWellKnownConfig(): Result<Unit> {
-        return runCatchingExceptions {
+    override suspend fun resetWellKnownConfig(): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
             Timber.d("Resetting well-known config for session $sessionId")
             innerClient.resetWellKnown()
         }
@@ -1013,7 +1037,7 @@ class RustMatrixClient(
     }
 
     override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
-        return RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities())
+        return RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities(), sessionDispatcher)
     }
 
     override fun totalUnreadCount(): Result<Long> = runCatchingExceptions {

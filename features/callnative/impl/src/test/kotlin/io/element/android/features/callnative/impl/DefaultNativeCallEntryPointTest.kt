@@ -11,18 +11,23 @@ import android.Manifest
 import android.app.Application
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
+import io.element.android.call.api.ElementCallConnection
+import io.element.android.call.api.ElementCallSnapshot
 import io.element.android.call.test.FakeElementCallController
+import io.element.android.call.ui.ElementCallActivity
 import io.element.android.features.call.api.CallData
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultNativeCallEntryPointTest : RobolectricTest() {
@@ -82,6 +87,39 @@ class DefaultNativeCallEntryPointTest : RobolectricTest() {
         runCurrent()
 
         assertThat(controller.startedCalls).isEmpty()
+    }
+
+    @Test
+    fun `the call screen opens once the controller has the call`() = runTest {
+        grantMicrophonePermission()
+        val controller = FakeElementCallController()
+        val entryPoint = createEntryPoint(controller)
+
+        entryPoint.startCall(A_CALL_DATA)
+        runCurrent()
+        // Opened before the call exists, the screen would find nothing to show and close at once.
+        assertThat(shadowOf(RuntimeEnvironment.getApplication()).nextStartedActivity).isNull()
+
+        controller.state.value = ElementCallSnapshot(
+            callData = controller.startedCalls.single(),
+            connection = ElementCallConnection.RequestingPermission,
+        )
+        runCurrent()
+
+        val started = shadowOf(RuntimeEnvironment.getApplication()).nextStartedActivity
+        assertThat(started?.component?.className).isEqualTo(ElementCallActivity::class.java.name)
+    }
+
+    @Test
+    fun `the call screen does not open when the call never starts`() = runTest {
+        grantMicrophonePermission()
+        val controller = FakeElementCallController()
+        val entryPoint = createEntryPoint(controller)
+
+        entryPoint.startCall(A_CALL_DATA)
+        advanceTimeBy(10.seconds)
+
+        assertThat(shadowOf(RuntimeEnvironment.getApplication()).nextStartedActivity).isNull()
     }
 
     private fun grantMicrophonePermission() {

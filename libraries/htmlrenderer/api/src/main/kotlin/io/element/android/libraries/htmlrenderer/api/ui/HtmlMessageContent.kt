@@ -61,12 +61,14 @@ import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
@@ -75,6 +77,7 @@ import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.linkify
@@ -87,6 +90,7 @@ import io.element.android.libraries.htmlrenderer.api.HeaderNode
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.INLINE_CODE_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser.Companion.LINK_ANNOTATION_TAG
 import io.element.android.libraries.htmlrenderer.api.ListNode
+import io.element.android.libraries.htmlrenderer.api.LocalMentionDisplayNames
 import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ParagraphNode
 import io.element.android.libraries.htmlrenderer.api.QuoteNode
@@ -416,7 +420,7 @@ private fun ListView(
 
 @Composable
 private fun MentionPill(
-    mention: MentionNodeContent,
+    displayText: String,
     isCurrentUser: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -433,7 +437,7 @@ private fun MentionPill(
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = mention.displayText,
+            text = displayText,
             style = ElementTheme.typography.fontBodyLgMedium,
             color = textColor,
             maxLines = 1,
@@ -444,6 +448,10 @@ private fun MentionPill(
 /**
  * Builds an [InlineTextContent] entry for each mention placeholder. Each pill is measured so
  * the placeholder reserves exactly the space the pill needs.
+ *
+ * The pill text (display name and user status) is resolved using [LocalMentionDisplayNames], so the pills are measured again
+ * whenever the display name or status of one of the mentioned users or rooms changes. The text sizes are
+ * cached in [PillTextSizeCache], so the same pill text is only measured once for all messages.
  */
 @Composable
 private fun rememberMentionInlineContent(
@@ -454,10 +462,32 @@ private fun rememberMentionInlineContent(
     val textMeasurer = rememberTextMeasurer()
     val pillTextStyle = ElementTheme.typography.fontBodyLgMedium
     val density = LocalDensity.current
-    return mentions.mapValues { (_, mention) ->
-        val measured = textMeasurer.measure(mention.displayText, pillTextStyle)
-        val width = with(density) { measured.size.width.toDp() + PillPaddingHorizontal * 2 }
-        val height = with(density) { measured.size.height.toDp() + PillPaddingVertical * 2 }
+    val layoutDirection = LocalLayoutDirection.current
+    val mentionDisplayNames = LocalMentionDisplayNames.current
+    // Only the display texts of these mentions matter: since `derivedStateOf` only notifies its readers when its value changes,
+    // unrelated display name changes won't recompose this text nor trigger a new measure pass
+    val displayTexts by remember(mentions, mentionDisplayNames) {
+        derivedStateOf { mentions.mapValues { (_, mention) -> mentionDisplayNames.pillTextFor(mention) } }
+    }
+    return remember(mentions, displayTexts, context, textMeasurer, pillTextStyle, density, layoutDirection) {
+        buildMentionInlineContent(mentions, displayTexts, context, textMeasurer, pillTextStyle, density, layoutDirection)
+    }
+}
+
+private fun buildMentionInlineContent(
+    mentions: ImmutableMap<String, MentionNodeContent>,
+    displayTexts: Map<String, String>,
+    context: RenderContext,
+    textMeasurer: TextMeasurer,
+    pillTextStyle: TextStyle,
+    density: Density,
+    layoutDirection: LayoutDirection,
+): ImmutableMap<String, InlineTextContent> {
+    return mentions.mapValues { (id, mention) ->
+        val displayText = displayTexts[id] ?: mention.displayText
+        val textSize = PillTextSizeCache.getOrMeasure(displayText, pillTextStyle, density, layoutDirection, textMeasurer)
+        val width = with(density) { textSize.width.toDp() + PillPaddingHorizontal * 2 }
+        val height = with(density) { textSize.height.toDp() + PillPaddingVertical * 2 }
         InlineTextContent(
             placeholder = Placeholder(
                 width = with(density) { width.toSp() },
@@ -466,7 +496,7 @@ private fun rememberMentionInlineContent(
             ),
         ) {
             MentionPill(
-                mention = mention,
+                displayText = displayText,
                 isCurrentUser = mention is MentionNodeContent.User && mention.userId == context.currentUserId,
                 onClick = { context.onMentionClick(mention) },
             )

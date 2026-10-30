@@ -85,6 +85,7 @@ class RustSpaceService(
             spaceId = id,
             innerProvider = { innerSpaceService.spaceRoomList(id.value) },
             coroutineScope = childCoroutineScope,
+            dispatcher = sessionDispatcher,
             spaceRoomMapper = spaceRoomMapper,
             analyticsService = analyticsService,
         )
@@ -102,6 +103,7 @@ class RustSpaceService(
             spaceRoomMapper = spaceRoomMapper,
             roomMembershipObserver = roomMembershipObserver,
             sessionCoroutineScope = sessionCoroutineScope,
+            dispatcher = sessionDispatcher,
         ) {
             innerSpaceService.leaveSpace(spaceId.value)
         }

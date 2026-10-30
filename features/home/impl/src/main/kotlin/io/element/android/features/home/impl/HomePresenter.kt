@@ -33,7 +33,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.totalUnreadCountFlow
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -62,9 +61,7 @@ class HomePresenter(
     override fun present(): HomeState {
         val coroutineScope = rememberCoroutineScope()
         val matrixUser by client.userProfile.collectAsState()
-        val totalUnreadCount by remember { client.totalUnreadCountFlow() }
-            // The initial value is only used for the first composition, remember it to avoid calling the SDK on every recomposition.
-            .collectAsState(initial = remember { client.totalUnreadCount().getOrDefault(0).toInt() })
+        val totalUnreadCount by client.totalUnreadCountFlow.collectAsState()
         val currentUserAndNeighbors by remember {
             combine(
                 client.userProfile,

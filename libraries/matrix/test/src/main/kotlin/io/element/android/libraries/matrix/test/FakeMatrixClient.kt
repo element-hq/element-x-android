@@ -76,7 +76,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import java.io.File
 import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
 class FakeMatrixClient(
     override val sessionId: SessionId = A_SESSION_ID,
@@ -142,6 +141,7 @@ class FakeMatrixClient(
     override val contentScanner: ContentScanner? = null,
     private val isShuttingDownResult: () -> Boolean = { false },
 ) : MatrixClient {
+    override val totalUnreadCountFlow = MutableStateFlow(0L)
     var setDisplayNameCalled: Boolean = false
         private set
     var uploadAvatarCalled: Boolean = false
@@ -367,6 +367,10 @@ class FakeMatrixClient(
 
     fun givenRemoveAvatarResult(result: Result<Unit>) {
         removeAvatarResult = result
+    }
+
+    fun givenTotalUnreadCount(value: Long) {
+        totalUnreadCountFlow.value = value
     }
 
     private val visitedRoomsId: MutableList<RoomId> = mutableListOf()

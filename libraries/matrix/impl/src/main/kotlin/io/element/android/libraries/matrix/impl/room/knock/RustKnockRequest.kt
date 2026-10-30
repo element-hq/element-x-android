@@ -12,10 +12,13 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
 
 class RustKnockRequest(
     private val inner: InnerKnockRequest,
+    private val dispatcher: CoroutineDispatcher,
 ) : KnockRequest {
     override val eventId: EventId = EventId(inner.eventId)
     override val userId: UserId = UserId(inner.userId)
@@ -25,19 +28,27 @@ class RustKnockRequest(
     override val timestamp: Long? = inner.timestamp?.toLong()
     override val isSeen: Boolean = inner.isSeen
 
-    override suspend fun accept(): Result<Unit> = runCatchingExceptions {
-        inner.actions.accept()
+    override suspend fun accept(): Result<Unit> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.actions.accept()
+        }
     }
 
-    override suspend fun decline(reason: String?): Result<Unit> = runCatchingExceptions {
-        inner.actions.decline(reason)
+    override suspend fun decline(reason: String?): Result<Unit> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.actions.decline(reason)
+        }
     }
 
-    override suspend fun declineAndBan(reason: String?): Result<Unit> = runCatchingExceptions {
-        inner.actions.declineAndBan(reason)
+    override suspend fun declineAndBan(reason: String?): Result<Unit> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.actions.declineAndBan(reason)
+        }
     }
 
-    override suspend fun markAsSeen(): Result<Unit> = runCatchingExceptions {
-        inner.actions.markAsSeen()
+    override suspend fun markAsSeen(): Result<Unit> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.actions.markAsSeen()
+        }
     }
 }

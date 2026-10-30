@@ -59,6 +59,12 @@ Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_roomlist_mark_as_unread">"Oznacz jako nieprzeczytane"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ten pokój został ulepszony"</string>
   <string name="screen_roomlist_your_spaces">"Twoje przestrzenie"</string>
+  <string name="screen_search_empty_state_message">"Szukaj czatów i wiadomości"</string>
+  <string name="screen_search_empty_state_title">"Rozpocznij wyszukiwanie"</string>
+  <string name="screen_search_no_results_message">"Nie znaleziono wyników dla \"%1$s\". Spróbuj wpisać nowe zapytanie."</string>
+  <string name="screen_search_recent_searches">"Ostatnie wyszukiwania"</string>
+  <string name="screen_search_tab_chats">"Czaty"</string>
+  <string name="screen_search_tab_messages">"Wiadomości"</string>
   <string name="session_verification_banner_message">"Wygląda na to, że używasz nowego urządzenia. Zweryfikuj się innym urządzeniem, aby uzyskać dostęp do zaszyfrowanych wiadomości."</string>
   <string name="session_verification_banner_title">"Potwierdź, że to Ty"</string>
 </resources>

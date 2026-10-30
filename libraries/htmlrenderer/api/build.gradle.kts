@@ -1,3 +1,5 @@
+import extension.testCommonDependencies
+
 /*
  * Copyright (c) 2026 Element Creations Ltd.
  *
@@ -20,4 +22,6 @@ dependencies {
     implementation(projects.libraries.uiStrings)
 
     api(libs.jsoup)
+
+    testCommonDependencies(libs)
 }

@@ -31,6 +31,10 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.api.HtmlMessageParser
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -54,6 +58,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.jsoup.nodes.Document
 import io.element.android.libraries.androidutils.R as UtilsR
 
 @AssistedInject
@@ -66,6 +71,8 @@ class MediaViewerPresenter(
     private val htmlConverterProvider: HtmlConverterProvider,
     private val permalinkParser: PermalinkParser,
     private val textPillificator: TextPillificator,
+    private val htmlMessageParser: HtmlMessageParser,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<MediaViewerState> {
     @AssistedFactory
     fun interface Factory {
@@ -84,6 +91,7 @@ class MediaViewerPresenter(
 
     // Keep the converted captions so the same instances are reused when the list is updated, which keeps the page data equality stable
     private val formattedCaptions = mutableMapOf<String, CharSequence?>()
+    private val captionTrees = mutableMapOf<String, DocumentNode?>()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Composable
@@ -101,7 +109,8 @@ class MediaViewerPresenter(
         }
         val data = dataSource.produceState { flow ->
             flow.collectLatest { items ->
-                val new = items.map { it.withFormattedCaption() }
+                val isComposeRendererEnabled = featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)
+                val new = items.map { it.withFormattedCaption(isComposeRendererEnabled) }
                 val existingItem = value.getOrNull(currentIndex.intValue)
                 val newItem = new.getOrNull(currentIndex.intValue)
                 if (existingItem is MediaViewerPageData.MediaViewerData && existingItem.eventId == eventId && newItem != existingItem) {
@@ -220,21 +229,34 @@ class MediaViewerPresenter(
             snackbarMessage = snackbarMessage,
             canShowInfo = inputs !is MediaViewerEntryPoint.Params.Avatar,
             mediaBottomSheetState = mediaBottomSheetState,
+            currentUserId = room.sessionId,
             eventSink = ::handleEvent,
         )
     }
 
-    private fun MediaViewerPageData.withFormattedCaption(): MediaViewerPageData {
+    private fun MediaViewerPageData.withFormattedCaption(isComposeRendererEnabled: Boolean): MediaViewerPageData {
         if (this !is MediaViewerPageData.MediaViewerData) return this
         val htmlCaption = mediaInfo.htmlCaption ?: return this
         val formattedCaption = formattedCaptions.getOrPut(htmlCaption) {
-            FormattedBody(format = MessageFormat.HTML, body = htmlCaption)
-                .toHtmlDocument(permalinkParser = permalinkParser)
+            htmlCaption.toHtmlDocument()
                 ?.let { htmlConverterProvider.provide().fromDocumentToSpans(it) }
                 ?.let { textPillificator.pillify(it) }
                 ?.safeLinkify()
         }
-        return copy(formattedCaption = formattedCaption)
+        // When the new timeline event renderer is enabled, also parse the caption so it can be rendered natively with Compose
+        val captionTree = if (isComposeRendererEnabled) {
+            captionTrees.getOrPut(htmlCaption) {
+                htmlCaption.toHtmlDocument()?.let(htmlMessageParser::parse)
+            }
+        } else {
+            null
+        }
+        return copy(formattedCaption = formattedCaption, captionTree = captionTree)
+    }
+
+    private fun String.toHtmlDocument(): Document? {
+        return FormattedBody(format = MessageFormat.HTML, body = this)
+            .toHtmlDocument(permalinkParser = permalinkParser)
     }
 
     @Composable

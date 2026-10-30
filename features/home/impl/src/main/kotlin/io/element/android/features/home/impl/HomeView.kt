@@ -28,6 +28,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshots.toInt
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -265,7 +266,7 @@ private fun HomeScaffold(
                         }
                     }
                 },
-                totalUnreadCount = state.totalUnreadCount,
+                totalUnreadCount = state.totalUnreadCount.toInt(),
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
