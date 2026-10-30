@@ -14,7 +14,10 @@ import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import kotlinx.coroutines.delay
 import java.io.File
 
-class FakeBugReporter(val mode: Mode = Mode.Success) : BugReporter {
+class FakeBugReporter(
+    val mode: Mode = Mode.Success,
+    private val onSendBugReport: (withDevicesLogs: Boolean, withCrashLogs: Boolean) -> Unit = { _, _ -> },
+) : BugReporter {
     enum class Mode {
         Success,
         Failure,
@@ -31,6 +34,7 @@ class FakeBugReporter(val mode: Mode = Mode.Success) : BugReporter {
         ghIssueNumber: Int?,
         listener: BugReporterListener,
     ) {
+        onSendBugReport(withDevicesLogs, withCrashLogs)
         delay(100)
         listener.onProgress(0)
         delay(100)
