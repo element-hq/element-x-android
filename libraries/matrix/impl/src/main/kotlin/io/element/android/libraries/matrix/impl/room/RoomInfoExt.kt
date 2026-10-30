@@ -33,10 +33,10 @@ fun RoomInfo.elementHeroes(): List<MatrixUser> {
 /**
  * The room's info now and on every change, for as long as it is collected.
  *
- * The current value is sent as the first item received by the listener in the SDK,
- * so there is no need to call [Room.roomInfo] to get the initial value.
+ * The initial value is emitted immediately. The flow is collected on the provided [CoroutineDispatchers.io].
  */
 internal fun Room.roomInfoUpdates(dispatchers: CoroutineDispatchers): Flow<RoomInfo> = mxCallbackFlow {
+    trySend(roomInfo())
     subscribeToRoomInfoUpdates(
         object : RoomInfoListener {
             override fun call(roomInfo: RoomInfo) {
