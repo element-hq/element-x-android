@@ -138,6 +138,11 @@ interface MatrixClient : ClientUrlContentFetcher {
     /** Backfills messages from the homeserver for searching for messages in a room. */
     val searchBackfillService: SearchBackfillService
 
+    /**
+     * Returns a flow of the total number of unread notifications across all rooms, as currently known by the client.
+     */
+    val totalUnreadCountFlow: StateFlow<Long>
+
     /** Whether the session is in the process of shutting down, either because it is being logged out or its cache is being cleared. */
     val isShuttingDown: Boolean
 
@@ -512,11 +517,6 @@ interface MatrixClient : ClientUrlContentFetcher {
      * This is a snapshot and may be out of date if the sync is running.
      */
     fun totalUnreadCount(): Result<Long>
-
-    /**
-     * Returns a flow of the total number of unread notifications across all rooms, as currently known by the client.
-     */
-    fun totalUnreadCountFlow(): StateFlow<Long>
 }
 
 /**
