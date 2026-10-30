@@ -94,3 +94,14 @@ val assetImageSvg = Asset(
     width = 800,
     height = 600,
 )
+
+/**
+ * "image.bmp" is a 1 x 1, 24-bit BMP image with a size of 30 bytes.
+ */
+val assetImageBmp = Asset(
+    filename = "image.bmp",
+    mimeType = "image/bmp",
+    size = 30,
+    width = 1,
+    height = 1,
+)
