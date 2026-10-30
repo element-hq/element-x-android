@@ -65,6 +65,73 @@ class MarkdownTextEditorStateTest : RobolectricTest() {
     }
 
     @Test
+    fun `deleteBackward - removes the character before the cursor`() {
+        val state = aMarkdownTextEditorState(initialText = "Hello", initialFocus = true).apply {
+            selection = 5..5
+        }
+        state.deleteBackward()
+        assertThat(state.text.value().toString()).isEqualTo("Hell")
+        assertThat(state.selection).isEqualTo(4..4)
+    }
+
+    @Test
+    fun `deleteBackward - removes an emoji made of several code points in one step`() {
+        // Family joined by zero-width joiners (8 code units), thumbs-up with skin tone (4) and a flag (4)
+        val state = aMarkdownTextEditorState(
+            initialText = "Hi \uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\uD83D\uDC4D\uD83C\uDFFD\uD83C\uDDE9\uD83C\uDDEA",
+            initialFocus = true
+        ).apply {
+            selection = 19..19
+        }
+        state.deleteBackward()
+        assertThat(state.text.value().toString()).isEqualTo("Hi \uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\uD83D\uDC4D\uD83C\uDFFD")
+        assertThat(state.selection).isEqualTo(15..15)
+        state.deleteBackward()
+        assertThat(state.text.value().toString()).isEqualTo("Hi \uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67")
+        assertThat(state.selection).isEqualTo(11..11)
+        state.deleteBackward()
+        assertThat(state.text.value().toString()).isEqualTo("Hi ")
+        assertThat(state.selection).isEqualTo(3..3)
+    }
+
+    @Test
+    fun `deleteBackward - removes the selected text`() {
+        val state = aMarkdownTextEditorState(initialText = "Hello world", initialFocus = true).apply {
+            selection = IntRange(start = 11, endInclusive = 6)
+        }
+        state.deleteBackward()
+        assertThat(state.text.value().toString()).isEqualTo("Hello ")
+        assertThat(state.selection).isEqualTo(6..6)
+    }
+
+    @Test
+    fun `deleteBackward - does nothing at the start of the text`() {
+        val state = aMarkdownTextEditorState(initialText = "Hello", initialFocus = true).apply {
+            selection = 0..0
+        }
+        state.deleteBackward()
+        assertThat(state.text.value().toString()).isEqualTo("Hello")
+        assertThat(state.selection).isEqualTo(0..0)
+    }
+
+    @Test
+    fun `deleteBackward - removes a mention ending at the cursor as a whole`() {
+        val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true).apply {
+            currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Mention, text = "")
+        }
+        val member = aRoomMember()
+        val permalinkParser = FakePermalinkParser(result = { PermalinkData.UserLink(member.userId) })
+        state.insertSuggestion(ResolvedSuggestion.Member(member), aMentionSpanProvider(permalinkParser = permalinkParser))
+        assertThat(state.getMentions()).hasSize(1)
+        // When a mention is followed by a space, the first deletion clears only the space and the second removes the entire mention.
+        state.deleteBackward()
+        state.deleteBackward()
+        assertThat(state.text.value().toString()).isEqualTo("Hello ")
+        assertThat(state.getMentions()).isEmpty()
+        assertThat(state.selection).isEqualTo(6..6)
+    }
+
+    @Test
     fun `insertText - keeps the existing mentions`() {
         val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true).apply {
             currentSuggestion = Suggestion(start = 6, end = 7, type = SuggestionType.Mention, text = "")

@@ -765,6 +765,21 @@ class MessageComposerPresenterTest : RobolectricTest() {
     }
 
     @Test
+    fun `present - DeleteBackward removes the text before the cursor in the markdown editor`() = runTest {
+        val presenter = createPresenter(isRichTextEditorEnabled = false)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            val markdownState = (initialState.textEditorState as TextEditorState.Markdown).state
+            markdownState.text.update("Hello \uD83D\uDE00", true)
+            markdownState.selection = 8..8
+            initialState.eventSink(MessageComposerEvent.DeleteBackward)
+            assertThat(markdownState.text.value().toString()).isEqualTo("Hello ")
+            assertThat(markdownState.selection).isEqualTo(6..6)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - Pick image from gallery`() = runTest {
         val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
