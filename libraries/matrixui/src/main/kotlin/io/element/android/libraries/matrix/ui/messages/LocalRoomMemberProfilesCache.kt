@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * The room's member profiles, for composables that resolve a member at render time rather than
@@ -39,7 +40,7 @@ fun rememberRoomMember(userId: UserId): RoomMember? {
  */
 @Composable
 fun ProvideRoomMemberProfiles(
-    members: List<RoomMember>,
+    members: ImmutableList<RoomMember>,
     content: @Composable () -> Unit,
 ) {
     val cache = remember(members) {

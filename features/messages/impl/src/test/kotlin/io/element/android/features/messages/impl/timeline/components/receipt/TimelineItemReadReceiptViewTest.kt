@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.ui.messages.ProvideRoomMemberProfiles
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.tests.testutils.robolectric.RobolectricTest
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
 
 @OptIn(ExperimentalTestApi::class)
@@ -27,7 +28,7 @@ class TimelineItemReadReceiptViewTest : RobolectricTest() {
     @Test
     fun `receipts are rendered when the preference is on`() = runAndroidComposeUiTest<ComponentActivity> {
         setContent {
-            ProvideRoomMemberProfiles(members = listOf(aRoomMember(userId = A_USER_ID, displayName = "Alice"))) {
+            ProvideRoomMemberProfiles(members = persistentListOf(aRoomMember(userId = A_USER_ID, displayName = "Alice"))) {
                 TimelineItemReadReceiptView(
                     state = aReadReceiptViewState(renderReadReceipts = true),
                     onReadReceiptsClick = {},
@@ -40,7 +41,7 @@ class TimelineItemReadReceiptViewTest : RobolectricTest() {
     @Test
     fun `receipts are not rendered when the preference is off`() = runAndroidComposeUiTest<ComponentActivity> {
         setContent {
-            ProvideRoomMemberProfiles(members = listOf(aRoomMember(userId = A_USER_ID, displayName = "Alice"))) {
+            ProvideRoomMemberProfiles(members = persistentListOf(aRoomMember(userId = A_USER_ID, displayName = "Alice"))) {
                 TimelineItemReadReceiptView(
                     state = aReadReceiptViewState(renderReadReceipts = false),
                     onReadReceiptsClick = {},
