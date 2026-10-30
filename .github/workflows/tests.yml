@@ -18,26 +18,13 @@ jobs:
   tests:
     name: Runs unit tests
     runs-on: ubuntu-latest
+    timeout-minutes: 90
 
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
-        with:
-          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-          tool-cache: true
-          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
-          android: false
-          dotnet: true
-          haskell: true
-          # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
-          large-packages: false
-          docker-images: true
-          swap-storage: false
-
       # Increase swapfile size to prevent screenshot tests getting terminated
       # https://github.com/actions/runner-images/discussions/7188#discussioncomment-6750749
       - name: 💽 Increase swapfile size
@@ -51,27 +38,17 @@ jobs:
       - name: ⏬ Checkout with LFS
         uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
         with:
+          persist-credentials: false
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
-      - name: Add SSH private keys for submodule repositories
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
-      - name: Clone submodules
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
-        run: git submodule update --init --recursive
-      - name: ☕️ Use JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
-
+          free-disk-space: 'true'
+          enterprise-ssh-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
+          # Only this job writes the Gradle cache on develop, see the setup-build action
+          gradle-cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: ⚙️ Run unit tests
         run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES --continue
 
@@ -88,10 +65,6 @@ jobs:
           name: kover-error-report
           path: |
             build/reports/kover
-
-      - name: ✅ Upload kover report (disabled)
-        if: always()
-        run: echo "This is now done only once a day, see nightlyReports.yml"
 
       - name: 🚫 Upload test results on error
         if: failure()

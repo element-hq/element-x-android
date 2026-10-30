@@ -11,7 +11,7 @@ jobs:
   sync-sas-strings:
     runs-on: ubuntu-latest
     # Skip in forks
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+    if: github.repository == 'element-hq/element-x-android'
     # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -29,6 +29,7 @@ jobs:
       - name: Create Pull Request for SAS Strings
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
+          token: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           commit-message: Sync SAS Strings
           title: Sync SAS Strings
           body: |
@@ -36,5 +37,3 @@ jobs:
           branch: sync-sas-strings
           base: develop
           labels: PR-Misc
-
-

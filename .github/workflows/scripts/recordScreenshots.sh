@@ -33,7 +33,7 @@ do
       ;;
     *)
       echo "Unexpected option: $1"
-      help
+      exit 1
       ;;
   esac
 done
@@ -59,7 +59,6 @@ echo "Record screenshots"
 ./gradlew recordPaparazziDebug --stacktrace $GRADLE_ARGS
 
 echo "Committing changes"
-git config http.sslVerify false
 
 if [[ -z ${INPUT_AUTHOR_NAME} ]]; then
   git config user.name "ElementBot"
@@ -70,7 +69,7 @@ fi
 if [[ -z ${INPUT_AUTHOR_EMAIL} ]]; then
   git config user.email "android@element.io"
 else
-  git config --local user.name "${INPUT_AUTHOR_EMAIL}"
+  git config --local user.email "${INPUT_AUTHOR_EMAIL}"
 fi
 git add -A
 if git diff --cached --quiet; then

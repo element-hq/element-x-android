@@ -1,0 +1,65 @@
+name: Setup build environment
+description: Free disk space, clone the enterprise submodule, and set up JDK 21, Gradle and Python. The repository must be checked out first.
+
+inputs:
+  free-disk-space:
+    description: Remove unused tools from the runner to free about 6 GB of disk space.
+    default: 'false'
+  enterprise-ssh-key:
+    description: SSH private key used to clone the enterprise submodule. The submodule is not cloned if empty (for instance on PRs from forks, where secrets are not available).
+    default: ''
+  setup-gradle:
+    description: Configure Gradle and its cache.
+    default: 'true'
+  gradle-cache-read-only:
+    description: >
+      The GitHub cache is limited to 10 GB per repository, and each job writing the cache adds several GB
+      (dependencies, transforms and build cache), so older entries get evicted and jobs can restore an incomplete cache.
+      To stay under the limit, only the debug build job (build.yml) and the unit tests job (tests.yml) write the cache on develop.
+      All the other jobs only read it.
+    default: 'true'
+  python-version:
+    description: Python version to set up. Python is not set up if empty.
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Free Disk Space (Ubuntu)
+      if: ${{ inputs.free-disk-space == 'true' }}
+      uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
+      with:
+        # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
+        tool-cache: true
+        # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
+        android: false
+        dotnet: true
+        haskell: true
+        # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
+        large-packages: false
+        docker-images: true
+        swap-storage: false
+    - name: Add SSH private keys for submodule repositories
+      if: ${{ inputs.enterprise-ssh-key != '' }}
+      uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
+      with:
+        ssh-private-key: ${{ inputs.enterprise-ssh-key }}
+    - name: Clone submodules
+      if: ${{ inputs.enterprise-ssh-key != '' }}
+      shell: bash
+      run: git submodule update --init --recursive
+    - name: Use JDK 21
+      uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      with:
+        distribution: 'temurin' # See 'Supported distributions' for available options
+        java-version: '21'
+    - name: Configure gradle
+      if: ${{ inputs.setup-gradle == 'true' }}
+      uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      with:
+        cache-read-only: ${{ inputs.gradle-cache-read-only }}
+    - name: Set up Python
+      if: ${{ inputs.python-version != '' }}
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: ${{ inputs.python-version }}

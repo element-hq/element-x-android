@@ -16,36 +16,20 @@ jobs:
   gplay:
     name: Create App Bundle (Gplay)
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     concurrency:
       group: ${{ format('build-release-main-gplay-{0}', github.sha) }}
       cancel-in-progress: true
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
-        with:
-          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-          tool-cache: true
-          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
-          android: false
-          dotnet: true
-          haskell: true
-          # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
-          large-packages: false
-          docker-images: true
-          swap-storage: false
-
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Check Matrix Rust SDK is not a nightly version
         run: ./tools/release/check_no_nightly_sdk.sh
-      - name: Use JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+          free-disk-space: 'true'
       - name: Create app bundle
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
@@ -68,36 +52,20 @@ jobs:
   fdroid:
     name: Create APKs (FDroid)
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     concurrency:
       group: ${{ format('build-release-main-fdroid-{0}', github.sha) }}
       cancel-in-progress: true
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
-        with:
-          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-          tool-cache: true
-          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
-          android: false
-          dotnet: true
-          haskell: true
-          # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
-          large-packages: false
-          docker-images: true
-          swap-storage: false
-
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Check Matrix Rust SDK is not a nightly version
         run: ./tools/release/check_no_nightly_sdk.sh
-      - name: Use JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+          free-disk-space: 'true'
       - name: Create APKs
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}

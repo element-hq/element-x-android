@@ -19,20 +19,6 @@ jobs:
     name: Search for forbidden patterns
     runs-on: ubuntu-latest
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
-        with:
-          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-          tool-cache: true
-          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
-          android: false
-          dotnet: true
-          haskell: true
-          # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
-          large-packages: false
-          docker-images: true
-          swap-storage: false
-
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -68,17 +54,8 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Use JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: true # Only the debug build and unit tests jobs write the Gradle cache, see build.yml
-      - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
           python-version: 3.15
       - name: Search for invalid dependencies
@@ -88,6 +65,7 @@ jobs:
   konsist:
     name: Konsist tests
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('check-konsist-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-konsist-develop-{0}', github.sha) || format('check-konsist-{0}', github.ref) }}
@@ -99,25 +77,12 @@ jobs:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
-      - name: Add SSH private keys for submodule repositories
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
-      - name: Clone submodules
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
-        run: git submodule update --init --recursive
-      - name: Use JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: true # Only the debug build and unit tests jobs write the Gradle cache, see build.yml
+          enterprise-ssh-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Run Konsist tests
-        run: ./gradlew :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES --no-daemon
+        run: ./gradlew :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -129,6 +94,7 @@ jobs:
   compose:
     name: Compose tests
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('check-compose-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-compose-develop-{0}', github.sha) || format('check-compose-{0}', github.ref) }}
@@ -140,29 +106,17 @@ jobs:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
-      - name: Add SSH private keys for submodule repositories
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
-      - name: Clone submodules
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
-        run: git submodule update --init --recursive
-      - name: Use JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: true # Only the debug build and unit tests jobs write the Gradle cache, see build.yml
+          enterprise-ssh-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Run compose tests
         run: ./tools/compose/check_stability.sh
 
   lint:
     name: Android lint check
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('check-lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-lint-develop-{0}', github.sha) || format('check-lint-{0}', github.ref) }}
@@ -174,27 +128,10 @@ jobs:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
-      - name: Add SSH private keys for submodule repositories
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
-      - name: Clone submodules
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
-        run: git submodule update --init --recursive
-      - name: Use JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: true # Only the debug build and unit tests jobs write the Gradle cache, see build.yml
-      - name: Build Gplay Debug
-        run: ./gradlew :app:compileGplayDebugKotlin $CI_GRADLE_ARG_PROPERTIES
-      - name: Build Fdroid Debug
-        run: ./gradlew :app:compileFdroidDebugKotlin $CI_GRADLE_ARG_PROPERTIES
+          enterprise-ssh-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Run lint
         run: ./gradlew :app:lintGplayDebug :app:lintFdroidDebug lintDebug $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Upload reports
@@ -208,6 +145,7 @@ jobs:
   detekt:
     name: Detekt checks
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('check-detekt-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-detekt-develop-{0}', github.sha) || format('check-detekt-{0}', github.ref) }}
@@ -219,25 +157,12 @@ jobs:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
-      - name: Add SSH private keys for submodule repositories
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
-      - name: Clone submodules
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
-        run: git submodule update --init --recursive
-      - name: Use JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: true # Only the debug build and unit tests jobs write the Gradle cache, see build.yml
+          enterprise-ssh-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Run Detekt
-        run: ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES --no-daemon --continue
+        run: ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -249,6 +174,7 @@ jobs:
   ktlint:
     name: Ktlint checks
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('check-ktlint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-ktlint-develop-{0}', github.sha) || format('check-ktlint-{0}', github.ref) }}
@@ -260,23 +186,10 @@ jobs:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
-      - name: Add SSH private keys for submodule repositories
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
-      - name: Clone submodules
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
-        run: git submodule update --init --recursive
-      - name: Use JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: true # Only the debug build and unit tests jobs write the Gradle cache, see build.yml
+          enterprise-ssh-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Run Ktlint check
         run: ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Upload reports
@@ -301,17 +214,9 @@ jobs:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
-      - name: Add SSH private keys for submodule repositories
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
-        with:
-          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
-      - name: Clone submodules
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
-        run: git submodule update --init --recursive
       - name: Run docs check
         # This is equivalent to `./gradlew checkDocs`, but we avoid having to install java and gradle
-        run: python3 ./tools/docs/generate_toc.py --verify ./*.md docs/**/*.md
+        run: python3 ./tools/docs/generate_toc.py --verify './*.md' 'docs/**/*.md'
 
   # Note: to auto fix issues you can use the following command:
   # shellcheck -f diff <files> | git apply
