@@ -104,7 +104,8 @@ internal fun TimelineItemCallNotifyView(
             state = ReadReceiptViewState(
                 sendState = event.localSendState,
                 isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
+                renderReadReceipts = timelineRoomInfo.renderReadReceipts,
+                knownReceipts = event.readReceiptState.receipts,
             ),
             onReadReceiptsClick = { onReadReceiptsClick(event) },
             modifier = Modifier.padding(top = 4.dp),

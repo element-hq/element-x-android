@@ -96,12 +96,13 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.activeRoomMembers
 import io.element.android.libraries.matrix.api.room.alias.matches
-import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.mediaviewer.api.GalleryInfo
@@ -249,7 +250,7 @@ class MessagesFlowNode(
         room.membersStateFlow
             .onEach { membersState ->
                 withContext(coroutineDispatchers.computation) {
-                    roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
+                    roomMemberProfilesCache.replace(membersState.activeRoomMembers())
                 }
             }
             .launchIn(lifecycleScope)
@@ -1000,6 +1001,7 @@ class MessagesFlowNode(
         CompositionLocalProvider(
             LocalMentionSpanUpdater provides mentionSpanUpdater,
             LocalMentionDisplayNames provides mentionDisplayNames,
+            LocalRoomMemberProfilesCache provides roomMemberProfilesCache,
         ) {
             Box(modifier = modifier) {
                 BackstackView()

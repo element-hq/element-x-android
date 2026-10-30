@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
@@ -53,17 +52,13 @@ import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenu
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
-import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
-import io.element.android.libraries.designsystem.preview.USER_NAME_CAROL
-import io.element.android.libraries.designsystem.preview.USER_NAME_CHARLIE
-import io.element.android.libraries.designsystem.preview.USER_NAME_DAVID
-import io.element.android.libraries.designsystem.preview.USER_NAME_JOHN_DOE
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.CallIntent
-import io.element.android.libraries.matrix.ui.components.aMatrixUser
+import io.element.android.libraries.matrix.ui.messages.ProvideRoomMemberProfiles
+import io.element.android.libraries.matrix.ui.messages.rememberRoomMember
+import io.element.android.libraries.previewutils.room.aRoomMemberList
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
@@ -145,7 +140,8 @@ internal fun ActiveCallTimelineItemView(
             state = ReadReceiptViewState(
                 sendState = event.localSendState,
                 isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
+                renderReadReceipts = timelineRoomInfo.renderReadReceipts,
+                knownReceipts = event.readReceiptState.receipts,
             ),
             onReadReceiptsClick = { onReadReceiptsClick(event) },
             modifier = Modifier.padding(top = 4.dp),
@@ -159,31 +155,33 @@ private fun DirectMessageCallBody(state: RtcNotificationState.Active, modifier: 
         verticalAlignment = Alignment.Top,
         modifier = modifier
     ) {
-        if (state.joinedMembers.size == 1) {
-            val caller = state.joinedMembers.first()
+        if (state.joinedMemberIds.size == 1) {
+            val callerId = state.joinedMemberIds.first()
+            val caller = rememberRoomMember(callerId)
             Avatar(
                 avatarData = AvatarData(
-                    id = caller.userId.value,
-                    name = caller.displayName,
-                    url = caller.avatarUrl,
+                    id = callerId.value,
+                    name = caller?.displayName,
+                    url = caller?.avatarUrl,
                     size = AvatarSize.ActiveCallItem,
                 ),
                 avatarType = AvatarType.User
             )
             Text(
                 modifier = Modifier.padding(start = 6.dp),
-                text = stringResource(CommonStrings.common_user_started_a_call, caller.displayName ?: caller.userId),
+                text = stringResource(CommonStrings.common_user_started_a_call, caller?.displayName ?: callerId.value),
                 style = ElementTheme.typography.fontBodyMdMedium,
                 color = ElementTheme.colors.textPrimary,
             )
         } else {
             AvatarRow(
-                avatarDataList = state.joinedMembers
-                    .map { user ->
+                avatarDataList = state.joinedMemberIds
+                    .map { userId ->
+                        val member = rememberRoomMember(userId)
                         AvatarData(
-                            id = user.userId.value,
-                            name = user.displayName,
-                            url = user.avatarUrl,
+                            id = userId.value,
+                            name = member?.displayName,
+                            url = member?.avatarUrl,
                             size = AvatarSize.ActiveCallItem
                         )
                     }
@@ -215,36 +213,38 @@ private fun GroupCallBody(event: TimelineItem.Event, state: RtcNotificationState
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (state.joinedMembers.size == 1) {
-                val caller = state.joinedMembers.first()
+            if (state.joinedMemberIds.size == 1) {
+                val callerId = state.joinedMemberIds.first()
+                val caller = rememberRoomMember(callerId)
                 Avatar(
                     avatarData = AvatarData(
-                        id = caller.userId.value,
-                        name = caller.displayName,
-                        url = caller.avatarUrl,
+                        id = callerId.value,
+                        name = caller?.displayName,
+                        url = caller?.avatarUrl,
                         size = AvatarSize.ActiveCallItem,
                     ),
                     avatarType = AvatarType.User
                 )
                 // Only show started a call if the last remaining user in the call
                 // is really the one who started the call
-                if (caller.userId == event.senderId) {
+                if (callerId == event.senderId) {
                     Text(
                         modifier = Modifier.padding(start = 6.dp),
-                        text = stringResource(CommonStrings.common_user_started_a_call, caller.displayName ?: caller.userId),
+                        text = stringResource(CommonStrings.common_user_started_a_call, caller?.displayName ?: callerId.value),
                         style = ElementTheme.typography.fontBodySmRegular,
                         color = ElementTheme.colors.textSecondary,
                     )
                 }
             } else {
-                val displayMembers = state.joinedMembers.take(3)
+                val displayMemberIds = state.joinedMemberIds.take(3)
                 AvatarRow(
-                    avatarDataList = displayMembers
-                        .map { user ->
+                    avatarDataList = displayMemberIds
+                        .map { userId ->
+                            val member = rememberRoomMember(userId)
                             AvatarData(
-                                id = user.userId.value,
-                                name = user.displayName,
-                                url = user.avatarUrl,
+                                id = userId.value,
+                                name = member?.displayName,
+                                url = member?.avatarUrl,
                                 size = AvatarSize.ActiveCallItem
                             )
                         }
@@ -256,8 +256,8 @@ private fun GroupCallBody(event: TimelineItem.Event, state: RtcNotificationState
                 Text(
                     text = pluralStringResource(
                         CommonPlurals.screen_timeline_active_call_joined_count,
-                        count = state.joinedMembers.size,
-                        state.joinedMembers.size
+                        count = state.joinedMemberIds.size,
+                        state.joinedMemberIds.size
                     ),
                     style = ElementTheme.typography.fontBodySmRegular,
                     color = ElementTheme.colors.textSecondary,
@@ -297,82 +297,62 @@ private fun CallDurationText(
 @PreviewsDayNight
 @PreviewWithLargeHeight
 @Composable
-internal fun ActiveCallTimelineItemViewPreview() = ElementPreview(
-    drawableFallbackForImages = CommonDrawables.sample_avatar
-) {
+internal fun ActiveCallTimelineItemViewPreview() = ElementPreview {
     val readReceiptState = mutableListOf(
         aTimelineItemReadReceipts(
             receipts = List(3) { aReadReceiptData(it) },
         )
     )
-    Column(modifier = Modifier.padding(bottom = 16.dp)) {
-        listOf(CallIntent.AUDIO, CallIntent.VIDEO).forEach { callIntent ->
-            listOf(
-                RtcNotificationState.Active(
-                    listOf(aMatrixUser(displayName = USER_NAME_ALICE, avatarUrl = "anUrl")),
-                    isJoined = true,
-                    callStartTsMillis = System.currentTimeMillis() - 60_000,
-                    callIntent = callIntent
-                ) to true,
-                RtcNotificationState.Active(
-                    listOf(
-                        aMatrixUser(displayName = USER_NAME_ALICE, avatarUrl = "anUrl"),
-                        aMatrixUser(displayName = USER_NAME_BOB)
+    ProvideRoomMemberProfiles(members = aRoomMemberList()) {
+        Column(modifier = Modifier.padding(bottom = 16.dp)) {
+            listOf(CallIntent.AUDIO, CallIntent.VIDEO).forEach { callIntent ->
+                listOf(
+                    CallPreviewCase(joined = previewMemberIds.take(1), isDm = true, isJoined = true),
+                    CallPreviewCase(joined = previewMemberIds.take(2), isDm = true, isJoined = true),
+                    CallPreviewCase(joined = previewMemberIds.take(6), isDm = false, isJoined = false),
+                    // Group call only one member still in call, but it is not the creator
+                    CallPreviewCase(joined = previewMemberIds.take(1), isDm = false, isJoined = true),
+                    // Group call only one member that is the call creator
+                    CallPreviewCase(
+                        joined = previewMemberIds.take(1),
+                        isDm = false,
+                        isJoined = true,
+                        senderId = previewMemberIds.first(),
                     ),
-                    isJoined = true,
-                    callStartTsMillis = System.currentTimeMillis() - 60_000,
-                    callIntent = callIntent
-                ) to true,
-                RtcNotificationState.Active(
-                    listOf(
-                        aMatrixUser(displayName = USER_NAME_ALICE),
-                        aMatrixUser(displayName = USER_NAME_BOB, avatarUrl = "anUrlB"),
-                        aMatrixUser(displayName = USER_NAME_CAROL),
-                        aMatrixUser(displayName = USER_NAME_DAVID),
-                        aMatrixUser(displayName = USER_NAME_CHARLIE),
-                        aMatrixUser(displayName = USER_NAME_JOHN_DOE, avatarUrl = "anUrlC"),
-                    ),
-                    isJoined = false,
-                    callStartTsMillis = System.currentTimeMillis(),
-                    callIntent = callIntent
-                ) to false,
-                // Group call only one member still in call, but it is not the creator
-                RtcNotificationState.Active(
-                    listOf(
-                        aMatrixUser(displayName = USER_NAME_ALICE, avatarUrl = "aliceURl"),
-                    ),
-                    isJoined = true,
-                    callStartTsMillis = System.currentTimeMillis(),
-                    callIntent = callIntent
-                ) to false,
-                // Group call only one member that is the call creator
-                RtcNotificationState.Active(
-                    listOf(
-                        aMatrixUser(
-                            id = "@senderId:domain",
-                            displayName = "Sender"
+                ).forEach { case ->
+                    val state = RtcNotificationState.Active(
+                        joinedMemberIds = case.joined,
+                        isJoined = case.isJoined,
+                        callStartTsMillis = System.currentTimeMillis(),
+                        callIntent = callIntent,
+                    )
+                    val content = TimelineItemRtcNotificationContent(callIntent, state)
+                    ActiveCallTimelineItemView(
+                        timelineRoomInfo = aTimelineRoomInfo(isDm = case.isDm),
+                        event = aTimelineItemEvent(
+                            senderId = case.senderId,
+                            content = content,
+                            // Only display read receipts for the first item
+                            readReceiptState = readReceiptState.removeFirstOrNull() ?: aTimelineItemReadReceipts(),
                         ),
-                    ),
-                    isJoined = true,
-                    callStartTsMillis = System.currentTimeMillis(),
-                    callIntent = callIntent
-                ) to false,
-            ).forEach { (state, isDm) ->
-                val content = TimelineItemRtcNotificationContent(callIntent, state)
-                ActiveCallTimelineItemView(
-                    timelineRoomInfo = aTimelineRoomInfo(isDm = isDm),
-                    event = aTimelineItemEvent(
-                        content = content,
-                        // Only display read receipts for the first item
-                        readReceiptState = readReceiptState.removeFirstOrNull() ?: aTimelineItemReadReceipts(),
-                    ),
-                    state,
-                    isLastOutgoingMessage = false,
-                    onLongClick = {},
-                    onReadReceiptsClick = {},
-                    onJoinCallClick = {},
-                )
+                        state,
+                        isLastOutgoingMessage = false,
+                        onLongClick = {},
+                        onReadReceiptsClick = {},
+                        onJoinCallClick = {},
+                    )
+                }
             }
         }
     }
 }
+
+private val previewMemberIds = aRoomMemberList().map { it.userId }
+
+private data class CallPreviewCase(
+    val joined: List<UserId>,
+    val isDm: Boolean,
+    val isJoined: Boolean,
+    // [senderId] defaults to a member who is never in the call
+    val senderId: UserId = previewMemberIds.last(),
+)

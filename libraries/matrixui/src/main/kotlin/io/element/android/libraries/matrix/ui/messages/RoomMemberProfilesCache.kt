@@ -18,18 +18,15 @@ import io.element.android.libraries.matrix.ui.model.toEmojiText
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.runningFold
 
 @SingleIn(RoomScope::class)
 @Inject
 class RoomMemberProfilesCache {
     private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
-    val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
+    val membersFlow: StateFlow<Map<UserId, RoomMember>> = cache.asStateFlow()
 
     private val _displayNames = MutableStateFlow<ImmutableMap<UserId, String>>(persistentMapOf())
 
@@ -45,7 +42,7 @@ class RoomMemberProfilesCache {
      */
     val displayedStatusEmojis: StateFlow<ImmutableMap<UserId, String>> = _displayedStatusEmojis.asStateFlow()
 
-    suspend fun replace(items: List<RoomMember>) = coroutineScope {
+    fun replace(items: List<RoomMember>) {
         cache.value = items.associateBy { it.userId }
         _displayNames.value = items
             .filter { it.displayName != null }
