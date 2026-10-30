@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Gib deinen Wiederherstellungsschlüssel ein"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Hast du deinen Wiederherstellungsschlüssel vergessen?"</string>
   <string name="confirm_recovery_key_banner_title">"Dein Schlüsselspeicher ist nicht synchronisiert"</string>
-  <string name="full_screen_intent_banner_message">"Damit du keinen wichtigen Anruf verpasst, ändere bitte deine Einstellungen so, dass du bei gesperrtem Telefon Benachrichtigungen im Vollbildmodus erhältst."</string>
-  <string name="full_screen_intent_banner_title">"Verbessere dein Anruferlebnis"</string>
+  <string name="full_screen_intent_banner_message_android">"Damit du keinen wichtigen Anruf verpasst, ändere bitte deine Einstellungen so, dass du bei gesperrtem Telefon Benachrichtigungen im Vollbildmodus erhältst."</string>
+  <string name="full_screen_intent_banner_title_android">"Verbessere dein Anruferlebnis"</string>
   <string name="screen_home_tab_chats">"Chats"</string>
   <string name="screen_home_tab_spaces">"Spaces"</string>
   <string name="screen_invites_decline_chat_message">"Möchtest du die Einladung zu %1$s wirklich ablehnen?"</string>

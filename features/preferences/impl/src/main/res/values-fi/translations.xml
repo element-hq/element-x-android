@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Salli koko näytön ilmoitukset, kun laite on lukittu, jos et halua koskaan missata tärkeää puhelua."</string>
-  <string name="full_screen_intent_banner_title">"Paranna puhelukokemustasi"</string>
+  <string name="full_screen_intent_banner_message_android">"Salli koko näytön ilmoitukset, kun laite on lukittu, jos et halua koskaan missata tärkeää puhelua."</string>
+  <string name="full_screen_intent_banner_title_android">"Paranna puhelukokemustasi"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Valitse, miten haluat vastaanottaa ilmoituksia"</string>
   <string name="screen_advanced_settings_developer_mode">"Kehittäjätila"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Ottamalla käyttöön pääset käsiksi kehittäjille tarkoitettuihin ominaisuuksiin."</string>

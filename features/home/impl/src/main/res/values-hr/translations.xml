@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Unesite svoj ključ za oporavak"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Zaboravili ste ključ za oporavak?"</string>
   <string name="confirm_recovery_key_banner_title">"Vaša pohrana ključeva nije sinkronizirana"</string>
-  <string name="full_screen_intent_banner_message">"Kako biste bili sigurni da nikada nećete propustiti važan poziv, promijenite postavke kako biste omogućili obavijesti preko cijelog zaslona kada je telefon zaključan."</string>
-  <string name="full_screen_intent_banner_title">"Poboljšajte svoje iskustvo poziva"</string>
+  <string name="full_screen_intent_banner_message_android">"Kako biste bili sigurni da nikada nećete propustiti važan poziv, promijenite postavke kako biste omogućili obavijesti preko cijelog zaslona kada je telefon zaključan."</string>
+  <string name="full_screen_intent_banner_title_android">"Poboljšajte svoje iskustvo poziva"</string>
   <string name="screen_home_tab_chats">"Razgovori"</string>
   <string name="screen_home_tab_spaces">"Prostori"</string>
   <string name="screen_invites_decline_chat_message">"Jeste li sigurni da želite odbiti poziv za pridruživanje %1$s?"</string>

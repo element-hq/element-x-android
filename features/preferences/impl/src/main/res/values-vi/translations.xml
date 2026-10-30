@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Để đảm bảo bạn không bỏ lỡ bất kỳ cuộc gọi quan trọng nào, vui lòng thay đổi cài đặt để cho phép thông báo toàn màn hình khi điện thoại của bạn bị khóa."</string>
-  <string name="full_screen_intent_banner_title">"Nâng cao trải nghiệm cuộc gọi của bạn"</string>
+  <string name="full_screen_intent_banner_message_android">"Để đảm bảo bạn không bỏ lỡ bất kỳ cuộc gọi quan trọng nào, vui lòng thay đổi cài đặt để cho phép thông báo toàn màn hình khi điện thoại của bạn bị khóa."</string>
+  <string name="full_screen_intent_banner_title_android">"Nâng cao trải nghiệm cuộc gọi của bạn"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Chọn cách nhận thông báo"</string>
   <string name="screen_advanced_settings_developer_mode">"Chế độ nhà phát triển"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Cho phép truy cập vào các tính năng và chức năng dành cho nhà phát triển."</string>

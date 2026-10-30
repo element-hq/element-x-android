@@ -14,8 +14,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Введіть ключ відновлення"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Забули ключ відновлення?"</string>
   <string name="confirm_recovery_key_banner_title">"Ваше сховище ключів не синхронізовано"</string>
-  <string name="full_screen_intent_banner_message">"Щоб ніколи не пропустити важливий виклик, змініть налаштування, щоб увімкнути повноекранні сповіщення, коли телефон заблоковано."</string>
-  <string name="full_screen_intent_banner_title">"Покращуйте якість викликів"</string>
+  <string name="full_screen_intent_banner_message_android">"Щоб ніколи не пропустити важливий виклик, змініть налаштування, щоб увімкнути повноекранні сповіщення, коли телефон заблоковано."</string>
+  <string name="full_screen_intent_banner_title_android">"Покращуйте якість викликів"</string>
   <string name="screen_home_tab_chats">"Бесіди"</string>
   <string name="screen_home_tab_search">"Пошук"</string>
   <string name="screen_home_tab_spaces">"Простори"</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"برای اطمینان از اینکه هرگز تماس مهمی را از دست نمی‌دهید، لطفاً تنظیمات خود را تغییر دهید تا وقتی تلفنتان قفل است، اعلان‌ها به صورت تمام صفحه نمایش داده شوند."</string>
-  <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>
+  <string name="full_screen_intent_banner_message_android">"برای اطمینان از اینکه هرگز تماس مهمی را از دست نمی‌دهید، لطفاً تنظیمات خود را تغییر دهید تا وقتی تلفنتان قفل است، اعلان‌ها به صورت تمام صفحه نمایش داده شوند."</string>
+  <string name="full_screen_intent_banner_title_android">"بهبود تجریهٔ تماستان"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"گزینش چگونگی دریافت آگاهی"</string>
   <string name="screen_advanced_settings_developer_mode">"حالت توسعه‌دهنده"</string>
   <string name="screen_advanced_settings_developer_mode_description">"دسترسی به ویژگی ها و عملکردها را برای توسعه دهندگان فعال کنید."</string>

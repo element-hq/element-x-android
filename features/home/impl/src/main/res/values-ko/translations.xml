@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"복구 키를 입력하세요"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"복구 키를 잊으셨나요?"</string>
   <string name="confirm_recovery_key_banner_title">"귀하의 키 저장소가 동기화되지 않았습니다"</string>
-  <string name="full_screen_intent_banner_message">"중요한 전화를 놓치지 않으려면 휴대폰이 잠겨 있을 때 전체 화면 알림을 허용하도록 설정을 변경하세요."</string>
-  <string name="full_screen_intent_banner_title">"통화 경험을 향상시키세요"</string>
+  <string name="full_screen_intent_banner_message_android">"중요한 전화를 놓치지 않으려면 휴대폰이 잠겨 있을 때 전체 화면 알림을 허용하도록 설정을 변경하세요."</string>
+  <string name="full_screen_intent_banner_title_android">"통화 경험을 향상시키세요"</string>
   <string name="screen_home_tab_chats">"채팅"</string>
   <string name="screen_home_tab_spaces">"스페이스"</string>
   <string name="screen_invites_decline_chat_message">"정말로 %1$s 에 참가하지 않고 초대를 거절하시겠어요?"</string>

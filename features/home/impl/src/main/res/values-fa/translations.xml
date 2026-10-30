@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"ورود کلید بازیابیتان"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"کلید بازیابی خود را فراموش کرده‌اید؟"</string>
   <string name="confirm_recovery_key_banner_title">"ذخیره‌ساز کلیدتان از هم‌گام بودن در آمده"</string>
-  <string name="full_screen_intent_banner_message">"برای اطمینان از اینکه هرگز تماس مهمی را از دست نمی‌دهید، لطفاً تنظیمات خود را تغییر دهید تا وقتی تلفنتان قفل است، اعلان‌ها به صورت تمام صفحه نمایش داده شوند."</string>
-  <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>
+  <string name="full_screen_intent_banner_message_android">"برای اطمینان از اینکه هرگز تماس مهمی را از دست نمی‌دهید، لطفاً تنظیمات خود را تغییر دهید تا وقتی تلفنتان قفل است، اعلان‌ها به صورت تمام صفحه نمایش داده شوند."</string>
+  <string name="full_screen_intent_banner_title_android">"بهبود تجریهٔ تماستان"</string>
   <string name="screen_home_tab_chats">"گپ‌ها"</string>
   <string name="screen_home_tab_spaces">"فضاها"</string>
   <string name="screen_invites_decline_chat_message">"مطمئنید که می‌خواهید دعوت پیوستن به %1$s را رد کنید؟"</string>

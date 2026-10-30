@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Muhim qoʻngʻiroqlarni oʻtkazib yubormasligingiz uchun telefoningiz qulflangan holatida toʻliq ekranli bildirishnomalarni ko‘rsatishga ruxsat beradigan qilib sozlamalaringizni oʻzgartiring."</string>
-  <string name="full_screen_intent_banner_title">"Qoʻngʻiroq tajribangizni yaxshilang"</string>
+  <string name="full_screen_intent_banner_message_android">"Muhim qoʻngʻiroqlarni oʻtkazib yubormasligingiz uchun telefoningiz qulflangan holatida toʻliq ekranli bildirishnomalarni ko‘rsatishga ruxsat beradigan qilib sozlamalaringizni oʻzgartiring."</string>
+  <string name="full_screen_intent_banner_title_android">"Qoʻngʻiroq tajribangizni yaxshilang"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Bildirishnomalarni qanday qabul qilishni tanlang"</string>
   <string name="screen_advanced_settings_developer_mode">"Dasturchi rejimi"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Ishlab chiquvchilar uchun xususiyatlar va funksiyalarga kirishni yoqing."</string>

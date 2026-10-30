@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"重要な電話を確実に受け取るため、端末がロックされている状態での全画面通知を、設定から許可してください。"</string>
-  <string name="full_screen_intent_banner_title">"通話品質を高める"</string>
+  <string name="full_screen_intent_banner_message_android">"重要な電話を確実に受け取るため、端末がロックされている状態での全画面通知を、設定から許可してください。"</string>
+  <string name="full_screen_intent_banner_title_android">"通話品質を高める"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"通知の受信方法を選択してください"</string>
   <string name="screen_advanced_settings_developer_mode">"開発者モード"</string>
   <string name="screen_advanced_settings_developer_mode_description">"開発者向けの機能を表示します。"</string>

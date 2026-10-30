@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Zadejte klíč pro obnovení"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Zapomněli jste klíč pro obnovení?"</string>
   <string name="confirm_recovery_key_banner_title">"Vaše úložiště klíčů není synchronizováno"</string>
-  <string name="full_screen_intent_banner_message">"Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen."</string>
-  <string name="full_screen_intent_banner_title">"Vylepšete si zážitek z volání"</string>
+  <string name="full_screen_intent_banner_message_android">"Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen."</string>
+  <string name="full_screen_intent_banner_title_android">"Vylepšete si zážitek z volání"</string>
   <string name="screen_home_tab_chats">"Chaty"</string>
   <string name="screen_home_tab_spaces">"Prostory"</string>
   <string name="screen_invites_decline_chat_message">"Opravdu chcete odmítnout pozvánku do %1$s?"</string>

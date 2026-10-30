@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"اس بات کو یقینی بنانے کے لیے کہ آپ کبھی بھی اہم مکالمہ سے محروم نہ ہوں، براہ کرم اپنی ترتیبات تبدیل کریں تاکہ آپ کا ہاتف مقفل ہونے پر مکمل پردۂ نمائش اطلاعات کی اجازت دی جا سکے۔"</string>
-  <string name="full_screen_intent_banner_title">"اپنے مکالمتی تجربے کو احسن کریں"</string>
+  <string name="full_screen_intent_banner_message_android">"اس بات کو یقینی بنانے کے لیے کہ آپ کبھی بھی اہم مکالمہ سے محروم نہ ہوں، براہ کرم اپنی ترتیبات تبدیل کریں تاکہ آپ کا ہاتف مقفل ہونے پر مکمل پردۂ نمائش اطلاعات کی اجازت دی جا سکے۔"</string>
+  <string name="full_screen_intent_banner_title_android">"اپنے مکالمتی تجربے کو احسن کریں"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"اطلاعات موصول کرنے کا طریقہ چنیں۔"</string>
   <string name="screen_advanced_settings_developer_mode">"مطور وضع"</string>
   <string name="screen_advanced_settings_developer_mode_description">"مطورین کیلئے خصوصیات اور فعالیت تک رسائی حاصل کرنے کے لیے فعال کریں۔"</string>

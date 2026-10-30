@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"For at sikre, at du aldrig går glip af et vigtigt opkald, skal du ændre dine indstillinger til at tillade underretninger i fuld skærm, når din telefon er låst."</string>
-  <string name="full_screen_intent_banner_title">"Gør din opkaldsoplevelse bedre"</string>
+  <string name="full_screen_intent_banner_message_android">"For at sikre, at du aldrig går glip af et vigtigt opkald, skal du ændre dine indstillinger til at tillade underretninger i fuld skærm, når din telefon er låst."</string>
+  <string name="full_screen_intent_banner_title_android">"Gør din opkaldsoplevelse bedre"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Vælg, hvordan du vil modtage notifikationer"</string>
   <string name="screen_advanced_settings_developer_mode">"Udviklertilstand"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Aktivér for at få adgang til funktioner og funktionalitet for udviklere."</string>

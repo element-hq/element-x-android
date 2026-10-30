@@ -10,8 +10,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Ange din återställningsnyckel"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Glömt din återställningsnyckel?"</string>
   <string name="confirm_recovery_key_banner_title">"Din nyckellagring är inte synkroniserad"</string>
-  <string name="full_screen_intent_banner_message">"För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst."</string>
-  <string name="full_screen_intent_banner_title">"Förbättra din samtalsupplevelse"</string>
+  <string name="full_screen_intent_banner_message_android">"För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst."</string>
+  <string name="full_screen_intent_banner_title_android">"Förbättra din samtalsupplevelse"</string>
   <string name="screen_home_tab_chats">"Chattar"</string>
   <string name="screen_home_tab_spaces">"Utrymmen"</string>
   <string name="screen_invites_decline_chat_message">"Är du säker på att du vill tacka nej till inbjudan att gå med%1$s?"</string>

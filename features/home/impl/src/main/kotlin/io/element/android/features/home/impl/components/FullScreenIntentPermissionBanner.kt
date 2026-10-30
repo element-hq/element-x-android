@@ -25,8 +25,8 @@ fun FullScreenIntentPermissionBanner(
     modifier: Modifier = Modifier
 ) {
     Announcement(
-        title = stringResource(R.string.full_screen_intent_banner_title),
-        description = stringResource(R.string.full_screen_intent_banner_message),
+        title = stringResource(R.string.full_screen_intent_banner_title_android),
+        description = stringResource(R.string.full_screen_intent_banner_message_android),
         type = AnnouncementType.Actionable(
             actionText = stringResource(CommonStrings.action_continue),
             onDismissClick = onDismissClick,

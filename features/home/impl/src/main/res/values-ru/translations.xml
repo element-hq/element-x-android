@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Введите ключ восстановления"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Забыли ключ восстановления?"</string>
   <string name="confirm_recovery_key_banner_title">"Хранилище ключей не синхронизировано"</string>
-  <string name="full_screen_intent_banner_message">"Чтобы больше не пропускать важные звонки, разрешите приложению показывать полноэкранные уведомления на заблокированном экране телефона."</string>
-  <string name="full_screen_intent_banner_title">"Улучшите качество звонков"</string>
+  <string name="full_screen_intent_banner_message_android">"Чтобы больше не пропускать важные звонки, разрешите приложению показывать полноэкранные уведомления на заблокированном экране телефона."</string>
+  <string name="full_screen_intent_banner_title_android">"Улучшите качество звонков"</string>
   <string name="screen_home_tab_chats">"Чаты"</string>
   <string name="screen_home_tab_spaces">"Пространства"</string>
   <string name="screen_invites_decline_chat_message">"Вы уверены, что хотите отклонить приглашение в %1$s?"</string>

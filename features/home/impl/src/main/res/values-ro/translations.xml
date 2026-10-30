@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Introduceți cheia de recuperare"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Ați uitat cheia de recuperare?"</string>
   <string name="confirm_recovery_key_banner_title">"Backupul cheilor nu este sincronizat"</string>
-  <string name="full_screen_intent_banner_message">"Pentru a vă asigura că nu pierdeți niciodată un apel important, modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat."</string>
-  <string name="full_screen_intent_banner_title">"Îmbunătățiți-vă experiența în timpul unui apel"</string>
+  <string name="full_screen_intent_banner_message_android">"Pentru a vă asigura că nu pierdeți niciodată un apel important, modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat."</string>
+  <string name="full_screen_intent_banner_title_android">"Îmbunătățiți-vă experiența în timpul unui apel"</string>
   <string name="screen_home_tab_chats">"Conversații"</string>
   <string name="screen_home_tab_spaces">"Spații"</string>
   <string name="screen_invites_decline_chat_message">"Sigur doriți să refuzați invitația de a vă alătura la %1$s?"</string>

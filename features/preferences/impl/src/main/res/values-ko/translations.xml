@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"중요한 전화를 놓치지 않으려면 휴대폰이 잠겨 있을 때 전체 화면 알림을 허용하도록 설정을 변경하세요."</string>
-  <string name="full_screen_intent_banner_title">"통화 경험을 향상시키세요"</string>
+  <string name="full_screen_intent_banner_message_android">"중요한 전화를 놓치지 않으려면 휴대폰이 잠겨 있을 때 전체 화면 알림을 허용하도록 설정을 변경하세요."</string>
+  <string name="full_screen_intent_banner_title_android">"통화 경험을 향상시키세요"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"어떻게 알림을 받을지 선택하기"</string>
   <string name="screen_advanced_settings_developer_mode">"개발자 모드"</string>
   <string name="screen_advanced_settings_developer_mode_description">"개발자가 기능에 액세스할 수 있도록 합니다."</string>

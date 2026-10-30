@@ -12,8 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"回復鍵を入力してください"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"回復鍵を忘れましたか？"</string>
   <string name="confirm_recovery_key_banner_title">"鍵の保管庫を同期できません。"</string>
-  <string name="full_screen_intent_banner_message">"重要な電話を確実に受け取るため、端末がロックされている状態での全画面通知を、設定から許可してください。"</string>
-  <string name="full_screen_intent_banner_title">"通話品質を高める"</string>
+  <string name="full_screen_intent_banner_message_android">"重要な電話を確実に受け取るため、端末がロックされている状態での全画面通知を、設定から許可してください。"</string>
+  <string name="full_screen_intent_banner_title_android">"通話品質を高める"</string>
   <string name="screen_home_tab_chats">"チャット"</string>
   <string name="screen_home_tab_spaces">"スペース"</string>
   <string name="screen_invites_decline_chat_message">"%1$sへの招待を本当に破棄しますか？"</string>

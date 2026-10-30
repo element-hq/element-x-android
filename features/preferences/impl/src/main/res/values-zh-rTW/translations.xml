@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"為確保您永遠不會錯過重要通話，請變更設定以允許在手機鎖定時允許全螢幕通知。"</string>
-  <string name="full_screen_intent_banner_title">"提升您的通話體驗"</string>
+  <string name="full_screen_intent_banner_message_android">"為確保您永遠不會錯過重要通話，請變更設定以允許在手機鎖定時允許全螢幕通知。"</string>
+  <string name="full_screen_intent_banner_title_android">"提升您的通話體驗"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"選擇接收通知的機制"</string>
   <string name="screen_advanced_settings_developer_mode">"開發者模式"</string>
   <string name="screen_advanced_settings_developer_mode_description">"啟用以存取供開發者使用的功能。"</string>

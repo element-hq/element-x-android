@@ -14,8 +14,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Enter your recovery key"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Forgot your recovery key?"</string>
   <string name="confirm_recovery_key_banner_title">"Your key storage is out of sync"</string>
-  <string name="full_screen_intent_banner_message">"To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked."</string>
-  <string name="full_screen_intent_banner_title">"Enhance your call experience"</string>
+  <string name="full_screen_intent_banner_message_android">"To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked."</string>
+  <string name="full_screen_intent_banner_title_android">"Enhance your call experience"</string>
   <string name="screen_home_tab_chats">"Chats"</string>
   <string name="screen_home_tab_search">"Search"</string>
   <string name="screen_home_tab_spaces">"Spaces"</string>
