@@ -22,11 +22,15 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.room.aRoomSummary
+import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
+import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.FakePushHistoryService
 import io.element.android.libraries.push.impl.notifications.fixtures.aPushRequest
 import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
+import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -60,6 +64,9 @@ class SyncOnNotifiableEventTest {
 
     private val client = FakeMatrixClient(
         syncService = syncService,
+        roomListService = FakeRoomListService(
+            allRooms = FakeDynamicRoomList(summaries = MutableStateFlow(listOf(aRoomSummary(roomId = A_ROOM_ID)))),
+        )
     ).apply {
         givenGetRoomResult(A_ROOM_ID, room)
     }
@@ -210,6 +217,7 @@ class SyncOnNotifiableEventTest {
             appForegroundStateService = appForegroundStateService,
             dispatchers = testCoroutineDispatchers(),
             pushHistoryService = pushHistoryService,
+            systemClock = FakeSystemClock(),
         )
     }
 }
