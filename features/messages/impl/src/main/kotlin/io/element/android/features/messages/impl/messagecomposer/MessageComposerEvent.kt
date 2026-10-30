@@ -23,6 +23,7 @@ sealed interface MessageComposerEvent {
     data object DismissAttachmentMenu : MessageComposerEvent
     data object OpenEmojiPicker : MessageComposerEvent
     data object DismissEmojiPicker : MessageComposerEvent
+    data object DeleteBackward : MessageComposerEvent
     data class InsertEmoji(val emoji: String) : MessageComposerEvent
     sealed interface PickAttachmentSource : MessageComposerEvent {
         data object FromGallery : PickAttachmentSource

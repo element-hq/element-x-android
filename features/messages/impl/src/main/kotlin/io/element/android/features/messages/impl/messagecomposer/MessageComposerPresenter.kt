@@ -322,6 +322,7 @@ class MessageComposerPresenter(
                 MessageComposerEvent.DismissAttachmentMenu -> showAttachmentSourcePicker = false
                 MessageComposerEvent.OpenEmojiPicker -> showEmojiPicker = true
                 MessageComposerEvent.DismissEmojiPicker -> showEmojiPicker = false
+                MessageComposerEvent.DeleteBackward -> markdownTextEditorState.deleteBackward()
                 is MessageComposerEvent.InsertEmoji -> {
                     markdownTextEditorState.insertText(event.emoji)
                     sessionCoroutineScope.launch(dispatchers.io) {
