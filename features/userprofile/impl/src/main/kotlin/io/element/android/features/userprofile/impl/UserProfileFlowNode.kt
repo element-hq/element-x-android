@@ -8,6 +8,11 @@
 
 package io.element.android.features.userprofile.impl
 
+import com.bumble.appyx.core.plugin.plugins
+import android.widget.Toast
+import android.os.Build
+import android.content.Intent
+import android.content.Context
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

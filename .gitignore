@@ -112,3 +112,7 @@ lint/tmp/
 .DS_Store
 
 checkouts/**
+.direnv
+.devenv
+.pre-commit-config.yaml
+kls_database.db
