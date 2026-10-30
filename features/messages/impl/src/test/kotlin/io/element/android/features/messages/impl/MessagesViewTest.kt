@@ -37,6 +37,7 @@ import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aChangedIdentitySendFailure
+import io.element.android.features.messages.impl.messagecomposer.ComposerEmojiPicker
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerItem
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
@@ -823,6 +824,13 @@ private fun AndroidComposeUiTest<ComponentActivity>.setMessagesView(
                             state.eventSink(MessagesEvent.ToggleReaction(emoji.unicode, uniqueId))
                         },
                         emojiPickerRenderer = emojiPickerRenderer,
+                    )
+                },
+                composerEmojiPicker = { height ->
+                    ComposerEmojiPicker(
+                        state = state.composerState,
+                        emojiPickerRenderer = emojiPickerRenderer,
+                        height = height,
                     )
                 },
                 onThreadsListClick = onThreadsListClicked,

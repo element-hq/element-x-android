@@ -132,6 +132,7 @@ fun TextComposer(
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     isInThreadTimeline: Boolean = false,
+    onAddEmoji: (() -> Unit)? = null,
 ) {
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
@@ -212,6 +213,9 @@ fun TextComposer(
                     composerMode = composerMode,
                     onResetComposerMode = onResetComposerMode,
                     isTextEmpty = state.state.text.value().isEmpty(),
+                    leadingContent = onAddEmoji?.let { onClick ->
+                        @Composable { AddEmojiButton(onClick = onClick) }
+                    },
                 ) {
                     MarkdownTextInput(
                         state = state.state,
@@ -645,6 +649,7 @@ private fun TextInputBox(
     onResetComposerMode: () -> Unit,
     isTextEmpty: Boolean,
     modifier: Modifier = Modifier,
+    leadingContent: (@Composable () -> Unit)? = null,
     textInput: @Composable () -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
@@ -670,31 +675,51 @@ private fun TextInputBox(
             Spacer(Modifier.height(4.dp))
         }
 
-        Box(
-            modifier = Modifier
-                .padding(top = 1.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                .then(Modifier.testTag(TestTags.textEditor)),
-            contentAlignment = Alignment.CenterStart,
-        ) {
-            textInput()
-            if (isTextEmpty && composerMode.showCaptionCompatibilityWarning()) {
-                var showBottomSheet by remember { mutableStateOf(false) }
-                Icon(
-                    modifier = Modifier
-                        .clickable { showBottomSheet = true }
-                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
-                        .align(Alignment.CenterEnd),
-                    imageVector = CompoundIcons.InfoSolid(),
-                    tint = ElementTheme.colors.iconCriticalPrimary,
-                    contentDescription = stringResource(CommonStrings.a11y_info),
-                )
-                if (showBottomSheet) {
-                    CaptionWarningBottomSheet(
-                        onDismiss = { showBottomSheet = false },
+        Row(verticalAlignment = Alignment.Bottom) {
+            leadingContent?.invoke()
+            Box(
+                modifier = Modifier
+                    .padding(top = 1.dp, bottom = 4.dp, start = if (leadingContent != null) 0.dp else 12.dp, end = 12.dp)
+                    .weight(1f)
+                    .then(Modifier.testTag(TestTags.textEditor)),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                textInput()
+                if (isTextEmpty && composerMode.showCaptionCompatibilityWarning()) {
+                    var showBottomSheet by remember { mutableStateOf(false) }
+                    Icon(
+                        modifier = Modifier
+                            .clickable { showBottomSheet = true }
+                            .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+                            .align(Alignment.CenterEnd),
+                        imageVector = CompoundIcons.InfoSolid(),
+                        tint = ElementTheme.colors.iconCriticalPrimary,
+                        contentDescription = stringResource(CommonStrings.a11y_info),
                     )
+                    if (showBottomSheet) {
+                        CaptionWarningBottomSheet(
+                            onDismiss = { showBottomSheet = false },
+                        )
+                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun AddEmojiButton(onClick: () -> Unit) {
+    IconButton(
+        modifier = Modifier
+            .padding(start = 2.dp)
+            .size(40.dp),
+        onClick = onClick,
+    ) {
+        Icon(
+            imageVector = CompoundIcons.Reaction(),
+            contentDescription = stringResource(R.string.rich_text_editor_a11y_add_emoji),
+            tint = ElementTheme.colors.iconSecondary,
+        )
     }
 }
 
@@ -736,6 +761,21 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = MessageComposerMode.Normal,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextComposerWithEmojiButtonPreview() = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateMarkdownList()
+    ) { textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = MessageComposerMode.Normal,
+            onAddEmoji = {},
         )
     }
 }
@@ -1064,10 +1104,12 @@ private fun ATextComposer(
     voiceMessageState: VoiceMessageState,
     composerMode: MessageComposerMode,
     showTextFormatting: Boolean = false,
+    onAddEmoji: (() -> Unit)? = null,
 ) {
     TextComposer(
         state = state,
         showTextFormatting = showTextFormatting,
+        onAddEmoji = onAddEmoji,
         voiceMessageState = voiceMessageState,
         composerMode = composerMode,
         onRequestFocus = {},

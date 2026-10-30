@@ -10,10 +10,16 @@ package io.element.android.features.messages.impl.messagecomposer
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -22,6 +28,8 @@ import io.element.android.features.messages.api.timeline.voicemessages.composer.
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerStatePreviewParam
 import io.element.android.features.messages.api.timeline.voicemessages.composer.aVoiceMessageComposerState
+import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.libraries.androidutils.ui.showKeyboard
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -29,8 +37,17 @@ import io.element.android.libraries.textcomposer.TextComposer
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.seconds
 
+/**
+ * Maximum time to wait for the keyboard to hide before showing the emoji picker.
+ */
+private val KeyboardHideTimeout = 1.seconds
+
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun MessageComposerView(
     state: MessageComposerState,
@@ -87,6 +104,35 @@ internal fun MessageComposerView(
         state.eventSink(MessageComposerEvent.CloseSpecialMode)
     }
 
+    val isEmojiPickerVisible = state.emojiPickerSheetState != ComposerEmojiPickerSheetState.Hidden
+    val isImeVisible = WindowInsets.isImeVisible
+    val isImeVisibleState = rememberUpdatedState(isImeVisible)
+    fun onToggleEmojiPicker() {
+        coroutineScope.launch {
+            if (isEmojiPickerVisible) {
+                state.eventSink(MessageComposerEvent.DismissEmojiPicker)
+                state.textEditorState.requestFocus()
+                // Before API 30 the keyboard is shown only for the focused view, i.e. the editor.
+                (view.findFocus() ?: view).showKeyboard()
+            } else {
+                // The picker replaces the keyboard: wait for the keyboard to hide before displaying it.
+                view.hideKeyboard()
+                withTimeoutOrNull(KeyboardHideTimeout) {
+                    snapshotFlow { isImeVisibleState.value }.first { !it }
+                }
+                state.eventSink(MessageComposerEvent.OpenEmojiPicker)
+            }
+        }
+    }
+
+    // The emoji picker replaces the keyboard: close it when the keyboard is shown for the composer again.
+    val composerHasFocus = state.textEditorState.hasFocus()
+    LaunchedEffect(isEmojiPickerVisible, isImeVisible, composerHasFocus) {
+        if (isEmojiPickerVisible && isImeVisible && composerHasFocus) {
+            state.eventSink(MessageComposerEvent.DismissEmojiPicker)
+        }
+    }
+
     val onDeleteVoiceMessage = {
         voiceMessageState.eventSink(VoiceMessageComposerEvent.DeleteVoiceMessage)
     }
@@ -117,6 +163,7 @@ internal fun MessageComposerView(
         onError = ::onError,
         onTyping = ::onTyping,
         onSelectRichContent = ::sendUri,
+        onAddEmoji = ::onToggleEmojiPicker,
     )
 
     AsyncActionView(
