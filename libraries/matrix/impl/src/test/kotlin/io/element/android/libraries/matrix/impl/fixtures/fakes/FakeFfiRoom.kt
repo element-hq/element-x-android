@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.rustcomponents.sdk.LatestEventValue
@@ -69,6 +70,8 @@ class FakeFfiRoom(
     private var roomInfoUpdatesFlow = MutableStateFlow(roomInfo)
     override fun subscribeToRoomInfoUpdates(listener: RoomInfoListener): TaskHandle {
         roomInfoUpdatesFlow
+            // Drop the first item to match the SDK's behavior
+            .drop(1)
             .onEach { listener.call(it) }
             .launchIn(testScope)
         return FakeFfiTaskHandle()

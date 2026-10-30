@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -16,7 +17,6 @@ import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomInfo
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoom
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -60,15 +60,14 @@ class RoomInfoExtTest {
     fun `roomInfoUpdates returns the current value and then updates`() = runTest {
         val roomInfo = aRustRoomInfo(isDm = true)
         val room = FakeFfiRoom(roomInfo = roomInfo, testScope = backgroundScope)
-        val flow = room.roomInfoUpdates(dispatchers = testCoroutineDispatchers())
 
-        val firstValue = flow.first()
-        assertThat(firstValue).isEqualTo(roomInfo)
+        room.roomInfoUpdates(dispatchers = testCoroutineDispatchers()).test {
+            assertThat(awaitItem()).isEqualTo(roomInfo)
 
-        val newRoomInfo = aRustRoomInfo(isDm = false)
-        room.givenRoomInfoUpdate(newRoomInfo)
+            val newRoomInfo = aRustRoomInfo(isDm = false)
+            room.givenRoomInfoUpdate(newRoomInfo)
 
-        val secondValue = flow.first()
-        assertThat(secondValue).isEqualTo(newRoomInfo)
+            assertThat(awaitItem()).isEqualTo(newRoomInfo)
+        }
     }
 }
