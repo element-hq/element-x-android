@@ -25,6 +25,8 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
+private const val MAX_ROOMS_TO_SUBSCRIBE_TO = 20
+
 @ContributesBinding(AppScope::class)
 class DefaultSyncOnNotifiableEvent(
     private val matrixClientProvider: MatrixClientProvider,
@@ -33,6 +35,7 @@ class DefaultSyncOnNotifiableEvent(
     private val dispatchers: CoroutineDispatchers,
     private val pushHistoryService: PushHistoryService,
 ) : SyncOnNotifiableEvent {
+    @Suppress("LoopWithTooManyJumpStatements")
     override suspend operator fun invoke(requests: List<PushRequest>) = withContext(dispatchers.io) {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
             return@withContext
@@ -48,11 +51,13 @@ class DefaultSyncOnNotifiableEvent(
                 val client = matrixClientProvider.getOrRestore(SessionId(sessionId)).getOrNull() ?: continue
 
                 if (client.syncService.startSync().isFailure) {
-                    Timber.w("Failed to start sync for session $sessionId")
+                    Timber.w("Failed to start opportunistic sync for session $sessionId")
                     continue
                 }
 
-                val mostRecentRoomIds = client.roomListService.allRooms.summaries.first().take(50).map { it.roomId }
+                val mostRecentRoomIds = client.roomListService.allRooms.summaries.first()
+                    .take(MAX_ROOMS_TO_SUBSCRIBE_TO)
+                    .map { it.roomId }
                 client.roomListService.subscribeToVisibleRooms(mostRecentRoomIds)
 
                 if (!appForegroundStateService.isInForeground.value) {
