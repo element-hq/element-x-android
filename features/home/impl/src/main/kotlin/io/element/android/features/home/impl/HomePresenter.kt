@@ -61,7 +61,7 @@ class HomePresenter(
     override fun present(): HomeState {
         val coroutineScope = rememberCoroutineScope()
         val matrixUser by client.userProfile.collectAsState()
-        val totalUnreadCount by remember { client.totalUnreadCountFlow() }.collectAsState()
+        val totalUnreadCount by client.totalUnreadCountFlow.collectAsState()
         val currentUserAndNeighbors by remember {
             combine(
                 client.userProfile,

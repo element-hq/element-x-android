@@ -141,8 +141,7 @@ class FakeMatrixClient(
     override val contentScanner: ContentScanner? = null,
     private val isShuttingDownResult: () -> Boolean = { false },
 ) : MatrixClient {
-    private val totalUnreadCountFlow = MutableStateFlow(0L)
-    override fun totalUnreadCountFlow(): StateFlow<Long> = totalUnreadCountFlow
+    override val totalUnreadCountFlow = MutableStateFlow(0L)
     var setDisplayNameCalled: Boolean = false
         private set
     var uploadAvatarCalled: Boolean = false

@@ -114,6 +114,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -345,6 +346,20 @@ class RustMatrixClient(
     private val _isShuttingDown = AtomicBoolean(false)
     override val isShuttingDown: Boolean
         get() = _isShuttingDown.get()
+
+    override val totalUnreadCountFlow: StateFlow<Long> =
+        mxCallbackFlow {
+            val listener = object : TotalUnreadNotificationsListener {
+                override fun onUpdate(count: ULong) {
+                    trySend(count.toLong())
+                }
+            }
+            innerClient.observeTotalUnreadNotifications(listener, 100.milliseconds.toJavaDuration())
+        }.stateIn(
+            scope = sessionCoroutineScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = runCatchingExceptions { innerClient.totalUnreadNotifications().toLong() }.getOrDefault(0L),
+        )
 
     init {
         // Make sure the session delegate has a reference to the client to be able to logout on auth error
@@ -1027,21 +1042,6 @@ class RustMatrixClient(
 
     override fun totalUnreadCount(): Result<Long> = runCatchingExceptions {
         innerClient.totalUnreadNotifications().toLong()
-    }
-
-    override fun totalUnreadCountFlow(): StateFlow<Long> {
-        return mxCallbackFlow {
-            val listener = object : TotalUnreadNotificationsListener {
-                override fun onUpdate(count: ULong) {
-                    trySend(count.toLong())
-                }
-            }
-            innerClient.observeTotalUnreadNotifications(listener, 100.milliseconds.toJavaDuration())
-        }.stateIn(
-            scope = sessionCoroutineScope,
-            started = SharingStarted.Eagerly,
-            initialValue = runCatchingExceptions { innerClient.totalUnreadNotifications().toLong() }.getOrDefault(0L),
-        )
     }
 
     private fun scheduleBackgroundSearchBackfill() {

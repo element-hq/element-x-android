@@ -73,7 +73,7 @@ class LoggedInEventProcessor(
             .launchIn(childScope)
 
         // Use the sync service heartbeat as a 'heartbeat' update to check existing notifications
-        matrixClient.totalUnreadCountFlow()
+        matrixClient.totalUnreadCountFlow
             // We drop the first value because it is the initial one and we don't want to clear notifications on startup
             .drop(1)
             .onEach {

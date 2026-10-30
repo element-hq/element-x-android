@@ -185,7 +185,7 @@ class PreferencesRootPresenter(
             emit(OtherAccount(user = user, unreadCount = 0))
         } else {
             emitAll(
-                combine(client.userProfile, client.totalUnreadCountFlow()) { profile, unreadCount ->
+                combine(client.userProfile, client.totalUnreadCountFlow) { profile, unreadCount ->
                     // Don't use userProfile directly so we don't lose avatarThumbnail
                     OtherAccount(
                         user = user.copy(displayedStatus = profile.displayedStatus, rawStatus = profile.rawStatus),
