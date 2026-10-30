@@ -37,9 +37,9 @@ class DefaultMentionSpanUpdater(
     @Composable
     override fun rememberMentionSpans(text: CharSequence): CharSequence {
         val isLightTheme = ElementTheme.isLightTheme
-        val roomInfoCacheUpdate by roomNamesCache.updateFlow.collectAsState(0)
-        val roomMemberProfilesCacheUpdate by roomMemberProfilesCache.updateFlow.collectAsState(0)
-        return remember(text, roomInfoCacheUpdate, roomMemberProfilesCacheUpdate, isLightTheme) {
+        val roomNames by roomNamesCache.displayNames.collectAsState()
+        val roomMembers by roomMemberProfilesCache.membersFlow.collectAsState()
+        return remember(text, roomNames, roomMembers, isLightTheme) {
             updateMentionSpans(text)
             text
         }

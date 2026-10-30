@@ -21,14 +21,11 @@ import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.runningFold
 
 @SingleIn(RoomScope::class)
 @Inject
 class RoomMemberProfilesCache {
     private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
-    val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
     val membersFlow: StateFlow<Map<UserId, RoomMember>> = cache.asStateFlow()
 
     private val _displayNames = MutableStateFlow<ImmutableMap<UserId, String>>(persistentMapOf())
