@@ -70,7 +70,7 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
         is ImageMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 thumbnailSource = (type.info?.thumbnailSource ?: type.source).takeUnless { hideImage },
-                textContent = eventContent.body,
+                textContent = textContent ?: eventContent.body,
                 type = AttachmentThumbnailType.Image,
                 blurHash = type.info?.blurhash,
             )
@@ -78,7 +78,7 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
         is VideoMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
-                textContent = eventContent.body,
+                textContent = textContent ?: eventContent.body,
                 type = AttachmentThumbnailType.Video,
                 blurHash = type.info?.blurhash,
             )
@@ -86,7 +86,7 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
         is FileMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
-                textContent = eventContent.body,
+                textContent = textContent ?: eventContent.body,
                 type = AttachmentThumbnailType.File,
             )
         )
@@ -98,7 +98,7 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
         )
         is AudioMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
-                textContent = eventContent.body,
+                textContent = textContent ?: eventContent.body,
                 type = AttachmentThumbnailType.Audio,
             )
         )

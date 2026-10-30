@@ -24,10 +24,13 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.GalleryItemType
 import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
@@ -41,6 +44,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageT
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.aMediaSource
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.aPollContent
 import io.element.android.libraries.matrix.test.timeline.aProfileDetails
@@ -55,6 +59,60 @@ import org.junit.Test
 import kotlin.time.Duration.Companion.minutes
 
 class InReplyToMetadataKtTest : RobolectricTest() {
+    @Test
+    fun `media replies use plain text from formatted captions`() = runTest {
+        assertMediaReplyText(
+            caption = "**Hello!**",
+            formattedCaption = FormattedBody(MessageFormat.HTML, "<p><strong>Hello!</strong></p>"),
+            expectedText = "Hello!",
+        )
+    }
+
+    @Test
+    fun `media replies preserve captions without formatting`() = runTest {
+        assertMediaReplyText(caption = "**Hello!**", formattedCaption = null, expectedText = "**Hello!**")
+    }
+
+    @Test
+    fun `media replies fall back to captions for unsupported formatting`() = runTest {
+        assertMediaReplyText(
+            caption = "Hello!",
+            formattedCaption = FormattedBody(MessageFormat.UNKNOWN, "unsupported formatting"),
+            expectedText = "Hello!",
+        )
+    }
+
+    @Test
+    fun `media replies without captions use the filename`() = runTest {
+        assertMediaReplyText(caption = null, formattedCaption = null, expectedText = "filename")
+    }
+
+    private suspend fun assertMediaReplyText(caption: String?, formattedCaption: FormattedBody?, expectedText: String) {
+        val messageTypes = listOf(
+            ImageMessageType("filename", caption, formattedCaption, aMediaSource(), info = null),
+            VideoMessageType("filename", caption, formattedCaption, aMediaSource(), info = null),
+            FileMessageType("filename", caption, formattedCaption, aMediaSource(), info = null),
+            AudioMessageType("filename", caption, formattedCaption, aMediaSource(), info = null),
+        )
+        for (messageType in messageTypes) {
+            val inReplyTo = InReplyTo.Ready(
+                eventId = AN_EVENT_ID,
+                senderId = A_USER_ID,
+                senderProfile = aProfileDetails(),
+                content = aMessageContent(body = caption ?: "filename", messageType = messageType),
+            )
+            val details = inReplyTo.map(FakePermalinkParser()) as InReplyToDetails.Ready
+            for (hideImage in listOf(false, true)) {
+                moleculeFlow(RecompositionMode.Immediate) {
+                    details.metadata(hideImage = hideImage)
+                }.test {
+                    val metadata = awaitItem() as InReplyToMetadata.Thumbnail
+                    assertThat(metadata.text).isEqualTo(expectedText)
+                }
+            }
+        }
+    }
+
     @Test
     fun `any message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
@@ -86,7 +144,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = aMediaSource(),
-                            textContent = "body",
+                            textContent = "textContent",
                             type = AttachmentThumbnailType.Image,
                             blurHash = A_BLUR_HASH,
                         )
@@ -116,7 +174,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = null,
-                            textContent = "body",
+                            textContent = "textContent",
                             type = AttachmentThumbnailType.Image,
                             blurHash = A_BLUR_HASH,
                         )
@@ -202,7 +260,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = aMediaSource(),
-                            textContent = "body",
+                            textContent = "textContent",
                             type = AttachmentThumbnailType.Video,
                             blurHash = A_BLUR_HASH,
                         )
@@ -232,7 +290,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = null,
-                            textContent = "body",
+                            textContent = "textContent",
                             type = AttachmentThumbnailType.Video,
                             blurHash = A_BLUR_HASH,
                         )
@@ -267,7 +325,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = aMediaSource(),
-                            textContent = "body",
+                            textContent = "textContent",
                             type = AttachmentThumbnailType.File,
                             blurHash = null,
                         )
@@ -302,7 +360,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
                             thumbnailSource = null,
-                            textContent = "body",
+                            textContent = "textContent",
                             type = AttachmentThumbnailType.File,
                             blurHash = null,
                         )
@@ -335,7 +393,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 assertThat(it).isEqualTo(
                     InReplyToMetadata.Thumbnail(
                         attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            textContent = "body",
+                            textContent = "textContent",
                             type = AttachmentThumbnailType.Audio,
                             blurHash = null,
                         )
