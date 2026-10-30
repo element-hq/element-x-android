@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.impl.utils
+package io.element.android.libraries.widget
 
 import kotlinx.coroutines.flow.Flow
 

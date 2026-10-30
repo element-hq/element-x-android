@@ -6,10 +6,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.impl.utils
+package io.element.android.libraries.widget
 
 import dev.zacsweers.metro.Inject
-import io.element.android.features.call.impl.data.WidgetMessage
 import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 
