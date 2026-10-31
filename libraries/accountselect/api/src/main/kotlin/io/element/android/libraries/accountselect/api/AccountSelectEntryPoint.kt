@@ -13,11 +13,20 @@ import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 
 interface AccountSelectEntryPoint : FeatureEntryPoint {
+    /**
+     * @param permalinkData the permalink which will be opened with the selected account.
+     */
+    data class Params(
+        val permalinkData: PermalinkData,
+    )
+
     fun createNode(
         parentNode: Node,
         buildContext: BuildContext,
+        params: Params,
         callback: Callback,
     ): Node
 
