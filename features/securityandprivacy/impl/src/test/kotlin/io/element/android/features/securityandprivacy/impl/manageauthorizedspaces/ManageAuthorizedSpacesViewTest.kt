@@ -54,26 +54,26 @@ class ManageAuthorizedSpacesViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `clicking done button emits Done event`() = runAndroidComposeUiTest {
+    fun `clicking save button emits Done event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ManageAuthorizedSpacesEvent>()
         val state = aManageAuthorizedSpacesState(
             selectedIds = listOf(A_ROOM_ID),
             eventSink = recorder
         )
         setManageAuthorizedSpacesView(state)
-        clickOn(CommonStrings.action_done)
+        clickOn(CommonStrings.action_save)
         recorder.assertSingle(ManageAuthorizedSpacesEvent.Done)
     }
 
     @Test
-    fun `done button is disabled when no spaces selected`() = runAndroidComposeUiTest {
+    fun `save button is disabled when no spaces selected`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ManageAuthorizedSpacesEvent>(expectEvents = false)
         val state = aManageAuthorizedSpacesState(
             selectedIds = emptyList(),
             eventSink = recorder
         )
         setManageAuthorizedSpacesView(state)
-        clickOn(CommonStrings.action_done)
+        clickOn(CommonStrings.action_save)
         recorder.assertEmpty()
     }
 }

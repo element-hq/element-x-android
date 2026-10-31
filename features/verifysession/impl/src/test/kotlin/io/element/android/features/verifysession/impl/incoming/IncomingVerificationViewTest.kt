@@ -161,7 +161,7 @@ class IncomingVerificationViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `click on done - when failure resets the flow`() = runAndroidComposeUiTest {
+    fun `click on close - when failure resets the flow`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
         setIncomingVerificationView(
             anIncomingVerificationState(
@@ -169,7 +169,7 @@ class IncomingVerificationViewTest : RobolectricTest() {
                 eventSink = eventsRecorder
             ),
         )
-        clickOn(CommonStrings.action_done)
+        clickOn(CommonStrings.action_close)
         eventsRecorder.assertSingle(IncomingVerificationViewEvent.GoBack)
     }
 
@@ -190,7 +190,7 @@ class IncomingVerificationViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `when flow is completed and the user clicks on the done button, the expected event is emitted`() = runAndroidComposeUiTest {
+    fun `when flow is completed and the user clicks on the close button, the expected event is emitted`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<IncomingVerificationViewEvent>()
         setIncomingVerificationView(
             anIncomingVerificationState(
@@ -198,7 +198,7 @@ class IncomingVerificationViewTest : RobolectricTest() {
                 eventSink = eventsRecorder
             ),
         )
-        clickOn(CommonStrings.action_done)
+        clickOn(CommonStrings.action_close)
         eventsRecorder.assertSingle(IncomingVerificationViewEvent.GoBack)
     }
     // endregion
