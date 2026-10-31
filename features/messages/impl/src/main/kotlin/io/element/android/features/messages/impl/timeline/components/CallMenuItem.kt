@@ -56,6 +56,8 @@ internal fun CallMenuItem(
                 onJoinCallClick = { onJoinCallClick(roomCallState.isAudioCall) },
                 modifier = modifier,
             )
+
+            Spacer(Modifier.width(4.dp))
         }
     }
 }
