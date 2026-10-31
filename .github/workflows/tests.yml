@@ -89,6 +89,15 @@ jobs:
           path: |
             build/reports/kover
 
+      # Consumed by the codecov job below
+      - name: 📦 Upload kover XML report for codecov
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: kover-xml-report
+          path: build/reports/kover/reportMerged.xml
+          if-no-files-found: error
+          retention-days: 1
+
       - name: ✅ Upload kover report (disabled)
         if: always()
         run: echo "This is now done only once a day, see nightlyReports.yml"
@@ -111,11 +120,10 @@ jobs:
           python3 .github/workflows/scripts/parse_test_failures.py . >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
 
-      # https://github.com/codecov/codecov-action
-      - name: ☂️ Upload coverage reports to codecov
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
-        with:
-          fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/reports/kover/reportMerged.xml
-          verbose: true
+  codecov:
+    name: Upload coverage to codecov
+    needs: tests
+    uses: $/.github/workflows/codecov.yml
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      ELEMENT_ENTERPRISE_DEPLOY_KEY: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
