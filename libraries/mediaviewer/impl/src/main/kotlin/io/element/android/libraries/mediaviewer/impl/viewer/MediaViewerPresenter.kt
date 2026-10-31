@@ -176,18 +176,7 @@ class MediaViewerPresenter(
                 }
                 is MediaViewerEvent.Forward -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
-                    navigator.onForwardClick(
-                        eventId = event.eventId,
-                        fromPinnedEvents = when (inputs) {
-                            is MediaViewerEntryPoint.Params.RoomMedia -> when (val myMode = inputs.mode) {
-                                is MediaViewerEntryPoint.MediaViewerMode.EventGallery -> myMode.fromPinnedMessages
-                                is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> myMode.getTimelineMode() == Timeline.Mode.PinnedEvents
-                                is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> myMode.getTimelineMode() == Timeline.Mode.PinnedEvents
-                            }
-                            is MediaViewerEntryPoint.Params.EventGallery -> inputs.fromPinnedMessages
-                            is MediaViewerEntryPoint.Params.Avatar -> false
-                        },
-                    )
+                    navigator.onForwardClick(event.eventId)
                 }
                 is MediaViewerEvent.OpenInfo -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.Details(
@@ -302,7 +291,7 @@ class MediaViewerPresenter(
                 is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> R.string.screen_media_details_no_more_media_to_show
                 is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> R.string.screen_media_details_no_more_files_to_show
                 // Should not happen
-                is MediaViewerEntryPoint.MediaViewerMode.EventGallery -> R.string.screen_media_details_no_more_media_to_show
+                MediaViewerEntryPoint.MediaViewerMode.EventGallery -> R.string.screen_media_details_no_more_media_to_show
             }
             val message = SnackbarMessage(messageResId)
             snackbarDispatcher.post(message)

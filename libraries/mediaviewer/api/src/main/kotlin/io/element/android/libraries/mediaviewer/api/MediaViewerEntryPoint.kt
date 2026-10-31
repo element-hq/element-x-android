@@ -32,7 +32,7 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
         fun onDone()
         fun viewInTimeline(eventId: EventId)
-        fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean)
+        fun forwardEvent(eventId: EventId)
     }
 
     sealed interface Params : NodeInputs {
@@ -49,7 +49,6 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
             val eventId: EventId?,
             val galleryInfo: GalleryInfo,
             val galleryItems: List<GalleryItemData>,
-            val fromPinnedMessages: Boolean,
         ) : Params
 
         data class Avatar(
@@ -62,7 +61,7 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
 
     sealed interface MediaViewerMode : Parcelable {
         @Parcelize
-        data class EventGallery(val fromPinnedMessages: Boolean) : MediaViewerMode
+        data object EventGallery : MediaViewerMode
 
         @Parcelize
         data class TimelineImagesAndVideos(val timelineMode: Timeline.Mode) : MediaViewerMode

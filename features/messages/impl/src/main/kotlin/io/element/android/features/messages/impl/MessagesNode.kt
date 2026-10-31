@@ -68,7 +68,6 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.media.contentvalidation.EventContentValidationCache
 import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
@@ -128,12 +127,12 @@ class MessagesNode(
 
     interface Callback : Plugin {
         fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean
-        fun handleGalleryItemClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, galleryItemIndex: Int, canUseOverlay: Boolean): Boolean
+        fun handleGalleryItemClick(event: TimelineItem.Event, galleryItemIndex: Int, canUseOverlay: Boolean): Boolean
         fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
         fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-        fun forwardEvents(eventIds: List<EventId>, timelineProvider: TimelineProvider)
+        fun forwardEvents(eventIds: List<EventId>)
         fun navigateToReportMessage(eventId: EventId, senderId: UserId)
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
@@ -216,8 +215,8 @@ class MessagesNode(
         callback.navigateToEventDebugInfo(eventId, debugInfo)
     }
 
-    override fun forwardEvents(eventIds: List<EventId>, timelineProvider: TimelineProvider) {
-        callback.forwardEvents(eventIds, timelineProvider)
+    override fun forwardEvents(eventIds: List<EventId>) {
+        callback.forwardEvents(eventIds)
     }
 
     override fun exitTimelineSelection() {
@@ -305,15 +304,10 @@ class MessagesNode(
                     }
                 },
                 onGalleryEventItemClick = { isLive, event, index ->
-                    if (isLive) {
-                        callback.handleGalleryItemClick(timelineController.mainTimelineMode(), event, index, canUseOverlay)
+                    if (isLive || timelineController.detachedTimelineMode() != null) {
+                        callback.handleGalleryItemClick(event, index, canUseOverlay)
                     } else {
-                        val detachedTimelineMode = timelineController.detachedTimelineMode()
-                        if (detachedTimelineMode != null) {
-                            callback.handleGalleryItemClick(detachedTimelineMode, event, index, canUseOverlay)
-                        } else {
-                            false
-                        }
+                        false
                     }
                 },
                 onUserDataClick = callback::navigateToRoomMemberDetails,
