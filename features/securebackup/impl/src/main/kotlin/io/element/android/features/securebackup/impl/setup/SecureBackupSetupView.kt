@@ -53,7 +53,10 @@ fun SecureBackupSetupView(
     if (state.setupState is SetupState.Error) {
         ErrorDialog(
             title = stringResource(id = CommonStrings.common_something_went_wrong),
-            content = stringResource(id = CommonStrings.common_something_went_wrong_message),
+            content = when (state.setupState.errorType) {
+                SetupErrorType.Network -> stringResource(id = CommonStrings.common_please_check_internet_connection)
+                SetupErrorType.Unknown -> stringResource(id = CommonStrings.common_something_went_wrong_message)
+            },
             onSubmit = {
                 state.eventSink.invoke(SecureBackupSetupEvent.DismissDialog)
             },
