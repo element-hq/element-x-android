@@ -24,7 +24,6 @@
   <string name="a11y_notifications_new_mentions">"새로운 언급"</string>
   <string name="a11y_notifications_new_messages">"새 메시지"</string>
   <string name="a11y_notifications_ongoing_call">"진행 중인 통화"</string>
-  <string name="a11y_other_user_avatar">"다른 사용자의 아바타"</string>
   <string name="a11y_page_n">"페이지 %1$d"</string>
   <string name="a11y_pause">"일시중지"</string>
   <string name="a11y_paused_voice_message">"음성 메시지, 지속 시간: %1$s, 현재 위치: %2$s"</string>
@@ -65,7 +64,6 @@
   <string name="a11y_voice_message">"음성 메시지, 재생 시간: %1$s"</string>
   <string name="a11y_voice_message_record">"음성 메시지를 녹음합니다."</string>
   <string name="a11y_voice_message_stop_recording">"녹화 중지"</string>
-  <string name="a11y_your_avatar">"당신의 아바타"</string>
   <string name="action_accept">"수락"</string>
   <string name="action_add_caption">"캡션 추가"</string>
   <string name="action_add_existing_rooms">"기존 방 추가"</string>
@@ -78,7 +76,6 @@
   <string name="action_choose_photo">"사진 선택"</string>
   <string name="action_clear">"지우기"</string>
   <string name="action_close">"닫기"</string>
-  <string name="action_complete_verification">"인증 완료"</string>
   <string name="action_confirm">"확인"</string>
   <string name="action_confirm_password">"비밀번호 확인"</string>
   <string name="action_continue">"계속"</string>
@@ -90,8 +87,6 @@
   <string name="action_create">"만들기"</string>
   <string name="action_create_room">"방 만들기"</string>
   <string name="action_create_space">"스페이스 만들기"</string>
-  <string name="action_deactivate">"비활성화"</string>
-  <string name="action_deactivate_account">"계정 비활성화"</string>
   <string name="action_decline">"거절"</string>
   <string name="action_decline_and_block">"거부 및 차단"</string>
   <string name="action_delete">"삭제"</string>
@@ -130,9 +125,7 @@
   <string name="action_leave_room">"방 떠나기"</string>
   <string name="action_leave_space">"스페이스 떠나기"</string>
   <string name="action_load_more">"더 불러오기"</string>
-  <string name="action_manage_account">"계정 관리"</string>
   <string name="action_manage_account_and_devices">"계정 및 기기 관리"</string>
-  <string name="action_manage_devices">"기기 관리"</string>
   <string name="action_manage_rooms">"방 관리"</string>
   <string name="action_message">"메시지"</string>
   <string name="action_minimize">"최소화"</string>
@@ -154,7 +147,6 @@
   <string name="action_reply">"답변"</string>
   <string name="action_reply_in_thread">"스레드에서 답장"</string>
   <string name="action_report">"신고"</string>
-  <string name="action_report_bug">"버그 보고"</string>
   <string name="action_report_content">"컨텐츠 신고"</string>
   <string name="action_report_dm">"대화 신고"</string>
   <string name="action_report_room">"방 신고"</string>
@@ -173,7 +165,6 @@
   <string name="action_share_link">"링크 공유"</string>
   <string name="action_share_live_location">"실시간 위치 공유"</string>
   <string name="action_show">"표시"</string>
-  <string name="action_sign_in_again">"다시 로그인"</string>
   <string name="action_signout">"이 기기 로그아웃"</string>
   <string name="action_signout_anyway">"무시하고 이 기기 제거"</string>
   <string name="action_skip">"건너뛰기"</string>
@@ -193,11 +184,8 @@
   <string name="action_view_source">"소스 보기"</string>
   <string name="action_yes">"예"</string>
   <string name="action_yes_try_again">"네, 다시 시도하세요"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"이제 서버가 새롭고 더 빠른 프로토콜을 지원합니다. 지금 로그아웃한 다음 다시 로그인하여 업그레이드하세요. 지금 업그레이드하면 나중에 이전 프로토콜이 제거될 때 강제 로그아웃되는 것을 방지할 수 있습니다."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"업그레이드 가능"</string>
   <string name="common_about">"정보"</string>
   <string name="common_acceptable_use_policy">"이용 목적 제한 방침"</string>
-  <string name="common_add_account">"계정 추가"</string>
   <string name="common_add_another_account">"다른 계정 추가"</string>
   <string name="common_adding_caption">"캡션 추가"</string>
   <string name="common_advanced_settings">"고급 설정"</string>
@@ -209,7 +197,6 @@
   <string name="common_audio">"소리"</string>
   <string name="common_beta">"베타"</string>
   <string name="common_blocked_users">"차단한 사용자"</string>
-  <string name="common_bubbles">"버블"</string>
   <string name="common_call_declined">"통화 거절"</string>
   <string name="common_call_started">"통화 시작"</string>
   <string name="common_call_you_declined">"통화를 거절하셨습니다"</string>
@@ -495,7 +482,6 @@
   <string name="screen_room_change_role_administrators_or_owners_title">"관리자 또는 소유자 편집"</string>
   <string name="screen_room_error_failed_processing_media">"미디어 업로드 처리가 실패했습니다. 다시 시도해 주세요."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"사용자 세부 정보를 가져올 수 없습니다."</string>
-  <string name="screen_room_event_pill">"메시지 %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"펼치기"</string>
   <string name="screen_room_grouped_state_events_reduce">"줄이다"</string>
   <string name="screen_room_live_location_banner">"실시간 위치 공유 중"</string>

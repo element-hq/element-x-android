@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"重要な電話を確実に受け取るため、端末がロックされている状態での全画面通知を、設定から許可してください。"</string>
   <string name="full_screen_intent_banner_title_android">"通話品質を高める"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"通知の受信方法を選択してください"</string>
-  <string name="screen_advanced_settings_developer_mode">"開発者モード"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"開発者向けの機能を表示します。"</string>
   <string name="screen_advanced_settings_element_call_base_url">"任意の Element Call のベースURL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"任意の Element Call のベースURLを入力してください。"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"無効なURLです。プロトコル (http/https) が明記されていることと、アドレスが正しいことを確認してください。"</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"ルームへの招待リクエストにアバターを表示しない"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"タイムラインにメディアのプレビューを表示しない"</string>
   <string name="screen_advanced_settings_labs">"ラボ"</string>
   <string name="screen_advanced_settings_live_location_section_description">"更新するのに必要な移動距離です。"</string>
   <string name="screen_advanced_settings_live_location_section_footer">"「正確な位置情報」がこのアプリで使用可能なことを確認してください。権限を変更するには %1$s を開いてください。"</string>
@@ -20,7 +17,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"写真や動画を高速で送信してデータ使用量を減らします。"</string>
   <string name="screen_advanced_settings_media_compression_title">"メディアの品質を最適化"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"セキュリティと制限"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"自動的に画像を最適化してアップロード時間とファイルサイズを削減します。"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"画像のアップロード画質を最適化"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s 変更するにはタップしてください。"</string>
@@ -29,9 +25,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"標準 (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"動画のアップロード品質"</string>
   <string name="screen_advanced_settings_push_provider_android">"プッシュ通知プロバイダー"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"リッチテキスト編集機能を無効化し、Markdown記法を手入力できるようにします。"</string>
-  <string name="screen_advanced_settings_send_read_receipts">"既読を通知"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"機能がオフの場合、メッセージを確認したことを誰にも通知しません。他のユーザーの既読は確認することができます。"</string>
   <string name="screen_advanced_settings_share_presence">"在席を共有"</string>
   <string name="screen_advanced_settings_share_presence_description">"機能がオフの場合、既読の情報と入力中の通知を使用できなくなります。"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"常に非表示"</string>

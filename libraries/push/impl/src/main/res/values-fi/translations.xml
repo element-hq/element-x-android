@@ -14,7 +14,6 @@
     <item quantity="other">"%d ilmoitusta"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"UnifiedPush ilmoitusten jakelijaa ei voitu rekisteröidä, joten et enää vastaanota ilmoituksia. Tarkista sovelluksen ilmoitusasetukset ja push-jakelijan tila."</string>
-  <string name="notification_fallback_content">"Sinulle on uusia viestejä."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"Sinulla on %d uusi viesti."</item>
     <item quantity="other">"Sinulla on %d uutta viestiä."</item>
@@ -26,8 +25,6 @@
   <string name="notification_incoming_audio_call">"📞 Saapuva puhelu"</string>
   <string name="notification_incoming_call">"📹 Saapuva puhelu"</string>
   <string name="notification_inline_reply_failed">"** Lähetys epäonnistui - avaa huone"</string>
-  <string name="notification_invitation_action_join">"Liity"</string>
-  <string name="notification_invitation_action_reject">"Hylkää"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d kutsu"</item>
     <item quantity="other">"%d kutsua"</item>

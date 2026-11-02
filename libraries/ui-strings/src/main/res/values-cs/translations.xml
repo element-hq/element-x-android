@@ -27,7 +27,6 @@
   <string name="a11y_notifications_new_mentions">"Nové zmínky"</string>
   <string name="a11y_notifications_new_messages">"Nové zprávy"</string>
   <string name="a11y_notifications_ongoing_call">"Probíhající hovor"</string>
-  <string name="a11y_other_user_avatar">"Avatar jiného uživatele"</string>
   <string name="a11y_page_n">"Strana %1$d"</string>
   <string name="a11y_pause">"Pozastavit"</string>
   <string name="a11y_paused_voice_message">"Hlasová zpráva, délka: %1$s, aktuální pozice: %2$s"</string>
@@ -69,7 +68,6 @@
   <string name="a11y_voice_message">"Hlasová zpráva, délka: %1$s"</string>
   <string name="a11y_voice_message_record">"Nahrajte hlasovou zprávu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastavit nahrávání"</string>
-  <string name="a11y_your_avatar">"Váš avatar"</string>
   <string name="action_accept">"Přijmout"</string>
   <string name="action_add_caption">"Přidat titulek"</string>
   <string name="action_add_existing_rooms">"Přidat stávající místnosti"</string>
@@ -82,7 +80,6 @@
   <string name="action_choose_photo">"Vybrat fotku"</string>
   <string name="action_clear">"Vymazat"</string>
   <string name="action_close">"Zavřít"</string>
-  <string name="action_complete_verification">"Dokončit ověření"</string>
   <string name="action_confirm">"Potvrdit"</string>
   <string name="action_confirm_password">"Potvrdit heslo"</string>
   <string name="action_continue">"Pokračovat"</string>
@@ -94,8 +91,6 @@
   <string name="action_create">"Vytvořit"</string>
   <string name="action_create_room">"Vytvořit místnost"</string>
   <string name="action_create_space">"Vytvořte prostor"</string>
-  <string name="action_deactivate">"Deaktivovat"</string>
-  <string name="action_deactivate_account">"Deaktivovat účet"</string>
   <string name="action_decline">"Odmítnout"</string>
   <string name="action_decline_and_block">"Odmítnout a zablokovat"</string>
   <string name="action_delete">"Smazat"</string>
@@ -134,9 +129,7 @@
   <string name="action_leave_room">"Opustit místnost"</string>
   <string name="action_leave_space">"Opustit prostor"</string>
   <string name="action_load_more">"Načíst více"</string>
-  <string name="action_manage_account">"Spravovat účet"</string>
   <string name="action_manage_account_and_devices">"Správa účtu a zařízení"</string>
-  <string name="action_manage_devices">"Spravovat zařízení"</string>
   <string name="action_manage_rooms">"Spravovat místnosti"</string>
   <string name="action_message">"Zpráva"</string>
   <string name="action_minimize">"Minimalizovat"</string>
@@ -158,7 +151,6 @@
   <string name="action_reply">"Odpovědět"</string>
   <string name="action_reply_in_thread">"Odpovědět ve vlákně"</string>
   <string name="action_report">"Nahlásit"</string>
-  <string name="action_report_bug">"Nahlásit chybu"</string>
   <string name="action_report_content">"Nahlásit obsah"</string>
   <string name="action_report_dm">"Nahlásit konverzaci"</string>
   <string name="action_report_room">"Nahlásit místnost"</string>
@@ -177,7 +169,6 @@
   <string name="action_share_link">"Sdílet odkaz"</string>
   <string name="action_share_live_location">"Sdílet aktuální polohu"</string>
   <string name="action_show">"Zobrazit"</string>
-  <string name="action_sign_in_again">"Přihlásit se znovu"</string>
   <string name="action_signout">"Odebrat toto zařízení"</string>
   <string name="action_signout_anyway">"Přesto toto zařízení odebrat"</string>
   <string name="action_skip">"Přeskočit"</string>
@@ -197,11 +188,8 @@
   <string name="action_view_source">"Zobrazit zdroj"</string>
   <string name="action_yes">"Ano"</string>
   <string name="action_yes_try_again">"Ano, zkusit znovu"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Váš server nyní podporuje nový, rychlejší protokol. Chcete-li upgradovat, odhlaste se a znovu se přihlaste. Pokud to uděláte nyní, pomůže vám vyhnout se nucenému odhlášení, když bude starý protokol později odstraněn."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade k dispozici"</string>
   <string name="common_about">"O aplikaci"</string>
   <string name="common_acceptable_use_policy">"Zásady používání"</string>
-  <string name="common_add_account">"Přidat účet"</string>
   <string name="common_add_another_account">"Přidat další účet"</string>
   <string name="common_adding_caption">"Přidání titulku"</string>
   <string name="common_advanced_settings">"Pokročilá nastavení"</string>
@@ -213,7 +201,6 @@
   <string name="common_audio">"Zvuk"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blokovaní uživatelé"</string>
-  <string name="common_bubbles">"Bubliny"</string>
   <string name="common_call_declined">"Hovor odmítnut"</string>
   <string name="common_call_started">"Hovor zahájen"</string>
   <string name="common_call_you_declined">"Odmítli jste hovor"</string>
@@ -513,7 +500,6 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Upravit správce nebo vlastníky"</string>
   <string name="screen_room_error_failed_processing_media">"Nahrání média se nezdařilo, zkuste to prosím znovu."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodařilo se načíst údaje o uživateli"</string>
-  <string name="screen_room_event_pill">"Zpráva v %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Rozbalit"</string>
   <string name="screen_room_grouped_state_events_reduce">"Zmenšit"</string>
   <string name="screen_room_live_location_banner">"Sdílení aktuální polohy"</string>

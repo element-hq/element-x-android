@@ -23,7 +23,6 @@
   <string name="a11y_notifications_new_mentions">"Nové zmienky"</string>
   <string name="a11y_notifications_new_messages">"Nové správy"</string>
   <string name="a11y_notifications_ongoing_call">"Prebiehajúci hovor"</string>
-  <string name="a11y_other_user_avatar">"Obrázok iného používateľa"</string>
   <string name="a11y_page_n">"Strana %1$d"</string>
   <string name="a11y_pause">"Pozastaviť"</string>
   <string name="a11y_paused_voice_message">"Hlasová správa, dĺžka:%1$s, aktuálna pozícia: %2$s"</string>
@@ -60,7 +59,6 @@
   <string name="a11y_voice_message">"Hlasová správa, dĺžka: %1$s"</string>
   <string name="a11y_voice_message_record">"Nahrať hlasovú správu."</string>
   <string name="a11y_voice_message_stop_recording">"Zastaviť nahrávanie"</string>
-  <string name="a11y_your_avatar">"Váš profilový obrázok"</string>
   <string name="action_accept">"Prijať"</string>
   <string name="action_add_caption">"Pridať titulok"</string>
   <string name="action_add_existing_rooms">"Pridať existujúce miestnosti"</string>
@@ -72,7 +70,6 @@
   <string name="action_choose_photo">"Vybrať fotku"</string>
   <string name="action_clear">"Vyčistiť"</string>
   <string name="action_close">"Zavrieť"</string>
-  <string name="action_complete_verification">"Dokončiť overenie"</string>
   <string name="action_confirm">"Potvrdiť"</string>
   <string name="action_confirm_password">"Potvrdiť heslo"</string>
   <string name="action_continue">"Pokračovať"</string>
@@ -84,8 +81,6 @@
   <string name="action_create">"Vytvoriť"</string>
   <string name="action_create_room">"Vytvoriť miestnosť"</string>
   <string name="action_create_space">"Vytvoriť priestor"</string>
-  <string name="action_deactivate">"Deaktivovať"</string>
-  <string name="action_deactivate_account">"Deaktivovať účet"</string>
   <string name="action_decline">"Odmietnuť"</string>
   <string name="action_decline_and_block">"Odmietnuť a zablokovať"</string>
   <string name="action_delete_poll">"Odstrániť anketu"</string>
@@ -120,8 +115,6 @@
   <string name="action_leave_room">"Opustiť miestnosť"</string>
   <string name="action_leave_space">"Opustiť priestor"</string>
   <string name="action_load_more">"Načítať viac"</string>
-  <string name="action_manage_account">"Spravovať účet"</string>
-  <string name="action_manage_devices">"Spravovať zariadenia"</string>
   <string name="action_manage_rooms">"Spravovať miestnosti"</string>
   <string name="action_message">"Poslať správu"</string>
   <string name="action_minimize">"Minimalizovať"</string>
@@ -143,7 +136,6 @@
   <string name="action_reply">"Odpovedať"</string>
   <string name="action_reply_in_thread">"Odpovedať vo vlákne"</string>
   <string name="action_report">"Nahlásiť"</string>
-  <string name="action_report_bug">"Nahlásiť chybu"</string>
   <string name="action_report_content">"Nahlásiť obsah"</string>
   <string name="action_report_dm">"Nahlásiť konverzáciu"</string>
   <string name="action_report_room">"Nahlásiť miestnosť"</string>
@@ -161,7 +153,6 @@
   <string name="action_share">"Zdieľať"</string>
   <string name="action_share_link">"Zdieľať odkaz"</string>
   <string name="action_show">"Zobraziť"</string>
-  <string name="action_sign_in_again">"Prihláste sa znova"</string>
   <string name="action_signout">"Odstrániť toto zariadenie"</string>
   <string name="action_signout_anyway">"Napriek tomu odstrániť toto zariadenie"</string>
   <string name="action_skip">"Preskočiť"</string>
@@ -180,11 +171,8 @@
   <string name="action_view_source">"Zobraziť zdroj"</string>
   <string name="action_yes">"Áno"</string>
   <string name="action_yes_try_again">"Áno, skúsiť to znova"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Váš server teraz podporuje nový, rýchlejší protokol. Odhláste sa a prihláste sa znova, aby ste mohli aktualizovať. Ak to urobíte teraz, pomôže vám vyhnúť sa nútenému odhláseniu, keď sa starý protokol neskôr odstráni."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Aktualizácia je k dispozícii"</string>
   <string name="common_about">"O aplikácii"</string>
   <string name="common_acceptable_use_policy">"Zásady prijateľného používania"</string>
-  <string name="common_add_account">"Pridať účet"</string>
   <string name="common_add_another_account">"Pridať ďalší účet"</string>
   <string name="common_adding_caption">"Pridáva sa titulok"</string>
   <string name="common_advanced_settings">"Pokročilé nastavenia"</string>
@@ -197,7 +185,6 @@
   <string name="common_audio">"Zvuk"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blokovaní používatelia"</string>
-  <string name="common_bubbles">"Bubliny"</string>
   <string name="common_call_started">"Hovor sa začal"</string>
   <string name="common_chat_backup">"Záloha konverzácie"</string>
   <string name="common_copied_to_clipboard">"Skopírované do schránky"</string>
@@ -476,7 +463,6 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Upraviť správcov alebo vlastníkov"</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodarilo sa získať údaje o používateľovi"</string>
-  <string name="screen_room_event_pill">"Správa v %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Rozbaliť"</string>
   <string name="screen_room_grouped_state_events_reduce">"Zmenšiť"</string>
   <string name="screen_room_permalink_same_room_android">"Už si prezeráte túto miestnosť!"</string>

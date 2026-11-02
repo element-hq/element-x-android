@@ -23,9 +23,7 @@
   <string name="screen_invites_decline_chat_title">"Odrzuć zaproszenie"</string>
   <string name="screen_invites_decline_direct_chat_message">"Czy na pewno chcesz odrzucić rozmowę prywatną z %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Odrzuć czat"</string>
-  <string name="screen_invites_empty_list">"Brak zaproszeń"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) zaprosił Cię"</string>
-  <string name="screen_migration_message">"Jest to jednorazowy proces, dziękujemy za czekanie."</string>
   <string name="screen_migration_title">"Konfigurowanie Twojego konta."</string>
   <string name="screen_multi_account_announcement_action">"Dodaj konto"</string>
   <string name="screen_multi_account_announcement_description">"Przejdź do %1$s, aby zalogować się na kolejne konto i łatwo się między nimi przełączać."</string>
@@ -65,6 +63,4 @@ Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_search_recent_searches">"Ostatnie wyszukiwania"</string>
   <string name="screen_search_tab_chats">"Czaty"</string>
   <string name="screen_search_tab_messages">"Wiadomości"</string>
-  <string name="session_verification_banner_message">"Wygląda na to, że używasz nowego urządzenia. Zweryfikuj się innym urządzeniem, aby uzyskać dostęp do zaszyfrowanych wiadomości."</string>
-  <string name="session_verification_banner_title">"Potwierdź, że to Ty"</string>
 </resources>

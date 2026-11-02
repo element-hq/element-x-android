@@ -20,9 +20,7 @@
   <string name="screen_invites_decline_chat_title">"Einladung ablehnen"</string>
   <string name="screen_invites_decline_direct_chat_message">"Bist du sicher, dass du diese Direktnachricht von %1$s ablehnen möchtest?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Einladung ablehnen"</string>
-  <string name="screen_invites_empty_list">"Keine Einladungen"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) hat dich eingeladen"</string>
-  <string name="screen_migration_message">"Dies ist ein einmaliger Vorgang, danke fürs Warten."</string>
   <string name="screen_migration_title">"Dein Konto wird eingerichtet."</string>
   <string name="screen_roomlist_a11y_create_message">"Einen neuen Chat erstellen"</string>
   <string name="screen_roomlist_clear_filters">"Filter zurücksetzen"</string>
@@ -53,6 +51,4 @@ Du hast keine ungelesenen Nachrichten!"</string>
   <string name="screen_roomlist_mark_as_unread">"Als ungelesen markieren"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Die Chat-Version wurde aktualisiert"</string>
   <string name="screen_roomlist_your_spaces">"Deine Spaces"</string>
-  <string name="session_verification_banner_message">"Es sieht aus, als würdest du ein neues Gerät verwenden. Verifiziere es mit einem anderen Gerät, damit du auf deine verschlüsselten Nachrichten zugreifen kannst."</string>
-  <string name="session_verification_banner_title">"Verifiziere deine Identität"</string>
 </resources>

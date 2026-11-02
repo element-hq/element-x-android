@@ -18,7 +18,6 @@
   <string name="a11y_notifications_new_mentions">"Nieuwe vermeldingen"</string>
   <string name="a11y_notifications_new_messages">"Nieuwe berichten"</string>
   <string name="a11y_notifications_ongoing_call">"Actieve oproep"</string>
-  <string name="a11y_other_user_avatar">"Afbeelding van andere gebruiker"</string>
   <string name="a11y_page_n">"Pagina %1$d"</string>
   <string name="a11y_pause">"Pauzeren"</string>
   <string name="a11y_paused_voice_message">"Spraakbericht, duur: %1$s, huidige positie: %2$s"</string>
@@ -47,7 +46,6 @@
   <string name="a11y_voice_message">"Spraakbericht, duur: %1$s"</string>
   <string name="a11y_voice_message_record">"Spraakbericht opnemen."</string>
   <string name="a11y_voice_message_stop_recording">"Opnemen stoppen"</string>
-  <string name="a11y_your_avatar">"Jouw afbeelding"</string>
   <string name="action_accept">"Accepteren"</string>
   <string name="action_add_caption">"Beschrijving toevoegen"</string>
   <string name="action_add_to_timeline">"Toevoegen aan tijdlijn"</string>
@@ -58,7 +56,6 @@
   <string name="action_choose_photo">"Kies foto"</string>
   <string name="action_clear">"Wissen"</string>
   <string name="action_close">"Sluiten"</string>
-  <string name="action_complete_verification">"Verificatie voltooien"</string>
   <string name="action_confirm">"Bevestigen"</string>
   <string name="action_confirm_password">"Bevestig wachtwoord"</string>
   <string name="action_continue">"Voortzetten"</string>
@@ -69,8 +66,6 @@
   <string name="action_copy_text">"Tekst kopiëren"</string>
   <string name="action_create">"Aanmaken"</string>
   <string name="action_create_room">"Creëer een kamer"</string>
-  <string name="action_deactivate">"Sluiten"</string>
-  <string name="action_deactivate_account">"Account sluiten"</string>
   <string name="action_decline">"Weigeren"</string>
   <string name="action_decline_and_block">"Weigeren en blokkeren"</string>
   <string name="action_delete_poll">"Peiling verwijderen"</string>
@@ -100,8 +95,6 @@
   <string name="action_leave_conversation">"Gesprek verlaten"</string>
   <string name="action_leave_room">"Kamer verlaten"</string>
   <string name="action_load_more">"Meer laden"</string>
-  <string name="action_manage_account">"Account beheren"</string>
-  <string name="action_manage_devices">"Apparaten beheren"</string>
   <string name="action_message">"Bericht"</string>
   <string name="action_next">"Volgende"</string>
   <string name="action_no">"Nee"</string>
@@ -120,7 +113,6 @@
   <string name="action_reply">"Antwoorden"</string>
   <string name="action_reply_in_thread">"Antwoord in gesprek"</string>
   <string name="action_report">"Melden"</string>
-  <string name="action_report_bug">"Probleem melden"</string>
   <string name="action_report_content">"Inhoud melden"</string>
   <string name="action_report_room">"Kamer melden"</string>
   <string name="action_reset">"Opnieuw instellen"</string>
@@ -134,7 +126,6 @@
   <string name="action_share">"Delen"</string>
   <string name="action_share_link">"Link delen"</string>
   <string name="action_show">"Toon"</string>
-  <string name="action_sign_in_again">"Log opnieuw in"</string>
   <string name="action_signout">"Uitloggen"</string>
   <string name="action_signout_anyway">"Toch uitloggen"</string>
   <string name="action_skip">"Overslaan"</string>
@@ -152,8 +143,6 @@
   <string name="action_view_source">"Bron weergeven"</string>
   <string name="action_yes">"Ja"</string>
   <string name="action_yes_try_again">"Ja, probeer het opnieuw"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Je server ondersteunt nu een nieuw, sneller protocol. Log uit en log opnieuw in om nu te upgraden. Als je dit nu doet, voorkom je dat je geforceerd uitlogt wordt wanneer het oude protocol later wordt verwijderd."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade beschikbaar"</string>
   <string name="common_about">"Over"</string>
   <string name="common_acceptable_use_policy">"Beleid inzake redelijk gebruik"</string>
   <string name="common_adding_caption">"Bijschrift toevoegen"</string>
@@ -163,7 +152,6 @@
   <string name="common_appearance">"Weergave"</string>
   <string name="common_audio">"Geluid"</string>
   <string name="common_blocked_users">"Geblokkeerde gebruikers"</string>
-  <string name="common_bubbles">"Bubbels"</string>
   <string name="common_call_started">"Oproep gestart"</string>
   <string name="common_chat_backup">"Chat back-up"</string>
   <string name="common_copied_to_clipboard">"Gekopieerd naar klembord"</string>

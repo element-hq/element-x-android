@@ -23,9 +23,7 @@
   <string name="screen_invites_decline_chat_title">"Refuser l’invitation"</string>
   <string name="screen_invites_decline_direct_chat_message">"Êtes-vous sûr de vouloir refuser cette discussion privée avec %1$s ?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Refuser l’invitation"</string>
-  <string name="screen_invites_empty_list">"Aucune invitation"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) vous a invité(e)"</string>
-  <string name="screen_migration_message">"Il s’agit d’une opération ponctuelle, merci d’attendre quelques instants."</string>
   <string name="screen_migration_title">"Configuration de votre compte."</string>
   <string name="screen_multi_account_announcement_action">"Ajouter un compte"</string>
   <string name="screen_multi_account_announcement_description">"Naviguer vers %1$s pour vous connecter à un autre compte. Vous pourrez ensuite facilement passer de l’un à l’autre."</string>
@@ -59,11 +57,15 @@ Vous n’avez plus de messages non-lus !"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ce salon a été mis à niveau."</string>
   <string name="screen_roomlist_your_spaces">"Vos espaces"</string>
   <string name="screen_search_empty_state_message">"Rechercher des discussions et des messages"</string>
-  <string name="screen_search_empty_state_title">"Commencez la recherche"</string>
+  <string name="screen_search_empty_state_title">"Commencer la recherche…"</string>
+  <string name="screen_search_from_your_messages_header">"Dans vos messages"</string>
+  <string name="screen_search_history_limit_message">"La recherche s’effectue sur votre appareil, vos messages chiffrés restent donc privés.
+Votre appareil conserve les messages des 3 derniers mois, les messages plus anciens ne peuvent donc pas apparaître dans les résultats de recherche."</string>
+  <string name="screen_search_history_limit_title">"La recherche porte sur les 3 derniers mois."</string>
+  <string name="screen_search_messages_no_results_message">"Aucun résultat ne correspond à « %1$s » dans vos messages récents."</string>
+  <string name="screen_search_messages_no_results_title">"Aucun résultat au cours des 3 derniers mois"</string>
   <string name="screen_search_no_results_message">"Aucun résultat pour « %1$s ». Essayez un autre terme de recherche."</string>
   <string name="screen_search_recent_searches">"Recherches récentes"</string>
   <string name="screen_search_tab_chats">"Salons"</string>
   <string name="screen_search_tab_messages">"Messages"</string>
-  <string name="session_verification_banner_message">"Il semblerait que vous utilisiez un nouvel appareil. Vérifiez la session avec un autre de vos appareils pour accéder à vos messages chiffrés."</string>
-  <string name="session_verification_banner_title">"Vérifier que c’est bien vous"</string>
 </resources>

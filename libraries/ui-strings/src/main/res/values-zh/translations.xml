@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_active">"活跃"</string>
   <string name="a11y_add_avatar">"添加头像"</string>
   <string name="a11y_add_reaction">"添加反应：%1$s"</string>
   <string name="a11y_address">"地址"</string>
@@ -27,6 +28,7 @@
   <string name="a11y_gallery_scanning">"媒体组，正在扫描第 %1$d 个"</string>
   <string name="a11y_gallery_video">"媒体组，第 %1$d 个视频"</string>
   <string name="a11y_hide_password">"隐藏密码"</string>
+  <string name="a11y_inactive">"不活跃"</string>
   <string name="a11y_info">"信息"</string>
   <string name="a11y_join_call">"加入通话"</string>
   <string name="a11y_jump_to_bottom">"跳转到底部"</string>
@@ -38,7 +40,6 @@
   <string name="a11y_notifications_new_mentions">"新提及"</string>
   <string name="a11y_notifications_new_messages">"新消息"</string>
   <string name="a11y_notifications_ongoing_call">"正在进行的通话"</string>
-  <string name="a11y_other_user_avatar">"其他用户的头像"</string>
   <string name="a11y_page_n">"第 %1$d 页"</string>
   <string name="a11y_pause">"暂停"</string>
   <string name="a11y_paused_voice_message">"语音消息，时长：%1$s，当前位置：%2$s"</string>
@@ -71,6 +72,8 @@
   <string name="a11y_start_call">"开始通话"</string>
   <string name="a11y_start_video_call">"开始视频通话"</string>
   <string name="a11y_start_voice_call">"开始语音通话"</string>
+  <string name="a11y_state_collapsed">"已折叠"</string>
+  <string name="a11y_state_expanded">"已展开"</string>
   <string name="a11y_status">"状态"</string>
   <string name="a11y_thread_in_room">"位于 %1$s 中的消息列"</string>
   <string name="a11y_threads_in_room">"位于 %1$s 中的消息列"</string>
@@ -83,7 +86,6 @@
   <string name="a11y_voice_message">"语音消息，时长：%1$s"</string>
   <string name="a11y_voice_message_record">"录制语音消息"</string>
   <string name="a11y_voice_message_stop_recording">"停止录制"</string>
-  <string name="a11y_your_avatar">"你的头像"</string>
   <string name="action_accept">"接受"</string>
   <string name="action_add_caption">"添加标题"</string>
   <string name="action_add_existing_rooms">"添加现有房间"</string>
@@ -97,7 +99,6 @@
   <string name="action_clear">"清除"</string>
   <string name="action_clear_all">"全部清除"</string>
   <string name="action_close">"关闭"</string>
-  <string name="action_complete_verification">"完成验证"</string>
   <string name="action_confirm">"确认"</string>
   <string name="action_confirm_password">"确认密码"</string>
   <string name="action_continue">"继续"</string>
@@ -110,8 +111,6 @@
   <string name="action_create">"创建"</string>
   <string name="action_create_room">"创建房间"</string>
   <string name="action_create_space">"创建空间"</string>
-  <string name="action_deactivate">"停用"</string>
-  <string name="action_deactivate_account">"停用账户"</string>
   <string name="action_decline">"拒绝"</string>
   <string name="action_decline_and_block">"拒绝并屏蔽"</string>
   <string name="action_delete">"删除"</string>
@@ -140,6 +139,7 @@
   <string name="action_go_back">"返回"</string>
   <string name="action_go_to_roles_and_permissions">"前往角色与权限"</string>
   <string name="action_go_to_settings">"前往设置"</string>
+  <string name="action_got_it">"明白"</string>
   <string name="action_ignore">"忽略"</string>
   <string name="action_invite">"邀请"</string>
   <string name="action_invite_friends">"邀请人员"</string>
@@ -153,9 +153,7 @@
   <string name="action_leave_room">"离开房间"</string>
   <string name="action_leave_space">"离开空间"</string>
   <string name="action_load_more">"载入更多"</string>
-  <string name="action_manage_account">"管理账户"</string>
   <string name="action_manage_account_and_devices">"管理账户与设备"</string>
-  <string name="action_manage_devices">"管理设备"</string>
   <string name="action_manage_rooms">"管理房间"</string>
   <string name="action_mark_as_read">"设为已读"</string>
   <string name="action_message">"发送消息"</string>
@@ -178,7 +176,6 @@
   <string name="action_reply">"回复"</string>
   <string name="action_reply_in_thread">"在消息列中回复"</string>
   <string name="action_report">"举报"</string>
-  <string name="action_report_bug">"报告 bug"</string>
   <string name="action_report_content">"举报内容"</string>
   <string name="action_report_dm">"举报对话"</string>
   <string name="action_report_room">"举报房间"</string>
@@ -197,7 +194,6 @@
   <string name="action_share_link">"分享链接"</string>
   <string name="action_share_live_location">"共享实时位置"</string>
   <string name="action_show">"显示"</string>
-  <string name="action_sign_in_again">"再次登录"</string>
   <string name="action_signout">"移除此设备"</string>
   <string name="action_signout_anyway">"仍要移除此设备"</string>
   <string name="action_skip">"跳过"</string>
@@ -219,12 +215,9 @@
   <string name="action_voice_call">"语音通话"</string>
   <string name="action_yes">"是"</string>
   <string name="action_yes_try_again">"是，重试"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"你的服务器现在支持更快的新协议。现在注销并重新登录以升级。立即这样做可以避免你在以后删除旧协议时被强制注销。"</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"有可用升级"</string>
   <string name="common_about">"关于"</string>
   <string name="common_acceptable_use_policy">"可接受的使用政策"</string>
   <string name="common_account_settings">"账户设置"</string>
-  <string name="common_add_account">"添加账户"</string>
   <string name="common_add_another_account">"添加账户"</string>
   <string name="common_adding_caption">"正在添加标题"</string>
   <string name="common_advanced_settings">"高级设置"</string>
@@ -237,7 +230,6 @@
   <string name="common_audio">"音频"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"已屏蔽用户"</string>
-  <string name="common_bubbles">"气泡"</string>
   <string name="common_call_declined">"来电被拒接"</string>
   <string name="common_call_in_progress">"通话进行中"</string>
   <string name="common_call_started">"通话已开始"</string>
@@ -328,7 +320,7 @@
   <string name="common_name">"名称"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"没有结果"</string>
-  <string name="common_no_results_for">"未找到与“%1$s”相关的搜索结果。尝试其它搜索关键词。"</string>
+  <string name="common_no_results_for">"未找到与“%1$s”相关的搜索结果。尝试新的搜索关键词。"</string>
   <string name="common_no_room_name">"无房间名称"</string>
   <string name="common_no_space_name">"未命名空间"</string>
   <string name="common_not_encrypted">"未加密"</string>
@@ -416,6 +408,7 @@
   <plurals name="common_spaces">
     <item quantity="other">"%1$d 个空间"</item>
   </plurals>
+  <string name="common_spoiler">"剧透"</string>
   <string name="common_starting_chat">"开始聊天…"</string>
   <string name="common_sticker">"贴纸"</string>
   <string name="common_success">"成功"</string>
@@ -553,7 +546,6 @@
   <string name="screen_room_change_role_administrators_or_owners_title">"编辑管理员或所有者"</string>
   <string name="screen_room_error_failed_processing_media">"处理要上传的媒体失败，请重试。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"无法获取用户信息"</string>
-  <string name="screen_room_event_pill">"%1$s 中的消息"</string>
   <string name="screen_room_grouped_state_events_expand">"展开"</string>
   <string name="screen_room_grouped_state_events_reduce">"折叠"</string>
   <string name="screen_room_live_location_banner">"正在共享实时位置"</string>
@@ -570,6 +562,8 @@
     <item quantity="other">"已选择 %1$d 条消息"</item>
   </plurals>
   <string name="screen_room_title">"聊天"</string>
+  <string name="screen_select_account_permalink_room_subtitle">"你的账户尚未加入此房间，请选择要使用的账户。"</string>
+  <string name="screen_select_account_permalink_title">"选择一个账户以打开链接："</string>
   <string name="screen_share_location_title">"共享位置"</string>
   <string name="screen_share_my_location_action">"共享我的位置"</string>
   <string name="screen_share_open_apple_maps">"在 Apple Maps 中打开"</string>

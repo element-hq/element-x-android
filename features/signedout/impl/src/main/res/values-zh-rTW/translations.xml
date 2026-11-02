@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"在其他工作階段變更密碼"</string>
-  <string name="screen_signed_out_reason_2">"在另一個工作階段刪除了此工作階段"</string>
-  <string name="screen_signed_out_reason_3">"伺服器管理員撤銷了您的存取權限"</string>
-  <string name="screen_signed_out_subtitle">"您可能因為下列某個原因被登出了。請重新登入以繼續使用 %s。"</string>
-  <string name="screen_signed_out_title">"您登出了"</string>
+  <string name="screen_signed_out_reason_1">"您已從您的帳號中移除此裝置"</string>
+  <string name="screen_signed_out_reason_2">"您已在其他裝置變更了您的密碼"</string>
+  <string name="screen_signed_out_reason_3">"您伺服器的工作階段過期或管理員封鎖了您的存取權"</string>
+  <string name="screen_signed_out_subtitle_v2">"此裝置因下列其中一項原因已被移除。請重新登入，將此裝置連結到您的帳號。"</string>
+  <string name="screen_signed_out_title">"已移除裝置"</string>
 </resources>

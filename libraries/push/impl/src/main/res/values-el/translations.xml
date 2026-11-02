@@ -14,7 +14,6 @@
     <item quantity="other">"%d ειδοποιήσεις"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Δεν ήταν δυνατή η εγγραφή του διανομέα ειδοποιήσεων UnifiedPush, επομένως δεν θα λαμβάνετε πλέον ειδοποιήσεις. Ελέγξτε τις ρυθμίσεις ειδοποιήσεων της εφαρμογής και την κατάσταση του διανομέα push."</string>
-  <string name="notification_fallback_content">"Έχεις νέο(α) μήνυμα(τα)."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"Έχετε %d νέο μήνυμα."</item>
     <item quantity="other">"Έχετε %d νέα μηνύματα."</item>
@@ -22,8 +21,6 @@
   <string name="notification_incoming_audio_call">"📞 Εισερχόμενη κλήση"</string>
   <string name="notification_incoming_call">"📹 Εισερχόμενη κλήση"</string>
   <string name="notification_inline_reply_failed">"** Αποτυχία αποστολής - παρακαλώ ανοίξτε την αίθουσα"</string>
-  <string name="notification_invitation_action_join">"Συμμετοχή"</string>
-  <string name="notification_invitation_action_reject">"Απόρριψη"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d πρόσκληση"</item>
     <item quantity="other">"%d προσκλήσεις"</item>

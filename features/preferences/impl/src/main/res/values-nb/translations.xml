@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"For å sikre at du aldri går glipp av en viktig samtale, må du endre innstillingene dine for å tillate fullskjermvarsler når telefonen er låst."</string>
   <string name="full_screen_intent_banner_title_android">"Forbedre samtaleopplevelsen din"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Velg hvordan du vil motta varsler"</string>
-  <string name="screen_advanced_settings_developer_mode">"Utviklermodus"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Aktiver for å få tilgang til funksjoner og funksjonalitet for utviklere."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Egendefinert Element Call base URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Angi en egendefinert base URL for Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ugyldig URL. Pass på at du inkluderer protokollen (http/https) og riktig adresse."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Skjul avatarer i invitasjonsforespørsler til rom"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Skjul forhåndsvisninger av medier på tidslinjen"</string>
   <string name="screen_advanced_settings_labs">"Prøvefunksjoner"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Avstanden du må bevege deg for å utløse en oppdatering."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Sørg for at «Nøyaktig lokasjon» er aktivert for denne appen. For å endre tillatelsen, gå til %1$s."</string>
@@ -21,7 +18,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Last opp bilder og videoer raskere og reduser databruken"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimaliser mediekvaliteten"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderasjon og sikkerhet"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimaliser bilder automatisk for raskere opplastinger og mindre filstørrelser."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimaliser kvaliteten på bildeopplasting"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Trykk her for å endre."</string>
@@ -30,9 +26,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Kvalitet på videoopplasting"</string>
   <string name="screen_advanced_settings_push_provider_android">"Leverandør av pushvarsling"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Deaktiver rik tekstredigering for å skrive Markdown manuelt."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Lesebekreftelser"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Hvis slått av, sendes ikke lesebekreftelsene dine til noen. Du vil fortsatt motta lesebekreftelser fra andre brukere."</string>
   <string name="screen_advanced_settings_share_presence">"Del tilstedeværelse"</string>
   <string name="screen_advanced_settings_share_presence_description">"Hvis slått av, kan du ikke sende eller motta lesebekreftelser eller skrivevarsler."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Skjul alltid"</string>

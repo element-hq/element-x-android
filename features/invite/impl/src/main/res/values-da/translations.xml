@@ -9,7 +9,6 @@
   <string name="screen_invites_decline_chat_title">"Afvis invitation"</string>
   <string name="screen_invites_decline_direct_chat_message">"Er du sikker på, at du vil afvise denne private samtale med %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Afvis samtale"</string>
-  <string name="screen_invites_empty_list">"Ingen invitationer"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s ) inviterede dig"</string>
   <string name="screen_join_room_decline_and_block_alert_confirmation">"Ja, afvis og blokér"</string>
   <string name="screen_join_room_decline_and_block_alert_message">"Er du sikker på, at du vil afvise invitationen til at deltage i dette rum? Dette forhindrer også %1$s i at kontakte dig eller invitere dig til andre rum."</string>

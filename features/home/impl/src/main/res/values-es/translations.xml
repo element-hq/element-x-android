@@ -20,9 +20,7 @@
   <string name="screen_invites_decline_chat_title">"Rechazar la invitación"</string>
   <string name="screen_invites_decline_direct_chat_message">"¿Estás seguro de que quieres rechazar este chat privado con %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Rechazar el chat"</string>
-  <string name="screen_invites_empty_list">"Sin invitaciones"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) te invitó"</string>
-  <string name="screen_migration_message">"Este proceso solo se hace una vez, gracias por esperar."</string>
   <string name="screen_migration_title">"Configura tu cuenta"</string>
   <string name="screen_roomlist_a11y_create_message">"Crear una nueva conversación o sala"</string>
   <string name="screen_roomlist_clear_filters">"Borrar filtros"</string>
@@ -51,6 +49,4 @@ Por ahora, puedes deseleccionar los filtros para ver tus otros chats"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcar como no leído"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Esta sala ha sido renovada"</string>
   <string name="screen_roomlist_your_spaces">"Tus espacios"</string>
-  <string name="session_verification_banner_message">"Parece que estás usando un nuevo dispositivo. Verifica que eres tú para acceder a tus mensajes cifrados."</string>
-  <string name="session_verification_banner_title">"Verifica que eres tú"</string>
 </resources>

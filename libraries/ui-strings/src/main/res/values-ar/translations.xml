@@ -48,7 +48,6 @@
   <string name="a11y_notifications_new_mentions">"إشارات جديدة"</string>
   <string name="a11y_notifications_new_messages">"رسائل جديدة"</string>
   <string name="a11y_notifications_ongoing_call">"مكالمة جارية"</string>
-  <string name="a11y_other_user_avatar">"صورة رمزية لمستخدم آخر"</string>
   <string name="a11y_page_n">"الصفحة %1$d"</string>
   <string name="a11y_pause">"إيقاف مؤقت"</string>
   <string name="a11y_paused_voice_message">"الرسالة الصوتية، المدة: %1$s ، الموضع الحالي: %2$s"</string>
@@ -98,7 +97,6 @@
   <string name="a11y_voice_message">"رسالة صوتية، المدة: %1$s"</string>
   <string name="a11y_voice_message_record">"تسجيل رسالة صوتية."</string>
   <string name="a11y_voice_message_stop_recording">"إيقاف التسجيل"</string>
-  <string name="a11y_your_avatar">"الصورة الرمزية الخاصة بك"</string>
   <string name="action_accept">"قبول"</string>
   <string name="action_add_caption">"أضف وصف"</string>
   <string name="action_add_existing_rooms">"إضافة غرف موجودة"</string>
@@ -111,7 +109,6 @@
   <string name="action_choose_photo">"اختيار صورة"</string>
   <string name="action_clear">"مسح"</string>
   <string name="action_close">"إغلاق"</string>
-  <string name="action_complete_verification">"أتمم التحقق"</string>
   <string name="action_confirm">"تأكيد"</string>
   <string name="action_confirm_password">"تأكيد كلمة المرور"</string>
   <string name="action_continue">"المتابعة"</string>
@@ -123,8 +120,6 @@
   <string name="action_create">"إنشاء"</string>
   <string name="action_create_room">"إنشاء غرفة"</string>
   <string name="action_create_space">"إنشاء مساحة"</string>
-  <string name="action_deactivate">"تعطيل"</string>
-  <string name="action_deactivate_account">"تعطيل الحساب"</string>
   <string name="action_decline">"رفض"</string>
   <string name="action_decline_and_block">"رفض وحظر"</string>
   <string name="action_delete">"حذف"</string>
@@ -163,9 +158,7 @@
   <string name="action_leave_room">"مغادرة الغرفة"</string>
   <string name="action_leave_space">"مغادرة المساحة"</string>
   <string name="action_load_more">"تحميل المزيد"</string>
-  <string name="action_manage_account">"إدارة الحساب"</string>
   <string name="action_manage_account_and_devices">"إدارة الحساب والأجهزة"</string>
-  <string name="action_manage_devices">"إدارة الأجهزة"</string>
   <string name="action_manage_rooms">"إدارة الغرف"</string>
   <string name="action_mark_as_read">"وضع علامة كمقروء"</string>
   <string name="action_message">"إرسال رسالة"</string>
@@ -188,7 +181,6 @@
   <string name="action_reply">"رد"</string>
   <string name="action_reply_in_thread">"ردّ في ثريد"</string>
   <string name="action_report">"إبلاغ"</string>
-  <string name="action_report_bug">"الإبلاغ عن مشكلة"</string>
   <string name="action_report_content">"الابلاغ عن المحتوى"</string>
   <string name="action_report_dm">"الإبلاغ عن المحادثة"</string>
   <string name="action_report_room">"الإبلاغ عن الغرفة"</string>
@@ -207,7 +199,6 @@
   <string name="action_share_link">"مشاركة رابط"</string>
   <string name="action_share_live_location">"مشاركة الموقع المباشر"</string>
   <string name="action_show">"إظهار"</string>
-  <string name="action_sign_in_again">"تسجيل الدخول مرة أخرى"</string>
   <string name="action_signout">"إزالة هذا الجهاز"</string>
   <string name="action_signout_anyway">"إزالة هذا الجهاز على أي حال"</string>
   <string name="action_skip">"تخطي"</string>
@@ -229,11 +220,8 @@
   <string name="action_voice_call">"مكالمة صوتية"</string>
   <string name="action_yes">"نعم"</string>
   <string name="action_yes_try_again">"نعم، حاول مرة أخرى"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"يدعم خادمك الآن بروتوكولًا جديدًا أسرع. سجّل الخروج ثم سجّل الدخول مرة أخرى للترقية الآن. سيساعدك القيام بذلك الآن على تجنب تسجيل خروج قسري عند إزالة البروتوكول القديم لاحقًا."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"ترقية متاحة"</string>
   <string name="common_about">"حول التطبيق"</string>
   <string name="common_acceptable_use_policy">"سياسة الاستخدام المقبول"</string>
-  <string name="common_add_account">"إضافة حساب"</string>
   <string name="common_add_another_account">"إضافة حساب آخر"</string>
   <string name="common_adding_caption">"جارٍ إضافة تعليق توضيحي"</string>
   <string name="common_advanced_settings">"إعدادات متقدمة"</string>
@@ -245,7 +233,6 @@
   <string name="common_audio">"الصوت"</string>
   <string name="common_beta">"تجريبي"</string>
   <string name="common_blocked_users">"المستخدمون المحظورون"</string>
-  <string name="common_bubbles">"فقاعات"</string>
   <string name="common_call_declined">"تم رفض المكالمة"</string>
   <string name="common_call_in_progress">"مكالمة جارية"</string>
   <string name="common_call_started">"بدأت المكالمة"</string>
@@ -601,7 +588,6 @@
   <string name="screen_room_change_role_administrators_or_owners_title">"تعديل المسؤولين أو المالكين"</string>
   <string name="screen_room_error_failed_processing_media">"تعذّرت معالجة الوسائط من أجل رفعها، يرجى المحاولة مجدداً."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"تعذّر استرداد معلومات المستخدم"</string>
-  <string name="screen_room_event_pill">"رسالة في %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"توسيع"</string>
   <string name="screen_room_grouped_state_events_reduce">"طي"</string>
   <string name="screen_room_live_location_banner">"مشاركة الموقع المباشر"</string>

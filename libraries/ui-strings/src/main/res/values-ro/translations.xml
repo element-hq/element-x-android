@@ -42,7 +42,6 @@
   <string name="a11y_notifications_new_mentions">"Mențiuni noi"</string>
   <string name="a11y_notifications_new_messages">"Mesaje noi"</string>
   <string name="a11y_notifications_ongoing_call">"Apel în curs"</string>
-  <string name="a11y_other_user_avatar">"Avatarul altui utilizator"</string>
   <string name="a11y_page_n">"Pagina %1$d"</string>
   <string name="a11y_pause">"Pauză"</string>
   <string name="a11y_paused_voice_message">"Mesaj vocal, durată:%1$s, poziție actuală: %2$s"</string>
@@ -89,7 +88,6 @@
   <string name="a11y_voice_message">"Mesaj vocal, durată: %1$s"</string>
   <string name="a11y_voice_message_record">"Înregistrați un mesaj vocal."</string>
   <string name="a11y_voice_message_stop_recording">"Opriți înregistrarea"</string>
-  <string name="a11y_your_avatar">"Avatarul dvs."</string>
   <string name="action_accept">"Acceptați"</string>
   <string name="action_add_caption">"Adăugați o descriere"</string>
   <string name="action_add_existing_rooms">"Adăugați camere existente"</string>
@@ -103,7 +101,6 @@
   <string name="action_clear">"Ștergeți"</string>
   <string name="action_clear_all">"Ștergeți tot"</string>
   <string name="action_close">"Închideți"</string>
-  <string name="action_complete_verification">"Finalizați verificarea"</string>
   <string name="action_confirm">"Confirmați"</string>
   <string name="action_confirm_password">"Confirmați parola"</string>
   <string name="action_continue">"Continuați"</string>
@@ -116,8 +113,6 @@
   <string name="action_create">"Creați"</string>
   <string name="action_create_room">"Creați o cameră"</string>
   <string name="action_create_space">"Creați un spațiu"</string>
-  <string name="action_deactivate">"Dezactivați"</string>
-  <string name="action_deactivate_account">"Dezactivați contul"</string>
   <string name="action_decline">"Refuzați"</string>
   <string name="action_decline_and_block">"Refuzați și blocați"</string>
   <string name="action_delete">"Ștergeți"</string>
@@ -161,9 +156,7 @@
   <string name="action_leave_room">"Părăsiți camera"</string>
   <string name="action_leave_space">"Părăsiți spațiul"</string>
   <string name="action_load_more">"Încărcați mai mult"</string>
-  <string name="action_manage_account">"Gestionați contul"</string>
   <string name="action_manage_account_and_devices">"Gestionați contul și dispozitivele"</string>
-  <string name="action_manage_devices">"Gestionați dispozitivele"</string>
   <string name="action_manage_rooms">"Gestionați camerele"</string>
   <string name="action_mark_as_read">"Marcați ca citită"</string>
   <string name="action_message">"Trimiteți mesaj"</string>
@@ -186,7 +179,6 @@
   <string name="action_reply">"Răspundeți"</string>
   <string name="action_reply_in_thread">"Răspundeți în fir"</string>
   <string name="action_report">"Raportați"</string>
-  <string name="action_report_bug">"Raportați o eroare"</string>
   <string name="action_report_content">"Raportați conținutul"</string>
   <string name="action_report_dm">"Raportați conversația"</string>
   <string name="action_report_room">"Raportați camera"</string>
@@ -205,7 +197,6 @@
   <string name="action_share_link">"Partajați linkul"</string>
   <string name="action_share_live_location">"Partajați locația în timp real"</string>
   <string name="action_show">"Afișați"</string>
-  <string name="action_sign_in_again">"Conectați-vă din nou"</string>
   <string name="action_signout">"Eliminați acest dispozitiv"</string>
   <string name="action_signout_anyway">"Eliminați acest dispozitiv oricum"</string>
   <string name="action_skip">"Omiteți"</string>
@@ -227,12 +218,9 @@
   <string name="action_voice_call">"Apel vocal"</string>
   <string name="action_yes">"Da"</string>
   <string name="action_yes_try_again">"Da, încercați din nou"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Serverul dvs. acceptă acum un protocol nou, mai rapid. Deconectați-vă și conectați-vă din nou pentru a face upgrade acum. Dacă faceți acest lucru acum, vă va ajuta să evitați o deconectare forțată atunci când vechiul protocol este eliminat ulterior."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Upgrade disponibil"</string>
   <string name="common_about">"Despre"</string>
   <string name="common_acceptable_use_policy">"Politică de utilizare rezonabilă"</string>
   <string name="common_account_settings">"Setări cont"</string>
-  <string name="common_add_account">"Adăugați un cont"</string>
   <string name="common_add_another_account">"Adăugați un cont"</string>
   <string name="common_adding_caption">"Adăugare descriere"</string>
   <string name="common_advanced_settings">"Setări avansate"</string>
@@ -245,7 +233,6 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Utilizatori blocați"</string>
-  <string name="common_bubbles">"Baloane"</string>
   <string name="common_call_declined">"Apel respins"</string>
   <string name="common_call_in_progress">"Apel în curs"</string>
   <string name="common_call_started">"Apel inițiat"</string>
@@ -579,7 +566,6 @@ Sigur doriți să continuați?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Editați administratorii sau proprietarii"</string>
   <string name="screen_room_error_failed_processing_media">"Nu s-au putut procesa fișierele media, încercați din nou."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nu am putut găsi detaliile utilizatorului"</string>
-  <string name="screen_room_event_pill">"Mesaj în %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Extindeți"</string>
   <string name="screen_room_grouped_state_events_reduce">"Reduceți"</string>
   <string name="screen_room_live_location_banner">"Se partajează locația în timp real"</string>

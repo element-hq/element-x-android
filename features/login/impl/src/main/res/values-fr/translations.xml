@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Changer de fournisseur de compte"</string>
-  <string name="screen_account_provider_form_hint">"Adresse du serveur d’accueil"</string>
-  <string name="screen_account_provider_form_notice">"Entrez un terme de recherche ou une adresse de domaine."</string>
-  <string name="screen_account_provider_form_subtitle">"Recherchez une entreprise, une communauté ou un serveur privé."</string>
-  <string name="screen_account_provider_form_title">"Trouver un fournisseur de comptes"</string>
-  <string name="screen_account_provider_signin_subtitle">"C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails."</string>
   <string name="screen_account_provider_signin_title">"Vous êtes sur le point de vous connecter à %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails."</string>
-  <string name="screen_account_provider_signup_title">"Vous êtes sur le point de créer un compte sur %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org est un grand serveur gratuit sur le réseau public Matrix pour une communication sécurisée et décentralisée, géré par la Fondation Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Autres"</string>
   <string name="screen_change_account_provider_subtitle">"Utilisez un autre fournisseur de compte, tel que votre propre serveur privé ou un serveur professionnel."</string>
   <string name="screen_change_account_provider_title">"Changer de fournisseur de compte"</string>
@@ -43,7 +34,6 @@
   <string name="screen_login_error_unsupported_authentication">"Le fournisseur de compte sélectionné ne prend pas en charge la connexion avec mot de passe ni OAuth. Contactez votre administrateur ou choisissez un autre fournisseur de compte."</string>
   <string name="screen_login_form_header">"Saisissez vos identifiants"</string>
   <string name="screen_login_subtitle">"Matrix est un réseau ouvert pour une communication sécurisée et décentralisée."</string>
-  <string name="screen_login_title">"Content de vous revoir !"</string>
   <string name="screen_login_title_with_homeserver">"Connectez-vous à %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"Ouvrir Element Classic"</string>
   <string name="screen_missing_key_backup_step_1">"Ouvrez Element Classic sur votre appareil"</string>
@@ -62,7 +52,6 @@
   <string name="screen_onboarding_sign_up">"Créer un compte"</string>
   <string name="screen_onboarding_welcome_back">"Bon retour parmi nous"</string>
   <string name="screen_onboarding_welcome_message">"Bienvenue dans l’application %1$s la plus rapide de tous les temps. Boosté pour plus de rapidité et de simplicité."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Bienvenue sur %1$s. Boosté, pour plus de rapidité et de simplicité."</string>
   <string name="screen_onboarding_welcome_title">"Soyez dans votre Element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Établissement d’une connexion sécurisée"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Aucune connexion sécurisée n’a pu être établie avec la nouvelle session. Vos sessions existantes sont toujours en sécurité et vous n’avez pas à vous en soucier."</string>
@@ -102,16 +91,10 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Vous devez autoriser %1$s à utiliser la camera de votre appareil pour continuer."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Autoriser l’usage de la caméra pour scanner le code QR"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Scannez le code QR"</string>
-  <string name="screen_qr_code_login_start_over_button">"Recommencer"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Une erreur inattendue s’est produite. Veuillez réessayer."</string>
   <string name="screen_qr_code_login_verify_code_loading">"En attente de votre autre session"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Votre fournisseur de compte peut vous demander le code suivant pour vérifier la connexion."</string>
   <string name="screen_qr_code_login_verify_code_title">"Votre code de vérification"</string>
-  <string name="screen_server_confirmation_change_server">"Changer de fournisseur de compte"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Un serveur privé pour les employés d’Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix est un réseau ouvert pour une communication sécurisée et décentralisée."</string>
-  <string name="screen_server_confirmation_message_register">"C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails."</string>
-  <string name="screen_server_confirmation_title_login">"Vous êtes sur le point de vous connecter à %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Choisissez un fournisseur de compte"</string>
-  <string name="screen_server_confirmation_title_register">"Vous êtes sur le point de créer un compte sur %1$s"</string>
 </resources>

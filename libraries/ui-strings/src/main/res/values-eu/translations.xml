@@ -12,7 +12,6 @@
   <string name="a11y_notifications_muted">"Mutututa"</string>
   <string name="a11y_notifications_new_mentions">"Aipamen berriak"</string>
   <string name="a11y_notifications_new_messages">"Mezu berriak"</string>
-  <string name="a11y_other_user_avatar">"Beste erabiltzailearen abatarra"</string>
   <string name="a11y_page_n">"%1$d. orria"</string>
   <string name="a11y_pause">"Eten"</string>
   <string name="a11y_paused_voice_message">"Ahots-mezua, iraupena: %1$s, uneko posizioa: %2$s"</string>
@@ -40,7 +39,6 @@
   <string name="a11y_voice_message">"Ahots-mezua, iraupena: %1$s"</string>
   <string name="a11y_voice_message_record">"Grabatu ahots-mezua."</string>
   <string name="a11y_voice_message_stop_recording">"Utzi grabatzeari"</string>
-  <string name="a11y_your_avatar">"Zure abatarra"</string>
   <string name="action_accept">"Onartu"</string>
   <string name="action_add_caption">"Gehitu testua"</string>
   <string name="action_add_to_timeline">"Gehitu denbora-lerrora"</string>
@@ -51,7 +49,6 @@
   <string name="action_choose_photo">"Aukeratu argazkia"</string>
   <string name="action_clear">"Garbitu"</string>
   <string name="action_close">"Itxi"</string>
-  <string name="action_complete_verification">"Burutu egiaztapena"</string>
   <string name="action_confirm">"Berretsi"</string>
   <string name="action_confirm_password">"Berretsi pasahitza"</string>
   <string name="action_continue">"Jarraitu"</string>
@@ -62,8 +59,6 @@
   <string name="action_copy_text">"Kopiatu testua"</string>
   <string name="action_create">"Sortu"</string>
   <string name="action_create_room">"Sortu gela"</string>
-  <string name="action_deactivate">"Desaktibatu"</string>
-  <string name="action_deactivate_account">"Desaktibatu kontua"</string>
   <string name="action_decline">"Ukatu"</string>
   <string name="action_decline_and_block">"Baztertu eta blokeatu"</string>
   <string name="action_delete_poll">"Ezabatu inkesta"</string>
@@ -93,8 +88,6 @@
   <string name="action_leave_conversation">"Utzi elkarrizketa"</string>
   <string name="action_leave_room">"Atera gelatik"</string>
   <string name="action_load_more">"Kargatu gehiago"</string>
-  <string name="action_manage_account">"Kudeatu kontua"</string>
-  <string name="action_manage_devices">"Kudeatu gailuak"</string>
   <string name="action_message">"Bidali mezua"</string>
   <string name="action_next">"Hurrengoa"</string>
   <string name="action_no">"Ez"</string>
@@ -113,7 +106,6 @@
   <string name="action_reply">"Erantzun"</string>
   <string name="action_reply_in_thread">"Erantzun harian"</string>
   <string name="action_report">"Salatu"</string>
-  <string name="action_report_bug">"Eman errore baten berri"</string>
   <string name="action_report_content">"Salatu edukia"</string>
   <string name="action_report_dm">"Salatu elkarrizketa"</string>
   <string name="action_report_room">"Salatu gela"</string>
@@ -130,7 +122,6 @@
   <string name="action_share">"Partekatu"</string>
   <string name="action_share_link">"Partekatu esteka"</string>
   <string name="action_show">"Erakutsi"</string>
-  <string name="action_sign_in_again">"Hasi saioa berriro"</string>
   <string name="action_signout">"Amaitu saioa"</string>
   <string name="action_signout_anyway">"Amaitu saioa edonola ere"</string>
   <string name="action_skip">"Saltatu"</string>
@@ -148,8 +139,6 @@
   <string name="action_view_source">"Ikusi iturburua"</string>
   <string name="action_yes">"Bai"</string>
   <string name="action_yes_try_again">"Bai, saiatu berriro"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Orain zure zerbitzaria protokolo berri eta azkarrago batekin da bateragarria. Amaitu saioa eta hasi berriro protokolo berria erabiltzeko. Orain eginez gero, etorkizunean protokolo zaharra kentzen denean ez zaizu behartutako saioa ixtera."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Bertsio-berritzea eskuragarri"</string>
   <string name="common_about">"Honi buruz"</string>
   <string name="common_adding_caption">"Testua gehitzen"</string>
   <string name="common_advanced_settings">"Ezarpen aurreratuak"</string>
@@ -159,7 +148,6 @@
   <string name="common_appearance">"Itxura"</string>
   <string name="common_audio">"Audioa"</string>
   <string name="common_blocked_users">"Blokeatutako erabiltzaileak"</string>
-  <string name="common_bubbles">"Bunbuiloak"</string>
   <string name="common_call_started">"Deia hasi da"</string>
   <string name="common_chat_backup">"Txataren babeskopia"</string>
   <string name="common_copied_to_clipboard">"Arbelean kopiatu da"</string>

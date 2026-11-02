@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"Untuk memastikan Anda tidak melewatkan panggilan penting, silakan ubah pengaturan Anda untuk memperbolehkan notifikasi layar penuh ketika ponsel Anda terkunci."</string>
   <string name="full_screen_intent_banner_title_android">"Tingkatkan pengalaman panggilan Anda"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Pilih cara menerima notifikasi"</string>
-  <string name="screen_advanced_settings_developer_mode">"Mode pengembang"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Aktifkan untuk mengakses fitur dan fungsi untuk para pengembang."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL dasar Element Call khusus"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Tetapkan URL dasar khusus untuk Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL tidak valid, pastikan Anda menyertakan protokol (http/https) dan alamat yang benar."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Sembunyikan avatar dalam permintaan undangan ruangan"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Sembunyikan pratinjau media pada lini masa"</string>
   <string name="screen_advanced_settings_labs">"Uji Coba"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Jarak yang harus Anda tempuh untuk memicu pembaruan."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Pastikan \"Lokasi Tepat\" diaktifkan untuk aplikasi ini. Untuk mengubah izin tersebut, buka %1$s."</string>
@@ -20,7 +17,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Unggah foto dan video lebih cepat dan kurangi penggunaan data"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimalkan kualitas media"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderasi dan Keamanan"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimalkan gambar secara otomatis untuk unggahan lebih cepat dan ukuran file lebih kecil."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimalkan kualitas unggahan gambar"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Ketuk di sini untuk mengubah."</string>
@@ -29,9 +25,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standar (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Kualitas unggahan video"</string>
   <string name="screen_advanced_settings_push_provider_android">"Penyedia notifikasi dorongan"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Nonaktifkan penyunting teks kaya untuk mengetik Markdown secara manual."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Laporan dibaca"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Jika dimatikan, laporan dibaca Anda tidak akan dikirim kepada siapa pun. Anda masih akan menerima laporan dibaca dari pengguna lain."</string>
   <string name="screen_advanced_settings_share_presence">"Bagikan presensi"</string>
   <string name="screen_advanced_settings_share_presence_description">"Jika dimatikan, Anda tidak akan dapat mengirim atau menerima laporan dibaca atau notifikasi pengetikan"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Selalu sembunyikan"</string>

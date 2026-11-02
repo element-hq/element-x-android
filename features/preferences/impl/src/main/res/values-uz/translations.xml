@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"Muhim qoʻngʻiroqlarni oʻtkazib yubormasligingiz uchun telefoningiz qulflangan holatida toʻliq ekranli bildirishnomalarni ko‘rsatishga ruxsat beradigan qilib sozlamalaringizni oʻzgartiring."</string>
   <string name="full_screen_intent_banner_title_android">"Qoʻngʻiroq tajribangizni yaxshilang"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Bildirishnomalarni qanday qabul qilishni tanlang"</string>
-  <string name="screen_advanced_settings_developer_mode">"Dasturchi rejimi"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Ishlab chiquvchilar uchun xususiyatlar va funksiyalarga kirishni yoqing."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Maxsus element qo‘ng‘iroqlar bazasi URL manzili"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Element qo\'ng\'irog\'iga maxsus asosiy url or\'natish"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL noto‘g‘ri, iltimos, protokol (http/https) va to‘g‘ri manzilni kiritganingizga ishonch hosil qiling."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Xonaga taklif so‘rovlarida avatarlarni berkitish"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Vaqt jadvalida mediaga razm solishlarni berkitish"</string>
   <string name="screen_advanced_settings_labs">"Laboratoriyalar"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Yangilanishni ishga tushirish uchun harakat qilishingiz kerak boʻlgan masofa"</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Ushbu ilova uchun “Aniq joylashuv” yoqilganligiga ishonch hosil qiling. Ruxsatni oʻzgartirish uchun %1$s ga oʻting."</string>
@@ -21,7 +18,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Rasm va videolarni tezroq yuklang va trafik sarfini kamaytiring"</string>
   <string name="screen_advanced_settings_media_compression_title">"Media sifatini yaxshilash"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderatsiya va xavfsizlik"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Tezroq yuklash va kichikroq fayl hajmi uchun rasmlarni avtomatik optimallashtirish."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Rasm yuklash sifatini optimallashtirish"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Oʻzgartirish uchun bu yerga bosing."</string>
@@ -30,9 +26,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standart (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Video yuklash sifati"</string>
   <string name="screen_advanced_settings_push_provider_android">"Push bildirishnoma provayderi"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Boy matn muharriri o\'chiring Markdown bilan qo\'lda yozish uchun"</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Kvitansiyalarni oʻqish"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Agar oʻchirib qo‘yilsa, sizning oʻqilganlik bildirishnomangiz hech kimga yuborilmaydi. Siz boshqa foydalanuvchilardan oʻqilganlik bildirishnomalarini olishda davom etasiz."</string>
   <string name="screen_advanced_settings_share_presence">"Mavjudligini ulashish"</string>
   <string name="screen_advanced_settings_share_presence_description">"Agar oʻchirib qoʻyilsa, siz oʻqilganlik haqidagi bildirishnomalarni yoki yozayotganingiz haqidagi xabarlarni yubora olmaysiz va qabul qila olmaysiz."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Doim berkitilsin"</string>

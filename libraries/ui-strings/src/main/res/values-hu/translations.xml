@@ -40,7 +40,6 @@
   <string name="a11y_notifications_new_mentions">"Új említések"</string>
   <string name="a11y_notifications_new_messages">"Új üzenetek"</string>
   <string name="a11y_notifications_ongoing_call">"Folyamatban lévő hívás"</string>
-  <string name="a11y_other_user_avatar">"Más felhasználó profilképe"</string>
   <string name="a11y_page_n">"%1$d. oldal"</string>
   <string name="a11y_pause">"Szüneteltetés"</string>
   <string name="a11y_paused_voice_message">"Hangüzenet, időtartam:%1$s, jelenlegi pozíció:%2$s"</string>
@@ -86,7 +85,6 @@
   <string name="a11y_voice_message">"Hangüzenet, időtartam: %1$s"</string>
   <string name="a11y_voice_message_record">"Hangüzenet felvétele."</string>
   <string name="a11y_voice_message_stop_recording">"Rögzítés leállítása"</string>
-  <string name="a11y_your_avatar">"Saját profilkép"</string>
   <string name="action_accept">"Elfogadás"</string>
   <string name="action_add_caption">"Felirat hozzáadása"</string>
   <string name="action_add_existing_rooms">"Létező szobák hozzáadása"</string>
@@ -100,7 +98,6 @@
   <string name="action_clear">"Törlés"</string>
   <string name="action_clear_all">"Összes törlése"</string>
   <string name="action_close">"Bezárás"</string>
-  <string name="action_complete_verification">"Ellenőrzés befejezése"</string>
   <string name="action_confirm">"Megerősítés"</string>
   <string name="action_confirm_password">"Jelszó megerősítése"</string>
   <string name="action_continue">"Folytatás"</string>
@@ -113,8 +110,6 @@
   <string name="action_create">"Létrehozás"</string>
   <string name="action_create_room">"Szoba létrehozása"</string>
   <string name="action_create_space">"Tér létrehozása"</string>
-  <string name="action_deactivate">"Deaktiválás"</string>
-  <string name="action_deactivate_account">"Fiók deaktiválása"</string>
   <string name="action_decline">"Elutasítás"</string>
   <string name="action_decline_and_block">"Elutasítás és letiltás"</string>
   <string name="action_delete">"Törlés"</string>
@@ -157,9 +152,7 @@
   <string name="action_leave_room">"Szoba elhagyása"</string>
   <string name="action_leave_space">"Tér elhagyása"</string>
   <string name="action_load_more">"Továbbiak betöltése"</string>
-  <string name="action_manage_account">"Fiók kezelése"</string>
   <string name="action_manage_account_and_devices">"Fiók és eszközök kezelése"</string>
-  <string name="action_manage_devices">"Eszközök kezelése"</string>
   <string name="action_manage_rooms">"Szobák kezelése"</string>
   <string name="action_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="action_message">"Üzenet"</string>
@@ -182,7 +175,6 @@
   <string name="action_reply">"Válasz"</string>
   <string name="action_reply_in_thread">"Válasz az üzenetszálban"</string>
   <string name="action_report">"Jelentés"</string>
-  <string name="action_report_bug">"Hiba jelentése"</string>
   <string name="action_report_content">"Tartalom jelentése"</string>
   <string name="action_report_dm">"Beszélgetés jelentése"</string>
   <string name="action_report_room">"Szoba jelentése"</string>
@@ -201,7 +193,6 @@
   <string name="action_share_link">"Hivatkozás megosztása"</string>
   <string name="action_share_live_location">"Valós idejű hely megosztása"</string>
   <string name="action_show">"Megjelenítés"</string>
-  <string name="action_sign_in_again">"Jelentkezzen be újra"</string>
   <string name="action_signout">"Eszköz eltávolítása"</string>
   <string name="action_signout_anyway">"Eszköz eltávolítása mindenképpen"</string>
   <string name="action_skip">"Kihagyás"</string>
@@ -223,12 +214,9 @@
   <string name="action_voice_call">"Hanghívás"</string>
   <string name="action_yes">"Igen"</string>
   <string name="action_yes_try_again">"Igen, újrapróbálkozás"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"A kiszolgálója mostantól egy új, gyorsabb protokollt támogat. A frissítéshez jelentkezzen ki, majd jelentkezzen be újra. Ha ezt most megteszi, elkerülheti a kényszerített kijelentkeztetést a régi protokollt eltávolításakor."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Frissítés érhető el"</string>
   <string name="common_about">"Névjegy"</string>
   <string name="common_acceptable_use_policy">"Elfogadható használatra vonatkozó szabályzat"</string>
   <string name="common_account_settings">"Fiókbeállítások"</string>
-  <string name="common_add_account">"Fiók hozzáadása"</string>
   <string name="common_add_another_account">"Másik fiók hozzáadása"</string>
   <string name="common_adding_caption">"Felirat hozzáadása"</string>
   <string name="common_advanced_settings">"Speciális beállítások"</string>
@@ -241,7 +229,6 @@
   <string name="common_audio">"Hang"</string>
   <string name="common_beta">"Béta"</string>
   <string name="common_blocked_users">"Letiltott felhasználók"</string>
-  <string name="common_bubbles">"Buborékok"</string>
   <string name="common_call_declined">"Hívás elutasítva"</string>
   <string name="common_call_in_progress">"Hívás folyamatban"</string>
   <string name="common_call_started">"A hívás elindult"</string>
@@ -565,7 +552,6 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Adminisztrátorok vagy tulajdonosok szerkesztése"</string>
   <string name="screen_room_error_failed_processing_media">"Nem sikerült feldolgozni a feltöltendő médiát, próbálja újra."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nem sikerült letölteni a felhasználói adatokat"</string>
-  <string name="screen_room_event_pill">"Üzenet a következőben: %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Kibontás"</string>
   <string name="screen_room_grouped_state_events_reduce">"Csökkentés"</string>
   <string name="screen_room_live_location_banner">"Élő helymegosztás"</string>

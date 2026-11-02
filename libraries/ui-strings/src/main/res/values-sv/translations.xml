@@ -21,7 +21,6 @@
   <string name="a11y_notifications_new_mentions">"Nya omnämnanden"</string>
   <string name="a11y_notifications_new_messages">"Nya meddelanden"</string>
   <string name="a11y_notifications_ongoing_call">"Pågående samtal"</string>
-  <string name="a11y_other_user_avatar">"Annan användares avatar"</string>
   <string name="a11y_page_n">"Sida %1$d"</string>
   <string name="a11y_pause">"Pausa"</string>
   <string name="a11y_paused_voice_message">"Röstmeddelande, varaktighet:%1$s, nuvarande position: %2$s"</string>
@@ -52,7 +51,6 @@
   <string name="a11y_voice_message">"Röstmeddelande, varaktighet: %1$s"</string>
   <string name="a11y_voice_message_record">"Spela in röstmeddelande."</string>
   <string name="a11y_voice_message_stop_recording">"Stoppa inspelning"</string>
-  <string name="a11y_your_avatar">"Din avatar"</string>
   <string name="action_accept">"Godkänn"</string>
   <string name="action_add_caption">"Lägg till bildtext"</string>
   <string name="action_add_to_timeline">"Lägg till i tidslinjen"</string>
@@ -63,7 +61,6 @@
   <string name="action_choose_photo">"Välj bild"</string>
   <string name="action_clear">"Rensa"</string>
   <string name="action_close">"Stäng"</string>
-  <string name="action_complete_verification">"Slutför verifiering"</string>
   <string name="action_confirm">"Bekräfta"</string>
   <string name="action_confirm_password">"Bekräfta lösenord"</string>
   <string name="action_continue">"Fortsätt"</string>
@@ -74,8 +71,6 @@
   <string name="action_copy_text">"Kopiera text"</string>
   <string name="action_create">"Skapa"</string>
   <string name="action_create_room">"Skapa rum"</string>
-  <string name="action_deactivate">"Inaktivera"</string>
-  <string name="action_deactivate_account">"Inaktivera konto"</string>
   <string name="action_decline">"Neka"</string>
   <string name="action_decline_and_block">"Avvisa och blockera"</string>
   <string name="action_delete_poll">"Radera omröstning"</string>
@@ -106,8 +101,6 @@
   <string name="action_leave_room">"Lämna rum"</string>
   <string name="action_leave_space">"Lämna utrymmet"</string>
   <string name="action_load_more">"Ladda mer"</string>
-  <string name="action_manage_account">"Hantera konto"</string>
-  <string name="action_manage_devices">"Hantera enheter"</string>
   <string name="action_message">"Meddela"</string>
   <string name="action_next">"Nästa"</string>
   <string name="action_no">"Nej"</string>
@@ -127,7 +120,6 @@
   <string name="action_reply">"Svara"</string>
   <string name="action_reply_in_thread">"Svara i tråd"</string>
   <string name="action_report">"Anmäl"</string>
-  <string name="action_report_bug">"Rapportera bugg"</string>
   <string name="action_report_content">"Rapportera innehåll"</string>
   <string name="action_report_dm">"Anmäl konversation"</string>
   <string name="action_report_room">"Anmäl rum"</string>
@@ -144,7 +136,6 @@
   <string name="action_share">"Dela"</string>
   <string name="action_share_link">"Dela länk"</string>
   <string name="action_show">"Visa"</string>
-  <string name="action_sign_in_again">"Logga in igen"</string>
   <string name="action_signout">"Ta bort den här enheten"</string>
   <string name="action_signout_anyway">"Ta bort den här enheten ändå"</string>
   <string name="action_skip">"Hoppa över"</string>
@@ -162,11 +153,8 @@
   <string name="action_view_source">"Visa källkod"</string>
   <string name="action_yes">"Ja"</string>
   <string name="action_yes_try_again">"Ja, försök igen"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Din server stöder nu ett nytt, snabbare protokoll. Logga ut och logga in igen för att uppgradera nu. Om du gör detta nu hjälper du dig att undvika en tvingad utloggning när det gamla protokollet tas bort senare."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Uppgradering tillgänglig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Policy för godtagbar användning"</string>
-  <string name="common_add_account">"Lägg till ett konto"</string>
   <string name="common_add_another_account">"Lägg till ytterligare ett konto"</string>
   <string name="common_adding_caption">"Lägga till bildtext"</string>
   <string name="common_advanced_settings">"Avancerade inställningar"</string>
@@ -177,7 +165,6 @@
   <string name="common_appearance">"Utseende"</string>
   <string name="common_audio">"Ljud"</string>
   <string name="common_blocked_users">"Blockerade användare"</string>
-  <string name="common_bubbles">"Bubblor"</string>
   <string name="common_call_started">"Samtal startat"</string>
   <string name="common_chat_backup">"Chattsäkerhetskopia"</string>
   <string name="common_copied_to_clipboard">"Kopierad till klippbordet"</string>
@@ -422,7 +409,6 @@ Anledning:%1$s."</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Redigera administratörer eller ägare"</string>
   <string name="screen_room_error_failed_processing_media">"Misslyckades att bearbeta media för uppladdning, vänligen pröva igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunde inte hämta användarinformation"</string>
-  <string name="screen_room_event_pill">"Meddelande i %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Expandera"</string>
   <string name="screen_room_grouped_state_events_reduce">"Reducera"</string>
   <string name="screen_room_permalink_same_room_android">"Visar redan det här rummet!"</string>

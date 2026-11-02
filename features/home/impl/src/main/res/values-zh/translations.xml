@@ -23,9 +23,7 @@
   <string name="screen_invites_decline_chat_title">"拒绝邀请"</string>
   <string name="screen_invites_decline_direct_chat_message">"你确定要拒绝与 %1$s 私聊？"</string>
   <string name="screen_invites_decline_direct_chat_title">"拒绝聊天"</string>
-  <string name="screen_invites_empty_list">"没有邀请"</string>
   <string name="screen_invites_invited_you">"%1$s（%2$s）邀请了你"</string>
-  <string name="screen_migration_message">"此为一次性流程，感谢等待。"</string>
   <string name="screen_migration_title">"设置账户。"</string>
   <string name="screen_multi_account_announcement_action">"添加账户"</string>
   <string name="screen_multi_account_announcement_description">"转到 %1$s 以登录另一账户。之后你可以轻松地在它们之间切换。"</string>
@@ -60,11 +58,15 @@
   <string name="screen_roomlist_tombstoned_room_description">"此房间已升级"</string>
   <string name="screen_roomlist_your_spaces">"你的空间"</string>
   <string name="screen_search_empty_state_message">"在聊天与消息中搜索"</string>
-  <string name="screen_search_empty_state_title">"开始搜索"</string>
-  <string name="screen_search_no_results_message">"未找到与“%1$s”相关的搜索结果。尝试其它搜索关键词。"</string>
+  <string name="screen_search_empty_state_title">"开始搜索…"</string>
+  <string name="screen_search_from_your_messages_header">"来自消息"</string>
+  <string name="screen_search_history_limit_message">"搜索功能在你的设备上运行，因此你的加密消息将保持私有。
+设备会保留最近 3 个月的消息，因此暂无法搜索到更早的消息。"</string>
+  <string name="screen_search_history_limit_title">"搜索范围涵盖最近 3 个月"</string>
+  <string name="screen_search_messages_no_results_message">"在您最近的消息中，未找到与“%1$s”相关的结果。"</string>
+  <string name="screen_search_messages_no_results_title">"最近 3 个月内没有结果"</string>
+  <string name="screen_search_no_results_message">"未找到与“%1$s”相关的结果。尝试新的搜索关键词。"</string>
   <string name="screen_search_recent_searches">"最近搜索"</string>
   <string name="screen_search_tab_chats">"聊天"</string>
   <string name="screen_search_tab_messages">"消息"</string>
-  <string name="session_verification_banner_message">"你似乎正在使用新设备。使用另一台设备进行验证以访问加密消息。"</string>
-  <string name="session_verification_banner_title">"验证是你本人"</string>
 </resources>

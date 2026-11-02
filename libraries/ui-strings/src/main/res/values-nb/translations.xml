@@ -30,7 +30,6 @@
   <string name="a11y_notifications_new_mentions">"Nye omtaler"</string>
   <string name="a11y_notifications_new_messages">"Nye meldinger"</string>
   <string name="a11y_notifications_ongoing_call">"Pågående samtale"</string>
-  <string name="a11y_other_user_avatar">"En annen brukers avatar"</string>
   <string name="a11y_page_n">"Side %1$d"</string>
   <string name="a11y_pause">"Setter på pause"</string>
   <string name="a11y_paused_voice_message">"Talemelding, lengde: %1$s, nåværende posisjon: %2$s"</string>
@@ -74,7 +73,6 @@
   <string name="a11y_voice_message">"Talemelding, lengde: %1$s"</string>
   <string name="a11y_voice_message_record">"Ta opp talemelding."</string>
   <string name="a11y_voice_message_stop_recording">"Stopp opptaket"</string>
-  <string name="a11y_your_avatar">"Din avatar"</string>
   <string name="action_accept">"Godta"</string>
   <string name="action_add_caption">"Legg til bildetekst"</string>
   <string name="action_add_existing_rooms">"Legg til eksisterende rom"</string>
@@ -87,7 +85,6 @@
   <string name="action_choose_photo">"Velg bilde"</string>
   <string name="action_clear">"Tøm"</string>
   <string name="action_close">"Lukk"</string>
-  <string name="action_complete_verification">"Fullfør verifisering"</string>
   <string name="action_confirm">"Bekreft"</string>
   <string name="action_confirm_password">"Bekreft passord"</string>
   <string name="action_continue">"Fortsett"</string>
@@ -99,8 +96,6 @@
   <string name="action_create">"Opprett"</string>
   <string name="action_create_room">"Opprett rom"</string>
   <string name="action_create_space">"Opprett område"</string>
-  <string name="action_deactivate">"Deaktiver"</string>
-  <string name="action_deactivate_account">"Deaktiver kontoen"</string>
   <string name="action_decline">"Avslå"</string>
   <string name="action_decline_and_block">"Avslå og blokker"</string>
   <string name="action_delete">"Slett"</string>
@@ -139,9 +134,7 @@
   <string name="action_leave_room">"Forlat rommet"</string>
   <string name="action_leave_space">"Forlat område"</string>
   <string name="action_load_more">"Last inn mer"</string>
-  <string name="action_manage_account">"Administrer konto"</string>
   <string name="action_manage_account_and_devices">"Administrer konto og enheter"</string>
-  <string name="action_manage_devices">"Administrer enheter"</string>
   <string name="action_manage_rooms">"Administrer rom"</string>
   <string name="action_mark_as_read">"Merk som lest"</string>
   <string name="action_message">"Melding"</string>
@@ -164,7 +157,6 @@
   <string name="action_reply">"Svar"</string>
   <string name="action_reply_in_thread">"Svar i tråden"</string>
   <string name="action_report">"Rapporter"</string>
-  <string name="action_report_bug">"Rapporter feil"</string>
   <string name="action_report_content">"Rapporter innhold"</string>
   <string name="action_report_dm">"Rapporter samtale"</string>
   <string name="action_report_room">"Rapporter rommet"</string>
@@ -183,7 +175,6 @@
   <string name="action_share_link">"Dele lenke"</string>
   <string name="action_share_live_location">"Del lokasjon i sanntid"</string>
   <string name="action_show">"Vis"</string>
-  <string name="action_sign_in_again">"Logg på igjen"</string>
   <string name="action_signout">"Fjern denne enheten"</string>
   <string name="action_signout_anyway">"Fjern denne enheten likevel"</string>
   <string name="action_skip">"Hopp over"</string>
@@ -205,11 +196,8 @@
   <string name="action_voice_call">"Taleanrop"</string>
   <string name="action_yes">"Ja"</string>
   <string name="action_yes_try_again">"Ja, prøv igjen"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Serveren din støtter nå en ny, raskere protokoll. Logg ut og logg inn igjen for å oppgradere nå. Ved å gjøre dette nå, unngår du å bli tvunget til å logge ut når den gamle protokollen fjernes senere."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Oppgradering tilgjengelig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Retningslinjer for akseptabel bruk"</string>
-  <string name="common_add_account">"Legg til en konto"</string>
   <string name="common_add_another_account">"Legg til en annen konto"</string>
   <string name="common_adding_caption">"Legger til bildetekst"</string>
   <string name="common_advanced_settings">"Avanserte innstillinger"</string>
@@ -221,7 +209,6 @@
   <string name="common_audio">"Lyd"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blokkerte brukere"</string>
-  <string name="common_bubbles">"Bobler"</string>
   <string name="common_call_declined">"Anrop avvist"</string>
   <string name="common_call_in_progress">"Samtale pågår"</string>
   <string name="common_call_started">"Samtale startet"</string>
@@ -531,7 +518,6 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Rediger administratorer eller eiere"</string>
   <string name="screen_room_error_failed_processing_media">"Kunne ikke behandle medier for opplasting, vennligst prøv igjen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunne ikke hente brukerdetaljer"</string>
-  <string name="screen_room_event_pill">"Melding i %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Utvid"</string>
   <string name="screen_room_grouped_state_events_reduce">"Reduser"</string>
   <string name="screen_room_live_location_banner">"Deler lokasjon i sanntid"</string>

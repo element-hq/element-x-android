@@ -38,7 +38,6 @@
   <string name="a11y_notifications_new_mentions">"Sebutan baru"</string>
   <string name="a11y_notifications_new_messages">"Pesan baru"</string>
   <string name="a11y_notifications_ongoing_call">"Panggilan berlangsung"</string>
-  <string name="a11y_other_user_avatar">"Avatar pengguna lain"</string>
   <string name="a11y_page_n">"Halaman %1$d"</string>
   <string name="a11y_pause">"Jeda"</string>
   <string name="a11y_paused_voice_message">"Pesan suara, durasi: %1$s, posisi saat ini: %2$s"</string>
@@ -83,7 +82,6 @@
   <string name="a11y_voice_message">"Pesan suara, durasi: %1$s"</string>
   <string name="a11y_voice_message_record">"Rekam pesan suara."</string>
   <string name="a11y_voice_message_stop_recording">"Berhenti merekam"</string>
-  <string name="a11y_your_avatar">"Avatar Anda"</string>
   <string name="action_accept">"Terima"</string>
   <string name="action_add_caption">"Tambahkan keterangan"</string>
   <string name="action_add_existing_rooms">"Tambahkan ruangan yang sudah ada"</string>
@@ -97,7 +95,6 @@
   <string name="action_clear">"Hapus"</string>
   <string name="action_clear_all">"Hapus semua"</string>
   <string name="action_close">"Tutup"</string>
-  <string name="action_complete_verification">"Selesaikan verifikasi"</string>
   <string name="action_confirm">"Konfirmasi"</string>
   <string name="action_confirm_password">"Konfirmasi kata sandi"</string>
   <string name="action_continue">"Lanjutkan"</string>
@@ -110,8 +107,6 @@
   <string name="action_create">"Buat"</string>
   <string name="action_create_room">"Buat room"</string>
   <string name="action_create_space">"Ciptakan ruang"</string>
-  <string name="action_deactivate">"Nonaktifkan"</string>
-  <string name="action_deactivate_account">"Nonaktifkan akun"</string>
   <string name="action_decline">"Tolak"</string>
   <string name="action_decline_and_block">"Tolak dan blokir"</string>
   <string name="action_delete">"Hapus"</string>
@@ -153,9 +148,7 @@
   <string name="action_leave_room">"Tinggalkan ruangan"</string>
   <string name="action_leave_space">"Tinggalkan space"</string>
   <string name="action_load_more">"Muat lainnya"</string>
-  <string name="action_manage_account">"Kelola akun"</string>
   <string name="action_manage_account_and_devices">"Kelola akun &amp;amp; perangkat"</string>
-  <string name="action_manage_devices">"Kelola perangkat"</string>
   <string name="action_manage_rooms">"Kelola ruangan"</string>
   <string name="action_mark_as_read">"Tandai sudah dibaca"</string>
   <string name="action_message">"Kirim pesan"</string>
@@ -178,7 +171,6 @@
   <string name="action_reply">"Balas"</string>
   <string name="action_reply_in_thread">"Balas dalam utas"</string>
   <string name="action_report">"Laporkan"</string>
-  <string name="action_report_bug">"Laporkan kutu"</string>
   <string name="action_report_content">"Laporkan Konten"</string>
   <string name="action_report_dm">"Laporkan percakapan"</string>
   <string name="action_report_room">"Laporkan ruangan"</string>
@@ -197,7 +189,6 @@
   <string name="action_share_link">"Bagikan tautan"</string>
   <string name="action_share_live_location">"Bagikan lokasi secara langsung"</string>
   <string name="action_show">"Tampilkan"</string>
-  <string name="action_sign_in_again">"Masuk lagi"</string>
   <string name="action_signout">"Hapus device dari akun"</string>
   <string name="action_signout_anyway">"Hapus Perangkat ini"</string>
   <string name="action_skip">"Lewati"</string>
@@ -219,12 +210,9 @@
   <string name="action_voice_call">"Panggilan suara"</string>
   <string name="action_yes">"Ya"</string>
   <string name="action_yes_try_again">"Ya, coba lagi"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Server Anda kini mendukung protokol baru yang lebih cepat. Keluar dan masuk lagi untuk memperbarui sekarang. Melakukan hal ini sekarang akan membantu Anda menghindari keluar paksa saat protokol lama dihapus nantinya."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Peningkatan tersedia"</string>
   <string name="common_about">"Tentang"</string>
   <string name="common_acceptable_use_policy">"Kebijakan penggunaan wajar"</string>
   <string name="common_account_settings">"Pengaturan Akun"</string>
-  <string name="common_add_account">"Tambahkan akun"</string>
   <string name="common_add_another_account">"Tambahkan akun lainnya"</string>
   <string name="common_adding_caption">"Menambahkan keterangan"</string>
   <string name="common_advanced_settings">"Pengaturan tingkat lanjut"</string>
@@ -237,7 +225,6 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Pengguna yang diblokir"</string>
-  <string name="common_bubbles">"Gelembung"</string>
   <string name="common_call_declined">"Panggilan ditolak"</string>
   <string name="common_call_in_progress">"Panggilan sedang berlangsung"</string>
   <string name="common_call_started">"Panggilan dimulai"</string>
@@ -552,7 +539,6 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Edit Admin atau Pemilik"</string>
   <string name="screen_room_error_failed_processing_media">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Tidak dapat mengambil detail pengguna"</string>
-  <string name="screen_room_event_pill">"Pesan dalam %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Buka"</string>
   <string name="screen_room_grouped_state_events_reduce">"Kurangi"</string>
   <string name="screen_room_live_location_banner">"Berbagi lokasi secara langsung"</string>

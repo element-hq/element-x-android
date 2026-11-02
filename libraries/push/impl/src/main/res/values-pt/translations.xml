@@ -14,11 +14,8 @@
     <item quantity="other">"%d notificações"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Não foi possível registar o distribuidor de UnifiedPush, pelo que deixarás de receber notificações. Por favor, verifica as configurações de notificação na aplicação."</string>
-  <string name="notification_fallback_content">"Tens novas mensagens."</string>
   <string name="notification_incoming_call">"📹 A receber chamada"</string>
   <string name="notification_inline_reply_failed">"** Falha no envio - por favor abre a sala"</string>
-  <string name="notification_invitation_action_join">"Entrar"</string>
-  <string name="notification_invitation_action_reject">"Rejeitar"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d convite"</item>
     <item quantity="other">"%d convites"</item>

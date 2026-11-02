@@ -14,11 +14,8 @@
     <item quantity="other">"%d notificações"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"O distribuidor de notificações do UnifiedPush não pôde ser cadastrado, então você não receberá mais notificações. Confira as configurações do app e o estado do distribuidor de push."</string>
-  <string name="notification_fallback_content">"Você tem mensagens novas."</string>
   <string name="notification_incoming_call">"📹 Chamada recebida"</string>
   <string name="notification_inline_reply_failed">"** Falha ao enviar - por favor, abra a sala"</string>
-  <string name="notification_invitation_action_join">"Entrar"</string>
-  <string name="notification_invitation_action_reject">"Recusar"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d convite"</item>
     <item quantity="other">"%d convites"</item>

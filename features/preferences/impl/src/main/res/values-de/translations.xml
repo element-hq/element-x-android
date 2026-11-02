@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"Damit du keinen wichtigen Anruf verpasst, ändere bitte deine Einstellungen so, dass du bei gesperrtem Telefon Benachrichtigungen im Vollbildmodus erhältst."</string>
   <string name="full_screen_intent_banner_title_android">"Verbessere dein Anruferlebnis"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Wähle aus, wie du Benachrichtigungen erhalten möchtest"</string>
-  <string name="screen_advanced_settings_developer_mode">"Entwicklermodus"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Aktivieren, um Zugriff auf Features und Funktionen für Entwickler zu aktivieren."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Benutzerdefinierte Element Call Basis-URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Lege eine eigene Basis-URL für Element Call fest."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ungültige URL, bitte gib das Protokoll (http/https) und die richtige Adresse an."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Avatare in Chateinladungen ausblenden"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Medienvorschau im Nachrichtenverlauf ausblenden"</string>
   <string name="screen_advanced_settings_labs">"Labs"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Die Entfernung, die du zurücklegen musst, um ein Update auszulösen."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Stelle sicher, dass „Genauer Standort“ für diese App aktiviert ist. Um die Berechtigung zu ändern, gehe zu %1$s."</string>
@@ -21,7 +18,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Lade Fotos und Videos schneller hoch und reduziere den Datenverbrauch"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimiere die Medienqualität"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderation und Sicherheit"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimiere Bilder automatisch für schnellere Uploads und kleinere Dateigrößen."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimiere die Qualität zum Hochladen von Bildern"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Tippe hier, um zu ändern."</string>
@@ -30,9 +26,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Video-Upload-Qualität"</string>
   <string name="screen_advanced_settings_push_provider_android">"Dienst für Push-Benachrichtigungen"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Deaktiviere den Rich-Text-Editor, um Markdown manuell einzugeben."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Lesebestätigungen"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Wenn diese Option deaktiviert ist, werden deine Lesebestätigungen an niemanden gesendet. Du erhältst weiterhin Lesebestätigungen von anderen Nutzern."</string>
   <string name="screen_advanced_settings_share_presence">"Präsenz teilen"</string>
   <string name="screen_advanced_settings_share_presence_description">"Wenn diese Option deaktiviert ist, kannst du keine Lesebestätigungen oder Tipp-Indikatoren senden oder empfangen."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Immer ausblenden"</string>

@@ -23,9 +23,7 @@
   <string name="screen_invites_decline_chat_title">"Відхилити запрошення"</string>
   <string name="screen_invites_decline_direct_chat_message">"Ви дійсно хочете відмовитися від приватної бесіди з %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Відхилити бесіду"</string>
-  <string name="screen_invites_empty_list">"Немає запрошень"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) запрошує вас"</string>
-  <string name="screen_migration_message">"Це одноразовий процес, дякую за очікування."</string>
   <string name="screen_migration_title">"Налаштування облікового запису."</string>
   <string name="screen_multi_account_announcement_action">"Додати обліковий запис"</string>
   <string name="screen_multi_account_announcement_description">"Перейдіть до %1$s, щоб увійти в інший обліковий запис. Після цього ви зможете легко перемикатися між ними."</string>
@@ -64,6 +62,4 @@
   <string name="screen_search_no_results_message">"За запитом «%1$s» нічого не знайдено. Спробуйте ввести інший термін."</string>
   <string name="screen_search_recent_searches">"Недавні пошукові запити"</string>
   <string name="screen_search_tab_chats">"Бесіди"</string>
-  <string name="session_verification_banner_message">"Здається, ви використовуєте новий пристрій. Звірте його за допомогою іншого пристрою, щоб отримати доступ до своїх зашифрованих повідомлень."</string>
-  <string name="session_verification_banner_title">"Підтвердьте, що це ви"</string>
 </resources>

@@ -25,7 +25,6 @@
   <string name="a11y_notifications_new_mentions">"Crybwylliadau newydd"</string>
   <string name="a11y_notifications_new_messages">"Negeseuon newydd"</string>
   <string name="a11y_notifications_ongoing_call">"Galwad cyfredol"</string>
-  <string name="a11y_other_user_avatar">"Afatar defnyddiwr arall"</string>
   <string name="a11y_page_n">"Tudalen %1$d"</string>
   <string name="a11y_pause">"Oedi"</string>
   <string name="a11y_paused_voice_message">"Neges llais, hyd: %1$s, safle presennol: %2$s"</string>
@@ -60,7 +59,6 @@
   <string name="a11y_voice_message">"Neges llais, hyd: %1$s"</string>
   <string name="a11y_voice_message_record">"Recordio neges llais."</string>
   <string name="a11y_voice_message_stop_recording">"Stopio recordio"</string>
-  <string name="a11y_your_avatar">"Eich afatar"</string>
   <string name="action_accept">"Derbyn"</string>
   <string name="action_add_caption">"Ychwanegu capsiwn"</string>
   <string name="action_add_to_timeline">"Ychwanegu at y llinell amser"</string>
@@ -71,7 +69,6 @@
   <string name="action_choose_photo">"Dewis llun"</string>
   <string name="action_clear">"Clirio"</string>
   <string name="action_close">"Cau"</string>
-  <string name="action_complete_verification">"Cwblhau\'r gwirio"</string>
   <string name="action_confirm">"Cadarnhau"</string>
   <string name="action_confirm_password">"Cadarnhau cyfrinair"</string>
   <string name="action_continue">"Parhau"</string>
@@ -82,8 +79,6 @@
   <string name="action_copy_text">"Copïo testun"</string>
   <string name="action_create">"Creu"</string>
   <string name="action_create_room">"Creu ystafell"</string>
-  <string name="action_deactivate">"Dadweithredu"</string>
-  <string name="action_deactivate_account">"Cau cyfrif"</string>
   <string name="action_decline">"Gwrthod"</string>
   <string name="action_decline_and_block">"Gwrthod a rhwystro"</string>
   <string name="action_delete_poll">"Dileu Pleidlais"</string>
@@ -115,8 +110,6 @@
   <string name="action_leave_room">"Gadael yr ystafell"</string>
   <string name="action_leave_space">"Gadael y gofod"</string>
   <string name="action_load_more">"Llwytho rhagor"</string>
-  <string name="action_manage_account">"Rheoli cyfrif"</string>
-  <string name="action_manage_devices">"Rheoli dyfeisiau"</string>
   <string name="action_message">"Neges"</string>
   <string name="action_next">"Nesaf"</string>
   <string name="action_no">"Na"</string>
@@ -136,7 +129,6 @@
   <string name="action_reply">"Ateb"</string>
   <string name="action_reply_in_thread">"Ateb mewn edefyn"</string>
   <string name="action_report">"Adroddiadau"</string>
-  <string name="action_report_bug">"Adrodd ar wall"</string>
   <string name="action_report_content">"Adrodd ar gynnwys"</string>
   <string name="action_report_dm">"Adrodd ar sgwrs"</string>
   <string name="action_report_room">"Adrodd ar ystafell"</string>
@@ -154,7 +146,6 @@
   <string name="action_share">"Rhannu"</string>
   <string name="action_share_link">"Rhannwch ddolen"</string>
   <string name="action_show">"Dangos"</string>
-  <string name="action_sign_in_again">"Mewngofnodi eto"</string>
   <string name="action_signout">"Allgofnodi"</string>
   <string name="action_signout_anyway">"Allgofnodi beth bynnag"</string>
   <string name="action_skip">"Hepgor"</string>
@@ -172,11 +163,8 @@
   <string name="action_view_source">"Gweld ffynhonnell"</string>
   <string name="action_yes">"Iawn"</string>
   <string name="action_yes_try_again">"Iawn, ceisiwch eto"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Mae eich gweinydd nawr yn cefnogi protocol newydd, cynt. Allgofnodwch a mewngofnodi\'n ôl i uwchraddio nawr. Bydd gwneud hyn nawr yn eich helpu i osgoi allgofnodi gorfodol pan fydd yr hen brotocol yn cael ei ddileu cyn hir."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Uwchraddiad ar gael"</string>
   <string name="common_about">"Ynghylch"</string>
   <string name="common_acceptable_use_policy">"Polisi defnydd derbyniol"</string>
-  <string name="common_add_account">"Ychwanegu cyfrif"</string>
   <string name="common_add_another_account">"Ychwanegu cyfrif arall"</string>
   <string name="common_adding_caption">"Ychwanegu capsiwn"</string>
   <string name="common_advanced_settings">"Gosodiadau uwch"</string>
@@ -187,7 +175,6 @@
   <string name="common_appearance">"Gwedd"</string>
   <string name="common_audio">"Sain"</string>
   <string name="common_blocked_users">"Defnyddwyr wedi\'u rhwystro"</string>
-  <string name="common_bubbles">"Swigod"</string>
   <string name="common_call_started">"Galwad wedi dechrau"</string>
   <string name="common_chat_backup">"Sgwrs wrth gefn"</string>
   <string name="common_copied_to_clipboard">"Wedi\'i gopïo i\'r clipfwrdd"</string>
@@ -463,7 +450,6 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Golygu Gweinyddwyr neu Berchnogion"</string>
   <string name="screen_room_error_failed_processing_media">"Wedi methu â phrosesu cyfryngau i\'w llwytho, ceisiwch eto."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Methu â nôl manylion defnyddiwr"</string>
-  <string name="screen_room_event_pill">"Neges yn %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Dangos"</string>
   <string name="screen_room_grouped_state_events_reduce">"Lleihau"</string>
   <string name="screen_room_permalink_same_room_android">"Eisoes yn gweld yr ystafell hon!"</string>

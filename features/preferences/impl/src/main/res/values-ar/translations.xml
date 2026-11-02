@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"للتأكد من عدم تفويت أي مكالمة مهمة، يُرجى تغيير إعداداتك للسماح بإشعارات ملء الشاشة عندما يكون هاتفك مقفلاً."</string>
   <string name="full_screen_intent_banner_title_android">"حسّن تجربة مكالماتك"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"اختر طريقة استقبال الإشعارات"</string>
-  <string name="screen_advanced_settings_developer_mode">"وضع المطوّر"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"فعّله للوصول إلى الميزات والوظائف الخاصة بالمطورين."</string>
   <string name="screen_advanced_settings_element_call_base_url">"عنوان URL الأساسي المخصص لـ Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"عيّن عنوان URL أساسيًا مخصصًا لـ Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"عنوان URL غير صالح، يُرجى التأكد من تضمين البروتوكول (http/https) والعنوان الصحيح."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"إخفاء الصور الرمزية في طلبات الدعوة إلى الغرف"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"إخفاء معاينات الوسائط في المخطط الزمني"</string>
   <string name="screen_advanced_settings_labs">"المختبرات"</string>
   <string name="screen_advanced_settings_live_location_section_description">"المسافة التي يجب أن تتحركها ليتم إرسال تحديث."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"تأكد من تفعيل \"الموقع الدقيق\" لهذا التطبيق. لتغيير الإذن، انتقل إلى %1$s."</string>
@@ -25,7 +22,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"رفع الصور ومقاطع الفيديو بسرعة أكبر وتقليل استخدام البيانات"</string>
   <string name="screen_advanced_settings_media_compression_title">"تحسين جودة الوسائط"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"الإشراف والسلامة"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"تحسين الصور تلقائيًا لرفعها بسرعة أكبر وتقليل أحجام الملفات."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"تحسين جودة رفع الصور"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. اضغط هنا للتغيير."</string>
@@ -34,9 +30,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"قياسية (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"جودة رفع الفيديو"</string>
   <string name="screen_advanced_settings_push_provider_android">"موفّر الإشعارات الفورية"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"عطّل محرر النص المنسق لكتابة Markdown يدويًا."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"إيصالات القراءة"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"إذا كان هذا الخيار متوقفًا، فلن تُرسل إيصالات القراءة الخاصة بك إلى أي شخص. ستظل تتلقى إيصالات القراءة من المستخدمين الآخرين."</string>
   <string name="screen_advanced_settings_share_presence">"مشاركة حالة التواجد"</string>
   <string name="screen_advanced_settings_share_presence_description">"إذا كان هذا الخيار متوقفًا، فلن تتمكن من إرسال أو تلقي إيصالات القراءة أو إشعارات الكتابة."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"إخفاء دائمًا"</string>

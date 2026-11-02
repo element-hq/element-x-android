@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"Pentru a vă asigura că nu pierdeți niciodată un apel important, modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat."</string>
   <string name="full_screen_intent_banner_title_android">"Îmbunătățiți-vă experiența în timpul unui apel"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Alegeți cum doriți să primiți notificări"</string>
-  <string name="screen_advanced_settings_developer_mode">"Modul dezvoltator"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Activați pentru a avea acces la funcționalități pentru dezvoltatori."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL de bază personalizat pentru Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Setați o adresă URL de bază personalizată pentru Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL invalid, asigurați-vă că includeți protocolul (http/https) și adresa corectă."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Ascundeți avatarele din invitațiile pentru camere"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Ascundeți previzualizările media în cronologie"</string>
   <string name="screen_advanced_settings_labs">"Laboratoare"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Distanța pe care trebuie să o parcurgeți pentru a declanșa o actualizare."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Asigurați-vă că este activată opțiunea „Locație exactă” pentru această aplicație. Pentru a schimba permisiunea, accesați %1$s."</string>
@@ -22,7 +19,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Încărcați fotografii și videoclipuri mai rapid și reduceți consumul de date"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimizați calitatea media"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderare și siguranță"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimizați automat imaginile pentru încărcări mai rapide și dimensiuni mai mici ale fișierelor."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimizați calitatea încărcării imaginilor"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Atingeți aici pentru a schimba."</string>
@@ -31,9 +27,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Calitatea încărcării videoclipurilor"</string>
   <string name="screen_advanced_settings_push_provider_android">"Furnizor de notificări push"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Dezactivați editorul avansat pentru a tasta manual Markdown."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Confirmări de citire"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Dacă este dezactivată, nu veți mai trimite confirmări de citire nimănui. Veți primi în continuare confirmări de citire de la alți utilizatori."</string>
   <string name="screen_advanced_settings_share_presence">"Împărtășiți prezența"</string>
   <string name="screen_advanced_settings_share_presence_description">"Dacă este dezactivată, nu veți putea trimite sau primi confirmări de citire sau notificări de tastare."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Ascundeți întotdeauna"</string>

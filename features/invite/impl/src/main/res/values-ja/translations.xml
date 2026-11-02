@@ -9,7 +9,6 @@
   <string name="screen_invites_decline_chat_title">"招待を破棄"</string>
   <string name="screen_invites_decline_direct_chat_message">"%1$sとのチャットを本当に拒否しますか？"</string>
   <string name="screen_invites_decline_direct_chat_title">"チャットを拒否"</string>
-  <string name="screen_invites_empty_list">"招待はありません"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) があなたを招待しました"</string>
   <string name="screen_join_room_decline_and_block_alert_confirmation">"拒否してブロックする"</string>
   <string name="screen_join_room_decline_and_block_alert_message">"本当にこのルームへの参加の招待を拒否しますか？%1$s は、あなたと会話することやルームに招待することができなくなります。"</string>

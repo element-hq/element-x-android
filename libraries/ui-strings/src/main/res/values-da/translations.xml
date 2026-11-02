@@ -23,7 +23,6 @@
   <string name="a11y_notifications_new_mentions">"Nye omtaler"</string>
   <string name="a11y_notifications_new_messages">"Nye beskeder"</string>
   <string name="a11y_notifications_ongoing_call">"Igangværende opkald"</string>
-  <string name="a11y_other_user_avatar">"Anden brugers avatar"</string>
   <string name="a11y_page_n">"Side %1$d"</string>
   <string name="a11y_pause">"Pausér"</string>
   <string name="a11y_paused_voice_message">"Talebesked, varighed: %1$s, aktuel position: %2$s"</string>
@@ -61,7 +60,6 @@
   <string name="a11y_voice_message">"Talebesked, varighed: %1$s"</string>
   <string name="a11y_voice_message_record">"Optag talebesked."</string>
   <string name="a11y_voice_message_stop_recording">"Stop optagelsen"</string>
-  <string name="a11y_your_avatar">"Din avatar"</string>
   <string name="action_accept">"Accepter"</string>
   <string name="action_add_caption">"Tilføj billedtekst"</string>
   <string name="action_add_existing_rooms">"Tilføj eksisterende rum"</string>
@@ -73,7 +71,6 @@
   <string name="action_choose_photo">"Vælg billede"</string>
   <string name="action_clear">"Ryd"</string>
   <string name="action_close">"Luk"</string>
-  <string name="action_complete_verification">"Fuldfør verifikation"</string>
   <string name="action_confirm">"Bekræft"</string>
   <string name="action_confirm_password">"Bekræft adgangskode"</string>
   <string name="action_continue">"Fortsæt"</string>
@@ -85,8 +82,6 @@
   <string name="action_create">"Opret"</string>
   <string name="action_create_room">"Opret et rum"</string>
   <string name="action_create_space">"Opret en klynge"</string>
-  <string name="action_deactivate">"Deaktiver"</string>
-  <string name="action_deactivate_account">"Deaktiver konto"</string>
   <string name="action_decline">"Afvis"</string>
   <string name="action_decline_and_block">"Afvis og blokér"</string>
   <string name="action_delete">"Slet"</string>
@@ -124,9 +119,7 @@
   <string name="action_leave_room">"Forlad rum"</string>
   <string name="action_leave_space">"Forlad klynge"</string>
   <string name="action_load_more">"Indlæs mere"</string>
-  <string name="action_manage_account">"Administrer konto"</string>
   <string name="action_manage_account_and_devices">"Administrer konto og enheder"</string>
-  <string name="action_manage_devices">"Administrer enheder"</string>
   <string name="action_manage_rooms">"Administrer rum"</string>
   <string name="action_message">"Besked"</string>
   <string name="action_minimize">"Minimér"</string>
@@ -148,7 +141,6 @@
   <string name="action_reply">"Svar"</string>
   <string name="action_reply_in_thread">"Svar i tråd"</string>
   <string name="action_report">"Anmeld"</string>
-  <string name="action_report_bug">"Anmeld fejl"</string>
   <string name="action_report_content">"Anmeld indhold"</string>
   <string name="action_report_dm">"Anmeld samtale"</string>
   <string name="action_report_room">"Anmeld rummet"</string>
@@ -167,7 +159,6 @@
   <string name="action_share_link">"Del link"</string>
   <string name="action_share_live_location">"Del placering live"</string>
   <string name="action_show">"Vis"</string>
-  <string name="action_sign_in_again">"Log ind igen"</string>
   <string name="action_signout">"Fjern denne enhed"</string>
   <string name="action_signout_anyway">"Fjern denne enhed alligevel"</string>
   <string name="action_skip">"Spring over"</string>
@@ -187,11 +178,8 @@
   <string name="action_view_source">"Se kilde"</string>
   <string name="action_yes">"Ja"</string>
   <string name="action_yes_try_again">"Ja, prøv igen"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Din server understøtter nu en ny, hurtigere protokol. Log ud og log ind igen for at opgradere nu. Hvis du gør dette nu, vil du undgå en tvungen logout, når den gamle protokol bliver fjerne senere."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Opgradering tilgængelig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Politik for acceptabel brug"</string>
-  <string name="common_add_account">"Tilføj en konto"</string>
   <string name="common_add_another_account">"Tilføj en anden konto"</string>
   <string name="common_adding_caption">"Tilføjelse af billedtekst"</string>
   <string name="common_advanced_settings">"Avancerede indstillinger"</string>
@@ -203,7 +191,6 @@
   <string name="common_audio">"Lyd"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blokerede brugere"</string>
-  <string name="common_bubbles">"Bobler"</string>
   <string name="common_call_declined">"Opkald afvist"</string>
   <string name="common_call_started">"Opkald startet"</string>
   <string name="common_call_you_declined">"Du afviste et opkald"</string>
@@ -491,7 +478,6 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Rediger administratorer eller ejere"</string>
   <string name="screen_room_error_failed_processing_media">"Det lykkedes ikke at behandle medier til upload. Prøv venligst igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunne ikke hente brugeroplysninger"</string>
-  <string name="screen_room_event_pill">"Besked i %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Udvid"</string>
   <string name="screen_room_grouped_state_events_reduce">"Reducér"</string>
   <string name="screen_room_live_location_banner">"Deler placering live"</string>

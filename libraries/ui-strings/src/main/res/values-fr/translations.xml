@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_active">"Actif"</string>
   <string name="a11y_add_avatar">"Ajouter un avatar"</string>
   <string name="a11y_add_reaction">"Ajouter une réaction: %1$s"</string>
   <string name="a11y_address">"Adresse"</string>
@@ -29,6 +30,7 @@
   <string name="a11y_gallery_scanning">"Galerie, analyse en cours de l’élément %1$d"</string>
   <string name="a11y_gallery_video">"Galerie, vidéo %1$d"</string>
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
+  <string name="a11y_inactive">"Inactif"</string>
   <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Rejoindre l’appel"</string>
   <string name="a11y_jump_to_bottom">"Retourner à la fin de la conversation"</string>
@@ -40,7 +42,6 @@
   <string name="a11y_notifications_new_mentions">"Nouvelles mentions"</string>
   <string name="a11y_notifications_new_messages">"Nouveaux messages"</string>
   <string name="a11y_notifications_ongoing_call">"Appel en cours"</string>
-  <string name="a11y_other_user_avatar">"Avatar de l’autre utilisateur"</string>
   <string name="a11y_page_n">"Page %1$d"</string>
   <string name="a11y_pause">"Pause"</string>
   <string name="a11y_paused_voice_message">"Message vocal, durée: %1$s, position actuelle: %2$s"</string>
@@ -74,6 +75,8 @@
   <string name="a11y_start_call">"Démarrer un appel"</string>
   <string name="a11y_start_video_call">"Passer un appel vidéo"</string>
   <string name="a11y_start_voice_call">"Lancer un appel vocal"</string>
+  <string name="a11y_state_collapsed">"Réduit"</string>
+  <string name="a11y_state_expanded">"Développé"</string>
   <string name="a11y_status">"Statut"</string>
   <string name="a11y_thread_in_room">"Discussion dans %1$s"</string>
   <string name="a11y_threads_in_room">"Discussions dans %1$s"</string>
@@ -86,7 +89,6 @@
   <string name="a11y_voice_message">"Message vocal, durée: %1$s"</string>
   <string name="a11y_voice_message_record">"Enregistrer un message vocal."</string>
   <string name="a11y_voice_message_stop_recording">"Arrêter l’enregistrement"</string>
-  <string name="a11y_your_avatar">"Votre avatar"</string>
   <string name="action_accept">"Accepter"</string>
   <string name="action_add_caption">"Ajouter une légende"</string>
   <string name="action_add_existing_rooms">"Ajouter des salons existants"</string>
@@ -100,7 +102,6 @@
   <string name="action_clear">"Effacer"</string>
   <string name="action_clear_all">"Tout effacer"</string>
   <string name="action_close">"Fermer"</string>
-  <string name="action_complete_verification">"Terminer la vérification"</string>
   <string name="action_confirm">"Confirmer"</string>
   <string name="action_confirm_password">"Confirmez le mot de passe"</string>
   <string name="action_continue">"Continuer"</string>
@@ -113,8 +114,6 @@
   <string name="action_create">"Créer"</string>
   <string name="action_create_room">"Créer un salon"</string>
   <string name="action_create_space">"Créer un espace"</string>
-  <string name="action_deactivate">"Désactiver"</string>
-  <string name="action_deactivate_account">"Désactiver le compte"</string>
   <string name="action_decline">"Refuser"</string>
   <string name="action_decline_and_block">"Refuser et bloquer"</string>
   <string name="action_delete">"Supprimer"</string>
@@ -144,6 +143,7 @@
   <string name="action_go_back">"Retour"</string>
   <string name="action_go_to_roles_and_permissions">"Accédez à l’écran « Rôles et autorisations »."</string>
   <string name="action_go_to_settings">"Ouvrir les paramètres"</string>
+  <string name="action_got_it">"J’ai compris"</string>
   <string name="action_ignore">"Ignorer"</string>
   <string name="action_invite">"Inviter"</string>
   <string name="action_invite_friends">"Inviter des amis"</string>
@@ -157,9 +157,7 @@
   <string name="action_leave_room">"Quitter le salon"</string>
   <string name="action_leave_space">"Quitter l’espace"</string>
   <string name="action_load_more">"Voir plus"</string>
-  <string name="action_manage_account">"Gérer le compte"</string>
   <string name="action_manage_account_and_devices">"Gérer le compte et les appareils"</string>
-  <string name="action_manage_devices">"Gérez les sessions"</string>
   <string name="action_manage_rooms">"Gérer les salons"</string>
   <string name="action_mark_as_read">"Marquer comme lu"</string>
   <string name="action_message">"Message"</string>
@@ -182,7 +180,6 @@
   <string name="action_reply">"Répondre"</string>
   <string name="action_reply_in_thread">"Répondre dans le fil de discussion"</string>
   <string name="action_report">"Signaler"</string>
-  <string name="action_report_bug">"Signaler un problème"</string>
   <string name="action_report_content">"Signaler le contenu"</string>
   <string name="action_report_dm">"Signaler la discussion"</string>
   <string name="action_report_room">"Signaler le salon"</string>
@@ -201,7 +198,6 @@
   <string name="action_share_link">"Partager le lien"</string>
   <string name="action_share_live_location">"Partager la position en continu"</string>
   <string name="action_show">"Afficher"</string>
-  <string name="action_sign_in_again">"Se connecter à nouveau"</string>
   <string name="action_signout">"Supprimer cet appareil"</string>
   <string name="action_signout_anyway">"Supprimer cet appareil quand même"</string>
   <string name="action_skip">"Passer"</string>
@@ -223,12 +219,9 @@
   <string name="action_voice_call">"Appel audio"</string>
   <string name="action_yes">"Oui"</string>
   <string name="action_yes_try_again">"Oui, réessayez"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Votre serveur prend désormais en charge un nouveau protocole plus rapide. Déconnectez-vous, puis reconnectez-vous pour effectuer la mise à niveau dès maintenant. En le faisant tout de suite, vous éviterez une déconnexion forcée lorsque l’ancien protocole sera supprimé."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Mise à niveau disponible"</string>
   <string name="common_about">"À propos"</string>
   <string name="common_acceptable_use_policy">"Politique d’utilisation acceptable"</string>
   <string name="common_account_settings">"Paramètres du compte"</string>
-  <string name="common_add_account">"Ajouter un compte"</string>
   <string name="common_add_another_account">"Ajouter un autre compte"</string>
   <string name="common_adding_caption">"Ajout d’une légende"</string>
   <string name="common_advanced_settings">"Paramètres avancés"</string>
@@ -241,7 +234,6 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_beta">"Bêta"</string>
   <string name="common_blocked_users">"Utilisateurs bloqués"</string>
-  <string name="common_bubbles">"Bulles"</string>
   <string name="common_call_declined">"Appel rejeté"</string>
   <string name="common_call_in_progress">"Appel en cours"</string>
   <string name="common_call_started">"Appel démarré"</string>
@@ -429,6 +421,7 @@ Raison : %1$s."</string>
     <item quantity="one">"%1$d Espace"</item>
     <item quantity="other">"%1$d Espaces"</item>
   </plurals>
+  <string name="common_spoiler">"Spoiler"</string>
   <string name="common_starting_chat">"Création de la discussion…"</string>
   <string name="common_sticker">"Autocollant"</string>
   <string name="common_success">"Succès"</string>
@@ -513,6 +506,7 @@ Raison : %1$s."</string>
   <string name="error_account_already_logged_in">"Vous êtes déjà connecté en tant que %1$s."</string>
   <string name="error_account_already_logged_in_title">"Connexion en double"</string>
   <string name="error_account_creation_not_possible">"Votre fournisseur de compte doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
+  <string name="error_camera_unavailable">"La caméra n’est pas disponible."</string>
   <string name="error_failed_creating_the_permalink">"Échec de la création du permalien"</string>
   <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
   <string name="error_failed_loading_messages">"Échec du chargement des messages"</string>
@@ -567,7 +561,6 @@ Raison : %1$s."</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Modifier les administrateurs ou les propriétaires"</string>
   <string name="screen_room_error_failed_processing_media">"Échec du traitement des médias à télécharger, veuillez réessayer."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossible de récupérer les détails de l’utilisateur"</string>
-  <string name="screen_room_event_pill">"Message dans %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Développer"</string>
   <string name="screen_room_grouped_state_events_reduce">"Réduire"</string>
   <string name="screen_room_live_location_banner">"Partage de la position en direct"</string>
@@ -586,6 +579,8 @@ Raison : %1$s."</string>
     <item quantity="other">"%1$d messages sélectionnés"</item>
   </plurals>
   <string name="screen_room_title">"Discussion"</string>
+  <string name="screen_select_account_permalink_room_subtitle">"Aucun de vos comptes n’a encore rejoint ce salon, veuillez choisir celui que vous souhaitez utiliser."</string>
+  <string name="screen_select_account_permalink_title">"Sélectionnez un compte pour ouvrir le lien :"</string>
   <string name="screen_share_location_title">"Partage de position"</string>
   <string name="screen_share_my_location_action">"Partager ma position"</string>
   <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>

@@ -47,9 +47,9 @@
   <string name="screen_room_attachment_source_poll">"投票"</string>
   <string name="screen_room_attachment_text_formatting">"格式化文字"</string>
   <string name="screen_room_confirm_removal_reason_label">"理由（選擇性）"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder">"輸入⋯⋯"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"輸入理由⋯⋯"</string>
   <string name="screen_room_confirm_removal_reason_supporting_text">"（選擇性）"</string>
-  <string name="screen_room_confirm_removal_title">"確認移除"</string>
+  <string name="screen_room_confirm_removal_title">"移除訊息？"</string>
   <string name="screen_room_encrypted_history_banner">"目前無法檢視訊息歷史紀錄。"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"無法檢視此聊天室的訊息歷史紀錄。驗證此裝置以檢視您的訊息紀錄。"</string>
   <string name="screen_room_invite_again_alert_message">"您想要邀請他們回來嗎？"</string>
