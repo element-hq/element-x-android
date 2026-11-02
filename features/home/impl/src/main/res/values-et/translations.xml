@@ -49,4 +49,5 @@ Sul pole ühtegi lugemata sõnumit!"</string>
   <string name="screen_roomlist_mark_as_unread">"Märgi mitteloetuks"</string>
   <string name="screen_roomlist_tombstoned_room_description">"See jututuba on uuendatud"</string>
   <string name="screen_roomlist_your_spaces">"Sinu kogukonnad"</string>
+  <string name="screen_space_list_empty_state_title">"Jututubade haldamiseks võid luua kogukondi"</string>
 </resources>

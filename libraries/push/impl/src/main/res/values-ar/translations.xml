@@ -54,7 +54,6 @@
   <string name="notification_knock_request_body">"طلبت الإنضمام"</string>
   <string name="notification_live_location_started_body">"بدأوا بمشاركة موقعهم المباشر"</string>
   <string name="notification_mentioned_you_body">"ذكرك: %1$s"</string>
-  <string name="notification_new_messages">"رسائل جديدة"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="zero">"%d رسالة جديدة"</item>
     <item quantity="one">"%d رسالة جديدة"</item>

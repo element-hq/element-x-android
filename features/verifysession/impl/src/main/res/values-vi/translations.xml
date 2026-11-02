@@ -22,5 +22,4 @@
   <string name="screen_session_verification_they_dont_match">"Chúng không khớp nhau"</string>
   <string name="screen_session_verification_they_match">"Chúng khớp với nhau"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Đang chờ chấp nhận yêu cầu"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Đang gỡ thiết bị…"</string>
 </resources>

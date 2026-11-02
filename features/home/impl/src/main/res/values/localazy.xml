@@ -69,4 +69,5 @@ Your device keeps the most recent 3 months of messages, so older messages can’
   <string name="screen_search_recent_searches">"Recent searches"</string>
   <string name="screen_search_tab_chats">"Chats"</string>
   <string name="screen_search_tab_messages">"Messages"</string>
+  <string name="screen_space_list_empty_state_title">"Create spaces to organize rooms"</string>
 </resources>

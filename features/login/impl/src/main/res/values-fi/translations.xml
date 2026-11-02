@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"Olet jo kirjautuneena käyttäjällä %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Kaksinkertainen kirjautuminen"</string>
+  <string name="error_account_creation_not_possible">"Palveluntarjoajasi on päivitettävä tukemaan Matrix Authentication Serviceä ja tilin luomista."</string>
   <string name="screen_account_provider_signin_title">"Olet kirjautumassa sisään %s-palvelimelle"</string>
   <string name="screen_change_account_provider_other">"Muu"</string>
   <string name="screen_change_account_provider_subtitle">"Käytä toista palveluntarjoajaa, kuten omaa yksityistä palvelintasi tai työpaikkaasi."</string>

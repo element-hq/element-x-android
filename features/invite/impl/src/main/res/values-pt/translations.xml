@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"A sala já não existe ou o convite já não é válido."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Não vais ver quaisquer mensagens ou convites para sala deste utilizador"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Bloquear utilizador"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Denunciar esta sala ao fornecedor da tua conta."</string>

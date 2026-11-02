@@ -41,5 +41,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"正在等待其他用户"</string>
   <string name="screen_session_verification_waiting_subtitle">"一旦被接受，你将能够继续进行验证。"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"等待接受请求"</string>
-  <string name="screen_signout_in_progress_dialog_content">"正在移除设备…"</string>
 </resources>

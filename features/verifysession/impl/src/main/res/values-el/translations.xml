@@ -39,5 +39,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Αναμονή για τον άλλο χρήστη"</string>
   <string name="screen_session_verification_waiting_subtitle">"Μόλις γίνει αποδεκτό, θα μπορείτε να συνεχίσετε με την επαλήθευση."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Αναμονή για αποδοχή αιτήματος"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Αφαίρεση συσκευής…"</string>
 </resources>

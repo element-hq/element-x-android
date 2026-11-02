@@ -19,7 +19,6 @@
   </plurals>
   <string name="notification_invite_body">"Поканиха ви за чат"</string>
   <string name="notification_mentioned_you_body">"Ви спомена: %1$s"</string>
-  <string name="notification_new_messages">"Нови съобщения"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d ново съобщение"</item>
     <item quantity="other">"%d нови съобщения"</item>

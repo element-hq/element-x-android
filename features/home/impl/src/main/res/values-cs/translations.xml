@@ -49,4 +49,5 @@ Nemáte žádné nepřečtené zprávy!"</string>
   <string name="screen_roomlist_mark_as_unread">"Označit jako nepřečtené"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Tato místnost byla aktualizována"</string>
   <string name="screen_roomlist_your_spaces">"Vaše prostory"</string>
+  <string name="screen_space_list_empty_state_title">"Vytvořte prostory pro uspořádání místností"</string>
 </resources>

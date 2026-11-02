@@ -51,4 +51,5 @@
   <string name="screen_roomlist_mark_as_unread">"未読にする"</string>
   <string name="screen_roomlist_tombstoned_room_description">"このルームはアップグレードされました"</string>
   <string name="screen_roomlist_your_spaces">"あなたのスペース"</string>
+  <string name="screen_space_list_empty_state_title">"スペースを作成してルームを整頓しましょう"</string>
 </resources>

@@ -69,4 +69,5 @@
   <string name="screen_search_recent_searches">"最近搜尋"</string>
   <string name="screen_search_tab_chats">"聊天"</string>
   <string name="screen_search_tab_messages">"訊息"</string>
+  <string name="screen_space_list_empty_state_title">"建立空間以整理聊天室"</string>
 </resources>

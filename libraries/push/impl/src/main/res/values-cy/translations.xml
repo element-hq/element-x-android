@@ -34,7 +34,6 @@
   <string name="notification_invite_body">"Wedi eich gwahodd i sgwrsio"</string>
   <string name="notification_invite_body_with_sender">"Mae %1$s wedi eich gwahodd i sgwrsio"</string>
   <string name="notification_mentioned_you_body">"Wedi eich crybwyll: %1$s"</string>
-  <string name="notification_new_messages">"Negeseuon Newydd"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="zero">"%d negeseuon newydd"</item>
     <item quantity="one">"%d neges newydd"</item>

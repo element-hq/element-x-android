@@ -39,7 +39,6 @@
   <string name="notification_knock_request_body">"A trimis o cerere de alăturare"</string>
   <string name="notification_live_location_started_body">"A început să își partajeze locația în timp real"</string>
   <string name="notification_mentioned_you_body">"%1$s v-a menționat"</string>
-  <string name="notification_new_messages">"Mesaje noi"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d mesaj nou"</item>
     <item quantity="few">"%d mesaje noi"</item>

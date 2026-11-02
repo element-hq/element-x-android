@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Der Chat existiert nicht mehr oder die Einladung ist nicht mehr gültig."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Du wirst keine Nachrichten oder Chat-Einladungen von diesem Nutzer sehen"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Nutzer blockieren"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Melde diesen Chat deinem Kontoanbieter."</string>

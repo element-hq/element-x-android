@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"Не удалось загрузить карту %1$s. Пожалуйста, повторите попытку позже."</string>
+  <string name="error_failed_locating_user">"%1$s не удалось получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже."</string>
+  <string name="error_location_service_disabled_android">"Включите геолокацию для доступа к её функциям."</string>
+  <string name="error_missing_location_auth_android">"У %1$s нет разрешения на доступ к вашему местоположению. Вы можете разрешить доступ в Настройках."</string>
+  <string name="error_missing_location_rationale_android">"У %1$s нет разрешения на доступ к вашему местоположению. Разрешите доступ ниже."</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Отправка местонахождения в реальном времени"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Определение местоположения в процессе"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"Текущее местоположение %1$s"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Никто не делится своим местоположением"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Местоположение отправляется в реальном времени"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d человек"</item>
+    <item quantity="few">"%1$d человек"</item>
+    <item quantity="many">"%1$d людей"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"На карте"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"История вашего местоположения в режиме реального времени будет сохранена в комнате и станет доступна участникам после окончания сессии."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Выберите, как долго вы будете делиться своим местоположением в режиме реального времени."</string>
   <string name="screen_share_location_live_location_missing_permissions">"У тебя нет прав на то, чтобы делиться своим текущим местоположением в этой комнате"</string>
+  <string name="screen_share_location_title">"Поделиться местоположением"</string>
+  <string name="screen_share_my_location_action">"Поделиться моим местоположением"</string>
+  <string name="screen_share_open_apple_maps">"Открыть в Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Открыть в Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Открыть в OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"Поделиться выбранным местоположением"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Параметры общего доступа"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Поделился %1$s"</string>
+  <string name="screen_static_location_sheet_title">"На карте"</string>
+  <string name="screen_view_location_title">"Местоположение"</string>
 </resources>

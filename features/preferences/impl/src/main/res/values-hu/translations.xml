@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Válaszd ki a feltöltött videók alapértelmezett minőségét."</string>
+  <string name="dialog_default_video_quality_selector_title">"Feltöltött videó minősége"</string>
   <string name="full_screen_intent_banner_message_android">"Hogy sose maradjon le egyetlen fontos hívásról sem, a beállításokban engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van."</string>
   <string name="full_screen_intent_banner_title_android">"Fokozza a hívásélményét"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Válassza ki az értesítések fogadási módját"</string>
@@ -112,6 +114,7 @@ Ha folytatja, egyes beállítások megváltozhatnak."</string>
   <string name="screen_settings_user_status_in_a_meeting">"Értekezleten"</string>
   <string name="screen_settings_user_status_on_the_road">"Úton"</string>
   <string name="screen_settings_user_status_placeholder">"Mi az állapota?"</string>
+  <string name="settings_version_number">"Verzió: %1$s (%2$s)"</string>
   <string name="theme_black">"Fekete"</string>
   <string name="theme_dark">"Sötét"</string>
   <string name="theme_light">"Világos"</string>

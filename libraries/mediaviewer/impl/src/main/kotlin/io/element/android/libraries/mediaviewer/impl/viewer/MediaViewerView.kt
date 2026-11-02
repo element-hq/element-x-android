@@ -103,6 +103,7 @@ import io.element.android.libraries.matrix.ui.media.contentvalidation.collectMed
 import io.element.android.libraries.matrixmedia.api.MediaRequestData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
+import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
 import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
@@ -410,7 +411,7 @@ private fun MediaViewerPage(
                 exit = fadeOut(spring(stiffness = 500F)),
             ) {
                 AsyncIndicator.Loading(
-                    text = stringResource(CommonStrings.content_scanner_scanning),
+                    text = stringResource(R.string.content_scanner_scanning),
                 )
             }
 

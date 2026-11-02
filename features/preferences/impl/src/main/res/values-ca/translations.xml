@@ -55,6 +55,7 @@ Si continues, és possible que alguna de les teves configuracions canviï."</str
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"configuració del sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificacions del sistema desactivades"</string>
   <string name="screen_notification_settings_title">"Notificacions"</string>
+  <string name="settings_version_number">"Versió: %1$s (%2$s)"</string>
   <string name="theme_dark">"Fosc"</string>
   <string name="theme_light">"Clar"</string>
   <string name="theme_system">"Sistema"</string>

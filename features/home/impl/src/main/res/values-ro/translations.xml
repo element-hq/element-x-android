@@ -54,4 +54,5 @@ Nu aveți mesaje necitite!"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcați ca necitită"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Această cameră a fost upgradată."</string>
   <string name="screen_roomlist_your_spaces">"Spațiile dvs."</string>
+  <string name="screen_space_list_empty_state_title">"Creați spații pentru a organiza camerele"</string>
 </resources>

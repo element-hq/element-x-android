@@ -45,6 +45,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"სისტემის პარამეტრები"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"სისტემის შეტყობინებები გამორთულია"</string>
   <string name="screen_notification_settings_title">"შეტყობინებები"</string>
+  <string name="settings_version_number">"ვერსია: %1$s (%2$s)"</string>
   <string name="theme_dark">"მუქი"</string>
   <string name="theme_light">"ღია"</string>
   <string name="theme_system">"სისტემა"</string>

@@ -34,7 +34,6 @@
   <string name="notification_knock_request_body">"Richiesta di accesso"</string>
   <string name="notification_live_location_started_body">"Ha iniziato a condividere la posizione in tempo reale"</string>
   <string name="notification_mentioned_you_body">"Ti ha menzionato: %1$s"</string>
-  <string name="notification_new_messages">"Nuovi messaggi"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nuovo messaggio"</item>
     <item quantity="other">"%d nuovi messaggi"</item>

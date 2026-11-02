@@ -553,7 +553,7 @@ class MessagesViewTest : RobolectricTest() {
         // Clear initial 'LoadMore' event emitted when setting the state
         eventsRecorder.clear()
 
-        val verifiedUserSendFailure = activity!!.getString(CommonStrings.screen_timeline_item_menu_send_failure_changed_identity, "Alice")
+        val verifiedUserSendFailure = activity!!.getString(R.string.screen_timeline_item_menu_send_failure_changed_identity, "Alice")
         onNodeWithText(verifiedUserSendFailure).performClick()
         // Give time for the close animation to complete
         mainClock.advanceTimeBy(milliseconds = 1_000)

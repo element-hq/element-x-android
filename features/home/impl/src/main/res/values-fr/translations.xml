@@ -68,4 +68,5 @@ Votre appareil conserve les messages des 3 derniers mois, les messages plus anci
   <string name="screen_search_recent_searches">"Recherches récentes"</string>
   <string name="screen_search_tab_chats">"Salons"</string>
   <string name="screen_search_tab_messages">"Messages"</string>
+  <string name="screen_space_list_empty_state_title">"Créer des espaces pour organiser les salons"</string>
 </resources>

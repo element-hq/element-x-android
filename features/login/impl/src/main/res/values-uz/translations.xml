@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"Bu qurilmada allaqachon %1$s hisobiga kirgansiz."</string>
+  <string name="error_account_creation_not_possible">"Matrix autentifikatsiya xizmati va hisob yaratish imkoniyatini qo‘llab-quvvatlash uchun uy serveringizni yangilash talab etiladi."</string>
   <string name="screen_account_provider_signin_title">"Siz %sga kirmoqchisiz"</string>
   <string name="screen_change_account_provider_other">"Boshqa"</string>
   <string name="screen_change_account_provider_subtitle">"Shaxsiy serveringiz yoki ishchi hisob qaydnomangiz kabi boshqa hisob provayderidan foydalaning."</string>

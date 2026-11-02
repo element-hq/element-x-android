@@ -28,7 +28,6 @@
   <string name="notification_invite_body">"Sizni suhbatga taklif qildi"</string>
   <string name="notification_invite_body_with_sender">"%1$s sizni suhbatga taklif qildi"</string>
   <string name="notification_mentioned_you_body">"%1$s sizni eslatib oʻtdi"</string>
-  <string name="notification_new_messages">"Yangi xabarlar"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%dyangi xabar"</item>
     <item quantity="other">"%dyangi xabarlar"</item>

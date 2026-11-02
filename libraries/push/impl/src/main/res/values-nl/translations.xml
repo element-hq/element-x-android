@@ -22,7 +22,6 @@
   <string name="notification_invite_body">"Nodigde je uit om te chatten"</string>
   <string name="notification_invite_body_with_sender">"%1$s nodigde je uit om te chatten"</string>
   <string name="notification_mentioned_you_body">"Heeft je genoemd: %1$s"</string>
-  <string name="notification_new_messages">"Nieuwe berichten"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nieuw bericht"</item>
     <item quantity="other">"%d nieuwe berichten"</item>

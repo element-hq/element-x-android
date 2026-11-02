@@ -34,7 +34,6 @@
   <string name="notification_knock_request_body">"A demandé à rejoindre"</string>
   <string name="notification_live_location_started_body">"A commencé à partager sa position en direct"</string>
   <string name="notification_mentioned_you_body">"Mentionné(e) : %1$s"</string>
-  <string name="notification_new_messages">"Nouveaux messages"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nouveau message"</item>
     <item quantity="other">"%d nouveaux messages"</item>

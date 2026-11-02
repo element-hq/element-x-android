@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Επιλέξτε την προεπιλεγμένη ποιότητα των βίντεο που ανεβάζετε."</string>
+  <string name="dialog_default_video_quality_selector_title">"Ποιότητα μεταφόρτωσης βίντεο"</string>
   <string name="full_screen_intent_banner_message_android">"Για να διασφαλίσετε ότι δεν θα χάσετε ποτέ μια σημαντική κλήση, αλλάξτε τις ρυθμίσεις σας ώστε να επιτρέπονται οι ειδοποιήσεις πλήρους οθόνης όταν το τηλέφωνό σας είναι κλειδωμένο."</string>
   <string name="full_screen_intent_banner_title_android">"Βελτίωσε την εμπειρία κλήσεων"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Επέλεξε τον τρόπο λήψης ειδοποιήσεων"</string>
@@ -102,6 +104,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"Σε μια συνάντηση"</string>
   <string name="screen_settings_user_status_on_the_road">"Εν κινήσει"</string>
   <string name="screen_settings_user_status_placeholder">"Ποια είναι η κατάστασή σας;"</string>
+  <string name="settings_version_number">"Έκδοση: %1$s (%2$s)"</string>
   <string name="theme_black">"Μαύρο"</string>
   <string name="theme_dark">"Σκοτεινό"</string>
   <string name="theme_light">"Φωτεινό"</string>

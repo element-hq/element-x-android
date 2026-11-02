@@ -28,7 +28,6 @@
   <string name="notification_invite_body">"Inviterte deg til å chatte"</string>
   <string name="notification_invite_body_with_sender">"%1$s inviterte deg til å chatte"</string>
   <string name="notification_mentioned_you_body">"Nevnte deg: %1$s"</string>
-  <string name="notification_new_messages">"Nye meldinger"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d ny melding"</item>
     <item quantity="other">"%d nye meldinger"</item>

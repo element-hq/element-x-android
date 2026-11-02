@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Pilih kualitas default untuk video yang Anda unggah."</string>
+  <string name="dialog_default_video_quality_selector_title">"Kualitas unggahan video"</string>
   <string name="full_screen_intent_banner_message_android">"Untuk memastikan Anda tidak melewatkan panggilan penting, silakan ubah pengaturan Anda untuk memperbolehkan notifikasi layar penuh ketika ponsel Anda terkunci."</string>
   <string name="full_screen_intent_banner_title_android">"Tingkatkan pengalaman panggilan Anda"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Pilih cara menerima notifikasi"</string>
@@ -114,6 +116,7 @@ Jika Anda melanjutkan, beberapa pengaturan Anda dapat berubah."</string>
   <string name="screen_settings_user_status_in_a_meeting">"Sedang rapat"</string>
   <string name="screen_settings_user_status_on_the_road">"Di jalan"</string>
   <string name="screen_settings_user_status_placeholder">"Apa status Anda?"</string>
+  <string name="settings_version_number">"Versi: %1$s (%2$s)"</string>
   <string name="theme_black">"Hitam"</string>
   <string name="theme_dark">"Gelap"</string>
   <string name="theme_light">"Terang"</string>

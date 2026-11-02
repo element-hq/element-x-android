@@ -51,4 +51,5 @@ Du hast keine ungelesenen Nachrichten!"</string>
   <string name="screen_roomlist_mark_as_unread">"Als ungelesen markieren"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Die Chat-Version wurde aktualisiert"</string>
   <string name="screen_roomlist_your_spaces">"Deine Spaces"</string>
+  <string name="screen_space_list_empty_state_title">"Erstelle einen Space, um Chats zu organisieren"</string>
 </resources>

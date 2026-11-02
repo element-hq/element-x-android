@@ -23,7 +23,6 @@
   <string name="notification_invite_body">"Convidou-te para conversar"</string>
   <string name="notification_invite_body_with_sender">"%1$s convidou-te para conversar"</string>
   <string name="notification_mentioned_you_body">"Mencionou-te: %1$s"</string>
-  <string name="notification_new_messages">"Mensagens novas"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d mensagem nova"</item>
     <item quantity="other">"%d mensagens novas"</item>

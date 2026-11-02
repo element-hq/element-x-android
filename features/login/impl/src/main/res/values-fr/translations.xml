@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"Vous êtes déjà connecté en tant que %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Connexion en double"</string>
+  <string name="error_account_creation_not_possible">"Votre fournisseur de compte doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte."</string>
   <string name="screen_account_provider_signin_title">"Vous êtes sur le point de vous connecter à %s"</string>
   <string name="screen_change_account_provider_other">"Autres"</string>
   <string name="screen_change_account_provider_subtitle">"Utilisez un autre fournisseur de compte, tel que votre propre serveur privé ou un serveur professionnel."</string>

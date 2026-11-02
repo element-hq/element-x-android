@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_room_address_already_exists">"Tato adresa místnosti již existuje, zkuste prosím upravit pole adresy místnosti nebo změnit název místnosti"</string>
+  <string name="error_room_address_invalid_symbols">"Některé znaky nejsou povoleny. Podporovány jsou pouze písmena, číslice a následující symboly ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Poslat pozvánku"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Chcete začít chatovat s %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Poslat pozvánku?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Momentálně s touto osobou nemáte žádné chaty. Před pokračováním potvrďte pozvání."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Chcete zahájit chat s tímto novým kontaktem?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) vás pozval(a)"</string>
+  <string name="screen_space_list_description">"Prostory, které jste vytvořili nebo se k nim připojili."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Prostory"</string>
 </resources>

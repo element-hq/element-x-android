@@ -56,4 +56,5 @@ Anda tidak memiliki pesan yang belum dibaca!"</string>
   <string name="screen_roomlist_mark_as_unread">"Tandai sebagai belum dibaca"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ruangan ini telah ditingkatkan"</string>
   <string name="screen_roomlist_your_spaces">"Ruang Anda"</string>
+  <string name="screen_space_list_empty_state_title">"Ciptakan ruang untuk menata ruangan."</string>
 </resources>

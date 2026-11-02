@@ -112,7 +112,6 @@ import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpanUpdater
-import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
@@ -499,7 +498,7 @@ class MessagesFlowNode(
                                 val numberOfMessages = navTarget.eventIds.size
                                 asyncIndicatorState.enqueue(durationMs = AsyncIndicator.DURATION_SHORT) {
                                     AsyncIndicator.Custom(
-                                        text = pluralStringResource(CommonPlurals.screen_room_messages_forwarded, numberOfMessages, numberOfMessages),
+                                        text = pluralStringResource(R.plurals.screen_room_messages_forwarded, numberOfMessages, numberOfMessages),
                                     )
                                 }
                             }

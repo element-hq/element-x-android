@@ -39,5 +39,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"In attesa dell\'altro utente"</string>
   <string name="screen_session_verification_waiting_subtitle">"Una volta accettata, potrai proseguire con la verifica."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"In attesa di accettare la richiesta"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Rimozione del dispositivo…"</string>
 </resources>

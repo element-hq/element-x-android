@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Wybierz domyślną jakość przesyłanych filmów."</string>
+  <string name="dialog_default_video_quality_selector_title">"Jakość przesyłania wideo"</string>
   <string name="full_screen_intent_banner_message_android">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
   <string name="full_screen_intent_banner_title_android">"Popraw jakość swoich rozmów"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Wybierz sposób otrzymywania powiadomień"</string>
@@ -114,6 +116,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_settings_user_status_in_a_meeting">"Na spotkaniu"</string>
   <string name="screen_settings_user_status_on_the_road">"W trasie"</string>
   <string name="screen_settings_user_status_placeholder">"Jaki jest Twój status?"</string>
+  <string name="settings_version_number">"Wersja: %1$s (%2$s)"</string>
   <string name="theme_black">"Czarny"</string>
   <string name="theme_dark">"Ciemny"</string>
   <string name="theme_light">"Jasny"</string>

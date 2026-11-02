@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"Na tomto zařízení jste již přihlášeni jako %1$s."</string>
+  <string name="error_account_creation_not_possible">"Váš poskytovatel účtu musí být upgradeován, aby podporoval Matrix Authentication Service a vytváření účtů."</string>
   <string name="screen_account_provider_signin_title">"Chystáte se přihlásit do %s"</string>
   <string name="screen_change_account_provider_other">"Jiný"</string>
   <string name="screen_change_account_provider_subtitle">"Použijte jiného poskytovatele účtu, například vlastní soukromý server nebo pracovní účet."</string>

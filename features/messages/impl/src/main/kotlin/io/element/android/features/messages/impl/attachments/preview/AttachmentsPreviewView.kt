@@ -355,9 +355,9 @@ private fun AttachmentPreviewContent(
         if (state.displayFileTooLargeError) {
             val maxFileUploadSize = state.mediaOptimizationSelectorState.maxUploadSize.dataOrNull()
             if (maxFileUploadSize != null) {
-                val content = stringResource(CommonStrings.dialog_file_too_large_to_upload_subtitle, sizeFormatter.format(maxFileUploadSize, true))
+                val content = stringResource(R.string.dialog_file_too_large_to_upload_subtitle, sizeFormatter.format(maxFileUploadSize, true))
                 AlertDialog(
-                    title = stringResource(CommonStrings.dialog_file_too_large_to_upload_title),
+                    title = stringResource(R.string.dialog_file_too_large_to_upload_title),
                     content = content,
                     onDismiss = { state.eventSink(AttachmentsPreviewEvent.CancelAndDismiss) },
                 )
@@ -465,8 +465,8 @@ private fun VideoQualitySelectorDialog(
     val sizeFormatter = rememberFileSizeFormatter()
 
     var localSelectedPreset by remember(selectedPreset) { mutableStateOf(selectedPreset) }
-    val subtitlePartNoFileSize = stringResource(CommonStrings.dialog_video_quality_selector_subtitle_no_file_size)
-    val subtitlePartWithFileSize = stringResource(CommonStrings.dialog_video_quality_selector_subtitle_file_size)
+    val subtitlePartNoFileSize = stringResource(R.string.dialog_video_quality_selector_subtitle_no_file_size)
+    val subtitlePartWithFileSize = stringResource(R.string.dialog_video_quality_selector_subtitle_file_size)
     val subtitle = remember(maxFileUploadSize) {
         buildString {
             append(subtitlePartNoFileSize)

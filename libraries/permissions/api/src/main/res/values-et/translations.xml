@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"Luba juurdepääs"</string>
   <string name="dialog_permission_camera">"Selleks, et rakendus saaks kaamerat kasutada, palun luba see süsteemi seadistuses."</string>
   <string name="dialog_permission_generic">"Palun luba süsteemi seadistustest vajalikud õigused."</string>
   <string name="dialog_permission_microphone">"Selleks, et rakendus saaks mikrofoni kasutada, palun luba see süsteemi seadistuses."</string>
   <string name="dialog_permission_notification">"Selleks, et rakendus saaks kuvada teavitusi, palun anna vajalikud õiguse süsteemi seadistustes."</string>
+  <string name="screen_local_network_opt_in_subtitle">"Sinu koduserver asub sinu kohalikus võrgus. Ühendamiseks vajab %1$s luba selle võrgu seadmetega ühenduse loomiseks."</string>
+  <string name="screen_local_network_opt_in_title">"Luba juurdepääs kohtvõrgule"</string>
 </resources>

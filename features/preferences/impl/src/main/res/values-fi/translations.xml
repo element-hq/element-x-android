@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Valitse lähettämäsi videoiden oletuslaatu."</string>
+  <string name="dialog_default_video_quality_selector_title">"Videon lähetyslaatu"</string>
   <string name="full_screen_intent_banner_message_android">"Salli koko näytön ilmoitukset, kun laite on lukittu, jos et halua koskaan missata tärkeää puhelua."</string>
   <string name="full_screen_intent_banner_title_android">"Paranna puhelukokemustasi"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Valitse, miten haluat vastaanottaa ilmoituksia"</string>
@@ -113,6 +115,7 @@ Jos jatkat, jotkin asetukset saattavat muuttua."</string>
   <string name="screen_settings_user_status_in_a_meeting">"Kokouksessa"</string>
   <string name="screen_settings_user_status_on_the_road">"Tien päällä"</string>
   <string name="screen_settings_user_status_placeholder">"Mikä on tilasi?"</string>
+  <string name="settings_version_number">"Versio: %1$s (%2$s)"</string>
   <string name="theme_black">"Musta"</string>
   <string name="theme_dark">"Tumma"</string>
   <string name="theme_light">"Vaalea"</string>

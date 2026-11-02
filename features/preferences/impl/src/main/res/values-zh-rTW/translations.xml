@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"選取您上傳的視訊預設品質。"</string>
+  <string name="dialog_default_video_quality_selector_title">"視訊上傳品質"</string>
   <string name="full_screen_intent_banner_message_android">"為確保您永遠不會錯過重要通話，請變更設定以允許在手機鎖定時允許全螢幕通知。"</string>
   <string name="full_screen_intent_banner_title_android">"提升您的通話體驗"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"選擇接收通知的機制"</string>
@@ -112,6 +114,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"在會議中"</string>
   <string name="screen_settings_user_status_on_the_road">"在路上"</string>
   <string name="screen_settings_user_status_placeholder">"您的狀態如何？"</string>
+  <string name="settings_version_number">"版本：%1$s（%2$s）"</string>
   <string name="theme_black">"黑色"</string>
   <string name="theme_dark">"深色"</string>
   <string name="theme_light">"淺色"</string>

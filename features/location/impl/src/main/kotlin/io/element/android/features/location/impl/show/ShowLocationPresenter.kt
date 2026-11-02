@@ -27,6 +27,7 @@ import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.location.api.live.isCurrentlySharing
+import io.element.android.features.location.impl.R
 import io.element.android.features.location.impl.common.LocationConstraintsCheck
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.SendLiveLocationPermissions
@@ -49,7 +50,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -142,7 +142,7 @@ class ShowLocationPresenter(
                 remember {
                     val relativeTime = dateFormatter.format(timestamp = mode.timestamp, mode = DateFormatterMode.Full, useRelative = true)
                     val formattedTimestamp = stringProvider.getString(
-                        CommonStrings.screen_static_location_sheet_timestamp_description,
+                        R.string.screen_static_location_sheet_timestamp_description,
                         relativeTime
                     )
                     persistentListOf(
@@ -178,7 +178,7 @@ class ShowLocationPresenter(
                             val avatarUrl = member?.avatarUrl
                             val relativeTime = dateFormatter.format(timestamp = lastLocation.timestamp, mode = DateFormatterMode.Full, useRelative = true)
                             val formattedTimestamp = stringProvider.getString(
-                                CommonStrings.screen_static_location_sheet_timestamp_description,
+                                R.string.screen_static_location_sheet_timestamp_description,
                                 relativeTime
                             )
                             LocationShareItem(

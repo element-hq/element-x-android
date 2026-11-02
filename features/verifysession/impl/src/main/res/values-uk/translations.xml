@@ -41,5 +41,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Очікування іншого користувача"</string>
   <string name="screen_session_verification_waiting_subtitle">"Після схвалення ви зможете продовжити звіряння."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Очікування на прийняття запиту"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Видалення пристрою…"</string>
 </resources>

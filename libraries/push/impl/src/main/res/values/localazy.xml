@@ -34,7 +34,6 @@
   <string name="notification_knock_request_body">"Requested to join"</string>
   <string name="notification_live_location_started_body">"Started sharing their live location"</string>
   <string name="notification_mentioned_you_body">"Mentioned you: %1$s"</string>
-  <string name="notification_new_messages">"New Messages"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d new message"</item>
     <item quantity="other">"%d new messages"</item>

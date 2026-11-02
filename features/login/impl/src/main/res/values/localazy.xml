@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"You’re already signed in as %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Duplicate sign-in"</string>
+  <string name="error_account_creation_not_possible">"Your account provider needs to be upgraded to support Matrix Authentication Service and account creation."</string>
   <string name="screen_account_provider_signin_title">"You’re about to sign in to %s"</string>
   <string name="screen_change_account_provider_other">"Other"</string>
   <string name="screen_change_account_provider_subtitle">"Use a different account provider, such as your own private server or a work account."</string>

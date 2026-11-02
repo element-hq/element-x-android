@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"Já tens sessão iniciada como %1$s neste dispositivo."</string>
+  <string name="error_account_creation_not_possible">"Seu homeserver precisa ser atualizado para suportar o Matrix Authentication Service e a criação de conta."</string>
   <string name="screen_account_provider_signin_title">"Irás iniciar sessão em %s"</string>
   <string name="screen_change_account_provider_other">"Outro"</string>
   <string name="screen_change_account_provider_subtitle">"Utiliza um operador de conta diferente, como o teu próprio servidor privado ou uma conta de trabalho."</string>

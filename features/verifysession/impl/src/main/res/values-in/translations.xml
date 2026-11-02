@@ -41,5 +41,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Menunggu pengguna lain"</string>
   <string name="screen_session_verification_waiting_subtitle">"Setelah diterima, Anda akan dapat melanjutkan verifikasi."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Menunggu untuk menerima permintaan"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Mengeluarkan device dari akun…"</string>
 </resources>

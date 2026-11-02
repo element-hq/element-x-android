@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Sélectionnez la qualité par défaut des vidéos que vous envoyez."</string>
+  <string name="dialog_default_video_quality_selector_title">"Qualité des vidéos envoyées"</string>
   <string name="full_screen_intent_banner_message_android">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>
   <string name="full_screen_intent_banner_title_android">"Améliorez votre expérience d’appel"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Choisissez le mode de réception des notifications"</string>
@@ -110,6 +112,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_settings_user_status_in_a_meeting">"En réunion"</string>
   <string name="screen_settings_user_status_on_the_road">"Sur la route"</string>
   <string name="screen_settings_user_status_placeholder">"Quel est votre statut ?"</string>
+  <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="theme_black">"Noir"</string>
   <string name="theme_dark">"Sombre"</string>
   <string name="theme_light">"Clair"</string>

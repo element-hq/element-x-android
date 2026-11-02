@@ -49,4 +49,5 @@ Você não tem nenhuma mensagem não lida!"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcar como não lida"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Esta sala foi atualizada"</string>
   <string name="screen_roomlist_your_spaces">"Seus espaços"</string>
+  <string name="screen_space_list_empty_state_title">"Crie espaços para organizar salas"</string>
 </resources>

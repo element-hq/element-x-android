@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_title">"Bideoen igoera-kalitatea"</string>
   <string name="full_screen_intent_banner_message_android">"Dei garrantzitsurik galduko ez duzula ziurtatzeko, aldatu ezarpenak telefonoa blokeatuta dagoenean pantaila osoko jakinarazpenak baimentzeko."</string>
   <string name="full_screen_intent_banner_title_android">"Hobetu deien esperientzia"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Aukeratu jakinarazpenak nola jaso"</string>
@@ -49,6 +50,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"sistemaren ezarpenak"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Sistemaren jakinarazpenak desaktibatuta daude"</string>
   <string name="screen_notification_settings_title">"Jakinarazpenak"</string>
+  <string name="settings_version_number">"Bertsioa: %1$s (%2$s)"</string>
   <string name="theme_dark">"Iluna"</string>
   <string name="theme_light">"Argia"</string>
   <string name="theme_system">"Sistema"</string>

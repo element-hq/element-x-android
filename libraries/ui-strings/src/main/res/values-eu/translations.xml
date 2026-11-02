@@ -277,9 +277,6 @@ Arrazoia: %1$s."</string>
   <string name="common_thread">"Haria"</string>
   <string name="common_topic">"Gaia"</string>
   <string name="common_topic_placeholder">"Zeri buruzko gela da?"</string>
-  <string name="common_unable_to_decrypt">"Ezin da desenkriptatu"</string>
-  <string name="common_unable_to_decrypt_insecure_device">"Egiaztatu gabeko gailu batetik bidalia"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Igorlearen egiaztatutako identitatea berrezarri da"</string>
   <string name="common_unable_to_invite_message">"Ezin izan dira gonbidapenak erabiltzaile bati edo gehiagori bidali."</string>
   <string name="common_unable_to_invite_title">"Ezin d(ir)a gonbidapena(k) bidali"</string>
   <string name="common_unlock">"Desblokeatu"</string>
@@ -306,62 +303,21 @@ Arrazoia: %1$s."</string>
   <string name="common_waiting_for_decryption_key">"Mezu honen zain"</string>
   <string name="common_you">"Zeu"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s(r)en identitatea berrezarri da. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s(r)en %2$s identitatea berrezarri da. %3$s"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s(r)en identitatea berrezarri da."</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s(r)en %2$s identitatea berrezarri da. %3$s"</string>
-  <string name="dialog_confirm_link_message">"%1$s estekak %2$s gunera zaramatza.
-
-Ziur jarraitu nahi duzula?"</string>
-  <string name="dialog_confirm_link_title">"Egiaztatu honako esteka"</string>
-  <string name="dialog_default_video_quality_selector_title">"Bideoen igoera-kalitatea"</string>
-  <string name="dialog_file_too_large_to_upload_title">"Fitxategiaren tamaina handiegia da igotzeko"</string>
   <string name="dialog_room_reported">"Gela salatu da"</string>
   <string name="dialog_room_reported_and_left">"Gela salatu eta utzi da"</string>
   <string name="dialog_title_confirmation">"Baieztapena"</string>
   <string name="dialog_title_error">"Errorea"</string>
   <string name="dialog_title_success">"Arrakasta"</string>
   <string name="dialog_title_warning">"Abisua"</string>
-  <string name="dialog_unsaved_changes_description">"Gorde gabeko aldaketak dituzu."</string>
-  <string name="dialog_unsaved_changes_description_android">"Zure aldaketak ez dira gorde. Ziur itzuli nahi duzula?"</string>
-  <string name="dialog_unsaved_changes_title">"Aldaketak gorde?"</string>
   <string name="dialog_video_quality_selector_title">"Hautatu bideoaren igoera-kalitatea"</string>
   <string name="error_failed_creating_the_permalink">"Huts egin du esteka iraunkorra sortzeak"</string>
-  <string name="error_failed_loading_map">"%1$s ezin izan da mapa kargatu. Saiatu berriro geroago."</string>
-  <string name="error_failed_loading_messages">"Huts egin du mezuak kargatzeak"</string>
-  <string name="error_failed_locating_user">"%1$s ezin izan da zure kokapena atzitu. Saiatu berriro geroago."</string>
-  <string name="error_failed_uploading_voice_message">"Ahots-mezua igotzeak huts egin du"</string>
   <string name="error_message_not_found">"Ez da mezua aurkitu"</string>
-  <string name="error_missing_location_auth_android">"%1$sek ez du zure kokapena atzitzeko baimenik. Sarbidea Ezarpenetan gaitu dezakezu."</string>
-  <string name="error_missing_location_rationale_android">"%1$sek ez du zure kokapena atzitzeko baimenik. Gaitu sarbidea behean."</string>
-  <string name="error_missing_microphone_voice_rationale_android">"%1$s(e)k ez du mikrofonoa atzitzeko baimenik. Gaitu sarbidea ahots-mezua grabatzeko."</string>
   <string name="error_network_or_server_issue">"Sarearen edo zerbitzariaren arazoren bategatik izan daiteke."</string>
-  <string name="error_room_address_already_exists">"Gela badago lehendik ere. Saiatu gelaren helbidearen eremua editatzen edo aldatu gelaren izena"</string>
-  <string name="error_room_address_invalid_symbols">"Karaktere batzuk ez daude baimenduta. Hizkiak, zifrak, eta ondorengo ikurrak onartzen dira bakarrik: ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Mezu batzuk ez dira bidali"</string>
   <string name="error_unknown">"Barka, errore bat gertatu da"</string>
-  <string name="invite_friends_rich_title">"🔐️ Zatoz nirekin %1$s(e)ra"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="preference_rageshake">"Astindu erroreen berri emateko"</string>
   <string name="screen_media_picker_error_failed_selection">"Huts egin du multimedia aukeratzeak, saiatu berriro."</string>
-  <plurals name="screen_pinned_timeline_screen_title">
-    <item quantity="one">"Finkatutako mezu %1$d"</item>
-    <item quantity="other">"Finkatutako %1$d mezu"</item>
-  </plurals>
-  <string name="screen_pinned_timeline_screen_title_empty">"Finkatutako mezuak"</string>
-  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Bidali mezua hala ere"</string>
-  <string name="screen_room_pinned_banner_indicator">"%2$s(e)tik %1$s"</string>
-  <string name="screen_room_pinned_banner_loading_description">"Mezua kargatzen…"</string>
-  <string name="screen_room_pinned_banner_view_all_button_title">"Ikusi guztia"</string>
   <string name="screen_room_title">"Txata"</string>
-  <string name="screen_share_location_title">"Partekatu kokapena"</string>
-  <string name="screen_share_my_location_action">"Partekatu nire kokapena"</string>
-  <string name="screen_share_open_apple_maps">"Ireki Apple Maps-en"</string>
-  <string name="screen_share_open_google_maps">"Ireki Google Maps-en"</string>
-  <string name="screen_share_open_osm_maps">"Ireki OpenStreetMap-en"</string>
-  <string name="screen_share_this_location_action">"Partekatu kokapen hau"</string>
-  <string name="screen_view_location_title">"Kokapena"</string>
-  <string name="settings_version_number">"Bertsioa: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"eu"</string>
-  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Iraganeko mezuak ez daude gailu honetan eskuragarri"</string>
-  <string name="timeline_decryption_failure_unable_to_decrypt">"Ezin da mezua deszifratu"</string>
 </resources>

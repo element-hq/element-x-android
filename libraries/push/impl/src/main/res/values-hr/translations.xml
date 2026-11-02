@@ -37,7 +37,6 @@
   <string name="notification_knock_request_body">"Zatraženo pridruživanje"</string>
   <string name="notification_live_location_started_body">"Počeli su dijeliti svoju lokaciju uživo"</string>
   <string name="notification_mentioned_you_body">"Korisnik vas je spomenuo: %1$s"</string>
-  <string name="notification_new_messages">"Nove poruke"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nova poruka"</item>
     <item quantity="few">"%d nove poruke"</item>

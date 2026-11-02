@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"Sa juba oled sellesse seadmesse sisseloginud kasutajana %1$s."</string>
+  <string name="error_account_creation_not_possible">"Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Service\'i tugi, vajab sinu koduserver uuendamist."</string>
   <string name="screen_account_provider_signin_title">"Sa oled sisse logimas %s teenusesse"</string>
   <string name="screen_change_account_provider_other">"Muu teenusepakkuja"</string>
   <string name="screen_change_account_provider_subtitle">"Kasuta erinevat teenusepakkujat, milleks võib olla ka sinu oma server või töökoha hallatav server."</string>

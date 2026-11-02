@@ -74,7 +74,6 @@ import io.element.android.libraries.matrix.ui.media.contentvalidation.EventConte
 import io.element.android.libraries.matrix.ui.media.contentvalidation.LocalEventContentValidationState
 import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadMessagesUi
@@ -262,7 +261,7 @@ class MessagesNode(
     }
 
     private fun displaySameRoomToast() {
-        context.toast(CommonStrings.screen_room_permalink_same_room_android)
+        context.toast(R.string.screen_room_permalink_same_room_android)
     }
 
     override fun close() = navigateUp()

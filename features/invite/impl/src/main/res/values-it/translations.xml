@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"La stanza non esiste più o l\'invito non è più valido."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Non vedrai alcun messaggio o invito ad una stanza da parte di questo utente"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Blocca utente"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Segnala questa stanza al fornitore del tuo account."</string>

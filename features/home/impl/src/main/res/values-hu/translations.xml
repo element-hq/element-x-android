@@ -54,4 +54,5 @@ Nincs olvasatlan üzenete!"</string>
   <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
   <string name="screen_roomlist_tombstoned_room_description">"A szoba verzióját frissítették"</string>
   <string name="screen_roomlist_your_spaces">"Saját terek"</string>
+  <string name="screen_space_list_empty_state_title">"Terek létrehozása a szobák rendszerezéséhez"</string>
 </resources>

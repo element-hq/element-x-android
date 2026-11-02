@@ -29,7 +29,6 @@
   <string name="notification_knock_request_body">"参加をリクエスト"</string>
   <string name="notification_live_location_started_body">"ライブ位置情報の共有を開始"</string>
   <string name="notification_mentioned_you_body">"%1$s があなたをメンションしました"</string>
-  <string name="notification_new_messages">"新着メッセージ"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="other">"%d 件の新着メッセージ"</item>
   </plurals>

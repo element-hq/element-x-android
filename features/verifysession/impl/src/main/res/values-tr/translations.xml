@@ -39,5 +39,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Diğer kullanıcı bekleniyor"</string>
   <string name="screen_session_verification_waiting_subtitle">"Kabul edildikten sonra doğrulama işlemine devam edebileceksiniz."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"İsteğin kabul edilmesi bekleniyor"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Oturum kapatılıyor…"</string>
 </resources>

@@ -51,4 +51,5 @@
   <string name="screen_roomlist_mark_as_unread">"Отметить как непрочитанное"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Уровень комнаты был повышен"</string>
   <string name="screen_roomlist_your_spaces">"Ваши пространства"</string>
+  <string name="screen_space_list_empty_state_title">"Создайте пространства для организации комнат"</string>
 </resources>

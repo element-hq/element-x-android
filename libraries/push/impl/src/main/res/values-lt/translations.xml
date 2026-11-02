@@ -21,7 +21,6 @@
     <item quantity="other">"%d kvietimų"</item>
   </plurals>
   <string name="notification_invite_body">"Pakvietė jus bendrauti"</string>
-  <string name="notification_new_messages">"Naujos žinutės"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nauja žinutė"</item>
     <item quantity="few">"%d naujos žinutės"</item>

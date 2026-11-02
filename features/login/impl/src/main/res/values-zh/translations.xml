@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"你已作为 %1$s 的身份登录。"</string>
+  <string name="error_account_already_logged_in_title">"检测到重复登录"</string>
+  <string name="error_account_creation_not_possible">"你的账户提供者需要升级以支持 Matrix 认证服务和账户创建。"</string>
   <string name="screen_account_provider_signin_title">"你即将登录到 %s"</string>
   <string name="screen_change_account_provider_other">"其它"</string>
   <string name="screen_change_account_provider_subtitle">"使用其它账户提供者，例如你自己的私有服务器或工作账户。"</string>

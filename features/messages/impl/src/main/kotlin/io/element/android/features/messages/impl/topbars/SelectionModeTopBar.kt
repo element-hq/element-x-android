@@ -20,6 +20,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.SelectionAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -39,7 +40,7 @@ fun SelectionModeTopBar(
     onConfirmClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val a11ySelectedCount = pluralStringResource(CommonPlurals.screen_room_selection_count, selectedCount, selectedCount)
+    val a11ySelectedCount = pluralStringResource(R.plurals.screen_room_selection_count, selectedCount, selectedCount)
     TopAppBar(
         modifier = modifier,
         title = {

@@ -41,5 +41,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Odotetaan toista käyttäjää"</string>
   <string name="screen_session_verification_waiting_subtitle">"Kun pyyntö on hyväksytty, voit jatkaa vahvistusta."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Odotetaan pyynnön hyväksymistä"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Poistetaan laitetta…"</string>
 </resources>

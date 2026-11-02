@@ -39,5 +39,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Ootame teise kasutaja järgi"</string>
   <string name="screen_session_verification_waiting_subtitle">"Kui oled nõustunud, siis saad sa verifitseerimist jätkata."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Ootame nõustumist verifitseerimispäringuga"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Eemaldan seadet…"</string>
 </resources>

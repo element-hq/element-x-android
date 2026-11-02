@@ -21,7 +21,6 @@
   <string name="notification_invite_body">"Txatetzera gonbidatu zaitu"</string>
   <string name="notification_invite_body_with_sender">"%1$s(e)k txatera gonbidatu zaitu"</string>
   <string name="notification_mentioned_you_body">"Aipatu zaitu: %1$s"</string>
-  <string name="notification_new_messages">"Mezu berriak"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"Mezu berri %d"</item>
     <item quantity="other">"%d mezu berri"</item>

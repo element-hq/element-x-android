@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Nepavyko iššifruoti"</string>
+  <string name="error_failed_loading_messages">"Nepavyko įkelti žinučių"</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Nepavyko apdoroti įkeliamos laikmenos, bandykite dar kartą."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Nepavyko įkelti laikmenos, pabandykite dar kartą."</string>
   <string name="screen_report_content_block_user">"Blokuoti vartotoją"</string>

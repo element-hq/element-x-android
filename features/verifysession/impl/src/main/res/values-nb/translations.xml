@@ -39,5 +39,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Venter på den andre brukeren"</string>
   <string name="screen_session_verification_waiting_subtitle">"Når du er akseptert, kan du fortsette med verifiseringen."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Venter på å godta forespørselen"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Fjerner enheten …"</string>
 </resources>

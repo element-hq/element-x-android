@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Kaydedilmemiş değişiklikleriniz var."</string>
+  <string name="dialog_unsaved_changes_description_android">"Değişiklikleriniz kaydedilmedi. Geri dönmek istediğinden emin misin?"</string>
+  <string name="dialog_unsaved_changes_title">"Değişiklikleri Kaydet?"</string>
+</resources>

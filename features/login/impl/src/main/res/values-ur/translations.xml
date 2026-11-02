@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_creation_not_possible">"‏Matrix Authentication Service اور اکاؤنٹ بنانے میں معاونت کے لیے آپ کے ہوم سرور کو اپ گریڈ کرنے کی ضرورت ہے۔"</string>
   <string name="screen_account_provider_signin_title">"آپ %s میں داخل ہونے والے ہیں"</string>
   <string name="screen_change_account_provider_other">"دیگر"</string>
   <string name="screen_change_account_provider_subtitle">"ایک مختلف کھاتہ فراہم کنندہ استعمال کریں، جیسے آپ کا اپنا نجی خادم یا کام کا کھاتہ۔"</string>

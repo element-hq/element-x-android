@@ -27,19 +27,19 @@ fun LocationConstraintsDialog(
     when (state) {
         LocationConstraintsDialogState.None -> Unit
         LocationConstraintsDialogState.PermissionRationale -> ConfirmationDialog(
-            content = stringResource(CommonStrings.error_missing_location_rationale_android, appName),
+            content = stringResource(R.string.error_missing_location_rationale_android, appName),
             onSubmitClick = onRequestPermissions,
             onDismiss = onDismiss,
             submitText = stringResource(CommonStrings.action_continue),
         )
         LocationConstraintsDialogState.PermissionDenied -> ConfirmationDialog(
-            content = stringResource(CommonStrings.error_missing_location_auth_android, appName),
+            content = stringResource(R.string.error_missing_location_auth_android, appName),
             onSubmitClick = onOpenAppSettings,
             onDismiss = onDismiss,
             submitText = stringResource(CommonStrings.action_continue),
         )
         LocationConstraintsDialogState.LocationServiceDisabled -> ConfirmationDialog(
-            content = stringResource(CommonStrings.error_location_service_disabled_android),
+            content = stringResource(R.string.error_location_service_disabled_android),
             onSubmitClick = onOpenLocationSettings,
             onDismiss = onDismiss,
             submitText = stringResource(CommonStrings.action_continue),

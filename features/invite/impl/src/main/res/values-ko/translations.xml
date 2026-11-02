@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"해당 방이 더 이상 존재하지 않거나 초대장이 더 이상 유효하지 않습니다."</string>
   <string name="screen_decline_and_block_block_user_option_description">"이 사용자로부터 메시지나 방 초대장이 표시되지 않습니다."</string>
   <string name="screen_decline_and_block_block_user_option_title">"사용자 차단하기"</string>
   <string name="screen_decline_and_block_report_user_option_description">"이 room 계정 제공자에게 신고하세요."</string>

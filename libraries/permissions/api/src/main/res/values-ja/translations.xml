@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"アクセスを許可"</string>
   <string name="dialog_permission_camera">"カメラを使用するには、本体の設定から権限を付与する必要があります。"</string>
   <string name="dialog_permission_generic">"本体の設定から権限を付与してください。"</string>
   <string name="dialog_permission_microphone">"マイクを使用するには、本体の設定から権限を付与してください。"</string>
   <string name="dialog_permission_notification">"通知を表示するには、本体の設定から権限を付与してください。"</string>
+  <string name="screen_local_network_opt_in_subtitle">"ホームサーバーがローカルネットワーク上に存在しています。接続するには %1$s はこのネットワークへアクセスする権限が必要です。"</string>
+  <string name="screen_local_network_opt_in_title">"ローカルネットワークへのアクセスを許可"</string>
 </resources>

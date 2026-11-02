@@ -28,7 +28,6 @@
   <string name="notification_invite_body">"Σε προσκάλεσε να συνομιλήσετε"</string>
   <string name="notification_invite_body_with_sender">"Ο χρήστης %1$s σε προσκάλεσε σε συνομιλία"</string>
   <string name="notification_mentioned_you_body">"Σέ ανέφερε: %1$s"</string>
-  <string name="notification_new_messages">"Νέα Μηνύματα"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d νέο μήνυμα"</item>
     <item quantity="other">"%d νέα μηνύματα"</item>

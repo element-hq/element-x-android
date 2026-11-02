@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Dewiswch ansawdd rhagosodedig y fideos rydych chi\'n eu llwytho."</string>
+  <string name="dialog_default_video_quality_selector_title">"Ansawdd lwytho fideo"</string>
   <string name="full_screen_intent_banner_message_android">"Er mwyn sicrhau fyddwch chi ddim yn colli galwad bwysig, newidiwch eich gosodiadau i ganiatáu hysbysiadau sgrin lawn pan fydd eich ffôn wedi\'i gloi."</string>
   <string name="full_screen_intent_banner_title_android">"Gwella profiad eich galwadau"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Dewiswch sut i dderbyn hysbysiadau"</string>
@@ -63,6 +65,7 @@ Os ewch ymlaen, efallai y bydd rhai o\'ch gosodiadau\'n newid."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"gosodiadau system"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Hysbysiadau system wedi\'u diffodd"</string>
   <string name="screen_notification_settings_title">"Hysbysiadau"</string>
+  <string name="settings_version_number">"Fersiwn: %1$s (%2$s)"</string>
   <string name="theme_dark">"Tywyll"</string>
   <string name="theme_light">"Golau"</string>
   <string name="theme_system">"System"</string>

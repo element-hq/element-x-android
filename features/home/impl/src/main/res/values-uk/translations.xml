@@ -62,4 +62,5 @@
   <string name="screen_search_no_results_message">"За запитом «%1$s» нічого не знайдено. Спробуйте ввести інший термін."</string>
   <string name="screen_search_recent_searches">"Недавні пошукові запити"</string>
   <string name="screen_search_tab_chats">"Бесіди"</string>
+  <string name="screen_space_list_empty_state_title">"Створіть простори для організації кімнат"</string>
 </resources>

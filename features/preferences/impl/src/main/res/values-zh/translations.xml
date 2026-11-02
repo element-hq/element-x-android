@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"选择你上传的视频的默认质量。"</string>
+  <string name="dialog_default_video_quality_selector_title">"视频上传质量"</string>
   <string name="full_screen_intent_banner_message_android">"为确保你不会错过重要来电，请更改设置以允许锁屏时的全屏通知。"</string>
   <string name="full_screen_intent_banner_title_android">"提升通话体验"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"选择如何接收通知"</string>
@@ -112,6 +114,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"正在开会"</string>
   <string name="screen_settings_user_status_on_the_road">"在路上"</string>
   <string name="screen_settings_user_status_placeholder">"你的当前状态？"</string>
+  <string name="settings_version_number">"版本：%1$s（%2$s）"</string>
   <string name="theme_black">"纯黑"</string>
   <string name="theme_dark">"深色"</string>
   <string name="theme_light">"浅色"</string>

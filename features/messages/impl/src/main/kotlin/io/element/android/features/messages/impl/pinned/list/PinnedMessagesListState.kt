@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.link.LinkState
@@ -20,8 +21,6 @@ import io.element.android.features.messages.impl.timeline.components.customreact
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
-import io.element.android.libraries.ui.strings.CommonPlurals
-import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
 @Immutable
@@ -48,9 +47,9 @@ sealed interface PinnedMessagesListState {
     fun title(): String {
         return when (this) {
             is Filled -> {
-                pluralStringResource(id = CommonPlurals.screen_pinned_timeline_screen_title, loadedPinnedMessagesCount, loadedPinnedMessagesCount)
+                pluralStringResource(id = R.plurals.screen_pinned_timeline_screen_title, loadedPinnedMessagesCount, loadedPinnedMessagesCount)
             }
-            else -> stringResource(id = CommonStrings.screen_pinned_timeline_screen_title_empty)
+            else -> stringResource(id = R.string.screen_pinned_timeline_screen_title_empty)
         }
     }
 }

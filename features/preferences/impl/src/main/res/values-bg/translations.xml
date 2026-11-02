@@ -52,6 +52,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системни настройки"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системните известия са изключени"</string>
   <string name="screen_notification_settings_title">"Известия"</string>
+  <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="theme_dark">"Тъмен"</string>
   <string name="theme_light">"Светъл"</string>
   <string name="theme_system">"Система"</string>

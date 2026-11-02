@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"アップロードする動画のデフォルト画質を選択してください。"</string>
+  <string name="dialog_default_video_quality_selector_title">"動画のアップロード品質"</string>
   <string name="full_screen_intent_banner_message_android">"重要な電話を確実に受け取るため、端末がロックされている状態での全画面通知を、設定から許可してください。"</string>
   <string name="full_screen_intent_banner_title_android">"通話品質を高める"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"通知の受信方法を選択してください"</string>
@@ -105,6 +107,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"会議中"</string>
   <string name="screen_settings_user_status_on_the_road">"移動中"</string>
   <string name="screen_settings_user_status_placeholder">"現在のステータスは？"</string>
+  <string name="settings_version_number">"バージョン: %1$s (%2$s)"</string>
   <string name="theme_black">"ブラック"</string>
   <string name="theme_dark">"ダーク"</string>
   <string name="theme_light">"ライト"</string>

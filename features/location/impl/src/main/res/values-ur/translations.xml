@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s نقشہ لاد نہیں سکا۔ برائے مہربانی بعد میں دوبارہ کوشش کریں۔"</string>
+  <string name="error_failed_locating_user">"%1$s آپ کے مقام تک رسائی حاصل نہیں کر سکا۔ برائے مہربانی بعد میں دوبارہ کوشش کریں۔"</string>
+  <string name="error_missing_location_auth_android">"%1$sآپ کے مقام تک رسائی کی اجازت نہیں ہے۔ آپ ترتیبات میں رسائی کو فعال کر سکتے ہیں۔"</string>
+  <string name="error_missing_location_rationale_android">"%1$s کو آپ کے مقام تک رسائی حاصل کرنے کی اجازت نہیں ہے۔ نیچے رسائی کو فعال کریں۔"</string>
+  <string name="screen_share_location_title">"مقام کا اشتراک کریں"</string>
+  <string name="screen_share_my_location_action">"میرے مقام کا اشتراک کریں"</string>
+  <string name="screen_share_open_apple_maps">"ایپل میپس میں کھولیں"</string>
+  <string name="screen_share_open_google_maps">"گوگل میپس میں کھولیں۔ل"</string>
+  <string name="screen_share_open_osm_maps">"اوپن اسٹریٹ میپ میں کھولیں"</string>
+  <string name="screen_share_this_location_action">"اس مقام کا اشتراک کریں"</string>
+  <string name="screen_view_location_title">"مقام"</string>
+</resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_creation_not_possible">"Ваш хатні сервер неабходна абнавіць для падтрымкі Matrix Authentication Service і стварэння ўліковага запісу."</string>
   <string name="screen_account_provider_signin_title">"Вы збіраецеся ўвайсці ў %s"</string>
   <string name="screen_change_account_provider_other">"Іншае"</string>
   <string name="screen_change_account_provider_subtitle">"Выкарыстоўвайце іншага правайдара ўліковых запісаў, напрыклад, уласны прыватны сервер або працоўны ўліковы запіс."</string>
