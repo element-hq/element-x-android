@@ -23,7 +23,7 @@ Você tem certeza de que deseja continuar?"</string>
   <string name="dialog_file_too_large_to_upload_subtitle">"O tamanho máximo permitido de arquivos é: %1$s"</string>
   <string name="dialog_file_too_large_to_upload_title">"O tamanho do arquivo é muito grande para ser enviado"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"O tamanho máximo permitido de arquivos é: %1$s"</string>
-  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Selecione a qualidade do video que quer enviar."</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Selecione a qualidade do vídeo que quer enviar."</string>
   <string name="error_failed_loading_messages">"Falha ao carregar mensagens"</string>
   <string name="error_failed_uploading_voice_message">"Falha ao enviar sua mensagem de voz."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s não tem permissão para acessar seu microfone. Permita o acesso para gravar uma mensagem de voz."</string>
