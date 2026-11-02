@@ -222,7 +222,7 @@ google_guava = "com.google.guava:guava:33.7.2-android"
 color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.60.7"
+posthog = "com.posthog:posthog-android:3.72.8"
 sentry = "io.sentry:sentry-android:8.61.1"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.38.0"
