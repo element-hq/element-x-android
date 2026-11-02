@@ -3,16 +3,12 @@
   <string name="full_screen_intent_banner_message_android">"Er mwyn sicrhau fyddwch chi ddim yn colli galwad bwysig, newidiwch eich gosodiadau i ganiatáu hysbysiadau sgrin lawn pan fydd eich ffôn wedi\'i gloi."</string>
   <string name="full_screen_intent_banner_title_android">"Gwella profiad eich galwadau"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Dewiswch sut i dderbyn hysbysiadau"</string>
-  <string name="screen_advanced_settings_developer_mode">"Modd datblygwr"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Galluogi i gael mynediad at nodweddion a swyddogaethau datblygwyr."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL sylfaen Galwad Element Cyfaddas"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Gosod URL sylfaen cyfaddas ar gyfer Galwad Element."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL annilys, gwnewch yn siŵr eich bod yn cynnwys y protocol (http/https) a\'r cyfeiriad cywir."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Cuddio afatarau yn y ceisiadau gwahoddiad i ystafell"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Cuddio rhagolygon cyfryngau yn y llinell amser"</string>
   <string name="screen_advanced_settings_media_compression_description">"Llwythwch i fyny lluniau a fideos yn gynt a lleihau\'r defnydd o ddata"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimeiddio ansawdd y cyfryngau"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Cymedroli a Diogelwch"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimeiddio delweddau\'n awtomatig ar gyfer llwytho cyflymach a meintiau ffeiliau llai."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimeiddio ansawdd llwytho delweddau"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s Tapiwch yma i newid."</string>
@@ -21,9 +17,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Safonol (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Ansawdd lwytho fideo"</string>
   <string name="screen_advanced_settings_push_provider_android">"Darparwr hysbysiad gwthio"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Analluogi\'r golygydd testun cyfoethog i deipio Markdown â llaw."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Derbynebau darllen"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Os wedi\'i ddiffodd, fydd eich derbynebau darllen ddim yn cael eu hanfon at unrhyw un. Byddwch yn dal i dderbyn derbynebau darllen gan ddefnyddwyr eraill."</string>
   <string name="screen_advanced_settings_share_presence">"Rhannu presenoldeb"</string>
   <string name="screen_advanced_settings_share_presence_description">"Os wedi\'i ddiffodd, fyddwch chi ddim yn gallu anfon na derbyn derbynebau wedi\'u darllen na hysbysiadau teipio."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Cuddio bob tro"</string>

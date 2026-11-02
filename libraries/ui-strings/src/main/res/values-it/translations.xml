@@ -40,7 +40,6 @@
   <string name="a11y_notifications_new_mentions">"Nuove menzioni"</string>
   <string name="a11y_notifications_new_messages">"Nuovi messaggi"</string>
   <string name="a11y_notifications_ongoing_call">"Chiamata in corso"</string>
-  <string name="a11y_other_user_avatar">"Avatar dell\'altro utente"</string>
   <string name="a11y_page_n">"Pagina %1$d"</string>
   <string name="a11y_pause">"Pausa"</string>
   <string name="a11y_paused_voice_message">"Messaggio vocale, durata: %1$s, posizione attuale: %2$s"</string>
@@ -86,7 +85,6 @@
   <string name="a11y_voice_message">"Messaggio vocale, durata: %1$s"</string>
   <string name="a11y_voice_message_record">"Registra un messaggio vocale."</string>
   <string name="a11y_voice_message_stop_recording">"Ferma la registrazione"</string>
-  <string name="a11y_your_avatar">"Il tuo avatar"</string>
   <string name="action_accept">"Accetta"</string>
   <string name="action_add_caption">"Aggiungi didascalia"</string>
   <string name="action_add_existing_rooms">"Aggiungi stanze esistenti"</string>
@@ -99,7 +97,6 @@
   <string name="action_choose_photo">"Scegli foto"</string>
   <string name="action_clear">"Cancella"</string>
   <string name="action_close">"Chiudi"</string>
-  <string name="action_complete_verification">"Completa verifica"</string>
   <string name="action_confirm">"Conferma"</string>
   <string name="action_confirm_password">"Conferma password"</string>
   <string name="action_continue">"Continua"</string>
@@ -111,8 +108,6 @@
   <string name="action_create">"Crea"</string>
   <string name="action_create_room">"Crea stanza"</string>
   <string name="action_create_space">"Crea spazio"</string>
-  <string name="action_deactivate">"Disattiva"</string>
-  <string name="action_deactivate_account">"Disattiva account"</string>
   <string name="action_decline">"Rifiuta"</string>
   <string name="action_decline_and_block">"Rifiuta e blocca"</string>
   <string name="action_delete">"Elimina"</string>
@@ -151,9 +146,7 @@
   <string name="action_leave_room">"Esci dalla stanza"</string>
   <string name="action_leave_space">"Esci dallo spazio"</string>
   <string name="action_load_more">"Carica altro"</string>
-  <string name="action_manage_account">"Gestisci account"</string>
   <string name="action_manage_account_and_devices">"Gestisci account &amp; dispositivi"</string>
-  <string name="action_manage_devices">"Gestisci dispositivi"</string>
   <string name="action_manage_rooms">"Gestisci le stanze"</string>
   <string name="action_mark_as_read">"Segna come letto"</string>
   <string name="action_message">"Invia messaggio"</string>
@@ -176,7 +169,6 @@
   <string name="action_reply">"Rispondi"</string>
   <string name="action_reply_in_thread">"Rispondi nella discussione"</string>
   <string name="action_report">"Segnala"</string>
-  <string name="action_report_bug">"Segnala un problema"</string>
   <string name="action_report_content">"Segnala contenuto"</string>
   <string name="action_report_dm">"Segnala una conversazione"</string>
   <string name="action_report_room">"Segnala stanza"</string>
@@ -195,7 +187,6 @@
   <string name="action_share_link">"Condividi collegamento"</string>
   <string name="action_share_live_location">"Condividi la posizione in tempo reale"</string>
   <string name="action_show">"Mostra"</string>
-  <string name="action_sign_in_again">"Accedi di nuovo"</string>
   <string name="action_signout">"Rimuovi questo dispositivo"</string>
   <string name="action_signout_anyway">"Rimuovi comunque questo dispositivo"</string>
   <string name="action_skip">"Salta"</string>
@@ -217,11 +208,8 @@
   <string name="action_voice_call">"Chiamata vocale"</string>
   <string name="action_yes">"Sì"</string>
   <string name="action_yes_try_again">"Sì, riprova"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Il tuo server ora supporta un nuovo protocollo più veloce. Esci e rientra per effettuare l\'aggiornamento. Se lo fai ora, eviterai una disconnessione forzata quando il vecchio protocollo verrà rimosso in seguito."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Aggiornamento disponibile"</string>
   <string name="common_about">"Informazioni"</string>
   <string name="common_acceptable_use_policy">"Regole sull\'utilizzo consentito"</string>
-  <string name="common_add_account">"Aggiungi un account"</string>
   <string name="common_add_another_account">"Aggiungi un altro account"</string>
   <string name="common_adding_caption">"Aggiunta didascalia"</string>
   <string name="common_advanced_settings">"Impostazioni avanzate"</string>
@@ -233,7 +221,6 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Utenti bloccati"</string>
-  <string name="common_bubbles">"Fumetti"</string>
   <string name="common_call_declined">"Chiamata rifiutata"</string>
   <string name="common_call_in_progress">"Chiamata in corso"</string>
   <string name="common_call_started">"Chiamata avviata"</string>
@@ -546,7 +533,6 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Modifica amministratori o proprietari"</string>
   <string name="screen_room_error_failed_processing_media">"Elaborazione del file multimediale da caricare fallita, riprova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Impossibile recuperare i dettagli dell\'utente"</string>
-  <string name="screen_room_event_pill">"Messaggio in %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Espandi"</string>
   <string name="screen_room_grouped_state_events_reduce">"Riduci"</string>
   <string name="screen_room_live_location_banner">"Condivisione posizione in tempo reale"</string>

@@ -10,14 +10,12 @@
   <string name="a11y_send_files">"Siųsti failus"</string>
   <string name="a11y_show_password">"Rodyti slaptažodį"</string>
   <string name="a11y_user_menu">"Vartotojo meniu"</string>
-  <string name="a11y_your_avatar">"Jūsų pseudoportretas"</string>
   <string name="action_accept">"Priimti"</string>
   <string name="action_back">"Atgal"</string>
   <string name="action_cancel">"Atšaukti"</string>
   <string name="action_choose_photo">"Pasirinkti nuotrauką"</string>
   <string name="action_clear">"Išvalyti"</string>
   <string name="action_close">"Uždaryti"</string>
-  <string name="action_complete_verification">"Užbaigti patvirtinimą"</string>
   <string name="action_confirm">"Patvirtinti"</string>
   <string name="action_continue">"Tęsti"</string>
   <string name="action_copy">"Kopijuoti"</string>
@@ -54,7 +52,6 @@
   <string name="action_react">"Reaguoti"</string>
   <string name="action_remove">"Šalinti"</string>
   <string name="action_reply">"Atsakyti"</string>
-  <string name="action_report_bug">"Pranešti apie riktą"</string>
   <string name="action_report_content">"Pranešti apie turinį"</string>
   <string name="action_retry">"Bandyti dar kartą"</string>
   <string name="action_retry_decryption">"Pakartoti iššifravimą"</string>
@@ -64,7 +61,6 @@
   <string name="action_send_message">"Siųsti žinutę"</string>
   <string name="action_share">"Dalintis"</string>
   <string name="action_share_link">"Bendrinti nuorodą"</string>
-  <string name="action_sign_in_again">"Prisijungti vėl"</string>
   <string name="action_signout">"Atsijungti"</string>
   <string name="action_signout_anyway">"Atsijungti vis tiek"</string>
   <string name="action_skip">"Praleisti"</string>
@@ -80,7 +76,6 @@
   <string name="common_analytics">"Analitika"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Jūs išėjote iš kambario"</string>
   <string name="common_audio">"Garsas"</string>
-  <string name="common_bubbles">"Burbulai"</string>
   <string name="common_chat_backup">"Pokalbio atsarginė kopija"</string>
   <string name="common_copyright">"Autorinės teisės"</string>
   <string name="common_creating_room">"Kuriamas kambarys…"</string>

@@ -42,7 +42,6 @@
   <string name="a11y_notifications_new_mentions">"Нові згадки"</string>
   <string name="a11y_notifications_new_messages">"Нові повідомлення"</string>
   <string name="a11y_notifications_ongoing_call">"Поточний виклик"</string>
-  <string name="a11y_other_user_avatar">"Аватар іншого користувача"</string>
   <string name="a11y_page_n">"Сторінка %1$d"</string>
   <string name="a11y_pause">"Пауза"</string>
   <string name="a11y_paused_voice_message">"Голосове повідомлення, тривалість: %1$s, поточна позиція: %2$s"</string>
@@ -89,7 +88,6 @@
   <string name="a11y_voice_message">"Голосове повідомлення, тривалість: %1$s"</string>
   <string name="a11y_voice_message_record">"Записати голосове повідомлення."</string>
   <string name="a11y_voice_message_stop_recording">"Припинити запис"</string>
-  <string name="a11y_your_avatar">"Ваш аватар"</string>
   <string name="action_accept">"Прийняти"</string>
   <string name="action_add_caption">"Додати підпис"</string>
   <string name="action_add_existing_rooms">"Додати наявні кімнати"</string>
@@ -103,7 +101,6 @@
   <string name="action_clear">"Очистити"</string>
   <string name="action_clear_all">"Очистити все"</string>
   <string name="action_close">"Закрити"</string>
-  <string name="action_complete_verification">"Завершити звіряння"</string>
   <string name="action_confirm">"Підтвердити"</string>
   <string name="action_confirm_password">"Підтвердіть пароль"</string>
   <string name="action_continue">"Продовжити"</string>
@@ -116,8 +113,6 @@
   <string name="action_create">"Створити"</string>
   <string name="action_create_room">"Створити кімнату"</string>
   <string name="action_create_space">"Створити простір"</string>
-  <string name="action_deactivate">"Деактивувати"</string>
-  <string name="action_deactivate_account">"Деактивувати обліковий запис"</string>
   <string name="action_decline">"Відхилити"</string>
   <string name="action_decline_and_block">"Відхилити та заблокувати"</string>
   <string name="action_delete">"Видалити"</string>
@@ -161,9 +156,7 @@
   <string name="action_leave_room">"Вийти з кімнати"</string>
   <string name="action_leave_space">"Вийти з простору"</string>
   <string name="action_load_more">"Завантажити ще"</string>
-  <string name="action_manage_account">"Керування обліковим записом"</string>
   <string name="action_manage_account_and_devices">"Керування обліковим записом і пристроями"</string>
-  <string name="action_manage_devices">"Керування пристроями"</string>
   <string name="action_manage_rooms">"Керувати кімнатами"</string>
   <string name="action_mark_as_read">"Позначити прочитаним"</string>
   <string name="action_message">"Написати"</string>
@@ -186,7 +179,6 @@
   <string name="action_reply">"Відповісти"</string>
   <string name="action_reply_in_thread">"Відповісти в гілці"</string>
   <string name="action_report">"Поскаржитися"</string>
-  <string name="action_report_bug">"Повідомити про помилку"</string>
   <string name="action_report_content">"Повідомити про вміст"</string>
   <string name="action_report_dm">"Поскаржитися на розмову"</string>
   <string name="action_report_room">"Поскаржитися на кімнату"</string>
@@ -205,7 +197,6 @@
   <string name="action_share_link">"Поділитися посиланням"</string>
   <string name="action_share_live_location">"Ділитися місцезнаходженням у реальному часі"</string>
   <string name="action_show">"Показати"</string>
-  <string name="action_sign_in_again">"Увійдіть знову"</string>
   <string name="action_signout">"Вилучити цей пристрій"</string>
   <string name="action_signout_anyway">"Усе одно вилучити цей пристрій"</string>
   <string name="action_skip">"Пропустити"</string>
@@ -227,12 +218,9 @@
   <string name="action_voice_call">"Голосовий виклик"</string>
   <string name="action_yes">"Так"</string>
   <string name="action_yes_try_again">"Так, повторити спробу"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Ваш сервер тепер підтримує новий, швидший протокол. Вийдіть із системи та увійдіть знову, щоб оновити систему зараз. Якщо ви зробите це зараз, це допоможе вам уникнути примусового виходу з системи, коли старий протокол буде видалено пізніше."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Доступне оновлення"</string>
   <string name="common_about">"Відомості"</string>
   <string name="common_acceptable_use_policy">"Політика прийнятного використання"</string>
   <string name="common_account_settings">"Налаштування облікового запису"</string>
-  <string name="common_add_account">"Додати обліковий запис"</string>
   <string name="common_add_another_account">"Додати ще один обліковий запис"</string>
   <string name="common_adding_caption">"Додавання підпису"</string>
   <string name="common_advanced_settings">"Додаткові налаштування"</string>
@@ -245,7 +233,6 @@
   <string name="common_audio">"Аудіо"</string>
   <string name="common_beta">"Бета-версія"</string>
   <string name="common_blocked_users">"Заблоковані користувачі"</string>
-  <string name="common_bubbles">"Бульбашки"</string>
   <string name="common_call_declined">"Виклик відхилено"</string>
   <string name="common_call_in_progress">"Виклик триває"</string>
   <string name="common_call_started">"Виклик розпочато"</string>
@@ -583,7 +570,6 @@
   <string name="screen_room_change_role_administrators_or_owners_title">"Змінити адміністраторів або власників"</string>
   <string name="screen_room_error_failed_processing_media">"Не вдалося обробити медіафайл для завантаження, спробуйте ще раз."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Не вдалося отримати дані користувача"</string>
-  <string name="screen_room_event_pill">"Повідомлення в %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Розгорнути"</string>
   <string name="screen_room_grouped_state_events_reduce">"Згорнути"</string>
   <string name="screen_room_live_location_banner">"Спільний доступ до місцезнаходження у реальному часі"</string>

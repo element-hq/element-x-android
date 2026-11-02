@@ -3,17 +3,13 @@
   <string name="full_screen_intent_banner_message_android">"Para garantir que você nunca perca uma chamada importante, por favor altere as suas configurações para permitir notificações em tela cheia enquanto o seu celular estiver bloqueado."</string>
   <string name="full_screen_intent_banner_title_android">"Melhore a sua experiência de chamadas"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Escolha como receber notificações"</string>
-  <string name="screen_advanced_settings_developer_mode">"Modo de desenvolvedor"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Ative para ter acesso a recursos e funcionalidades para desenvolvedores."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL base do Element Call personalizada"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Defina uma URL base personalizada para o Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL inválida, por favor verifique se o protocolo (http/https) está incluso e o endereço correto."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Ocultar avatares em solicitações de convite para salas"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Ocultar pré-visualizações de mídia na linha do tempo"</string>
   <string name="screen_advanced_settings_labs">"Experimentos"</string>
   <string name="screen_advanced_settings_media_compression_description">"Envie fotos e vídeos com mais rapidez e reduza o uso de dados"</string>
   <string name="screen_advanced_settings_media_compression_title">"Otimizar a qualidade da mídia"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderação e segurança"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Otimizar automaticamente as imagens para envios mais rápidos e arquivos com tamanhos menores."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Otimizar qualidade de envio de imagens"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Toque aqui para alterar."</string>
@@ -22,9 +18,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Normal (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Qualidade de envio de vídeos"</string>
   <string name="screen_advanced_settings_push_provider_android">"Provedor de notificações push"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Desative o editor de rich text para digitar Markdown manualmente."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Confirmações de leitura"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Se desligado, suas confirmações de leitura não serão enviadas para ninguém. Você ainda receberá confirmações de leitura de outros usuários."</string>
   <string name="screen_advanced_settings_share_presence">"Compartilhar presença"</string>
   <string name="screen_advanced_settings_share_presence_description">"Se desligado, você não poderá enviar ou receber confirmações de leitura ou notificações de digitação."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Ocultar sempre"</string>

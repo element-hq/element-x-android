@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Ubah penyedia akun"</string>
-  <string name="screen_account_provider_form_hint">"Alamat homeserver"</string>
-  <string name="screen_account_provider_form_notice">"Masukkan istilah pencarian atau alamat domain."</string>
-  <string name="screen_account_provider_form_subtitle">"Cari perusahaan, komunitas, atau server pribadi."</string>
-  <string name="screen_account_provider_form_title">"Cari penyedia akun"</string>
-  <string name="screen_account_provider_signin_subtitle">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
   <string name="screen_account_provider_signin_title">"Anda akan masuk ke %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
-  <string name="screen_account_provider_signup_title">"Anda akan membuat akun di %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org adalah server besar dan gratis di jaringan Matrix publik untuk komunikasi yang aman dan terdesentralisasi, disediakan oleh Yayasan Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Lainnya"</string>
   <string name="screen_change_account_provider_subtitle">"Gunakan penyedia akun yang berbeda, seperti server pribadi Anda sendiri atau akun kerja."</string>
   <string name="screen_change_account_provider_title">"Ubah penyedia akun"</string>
@@ -43,7 +34,6 @@
   <string name="screen_login_error_unsupported_authentication">"Homeserver yang dipilih tidak mendukung log masuk kata sandi atau OAuth. Silakan hubungi admin Anda atau pilih homeserver yang lain."</string>
   <string name="screen_login_form_header">"Masukkan detail Anda"</string>
   <string name="screen_login_subtitle">"Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi."</string>
-  <string name="screen_login_title">"Selamat datang kembali!"</string>
   <string name="screen_login_title_with_homeserver">"Masuk ke %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"Buka Element Classic"</string>
   <string name="screen_missing_key_backup_step_1">"Buka Element Classic di perangkat Anda"</string>
@@ -62,7 +52,6 @@
   <string name="screen_onboarding_sign_up">"Buat akun"</string>
   <string name="screen_onboarding_welcome_back">"Selamat datang kembali!"</string>
   <string name="screen_onboarding_welcome_message">"Selamat datang di %1$s tercepat yang pernah ada. Berdaya besar untuk kecepatan dan kesederhanaan."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Selamat datang di %1$s. Berdaya penuh, untuk kecepatan dan kesederhanaan."</string>
   <string name="screen_onboarding_welcome_title">"Berada di elemen Anda"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Membuat koneksi aman"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Koneksi aman tidak dapat dibuat ke perangkat baru. Perangkat Anda yang ada masih aman dan Anda tidak perlu khawatir tentang mereka."</string>
@@ -104,16 +93,10 @@ Coba masuk secara manual, atau pindai kode QR dengan perangkat lain."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Anda perlu memberikan izin ke %1$s untuk menggunakan kamera perangkat Anda untuk melanjutkan."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Izinkan akses kamera untuk memindai kode QR"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Pindai kode QR"</string>
-  <string name="screen_qr_code_login_start_over_button">"Mulai dari awal"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Terjadi kesalahan tak terduga. Silakan coba lagi."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Menunggu perangkat Anda yang lain"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Penyedia akun Anda mungkin meminta kode berikut untuk memverifikasi proses masuk."</string>
   <string name="screen_qr_code_login_verify_code_title">"Kode verifikasi Anda"</string>
-  <string name="screen_server_confirmation_change_server">"Ubah penyedia akun"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Server pribadi untuk karyawan Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi."</string>
-  <string name="screen_server_confirmation_message_register">"Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda."</string>
-  <string name="screen_server_confirmation_title_login">"Anda akan masuk ke %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Pilih penyedia akun"</string>
-  <string name="screen_server_confirmation_title_register">"Anda akan membuat akun di %1$s"</string>
 </resources>

@@ -3,16 +3,12 @@
   <string name="full_screen_intent_banner_message_android">"För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst."</string>
   <string name="full_screen_intent_banner_title_android">"Förbättra din samtalsupplevelse"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Välj hur du vill ta emot aviseringar"</string>
-  <string name="screen_advanced_settings_developer_mode">"Utvecklarläge"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Aktivera för att ha tillgång till funktionalitet för utvecklare."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Anpassad bas-URL för Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Ange en anpassad bas-URL för Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ogiltig URL, se till att du inkluderar protokollet (http/https) och rätt adress."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Dölj avatarer i förfrågningar om rumsinbjudningar"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Dölj förhandsgranskningar av media i tidslinjen"</string>
   <string name="screen_advanced_settings_media_compression_description">"Ladda upp foton och videor snabbare och minska dataanvändningen"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimera mediekvaliteten"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderering och säkerhet"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimera bilder automatiskt för snabbare uppladdningar och mindre filstorlekar."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimera bilduppladdningskvalitet"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Tryck här för att ändra."</string>
@@ -21,9 +17,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Videouppladdningskvalitet"</string>
   <string name="screen_advanced_settings_push_provider_android">"Pushnotisleverantör"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Inaktivera rik-text-redigeraren för att skriva Markdown manuellt."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Läskvitton"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Om det är avstängt kommer dina läskvitton inte att skickas till någon. Du kommer fortfarande att få läskvitton från andra användare."</string>
   <string name="screen_advanced_settings_share_presence">"Dela närvaro"</string>
   <string name="screen_advanced_settings_share_presence_description">"Om det är avstängt kan du inte skicka eller ta emot läskvitton eller skrivnotiser"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Göm alltid"</string>

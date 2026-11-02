@@ -8,6 +8,8 @@
   <string name="banner_set_up_recovery_content">"您的聊天會自動使用端到端加密備份。若您失去對您所有裝置的存取權，且要還原此備份並保留您的數位身份的話，您就會需要您的還原金鑰。"</string>
   <string name="banner_set_up_recovery_submit">"取得還原金鑰"</string>
   <string name="banner_set_up_recovery_title">"備份您的聊天"</string>
+  <string name="banner_swipe_avatar_content">"不需要進入應用程式設定，僅需向上或向下滑動您的大頭照即可切換帳號。"</string>
+  <string name="banner_swipe_avatar_title">"滑動您的大頭照即可切換帳號"</string>
   <string name="confirm_recovery_key_banner_message">"確認您的復原金鑰以維持對金鑰儲存空間與訊息歷史紀錄的存取權。"</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"輸入您的復原金鑰"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"忘記了您的復原金鑰？"</string>
@@ -15,15 +17,17 @@
   <string name="full_screen_intent_banner_message_android">"為確保您永遠不會錯過重要通話，請變更設定以允許在手機鎖定時允許全螢幕通知。"</string>
   <string name="full_screen_intent_banner_title_android">"提升您的通話體驗"</string>
   <string name="screen_home_tab_chats">"聊天"</string>
+  <string name="screen_home_tab_search">"搜尋"</string>
   <string name="screen_home_tab_spaces">"空間"</string>
   <string name="screen_invites_decline_chat_message">"您確定您想要拒絕加入 %1$s 的邀請嗎？"</string>
   <string name="screen_invites_decline_chat_title">"拒絕邀請"</string>
   <string name="screen_invites_decline_direct_chat_message">"您確定您要拒絕此與 %1$s 的私人聊天嗎？"</string>
   <string name="screen_invites_decline_direct_chat_title">"拒絕聊天"</string>
-  <string name="screen_invites_empty_list">"沒有邀請"</string>
   <string name="screen_invites_invited_you">"%1$s（%2$s）邀請您"</string>
-  <string name="screen_migration_message">"這是一次性的程序，感謝您耐心等候。"</string>
   <string name="screen_migration_title">"正在設定您的帳號。"</string>
+  <string name="screen_multi_account_announcement_action">"新增帳號"</string>
+  <string name="screen_multi_account_announcement_description">"前往 %1$s 登入另一個帳號。然後您就可以輕鬆地在它們之間切換。"</string>
+  <string name="screen_multi_account_announcement_title">"現在您可以新增多個帳號"</string>
   <string name="screen_roomlist_a11y_create_message">"建立新的對話或聊天室"</string>
   <string name="screen_roomlist_clear_filters">"清除篩選條件"</string>
   <string name="screen_roomlist_empty_message">"從向某人傳送訊息開始。"</string>
@@ -53,6 +57,16 @@
   <string name="screen_roomlist_mark_as_unread">"標為未讀"</string>
   <string name="screen_roomlist_tombstoned_room_description">"此聊天室已升級"</string>
   <string name="screen_roomlist_your_spaces">"您的空間"</string>
-  <string name="session_verification_banner_message">"您似乎正在使用新的裝置。請使用另一個裝置進行驗證，以存取您的加密訊息。"</string>
-  <string name="session_verification_banner_title">"驗證這是您本人"</string>
+  <string name="screen_search_empty_state_message">"搜尋聊天與訊息"</string>
+  <string name="screen_search_empty_state_title">"開始搜尋⋯⋯"</string>
+  <string name="screen_search_from_your_messages_header">"來自您的訊息"</string>
+  <string name="screen_search_history_limit_message">"搜尋功能在您的裝置上執行，因此您的加密訊息將保持私密。
+您的裝置僅保留最近 3 個月的訊息，因此較舊的訊息目前尚無法搜尋。"</string>
+  <string name="screen_search_history_limit_title">"搜尋範圍涵蓋過去 3 個月"</string>
+  <string name="screen_search_messages_no_results_message">"在您最近的訊息中，沒有找到與「%1$s」相關的結果。"</string>
+  <string name="screen_search_messages_no_results_title">"最近 3 個月內沒有結果"</string>
+  <string name="screen_search_no_results_message">"沒有找到與「%1$s」相符的結果。請試試新的搜尋字詞。"</string>
+  <string name="screen_search_recent_searches">"最近搜尋"</string>
+  <string name="screen_search_tab_chats">"聊天"</string>
+  <string name="screen_search_tab_messages">"訊息"</string>
 </resources>

@@ -14,7 +14,6 @@
     <item quantity="other">"%d Mitteilungen"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Der Dienst für UnifiedPush Benachrichtigungen konnte nicht registriert werden. Daher können aktuell keine Push-Benachrichtigungen erhalten werden. Bitte überprüfe die Einstellungen der Benachrichtigungen in der App und den Status des Push-Dienstes."</string>
-  <string name="notification_fallback_content">"Du hast neue Nachrichten."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"Du hast %d neue Nachricht."</item>
     <item quantity="other">"Du hast %d neue Nachrichten."</item>
@@ -26,8 +25,6 @@
   <string name="notification_incoming_audio_call">"📞 Eingehender Anruf"</string>
   <string name="notification_incoming_call">"Eingehender Anruf"</string>
   <string name="notification_inline_reply_failed">"** Fehler beim Senden – bitte Chat öffnen"</string>
-  <string name="notification_invitation_action_join">"Beitreten"</string>
-  <string name="notification_invitation_action_reject">"Ablehnen"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d Einladung"</item>
     <item quantity="other">"%d Einladungen"</item>

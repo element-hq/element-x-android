@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"중요한 전화를 놓치지 않으려면 휴대폰이 잠겨 있을 때 전체 화면 알림을 허용하도록 설정을 변경하세요."</string>
   <string name="full_screen_intent_banner_title_android">"통화 경험을 향상시키세요"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"어떻게 알림을 받을지 선택하기"</string>
-  <string name="screen_advanced_settings_developer_mode">"개발자 모드"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"개발자가 기능에 액세스할 수 있도록 합니다."</string>
   <string name="screen_advanced_settings_element_call_base_url">"사용자 정의 요소 호출 베이스 URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Element Call에 대한 사용자 지정 기본 URL을 설정하세요."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL이 잘못되었습니다. 프로토콜(http/https)과 올바른 주소를 포함했는지 확인하세요."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"방 초대 요청에서 아바타 숨기기"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"타임라인에서 미디어 미리 보기 숨기기"</string>
   <string name="screen_advanced_settings_labs">"실험실"</string>
   <string name="screen_advanced_settings_live_location_section_description">"위치 업데이트 전환 기준 거리"</string>
   <string name="screen_advanced_settings_live_location_section_footer">"이 앱에 \"정확한 위치\" 권한이 허용되어 있는지 확인해 주세요. 권한을 변경하려면 %1$s(으)로 이동하세요."</string>
@@ -20,7 +17,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"사진과 동영상을 더 빠르게 업로드하고 데이터 사용량을 줄이세요"</string>
   <string name="screen_advanced_settings_media_compression_title">"미디어 품질 최적화"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"중재와 안전"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"더 빠른 업로드와 더 작은 파일 크기에 맞춰 이미지를 자동으로 최적화합니다."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"이미지 업로드 품질 최적화"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. 여기를 탭하여 변경하세요."</string>
@@ -30,9 +26,6 @@
 "</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"비디오 업로드 품질"</string>
   <string name="screen_advanced_settings_push_provider_android">"푸시 알림 제공자"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"마크다운을 직접 입력하려면 서식 있는 텍스트 편집기를 비활성화하세요."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"읽기 확인"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"이 기능을 해제하면 읽기 확인이 누구에게도 전송되지 않습니다. 다른 사용자의 읽기 확인은 계속 수신됩니다."</string>
   <string name="screen_advanced_settings_share_presence">"현재 상태 공유"</string>
   <string name="screen_advanced_settings_share_presence_description">"이 기능을 해제하면 읽기 확인 및 타이핑 알림을 보내거나 받을 수 없습니다."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"항상 숨기기"</string>

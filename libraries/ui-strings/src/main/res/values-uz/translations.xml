@@ -25,7 +25,6 @@
   <string name="a11y_notifications_new_mentions">"Yangi eslatmalar"</string>
   <string name="a11y_notifications_new_messages">"Yangi xabarlar"</string>
   <string name="a11y_notifications_ongoing_call">"Davom etayotgan qo\'ng\'iroq"</string>
-  <string name="a11y_other_user_avatar">"Boshqa foydalanuvchining avatari"</string>
   <string name="a11y_page_n">"Sahifa %1$d"</string>
   <string name="a11y_pause">"Pauza"</string>
   <string name="a11y_paused_voice_message">"Ovoz xabar, davomiyligi: %1$s, joriy holati: %2$s"</string>
@@ -67,7 +66,6 @@
   <string name="a11y_voice_message">"Ovozli xabar, davomiyligi: %1$s"</string>
   <string name="a11y_voice_message_record">"Ovoz yozishni amalga oshiring"</string>
   <string name="a11y_voice_message_stop_recording">"Yozishni to\'xtatish"</string>
-  <string name="a11y_your_avatar">"Sizning avataringiz"</string>
   <string name="action_accept">"Qabul qiling"</string>
   <string name="action_add_caption">"Sarlavha qo\'shing"</string>
   <string name="action_add_existing_rooms">"Mavjud xonalarni qo‘shish"</string>
@@ -80,7 +78,6 @@
   <string name="action_choose_photo">"Fotosuratni tanlang"</string>
   <string name="action_clear">"Tozalash"</string>
   <string name="action_close">"Yopish"</string>
-  <string name="action_complete_verification">"To\'liq tekshirish"</string>
   <string name="action_confirm">"Tasdiqlash"</string>
   <string name="action_confirm_password">"Parolni tasdiqlang"</string>
   <string name="action_continue">"Davom etish"</string>
@@ -92,8 +89,6 @@
   <string name="action_create">"Yaratmoq"</string>
   <string name="action_create_room">"Xonani yaratish"</string>
   <string name="action_create_space">"Maydon yaratish"</string>
-  <string name="action_deactivate">"Faolsizlantirish"</string>
-  <string name="action_deactivate_account">"Hisobni faolsizlantirish"</string>
   <string name="action_decline">"Rad etish"</string>
   <string name="action_decline_and_block">"Rad etish va bloklash"</string>
   <string name="action_delete">"Oʻchirish"</string>
@@ -132,9 +127,7 @@
   <string name="action_leave_room">"Xonani tark etish"</string>
   <string name="action_leave_space">"Maydondan chiqish"</string>
   <string name="action_load_more">"Ko\'proq yuklash"</string>
-  <string name="action_manage_account">"Hisobni boshqarish"</string>
   <string name="action_manage_account_and_devices">"Hisob va qurilmalarni boshqarish"</string>
-  <string name="action_manage_devices">"Qurilmalarni boshqarish"</string>
   <string name="action_manage_rooms">"Xonalarni boshqarish"</string>
   <string name="action_message">"Xabar"</string>
   <string name="action_minimize">"Kichraytirmoq"</string>
@@ -156,7 +149,6 @@
   <string name="action_reply">"Javob berish"</string>
   <string name="action_reply_in_thread">"Mavzuda javob berish"</string>
   <string name="action_report">"Shikoyat qilish"</string>
-  <string name="action_report_bug">"Xato haqida xabar berish"</string>
   <string name="action_report_content">"Tarkib haqida xabar berish"</string>
   <string name="action_report_dm">"Suhbat haqida shikoyat bering"</string>
   <string name="action_report_room">"Xona ustidan shikoyat qilish"</string>
@@ -175,7 +167,6 @@
   <string name="action_share_link">"Havolani ulashing"</string>
   <string name="action_share_live_location">"Jonli joylashuvni ulashish"</string>
   <string name="action_show">"Koʻrsatish"</string>
-  <string name="action_sign_in_again">"Qaytadan kiring"</string>
   <string name="action_signout">"Bu qurilmani olib tashlash"</string>
   <string name="action_signout_anyway">"Bu qurilma baribir olib tashlansin"</string>
   <string name="action_skip">"Oʻtkazib yuborish"</string>
@@ -195,11 +186,8 @@
   <string name="action_view_source">"Manbani korish"</string>
   <string name="action_yes">"Ha"</string>
   <string name="action_yes_try_again">"Ha, qayta urinish"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Sizning serveringiz endi yangi, tezroq protokolni qoʻllab-quvvatlaydi. Hozir yangilash uchun tizimdan chiqing va qayta kiring. Buni hozir qilish eski protokol bilan kirib, keyin olib tashlanganda majburiy chiqib-kirishni oldini olishga yordam beradi."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Yangilash mavjud"</string>
   <string name="common_about">"Haqida"</string>
   <string name="common_acceptable_use_policy">"Qabul qilinadigan foydalanish siyosati"</string>
-  <string name="common_add_account">"Hisob qo‘shish"</string>
   <string name="common_add_another_account">"Boshqa hisob qo‘shish"</string>
   <string name="common_adding_caption">"Sarlavha qoʻshish"</string>
   <string name="common_advanced_settings">"Kengaytirilgan sozlamalar"</string>
@@ -211,7 +199,6 @@
   <string name="common_audio">"Audio"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Bloklangan foydalanuvchilar"</string>
-  <string name="common_bubbles">"Pufakchalar"</string>
   <string name="common_call_declined">"Qoʻngʻiroq rad etildi"</string>
   <string name="common_call_started">"Qoʻngʻiroq boshlandi"</string>
   <string name="common_call_you_declined">"Siz qoʻngʻiroqni rad etdingiz"</string>
@@ -504,7 +491,6 @@ Davom etasizmi?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Administratorlar yoki egalarni tahrirlash"</string>
   <string name="screen_room_error_failed_processing_media">"Mediani yuklab bo‘lmadi, qayta urinib ko‘ring."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Foydalanuvchi tafsilotlarini olinmadi"</string>
-  <string name="screen_room_event_pill">"Xabar %1$sda"</string>
   <string name="screen_room_grouped_state_events_expand">"Kengaytirish"</string>
   <string name="screen_room_grouped_state_events_reduce">"Kamaytirish"</string>
   <string name="screen_room_live_location_banner">"Jonli joylashuvni ulashish"</string>

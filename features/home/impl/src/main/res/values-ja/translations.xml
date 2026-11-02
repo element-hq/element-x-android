@@ -20,9 +20,7 @@
   <string name="screen_invites_decline_chat_title">"招待を破棄"</string>
   <string name="screen_invites_decline_direct_chat_message">"%1$sとのチャットを本当に拒否しますか？"</string>
   <string name="screen_invites_decline_direct_chat_title">"チャットを拒否"</string>
-  <string name="screen_invites_empty_list">"招待はありません"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) があなたを招待しました"</string>
-  <string name="screen_migration_message">"一度限りの工程です。お待ちください。"</string>
   <string name="screen_migration_title">"アカウントを設定しています。"</string>
   <string name="screen_roomlist_a11y_create_message">"新しい会話またはルームを作成"</string>
   <string name="screen_roomlist_clear_filters">"フィルターを解除"</string>
@@ -53,6 +51,4 @@
   <string name="screen_roomlist_mark_as_unread">"未読にする"</string>
   <string name="screen_roomlist_tombstoned_room_description">"このルームはアップグレードされました"</string>
   <string name="screen_roomlist_your_spaces">"あなたのスペース"</string>
-  <string name="session_verification_banner_message">"新しいデバイスをご利用のようです。暗号化されたメッセージにアクセスするには、別のデバイスで検証してください。"</string>
-  <string name="session_verification_banner_title">"本人確認"</string>
 </resources>

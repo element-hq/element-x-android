@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked."</string>
   <string name="full_screen_intent_banner_title_android">"Enhance your call experience"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Choose how to receive notifications"</string>
-  <string name="screen_advanced_settings_developer_mode">"Developer mode"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Enable to have access to features and functionality for developers."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Custom Element Call base URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Set a custom base URL for Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Invalid URL, please make sure you include the protocol (http/https) and the correct address."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Hide avatars in room invite requests"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Hide media previews in timeline"</string>
   <string name="screen_advanced_settings_labs">"Labs"</string>
   <string name="screen_advanced_settings_live_location_section_description">"The distance you have to move to trigger an update."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$s."</string>
@@ -21,7 +18,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Upload photos and videos faster and reduce data usage"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimise media quality"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderation and Safety"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Automatically optimise images for faster uploads and smaller file sizes."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimise image upload quality"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Tap here to change."</string>
@@ -30,9 +26,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Video upload quality"</string>
   <string name="screen_advanced_settings_push_provider_android">"Push notification provider"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Disable the rich text editor to type Markdown manually."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Read receipts"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"If turned off, your read receipts won\'t be sent to anyone. You will still receive read receipts from other users."</string>
   <string name="screen_advanced_settings_share_presence">"Share presence"</string>
   <string name="screen_advanced_settings_share_presence_description">"If turned off, you won’t be able to send or receive read receipts or typing notifications."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Always hide"</string>

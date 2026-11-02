@@ -21,7 +21,6 @@
   <string name="a11y_notifications_new_mentions">"Đề cập mới"</string>
   <string name="a11y_notifications_new_messages">"Tin nhắn mới"</string>
   <string name="a11y_notifications_ongoing_call">"Cuộc gọi hiện thời"</string>
-  <string name="a11y_other_user_avatar">"Ảnh đại diện của người dùng khác"</string>
   <string name="a11y_page_n">"Trang %1$d"</string>
   <string name="a11y_pause">"Tạm dừng"</string>
   <string name="a11y_paused_voice_message">"Tin nhắn thoại, thời lượng: %1$s, vị trí hiện tại: %2$s"</string>
@@ -57,7 +56,6 @@
   <string name="a11y_voice_message">"Tin nhắn thoại, thời lượng: %1$s"</string>
   <string name="a11y_voice_message_record">"Ghi âm tin nhắn thoại"</string>
   <string name="a11y_voice_message_stop_recording">"Dừng ghi"</string>
-  <string name="a11y_your_avatar">"Ảnh đại diện của bạn"</string>
   <string name="action_accept">"Đồng ý"</string>
   <string name="action_add_caption">"Thêm chú thích"</string>
   <string name="action_add_existing_rooms">"Thêm các phòng trò chuyện hiện có"</string>
@@ -69,7 +67,6 @@
   <string name="action_choose_photo">"Chọn ảnh"</string>
   <string name="action_clear">"Xoá"</string>
   <string name="action_close">"Đóng"</string>
-  <string name="action_complete_verification">"Xác minh hoàn tất"</string>
   <string name="action_confirm">"Xác nhận"</string>
   <string name="action_confirm_password">"Xác nhận mật khẩu"</string>
   <string name="action_continue">"Tiếp tục"</string>
@@ -81,8 +78,6 @@
   <string name="action_create">"Tạo"</string>
   <string name="action_create_room">"Tạo phòng"</string>
   <string name="action_create_space">"Tạo không gian"</string>
-  <string name="action_deactivate">"Hủy kích hoạt"</string>
-  <string name="action_deactivate_account">"Vô hiệu hóa tài khoản"</string>
   <string name="action_decline">"Từ chối"</string>
   <string name="action_decline_and_block">"Từ chối và chặn"</string>
   <string name="action_delete_poll">"Xóa cuộc thăm dò"</string>
@@ -117,9 +112,7 @@
   <string name="action_leave_room">"Rời phòng"</string>
   <string name="action_leave_space">"Rời space"</string>
   <string name="action_load_more">"Tải thêm"</string>
-  <string name="action_manage_account">"Quản lý tài khoản"</string>
   <string name="action_manage_account_and_devices">"Quản lý tài khoản và thiết bị"</string>
-  <string name="action_manage_devices">"Quản lý thiết bị"</string>
   <string name="action_manage_rooms">"Quản lý phòng trò chuyện"</string>
   <string name="action_message">"Tin nhắn"</string>
   <string name="action_minimize">"Thu nhỏ"</string>
@@ -141,7 +134,6 @@
   <string name="action_reply">"Trả lời"</string>
   <string name="action_reply_in_thread">"Trả lời trong thread"</string>
   <string name="action_report">"Báo cáo"</string>
-  <string name="action_report_bug">"Báo lỗi"</string>
   <string name="action_report_content">"Báo cáo nội dung"</string>
   <string name="action_report_dm">"Báo cáo cuộc trò chuyện"</string>
   <string name="action_report_room">"Báo cáo phòng"</string>
@@ -160,7 +152,6 @@
   <string name="action_share_link">"Chia sẻ liên kết"</string>
   <string name="action_share_live_location">"Chia sẻ vị trí trong thời gian thực"</string>
   <string name="action_show">"Hiện"</string>
-  <string name="action_sign_in_again">"Đăng nhập lại"</string>
   <string name="action_signout">"Gỡ bỏ thiết bị này"</string>
   <string name="action_signout_anyway">"Vẫn gỡ bỏ thiết bị này"</string>
   <string name="action_skip">"Bỏ qua"</string>
@@ -180,11 +171,8 @@
   <string name="action_view_source">"Xem mã nguồn"</string>
   <string name="action_yes">"Có"</string>
   <string name="action_yes_try_again">"Có, thử lại"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Máy chủ của bạn hiện đã hỗ trợ một giao thức mới, nhanh hơn. Hãy đăng xuất và đăng nhập lại để nâng cấp ngay. Việc này sẽ giúp bạn tránh bị buộc đăng xuất khi giao thức cũ bị loại bỏ sau này."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Có thể nâng cấp"</string>
   <string name="common_about">"Giới thiệu"</string>
   <string name="common_acceptable_use_policy">"Quy định sử dụng dịch vụ"</string>
-  <string name="common_add_account">"Thêm tài khoản"</string>
   <string name="common_add_another_account">"Thêm tài khoản khác"</string>
   <string name="common_adding_caption">"Thêm chú thích"</string>
   <string name="common_advanced_settings">"Cài đặt nâng cao"</string>
@@ -196,7 +184,6 @@
   <string name="common_audio">"Âm thanh"</string>
   <string name="common_beta">"Thử nghiệm"</string>
   <string name="common_blocked_users">"Người dùng bị chặn"</string>
-  <string name="common_bubbles">"Bong bóng"</string>
   <string name="common_call_started">"Cuộc gọi bắt đầu"</string>
   <string name="common_chat_backup">"Sao lưu cuộc trò chuyện"</string>
   <string name="common_copied_to_clipboard">"Đã sao chép"</string>

@@ -41,7 +41,6 @@
   <string name="a11y_notifications_new_mentions">"Nova spominjanja"</string>
   <string name="a11y_notifications_new_messages">"Nove poruke"</string>
   <string name="a11y_notifications_ongoing_call">"Poziv u tijeku"</string>
-  <string name="a11y_other_user_avatar">"Avatar drugog korisnika"</string>
   <string name="a11y_page_n">"Stranica %1$d"</string>
   <string name="a11y_pause">"Pauziraj"</string>
   <string name="a11y_paused_voice_message">"Glasovna poruka, trajanje: %1$s, trenutačno zaustavljeno na: %2$s"</string>
@@ -87,7 +86,6 @@
   <string name="a11y_voice_message">"Glasovna poruka, trajanje: %1$s"</string>
   <string name="a11y_voice_message_record">"Snimite glasovnu poruku."</string>
   <string name="a11y_voice_message_stop_recording">"Zaustavi snimanje"</string>
-  <string name="a11y_your_avatar">"Vaš avatar"</string>
   <string name="action_accept">"Prihvati"</string>
   <string name="action_add_caption">"Dodaj opis"</string>
   <string name="action_add_existing_rooms">"Dodaj postojeće sobe"</string>
@@ -101,7 +99,6 @@
   <string name="action_clear">"Očisti"</string>
   <string name="action_clear_all">"Očisti sve"</string>
   <string name="action_close">"Zatvori"</string>
-  <string name="action_complete_verification">"Dovrši provjeru"</string>
   <string name="action_confirm">"Potvrdi"</string>
   <string name="action_confirm_password">"Potvrdi zaporku"</string>
   <string name="action_continue">"Nastavi"</string>
@@ -114,8 +111,6 @@
   <string name="action_create">"Stvori"</string>
   <string name="action_create_room">"Napravi sobu"</string>
   <string name="action_create_space">"Stvori prostor"</string>
-  <string name="action_deactivate">"Deaktiviraj"</string>
-  <string name="action_deactivate_account">"Deaktiviraj račun"</string>
   <string name="action_decline">"Odbij"</string>
   <string name="action_decline_and_block">"Odbij i blokiraj"</string>
   <string name="action_delete">"Izbriši"</string>
@@ -158,9 +153,7 @@
   <string name="action_leave_room">"Napusti sobu"</string>
   <string name="action_leave_space">"Napusti prostor"</string>
   <string name="action_load_more">"Učitaj više"</string>
-  <string name="action_manage_account">"Upravljanje računom"</string>
   <string name="action_manage_account_and_devices">"Upravljanje računom i uređajima"</string>
-  <string name="action_manage_devices">"Upravljanje uređajima"</string>
   <string name="action_manage_rooms">"Upravljaj sobama"</string>
   <string name="action_mark_as_read">"Označi kao pročitano"</string>
   <string name="action_message">"Poruka"</string>
@@ -183,7 +176,6 @@
   <string name="action_reply">"Odgovori"</string>
   <string name="action_reply_in_thread">"Odgovori u niti"</string>
   <string name="action_report">"Prijavi"</string>
-  <string name="action_report_bug">"Prijavi grešku"</string>
   <string name="action_report_content">"Prijavi sadržaj"</string>
   <string name="action_report_dm">"Prijavi razgovor"</string>
   <string name="action_report_room">"Prijavi sobu"</string>
@@ -202,7 +194,6 @@
   <string name="action_share_link">"Podijeli poveznicu"</string>
   <string name="action_share_live_location">"Dijeljenje lokacije uživo"</string>
   <string name="action_show">"Prikaži"</string>
-  <string name="action_sign_in_again">"Ponovno se prijavite"</string>
   <string name="action_signout">"Ukloni ovaj uređaj"</string>
   <string name="action_signout_anyway">"Ukloni ovaj uređaj svejedno"</string>
   <string name="action_skip">"Preskoči"</string>
@@ -224,12 +215,9 @@
   <string name="action_voice_call">"Glasovni poziv"</string>
   <string name="action_yes">"Da"</string>
   <string name="action_yes_try_again">"Da, pokušaj ponovno"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Vaš poslužitelj sada podržava novi, brži protokol. Odjavite se i ponovno prijavite da biste odmah izvršili nadogradnju. Ako to sada napravite, izbjeći ćete prisilnu odjavu kada se poslije ukloni stari protokol."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Dostupna je nadogradnja"</string>
   <string name="common_about">"O aplikaciji"</string>
   <string name="common_acceptable_use_policy">"Pravilnik o prihvatljivoj upotrebi"</string>
   <string name="common_account_settings">"Postavke računa"</string>
-  <string name="common_add_account">"Dodaj račun"</string>
   <string name="common_add_another_account">"Dodaj još jedan račun"</string>
   <string name="common_adding_caption">"Dodavanje opisa"</string>
   <string name="common_advanced_settings">"Napredne postavke"</string>
@@ -242,7 +230,6 @@
   <string name="common_audio">"Audiozapis"</string>
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blokirani korisnici"</string>
-  <string name="common_bubbles">"Mjehurići"</string>
   <string name="common_call_declined">"Poziv je odbijen"</string>
   <string name="common_call_in_progress">"Poziv je u tijeku"</string>
   <string name="common_call_started">"Poziv je započeo"</string>
@@ -575,7 +562,6 @@ Jeste li sigurni da želite nastaviti?"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Uredi administratore ili vlasnike"</string>
   <string name="screen_room_error_failed_processing_media">"Prijenos medija za obradu nije uspio, pokušajte ponovno."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nije moguće dohvatiti korisničke podatke"</string>
-  <string name="screen_room_event_pill">"Poruka u sobi %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Proširi"</string>
   <string name="screen_room_grouped_state_events_reduce">"Smanji"</string>
   <string name="screen_room_live_location_banner">"Dijeljenje lokacije uživo"</string>

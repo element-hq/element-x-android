@@ -9,7 +9,6 @@
   <string name="screen_invites_decline_chat_title">"رد دعوت"</string>
   <string name="screen_invites_decline_direct_chat_message">"مطمئنید که می‌خواهید این گپ خصوصی با %1$s را رد کنید؟"</string>
   <string name="screen_invites_decline_direct_chat_title">"رد گپ"</string>
-  <string name="screen_invites_empty_list">"بدون دعوت"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) دعوتتان کرد"</string>
   <string name="screen_join_room_decline_and_block_alert_confirmation">"بله. رد و انسداد"</string>
   <string name="screen_join_room_decline_and_block_alert_message">"آیا مطمئنید که می‌خواهید دعوت به عضویت در این اتاق را رد کنید؟ این کار همچنین مانع از تماس %1$s با شما یا دعوت شما به اتاق‌ها می‌شود."</string>

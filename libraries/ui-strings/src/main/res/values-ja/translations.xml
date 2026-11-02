@@ -38,7 +38,6 @@
   <string name="a11y_notifications_new_mentions">"新規メンション"</string>
   <string name="a11y_notifications_new_messages">"新着メッセージ"</string>
   <string name="a11y_notifications_ongoing_call">"通話中"</string>
-  <string name="a11y_other_user_avatar">"他のユーザーのアバター"</string>
   <string name="a11y_page_n">"%1$d ページ"</string>
   <string name="a11y_pause">"一時停止"</string>
   <string name="a11y_paused_voice_message">"音声メッセージ 長さ: %1$s 再生位置: %2$s"</string>
@@ -83,7 +82,6 @@
   <string name="a11y_voice_message">"音声メッセージ 長さ: %1$s"</string>
   <string name="a11y_voice_message_record">"音声メッセージを録音してください。"</string>
   <string name="a11y_voice_message_stop_recording">"録音を停止"</string>
-  <string name="a11y_your_avatar">"あなたのアバター"</string>
   <string name="action_accept">"承諾"</string>
   <string name="action_add_caption">"キャプションを追加"</string>
   <string name="action_add_existing_rooms">"既存のルームを追加"</string>
@@ -96,7 +94,6 @@
   <string name="action_choose_photo">"写真を選択"</string>
   <string name="action_clear">"クリア"</string>
   <string name="action_close">"閉じる"</string>
-  <string name="action_complete_verification">"検証してください"</string>
   <string name="action_confirm">"確認"</string>
   <string name="action_confirm_password">"パスワードを確認"</string>
   <string name="action_continue">"続行"</string>
@@ -108,8 +105,6 @@
   <string name="action_create">"作成"</string>
   <string name="action_create_room">"ルームを作成"</string>
   <string name="action_create_space">"スペースを作成"</string>
-  <string name="action_deactivate">"停止"</string>
-  <string name="action_deactivate_account">"アカウントを無効化"</string>
   <string name="action_decline">"拒否"</string>
   <string name="action_decline_and_block">"拒否してブロック"</string>
   <string name="action_delete">"削除"</string>
@@ -148,9 +143,7 @@
   <string name="action_leave_room">"ルームを退出"</string>
   <string name="action_leave_space">"スペースを退出"</string>
   <string name="action_load_more">"さらに表示"</string>
-  <string name="action_manage_account">"アカウントを管理"</string>
   <string name="action_manage_account_and_devices">"アカウントと端末を管理"</string>
-  <string name="action_manage_devices">"端末を管理"</string>
   <string name="action_manage_rooms">"ルームを管理"</string>
   <string name="action_mark_as_read">"既読にする"</string>
   <string name="action_message">"メッセージ"</string>
@@ -173,7 +166,6 @@
   <string name="action_reply">"返信"</string>
   <string name="action_reply_in_thread">"スレッドで返信"</string>
   <string name="action_report">"報告"</string>
-  <string name="action_report_bug">"バグを報告"</string>
   <string name="action_report_content">"コンテンツを報告"</string>
   <string name="action_report_dm">"会話を通報"</string>
   <string name="action_report_room">"ルームを通報"</string>
@@ -192,7 +184,6 @@
   <string name="action_share_link">"リンクを共有"</string>
   <string name="action_share_live_location">"ライブ位置情報を共有"</string>
   <string name="action_show">"表示"</string>
-  <string name="action_sign_in_again">"再度サインイン"</string>
   <string name="action_signout">"この端末を削除"</string>
   <string name="action_signout_anyway">"強制的に削除"</string>
   <string name="action_skip">"スキップ"</string>
@@ -214,11 +205,8 @@
   <string name="action_voice_call">"音声通話"</string>
   <string name="action_yes">"はい"</string>
   <string name="action_yes_try_again">"再試行する"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"使用しているサーバーがより高速な新しいプロトコルに対応しました。将来、古いプロトコルへの対応が打ち切られ、強制的にログアウトされる可能性があるため、今すぐにログアウトし、再度ログインし直すことを推奨します。"</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"アップグレードがあります"</string>
   <string name="common_about">"アプリケーションについて"</string>
   <string name="common_acceptable_use_policy">"利用規定"</string>
-  <string name="common_add_account">"アカウントを追加"</string>
   <string name="common_add_another_account">"別のアカウントを追加"</string>
   <string name="common_adding_caption">"キャプションを追加"</string>
   <string name="common_advanced_settings">"高度な設定"</string>
@@ -230,7 +218,6 @@
   <string name="common_audio">"音声"</string>
   <string name="common_beta">"ベータ版"</string>
   <string name="common_blocked_users">"ブロックしたユーザー"</string>
-  <string name="common_bubbles">"ふきだし"</string>
   <string name="common_call_declined">"通話を拒否しました"</string>
   <string name="common_call_in_progress">"通話が進行中"</string>
   <string name="common_call_started">"通話を開始しました"</string>
@@ -532,7 +519,6 @@
   <string name="screen_room_change_role_administrators_or_owners_title">"管理者または所有者を編集"</string>
   <string name="screen_room_error_failed_processing_media">"ファイルの処理に失敗しました。再試行してください。"</string>
   <string name="screen_room_error_failed_retrieving_user_details">"ユーザーの詳細を取得できませんでした"</string>
-  <string name="screen_room_event_pill">"%1$s のメッセージ"</string>
   <string name="screen_room_grouped_state_events_expand">"展開"</string>
   <string name="screen_room_grouped_state_events_reduce">"縮小"</string>
   <string name="screen_room_live_location_banner">"ライブ位置情報を共有中"</string>

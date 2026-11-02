@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
   <string name="full_screen_intent_banner_title_android">"Popraw jakość swoich rozmów"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Wybierz sposób otrzymywania powiadomień"</string>
-  <string name="screen_advanced_settings_developer_mode">"Tryb programisty"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Włącz, aby uzyskać dostęp do funkcji dla deweloperów."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Własny bazowy URL dla połączeń Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Ustaw własny bazowy URL dla połączeń Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Nieprawidłowy adres URL, upewnij się, że zawiera protokół (http/https) i poprawny adres."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Ukryj awatary w prośbach o dołączenie do pokoju"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Ukryj podglądy multimediów na osi czasu"</string>
   <string name="screen_advanced_settings_labs">"Laboratoria"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Odległość, jaką należy pokonać, aby uruchomić aktualizację."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Upewnij się, że \"Dokładna lokalizacja\" jest włączona dla tej aplikacji. Aby zmienić to uprawnienie, przejdź do %1$s."</string>
@@ -22,7 +19,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Przesyłaj zdjęcia i filmy szybciej, zmniejszając zużycie danych"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optymalizuj jakość multimediów"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderacja i bezpieczeństwo"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Automatycznie optymalizuj obrazy, aby szybciej je przesyłać i zmniejszać rozmiar plików."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Zoptymalizuj jakość przesyłania obrazów"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Dotknij tutaj, aby zmienić."</string>
@@ -31,9 +27,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standardowa (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Jakość przesyłania wideo"</string>
   <string name="screen_advanced_settings_push_provider_android">"Dostawca powiadomień push"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Wyłącz edytor tekstu bogatego, aby pisać tekst Markdown ręcznie."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Potwierdzenia odczytania"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Po wyłączeniu potwierdzenia odczytu nie będą wysyłane. Nadal będziesz otrzymywać potwierdzenia od innych użytkowników."</string>
   <string name="screen_advanced_settings_share_presence">"Udostępnij obecność"</string>
   <string name="screen_advanced_settings_share_presence_description">"Po wyłączeniu nie będzie można wysyłać ani odbierać potwierdzeń odczytu i powiadomień o pisaniu."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Zawsze ukrywaj"</string>

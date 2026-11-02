@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"Чтобы больше не пропускать важные звонки, разрешите приложению показывать полноэкранные уведомления на заблокированном экране телефона."</string>
   <string name="full_screen_intent_banner_title_android">"Улучшите качество звонков"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Выберите способ получения уведомлений"</string>
-  <string name="screen_advanced_settings_developer_mode">"Режим разработчика"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Предоставьте разработчикам доступ к функциям и функциональным возможностям."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL сервера Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Укажите собственный сервер Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Адрес указан неверно, удостоверьтесь, что вы указали протокол (http/https) и правильный адрес."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Скрывать аватары в приглашениях"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Скрывать предпросмотр медиа в истории сообщений"</string>
   <string name="screen_advanced_settings_labs">"Лаборатория"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Расстояние, которое нужно пройти, чтобы инициировать обновление."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Убедитесь, что для этого приложения включена функция «Точное местоположение». Чтобы изменить разрешение, перейдите на страницу %1$s."</string>
@@ -22,7 +19,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Загружайте фотографии и видео быстрее и сокращайте потребление трафика"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимизировать качество мультимедиа"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерация и безопасность"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Автоматически оптимизировать изображения для более быстрой загрузки и уменьшения размера файлов."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Оптимизировать качество загрузки изображений"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Нажмите здесь, чтобы изменить."</string>
@@ -31,9 +27,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Среднее (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Качество загружаемого видео"</string>
   <string name="screen_advanced_settings_push_provider_android">"Поставщик push-уведомлений"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Отключить редактор форматированного текста и включить Markdown."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Уведомления о прочтении"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Если этот параметр выключен, другие пользователи не будут видеть, прочитали ли вы сообщения. Вы по-прежнему будете видеть статус прочтения других пользователей."</string>
   <string name="screen_advanced_settings_share_presence">"Делиться присутствием"</string>
   <string name="screen_advanced_settings_share_presence_description">"Если выключено, Вы не будете видеть, кто печатает и читает сообщения, а также другие пользователи не будут знать, когда Вы печатаете или читаете сообщения."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Всегда скрывать"</string>

@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"اکاؤنٹ فراہم کنندہ بدلیں"</string>
-  <string name="screen_account_provider_form_hint">"منزلی خادم پتہ"</string>
-  <string name="screen_account_provider_form_notice">"تلاش کی اصطلاح یا عنوانِ مجال درج کریں۔"</string>
-  <string name="screen_account_provider_form_subtitle">"کسی شرکت، برادری، یا نجی خادم کیلئے تلاش کریں۔"</string>
-  <string name="screen_account_provider_form_title">"ایک کھاتہ فراہم کنندہ ڈھونڈیں"</string>
-  <string name="screen_account_provider_signin_subtitle">"یہ وہ جگہ ہے جہاں آپ کی گفتگوئیں زندہ رہیں گی — بالکل اسی طرح جیسے آپ اپنی برقی خطوط رکھنے کے لیے برقی ڈاک فراہم کنندہ کا استعمال کرتے ہوں گے۔"</string>
   <string name="screen_account_provider_signin_title">"آپ %s میں داخل ہونے والے ہیں"</string>
-  <string name="screen_account_provider_signup_subtitle">"یہ وہ جگہ ہے جہاں آپ کی گفتگوئیں زندہ رہیں گی — بالکل اسی طرح جیسے آپ اپنی برقی خطوط رکھنے کے لیے برقی ڈاک فراہم کنندہ کا استعمال کرتے ہوں گے۔"</string>
-  <string name="screen_account_provider_signup_title">"آپ %s پر ایک کھاتہ تخلیق کرنے والے ہیں"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org Matrix.org فاؤنڈیشن کے ذریعہ محفوظ، غیر مرکزی مواصلات کے لئے عوامی میٹرکس شبکہ پر ایک بڑا، مفت خادم ہے۔"</string>
   <string name="screen_change_account_provider_other">"دیگر"</string>
   <string name="screen_change_account_provider_subtitle">"ایک مختلف کھاتہ فراہم کنندہ استعمال کریں، جیسے آپ کا اپنا نجی خادم یا کام کا کھاتہ۔"</string>
   <string name="screen_change_account_provider_title">"اکاؤنٹ فراہم کنندہ بدلیں"</string>
@@ -27,14 +18,12 @@
   <string name="screen_login_error_unsupported_authentication">"منتخب منزلی خادم کلمۂ عبوری یا OAuth دخول کا تعاون نہیں کرتا۔ برائے مہربانی اپنے منتظم سے رابطہ کریں یا کوئی اور منزلی خادم چنیں۔"</string>
   <string name="screen_login_form_header">"اپنی تفصیلات درج کریں"</string>
   <string name="screen_login_subtitle">"میٹرکس محفوظ، غیر مرکزی مواصلت کے لئے ایک کھلا شبکہ ہے۔"</string>
-  <string name="screen_login_title">"واپس خوش آمدید!"</string>
   <string name="screen_login_title_with_homeserver">"%1$s میں داخل ہوں"</string>
   <string name="screen_onboarding_sign_in_manually">"دستی طور پر داخل ہوں"</string>
   <string name="screen_onboarding_sign_in_to">"%1$s میں داخل ہوں"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"کیو آر (QR) رمز کیساتھ داخل ہوں"</string>
   <string name="screen_onboarding_sign_up">"کھاتہ تخلیق کریں"</string>
   <string name="screen_onboarding_welcome_message">"اب تک کی تیز ترین %1$s میں خوش آمدید۔ رفتار اور سادگی کے لئے مشحون"</string>
-  <string name="screen_onboarding_welcome_subtitle">"%1$s پر خوش آمدید۔ شحن فائق شدہ، رفتار اور سادگی کیلئے۔"</string>
   <string name="screen_onboarding_welcome_title">"اپنے عنصر میں رہیں"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"محفوظ اتصال قائم کر رہا ہے"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"نئے آلے سے محفوظ اتصال نہیں بنایا جا سکا۔ آپ کے موجودہ آلات اب بھی محفوظ ہیں اور آپ کو ان کے بارے میں فکر کرنے کی ضرورت نہیں ہے۔"</string>
@@ -73,15 +62,9 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"جاری رکھنے کے لیے آپ %1$s کو اپنے آلے کا تصویرگر استعمال کرنے کی اجازت دینے کی ضرورت ہے۔"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"کیو آر رمز کو مسح ضوئی کرنے کے لئے تصویرگر تک رسائی کی اجازت دیں"</string>
   <string name="screen_qr_code_login_scanning_state_title">"کیو آر رمز مسح ضوئی کریں"</string>
-  <string name="screen_qr_code_login_start_over_button">"از سر نو شروع کریں"</string>
   <string name="screen_qr_code_login_unknown_error_description">"ایک غیر متوقع نقص واقع ہوا۔ برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_qr_code_login_verify_code_loading">"آپکے دوسرے آلے کا منتظر"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"آپ کا کھاتہ فراہم کنندہ دخول کی توثیق کے لیے درج ذیل رمز کا مطالبہ کر سکتا ہے۔"</string>
   <string name="screen_qr_code_login_verify_code_title">"آپکا توثیقی رمز"</string>
-  <string name="screen_server_confirmation_change_server">"اکاؤنٹ فراہم کنندہ بدلیں"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"ایلیمنٹ کے ملازمین کیلئے ایک نجی خادم۔"</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"میٹرکس محفوظ، غیر مرکزی مواصلت کے لئے ایک کھلا شبکہ ہے۔"</string>
-  <string name="screen_server_confirmation_message_register">"یہ وہ جگہ ہے جہاں آپ کی گفتگوئیں زندہ رہیں گی — بالکل اسی طرح جیسے آپ اپنی برقی خطوط رکھنے کے لیے برقی ڈاک فراہم کنندہ کا استعمال کرتے ہوں گے۔"</string>
-  <string name="screen_server_confirmation_title_login">"آپ %1$s میں داخل ہونے والے ہیں"</string>
-  <string name="screen_server_confirmation_title_register">"آپ %1$s پر ایک کھاتہ بنانے والے ہیں"</string>
 </resources>

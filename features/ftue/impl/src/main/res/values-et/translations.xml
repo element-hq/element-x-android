@@ -9,7 +9,6 @@
   <string name="screen_identity_confirmed_subtitle">"Nüüd saad saata või lugeda sõnumeid turvaliselt ning kõik sinu vestluspartnerid võivad usaldada seda seadet."</string>
   <string name="screen_identity_confirmed_title">"Seade on verifitseeritud"</string>
   <string name="screen_identity_use_another_device">"Kasuta teist seadet"</string>
-  <string name="screen_identity_waiting_on_other_device">"Ootame teise seadme järgi…"</string>
   <string name="screen_notification_optin_subtitle">"Sa võid seadistusi hiljem alati muuta."</string>
   <string name="screen_notification_optin_title">"Luba teavitused ja kunagi ei jää sul sõnumid märkamata"</string>
 </resources>

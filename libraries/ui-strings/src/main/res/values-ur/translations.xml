@@ -54,7 +54,6 @@
   <string name="action_choose_photo">"تصویر چنیں"</string>
   <string name="action_clear">"صاف کریں"</string>
   <string name="action_close">"بند کریں"</string>
-  <string name="action_complete_verification">"توثیق مکمل کریں"</string>
   <string name="action_confirm">"تصدیق کریں"</string>
   <string name="action_confirm_password">"پاس ورڈ کی تصدیق"</string>
   <string name="action_continue">"جاری رکھیں"</string>
@@ -63,8 +62,6 @@
   <string name="action_copy_link_to_message">"پیغام کا ربط نقل کریں"</string>
   <string name="action_create">"تخلیق کریں"</string>
   <string name="action_create_room">"کمرہ تخلیق کریں"</string>
-  <string name="action_deactivate">"غیر فعال کریں"</string>
-  <string name="action_deactivate_account">"اکاؤنٹ کو غیر فعال کریں"</string>
   <string name="action_decline">"مسترد کریں"</string>
   <string name="action_delete_poll">"رائے شماری حذف کریں"</string>
   <string name="action_disable">"غیر فعال کریں"</string>
@@ -89,8 +86,6 @@
   <string name="action_leave_conversation">"گفتگو چھوڑیں"</string>
   <string name="action_leave_room">"کمرہ چھوڑ دیں"</string>
   <string name="action_load_more">"مزید لادیں"</string>
-  <string name="action_manage_account">"کھاتہ کا انتظام کریں"</string>
-  <string name="action_manage_devices">"آلات کا نظم کریں"</string>
   <string name="action_message">"ارسال"</string>
   <string name="action_next">"اگلا"</string>
   <string name="action_no">"نہیں"</string>
@@ -106,7 +101,6 @@
   <string name="action_remove">"ہٹائیں"</string>
   <string name="action_reply">"جواب دیں"</string>
   <string name="action_reply_in_thread">"دھاگے میں جواب دیں"</string>
-  <string name="action_report_bug">"خطاء کی اطلاع دیں"</string>
   <string name="action_report_content">"مواد کی اطلاع دیں"</string>
   <string name="action_reset">"بحال کریں"</string>
   <string name="action_reset_identity">"شناخت بحال کر دیں"</string>
@@ -118,7 +112,6 @@
   <string name="action_send_message">"پیغام بھیجیں"</string>
   <string name="action_share">"اشتراک کریں"</string>
   <string name="action_share_link">"ربط کا اشتراک کریں"</string>
-  <string name="action_sign_in_again">"دوبارہ داخل ہوں"</string>
   <string name="action_signout">"خارج ہوں"</string>
   <string name="action_signout_anyway">"بہرحال خارج ہوں"</string>
   <string name="action_skip">"چھوڑیں"</string>
@@ -134,8 +127,6 @@
   <string name="action_view_in_timeline">"ٹائم لائن میں دیکھیں"</string>
   <string name="action_view_source">"ماخذ دیکھیں"</string>
   <string name="action_yes">"ہاں"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"آپ کا سرور اب ایک نئے، تیز تر پروٹوکول کو سپورٹ کرتا ہے۔ لاگ آؤٹ کریں اور ابھی اپ گریڈ کے لیے دوبارہ لاگ ان کریں۔ ابھی ایسا کرنے سے آپ کو زبردستی لاگ آؤٹ سے بچنے میں مدد ملے گی جب پرانا پروٹوکول بعد میں ہٹا دیا جائے گا۔"</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"اپ گریڈ دستیاب ہے۔"</string>
   <string name="common_about">"بمتعلق"</string>
   <string name="common_acceptable_use_policy">"قابل قبول استعمال کی سیاست"</string>
   <string name="common_advanced_settings">"اعلیٰ ترتیبات"</string>
@@ -144,7 +135,6 @@
   <string name="common_appearance">"ظہور"</string>
   <string name="common_audio">"صوت"</string>
   <string name="common_blocked_users">"مسدود صارفین"</string>
-  <string name="common_bubbles">"بلبلے"</string>
   <string name="common_call_started">"مکالمہ شروع"</string>
   <string name="common_chat_backup">"گفتگو کا پشتارہ"</string>
   <string name="common_copied_to_clipboard">"کلپ بورڈ میں کاپى کیا گیا"</string>

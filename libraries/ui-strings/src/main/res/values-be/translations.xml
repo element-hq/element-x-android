@@ -51,7 +51,6 @@
   <string name="a11y_view_details">"Паглядзець падрабязнасці"</string>
   <string name="a11y_voice_message_record">"Запісаць галасавое паведамленне."</string>
   <string name="a11y_voice_message_stop_recording">"Спыніць запіс"</string>
-  <string name="a11y_your_avatar">"Ваш аватар"</string>
   <string name="action_accept">"Прыняць"</string>
   <string name="action_add_caption">"Дадаць подпіс"</string>
   <string name="action_add_to_timeline">"Дадаць у хроніку"</string>
@@ -63,7 +62,6 @@
   <string name="action_choose_photo">"Выбраць фота"</string>
   <string name="action_clear">"Ачысціць"</string>
   <string name="action_close">"Закрыць"</string>
-  <string name="action_complete_verification">"Праверка завершана"</string>
   <string name="action_confirm">"Пацвердзіць"</string>
   <string name="action_confirm_password">"Пацвердзіць пароль"</string>
   <string name="action_continue">"Працягнуць"</string>
@@ -75,8 +73,6 @@
   <string name="action_create">"Стварыць"</string>
   <string name="action_create_room">"Стварыце пакой"</string>
   <string name="action_create_space">"Стварыць прастору"</string>
-  <string name="action_deactivate">"Дэактываваць"</string>
-  <string name="action_deactivate_account">"Дэактываваць уліковы запіс"</string>
   <string name="action_decline">"Адхіліць"</string>
   <string name="action_decline_and_block">"Адхіліць і заблакіраваць"</string>
   <string name="action_delete">"Выдаліць"</string>
@@ -115,8 +111,6 @@
   <string name="action_leave_room">"Пакінуць пакой"</string>
   <string name="action_leave_space">"Пакінуць прастору"</string>
   <string name="action_load_more">"Загрузіць больш"</string>
-  <string name="action_manage_account">"Кіраванне ўліковым запісам"</string>
-  <string name="action_manage_devices">"Кіраванне прыладамі"</string>
   <string name="action_mark_as_read">"Пазначыць як прачытанае"</string>
   <string name="action_message">"Паведамленне"</string>
   <string name="action_next">"Далей"</string>
@@ -136,7 +130,6 @@
   <string name="action_reply">"Адказаць"</string>
   <string name="action_reply_in_thread">"Адказаць у гутаркі"</string>
   <string name="action_report">"Паскардзіцца"</string>
-  <string name="action_report_bug">"Паведаміць пра памылку"</string>
   <string name="action_report_content">"Паскардзіцца на змест"</string>
   <string name="action_reset">"Скінуць"</string>
   <string name="action_reset_identity">"Скінуць ідэнтыфікацыйныя дадзеныя"</string>
@@ -150,7 +143,6 @@
   <string name="action_share">"Абагуліць"</string>
   <string name="action_share_link">"Абагуліць спасылку"</string>
   <string name="action_show">"Паказаць"</string>
-  <string name="action_sign_in_again">"Увайдзіце яшчэ раз"</string>
   <string name="action_signout">"Выйсці"</string>
   <string name="action_signout_anyway">"Усё роўна выйсці"</string>
   <string name="action_skip">"Прапусціць"</string>
@@ -167,18 +159,14 @@
   <string name="action_view_in_timeline">"Прагляд у хроніцы"</string>
   <string name="action_view_source">"Прагляд зыходнага кода"</string>
   <string name="action_yes">"Так"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Ваш сервер зараз падтрымлівае новы, хутчэйшы пратакол. Выйдзіце з сістэмы і зноў увайдзіце, каб абнавіць яе. Гэта дапаможа вам пазбегнуць прымусовага выхаду з сістэмы, калі стары пратакол будзе пазней выдалены."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Даступна абнаўленне"</string>
   <string name="common_about">"Аб праграме"</string>
   <string name="common_acceptable_use_policy">"Палітыка дапушчальнага выкарыстання"</string>
-  <string name="common_add_account">"Дадаць уліковы запіс"</string>
   <string name="common_advanced_settings">"Пашыраныя налады"</string>
   <string name="common_analytics">"Аналітыка"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Вы выйшлі з пакоя"</string>
   <string name="common_appearance">"Знешні выгляд"</string>
   <string name="common_audio">"Аўдыя"</string>
   <string name="common_blocked_users">"Заблакіраваныя карыстальнікі"</string>
-  <string name="common_bubbles">"Бурбалкі"</string>
   <string name="common_call_started">"Званок пачаўся"</string>
   <string name="common_chat_backup">"Рэзервовае капіраванне чатаў"</string>
   <string name="common_copied_to_clipboard">"Скапіравана ў буфер абмену"</string>

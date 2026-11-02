@@ -31,7 +31,6 @@
   <string name="a11y_notifications_new_mentions">"اشاره‌های جدید"</string>
   <string name="a11y_notifications_new_messages">"پیام‌های جدید"</string>
   <string name="a11y_notifications_ongoing_call">"تماس خروجی"</string>
-  <string name="a11y_other_user_avatar">"چهرک دیگر کاربران"</string>
   <string name="a11y_page_n">"صفحهٔ %1$d"</string>
   <string name="a11y_pause">"مکث"</string>
   <string name="a11y_paused_voice_message">"پیام صوتی. طول %1$s. موقعیت کنونی: %2$s"</string>
@@ -77,7 +76,6 @@
   <string name="a11y_voice_message">"پیام صوتی. طول %1$s"</string>
   <string name="a11y_voice_message_record">"ضبط پیام صوتی."</string>
   <string name="a11y_voice_message_stop_recording">"توقّف ضبط"</string>
-  <string name="a11y_your_avatar">"چهرکتان"</string>
   <string name="action_accept">"پذیرش"</string>
   <string name="action_add_caption">"افزودن عنوان"</string>
   <string name="action_add_existing_rooms">"افزودن اتاق‌های موجود"</string>
@@ -90,7 +88,6 @@
   <string name="action_choose_photo">"گزینش عکس"</string>
   <string name="action_clear">"پاک سازی"</string>
   <string name="action_close">"بستن"</string>
-  <string name="action_complete_verification">"تکمیل تأیید"</string>
   <string name="action_confirm">"تأیید"</string>
   <string name="action_confirm_password">"تأیید گذرواژه"</string>
   <string name="action_continue">"ادامه"</string>
@@ -102,8 +99,6 @@
   <string name="action_create">"ایجاد"</string>
   <string name="action_create_room">"ایجاد اتاق"</string>
   <string name="action_create_space">"ایجاد فضا"</string>
-  <string name="action_deactivate">"غیرفعّال"</string>
-  <string name="action_deactivate_account">"غیرفعّال‌سازی حساب"</string>
   <string name="action_decline">"رد"</string>
   <string name="action_decline_and_block">"رد و انسداد"</string>
   <string name="action_delete">"پاک‌کردن"</string>
@@ -142,9 +137,7 @@
   <string name="action_leave_room">"ترک اتاق"</string>
   <string name="action_leave_space">"ترک فضا"</string>
   <string name="action_load_more">"بار کردن بیش‌تر"</string>
-  <string name="action_manage_account">"مدیریت حساب"</string>
   <string name="action_manage_account_and_devices">"مدیریت حساب و دستگاه‌ها"</string>
-  <string name="action_manage_devices">"مدیریت افزاره‌ها"</string>
   <string name="action_manage_rooms">"مدیریت اتاق‌ها"</string>
   <string name="action_mark_as_read">"علامت‌گذاری به عنوان خوانده شده"</string>
   <string name="action_message">"پیام"</string>
@@ -167,7 +160,6 @@
   <string name="action_reply">"پاسخ"</string>
   <string name="action_reply_in_thread">"پاسخ در رشته"</string>
   <string name="action_report">"گزارش"</string>
-  <string name="action_report_bug">"گزارش اشکال"</string>
   <string name="action_report_content">"گزارش محتوا"</string>
   <string name="action_report_dm">"گزارش گفت‌وگو"</string>
   <string name="action_report_room">"گزارش اتاق"</string>
@@ -186,7 +178,6 @@
   <string name="action_share_link">"هم‌رسانی پیوند"</string>
   <string name="action_share_live_location">"اشتراک گذاری موقعیت مکانی زنده"</string>
   <string name="action_show">"نمایش"</string>
-  <string name="action_sign_in_again">"ورود دوباره"</string>
   <string name="action_signout">"برداشتن این افزاره"</string>
   <string name="action_signout_anyway">"به هر حال این دستگاه را حذف کنید"</string>
   <string name="action_skip">"رد شدن"</string>
@@ -208,11 +199,8 @@
   <string name="action_voice_call">"تماس صوتی"</string>
   <string name="action_yes">"بله"</string>
   <string name="action_yes_try_again">"بله. تلاش دوباره"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"سرور شما اکنون از یک پروتکل جدید و سریع‌تر پشتیبانی می‌کند. برای ارتقا، از سیستم خارج شوید و دوباره وارد شوید. انجام این کار در حال حاضر به شما کمک می‌کند تا از خروج اجباری هنگام حذف پروتکل قدیمی در آینده جلوگیری کنید."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"ارتقا موجود است"</string>
   <string name="common_about">"درباره"</string>
   <string name="common_acceptable_use_policy">"سیاست استفادهٔ پذیرفتنی"</string>
-  <string name="common_add_account">"افزودن یک حساب"</string>
   <string name="common_add_another_account">"افزودن حسابی دیگر"</string>
   <string name="common_adding_caption">"افزودن عنوان"</string>
   <string name="common_advanced_settings">"تنظیمات پیش‌رفته"</string>
@@ -224,7 +212,6 @@
   <string name="common_audio">"صدا"</string>
   <string name="common_beta">"آزمایشی"</string>
   <string name="common_blocked_users">"کاربران مسدود"</string>
-  <string name="common_bubbles">"حباب‌ها"</string>
   <string name="common_call_declined">"تماس رد شد"</string>
   <string name="common_call_in_progress">"تماس در جریان است"</string>
   <string name="common_call_started">"تماس آغاز شد"</string>
@@ -537,7 +524,6 @@
   <string name="screen_room_change_role_administrators_or_owners_title">"ویرایش مدیران یا مالکان"</string>
   <string name="screen_room_error_failed_processing_media">"پردازش رسانه برای بارگذاری شکست خورد. لطفاً دوباره تلاش کنید."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"نمی توان جزئیات کاربر را بازیابی کرد"</string>
-  <string name="screen_room_event_pill">"پیام در %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"گسترش"</string>
   <string name="screen_room_grouped_state_events_reduce">"کاهش"</string>
   <string name="screen_room_live_location_banner">"اشتراک گذاری موقعیت مکانی زنده"</string>

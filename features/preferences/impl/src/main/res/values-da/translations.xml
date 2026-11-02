@@ -3,13 +3,10 @@
   <string name="full_screen_intent_banner_message_android">"For at sikre, at du aldrig går glip af et vigtigt opkald, skal du ændre dine indstillinger til at tillade underretninger i fuld skærm, når din telefon er låst."</string>
   <string name="full_screen_intent_banner_title_android">"Gør din opkaldsoplevelse bedre"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Vælg, hvordan du vil modtage notifikationer"</string>
-  <string name="screen_advanced_settings_developer_mode">"Udviklertilstand"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Aktivér for at få adgang til funktioner og funktionalitet for udviklere."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Brugerdefineret URL til opkaldsbase for Element"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Angiv en brugerdefineret basis-URL til Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ugyldig URL, sørg for at inkludere protokollen (http/https) og den korrekte adresse."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Skjul avatarer i anmodninger om invitation til rum"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Skjul forhåndsvisning af medier i tidslinjen"</string>
   <string name="screen_advanced_settings_labs">"Laboratorier"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Den afstand, du skal tilbagelægge for at udløse en opdatering."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Sørg for, at \"nøjagtig placering\" er aktiveret for denne app. For at ændre på tilladelsen skal du gå til %1$s."</string>
@@ -21,7 +18,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Upload fotos og videoer hurtigere, og reducér dataforbrug"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimér mediekvaliteten"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderation og sikkerhed"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimér automatisk billeder for hurtigere uploads og mindre filstørrelser."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimér kvaliteten på overførte billeder"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Tryk her for at ændre."</string>
@@ -30,9 +26,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Kvalitet på overførte videoer"</string>
   <string name="screen_advanced_settings_push_provider_android">"Udbyder af push-notifikationer"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Deaktiver rich text-editoren for at skrive Markdown manuelt."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Kvitteringer​•​for​•​læsning"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Hvis deaktiveret, sendes dine læsekvitteringer ikke til nogen. Du vil stadig modtage læsekvitteringer fra andre brugere."</string>
   <string name="screen_advanced_settings_share_presence">"Del tilstedeværelse"</string>
   <string name="screen_advanced_settings_share_presence_description">"Hvis deaktiveret, kan du ikke sende eller modtage læsekvitteringer eller indtastningsmeddelelser."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Skjul altid"</string>

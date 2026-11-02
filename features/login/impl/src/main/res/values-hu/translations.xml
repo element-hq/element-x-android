@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Fiókszolgáltató módosítása"</string>
-  <string name="screen_account_provider_form_hint">"Matrix-kiszolgáló webcíme"</string>
-  <string name="screen_account_provider_form_notice">"Adjon meg egy keresési kifejezést vagy egy tartománycímet."</string>
-  <string name="screen_account_provider_form_subtitle">"Keresés egy cégre, közösségre vagy privát kiszolgálóra."</string>
-  <string name="screen_account_provider_form_title">"Fiókszolgáltató keresése"</string>
-  <string name="screen_account_provider_signin_subtitle">"Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez."</string>
   <string name="screen_account_provider_signin_title">"Hamarosan bejelentkezik ide: %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez."</string>
-  <string name="screen_account_provider_signup_title">"Hamarosan létrehoz egy fiókot itt: %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"A Matrix.org egy nagy, ingyenes kiszolgáló a nyilvános Matrix-hálózaton, a biztonságos, decentralizált kommunikáció érdekében, amelyet a Matrix.org Alapítvány üzemeltet."</string>
   <string name="screen_change_account_provider_other">"Egyéb"</string>
   <string name="screen_change_account_provider_subtitle">"Másik fiókszolgáltató, például a saját privát kiszolgáló vagy egy munkahelyi fiók használata."</string>
   <string name="screen_change_account_provider_title">"Fiókszolgáltató módosítása"</string>
@@ -43,7 +34,6 @@
   <string name="screen_login_error_unsupported_authentication">"A kiválasztott Matrix-kiszolgáló nem támogatja a jelszavas vagy OAuth-alapú bejelentkezést. Lépjen kapcsolatba a kiszolgáló adminisztrátorával, vagy válasszon másik Matrix-kiszolgálót."</string>
   <string name="screen_login_form_header">"Adja meg adatait"</string>
   <string name="screen_login_subtitle">"A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz."</string>
-  <string name="screen_login_title">"Örülünk, hogy visszatért!"</string>
   <string name="screen_login_title_with_homeserver">"Bejelentkezés ide: %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"Nyissa meg az Element Classic alkalmazást"</string>
   <string name="screen_missing_key_backup_step_1">"Nyissa meg az Element Classic alkalmazást az eszközén"</string>
@@ -60,7 +50,6 @@
   <string name="screen_onboarding_sign_up">"Fiók létrehozása"</string>
   <string name="screen_onboarding_welcome_back">"Üdvözöljük újra!"</string>
   <string name="screen_onboarding_welcome_message">"Üdvözöljük a valaha volt leggyorsabb %1$sben. Felturbózva, a sebesség és az egyszerűség érdekében."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Üdvözli az %1$s. Felturbózva, a sebesség és az egyszerűség jegyében."</string>
   <string name="screen_onboarding_welcome_title">"Legyen elemében"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Biztonságos kapcsolat létesítése"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Nem sikerült biztonságos kapcsolatot létesíteni az új eszközzel. A meglévő eszközei továbbra is biztonságban vannak, és nem kell aggódnia miattuk."</string>
@@ -102,16 +91,10 @@ Próbáljon meg kézileg bejelentkezni, vagy olvassa be a QR-kódot egy másik e
   <string name="screen_qr_code_login_no_camera_permission_state_description">"A folytatáshoz engedélyeznie kell, hogy az %1$s használhassa az eszköz kameráját."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Engedélyezze a kamera elérését a QR-kód beolvasásához"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Olvassa be a QR-kódot"</string>
-  <string name="screen_qr_code_login_start_over_button">"Újrakezdés"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Váratlan hiba történt. Próbálja meg újra."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Várakozás a másik eszközre"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"A fiókszolgáltatója kérheti a következő kódot a bejelentkezése ellenőrzéséhez."</string>
   <string name="screen_qr_code_login_verify_code_title">"Az Ön ellenőrzőkódja"</string>
-  <string name="screen_server_confirmation_change_server">"Fiókszolgáltató módosítása"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Egy privát kiszolgáló az Element alkalmazottai számára."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz."</string>
-  <string name="screen_server_confirmation_message_register">"Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez."</string>
-  <string name="screen_server_confirmation_title_login">"Hamarosan bejelentkezik ebbe: %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Válassza ki a fiókszolgáltatót"</string>
-  <string name="screen_server_confirmation_title_register">"Hamarosan létrehoz egy fiókot ezen: %1$s"</string>
 </resources>
