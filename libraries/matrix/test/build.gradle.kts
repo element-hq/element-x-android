@@ -1,3 +1,5 @@
+import extension.testCommonDependencies
+
 /*
  * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2022-2025 New Vector Ltd.
@@ -15,6 +17,7 @@ android {
 }
 
 dependencies {
+    testCommonDependencies(libs)
     api(projects.libraries.core)
     api(projects.libraries.matrix.api)
     api(libs.coroutines.core)

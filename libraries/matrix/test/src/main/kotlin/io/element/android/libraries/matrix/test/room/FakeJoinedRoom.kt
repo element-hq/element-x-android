@@ -83,6 +83,7 @@ class FakeJoinedRoom(
     private val updateCanonicalAliasResult: (RoomAlias?, List<RoomAlias>) -> Result<Unit> = { _, _ -> lambdaError() },
     private val updateRoomVisibilityResult: (RoomVisibility) -> Result<Unit> = { lambdaError() },
     private val updateRoomHistoryVisibilityResult: (RoomHistoryVisibility) -> Result<Unit> = { lambdaError() },
+    private val sendStateEventRawResult: (String, String, String) -> Result<EventId> = { _, _, _ -> lambdaError() },
     private val publishRoomAliasInRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
     private val removeRoomAliasFromRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
     private val enableEncryptionResult: () -> Result<Unit> = { lambdaError() },
@@ -154,6 +155,10 @@ class FakeJoinedRoom(
 
     override suspend fun updateHistoryVisibility(historyVisibility: RoomHistoryVisibility): Result<Unit> = simulateLongTask {
         updateRoomHistoryVisibilityResult(historyVisibility)
+    }
+
+    override suspend fun sendStateEventRaw(eventType: String, stateKey: String, content: String): Result<EventId> = simulateLongTask {
+        sendStateEventRawResult(eventType, stateKey, content)
     }
 
     override suspend fun publishRoomAliasInRoomDirectory(roomAlias: RoomAlias): Result<Boolean> = simulateLongTask {
