@@ -107,7 +107,7 @@ class SuggestionsProcessor(
 
             fun memberMatchesQuery(member: RoomMember, query: String): Boolean {
                 return member.userId.value.contains(query, ignoreCase = true) ||
-                    member.displayName?.contains(query, ignoreCase = true) == true
+                    member.displayName?.withoutWhitespace()?.contains(query, ignoreCase = true) == true
             }
 
             val matchingMembers = roomMembers
@@ -132,11 +132,17 @@ class SuggestionsProcessor(
      */
     private fun matchRank(member: RoomMember, query: String): Int {
         return when {
-            member.displayName?.startsWith(query, ignoreCase = true) == true -> 0
+            member.displayName?.withoutWhitespace()?.startsWith(query, ignoreCase = true) == true -> 0
             member.userId.extractedDisplayName.startsWith(query, ignoreCase = true) -> 1
             else -> 2
         }
     }
+
+    /**
+     * The query never contains whitespace, so display names are matched with their whitespace removed:
+     * "Jane Q Doe" is found by "janeqdoe" as well as by "doe".
+     */
+    private fun String.withoutWhitespace(): String = filterNot { it.isWhitespace() }
 
     companion object {
         // We don't want to retrieve thousands of members
