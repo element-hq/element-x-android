@@ -272,19 +272,6 @@ class GlobalSearchViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `with a query and uninitialized results - displays the start searching placeholder`() = runAndroidComposeUiTest {
-        setGlobalSearchView(
-            state = aGlobalSearchState(
-                isSearchActive = true,
-                queryState = TextFieldState("Query"),
-                results = AsyncData.Uninitialized,
-            ),
-        )
-        val startSearching = activity!!.getString(R.string.screen_search_empty_state_title)
-        onNodeWithText(startSearching).assertIsDisplayed()
-    }
-
-    @Test
     fun `with empty results - displays the no results placeholder`() = runAndroidComposeUiTest {
         setGlobalSearchView(
             state = aGlobalSearchState(

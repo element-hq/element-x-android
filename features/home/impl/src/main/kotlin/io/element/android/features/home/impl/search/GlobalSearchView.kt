@@ -175,7 +175,7 @@ private fun GlobalSearchContent(
                 }
 
                 when {
-                    state.results.isUninitialized() -> if (state.queryState.text.isBlank() && historyResults.isNotEmpty()) {
+                    state.queryState.text.isBlank() -> if (historyResults.isNotEmpty()) {
                         searchHistory(
                             historyResults = historyResults,
                             onRemoveResult = { item -> state.eventSink(GlobalSearchEvent.RemoveSearchHistoryResult(item)) },
@@ -191,7 +191,8 @@ private fun GlobalSearchContent(
                     } else {
                         startSearching()
                     }
-                    else -> results(
+                    results?.isEmpty() == true -> emptySearchResults(query = state.queryState.text.toString())
+                    else -> searchResultItems(
                         results = results,
                         onSearchResultSelected = onSelectSearchResult,
                     )
@@ -429,7 +430,7 @@ private fun LazyListScope.searchHistory(
     }
 }
 
-private fun LazyListScope.results(
+private fun LazyListScope.searchResultItems(
     results: GlobalSearchResults?,
     onSearchResultSelected: (RoomId, EventId?) -> Unit,
 ) {
