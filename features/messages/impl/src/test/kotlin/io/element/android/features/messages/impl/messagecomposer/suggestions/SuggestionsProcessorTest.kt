@@ -408,6 +408,44 @@ class SuggestionsProcessorTest {
     }
 
     @Test
+    fun `processing Mention suggestion matches a display name typed without its spaces`() = runTest {
+        val aRoomMember = aRoomMember(userId = UserId("@jdoe:server.org"), displayName = "Jane Q Doe")
+        val result = suggestionsProcessor.process(
+            suggestion = aMentionSuggestion("janeqdoe"),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember)),
+            roomAliasSuggestions = emptyList(),
+            currentUserId = A_USER_ID_2,
+            canSendRoomMention = { false },
+            isInThread = false,
+        )
+        assertThat(result).isEqualTo(
+            listOf(
+                ResolvedSuggestion.Member(aRoomMember),
+            )
+        )
+    }
+
+    @Test
+    fun `processing Mention suggestion ranks a display name starting with the query without its spaces first`() = runTest {
+        val matchingOnAnyPart = aRoomMember(userId = UserId("@carol:server.org"), displayName = "Not Jane Q")
+        val matchingOnDisplayNameStart = aRoomMember(userId = UserId("@jdoe:server.org"), displayName = "Jane Q Doe")
+        val result = suggestionsProcessor.process(
+            suggestion = aMentionSuggestion("janeq"),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(matchingOnAnyPart, matchingOnDisplayNameStart)),
+            roomAliasSuggestions = emptyList(),
+            currentUserId = A_USER_ID_2,
+            canSendRoomMention = { false },
+            isInThread = false,
+        )
+        assertThat(result).isEqualTo(
+            listOf(
+                ResolvedSuggestion.Member(matchingOnDisplayNameStart),
+                ResolvedSuggestion.Member(matchingOnAnyPart),
+            )
+        )
+    }
+
+    @Test
     fun `processing Mention suggestion returns room ignoring the case of the query`() = runTest {
         val aRoomMember = aRoomMember(userId = UserId("@alice:server.org"), displayName = "alice")
         val result = suggestionsProcessor.process(
