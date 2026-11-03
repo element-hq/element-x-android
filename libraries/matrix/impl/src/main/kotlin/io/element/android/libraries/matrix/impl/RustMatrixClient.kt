@@ -54,7 +54,6 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.search.SearchBackfillStrategy
 import io.element.android.libraries.matrix.api.spaces.SpaceService
-import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -90,7 +89,6 @@ import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
 import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
-import io.element.android.libraries.matrix.impl.sync.map
 import io.element.android.libraries.matrix.impl.user.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.user.into
 import io.element.android.libraries.matrix.impl.user.map
@@ -898,12 +896,6 @@ class RustMatrixClient(
             }
         })
     }.buffer(Channel.UNLIMITED)
-
-    override suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion> = withContext(sessionDispatcher) {
-        runCatchingExceptions {
-            innerClient.session().slidingSyncVersion.map()
-        }
-    }
 
     override suspend fun canReportRoom(): Boolean = withContext(sessionDispatcher) {
         runCatchingExceptions {

@@ -42,7 +42,6 @@ import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.api.search.SearchBackfillService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
-import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -115,7 +114,6 @@ class FakeMatrixClient(
     private val getUrlLambda: (String) -> Result<ByteArray> = { lambdaError() },
     private val canDeactivateAccountResult: () -> Boolean = { lambdaError() },
     private val deactivateAccountResult: (String, Boolean) -> Result<Unit> = { _, _ -> lambdaError() },
-    private val currentSlidingSyncVersionLambda: () -> Result<SlidingSyncVersion> = { lambdaError() },
     private val ignoreUserResult: (UserId) -> Result<Unit> = { lambdaError() },
     private val canLinkNewDeviceResult: () -> Result<Boolean> = { lambdaError() },
     private val createLinkMobileHandlerResult: () -> Result<LinkMobileHandler> = { lambdaError() },
@@ -412,10 +410,6 @@ class FakeMatrixClient(
 
     override suspend fun getUrl(url: String): Result<ByteArray> {
         return getUrlLambda(url)
-    }
-
-    override suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion> {
-        return currentSlidingSyncVersionLambda()
     }
 
     override suspend fun canReportRoom(): Boolean {
