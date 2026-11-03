@@ -715,7 +715,7 @@ private fun AddEmojiButton(onClick: () -> Unit) {
     // overflows the box by equal margins top and bottom while retaining its full touch target.
     Box(
         modifier = Modifier
-            .padding(end = 2.dp, bottom = 4.dp)
+            .padding(end = 4.dp, bottom = 4.dp)
             .size(width = 40.dp, height = 34.dp),
         contentAlignment = Alignment.Center,
     ) {
