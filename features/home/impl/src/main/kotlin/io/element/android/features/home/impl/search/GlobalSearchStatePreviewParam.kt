@@ -55,7 +55,7 @@ class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState
             return sequenceOf(
                 // Not enabled, no preview
                 aGlobalSearchState(isEnabled = false),
-                aGlobalSearchState(isSearchActive = true, queryState = TextFieldState("Query")),
+                aGlobalSearchState(isSearchActive = true, queryState = TextFieldState("")),
                 aGlobalSearchState(
                     isSearchActive = true,
                     currentTarget = GlobalSearchTarget.ROOMS,
