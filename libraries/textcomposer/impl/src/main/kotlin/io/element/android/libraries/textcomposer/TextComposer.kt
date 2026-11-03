@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -213,7 +214,7 @@ fun TextComposer(
                     composerMode = composerMode,
                     onResetComposerMode = onResetComposerMode,
                     isTextEmpty = state.state.text.value().isEmpty(),
-                    leadingContent = onAddEmoji?.let { onClick ->
+                    trailingContent = onAddEmoji?.let { onClick ->
                         @Composable { AddEmojiButton(onClick = onClick) }
                     },
                 ) {
@@ -649,7 +650,7 @@ private fun TextInputBox(
     onResetComposerMode: () -> Unit,
     isTextEmpty: Boolean,
     modifier: Modifier = Modifier,
-    leadingContent: (@Composable () -> Unit)? = null,
+    trailingContent: (@Composable () -> Unit)? = null,
     textInput: @Composable () -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
@@ -676,10 +677,9 @@ private fun TextInputBox(
         }
 
         Row(verticalAlignment = Alignment.Bottom) {
-            leadingContent?.invoke()
             Box(
                 modifier = Modifier
-                    .padding(top = 1.dp, bottom = 4.dp, start = if (leadingContent != null) 0.dp else 12.dp, end = 12.dp)
+                    .padding(top = 1.dp, bottom = 4.dp, start = 12.dp, end = if (trailingContent != null) 0.dp else 12.dp)
                     .weight(1f)
                     .then(Modifier.testTag(TestTags.textEditor)),
                 contentAlignment = Alignment.CenterStart,
@@ -703,23 +703,32 @@ private fun TextInputBox(
                     }
                 }
             }
+            trailingContent?.invoke()
         }
     }
 }
 
 @Composable
 private fun AddEmojiButton(onClick: () -> Unit) {
-    IconButton(
+    // The box is sized exactly to one line of the text input (34 dp plus the 4 dp bottom padding), so the
+    // button neither expands the composer nor drifts off the centre line of the text. The 40 dp button
+    // overflows the box by equal margins top and bottom while retaining its full touch target.
+    Box(
         modifier = Modifier
-            .padding(start = 2.dp)
-            .size(40.dp),
-        onClick = onClick,
+            .padding(end = 2.dp, bottom = 4.dp)
+            .size(width = 40.dp, height = 34.dp),
+        contentAlignment = Alignment.Center,
     ) {
-        Icon(
-            imageVector = CompoundIcons.Reaction(),
-            contentDescription = stringResource(R.string.rich_text_editor_a11y_add_emoji),
-            tint = ElementTheme.colors.iconSecondary,
-        )
+        IconButton(
+            modifier = Modifier.requiredSize(40.dp),
+            onClick = onClick,
+        ) {
+            Icon(
+                imageVector = CompoundIcons.Reaction(),
+                contentDescription = stringResource(R.string.rich_text_editor_a11y_add_emoji),
+                tint = ElementTheme.colors.iconSecondary,
+            )
+        }
     }
 }
 
