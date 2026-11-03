@@ -9,6 +9,7 @@ package io.element.android.features.home.impl.search
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -40,9 +41,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
@@ -157,6 +160,8 @@ private fun GlobalSearchContent(
                 state.eventSink(GlobalSearchEvent.UpdateVisibleRange(visibleRange))
             }
 
+            val isLoadingAlpha by animateFloatAsState(if (state.results.isLoading()) 1f else 0f)
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = lazyColumnContentPadding,
@@ -164,6 +169,11 @@ private fun GlobalSearchContent(
             ) {
                 val results = state.results.dataOrNull()
                 val historyResults = state.history.dataOrNull()?.toImmutableList() ?: persistentListOf()
+
+                item {
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth().alpha(isLoadingAlpha))
+                }
+
                 when {
                     state.results.isUninitialized() -> if (state.queryState.text.isBlank() && historyResults.isNotEmpty()) {
                         searchHistory(
@@ -181,14 +191,8 @@ private fun GlobalSearchContent(
                     } else {
                         startSearching()
                     }
-                    state.results.isLoading() -> loadingResults()
-                    results?.isEmpty() == true -> emptySearchResults(query = state.queryState.text.toString())
-                    results is GlobalSearchResults.RoomListResults -> roomListResults(
-                        results = results.results,
-                        onRoomClick = { roomId -> onSelectSearchResult(roomId, null) },
-                    )
-                    results is GlobalSearchResults.MessageSearchResults -> messageSearchResults(
-                        results = results.results,
+                    else -> results(
+                        results = results,
                         onSearchResultSelected = onSelectSearchResult,
                     )
                 }
@@ -425,9 +429,20 @@ private fun LazyListScope.searchHistory(
     }
 }
 
-private fun LazyListScope.loadingResults() {
-    item {
-        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+private fun LazyListScope.results(
+    results: GlobalSearchResults?,
+    onSearchResultSelected: (RoomId, EventId?) -> Unit,
+) {
+    when (results) {
+        null -> Unit
+        is GlobalSearchResults.RoomListResults -> roomListResults(
+            results = results.results,
+            onRoomClick = { roomId -> onSearchResultSelected(roomId, null) },
+        )
+        is GlobalSearchResults.MessageSearchResults -> messageSearchResults(
+            results = results.results,
+            onSearchResultSelected = onSearchResultSelected,
+        )
     }
 }
 

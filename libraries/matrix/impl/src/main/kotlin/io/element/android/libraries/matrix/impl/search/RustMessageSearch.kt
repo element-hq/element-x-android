@@ -111,14 +111,6 @@ class RustMessageSearch(
         runCatchingExceptions {
             // Subscribe lazily, so a search screen that is opened but never used costs nothing.
             subscribeToResultsIfNeeded()
-            // The SDK contract for setQuery is "clears the current results, restarts pagination from
-            // scratch". Whatever endReached we are holding describes the PREVIOUS query — or, on the
-            // very first search, a cursor that was never queried at all and reports endReached=true
-            // because there is nothing to page through yet. Carrying it over makes every search look
-            // finished before it starts, so callers never paginate and an empty result is reported as
-            // a definitive "no results". Reset before handing the query over; the subscription
-            // corrects this the moment the SDK reports its real state.
-            mutablePaginationState.value = MessageSearchPaginationState.Idle(endReached = false)
             // The SDK parses this with tantivy's strict query parser, where `:` and friends are
             // syntax rather than text — a pasted URL fails the whole search. Escape so the query is
             // searched literally. The caller keeps the raw string; only the SDK sees the escaped one.
