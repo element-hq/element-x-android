@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Schimbați furnizorul contului"</string>
-  <string name="screen_account_provider_form_hint">"Adresa homeserverului"</string>
-  <string name="screen_account_provider_form_notice">"Introduceți un termen de căutare sau o adresă de domeniu."</string>
-  <string name="screen_account_provider_form_subtitle">"Căutați o companie, o comunitate sau un server privat."</string>
-  <string name="screen_account_provider_form_title">"Găsiți un furnizor de cont"</string>
-  <string name="screen_account_provider_signin_subtitle">"Aici vor apărea conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile."</string>
   <string name="screen_account_provider_signin_title">"Sunteți pe cale să vă conectați la %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Aici vor apărea conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile."</string>
-  <string name="screen_account_provider_signup_title">"Sunteți pe cale să creați un cont pe %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org este un server mare și gratuit din rețeaua publică Matrix pentru comunicații sigure și descentralizate, administrat de Fundația Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Altul"</string>
   <string name="screen_change_account_provider_subtitle">"Utilizați un alt furnizor de cont, cum ar fi propriul server privat sau un cont de serviciu."</string>
   <string name="screen_change_account_provider_title">"Schimbați furnizorul contului"</string>
@@ -43,7 +34,6 @@
   <string name="screen_login_error_unsupported_authentication">"Furnizorul de cont selectat nu acceptă conectarea prin parolă sau OAuth. Contactați administratorul sau alegeți un alt furnizor de cont."</string>
   <string name="screen_login_form_header">"Introduceți detaliile"</string>
   <string name="screen_login_subtitle">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>
-  <string name="screen_login_title">"Bine ați revenit!"</string>
   <string name="screen_login_title_with_homeserver">"Conectați-vă la %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"Deschideți Element Classic"</string>
   <string name="screen_missing_key_backup_step_1">"Deschideți Element Classic pe dispozitivul dvs."</string>
@@ -60,7 +50,6 @@
   <string name="screen_onboarding_sign_up">"Creați un cont"</string>
   <string name="screen_onboarding_welcome_back">"Bine ați revenit"</string>
   <string name="screen_onboarding_welcome_message">"Bine ați venit la cel mai rapid %1$s din toate timpurile. Superperformant, pentru viteză și simplitate."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Bun-venit în %1$s. Superperformant, pentru viteză și simplitate."</string>
   <string name="screen_onboarding_welcome_title">"Intrați-vă în Element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Se stabilește o conexiune securizată"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Nu a putut fi creată o conexiune sigură la noul dispozitiv. Dispozitivele existente sunt încă în siguranță și nu trebuie să vă faceți griji cu privire la ele."</string>
@@ -102,16 +91,10 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Trebuie să acordați permisiunea ca %1$s să folosească camera dispozitivului pentru a continua."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Permiteți accesul la cameră pentru a scana codul QR"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Scanați codul QR"</string>
-  <string name="screen_qr_code_login_start_over_button">"Începeți din nou"</string>
   <string name="screen_qr_code_login_unknown_error_description">"A apărut o eroare neașteptată. Încercați din nou."</string>
   <string name="screen_qr_code_login_verify_code_loading">"În așteptarea celuilalt dispozitiv"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Furnizorul contului dvs. poate cere următorul cod pentru a verifica conectarea."</string>
   <string name="screen_qr_code_login_verify_code_title">"Codul dvs. de verificare"</string>
-  <string name="screen_server_confirmation_change_server">"Schimbați furnizorul contului"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Un server privat pentru angajații Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>
-  <string name="screen_server_confirmation_message_register">"Aici vor apărea conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile."</string>
-  <string name="screen_server_confirmation_title_login">"Sunteți pe cale să vă conectați la %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Alegeți furnizorul de cont"</string>
-  <string name="screen_server_confirmation_title_register">"Sunteți pe cale să creați un cont pe %1$s"</string>
 </resources>

@@ -48,9 +48,9 @@
   <string name="screen_room_attachment_source_poll">"Kysely"</string>
   <string name="screen_room_attachment_text_formatting">"Tekstin muotoilu"</string>
   <string name="screen_room_confirm_removal_reason_label">"Syy (valinnainen)"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder">"Kirjoita…"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Kirjoita syy…"</string>
   <string name="screen_room_confirm_removal_reason_supporting_text">"(Valinnainen)"</string>
-  <string name="screen_room_confirm_removal_title">"Vahvista poistaminen"</string>
+  <string name="screen_room_confirm_removal_title">"Poistetaanko viesti?"</string>
   <string name="screen_room_encrypted_history_banner">"Viestihistoria ei ole tällä hetkellä saatavilla"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Viestihistoria ei ole käytettävissä tässä huoneessa. Vahvista tämä laite nähdäksesi viestihistoriasi."</string>
   <string name="screen_room_invite_again_alert_message">"Haluatko kutsua heidät takaisin?"</string>

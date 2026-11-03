@@ -48,7 +48,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
-import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
@@ -56,7 +55,6 @@ import io.element.android.services.analyticsproviders.api.trackers.captureIntera
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -110,6 +108,8 @@ class PinnedMessagesListPresenter(
                     currentUserId = room.sessionId,
                     isDm = roomInfo.isDm,
                     name = roomInfo.name,
+                    // The pinned events timeline never shows read receipts.
+                    renderReadReceipts = false,
                     // We don't need to compute those values
                     userHasPermissionToSendMessage = false,
                     userHasPermissionToSendReaction = userEventPermissions.canSendReaction,
@@ -225,13 +225,13 @@ class PinnedMessagesListPresenter(
                 is AsyncData.Loading -> flowOf(AsyncData.Loading())
                 is AsyncData.Success -> {
                     val timelineItemsFlow = asyncTimeline.data.timelineItems
-                    combine(timelineItemsFlow, room.membersStateFlow) { items, membersState ->
-                        timelineItemsFactory.replaceWith(
-                            timelineItems = items.keepDisplayablePinnedEvents(),
-                            roomMembers = membersState.roomMembers().orEmpty(),
-                            renderReadReceipts = false,
-                        )
-                    }.launchIn(this)
+                    timelineItemsFlow
+                        .onEach { items ->
+                            timelineItemsFactory.replaceWith(
+                                timelineItems = items.keepDisplayablePinnedEvents(),
+                            )
+                        }
+                        .launchIn(this)
 
                     timelineItemsFactory.timelineItems.map { timelineItems ->
                         AsyncData.Success(timelineItems)

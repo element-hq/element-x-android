@@ -28,7 +28,6 @@
   <string name="a11y_notifications_new_mentions">"Yeni bahsetmeler"</string>
   <string name="a11y_notifications_new_messages">"Yeni mesajlar"</string>
   <string name="a11y_notifications_ongoing_call">"Devam eden arama"</string>
-  <string name="a11y_other_user_avatar">"Diğer kullanıcının avatarı"</string>
   <string name="a11y_page_n">"Sayfa %1$d"</string>
   <string name="a11y_pause">"Duraklat"</string>
   <string name="a11y_paused_voice_message">"Sesli mesaj, süre: %1$s, geçerli konum: %2$s"</string>
@@ -56,7 +55,6 @@
   <string name="a11y_view_details">"Ayrıntıları görüntüle"</string>
   <string name="a11y_voice_message_record">"Sesli mesajı kaydedin."</string>
   <string name="a11y_voice_message_stop_recording">"Kaydı durdur"</string>
-  <string name="a11y_your_avatar">"Fotoğrafın"</string>
   <string name="action_accept">"Kabul et"</string>
   <string name="action_add_caption">"Açıklama ekle"</string>
   <string name="action_add_to_timeline">"Zaman çizelgesine ekle"</string>
@@ -67,7 +65,6 @@
   <string name="action_choose_photo">"Fotoğraf seç"</string>
   <string name="action_clear">"Temizle"</string>
   <string name="action_close">"Kapat"</string>
-  <string name="action_complete_verification">"Doğrulamayı tamamlayın"</string>
   <string name="action_confirm">"Onayla"</string>
   <string name="action_confirm_password">"Şifreyi onayla"</string>
   <string name="action_continue">"Devam et"</string>
@@ -78,8 +75,6 @@
   <string name="action_copy_text">"Metni kopyala"</string>
   <string name="action_create">"Oluştur"</string>
   <string name="action_create_room">"Bir oda oluştur"</string>
-  <string name="action_deactivate">"Devre dışı bırak"</string>
-  <string name="action_deactivate_account">"Hesabı devre dışı bırak"</string>
   <string name="action_decline">"Reddet"</string>
   <string name="action_delete_poll">"Anketi Sil"</string>
   <string name="action_deselect_all">"Seçimi kaldır"</string>
@@ -108,8 +103,6 @@
   <string name="action_leave_conversation">"Sohbeti bırak"</string>
   <string name="action_leave_room">"Odadan ayrıl"</string>
   <string name="action_load_more">"Daha fazla yükle"</string>
-  <string name="action_manage_account">"Hesabı yönet"</string>
-  <string name="action_manage_devices">"Cihazları yönet"</string>
   <string name="action_manage_rooms">"Odaları yönet"</string>
   <string name="action_message">"Mesaj"</string>
   <string name="action_next">"Sonraki"</string>
@@ -128,7 +121,6 @@
   <string name="action_remove_message">"Mesajı kaldır"</string>
   <string name="action_reply">"Yanıtla"</string>
   <string name="action_reply_in_thread">"Konuya cevap ver"</string>
-  <string name="action_report_bug">"Hata bildir"</string>
   <string name="action_report_content">"İçeriği bildir"</string>
   <string name="action_reset">"Sıfırla"</string>
   <string name="action_reset_identity">"Kimliği sıfırla"</string>
@@ -141,7 +133,6 @@
   <string name="action_share">"Paylaş"</string>
   <string name="action_share_link">"Linki paylaş"</string>
   <string name="action_show">"Göster"</string>
-  <string name="action_sign_in_again">"Tekrar oturum açın"</string>
   <string name="action_signout">"Oturumu kapat"</string>
   <string name="action_signout_anyway">"Yine de çıkış yap"</string>
   <string name="action_skip">"Atla"</string>
@@ -159,11 +150,8 @@
   <string name="action_view_source">"Kaynağı görüntüle"</string>
   <string name="action_yes">"Evet"</string>
   <string name="action_yes_try_again">"Evet, tekrar dene"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"Sunucunuz artık yeni, daha hızlı bir protokolü destekliyor. Şimdi oturumu kapatıp tekrar oturum açarak yükseltme yapın. Bunu şimdi yapmak, eski protokol daha sonra kaldırıldığında zorunlu oturum kapatmayı önlemenize yardımcı olacaktır."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Yükseltme mevcut"</string>
   <string name="common_about">"Hakkında"</string>
   <string name="common_acceptable_use_policy">"Kabul edilebilir kullanım politikası"</string>
-  <string name="common_add_account">"Hesap ekle"</string>
   <string name="common_add_another_account">"Başka bir hesap ekle"</string>
   <string name="common_adding_caption">"Açıklama ekleme"</string>
   <string name="common_advanced_settings">"Gelişmiş Ayarlar"</string>
@@ -172,7 +160,6 @@
   <string name="common_appearance">"Görünüm"</string>
   <string name="common_audio">"Ses"</string>
   <string name="common_blocked_users">"Engellenen kullanıcılar"</string>
-  <string name="common_bubbles">"Kabarcıklar"</string>
   <string name="common_call_started">"Çağrı başladı"</string>
   <string name="common_chat_backup">"Sohbet yedekleme"</string>
   <string name="common_copied_to_clipboard">"Panoya kopyalandı"</string>

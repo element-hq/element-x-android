@@ -12,16 +12,14 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Nhập khóa khôi phục của bạn."</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Bạn quên khóa khôi phục?”"</string>
   <string name="confirm_recovery_key_banner_title">"Dữ liệu khóa của bạn không còn đồng bộ"</string>
-  <string name="full_screen_intent_banner_message">"Để đảm bảo bạn không bỏ lỡ bất kỳ cuộc gọi quan trọng nào, vui lòng thay đổi cài đặt để cho phép thông báo toàn màn hình khi điện thoại của bạn bị khóa."</string>
-  <string name="full_screen_intent_banner_title">"Nâng cao trải nghiệm cuộc gọi của bạn"</string>
+  <string name="full_screen_intent_banner_message_android">"Để đảm bảo bạn không bỏ lỡ bất kỳ cuộc gọi quan trọng nào, vui lòng thay đổi cài đặt để cho phép thông báo toàn màn hình khi điện thoại của bạn bị khóa."</string>
+  <string name="full_screen_intent_banner_title_android">"Nâng cao trải nghiệm cuộc gọi của bạn"</string>
   <string name="screen_home_tab_chats">"Cuộc trò chuyện"</string>
   <string name="screen_invites_decline_chat_message">"Bạn có chắc muốn từ chối lời mời tham gia %1$s không?"</string>
   <string name="screen_invites_decline_chat_title">"Từ chối lời mời"</string>
   <string name="screen_invites_decline_direct_chat_message">"Bạn có chắc muốn từ chối cuộc trò chuyện riêng với %1$s không?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Từ chối trò chuyện"</string>
-  <string name="screen_invites_empty_list">"Không có lời mời"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s ) đã mời bạn"</string>
-  <string name="screen_migration_message">"Quá trình này chỉ thực hiện một lần, cảm ơn bạn đã kiên nhẫn."</string>
   <string name="screen_migration_title">"Đang thiết lập tài khoản của bạn."</string>
   <string name="screen_roomlist_a11y_create_message">"Tạo một cuộc trò chuyện hoặc phòng mới"</string>
   <string name="screen_roomlist_empty_message">"Bắt đầu bằng cách nhắn tin cho ai đó."</string>
@@ -45,6 +43,4 @@ Bạn không còn tin nhắn nào chưa đọc nữa!"</string>
   <string name="screen_roomlist_main_space_title">"Cuộc trò chuyện"</string>
   <string name="screen_roomlist_mark_as_read">"Đánh dấu đã đọc"</string>
   <string name="screen_roomlist_mark_as_unread">"Đánh dấu chưa đọc"</string>
-  <string name="session_verification_banner_message">"Có vẻ như bạn đang sử dụng thiết bị mới. Hãy xác minh bằng một thiết bị khác để truy cập tin nhắn được mã hóa của bạn."</string>
-  <string name="session_verification_banner_title">"Xác thực danh tính của bạn"</string>
 </resources>

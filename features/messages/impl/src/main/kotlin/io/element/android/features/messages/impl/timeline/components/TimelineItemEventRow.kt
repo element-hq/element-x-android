@@ -362,7 +362,8 @@ fun TimelineItemEventRow(
             state = ReadReceiptViewState(
                 sendState = sendState,
                 isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
+                renderReadReceipts = timelineRoomInfo.renderReadReceipts,
+                knownReceipts = event.readReceiptState.receipts,
             ),
             onReadReceiptsClick = { onReadReceiptClick(event) },
             // Not slid: the read receipts sit outside the slid content, so they stay pinned to the end edge in selection mode.

@@ -17,8 +17,6 @@
   </plurals>
   <string name="notification_incoming_call">"📹 Уваходны выклік"</string>
   <string name="notification_inline_reply_failed">"** Не атрымалася даслаць - калі ласка, адкрыйце пакой"</string>
-  <string name="notification_invitation_action_join">"Далучыцца"</string>
-  <string name="notification_invitation_action_reject">"Адхіліць"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d запрашэнне"</item>
     <item quantity="few">"%d запрашэнні"</item>

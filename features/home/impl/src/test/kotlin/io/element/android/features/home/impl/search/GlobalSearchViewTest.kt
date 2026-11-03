@@ -99,7 +99,7 @@ class GlobalSearchViewTest : RobolectricTest() {
         )
         // Remove automatic initial events
         eventsRecorder.clear()
-        clickOn(R.string.search_section_chats)
+        clickOn(R.string.screen_search_tab_chats)
         eventsRecorder.assertSingle(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.ROOMS))
     }
 
@@ -116,7 +116,7 @@ class GlobalSearchViewTest : RobolectricTest() {
         )
         // Remove automatic initial events
         eventsRecorder.clear()
-        clickOn(R.string.search_section_messages)
+        clickOn(R.string.screen_search_tab_messages)
         eventsRecorder.assertSingle(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.MESSAGES))
     }
 
@@ -280,7 +280,7 @@ class GlobalSearchViewTest : RobolectricTest() {
                 results = AsyncData.Uninitialized,
             ),
         )
-        val startSearching = activity!!.getString(R.string.start_searching_title)
+        val startSearching = activity!!.getString(R.string.screen_search_empty_state_title)
         onNodeWithText(startSearching).assertIsDisplayed()
     }
 
@@ -294,7 +294,7 @@ class GlobalSearchViewTest : RobolectricTest() {
                 results = AsyncData.Success(GlobalSearchResults.RoomListResults(persistentListOf())),
             ),
         )
-        val noResults = activity!!.getString(R.string.search_no_results_title)
+        val noResults = activity!!.getString(CommonStrings.common_no_results)
         onNodeWithText(noResults).assertIsDisplayed()
     }
 

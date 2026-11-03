@@ -6,9 +6,14 @@
   <string name="screen_create_poll_answer_hint">"Вариант %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Изменения не сохранены. Вы действительно хотите вернуться?"</string>
   <string name="screen_create_poll_delete_option_a11y">"Удалить опцию %1$s"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Параметры"</string>
   <string name="screen_create_poll_question_desc">"Вопрос или тема"</string>
   <string name="screen_create_poll_question_hint">"О чём будет опрос?"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Удалить %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Настройки"</string>
   <string name="screen_create_poll_title">"Создать опрос"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Количество голосов, разрешенных одному человеку"</string>
   <string name="screen_edit_poll_delete_confirmation">"Вы уверены, что хотите удалить этот опрос?"</string>
   <string name="screen_edit_poll_delete_confirmation_title">"Удалить опрос"</string>
   <string name="screen_edit_poll_title">"Редактировать опрос"</string>

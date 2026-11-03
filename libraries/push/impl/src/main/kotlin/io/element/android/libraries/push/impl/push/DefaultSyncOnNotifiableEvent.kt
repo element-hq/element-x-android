@@ -14,14 +14,23 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.db.PushRequest
+import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.services.appnavstate.api.AppForegroundStateService
-import kotlinx.coroutines.delay
+import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
+
+private const val MAX_ROOMS_TO_SUBSCRIBE_TO = 20
+private const val SYNC_TIMEOUT_SECONDS = 10
 
 @ContributesBinding(AppScope::class)
 class DefaultSyncOnNotifiableEvent(
@@ -29,32 +38,61 @@ class DefaultSyncOnNotifiableEvent(
     private val featureFlagService: FeatureFlagService,
     private val appForegroundStateService: AppForegroundStateService,
     private val dispatchers: CoroutineDispatchers,
+    private val pushHistoryService: PushHistoryService,
+    private val systemClock: SystemClock,
 ) : SyncOnNotifiableEvent {
     override suspend operator fun invoke(requests: List<PushRequest>) = withContext(dispatchers.io) {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
             return@withContext
         }
 
+        val start = Instant.fromEpochMilliseconds(systemClock.epochMillis())
+        val syncJobs = mutableListOf<Job>()
         try {
-            val eventsBySession = requests.groupBy { it.sessionId }
+            val requestsBySessionId = requests.groupBy { it.sessionId }
 
             appForegroundStateService.updateIsSyncingNotificationEvent(true)
-            Timber.d("Starting opportunistic room list sync | In foreground: ${appForegroundStateService.isInForeground.value}")
 
-            for ((sessionId, events) in eventsBySession) {
-                val client = matrixClientProvider.getOrRestore(SessionId(sessionId)).getOrNull() ?: continue
-                val roomIds = events.map { RoomId(it.roomId) }.distinct()
-
-                client.roomListService.subscribeToVisibleRooms(roomIds)
-
-                if (!appForegroundStateService.isInForeground.value) {
-                    // Give the sync some time to complete in background
-                    delay(10.seconds)
+            if (!appForegroundStateService.isInForeground.value) {
+                for ((sessionId, requests) in requestsBySessionId) {
+                    Timber.d("Starting opportunistic room list sync for $sessionId")
+                    syncJobs += launch {
+                        syncUsingSession(SessionId(sessionId), requests)
+                    }
                 }
+
+                syncJobs.joinAll()
             }
         } finally {
-            Timber.d("Finished opportunistic room list sync")
+            if (syncJobs.isNotEmpty()) {
+                val end = Instant.fromEpochMilliseconds(systemClock.epochMillis())
+                Timber.d("Finished opportunistic room list syncs in ${end - start}")
+            }
             appForegroundStateService.updateIsSyncingNotificationEvent(false)
+        }
+    }
+
+    private suspend fun syncUsingSession(sessionId: SessionId, requests: List<PushRequest>) = withTimeoutOrNull(SYNC_TIMEOUT_SECONDS.seconds) {
+        if (requests.isEmpty()) return@withTimeoutOrNull
+
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@withTimeoutOrNull
+
+        val mostRecentRoomIds = client.roomListService.allRooms.summaries.first { it.isNotEmpty() }
+            .take(MAX_ROOMS_TO_SUBSCRIBE_TO)
+            .map { it.roomId }
+        client.roomListService.subscribeToVisibleRooms(mostRecentRoomIds)
+
+        // Give the sync some time to complete in background, but stop early if a newer push is waiting: the work fetching it can only
+        // start once this one is done, and an incoming call can't wait that long to ring.
+        // Pushes handled by this work and pending again after a network error keep their push date, so they don't end it early.
+        val newestHandledPushDate = Instant.fromEpochMilliseconds(requests.maxOf { it.pushDate })
+
+        val newPushQueued = pushHistoryService.getPendingPushRequestsFlow(sessionId, since = newestHandledPushDate)
+            .first { it.isNotEmpty() }
+            .isNotEmpty()
+        if (newPushQueued) {
+            Timber.d("A newer push is waiting to be fetched, ending the opportunistic sync early")
+            return@withTimeoutOrNull
         }
     }
 }

@@ -14,7 +14,6 @@
     <item quantity="other">"%d notifications"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"The UnifiedPush notification distributor couldn\'t be registered, so you will not receive notifications anymore. Please check the notifications settings of the app and the status of the push distributor."</string>
-  <string name="notification_fallback_content">"You have new messages."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"You have %d new message."</item>
     <item quantity="other">"You have %d new messages."</item>
@@ -26,8 +25,6 @@
   <string name="notification_incoming_audio_call">"📞 Incoming call"</string>
   <string name="notification_incoming_call">"📹 Incoming call"</string>
   <string name="notification_inline_reply_failed">"** Failed to send - please open room"</string>
-  <string name="notification_invitation_action_join">"Join"</string>
-  <string name="notification_invitation_action_reject">"Reject"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d invitation"</item>
     <item quantity="other">"%d invitations"</item>

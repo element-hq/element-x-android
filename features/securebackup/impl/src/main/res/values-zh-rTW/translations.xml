@@ -40,11 +40,16 @@
   <string name="screen_custom_recovery_key_success_notice">"若要變更復原金鑰，請前往「設定」→「加密」→「備份」"</string>
   <string name="screen_custom_recovery_key_success_subtitle">"若您無法存取您所有的裝置，可以使用復原金鑰來確認新裝置或還原加密聊天紀錄。"</string>
   <string name="screen_custom_recovery_key_success_title">"您的備份已設定完成"</string>
-  <string name="screen_encryption_reset_action_continue_reset">"繼續重設"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"繼續"</string>
   <string name="screen_encryption_reset_bullet_1">"您的帳號詳細資訊、聯絡人、偏好設定與聊天清單都會保留"</string>
   <string name="screen_encryption_reset_bullet_2">"您將會遺失僅儲存在伺服器上的任何訊息歷史紀錄"</string>
-  <string name="screen_encryption_reset_bullet_3">"您將需要再次驗證所有現有裝置與聯絡人"</string>
+  <string name="screen_encryption_reset_bullet_3">"其他使用者將會看到您的數位身份已被重設"</string>
+  <string name="screen_encryption_reset_bullet_4">"您已登入的所有裝置都需要重新確認"</string>
   <string name="screen_encryption_reset_footer">"僅當您無法存取其他已驗證的裝置且沒有還原金鑰時才重設您的數位身份。"</string>
+  <string name="screen_encryption_reset_no_chats_message">"看來目前您還沒有任何聊天。若情況屬實，您可以放心地繼續重設您的數位身份。"</string>
+  <string name="screen_encryption_reset_no_options_subtitle">"您沒有其他已驗證的裝置或還原金鑰，因此您需要重設您的數位身份才能繼續使用該應用程式。"</string>
+  <string name="screen_encryption_reset_no_options_title">"您必須重設您的數位身份"</string>
+  <string name="screen_encryption_reset_subtitle">"若您沒有其他已驗證的裝置，也沒有還原金鑰，那您需要重設您的數位身份才能繼續使用該應用程式。"</string>
   <string name="screen_encryption_reset_title">"無法確認？您需要重設數位身份。"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"刪除"</string>
   <string name="screen_key_backup_disable_confirmation_description">"若您移除所有裝置，您將遺失加密的聊天記錄，並需重設您的數位身分。"</string>
@@ -58,6 +63,10 @@
   <string name="screen_recovery_key_change_generate_key_description">"不要與任何人分享！"</string>
   <string name="screen_recovery_key_change_success">"復原金鑰已變更"</string>
   <string name="screen_recovery_key_change_title">"變更復原金鑰？"</string>
+  <string name="screen_recovery_key_check_key_title">"輸入還原金鑰"</string>
+  <string name="screen_recovery_key_check_subtitle">"輸入您儲存的還原金鑰，以確保其正確且有效。"</string>
+  <string name="screen_recovery_key_check_success_title">"您的還原金鑰已啟用"</string>
+  <string name="screen_recovery_key_check_title">"檢查您的還原金鑰"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"建立新復原金鑰"</string>
   <string name="screen_recovery_key_confirm_description">"確保沒有人可以看到此畫面！"</string>
   <string name="screen_recovery_key_confirm_error_content">"請再試一次確認對您金鑰儲存空間的存取權。"</string>
@@ -80,6 +89,7 @@
   <string name="screen_recovery_key_setup_generate_key_description">"不要與任何人分享！"</string>
   <string name="screen_recovery_key_setup_success">"復原設定成功"</string>
   <string name="screen_recovery_key_setup_title">"取得還原金鑰"</string>
+  <string name="screen_recovery_key_success_title">"您的新還原金鑰目前已啟用。"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"是的，立刻重設"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"此過程不可逆。"</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"您確定您想要重設您的身份嗎？"</string>

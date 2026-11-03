@@ -52,15 +52,9 @@ import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import java.util.Optional
-import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Entry point for everything scoped to a single logged in session: the sub-services, room access, and account level operations.
@@ -143,6 +137,11 @@ interface MatrixClient : ClientUrlContentFetcher {
 
     /** Backfills messages from the homeserver for searching for messages in a room. */
     val searchBackfillService: SearchBackfillService
+
+    /**
+     * Returns a flow of the total number of unread notifications across all rooms, as currently known by the client.
+     */
+    val totalUnreadCountFlow: StateFlow<Long>
 
     /** Whether the session is in the process of shutting down, either because it is being logged out or its cache is being cleared. */
     val isShuttingDown: Boolean
@@ -529,21 +528,6 @@ fun MatrixClient.roomAliasFromName(name: String): RoomAlias? {
         ?.let { "#$it:${userIdServerName()}" }
         ?.takeIf { MatrixPatterns.isRoomAlias(it) }
         ?.let { tryOrNull { RoomAlias(it) } }
-}
-
-/**
- * Returns a flow of the total number of unread notifications across all rooms.
- * The first value is emitted immediately, then the value is refreshed on each sync heartbeat.
- * In case of error, 0 is emitted.
- */
-@OptIn(FlowPreview::class)
-fun MatrixClient.totalUnreadCountFlow(): Flow<Int> {
-    return syncService.heartBeat
-        // Delay the heartbeat so the SDK has time to update the unread count before we read it.
-        .debounce(100.milliseconds)
-        .onStart { emit(Unit) }
-        .map { totalUnreadCount().getOrDefault(0).toInt() }
-        .distinctUntilChanged()
 }
 
 /**

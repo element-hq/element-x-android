@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Aldatu kontu-hornitzailea"</string>
-  <string name="screen_account_provider_form_hint">"Zerbitzariaren helbidea"</string>
-  <string name="screen_account_provider_form_notice">"Sartu bilaketa-kontsulta edo domeinu-helbidea."</string>
-  <string name="screen_account_provider_form_subtitle">"Bilatu enpresa, komunitate edo zerbitzari pribatu bat."</string>
-  <string name="screen_account_provider_form_title">"Bilatu kontu-hornitzaile bat"</string>
   <string name="screen_account_provider_signin_title">"%s(e)n saioa hastear zaude"</string>
-  <string name="screen_account_provider_signup_title">"%s(e)n kontua sortzear zaude"</string>
   <string name="screen_change_account_provider_other">"Beste bat"</string>
   <string name="screen_change_account_provider_subtitle">"Erabili beste kontu-hornitzaile bat, hala nola zure zerbitzari pribatua edo laneko kontu bat."</string>
   <string name="screen_change_account_provider_title">"Aldatu kontu-hornitzailea"</string>
@@ -24,7 +18,6 @@
   <string name="screen_login_error_unsupported_authentication">"Hautatutako zerbitzaria ez da bateragarria pasahitz edo OAuth saio-hasierarekin. Jarri harremanetan administratzailearekin edo aukeratu beste zerbitzari bat."</string>
   <string name="screen_login_form_header">"Sartu zure datuak"</string>
   <string name="screen_login_subtitle">"Matrix komunikazio seguru eta deszentralizaturako sare irekia da."</string>
-  <string name="screen_login_title">"Ongi etorri!"</string>
   <string name="screen_login_title_with_homeserver">"Hasi saioa %1$s(e)n"</string>
   <string name="screen_onboarding_app_version">"%1$s bertsioa"</string>
   <string name="screen_onboarding_sign_in_manually">"Hasi saioa eskuz"</string>
@@ -32,7 +25,6 @@
   <string name="screen_onboarding_sign_in_with_qr_code">"Hasi saioa QR kodearekin"</string>
   <string name="screen_onboarding_sign_up">"Sortu kontua"</string>
   <string name="screen_onboarding_welcome_message">"Ongi etorri inoizko %1$s azkarrenera. Abiaduraz eta sinpletasunaz gainkargatua."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Ongi etorri %1$s-ra. Abiaduraz eta sinpletasunez gainezka."</string>
   <string name="screen_onboarding_welcome_title">"Egon zure saltsan"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Konexio segurua ezartzen"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Ezin izan da konexio segururik ezarri gailu berriarekin. Lehendik dauden gailuak seguru daude oraindik ere eta ez duzu haietaz kezkatu beharrik."</string>
@@ -66,15 +58,10 @@ Saiatu saioa eskuz hasten, edo eskaneatu QR kodea beste gailu batean."</string>
   <string name="screen_qr_code_login_no_camera_permission_button">"Joan kameraren ezarpenetara"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Baimendu kameraren sarbidea QR kodea eskaneatzeko"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Eskaneatu QR kodea"</string>
-  <string name="screen_qr_code_login_start_over_button">"Hasi berriro"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Ustekabeko errore bat gertatu da. Saiatu berriro."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Beste gailuaren zain"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Zure kontu-hornitzaileak hurrengo kodea eska diezazuke saio-hasiera egiaztatzeko."</string>
   <string name="screen_qr_code_login_verify_code_title">"Egiaztapen-kodea"</string>
-  <string name="screen_server_confirmation_change_server">"Aldatu kontu-hornitzailea"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Elementeko langileentzako zerbitzari pribatua."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix komunikazio seguru eta deszentralizaturako sare irekia da."</string>
-  <string name="screen_server_confirmation_title_login">"%1$s(e)n saioa hastear zaude"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Aukeratu kontu-hornitzailea"</string>
-  <string name="screen_server_confirmation_title_register">"%1$s(e)n kontua sortzear zaude"</string>
 </resources>

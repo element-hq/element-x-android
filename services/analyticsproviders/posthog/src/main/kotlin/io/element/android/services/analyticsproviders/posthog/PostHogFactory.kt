@@ -27,7 +27,7 @@ class PostHogFactory(
         return PostHogAndroid.with(
             context,
             PostHogAndroidConfig(
-                apiKey = endpoint.apiKey,
+                projectToken = endpoint.apiKey,
                 host = endpoint.host,
                 captureApplicationLifecycleEvents = false,
                 captureDeepLinks = false,

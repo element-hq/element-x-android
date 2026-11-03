@@ -8,7 +8,6 @@
   <string name="screen_invites_decline_chat_title">"Từ chối lời mời"</string>
   <string name="screen_invites_decline_direct_chat_message">"Bạn có chắc muốn từ chối cuộc trò chuyện riêng với %1$s không?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Từ chối trò chuyện"</string>
-  <string name="screen_invites_empty_list">"Không có lời mời"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s ) đã mời bạn"</string>
   <string name="screen_join_room_decline_and_block_alert_confirmation">"Có, từ chối &amp; chặn"</string>
   <string name="screen_join_room_decline_and_block_alert_message">"Bạn có chắc muốn từ chối lời mời tham gia phòng này không? Điều này cũng sẽ ngăn %1$s liên hệ với bạn hoặc mời bạn vào các phòng."</string>

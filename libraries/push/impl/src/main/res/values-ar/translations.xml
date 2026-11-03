@@ -22,7 +22,6 @@
     <item quantity="other">"%d إشعار"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"تعذّر تسجيل موزّع إشعارات UnifiedPush، لذلك لن تتلقى إشعارات بعد الآن. يرجى التحقق من إعدادات إشعارات التطبيق وحالة موزّع الإشعارات الفورية."</string>
-  <string name="notification_fallback_content">"أتتك رسائل جديدة."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="zero">"لديك %d رسائل جديدة."</item>
     <item quantity="one">"لديك %d رسالة جديدة."</item>
@@ -42,8 +41,6 @@
   <string name="notification_incoming_audio_call">"📞 مكالمة واردة"</string>
   <string name="notification_incoming_call">"📹 مكالمة واردة"</string>
   <string name="notification_inline_reply_failed">"** فشل الإرسال - يرجى فتح الغرفة"</string>
-  <string name="notification_invitation_action_join">"إنضمام"</string>
-  <string name="notification_invitation_action_reject">"رفض"</string>
   <plurals name="notification_invitations">
     <item quantity="zero">"%d دعوة"</item>
     <item quantity="one">"%d دعوة"</item>

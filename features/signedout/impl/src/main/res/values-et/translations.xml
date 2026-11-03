@@ -3,6 +3,5 @@
   <string name="screen_signed_out_reason_1">"Sa oled muutnud oma salasõna ühes teises sessioonis"</string>
   <string name="screen_signed_out_reason_2">"Sa oled kustutanud selle sessiooni ühest teisest oma sessioonist"</string>
   <string name="screen_signed_out_reason_3">"Sinu koduserveri haldaja on sinu ligipääsu keelanud"</string>
-  <string name="screen_signed_out_subtitle">"Sa oled välja logitud ühel alltoodud põhjusel. Teenuse %s kasutamiseks palun logi uuesti sisse."</string>
   <string name="screen_signed_out_title">"Sa oled välja loginud"</string>
 </resources>

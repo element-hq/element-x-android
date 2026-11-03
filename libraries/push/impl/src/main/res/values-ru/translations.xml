@@ -16,7 +16,6 @@
     <item quantity="many">"%d уведомлений"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Не удалось зарегистрировать дистрибьютора уведомлений UnifiedPush, поэтому Вы больше не будете получать уведомления. Проверьте настройки уведомлений в приложении и статус дистрибьютора push-уведомлений."</string>
-  <string name="notification_fallback_content">"У Вас есть новые сообщения."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"У Вас %d новое сообщение."</item>
     <item quantity="few">"У Вас %d новых сообщения."</item>
@@ -30,8 +29,6 @@
   <string name="notification_incoming_audio_call">"📞 Входящий вызов"</string>
   <string name="notification_incoming_call">"📹 Входящий вызов"</string>
   <string name="notification_inline_reply_failed">"** Не удалось отправить - пожалуйста, откройте комнату"</string>
-  <string name="notification_invitation_action_join">"Присоединиться"</string>
-  <string name="notification_invitation_action_reject">"Отклонить"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d приглашение"</item>
     <item quantity="few">"%d приглашения"</item>

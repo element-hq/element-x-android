@@ -9,7 +9,6 @@
   <string name="screen_identity_confirmed_subtitle">"Artık mesajları güvenli bir şekilde okuyabilir veya gönderebilirsiniz ve sohbet ettiğiniz herkes de bu cihaza güvenebilir."</string>
   <string name="screen_identity_confirmed_title">"Cihaz doğrulandı"</string>
   <string name="screen_identity_use_another_device">"Başka bir cihaz kullan"</string>
-  <string name="screen_identity_waiting_on_other_device">"Diğer cihazda bekleniyor…"</string>
   <string name="screen_notification_optin_subtitle">"Ayarlarınızı daha sonra değiştirebilirsiniz."</string>
   <string name="screen_notification_optin_title">"Bildirimlere izin verin ve hiçbir mesajı kaçırmayın"</string>
 </resources>

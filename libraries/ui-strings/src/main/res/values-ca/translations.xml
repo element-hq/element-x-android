@@ -45,7 +45,6 @@
   <string name="action_choose_photo">"Tria una foto"</string>
   <string name="action_clear">"Esborra"</string>
   <string name="action_close">"Tanca"</string>
-  <string name="action_complete_verification">"Completa la verificació"</string>
   <string name="action_confirm">"Confirma"</string>
   <string name="action_confirm_password">"Confirma la contrasenya"</string>
   <string name="action_continue">"Continua"</string>
@@ -56,8 +55,6 @@
   <string name="action_copy_text">"Copia text"</string>
   <string name="action_create">"Crea"</string>
   <string name="action_create_room">"Crea sala"</string>
-  <string name="action_deactivate">"Desactiva"</string>
-  <string name="action_deactivate_account">"Desactiva el compte"</string>
   <string name="action_decline">"Declina"</string>
   <string name="action_decline_and_block">"Rebutja i bloqueja"</string>
   <string name="action_delete_poll">"Elimina votació"</string>
@@ -86,8 +83,6 @@
   <string name="action_leave_conversation">"Surt del xat"</string>
   <string name="action_leave_room">"Surt de la sala"</string>
   <string name="action_load_more">"Carrega més"</string>
-  <string name="action_manage_account">"Gestiona compte"</string>
-  <string name="action_manage_devices">"Gestiona dispositius"</string>
   <string name="action_message">"Envia missatge"</string>
   <string name="action_next">"Següent"</string>
   <string name="action_no">"No"</string>
@@ -106,7 +101,6 @@
   <string name="action_reply">"Respon"</string>
   <string name="action_reply_in_thread">"Respon al fil"</string>
   <string name="action_report">"Denuncia"</string>
-  <string name="action_report_bug">"Informa d\'un error"</string>
   <string name="action_report_content">"Denuncia contingut"</string>
   <string name="action_report_dm">"Denuncia la conversa"</string>
   <string name="action_report_room">"Denuncia sala"</string>
@@ -121,7 +115,6 @@
   <string name="action_share">"Comparteix"</string>
   <string name="action_share_link">"Comparteix enllaç"</string>
   <string name="action_show">"Mostra"</string>
-  <string name="action_sign_in_again">"Torna a iniciar sessió"</string>
   <string name="action_signout">"Tanca sessió"</string>
   <string name="action_signout_anyway">"Tanca sessió igualment"</string>
   <string name="action_skip">"Omet"</string>
@@ -138,8 +131,6 @@
   <string name="action_view_source">"Mostra font"</string>
   <string name="action_yes">"Sí"</string>
   <string name="action_yes_try_again">"Sí, torna-ho a intentar"</string>
-  <string name="banner_migrate_to_native_sliding_sync_description">"El servidor utilizat admet un nou protocol més ràpid. Tanca la sessió i torna-la a iniciar per actualitzar-lo. Si ho fas ara, evitaràs un tancament de sessió forçat quan s\'elimini l\'antic protocol (més endavant)."</string>
-  <string name="banner_migrate_to_native_sliding_sync_title">"Actualització disponible"</string>
   <string name="common_about">"Sobre l\'aplicació"</string>
   <string name="common_acceptable_use_policy">"Política d\'ús a acceptar"</string>
   <string name="common_adding_caption">"Afegint llegenda"</string>
@@ -149,7 +140,6 @@
   <string name="common_appearance">"Aspecte"</string>
   <string name="common_audio">"Àudio"</string>
   <string name="common_blocked_users">"Usuaris bloquejats"</string>
-  <string name="common_bubbles">"Bombolles"</string>
   <string name="common_call_started">"Trucada iniciada"</string>
   <string name="common_chat_backup">"Còpia de seguretat de xat"</string>
   <string name="common_copied_to_clipboard">"Copiat al porta-retalls"</string>
@@ -359,7 +349,6 @@ Segur que vols continuar?"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"El missatge no s\'ha enviat perquè no has verificat un o més dels teus dispositius."</string>
   <string name="screen_room_error_failed_processing_media">"No s\'ha pogut processar el contingut que s\'havia de pujar. Torna-ho a provar."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"No s\'han pogut obtenir els detalls d\'usuari"</string>
-  <string name="screen_room_event_pill">"Missatge a %1$s"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s de %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s missatges fixats"</string>
   <string name="screen_room_pinned_banner_loading_description">"Crregant missatge…"</string>

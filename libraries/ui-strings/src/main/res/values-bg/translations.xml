@@ -44,7 +44,6 @@
   <string name="action_choose_photo">"Избор на снимка"</string>
   <string name="action_clear">"Изчистване"</string>
   <string name="action_close">"Затваряне"</string>
-  <string name="action_complete_verification">"Завършване на потвърждаването"</string>
   <string name="action_confirm">"Потвърждаване"</string>
   <string name="action_confirm_password">"Потвърдете паролата"</string>
   <string name="action_continue">"Продължаване"</string>
@@ -54,8 +53,6 @@
   <string name="action_copy_text">"Копиране на текста"</string>
   <string name="action_create">"Създаване"</string>
   <string name="action_create_room">"Създаване на стая"</string>
-  <string name="action_deactivate">"Деактивиране"</string>
-  <string name="action_deactivate_account">"Деактивиране на акаунта"</string>
   <string name="action_decline">"Отхвърляне"</string>
   <string name="action_decline_and_block">"Отхвърляне и блокиране"</string>
   <string name="action_delete_poll">"Изтриване на анкетата"</string>
@@ -81,8 +78,6 @@
   <string name="action_leave_room">"Напускане на стаята"</string>
   <string name="action_leave_space">"Напускане на пространството"</string>
   <string name="action_load_more">"Зареждане на още"</string>
-  <string name="action_manage_account">"Управление на профила"</string>
-  <string name="action_manage_devices">"Управление на устройствата"</string>
   <string name="action_message">"Съобщение"</string>
   <string name="action_next">"Напред"</string>
   <string name="action_no">"Не"</string>
@@ -99,7 +94,6 @@
   <string name="action_reply">"Отговор"</string>
   <string name="action_reply_in_thread">"Отговор в нишка"</string>
   <string name="action_report">"Докладване"</string>
-  <string name="action_report_bug">"Докладване на грешка"</string>
   <string name="action_report_content">"Докладване на съдържанието"</string>
   <string name="action_report_room">"Докладване на стаята"</string>
   <string name="action_reset">"Нулиране"</string>
@@ -112,7 +106,6 @@
   <string name="action_share">"Споделяне"</string>
   <string name="action_share_link">"Споделяне на връзката"</string>
   <string name="action_show">"Показване"</string>
-  <string name="action_sign_in_again">"Влизане отново"</string>
   <string name="action_signout">"Изход"</string>
   <string name="action_signout_anyway">"Излизане въпреки това"</string>
   <string name="action_skip">"Пропускане"</string>
@@ -129,7 +122,6 @@
   <string name="action_yes_try_again">"Да, опитай отново"</string>
   <string name="common_about">"Относно"</string>
   <string name="common_acceptable_use_policy">"Политика за приемлива употреба"</string>
-  <string name="common_add_account">"Добавяне на акаунт"</string>
   <string name="common_add_another_account">"Добавяне на друг акаунт"</string>
   <string name="common_advanced_settings">"Разширени настройки"</string>
   <string name="common_an_image">"изображение"</string>
@@ -138,7 +130,6 @@
   <string name="common_appearance">"Облик"</string>
   <string name="common_audio">"Аудио"</string>
   <string name="common_blocked_users">"Блокирани потребители"</string>
-  <string name="common_bubbles">"Мехурчета"</string>
   <string name="common_call_started">"Започнато обаждане"</string>
   <string name="common_chat_backup">"Резервно копие на чатовете"</string>
   <string name="common_copyright">"Авторски права"</string>

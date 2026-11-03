@@ -14,8 +14,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Wprowadź klucz przywracania"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Zapomniałeś klucza przywracania?"</string>
   <string name="confirm_recovery_key_banner_title">"Magazyn kluczy nie jest zsynchronizowany"</string>
-  <string name="full_screen_intent_banner_message">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
-  <string name="full_screen_intent_banner_title">"Popraw jakość swoich rozmów"</string>
+  <string name="full_screen_intent_banner_message_android">"Upewnij się, że nie pominiesz żadnego połączenia. Zmień swoje ustawienia i zezwól na powiadomienia na blokadzie ekranu."</string>
+  <string name="full_screen_intent_banner_title_android">"Popraw jakość swoich rozmów"</string>
   <string name="screen_home_tab_chats">"Czaty"</string>
   <string name="screen_home_tab_search">"Szukaj"</string>
   <string name="screen_home_tab_spaces">"Przestrzenie"</string>
@@ -23,9 +23,7 @@
   <string name="screen_invites_decline_chat_title">"Odrzuć zaproszenie"</string>
   <string name="screen_invites_decline_direct_chat_message">"Czy na pewno chcesz odrzucić rozmowę prywatną z %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Odrzuć czat"</string>
-  <string name="screen_invites_empty_list">"Brak zaproszeń"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) zaprosił Cię"</string>
-  <string name="screen_migration_message">"Jest to jednorazowy proces, dziękujemy za czekanie."</string>
   <string name="screen_migration_title">"Konfigurowanie Twojego konta."</string>
   <string name="screen_multi_account_announcement_action">"Dodaj konto"</string>
   <string name="screen_multi_account_announcement_description">"Przejdź do %1$s, aby zalogować się na kolejne konto i łatwo się między nimi przełączać."</string>
@@ -59,6 +57,10 @@ Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_roomlist_mark_as_unread">"Oznacz jako nieprzeczytane"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ten pokój został ulepszony"</string>
   <string name="screen_roomlist_your_spaces">"Twoje przestrzenie"</string>
-  <string name="session_verification_banner_message">"Wygląda na to, że używasz nowego urządzenia. Zweryfikuj się innym urządzeniem, aby uzyskać dostęp do zaszyfrowanych wiadomości."</string>
-  <string name="session_verification_banner_title">"Potwierdź, że to Ty"</string>
+  <string name="screen_search_empty_state_message">"Szukaj czatów i wiadomości"</string>
+  <string name="screen_search_empty_state_title">"Rozpocznij wyszukiwanie"</string>
+  <string name="screen_search_no_results_message">"Nie znaleziono wyników dla \"%1$s\". Spróbuj wpisać nowe zapytanie."</string>
+  <string name="screen_search_recent_searches">"Ostatnie wyszukiwania"</string>
+  <string name="screen_search_tab_chats">"Czaty"</string>
+  <string name="screen_search_tab_messages">"Wiadomości"</string>
 </resources>

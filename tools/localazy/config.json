@@ -200,12 +200,19 @@
       ]
     },
     {
+      "name" : ":libraries:slashcommands:impl",
+      "includeRegex" : [
+        "slash_command\\..*"
+      ]
+    },
+    {
       "name" : ":features:home:impl",
       "includeRegex" : [
         "screen\\.home\\..*",
         "screen_roomlist_.*",
         "screen\\.roomlist\\..*",
         "screen\\.multi_account_announcement\\..*",
+        "screen_search_.*",
         "session_verification_banner_.*",
         "confirm_recovery_key_banner_.*",
         "banner\\.set_up_recovery\\..*",
@@ -313,6 +320,7 @@
       "name" : ":features:poll:impl",
       "includeRegex" : [
         "screen_create_poll_.*",
+        "screen\\.create_poll\\..*",
         "screen_edit_poll_.*",
         "screen_polls_history_.*"
       ]

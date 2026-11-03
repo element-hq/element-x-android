@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Wijzig accountprovider"</string>
-  <string name="screen_account_provider_form_hint">"Homeserver-adres"</string>
-  <string name="screen_account_provider_form_notice">"Voer een zoekterm of een domeinnaam in."</string>
-  <string name="screen_account_provider_form_subtitle">"Zoek naar een bedrijf, community of privéserver."</string>
-  <string name="screen_account_provider_form_title">"Vind een accountprovider"</string>
-  <string name="screen_account_provider_signin_subtitle">"Dit is waar je gesprekken zullen worden bewaard — net zoals je een e-mailprovider zou gebruiken om je e-mails te bewaren."</string>
   <string name="screen_account_provider_signin_title">"Je staat op het punt om je aan te melden bij %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Dit is waar je gesprekken zullen worden bewaard — net zoals je een e-mailprovider zou gebruiken om je e-mails te bewaren."</string>
-  <string name="screen_account_provider_signup_title">"Je staat op het punt een account aan te maken op %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org is een grote, gratis server op het openbare Matrix-netwerk voor veilige, gedecentraliseerde communicatie, beheerd door de Matrix.org Foundation."</string>
   <string name="screen_change_account_provider_other">"Anders"</string>
   <string name="screen_change_account_provider_subtitle">"Gebruik een andere accountprovider, zoals je eigen privéserver of een zakelijke account."</string>
   <string name="screen_change_account_provider_title">"Wijzig accountprovider"</string>
@@ -27,14 +18,12 @@
   <string name="screen_login_error_unsupported_authentication">"De geselecteerde homeserver ondersteunt geen wachtwoord of OAuth aanmelding. Neem contact op met je beheerder of kies een andere homeserver."</string>
   <string name="screen_login_form_header">"Vul je gegevens in"</string>
   <string name="screen_login_subtitle">"Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie."</string>
-  <string name="screen_login_title">"Welkom terug!"</string>
   <string name="screen_login_title_with_homeserver">"Inloggen bij %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Handmatig inloggen"</string>
   <string name="screen_onboarding_sign_in_to">"Inloggen bij %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Inloggen met QR-code"</string>
   <string name="screen_onboarding_sign_up">"Account aanmaken"</string>
   <string name="screen_onboarding_welcome_message">"Welkom bij de snelste %1$s ooit. Supercharged, voor snelheid en eenvoud."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Welkom bij %1$s. Supercharged, voor snelheid en eenvoud."</string>
   <string name="screen_onboarding_welcome_title">"Wees in je element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Een beveiligde verbinding tot stand brengen"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Er kon geen beveiligde verbinding worden gemaakt met het nieuwe apparaat. Je bestaande apparaten zijn nog steeds veilig en je hoeft je daarover geen zorgen te maken."</string>
@@ -74,15 +63,9 @@ Probeer handmatig in te loggen, of scan de QR code met een ander apparaat."</str
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Je moet %1$s toestemming geven om de camera van je apparaat te gebruiken om verder te gaan."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Cameratoegang toestaan om de QR-code te scannen"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Scan de QR-code"</string>
-  <string name="screen_qr_code_login_start_over_button">"Opnieuw beginnen"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Er is een onverwachte fout opgetreden. Probeer het opnieuw."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Aan het wachten op je andere apparaat"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Je accountprovider kan om de volgende code vragen om de aanmelding te verifiëren."</string>
   <string name="screen_qr_code_login_verify_code_title">"Je verificatiecode"</string>
-  <string name="screen_server_confirmation_change_server">"Wijzig accountprovider"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Een privéserver voor medewerkers van Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie."</string>
-  <string name="screen_server_confirmation_message_register">"Dit is waar je gesprekken zullen worden bewaard — net zoals je een e-mailprovider zou gebruiken om je e-mails te bewaren."</string>
-  <string name="screen_server_confirmation_title_login">"Je staat op het punt je aan te melden bij %1$s"</string>
-  <string name="screen_server_confirmation_title_register">"Je staat op het punt een account aan te maken op %1$s"</string>
 </resources>
