@@ -281,7 +281,7 @@ class GlobalSearchViewTest : RobolectricTest() {
                 results = AsyncData.Success(GlobalSearchResults.RoomListResults(persistentListOf())),
             ),
         )
-        val noResults = activity!!.getString(CommonStrings.common_no_results)
+        val noResults = activity!!.getString(R.string.screen_search_messages_no_results_message, "Query")
         onNodeWithText(noResults).assertIsDisplayed()
     }
 
