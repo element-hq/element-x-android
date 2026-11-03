@@ -110,7 +110,9 @@ fun ModalBottomSheet(
 fun SheetState.hide(coroutineScope: CoroutineScope, then: suspend () -> Unit) {
     coroutineScope.launch {
         hide()
-        then()
+        if (!isVisible) {
+            then()
+        }
     }
 }
 

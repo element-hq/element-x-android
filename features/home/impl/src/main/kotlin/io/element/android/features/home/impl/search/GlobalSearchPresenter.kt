@@ -91,6 +91,7 @@ class GlobalSearchPresenter(
         var searchResults: AsyncData<GlobalSearchResults> by remember { mutableStateOf(AsyncData.Uninitialized) }
         var currentTarget: GlobalSearchTarget by remember { mutableStateOf(GlobalSearchTarget.ROOMS) }
         val currentMessageSearch: MessageSearch = remember { messageSearchService.createMessageSearch(scope = coroutineScope) }
+        var showLearnMoreBottomSheet by rememberSaveable { mutableStateOf(false) }
 
         StartSearchBackfillWhenVisible(isEnabled = isEnabled, isSearchActive = isSearchActive)
 
@@ -272,6 +273,9 @@ class GlobalSearchPresenter(
                 GlobalSearchEvent.ClearSearchHistory -> coroutineScope.launch {
                     searchHistoryStore.clear()
                 }
+                is GlobalSearchEvent.ToggleLearnMoreBottomSheet -> {
+                    showLearnMoreBottomSheet = event.show
+                }
             }
         }
 
@@ -282,6 +286,7 @@ class GlobalSearchPresenter(
             currentTarget = currentTarget,
             results = searchResults,
             history = searchHistory,
+            showLearnMoreBottomSheet = showLearnMoreBottomSheet,
             eventSink = ::handleEvent,
         )
     }
