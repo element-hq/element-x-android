@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imeAnimationTarget
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -279,11 +280,15 @@ fun MessagesView(
 
     val expandableState = rememberExpandableBottomSheetLayoutState()
     val imeInsets = WindowInsets.ime
+    // The picker acts as the keyboard only for the duration that the keyboard would be shown for the composer. When a separate field requests the
+    // keyboard, e.g. the picker's own search, the picker is laid out above the keyboard the same way any other content is.
+    val emojiPickerReplacesKeyboard = isEmojiPickerShown &&
+        (state.composerState.textEditorState.hasFocus() || !WindowInsets.isImeVisible)
     ExpandableBottomSheetLayout(
         modifier = modifier
             .fillMaxSize()
             .then(
-                if (isEmojiPickerShown) {
+                if (emojiPickerReplacesKeyboard) {
                     // The emoji picker substitutes for the keyboard: keyboard insets stay unapplied so the layout remains
                     // fixed while the keyboard slides out from in front of the picker or slides back over it. The insets are
                     // still consumed, preventing nested paddings from applying them.
