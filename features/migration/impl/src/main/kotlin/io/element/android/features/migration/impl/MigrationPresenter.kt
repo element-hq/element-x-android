@@ -22,6 +22,8 @@ import io.element.android.features.migration.api.MigrationState
 import io.element.android.features.migration.impl.migrations.AppMigration
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 @SingleIn(AppScope::class)
@@ -29,6 +31,7 @@ import timber.log.Timber
 class MigrationPresenter(
     private val migrationStore: MigrationStore,
     migrations: Set<@JvmSuppressWildcards AppMigration>,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<MigrationState> {
     private val orderedMigrations = migrations.sortedBy { it.order }
     private val lastMigration: Int = orderedMigrations.lastOrNull()?.order ?: 0
@@ -62,7 +65,10 @@ class MigrationPresenter(
             val nextMigration = orderedMigrations.firstOrNull { it.order > migrationValue }
             if (nextMigration != null) {
                 Timber.d("Current app migration version: $migrationValue. Applying migration: ${nextMigration.order}")
-                nextMigration.migrate(isFreshInstall)
+                // Migrations can perform IO (database, files), do not run them on the main thread.
+                withContext(coroutineDispatchers.io) {
+                    nextMigration.migrate(isFreshInstall)
+                }
                 migrationStore.setApplicationMigrationVersion(nextMigration.order)
             }
         }

@@ -20,7 +20,9 @@ import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -44,10 +46,7 @@ class MigrationPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.migrationAction).isEqualTo(AsyncData.Uninitialized)
-            skipItems(migrations.size)
-            awaitItem().also { state ->
-                assertThat(state.migrationAction).isEqualTo(AsyncData.Success(Unit))
-            }
+            consumeItemsUntilPredicate { it.migrationAction is AsyncData.Success }
             assertThat(store.applicationMigrationVersion().first()).isEqualTo(migrations.maxOf { it.order })
         }
         for (migration in migrations) {
@@ -104,12 +103,13 @@ class MigrationPresenterTest {
     }
 }
 
-private fun createPresenter(
+private fun TestScope.createPresenter(
     migrationStore: MigrationStore = InMemoryMigrationStore(0),
     migrations: Set<AppMigration> = setOf(FakeAppMigration(1)),
 ) = MigrationPresenter(
     migrationStore = migrationStore,
     migrations = migrations,
+    coroutineDispatchers = testCoroutineDispatchers(),
 )
 
 private class FakeAppMigration(
