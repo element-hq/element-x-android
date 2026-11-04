@@ -21,5 +21,4 @@
   <string name="screen_session_verification_they_dont_match">"وہ مماثل نہیں ہیں"</string>
   <string name="screen_session_verification_they_match">"وہ مماثل ہیں"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"درخواست قبول کرنے کا منتظر"</string>
-  <string name="screen_signout_in_progress_dialog_content">"خارج ہورہاہے…"</string>
 </resources>

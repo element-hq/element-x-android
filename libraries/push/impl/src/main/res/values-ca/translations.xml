@@ -22,7 +22,6 @@
   <string name="notification_invite_body">"T\'ha convidat a xatejar"</string>
   <string name="notification_invite_body_with_sender">"%1$s t\'ha convidat a xatejar"</string>
   <string name="notification_mentioned_you_body">"T\'ha mencionat: %1$s"</string>
-  <string name="notification_new_messages">"Missatges nous"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d missatge nou"</item>
     <item quantity="other">"%d missatges nous"</item>

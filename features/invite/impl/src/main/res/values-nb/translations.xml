@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Rommet eksisterer ikke lenger, eller invitasjonen er ikke lenger gyldig."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Du vil ikke se noen meldinger eller rominvitasjoner fra denne brukeren"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Blokker bruker"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Rapporter dette rommet til din kontoleverandør."</string>

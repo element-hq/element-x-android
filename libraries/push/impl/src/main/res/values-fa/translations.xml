@@ -33,7 +33,6 @@
   <string name="notification_invite_body_with_sender">"%1$s به گپ دعوتتان کرد"</string>
   <string name="notification_live_location_started_body">"شروع به اشتراک گذاری موقعیت مکانی زنده خود کردند"</string>
   <string name="notification_mentioned_you_body">"به شما اشاره کرد: %1$s"</string>
-  <string name="notification_new_messages">"پیام جدید"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d پیام جدید"</item>
     <item quantity="other">"%d پیام جدید"</item>

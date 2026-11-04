@@ -96,15 +96,15 @@ fun LoginModeView(
                 }
                 is AccountCreationNotSupported -> {
                     ErrorDialog(
-                        content = stringResource(CommonStrings.error_account_creation_not_possible),
+                        content = stringResource(R.string.error_account_creation_not_possible),
                         onSubmit = onClearError,
                     )
                 }
                 is AuthenticationException.AccountAlreadyLoggedIn -> {
                     // Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=1242-18532
                     ErrorDialog(
-                        title = stringResource(CommonStrings.error_account_already_logged_in_title),
-                        content = stringResource(CommonStrings.error_account_already_logged_in, error.userId),
+                        title = stringResource(R.string.error_account_already_logged_in_title),
+                        content = stringResource(R.string.error_account_already_logged_in, error.userId),
                         onSubmit = onClearError,
                     )
                 }

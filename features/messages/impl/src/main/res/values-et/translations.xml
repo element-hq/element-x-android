@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Dekrüptimine ei olnud võimalik"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Saadetud ebaturvalisest seadmest"</string>
+  <string name="common_unable_to_decrypt_no_access">"Sul pole ligipääsu antud sõnumile"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Saatja digitaalse identiteet on lähtestatud"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Sündmuse saatja ja seadme omanik pole vastavuses."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Selle krüptitud sõnumi tõepärasus pole selles seadmes tagatud."</string>
   <string name="crypto_event_authenticity_previously_verified">"Krüptitud varem verifitseeritud kasutaja poolt"</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Krüptitud tundmatu või kustutatud seadme poolt."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Krüptitud seadme poolt, mida tema omanik pole verifitseerinud."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Krüptitud verifitseerimata kasutaja poolt."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"Kuna sind polnud saatmise ajal jututoas, siis %1$s (%2$s) jagas seda sõnumit sinuga."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s jagas seda sõnumit, kuna sind ei olnud selle algse saatmise ajal jututoas."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Kasutaja %1$s %2$s digitaalse identiteet on lähtestatud. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s kasutaja (ksutajanimega %2$s) digitaalse identiteet on lähtestatud. %3$s"</string>
+  <string name="dialog_confirm_link_message">"%1$s link viib sind teise veebisaiti %2$s
+
+Kas sa oled kindel, et soovid jätkata?"</string>
+  <string name="dialog_confirm_link_title">"Palun kontrolli seda linki mõttega"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Suurim lubatud failisuurus on: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"See fail on üleslaadimiseks liiga suur"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Suurim lubatud failisuurus on: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vali üleslaaditava video kvaliteet."</string>
+  <string name="error_failed_loading_messages">"Sõnumite laadimine ei õnnestunud"</string>
+  <string name="error_failed_uploading_voice_message">"Sinu häälsõnumi üleslaadimine ei õnnestunud."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"Rakendusel %1$s puudub õigus sinu nutiseadme mikrofoni kasutada. Järgnevalt anna õigused heli salvestamiseks."</string>
   <string name="error_sending_failure_invalid_mime_type">"Vigane MIME-tüüp: %s"</string>
   <string name="error_sending_failure_other">"Vea üksikasjad: %s"</string>
   <string name="error_sending_failure_sending_from_unverified_device">"Saadetakse verifitseerimata seadmest"</string>
@@ -34,10 +54,25 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimeeri pildikvaliteeti"</string>
   <string name="screen_media_upload_preview_processing">"Töötlen…"</string>
   <string name="screen_media_upload_preview_title">"Lisa meediumi"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Siia lisamiseks vajuta sõnumil ja vali „%1$s“."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d esiletõstetud sõnum"</item>
+    <item quantity="other">"%1$d esiletõstetud sõnumit"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Esiletõstetud sõnumid"</string>
   <string name="screen_report_content_block_user">"Blokeeri kasutaja"</string>
   <string name="screen_report_content_block_user_hint">"Vali see eelistus, kui sa soovid peita selle kasutaja kõik senised ja tulevased sõnumid"</string>
   <string name="screen_report_content_explanation">"Teade selle sõnumi kohta edastatakse sinu koduserveri haldajale. Haldajal ei ole võimalik lugeda krüptitud sõnumite sisu."</string>
   <string name="screen_report_content_hint">"Sellest sisust teatamise põhjus"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Unusta verifitseerimine ja saada ikkagi"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Sa võid jätta verifitseerimisvea tähelepanuta ja sõnumi ikkagi saata või katkestad saatmise ja peale kasutaja %1$s verifitseerimist proovid seda uuesti."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Sinu sõnum on saatmata, kuna kasutaja %1$s digitaalse identiteet on lähtestatud."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Saada sõnum ikkagi"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s kasutab ühte või enamat verifitseerimata seadet. Sa võid sõnumi ikkagi saata või katkestad selle ning ootad kuni %2$s on kõik oma seadmed verifitseerinud ning proovid seejärel uuesti."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Sinu sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Üks või enam sinu seadet on verifitseerimata. Sa võid sõnumi ikkagi ära saata või katkestad saatmise ning proovid uuesti, kui oled kõik oma seadmed verifitseerinud."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Kuna sul on üks või enam verifitseerimata seadet, siis sinu sõnum jäi saatmata"</string>
   <string name="screen_room_attachment_source_camera">"Kaamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Pildista"</string>
   <string name="screen_room_attachment_source_camera_video">"Salvesta video"</string>
@@ -52,6 +87,11 @@
   <string name="screen_room_invite_again_alert_title">"Sa oled selles vestluses üksinda"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Teavita kogu jututuba"</string>
   <string name="screen_room_mentions_at_room_title">"Kõik"</string>
+  <string name="screen_room_permalink_same_room_android">"Sa juba vaatad seda jututuba!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s esiletõstetud sõnumit"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Laadin sõnumit…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Näita kõiki"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Saada uuesti"</string>
   <string name="screen_room_retry_send_menu_title">"Sinu sõnumi saatmine ei õnnestunud"</string>
   <string name="screen_room_timeline_add_reaction">"Lisa emotikon"</string>
@@ -95,4 +135,16 @@
     <item quantity="other">"%1$s kirjutavad"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s ja %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d liitus"</item>
+    <item quantity="other">"%1$d liitusid"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s digitaalse identiteet on lähtestatud."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Vanu sõnumeid ei saa selles seadmes näha"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Ligipääsuks vanadele sõnumitele pead selle seadme verifitseerima"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sul pole ligipääsu antud sõnumile"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Sõnumi dekrüptimine ei õnnestu"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Kuna seade on verifitseerimata või saatja pole sinu digitaalset identiteeti verifitseerinud, siis sõnumi näitamine on blokeeritud."</string>
 </resources>

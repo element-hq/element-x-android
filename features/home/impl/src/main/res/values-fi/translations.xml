@@ -63,4 +63,5 @@ Sinulla ei ole lukemattomia viestejä!"</string>
   <string name="screen_search_recent_searches">"Viimeaikaiset haut"</string>
   <string name="screen_search_tab_chats">"Keskustelut"</string>
   <string name="screen_search_tab_messages">"Viestit"</string>
+  <string name="screen_space_list_empty_state_title">"Luo tiloja huoneiden järjestämiseksi"</string>
 </resources>

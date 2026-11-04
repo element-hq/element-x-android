@@ -48,7 +48,7 @@ fun AcceptDeclineInviteView(
             },
             errorMessage = { error ->
                 if (error is AcceptInvite.Failures.InvalidInvite) {
-                    stringResource(CommonStrings.error_invalid_invite)
+                    stringResource(R.string.error_invalid_invite)
                 } else {
                     stringResource(CommonStrings.error_network_or_server_issue)
                 }

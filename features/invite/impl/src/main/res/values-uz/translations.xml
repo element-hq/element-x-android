@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Xona endi mavjud emas yoki taklif yaroqsiz."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Siz bu foydalanuvchidan hech qanday xabar yoki xonaga taklif ko‘rmaysiz"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Foydalanuvchini bloklash"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Bu xona haqida hisobingiz provayderiga xabar bering."</string>

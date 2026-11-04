@@ -11,8 +11,8 @@ package io.element.android.features.messages.impl.pinned.banner
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.text.toAnnotatedString
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
 sealed interface PinnedMessagesBannerState {
@@ -31,7 +31,7 @@ sealed interface PinnedMessagesBannerState {
 
         @Composable
         fun formattedMessage() = when (this) {
-            is Loading -> stringResource(id = CommonStrings.screen_room_pinned_banner_loading_description).toAnnotatedString()
+            is Loading -> stringResource(id = R.string.screen_room_pinned_banner_loading_description).toAnnotatedString()
             is Loaded -> currentPinnedMessage.formatted
         }
     }

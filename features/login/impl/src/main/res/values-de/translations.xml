@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"Du bist auf diesem Gerät bereits als %1$s angemeldet."</string>
+  <string name="error_account_creation_not_possible">"Dein Kontoanbieter muss aktualisiert werden, um Matrix Authentication Service und die Erstellung von Konten zu unterstützen."</string>
   <string name="screen_account_provider_signin_title">"Du bist dabei, dich bei %s anzumelden"</string>
   <string name="screen_change_account_provider_other">"Sonstige"</string>
   <string name="screen_change_account_provider_subtitle">"Verwende einen anderen Kontoanbieter, z. B. deinen eigenen privaten Server oder ein Geschäftskonto."</string>

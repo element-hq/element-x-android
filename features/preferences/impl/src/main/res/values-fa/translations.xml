@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"کیفیت پیش‌فرض ویدیوهایی که آپلود می‌کنید را انتخاب کنید."</string>
+  <string name="dialog_default_video_quality_selector_title">"کیفیت بارگذاری ویدیو"</string>
   <string name="full_screen_intent_banner_message_android">"برای اطمینان از اینکه هرگز تماس مهمی را از دست نمی‌دهید، لطفاً تنظیمات خود را تغییر دهید تا وقتی تلفنتان قفل است، اعلان‌ها به صورت تمام صفحه نمایش داده شوند."</string>
   <string name="full_screen_intent_banner_title_android">"بهبود تجریهٔ تماستان"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"گزینش چگونگی دریافت آگاهی"</string>
@@ -102,6 +104,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"در یک جلسه"</string>
   <string name="screen_settings_user_status_on_the_road">"در جاده"</string>
   <string name="screen_settings_user_status_placeholder">"وضعیتت چطوره؟"</string>
+  <string name="settings_version_number">"نگارش : %1$s (%2$s)"</string>
   <string name="theme_black">"سیاه"</string>
   <string name="theme_dark">"تیره"</string>
   <string name="theme_light">"روشن"</string>

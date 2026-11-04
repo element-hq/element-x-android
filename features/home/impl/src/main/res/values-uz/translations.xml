@@ -49,4 +49,5 @@ Sizda oʻqilmagan xabarlar yoʻq!"</string>
   <string name="screen_roomlist_mark_as_unread">"Oʻqilmagan deb belgilash"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Bu xona yangilandi"</string>
   <string name="screen_roomlist_your_spaces">"Maydonlaringiz"</string>
+  <string name="screen_space_list_empty_state_title">"Xonalarni tartibga solish uchun maydon yarating"</string>
 </resources>

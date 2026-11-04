@@ -49,4 +49,5 @@
   <string name="screen_roomlist_mark_as_unread">"Επισήμανση ως μη αναγνωσμένου"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Αυτή η αίθουσα έχει αναβαθμιστεί"</string>
   <string name="screen_roomlist_your_spaces">"Οι χώροι σας"</string>
+  <string name="screen_space_list_empty_state_title">"Δημιουργήστε χώρους για να οργανώσετε αίθουσες"</string>
 </resources>

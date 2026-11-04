@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"اختر الجودة الافتراضية للفيديوهات التي ترفعها."</string>
+  <string name="dialog_default_video_quality_selector_title">"جودة رفع الفيديو"</string>
   <string name="full_screen_intent_banner_message_android">"للتأكد من عدم تفويت أي مكالمة مهمة، يُرجى تغيير إعداداتك للسماح بإشعارات ملء الشاشة عندما يكون هاتفك مقفلاً."</string>
   <string name="full_screen_intent_banner_title_android">"حسّن تجربة مكالماتك"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"اختر طريقة استقبال الإشعارات"</string>
@@ -106,6 +108,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"في اجتماع"</string>
   <string name="screen_settings_user_status_on_the_road">"في الطريق"</string>
   <string name="screen_settings_user_status_placeholder">"ما هي حالتك؟"</string>
+  <string name="settings_version_number">"الإصدار: %1$s (%2$s)"</string>
   <string name="theme_black">"أسود"</string>
   <string name="theme_dark">"داكن"</string>
   <string name="theme_light">"فاتح"</string>

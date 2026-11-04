@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Nem lehet visszafejteni"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Nem biztonságos eszközről küldve"</string>
+  <string name="common_unable_to_decrypt_no_access">"Nincs hozzáférése ehhez az üzenethez"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"A feladó ellenőrzött digitális személyazonossága alaphelyzetbe lett állítva"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Az esemény feladója nem egyezik az eseményt küldő eszköz tulajdonosával."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni."</string>
   <string name="crypto_event_authenticity_previously_verified">"Egy korábban ellenőrzött felhasználó által titkosítva."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Ismeretlen vagy törölt eszköz által titkosítva."</string>
   <string name="crypto_event_authenticity_unsigned_device">"A tulajdonos által nem ellenőrzött eszköz által titkosítva."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Nem ellenőrzött felhasználó által titkosítva."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s (%2$s) digitális személyazonossága alaphelyzetbe lett állítva. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s (%2$s) digitális személyazonossága alaphelyzetbe lett állítva. %3$s"</string>
+  <string name="dialog_confirm_link_message">"A(z) %1$s hivatkozás átviszi egy másik webhelyre: %2$s
+
+Biztos, hogy folytatja?"</string>
+  <string name="dialog_confirm_link_title">"Ellenőrizze újra ezt a hivatkozást"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"A legnagyobb megengedett fájlméret: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"A feltöltendő fájl túl nagy"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"A legnagyobb megengedett fájlméret: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Válassza ki a feltöltendő videó minőségét."</string>
+  <string name="error_failed_loading_messages">"Nem sikerült betölteni az üzeneteket"</string>
+  <string name="error_failed_uploading_voice_message">"Nem sikerült feltölteni a hangüzenetét."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a mikrofonhoz. Engedélyezze, hogy tudjon hangüzenetet felvenni."</string>
   <string name="error_sending_failure_invalid_mime_type">"Érvénytelen MIME-típus: %s"</string>
   <string name="error_sending_failure_missing_media_content">"Hiányzó médiatartalom"</string>
   <string name="error_sending_failure_other">"Hiba részletei: %s"</string>
@@ -35,10 +55,25 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Képminőség optimalizációja"</string>
   <string name="screen_media_upload_preview_processing">"Feldolgozás…"</string>
   <string name="screen_media_upload_preview_title">"Média hozzáadása"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Nyomjon hosszan az üzenetre, és válassza a „%1$s” lehetőséget, hogy itt szerepeljen."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d kitűzött üzenet"</item>
+    <item quantity="other">"%1$d kitűzött üzenet"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Kitűzött üzenetek"</string>
   <string name="screen_report_content_block_user">"Felhasználó letiltása"</string>
   <string name="screen_report_content_block_user_hint">"Jelölje be, ha el akarja rejteni az összes jelenlegi és jövőbeli üzenetet ettől a felhasználótól"</string>
   <string name="screen_report_content_explanation">"Ez az üzenet jelentve lesz a Matrix-kiszolgáló adminisztrátorának. Nem fogja tudni elolvasni a titkosított üzeneteket."</string>
   <string name="screen_report_content_hint">"A tartalom jelentésének oka"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ellenőrzés visszavonása és elküldés"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Visszavonhatja az ellenőrzést, és ennek ellenére elküldheti ezt az üzenetet, vagy egyelőre törölheti, és %1$s újbóli ellenőrzése után újra megpróbálhatja."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Az üzenete nem lett elküldve, mert %1$s digitális személyazonossága alaphelyzetbe lett állítva."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Üzenet elküldése mindenképp"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s egy vagy több ellenőrizetlen eszközt használ. Így is elküldheti az üzenetet, vagy megszakíthatja most, és megpróbálhatja újra, miután %2$s ellenőrizte az összes eszközét."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Az üzenet nem lett elküldve, mert %1$s nem ellenőrizte az összes eszközét"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Egy vagy több eszköze nincs ellenőrizve. Így is elküldheti az üzenetet, vagy egyelőre megszakíthatja, és később, az összes eszköz ellenőrzése után újrapróbálkozhat."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Fénykép készítése"</string>
   <string name="screen_room_attachment_source_camera_video">"Videó rögzítése"</string>
@@ -55,10 +90,24 @@
   <string name="screen_room_encrypted_history_banner_unverified">"Az üzenetelőzmények nem érhetők el ebben a szobában. Ellenőrizze ezt az eszközt, hogy lássa az előzményeket."</string>
   <string name="screen_room_invite_again_alert_message">"Visszahívja?"</string>
   <string name="screen_room_invite_again_alert_title">"Egyedül van ebben a csevegésben"</string>
+  <string name="screen_room_maximum_messages_selected">"Maximális üzenet kiválasztva"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Az egész szoba értesítése"</string>
   <string name="screen_room_mentions_at_room_title">"Mindenki"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"%1$d üzenet továbbítva"</item>
+    <item quantity="other">"%1$d üzenet továbbítva"</item>
+  </plurals>
+  <string name="screen_room_permalink_same_room_android">"Már ezt a szobát nézi!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s. / %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s kitűzött üzenet"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Üzenet betöltése…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Összes megtekintése"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Újraküldés"</string>
   <string name="screen_room_retry_send_menu_title">"Az üzenet elküldése sikertelen"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"%1$d üzenet kijelölve"</item>
+    <item quantity="other">"%1$d üzenet kijelölve"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Emodzsi hozzáadása"</string>
   <string name="screen_room_timeline_beginning_of_room">"Ez a(z) %1$s kezdete."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Ez a beszélgetés kezdete."</string>
@@ -100,4 +149,16 @@
     <item quantity="other">"%1$s éppen ír…"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s és %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d csatlakozott"</item>
+    <item quantity="other">"%1$d csatlakozott"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Az üzenet nem lett elküldve, mert %1$s ellenőrzött digitális személyazonossága alaphelyzetbe lett állítva."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Az üzenet nem lett elküldve, mert %1$s nem ellenőrizte az összes eszközét."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"A korábbi üzenetek nem érhetők el ezen az eszközön"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nincs hozzáférése ehhez az üzenethez"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Nem sikerült visszafejteni az üzenetet"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Ez az üzenet azért lett blokkolva, mert vagy nem ellenőrizte az eszközt, vagy a feladónak ellenőriznie kell az Ön digitális személyazonosságát."</string>
 </resources>

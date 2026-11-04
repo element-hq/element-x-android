@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Không thể giải mã"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Được gửi từ một thiết bị không an toàn"</string>
+  <string name="common_unable_to_decrypt_no_access">"Bạn không thể xem tin nhắn này"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Danh tính kỹ thuật số đã được xác minh của người gửi đã được đặt lại."</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Người gửi sự kiện không khớp với chủ sở hữu của thiết bị đã gửi nó."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Tin nhắn mã hóa này không thể được xác thực trên thiết bị này."</string>
   <string name="crypto_event_authenticity_previously_verified">"Được mã hóa bởi một người dùng đã từng được xác minh."</string>
@@ -7,8 +11,28 @@
   <string name="crypto_event_authenticity_unknown_device">"Được mã hóa bởi một thiết bị không xác định hoặc đã bị xóa."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Được mã hóa bởi một thiết bị chưa được chủ sở hữu xác minh."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Được mã hóa bởi một người dùng chưa được xác minh."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) đã chia sẻ tin nhắn này vì bạn không có trong phòng khi nó được gửi."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s đã chia sẻ tin nhắn này vì bạn không có trong phòng khi nó được gửi."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Danh tính số %2$s của %1$s đã được đặt lại. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s )"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Danh tính số %2$s của %1$s đã được đặt lại. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Liên kết %1$s sẽ đưa bạn đến một trang khác %2$s
+
+Bạn có chắc muốn tiếp tục không?"</string>
+  <string name="dialog_confirm_link_title">"Kiểm tra lại liên kết này"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Kích thước tệp tối đa cho phép là: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Kích thước tệp quá lớn để tải lên"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Kích thước tệp tối đa cho phép là: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Chọn chất lượng video bạn muốn tải lên."</string>
+  <string name="error_failed_loading_messages">"Không tải được tin nhắn"</string>
+  <string name="error_failed_uploading_voice_message">"Không thể tải lên tin nhắn thoại của bạn."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s không có quyền truy cập micro của bạn. Hãy bật quyền để ghi tin nhắn thoại."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Xử lý phương tiện tải lên không thành công, vui lòng thử lại."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Không thể tải lên tệp phương tiện. Vui lòng thử lại."</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="other">"%1$d tin nhắn được ghim"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Tin nhắn được ghim"</string>
   <string name="screen_report_content_block_user">"Chặn người dùng"</string>
   <string name="screen_report_content_block_user_hint">"Chọn tùy chọn này nếu bạn muốn ẩn tất cả tin nhắn hiện tại và tương lai từ người dùng này."</string>
   <string name="screen_report_content_explanation">"Tin nhắn này sẽ được báo cáo cho quản trị viên máy chủ của bạn. Họ sẽ không thể đọc bất kỳ tin nhắn được mã hóa nào."</string>
@@ -27,6 +51,7 @@
   <string name="screen_room_invite_again_alert_title">"Bạn đang một mình trong cuộc trò chuyện này"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Thông báo cho cả phòng"</string>
   <string name="screen_room_mentions_at_room_title">"Mọi người"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Tin nhắn được ghim"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Gửi lại"</string>
   <string name="screen_room_retry_send_menu_title">"Gửi tin nhắn không thành công"</string>
   <string name="screen_room_timeline_add_reaction">"Thêm biểu cảm"</string>
@@ -55,4 +80,5 @@
     <item quantity="other">"%1$s đang gõ"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s và %2$s"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Bạn không thể xem tin nhắn này"</string>
 </resources>

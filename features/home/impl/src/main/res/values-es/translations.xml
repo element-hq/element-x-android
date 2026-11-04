@@ -49,4 +49,5 @@ Por ahora, puedes deseleccionar los filtros para ver tus otros chats"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcar como no leído"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Esta sala ha sido renovada"</string>
   <string name="screen_roomlist_your_spaces">"Tus espacios"</string>
+  <string name="screen_space_list_empty_state_title">"Crea espacios para organizar salas"</string>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Soba više ne postoji ili pozivnica više ne vrijedi."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Nećete vidjeti nikakve poruke ili pozivnice za sobu od ovog korisnika"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Blokiraj korisnika"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Prijavite ovu sobu svom davatelju usluga računa."</string>

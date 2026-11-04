@@ -10,8 +10,8 @@ package io.element.android.features.preferences.impl.root
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 interface VersionFormatter {
@@ -25,7 +25,7 @@ class DefaultVersionFormatter(
 ) : VersionFormatter {
     override fun get(): String {
         return stringProvider.getString(
-            CommonStrings.settings_version_number,
+            R.string.settings_version_number,
             buildMeta.versionName,
             buildMeta.versionCode.toString()
         )

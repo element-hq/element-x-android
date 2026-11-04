@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Velg standardkvaliteten på videoene du laster opp."</string>
+  <string name="dialog_default_video_quality_selector_title">"Kvalitet på videoopplasting"</string>
   <string name="full_screen_intent_banner_message_android">"For å sikre at du aldri går glipp av en viktig samtale, må du endre innstillingene dine for å tillate fullskjermvarsler når telefonen er låst."</string>
   <string name="full_screen_intent_banner_title_android">"Forbedre samtaleopplevelsen din"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Velg hvordan du vil motta varsler"</string>
@@ -101,6 +103,7 @@ Hvis du fortsetter, kan noen av innstillingene dine endres."</string>
   <string name="screen_settings_user_status_in_a_meeting">"I et møte"</string>
   <string name="screen_settings_user_status_on_the_road">"På farten"</string>
   <string name="screen_settings_user_status_placeholder">"Hva er statusen din?"</string>
+  <string name="settings_version_number">"Versjon: %1$s (%2$s)"</string>
   <string name="theme_black">"Svart"</string>
   <string name="theme_dark">"Mørk"</string>
   <string name="theme_light">"Lys"</string>

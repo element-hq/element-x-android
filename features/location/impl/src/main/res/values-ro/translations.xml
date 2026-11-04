@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s nu a putut încărca harta. Încercați din nou mai târziu."</string>
+  <string name="error_failed_locating_user">"%1$s nu a putut accesa locația dvs. Încercați din nou mai târziu."</string>
+  <string name="error_location_service_disabled_android">"Activați GPS-ul pentru a accesa funcțiile bazate pe locație."</string>
+  <string name="error_missing_location_auth_android">"%1$s nu are permisiuni pentru a vă accesa locația. Puteți permite accesul în Setări."</string>
+  <string name="error_missing_location_rationale_android">"%1$s nu are permisiuni pentru a accesa locația. Permiteți accesul mai jos."</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Partajarea locației în timp real"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Partajarea locației este în curs de desfășurare"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Locație în timp real"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Nimeni nu își partajează locația"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Se partajează locația în timp real"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d persoană"</item>
+    <item quantity="few">"%1$d persoane"</item>
+    <item quantity="other">"%1$d de persoane"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Pe hartă"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"Istoricul locațiilor dvs. în timp real va fi stocat în cameră și va fi vizibil pentru membri după încheierea sesiunii."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Alegeți pentru cât timp doriți să vă partajați locația în timp real."</string>
   <string name="screen_share_location_live_location_missing_permissions">"Nu aveți permisiunea de a vă partaja locația în timp real în această cameră."</string>
+  <string name="screen_share_location_title">"Partajați locația"</string>
+  <string name="screen_share_my_location_action">"Partajați locația mea"</string>
+  <string name="screen_share_open_apple_maps">"Deschideți în Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Deschideți în Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Deschideți în OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"Partajați locația selectată"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Opțiuni de partajare"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Partajat %1$s"</string>
+  <string name="screen_static_location_sheet_title">"Pe hartă"</string>
+  <string name="screen_view_location_title">"Locație"</string>
 </resources>

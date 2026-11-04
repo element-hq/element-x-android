@@ -13,6 +13,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.deeplink.api.usecase.InviteFriendsUseCase
+import io.element.android.libraries.deeplink.impl.R
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -36,8 +37,8 @@ class DefaultInviteFriendsUseCase(
                 activity.startSharePlainTextIntent(
                     activityResultLauncher = null,
                     chooserTitle = stringProvider.getString(CommonStrings.action_invite_friends),
-                    text = stringProvider.getString(CommonStrings.invite_friends_text, appName, permalink),
-                    extraTitle = stringProvider.getString(CommonStrings.invite_friends_rich_title, appName),
+                    text = stringProvider.getString(R.string.invite_friends_text, appName, permalink),
+                    extraTitle = stringProvider.getString(R.string.invite_friends_rich_title, appName),
                     noActivityFoundMessage = stringProvider.getString(AndroidUtilsR.string.error_no_compatible_app_found)
                 )
             },

@@ -48,4 +48,5 @@
   <string name="screen_roomlist_mark_as_unread">"نشان به ناخوانده"</string>
   <string name="screen_roomlist_tombstoned_room_description">"این اتاق ارتقا یافته"</string>
   <string name="screen_roomlist_your_spaces">"فضاهای شما"</string>
+  <string name="screen_space_list_empty_state_title">"ایجاد فضاهایی برای سازماندهی اتاق‌ها"</string>
 </resources>

@@ -39,7 +39,6 @@
   <string name="notification_knock_request_body">"Запит на приєднання"</string>
   <string name="notification_live_location_started_body">"Починає ділитися своїм поточним місцем розташування"</string>
   <string name="notification_mentioned_you_body">"Вас згадує: %1$s"</string>
-  <string name="notification_new_messages">"Нові повідомлення"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d нове повідомлення"</item>
     <item quantity="few">"%d нові повідомлення"</item>

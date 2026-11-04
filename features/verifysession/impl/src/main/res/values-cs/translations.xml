@@ -39,5 +39,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Čekání na druhého uživatele"</string>
   <string name="screen_session_verification_waiting_subtitle">"Po přijetí budete moci pokračovat v ověřování."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Čekání na přijetí žádosti"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Odebírání zařízení…"</string>
 </resources>

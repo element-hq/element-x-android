@@ -39,7 +39,6 @@
   <string name="notification_knock_request_body">"Хочет присоединиться"</string>
   <string name="notification_live_location_started_body">"Начал(а) делиться своим текущим местоположением"</string>
   <string name="notification_mentioned_you_body">"Упомянул(а) вас: %1$s"</string>
-  <string name="notification_new_messages">"Новые сообщения"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d новое сообщение"</item>
     <item quantity="few">"%d новых сообщения"</item>

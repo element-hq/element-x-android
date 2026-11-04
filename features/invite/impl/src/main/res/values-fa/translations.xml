@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"اتاق دیگر وجود ندارد یا دعوتنامه دیگر معتبر نیست."</string>
   <string name="screen_decline_and_block_block_user_option_description">"شما هیچ پیام یا دعوتنامه‌ای از این کاربر نخواهید دید."</string>
   <string name="screen_decline_and_block_block_user_option_title">"انسداد کاربر"</string>
   <string name="screen_decline_and_block_report_user_option_description">"این اتاق را به ارائه دهنده حساب خود گزارش دهید."</string>

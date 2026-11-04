@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Yüklediğiniz videoların varsayılan kaliteyi seçin."</string>
+  <string name="dialog_default_video_quality_selector_title">"Video yükleme kalitesi"</string>
   <string name="full_screen_intent_banner_message_android">"Önemli bir aramayı asla kaçırmamak için, telefonunuz kilitliyken tam ekran bildirimlere izin vermek üzere ayarlarınızı değiştirin."</string>
   <string name="full_screen_intent_banner_title_android">"Arama deneyiminizi geliştirin"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Bildirimleri nasıl alacağınızı seçin"</string>
@@ -67,6 +69,7 @@ Devam ederseniz, bazı ayarlarınız değişebilir."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"si̇stem ayarları"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Sistem bildirimleri kapalı"</string>
   <string name="screen_notification_settings_title">"Bildirimler"</string>
+  <string name="settings_version_number">"Sürüm: %1$s (%2$s)"</string>
   <string name="theme_dark">"Koyu"</string>
   <string name="theme_light">"Aydınlık"</string>
   <string name="theme_system">"Sistem"</string>

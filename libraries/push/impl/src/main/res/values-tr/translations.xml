@@ -22,7 +22,6 @@
   <string name="notification_invite_body">"Sizi sohbete davet etti"</string>
   <string name="notification_invite_body_with_sender">"%1$s sizi sohbete davet etti"</string>
   <string name="notification_mentioned_you_body">"Senden bahsettim: %1$s"</string>
-  <string name="notification_new_messages">"Yeni Mesajlar"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d yeni mesaj"</item>
     <item quantity="other">"%d yeni mesaj"</item>

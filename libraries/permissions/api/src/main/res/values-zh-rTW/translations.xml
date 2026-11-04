@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"允許存取"</string>
   <string name="dialog_permission_camera">"為了讓應用程式使用相機，請到系統設定中開啟權限。"</string>
   <string name="dialog_permission_generic">"請到系統設定中開啟權限。"</string>
   <string name="dialog_permission_microphone">"為了讓應用程式使用麥克風，請到系統設定中開啟權限。"</string>
   <string name="dialog_permission_notification">"為了讓應用程式顯示通知，請到系統設定中開啟權限。"</string>
+  <string name="screen_local_network_opt_in_subtitle">"您的家伺服器位於區域網路。要連線，%1$s 需要取得存取此網路上裝置的權限。"</string>
+  <string name="screen_local_network_opt_in_title">"允許存取區域網路"</string>
 </resources>

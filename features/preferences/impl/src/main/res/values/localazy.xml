@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Select the default quality of videos you upload."</string>
+  <string name="dialog_default_video_quality_selector_title">"Video upload quality"</string>
   <string name="full_screen_intent_banner_message_android">"To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked."</string>
   <string name="full_screen_intent_banner_title_android">"Enhance your call experience"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Choose how to receive notifications"</string>
@@ -113,6 +115,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_settings_user_status_in_a_meeting">"In a meeting"</string>
   <string name="screen_settings_user_status_on_the_road">"On the road"</string>
   <string name="screen_settings_user_status_placeholder">"What\'s your status?"</string>
+  <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="theme_black">"Black"</string>
   <string name="theme_dark">"Dark"</string>
   <string name="theme_light">"Light"</string>

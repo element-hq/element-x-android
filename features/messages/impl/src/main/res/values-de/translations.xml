@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Entschlüsselung nicht möglich"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Von einem ungesicherten Gerät gesendet"</string>
+  <string name="common_unable_to_decrypt_no_access">"Du hast keinen Zugriff auf diese Nachricht"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Die verifizierte digitale Identität des Absenders wurde zurückgesetzt"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Der Absender des Ereignisses stimmt nicht mit dem Besitzer des Gerätes überein, das es gesendet hat."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Die Authentizität dieser verschlüsselten Nachricht kann auf diesem Gerät nicht garantiert werden."</string>
   <string name="crypto_event_authenticity_previously_verified">"Verschlüsselt von einem zuvor verifizierten Nutzer."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Verschlüsselt von einem unbekannten oder gelöschten Gerät."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Verschlüsselt durch ein Gerät, das nicht von seinem Besitzer verifiziert wurde."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Verschlüsselt durch einen nicht verifizierten Nutzer."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) hat diese Nachricht mit dir geteilt, weil du nicht im Chat warst, als sie verschickt wurde."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"Diese Nachricht wurde von %1$s weitergeleitet, da du zum Zeitpunkt des Versands kein Mitglied der Gruppe warst."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Die digitale Identität von %1$s %2$s wurde zurückgesetzt. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Die digitale Identität von %1$s %2$s wurde zurückgesetzt. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Der Link %1$s führt dich zu einer anderen Seite %2$s. 
+
+Möchtest du wirklich fortfahren?"</string>
+  <string name="dialog_confirm_link_title">"Überprüfe diesen Link noch einmal"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Die maximal erlaubte Dateigröße ist: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Die Datei ist zu groß zum Hochladen"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Die maximal erlaubte Dateigröße ist: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Wähle die Qualität des Videos, das du hochladen möchtest."</string>
+  <string name="error_failed_loading_messages">"Fehler beim Laden der Nachrichten"</string>
+  <string name="error_failed_uploading_voice_message">"Fehler beim Hochladen der Sprachnachricht."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s hat nicht die Berechtigung auf dein Mikrofon zuzugreifen. Erlaube den Zugriff, um eine Sprachnachricht aufzunehmen."</string>
   <string name="error_sending_failure_invalid_mime_type">"Ungültiger MIME-Typ: %s"</string>
   <string name="error_sending_failure_missing_media_content">"Fehlende Medieninhalte"</string>
   <string name="error_sending_failure_other">"Fehlerdetails: %s"</string>
@@ -35,10 +55,25 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimiere die Bildqualität"</string>
   <string name="screen_media_upload_preview_processing">"Verarbeitung läuft …"</string>
   <string name="screen_media_upload_preview_title">"Medien hinzufügen"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Halte eine Nachricht gedrückt und wähle „%1$s“, um sie hier einzufügen."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Fixiere wichtige Nachrichten, so dass sie leicht gefunden werden können"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d fixierte Nachricht"</item>
+    <item quantity="other">"%1$d fixierte Nachrichten"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Fixierte Nachrichten"</string>
   <string name="screen_report_content_block_user">"Nutzer blockieren"</string>
   <string name="screen_report_content_block_user_hint">"Prüfe, ob du alle aktuellen und zukünftigen Nachrichten dieses Nutzers ausblenden möchtest"</string>
   <string name="screen_report_content_explanation">"Diese Nachricht wird an deinen Kontoanbieter gemeldet. Verschlüsselte Nachrichten kann dieser nicht lesen."</string>
   <string name="screen_report_content_hint">"Grund für die Meldung dieses Inhalts"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Verifizierung zurückziehen und senden"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kannst deine Verifizierung zurückziehen und diese Nachricht trotzdem senden, oder du kannst vorerst abbrechen und es später noch einmal versuchen, nachdem du %1$s erneut verifiziert hast."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Deine Nachricht wurde nicht gesendet, da die verifizierte digitale Identität von %1$s zurückgesetzt wurde"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Nachricht trotzdem senden"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s verwendet wenigstens ein nicht verifiziertes Gerät. Du kannst die Nachricht trotzdem verschicken, oder vorerst abbrechen und später erneut versuchen, nachdem %2$s alle Geräte verifiziert hat."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Deine Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Mindestens eines deiner Geräte ist nicht verifiziert. Du kannst die Nachricht trotzdem senden, oder den Vorgang zunächst abbrechen und es später erneut versuchen, nachdem du alle deine Geräte verifiziert hast."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Deine Nachricht wurde nicht gesendet, da du eines oder mehrere deiner Geräte nicht verifiziert hast"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Foto aufnehmen"</string>
   <string name="screen_room_attachment_source_camera_video">"Video aufnehmen"</string>
@@ -55,10 +90,20 @@
   <string name="screen_room_encrypted_history_banner_unverified">"Der Nachrichtenverlauf ist nicht verfügbar. Verifiziere dieses Gerät, um deinen Nachrichtenverlauf zu sehen."</string>
   <string name="screen_room_invite_again_alert_message">"Möchtest du sie wieder einladen?"</string>
   <string name="screen_room_invite_again_alert_title">"Du bist allein in diesem Chat"</string>
+  <string name="screen_room_maximum_messages_selected">"Maximale Anzahl an Nachrichten ausgewählt"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Alle Mitglieder benachrichtigen"</string>
   <string name="screen_room_mentions_at_room_title">"Alle"</string>
+  <string name="screen_room_permalink_same_room_android">"Du siehst diesen Chat bereits!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s von %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s fixierte Nachrichten"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Nachricht wird geladen…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Alle anzeigen"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Erneut senden"</string>
   <string name="screen_room_retry_send_menu_title">"Deine Nachricht konnte nicht gesendet werden"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"%1$d Nachricht ausgewählt"</item>
+    <item quantity="other">"%1$d Nachrichten ausgewählt"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Emoji hinzufügen"</string>
   <string name="screen_room_timeline_beginning_of_room">"Dies ist der Anfang von %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Dies ist der Anfang dieses Gesprächs."</string>
@@ -100,4 +145,16 @@
     <item quantity="other">"%1$s schreiben…"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s und %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d ist beigetreten"</item>
+    <item quantity="other">"%1$d sind beigetreten"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Die Nachricht wurde nicht gesendet, da die verifizierte digitale Identität von %1$s zurückgesetzt wurde."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Die Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Die Nachricht wurde nicht gesendet, weil du eines oder mehrere deiner Geräte nicht verifiziert hast."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Der Nachrichtenverlauf ist auf diesem Gerät nicht verfügbar"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Für den Zugriff auf den Nachrichtenverlauf musst du dieses Gerät verifizieren"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Du hast keinen Zugriff auf diese Nachricht"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Nachricht kann nicht entschlüsselt werden"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Diese Nachricht wurde entweder blockiert, weil du dein Gerät nicht verifiziert hast, oder weil der Absender deine digitale Identität verifizieren muss."</string>
 </resources>

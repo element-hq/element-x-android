@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"업로드하는 비디오의 기본 품질을 선택하세요."</string>
+  <string name="dialog_default_video_quality_selector_title">"비디오 업로드 품질"</string>
   <string name="full_screen_intent_banner_message_android">"중요한 전화를 놓치지 않으려면 휴대폰이 잠겨 있을 때 전체 화면 알림을 허용하도록 설정을 변경하세요."</string>
   <string name="full_screen_intent_banner_title_android">"통화 경험을 향상시키세요"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"어떻게 알림을 받을지 선택하기"</string>
@@ -94,6 +96,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"시스템 설정"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"시스템 알림이 꺼져 있습니다."</string>
   <string name="screen_notification_settings_title">"알림"</string>
+  <string name="settings_version_number">"버전: %1$s (%2$s)"</string>
   <string name="theme_black">"검은색"</string>
   <string name="theme_dark">"다크"</string>
   <string name="theme_light">"라이트"</string>

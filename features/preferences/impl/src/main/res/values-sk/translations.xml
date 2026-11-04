@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Vyberte predvolenú kvalitu nahrávaných videí."</string>
+  <string name="dialog_default_video_quality_selector_title">"Kvalita nahrávania videa"</string>
   <string name="full_screen_intent_banner_message_android">"Aby ste už nikdy nezmeškali dôležitý hovor, zmeňte svoje nastavenia a povoľte upozornenia na celú obrazovku, keď je váš telefón uzamknutý."</string>
   <string name="full_screen_intent_banner_title_android">"Vylepšite svoj zážitok z hovoru"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Vyberte spôsob prijímania oznámení"</string>
@@ -71,6 +73,7 @@ Ak budete pokračovať, niektoré z vašich nastavení sa môžu zmeniť."</stri
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"nastavenia systému"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systémové oznámenia sú vypnuté"</string>
   <string name="screen_notification_settings_title">"Oznámenia"</string>
+  <string name="settings_version_number">"Verzia: %1$s (%2$s)"</string>
   <string name="theme_dark">"Tmavý"</string>
   <string name="theme_light">"Svetlý"</string>
   <string name="theme_system">"Systém"</string>

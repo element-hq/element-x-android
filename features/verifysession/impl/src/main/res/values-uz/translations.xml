@@ -39,5 +39,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Boshqa foydalanuvchi kutilmoqda"</string>
   <string name="screen_session_verification_waiting_subtitle">"Qabul qilinganingizdan so‘ng, tasdiqlash jarayonini davom ettirishingiz mumkin bo‘ladi."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Soʻrovni qabul qilish kutilmoqda"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Chiqish…"</string>
 </resources>

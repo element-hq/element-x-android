@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"Rydych chi eisoes wedi mewngofnodi ar y ddyfais hon fel %1$s ."</string>
+  <string name="error_account_creation_not_possible">"Mae angen uwchraddio eich gweinydd cartref i gefnogi Gwasanaeth Dilysu Matrix a chreu cyfrif."</string>
   <string name="screen_account_provider_signin_title">"Rydych ar fin mewngofnodi i %s"</string>
   <string name="screen_change_account_provider_other">"Arall"</string>
   <string name="screen_change_account_provider_subtitle">"Defnyddiwch ddarparwr cyfrif gwahanol, fel eich gweinydd preifat eich hun neu gyfrif gwaith."</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Camera nu mai există sau invitația nu mai este valabilă."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Nu veți vedea niciun mesaj sau invitație de la acest utilizator."</string>
   <string name="screen_decline_and_block_block_user_option_title">"Blocați utilizatorul"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Raportați această cameră furnizorului contului dvs."</string>

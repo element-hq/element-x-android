@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Chọn chất lượng mặc định cho video bạn tải lên."</string>
   <string name="full_screen_intent_banner_message_android">"Để đảm bảo bạn không bỏ lỡ bất kỳ cuộc gọi quan trọng nào, vui lòng thay đổi cài đặt để cho phép thông báo toàn màn hình khi điện thoại của bạn bị khóa."</string>
   <string name="full_screen_intent_banner_title_android">"Nâng cao trải nghiệm cuộc gọi của bạn"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Chọn cách nhận thông báo"</string>
@@ -56,6 +57,7 @@ Nếu bạn tiếp tục, một số cài đặt của bạn có thể thay đ�
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"cài đặt hệ thống"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Thông báo hệ thống đã tắt"</string>
   <string name="screen_notification_settings_title">"Thông báo"</string>
+  <string name="settings_version_number">"Phiên bản: %1$s (%2$s )"</string>
   <string name="theme_dark">"Tối"</string>
   <string name="theme_light">"Sáng"</string>
   <string name="theme_system">"Hệ thống"</string>

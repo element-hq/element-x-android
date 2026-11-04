@@ -39,5 +39,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Esperant a l\'altre usuari"</string>
   <string name="screen_session_verification_waiting_subtitle">"Un cop acceptat, podràs continuar amb la verificació."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Esperant que s\'accepti la sol·licitud"</string>
-  <string name="screen_signout_in_progress_dialog_content">"S\'està tancant la sessió…"</string>
 </resources>

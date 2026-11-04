@@ -63,4 +63,5 @@ Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_search_recent_searches">"Ostatnie wyszukiwania"</string>
   <string name="screen_search_tab_chats">"Czaty"</string>
   <string name="screen_search_tab_messages">"Wiadomości"</string>
+  <string name="screen_space_list_empty_state_title">"Utwórz przestrzeń, aby organizować pokoje"</string>
 </resources>

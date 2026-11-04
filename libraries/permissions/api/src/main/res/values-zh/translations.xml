@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"允许访问"</string>
   <string name="dialog_permission_camera">"为了让 app 使用相机，请在系统设置中授予权限。"</string>
   <string name="dialog_permission_generic">"请在系统设置中授予权限。"</string>
   <string name="dialog_permission_microphone">"为了让 app 使用麦克风，请在系统设置中授予权限。"</string>
   <string name="dialog_permission_notification">"为了让 app 显示通知，请在系统设置中授予权限。"</string>
+  <string name="screen_local_network_opt_in_subtitle">"你的主服务器位于本地网络。%1$s 需要获得此网络上设备的访问权才能连接。"</string>
+  <string name="screen_local_network_opt_in_title">"允许访问本地网络"</string>
 </resources>

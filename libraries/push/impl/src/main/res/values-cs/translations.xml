@@ -32,7 +32,6 @@
   <string name="notification_invite_body">"Vás pozval(a) do chatu"</string>
   <string name="notification_invite_body_with_sender">"%1$s vás pozval(a) do chatu"</string>
   <string name="notification_mentioned_you_body">"Zmínili vás: %1$s"</string>
-  <string name="notification_new_messages">"Nové zprávy"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nová zpráva"</item>
     <item quantity="few">"%d nové zprávy"</item>

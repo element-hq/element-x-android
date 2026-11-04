@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Вибір усталеної якості вивантажуваних відео."</string>
+  <string name="dialog_default_video_quality_selector_title">"Якість вивантаження відео"</string>
   <string name="full_screen_intent_banner_message_android">"Щоб ніколи не пропустити важливий виклик, змініть налаштування, щоб увімкнути повноекранні сповіщення, коли телефон заблоковано."</string>
   <string name="full_screen_intent_banner_title_android">"Покращуйте якість викликів"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Виберіть спосіб отримання сповіщень"</string>
@@ -114,6 +116,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"На зустрічі"</string>
   <string name="screen_settings_user_status_on_the_road">"У дорозі"</string>
   <string name="screen_settings_user_status_placeholder">"Який у вас статус?"</string>
+  <string name="settings_version_number">"Версія: %1$s (%2$s)"</string>
   <string name="theme_black">"Темна"</string>
   <string name="theme_dark">"Темна"</string>
   <string name="theme_light">"Світла"</string>

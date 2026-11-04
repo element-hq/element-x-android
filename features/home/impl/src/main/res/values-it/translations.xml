@@ -49,4 +49,5 @@ Non hai messaggi non letti!"</string>
   <string name="screen_roomlist_mark_as_unread">"Segna come non letto"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Questa stanza è stata aggiornata"</string>
   <string name="screen_roomlist_your_spaces">"I tuoi spazi"</string>
+  <string name="screen_space_list_empty_state_title">"Crea spazi per organizzare le stanze"</string>
 </resources>

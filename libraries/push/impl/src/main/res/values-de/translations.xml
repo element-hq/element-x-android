@@ -34,7 +34,6 @@
   <string name="notification_knock_request_body">"Hat um Beitritt gebeten"</string>
   <string name="notification_live_location_started_body">"Hat begonnen, den Live-Standort zu teilen"</string>
   <string name="notification_mentioned_you_body">"Hat dich erwähnt: %1$s"</string>
-  <string name="notification_new_messages">"Neue Nachrichten"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d neue Nachricht"</item>
     <item quantity="other">"%d neue Nachrichten"</item>

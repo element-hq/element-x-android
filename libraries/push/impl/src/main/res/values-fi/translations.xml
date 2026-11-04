@@ -34,7 +34,6 @@
   <string name="notification_knock_request_body">"Pyytää liittymistä"</string>
   <string name="notification_live_location_started_body">"Aloitti reaaliaikaisen sijainnin jakamisen"</string>
   <string name="notification_mentioned_you_body">"Mainitsi sinut: %1$s"</string>
-  <string name="notification_new_messages">"Uusia viestejä"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d uusi viesti"</item>
     <item quantity="other">"%d uutta viestiä"</item>

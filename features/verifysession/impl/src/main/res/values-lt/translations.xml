@@ -7,5 +7,4 @@
   <string name="screen_session_verification_they_dont_match">"Jie nesutampa"</string>
   <string name="screen_session_verification_they_match">"Jie sutampa"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Laukiama prašymo priėmimo"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Šalinamas įrenginys…"</string>
 </resources>

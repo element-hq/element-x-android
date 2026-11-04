@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"Επιτρέψτε την πρόσβαση"</string>
   <string name="dialog_permission_camera">"Για να επιτρέψεις στην εφαρμογή να χρησιμοποιεί την κάμερα, παραχώρησε την άδεια στις ρυθμίσεις συστήματος."</string>
   <string name="dialog_permission_generic">"Παρακαλώ παραχώρησε την άδεια στις ρυθμίσεις συστήματος."</string>
   <string name="dialog_permission_microphone">"Για να επιτρέψεις στην εφαρμογή να χρησιμοποιεί το μικρόφωνο, παραχώρησε την άδεια στις ρυθμίσεις συστήματος."</string>
   <string name="dialog_permission_notification">"Για να επιτρέψεις στην εφαρμογή να εμφανίζει ειδοποιήσεις, παραχώρησε την άδεια στις ρυθμίσεις συστήματος."</string>
+  <string name="screen_local_network_opt_in_subtitle">"Ο αρχικός διακομιστής βρίσκεται στο τοπικό σας δίκτυο. Για να συνδεθεί, το %1$s χρειάζεται άδεια πρόσβασης σε συσκευές σε αυτό το δίκτυο."</string>
+  <string name="screen_local_network_opt_in_title">"Επιτρέψτε την πρόσβαση στο τοπικό δίκτυο"</string>
 </resources>

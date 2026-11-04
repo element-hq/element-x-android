@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Ude af stand til at dekryptere"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Sendt fra en usikker enhed"</string>
+  <string name="common_unable_to_decrypt_no_access">"Du har ikke adgang til denne meddelelse"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Afsenderens verificerede digitale identitet blev nulstillet"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Afsenderen af begivenheden matcher ikke ejeren af den enhed, der sendte den."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Ægtheden af denne krypterede besked kan ikke garanteres på denne enhed."</string>
   <string name="crypto_event_authenticity_previously_verified">"Krypteret af en tidligere verificeret bruger."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Krypteret af en ukendt eller slettet enhed."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Krypteret af en enhed, der ikke er verificeret af sin ejer."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Krypteret af en ikke-verificeret bruger."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s(%2$s ) har delt denne besked siden du ikke var i rummet da den blev sendt."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s delte denne besked, siden du ikke var i rummet da den blev sendt."</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$ss %2$s digitale identitet blev nulstillet. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$ss %2$s digitale identitet blev nulstillet. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Linket %1$s fører dig til et andet websted %2$s
+
+Er du sikker på, at du vil fortsætte?"</string>
+  <string name="dialog_confirm_link_title">"Dobbelttjek dette link"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Den maksimalt tilladte filstørrelse er: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Filen er for stor til at kunne uploades."</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Den maksimalt tilladte filstørrelse er: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vælg den kvalitet, du ønsker at uploade videoen i."</string>
+  <string name="error_failed_loading_messages">"Fejl under indlæsning af beskeder"</string>
+  <string name="error_failed_uploading_voice_message">"Kunne ikke uploade din talebesked."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s har ikke tilladelse til at få adgang til din mikrofon. Aktivér adgang for at optage en stemmemeddelelse."</string>
   <string name="screen_media_upload_preview_caption_warning">"Billedtekster er muligvis ikke synlige for personer, der bruger ældre apps."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tryk for at ændre videokvaliteten i uploadet"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Filen kunne ikke uploades."</string>
@@ -17,10 +37,25 @@
   <string name="screen_media_upload_preview_item_count">"Fil %1$d af %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimér billedkvaliteten"</string>
   <string name="screen_media_upload_preview_processing">"Behandler…"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Tryk på en besked og vælg \"%1$s\" for at inkludere den her."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Fastgør vigtige beskeder, så de let kan opdages"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Fastgjort besked"</item>
+    <item quantity="other">"%1$d Fastgjorte beskeder"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Fastgjorte beskeder"</string>
   <string name="screen_report_content_block_user">"Bloker bruger"</string>
   <string name="screen_report_content_block_user_hint">"Marker, hvis du vil skjule alle nuværende og fremtidige beskeder fra denne bruger"</string>
   <string name="screen_report_content_explanation">"Denne meddelelse vil blive indberettet til administratoren af din hjemmeserver. De vil ikke være i stand til at læse nogen krypterede meddelelser."</string>
   <string name="screen_report_content_hint">"Årsag til indberetning af dette indhold"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Træk verifikationen tilbage og send"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kan trække din verifikation tilbage og sende denne meddelelse alligevel, eller du kan annullere for nu og prøve igen senere efter at have gen-verificeret. %1$s"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Din besked blev ikke sendt, fordi %1$s\'s verificerede digitale identitet er blevet nulstillet"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Send besked alligevel"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s bruger en eller flere uverificerede enheder. Du kan sende beskeden alligevel, eller du kan annullere for nu og prøve igen senere, når %2$s har bekræftet alle deres enheder."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Din besked blev ikke sendt, fordi %1$s ikke har bekræftet alle enheder"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"En eller flere af dine enheder er ikke verificeret. Du kan sende beskeden alligevel, eller du kan annullere for nu og prøve igen senere, når du har verificeret alle dine enheder."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Din besked blev ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Tag billede"</string>
   <string name="screen_room_attachment_source_camera_video">"Optag video"</string>
@@ -35,6 +70,11 @@
   <string name="screen_room_invite_again_alert_title">"Du er alene i denne samtale"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Giv hele rummet besked"</string>
   <string name="screen_room_mentions_at_room_title">"Alle"</string>
+  <string name="screen_room_permalink_same_room_android">"Du ser allerede dette rum!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s af %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Fastgjorte beskeder"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Indlæser besked…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Se alle"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Send igen"</string>
   <string name="screen_room_retry_send_menu_title">"Din besked kunne ikke sendes"</string>
   <string name="screen_room_timeline_add_reaction">"Tilføj emoji"</string>
@@ -74,4 +114,12 @@
     <item quantity="other">"%1$s skriver"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s og %2$s"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Beskeden blev ikke sendt fordi %1$s s bekræftede digitale identitet blev nulstillet."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meddelelsen er ikke sendt, fordi %1$s ikke har bekræftet alle enheder."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Beskeden er ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historiske beskeder er ikke tilgængelige på denne enhed"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Du skal verificere denne enhed for at få adgang til historiske beskeder"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Du har ikke adgang til denne meddelelse"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Kan ikke dekryptere beskeden"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Denne besked blev blokeret, enten fordi du ikke verificerede din enhed, eller fordi afsenderen endnu ikke har bekræftet din digitale identitet."</string>
 </resources>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Välj standardkvalitet för videor du laddar upp."</string>
+  <string name="dialog_default_video_quality_selector_title">"Videouppladdningskvalitet"</string>
   <string name="full_screen_intent_banner_message_android">"För att säkerställa att du aldrig missar ett viktigt samtal, ändra dina inställningar för att tillåta helskärmsmeddelanden när telefonen är låst."</string>
   <string name="full_screen_intent_banner_title_android">"Förbättra din samtalsupplevelse"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Välj hur du vill ta emot aviseringar"</string>
@@ -63,6 +65,7 @@ Om du fortsätter kan vissa av dina inställningar ändras."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeminställningar"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systemaviseringar avstängda"</string>
   <string name="screen_notification_settings_title">"Aviseringar"</string>
+  <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="theme_dark">"Mörkt"</string>
   <string name="theme_light">"Ljust"</string>
   <string name="theme_system">"System"</string>

@@ -16,8 +16,8 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
@@ -56,7 +56,7 @@ class PinnedMessagesBannerViewTest : RobolectricTest() {
                 state = state,
                 onViewAllClick = callback
             )
-            clickOn(CommonStrings.screen_room_pinned_banner_view_all_button_title)
+            clickOn(R.string.screen_room_pinned_banner_view_all_button_title)
         }
     }
 }

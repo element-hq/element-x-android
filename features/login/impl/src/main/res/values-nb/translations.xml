@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"Du er allerede logget inn på denne enheten som %1$s."</string>
+  <string name="error_account_creation_not_possible">"Hjemmeserveren din må oppgraderes for å støtte Matrix Authentication Service og kontooppretting."</string>
   <string name="screen_account_provider_signin_title">"Du er i ferd med å logge inn på %s"</string>
   <string name="screen_change_account_provider_other">"Annet"</string>
   <string name="screen_change_account_provider_subtitle">"Bruk en annen kontotilbyder, for eksempel din egen private server eller en arbeidskonto."</string>

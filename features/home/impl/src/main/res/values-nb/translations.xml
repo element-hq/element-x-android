@@ -49,4 +49,5 @@ Du har ingen uleste meldinger!"</string>
   <string name="screen_roomlist_mark_as_unread">"Merk som ulest"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Dette rommet har blitt oppgradert"</string>
   <string name="screen_roomlist_your_spaces">"Dine områder"</string>
+  <string name="screen_space_list_empty_state_title">"Opprett område for å organisere rom"</string>
 </resources>

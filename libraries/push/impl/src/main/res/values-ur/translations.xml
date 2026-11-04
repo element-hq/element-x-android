@@ -22,7 +22,6 @@
   <string name="notification_invite_body">"آپ کو گفتگو کیلئے مدعو کیا"</string>
   <string name="notification_invite_body_with_sender">"%1$s نے آپ کو چیٹ کے لیے مدعو کیا"</string>
   <string name="notification_mentioned_you_body">"آپ کا تذکرہ کیا: %1$s"</string>
-  <string name="notification_new_messages">"نئے پیغامات"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d نیا پیغام"</item>
     <item quantity="other">"%d نئے پیغامات"</item>

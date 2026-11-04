@@ -34,5 +34,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Beste erabiltzailearen zain"</string>
   <string name="screen_session_verification_waiting_subtitle">"Onartutakoan egiaztapenarekin jarraitu ahal izango duzu."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Eskaera onartzeko zain"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Saioa amaitzen…"</string>
 </resources>

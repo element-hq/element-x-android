@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"A szoba már nem létezik, vagy a meghívó már nem érvényes."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Ettől a felhasználótól nem fog többé üzeneteket vagy meghívásokat látni."</string>
   <string name="screen_decline_and_block_block_user_option_title">"Felhasználó letiltása"</string>
   <string name="screen_decline_and_block_report_user_option_description">"A szoba jelentése a fiókszolgáltatójának."</string>

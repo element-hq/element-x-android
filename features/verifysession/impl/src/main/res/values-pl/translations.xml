@@ -41,5 +41,4 @@
   <string name="screen_session_verification_waiting_other_user_title">"Oczekiwanie na drugiego użytkownika"</string>
   <string name="screen_session_verification_waiting_subtitle">"Po zaakceptowaniu będziesz mógł kontynuować weryfikację."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Oczekiwanie na zaakceptowanie prośby"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Usuwam urządzenie…"</string>
 </resources>

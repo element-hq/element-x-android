@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Ruangan tidak ada lagi atau undangan tidak lagi valid."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Anda tidak akan melihat pesan atau undangan ruangan dari pengguna ini"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Blokir pengguna"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Laporkan ruangan ini ke penyedia akun Anda."</string>

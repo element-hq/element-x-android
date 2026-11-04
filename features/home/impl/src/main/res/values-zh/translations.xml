@@ -63,10 +63,11 @@
   <string name="screen_search_history_limit_message">"搜索功能在你的设备上运行，因此你的加密消息将保持私有。
 设备会保留最近 3 个月的消息，因此暂无法搜索到更早的消息。"</string>
   <string name="screen_search_history_limit_title">"搜索范围涵盖最近 3 个月"</string>
-  <string name="screen_search_messages_no_results_message">"在您最近的消息中，未找到与“%1$s”相关的结果。"</string>
+  <string name="screen_search_messages_no_results_message">"在你最近的消息中，未找到与“%1$s”相关的结果。"</string>
   <string name="screen_search_messages_no_results_title">"最近 3 个月内没有结果"</string>
   <string name="screen_search_no_results_message">"未找到与“%1$s”相关的结果。尝试新的搜索关键词。"</string>
   <string name="screen_search_recent_searches">"最近搜索"</string>
   <string name="screen_search_tab_chats">"聊天"</string>
   <string name="screen_search_tab_messages">"消息"</string>
+  <string name="screen_space_list_empty_state_title">"创建空间以组织房间"</string>
 </resources>

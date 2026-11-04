@@ -49,4 +49,5 @@ Du har ingen ulæste beskeder!"</string>
   <string name="screen_roomlist_mark_as_unread">"Marker som ulæst"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Dette rum er blevet opgraderet"</string>
   <string name="screen_roomlist_your_spaces">"Dine klynger"</string>
+  <string name="screen_space_list_empty_state_title">"Opret klynger til at organisere rum i"</string>
 </resources>

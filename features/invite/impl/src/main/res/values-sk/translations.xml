@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Miestnosť už neexistuje alebo pozvánka už nie je platná."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Od tohto používateľa sa vám nezobrazia žiadne správy ani pozvánky do miestnosti"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Zablokovať používateľa"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Nahlásiť túto miestnosť poskytovateľovi účtu."</string>

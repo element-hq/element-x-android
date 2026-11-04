@@ -21,5 +21,4 @@
   <string name="screen_session_verification_they_dont_match">"Яны не супадаюць"</string>
   <string name="screen_session_verification_they_match">"Яны супадаюць"</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Чаканне прыняцця запыту"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Выдаленне прылады…"</string>
 </resources>

@@ -24,7 +24,6 @@
   <string name="notification_invite_body">"Đã mời bạn trò chuyện"</string>
   <string name="notification_invite_body_with_sender">"%1$s đã mời bạn trò chuyện"</string>
   <string name="notification_mentioned_you_body">"Đã nhắc đến bạn: %1$s"</string>
-  <string name="notification_new_messages">"Tin nhắn mới"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="other">"%dtin nhắn mới"</item>
   </plurals>

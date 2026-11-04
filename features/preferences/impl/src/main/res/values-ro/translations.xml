@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Selectați calitatea implicită a videoclipurilor pe care le încărcați."</string>
+  <string name="dialog_default_video_quality_selector_title">"Calitatea încărcării videoclipurilor"</string>
   <string name="full_screen_intent_banner_message_android">"Pentru a vă asigura că nu pierdeți niciodată un apel important, modificați setările pentru a permite notificări fullscreen atunci când telefonul este blocat."</string>
   <string name="full_screen_intent_banner_title_android">"Îmbunătățiți-vă experiența în timpul unui apel"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Alegeți cum doriți să primiți notificări"</string>
@@ -113,6 +115,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"Într-o ședință"</string>
   <string name="screen_settings_user_status_on_the_road">"Pe drum"</string>
   <string name="screen_settings_user_status_placeholder">"Care este statusul dvs.?"</string>
+  <string name="settings_version_number">"Versiunea: %1$s (%2$s)"</string>
   <string name="theme_black">"Negru"</string>
   <string name="theme_dark">"Întunecat"</string>
   <string name="theme_light">"Deschis"</string>

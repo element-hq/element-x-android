@@ -54,4 +54,5 @@ Nemate nepročitanih poruka!"</string>
   <string name="screen_roomlist_mark_as_unread">"Označi kao nepročitano"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ova je soba nadograđena"</string>
   <string name="screen_roomlist_your_spaces">"Vaši prostori"</string>
+  <string name="screen_space_list_empty_state_title">"Stvorite prostore za organizaciju soba"</string>
 </resources>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_default_video_quality_selector_subtitle">"Yuklagan videolaringizning standart sifatini tanlang."</string>
+  <string name="dialog_default_video_quality_selector_title">"Video yuklash sifati"</string>
   <string name="full_screen_intent_banner_message_android">"Muhim qoʻngʻiroqlarni oʻtkazib yubormasligingiz uchun telefoningiz qulflangan holatida toʻliq ekranli bildirishnomalarni ko‘rsatishga ruxsat beradigan qilib sozlamalaringizni oʻzgartiring."</string>
   <string name="full_screen_intent_banner_title_android">"Qoʻngʻiroq tajribangizni yaxshilang"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Bildirishnomalarni qanday qabul qilishni tanlang"</string>
@@ -94,6 +96,7 @@ Davom ettirsangiz, baʼzi sozlamalaringiz oʻzgarishi mumkin."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"tizim sozlamalari"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Tizim bildirishnomalari o\'chirilgan"</string>
   <string name="screen_notification_settings_title">"Bildirishnomalar"</string>
+  <string name="settings_version_number">"Versiya:%1$s (%2$s )"</string>
   <string name="theme_black">"Qora"</string>
   <string name="theme_dark">"Tungi"</string>
   <string name="theme_light">"Nur"</string>

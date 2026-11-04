@@ -22,7 +22,6 @@
   <string name="notification_invite_body">"Bjöd in dig att chatta"</string>
   <string name="notification_invite_body_with_sender">"%1$s bjöd in dig att chatta"</string>
   <string name="notification_mentioned_you_body">"Nämnde dig: %1$s"</string>
-  <string name="notification_new_messages">"Nya meddelanden"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nytt meddelande"</item>
     <item quantity="other">"%d nya meddelanden"</item>

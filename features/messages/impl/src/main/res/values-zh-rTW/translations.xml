@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"無法解密"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"從不安全的裝置傳送"</string>
+  <string name="common_unable_to_decrypt_no_access">"您無法存取此則訊息"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"傳送者的驗證數位身份已重設"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"事件的傳送者與傳送該事件的裝置擁有者不相符。"</string>
   <string name="crypto_event_authenticity_not_guaranteed">"無法在此裝置上保證此加密訊息的真實性。"</string>
   <string name="crypto_event_authenticity_previously_verified">"由先前驗證的使用者加密。"</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"由未知或已刪除的裝置加密。"</string>
   <string name="crypto_event_authenticity_unsigned_device">"由未經其擁有者驗證的裝置加密。"</string>
   <string name="crypto_event_authenticity_unverified_identity">"由未經驗證的使用者加密。"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"因為您當時不在聊天室內，所以 %1$s (%2$s) 分享了此訊息。"</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"因為您當時不在聊天室裡面，因此 %1$s 分享了此訊息。"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s 的 %2$s 數位身份似乎已重設。%3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"（%1$s）"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s 的 %2$s 數位身份已重設。%3$s"</string>
+  <string name="dialog_confirm_link_message">"連結 %1$s 會將您帶往其他網站 %2$s
+
+您確定您想要繼續嗎？"</string>
+  <string name="dialog_confirm_link_title">"仔細檢查此連結"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"最大允許的檔案大小為：%1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"檔案太大，無法上傳"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"最大允許的檔案大小為：%1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"選取您要上傳的視訊的品質。"</string>
+  <string name="error_failed_loading_messages">"無法載入訊息"</string>
+  <string name="error_failed_uploading_voice_message">"無法上傳語音訊息。"</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s 沒有權限存取您的麥克風。您需要開啟權限才能錄製語音訊息。"</string>
   <string name="error_sending_failure_invalid_mime_type">"無效的 MIME 類型：%s"</string>
   <string name="error_sending_failure_missing_media_content">"缺少媒體內容"</string>
   <string name="error_sending_failure_other">"錯誤詳細資訊：%s"</string>
@@ -34,10 +54,24 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"最佳化影像品質"</string>
   <string name="screen_media_upload_preview_processing">"正在處理……"</string>
   <string name="screen_media_upload_preview_title">"新增媒體"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"按一下訊息，然後選擇「%1$s」以加入至此。"</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"釘選重要訊息，如此才能輕鬆發現"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="other">"%1$d 則釘選的訊息"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"釘選訊息"</string>
   <string name="screen_report_content_block_user">"封鎖使用者"</string>
   <string name="screen_report_content_block_user_hint">"檢查您是否要隱藏所有來自此使用者的目前及未來的訊息"</string>
   <string name="screen_report_content_explanation">"這則訊息將會通報給您的帳號服務提供者。他們將無法閱讀任何加密訊息。"</string>
   <string name="screen_report_content_hint">"檢舉這個內容的原因"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"撤回驗證並傳送"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"您可以撤回您的驗證並仍傳送此訊息，或者您也可以立刻取消並在重新驗證 %1$s 後再試一次。"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"因為 %1$s 的驗證數位身份已重設，因此未傳送您的訊息。"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"仍要傳送訊息"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s 正在使用一個或多個未經驗證的裝置。您仍然可以傳送訊息，也可以立刻取消並在 %2$s 驗證其所有裝置後再試一次。"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"未傳送您的訊息，因為 %1$s 尚未驗證所有裝置。"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"您的一個或多個裝置未經驗證。您仍可傳送訊息，也可以取消並在您驗證您的所有裝置後再試一次。"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"因為您尚未驗證一個或多個裝置，因為未傳送您的訊息"</string>
   <string name="screen_room_attachment_source_camera">"照相機"</string>
   <string name="screen_room_attachment_source_camera_photo">"拍照"</string>
   <string name="screen_room_attachment_source_camera_video">"錄影"</string>
@@ -54,10 +88,22 @@
   <string name="screen_room_encrypted_history_banner_unverified">"無法檢視此聊天室的訊息歷史紀錄。驗證此裝置以檢視您的訊息紀錄。"</string>
   <string name="screen_room_invite_again_alert_message">"您想要邀請他們回來嗎？"</string>
   <string name="screen_room_invite_again_alert_title">"此聊天室只有您一個人"</string>
+  <string name="screen_room_maximum_messages_selected">"已選取最多訊息"</string>
   <string name="screen_room_mentions_at_room_subtitle">"通知整個聊天室"</string>
   <string name="screen_room_mentions_at_room_title">"所有人"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="other">"已轉發 %1$d 訊息"</item>
+  </plurals>
+  <string name="screen_room_permalink_same_room_android">"已檢視此聊天室！"</string>
+  <string name="screen_room_pinned_banner_indicator">"第 %1$s 個，共 %2$s 個"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s 個釘選訊息"</string>
+  <string name="screen_room_pinned_banner_loading_description">"正在載入訊息……"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"檢視全部"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"重傳"</string>
   <string name="screen_room_retry_send_menu_title">"無法傳送您的訊息"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="other">"已選取 %1$d 則訊息"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"新增表情符號"</string>
   <string name="screen_room_timeline_beginning_of_room">"這是 %1$s 的開頭。"</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"這是此對話的開頭。"</string>
@@ -93,4 +139,15 @@
     <item quantity="other">"%1$s 正在打字"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s 和 %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="other">"%1$d 人已加入"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"因為 %1$s 的驗證數位身份已重設，因此未傳送訊息。"</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"訊息未傳送，因為 %1$s 尚未驗證所有裝置。"</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"因為您尚未驗證一個或多個裝置，因此未傳送訊息"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"歷史訊息在此裝置上無法讀取"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"您必須驗證此裝置才能存取歷史訊息"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"您無法存取此則訊息"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"無法解密訊息"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"此訊息被封鎖，原因可能是您尚未驗證裝置，或是寄件者需要驗證您的數位身分。"</string>
 </resources>

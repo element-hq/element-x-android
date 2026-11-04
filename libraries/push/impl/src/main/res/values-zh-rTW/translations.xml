@@ -29,7 +29,6 @@
   <string name="notification_knock_request_body">"已要求加入"</string>
   <string name="notification_live_location_started_body">"已開始分享他們的即時位置"</string>
   <string name="notification_mentioned_you_body">"提及您：%1$s"</string>
-  <string name="notification_new_messages">"新訊息"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="other">"%d 則新訊息"</item>
   </plurals>

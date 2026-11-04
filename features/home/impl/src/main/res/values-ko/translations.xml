@@ -49,4 +49,5 @@
   <string name="screen_roomlist_mark_as_unread">"읽지 않음으로 표시"</string>
   <string name="screen_roomlist_tombstoned_room_description">"이 방이 업그레이드되었습니다"</string>
   <string name="screen_roomlist_your_spaces">"내 스페이스"</string>
+  <string name="screen_space_list_empty_state_title">"스페이스를 생성하여 방을 체계적으로 관리해 보세요."</string>
 </resources>

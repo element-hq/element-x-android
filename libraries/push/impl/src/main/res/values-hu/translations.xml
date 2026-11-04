@@ -34,7 +34,6 @@
   <string name="notification_knock_request_body">"Csatlakozási kérelem benyújtva"</string>
   <string name="notification_live_location_started_body">"Elkezdték megosztani az élő helyzetüket"</string>
   <string name="notification_mentioned_you_body">"Megemlítette Önt: %1$s"</string>
-  <string name="notification_new_messages">"Új üzenetek"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d új üzenet"</item>
     <item quantity="other">"%d új üzenet"</item>

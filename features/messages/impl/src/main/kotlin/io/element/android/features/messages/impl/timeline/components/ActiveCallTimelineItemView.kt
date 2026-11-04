@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReadReceipts
@@ -59,7 +60,6 @@ import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.ui.messages.ProvideRoomMemberProfiles
 import io.element.android.libraries.matrix.ui.messages.rememberRoomMember
 import io.element.android.libraries.previewutils.room.aRoomMemberList
-import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -255,7 +255,7 @@ private fun GroupCallBody(event: TimelineItem.Event, state: RtcNotificationState
                 )
                 Text(
                     text = pluralStringResource(
-                        CommonPlurals.screen_timeline_active_call_joined_count,
+                        R.plurals.screen_timeline_active_call_joined_count,
                         count = state.joinedMemberIds.size,
                         state.joinedMemberIds.size
                     ),

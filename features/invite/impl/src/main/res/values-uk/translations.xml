@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Кімната більше не існує або запрошення не чинне."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Ви не бачитимете повідомлень або запрошень у кімнату від цього користувача"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Заблокувати користувача"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Поскаржитися на цю кімнату постачальнику облікового запису."</string>

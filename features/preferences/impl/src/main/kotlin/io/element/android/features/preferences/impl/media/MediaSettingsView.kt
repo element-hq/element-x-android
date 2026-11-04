@@ -157,7 +157,7 @@ private fun VideoQualitySelectorDialog(
     var localSelectedPreset by remember { mutableStateOf(selectedPreset) }
     ListDialog(
         title = stringResource(CommonStrings.dialog_video_quality_selector_title),
-        subtitle = stringResource(CommonStrings.dialog_default_video_quality_selector_subtitle),
+        subtitle = stringResource(R.string.dialog_default_video_quality_selector_subtitle),
         onSubmit = { onSubmit(localSelectedPreset) },
         onDismissRequest = onDismiss,
         applyPaddingToContents = false,

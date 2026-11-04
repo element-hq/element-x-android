@@ -34,7 +34,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
 import io.element.android.libraries.matrix.api.timeline.item.event.isCritical
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun MessageShieldView(
@@ -98,12 +97,12 @@ internal fun MessageShieldData.toText(): String {
         var displayName = forwarderProfile?.getDisplayName()
         return if (displayName == null) {
             stringResource(
-                CommonStrings.crypto_event_key_forwarded_unknown_profile_dialog_content,
+                R.string.crypto_event_key_forwarded_unknown_profile_dialog_content,
                 forwarder.toString(),
             )
         } else {
             stringResource(
-                CommonStrings.crypto_event_key_forwarded_known_profile_dialog_content,
+                R.string.crypto_event_key_forwarded_known_profile_dialog_content,
                 displayName,
                 forwarder.toString(),
             )

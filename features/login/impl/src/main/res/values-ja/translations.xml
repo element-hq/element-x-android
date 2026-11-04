@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_account_already_logged_in">"この端末では既に %1$s としてログインしています。"</string>
+  <string name="error_account_creation_not_possible">"Matrix Authentication Service とアカウント作成に対応させるため、アカウント提供元のアップグレードが必要です。"</string>
   <string name="screen_account_provider_signin_title">"%s にサインインを試みています"</string>
   <string name="screen_change_account_provider_other">"その他"</string>
   <string name="screen_change_account_provider_subtitle">"自身のサーバーや仕事用のアカウントにサインインするには、アカウント提供元を変更してください。"</string>

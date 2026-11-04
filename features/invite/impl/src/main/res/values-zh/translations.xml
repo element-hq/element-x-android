@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"该房间已不存在或邀请已失效。"</string>
   <string name="screen_decline_and_block_block_user_option_description">"你将不会看到来自该用户的任何消息或房间邀请"</string>
   <string name="screen_decline_and_block_block_user_option_title">"屏蔽用户"</string>
   <string name="screen_decline_and_block_report_user_option_description">"向账户提供者举报此房间。"</string>
