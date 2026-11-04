@@ -17,6 +17,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -27,11 +28,14 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imeAnimationTarget
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
@@ -41,12 +45,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -72,6 +78,7 @@ import io.element.android.features.messages.impl.link.LinkEvent
 import io.element.android.features.messages.impl.link.LinkView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.ComposerEmojiPickerMaxHeight
+import io.element.android.features.messages.impl.messagecomposer.ComposerEmojiPickerMinHeight
 import io.element.android.features.messages.impl.messagecomposer.ComposerEmojiPickerSheetState
 import io.element.android.features.messages.impl.messagecomposer.DisabledComposerView
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
@@ -149,6 +156,7 @@ import kotlinx.collections.immutable.toImmutableSet
 import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MessagesView(
     state: MessagesState,
@@ -182,16 +190,32 @@ fun MessagesView(
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
     var availableHeightPx by remember { mutableIntStateOf(240) }
-    // The emoji picker is shown beneath the composer, replacing the soft keyboard. It occupies at most half the
-    // available height so the composer remains visible on small screens.
-    val emojiPickerHeight = if (state.composerState.emojiPickerSheetState == ComposerEmojiPickerSheetState.Hidden) {
-        0.dp
-    } else {
-        with(LocalDensity.current) { (availableHeightPx / 2).toDp() }.coerceAtMost(ComposerEmojiPickerMaxHeight)
+    val density = LocalDensity.current
+    val isEmojiPickerShown = state.composerState.emojiPickerSheetState != ComposerEmojiPickerSheetState.Hidden
+    // Last observed soft-keyboard height for this orientation, navigation-bar area included. The emoji picker claims
+    // exactly that space while the keyboard is hidden, so the composer stays put when one replaces the other.
+    val orientation = LocalConfiguration.current.orientation
+    var keyboardHeightPx by rememberSaveable(orientation) { mutableIntStateOf(0) }
+    val imeTargetBottomPx = WindowInsets.imeAnimationTarget.getBottom(density)
+    LaunchedEffect(imeTargetBottomPx) {
+        if (imeTargetBottomPx > 0) {
+            keyboardHeightPx = imeTargetBottomPx
+        }
     }
-    // Limit the composer to at most half the available height, plus the emoji picker's height when displayed. The resulting
-    // value depends on whether the soft keyboard is shown.
-    val maxComposerHeightPx = availableHeightPx / 2 + with(LocalDensity.current) { emojiPickerHeight.roundToPx() }
+    val emojiPickerHeightPx = if (isEmojiPickerShown) {
+        val keyboardSpacePx = keyboardHeightPx - WindowInsets.systemBars.getBottom(density)
+        if (keyboardSpacePx >= with(density) { ComposerEmojiPickerMinHeight.roundToPx() }) {
+            keyboardSpacePx
+        } else {
+            // No keyboard has appeared in this orientation yet: use half the available height.
+            (availableHeightPx / 2).coerceAtMost(with(density) { ComposerEmojiPickerMaxHeight.roundToPx() })
+        }
+    } else {
+        0
+    }
+    val emojiPickerHeight = with(density) { emojiPickerHeightPx.toDp() }
+    // The composer may claim half the space above the emoji picker, i.e. the same share it receives above the soft keyboard.
+    val maxComposerHeightPx = (availableHeightPx - emojiPickerHeightPx) / 2 + emojiPickerHeightPx
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
@@ -254,11 +278,24 @@ fun MessagesView(
     }
 
     val expandableState = rememberExpandableBottomSheetLayoutState()
+    val imeInsets = WindowInsets.ime
     ExpandableBottomSheetLayout(
         modifier = modifier
             .fillMaxSize()
-            .imePadding()
-            .systemBarsPadding()
+            .then(
+                if (isEmojiPickerShown) {
+                    // The emoji picker substitutes for the keyboard: keyboard insets stay unapplied so the layout remains
+                    // fixed while the keyboard slides out from in front of the picker or slides back over it. The insets are
+                    // still consumed, preventing nested paddings from applying them.
+                    Modifier
+                        .systemBarsPadding()
+                        .consumeWindowInsets(imeInsets)
+                } else {
+                    Modifier
+                        .imePadding()
+                        .systemBarsPadding()
+                }
+            )
             .onSizeChanged { size ->
                 availableHeightPx = size.height
             },
