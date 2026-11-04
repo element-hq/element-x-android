@@ -1,6 +1,5 @@
 name: Maestro (local)
 
-# Run this flow only when APK Build workflow completes
 on:
   workflow_dispatch:
   pull_request:
@@ -20,6 +19,7 @@ jobs:
   build-apk:
     name: Build APK
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     # Secrets are not available to pull_request runs from forks, so the Maestro job below
     # cannot run for them; skip the build too, as its only consumer is that job.
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
@@ -27,35 +27,16 @@ jobs:
       group: ${{ format('maestro-build-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
-        with:
-          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-          tool-cache: true
-          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
-          android: false
-          dotnet: true
-          haskell: true
-          # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
-          large-packages: false
-          docker-images: true
-          swap-storage: false
-
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
-          ref: ${{ github.ref }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
-      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
-        name: Use JDK 21
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: true # Only the debug build and unit tests jobs write the Gradle cache, see build.yml
+          free-disk-space: 'true'
       - name: Assemble debug APK
         run: ./gradlew :app:assembleGplayDebug $CI_GRADLE_ARG_PROPERTIES
         env:
@@ -72,9 +53,10 @@ jobs:
           overwrite: true
           if-no-files-found: error
 
-  maestro-cloud:
+  maestro:
     name: Maestro test suite
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     needs: [ build-apk ]
     if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
     # Allow only one to run at a time, since they use the same environment.
@@ -89,7 +71,7 @@ jobs:
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
-          ref: ${{ github.ref }}
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
       - name: Download APK artifact from previous job
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -153,9 +135,8 @@ jobs:
       - name: Update summary (failure)
         if: steps.maestro_test.outcome != 'success'
         run: |
-          LOG_FILE=$(find ~/.maestro/tests/ -name maestro.log)
-          echo "Log file: $LOG_FILE"
-          LOG_LINES="$(tail -n 30 $LOG_FILE)"
+          # There can be several log files
+          LOG_LINES="$(find ~/.maestro/tests/ -name maestro.log -exec tail -n 30 {} +)"
           echo "### :x: Maestro tests failed...
           
           \`\`\`
