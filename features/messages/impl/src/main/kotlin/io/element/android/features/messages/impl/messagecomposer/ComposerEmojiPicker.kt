@@ -25,10 +25,17 @@ import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import kotlinx.collections.immutable.persistentSetOf
 
 /**
- * Maximum height of the emoji picker shown below the composer. The caller reduces it on small screens to
- * keep the composer visible.
+ * Height of the emoji picker shown beneath the composer while the soft-keyboard height remains unknown for the
+ * current orientation, i.e. until the keyboard has appeared once. The caller shrinks it on small screens to keep
+ * the composer visible. Once the keyboard height is known, the picker occupies exactly that space.
  */
 internal val ComposerEmojiPickerMaxHeight = 300.dp
+
+/**
+ * Smallest keyboard space the picker will occupy. Below that threshold, e.g. with a floating keyboard,
+ * the picker falls back to [ComposerEmojiPickerMaxHeight].
+ */
+internal val ComposerEmojiPickerMinHeight = 160.dp
 
 /**
  * Emoji picker shown below the composer, replacing the soft keyboard. Tapping an emoji inserts it
