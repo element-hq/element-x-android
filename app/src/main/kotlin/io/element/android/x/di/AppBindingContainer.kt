@@ -24,9 +24,9 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
-import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.SessionsCacheDirectory
+import io.element.android.libraries.di.SessionsFilesDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.x.BuildConfig
@@ -41,8 +41,8 @@ import java.io.File
 @ContributesTo(AppScope::class)
 object AppBindingContainer {
     @Provides
-    @BaseDirectory
-    fun providesBaseDirectory(@ApplicationContext context: Context): File {
+    @SessionsFilesDirectory
+    fun providesSessionsFilesDirectory(@ApplicationContext context: Context): File {
         return File(context.filesDir, "sessions")
     }
 
