@@ -100,7 +100,6 @@ import io.element.android.libraries.matrix.api.room.activeRoomMembers
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
@@ -120,7 +119,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -178,7 +176,6 @@ class MessagesFlowNode(
 
         @Parcelize
         data class GalleryViewer(
-            val fromPinnedMessages: Boolean,
             val eventId: EventId?,
             val galleryInfo: GalleryInfo,
             val canUseOverlay: Boolean,
@@ -195,11 +192,7 @@ class MessagesFlowNode(
         data class EventDebugInfo(val eventId: EventId?, val debugInfo: TimelineItemDebugInfo) : NavTarget
 
         @Parcelize
-        data class ForwardEvent(
-            val eventIds: List<EventId>,
-            @IgnoredOnParcel
-            val timelineProvider: TimelineProvider? = null,
-        ) : NavTarget
+        data class ForwardEvent(val eventIds: List<EventId>) : NavTarget
 
         @Parcelize
         data class ReportMessage(val eventId: EventId, val senderId: UserId) : NavTarget
@@ -287,13 +280,11 @@ class MessagesFlowNode(
                     }
 
                     override fun handleGalleryItemClick(
-                        timelineMode: Timeline.Mode,
                         event: TimelineItem.Event,
                         galleryItemIndex: Int,
                         canUseOverlay: Boolean,
                     ): Boolean {
                         return processGalleryEventClick(
-                            timelineMode = timelineMode,
                             event = event,
                             canUseOverlay = canUseOverlay,
                             galleryItemIndex = galleryItemIndex,
@@ -322,8 +313,8 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
 
-                    override fun forwardEvents(eventIds: List<EventId>, timelineProvider: TimelineProvider) {
-                        backstack.push(NavTarget.ForwardEvent(eventIds, timelineProvider))
+                    override fun forwardEvents(eventIds: List<EventId>) {
+                        backstack.push(NavTarget.ForwardEvent(eventIds))
                     }
 
                     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
@@ -413,9 +404,9 @@ class MessagesFlowNode(
                         this@MessagesFlowNode.viewInTimeline(eventId)
                     }
 
-                    override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
+                    override fun forwardEvent(eventId: EventId) {
                         // Need to go to the parent because of the overlay
-                        callback.forwardEvent(eventId, fromPinnedEvents)
+                        callback.forwardEvent(eventId)
                     }
                 }
                 mediaViewerEntryPoint.createNode(
@@ -430,7 +421,6 @@ class MessagesFlowNode(
                     eventId = navTarget.eventId,
                     galleryInfo = navTarget.galleryInfo,
                     galleryItems = navTarget.galleryItems,
-                    fromPinnedMessages = navTarget.fromPinnedMessages,
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
@@ -445,9 +435,9 @@ class MessagesFlowNode(
                         this@MessagesFlowNode.viewInTimeline(eventId)
                     }
 
-                    override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
+                    override fun forwardEvent(eventId: EventId) {
                         // Need to go to the parent because of the overlay
-                        callback.forwardEvent(eventId, fromPinnedEvents)
+                        callback.forwardEvent(eventId)
                     }
                 }
                 mediaViewerEntryPoint.createNode(
@@ -478,11 +468,8 @@ class MessagesFlowNode(
                 createNode<EventDebugInfoNode>(buildContext, listOf(inputs))
             }
             is NavTarget.ForwardEvent -> {
-                // If no timeline provider is received, assume the live timeline should be used
-                val timelineProvider = navTarget.timelineProvider ?: timelineController
                 val params = ForwardEntryPoint.Params(
                     eventIds = navTarget.eventIds,
-                    timelineProvider = timelineProvider,
                     fromRoomId = room.roomId,
                 )
                 val callback = object : ForwardEntryPoint.Callback {
@@ -560,7 +547,6 @@ class MessagesFlowNode(
                         canUseOverlay: Boolean,
                     ) {
                         processGalleryEventClick(
-                            timelineMode = Timeline.Mode.PinnedEvents,
                             event = event,
                             galleryItemIndex = galleryItemIndex,
                             canUseOverlay = canUseOverlay,
@@ -583,8 +569,8 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
 
-                    override fun handleForwardEventClick(eventId: EventId, timelineProvider: TimelineProvider) {
-                        backstack.push(NavTarget.ForwardEvent(eventIds = listOf(eventId), timelineProvider = timelineProvider))
+                    override fun handleForwardEventClick(eventId: EventId) {
+                        backstack.push(NavTarget.ForwardEvent(eventIds = listOf(eventId)))
                     }
 
                     override fun navigateToThread(threadRootId: ThreadId) {
@@ -615,13 +601,11 @@ class MessagesFlowNode(
                     }
 
                     override fun handleGalleryItemClick(
-                        timelineMode: Timeline.Mode,
                         event: TimelineItem.Event,
                         galleryItemIndex: Int,
                         canUseOverlay: Boolean,
                     ): Boolean {
                         return processGalleryEventClick(
-                            timelineMode = timelineMode,
                             event = event,
                             canUseOverlay = canUseOverlay,
                             galleryItemIndex = galleryItemIndex,
@@ -650,8 +634,8 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
 
-                    override fun handleForwardEventClick(eventIds: List<EventId>, timelineProvider: TimelineProvider) {
-                        backstack.push(NavTarget.ForwardEvent(eventIds, timelineProvider))
+                    override fun handleForwardEventClick(eventIds: List<EventId>) {
+                        backstack.push(NavTarget.ForwardEvent(eventIds))
                     }
 
                     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
@@ -724,7 +708,7 @@ class MessagesFlowNode(
                         // Cannot happen
                     }
 
-                    override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
+                    override fun forwardEvent(eventId: EventId) {
                         // Cannot happen
                     }
                 }
@@ -835,7 +819,6 @@ class MessagesFlowNode(
     }
 
     private fun processGalleryEventClick(
-        timelineMode: Timeline.Mode,
         event: TimelineItem.Event,
         galleryItemIndex: Int,
         canUseOverlay: Boolean,
@@ -873,7 +856,6 @@ class MessagesFlowNode(
                     galleryInfo = galleryInfo,
                     canUseOverlay = canUseOverlay,
                     galleryItems = galleryItems,
-                    fromPinnedMessages = timelineMode is Timeline.Mode.PinnedEvents
                 )
             }
             is TimelineItemAttachmentsContent -> {
@@ -908,7 +890,6 @@ class MessagesFlowNode(
                     galleryInfo = galleryInfo,
                     canUseOverlay = canUseOverlay,
                     galleryItems = galleryItems,
-                    fromPinnedMessages = timelineMode is Timeline.Mode.PinnedEvents
                 )
             }
             else -> null
