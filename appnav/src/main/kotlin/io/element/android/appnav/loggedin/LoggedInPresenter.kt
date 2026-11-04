@@ -27,14 +27,11 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -62,7 +59,6 @@ class LoggedInPresenter(
     private val sessionVerificationService: SessionVerificationService,
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
-    private val buildMeta: BuildMeta,
     private val networkMonitor: NetworkMonitor,
     private val localNetworkPermissionAdvisor: LocalNetworkPermissionAdvisor,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
@@ -119,7 +115,6 @@ class LoggedInPresenter(
                 }
             }
         }
-        var forceNativeSlidingSyncMigration by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
             combine(
                 sessionVerificationService.sessionVerifiedStatus,
@@ -168,13 +163,6 @@ class LoggedInPresenter(
                         }
                     }
                 }
-                LoggedInEvent.CheckSlidingSyncProxyAvailability -> coroutineScope.launch {
-                    forceNativeSlidingSyncMigration = matrixClient.needsForcedNativeSlidingSyncMigration().getOrDefault(false)
-                }
-                LoggedInEvent.LogoutAndMigrateToNativeSlidingSync -> coroutineScope.launch {
-                    // Force the logout since Native Sliding Sync is already enforced by the SDK
-                    matrixClient.logout(userInitiated = true, ignoreSdkError = true)
-                }
                 LoggedInEvent.DismissLocalNetworkPermissionPrompt -> {
                     localNetworkPromptDismissedThisSession = true
                 }
@@ -193,17 +181,9 @@ class LoggedInPresenter(
             syncIndicatorState = syncIndicatorState,
             pusherRegistrationState = pusherRegistrationState.value,
             ignoreRegistrationError = ignoreRegistrationError,
-            forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
-            appName = buildMeta.applicationName,
             localNetworkPermissionDialog = localNetworkPermissionDialog,
             eventSink = ::handleEvent,
         )
-    }
-
-    // Force the user to log out if they were using the proxy sliding sync as it's no longer supported by the SDK
-    private suspend fun MatrixClient.needsForcedNativeSlidingSyncMigration(): Result<Boolean> = runCatchingExceptions {
-        val currentSlidingSyncVersion = currentSlidingSyncVersion().getOrThrow()
-        currentSlidingSyncVersion == SlidingSyncVersion.Proxy
     }
 
     private fun reportCryptoStatusToAnalytics(verificationState: SessionVerifiedStatus, recoveryState: RecoveryState) {

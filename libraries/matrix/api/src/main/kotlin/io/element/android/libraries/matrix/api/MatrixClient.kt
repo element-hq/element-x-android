@@ -43,7 +43,6 @@ import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.api.search.SearchBackfillService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
-import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -405,11 +404,6 @@ interface MatrixClient : ClientUrlContentFetcher {
      * @param serverNames servers to ask about the room, used when it cannot be resolved locally.
      */
     suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<NotJoinedRoom>
-
-    /**
-     * Returns the currently used sliding sync version.
-     */
-    suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion>
 
     /** Whether this account can be deactivated from the app, which depends on the authentication method used by the homeserver. */
     fun canDeactivateAccount(): Boolean
