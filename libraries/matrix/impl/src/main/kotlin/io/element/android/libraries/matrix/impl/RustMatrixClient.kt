@@ -736,7 +736,7 @@ class RustMatrixClient(
         }.mapFailure { it.mapClientException() }
     }
 
-    internal suspend fun destroy() {
+    override suspend fun destroy() {
         innerNotificationClient.close()
 
         roomFactory.destroy()

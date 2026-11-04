@@ -503,6 +503,11 @@ interface MatrixClient : ClientUrlContentFetcher {
      */
     suspend fun resetWellKnownConfig(): Result<Unit>
 
+    /**
+     * Release all the resources of the client. The client must not be used afterwards.
+     */
+    suspend fun destroy()
+
     /** Returns a provider for the capabilities the homeserver advertises, such as whether the display name can be changed. */
     fun homeserverCapabilities(): HomeserverCapabilitiesProvider
 
