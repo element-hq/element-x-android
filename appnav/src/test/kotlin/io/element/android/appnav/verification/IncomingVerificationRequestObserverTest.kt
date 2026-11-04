@@ -11,6 +11,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appnav.session.MatrixSessionCache
 import io.element.android.appnav.session.SyncOrchestrator
+import io.element.android.features.migration.test.FakeAppMigrationRunner
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -170,6 +171,7 @@ class IncomingVerificationRequestObserverTest {
                 )
             },
             analyticsService = FakeAnalyticsService(),
+            appMigrationRunner = FakeAppMigrationRunner(),
         )
     }
 

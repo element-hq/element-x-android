@@ -39,4 +39,5 @@ dependencies {
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.features.announcement.test)
     testImplementation(projects.features.rageshake.test)
+    testImplementation(projects.features.migration.test)
 }

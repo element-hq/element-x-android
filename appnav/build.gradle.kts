@@ -52,6 +52,7 @@ dependencies {
     implementation(projects.features.callnative.api)
     implementation(projects.features.ftue.api)
     implementation(projects.features.linknewdevice.api)
+    implementation(projects.features.migration.api)
     implementation(projects.features.share.api)
 
     implementation(projects.services.apperror.api)
@@ -74,6 +75,7 @@ dependencies {
     testImplementation(projects.features.announcement.test)
     testImplementation(projects.features.forward.test)
     testImplementation(projects.features.messages.test)
+    testImplementation(projects.features.migration.test)
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.features.preferences.test)
     testImplementation(projects.features.rageshake.test)
