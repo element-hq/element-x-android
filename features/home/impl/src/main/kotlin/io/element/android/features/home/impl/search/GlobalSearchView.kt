@@ -257,7 +257,7 @@ private fun LearnMoreBottomSheet(
         }
     }
 
-    if (!bottomSheetState.isVisible) return
+    if (!showLearnMoreBottomSheet) return
 
     ModalBottomSheet(
         onDismissRequest = {
