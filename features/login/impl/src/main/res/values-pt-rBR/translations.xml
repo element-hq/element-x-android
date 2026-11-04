@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Alterar provedor da conta"</string>
-  <string name="screen_account_provider_form_hint">"Endereço do servidor-casa"</string>
-  <string name="screen_account_provider_form_notice">"Digite um termo de pesquisa ou o endereço de um domínio."</string>
-  <string name="screen_account_provider_form_subtitle">"Procure uma empresa, comunidade ou servidor privado."</string>
-  <string name="screen_account_provider_form_title">"Encontre um provedor de contas"</string>
-  <string name="screen_account_provider_signin_subtitle">"Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mail para guardar seus e-mails."</string>
+  <string name="error_account_already_logged_in">"Você já está conectado neste dispositivo como %1$s ."</string>
+  <string name="error_account_creation_not_possible">"Seu servidor-casa precisa ser atualizado para oferecer suporte ao Matrix Authentication Service e à criação de contas."</string>
   <string name="screen_account_provider_signin_title">"Você está prestes a entrar em %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mail para guardar seus e-mails."</string>
-  <string name="screen_account_provider_signup_title">"Você está prestes a criar uma conta em %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"O Matrix.org é um grande servidor gratuito na rede pública Matrix para comunicação segura e descentralizada, administrado pela Fundação Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Outro"</string>
   <string name="screen_change_account_provider_subtitle">"Use um provedor de conta diferente, como seu próprio servidor privado ou uma conta corporativa."</string>
   <string name="screen_change_account_provider_title">"Alterar provedor da conta"</string>
@@ -35,7 +28,6 @@
   <string name="screen_login_error_unsupported_authentication">"O servidor selecionado não suporta a entrada por senha ou OAuth. Entre em contato com o administrador ou escolha outro servidor."</string>
   <string name="screen_login_form_header">"Digite seus dados"</string>
   <string name="screen_login_subtitle">"A Matrix é uma rede aberta para comunicação segura e descentralizada."</string>
-  <string name="screen_login_title">"Boas-vindas novamente!"</string>
   <string name="screen_login_title_with_homeserver">"Entrar em %1$s"</string>
   <string name="screen_onboarding_app_version">"Versão %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Entrar manualmente"</string>
@@ -43,7 +35,6 @@
   <string name="screen_onboarding_sign_in_with_qr_code">"Entrar com código QR"</string>
   <string name="screen_onboarding_sign_up">"Criar conta"</string>
   <string name="screen_onboarding_welcome_message">"Boas-vindas ao %1$s mais rápido de todos os tempos. Turbinado para velocidade e simplicidade."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Bem-vindo ao %1$s. Turbinado, para velocidade e simplicidade"</string>
   <string name="screen_onboarding_welcome_title">"Esteja no seu elemento"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Estabelecendo uma conexão segura"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Não foi possível estabelecer uma conexão segura com o novo dispositivo. Seus dispositivos existentes ainda estão seguros e você não precisa se preocupar com eles."</string>
@@ -85,16 +76,10 @@ Tente entrar manualmente ou ler o código QR com outro dispositivo."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Você deve permitir que o %1$s use a câmera do seu dispositivo para continuar."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Permita o acesso à câmera para ler o código QR"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Leia o código QR"</string>
-  <string name="screen_qr_code_login_start_over_button">"Começar de novo"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Ocorreu um erro inesperado. Tente novamente."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Aguardando seu outro dispositivo"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Seu provedor de conta pode solicitar o seguinte código para verificar a entrada."</string>
   <string name="screen_qr_code_login_verify_code_title">"Seu código de verificação"</string>
-  <string name="screen_server_confirmation_change_server">"Alterar provedor da conta"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Um servidor privado para funcionários do Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"A Matrix é uma rede aberta para comunicação segura e descentralizada."</string>
-  <string name="screen_server_confirmation_message_register">"Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mail para guardar seus e-mails."</string>
-  <string name="screen_server_confirmation_title_login">"Você está prestes a entrar em %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Escolher um provedor de conta"</string>
-  <string name="screen_server_confirmation_title_register">"Você está prestes a criar uma conta em %1$s"</string>
 </resources>

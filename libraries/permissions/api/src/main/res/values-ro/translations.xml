@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"Permiteți accesul"</string>
   <string name="dialog_permission_camera">"Pentru a permite aplicației să utilizeze camera dispozitivului, acordați permisiunea în setările sistemului."</string>
   <string name="dialog_permission_generic">"Acordați permisiunea în setările sistemului."</string>
   <string name="dialog_permission_microphone">"Pentru a permite aplicației să utilizeze microfonul, acordați permisiunea în setările sistemului."</string>
   <string name="dialog_permission_notification">"Pentru a permite aplicației să afișeze notificări, acordați permisiunea în setările sistemului."</string>
+  <string name="screen_local_network_opt_in_subtitle">"Homeserverul dvs. se află în rețeaua locală. Pentru a se conecta, %1$s are nevoie de permisiunea de a accesa dispozitive din această rețea."</string>
+  <string name="screen_local_network_opt_in_title">"Permiteți accesul la rețeaua locală"</string>
 </resources>

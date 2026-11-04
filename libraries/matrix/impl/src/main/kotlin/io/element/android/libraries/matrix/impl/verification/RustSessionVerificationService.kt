@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.verification.VerificationEmoji
 import io.element.android.libraries.matrix.api.verification.VerificationFlowState
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.Flow
@@ -53,6 +54,7 @@ class RustSessionVerificationService(
     private val client: Client,
     isSyncServiceReady: Flow<Boolean>,
     private val sessionCoroutineScope: CoroutineScope,
+    private val sessionDispatcher: CoroutineDispatcher,
 ) : SessionVerificationService, SessionVerificationControllerDelegate {
     private var currentVerificationRequest: VerificationRequest? = null
 
@@ -167,7 +169,7 @@ class RustSessionVerificationService(
         runCatchingExceptions {
             // Ensure the block cannot be cancelled, else if the Rust SDK emit a new state during the API execution,
             // the state machine may cancel the api call.
-            withContext(NonCancellable) {
+            withContext(NonCancellable + sessionDispatcher) {
                 block()
             }
         }.onFailure {
@@ -238,7 +240,7 @@ class RustSessionVerificationService(
         currentVerificationRequest = null
         if (canVerify.value && cancelAnyPendingVerificationAttempt) {
             // Cancel any pending verification attempt
-            tryOrNull { verificationController.cancelVerification() }
+            tryOrNull { withContext(sessionDispatcher) { verificationController.cancelVerification() } }
         }
         _verificationFlowState.value = VerificationFlowState.Initial
     }

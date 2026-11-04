@@ -11,9 +11,13 @@ package io.element.android.features.messages.impl.timeline.components.receipt
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 data class ReadReceiptViewState(
     val sendState: LocalEventSendState?,
     val isLastOutgoingMessage: Boolean,
-    val receipts: ImmutableList<ReadReceiptData>,
-)
+    private val renderReadReceipts: Boolean,
+    private val knownReceipts: ImmutableList<ReadReceiptData>,
+) {
+    val receipts = if (renderReadReceipts) knownReceipts else persistentListOf()
+}

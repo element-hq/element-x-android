@@ -31,6 +31,7 @@ import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.exception.isNetworkError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -105,7 +106,15 @@ class SecureBackupSetupPresenter(
             SecureBackupSetupStateMachine.State.CreatingKey -> SetupState.Creating
             is SecureBackupSetupStateMachine.State.KeyCreated -> SetupState.Created(formattedRecoveryKey = key)
             is SecureBackupSetupStateMachine.State.KeyCreatedAndSaved -> SetupState.CreatedAndSaved(formattedRecoveryKey = key)
-            is SecureBackupSetupStateMachine.State.Error -> SetupState.Error(exception)
+            is SecureBackupSetupStateMachine.State.Error -> SetupState.Error(errorType = exception.toSetupErrorType())
+        }
+    }
+
+    private fun Exception.toSetupErrorType(): SetupErrorType {
+        return if (isNetworkError()) {
+            SetupErrorType.Network
+        } else {
+            SetupErrorType.Unknown
         }
     }
 
@@ -120,6 +129,7 @@ class SecureBackupSetupPresenter(
                     stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.SdkHasCreatedKey(it))
                 },
                 onFailure = {
+                    Timber.tag(loggerTagSetup.value).e(it, "Failed to reset recovery key")
                     if (it is Exception) {
                         stateAndDispatch.dispatchAction(SecureBackupSetupStateMachine.Event.SdkError(it))
                     }

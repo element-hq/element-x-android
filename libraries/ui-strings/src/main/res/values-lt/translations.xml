@@ -10,14 +10,12 @@
   <string name="a11y_send_files">"Siųsti failus"</string>
   <string name="a11y_show_password">"Rodyti slaptažodį"</string>
   <string name="a11y_user_menu">"Vartotojo meniu"</string>
-  <string name="a11y_your_avatar">"Jūsų pseudoportretas"</string>
   <string name="action_accept">"Priimti"</string>
   <string name="action_back">"Atgal"</string>
   <string name="action_cancel">"Atšaukti"</string>
   <string name="action_choose_photo">"Pasirinkti nuotrauką"</string>
   <string name="action_clear">"Išvalyti"</string>
   <string name="action_close">"Uždaryti"</string>
-  <string name="action_complete_verification">"Užbaigti patvirtinimą"</string>
   <string name="action_confirm">"Patvirtinti"</string>
   <string name="action_continue">"Tęsti"</string>
   <string name="action_copy">"Kopijuoti"</string>
@@ -54,7 +52,6 @@
   <string name="action_react">"Reaguoti"</string>
   <string name="action_remove">"Šalinti"</string>
   <string name="action_reply">"Atsakyti"</string>
-  <string name="action_report_bug">"Pranešti apie riktą"</string>
   <string name="action_report_content">"Pranešti apie turinį"</string>
   <string name="action_retry">"Bandyti dar kartą"</string>
   <string name="action_retry_decryption">"Pakartoti iššifravimą"</string>
@@ -64,7 +61,6 @@
   <string name="action_send_message">"Siųsti žinutę"</string>
   <string name="action_share">"Dalintis"</string>
   <string name="action_share_link">"Bendrinti nuorodą"</string>
-  <string name="action_sign_in_again">"Prisijungti vėl"</string>
   <string name="action_signout">"Atsijungti"</string>
   <string name="action_signout_anyway">"Atsijungti vis tiek"</string>
   <string name="action_skip">"Praleisti"</string>
@@ -80,7 +76,6 @@
   <string name="common_analytics">"Analitika"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Jūs išėjote iš kambario"</string>
   <string name="common_audio">"Garsas"</string>
-  <string name="common_bubbles">"Burbulai"</string>
   <string name="common_chat_backup">"Pokalbio atsarginė kopija"</string>
   <string name="common_copyright">"Autorinės teisės"</string>
   <string name="common_creating_room">"Kuriamas kambarys…"</string>
@@ -158,7 +153,6 @@
   <string name="common_third_party_notices">"Trečiųjų šalių pranešimai"</string>
   <string name="common_topic">"Tema"</string>
   <string name="common_topic_placeholder">"Apie ką yra šis kambarys?"</string>
-  <string name="common_unable_to_decrypt">"Nepavyko iššifruoti"</string>
   <string name="common_unable_to_invite_message">"Kvietimų nepavyko išsiųsti vienam ar keliems vartotojams."</string>
   <string name="common_unable_to_invite_title">"Nepavyko išsiųsti kvietimo (-ų)"</string>
   <string name="common_unmute">"Atšaukti nutildymą"</string>
@@ -173,27 +167,12 @@
   <string name="dialog_title_success">"Pavyko"</string>
   <string name="dialog_title_warning">"Įspėjimas"</string>
   <string name="error_failed_creating_the_permalink">"Nepavyko sukurti nuolatinės nuorodos"</string>
-  <string name="error_failed_loading_messages">"Nepavyko įkelti žinučių"</string>
   <string name="error_some_messages_have_not_been_sent">"Kai kurios žinutės nebuvo išsiųstos"</string>
   <string name="error_unknown">"Atsiprašome, įvyko klaida"</string>
-  <string name="invite_friends_rich_title">"🔐️ Prisijunkite prie manęs %1$s"</string>
-  <string name="invite_friends_text">"Ei, pasikalbėkime naudojant %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
-  <string name="preference_rageshake">"Papurtykite, kad praneštumėte apie klaidą"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepavyko pasirinkti laikmenos, pabandykite dar kartą."</string>
   <string name="screen_room_error_failed_processing_media">"Nepavyko apdoroti įkeliamos laikmenos, bandykite dar kartą."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepavyko gauti naudotojo išsamios informacijos."</string>
-  <string name="screen_share_location_title">"Bendrinti vietą"</string>
-  <string name="screen_share_my_location_action">"Bendrinti mano vietą"</string>
-  <string name="screen_share_open_apple_maps">"Atverti programoje „Apple Maps“"</string>
-  <string name="screen_share_open_google_maps">"Atverti „Google“ žemėlapiuose"</string>
-  <string name="screen_share_open_osm_maps">"Atverti programoje „OpenStreetMap“"</string>
-  <string name="screen_share_this_location_action">"Bendrinti pasirinktą vietą"</string>
-  <string name="screen_space_list_description">"Erdvės, kurias sukūrėte arba prie kurių prisijungėte."</string>
-  <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"„%1$s“ erdvė"</string>
-  <string name="screen_space_list_title">"Erdvės"</string>
-  <string name="screen_view_location_title">"Vieta"</string>
-  <string name="settings_version_number">"Versija: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"lt"</string>
 </resources>

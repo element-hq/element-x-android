@@ -9,6 +9,14 @@ package io.element.android.libraries.push.impl.push
 
 import io.element.android.libraries.push.impl.db.PushRequest
 
+/**
+ * A helper that triggers an opportunistic sync when a notifiable event is received.
+ *
+ * When this happens, the app is in background but has internet connectivity, so we can trigger a sync to get
+ * the latest state of the rooms that have new events.
+ *
+ * This is useful to avoid showing stale data when the user opens the app after receiving a push notification.
+ */
 fun interface SyncOnNotifiableEvent {
     suspend operator fun invoke(requests: List<PushRequest>)
 }

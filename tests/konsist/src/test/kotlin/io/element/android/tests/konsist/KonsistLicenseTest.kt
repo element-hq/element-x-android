@@ -30,8 +30,8 @@ class KonsistLicenseTest {
             .files
             .filter {
                 it.moduleName.startsWith("enterprise").not() &&
-                    it.moduleName != "libraries/rustls-tls" &&
                     it.nameWithExtension != "locales.kt" &&
+                    it.nameWithExtension != "CertificateVerifier.kt" &&
                     it.name.startsWith("Template ").not()
             }
             .also {

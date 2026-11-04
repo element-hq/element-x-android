@@ -9,7 +9,6 @@
   <string name="screen_identity_confirmed_subtitle">"Ara pots llegir o enviar missatges de manera segura, i qualsevol persona amb qui xategis també confiarà en aquest dispositiu."</string>
   <string name="screen_identity_confirmed_title">"Dispositiu verificat"</string>
   <string name="screen_identity_use_another_device">"Utilitza un altre dispositiu"</string>
-  <string name="screen_identity_waiting_on_other_device">"Esperant un altre dispositiu…"</string>
   <string name="screen_notification_optin_subtitle">"Pots canviar la configuració més tard."</string>
   <string name="screen_notification_optin_title">"Permet les notificacions i no perdis cap missatge"</string>
 </resources>

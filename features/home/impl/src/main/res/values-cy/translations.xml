@@ -10,17 +10,15 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Rhowch eich allwedd adfer"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Wedi anghofio\'ch allwedd adfer?"</string>
   <string name="confirm_recovery_key_banner_title">"Dyw eich allwedd storfa heb ei gydweddu"</string>
-  <string name="full_screen_intent_banner_message">"Er mwyn sicrhau fyddwch chi ddim yn colli galwad bwysig, newidiwch eich gosodiadau i ganiatáu hysbysiadau sgrin lawn pan fydd eich ffôn wedi\'i gloi."</string>
-  <string name="full_screen_intent_banner_title">"Gwella profiad eich galwadau"</string>
+  <string name="full_screen_intent_banner_message_android">"Er mwyn sicrhau fyddwch chi ddim yn colli galwad bwysig, newidiwch eich gosodiadau i ganiatáu hysbysiadau sgrin lawn pan fydd eich ffôn wedi\'i gloi."</string>
+  <string name="full_screen_intent_banner_title_android">"Gwella profiad eich galwadau"</string>
   <string name="screen_home_tab_chats">"Sgyrsiau"</string>
   <string name="screen_home_tab_spaces">"Gofodau"</string>
   <string name="screen_invites_decline_chat_message">"Ydych chi\'n siŵr eich bod am wrthod y gwahoddiad i ymuno â %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Gwrthod y gwahoddiad"</string>
   <string name="screen_invites_decline_direct_chat_message">"Ydych chi\'n siŵr eich bod am wrthod y sgwrs breifat hon gyda %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Gwrthod sgwrs"</string>
-  <string name="screen_invites_empty_list">"Dim Gwahoddiadau"</string>
   <string name="screen_invites_invited_you">"Mae %1$s (%2$s) wedi eich gwahodd"</string>
-  <string name="screen_migration_message">"Mae hon yn broses un tro, diolch am aros."</string>
   <string name="screen_migration_title">"Creu eich cyfrif."</string>
   <string name="screen_roomlist_a11y_create_message">"Crëwch sgwrs neu ystafell newydd"</string>
   <string name="screen_roomlist_clear_filters">"Clirio\'r hidlau"</string>
@@ -48,6 +46,4 @@ Does gennych chi ddim negeseuon heb eu darllen!"</string>
   <string name="screen_roomlist_mark_as_read">"Marcio fel wedi\'i ddarllen"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcio fel heb ei ddarllen"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Mae\'r ystafell hon wedi\'i huwchraddio"</string>
-  <string name="session_verification_banner_message">"Mae\'n debyg eich bod chi\'n defnyddio dyfais newydd. Dilyswch gyda dyfais arall i gael mynediad at eich negeseuon wedi\'u hamgryptio."</string>
-  <string name="session_verification_banner_title">"Gwiriwch mai chi sydd yna"</string>
 </resources>

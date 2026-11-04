@@ -12,17 +12,15 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Skriv inn gjenopprettingsnøkkelen din"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Har du glemt din gjenopprettingsnøkkel?"</string>
   <string name="confirm_recovery_key_banner_title">"Nøkkellagringen din er ikke synkronisert"</string>
-  <string name="full_screen_intent_banner_message">"For å sikre at du aldri går glipp av en viktig samtale, må du endre innstillingene dine for å tillate fullskjermvarsler når telefonen er låst."</string>
-  <string name="full_screen_intent_banner_title">"Forbedre samtaleopplevelsen din"</string>
+  <string name="full_screen_intent_banner_message_android">"For å sikre at du aldri går glipp av en viktig samtale, må du endre innstillingene dine for å tillate fullskjermvarsler når telefonen er låst."</string>
+  <string name="full_screen_intent_banner_title_android">"Forbedre samtaleopplevelsen din"</string>
   <string name="screen_home_tab_chats">"Chatter"</string>
   <string name="screen_home_tab_spaces">"Områder"</string>
   <string name="screen_invites_decline_chat_message">"Er du sikker på at du vil takke nei til invitasjonen til å bli med i %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Avvis invitasjon"</string>
   <string name="screen_invites_decline_direct_chat_message">"Er du sikker på at du vil avslå denne private chatten med %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Avslå chat"</string>
-  <string name="screen_invites_empty_list">"Ingen invitasjoner"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s) inviterte deg"</string>
-  <string name="screen_migration_message">"Dette er en engangsprosess, takk for at du venter."</string>
   <string name="screen_migration_title">"Setter opp kontoen din."</string>
   <string name="screen_roomlist_a11y_create_message">"Opprett en ny samtale eller et nytt rom"</string>
   <string name="screen_roomlist_clear_filters">"Fjern filtre"</string>
@@ -51,6 +49,5 @@ Du har ingen uleste meldinger!"</string>
   <string name="screen_roomlist_mark_as_unread">"Merk som ulest"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Dette rommet har blitt oppgradert"</string>
   <string name="screen_roomlist_your_spaces">"Dine områder"</string>
-  <string name="session_verification_banner_message">"Det ser ut til at du bruker en ny enhet. Bekreft med en annen enhet for å få tilgang til de krypterte meldingene dine."</string>
-  <string name="session_verification_banner_title">"Bekreft at det er deg"</string>
+  <string name="screen_space_list_empty_state_title">"Opprett område for å organisere rom"</string>
 </resources>

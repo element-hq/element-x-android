@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_scanning">"Scansione…"</string>
   <string name="screen_media_browser_delete_confirmation_subtitle">"Questo file verrà rimosso dalla stanza e i membri non ne avranno accesso."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Eliminare il file?"</string>
   <string name="screen_media_browser_download_error_message">"Controlla la tua connessione Internet e riprova."</string>

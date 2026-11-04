@@ -5,7 +5,6 @@
   <string name="screen_identity_confirmation_title">"დაამტკიცეთ თქვენი პიროვნება"</string>
   <string name="screen_identity_confirmed_subtitle">"ახლა თქვენ შეძლებთ შეტყობინებების წაკითხვას ან გაგზავნას უსაფრთხოდ, სხვა მომხმარებლებსაც შეუძლიათ ამ მოწყობილობას ენდონ."</string>
   <string name="screen_identity_confirmed_title">"მოწყობილობა დადასტურებულია"</string>
-  <string name="screen_identity_waiting_on_other_device">"ველოდებით სხვა მოწყობილობას…"</string>
   <string name="screen_notification_optin_subtitle">"თქვენ შეგიძლიათ შეცვალოთ თქვენი პარამეტრები მოგვიანებით."</string>
   <string name="screen_notification_optin_title">"ყველა შეტყობინებაზე შეტყობინებების მიღება"</string>
 </resources>

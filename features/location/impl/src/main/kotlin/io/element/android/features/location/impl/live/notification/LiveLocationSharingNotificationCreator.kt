@@ -16,9 +16,9 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import dev.zacsweers.metro.Inject
+import io.element.android.features.location.impl.R
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.ApplicationContext
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Inject
 class LiveLocationSharingNotificationCreator(
@@ -35,8 +35,8 @@ class LiveLocationSharingNotificationCreator(
         }
         return NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-            .setContentTitle(context.getString(CommonStrings.live_location_sharing_foreground_service_title_android, buildMeta.applicationName))
-            .setContentText(context.getString(CommonStrings.live_location_sharing_foreground_service_message_android))
+            .setContentTitle(context.getString(R.string.live_location_sharing_foreground_service_title_android, buildMeta.applicationName))
+            .setContentText(context.getString(R.string.live_location_sharing_foreground_service_message_android))
             .setOngoing(true)
             .build()
     }
@@ -48,7 +48,7 @@ class LiveLocationSharingNotificationCreator(
             notificationManager.createNotificationChannel(
                 NotificationChannel(
                     CHANNEL_ID,
-                    context.getString(CommonStrings.live_location_sharing_foreground_service_channel_title_android)
+                    context.getString(R.string.live_location_sharing_foreground_service_channel_title_android)
                         .ifEmpty { "Live Location Sharing" },
                     NotificationManager.IMPORTANCE_LOW,
                 )

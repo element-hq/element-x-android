@@ -14,7 +14,6 @@
     <item quantity="other">"%d notifications"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Le distributeur de notifications UnifiedPush n’a pas pu être enregistré, vous ne recevrez donc plus de notifications. Veuillez vérifier les paramètres de notification de l’application et l’état du distributeur."</string>
-  <string name="notification_fallback_content">"Vous avez de nouveau(x) message(s)."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"Vous avez %d nouveau message."</item>
     <item quantity="other">"Vous avez %d nouveaux messages."</item>
@@ -26,8 +25,6 @@
   <string name="notification_incoming_audio_call">"📞 Appel entrant"</string>
   <string name="notification_incoming_call">"📹 Appel entrant"</string>
   <string name="notification_inline_reply_failed">"** Échec de l’envoi - veuillez ouvrir le salon"</string>
-  <string name="notification_invitation_action_join">"Rejoindre"</string>
-  <string name="notification_invitation_action_reject">"Rejeter"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d invitation"</item>
     <item quantity="other">"%d invitations"</item>
@@ -37,7 +34,6 @@
   <string name="notification_knock_request_body">"A demandé à rejoindre"</string>
   <string name="notification_live_location_started_body">"A commencé à partager sa position en direct"</string>
   <string name="notification_mentioned_you_body">"Mentionné(e) : %1$s"</string>
-  <string name="notification_new_messages">"Nouveaux messages"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nouveau message"</item>
     <item quantity="other">"%d nouveaux messages"</item>

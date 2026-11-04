@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Para asegurarte de que nunca te pierdas una llamada importante, modifica tus ajustes para permitir notificaciones a pantalla completa cuando el teléfono esté bloqueado."</string>
-  <string name="full_screen_intent_banner_title">"Mejora tu experiencia de llamada"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Selecciona la calidad por defecto de los vídeos que subas."</string>
+  <string name="dialog_default_video_quality_selector_title">"Calidad de subida de vídeos"</string>
+  <string name="full_screen_intent_banner_message_android">"Para asegurarte de que nunca te pierdas una llamada importante, modifica tus ajustes para permitir notificaciones a pantalla completa cuando el teléfono esté bloqueado."</string>
+  <string name="full_screen_intent_banner_title_android">"Mejora tu experiencia de llamada"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Elige cómo recibir las notificaciones"</string>
-  <string name="screen_advanced_settings_developer_mode">"Modo desarrollador"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Habilita para tener acceso a características y funcionalidades para desarrolladores."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL base personalizada de Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Define una URL base personalizada para Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL no válida, asegúrate de incluir el protocolo (http/https) y la dirección correcta."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Ocultar avatares en las invitaciones a salas"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Ocultar vistas previas de multimedia en la cronología"</string>
   <string name="screen_advanced_settings_labs">"Experimental"</string>
   <string name="screen_advanced_settings_live_location_section_description">"La distancia que debes recorrer para que se active una actualización."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Asegúrate de que la «Ubicación precisa» está activada para esta aplicación. Para cambiar el permiso, ve a %1$s."</string>
@@ -21,7 +20,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Sube fotos y vídeos más rápido y reduce el uso de datos"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimizar la calidad multimedia"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderación y seguridad"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimizar automáticamente las imágenes para subidas más rápidas y tamaños de archivo más pequeños."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimizar la calidad de subida de imágenes"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Toca aquí para cambiar."</string>
@@ -30,9 +28,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Estándar (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Calidad de subida de vídeos"</string>
   <string name="screen_advanced_settings_push_provider_android">"Proveedor de notificaciones push"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Desactiva el editor de texto enriquecido para escribir Markdown manualmente."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Confirmaciones de lectura"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Si se desactiva, las confirmaciones de lectura no se enviarán a nadie. Seguirás recibiendo confirmaciones de lectura de otros usuarios."</string>
   <string name="screen_advanced_settings_share_presence">"Compartir presencia"</string>
   <string name="screen_advanced_settings_share_presence_description">"Si se desactiva, no podrás enviar ni recibir confirmaciones de lectura ni notificaciones de escritura."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Ocultar siempre"</string>
@@ -109,6 +104,7 @@ Si continúas, es posible que algunos de tus ajustes cambien."</string>
   <string name="screen_settings_user_status_in_a_meeting">"En una reunión"</string>
   <string name="screen_settings_user_status_on_the_road">"En la carretera"</string>
   <string name="screen_settings_user_status_placeholder">"¿Cuál es tu estado?"</string>
+  <string name="settings_version_number">"Versión: %1$s (%2$s)"</string>
   <string name="theme_black">"Negro"</string>
   <string name="theme_dark">"Oscuro"</string>
   <string name="theme_light">"Claro"</string>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="vulkan_not_supported_dialog_content_android">"你的设备过旧，需要 Android 8 或更高版本的设备。"</string>
+  <string name="vulkan_not_supported_dialog_title_android">"地图渲染不受支持。"</string>
+</resources>

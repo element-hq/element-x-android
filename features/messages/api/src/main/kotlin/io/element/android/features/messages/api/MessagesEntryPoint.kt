@@ -36,7 +36,7 @@ interface MessagesEntryPoint : FeatureEntryPoint {
         fun navigateToRoomDetails()
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
-        fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean)
+        fun forwardEvent(eventId: EventId)
         fun navigateToRoom(roomId: RoomId)
         fun navigateToDeveloperSettings()
     }

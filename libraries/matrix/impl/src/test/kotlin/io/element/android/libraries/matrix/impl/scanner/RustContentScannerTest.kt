@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.scanner
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.test.media.aMediaSource
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import uniffi.matrix_sdk_contentscanner.MediaScanResponse
@@ -20,6 +21,7 @@ class RustContentScannerTest {
         val scanner = RustContentScanner(
             client = FakeFfiClient(),
             rustScanner = FakeFfiContentScanner(),
+            dispatcher = StandardTestDispatcher(testScheduler),
         )
 
         scanner.scan(aMediaSource()).run {
@@ -32,7 +34,8 @@ class RustContentScannerTest {
     fun `test successful invalid scan`() = runTest {
         val scanner = RustContentScanner(
             client = FakeFfiClient(),
-            rustScanner = FakeFfiContentScanner(scan = { _, _ -> MediaScanResponse(clean = false, info = "Not clean") })
+            rustScanner = FakeFfiContentScanner(scan = { _, _ -> MediaScanResponse(clean = false, info = "Not clean") }),
+            dispatcher = StandardTestDispatcher(testScheduler),
         )
 
         scanner.scan(aMediaSource()).run {
@@ -45,7 +48,8 @@ class RustContentScannerTest {
     fun `test failed scan`() = runTest {
         val scanner = RustContentScanner(
             client = FakeFfiClient(),
-            rustScanner = FakeFfiContentScanner(scan = { _, _ -> throw IllegalStateException("BOOM") })
+            rustScanner = FakeFfiContentScanner(scan = { _, _ -> throw IllegalStateException("BOOM") }),
+            dispatcher = StandardTestDispatcher(testScheduler),
         )
 
         scanner.scan(aMediaSource()).run {

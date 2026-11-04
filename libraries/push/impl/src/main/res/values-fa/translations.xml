@@ -14,7 +14,6 @@
     <item quantity="other">"%dاعلان‌"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"توزیع‌کننده اعلان UnifiedPush قابل ثبت نیست، بنابراین دیگر اعلانی دریافت نخواهید کرد. لطفاً تنظیمات اعلان‌های برنامه و وضعیت توزیع‌کننده اعلان را بررسی کنید."</string>
-  <string name="notification_fallback_content">"پیام‌های جدیدی دارید."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"شما یک پیام جدید %d دارید."</item>
     <item quantity="other">"شما پیام‌های جدید %d دارید."</item>
@@ -26,8 +25,6 @@
   <string name="notification_incoming_audio_call">"📞 تماس ورودی"</string>
   <string name="notification_incoming_call">"📹 تماس ورودی"</string>
   <string name="notification_inline_reply_failed">"**‌شکست در فرستادن - لطفاً اتاق را بگشایید"</string>
-  <string name="notification_invitation_action_join">"پیوستن"</string>
-  <string name="notification_invitation_action_reject">"رد کردن"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d دعوت"</item>
     <item quantity="other">"%d دعوت"</item>
@@ -36,7 +33,6 @@
   <string name="notification_invite_body_with_sender">"%1$s به گپ دعوتتان کرد"</string>
   <string name="notification_live_location_started_body">"شروع به اشتراک گذاری موقعیت مکانی زنده خود کردند"</string>
   <string name="notification_mentioned_you_body">"به شما اشاره کرد: %1$s"</string>
-  <string name="notification_new_messages">"پیام جدید"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d پیام جدید"</item>
     <item quantity="other">"%d پیام جدید"</item>

@@ -21,8 +21,6 @@ data class LoggedInState(
     val syncIndicatorState: SyncIndicatorState,
     val pusherRegistrationState: AsyncData<Unit>,
     val ignoreRegistrationError: Boolean,
-    val forceNativeSlidingSyncMigration: Boolean,
-    val appName: String,
     val localNetworkPermissionDialog: LocalNetworkPermissionDialog,
     val eventSink: (LoggedInEvent) -> Unit,
 )

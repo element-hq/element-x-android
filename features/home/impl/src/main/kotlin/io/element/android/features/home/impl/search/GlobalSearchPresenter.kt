@@ -161,6 +161,12 @@ class GlobalSearchPresenter(
                     }.collectLatest { (results, paginationState) ->
                         Timber.d("Message search found ${results.size} items, pagination state: $paginationState")
 
+                        // This is an intermediate state, where we received a signal that the current search finished, but the results have not been
+                        // received yet.
+                        if (paginationState is MessageSearchPaginationState.Idle && !paginationState.endReached && results.isEmpty()) {
+                            return@collectLatest
+                        }
+
                         // Try processing the results in parallel to speed up the processing time, since we have to wait until we get the room info for each
                         // result, which can be slow if we have a lot of results. The original order is kept by using `awaitAll()`.
                         val mappedResults = results.map { result ->

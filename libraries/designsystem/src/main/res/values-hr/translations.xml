@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Niste spremili sve promjene."</string>
+  <string name="dialog_unsaved_changes_description_android">"Vaše promjene nisu spremljene. Jeste li sigurni da se želite vratiti?"</string>
+  <string name="dialog_unsaved_changes_title">"Želite li spremiti promjene?"</string>
+</resources>

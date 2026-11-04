@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s で地図を読み込めません。時間を置いて再度お試しください。"</string>
+  <string name="error_failed_locating_user">"%1$s は現在地にアクセスできませんでした。時間を置いて再度お試しください。"</string>
+  <string name="error_location_service_disabled_android">"位置情報に基づく機能を使用するには、GPSを有効化してください。"</string>
+  <string name="error_missing_location_auth_android">"現在地を取得する権限が %1$s にありません。設定で権限を追加できます。"</string>
+  <string name="error_missing_location_rationale_android">"現在地を取得する権限が %1$s にありません。以下から許可してください。"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"ライブ位置情報共有"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"位置情報を共有しています"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s ライブ位置情報"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"誰も位置情報を共有していません"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"ライブ位置情報を共有しています"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="other">"%1$d 人"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"地図上"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"ライブ位置情報の履歴はルームに保管され、メンバーは後から確認することもできます。"</string>
   <string name="screen_share_location_live_location_duration_picker_title">"ライブ位置情報を共有する期間を選択してください。"</string>
   <string name="screen_share_location_live_location_missing_permissions">"このルームでライブ位置情報を共有する権限がありません。"</string>
+  <string name="screen_share_location_title">"場所を共有"</string>
+  <string name="screen_share_my_location_action">"現在地を共有する"</string>
+  <string name="screen_share_open_apple_maps">"Apple Maps で開く"</string>
+  <string name="screen_share_open_google_maps">"Google Maps で開く"</string>
+  <string name="screen_share_open_osm_maps">"OpenStreetMapで開く"</string>
+  <string name="screen_share_this_location_action">"この位置情報を共有する"</string>
+  <string name="screen_sharing_location_option_sheet_title">"共有設定"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"%1$s 共有"</string>
+  <string name="screen_static_location_sheet_title">"地図上"</string>
+  <string name="screen_view_location_title">"位置情報"</string>
 </resources>

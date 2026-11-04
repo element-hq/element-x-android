@@ -10,9 +10,12 @@
   <string name="screen_signout_key_backup_offline_title">"Avaimiasi varmuuskopioidaan vielä"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Odota, että tämä on valmis ennen tämän laitteen poistamista."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Avaimiasi varmuuskopioidaan vielä"</string>
+  <string name="screen_signout_other_verified_device_dialog_content">"Varmista, että sinulla on toinen vahvistettu laite tai palautusavaimesi käytettävissä, jotta et menetä salattua keskusteluhistoriaasi."</string>
+  <string name="screen_signout_other_verified_device_dialog_title">"Haluatko varmasti poistaa tämän laitteen?"</string>
   <string name="screen_signout_preference_item">"Poista tämä laite"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"Tämä on ainoa laitteesi. Jos poistat sen, tarvitset palautusavaimen vahvistaaksesi digitaalisen identiteettisi ja palauttaaksesi salatut keskustelusi seuraavalla sisäänkirjautumiskerralla."</string>
   <string name="screen_signout_recovery_disabled_title">"Olet menettämässä pääsyn salattuihin keskusteluihisi"</string>
+  <string name="screen_signout_save_recovery_key_action_continue">"Jatka tämän laitteen poistamista"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Tämä on ainoa laitteesi. Jos poistat sen, tarvitset palautusavaimen vahvistaaksesi digitaalisen identiteettisi ja palauttaaksesi salatut keskustelusi seuraavalla sisäänkirjautumiskerralla."</string>
   <string name="screen_signout_save_recovery_key_title">"Varmista, että palautusavaimesi on tallessa ennen tämän laitteen poistamista"</string>
 </resources>

@@ -14,7 +14,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.text.toAnnotatedString
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.api.ParagraphNode
+import io.element.android.libraries.htmlrenderer.api.QuoteNode
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
@@ -31,6 +36,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDeleteConfirmation
 import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 private const val LONG_CAPTION = "This is a very long caption that should be scrollable in the media viewer. " +
@@ -306,6 +312,33 @@ open class MediaViewerStatePreviewParam : PreviewParameterProvider<MediaViewerSt
                     )
                 )
             },
+            anImageMediaInfo(
+                senderName = "Sally Sanderson",
+                dateSent = "21 NOV, 2024",
+                caption = "A caption",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                            captionTree = DocumentNode(
+                                children = persistentListOf(
+                                    QuoteNode(
+                                        persistentListOf(
+                                            ParagraphNode(
+                                                text = "This is a formatted caption".toAnnotatedString()
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
+                        )
+                    )
+                )
+            }
         )
 }
 
@@ -326,10 +359,12 @@ fun aMediaViewerPageData(
     mediaSource: MediaSource = MediaSource(""),
     validationState: ContentValidationState = NoopContentValidationState(),
     formattedCaption: CharSequence? = mediaInfo.htmlCaption,
+    captionTree: DocumentNode? = null,
 ): MediaViewerPageData.MediaViewerData = MediaViewerPageData.MediaViewerData(
     eventId = null,
     mediaInfo = mediaInfo,
     formattedCaption = formattedCaption,
+    captionTree = captionTree,
     mediaSource = mediaSource,
     thumbnailSource = null,
     downloadedMedia = mutableStateOf(downloadedMedia),
@@ -342,6 +377,7 @@ fun aMediaViewerState(
     currentIndex: Int = 0,
     canShowInfo: Boolean = true,
     mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
+    currentUserId: UserId? = null,
     eventSink: (MediaViewerEvent) -> Unit = {},
 ) = MediaViewerState(
     initiallySelectedEventId = EventId("\$a:b"),
@@ -350,5 +386,6 @@ fun aMediaViewerState(
     snackbarMessage = null,
     canShowInfo = canShowInfo,
     mediaBottomSheetState = mediaBottomSheetState,
+    currentUserId = currentUserId,
     eventSink = eventSink,
 )

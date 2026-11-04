@@ -90,7 +90,9 @@ internal fun TestScope.aTimelineItemsFactory(
         eventItemFactoryCreator = object : TimelineItemEventFactory.Creator {
             override fun create(config: TimelineItemsFactoryConfig): TimelineItemEventFactory {
                 return TimelineItemEventFactory(
-                    contentFactory = aTimelineItemContentFactory(matrixClient = matrixClient),
+                    contentFactory = aTimelineItemContentFactory(
+                        matrixClient = matrixClient,
+                    ),
                     matrixClient = matrixClient,
                     dateFormatter = FakeDateFormatter(),
                     permalinkParser = FakePermalinkParser(),

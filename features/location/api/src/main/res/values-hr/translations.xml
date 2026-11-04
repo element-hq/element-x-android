@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="vulkan_not_supported_dialog_content_android">"Vaš je uređaj prestar, potreban je uređaj s Androidom 8 ili novijim."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Renderiranje mapa nije podržano"</string>
+</resources>

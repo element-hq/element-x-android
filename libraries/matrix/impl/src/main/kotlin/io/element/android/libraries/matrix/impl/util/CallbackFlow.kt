@@ -13,10 +13,12 @@ import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import org.matrix.rustcomponents.sdk.TaskHandle
+import timber.log.Timber
 
 internal fun <T> mxCallbackFlow(block: suspend ProducerScope<T>.() -> TaskHandle) =
     callbackFlow {
-        val taskHandle: TaskHandle? = tryOrNull {
+        // A failed subscription leaves the flow open and silent, so at least say so.
+        val taskHandle: TaskHandle? = tryOrNull(onException = { Timber.w(it, "Failed to subscribe") }) {
             block(this)
         }
         awaitClose {

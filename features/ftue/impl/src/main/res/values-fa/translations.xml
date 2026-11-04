@@ -9,7 +9,6 @@
   <string name="screen_identity_confirmed_subtitle">"اکنون می‌توانید پیام‌ها را به صورت امن فرستاده و بگیرید و هرکسی که با او گپ می‌زنید نیز می‌تواند به این افزاره اعتماد کند."</string>
   <string name="screen_identity_confirmed_title">"افزاره تأیید شده"</string>
   <string name="screen_identity_use_another_device">"استفاده از افزاره‌ای دیگر"</string>
-  <string name="screen_identity_waiting_on_other_device">"منتظر افزارهٔ دیگر…"</string>
   <string name="screen_notification_optin_subtitle">"می‌توانید بعداً تنظیماتتان را تغییر دهید."</string>
   <string name="screen_notification_optin_title">"اجازه به آگاهی‌ها و از دست ندادن پیام‌ها"</string>
 </resources>

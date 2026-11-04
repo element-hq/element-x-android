@@ -25,6 +25,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.messages.impl.MessagesNavigator
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureEvent
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
@@ -78,7 +79,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
@@ -126,7 +126,6 @@ class TimelinePresenter(
             navigator: MessagesNavigator
         ): TimelinePresenter
     }
-
     private val timelineItemsFactory: TimelineItemsFactory = timelineItemsFactoryCreator.create(
         config = TimelineItemsFactoryConfig(
             computeReadReceipts = true,
@@ -294,7 +293,7 @@ class TimelinePresenter(
                         // Deselecting the last event does not exit selection mode: it is only left explicitly, as on iOS.
                         event.eventId in selected -> current.deselect(setOf(event.eventId))
                         selected.size >= MAX_SELECTION_COUNT -> {
-                            snackbarDispatcher.post(SnackbarMessage(CommonStrings.screen_room_maximum_messages_selected))
+                            snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_maximum_messages_selected))
                             current
                         }
                         else -> current.copy(selectedEventIds = (selected + event.eventId).toImmutableSet())
@@ -402,22 +401,14 @@ class TimelinePresenter(
                 .onEach { eventIdsToDeselect -> selectionState.value = selectionState.value.deselect(eventIdsToDeselect) }
                 .launchIn(this)
 
-            combine(
-                timelineController.timelineItems(),
-                room.membersStateFlow,
-                sessionPreferencesStore.isRenderReadReceiptsEnabled(),
-            ) { items, membersState, renderReadReceipts ->
-                val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
-                val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
-                transaction?.putExtraData(AnalyticsUserData.TIMELINE_ITEM_COUNT, items.count().toString())
-                timelineItemsFactory.replaceWith(
-                    timelineItems = items,
-                    roomMembers = membersState.roomMembers().orEmpty(),
-                    renderReadReceipts = renderReadReceipts,
-                )
-                transaction?.finish()
-                items
-            }
+            timelineController.timelineItems()
+                .onEach { items ->
+                    val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
+                    val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
+                    transaction?.putExtraData(AnalyticsUserData.TIMELINE_ITEM_COUNT, items.count().toString())
+                    timelineItemsFactory.replaceWith(timelineItems = items)
+                    transaction?.finish()
+                }
                 .onEach(redactedVoiceMessageManager::onEachMatrixTimelineItem)
                 .flowOn(dispatchers.computation)
                 .launchIn(this)
@@ -505,12 +496,14 @@ class TimelinePresenter(
         val userEventPermissions by room.permissionsAsState(UserEventPermissions.DEFAULT) { perms ->
             perms.userEventPermissions()
         }
-        val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo) {
+        val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
+        val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo, renderReadReceipts) {
             derivedStateOf {
                 TimelineRoomInfo(
                     currentUserId = room.sessionId,
                     name = roomInfo.name,
                     isDm = roomInfo.isDm,
+                    renderReadReceipts = renderReadReceipts,
                     userHasPermissionToSendMessage = userEventPermissions.canSendMessage,
                     userHasPermissionToSendReaction = userEventPermissions.canSendReaction,
                     roomCallState = roomCallState,

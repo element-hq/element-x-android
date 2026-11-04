@@ -71,8 +71,8 @@ class MediaViewerNode(
         callback.viewInTimeline(eventId)
     }
 
-    override fun onForwardClick(eventId: EventId, fromPinnedEvents: Boolean) {
-        callback.forwardEvent(eventId, fromPinnedEvents)
+    override fun onForwardClick(eventId: EventId) {
+        callback.forwardEvent(eventId)
     }
 
     override fun onItemDeleted() {
@@ -137,7 +137,7 @@ class MediaViewerNode(
                 is MediaViewerEntryPoint.Params.Avatar ->
                     MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(Timeline.Mode.Media)
                 is MediaViewerEntryPoint.Params.EventGallery ->
-                    MediaViewerEntryPoint.MediaViewerMode.EventGallery(fromPinnedMessages = inputs.fromPinnedMessages)
+                    MediaViewerEntryPoint.MediaViewerMode.EventGallery
                 is MediaViewerEntryPoint.Params.RoomMedia ->
                     inputs.mode
             },
@@ -177,6 +177,6 @@ internal fun MediaViewerEntryPoint.MediaViewerMode.getTimelineMode(): Timeline.M
     return when (this) {
         is MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos -> timelineMode
         is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios -> timelineMode
-        is MediaViewerEntryPoint.MediaViewerMode.EventGallery -> null
+        MediaViewerEntryPoint.MediaViewerMode.EventGallery -> null
     }
 }

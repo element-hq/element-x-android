@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.runtime.Immutable
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlin.time.Duration
 
@@ -36,6 +37,13 @@ sealed interface TimelineItemEventContentWithAttachment :
 
     /** The caption as it was written, in HTML, so that editing it can start from the formatted text. */
     val htmlCaption: String?
+
+    /**
+     * The formatted caption parsed into a tree of [DocumentNode] for the native Compose renderer.
+     * Null when there is no formatted caption. Only used when the new timeline event renderer is enabled.
+     */
+    val captionTree: DocumentNode?
+
     val mediaSource: MediaSource
     val mimeType: String
     val formattedFileSize: String
@@ -127,6 +135,13 @@ fun TimelineItemEventContent.formattedCaptionOrNull(): CharSequence? = when (thi
     is TimelineItemEventContentWithAttachment -> formattedCaption
     is TimelineItemGalleryContent -> formattedCaption
     is TimelineItemAttachmentsContent -> formattedCaption
+    else -> null
+}
+
+fun TimelineItemEventContent.captionTreeOrNull(): DocumentNode? = when (this) {
+    is TimelineItemEventContentWithAttachment -> captionTree
+    is TimelineItemGalleryContent -> captionTree
+    is TimelineItemAttachmentsContent -> captionTree
     else -> null
 }
 

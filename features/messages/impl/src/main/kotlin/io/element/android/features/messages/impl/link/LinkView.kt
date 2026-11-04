@@ -15,6 +15,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.extensions.ensureEndsLeftToRight
 import io.element.android.libraries.core.extensions.filterDirectionOverrides
@@ -38,9 +39,9 @@ fun LinkView(
             if (state.linkClick is ConfirmingLinkClick) {
                 ConfirmationDialog(
                     modifier = modifier,
-                    title = stringResource(CommonStrings.dialog_confirm_link_title),
+                    title = stringResource(R.string.dialog_confirm_link_title),
                     content = stringResource(
-                        CommonStrings.dialog_confirm_link_message,
+                        R.string.dialog_confirm_link_message,
                         state.linkClick.link.text.ensureEndsLeftToRight(),
                         state.linkClick.link.url.filterDirectionOverrides(),
                     ),

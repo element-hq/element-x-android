@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Невозможно расшифровать"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Отправлено с незащищенного устройства"</string>
+  <string name="common_unable_to_decrypt_no_access">"Вы не имеете доступа к этому сообщению"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Подтвержденная личность отправителя была сброшена"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Отправитель события и владелец устройства не совпадают."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Подлинность этого зашифрованного сообщения не может быть гарантирована на этом устройстве."</string>
   <string name="crypto_event_authenticity_previously_verified">"Зашифровано ранее проверенным пользователем."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Зашифровано неизвестным или удаленным устройством."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Зашифровано устройством, не проверенным его владельцем."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Зашифровано непроверенным пользователем."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поделился(ась) этим сообщением, поскольку Вас не было в комнате, когда оно было отправлено."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s поделился(ась) этим сообщением, поскольку Вас не было в комнате, когда оно было отправлено."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Личность %1$s %2$s была сброшена. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Личность %1$s %2$s была сброшена. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Ссылка %1$s ведет на сайт %2$s
+
+Вы уверены, что хотите продолжить?"</string>
+  <string name="dialog_confirm_link_title">"Перепроверьте эту ссылку"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Максимально допустимый размер файла: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Размер файла слишком большой для загрузки."</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально допустимый размер файла: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Выберите качество видео, которое Вы хотите загрузить."</string>
+  <string name="error_failed_loading_messages">"Не удалось загрузить сообщения"</string>
+  <string name="error_failed_uploading_voice_message">"Не удалось загрузить голосовое сообщение."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s не имеет разрешения на доступ к вашему микрофону. Разрешите доступ к записи голосового сообщения."</string>
   <string name="error_sending_failure_invalid_mime_type">"Неверный тип MIME: %s"</string>
   <string name="error_sending_failure_missing_media_content">"Отсутствует медиаконтент"</string>
   <string name="error_sending_failure_other">"Подробности ошибки: %s"</string>
@@ -36,10 +56,26 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Оптимизировать качество изображения"</string>
   <string name="screen_media_upload_preview_processing">"Обработка…"</string>
   <string name="screen_media_upload_preview_title">"Добавить медиа"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Нажмите на сообщение и выберите «%1$s», чтобы добавить его сюда."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Закрепите важные сообщения, чтобы их можно было легко найти"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d закреплённое сообщение"</item>
+    <item quantity="few">"%1$d закреплённых сообщения"</item>
+    <item quantity="many">"%1$d закреплённых сообщений"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Закреплённые сообщения"</string>
   <string name="screen_report_content_block_user">"Заблокировать пользователя"</string>
   <string name="screen_report_content_block_user_hint">"Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя"</string>
   <string name="screen_report_content_explanation">"Это сообщение будет передано администратору Вашего сервера. Они не смогут прочитать зашифрованные сообщения."</string>
   <string name="screen_report_content_hint">"Причина жалобы"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Сбросить верификацию и отправить"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Вы можете либо сбросить подтверждение и всё равно отправить это сообщение, либо отменить его сейчас и повторить попытку после повторного подтверждения %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Ваше сообщение не было отправлено, потому что подтвержденная идентификации %1$s была сброшена"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Всё равно отправить сообщение"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"У %1$s есть одно или несколько неподтвержденных устройств. Вы всё равно можете отправить сообщение или отменить его и повторить попытку позже, когда %2$s подтвердит все свои устройства."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Ваше сообщение не было отправлено, потому что %1$s имеет неподтвержденные устройства"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Одно или несколько ваших устройств не подтверждены. Вы можете отправить сообщение в любом случае или отменить его пока и повторить попытку позже, подтвердив все свои устройства."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше сообщение не было отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
   <string name="screen_room_attachment_source_camera">"Камера"</string>
   <string name="screen_room_attachment_source_camera_photo">"Сделать фото"</string>
   <string name="screen_room_attachment_source_camera_video">"Записать видео"</string>
@@ -56,10 +92,21 @@
   <string name="screen_room_encrypted_history_banner_unverified">"История сообщений в этой комнате недоступна. Проверьте это устройство, чтобы увидеть историю сообщений."</string>
   <string name="screen_room_invite_again_alert_message">"Хотите пригласить их снова?"</string>
   <string name="screen_room_invite_again_alert_title">"Вы одни в этой комнате"</string>
+  <string name="screen_room_maximum_messages_selected">"Выбрано максимальное количество сообщений"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Уведомить всю комнату"</string>
   <string name="screen_room_mentions_at_room_title">"Все"</string>
+  <string name="screen_room_permalink_same_room_android">"Эта комната уже просматривается!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s из %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Закреплённые сообщения"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Загрузка сообщения…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Посмотреть Все"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Отправить снова"</string>
   <string name="screen_room_retry_send_menu_title">"Не удалось отправить ваше сообщение"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"Выбрано %1$d сообщение"</item>
+    <item quantity="few">"Выбрано %1$d сообщения"</item>
+    <item quantity="many">"Выбрано %1$d сообщений"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Добавить реакцию"</string>
   <string name="screen_room_timeline_beginning_of_room">"Это начало %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Это начало беседы."</string>
@@ -107,4 +154,17 @@
     <item quantity="many">"%1$s печатают"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s и %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d присоединился"</item>
+    <item quantity="few">"%1$d присоединились"</item>
+    <item quantity="many">"%1$d присоединилось"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Сообщение не отправлено, так как подтвержденная цифровая идентичность %1$s была сброшена."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Сообщение не отправлено, потому что %1$s не подтвердил(а) все свои устройства."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Сообщение не отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"На этом устройстве недоступна история сообщений"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Вам необходимо подтвердить это устройство чтобы получить доступ к истории сообщений"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Вы не имеете доступа к этому сообщению"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Не удалось расшифровать сообщение"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Это сообщение было заблокировано либо потому, что вы не подтвердили свое устройство, либо потому, что отправителю необходимо подтвердить вашу цифровую личность."</string>
 </resources>

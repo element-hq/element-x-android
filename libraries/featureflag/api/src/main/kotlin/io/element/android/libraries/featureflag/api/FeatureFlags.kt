@@ -158,7 +158,7 @@ enum class FeatureFlags(
         key = "feature.message_multi_select",
         title = "Multi-select messages",
         description = "The Forward action enters a selection mode, to pick and forward up to 10 messages at once.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
         isInLabs = false,
     ),

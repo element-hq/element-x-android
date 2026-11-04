@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="vulkan_not_supported_dialog_content_android">"Ваше устройство слишком старое, требуется устройство с Android 8 или более новой версией."</string>
+  <string name="vulkan_not_supported_dialog_title_android">"Отображение карт не поддерживается"</string>
+</resources>

@@ -43,6 +43,7 @@ import org.matrix.rustcomponents.sdk.BackupSteadyStateListener
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgressListener
 import org.matrix.rustcomponents.sdk.Encryption
+import org.matrix.rustcomponents.sdk.SecretStorageKey
 import org.matrix.rustcomponents.sdk.UserIdentity
 import timber.log.Timber
 import org.matrix.rustcomponents.sdk.BackupUploadState as RustBackupUploadState
@@ -137,15 +138,17 @@ class RustEncryptionService(
             // The key arrives as the suspend return value (like resetRecoveryKey), avoiding a
             // flow/return-value race; the listener only feeds sub-progress.
             enableRecoveryProgressStateFlow.value = EnableRecoveryProgress.Starting
-            val key = service.enableRecovery(
-                waitForBackupsToUpload = waitForBackupsToUpload,
-                progressListener = object : EnableRecoveryProgressListener {
-                    override fun onUpdate(status: RustEnableRecoveryProgress) {
-                        enableRecoveryProgressStateFlow.value = enableRecoveryProgressMapper.map(status)
-                    }
-                },
-                passphrase = passphrase,
-            )
+            val key = passphrase?.let { SecretStorageKey.newFromPassphrase(it) }.use { secretStorageKey ->
+                service.enableRecovery(
+                    waitForBackupsToUpload = waitForBackupsToUpload,
+                    key = secretStorageKey,
+                    progressListener = object : EnableRecoveryProgressListener {
+                        override fun onUpdate(status: RustEnableRecoveryProgress) {
+                            enableRecoveryProgressStateFlow.value = enableRecoveryProgressMapper.map(status)
+                        }
+                    },
+                )
+            }
             // Pin Done explicitly so observers get a coherent terminal value. For the passphrase
             // path the user never sees the SDK base58 key, so keep it out of this session-scoped
             // (in-memory) flow entirely; the caller still receives it as the return value and is
@@ -233,38 +236,44 @@ class RustEncryptionService(
         }
     }
 
-    override suspend fun deviceCurve25519(): String? {
-        return runCatchingExceptions { service.curve25519Key() }.getOrNull()
+    override suspend fun deviceCurve25519(): String? = withContext(dispatchers.io) {
+        runCatchingExceptions { service.curve25519Key() }.getOrNull()
     }
 
-    override suspend fun deviceEd25519(): String? {
-        return runCatchingExceptions { service.ed25519Key() }.getOrNull()
+    override suspend fun deviceEd25519(): String? = withContext(dispatchers.io) {
+        runCatchingExceptions { service.ed25519Key() }.getOrNull()
     }
 
-    override suspend fun startIdentityReset(): Result<IdentityResetHandle?> {
-        return runCatchingExceptions {
+    override suspend fun startIdentityReset(): Result<IdentityResetHandle?> = withContext(dispatchers.io) {
+        runCatchingExceptions {
             service.resetIdentity()
         }.flatMap { handle ->
-            RustIdentityResetHandleFactory.create(sessionId, handle)
+            RustIdentityResetHandleFactory.create(sessionId, handle, dispatchers.io)
         }
     }
 
-    override suspend fun pinUserIdentity(userId: UserId): Result<Unit> = runCatchingExceptions {
-        getUserIdentityInternal(userId).pin()
+    override suspend fun pinUserIdentity(userId: UserId): Result<Unit> = withContext(dispatchers.io) {
+        runCatchingExceptions {
+            getUserIdentityInternal(userId).pin()
+        }
     }
 
-    override suspend fun withdrawVerification(userId: UserId): Result<Unit> = runCatchingExceptions {
-        getUserIdentityInternal(userId).withdrawVerification()
+    override suspend fun withdrawVerification(userId: UserId): Result<Unit> = withContext(dispatchers.io) {
+        runCatchingExceptions {
+            getUserIdentityInternal(userId).withdrawVerification()
+        }
     }
 
-    override suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean): Result<IdentityState?> = runCatchingExceptions {
-        val identity = getUserIdentityInternal(userId, fallbackToServer)
-        val isVerified = identity.isVerified()
-        when {
-            identity.hasVerificationViolation() -> IdentityState.VerificationViolation
-            isVerified -> IdentityState.Verified
-            !isVerified -> IdentityState.Pinned
-            else -> null
+    override suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean): Result<IdentityState?> = withContext(dispatchers.io) {
+        runCatchingExceptions {
+            val identity = getUserIdentityInternal(userId, fallbackToServer)
+            val isVerified = identity.isVerified()
+            when {
+                identity.hasVerificationViolation() -> IdentityState.VerificationViolation
+                isVerified -> IdentityState.Verified
+                !isVerified -> IdentityState.Pinned
+                else -> null
+            }
         }
     }
 

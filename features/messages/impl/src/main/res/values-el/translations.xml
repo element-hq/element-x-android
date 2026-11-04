@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Δεν είναι δυνατή η αποκρυπτογράφηση"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Στάλθηκε από μια μη ασφαλής συσκευή"</string>
+  <string name="common_unable_to_decrypt_no_access">"Δεν έχεις πρόσβαση σε αυτό το μήνυμα"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Η επαληθευμένη ψηφιακή ταυτότητα του αποστολέα έχει επαναφερθεί"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Ο αποστολέας του συμβάντος δεν ταιριάζει με τον κάτοχο της συσκευής που το έστειλε."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Η αυθεντικότητα αυτού του κρυπτογραφημένου μηνύματος δεν είναι εγγυημένη σε αυτήν τη συσκευή."</string>
   <string name="crypto_event_authenticity_previously_verified">"Κρυπτογραφημένο από έναν προηγουμένως επαληθευμένο χρήστη."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Κρυπτογραφημένο από άγνωστη ή διαγεγραμμένη συσκευή."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Κρυπτογραφημένο από μια συσκευή που δεν έχει επαληθευτεί από τον ιδιοκτήτη της."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Κρυπτογραφημένο από μη επαληθευμένο χρήστη."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) μοιράστηκε αυτό το μήνυμα, καθώς δεν ήσασταν στην αίθουσα όταν στάλθηκε."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s μοιράστηκε αυτό το μήνυμα, ενόσω δεν ήσασταν στην αίθουσα όταν στάλθηκε."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Η ψηφιακή ταυτότητα του %1$s %2$s επαναφέρθηκε. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Η ψηφιακή ταυτότητα του %1$s %2$s επαναφέρθηκε. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Ο σύνδεσμος %1$s σας μεταφέρει σε άλλο ιστότοπο %2$s 
+
+Είστε βέβαιοι ότι θέλετε να συνεχίσετε;"</string>
+  <string name="dialog_confirm_link_title">"Ελέγξτε ξανά αυτόν τον σύνδεσμο"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Το μέγιστο επιτρεπόμενο μέγεθος αρχείου είναι: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Το μέγεθος του αρχείου είναι πολύ μεγάλο για μεταφόρτωση"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Το μέγιστο επιτρεπόμενο μέγεθος αρχείου είναι: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Επιλέξτε την ποιότητα του βίντεο που θέλετε να ανεβάσετε."</string>
+  <string name="error_failed_loading_messages">"Αποτυχία φόρτωσης μηνυμάτων"</string>
+  <string name="error_failed_uploading_voice_message">"Αποτυχία μεταφόρτωσης του φωνητικού σου μηνύματος."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"Το %1$s δεν έχει άδεια πρόσβασης στο μικρόφωνό σου. Ενεργοποίησε την πρόσβαση για εγγραφή φωνητικού μηνύματος."</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Αναστροφή εικόνας οριζόντια"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Αναποδογυρισμένο οριζόντια"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Πρωτότυπο"</string>
@@ -30,10 +50,25 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Βελτιστοποίηση ποιότητας εικόνας"</string>
   <string name="screen_media_upload_preview_processing">"Επεξεργασία…"</string>
   <string name="screen_media_upload_preview_title">"Προσθήκη πολυμέσων"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Πάτα σε ένα μήνυμα και επέλεξε «%1$s» για να συμπεριληφθεί εδώ."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Καρφίτσωσε σημαντικά μηνύματα, ώστε να μπορούν να εντοπιστούν εύκολα"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Καρφιτσωμένο μήνυμα"</item>
+    <item quantity="other">"%1$d Καρφιτσωμένα μηνύματα"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Καρφιτσωμένα μηνύματα"</string>
   <string name="screen_report_content_block_user">"Αποκλεισμός χρήστη"</string>
   <string name="screen_report_content_block_user_hint">"Επέλεξε εάν θες να αποκρύψεις όλα τα τρέχοντα και μελλοντικά μηνύματα από αυτόν τον χρήστη"</string>
   <string name="screen_report_content_explanation">"Αυτό το μήνυμα θα αναφερθεί στον πάροχο του λογαριασμού σας. Δεν θα μπορεί να διαβάσει κανένα κρυπτογραφημένο μήνυμα."</string>
   <string name="screen_report_content_hint">"Λόγος αναφοράς αυτού του περιεχομένου"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ανάκληση επαλήθευσης και αποστολή"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Μπορείτε να ανακαλέσεις την επαλήθευσή σου και να στείλεις αυτό το μήνυμα όπως και να \'χει ή μπορείς να το ακυρώσεις προς το παρόν και να προσπαθήσεις ξανά αργότερα μετά την επαλήθευση του χρήστη %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Το μήνυμά σας δεν αποστάλθηκε επειδή η επαληθευμένη ψηφιακή ταυτότητα του %1$s επαναφέρθηκε"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Αποστολή μηνύματος ούτως ή άλλως"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"Ο χρήστης %1$s χρησιμοποιεί τουλάχιστον μία μη επαληθευμένη συσκευή. Μπορείς να στείλεις το μήνυμα όπως και να \'χει ή μπορείς να το ακυρώσεις προς το παρόν και να δοκιμάσεις ξανά αργότερα αφού ο χρήστης %2$s επαληθεύσει όλες τις συσκευές του."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Το μήνυμά σου δεν στάλθηκε επειδή ο χρήστης %1$s δεν έχει επαληθεύσει όλες τις συσκευές"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Μία ή περισσότερες από τις συσκευές σου δεν έχουν επαληθευτεί. Μπορείς να στείλεις το μήνυμα ούτως ή άλλως, ή μπορείς να το ακυρώσεις προς το παρόν και να προσπαθήσεις ξανά αργότερα αφού επαληθεύσεις όλες τις συσκευές σου."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Το μήνυμά σου δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου"</string>
   <string name="screen_room_attachment_source_camera">"Κάμερα"</string>
   <string name="screen_room_attachment_source_camera_photo">"Τράβηξε φωτογραφία"</string>
   <string name="screen_room_attachment_source_camera_video">"Εγγραφή βίντεο"</string>
@@ -48,6 +83,11 @@
   <string name="screen_room_invite_again_alert_title">"Είσαι μόνος σε αυτή τη συνομιλία"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Ειδοποιήστε όλη την αίθουσα"</string>
   <string name="screen_room_mentions_at_room_title">"Όλοι"</string>
+  <string name="screen_room_permalink_same_room_android">"Βλέπετε ήδη αυτήν την αίθουσα!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s από %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Καρφιτσωμένα μηνύματα"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Φόρτωση μηνύματος…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Προβολή Όλων"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Αποστολή ξανά"</string>
   <string name="screen_room_retry_send_menu_title">"Το μήνυμά σου απέτυχε να σταλεί"</string>
   <string name="screen_room_timeline_add_reaction">"Προσθήκη emoji"</string>
@@ -91,4 +131,16 @@
     <item quantity="other">"Οι χρήστες %1$s πληκτρολογούν"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s και %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d συμμετέχον"</item>
+    <item quantity="other">"%1$d συμμετέχοντες"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Το μήνυμα δεν αποστάλη επειδή η επαληθευμένη ψηφιακή ταυτότητα του %1$s επαναφέρθηκε."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Το μήνυμα δεν στάλθηκε επειδή ο χρήστης %1$s δεν έχει επαληθεύσει όλες τις συσκευές."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Το μήνυμα δεν στάλθηκε επειδή δεν έχεις επαληθεύσει τουλάχιστον μία από τις συσκευές σου."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Τα ιστορικά μηνύματα δεν είναι διαθέσιμα σε αυτήν τη συσκευή"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Πρέπει να επαληθεύσετε αυτήν τη συσκευή για πρόσβαση σε μηνύματα ιστορικού"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Δεν έχεις πρόσβαση σε αυτό το μήνυμα"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Δεν είναι δυνατή η αποκρυπτογράφηση μηνύματος"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Αυτό το μήνυμα αποκλείστηκε είτε επειδή δεν επαληθεύσατε τη συσκευή σας είτε επειδή ο αποστολέας πρέπει να επαληθεύσει την ψηφιακή σας ταυτότητα."</string>
 </resources>

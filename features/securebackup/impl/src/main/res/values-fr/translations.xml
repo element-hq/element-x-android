@@ -64,6 +64,10 @@
   <string name="screen_recovery_key_change_generate_key_description">"Ne partagez cela avec personne !"</string>
   <string name="screen_recovery_key_change_success">"Clé de récupération modifée"</string>
   <string name="screen_recovery_key_change_title">"Changer la clé de récupération ?"</string>
+  <string name="screen_recovery_key_check_key_title">"Saisir la clé de récupération"</string>
+  <string name="screen_recovery_key_check_subtitle">"Saisissez la clé de récupération que vous avez enregistrée pour vérifier qu’elle est correcte et active."</string>
+  <string name="screen_recovery_key_check_success_title">"Votre clé de récupération est active."</string>
+  <string name="screen_recovery_key_check_title">"Vérifiez votre clé de récupération"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"Créer une nouvelle clé de récupération"</string>
   <string name="screen_recovery_key_confirm_description">"Assurez vous que personne d’autre ne regarde votre écran !"</string>
   <string name="screen_recovery_key_confirm_error_content">"Veuillez réessayer pour confirmer l’accès à votre stockage de clés."</string>
@@ -86,6 +90,7 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Ne partagez cela avec personne !"</string>
   <string name="screen_recovery_key_setup_success">"Sauvegarde mise en place avec succès"</string>
   <string name="screen_recovery_key_setup_title">"Obtenir une clé de récupération"</string>
+  <string name="screen_recovery_key_success_title">"Votre nouvelle clé de récupération est maintenant active."</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Oui, réinitialisez maintenant"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Cette opération ne peut pas être annulée."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Êtes-vous sûr de vouloir réinitialiser votre identité numérique?"</string>

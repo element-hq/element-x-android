@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Mae gennych newidiadau heb eu cadw."</string>
+  <string name="dialog_unsaved_changes_description_android">"Dyw eich newidiadau heb gael eu cadw. Ydych chi\'n siŵr eich bod am fynd nôl?"</string>
+  <string name="dialog_unsaved_changes_title">"Cadw\'r newidiadau?"</string>
+</resources>

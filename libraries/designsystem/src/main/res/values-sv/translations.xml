@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Du har osparade ändringar."</string>
+  <string name="dialog_unsaved_changes_description_android">"Dina ändringar har inte sparats. Är du säker på att du vill gå tillbaka?"</string>
+  <string name="dialog_unsaved_changes_title">"Spara ändringar?"</string>
+</resources>

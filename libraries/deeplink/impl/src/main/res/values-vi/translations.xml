@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="invite_friends_rich_title">"🔐️ Tham gia cùng tôi trên %1$s"</string>
+  <string name="invite_friends_text">"Xin chào, hãy trò chuyện với tôi trên %1$s bằng đường liên kết sau: %2$s"</string>
+</resources>

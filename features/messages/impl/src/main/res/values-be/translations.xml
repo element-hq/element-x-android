@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Немагчыма расшыфраваць"</string>
+  <string name="common_unable_to_decrypt_no_access">"У вас няма доступу да гэтага паведамлення"</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Сапраўднасць гэтага зашыфраванага паведамлення не можа быць гарантаваная на гэтай прыладзе."</string>
   <string name="crypto_event_authenticity_previously_verified">"Зашыфравана раней правераным карыстальнікам."</string>
   <string name="crypto_event_authenticity_sent_in_clear">"Не зашыфраваны."</string>
   <string name="crypto_event_authenticity_unknown_device">"Зашыфравана невядомай ці выдаленай прыладай."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Зашыфравана прыладай, не пацверджанай яе ўладальнікам."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Зашыфравана неправераным карыстальнікам."</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="error_failed_loading_messages">"Не ўдалося загрузіць паведамленні"</string>
+  <string name="error_failed_uploading_voice_message">"Не ўдалося загрузіць ваша галасавое паведамленне."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s не мае дазволу на доступ да вашага мікрафона. Дазвольце доступ да запісу галасавога паведамлення."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
   <string name="screen_media_upload_preview_processing">"Апрацоўка…"</string>
   <string name="screen_media_upload_preview_title">"Дадаць медыя"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Націсніце на паведамленне і абярыце «%1$s », каб уключыць сюды."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Замацуеце важныя паведамленні, каб іх можна было лёгка знайсці"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Замацаванае паведамленне"</item>
+    <item quantity="few">"%1$d Замацаваныя паведамленні"</item>
+    <item quantity="many">"%1$d Замацаваных паведамленняў"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Замацаваныя паведамленні"</string>
   <string name="screen_report_content_block_user">"Заблакіраваць карыстальніка"</string>
   <string name="screen_report_content_block_user_hint">"Адзначце, ці хочаце вы схаваць усе бягучыя і будучыя паведамленні ад гэтага карыстальніка"</string>
   <string name="screen_report_content_explanation">"Гэтае паведамленне будзе перададзена адміністратару вашага хатняга сервера. Яны не змогуць прачытаць зашыфраваныя паведамленні."</string>
   <string name="screen_report_content_hint">"Прычына, па якой вы паскардзіліся на гэты змест"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Адклікаць праверку і адправіць"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Усё роўна адправіць паведамленне"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$sвыкарыстоўвае адну або некалькі неправераных прылад. Вы можаце адправіць паведамленне ў любым выпадку, або вы можаце адмяніць зараз і паўтарыць спробу пазней, калі %2$s праверыць усе свае прылады."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Ваша паведамленне не было адпраўлена, таму што%1$s не праверыў усе прылады"</string>
   <string name="screen_room_attachment_source_camera">"Камера"</string>
   <string name="screen_room_attachment_source_camera_photo">"Зрабіць фота"</string>
   <string name="screen_room_attachment_source_camera_video">"Запісаць відэа"</string>
@@ -28,6 +46,10 @@
   <string name="screen_room_invite_again_alert_title">"Вы адзін у гэтым чаце"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Апавясціць увесь пакой"</string>
   <string name="screen_room_mentions_at_room_title">"Усе"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s з %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Замацаваныя паведамленні"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Загрузка паведамлення…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Паглядзець усе"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Адправіць зноў"</string>
   <string name="screen_room_retry_send_menu_title">"Не ўдалося адправіць ваша паведамленне"</string>
   <string name="screen_room_timeline_add_reaction">"Дадаць эмодзі"</string>
@@ -54,4 +76,6 @@
     <item quantity="many">"%1$s пішуць"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s і %2$s"</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Паведамленне не адпраўлена таму што%1$s не праверыў усе прылады."</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"У вас няма доступу да гэтага паведамлення"</string>
 </resources>

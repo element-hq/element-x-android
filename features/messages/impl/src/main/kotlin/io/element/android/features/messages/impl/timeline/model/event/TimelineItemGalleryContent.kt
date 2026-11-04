@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrixmedia.api.MediaRequestData
 import kotlinx.collections.immutable.ImmutableList
@@ -17,6 +18,7 @@ data class TimelineItemGalleryContent(
     val caption: String?,
     val formattedCaption: CharSequence?,
     val htmlCaption: String? = null,
+    val captionTree: DocumentNode? = null,
     override val isEdited: Boolean,
     val items: ImmutableList<GalleryItem>,
 ) : TimelineItemEventContent, TimelineItemEventMutableContent {
