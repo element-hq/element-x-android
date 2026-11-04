@@ -49,7 +49,7 @@ class AccountSelectViewTest : RobolectricTest() {
         setAccountSelectView(
             aTwoAccountsState(eventSink = eventsRecorder),
         )
-        clickOn(CommonStrings.common_switch_account)
+        clickOn(CommonStrings.common_switch_accounts)
         eventsRecorder.assertSingle(AccountSelectEvent.ToggleAccountListExpanded)
     }
 
