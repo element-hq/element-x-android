@@ -123,7 +123,7 @@ private fun SelectAccountHeader(state: AccountSelectState) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 24.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 0.dp, bottom = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         BigIcon(
@@ -158,7 +158,6 @@ private fun SelectAccountHeader(state: AccountSelectState) {
                 color = ElementTheme.colors.textSecondary,
             )
         }
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
