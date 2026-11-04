@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.paths
 
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.BaseDirectory
-import io.element.android.libraries.di.CacheDirectory
+import io.element.android.libraries.di.SessionsCacheDirectory
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import java.io.File
 import java.util.UUID
@@ -18,13 +18,13 @@ import java.util.UUID
 @Inject
 class SessionPathsFactory(
     @BaseDirectory private val baseDirectory: File,
-    @CacheDirectory private val cacheDirectory: File,
+    @SessionsCacheDirectory private val sessionsCacheDirectory: File,
 ) {
     fun create(): SessionPaths {
         val subPath = UUID.randomUUID().toString()
         return SessionPaths(
             fileDirectory = File(baseDirectory, subPath),
-            cacheDirectory = File(cacheDirectory, subPath),
+            cacheDirectory = File(sessionsCacheDirectory, subPath),
         )
     }
 }

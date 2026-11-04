@@ -26,6 +26,7 @@ import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.di.CacheDirectory
+import io.element.android.libraries.di.SessionsCacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.x.BuildConfig
@@ -49,6 +50,12 @@ object AppBindingContainer {
     @CacheDirectory
     fun providesCacheDirectory(@ApplicationContext context: Context): File {
         return context.cacheDir
+    }
+
+    @Provides
+    @SessionsCacheDirectory
+    fun providesSessionsCacheDirectory(@CacheDirectory cacheDirectory: File): File {
+        return File(cacheDirectory, "sessions")
     }
 
     @Provides
