@@ -30,7 +30,7 @@ runs:
       uses: jlumbroso/free-disk-space@ceedf095f4ec1a097402bc6bd80831f2e1a6fde6 # v2.0.0
       with:
         # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-        tool-cache: true
+        preinstalled-runtimes: true
         # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
         android: false
         dotnet: true
