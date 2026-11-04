@@ -16,8 +16,6 @@ import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.impl.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.matrix.api.tracing.TracingService
-import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -26,12 +24,10 @@ import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.tracing.FakeTracingService
 import io.element.android.libraries.network.useragent.DefaultUserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
-import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,6 +44,7 @@ import okio.buffer
 import okio.source
 import org.junit.Test
 import org.robolectric.RuntimeEnvironment
+import java.io.File
 
 class DefaultBugReporterTest : RobolectricTest() {
     @Test
@@ -446,19 +443,9 @@ class DefaultBugReporterTest : RobolectricTest() {
     }
 
     @Test
-    fun `the log directory is initialized using the last session store data`() = runTest {
+    fun `the log directory is the root log directory`() = runTest {
         val sut = createDefaultBugReporter(
             buildMeta = aBuildMeta(isEnterpriseBuild = true),
-            sessionStore = InMemorySessionStore(
-                initialList = listOf(aSessionData(sessionId = "@alice:domain.com"))
-            )
-        )
-        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs/domain.com")
-    }
-
-    @Test
-    fun `foss build - the log directory is initialized to the root log directory`() = runTest {
-        val sut = createDefaultBugReporter(
             sessionStore = InMemorySessionStore(
                 initialList = listOf(aSessionData(sessionId = "@alice:domain.com"))
             )
@@ -468,106 +455,15 @@ class DefaultBugReporterTest : RobolectricTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `when a session is added, the tracing service is invoked`() = runTest {
-        var param: WriteToFilesConfiguration? = null
-        val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {
-            param = it
-        }
-        val sessionStore = InMemorySessionStore()
-        createDefaultBugReporter(
-            buildMeta = aBuildMeta(isEnterpriseBuild = true),
-            sessionStore = sessionStore,
-            tracingService = FakeTracingService(
-                updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
-            ),
-        )
-        sessionStore.addSession(aSessionData(sessionId = "@alice:server.org"))
+    fun `legacy per-domain log subfolders are deleted`() = runTest {
+        val logDirectory = File(RuntimeEnvironment.getApplication().cacheDir, "logs")
+        val legacySubfolder = File(logDirectory, "domain.com").apply { mkdirs() }
+        File(legacySubfolder, "logs.2024-01-01-00.log").writeText("legacy")
+        val rootLogFile = File(logDirectory, "logs.2024-01-01-01.log").apply { writeText("root") }
+        createDefaultBugReporter()
         runCurrent()
-        updateWriteToFilesConfigurationResult.assertions().isCalledOnce()
-        assertThat(param).isNotNull()
-        assertThat(param).isInstanceOf(WriteToFilesConfiguration.Enabled::class.java)
-        assertThat((param as WriteToFilesConfiguration.Enabled).directory).endsWith("/cache/logs/server.org")
-        assertThat((param as WriteToFilesConfiguration.Enabled).filenamePrefix).isEqualTo("logs")
-        assertThat((param as WriteToFilesConfiguration.Enabled).numberOfFiles).isEqualTo(168)
-        assertThat((param as WriteToFilesConfiguration.Enabled).filenameSuffix).isEqualTo(".log")
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun `when another session is added on same domain, the tracing service is not invoked`() = runTest {
-        val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {}
-        val sessionStore = InMemorySessionStore()
-        createDefaultBugReporter(
-            buildMeta = aBuildMeta(isEnterpriseBuild = true),
-            sessionStore = sessionStore,
-            tracingService = FakeTracingService(
-                updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
-            ),
-        )
-        sessionStore.addSession(aSessionData(sessionId = "@alice:server.org"))
-        runCurrent()
-        updateWriteToFilesConfigurationResult.assertions().isCalledOnce()
-        sessionStore.addSession(aSessionData(sessionId = "@bob:server.org"))
-        runCurrent()
-        updateWriteToFilesConfigurationResult.assertions().isCalledOnce()
-    }
-
-    @Test
-    fun `foss build - when a session is added, the tracing service is not invoked`() = runTest {
-        val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {}
-        val sessionStore = InMemorySessionStore()
-        createDefaultBugReporter(
-            tracingService = FakeTracingService(
-                updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
-            ),
-            sessionStore = sessionStore,
-        )
-        sessionStore.addSession(aSessionData(sessionId = "@alice:server.org"))
-        updateWriteToFilesConfigurationResult.assertions().isNeverCalled()
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun `when the user signs out, the tracing service is invoked`() = runTest {
-        var param: WriteToFilesConfiguration? = null
-        val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {
-            param = it
-        }
-        val sessionStore = InMemorySessionStore(
-            initialList = listOf(aSessionData(sessionId = "@alice:server.org")),
-        )
-        createDefaultBugReporter(
-            buildMeta = aBuildMeta(isEnterpriseBuild = true),
-            tracingService = FakeTracingService(
-                updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
-            ),
-            sessionStore = sessionStore,
-        )
-        sessionStore.removeSession("@alice:server.org")
-        runCurrent()
-        updateWriteToFilesConfigurationResult.assertions().isCalledOnce()
-        assertThat(param).isNotNull()
-        assertThat(param).isInstanceOf(WriteToFilesConfiguration.Enabled::class.java)
-        assertThat((param as WriteToFilesConfiguration.Enabled).directory).endsWith("/cache/logs")
-        assertThat((param as WriteToFilesConfiguration.Enabled).filenamePrefix).isEqualTo("logs")
-        assertThat((param as WriteToFilesConfiguration.Enabled).numberOfFiles).isEqualTo(168)
-        assertThat((param as WriteToFilesConfiguration.Enabled).filenameSuffix).isEqualTo(".log")
-    }
-
-    @Test
-    fun `foss build - when the log directory is reset, the tracing service is not invoked`() = runTest {
-        val updateWriteToFilesConfigurationResult = lambdaRecorder<WriteToFilesConfiguration, Unit> {}
-        val sessionStore = InMemorySessionStore(
-            initialList = listOf(aSessionData(sessionId = "@alice:server.org")),
-        )
-        createDefaultBugReporter(
-            tracingService = FakeTracingService(
-                updateWriteToFilesConfigurationResult = updateWriteToFilesConfigurationResult,
-            ),
-            sessionStore = sessionStore,
-        )
-        sessionStore.removeSession("@alice:server.org")
-        updateWriteToFilesConfigurationResult.assertions().isNeverCalled()
+        assertThat(legacySubfolder.exists()).isFalse()
+        assertThat(rootLogFile.exists()).isTrue()
     }
 
     private fun TestScope.createDefaultBugReporter(
@@ -576,7 +472,6 @@ class DefaultBugReporterTest : RobolectricTest() {
         matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
         crashDataStore: CrashDataStore = FakeCrashDataStore(),
         server: MockWebServer = MockWebServer(),
-        tracingService: TracingService = FakeTracingService(),
     ): DefaultBugReporter {
         return DefaultBugReporter(
             context = RuntimeEnvironment.getApplication(),
@@ -591,7 +486,6 @@ class DefaultBugReporterTest : RobolectricTest() {
             bugReporterUrlProvider = { flowOf(server.url("/")) },
             sdkMetadata = FakeSdkMetadata("123456789"),
             matrixClientProvider = matrixClientProvider,
-            tracingService = tracingService,
         )
     }
 
