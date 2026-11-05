@@ -20,6 +20,12 @@
       ]
     },
     {
+      "name" : ":libraries:accountselect:impl",
+      "includeRegex" : [
+        "screen\\.select_account\\..*"
+      ]
+    },
+    {
       "name" : ":features:rageshake:api",
       "includeRegex" : [
         "crash_detection_.*",
