@@ -187,14 +187,12 @@ private fun ReactionContent(
             ),
         )
     }
-    if (reaction.count > 1) {
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            text = reaction.count.toString(),
-            color = if (reaction.isHighlighted) ElementTheme.colors.textPrimary else ElementTheme.colors.textSecondary,
-            style = ElementTheme.typography.fontBodyMdRegular,
-        )
-    }
+    Spacer(modifier = Modifier.width(4.dp))
+    Text(
+        text = reaction.count.toString(),
+        color = if (reaction.isHighlighted) ElementTheme.colors.textPrimary else ElementTheme.colors.textSecondary,
+        style = ElementTheme.typography.fontBodyMdRegular,
+    )
 }
 
 @PreviewsDayNight

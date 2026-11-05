@@ -221,17 +221,15 @@ private fun AggregatedReactionButton(
                     ),
                 )
             }
-            if (reaction.count > 1) {
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = reaction.count.toString(),
-                    color = ElementTheme.colors.textPrimary,
-                    style = ElementTheme.typography.fontBodyMdRegular.copy(
-                        fontSize = 20.sp,
-                        lineHeight = REACTION_SUMMARY_LINE_HEIGHT
-                    )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = reaction.count.toString(),
+                color = ElementTheme.colors.textPrimary,
+                style = ElementTheme.typography.fontBodyMdRegular.copy(
+                    fontSize = 20.sp,
+                    lineHeight = REACTION_SUMMARY_LINE_HEIGHT
                 )
-            }
+            )
         }
     }
 }
