@@ -101,7 +101,7 @@ class RustBaseRoom(
 
     override suspend fun getMembers(limit: Int) = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.members().use {
+            innerRoom.membersFetchingGlobalProfiles().use {
                 it.nextChunk(limit.toUInt()).orEmpty().map { roomMember ->
                     RoomMemberMapper.map(roomMember)
                 }

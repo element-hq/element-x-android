@@ -43,7 +43,7 @@ class FakeFfiRoom(
         return roomId.value
     }
 
-    override suspend fun members(): RoomMembersIterator {
+    override suspend fun membersFetchingGlobalProfiles(): RoomMembersIterator {
         return getMembers()
     }
 
