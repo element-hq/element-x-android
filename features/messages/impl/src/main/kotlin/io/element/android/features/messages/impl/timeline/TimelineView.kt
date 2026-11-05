@@ -45,6 +45,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -529,6 +530,8 @@ private fun JumpToPositionButton(
                     .clip(CircleShape)
                     .border(1.dp, ElementTheme.colors.borderDisabled, CircleShape)
                     .combinedClickable(
+                        interactionSource = null,
+                        indication = ripple(focusRingShape = CircleShape),
                         onClick = onClick,
                         onLongClick = { menuExpanded = true },
                         onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
@@ -576,7 +579,10 @@ private fun JumpToPositionButton(
                                     .clip(RoundedCornerShape(8.dp))
                                     .background(ElementTheme.colors.bgCanvasDefaultLevel1)
                                     .border(1.dp, ElementTheme.colors.borderDisabled, RoundedCornerShape(8.dp))
-                                    .clickable {
+                                    .clickable(
+                                        interactionSource = null,
+                                        indication = ripple(focusRingShape = RoundedCornerShape(8.dp)),
+                                    ) {
                                         menuExpanded = false
                                         onMarkAsRead()
                                     }

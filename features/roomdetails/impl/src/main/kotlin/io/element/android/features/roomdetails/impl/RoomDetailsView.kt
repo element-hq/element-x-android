@@ -25,6 +25,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -485,6 +486,8 @@ private fun RoomHeaderSection(
             modifier = Modifier
                 .clip(CircleShape)
                 .clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = CircleShape),
                     enabled = avatarUrl != null,
                     onClickLabel = stringResource(CommonStrings.action_view),
                 ) {
@@ -539,6 +542,8 @@ private fun DmHeaderSection(
             modifier = Modifier
                 .clip(CircleShape)
                 .clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = CircleShape),
                     enabled = otherMember.avatarUrl != null,
                     onClickLabel = stringResource(CommonStrings.action_view),
                 ) {

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -148,10 +149,13 @@ private fun ReadReceiptsAvatars(
     val avatarStrokeSize = 1.dp
     val avatarStrokeColor = ElementTheme.colors.bgCanvasDefault
     val receiptDescription = computeReceiptDescription(receipts)
+    val shape = RoundedCornerShape(4.dp)
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
+            .clip(shape)
             .clickable(
+                interactionSource = null,
+                indication = ripple(focusRingShape = shape),
                 onClick = onClick,
                 onClickLabel = stringResource(id = CommonStrings.a11y_read_receipts_tap_to_show_all_android),
             )

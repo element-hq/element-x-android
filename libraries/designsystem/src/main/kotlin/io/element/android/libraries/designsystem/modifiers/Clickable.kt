@@ -11,6 +11,7 @@ package io.element.android.libraries.designsystem.modifiers
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -26,7 +27,12 @@ fun Modifier.clickableIfNotNull(onClick: (() -> Unit)? = null): Modifier = this.
 fun Modifier.niceClickable(
     onClick: () -> Unit,
 ): Modifier {
-    return clip(RoundedCornerShape(4.dp))
-        .clickable { onClick() }
+    val shape = RoundedCornerShape(4.dp)
+    return clip(shape)
+        .clickable(
+            interactionSource = null,
+            indication = ripple(focusRingShape = shape),
+            onClick = onClick,
+        )
         .padding(horizontal = 4.dp)
 }
