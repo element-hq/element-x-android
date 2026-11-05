@@ -91,6 +91,10 @@ allprojects {
         plugin("org.owasp.dependencycheck")
     }
 
+    tasks.withType<org.owasp.dependencycheck.gradle.tasks.Analyze> {
+        nvd.apiKey = System.getenv("NVD_API_KEY")
+    }
+
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
             // Warnings are potential errors, so stop ignoring them
