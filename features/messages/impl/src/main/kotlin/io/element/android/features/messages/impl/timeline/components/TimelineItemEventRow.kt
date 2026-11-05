@@ -264,9 +264,7 @@ fun TimelineItemEventRow(
         }
         if (canReply) {
             val state: SwipeableActionsState = rememberSwipeableActionsState()
-            val offset = state.offset.floatValue
             val swipeThresholdPx = 40.dp.toPx()
-            val thresholdCrossed = abs(offset) > swipeThresholdPx
             SwipeSensitivity(3f) {
                 Box(
                     Modifier
@@ -274,7 +272,7 @@ fun TimelineItemEventRow(
                         .offset(selectionContentOffset)
                 ) {
                     Row(modifier = Modifier.matchParentSize()) {
-                        ReplySwipeIndicator({ offset / 120 })
+                        ReplySwipeIndicator({ state.offset.floatValue / 120 })
                     }
                     TimelineItemEventRowContent(
                         selectionData = selectionData,
@@ -292,13 +290,13 @@ fun TimelineItemEventRow(
                         onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClick = { onMoreReactionsClick(event) },
                         modifier = Modifier
-                            .absoluteOffset { IntOffset(x = offset.roundToInt(), y = 0) }
+                            .absoluteOffset { IntOffset(x = state.offset.floatValue.roundToInt(), y = 0) }
                             .draggable(
                                 orientation = Orientation.Horizontal,
                                 enabled = !state.isResettingOnRelease && !isSelectionToggle,
                                 onDragStopped = {
                                     coroutineScope.launch {
-                                        if (thresholdCrossed) {
+                                        if (abs(state.offset.floatValue) > swipeThresholdPx) {
                                             onSwipeToReply()
                                         }
                                         state.resetOffset()
