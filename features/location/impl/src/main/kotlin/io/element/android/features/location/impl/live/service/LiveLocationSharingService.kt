@@ -94,7 +94,9 @@ class LiveLocationSharingService : Service() {
         appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow()
             .flatMapLatest { minDistanceMeters ->
                 val locationRequest = LocationRequest {
-                    accuracy = LocationAccuracy.Balanced
+                    // High accuracy is required: with Balanced, some fused providers (e.g. microG) never enable
+                    // the GPS, so no location update is received when no network location is available.
+                    accuracy = LocationAccuracy.High
                     minimumInterval = UPDATE_INTERVAL_IN_SECOND.seconds
                     minimumDistance = minDistanceMeters.meters
                 }
