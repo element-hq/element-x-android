@@ -11,6 +11,7 @@ package io.element.android.libraries.designsystem.components.dialogs
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -21,8 +22,8 @@ fun SaveChangesDialog(
     onDiscardClick: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    title: String = stringResource(CommonStrings.dialog_unsaved_changes_title),
-    content: String = stringResource(CommonStrings.dialog_unsaved_changes_description),
+    title: String = stringResource(R.string.dialog_unsaved_changes_title),
+    content: String = stringResource(R.string.dialog_unsaved_changes_description),
     submitText: String = stringResource(CommonStrings.action_save),
     cancelText: String = stringResource(CommonStrings.action_discard),
 ) = ConfirmationDialog(

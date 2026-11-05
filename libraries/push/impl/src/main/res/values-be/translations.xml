@@ -17,8 +17,6 @@
   </plurals>
   <string name="notification_incoming_call">"📹 Уваходны выклік"</string>
   <string name="notification_inline_reply_failed">"** Не атрымалася даслаць - калі ласка, адкрыйце пакой"</string>
-  <string name="notification_invitation_action_join">"Далучыцца"</string>
-  <string name="notification_invitation_action_reject">"Адхіліць"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d запрашэнне"</item>
     <item quantity="few">"%d запрашэнні"</item>
@@ -27,7 +25,6 @@
   <string name="notification_invite_body">"Запрасіў(-ла) вас у чат"</string>
   <string name="notification_invite_body_with_sender">"%1$s запрасіў(-ла) вас у чат"</string>
   <string name="notification_mentioned_you_body">"Згадаў(-ла) вас: %1$s"</string>
-  <string name="notification_new_messages">"Новыя паведамленні"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d новае паведамленне"</item>
     <item quantity="few">"%d новыя паведамленні"</item>

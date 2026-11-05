@@ -54,7 +54,6 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.search.SearchBackfillStrategy
 import io.element.android.libraries.matrix.api.spaces.SpaceService
-import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -88,10 +87,8 @@ import io.element.android.libraries.matrix.impl.roomlist.RustRoomListService
 import io.element.android.libraries.matrix.impl.roomlist.roomOrNull
 import io.element.android.libraries.matrix.impl.search.RustMessageSearchService
 import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
-import io.element.android.libraries.matrix.impl.search.map
 import io.element.android.libraries.matrix.impl.spaces.RustSpaceService
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
-import io.element.android.libraries.matrix.impl.sync.map
 import io.element.android.libraries.matrix.impl.user.UserSearchResultMapper
 import io.element.android.libraries.matrix.impl.user.into
 import io.element.android.libraries.matrix.impl.user.map
@@ -113,7 +110,9 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -123,6 +122,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -139,6 +139,7 @@ import org.matrix.rustcomponents.sdk.ProfileListener
 import org.matrix.rustcomponents.sdk.RoomInfoListener
 import org.matrix.rustcomponents.sdk.SendQueueRoomErrorListener
 import org.matrix.rustcomponents.sdk.TaskHandle
+import org.matrix.rustcomponents.sdk.TotalUnreadNotificationsListener
 import org.matrix.rustcomponents.sdk.UserProfile
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
@@ -148,7 +149,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.io.encoding.Base64
 import kotlin.jvm.optionals.getOrNull
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 import org.matrix.rustcomponents.sdk.CreateRoomParameters as RustCreateRoomParameters
 import org.matrix.rustcomponents.sdk.RoomPreset as RustRoomPreset
 import org.matrix.rustcomponents.sdk.SyncService as ClientSyncService
@@ -341,6 +344,20 @@ class RustMatrixClient(
     private val _isShuttingDown = AtomicBoolean(false)
     override val isShuttingDown: Boolean
         get() = _isShuttingDown.get()
+
+    override val totalUnreadCountFlow: StateFlow<Long> =
+        mxCallbackFlow {
+            val listener = object : TotalUnreadNotificationsListener {
+                override fun onUpdate(count: ULong) {
+                    trySend(count.toLong())
+                }
+            }
+            innerClient.observeTotalUnreadNotifications(listener, 100.milliseconds.toJavaDuration())
+        }.stateIn(
+            scope = sessionCoroutineScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = runCatchingExceptions { innerClient.totalUnreadNotifications().toLong() }.getOrDefault(0L),
+        )
 
     init {
         // Make sure the session delegate has a reference to the client to be able to logout on auth error
@@ -879,12 +896,6 @@ class RustMatrixClient(
             }
         })
     }.buffer(Channel.UNLIMITED)
-
-    override suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion> = withContext(sessionDispatcher) {
-        runCatchingExceptions {
-            innerClient.session().slidingSyncVersion.map()
-        }
-    }
 
     override suspend fun canReportRoom(): Boolean = withContext(sessionDispatcher) {
         runCatchingExceptions {

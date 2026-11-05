@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Неможливо розшифрувати"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Надіслано з незахищеного пристрою"</string>
+  <string name="common_unable_to_decrypt_no_access">"Ви не маєте доступу до цього повідомлення"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Звірена цифрова ідентичність відправника була скинута"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Відправник події не збігається з власником пристрою, який його надіслав."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Автентичність цього зашифрованого повідомлення не може бути гарантована на цьому пристрої."</string>
   <string name="crypto_event_authenticity_previously_verified">"Зашифровано звіреним раніше користувачем."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Зашифровано невідомим або видаленим пристроєм."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Зашифровано пристроєм, який не звірено його власником."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Зашифровано не звіреним користувачем."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поділився цим повідомленням, оскільки вас не було в кімнаті, коли його надіслали."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s поділився цим повідомленням, оскільки вас не було в кімнаті, коли його надіслали."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Цифрову ідентичність %1$s %2$s скинуто. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Цифрову ідентичність %1$s %2$s скинуто. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Посилання %1$s спрямовує вас на інший сайт %2$s
+
+Ви впевнені, що хочете продовжити?"</string>
+  <string name="dialog_confirm_link_title">"Уважно перевірте це посилання"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Максимально дозволений розмір файлу: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Розмір файлу завеликий для вивантаження"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально дозволений розмір файлу: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Виберіть якість відео, яке ви хочете вивантажити."</string>
+  <string name="error_failed_loading_messages">"Не вдалося завантажити повідомлення"</string>
+  <string name="error_failed_uploading_voice_message">"Не вдалося завантажити голосове повідомлення."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s не має доступу до вашого мікрофона. Надайте доступ, щоб записати голосове повідомлення."</string>
   <string name="error_sending_failure_invalid_mime_type">"Недійсний тип MIME: %s"</string>
   <string name="error_sending_failure_missing_media_content">"Відсутній медіавміст"</string>
   <string name="error_sending_failure_other">"Подробиці помилки: %s"</string>
@@ -36,10 +56,26 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Оптимізувати якість зображення"</string>
   <string name="screen_media_upload_preview_processing">"Обробка…"</string>
   <string name="screen_media_upload_preview_title">"Додати медіа"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Натисніть на повідомлення і виберіть \"%1$s\", щоб додати його сюди."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Закріпіть важливі повідомлення, щоб їх можна було легко знайти"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Закріплене повідомлення"</item>
+    <item quantity="few">"%1$d Закріплених повідомлення"</item>
+    <item quantity="many">"%1$d Закріплених повідомлення"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Закріплені повідомлення"</string>
   <string name="screen_report_content_block_user">"Заблокувати користувача"</string>
   <string name="screen_report_content_block_user_hint">"Перевірте, чи хочете ви приховати всі поточні та майбутні повідомлення від цього користувача"</string>
   <string name="screen_report_content_explanation">"Це повідомлення буде передано постачальнику вашого облікового запису. Він не зможе прочитати зашифрованих повідомлень."</string>
   <string name="screen_report_content_hint">"Причина скарги на цей вміст"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Відкликати верифікацію та відправити"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Ви все одно можете відкликати підтвердження та надіслати це повідомлення, або ви можете скасувати підписку на даний момент і спробувати пізніше після повторної перевірки %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Ваше повідомлення не надіслано, оскільки звірена цифрова ідентичність %1$s була скинута"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Надіслати повідомлення в будь-якому випадку"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s використовує один або кілька неперевірених пристроїв. Ви можете відправити повідомлення в будь-якому випадку, або ж скасувати відправку і спробувати пізніше, коли %2$s перевірить всі пристрої."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Ваше повідомлення не було надіслано, тому що %1$s не перевірив усі пристрої"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Один або кілька ваших пристроїв не підтверджено. Ви можете відправити повідомлення в будь-якому випадку, або ж скасувати відправку і спробувати пізніше, коли перевірите всі свої пристрої."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваше повідомлення не було надіслано, оскільки ви не підтвердили один або декілька своїх пристроїв"</string>
   <string name="screen_room_attachment_source_camera">"Камера"</string>
   <string name="screen_room_attachment_source_camera_photo">"Зробити фото"</string>
   <string name="screen_room_attachment_source_camera_video">"Записати відео"</string>
@@ -56,10 +92,26 @@
   <string name="screen_room_encrypted_history_banner_unverified">"Історія повідомлень недоступна в цій кімнаті. Звірте цей пристрій, щоб побачити історію повідомлень."</string>
   <string name="screen_room_invite_again_alert_message">"Чи хотіли б ви запросити їх знову?"</string>
   <string name="screen_room_invite_again_alert_title">"Ви одні в цій бесіді"</string>
+  <string name="screen_room_maximum_messages_selected">"Вибрано максимальну кількість повідомлень"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Сповістити всю кімнату"</string>
   <string name="screen_room_mentions_at_room_title">"Усі"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"Переслано %1$d повідомлення"</item>
+    <item quantity="few">"Переслано %1$d повідомлення"</item>
+    <item quantity="many">"Переслано %1$d повідомлень"</item>
+  </plurals>
+  <string name="screen_room_permalink_same_room_android">"Уже переглядаєте цю кімнату!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s із %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s закріплених повідомлень"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Завантаження повідомлення…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Переглянути всі"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Надіслати знову"</string>
   <string name="screen_room_retry_send_menu_title">"Не вдалося надіслати ваше повідомлення"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"Вибрано %1$d повідомлення"</item>
+    <item quantity="few">"Вибрано %1$d повідомлення"</item>
+    <item quantity="many">"Вибрано %1$d повідомлень"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Додати смайлики"</string>
   <string name="screen_room_timeline_beginning_of_room">"Це початок %1$s"</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Це початок цієї розмови."</string>
@@ -107,4 +159,17 @@
     <item quantity="many">"%1$s пишуть"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s та %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d приєднується"</item>
+    <item quantity="few">"%1$d приєдналися"</item>
+    <item quantity="many">"%1$d приєдналися"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки звірена цифрова ідентичність %1$s була скинута."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Повідомлення не надіслано, оскільки %1$s перевірив не всі пристрої."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Повідомлення не надіслано, оскільки ви не звірили один або кілька своїх пристроїв."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Історичні повідомлення недоступні на цьому пристрої"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Щоб отримати доступ до історії повідомлень, потрібно звірити цей пристрій"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Ви не маєте доступу до цього повідомлення"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Неможливо розшифрувати повідомлення"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Це повідомлення заблоковано, оскільки ви не звірили свій пристрій або відправник повинен звірити вашу цифрову ідентичність."</string>
 </resources>

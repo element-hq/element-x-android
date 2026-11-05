@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>
-  <string name="full_screen_intent_banner_title">"Améliorez votre expérience d’appel"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Sélectionnez la qualité par défaut des vidéos que vous envoyez."</string>
+  <string name="dialog_default_video_quality_selector_title">"Qualité des vidéos envoyées"</string>
+  <string name="full_screen_intent_banner_message_android">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>
+  <string name="full_screen_intent_banner_title_android">"Améliorez votre expérience d’appel"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Choisissez le mode de réception des notifications"</string>
-  <string name="screen_advanced_settings_developer_mode">"Mode développeur"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Activer pour pouvoir accéder aux fonctionnalités destinées aux développeurs."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL de base pour Element Call personnalisée"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Configurer une URL de base pour Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL invalide, assurez-vous d’inclure le protocol (http/https) et l’adresse correcte."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Masquer les avatars des salons dans les invitations"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Masquer les aperçus des médias dans les discussions"</string>
   <string name="screen_advanced_settings_labs">"Expérimental"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Distance à effectuer pour envoyer une mise à jour."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Assurez-vous que la « Localisation précise » est activée pour cette application. Pour modifier l’autorisation, aller à: %1$s."</string>
@@ -21,7 +20,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Téléchargez des photos et des vidéos plus rapidement et réduisez la consommation de données"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimisez la qualité des médias"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Modération et sécurité"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimiser automatiquement les images pour des envois plus rapides et des tailles de fichiers plus petites."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimiser la qualité des images envoyées"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Appuyez ici pour changer."</string>
@@ -30,9 +28,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Résolution standard (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Qualité des vidéos envoyées"</string>
   <string name="screen_advanced_settings_push_provider_android">"Fournisseur de Push"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Désactivez l’éditeur de texte enrichi pour saisir manuellement du Markdown."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Accusés de lecture"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"En cas de désactivation, vos accusés de lecture ne seront pas envoyés aux autres membres. Vous verrez toujours les accusés des autres membres."</string>
   <string name="screen_advanced_settings_share_presence">"Partager la présence"</string>
   <string name="screen_advanced_settings_share_presence_description">"Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Toujours cacher"</string>
@@ -117,6 +112,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_settings_user_status_in_a_meeting">"En réunion"</string>
   <string name="screen_settings_user_status_on_the_road">"Sur la route"</string>
   <string name="screen_settings_user_status_placeholder">"Quel est votre statut ?"</string>
+  <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="theme_black">"Noir"</string>
   <string name="theme_dark">"Sombre"</string>
   <string name="theme_light">"Clair"</string>

@@ -19,7 +19,6 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.RoomCoroutineScope
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import kotlinx.coroutines.CoroutineScope
 
 @ContributesTo(RoomScope::class)
@@ -37,8 +36,4 @@ object MessagesProvidesBindingContainer {
         @RoomCoroutineScope roomCoroutineScope: CoroutineScope,
         dispatchers: CoroutineDispatchers,
     ): TimelineController = TimelineController(joinedRoom, liveTimeline, roomCoroutineScope, dispatchers)
-
-    @Provides
-    @SingleIn(RoomScope::class)
-    fun providesTimelineProvider(timelineController: TimelineController): TimelineProvider = timelineController
 }

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_room_address_already_exists">"이 방 주소는 이미 존재합니다. 방 주소 필드를 편집하거나 방 이름을 변경해 보세요."</string>
+  <string name="error_room_address_invalid_symbols">"일부 문자는 허용되지 않습니다. 로마자, 숫자 및 다음 기호만 지원됩니다! $ &amp;amp; ' ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"초대장 보내기"</string>
   <string name="screen_bottom_sheet_create_dm_message">"%1$s 와 채팅을 시작하시겠습니까?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"초대장을 보내시겠습니까?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"이 사용자와의 대화 내역이 없습니다. 계속하려면 먼저 초대를 확인해 주세요."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"이 사용자와 대화를 시작하시겠습니까?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) 당신을 초대했습니다"</string>
+  <string name="screen_space_list_description">"당신이 스페이스를 만들거나 가입했습니다."</string>
+  <string name="screen_space_list_details">"%1$s•%2$s"</string>
+  <string name="screen_space_list_title">"스페이스"</string>
 </resources>

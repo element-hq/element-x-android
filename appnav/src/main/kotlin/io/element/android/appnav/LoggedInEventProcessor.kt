@@ -16,15 +16,15 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
-import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -33,8 +33,7 @@ import kotlinx.coroutines.flow.onEach
 class LoggedInEventProcessor(
     @Assisted private val snackbarDispatcher: SnackbarDispatcher,
     private val roomMembershipObserver: RoomMembershipObserver,
-    private val sessionId: SessionId,
-    private val syncService: SyncService,
+    private val matrixClient: MatrixClient,
     private val notificationCleaner: NotificationCleaner,
     private val dispatchers: CoroutineDispatchers
 ) {
@@ -74,9 +73,11 @@ class LoggedInEventProcessor(
             .launchIn(childScope)
 
         // Use the sync service heartbeat as a 'heartbeat' update to check existing notifications
-        syncService.heartBeat
+        matrixClient.totalUnreadCountFlow
+            // We drop the first value because it is the initial one and we don't want to clear notifications on startup
+            .drop(1)
             .onEach {
-                notificationCleaner.clearReadRoomsNotifications(sessionId)
+                notificationCleaner.clearReadRoomsNotifications(matrixClient.sessionId)
             }
             .launchIn(childScope)
     }

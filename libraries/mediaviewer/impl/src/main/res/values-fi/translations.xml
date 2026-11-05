@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_scanning">"Skannataan…"</string>
   <string name="screen_media_browser_delete_confirmation_subtitle">"Tämä tiedosto poistetaan huoneesta, eikä jäsenillä ole enää pääsyä siihen."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Poistetaanko tiedosto?"</string>
   <string name="screen_media_browser_download_error_message">"Tarkista internet-yhteytesi ja yritä uudelleen."</string>

@@ -37,7 +37,6 @@ import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
@@ -259,13 +258,12 @@ class PreferencesRootPresenterTest {
 
     @Test
     fun `present - other accounts keep the session store order and get their unread count`() = runTest {
-        var bobUnreadCount = 3L
-        val bobSyncService = FakeSyncService()
+        var bobUnreadCount = 3
         val bobClient = FakeMatrixClient(
             sessionId = A_SESSION_ID_2,
-            syncService = bobSyncService,
-            totalUnreadCountResult = { Result.success(bobUnreadCount) },
-        )
+        ).apply {
+            givenTotalUnreadCount(bobUnreadCount.toLong())
+        }
         createPreferencesRootPresenter(
             matrixClient = FakeMatrixClient(sessionId = A_SESSION_ID),
             sessionStore = InMemorySessionStore(
@@ -290,8 +288,8 @@ class PreferencesRootPresenterTest {
             ).inOrder()
             // The unread count is refreshed on sync heartbeat
             bobUnreadCount = 5
-            bobSyncService.emitHeartBeat()
-            val updatedState = consumeItemsUntilPredicate { state -> state.otherSessions.any { it.unreadCount == 5 } }.last()
+            bobClient.givenTotalUnreadCount(bobUnreadCount.toLong())
+            val updatedState = consumeItemsUntilPredicate { state -> state.otherSessions.any { it.unreadCount == bobUnreadCount } }.last()
             assertThat(updatedState.otherSessions.map { it.user.userId to it.unreadCount }).containsExactly(
                 A_USER_ID_3 to 0,
                 A_SESSION_ID_2 to 5,

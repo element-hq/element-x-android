@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"Allalaadimist pole saadaval."</string>
+  <string name="content_scanner_not_found_title">"Faili ei leidu"</string>
+  <string name="error_room_address_already_exists">"Selline jututoa aadress on juba olemas. Palun proovi muuta kas aadressi või jututoa nime"</string>
+  <string name="error_room_address_invalid_symbols">"Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Saada kutse"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Kas sa soovid alustada vestlust kasutajaga %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Kas saadame kutse?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Sul pole hetkel selle inimesega ühtegi vestlust. Enne jätkamist kinnita talle kutse saatmine."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Kas alustad vestlust selle uue kontaktiga?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) saatis sulle kutse"</string>
+  <string name="screen_space_list_description">"Sinu loodud kogukonnad ning need, millega oled liitunud."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Kogukonnad"</string>
 </resources>

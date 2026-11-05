@@ -12,16 +12,13 @@
     <item quantity="one">"%d известие"</item>
     <item quantity="other">"%d известия"</item>
   </plurals>
-  <string name="notification_fallback_content">"Имате нови съобщения."</string>
   <string name="notification_inline_reply_failed">"** Неуспешно изпращане - моля, отворете стаята"</string>
-  <string name="notification_invitation_action_join">"Присъединяване"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d покана"</item>
     <item quantity="other">"%d покани"</item>
   </plurals>
   <string name="notification_invite_body">"Поканиха ви за чат"</string>
   <string name="notification_mentioned_you_body">"Ви спомена: %1$s"</string>
-  <string name="notification_new_messages">"Нови съобщения"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d ново съобщение"</item>
     <item quantity="other">"%d нови съобщения"</item>

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"為確保您永遠不會錯過重要通話，請變更設定以允許在手機鎖定時允許全螢幕通知。"</string>
-  <string name="full_screen_intent_banner_title">"提升您的通話體驗"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"選取您上傳的視訊預設品質。"</string>
+  <string name="dialog_default_video_quality_selector_title">"視訊上傳品質"</string>
+  <string name="full_screen_intent_banner_message_android">"為確保您永遠不會錯過重要通話，請變更設定以允許在手機鎖定時允許全螢幕通知。"</string>
+  <string name="full_screen_intent_banner_title_android">"提升您的通話體驗"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"選擇接收通知的機制"</string>
-  <string name="screen_advanced_settings_developer_mode">"開發者模式"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"啟用以存取供開發者使用的功能。"</string>
   <string name="screen_advanced_settings_element_call_base_url">"自訂 Element 通話基礎 URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"設定 Element 通話的自訂基礎 URL。"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"無效的 URL，請確定包含了協定 (http/https) 與正確的地址。"</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"在聊天室邀請請求中隱藏大頭貼"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"在時間軸中隱藏媒體預覽"</string>
   <string name="screen_advanced_settings_labs">"實驗室"</string>
   <string name="screen_advanced_settings_live_location_section_description">"觸發更新所需的移動距離。"</string>
   <string name="screen_advanced_settings_live_location_section_footer">"請確保已為此應用程式啟用「精確位置」功能。若要變更此權限，請前往 %1$s。"</string>
@@ -20,7 +19,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"上傳照片與影片更快且減少資料使用量"</string>
   <string name="screen_advanced_settings_media_compression_title">"最佳化媒體品質"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"管理與安全"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"自動最佳化影像以提供更快的上傳速度與較小的檔案大小。"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"最佳化影像上傳品質"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s。輕點此處以變更。"</string>
@@ -29,15 +27,12 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"標準 (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"視訊上傳品質"</string>
   <string name="screen_advanced_settings_push_provider_android">"推播通知提供者"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"手動輸入 Markdown，停用格式化文字編輯器。"</string>
-  <string name="screen_advanced_settings_send_read_receipts">"已讀回條"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"若關閉，您的讀取回條將不會傳送給任何人。您仍然會收到來自其他使用者的讀取回條。"</string>
   <string name="screen_advanced_settings_share_presence">"分享動態"</string>
   <string name="screen_advanced_settings_share_presence_description">"若關閉，您將無法傳送或接收讀取回條或輸入通知。"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"永遠隱藏"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"永遠顯示"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"在私人聊天室中"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"隨時可以透過點選來顯示隱藏媒體"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"在私人聊天室中顯示"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"可以透過點選隱藏的媒體使其顯示。"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"在時間軸中顯示媒體"</string>
   <string name="screen_advanced_settings_view_source_description">"啟用選項以在時間軸中檢視訊息來源。"</string>
   <string name="screen_blocked_users_empty">"您並未封鎖使用者"</string>
@@ -60,6 +55,10 @@
   <string name="screen_labs_header_description">"試試我們正在開發中的最新構想。這些功能可能尚未完成，可能不夠穩定，也可能隨時變動。"</string>
   <string name="screen_labs_header_title">"想不想來點新花樣？"</string>
   <string name="screen_labs_title">"實驗室"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"邀請"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"其他使用者"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"您的外觀"</string>
+  <string name="screen_notification_settings_activity_section_title">"活動"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"其他設定"</string>
   <string name="screen_notification_settings_call_ringtone_label">"通話鈴聲"</string>
   <string name="screen_notification_settings_calls_label">"音訊與視訊通話"</string>
@@ -88,6 +87,8 @@
   <string name="screen_notification_settings_mode_mentions">"提及"</string>
   <string name="screen_notification_settings_notification_section_title">"通知我"</string>
   <string name="screen_notification_settings_room_mention_label">"提及 @room"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"未讀訊息的圓點或數量"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"在聊天室清單中顯示所有活動"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"自訂"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"自訂音效⋯⋯"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"刪除檔案時發生錯誤"</string>
@@ -104,6 +105,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"系統設定"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"已關閉系統通知"</string>
   <string name="screen_notification_settings_title">"通知"</string>
+  <string name="screen_settings_add_account">"新增帳號"</string>
   <string name="screen_settings_user_status_away">"離開"</string>
   <string name="screen_settings_user_status_be_right_back">"稍後回來"</string>
   <string name="screen_settings_user_status_custom">"自訂⋯⋯"</string>
@@ -112,6 +114,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"在會議中"</string>
   <string name="screen_settings_user_status_on_the_road">"在路上"</string>
   <string name="screen_settings_user_status_placeholder">"您的狀態如何？"</string>
+  <string name="settings_version_number">"版本：%1$s（%2$s）"</string>
   <string name="theme_black">"黑色"</string>
   <string name="theme_dark">"深色"</string>
   <string name="theme_light">"淺色"</string>

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"为确保你不会错过重要来电，请更改设置以允许锁屏时的全屏通知。"</string>
-  <string name="full_screen_intent_banner_title">"提升通话体验"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"选择你上传的视频的默认质量。"</string>
+  <string name="dialog_default_video_quality_selector_title">"视频上传质量"</string>
+  <string name="full_screen_intent_banner_message_android">"为确保你不会错过重要来电，请更改设置以允许锁屏时的全屏通知。"</string>
+  <string name="full_screen_intent_banner_title_android">"提升通话体验"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"选择如何接收通知"</string>
-  <string name="screen_advanced_settings_developer_mode">"开发者模式"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"启用以访问适用于开发者的功能与特性。"</string>
   <string name="screen_advanced_settings_element_call_base_url">"自定义 Element Call 基础 URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"为 Element Call 设置基础 URL。"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL 无效，请确保包含协议（http/https）和正确的地址。"</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"在房间邀请请求中隐藏头像"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"在时间线上隐藏媒体预览"</string>
   <string name="screen_advanced_settings_labs">"实验室"</string>
   <string name="screen_advanced_settings_live_location_section_description">"触发一次更新所需的移动距离。"</string>
   <string name="screen_advanced_settings_live_location_section_footer">"确保已为 app 启用“精确位置”。如需更改该权限请转到 %1$s。"</string>
@@ -20,7 +19,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"针对上传进行优化"</string>
   <string name="screen_advanced_settings_media_compression_title">"优化媒体质量"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"尺度与安全"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"自动优化图像以实现更快的上传速度和更小的文件大小。"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"优化图片上传质量"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s。点击此处更改。"</string>
@@ -29,9 +27,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"标准（720p）"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"视频上传质量"</string>
   <string name="screen_advanced_settings_push_provider_android">"通知推送提供者"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"禁用富文本编辑器，手动输入 Markdown。"</string>
-  <string name="screen_advanced_settings_send_read_receipts">"已读回执"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"关闭后已读回执将不会发送给他人，但仍能收到他人的已读回执。"</string>
   <string name="screen_advanced_settings_share_presence">"分享在线状态"</string>
   <string name="screen_advanced_settings_share_presence_description">"关闭后将无法发送或接收已读回执、输入通知"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"始终隐藏"</string>
@@ -119,6 +114,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"正在开会"</string>
   <string name="screen_settings_user_status_on_the_road">"在路上"</string>
   <string name="screen_settings_user_status_placeholder">"你的当前状态？"</string>
+  <string name="settings_version_number">"版本：%1$s（%2$s）"</string>
   <string name="theme_black">"纯黑"</string>
   <string name="theme_dark">"深色"</string>
   <string name="theme_light">"浅色"</string>

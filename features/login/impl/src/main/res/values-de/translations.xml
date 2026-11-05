@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Kontoanbieter wechseln"</string>
-  <string name="screen_account_provider_form_hint">"Homeserver-Adresse"</string>
-  <string name="screen_account_provider_form_notice">"Gib einen Suchbegriff oder eine Domainadresse ein."</string>
-  <string name="screen_account_provider_form_subtitle">"Suche nach einem Unternehmen, einer Community oder einem privaten Server."</string>
-  <string name="screen_account_provider_form_title">"Kontoanbieter finden"</string>
-  <string name="screen_account_provider_signin_subtitle">"Hier werden deine Gespräche gespeichert – so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würdest."</string>
+  <string name="error_account_already_logged_in">"Du bist auf diesem Gerät bereits als %1$s angemeldet."</string>
+  <string name="error_account_creation_not_possible">"Dein Kontoanbieter muss aktualisiert werden, um Matrix Authentication Service und die Erstellung von Konten zu unterstützen."</string>
   <string name="screen_account_provider_signin_title">"Du bist dabei, dich bei %s anzumelden"</string>
-  <string name="screen_account_provider_signup_subtitle">"Hier werden deine Gespräche gespeichert – so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würdest."</string>
-  <string name="screen_account_provider_signup_title">"Du bist dabei, ein Konto bei %s zu erstellen"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org ist ein großer, kostenloser Server im öffentlichen Matrix-Netzwerk für eine sichere, dezentralisierte Kommunikation, der von der Matrix.org Foundation betrieben wird."</string>
   <string name="screen_change_account_provider_other">"Sonstige"</string>
   <string name="screen_change_account_provider_subtitle">"Verwende einen anderen Kontoanbieter, z. B. deinen eigenen privaten Server oder ein Geschäftskonto."</string>
   <string name="screen_change_account_provider_title">"Kontoanbieter wechseln"</string>
@@ -43,7 +36,6 @@
   <string name="screen_login_error_unsupported_authentication">"Der ausgewählte Kontoanbieter unterstützt weder die Anmeldung per Passwort noch per OAuth. Wende dich an deinen Kontoanbieter oder wähle einen anderen."</string>
   <string name="screen_login_form_header">"Gib deine Daten ein"</string>
   <string name="screen_login_subtitle">"Matrix ist ein offenes Netzwerk für eine sichere, dezentrale Kommunikation."</string>
-  <string name="screen_login_title">"Willkommen zurück!"</string>
   <string name="screen_login_title_with_homeserver">"Anmelden bei %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"Element Classic öffnen"</string>
   <string name="screen_missing_key_backup_step_1">"Öffne Element Classic auf deinem Gerät"</string>
@@ -60,7 +52,6 @@
   <string name="screen_onboarding_sign_up">"Konto erstellen"</string>
   <string name="screen_onboarding_welcome_back">"Willkommen zurück"</string>
   <string name="screen_onboarding_welcome_message">"Willkommen beim schnellsten %1$s aller Zeiten. Optimiert für Geschwindigkeit und Einfachheit."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Willkommen zu %1$s. Aufgeladen, für Geschwindigkeit und Einfachheit."</string>
   <string name="screen_onboarding_welcome_title">"Sei in deinem Element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Sichere Verbindung wird aufgebaut"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Es konnte keine sichere Verbindung zu dem neuen Gerät hergestellt werden."</string>
@@ -102,16 +93,10 @@ Versuche, dich manuell anzumelden, oder scanne den QR-Code mit einem anderen Ger
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Du musst %1$s die Berechtigung erteilen, die Kamera deines Geräts zu verwenden, um fortzufahren."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Erlaube Zugriff auf die Kamera zum Scannen des QR-Codes"</string>
   <string name="screen_qr_code_login_scanning_state_title">"QR-Code scannen"</string>
-  <string name="screen_qr_code_login_start_over_button">"Neu beginnen"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Warten auf dein anderes Gerät"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Dein Kontoanbieter fragt möglicherweise nach dem folgenden Code, um die Anmeldung zu bestätigen."</string>
   <string name="screen_qr_code_login_verify_code_title">"Dein Verifizierungscode"</string>
-  <string name="screen_server_confirmation_change_server">"Kontoanbieter wechseln"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Ein privater Server für die Mitarbeiter von Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix ist ein offenes Netzwerk für eine sichere, dezentrale Kommunikation."</string>
-  <string name="screen_server_confirmation_message_register">"Hier werden deine Gespräche gespeichert – so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würdest."</string>
-  <string name="screen_server_confirmation_title_login">"Du bist dabei, dich bei %1$s anzumelden"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Kontoanbieter auswählen"</string>
-  <string name="screen_server_confirmation_title_register">"Du bist dabei, auf %1$s ein Konto zu erstellen"</string>
 </resources>

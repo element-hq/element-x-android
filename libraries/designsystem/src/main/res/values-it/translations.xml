@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Hai delle modifiche non salvate."</string>
+  <string name="dialog_unsaved_changes_description_android">"Le modifiche non sono state salvate. Vuoi davvero tornare indietro?"</string>
+  <string name="dialog_unsaved_changes_title">"Salvare le modifiche?"</string>
+</resources>

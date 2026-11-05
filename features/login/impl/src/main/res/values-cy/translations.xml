@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Newid darparwr cyfrif"</string>
-  <string name="screen_account_provider_form_hint">"Cyfeiriad y gweinydd cartref"</string>
-  <string name="screen_account_provider_form_notice">"Rhowch derm chwilio neu gyfeiriad parth."</string>
-  <string name="screen_account_provider_form_subtitle">"Chwiliwch am gwmni, gweinyddwr cymunedol neu weinydd preifat."</string>
-  <string name="screen_account_provider_form_title">"Canfod darparwr cyfrif"</string>
-  <string name="screen_account_provider_signin_subtitle">"Dyma lle bydd eich sgyrsiau\'n byw - yn union fel y byddech chi\'n defnyddio darparwr e-bost i gadw\'ch e-byst."</string>
+  <string name="error_account_already_logged_in">"Rydych chi eisoes wedi mewngofnodi ar y ddyfais hon fel %1$s ."</string>
+  <string name="error_account_creation_not_possible">"Mae angen uwchraddio eich gweinydd cartref i gefnogi Gwasanaeth Dilysu Matrix a chreu cyfrif."</string>
   <string name="screen_account_provider_signin_title">"Rydych ar fin mewngofnodi i %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Dyma lle bydd eich sgyrsiau\'n byw - yn union fel y byddech chi\'n defnyddio darparwr e-bost i gadw\'ch e-byst."</string>
-  <string name="screen_account_provider_signup_title">"Rydych chi ar fin creu cyfrif ar %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Mae Matrix.org yn weinydd mawr, rhad ac am ddim ar y rhwydwaith Matrix cyhoeddus ar gyfer cyfathrebu diogel, datganoledig, sy\'n cael ei redeg gan y Matrix.org Foundation."</string>
   <string name="screen_change_account_provider_other">"Arall"</string>
   <string name="screen_change_account_provider_subtitle">"Defnyddiwch ddarparwr cyfrif gwahanol, fel eich gweinydd preifat eich hun neu gyfrif gwaith."</string>
   <string name="screen_change_account_provider_title">"Newid darparwr cyfrif"</string>
@@ -35,7 +28,6 @@
   <string name="screen_login_error_unsupported_authentication">"Nid yw\'r gweinydd cartref ddewiswyd yn cefnogi cyfrinair na mewngofnodi OAuth. Cysylltwch â\'ch gweinyddwr neu dewis gweinydd cartref arall."</string>
   <string name="screen_login_form_header">"Rhowch eich manylion"</string>
   <string name="screen_login_subtitle">"Mae Matrix yn rhwydwaith agored ar gyfer cyfathrebu diogel, datganoledig."</string>
-  <string name="screen_login_title">"Croeso nôl!"</string>
   <string name="screen_login_title_with_homeserver">"Mewngofnodi i %1$s"</string>
   <string name="screen_onboarding_app_version">"Fersiwn %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Mewngofnodwch â llaw"</string>
@@ -43,7 +35,6 @@
   <string name="screen_onboarding_sign_in_with_qr_code">"Mewngofnodwch gyda chod QR"</string>
   <string name="screen_onboarding_sign_up">"Creu cyfrif"</string>
   <string name="screen_onboarding_welcome_message">"Croeso i\'r %1$s cyflymaf erioed. Yn nodedig am gyflymder a symlrwydd."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Croeso i %1$s. Yn nodedig ar gyfer cyflymder a symlrwydd."</string>
   <string name="screen_onboarding_welcome_title">"Byddwch yn eich elfen"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Yn creu cysylltiad diogel"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Nid oedd modd gwneud cysylltiad diogel â\'r ddyfais newydd. Mae eich dyfeisiau presennol yn dal yn ddiogel a does dim angen i chi boeni amdanyn nhw."</string>
@@ -83,16 +74,10 @@ Ceisiwch fewngofnodi â llaw, neu sganiwch y cod QR gyda dyfais arall."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Mae angen i chi roi caniatâd i %1$s ddefnyddio camera eich dyfais er mwyn parhau."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Caniatáu mynediad camera i sganio\'r cod QR"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Sganiwch y cod QR"</string>
-  <string name="screen_qr_code_login_start_over_button">"Cychwyn eto"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Digwyddodd gwall annisgwyl. Ceisiwch eto."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Yn aros am eich dyfais arall"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Mae\'n bosibl y bydd darparwr eich cyfrif yn gofyn am y cod canlynol i ddilysu\'r mewngofnodi."</string>
   <string name="screen_qr_code_login_verify_code_title">"Eich cod dilysu"</string>
-  <string name="screen_server_confirmation_change_server">"Newid darparwr cyfrif"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Gweinydd preifat ar gyfer gweithwyr Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Mae Matrix yn rhwydwaith agored ar gyfer cyfathrebu diogel, datganoledig."</string>
-  <string name="screen_server_confirmation_message_register">"Dyma lle bydd eich sgyrsiau\'n byw - yn union fel y byddech chi\'n defnyddio darparwr e-bost i gadw\'ch e-byst."</string>
-  <string name="screen_server_confirmation_title_login">"Rydych ar fin mewngofnodi i %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Dewiswch ddarparwr cyfrif"</string>
-  <string name="screen_server_confirmation_title_register">"Rydych chi ar fin creu cyfrif ar %1$s"</string>
 </resources>

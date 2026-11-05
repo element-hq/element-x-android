@@ -75,7 +75,6 @@ import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
@@ -114,7 +113,6 @@ import io.element.android.tests.testutils.FakeLifecycleOwner
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.consumeItemsUntilTimeout
-import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -312,7 +310,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - handle action forward navigates directly when multi select is disabled`() = runTest {
-        val onForwardEventClickLambda = lambdaRecorder<List<EventId>, TimelineProvider, Unit> { _, _ -> }
+        val onForwardEventClickLambda = lambdaRecorder<List<EventId>, Unit> { _ -> }
         val navigator = FakeMessagesNavigator(
             onForwardEventClickLambda = onForwardEventClickLambda,
         )
@@ -324,7 +322,7 @@ class MessagesPresenterTest {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
             assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
-            onForwardEventClickLambda.assertions().isCalledOnce().with(value(listOf(AN_EVENT_ID)), any())
+            onForwardEventClickLambda.assertions().isCalledOnce().with(value(listOf(AN_EVENT_ID)))
         }
     }
 
@@ -1524,7 +1522,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - confirm selection action forwards the selection in timeline order`() = runTest {
-        val onForwardEventClickLambda = lambdaRecorder<List<EventId>, TimelineProvider, Unit> { _, _ -> }
+        val onForwardEventClickLambda = lambdaRecorder<List<EventId>, Unit> { _ -> }
         val navigator = FakeMessagesNavigator(onForwardEventClickLambda = onForwardEventClickLambda)
         val timelineEventSink = lambdaRecorder<TimelineEvent, Unit> { }
         val presenter = createMessagesPresenter(
@@ -1546,7 +1544,7 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
             initialState.eventSink(MessagesEvent.ConfirmSelectionAction)
-            onForwardEventClickLambda.assertions().isCalledOnce().with(value(listOf(AN_EVENT_ID, AN_EVENT_ID_2)), any())
+            onForwardEventClickLambda.assertions().isCalledOnce().with(value(listOf(AN_EVENT_ID, AN_EVENT_ID_2)))
             // Selection mode is not exited here: this is done by the parent node, and only if the forward actually happened.
             timelineEventSink.assertions().isNeverCalled()
             cancelAndIgnoreRemainingEvents()
@@ -1555,7 +1553,7 @@ class MessagesPresenterTest {
 
     @Test
     fun `present - confirm selection action does nothing when no selection is active`() = runTest {
-        val onForwardEventClickLambda = lambdaRecorder<List<EventId>, TimelineProvider, Unit> { _, _ -> }
+        val onForwardEventClickLambda = lambdaRecorder<List<EventId>, Unit> { _ -> }
         val navigator = FakeMessagesNavigator(onForwardEventClickLambda = onForwardEventClickLambda)
         val presenter = createMessagesPresenter(navigator = navigator)
         presenter.testWithLifecycleOwner {

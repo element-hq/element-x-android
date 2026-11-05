@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"دانلود در دسترس نیست."</string>
+  <string name="content_scanner_not_found_title">"چیزی اشتباه پیش رفت"</string>
+  <string name="error_room_address_already_exists">"این آدرس اتاق از قبل وجود دارد. لطفاً فیلد آدرس اتاق را ویرایش کنید یا نام اتاق را تغییر دهید."</string>
+  <string name="error_room_address_invalid_symbols">"بعضی از کاراکترها مجاز نیستند. فقط حروف، ارقام و نمادهای زیر پشتیبانی می‌شوند! $ &amp;amp; ' ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"فرستادن دعوت"</string>
   <string name="screen_bottom_sheet_create_dm_message">"می‌خواهید گپی را با %1$s بیاغازید؟"</string>
   <string name="screen_bottom_sheet_create_dm_title">"فرستادن دعوت؟"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"شما در حال حاضر هیچ گفت‌وگویی با این شخص ندارید. قبل از ادامه، دعوت از او را تأیید کنید."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"با این مخاطب جدید گفت‌وگو را شروع کنید؟"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) دعوتتان کرد"</string>
+  <string name="screen_space_list_description">"فضاهایی که ساخته یا پیوسته‌اید."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"فضاها"</string>
 </resources>

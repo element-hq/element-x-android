@@ -23,7 +23,23 @@ sealed interface SetupState {
     data object Creating : SetupState
     data class Created(val formattedRecoveryKey: String) : SetupState
     data class CreatedAndSaved(val formattedRecoveryKey: String) : SetupState
-    data class Error(val exception: Exception) : SetupState
+    data class Error(val errorType: SetupErrorType) : SetupState
+}
+
+/**
+ * Why the recovery key could not be created, so that the UI can display an
+ * actionable error instead of a generic one.
+ */
+enum class SetupErrorType {
+    /**
+     * The homeserver could not be reached, for instance because the device is offline.
+     */
+    Network,
+
+    /**
+     * Any other failure, for instance an internal error of the SDK.
+     */
+    Unknown,
 }
 
 fun SetupState.recoveryKey(): String? = when (this) {

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Щоб ніколи не пропустити важливий виклик, змініть налаштування, щоб увімкнути повноекранні сповіщення, коли телефон заблоковано."</string>
-  <string name="full_screen_intent_banner_title">"Покращуйте якість викликів"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Вибір усталеної якості вивантажуваних відео."</string>
+  <string name="dialog_default_video_quality_selector_title">"Якість вивантаження відео"</string>
+  <string name="full_screen_intent_banner_message_android">"Щоб ніколи не пропустити важливий виклик, змініть налаштування, щоб увімкнути повноекранні сповіщення, коли телефон заблоковано."</string>
+  <string name="full_screen_intent_banner_title_android">"Покращуйте якість викликів"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Виберіть спосіб отримання сповіщень"</string>
-  <string name="screen_advanced_settings_developer_mode">"Режим розробника"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Увімкніть доступ до функцій і можливостей для розробників."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Користувацька URL-адреса Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Встановіть URL-адресу для Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Неправильна URL-адреса. Переконайтеся, що ви вказали протокол (http/https) та правильну адресу."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Сховати аватари у запитах на запрошення до кімнат"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Сховати попередній перегляд медіа у стрічці"</string>
   <string name="screen_advanced_settings_labs">"Лабораторія"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Відстань, яку потрібно пройти, щоб ініціювати оновлення."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Переконайтеся, що для цього застосунку ввімкнено функцію «Точна геолокація». Щоб змінити дозвіл, перейдіть на сторінку %1$s."</string>
@@ -22,7 +21,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Швидше завантаження світлин і відео та зменшення обсягу трафіку"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимізація якості медіа"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерування й безпека"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Автоматична оптимізація зображень для швидшого вивантаження та зменшення розміру файлів."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Оптимізація якості вивантажуваних зображень"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s, торкніться тут, щоб змінити."</string>
@@ -31,9 +29,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Стандартна (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Якість вивантаження відео"</string>
   <string name="screen_advanced_settings_push_provider_android">"Постачальник push-сповіщень"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Вимкніть редактор розширеного тексту, щоб вводити Markdown вручну."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Читати журнали"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Якщо вимкнено, ваші сповіщення про прочитання нікому не надсилатимуться. Ви все одно отримуватимете сповіщення про прочитання від інших користувачів."</string>
   <string name="screen_advanced_settings_share_presence">"Ділитися присутністю"</string>
   <string name="screen_advanced_settings_share_presence_description">"Якщо вимкнути цю функцію, ви не зможете надсилати чи отримувати підтвердження прочитання або сповіщення про набір тексту."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Завжди ховати"</string>
@@ -121,6 +116,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"На зустрічі"</string>
   <string name="screen_settings_user_status_on_the_road">"У дорозі"</string>
   <string name="screen_settings_user_status_placeholder">"Який у вас статус?"</string>
+  <string name="settings_version_number">"Версія: %1$s (%2$s)"</string>
   <string name="theme_black">"Темна"</string>
   <string name="theme_dark">"Темна"</string>
   <string name="theme_light">"Світла"</string>

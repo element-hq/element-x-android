@@ -127,41 +127,19 @@ class HomePresenterTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `present - total unread count is updated on sync heartbeat`() = runTest {
-        var unreadCount = 0L
+    fun `present - total unread count is updated with the totalUnreadCountFlow`() = runTest {
         val syncService = FakeSyncService()
+        val client = FakeMatrixClient(syncService = syncService)
         val presenter = createHomePresenter(
-            client = FakeMatrixClient(
-                syncService = syncService,
-                totalUnreadCountResult = { Result.success(unreadCount) },
-            ),
+            client = client,
             syncService = syncService,
         )
         presenter.test {
             assertThat(awaitItem().totalUnreadCount).isEqualTo(0)
-            unreadCount = 5
+            client.givenTotalUnreadCount(5)
             syncService.emitHeartBeat()
             advanceTimeBy(200.milliseconds)
             assertThat(awaitItem().totalUnreadCount).isEqualTo(5)
-        }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun `present - total unread count defaults to 0 when the SDK call fails`() = runTest {
-        val syncService = FakeSyncService()
-        val presenter = createHomePresenter(
-            client = FakeMatrixClient(
-                syncService = syncService,
-                totalUnreadCountResult = { Result.failure(AN_EXCEPTION) },
-            ),
-            syncService = syncService,
-        )
-        presenter.test {
-            assertThat(awaitItem().totalUnreadCount).isEqualTo(0)
-            syncService.emitHeartBeat()
-            advanceTimeBy(200.milliseconds)
-            expectNoEvents()
         }
     }
 
@@ -315,9 +293,13 @@ class HomePresenterTest {
 
     @Test
     fun `present - total unread count is loaded in the initial state`() = runTest {
-        val presenter = createHomePresenter(
-            client = FakeMatrixClient(totalUnreadCountResult = { Result.success(5) }),
-        )
+        val client = FakeMatrixClient()
+        val presenter = createHomePresenter(client = client)
+
+        assertThat(client.totalUnreadCount()).isEqualTo(Result.success(0L))
+
+        client.givenTotalUnreadCount(5)
+
         presenter.test {
             assertThat(awaitItem().totalUnreadCount).isEqualTo(5)
         }

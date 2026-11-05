@@ -21,6 +21,7 @@ import io.element.android.libraries.androidutils.toast.FakeToastHelper
 import io.element.android.libraries.androidutils.toast.ToastHelper
 import io.element.android.libraries.matrix.api.encryption.EnableRecoveryProgress
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
+import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.test.A_RECOVERY_KEY
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.tests.testutils.WarmUpRule
@@ -139,7 +140,39 @@ class SecureBackupSetupPresenterTest {
             val creatingState = awaitItem()
             assertThat(creatingState.setupState).isEqualTo(SetupState.Creating)
             val failedState = awaitItem()
-            assertThat(failedState.setupState).isInstanceOf(SetupState.Error::class.java)
+            assertThat(failedState.setupState).isEqualTo(SetupState.Error(SetupErrorType.Unknown))
+            failedState.eventSink(SecureBackupSetupEvent.DismissDialog)
+
+            val finalState = awaitItem()
+            assertThat(finalState.setupState).isEqualTo(SetupState.Init)
+        }
+    }
+
+    @Test
+    fun `present - network error when creating the recovery key`() = runTest {
+        val encryptionService = FakeEncryptionService(
+            enableRecoveryLambda = { _, _ ->
+                Result.failure(
+                    ClientException.Generic(
+                        message = "error sending request for url (https://matrix.org/_matrix/client/v3/keys/backup/version)",
+                        details = null,
+                    )
+                )
+            }
+        )
+        val presenter = createSecureBackupSetupPresenter(
+            isChangeRecoveryKeyUserStory = false,
+            encryptionService = encryptionService
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(SecureBackupSetupEvent.CreateRecoveryKey)
+            val creatingState = awaitItem()
+            assertThat(creatingState.setupState).isEqualTo(SetupState.Creating)
+            val failedState = awaitItem()
+            assertThat(failedState.setupState).isEqualTo(SetupState.Error(SetupErrorType.Network))
             failedState.eventSink(SecureBackupSetupEvent.DismissDialog)
 
             val finalState = awaitItem()

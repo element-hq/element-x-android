@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Nije moguće dešifrirati"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Poslano s nesigurnog uređaja"</string>
+  <string name="common_unable_to_decrypt_no_access">"Nemate pristup ovoj poruci"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Pošiljateljev potvrđeni identitet je poništen"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Pošiljatelj događaja ne podudara se s vlasnikom uređaja koji ga je poslao."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Autentičnost ove šifrirane poruke ne može se jamčiti na ovom uređaju"</string>
   <string name="crypto_event_authenticity_previously_verified">"Šifrirao je prethodno provjereni korisnik."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Šifrirano nepoznatim ili izbrisanim uređajem."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Šifrirano uređajem koji vlasnik nije potvrdio."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Šifrirao neprovjereni korisnik."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s(%2$s ) je podijelio/la ovu poruku jer niste bili u sobi kada je poslana."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$spodijelio/la je ovu poruku jer nisi bio/la u sobi kada je poslana."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Identitet korisnika %1$s %2$s je poništen. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Identitet korisnika %1$s %2$s je poništen. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Poveznica %1$s vodi vas na drugo mrežno mjesto %2$s
+
+Jeste li sigurni da želite nastaviti?"</string>
+  <string name="dialog_confirm_link_title">"Dvaput provjerite ovu poveznicu"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Maksimalna dopuštena veličina datoteke je: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Datoteka je prevelika za prijenos"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Maksimalna dopuštena veličina datoteke je: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Odaberite kvalitetu videozapisa koji želite prenijeti."</string>
+  <string name="error_failed_loading_messages">"Učitavanje poruka nije uspjelo"</string>
+  <string name="error_failed_uploading_voice_message">"Prijenos vaše glasovne poruke nije uspio."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s nema dopuštenje za pristup vašem mikrofonu. Omogućite pristup kako biste mogli snimiti glasovnu poruku."</string>
   <string name="error_sending_failure_invalid_mime_type">"Nevažeći MIME tip: %s"</string>
   <string name="error_sending_failure_missing_media_content">"Nedostaje medijski sadržaj"</string>
   <string name="error_sending_failure_other">"Detalji pogreške: %s"</string>
@@ -35,10 +55,26 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimiziraj kvalitetu slike"</string>
   <string name="screen_media_upload_preview_processing">"Obrada…"</string>
   <string name="screen_media_upload_preview_title">"Dodaj medij"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Pritisnite poruku i odaberite “%1$s” kako biste uključili ovdje."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Prikvačite važne poruke kako bi ih se lakše moglo pronaći"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d prikvačena poruka"</item>
+    <item quantity="few">"%1$d prikvačene poruke"</item>
+    <item quantity="other">"%1$d prikvačenih poruka"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Prikvačene poruke"</string>
   <string name="screen_report_content_block_user">"Blokiraj korisnika"</string>
   <string name="screen_report_content_block_user_hint">"Označite ako želite sakriti sve trenutačne i buduće poruke od ovog korisnika"</string>
   <string name="screen_report_content_explanation">"Ova poruka bit će prijavljena administratoru vašeg matičnog poslužitelja. On neće moći pročitati nijednu šifriranu poruku."</string>
   <string name="screen_report_content_hint">"Razlog za prijavu ovog sadržaja"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Povuci potvrdu i pošalji"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Možete povući svoju potvrdu i svejedno poslati ovu poruku ili možete za sada otkazati i pokušati ponovno poslije nakon ponovne potvrde korisnika %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Vaša poruka nije poslana jer je poništen potvrđeni identitet korisnika %1$s"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Svejedno pošalji poruku"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s se služi jednim nepotvrđenim uređajem ili više njih. Možete svejedno poslati poruku ili je za sada otkazati i pokušati ponovno poslije. %2$s je potvrdio/la sve svoje uređaje."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Vaša poruka nije poslana jer %1$s nije potvrdio sve uređaje"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedan vaš uređaj ili više njih nije potvrđeno. Možete svejedno poslati poruku ili za sada otkazati i pokušati ponovno poslije nakon što potvrdite sve svoje uređaje."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Vaša poruka nije poslana jer niste potvrdili jedan svoj uređaj ili više njih"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Uslikaj"</string>
   <string name="screen_room_attachment_source_camera_video">"Snimi videozapis"</string>
@@ -55,10 +91,24 @@
   <string name="screen_room_encrypted_history_banner_unverified">"Povijest poruka nije dostupna u ovoj sobi. Potvrdite ovaj uređaj kako biste vidjeli povijest poruka."</string>
   <string name="screen_room_invite_again_alert_message">"Želite li ih pozvati natrag?"</string>
   <string name="screen_room_invite_again_alert_title">"Sami ste u ovom razgovoru"</string>
+  <string name="screen_room_maximum_messages_selected">"Odabran je maksimalan broj poruka"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Obavijestite cijelu sobu"</string>
   <string name="screen_room_mentions_at_room_title">"Svi"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"%1$d poruka proslijeđena"</item>
+    <item quantity="other">"Proslijeđene poruke %1$d"</item>
+  </plurals>
+  <string name="screen_room_permalink_same_room_android">"Već gledam ovu sobu!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s od %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Prikvačene poruke"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Učitavanje poruke…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Prikaži sve"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Pošalji ponovno"</string>
   <string name="screen_room_retry_send_menu_title">"Slanje vaše poruke nije uspjelo"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"Odabrana je poruka %1$d"</item>
+    <item quantity="other">"Odabrano je %1$d poruka"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Dodaj reakciju"</string>
   <string name="screen_room_timeline_beginning_of_room">"Ovo je početak sobe %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Ovo je početak ovog razgovora."</string>
@@ -105,4 +155,16 @@
     <item quantity="other">"%1$s tipka"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s i %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d se pridružio"</item>
+    <item quantity="other">"%1$d se pridružio"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Poruka nije poslana jer je poništen potvrđeni identitet korisnika %1$s."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Poruka nije poslana jer %1$s nije potvrdio sve uređaje."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Poruka nije poslana jer niste potvrdili jedan svoj uređaj ili više njih."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Prijašnje poruke nisu dostupne na ovom uređaju"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Trebate potvrditi ovaj uređaj kako biste mogli pristupiti prijašnjim porukama"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nemate pristup ovoj poruci"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Nije moguće dešifrirati poruku"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Ova je poruka blokirana jer niste potvrdili svoj uređaj ili zato što pošiljatelj treba potvrditi vaš identitet."</string>
 </resources>

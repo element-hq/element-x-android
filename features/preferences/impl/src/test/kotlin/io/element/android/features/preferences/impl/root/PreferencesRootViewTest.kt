@@ -134,7 +134,7 @@ class PreferencesRootViewTest : RobolectricTest() {
                 eventSink = eventsRecorder,
             ),
         )
-        clickOn(CommonStrings.common_switch_account)
+        clickOn(CommonStrings.common_switch_accounts)
         eventsRecorder.assertSingle(PreferencesRootEvent.ToggleOtherAccountsExpanded)
     }
 
@@ -156,7 +156,7 @@ class PreferencesRootViewTest : RobolectricTest() {
                 eventSink = eventsRecorder,
             ),
         )
-        assertNodeWithTextIsDisplayed(CommonStrings.common_switch_account)
+        assertNodeWithTextIsDisplayed(CommonStrings.common_switch_accounts)
         onNodeWithText("Bob").assertDoesNotExist()
         assertNoNodeWithText(CommonStrings.common_add_another_account)
     }

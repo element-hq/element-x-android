@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"اس بات کو یقینی بنانے کے لیے کہ آپ کبھی بھی اہم مکالمہ سے محروم نہ ہوں، براہ کرم اپنی ترتیبات تبدیل کریں تاکہ آپ کا ہاتف مقفل ہونے پر مکمل پردۂ نمائش اطلاعات کی اجازت دی جا سکے۔"</string>
-  <string name="full_screen_intent_banner_title">"اپنے مکالمتی تجربے کو احسن کریں"</string>
+  <string name="full_screen_intent_banner_message_android">"اس بات کو یقینی بنانے کے لیے کہ آپ کبھی بھی اہم مکالمہ سے محروم نہ ہوں، براہ کرم اپنی ترتیبات تبدیل کریں تاکہ آپ کا ہاتف مقفل ہونے پر مکمل پردۂ نمائش اطلاعات کی اجازت دی جا سکے۔"</string>
+  <string name="full_screen_intent_banner_title_android">"اپنے مکالمتی تجربے کو احسن کریں"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"اطلاعات موصول کرنے کا طریقہ چنیں۔"</string>
-  <string name="screen_advanced_settings_developer_mode">"مطور وضع"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"مطورین کیلئے خصوصیات اور فعالیت تک رسائی حاصل کرنے کے لیے فعال کریں۔"</string>
   <string name="screen_advanced_settings_element_call_base_url">"حسب ضرورت ایلیمنٹ مکالمہ بنیادی عنوان"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"ایلیمنٹ مکالمہ کیلئے حسب ضرورت بنیادی عنوان ترتیب دیں"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"باطل عنوان، برائے مہربانی یقینی بنائیں کہ آپ دستور (http/https) اور صحیح پتہ شامل کریں۔"</string>
   <string name="screen_advanced_settings_push_provider_android">"دھکا اطلاع فراہم کنندہ"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"مارک ڈاون کو دستی طور پر تحریر کرنے کے لیے امیر متن مدون کو غیر فعال کریں۔"</string>
-  <string name="screen_advanced_settings_send_read_receipts">"پڑھنے کی رسیدیں"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"اگر بند کر دیا جائے تو، آپ کی پڑھنے کی رسیدیں کسی کو نہیں بھیجی جائیں گی۔ آپ اب بھی دوسرے صارفین سے پڑھنے کی رسیدیں وصول کریں گے۔"</string>
   <string name="screen_advanced_settings_share_presence">"موجودگی کا اشتراک کریں"</string>
   <string name="screen_advanced_settings_share_presence_description">"اگربند کیا، تو آپ پڑھنے کی رسیدیں یا تحریر کی اطلاعات ارسال یا وصول نہیں کر سکیں گے۔"</string>
   <string name="screen_advanced_settings_view_source_description">"جدول زمانی میں پیغام کا ماخذ دیکھنے کے لئے اختیار فعال کریں۔"</string>
@@ -53,6 +48,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"نظام کی ترتیبات"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"نظام کی اطلاعات بند کر دی گئیں"</string>
   <string name="screen_notification_settings_title">"اطلاعات"</string>
+  <string name="settings_version_number">"نسخہ %1$s (%2$s)"</string>
   <string name="theme_dark">"اندھیرا"</string>
   <string name="theme_light">"روشنی"</string>
   <string name="theme_system">"نظام"</string>

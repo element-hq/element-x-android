@@ -12,17 +12,15 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Sisesta oma taastevõti"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Kas unustasid oma taastevõtme?"</string>
   <string name="confirm_recovery_key_banner_title">"Sinu võtmehoidla pole sünkroonis"</string>
-  <string name="full_screen_intent_banner_message">"Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused."</string>
-  <string name="full_screen_intent_banner_title">"Sinu tõhusad telefonikõned"</string>
+  <string name="full_screen_intent_banner_message_android">"Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused."</string>
+  <string name="full_screen_intent_banner_title_android">"Sinu tõhusad telefonikõned"</string>
   <string name="screen_home_tab_chats">"Vestlused"</string>
   <string name="screen_home_tab_spaces">"Kogukonnad"</string>
   <string name="screen_invites_decline_chat_message">"Kas sa oled kindel, et soovid keelduda liitumiskutsest: %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Lükka kutse tagasi"</string>
   <string name="screen_invites_decline_direct_chat_message">"Kas sa oled kindel, et soovid keelduda privaatsest vestlusest kasutajaga %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Keeldu vestlusest"</string>
-  <string name="screen_invites_empty_list">"Kutseid pole"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) saatis sulle kutse"</string>
-  <string name="screen_migration_message">"Tänud, et ootad - seda toimingut on vaja teha vaid üks kord."</string>
   <string name="screen_migration_title">"Seadistame sinu kasutajakontot."</string>
   <string name="screen_roomlist_a11y_create_message">"Loo uus vestlus või jututuba"</string>
   <string name="screen_roomlist_clear_filters">"Tühjenda filtrid"</string>
@@ -51,6 +49,5 @@ Sul pole ühtegi lugemata sõnumit!"</string>
   <string name="screen_roomlist_mark_as_unread">"Märgi mitteloetuks"</string>
   <string name="screen_roomlist_tombstoned_room_description">"See jututuba on uuendatud"</string>
   <string name="screen_roomlist_your_spaces">"Sinu kogukonnad"</string>
-  <string name="session_verification_banner_message">"Tundub, et kasutad uut seadet. Oma krüptitud sõnumite lugemiseks verifitseeri ta mõne muu oma seadmega."</string>
-  <string name="session_verification_banner_title">"Verifitseeri, et see oled sina"</string>
+  <string name="screen_space_list_empty_state_title">"Jututubade haldamiseks võid luua kogukondi"</string>
 </resources>

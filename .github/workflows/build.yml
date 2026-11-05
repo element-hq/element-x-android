@@ -18,6 +18,7 @@ jobs:
   build:
     name: Build APKs
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     permissions:
       # For NejcZdovc/comment-pr
       pull-requests: write
@@ -30,39 +31,18 @@ jobs:
       group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{0}-{1}', matrix.variant, github.sha) || format('build-{0}-{1}', matrix.variant, github.ref)  }}
       cancel-in-progress: true
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
-        with:
-          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-          tool-cache: true
-          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
-          android: false
-          dotnet: true
-          haskell: true
-          # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
-          large-packages: false
-          docker-images: true
-          swap-storage: false
-
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
           persist-credentials: false
-      - name: Use JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          # The GitHub cache is limited to 10 GB per repository, and each job writing the cache adds several GB
-          # (dependencies, transforms and build cache), so older entries get evicted and jobs can restore an incomplete cache.
-          # To stay under the limit, only this job (debug variant) and the unit tests job (tests.yml) write the cache on develop.
-          # All the other jobs only read it.
-          cache-read-only: ${{ github.ref != 'refs/heads/develop' || matrix.variant != 'debug' }}
+          free-disk-space: 'true'
+          # Only this job writes the Gradle cache on develop, see the setup-build action
+          gradle-cache-read-only: ${{ github.ref != 'refs/heads/develop' || matrix.variant != 'debug' }}
       - name: Assemble debug APKs
         if: ${{ matrix.variant == 'debug' }}
         env:
@@ -75,7 +55,7 @@ jobs:
           ELEMENT_CALL_POSTHOG_API_HOST: ${{ secrets.ELEMENT_CALL_POSTHOG_API_HOST }}
           ELEMENT_CALL_POSTHOG_API_KEY: ${{ secrets.ELEMENT_CALL_POSTHOG_API_KEY }}
           ELEMENT_CALL_RAGESHAKE_URL: ${{ secrets.ELEMENT_CALL_RAGESHAKE_URL }}
-        run: ./gradlew :app:assembleGplayDebug app:assembleFDroidDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew :app:assembleGplayDebug :app:assembleFdroidDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Upload debug APKs
         if: ${{ matrix.variant == 'debug' }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -108,15 +88,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Compile release sources
         if: ${{ matrix.variant == 'release' }}
+        # Keep 2 separate invocations: when a requested task contains "bundle", the ABI splits and the universal APK are disabled
+        # (see app/build.gradle.kts), and the universal APK is needed by the aapt dump below.
         run: |
           ./gradlew assembleGplayRelease -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
           ./gradlew bundleGplayRelease -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Run aapt dump
         if: ${{ matrix.variant == 'release' }}
-        run: |
-          $ANDROID_HOME/build-tools/37.0.0/aapt dump badging \
-            ./app/build/outputs/apk/gplay/release/app-gplay-universal-release.apk \
-            > /tmp/currentAaptDump.txt
+        run: ./tools/manifest/aaptDump.sh --skip-build /tmp/currentAaptDump.txt
       - name: Check manifest has not changed
         if: ${{ matrix.variant == 'release' }}
         run: diff /tmp/currentAaptDump.txt ./tools/manifest/gplay/release/aaptDump.txt

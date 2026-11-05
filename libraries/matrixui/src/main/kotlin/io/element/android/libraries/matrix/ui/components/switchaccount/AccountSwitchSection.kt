@@ -85,7 +85,7 @@ fun AccountSwitchSection(
                 modifier = Modifier.semantics {
                     stateDescription = expandedStateDescription
                 },
-                content = { Text(stringResource(CommonStrings.common_switch_account)) },
+                content = { Text(stringResource(CommonStrings.common_switch_accounts)) },
                 onClick = onToggleExpand,
                 trailingContent = ListItemContent.Custom { _ ->
                     Row(

@@ -10,9 +10,14 @@
   <string name="screen_signout_key_backup_offline_title">"您的金鑰仍在備份中"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"請等待此動作完成後再移除此裝置。"</string>
   <string name="screen_signout_key_backup_ongoing_title">"您的金鑰仍在備份中"</string>
+  <string name="screen_signout_other_verified_device_dialog_content">"請確保總是可以使用另一台驗證過的裝置或您的還原金鑰，以免遺失加密的聊天歷史紀錄。"</string>
+  <string name="screen_signout_other_verified_device_dialog_title">"您確定您想要移除此裝置嗎？"</string>
   <string name="screen_signout_preference_item">"移除此裝置"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"這是您唯一的裝置。若您移除它，下此登入時將需要還原金鑰來驗證您的數位身份並還原您的加密聊天。"</string>
   <string name="screen_signout_recovery_disabled_title">"您即將失去對您的加密聊天的存取權"</string>
+  <string name="screen_signout_save_recovery_key_action_check">"檢查您的還原金鑰"</string>
+  <string name="screen_signout_save_recovery_key_action_continue">"繼續移除此裝置"</string>
+  <string name="screen_signout_save_recovery_key_action_generate">"產生新還原金鑰"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"這是您唯一的裝置。若您移除它，下此登入時將需要還原金鑰來驗證您的數位身份並還原您的加密聊天。"</string>
   <string name="screen_signout_save_recovery_key_title">"在移除此裝置前，請確保您可存取您的還原金鑰"</string>
 </resources>

@@ -17,7 +17,6 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -127,17 +126,70 @@ class PollRepositoryTest {
     }
 
     @Test
-    fun `given a live timeline, the timeline is not closed`() = runTest {
+    fun `given a live timeline, savePoll of a new poll uses the live timeline and does not close it`() = runTest {
         val liveTimeline = aLiveTimeline().apply {
-            redactEventLambda = { _, _ -> Result.success(Unit) }
+            createPollLambda = { _, _, _, _ -> Result.success(Unit) }
         }
         val room = FakeJoinedRoom(liveTimeline = liveTimeline)
+        val sut = createPollRepository(room, Timeline.Mode.Live)
+
+        val result = sut.savePoll(
+            existingPollId = null,
+            question = "A question",
+            answers = listOf("Yes", "No"),
+            pollKind = PollKind.Disclosed,
+            maxSelections = 1,
+        )
+
+        assertThat(result.isSuccess).isTrue()
+        assertThat(liveTimeline.closeCounter).isEqualTo(0)
+    }
+
+    @Test
+    fun `given a live timeline, getPoll closes the timeline focused on the poll`() = runTest {
+        val focusedTimeline = aFocusedTimeline()
+        val room = aRoomCreating(focusedTimeline, CreateTimelineParams.Focused(AN_EVENT_ID))
+        val sut = createPollRepository(room, Timeline.Mode.Live)
+
+        val result = sut.getPoll(AN_EVENT_ID)
+
+        assertThat(result.getOrNull()).isEqualTo(pollContent)
+        assertThat(focusedTimeline.closeCounter).isEqualTo(1)
+        assertThat((room.liveTimeline as FakeTimeline).closeCounter).isEqualTo(0)
+    }
+
+    @Test
+    fun `given a live timeline, savePoll of an existing poll closes the timeline focused on the poll`() = runTest {
+        val focusedTimeline = aFocusedTimeline().apply {
+            editPollLambda = { _, _, _, _, _ -> Result.success(Unit) }
+        }
+        val room = aRoomCreating(focusedTimeline, CreateTimelineParams.Focused(AN_EVENT_ID))
+        val sut = createPollRepository(room, Timeline.Mode.Live)
+
+        val result = sut.savePoll(
+            existingPollId = AN_EVENT_ID,
+            question = "A question",
+            answers = listOf("Yes", "No"),
+            pollKind = PollKind.Disclosed,
+            maxSelections = 1,
+        )
+
+        assertThat(result.isSuccess).isTrue()
+        assertThat(focusedTimeline.closeCounter).isEqualTo(1)
+    }
+
+    @Test
+    fun `given a live timeline, deletePoll closes the timeline focused on the poll`() = runTest {
+        val focusedTimeline = aFocusedTimeline().apply {
+            redactEventLambda = { _, _ -> Result.success(Unit) }
+        }
+        val room = aRoomCreating(focusedTimeline, CreateTimelineParams.Focused(AN_EVENT_ID))
         val sut = createPollRepository(room, Timeline.Mode.Live)
 
         val result = sut.deletePoll(AN_EVENT_ID)
 
         assertThat(result.isSuccess).isTrue()
-        assertThat(liveTimeline.closeCounter).isEqualTo(0)
+        assertThat(focusedTimeline.closeCounter).isEqualTo(1)
     }
 
     private fun aLiveTimeline() = FakeTimeline(
@@ -149,11 +201,19 @@ class PollRepositoryTest {
         mode = Timeline.Mode.Thread(A_THREAD_ID),
     )
 
-    private fun aRoomCreating(threadedTimeline: FakeTimeline) = FakeJoinedRoom(
+    private fun aFocusedTimeline() = FakeTimeline(
+        timelineItems = aPollTimelineItems(mapOf(AN_EVENT_ID to pollContent)),
+        mode = Timeline.Mode.FocusedOnEvent(AN_EVENT_ID),
+    )
+
+    private fun aRoomCreating(
+        timeline: FakeTimeline,
+        expectedParams: CreateTimelineParams = CreateTimelineParams.Threaded(A_THREAD_ID),
+    ) = FakeJoinedRoom(
         liveTimeline = aLiveTimeline(),
         createTimelineResult = { params ->
-            assertThat(params).isEqualTo(CreateTimelineParams.Threaded(A_THREAD_ID))
-            Result.success(threadedTimeline)
+            assertThat(params).isEqualTo(expectedParams)
+            Result.success(timeline)
         },
     )
 
@@ -162,7 +222,6 @@ class PollRepositoryTest {
         timelineMode: Timeline.Mode,
     ) = PollRepository(
         room = room,
-        defaultTimelineProvider = LiveTimelineProvider(room),
         timelineMode = timelineMode,
     )
 }

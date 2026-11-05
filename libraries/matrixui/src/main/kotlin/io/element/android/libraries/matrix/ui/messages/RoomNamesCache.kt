@@ -21,14 +21,11 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.runningFold
 
 @SingleIn(RoomScope::class)
 @Inject
 class RoomNamesCache {
     private val cache = MutableStateFlow<ImmutableMap<RoomIdOrAlias, String>>(persistentMapOf())
-    val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
 
     /**
      * The known room names, by room id and canonical alias. Rooms without a name are not included.

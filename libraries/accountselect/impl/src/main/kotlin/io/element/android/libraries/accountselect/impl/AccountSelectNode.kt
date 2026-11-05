@@ -18,16 +18,24 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
+import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
+import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
 
 @ContributesNode(AppScope::class)
 @AssistedInject
 class AccountSelectNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: AccountSelectPresenter,
+    presenterFactory: AccountSelectPresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
+    data class Inputs(
+        val permalinkData: PermalinkData,
+    ) : NodeInputs
+
     private val callback: AccountSelectEntryPoint.Callback = callback()
+    private val presenter = presenterFactory.create(inputs<Inputs>().permalinkData)
 
     @Composable
     override fun View(modifier: Modifier) {

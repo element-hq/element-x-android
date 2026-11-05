@@ -99,7 +99,7 @@ class GlobalSearchViewTest : RobolectricTest() {
         )
         // Remove automatic initial events
         eventsRecorder.clear()
-        clickOn(R.string.search_section_chats)
+        clickOn(R.string.screen_search_tab_chats)
         eventsRecorder.assertSingle(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.ROOMS))
     }
 
@@ -116,7 +116,7 @@ class GlobalSearchViewTest : RobolectricTest() {
         )
         // Remove automatic initial events
         eventsRecorder.clear()
-        clickOn(R.string.search_section_messages)
+        clickOn(R.string.screen_search_tab_messages)
         eventsRecorder.assertSingle(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.MESSAGES))
     }
 
@@ -272,19 +272,6 @@ class GlobalSearchViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `with a query and uninitialized results - displays the start searching placeholder`() = runAndroidComposeUiTest {
-        setGlobalSearchView(
-            state = aGlobalSearchState(
-                isSearchActive = true,
-                queryState = TextFieldState("Query"),
-                results = AsyncData.Uninitialized,
-            ),
-        )
-        val startSearching = activity!!.getString(R.string.start_searching_title)
-        onNodeWithText(startSearching).assertIsDisplayed()
-    }
-
-    @Test
     fun `with empty results - displays the no results placeholder`() = runAndroidComposeUiTest {
         setGlobalSearchView(
             state = aGlobalSearchState(
@@ -294,7 +281,7 @@ class GlobalSearchViewTest : RobolectricTest() {
                 results = AsyncData.Success(GlobalSearchResults.RoomListResults(persistentListOf())),
             ),
         )
-        val noResults = activity!!.getString(R.string.search_no_results_title)
+        val noResults = activity!!.getString(R.string.screen_search_messages_no_results_message, "Query")
         onNodeWithText(noResults).assertIsDisplayed()
     }
 

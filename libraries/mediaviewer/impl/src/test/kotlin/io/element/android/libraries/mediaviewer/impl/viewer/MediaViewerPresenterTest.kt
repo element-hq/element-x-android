@@ -949,7 +949,7 @@ class MediaViewerPresenterTest {
 
     @Test
     fun `present - forward hides the bottom sheet and invokes the navigator`() = runTest {
-        val onForwardClickLambda = lambdaRecorder<EventId, Boolean, Unit> { _, _ -> }
+        val onForwardClickLambda = lambdaRecorder<EventId, Unit> { }
         val navigator = FakeMediaViewerNavigator(
             onForwardClickLambda = onForwardClickLambda,
         )
@@ -974,39 +974,7 @@ class MediaViewerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             onForwardClickLambda.assertions().isCalledOnce()
-                .with(value(AN_EVENT_ID), value(false))
-        }
-    }
-
-    @Test
-    fun `present - forward from pinned events hides the bottom sheet and invokes the navigator`() = runTest {
-        val onForwardClickLambda = lambdaRecorder<EventId, Boolean, Unit> { _, _ -> }
-        val navigator = FakeMediaViewerNavigator(
-            onForwardClickLambda = onForwardClickLambda,
-        )
-        val presenter = createMediaViewerPresenter(
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.PinnedEvents),
-            localMediaFactory = localMediaFactory,
-            mediaViewerNavigator = navigator,
-            room = FakeJoinedRoom(
-                baseRoom = FakeBaseRoom(
-                    roomPermissions = FakeRoomPermissions(
-                        canRedactOwn = true
-                    ),
-                ),
-            ),
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(MediaViewerEvent.OpenInfo(aMediaViewerPageData()))
-            skipItems(1)
-            val withBottomSheetState = awaitItem()
-            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
-            initialState.eventSink(MediaViewerEvent.Forward(AN_EVENT_ID))
-            val finalState = awaitItem()
-            assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
-            onForwardClickLambda.assertions().isCalledOnce()
-                .with(value(AN_EVENT_ID), value(true))
+                .with(value(AN_EVENT_ID))
         }
     }
 

@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"تغيير مزوّد الحسابات"</string>
-  <string name="screen_account_provider_form_hint">"عنوان السيرفر"</string>
-  <string name="screen_account_provider_form_notice">"أدخِل عبارة بحث أو عنوان نطاق."</string>
-  <string name="screen_account_provider_form_subtitle">"ابحث عن شركة، أو مجتمع، أو سيرفر خاص."</string>
-  <string name="screen_account_provider_form_title">"ابحث عن مزوّد حسابات"</string>
-  <string name="screen_account_provider_signin_subtitle">"هذا المكان الذي تقطن فيه رسائلك — تماماً كاستخدامك مزوّد بريد إلكتروني للاحتفاظ برسائل البريد خاصّتك فيه."</string>
+  <string name="error_account_already_logged_in">"لقد سجّلت الدخول بالفعل على هذا الجهاز باسم %1$s."</string>
+  <string name="error_account_creation_not_possible">"يجب ترقية خادمك المنزلي لدعم Matrix Authentication Service وإنشاء الحسابات."</string>
   <string name="screen_account_provider_signin_title">"أنت على وشك تسجيل الدخول إلى %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"هذا المكان الذي تقطن فيه رسائلك — تماماً كاستخدامك مزوّد بريد إلكتروني للاحتفاظ برسائل البريد خاصّتك فيه."</string>
-  <string name="screen_account_provider_signup_title">"أنت على وشك إنشاء حساب في %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"إن Matrix.org سيرفر ضخم ومجاني في شبكة Matrix العامّة وُجِد من أجل مراسلات آمنة ولا مركزية، يُدار من قِبل مؤسسة Matrix.org."</string>
   <string name="screen_change_account_provider_other">"غير ذلك"</string>
   <string name="screen_change_account_provider_subtitle">"استخدم مزوّد حسابات آخر كسيرفرك الخاص أو حساب عمل."</string>
   <string name="screen_change_account_provider_title">"تغيير مزوّد الحسابات"</string>
@@ -43,7 +36,6 @@
   <string name="screen_login_error_unsupported_authentication">"لا يتيح المخدِّم المختار تسجيلَ الدخول بكلمة سرّ أو OAuth. راجع المسؤول أو اختر مخدِّماً آخر."</string>
   <string name="screen_login_form_header">"أدخِل تفاصيلك"</string>
   <string name="screen_login_subtitle">"Matrix عبارة عن شبكة مفتوحة للاتصالات الآمنة واللا مركزية."</string>
-  <string name="screen_login_title">"أهلاً بعودتك!"</string>
   <string name="screen_login_title_with_homeserver">"تسجيل الدخول إلى %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"فتح Element Classic"</string>
   <string name="screen_missing_key_backup_step_1">"افتح Element Classic على جهازك"</string>
@@ -60,7 +52,6 @@
   <string name="screen_onboarding_sign_up">"إنشاء حساب"</string>
   <string name="screen_onboarding_welcome_back">"مرحبًا بعودتك"</string>
   <string name="screen_onboarding_welcome_message">"مرحباً بك في أسرع %1$s على الإطلاق. مزوَّد من أجل سرعةٍ وبساطة."</string>
-  <string name="screen_onboarding_welcome_subtitle">"مرحباً بك في %1$s. المعزَّز، من أجل سرعةٍ وبساطة."</string>
   <string name="screen_onboarding_welcome_title">"Be in your element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"جارٍ إنشاء اتصال آمن"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"تعذّر إنشاء اتصال آمن بالجهاز الجديد. لا تزال أجهزتك الحالية آمنة ولا داعي للقلق بشأنها."</string>
@@ -102,16 +93,10 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"تحتاج إلى منح %1$s إذنًا لاستخدام كاميرا جهازك للمتابعة."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"اسمح بالوصول إلى الكاميرا لمسح رمز QR ضوئيًا"</string>
   <string name="screen_qr_code_login_scanning_state_title">"امسح رمز QR ضوئيًا"</string>
-  <string name="screen_qr_code_login_start_over_button">"البدء من جديد"</string>
   <string name="screen_qr_code_login_unknown_error_description">"حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى."</string>
   <string name="screen_qr_code_login_verify_code_loading">"في انتظار جهازك الآخر"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"قد يطلب موفّر حسابك الرمز التالي للتحقق من تسجيل الدخول."</string>
   <string name="screen_qr_code_login_verify_code_title">"رمز التحقق الخاص بك"</string>
-  <string name="screen_server_confirmation_change_server">"تغيير مزوّد الحسابات"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"سيرفر خاص بموظّفي Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix عبارة عن شبكة مفتوحة للاتصالات الآمنة واللا مركزية."</string>
-  <string name="screen_server_confirmation_message_register">"هذا المكان الذي تقطن فيه رسائلك — تماماً كاستخدامك مزوّد بريد إلكتروني للاحتفاظ برسائل البريد خاصّتك فيه."</string>
-  <string name="screen_server_confirmation_title_login">"أنت على وشك تسجيل الدخول إلى %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"اختر موفّر الحساب"</string>
-  <string name="screen_server_confirmation_title_register">"أنت على وشك إنشاء حساب في %1$s"</string>
 </resources>

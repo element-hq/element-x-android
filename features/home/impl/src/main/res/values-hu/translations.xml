@@ -12,17 +12,15 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Adja meg a helyreállítási kulcsot"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Elfelejtette a helyreállítási kulcsot?"</string>
   <string name="confirm_recovery_key_banner_title">"A kulcstároló nincs szinkronizálva"</string>
-  <string name="full_screen_intent_banner_message">"Hogy sose maradjon le egyetlen fontos hívásról sem, a beállításokban engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van."</string>
-  <string name="full_screen_intent_banner_title">"Fokozza a hívásélményét"</string>
+  <string name="full_screen_intent_banner_message_android">"Hogy sose maradjon le egyetlen fontos hívásról sem, a beállításokban engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van."</string>
+  <string name="full_screen_intent_banner_title_android">"Fokozza a hívásélményét"</string>
   <string name="screen_home_tab_chats">"Csevegések"</string>
   <string name="screen_home_tab_spaces">"Terek"</string>
   <string name="screen_invites_decline_chat_message">"Biztos, hogy elutasítja a meghívást, hogy csatlakozzon ehhez: %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Meghívás elutasítása"</string>
   <string name="screen_invites_decline_direct_chat_message">"Biztos, hogy elutasítja ezt a privát csevegést vele: %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Csevegés elutasítása"</string>
-  <string name="screen_invites_empty_list">"Nincsenek meghívások"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) meghívta"</string>
-  <string name="screen_migration_message">"Ez egy egyszeri folyamat, köszönjük a türelmét."</string>
   <string name="screen_migration_title">"A fiók beállítása."</string>
   <string name="screen_multi_account_announcement_action">"Fiók hozzáadása"</string>
   <string name="screen_multi_account_announcement_description">"Jelentkezzen be egy másik fiókba itt: %1$s . Ezután könnyedén válthat közöttük."</string>
@@ -56,6 +54,5 @@ Nincs olvasatlan üzenete!"</string>
   <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
   <string name="screen_roomlist_tombstoned_room_description">"A szoba verzióját frissítették"</string>
   <string name="screen_roomlist_your_spaces">"Saját terek"</string>
-  <string name="session_verification_banner_message">"Úgy tűnik, hogy új eszközt használ. Ellenőrizze egy másik eszközzel, hogy a továbbiakban elérje a titkosított üzeneteket."</string>
-  <string name="session_verification_banner_title">"Ellenőrizze, hogy Ön az"</string>
+  <string name="screen_space_list_empty_state_title">"Terek létrehozása a szobák rendszerezéséhez"</string>
 </resources>

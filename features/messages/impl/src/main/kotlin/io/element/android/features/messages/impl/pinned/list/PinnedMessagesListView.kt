@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -136,7 +137,7 @@ private fun PinnedMessagesListContent(
             PinnedMessagesListState.Failed -> {
                 ErrorDialog(
                     title = stringResource(id = CommonStrings.error_unknown),
-                    content = stringResource(id = CommonStrings.error_failed_loading_messages),
+                    content = stringResource(id = R.string.error_failed_loading_messages),
                     onSubmit = onErrorDismiss
                 )
             }
@@ -173,8 +174,8 @@ private fun PinnedMessagesListEmpty(
     ) {
         val pinActionText = stringResource(id = CommonStrings.action_pin)
         IconTitleSubtitleMolecule(
-            title = stringResource(id = CommonStrings.screen_pinned_timeline_empty_state_headline),
-            subTitle = stringResource(id = CommonStrings.screen_pinned_timeline_empty_state_description, pinActionText),
+            title = stringResource(id = R.string.screen_pinned_timeline_empty_state_headline),
+            subTitle = stringResource(id = R.string.screen_pinned_timeline_empty_state_description, pinActionText),
             iconStyle = BigIcon.Style.Default(CompoundIcons.Pin()),
         )
     }

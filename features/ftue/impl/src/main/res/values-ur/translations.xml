@@ -9,7 +9,6 @@
   <string name="screen_identity_confirmed_subtitle">"اب آپ محفوظ طریقے سے پیغامات پڑھ یا بھیج سکتے ہیں، اور جسکے ساتھ آپ گفتگو کرتے ہیں وہ بھی اس آلہ پر بھروسہ کر سکتا ہے۔"</string>
   <string name="screen_identity_confirmed_title">"آلہ توثیق شدہ"</string>
   <string name="screen_identity_use_another_device">"دوسرا آلہ استعمال کریں"</string>
-  <string name="screen_identity_waiting_on_other_device">"دوسرے آلہ پر منتظر…"</string>
   <string name="screen_notification_optin_subtitle">"آپ بعد میں اپنی ترتیبات تبدیل کر سکتے ہیں۔"</string>
   <string name="screen_notification_optin_title">"اطلاعات کی اجازت دیں اور کبھی بھی کسی پیغام سے محروم نہ ہوں۔"</string>
 </resources>

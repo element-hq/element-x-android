@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.voicemessages.composer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -20,7 +21,7 @@ internal fun VoiceMessagePermissionRationaleDialog(
     appName: String,
 ) {
     ConfirmationDialog(
-        content = stringResource(CommonStrings.error_missing_microphone_voice_rationale_android, appName),
+        content = stringResource(R.string.error_missing_microphone_voice_rationale_android, appName),
         onSubmitClick = onContinue,
         onDismiss = onDismiss,
         submitText = stringResource(CommonStrings.action_continue),

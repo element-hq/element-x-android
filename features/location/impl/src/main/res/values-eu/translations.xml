@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s ezin izan da mapa kargatu. Saiatu berriro geroago."</string>
+  <string name="error_failed_locating_user">"%1$s ezin izan da zure kokapena atzitu. Saiatu berriro geroago."</string>
+  <string name="error_missing_location_auth_android">"%1$sek ez du zure kokapena atzitzeko baimenik. Sarbidea Ezarpenetan gaitu dezakezu."</string>
+  <string name="error_missing_location_rationale_android">"%1$sek ez du zure kokapena atzitzeko baimenik. Gaitu sarbidea behean."</string>
+  <string name="screen_share_location_title">"Partekatu kokapena"</string>
+  <string name="screen_share_my_location_action">"Partekatu nire kokapena"</string>
+  <string name="screen_share_open_apple_maps">"Ireki Apple Maps-en"</string>
+  <string name="screen_share_open_google_maps">"Ireki Google Maps-en"</string>
+  <string name="screen_share_open_osm_maps">"Ireki OpenStreetMap-en"</string>
+  <string name="screen_share_this_location_action">"Partekatu kokapen hau"</string>
+  <string name="screen_view_location_title">"Kokapena"</string>
+</resources>

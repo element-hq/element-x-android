@@ -38,4 +38,9 @@ enum class UtdCause {
      * Key is withheld by sender.
      */
     WithheldBySender,
+
+    /**
+     * The event is malformed and cannot be decrypted.
+     */
+    Malformed,
 }

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Nie można odszyfrować"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Wysłane z niebezpiecznego urządzenia"</string>
+  <string name="common_unable_to_decrypt_no_access">"Nie masz uprawnień do tej wiadomości"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Zweryfikowana tożsamość nadawcy została zresetowana"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Nadawca zdarzenia nie pasuje do właściciela urządzenia, które je wysłał."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Autentyczność tej wiadomości szyfrowanej nie jest gwarantowana na tym urządzeniu."</string>
   <string name="crypto_event_authenticity_previously_verified">"Zaszyfrowane przez wcześniej zweryfikowanego użytkownika."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Zaszyfrowana przez nieznane lub usunięte urządzenie."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Zaszyfrowana przez urządzenie niezweryfikowane przez jego właściciela."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Zaszyfrowana przez niezweryfikowanego użytkownika."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) udostępnił tę wiadomość, kiedy nie było Cię w pokoju, gdy została wysłana."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s udostępnił tę wiadomość, kiedy nie było Cię w pokoju, gdy została wysłana."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Tożsamość %1$s %2$s została zresetowana. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Tożsamość %1$s %2$s została zresetowana. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Link %1$s prowadzi Cię do innej witryny %2$s
+
+Czy na pewno chcesz kontynuować?"</string>
+  <string name="dialog_confirm_link_title">"Sprawdź dwukrotnie ten link"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Maksymalny dozwolony rozmiar pliku to: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Rozmiar pliku jest za duży, aby go przesłać"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Maksymalny dozwolony rozmiar pliku to: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Wybierz jakość filmu, który chcesz przesłać."</string>
+  <string name="error_failed_loading_messages">"Nie udało się załadować wiadomości"</string>
+  <string name="error_failed_uploading_voice_message">"Nie udało się przesłać Twojej wiadomości głosowej."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s nie ma uprawnień dostępu do Twojego mikrofonu. Włącz dostęp, aby nagrać wiadomość głosową."</string>
   <string name="error_sending_failure_invalid_mime_type">"Nieprawidłowy typ MIME: %s"</string>
   <string name="error_sending_failure_missing_media_content">"Brak treści multimedialnych"</string>
   <string name="error_sending_failure_other">"Szczegóły błędu: %s"</string>
@@ -36,10 +56,26 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Zoptymalizuj jakość obrazu"</string>
   <string name="screen_media_upload_preview_processing">"Przetwarzanie…"</string>
   <string name="screen_media_upload_preview_title">"Dodaj media"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Przytrzymaj wiadomość i wybierz “%1$s”, aby umieścić ją tutaj."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Przypinaj ważne wiadomości, by łatwo je później odnaleźć"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d przypięta wiadomość"</item>
+    <item quantity="few">"%1$d przypięte wiadomości"</item>
+    <item quantity="many">"%1$d przypiętych wiadomości"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Przypięte wiadomości"</string>
   <string name="screen_report_content_block_user">"Zablokuj użytkownika"</string>
   <string name="screen_report_content_block_user_hint">"Zaznacz, jeśli chcesz ukryć wszystkie bieżące i przyszłe wiadomości od tego użytkownika."</string>
   <string name="screen_report_content_explanation">"Wiadomość zostanie zgłoszona do Twojego dostawcy konta. Nie będzie mógł on przeczytać żadnych zaszyfrowanych wiadomości."</string>
   <string name="screen_report_content_hint">"Powód zgłoszenia treści"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Wycofaj weryfikację i wyślij"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Możesz wycofać weryfikację i wysłać wiadomość mimo wszystko lub anulować i spróbować ponownie po ponownej weryfikacji %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Twoja wiadomość nie została wysłana, ponieważ tożsamość %1$s została zresetowana."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Wyślij wiadomość mimo to"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s korzysta z jednego lub więcej niezweryfikowanych urządzeń. Wyślij wiadomość mimo to lub anuluj i spróbuj ponownie, gdy %2$s zweryfikuje wszystkie swoje urządzenia."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Twoja wiadomość nie została wysłana, ponieważ %1$s nie zweryfikował swoich wszystkich urządzeń"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedno lub więcej z Twoich urządzeń jest niezweryfikowanych. Wyślij wiadomość mimo to lub anuluj i spróbuj ponownie po zweryfikowaniu wszystkich swoich urządzeń."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Twoja wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń."</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Zrób zdjęcie"</string>
   <string name="screen_room_attachment_source_camera_video">"Nagraj wideo"</string>
@@ -56,10 +92,26 @@
   <string name="screen_room_encrypted_history_banner_unverified">"Historia wiadomości jest niedostępna w tym pokoju. Zweryfikuj to urządzenie, aby zobaczyć historię wiadomości."</string>
   <string name="screen_room_invite_again_alert_message">"Czy chcesz zaprosić ich z powrotem?"</string>
   <string name="screen_room_invite_again_alert_title">"Jesteś sam na tym czacie"</string>
+  <string name="screen_room_maximum_messages_selected">"Zaznaczono maksymalną liczbę wiadomości"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Powiadom cały pokój"</string>
   <string name="screen_room_mentions_at_room_title">"Wszyscy"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"Przekazano %1$d wiadomość"</item>
+    <item quantity="few">"Przekazano %1$d wiadomości"</item>
+    <item quantity="many">"Przekazano %1$d wiadomości"</item>
+  </plurals>
+  <string name="screen_room_permalink_same_room_android">"Już oglądasz ten pokój!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s przypiętych wiadomości"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Wczytywanie wiadomości…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Wyświetl wszystkie"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Wyślij ponownie"</string>
   <string name="screen_room_retry_send_menu_title">"Nie udało się wysłać wiadomości"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"Zaznaczono %1$d wiadomość"</item>
+    <item quantity="few">"Zaznaczono %1$d wiadomości"</item>
+    <item quantity="many">"Zaznaczono %1$d wiadomości"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Dodaj emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"To jest początek %1$s"</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"To jest początek tej konwersacji"</string>
@@ -107,4 +159,17 @@
     <item quantity="many">"%1$s piszą"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s i %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d dołączyła"</item>
+    <item quantity="few">"%1$d dołączyły"</item>
+    <item quantity="many">"%1$d dołączyło"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Wiadomość nie została wysłana, ponieważ tożsamość %1$s została zresetowana."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Wiadomość nie została wysłana, ponieważ %1$s nie zweryfikował wszystkich urządzeń."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Wiadomość nie została wysłana, ponieważ nie zweryfikowałeś jednego lub więcej swoich urządzeń."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historia wiadomości nie jest dostępna na tym urządzeniu"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Musisz zweryfikować to urządzenie, aby uzyskać dostęp do historii wiadomości"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nie masz uprawnień do tej wiadomości"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Nie można odszyfrować wiadomości"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Ta wiadomość została zablokowana, ponieważ urządzenie nie zostało zweryfikowane lub nadawca musi zweryfikować Twoją tożsamość."</string>
 </resources>

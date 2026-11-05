@@ -1,11 +1,13 @@
 name: Pull Request
 on:
-  pull_request_target:
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
     types: [ opened, edited, labeled, unlabeled, synchronize ]
-  workflow_call: # zizmor: ignore[dangerous-triggers]
+  workflow_call:
     secrets:
       ELEMENT_BOT_TOKEN:
         required: true
+      ELEMENT_BOT_TOKEN_READ_ORG:
+        required: false
 
 permissions: {}
 
@@ -44,7 +46,7 @@ jobs:
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
-            github.rest.issues.addLabels({
+            await github.rest.issues.addLabels({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -66,15 +68,15 @@ jobs:
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "Thanks for opening this pull request, unfortunately we do not accept contributions from the main" +
+              body: "Thanks for opening this pull request, unfortunately we do not accept contributions from the develop" +
                 " branch of your fork, please re-open once you switch to an alternative branch for everyone's sanity.",
             });
-            
-            github.rest.pulls.update({
+
+            await github.rest.pulls.update({
               pull_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,

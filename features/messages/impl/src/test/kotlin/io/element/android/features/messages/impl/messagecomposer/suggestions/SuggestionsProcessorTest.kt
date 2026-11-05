@@ -266,6 +266,36 @@ class SuggestionsProcessorTest {
     }
 
     @Test
+    fun `processing Room suggestion will return a suggestion when matching on room name without its spaces`() = runTest {
+        val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
+        val result = suggestionsProcessor.process(
+            suggestion = aRoomSuggestion("elementx"),
+            roomMembersState = RoomMembersState.Ready(persistentListOf()),
+            roomAliasSuggestions = listOf(
+                RoomAliasSuggestion(
+                    roomAlias = A_ROOM_ALIAS,
+                    roomId = aRoomSummary.roomId,
+                    roomName = "Element X",
+                    roomAvatarUrl = aRoomSummary.info.avatarUrl,
+                )
+            ),
+            currentUserId = A_USER_ID,
+            canSendRoomMention = { true },
+            isInThread = false,
+        )
+        assertThat(result).isEqualTo(
+            listOf(
+                ResolvedSuggestion.Alias(
+                    roomAlias = A_ROOM_ALIAS,
+                    roomId = aRoomSummary.roomId,
+                    roomName = "Element X",
+                    roomAvatarUrl = aRoomSummary.info.avatarUrl,
+                )
+            )
+        )
+    }
+
+    @Test
     fun `processing Room suggestion will not return a suggestion when room has no name`() = runTest {
         val aRoomSummary = aRoomSummary(canonicalAlias = A_ROOM_ALIAS)
         val result = suggestionsProcessor.process(
@@ -403,6 +433,64 @@ class SuggestionsProcessorTest {
                 ResolvedSuggestion.Member(matchingOnDisplayNameStart),
                 ResolvedSuggestion.Member(matchingOnUserIdStart),
                 ResolvedSuggestion.Member(matchingOnAnyPart),
+            )
+        )
+    }
+
+    @Test
+    fun `processing Mention suggestion matches a display name typed without its spaces`() = runTest {
+        val aRoomMember = aRoomMember(userId = UserId("@jdoe:server.org"), displayName = "Jane Q Doe")
+        val result = suggestionsProcessor.process(
+            suggestion = aMentionSuggestion("janeqdoe"),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember)),
+            roomAliasSuggestions = emptyList(),
+            currentUserId = A_USER_ID_2,
+            canSendRoomMention = { false },
+            isInThread = false,
+        )
+        assertThat(result).isEqualTo(
+            listOf(
+                ResolvedSuggestion.Member(aRoomMember),
+            )
+        )
+    }
+
+    @Test
+    fun `processing Mention suggestion ranks a display name starting with the query without its spaces first`() = runTest {
+        val matchingOnAnyPart = aRoomMember(userId = UserId("@carol:server.org"), displayName = "Not Jane Q")
+        val matchingOnDisplayNameStart = aRoomMember(userId = UserId("@jdoe:server.org"), displayName = "Jane Q Doe")
+        val result = suggestionsProcessor.process(
+            suggestion = aMentionSuggestion("janeq"),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(matchingOnAnyPart, matchingOnDisplayNameStart)),
+            roomAliasSuggestions = emptyList(),
+            currentUserId = A_USER_ID_2,
+            canSendRoomMention = { false },
+            isInThread = false,
+        )
+        assertThat(result).isEqualTo(
+            listOf(
+                ResolvedSuggestion.Member(matchingOnDisplayNameStart),
+                ResolvedSuggestion.Member(matchingOnAnyPart),
+            )
+        )
+    }
+
+    @Test
+    fun `processing Mention suggestion ranks a direct match before a match across words`() = runTest {
+        val matchingAcrossWords = aRoomMember(userId = UserId("@lee:server.org"), displayName = "Lee Dawson")
+        val matchingDirectly = aRoomMember(userId = UserId("@edward:server.org"), displayName = "Edward")
+        val result = suggestionsProcessor.process(
+            suggestion = aMentionSuggestion("ed"),
+            roomMembersState = RoomMembersState.Ready(persistentListOf(matchingAcrossWords, matchingDirectly)),
+            roomAliasSuggestions = emptyList(),
+            currentUserId = A_USER_ID_2,
+            canSendRoomMention = { false },
+            isInThread = false,
+        )
+        assertThat(result).isEqualTo(
+            listOf(
+                ResolvedSuggestion.Member(matchingDirectly),
+                ResolvedSuggestion.Member(matchingAcrossWords),
             )
         )
     }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Έχεις μη αποθηκευμένες αλλαγές."</string>
+  <string name="dialog_unsaved_changes_description_android">"Οι αλλαγές σου δεν έχουν αποθηκευτεί. Σίγουρα θες να πας πίσω;"</string>
+  <string name="dialog_unsaved_changes_title">"Αποθήκευση αλλαγών;"</string>
+</resources>

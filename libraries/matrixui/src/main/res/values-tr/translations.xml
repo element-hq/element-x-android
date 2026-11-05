@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_room_address_already_exists">"Bu oda adresi zaten mevcut. Lütfen oda adres alanını düzenlemeyi deneyin veya oda adını değiştirin"</string>
+  <string name="error_room_address_invalid_symbols">"Bazı karakterlere izin verilmez. Yalnızca harfler, rakamlar ve aşağıdaki semboller desteklenir ! $ &amp;amp; \' ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Davet gönder"</string>
   <string name="screen_bottom_sheet_create_dm_message">"%1$s ile sohbet başlatmak ister misiniz?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Davet gönder?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) sizi davet etti"</string>
+  <string name="screen_space_list_description">"Oluşturduğunuz veya katıldığınız alanlar."</string>
+  <string name="screen_space_list_title">"Alanlar"</string>
 </resources>

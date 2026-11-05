@@ -14,6 +14,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -25,6 +26,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.messages.impl.MessagesNavigator
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.UserEventPermissions
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureEvent
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
@@ -78,7 +80,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
@@ -126,7 +127,6 @@ class TimelinePresenter(
             navigator: MessagesNavigator
         ): TimelinePresenter
     }
-
     private val timelineItemsFactory: TimelineItemsFactory = timelineItemsFactoryCreator.create(
         config = TimelineItemsFactoryConfig(
             computeReadReceipts = true,
@@ -134,6 +134,8 @@ class TimelinePresenter(
         )
     )
     private var timelineItems by mutableStateOf<ImmutableList<TimelineItem>>(persistentListOf())
+
+    private var timelineItemsStructureVersion by mutableIntStateOf(0)
 
     private val focusRequestState: MutableState<FocusRequestState> = mutableStateOf(FocusRequestState.None)
 
@@ -294,7 +296,7 @@ class TimelinePresenter(
                         // Deselecting the last event does not exit selection mode: it is only left explicitly, as on iOS.
                         event.eventId in selected -> current.deselect(setOf(event.eventId))
                         selected.size >= MAX_SELECTION_COUNT -> {
-                            snackbarDispatcher.post(SnackbarMessage(CommonStrings.screen_room_maximum_messages_selected))
+                            snackbarDispatcher.post(SnackbarMessage(R.string.screen_room_maximum_messages_selected))
                             current
                         }
                         else -> current.copy(selectedEventIds = (selected + event.eventId).toImmutableSet())
@@ -383,10 +385,13 @@ class TimelinePresenter(
 
         LaunchedEffect(Unit) {
             timelineItemsFactory.timelineItems
-                .onEach { newTimelineItems ->
-                    timelineItemIndexer.process(newTimelineItems)
-                    timelineItems = newTimelineItems.toImmutableList()
-
+                .map { newTimelineItems ->
+                    newTimelineItems.toImmutableList() to timelineItemIndexer.process(newTimelineItems)
+                }
+                .flowOn(dispatchers.computation)
+                .onEach { (newTimelineItems, newStructureVersion) ->
+                    timelineItems = newTimelineItems
+                    timelineItemsStructureVersion = newStructureVersion
                     analyticsService.run {
                         finishLongRunningTransaction(DisplayFirstTimelineItems)
                         finishLongRunningTransaction(OpenRoom)
@@ -402,22 +407,14 @@ class TimelinePresenter(
                 .onEach { eventIdsToDeselect -> selectionState.value = selectionState.value.deselect(eventIdsToDeselect) }
                 .launchIn(this)
 
-            combine(
-                timelineController.timelineItems(),
-                room.membersStateFlow,
-                sessionPreferencesStore.isRenderReadReceiptsEnabled(),
-            ) { items, membersState, renderReadReceipts ->
-                val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
-                val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
-                transaction?.putExtraData(AnalyticsUserData.TIMELINE_ITEM_COUNT, items.count().toString())
-                timelineItemsFactory.replaceWith(
-                    timelineItems = items,
-                    roomMembers = membersState.roomMembers().orEmpty(),
-                    renderReadReceipts = renderReadReceipts,
-                )
-                transaction?.finish()
-                items
-            }
+            timelineController.timelineItems()
+                .onEach { items ->
+                    val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
+                    val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
+                    transaction?.putExtraData(AnalyticsUserData.TIMELINE_ITEM_COUNT, items.count().toString())
+                    timelineItemsFactory.replaceWith(timelineItems = items)
+                    transaction?.finish()
+                }
                 .onEach(redactedVoiceMessageManager::onEachMatrixTimelineItem)
                 .flowOn(dispatchers.computation)
                 .launchIn(this)
@@ -427,10 +424,10 @@ class TimelinePresenter(
             computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
         }
 
-        // Keyed on the full [timelineItems] reference (not just .size) so we re-scan when the
-        // read marker advances in place — the SDK swaps the marker virtual item to a new position
-        // without changing the list length, e.g. when [markRoomAsFullyRead] is sent while at the
-        // bottom of the room.
+        // Keyed on [timelineItemsStructureVersion] (not just .size) so we re-scan when the read marker
+        // advances in place — the SDK swaps the marker virtual item to a new position without
+        // changing the list length, e.g. when [markRoomAsFullyRead] is sent while at the bottom
+        // of the room.
         //
         // The state has three shapes:
         //  - InWindow: the SDK has materialised a virtual ReadMarker item in the loaded window;
@@ -447,7 +444,7 @@ class TimelinePresenter(
             suppressJumpToUnread.value = false
         }
         LaunchedEffect(
-            timelineItems.map { it.identifier() },
+            timelineItemsStructureVersion,
             displayJumpToUnread,
             roomInfo.fullyReadEventId,
             roomInfo.numUnreadMessages,
@@ -482,12 +479,12 @@ class TimelinePresenter(
             }
         }
 
-        // Keyed on the full [timelineItems] reference (not just .size) so we re-resolve the index
-        // when a focused timeline loads with the same item count as the window it replaced — e.g.
-        // jumping to an out-of-window read marker in a busy room, where both windows fill to the
-        // same page size. With .size as the key the effect wouldn't re-run, the focused event's
-        // index would stay unresolved, and the scroll would never fire until a second tap.
-        LaunchedEffect(timelineItems.map { it.identifier() }, focusRequestState.value) {
+        // Keyed on [timelineItemsStructureVersion] (not just .size) so we re-resolve the index when a focused
+        // timeline loads with the same item count as the window it replaced — e.g. jumping to an
+        // out-of-window read marker in a busy room, where both windows fill to the same page size.
+        // With .size as the key the effect wouldn't re-run, the focused event's index would stay
+        // unresolved, and the scroll would never fire until a second tap.
+        LaunchedEffect(timelineItemsStructureVersion, focusRequestState.value) {
             val currentFocusRequestState = focusRequestState.value
             if (currentFocusRequestState is FocusRequestState.Success && !currentFocusRequestState.rendered) {
                 val eventId = currentFocusRequestState.eventId
@@ -505,12 +502,14 @@ class TimelinePresenter(
         val userEventPermissions by room.permissionsAsState(UserEventPermissions.DEFAULT) { perms ->
             perms.userEventPermissions()
         }
-        val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo) {
+        val renderReadReceipts by sessionPreferencesStore.isRenderReadReceiptsEnabled().collectAsState(initial = true)
+        val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo, renderReadReceipts) {
             derivedStateOf {
                 TimelineRoomInfo(
                     currentUserId = room.sessionId,
                     name = roomInfo.name,
                     isDm = roomInfo.isDm,
+                    renderReadReceipts = renderReadReceipts,
                     userHasPermissionToSendMessage = userEventPermissions.canSendMessage,
                     userHasPermissionToSendReaction = userEventPermissions.canSendReaction,
                     roomCallState = roomCallState,
