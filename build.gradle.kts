@@ -91,7 +91,7 @@ allprojects {
         plugin("org.owasp.dependencycheck")
     }
 
-    tasks.withType<org.owasp.dependencycheck.gradle.tasks.Analyze> {
+    tasks.withType<org.owasp.dependencycheck.gradle.tasks.Aggregate> {
         nvd.apiKey = System.getenv("NVD_API_KEY")
     }
 
