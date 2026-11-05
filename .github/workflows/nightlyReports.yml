@@ -74,7 +74,7 @@ jobs:
       - name: Setup build environment
         uses: $/.github/actions/setup-build
       - name: Dependency analysis
-        run: ./gradlew dependencyCheckAggregate --no-parallel --no-configuration-cache $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew dependencyCheckAggregate -i --no-parallel --no-configuration-cache $CI_GRADLE_ARG_PROPERTIES
       - name: Upload dependency analysis
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
