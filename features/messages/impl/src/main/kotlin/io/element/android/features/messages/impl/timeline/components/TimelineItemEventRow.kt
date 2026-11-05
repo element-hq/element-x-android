@@ -44,6 +44,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -710,7 +711,9 @@ private fun MessageSenderInformation(
     val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
     Row(
         modifier = modifier
-            // Add external clickable modifier with no indicator so the touch target is larger than just the display name
+            // Add external clickable modifier with no indicator so the touch target is larger than just the display name.
+            // It must not get the keyboard focus, since it would not draw any focus indicator: the avatar and the name will get it.
+            .focusProperties { canFocus = false }
             .clickable(onClick = onClick, enabled = true, interactionSource = remember { MutableInteractionSource() }, indication = null)
             .clearAndSetSemantics {
                 hideFromAccessibility()
