@@ -17,7 +17,6 @@ jobs:
   nightlyReports:
     name: Create kover report artifact and upload sonar result
     runs-on: ubuntu-latest
-    timeout-minutes: 120
     if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
       - name: ⏬ Checkout with LFS
