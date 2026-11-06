@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.room.threads.ThreadsListService
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetCapabilitiesPolicy
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.impl.core.RustSendHandle
@@ -56,6 +57,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEven
 import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
+import io.element.android.libraries.matrix.impl.widget.RustWidgetCapabilitiesProvider
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
 import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -84,9 +86,6 @@ import org.matrix.rustcomponents.sdk.TimelineFilter
 import org.matrix.rustcomponents.sdk.TimelineFocus
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
-import org.matrix.rustcomponents.sdk.WidgetCapabilities
-import org.matrix.rustcomponents.sdk.WidgetCapabilitiesProvider
-import org.matrix.rustcomponents.sdk.getElementCallRequiredPermissions
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
@@ -473,16 +472,19 @@ class JoinedRustRoom(
         }
     }
 
-    override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> {
+    override fun getWidgetDriver(
+        widgetSettings: MatrixWidgetSettings,
+        capabilitiesPolicy: MatrixWidgetCapabilitiesPolicy,
+    ): Result<MatrixWidgetDriver> {
         return runCatchingExceptions {
             RustWidgetDriver(
                 widgetSettings = widgetSettings,
                 room = innerRoom,
-                widgetCapabilitiesProvider = object : WidgetCapabilitiesProvider {
-                    override suspend fun acquireCapabilities(capabilities: WidgetCapabilities): WidgetCapabilities {
-                        return getElementCallRequiredPermissions(sessionId.value, baseRoom.deviceId.value)
-                    }
-                },
+                widgetCapabilitiesProvider = RustWidgetCapabilitiesProvider(
+                    policy = capabilitiesPolicy,
+                    userId = sessionId.value,
+                    deviceId = baseRoom.deviceId.value,
+                ),
             )
         }
     }
