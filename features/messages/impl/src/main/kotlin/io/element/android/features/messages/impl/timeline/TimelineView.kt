@@ -446,9 +446,12 @@ private fun BoxScope.TimelineScrollHelper(
         coroutineScope.launch {
             val firstVisibleIndex = lazyListState.firstVisibleItemIndex
             when {
-                firstVisibleIndex > 10 -> lazyListState.scrollToItem(0)
+                firstVisibleIndex > 10 || force && firstVisibleIndex == 0 && lazyListState.firstVisibleItemScrollOffset != 0 -> {
+                    lazyListState.scrollToItem(0)
+                    // This scroll starts and ends in the same frame, so `isScrollInProgress` never changes for the composition: report it directly
+                    latestOnScrollFinishAt(0)
+                }
                 firstVisibleIndex != 0 -> lazyListState.animateScrollToItem(0)
-                force && lazyListState.firstVisibleItemScrollOffset != 0 -> lazyListState.scrollToItem(0)
                 force -> latestOnScrollFinishAt(0)
             }
         }
