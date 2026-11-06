@@ -281,6 +281,20 @@ class GlobalSearchViewTest : RobolectricTest() {
                 results = AsyncData.Success(GlobalSearchResults.RoomListResults(persistentListOf())),
             ),
         )
+        val noResults = activity!!.getString(R.string.screen_search_no_results_message, "Query")
+        onNodeWithText(noResults).assertIsDisplayed()
+    }
+
+    @Test
+    fun `with empty messages results - displays the no results placeholder`() = runAndroidComposeUiTest {
+        setGlobalSearchView(
+            state = aGlobalSearchState(
+                isSearchActive = true,
+                currentTarget = GlobalSearchTarget.MESSAGES,
+                queryState = TextFieldState("Query"),
+                results = AsyncData.Success(GlobalSearchResults.MessageSearchResults(persistentListOf())),
+            ),
+        )
         val noResults = activity!!.getString(R.string.screen_search_messages_no_results_message, "Query")
         onNodeWithText(noResults).assertIsDisplayed()
     }
