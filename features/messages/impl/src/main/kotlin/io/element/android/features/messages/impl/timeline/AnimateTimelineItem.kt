@@ -22,8 +22,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Measurable
@@ -33,8 +35,10 @@ import androidx.compose.ui.node.LayoutModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.zIndex
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CancellationException
@@ -140,6 +144,10 @@ internal class TimelineItemsInsertion(
 internal class TimelineItemsInsertions(private val coroutineScope: CoroutineScope) {
     private var last: TimelineItemsInsertion? = null
 
+    /** The offset of the items which are still sliding in, if any. */
+    val offset: Float
+        get() = last?.offset ?: 0f
+
     fun onItemsInserted(keys: Set<Any>): TimelineItemsInsertion? {
         if (keys.isEmpty()) return null
         // Don't observe the offset: this is called during composition, it must not recompose on each frame of the animation
@@ -164,6 +172,22 @@ internal fun rememberTimelineItemsInsertion(
         insertions.onItemsInserted(keys)
     }
 }
+
+/**
+ * For the item below the ones which are inserted at the bottom of the timeline (i.e. the typing notification): draws it above the other items, and
+ * while new items slide in, hides them behind it and the [coveredHeightBelow] below it (i.e. the content padding of the list).
+ */
+internal fun Modifier.hideItemsSlidingIn(
+    insertions: TimelineItemsInsertions,
+    color: Color,
+    coveredHeightBelow: Dp,
+): Modifier = this
+    .zIndex(1f)
+    .drawBehind {
+        if (insertions.offset > 0f) {
+            drawRect(color = color, size = Size(size.width, size.height + coveredHeightBelow.toPx()))
+        }
+    }
 
 internal fun keysInsertedAtBottom(previous: List<TimelineItem>?, current: List<TimelineItem>): Set<Any> {
     if (previous == null) return emptySet()
