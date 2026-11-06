@@ -11,6 +11,10 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -22,8 +26,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemUnknownContent
@@ -272,6 +278,48 @@ class TimelineViewTest : RobolectricTest() {
         onNodeWithText("Failed to fetch the event").assertDoesNotExist()
         onNodeWithText(activity!!.getString(CommonStrings.error_message_not_found)).assertIsDisplayed().performClick()
         eventsRecorder.assertEmpty()
+    }
+
+    @Test
+    fun `when sending a message while the newest item is not fully visible, it scrolls to it and reports it`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
+        val items = List<TimelineItem>(20) {
+            aTimelineItemEvent(
+                eventId = EventId("\$event_$it"),
+                content = aTimelineItemTextContent(body = "Message $it"),
+            )
+        }.toImmutableList()
+        var state by mutableStateOf(aTimelineState(timelineItems = items, eventSink = eventsRecorder, focusedEventIndex = -1))
+        // The newest item is the first visible one, but it's scrolled a bit
+        val lazyListState = LazyListState(firstVisibleItemIndex = 0, firstVisibleItemScrollOffset = 10)
+        setSafeContent(clearAndroidUiDispatcher = true) {
+            TimelineView(
+                state = state,
+                timelineProtectionState = aTimelineProtectionState(),
+                onUserDataClick = {},
+                onLinkClick = {},
+                onContentClick = {},
+                onMessageLongClick = {},
+                onSwipeToReply = {},
+                onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
+                onMoreReactionsClick = {},
+                onReadReceiptClick = {},
+                onGalleryItemClick = { _, _ -> },
+                onJoinCallClick = {},
+                lazyListState = lazyListState,
+            )
+        }
+        waitForIdle()
+        assertThat(lazyListState.firstVisibleItemIndex).isEqualTo(0)
+        assertThat(lazyListState.firstVisibleItemScrollOffset).isEqualTo(10)
+        eventsRecorder.clear()
+
+        state = state.copy(newEventState = NewEventState.FromMe)
+        waitForIdle()
+
+        assertThat(lazyListState.firstVisibleItemScrollOffset).isEqualTo(0)
+        eventsRecorder.assertSingle(TimelineEvent.OnScrollFinished(firstIndex = 0))
     }
 
     @Ignore(
