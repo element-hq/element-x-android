@@ -65,7 +65,7 @@ class ModalBottomSheetStuckStateTest {
 
     @Test
     fun `awaitStuckAtRest returns false when no animation is running`() = runTest {
-        val clock = FakeFrameClock()
+        val clock = FakeMonotonicFrameClock()
         val result = withContext(clock) {
             awaitStuckAtRest(isAnimationRunning = { false }, offset = { 0f })
         }
@@ -75,7 +75,7 @@ class ModalBottomSheetStuckStateTest {
 
     @Test
     fun `awaitStuckAtRest returns true when the animation is running but the offset does not change`() = runTest {
-        val clock = FakeFrameClock()
+        val clock = FakeMonotonicFrameClock()
         val result = withContext(clock) {
             awaitStuckAtRest(isAnimationRunning = { true }, offset = { 0f }, stableFrameCount = 3)
         }
@@ -85,7 +85,7 @@ class ModalBottomSheetStuckStateTest {
 
     @Test
     fun `awaitStuckAtRest waits for the offset to stop changing`() = runTest {
-        val clock = FakeFrameClock()
+        val clock = FakeMonotonicFrameClock()
         // The offset changes during the 5 first frames, then stops changing
         val result = withContext(clock) {
             awaitStuckAtRest(
@@ -100,7 +100,7 @@ class ModalBottomSheetStuckStateTest {
 
     @Test
     fun `awaitStuckAtRest returns false when a moving animation ends`() = runTest {
-        val clock = FakeFrameClock()
+        val clock = FakeMonotonicFrameClock()
         val result = withContext(clock) {
             awaitStuckAtRest(
                 isAnimationRunning = { clock.frameCount < 10 },
@@ -114,7 +114,7 @@ class ModalBottomSheetStuckStateTest {
 
     @Test
     fun `awaitStuckAtRest does not consider an unknown offset as stable`() = runTest {
-        val clock = FakeFrameClock()
+        val clock = FakeMonotonicFrameClock()
         val result = withContext(clock) {
             awaitStuckAtRest(
                 isAnimationRunning = { clock.frameCount < 10 },
@@ -126,7 +126,7 @@ class ModalBottomSheetStuckStateTest {
         assertThat(clock.frameCount).isEqualTo(10)
     }
 
-    private class FakeFrameClock : MonotonicFrameClock {
+    private class FakeMonotonicFrameClock : MonotonicFrameClock {
         var frameCount = 0
             private set
 
