@@ -217,7 +217,8 @@ fun TimelineView(
         }
         // Must be a composition scope, see [animateTimelineItem]
         val itemAnimationScope = rememberCoroutineScope()
-        val timelineItemsInsertion = rememberTimelineItemsInsertion(state.timelineItems, itemAnimationScope)
+        val timelineItemsInsertions = remember(itemAnimationScope) { TimelineItemsInsertions(itemAnimationScope) }
+        val timelineItemsInsertion = rememberTimelineItemsInsertion(state.timelineItems, timelineItemsInsertions)
 
         // Only the font scales: `dp` values keep the layout as designed.
         val density = LocalDensity.current

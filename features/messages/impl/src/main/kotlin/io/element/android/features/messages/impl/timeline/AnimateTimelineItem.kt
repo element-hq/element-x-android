@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -78,19 +79,32 @@ internal fun Modifier.animateTimelineItem(
 
 /**
  * Keeps track of the timeline items inserted at the bottom of the timeline (i.e. new messages) in a single update, so they can slide in together.
+ *
+ * @param keys the keys of the inserted items.
+ * @param coroutineScope the scope to run the animation in, see `animationScope` in [animateTimelineItem].
+ * @param previous the previous insertion, if its items are still sliding in. The new items are below them, so they also need to follow that slide.
  */
 @Stable
 internal class TimelineItemsInsertion(
     val keys: Set<Any>,
     private val coroutineScope: CoroutineScope,
+    private val previous: TimelineItemsInsertion? = null,
 ) {
     private var totalHeight = 0f
     private var isAnimationScheduled = false
     private var isAnimationStarted = false
 
-    /** The offset to apply to the inserted items: positive values move them down. */
-    var offset by mutableFloatStateOf(0f)
-        private set
+    // The offset of this insertion only
+    private var ownOffset by mutableFloatStateOf(0f)
+
+    /**
+     * The offset to apply to the inserted items: positive values move them down.
+     *
+     * The items of the previous insertion still apply their own offset, and the placement animation of the items above the new ones uses the same
+     * spring as [ownOffset], so adding them up keeps all the items moving together.
+     */
+    val offset: Float
+        get() = ownOffset + (previous?.offset ?: 0f)
 
     /**
      * Called when an inserted item is first measured. All the inserted items which are visible are measured in the same frame, and they start
@@ -100,7 +114,7 @@ internal class TimelineItemsInsertion(
         // Items measured later, i.e. when scrolled into view, are displayed directly at their final position
         if (isAnimationStarted) return
         totalHeight += height
-        offset = totalHeight
+        ownOffset = totalHeight
         if (!isAnimationScheduled) {
             isAnimationScheduled = true
             // The animation starts in the next frame, once all the inserted items have been measured
@@ -110,12 +124,27 @@ internal class TimelineItemsInsertion(
                     // Same steps as the placement animations, so the animation starts in the same frame
                     val animation = Animatable(0f)
                     animation.snapTo(totalHeight)
-                    animation.animateTo(0f, offsetSpec) { offset = value }
+                    animation.animateTo(0f, offsetSpec) { ownOffset = value }
                 } finally {
-                    offset = 0f
+                    ownOffset = 0f
                 }
             }
         }
+    }
+}
+
+/**
+ * Creates the [TimelineItemsInsertion]s, chaining each one to the previous one while its items are still sliding in.
+ */
+@Stable
+internal class TimelineItemsInsertions(private val coroutineScope: CoroutineScope) {
+    private var last: TimelineItemsInsertion? = null
+
+    fun onItemsInserted(keys: Set<Any>): TimelineItemsInsertion? {
+        if (keys.isEmpty()) return null
+        // Don't observe the offset: this is called during composition, it must not recompose on each frame of the animation
+        val previous = last?.takeIf { Snapshot.withoutReadObservation { it.offset } != 0f }
+        return TimelineItemsInsertion(keys, coroutineScope, previous).also { last = it }
     }
 }
 
@@ -126,13 +155,13 @@ internal class TimelineItemsInsertion(
 @Composable
 internal fun rememberTimelineItemsInsertion(
     timelineItems: ImmutableList<TimelineItem>,
-    animationScope: CoroutineScope,
+    insertions: TimelineItemsInsertions,
 ): TimelineItemsInsertion? {
     val previousItems = remember { arrayOfNulls<List<TimelineItem>>(1) }
     return remember(timelineItems) {
         val keys = keysInsertedAtBottom(previous = previousItems[0], current = timelineItems)
         previousItems[0] = timelineItems
-        keys.takeIf { it.isNotEmpty() }?.let { TimelineItemsInsertion(it, animationScope) }
+        insertions.onItemsInserted(keys)
     }
 }
 
