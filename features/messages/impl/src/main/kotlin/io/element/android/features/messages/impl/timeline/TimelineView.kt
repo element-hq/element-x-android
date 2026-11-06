@@ -209,6 +209,9 @@ fun TimelineView(
                 currentUserId = state.timelineRoomInfo.currentUserId,
             )
         }
+        // Must be a composition scope, see [animateTimelineItem]
+        val itemAnimationScope = rememberCoroutineScope()
+        val timelineItemsInsertion = rememberTimelineItemsInsertion(state.timelineItems, itemAnimationScope)
         CompositionLocalProvider(LocalTimelineEventRendererConfig provides composeLocalTimelineEventRendererConfig) {
             Box(modifier) {
                 LazyColumn(
@@ -226,7 +229,11 @@ fun TimelineView(
                         key = { timelineItem -> timelineItem.identifier() },
                     ) { timelineItem ->
                         TimelineItemRow(
-                            modifier = Modifier.animateTimelineItem(this),
+                            modifier = Modifier.animateTimelineItem(
+                                scope = this,
+                                animationScope = itemAnimationScope,
+                                insertion = timelineItemsInsertion?.takeIf { timelineItem.identifier() in it.keys },
+                            ),
                             timelineItem = timelineItem,
                             timelineMode = state.timelineMode,
                             timelineRoomInfo = state.timelineRoomInfo,
