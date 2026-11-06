@@ -36,6 +36,7 @@ import io.element.android.features.login.api.accesscontrol.AccountProviderAccess
 import io.element.android.features.login.test.FakeLoginEntryPoint
 import io.element.android.features.login.test.FakeLoginIntentResolver
 import io.element.android.features.login.test.accesscontrol.FakeAccountProviderAccessControl
+import io.element.android.features.migration.test.FakeAppMigrationRunner
 import io.element.android.features.preferences.test.FakeCacheService
 import io.element.android.features.rageshake.test.FakeBugReportEntryPoint
 import io.element.android.features.share.api.ShareEntryPoint
@@ -307,6 +308,7 @@ class RootFlowNodeTest : RobolectricTest() {
             authenticationService = FakeMatrixAuthenticationService(),
             syncOrchestratorFactory = FakeSyncOrchestratorFactory(),
             analyticsService = FakeAnalyticsService(),
+            appMigrationRunner = FakeAppMigrationRunner(),
         )
         val parentNode = FakeParentNode(
             graph = FakeNodeFactoriesBindings(

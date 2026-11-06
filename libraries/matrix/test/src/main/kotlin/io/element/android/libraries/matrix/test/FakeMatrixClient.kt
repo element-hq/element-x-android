@@ -135,6 +135,7 @@ class FakeMatrixClient(
     override val searchBackfillService: SearchBackfillService = FakeSearchBackfillService(),
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
     private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
+    private val destroyLambda: () -> Unit = { },
     private val enableAutomaticCallStatusLambda: (Boolean) -> Unit = { },
     override val contentScanner: ContentScanner? = null,
     private val isShuttingDownResult: () -> Boolean = { false },
@@ -466,6 +467,10 @@ class FakeMatrixClient(
 
     override suspend fun resetWellKnownConfig(): Result<Unit> {
         return resetWellKnownConfigLambda()
+    }
+
+    override suspend fun destroy() {
+        destroyLambda()
     }
 
     override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
