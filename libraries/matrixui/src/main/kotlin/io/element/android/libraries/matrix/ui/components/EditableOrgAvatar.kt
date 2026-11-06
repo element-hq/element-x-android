@@ -116,7 +116,7 @@ fun EditableOrgAvatar(
                 .size(30.dp)
                 .align(Alignment.BottomEnd)
                 .clickable(
-                    indication = ripple(),
+                    indication = ripple(focusRingShape = CircleShape),
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = onEdit,
                 ),

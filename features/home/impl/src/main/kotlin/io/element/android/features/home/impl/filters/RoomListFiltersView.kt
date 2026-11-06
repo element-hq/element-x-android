@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -148,7 +149,11 @@ private fun RoomListClearFiltersButton(
         modifier = modifier
             .clip(CircleShape)
             .background(ElementTheme.colors.bgActionPrimaryRest)
-            .clickable(onClick = onClick)
+            .clickable(
+                interactionSource = null,
+                indication = ripple(focusRingShape = CircleShape),
+                onClick = onClick,
+            )
             .padding(4.dp)
     ) {
         Icon(

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -70,10 +71,11 @@ fun TimelineItemVideoView(
     val a11yLabel = stringResource(CommonStrings.common_video)
     val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel
     Column(modifier = modifier.wrapContentWidth(Alignment.CenterHorizontally)) {
-        val containerModifier = if (content.showCaption) {
+        val containerShape = if (content.showCaption) RoundedCornerShape(6.dp) else null
+        val containerModifier = if (containerShape != null) {
             Modifier
                 .padding(top = 6.dp)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(containerShape)
         } else {
             Modifier
         }
@@ -98,6 +100,8 @@ fun TimelineItemVideoView(
                             if (!isTalkbackActive && onContentClick != null) {
                                 Modifier
                                     .combinedClickable(
+                                        interactionSource = null,
+                                        indication = ripple(focusRingShape = containerShape),
                                         onClick = onContentClick,
                                         onLongClick = onLongClick,
                                     )

@@ -46,7 +46,7 @@ fun MessageStateEventContainer(
                 onClick = onClick,
                 onLongClick = onLongClick,
                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
-                indication = ripple(),
+                indication = ripple(focusRingShape = shape),
                 interactionSource = interactionSource
             )
             .onKeyboardContextMenuAction(onLongClick),

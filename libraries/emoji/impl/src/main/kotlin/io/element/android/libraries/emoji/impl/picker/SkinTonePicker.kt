@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -100,7 +101,11 @@ private fun SkinToneSlot(
             .size(SkinToneSlotSize)
             .clip(CircleShape)
             .background(background, CircleShape)
-            .clickable(onClick = onClick),
+            .clickable(
+                interactionSource = null,
+                indication = ripple(focusRingShape = CircleShape),
+                onClick = onClick,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Text(

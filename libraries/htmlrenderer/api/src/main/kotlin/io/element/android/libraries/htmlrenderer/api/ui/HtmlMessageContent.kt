@@ -34,6 +34,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.SideEffect
@@ -319,6 +320,8 @@ private fun CodeBlockView(
             .background(ElementTheme.colors.bgSubtleSecondary)
             .height(IntrinsicSize.Min)
             .combinedClickable(
+                interactionSource = null,
+                indication = ripple(focusRingShape = RoundedCornerShape(8.dp)),
                 onClick = {},
                 onLongClick = {
                     coroutineScope.launch {
@@ -432,7 +435,11 @@ private fun MentionPill(
             .fillMaxSize()
             .clip(RoundedCornerShape(percent = 50))
             .background(backgroundColor)
-            .clickable(onClick = onClick)
+            .clickable(
+                interactionSource = null,
+                indication = ripple(focusRingShape = RoundedCornerShape(percent = 50)),
+                onClick = onClick,
+            )
             .padding(horizontal = PillPaddingHorizontal, vertical = PillPaddingVertical),
         contentAlignment = Alignment.Center,
     ) {

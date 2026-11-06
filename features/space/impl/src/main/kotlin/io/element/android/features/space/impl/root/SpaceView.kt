@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -428,7 +429,12 @@ private fun SpaceViewTopBar(
                 avatarData = spaceInfo.getAvatarData(AvatarSize.TimelineRoom),
                 modifier = Modifier
                     .clip(roundedCornerShape)
-                    .clickable(enabled = canAccessSpaceSettings, onClick = onSettingsClick)
+                    .clickable(
+                        interactionSource = null,
+                        indication = ripple(focusRingShape = roundedCornerShape),
+                        enabled = canAccessSpaceSettings,
+                        onClick = onSettingsClick,
+                    )
                     .semantics { heading() }
             )
         },
