@@ -21,7 +21,7 @@ fun mimeTypeToCompressFileExtension(mimeType: String) = when (mimeType) {
     else -> "jpeg"
 }
 
-fun mimeTypeToThumbnailMimeType(mimeType: String) = when (mimeType) {
+fun mimeTypeToCompressedMimeType(mimeType: String) = when (mimeType) {
     MimeTypes.Png -> MimeTypes.Png
     else -> MimeTypes.Jpeg
 }

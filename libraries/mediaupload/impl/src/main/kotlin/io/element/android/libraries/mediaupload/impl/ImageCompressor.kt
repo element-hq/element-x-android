@@ -54,7 +54,8 @@ class ImageCompressor(
                 file = tmpFile,
                 width = compressedBitmap.width,
                 height = compressedBitmap.height,
-                size = tmpFile.length()
+                size = tmpFile.length(),
+                mimeType = mimeTypeToCompressedMimeType(mimeType),
             )
         }
     }
@@ -112,6 +113,7 @@ data class ImageCompressionResult(
     val width: Int,
     val height: Int,
     val size: Long,
+    val mimeType: String,
 )
 
 sealed interface ResizeMode {

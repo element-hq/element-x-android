@@ -127,7 +127,7 @@ class ThumbnailFactory(
             info = ThumbnailInfo(
                 width = bitmapThumbnail.width.toLong(),
                 height = bitmapThumbnail.height.toLong(),
-                mimetype = mimeTypeToThumbnailMimeType(mimeType),
+                mimetype = mimeTypeToCompressedMimeType(mimeType),
                 size = thumbnailFile.length()
             ),
             blurhash = blurhash
