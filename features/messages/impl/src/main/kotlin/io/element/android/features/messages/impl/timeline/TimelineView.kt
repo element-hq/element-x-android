@@ -226,6 +226,7 @@ fun TimelineView(
                         key = { timelineItem -> timelineItem.identifier() },
                     ) { timelineItem ->
                         TimelineItemRow(
+                            modifier = Modifier.animateTimelineItem(this),
                             timelineItem = timelineItem,
                             timelineMode = state.timelineMode,
                             timelineRoomInfo = state.timelineRoomInfo,
@@ -403,17 +404,25 @@ private fun BoxScope.TimelineScrollHelper(
     val isJumpToBottomVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive
     var jumpToLiveHandled by remember { mutableStateOf(true) }
 
+    val latestOnScrollFinishAt by rememberUpdatedState(onScrollFinishAt)
+
     /**
-     * @param force If true, scroll to the bottom even if the user is already seeing the most recent item.
+     * @param force If true, ensure we settle at the bottom even if the user is already seeing the most recent item.
      * This fixes the issue where the user is seeing typing notification and so the read receipt is not sent
      * when a new message comes in.
+     *
+     * When already at index 0, do **not** call [LazyListState.animateScrollToItem]: it skips the placement animations of the items,
+     * which would interrupt the `animateItem()` animation of the newly inserted message.
+     * The read receipts are still sent by invoking [onScrollFinishAt] directly.
      */
     fun scrollToBottom(force: Boolean) {
         coroutineScope.launch {
-            if (lazyListState.firstVisibleItemIndex > 10) {
-                lazyListState.scrollToItem(0)
-            } else if (force || lazyListState.firstVisibleItemIndex != 0) {
-                lazyListState.animateScrollToItem(0)
+            val firstVisibleIndex = lazyListState.firstVisibleItemIndex
+            when {
+                firstVisibleIndex > 10 -> lazyListState.scrollToItem(0)
+                firstVisibleIndex != 0 -> lazyListState.animateScrollToItem(0)
+                force && lazyListState.firstVisibleItemScrollOffset != 0 -> lazyListState.scrollToItem(0)
+                force -> latestOnScrollFinishAt(0)
             }
         }
     }
@@ -463,7 +472,6 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    val latestOnScrollFinishAt by rememberUpdatedState(onScrollFinishAt)
     LaunchedEffect(isScrollFinished, hasAnyEvent) {
         if (isScrollFinished && hasAnyEvent) {
             // Notify the parent composable about the first visible item index when scrolling finishes
