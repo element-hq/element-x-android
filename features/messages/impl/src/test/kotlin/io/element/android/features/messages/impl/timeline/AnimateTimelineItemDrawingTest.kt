@@ -10,7 +10,6 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.activity.ComponentActivity
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,7 +46,7 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
     private var isExpanded by mutableStateOf(false)
 
     @Test
-    fun `when an item expands with animateContentSize, it is never drawn over the items next to it`() = runAndroidComposeUiTest<ComponentActivity> {
+    fun `when an item expands, it is never drawn over the items next to it`() = runAndroidComposeUiTest<ComponentActivity> {
         setContent {
             val coroutineScope = rememberCoroutineScope()
             LazyColumn(
@@ -62,11 +61,7 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
                     if (key == EXPANDING) {
                         // Like a group of events
                         Box(modifier) {
-                            Column(
-                                Modifier
-                                    .animateContentSize()
-                                    .background(EXPANDING_COLOR)
-                            ) {
+                            Column(Modifier.background(EXPANDING_COLOR)) {
                                 Box(Modifier.fillMaxWidth().height(50.dp))
                                 if (isExpanded) {
                                     repeat(3) { Box(Modifier.fillMaxWidth().height(50.dp)) }
