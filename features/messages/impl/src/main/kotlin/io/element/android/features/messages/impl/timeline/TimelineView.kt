@@ -215,6 +215,10 @@ fun TimelineView(
                 fontScale = state.timelineFontScale,
             )
         }
+        // Must be a composition scope, see [animateTimelineItem]
+        val itemAnimationScope = rememberCoroutineScope()
+        val timelineItemsInsertion = rememberTimelineItemsInsertion(state.timelineItems, itemAnimationScope)
+
         // Only the font scales: `dp` values keep the layout as designed.
         val density = LocalDensity.current
         val scaledDensity = remember(density, state.timelineFontScale) {
@@ -240,7 +244,11 @@ fun TimelineView(
                         key = { timelineItem -> timelineItem.identifier() },
                     ) { timelineItem ->
                         TimelineItemRow(
-                            modifier = Modifier.animateTimelineItem(this),
+                            modifier = Modifier.animateTimelineItem(
+                                scope = this,
+                                animationScope = itemAnimationScope,
+                                insertion = timelineItemsInsertion?.takeIf { timelineItem.identifier() in it.keys },
+                            ),
                             timelineItem = timelineItem,
                             timelineMode = state.timelineMode,
                             timelineRoomInfo = state.timelineRoomInfo,
