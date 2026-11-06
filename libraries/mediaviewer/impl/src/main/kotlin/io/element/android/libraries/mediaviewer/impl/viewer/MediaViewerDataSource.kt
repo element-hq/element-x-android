@@ -21,6 +21,7 @@ import io.element.android.features.contentscanner.api.ContentScannerService
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ProgressCallback
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -44,6 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -76,6 +78,7 @@ class MediaViewerDataSource(
     // Map of sourceUrl to local media state
     private val localMediaStates: MutableMap<String, MutableState<AsyncData<LocalMedia>>> =
         mutableMapOf()
+    private val downloadProgressStates: MutableMap<String, MutableStateFlow<Int?>> = mutableMapOf()
 
     private val mediaValidationState: MutableMap<String, ContentValidationState> =
         mutableMapOf()
@@ -88,6 +91,8 @@ class MediaViewerDataSource(
         Timber.d("Disposing MediaViewerDataSource, closing ${mediaFiles.size} media files")
         mediaFiles.values.forEach { it.close() }
         mediaFiles.clear()
+        downloadProgressStates.values.forEach { it.value = null }
+        downloadProgressStates.clear()
         localMediaStates.clear()
     }
 
@@ -171,6 +176,9 @@ class MediaViewerDataSource(
                     val localMedia = localMediaStates.getOrPut(sourceUrl) {
                         mutableStateOf(AsyncData.Uninitialized)
                     }
+                    val downloadProgress = downloadProgressStates.getOrPut(sourceUrl) {
+                        MutableStateFlow(null)
+                    }
                     val validationState = mediaValidationState.getOrPut(sourceUrl) {
                         mediaItem.eventId()?.let { contentValidationCache[it] } ?: DefaultContentValidationState()
                     }
@@ -181,6 +189,7 @@ class MediaViewerDataSource(
                             mediaSource = mediaItem.mediaSource(),
                             thumbnailSource = mediaItem.thumbnailSource(),
                             downloadedMedia = localMedia,
+                            downloadProgress = downloadProgress,
                             pagerKey = pagerKeysHandler.getKey(mediaItem),
                             validationState = validationState,
                         )
@@ -198,6 +207,7 @@ class MediaViewerDataSource(
     }.toImmutableList()
 
     fun clearLoadingError(data: MediaViewerPageData.MediaViewerData) {
+        downloadProgressStates[data.mediaSource.safeUrl]?.value = null
         localMediaStates[data.mediaSource.safeUrl]?.value = AsyncData.Uninitialized
     }
 
@@ -218,28 +228,45 @@ class MediaViewerDataSource(
         val localMediaState = localMediaStates.getOrPut(data.mediaSource.safeUrl) {
             mutableStateOf(AsyncData.Uninitialized)
         }
+        val downloadProgress = downloadProgressStates.getOrPut(data.mediaSource.safeUrl) {
+            MutableStateFlow(null)
+        }
+        downloadProgress.value = null
         localMediaState.value = AsyncData.Loading()
-        mediaLoader
-            .downloadMediaFile(
-                source = data.mediaSource,
-                mimeType = data.mediaInfo.mimeType,
-                filename = data.mediaInfo.filename
-            )
-            .onSuccess { mediaFile ->
-                mediaFiles[data.mediaSource] = mediaFile
-            }
-            .mapCatchingExceptions { mediaFile ->
-                localMediaFactory.createFromMediaFile(
-                    mediaFile = mediaFile,
-                    mediaInfo = data.mediaInfo
+        try {
+            mediaLoader
+                .downloadMediaFile(
+                    source = data.mediaSource,
+                    mimeType = data.mediaInfo.mimeType,
+                    filename = data.mediaInfo.filename,
+                    progressCallback = object : ProgressCallback {
+                        override fun onProgress(current: Long, total: Long) {
+                            downloadProgress.value = if (total > 0) {
+                                ((current.coerceIn(0, total) * 100.0) / total).toInt().coerceIn(0, 100)
+                            } else {
+                                null
+                            }
+                        }
+                    }
                 )
-            }
-            .onSuccess {
-                localMediaState.value = AsyncData.Success(it)
-            }
-            .onFailure {
-                localMediaState.value = AsyncData.Failure(it)
-            }
+                .onSuccess { mediaFile ->
+                    mediaFiles[data.mediaSource] = mediaFile
+                }
+                .mapCatchingExceptions { mediaFile ->
+                    localMediaFactory.createFromMediaFile(
+                        mediaFile = mediaFile,
+                        mediaInfo = data.mediaInfo
+                    )
+                }
+                .onSuccess {
+                    localMediaState.value = AsyncData.Success(it)
+                }
+                .onFailure {
+                    localMediaState.value = AsyncData.Failure(it)
+                }
+        } finally {
+            downloadProgress.value = null
+        }
     }
 
     fun validateMedia(mediaSource: MediaSource, thumbnailMediaSource: MediaSource?) {
@@ -257,6 +284,7 @@ class MediaViewerDataSource(
         if (localMediaStates[data.mediaSource.safeUrl]?.value?.isLoading() == true) {
             Timber.d("cancelLoadingMedia for ${data.eventId}")
             mediaFiles.remove(data.mediaSource)?.close()
+            downloadProgressStates[data.mediaSource.safeUrl]?.value = null
             localMediaStates[data.mediaSource.safeUrl]?.value = AsyncData.Uninitialized
         }
     }
