@@ -10,14 +10,14 @@ package io.element.android.features.migration.impl.migrations
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import io.element.android.libraries.di.BaseDirectory
+import io.element.android.libraries.di.SessionsFilesDirectory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import java.io.File
 
 @ContributesIntoSet(AppScope::class)
 class AppMigration05(
     private val sessionStore: SessionStore,
-    @BaseDirectory private val baseDirectory: File,
+    @SessionsFilesDirectory private val sessionsFilesDirectory: File,
 ) : AppMigration {
     override val order: Int = 5
 
@@ -25,7 +25,7 @@ class AppMigration05(
         val allSessions = sessionStore.getAllSessions()
         for (session in allSessions) {
             if (session.sessionPath.isEmpty()) {
-                val sessionPath = File(baseDirectory, session.userId.replace(':', '_')).absolutePath
+                val sessionPath = File(sessionsFilesDirectory, session.userId.replace(':', '_')).absolutePath
                 sessionStore.updateData(session.copy(sessionPath = sessionPath))
             }
         }

@@ -11,7 +11,7 @@ package io.element.android.libraries.di
 import dev.zacsweers.metro.Qualifier
 
 /**
- * Qualifies a [File] object which represents the application base directory.
+ * Qualifies a [File] object which represents the directory holding the file directories of the sessions.
  */
 @Retention(AnnotationRetention.RUNTIME)
 @MustBeDocumented
@@ -25,4 +25,4 @@ import dev.zacsweers.metro.Qualifier
     AnnotationTarget.VALUE_PARAMETER,
     AnnotationTarget.TYPE,
 )
-public annotation class BaseDirectory
+public annotation class SessionsFilesDirectory

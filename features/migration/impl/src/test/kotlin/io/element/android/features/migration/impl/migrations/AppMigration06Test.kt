@@ -44,7 +44,7 @@ class AppMigration06Test {
                 )
             )
         )
-        val migration = AppMigration05(sessionStore = sessionStore, baseDirectory = File("/a/path/cache"))
+        val migration = AppMigration05(sessionStore = sessionStore, sessionsFilesDirectory = File("/a/path/cache"))
         migration.migrate(true)
         val storedData = sessionStore.getSession(A_SESSION_ID.value)!!
         assertThat(storedData.cachePath).isEqualTo("/a/path/existing")
