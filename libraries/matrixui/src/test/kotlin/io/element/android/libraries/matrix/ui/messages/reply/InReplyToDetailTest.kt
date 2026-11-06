@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.ui.messages.reply
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
+import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
@@ -17,6 +18,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aProfileDetails
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
@@ -105,5 +107,33 @@ class InReplyToDetailTest {
         assertThat(
             (inReplyTo.map(permalinkParser = FakePermalinkParser()) as InReplyToDetails.Ready).textContent
         ).isEqualTo("**Hello!**")
+    }
+
+    @Test
+    fun `map - with a media message content uses the formatted caption for textContent`() {
+        val inReplyTo = InReplyTo.Ready(
+            eventId = AN_EVENT_ID,
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            content = MessageContent(
+                body = "**Hello!**",
+                inReplyTo = null,
+                isEdited = false,
+                threadInfo = null,
+                type = ImageMessageType(
+                    filename = "image.jpg",
+                    caption = "**Hello!**",
+                    formattedCaption = FormattedBody(
+                        format = MessageFormat.HTML,
+                        body = "<p><b>Hello!</b></p>",
+                    ),
+                    source = aMediaSource(),
+                    info = null,
+                )
+            )
+        )
+        assertThat(
+            (inReplyTo.map(permalinkParser = FakePermalinkParser()) as InReplyToDetails.Ready).textContent
+        ).isEqualTo("Hello!")
     }
 }

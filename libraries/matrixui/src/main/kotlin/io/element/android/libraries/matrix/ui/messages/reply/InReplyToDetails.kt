@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageTypeWithAttachment
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -57,7 +58,14 @@ fun InReplyTo.map(
         textContent = when (content) {
             is MessageContent -> {
                 val messageContent = content as MessageContent
-                (messageContent.type as? TextMessageType)?.toPlainText(permalinkParser = permalinkParser) ?: messageContent.body
+                when (val messageType = messageContent.type) {
+                    is TextMessageType -> messageType.toPlainText(permalinkParser = permalinkParser)
+                    is MessageTypeWithAttachment -> messageType.toPlainText(
+                        permalinkParser = permalinkParser,
+                        default = messageContent.body,
+                    )
+                    else -> messageContent.body
+                }
             }
             is StickerContent -> {
                 val stickerContent = content as StickerContent
