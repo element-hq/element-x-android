@@ -24,6 +24,7 @@ class RoomMembershipContentFormatter(
         membershipContent: RoomMembershipContent,
         senderDisambiguatedDisplayName: String,
         senderIsYou: Boolean,
+        isDeveloperModeEnabled: Boolean,
     ): CharSequence? {
         val userId = membershipContent.userId
         val memberIsYou = matrixClient.isMe(userId)
@@ -115,10 +116,15 @@ class RoomMembershipContentFormatter(
             } else {
                 sp.getString(R.string.state_event_room_knock_denied, senderDisambiguatedDisplayName, userDisplayNameOrId)
             }
-            MembershipChange.NONE -> if (senderIsYou) {
-                sp.getString(R.string.state_event_room_none_by_you)
-            } else {
-                sp.getString(R.string.state_event_room_none, senderDisambiguatedDisplayName)
+            MembershipChange.NONE -> {
+                if (!isDeveloperModeEnabled) {
+                    Timber.v("Filtering timeline item for room membership: $membershipContent")
+                    null
+                } else if (senderIsYou) {
+                    sp.getString(R.string.state_event_room_none_by_you)
+                } else {
+                    sp.getString(R.string.state_event_room_none, senderDisambiguatedDisplayName)
+                }
             }
             MembershipChange.ERROR -> {
                 Timber.v("Filtering timeline item for room membership: $membershipContent")
