@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.textcomposer.model
 
+import android.icu.text.BreakIterator
 import android.os.Parcelable
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -43,6 +44,49 @@ class MarkdownTextEditorState(
     var requestFocusAction by mutableStateOf({})
     var lineCount by mutableIntStateOf(1)
     var currentSuggestion by mutableStateOf<Suggestion?>(null)
+
+    /**
+     * Inserts [value] at the current cursor position, replacing any selected text, and places the cursor after it.
+     */
+    fun insertText(value: String) {
+        val currentText = SpannableStringBuilder(text.value())
+        // The selection is reversed when the text was selected backwards.
+        val start = minOf(selection.first, selection.last).coerceIn(0, currentText.length)
+        val end = maxOf(selection.first, selection.last).coerceIn(start, currentText.length)
+        currentText.replace(start, end, value)
+        text.update(currentText, true)
+        val cursor = start + value.length
+        selection = IntRange(cursor, cursor)
+    }
+
+    /**
+     * Removes the selected range, or the grapheme cluster immediately before the cursor when nothing is selected, so a multi-
+     * code-point emoji is erased in one step; a mention that ends at the cursor is deleted in its entirety.
+     */
+    fun deleteBackward() {
+        val currentText = SpannableStringBuilder(text.value())
+        val start = minOf(selection.first, selection.last).coerceIn(0, currentText.length)
+        val end = maxOf(selection.first, selection.last).coerceIn(start, currentText.length)
+        val deleteFrom = when {
+            start < end -> start
+            start == 0 -> return
+            else -> {
+                val mention = currentText.getMentionSpans(start - 1, start)
+                    .firstOrNull { currentText.getSpanStart(it) >= 0 && currentText.getSpanEnd(it) == start }
+                mention?.let { currentText.getSpanStart(it) } ?: previousGraphemeBoundary(currentText, start)
+            }
+        }
+        currentText.delete(deleteFrom, end)
+        text.update(currentText, true)
+        selection = IntRange(deleteFrom, deleteFrom)
+    }
+
+    private fun previousGraphemeBoundary(text: CharSequence, offset: Int): Int {
+        val iterator = BreakIterator.getCharacterInstance()
+        iterator.setText(text.toString())
+        val boundary = iterator.preceding(offset)
+        return if (boundary == BreakIterator.DONE) 0 else boundary
+    }
 
     fun insertSuggestion(
         resolvedSuggestion: ResolvedSuggestion,
