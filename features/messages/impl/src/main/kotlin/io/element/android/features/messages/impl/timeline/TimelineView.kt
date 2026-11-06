@@ -94,6 +94,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemSele
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentPreviewParam
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
@@ -222,7 +223,8 @@ fun TimelineView(
                         .testTag(TestTags.timeline),
                     state = lazyListState,
                     reverseLayout = true,
-                    contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() + PaddingValues(top = 64.dp, bottom = 8.dp),
+                    contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() +
+                        PaddingValues(top = 64.dp, bottom = TIMELINE_BOTTOM_PADDING),
                 ) {
                     items(
                         items = state.timelineItems,
@@ -230,11 +232,24 @@ fun TimelineView(
                         key = { timelineItem -> timelineItem.identifier() },
                     ) { timelineItem ->
                         TimelineItemRow(
-                            modifier = Modifier.animateTimelineItem(
-                                scope = this,
-                                animationScope = itemAnimationScope,
-                                insertion = timelineItemsInsertion?.takeIf { timelineItem.identifier() in it.keys },
-                            ),
+                            modifier = Modifier
+                                .animateTimelineItem(
+                                    scope = this,
+                                    animationScope = itemAnimationScope,
+                                    insertion = timelineItemsInsertion?.takeIf { timelineItem.identifier() in it.keys },
+                                )
+                                .then(
+                                    if (timelineItem.isTypingNotification()) {
+                                        // The new messages slide in from behind it
+                                        Modifier.hideItemsSlidingIn(
+                                            insertions = timelineItemsInsertions,
+                                            color = ElementTheme.colors.bgCanvasDefault,
+                                            coveredHeightBelow = TIMELINE_BOTTOM_PADDING,
+                                        )
+                                    } else {
+                                        Modifier
+                                    }
+                                ),
                             timelineItem = timelineItem,
                             timelineMode = state.timelineMode,
                             timelineRoomInfo = state.timelineRoomInfo,
@@ -311,6 +326,10 @@ fun TimelineView(
 
     MessageShieldDialog(state)
 }
+
+private val TIMELINE_BOTTOM_PADDING = 8.dp
+
+private fun TimelineItem.isTypingNotification() = this is TimelineItem.Virtual && model is TimelineItemTypingNotificationModel
 
 @Composable
 private fun MessageShieldDialog(state: TimelineState) {
