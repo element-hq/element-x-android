@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.home.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
@@ -142,7 +143,7 @@ private fun EmptySpaceHomeView(
                     style = BigIcon.Style.Default(CompoundIcons.SpaceSolid())
                 )
                 Text(
-                    text = stringResource(CommonStrings.screen_space_list_empty_state_title),
+                    text = stringResource(R.string.screen_space_list_empty_state_title),
                     style = ElementTheme.typography.fontHeadingMdBold,
                     color = ElementTheme.colors.textPrimary,
                     textAlign = TextAlign.Center,

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"復号化できません"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"安全でないデバイスから送信されました"</string>
+  <string name="common_unable_to_decrypt_no_access">"このメッセージにアクセスできません"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"送信者の検証済みのデジタルIDがリセットされました"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"イベントの送信者と、使用された端末の所有者が一致しません。"</string>
   <string name="crypto_event_authenticity_not_guaranteed">"この暗号化されたメッセージの真正性を、この端末では保証できません。"</string>
   <string name="crypto_event_authenticity_previously_verified">"以前に検証されたユーザーにより暗号化されています。"</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"削除されたまたは不明な端末により暗号化されています。"</string>
   <string name="crypto_event_authenticity_unsigned_device">"所有者に検証されていない端末により暗号化されています。"</string>
   <string name="crypto_event_authenticity_unverified_identity">"未検証のユーザーにより暗号化されています。"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"あなたが参加する以前に送信されたメッセージを、%1$s (%2$s) が共有しました。"</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"あなたが参加する以前に送信されたメッセージを、%1$s が共有しました。"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s の %2$s のデジタルIDはリセットされました。%3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s %2$s のデジタルIDはリセットされました。%3$s"</string>
+  <string name="dialog_confirm_link_message">"リンク %1$s が別サイト %2$s に遷移しようとしています。
+
+続行しますか？"</string>
+  <string name="dialog_confirm_link_title">"リンクを再度確認してください"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"アップロードできる最大サイズは %1$s です。"</string>
+  <string name="dialog_file_too_large_to_upload_title">"アップロードの許容サイズを超えています。"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"アップロードできる最大サイズは %1$s です。"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"アップロードする画質を選択してください。"</string>
+  <string name="error_failed_loading_messages">"メッセージの読み込みに失敗しました"</string>
+  <string name="error_failed_uploading_voice_message">"音声メッセージの送信に失敗しました。"</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s には、マイクの使用が許可されていません。音声メッセージのために、マイクの使用を許可してください。"</string>
   <string name="error_sending_failure_invalid_mime_type">"無効なMIMEタイプ: %s"</string>
   <string name="error_sending_failure_missing_media_content">"メディアの内容が見つかりません"</string>
   <string name="error_sending_failure_other">"エラーの詳細: %s"</string>
@@ -34,10 +54,24 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"画像の品質を最適化"</string>
   <string name="screen_media_upload_preview_processing">"処理中…"</string>
   <string name="screen_media_upload_preview_title">"メディアを追加"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"メッセージを長押しし \"%1$s\" を選択してください"</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"重要なメッセージをピン留めして容易に見つけられるようにします"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="other">"%1$d 個のピン留めされたメッセージ"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"ピン留めされたメッセージ"</string>
   <string name="screen_report_content_block_user">"ユーザーをブロック"</string>
   <string name="screen_report_content_block_user_hint">"このユーザーからのメッセージをすべて非表示にする場合はチェックしてください。"</string>
   <string name="screen_report_content_explanation">"このメッセージはアカウント提供元の管理者に報告されます。暗号化されたメッセージは確認することができません。"</string>
   <string name="screen_report_content_hint">"このコンテンツを通報する理由"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"検証の要求を取り下げて送信"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"検証の要求を取り下げてメッセージの送信を続行するか、送信をキャンセルして %1$s の検証が完了した後に再試行することができます。"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"%1$s の検証済みのデジタルIDがリセットされたため、メッセージは送信されませんでした。"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"メッセージを強制送信"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s は未検証の端末を使用しています。メッセージを強制的に送信するか、%2$s がすべての端末を検証した後に送信を再試行することができます。"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"%1$s に未検証の端末が存在するため、メッセージは送信されませんでした。"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"検証の完了していない端末があります。メッセージを強制的に送信するか、すべての端末を検証した後に送信を再試行することができます。"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"未検証の端末が存在するため、メッセージは送信されませんでした。"</string>
   <string name="screen_room_attachment_source_camera">"カメラ"</string>
   <string name="screen_room_attachment_source_camera_photo">"写真を撮影"</string>
   <string name="screen_room_attachment_source_camera_video">"動画を撮影"</string>
@@ -54,10 +88,19 @@
   <string name="screen_room_encrypted_history_banner_unverified">"このルームの過去のメッセージを表示できません。確認するには、この端末を検証してください。"</string>
   <string name="screen_room_invite_again_alert_message">"招待し直しますか？"</string>
   <string name="screen_room_invite_again_alert_title">"このチャットにはあなた一人だけです"</string>
+  <string name="screen_room_maximum_messages_selected">"最大数のメッセージを選択中"</string>
   <string name="screen_room_mentions_at_room_subtitle">"ルーム全体に通知"</string>
   <string name="screen_room_mentions_at_room_title">"全員"</string>
+  <string name="screen_room_permalink_same_room_android">"すでにこのルームを表示しています"</string>
+  <string name="screen_room_pinned_banner_indicator">"%2$s 個のうち %1$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s 個のピン留めされたメッセージ"</string>
+  <string name="screen_room_pinned_banner_loading_description">"メッセージを読み込み中…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"すべて表示"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"再送信する"</string>
   <string name="screen_room_retry_send_menu_title">"メッセージの送信に失敗しました"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="other">"%1$d件のメッセージを選択中"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"リアクションを追加"</string>
   <string name="screen_room_timeline_beginning_of_room">"%1$s の始まりです。"</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"ここが会話の開始点です。"</string>
@@ -93,4 +136,15 @@
     <item quantity="other">"%1$s が入力中"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s と %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="other">"%1$d が参加"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"%1$s の検証済みのデジタルIDがリセットされたため、メッセージは送信されませんでした。"</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"%1$s に未検証の端末が存在するため、メッセージは送信されませんでした。"</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"未検証の端末が存在するため、メッセージは送信されませんでした。"</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"この端末で過去のメッセージを表示できません"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"過去のメッセージを表示するには、この端末を検証する必要があります"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"このメッセージにアクセスできません"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"メッセージの復号化に失敗"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"この端末を検証していないか、送信者があなたのデジタルIDを検証していないため、このメッセージはブロックされました。"</string>
 </resources>

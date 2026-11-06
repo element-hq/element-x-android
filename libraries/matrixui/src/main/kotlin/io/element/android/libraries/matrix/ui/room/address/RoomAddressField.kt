@@ -17,9 +17,9 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TextFieldValidity
+import io.element.android.libraries.matrix.ui.R
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun RoomAddressField(
@@ -51,10 +51,10 @@ fun RoomAddressField(
         },
         supportingText = when (addressValidity) {
             RoomAddressValidity.InvalidSymbols -> {
-                stringResource(CommonStrings.error_room_address_invalid_symbols)
+                stringResource(R.string.error_room_address_invalid_symbols)
             }
             RoomAddressValidity.NotAvailable -> {
-                stringResource(CommonStrings.error_room_address_already_exists)
+                stringResource(R.string.error_room_address_already_exists)
             }
             else -> supportingText
         },

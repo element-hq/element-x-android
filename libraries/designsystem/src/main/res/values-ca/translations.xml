@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Hi ha canvis sense desar."</string>
+  <string name="dialog_unsaved_changes_description_android">"Els canvis no s\'han desat. Segur que vols tornar enrere?"</string>
+  <string name="dialog_unsaved_changes_title">"Desar canvis?"</string>
+</resources>

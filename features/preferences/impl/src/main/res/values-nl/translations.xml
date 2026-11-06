@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Pas je instellingen aan om meldingen op het volledige scherm toe te staan wanneer de telefoon is vergrendeld. Zo mis je nooit een belangrijk gesprek."</string>
-  <string name="full_screen_intent_banner_title">"Verbeter je gesprekservaring"</string>
+  <string name="full_screen_intent_banner_message_android">"Pas je instellingen aan om meldingen op het volledige scherm toe te staan wanneer de telefoon is vergrendeld. Zo mis je nooit een belangrijk gesprek."</string>
+  <string name="full_screen_intent_banner_title_android">"Verbeter je gesprekservaring"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Kies hoe je meldingen wilt ontvangen"</string>
-  <string name="screen_advanced_settings_developer_mode">"Ontwikkelaarsmodus"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Schakel in om toegang te krijgen tot tools en functies voor ontwikkelaars."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Aangepaste basis-URL voor Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Stel een aangepaste basis-URL in voor Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Ongeldige URL, zorg ervoor dat je het protocol (http/https) en het juiste adres invult."</string>
   <string name="screen_advanced_settings_push_provider_android">"Push-meldingen provider"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Schakel de uitgebreide tekstverwerker uit om Markdown handmatig te typen."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Leesbevestigingen"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Indien uitgeschakeld worden er geen leesbevestigingen verstuurd. Je ontvangt nog steeds leesbevestigingen van andere gebruikers."</string>
   <string name="screen_advanced_settings_share_presence">"Aanwezigheid delen"</string>
   <string name="screen_advanced_settings_share_presence_description">"Indien uitgeschakeld kun je geen leesbevestigingen en typmeldingen verzenden of ontvangen."</string>
   <string name="screen_advanced_settings_view_source_description">"Schakel optie in om de berichtbron in de tijdlijn te bekijken."</string>
@@ -54,6 +49,7 @@ Als je doorgaat, kunnen sommige van je instellingen veranderen."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systeeminstellingen"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systeemmeldingen uitgeschakeld"</string>
   <string name="screen_notification_settings_title">"Meldingen"</string>
+  <string name="settings_version_number">"Versie: %1$s (%2$s)"</string>
   <string name="theme_dark">"Donker"</string>
   <string name="theme_light">"Licht"</string>
   <string name="theme_system">"Systeem"</string>

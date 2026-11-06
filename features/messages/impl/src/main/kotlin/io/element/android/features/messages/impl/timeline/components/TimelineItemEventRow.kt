@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +44,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -264,9 +266,7 @@ fun TimelineItemEventRow(
         }
         if (canReply) {
             val state: SwipeableActionsState = rememberSwipeableActionsState()
-            val offset = state.offset.floatValue
             val swipeThresholdPx = 40.dp.toPx()
-            val thresholdCrossed = abs(offset) > swipeThresholdPx
             SwipeSensitivity(3f) {
                 Box(
                     Modifier
@@ -274,7 +274,7 @@ fun TimelineItemEventRow(
                         .offset(selectionContentOffset)
                 ) {
                     Row(modifier = Modifier.matchParentSize()) {
-                        ReplySwipeIndicator({ offset / 120 })
+                        ReplySwipeIndicator({ state.offset.floatValue / 120 })
                     }
                     TimelineItemEventRowContent(
                         selectionData = selectionData,
@@ -292,13 +292,13 @@ fun TimelineItemEventRow(
                         onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClick = { onMoreReactionsClick(event) },
                         modifier = Modifier
-                            .absoluteOffset { IntOffset(x = offset.roundToInt(), y = 0) }
+                            .absoluteOffset { IntOffset(x = state.offset.floatValue.roundToInt(), y = 0) }
                             .draggable(
                                 orientation = Orientation.Horizontal,
                                 enabled = !state.isResettingOnRelease && !isSelectionToggle,
                                 onDragStopped = {
                                     coroutineScope.launch {
-                                        if (thresholdCrossed) {
+                                        if (abs(state.offset.floatValue) > swipeThresholdPx) {
                                             onSwipeToReply()
                                         }
                                         state.resetOffset()
@@ -362,7 +362,8 @@ fun TimelineItemEventRow(
             state = ReadReceiptViewState(
                 sendState = sendState,
                 isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
+                renderReadReceipts = timelineRoomInfo.renderReadReceipts,
+                knownReceipts = event.readReceiptState.receipts,
             ),
             onReadReceiptsClick = { onReadReceiptClick(event) },
             // Not slid: the read receipts sit outside the slid content, so they stay pinned to the end edge in selection mode.
@@ -710,7 +711,9 @@ private fun MessageSenderInformation(
     val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
     Row(
         modifier = modifier
-            // Add external clickable modifier with no indicator so the touch target is larger than just the display name
+            // Add external clickable modifier with no indicator so the touch target is larger than just the display name.
+            // It must not get the keyboard focus, since it would not draw any focus indicator: the avatar and the name will get it.
+            .focusProperties { canFocus = false }
             .clickable(onClick = onClick, enabled = true, interactionSource = remember { MutableInteractionSource() }, indication = null)
             .clearAndSetSemantics {
                 hideFromAccessibility()
@@ -720,15 +723,24 @@ private fun MessageSenderInformation(
             modifier = Modifier
                 .testTag(TestTags.timelineItemSenderAvatar)
                 .clip(CircleShape)
-                .clickable(onClick = onClick),
+                .clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = CircleShape),
+                    onClick = onClick,
+                ),
             avatarData = senderAvatar,
             avatarType = AvatarType.User,
         )
+        val senderNameShape = RoundedCornerShape(6.dp)
         SenderName(
             modifier = Modifier
                 .testTag(TestTags.timelineItemSenderName)
-                .clip(RoundedCornerShape(6.dp))
-                .clickable(onClick = onClick)
+                .clip(senderNameShape)
+                .clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = senderNameShape),
+                    onClick = onClick,
+                )
                 .padding(horizontal = 4.dp),
             senderId = senderId,
             senderProfile = senderProfile,
@@ -926,7 +938,11 @@ private fun MessageEventBubbleContent(
                 // Usually, you'd use traversalIndex for that, but it's not working for some reason
                 isTalkbackActive() -> inReplyToModifier.zIndex(1f)
                 inReplyTo is InReplyToDetails.Error -> inReplyToModifier
-                else -> inReplyToModifier.clickable(onClick = inReplyToClick)
+                else -> inReplyToModifier.clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = shape),
+                    onClick = inReplyToClick,
+                )
             }
 
             val contentHasError = currentContentValidationState.hasError() || inReplyTo is InReplyToDetails.Error

@@ -24,7 +24,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.matrix.ui.R
 
 /**
  * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=3643-2048
@@ -45,7 +45,7 @@ fun SpaceHeaderRootView(
             style = BigIcon.Style.Default(CompoundIcons.SpaceSolid())
         )
         Text(
-            text = stringResource(CommonStrings.screen_space_list_title),
+            text = stringResource(R.string.screen_space_list_title),
             style = ElementTheme.typography.fontHeadingMdBold,
             color = ElementTheme.colors.textPrimary,
             textAlign = TextAlign.Center,
@@ -55,7 +55,7 @@ fun SpaceHeaderRootView(
             rightText = null,
         )
         Text(
-            text = stringResource(CommonStrings.screen_space_list_description),
+            text = stringResource(R.string.screen_space_list_description),
             style = ElementTheme.typography.fontBodyMdRegular,
             color = ElementTheme.colors.textPrimary,
             textAlign = TextAlign.Center,

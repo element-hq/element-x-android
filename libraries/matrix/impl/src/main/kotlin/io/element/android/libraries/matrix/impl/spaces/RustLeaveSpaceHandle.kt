@@ -15,9 +15,11 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.spaces.LeaveSpaceHandle
 import io.element.android.libraries.matrix.api.spaces.LeaveSpaceRoom
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import org.matrix.rustcomponents.sdk.LeaveSpaceHandle as RustLeaveSpaceHandle
 
@@ -26,6 +28,7 @@ class RustLeaveSpaceHandle(
     private val spaceRoomMapper: SpaceRoomMapper,
     private val roomMembershipObserver: RoomMembershipObserver,
     sessionCoroutineScope: CoroutineScope,
+    private val dispatcher: CoroutineDispatcher,
     private val innerProvider: suspend () -> RustLeaveSpaceHandle,
 ) : LeaveSpaceHandle {
     private val inner = CompletableDeferred<RustLeaveSpaceHandle>()
@@ -36,20 +39,24 @@ class RustLeaveSpaceHandle(
         }
     }
 
-    override suspend fun rooms(): Result<List<LeaveSpaceRoom>> = runCatchingExceptions {
-        inner.await().rooms().map { leaveSpaceRoom ->
-            LeaveSpaceRoom(
-                spaceRoom = spaceRoomMapper.map(leaveSpaceRoom.spaceRoom),
-                isLastOwner = leaveSpaceRoom.isLastOwner,
-                areCreatorsPrivileged = leaveSpaceRoom.areCreatorsPrivileged,
-            )
+    override suspend fun rooms(): Result<List<LeaveSpaceRoom>> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.await().rooms().map { leaveSpaceRoom ->
+                LeaveSpaceRoom(
+                    spaceRoom = spaceRoomMapper.map(leaveSpaceRoom.spaceRoom),
+                    isLastOwner = leaveSpaceRoom.isLastOwner,
+                    areCreatorsPrivileged = leaveSpaceRoom.areCreatorsPrivileged,
+                )
+            }
         }
     }
 
-    override suspend fun leave(roomIds: List<RoomId>): Result<Unit> = runCatchingExceptions {
-        // Ensure the space is included and is the last room to be left
-        val roomToLeave = roomIds - id + id
-        inner.await().leave(roomToLeave.map { it.value })
+    override suspend fun leave(roomIds: List<RoomId>): Result<Unit> = withContext(dispatcher) {
+        runCatchingExceptions {
+            // Ensure the space is included and is the last room to be left
+            val roomToLeave = roomIds - id + id
+            inner.await().leave(roomToLeave.map { it.value })
+        }
     }.onSuccess {
         roomMembershipObserver.notifyUserLeftRoom(
             roomId = id,

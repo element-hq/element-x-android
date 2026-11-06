@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.appconfig.LearnMoreConfig
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertLevel
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -43,7 +44,7 @@ fun IdentityChangeStateView(
         IdentityState.PinViolation -> ViolationAlert(
             identityChangeViolation = identityChangeViolation,
             onLinkClick = onLinkClick,
-            textId = CommonStrings.crypto_identity_change_pin_violation_new,
+            textId = R.string.crypto_identity_change_pin_violation_new,
             isCritical = false,
             submitTextId = CommonStrings.action_dismiss,
             onSubmitClick = { state.eventSink(IdentityChangeEvent.PinIdentity(identityChangeViolation.identityRoomMember.userId)) },
@@ -52,7 +53,7 @@ fun IdentityChangeStateView(
         IdentityState.VerificationViolation -> ViolationAlert(
             identityChangeViolation = identityChangeViolation,
             onLinkClick = onLinkClick,
-            textId = CommonStrings.crypto_identity_change_verification_violation_new,
+            textId = R.string.crypto_identity_change_verification_violation_new,
             isCritical = true,
             submitTextId = CommonStrings.crypto_identity_change_withdraw_verification_action,
             onSubmitClick = { state.eventSink(IdentityChangeEvent.WithdrawVerification(identityChangeViolation.identityRoomMember.userId)) },
@@ -79,7 +80,7 @@ private fun ViolationAlert(
             val learnMoreStr = stringResource(CommonStrings.action_learn_more)
             val displayName = identityChangeViolation.identityRoomMember.displayNameOrDefault
             val userIdStr = stringResource(
-                CommonStrings.crypto_identity_change_pin_violation_new_user_id,
+                R.string.crypto_identity_change_pin_violation_new_user_id,
                 identityChangeViolation.identityRoomMember.userId,
             )
             val fullText = stringResource(textId, displayName, userIdStr, learnMoreStr)

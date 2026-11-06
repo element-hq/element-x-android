@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Per non perdere mai una chiamata importante, modifica le impostazioni per consentire le notifiche a schermo intero quando il telefono è bloccato."</string>
-  <string name="full_screen_intent_banner_title">"Migliora la tua esperienza di chiamata"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Seleziona la qualità predefinita dei video che carichi."</string>
+  <string name="dialog_default_video_quality_selector_title">"Qualità del caricamento video"</string>
+  <string name="full_screen_intent_banner_message_android">"Per non perdere mai una chiamata importante, modifica le impostazioni per consentire le notifiche a schermo intero quando il telefono è bloccato."</string>
+  <string name="full_screen_intent_banner_title_android">"Migliora la tua esperienza di chiamata"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Scegli come ricevere le notifiche"</string>
-  <string name="screen_advanced_settings_developer_mode">"Modalità sviluppatore"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Attiva per avere accesso alle funzionalità per sviluppatori."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL base di Element Call personalizzato"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Imposta un URL di base personalizzato per Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL non valido, assicurati di includere il protocollo (http/https) e l\'indirizzo corretto."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Nascondi gli avatar nelle richieste di invito alle stanze"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Nascondi le anteprime dei media nelle conversazioni"</string>
   <string name="screen_advanced_settings_labs">"Labs"</string>
   <string name="screen_advanced_settings_live_location_section_description">"La distanza che devi percorrere per attivare un aggiornamento."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Assicurati che l\'opzione \"Posizione precisa\" sia abilitata per questa app. Per modificare l\'autorizzazione, vai in %1$s."</string>
@@ -21,7 +20,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Carica foto e video più velocemente e riduci l\'utilizzo dei dati"</string>
   <string name="screen_advanced_settings_media_compression_title">"Ottimizza la qualità dei contenuti multimediali"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderazione e Sicurezza"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Ottimizza automaticamente le immagini per caricamenti più rapidi e file di dimensioni ridotte."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Ottimizza la qualità del caricamento delle immagini"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Tocca qui per cambiarla."</string>
@@ -30,9 +28,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Qualità del caricamento video"</string>
   <string name="screen_advanced_settings_push_provider_android">"Fornitore di notifiche push"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Disattiva l\'editor di testo avanzato per scrivere manualmente in Markdown"</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Conferme di lettura"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Se disattivato, le tue conferme di visualizzazione non verranno inviate a nessuno. Riceverai comunque conferme di visualizzazione da altri utenti."</string>
   <string name="screen_advanced_settings_share_presence">"Condividi presenza online"</string>
   <string name="screen_advanced_settings_share_presence_description">"Se disattivato, non potrai né inviare né ricevere conferme di lettura o notifiche di scrittura."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Nascondi sempre"</string>
@@ -109,6 +104,7 @@ Se procedi, alcune delle tue impostazioni potrebbero cambiare."</string>
   <string name="screen_settings_user_status_in_a_meeting">"In una riunione"</string>
   <string name="screen_settings_user_status_on_the_road">"In viaggio"</string>
   <string name="screen_settings_user_status_placeholder">"Quale è il tuo stato?"</string>
+  <string name="settings_version_number">"Versione: %1$s (%2$s)"</string>
   <string name="theme_black">"Nero"</string>
   <string name="theme_dark">"Scuro"</string>
   <string name="theme_light">"Chiaro"</string>

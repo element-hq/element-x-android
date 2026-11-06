@@ -189,7 +189,7 @@ private fun ShareLocationScaffold(
         sheetSwipeEnabled = false,
         topBar = {
             TopAppBar(
-                titleStr = stringResource(CommonStrings.screen_share_location_title),
+                titleStr = stringResource(R.string.screen_share_location_title),
                 navigationIcon = {
                     BackButton(onClick = navigateUp)
                 },
@@ -297,7 +297,7 @@ private fun ShareCurrentLocationItem(
 ) {
     ListItem(
         content = {
-            Text(stringResource(CommonStrings.screen_share_my_location_action))
+            Text(stringResource(R.string.screen_share_my_location_action))
         },
         onClick = onClick,
         leadingContent = ListItemContent.Icon(
@@ -312,7 +312,7 @@ private fun SharePinLocationItem(
 ) {
     ListItem(
         content = {
-            Text(stringResource(CommonStrings.screen_share_this_location_action))
+            Text(stringResource(R.string.screen_share_this_location_action))
         },
         onClick = onClick,
         leadingContent = ListItemContent.Icon(

@@ -32,6 +32,9 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
+import io.element.android.libraries.matrix.ui.messages.ProvideRoomMemberProfiles
+import io.element.android.libraries.matrix.ui.messages.rememberRoomMember
+import io.element.android.libraries.previewutils.room.aRoomMemberList
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
@@ -94,13 +97,13 @@ private fun ReadReceiptBottomSheetContent(
         items(
             items = state.selectedEvent?.readReceiptState?.receipts.orEmpty()
         ) {
-            val userId = UserId(it.avatarData.id)
+            val member = rememberRoomMember(it.userId)
             MatrixUserRow(
-                modifier = Modifier.clickable { onUserDataClick(userId) },
+                modifier = Modifier.clickable { onUserDataClick(it.userId) },
                 matrixUser = MatrixUser(
-                    userId = userId,
-                    displayName = it.avatarData.name,
-                    avatarUrl = it.avatarData.url,
+                    userId = it.userId,
+                    displayName = member?.displayName,
+                    avatarUrl = member?.avatarUrl,
                 ),
                 avatarSize = AvatarSize.ReadReceiptList,
                 trailingContent = {
@@ -119,9 +122,11 @@ private fun ReadReceiptBottomSheetContent(
 @Composable
 internal fun ReadReceiptBottomSheetPreview(@PreviewParameter(ReadReceiptBottomSheetStatePreviewParam::class) state: ReadReceiptBottomSheetState) {
     ElementPreview(fillMaxSize = true) {
-        ReadReceiptBottomSheet(
-            state = state,
-            onUserDataClick = {},
-        )
+        ProvideRoomMemberProfiles(members = aRoomMemberList()) {
+            ReadReceiptBottomSheet(
+                state = state,
+                onUserDataClick = {},
+            )
+        }
     }
 }

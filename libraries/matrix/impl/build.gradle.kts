@@ -26,44 +26,22 @@ setupDependencyInjection()
 val elementCallVersion: String = providers.gradleProperty("elementCallLocalVersion")
     .getOrElse(libs.versions.element.call.get())
 
-val usesLocalRustSdk = file("${rootDir.path}/libraries/rustsdk/matrix-rust-sdk.aar").exists()
-
-if (usesLocalRustSdk) {
-    // element-call-matrix declares the Rust SDK as an ordinary Maven dependency, so with the local
-    // AAR in place a debug classpath would carry two copies of org.matrix.rustcomponents.sdk.
-    // Point the library's dependency at the same local AAR the app is using.
-    configurations.matching { it.name.startsWith("debug") }.configureEach {
-        resolutionStrategy.dependencySubstitution {
-            substitute(module("org.matrix.rustcomponents:sdk-android"))
-                .using(project(":libraries:rustsdk"))
-                .because("the local Rust SDK AAR replaces the published one on debug builds")
-        }
-    }
-}
-
 dependencies {
     releaseImplementation(libs.matrix.sdk)
-    if (usesLocalRustSdk) {
-        println(
-            "\nNote: Using local binary of the Rust SDK." +
-                "\n      element-call-matrix is substituted onto it as well, so the native call runs" +
-                "\n      against this SDK rather than the one it was published against.\n"
-        )
+    if (file("${rootDir.path}/libraries/rustsdk/matrix-rust-sdk.aar").exists()) {
+        println("\nNote: Using local binary of the Rust SDK.\n")
         debugImplementation(projects.libraries.rustsdk)
     } else {
         debugImplementation(libs.matrix.sdk)
     }
-    implementation(variantOf(libs.rustls.platform.verifier) { artifactType("aar") })
+    // Disabled until the platform verifier is ready for production. See CertificateVerifier.kt.
+//    implementation(variantOf(libs.rustls.platform.verifier) { artifactType("aar") })
 
-    // The native call's Matrix transport. Only this module may hand it a raw SDK client.
+    // The native call's MatrixBackend, over the SDK client. Only this module may hand it a raw SDK client.
+    // element-call carries the RTC core, where MatrixBackend lives, as an api dependency.
     implementation(platform("io.element.android:element-call-bom:$elementCallVersion"))
-    implementation(libs.element.call.api)
+    implementation(libs.element.call.impl)
     implementation(projects.features.callnative.api)
-    implementation(libs.element.call.matrix) {
-        if (usesLocalRustSdk) {
-            exclude(group = "org.matrix.rustcomponents", module = "sdk-android")
-        }
-    }
 
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)
@@ -82,6 +60,7 @@ dependencies {
     implementation(variantOf(libs.jna) { artifactType("aar") })
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.serialization.json)
     implementation(libs.androidx.lifecycle.process)
 
     testCommonDependencies(libs)

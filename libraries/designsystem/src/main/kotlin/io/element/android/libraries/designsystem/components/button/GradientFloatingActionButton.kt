@@ -89,7 +89,7 @@ fun GradientFloatingActionButton(
                 enabled = true,
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = Color.White)
+                indication = ripple(color = Color.White, focusRingShape = shape)
             ),
         contentAlignment = Alignment.Center
     ) {

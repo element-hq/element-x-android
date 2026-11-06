@@ -200,7 +200,8 @@ private fun TimelineItemGroupedEventsRowContent(
                 state = ReadReceiptViewState(
                     sendState = null,
                     isLastOutgoingMessage = false,
-                    receipts = timelineItem.aggregatedReadReceipts,
+                    renderReadReceipts = timelineRoomInfo.renderReadReceipts,
+                    knownReceipts = timelineItem.aggregatedReadReceipts,
                 ),
                 onReadReceiptsClick = onExpandGroupClick
             )

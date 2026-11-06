@@ -91,6 +91,7 @@ class GlobalSearchPresenter(
         var searchResults: AsyncData<GlobalSearchResults> by remember { mutableStateOf(AsyncData.Uninitialized) }
         var currentTarget: GlobalSearchTarget by remember { mutableStateOf(GlobalSearchTarget.ROOMS) }
         val currentMessageSearch: MessageSearch = remember { messageSearchService.createMessageSearch(scope = coroutineScope) }
+        var showLearnMoreBottomSheet by rememberSaveable { mutableStateOf(false) }
 
         StartSearchBackfillWhenVisible(isEnabled = isEnabled, isSearchActive = isSearchActive)
 
@@ -160,6 +161,12 @@ class GlobalSearchPresenter(
                         Pair(results, paginationState)
                     }.collectLatest { (results, paginationState) ->
                         Timber.d("Message search found ${results.size} items, pagination state: $paginationState")
+
+                        // This is an intermediate state, where we received a signal that the current search finished, but the results have not been
+                        // received yet.
+                        if (paginationState is MessageSearchPaginationState.Idle && !paginationState.endReached && results.isEmpty()) {
+                            return@collectLatest
+                        }
 
                         // Try processing the results in parallel to speed up the processing time, since we have to wait until we get the room info for each
                         // result, which can be slow if we have a lot of results. The original order is kept by using `awaitAll()`.
@@ -266,6 +273,9 @@ class GlobalSearchPresenter(
                 GlobalSearchEvent.ClearSearchHistory -> coroutineScope.launch {
                     searchHistoryStore.clear()
                 }
+                is GlobalSearchEvent.ToggleLearnMoreBottomSheet -> {
+                    showLearnMoreBottomSheet = event.show
+                }
             }
         }
 
@@ -276,6 +286,7 @@ class GlobalSearchPresenter(
             currentTarget = currentTarget,
             results = searchResults,
             history = searchHistory,
+            showLearnMoreBottomSheet = showLearnMoreBottomSheet,
             eventSink = ::handleEvent,
         )
     }

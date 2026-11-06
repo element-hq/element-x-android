@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Tidak dapat mendekripsi"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Dikirim dari perangkat yang tidak aman"</string>
+  <string name="common_unable_to_decrypt_no_access">"Anda tidak memiliki akses ke pesan ini"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Identitas terverifikasi pengirim diatur ulang"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Pengirim peristiwa tidak cocok dengan pemilik perangkat yang mengirimnya."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Keaslian pesan terenkripsi ini tidak dapat dijamin pada perangkat ini."</string>
   <string name="crypto_event_authenticity_previously_verified">"Dienkripsi oleh pengguna yang telah diverifikasi sebelumnya."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Dienkripsi oleh perangkat yang tidak dikenal atau dihapus."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Dienkripsi oleh perangkat yang tidak diverifikasi oleh pemiliknya."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Dienkripsi oleh pengguna yang tidak terverifikasi."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) membagikan pesan ini karena Anda tidak berada di ruangan saat pesan ini dikirim."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s membagikan pesan ini karena Anda tidak berada di ruangan saat pesan ini dikirim."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Identitas %2$s %1$s telah diatur ulang. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Identitas %2$s %1$s telah diatur ulang. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Tautan %1$s membawa Anda ke situs lain %2$s
+
+Apakah Anda yakin ingin melanjutkan?"</string>
+  <string name="dialog_confirm_link_title">"Periksa kembali tautan ini"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Ukuran file maksimum yang diizinkan adalah: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Ukuran file terlalu besar untuk diunggah"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Ukuran file maksimum yang diizinkan adalah: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Pilih kualitas video yang ingin Anda unggah."</string>
+  <string name="error_failed_loading_messages">"Gagal memuat pesan"</string>
+  <string name="error_failed_uploading_voice_message">"Gagal mengunggah pesan suara Anda."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s tidak memiliki izin untuk mengakses mikrofon. Aktifkan akses untuk merekam pesan suara."</string>
   <string name="error_sending_failure_invalid_mime_type">"Tipe MIME tidak valid: %s"</string>
   <string name="error_sending_failure_missing_media_content">"Konten media tidak ditemukan"</string>
   <string name="error_sending_failure_other">"Detail kesalahan: %s"</string>
@@ -34,10 +54,24 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimalkan kualitas gambar"</string>
   <string name="screen_media_upload_preview_processing">"Memproses…"</string>
   <string name="screen_media_upload_preview_title">"Tambahkan media"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Tekan pesan dan pilih “%1$s” untuk disertakan di sini."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Sematkan pesan penting agar mudah ditemukan"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="other">"%1$d Pesan yang disematkan"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Pesan yang disematkan"</string>
   <string name="screen_report_content_block_user">"Blokir pengguna"</string>
   <string name="screen_report_content_block_user_hint">"Centang jika Anda ingin menyembunyikan semua pesan saat ini dan yang akan datang dari pengguna ini"</string>
   <string name="screen_report_content_explanation">"Pesan ini akan dilaporkan ke penyedia akun Anda. Mereka tidak akan dapat membaca pesan terenkripsi apa pun."</string>
   <string name="screen_report_content_hint">"Alasan melaporkan konten ini"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Tarik verifikasi dan kirim"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Anda dapat menarik verifikasi dan tetap mengirim pesan ini, atau Anda dapat membatalkan untuk saat ini dan mencoba lagi nanti setelah memverifikasi ulang %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Pesan Anda tidak terkirim karena identitas terverifikasi %1$s telah diatur ulang"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Kirim pesan saja"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s menggunakan satu atau beberapa perangkat yang belum diverifikasi. Anda tetap dapat mengirim pesan, atau Anda dapat membatalkan untuk saat ini dan mencoba lagi nanti setelah %2$s telah memverifikasi semua perangkat mereka."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Pesan Anda tidak terkirim karena %1$s belum memverifikasi semua perangkat"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Satu atau beberapa perangkat Anda tidak terverifikasi. Anda tetap dapat mengirim pesan, atau Anda dapat membatalkannya dan mencoba lagi nanti setelah Anda memverifikasi semua perangkat."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Pesan Anda tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Ambil foto"</string>
   <string name="screen_room_attachment_source_camera_video">"Rekam video"</string>
@@ -54,10 +88,22 @@
   <string name="screen_room_encrypted_history_banner_unverified">"Riwayat pesan tidak tersedia di ruangan ini. Verifikasi perangkat ini untuk melihat riwayat pesan."</string>
   <string name="screen_room_invite_again_alert_message">"Apakah Anda ingin mengundang mereka kembali?"</string>
   <string name="screen_room_invite_again_alert_title">"Anda sendirian di obrolan ini"</string>
+  <string name="screen_room_maximum_messages_selected">"Memilih maksimum, pesan"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Beri tahu seluruh ruangan"</string>
   <string name="screen_room_mentions_at_room_title">"Semua orang"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="other">"%1$d pesan diteruskan"</item>
+  </plurals>
+  <string name="screen_room_permalink_same_room_android">"Sudah melihat ruangan ini!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s dari %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Pesan yang disematkan"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Memuat pesan…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Lihat Semua"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Kirim ulang"</string>
   <string name="screen_room_retry_send_menu_title">"Pesan Anda gagal dikirim"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="other">"%1$d pesan terpilih"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Tambahkan emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Ini adalah awal dari %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Ini adalah awal dari percakapan ini."</string>
@@ -93,4 +139,15 @@
     <item quantity="other">"%1$s sedang mengetik"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s dan %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="other">"%1$d bergabung"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Pesan tidak terkirim karena identitas terverifikasi %1$s telah diatur ulang."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Pesan tidak terkirim karena %1$s belum memverifikasi semua perangkat."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Pesan tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Riwayat pesan tidak tersedia di perangkat ini"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Anda harus memverifikasi perangkat ini untuk mengakses riwayat pesan"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Anda tidak memiliki akses ke pesan ini"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Tidak dapat mendekripsi pesan"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Pesan ini diblokir karena Anda tidak memverifikasi perangkat Anda atau karena pengirim perlu memverifikasi identitas Anda."</string>
 </resources>

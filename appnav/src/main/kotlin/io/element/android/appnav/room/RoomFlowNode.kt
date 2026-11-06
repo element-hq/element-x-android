@@ -148,10 +148,9 @@ class RoomFlowNode(
     }
 
     private fun subscribeToRoomInfoFlow(roomId: RoomId, serverNames: List<String>) {
-        val joinedRoom = (inputs.initialElement as? RoomNavigationTarget.Root)?.joinedRoom
-        val roomInfoFlow = joinedRoom?.roomInfoFlow?.map { Optional.of(it) }
-            ?: client.getRoomInfoFlow(roomId)
-
+        // Always use `client.getRoomInfoFlow` to observe room info
+        // so even if the room instance is closed it keeps working
+        val roomInfoFlow = client.getRoomInfoFlow(roomId)
         // This observes the local membership changes for the room
         val membershipUpdateFlow = membershipObserver.updates
             .filter { it.roomId == roomId }

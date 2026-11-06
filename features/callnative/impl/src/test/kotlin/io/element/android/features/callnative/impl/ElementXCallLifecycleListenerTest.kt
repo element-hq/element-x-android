@@ -40,6 +40,18 @@ class ElementXCallLifecycleListenerTest {
     }
 
     @Test
+    fun `the app is in a call from start to end, so the sync keeps running in the background`() = runTest {
+        val appForegroundStateService = FakeAppForegroundStateService()
+        val listener = createListener(appForegroundStateService = appForegroundStateService)
+
+        listener.onCallStarted(A_CALL)
+        assertThat(appForegroundStateService.isInCall.value).isTrue()
+
+        listener.onCallEnded(A_CALL, ElementCallEndReason.LEFT)
+        assertThat(appForegroundStateService.isInCall.value).isFalse()
+    }
+
+    @Test
     fun `joining a call stops the ring`() = runTest {
         val ringingCallTracker = FakeRingingCallTracker()
         val listener = createListener(ringingCallTracker = ringingCallTracker)
@@ -71,12 +83,13 @@ class ElementXCallLifecycleListenerTest {
     private fun TestScope.createListener(
         currentCallTracker: FakeCurrentCallTracker = FakeCurrentCallTracker(),
         ringingCallTracker: FakeRingingCallTracker = FakeRingingCallTracker(),
+        appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(),
     ) = ElementXCallLifecycleListener(
         sessionId = A_SESSION_ID,
         currentCallTracker = currentCallTracker,
         ringingCallTracker = ringingCallTracker,
         sessionCoroutineScope = this,
-        appForegroundStateService = FakeAppForegroundStateService(),
+        appForegroundStateService = appForegroundStateService,
     )
 
     private companion object {

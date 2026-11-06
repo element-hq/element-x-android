@@ -12,15 +12,20 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.TemporaryMatrixClient
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.exception.mapClientException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 
 class RustTemporaryMatrixClient(
     private val client: Client,
     private val paths: SessionPaths?,
+    private val dispatcher: CoroutineDispatcher,
 ) : TemporaryMatrixClient {
-    override suspend fun getUrl(url: String): Result<ByteArray> = runCatchingExceptions {
-        client.getUrl(url)
-    }.mapFailure { it.mapClientException() }
+    override suspend fun getUrl(url: String): Result<ByteArray> = withContext(dispatcher) {
+        runCatchingExceptions {
+            client.getUrl(url)
+        }.mapFailure { it.mapClientException() }
+    }
 
     override val server: String? = client.server()
     override val homeserverUrl: String = client.homeserver()

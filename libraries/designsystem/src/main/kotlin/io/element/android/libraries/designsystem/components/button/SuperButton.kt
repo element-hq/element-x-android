@@ -95,7 +95,7 @@ fun SuperButton(
                 enabled = enabled,
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple()
+                indication = ripple(focusRingShape = shape)
             )
             .padding(contentPadding),
         contentAlignment = Alignment.Center

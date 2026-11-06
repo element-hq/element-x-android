@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -95,14 +96,17 @@ internal fun GalleryFileListItemContent(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
 ) {
+    val shape = RoundedCornerShape(12.dp)
     Row(
         modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(shape)
             .background(
                 color = ElementTheme.colors.bgSubtleSecondary,
-                shape = RoundedCornerShape(12.dp),
+                shape = shape,
             )
             .combinedClickable(
+                interactionSource = null,
+                indication = ripple(focusRingShape = shape),
                 onClick = onClick.takeIf { !isValidating } ?: {},
                 onLongClick = onLongClick.takeIf { !isValidating } ?: {},
                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),

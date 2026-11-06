@@ -62,6 +62,7 @@ dependencies {
     implementation(projects.libraries.uiCommon)
     implementation(projects.libraries.uiUtils)
     implementation(projects.libraries.testtags)
+    implementation(projects.libraries.previewutils)
     implementation(projects.features.contentscanner.api)
     implementation(projects.services.analytics.compose)
     implementation(projects.services.appnavstate.api)

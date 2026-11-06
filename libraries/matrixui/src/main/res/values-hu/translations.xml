@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"A letöltés nem érhető el."</string>
+  <string name="content_scanner_not_found_title">"A fájl nem található"</string>
+  <string name="error_room_address_already_exists">"Ez a szobacím már létezik. Próbálja meg szerkeszteni a szobacím mezőt, vagy módosítsa a szoba nevét."</string>
+  <string name="error_room_address_invalid_symbols">"Egyes karakterek nem engedélyezettek. Csak a betűk, a számjegyek és a következő szimbólumok támogatottak: $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Meghívó küldése"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Csevegést kezd vele: %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Meghívó küldése?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Még nem beszélgetett ezzel a személlyel. Folytatás előtt erősítse meg a meghívást."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Csevegést kezdeményez ezzel az új felhasználóval?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) meghívta"</string>
+  <string name="screen_space_list_description">"Létrehozott vagy olyan terek, melyekhez csatlakozott."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Terek"</string>
 </resources>

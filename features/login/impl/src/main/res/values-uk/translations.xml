@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Змінити провайдера облікового запису"</string>
-  <string name="screen_account_provider_form_hint">"Адреса домашнього сервера"</string>
-  <string name="screen_account_provider_form_notice">"Уведіть пошуковий термін або адресу домену."</string>
-  <string name="screen_account_provider_form_subtitle">"Пошук компанії, спільноти або приватного сервера."</string>
-  <string name="screen_account_provider_form_title">"Знайти провайдера облікового запису"</string>
-  <string name="screen_account_provider_signin_subtitle">"Тут розміщуватимуться ваші розмови — так само як у поштовій скриньці для зберігання своїх електронних листів."</string>
+  <string name="error_account_already_logged_in">"Ви вже ввійшли як %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Дублікат входу"</string>
+  <string name="error_account_creation_not_possible">"Постачальника послуг облікового запису потрібно оновити для підтримки Matrix Authentication Service та створення облікових записів."</string>
   <string name="screen_account_provider_signin_title">"Ви збираєтесь увійти в %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Тут розміщуватимуться ваші розмови — так само як у поштовій скриньці для зберігання своїх електронних листів."</string>
-  <string name="screen_account_provider_signup_title">"Ви збираєтеся створити обліковий запис на %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org — це великий безплатний сервер у загальнодоступній мережі Matrix для безпечного децентралізованого спілкування, яким керує Matrix.org Foundation."</string>
   <string name="screen_change_account_provider_other">"Інше"</string>
   <string name="screen_change_account_provider_subtitle">"Використати іншого провайдера облікових записів, наприклад, власний приватний сервер або робочий обліковий запис."</string>
   <string name="screen_change_account_provider_title">"Змінити провайдера облікового запису"</string>
@@ -43,7 +37,6 @@
   <string name="screen_login_error_unsupported_authentication">"Вибраний постачальник облікового запису не підтримує пароль або вхід через OAuth. Зверніться до постачальника облікового запису або виберіть іншого."</string>
   <string name="screen_login_form_header">"Введіть свої дані"</string>
   <string name="screen_login_subtitle">"Matrix — це відкрита мережа для безпечної, децентралізованої комунікації."</string>
-  <string name="screen_login_title">"З поверненням!"</string>
   <string name="screen_login_title_with_homeserver">"Увійти в %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"Відкрити Element Classic"</string>
   <string name="screen_missing_key_backup_step_1">"Відкрийте Element Classic на своєму пристрої"</string>
@@ -62,7 +55,6 @@
   <string name="screen_onboarding_sign_up">"Створити обліковий запис"</string>
   <string name="screen_onboarding_welcome_back">"З поверненням!"</string>
   <string name="screen_onboarding_welcome_message">"Вітаємо в %1$s. Сфокусованому на швидкості та простоті."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Вітаємо у %1$s. Сфокусованому на швидкості та простоті."</string>
   <string name="screen_onboarding_welcome_title">"Спілкуйтесь елементарно"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Встановлення безпечного з\'єднання"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Не вдалося встановити безпечне з\'єднання з новим пристроєм. Ваші наявні пристрої досі в безпеці, і вам не потрібно про них турбуватися."</string>
@@ -104,16 +96,10 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Вам потрібно дати дозвіл %1$s на використання камери вашого пристрою, щоб продовжити."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Надайте доступ до камери, щоб сканувати QR-код"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Зіскануйте QR-код"</string>
-  <string name="screen_qr_code_login_start_over_button">"Почати спочатку"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Сталася несподівана помилка. Будь ласка, спробуйте ще раз."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Чекаємо на ваш інший пристрій"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Постачальник облікового запису може попросити вас ввести код нижче для підтвердження входу."</string>
   <string name="screen_qr_code_login_verify_code_title">"Ваш код підтвердження"</string>
-  <string name="screen_server_confirmation_change_server">"Змінити провайдера облікового запису"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Приватний сервер для співробітників Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix — це відкрита мережа для безпечної, децентралізованої комунікації."</string>
-  <string name="screen_server_confirmation_message_register">"Тут розміщуватимуться ваші розмови — так само як у поштовій скриньці для зберігання своїх електронних листів."</string>
-  <string name="screen_server_confirmation_title_login">"Ви збираєтесь увійти в %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Вибір постачальника облікового запису"</string>
-  <string name="screen_server_confirmation_title_register">"Ви збираєтеся створити обліковий запис на %1$s"</string>
 </resources>

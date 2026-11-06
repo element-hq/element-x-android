@@ -29,6 +29,7 @@ data class GlobalSearchState(
     val currentTarget: GlobalSearchTarget,
     val results: AsyncData<GlobalSearchResults>,
     val history: AsyncData<ImmutableList<SearchHistoryListItem>>,
+    val showLearnMoreBottomSheet: Boolean,
     val eventSink: (GlobalSearchEvent) -> Unit
 )
 

@@ -45,7 +45,7 @@ allActions = []
 # Iterating on the config
 for entry in config["modules"]:
     # Create action for the default language
-    excludeRegex = regexToAlwaysExclude
+    excludeRegex = list(regexToAlwaysExclude)
     if "excludeRegex" in entry:
         excludeRegex += entry["excludeRegex"]
     action = baseAction | {

@@ -8,7 +8,7 @@
 
 package io.element.android.features.messages.impl.timeline.model
 
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.collections.immutable.ImmutableList
 
 data class TimelineItemReadReceipts(
@@ -16,6 +16,6 @@ data class TimelineItemReadReceipts(
 )
 
 data class ReadReceiptData(
-    val avatarData: AvatarData,
+    val userId: UserId,
     val formattedDate: String,
 )

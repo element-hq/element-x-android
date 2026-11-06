@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Αλλαγή παρόχου λογαριασμού"</string>
-  <string name="screen_account_provider_form_hint">"Διεύθυνση οικιακού διακομιστή"</string>
-  <string name="screen_account_provider_form_notice">"Εισήγαγε έναν όρο αναζήτησης ή μια διεύθυνση τομέα."</string>
-  <string name="screen_account_provider_form_subtitle">"Αναζήτησε μια εταιρεία, κοινότητα ή ιδιωτικό διακομιστή."</string>
-  <string name="screen_account_provider_form_title">"Βρες έναν πάροχο λογαριασμού"</string>
-  <string name="screen_account_provider_signin_subtitle">"Εδώ θα ζουν οι συνομιλίες σου - όπως θα χρησιμοποιούσες έναν πάροχο email για να διατηρήσεις τα email σου."</string>
+  <string name="error_account_already_logged_in">"Έχετε ήδη συνδεθεί σε αυτή τη συσκευή ως %1$s."</string>
+  <string name="error_account_creation_not_possible">"Ο πάροχος του λογαριασμού σας πρέπει να πραγματοποιήσει αναβάθμιση ώστε να υποστηρίζει την υπηρεσία Matrix Authentication Service και τη δημιουργία λογαριασμού."</string>
   <string name="screen_account_provider_signin_title">"Πρόκειται να συνδεθείς στο %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Εδώ θα ζουν οι συνομιλίες σου - όπως θα χρησιμοποιούσες έναν πάροχο email για να διατηρήσεις τα email σου."</string>
-  <string name="screen_account_provider_signup_title">"Πρόκειται να δημιουργήσεις έναν λογαριασμό στο %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Το Matrix.org είναι ένας μεγάλος, δωρεάν διακομιστής στο δημόσιο δίκτυο Matrix για ασφαλή, αποκεντρωμένη επικοινωνία, που διευθύνεται από το Ίδρυμα Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Άλλο"</string>
   <string name="screen_change_account_provider_subtitle">"Χρησιμοποίησε διαφορετικό πάροχο λογαριασμού, όπως τον δικό σου ιδιωτικό διακομιστή ή έναν εργασιακό λογαριασμό."</string>
   <string name="screen_change_account_provider_title">"Αλλαγή παρόχου λογαριασμού"</string>
@@ -35,7 +28,6 @@
   <string name="screen_login_error_unsupported_authentication">"Ο επιλεγμένος πάροχος λογαριασμού δεν υποστηρίζει σύνδεση με κωδικό πρόσβασης ή OAuth. Παρακαλούμε επικοινωνήστε με τον πάροχο του λογαριασμού σας ή επιλέξτε διαφορετικό."</string>
   <string name="screen_login_form_header">"Εισήγαγε τα στοιχεία σου"</string>
   <string name="screen_login_subtitle">"Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία."</string>
-  <string name="screen_login_title">"Καλωσόρισες ξανά!"</string>
   <string name="screen_login_title_with_homeserver">"Συνδέσου στο %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"Άνοιγμα του Element Classic"</string>
   <string name="screen_missing_key_backup_step_1">"Ανοίξτε το Element Classic στη συσκευή σας."</string>
@@ -52,7 +44,6 @@
   <string name="screen_onboarding_sign_up">"Δημιουργία λογαριασμού"</string>
   <string name="screen_onboarding_welcome_back">"Καλώς ήρθατε ξανά"</string>
   <string name="screen_onboarding_welcome_message">"Καλώς ήλθατε στο γρηγορότερο %1$s όλων των εποχών. Υπερτροφοδοτούμενο με ταχύτητα και απλότητα."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Καλώς ήρθες στο %1$s. Υπερφορτισμένο, για ταχύτητα και απλότητα."</string>
   <string name="screen_onboarding_welcome_title">"Μείνε στο element σου"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Εγκαθίδρυση ασφαλούς σύνδεσης"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Δεν ήταν δυνατή η πραγματοποίηση ασφαλούς σύνδεσης στη νέα συσκευή. Οι υπάρχουσες συσκευές σας εξακολουθούν να είναι ασφαλείς και δεν χρειάζεται να ανησυχείς για αυτές."</string>
@@ -94,16 +85,10 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Πρέπει να δώσεις άδεια για %1$s για να χρησιμοποιήσεις την κάμερα της συσκευής σου και να συνεχίσεις."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Επέτρεψε την πρόσβαση της κάμερας για σάρωση του κωδικού QR"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Σάρωση κωδικού QR"</string>
-  <string name="screen_qr_code_login_start_over_button">"Ξανά από την αρχή"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Παρουσιάστηκε ένα απροσδόκητο σφάλμα. Παρακαλώ προσπάθησε ξανά."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Αναμονή για την άλλη σου συσκευή"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Ο πάροχος λογαριασμού σου μπορεί να ζητήσει τον ακόλουθο κωδικό για να επαληθεύσει τη σύνδεση."</string>
   <string name="screen_qr_code_login_verify_code_title">"Ο κωδικός επαλήθευσής σου"</string>
-  <string name="screen_server_confirmation_change_server">"Αλλαγή παρόχου λογαριασμού"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Ένας ιδιωτικός διακομιστής για υπαλλήλους του Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία."</string>
-  <string name="screen_server_confirmation_message_register">"Εδώ θα ζουν οι συνομιλίες σου - όπως θα χρησιμοποιούσες έναν πάροχο email για να διατηρήσεις τα email σου."</string>
-  <string name="screen_server_confirmation_title_login">"Πρόκειται να συνδεθείς στο %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Επέλεξε πάροχο λογαριασμού"</string>
-  <string name="screen_server_confirmation_title_register">"Πρόκειται να δημιουργήσεις έναν λογαριασμό στο %1$s"</string>
 </resources>

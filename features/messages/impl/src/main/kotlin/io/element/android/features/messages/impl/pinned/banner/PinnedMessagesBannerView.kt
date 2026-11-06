@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -58,7 +59,6 @@ import io.element.android.libraries.designsystem.theme.pinnedMessageBannerBorder
 import io.element.android.libraries.designsystem.theme.pinnedMessageBannerIndicator
 import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
 import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 
@@ -143,7 +143,7 @@ private fun ViewAllButton(
     modifier: Modifier = Modifier,
 ) {
     val text = if (state is PinnedMessagesBannerState.Loaded) {
-        stringResource(id = CommonStrings.screen_room_pinned_banner_view_all_button_title)
+        stringResource(id = R.string.screen_room_pinned_banner_view_all_button_title)
     } else {
         ""
     }
@@ -237,8 +237,8 @@ private fun PinnedMessageItem(
     message: AnnotatedString?,
     modifier: Modifier = Modifier,
 ) {
-    val countMessage = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator, index + 1, totalCount)
-    val fullCountMessage = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator_description, countMessage)
+    val countMessage = stringResource(id = R.string.screen_room_pinned_banner_indicator, index + 1, totalCount)
+    val fullCountMessage = stringResource(id = R.string.screen_room_pinned_banner_indicator_description, countMessage)
     Column(modifier = modifier) {
         AnimatedVisibility(totalCount > 1) {
             Text(

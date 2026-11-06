@@ -97,11 +97,13 @@ class IncomingVerificationPresenterTest {
     fun `present - nominal case - incoming verification successful`() = runTest {
         val acknowledgeVerificationRequestLambda = lambdaRecorder<VerificationRequest.Incoming, Unit> { _ -> }
         val acceptVerificationRequestLambda = lambdaRecorder<Unit> { }
+        val startSasVerificationLambda = lambdaRecorder<Unit> { }
         val approveVerificationLambda = lambdaRecorder<Unit> { }
         val resetLambda = lambdaRecorder<Boolean, Unit> { }
         val fakeSessionVerificationService = FakeSessionVerificationService(
             acknowledgeVerificationRequestLambda = acknowledgeVerificationRequestLambda,
             acceptVerificationRequestLambda = acceptVerificationRequestLambda,
+            startSasVerificationLambda = startSasVerificationLambda,
             approveVerificationLambda = approveVerificationLambda,
             resetLambda = resetLambda,
         )
@@ -133,6 +135,7 @@ class IncomingVerificationPresenterTest {
             advanceTimeBy(1.seconds)
 
             acceptVerificationRequestLambda.assertions().isCalledOnce()
+            startSasVerificationLambda.assertions().isCalledOnce()
             // Remote sent the data
             fakeSessionVerificationService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)
             fakeSessionVerificationService.emitVerificationFlowState(VerificationFlowState.DidStartSasVerification)
@@ -167,11 +170,13 @@ class IncomingVerificationPresenterTest {
     fun `present - emoji not matching case - incoming verification failure`() = runTest {
         val acknowledgeVerificationRequestLambda = lambdaRecorder<VerificationRequest.Incoming, Unit> { _ -> }
         val acceptVerificationRequestLambda = lambdaRecorder<Unit> { }
+        val startSasVerificationLambda = lambdaRecorder<Unit> { }
         val declineVerificationLambda = lambdaRecorder<Unit> { }
         val resetLambda = lambdaRecorder<Boolean, Unit> { }
         val fakeSessionVerificationService = FakeSessionVerificationService(
             acknowledgeVerificationRequestLambda = acknowledgeVerificationRequestLambda,
             acceptVerificationRequestLambda = acceptVerificationRequestLambda,
+            startSasVerificationLambda = startSasVerificationLambda,
             declineVerificationLambda = declineVerificationLambda,
             resetLambda = resetLambda,
         )
@@ -203,6 +208,7 @@ class IncomingVerificationPresenterTest {
             advanceTimeBy(1.seconds)
 
             acceptVerificationRequestLambda.assertions().isCalledOnce()
+            startSasVerificationLambda.assertions().isCalledOnce()
             // Remote sent the data
             fakeSessionVerificationService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)
             fakeSessionVerificationService.emitVerificationFlowState(VerificationFlowState.DidStartSasVerification)
@@ -269,11 +275,13 @@ class IncomingVerificationPresenterTest {
     fun `present - user goes back when comparing emoji - incoming verification failure`() = runTest {
         val acknowledgeVerificationRequestLambda = lambdaRecorder<VerificationRequest.Incoming, Unit> { _ -> }
         val acceptVerificationRequestLambda = lambdaRecorder<Unit> { }
+        val startSasVerificationLambda = lambdaRecorder<Unit> { }
         val declineVerificationLambda = lambdaRecorder<Unit> { }
         val resetLambda = lambdaRecorder<Boolean, Unit> { }
         val fakeSessionVerificationService = FakeSessionVerificationService(
             acknowledgeVerificationRequestLambda = acknowledgeVerificationRequestLambda,
             acceptVerificationRequestLambda = acceptVerificationRequestLambda,
+            startSasVerificationLambda = startSasVerificationLambda,
             declineVerificationLambda = declineVerificationLambda,
             resetLambda = resetLambda,
         )
@@ -305,6 +313,7 @@ class IncomingVerificationPresenterTest {
             advanceTimeBy(1.seconds)
 
             acceptVerificationRequestLambda.assertions().isCalledOnce()
+            startSasVerificationLambda.assertions().isCalledOnce()
             // Remote sent the data
             fakeSessionVerificationService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)
             fakeSessionVerificationService.emitVerificationFlowState(VerificationFlowState.DidStartSasVerification)

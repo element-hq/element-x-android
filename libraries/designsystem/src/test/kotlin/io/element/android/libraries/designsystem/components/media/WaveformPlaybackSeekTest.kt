@@ -93,6 +93,43 @@ class WaveformPlaybackSeekTest {
         assertThat(seekProgressFromPointerX(x = 100f, waveformWidthPx = 100f)).isEqualTo(1f)
     }
 
+    @Test
+    fun `cursor is on the first line at the start`() {
+        assertThat(cursorOffsetPx(progress = 0f, waveformWidthPx = 100f, lineWidthPx = 2f, linePaddingPx = 3f)).isEqualTo(0f)
+    }
+
+    @Test
+    fun `cursor right edge is aligned with the last line at the end`() {
+        val offset = cursorOffsetPx(progress = 1f, waveformWidthPx = 100f, lineWidthPx = 2f, linePaddingPx = 3f)
+        // The last line ends at waveformWidthPx - linePaddingPx.
+        assertThat(offset + 2f).isEqualTo(97f)
+    }
+
+    @Test
+    fun `cursor offset clamps progress outside of 0 to 1`() {
+        assertThat(cursorOffsetPx(progress = -0.5f, waveformWidthPx = 100f, lineWidthPx = 2f, linePaddingPx = 3f)).isEqualTo(0f)
+        assertThat(cursorOffsetPx(progress = 1.5f, waveformWidthPx = 100f, lineWidthPx = 2f, linePaddingPx = 3f)).isEqualTo(95f)
+    }
+
+    @Test
+    fun `cursor offset is zero when the waveform is narrower than a line`() {
+        assertThat(cursorOffsetPx(progress = 0.5f, waveformWidthPx = 1f, lineWidthPx = 2f, linePaddingPx = 3f)).isEqualTo(0f)
+        assertThat(seekProgressFromPointerX(x = 1f, waveformWidthPx = 1f, lineWidthPx = 2f, linePaddingPx = 3f)).isEqualTo(0f)
+    }
+
+    @Test
+    fun `seeking at the cursor centre gives back the cursor progress`() {
+        val offset = cursorOffsetPx(progress = 0.4f, waveformWidthPx = 100f, lineWidthPx = 2f, linePaddingPx = 3f)
+        val progress = seekProgressFromPointerX(x = offset + 1f, waveformWidthPx = 100f, lineWidthPx = 2f, linePaddingPx = 3f)
+        assertThat(progress).isWithin(0.0001f).of(0.4f)
+    }
+
+    @Test
+    fun `seeking near the edges of the waveform is clamped`() {
+        assertThat(seekProgressFromPointerX(x = 0f, waveformWidthPx = 100f, lineWidthPx = 2f, linePaddingPx = 3f)).isEqualTo(0f)
+        assertThat(seekProgressFromPointerX(x = 100f, waveformWidthPx = 100f, lineWidthPx = 2f, linePaddingPx = 3f)).isEqualTo(1f)
+    }
+
     private fun handleEvent(
         action: Int,
         x: Float = 0f,

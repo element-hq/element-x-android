@@ -89,9 +89,11 @@ class VoiceMessagePresenter(
                 }.milliseconds.formatShort()
             }
         }
+        // Show the cursor as soon as there is a progress drawn on the waveform: once playback has started (including when it
+        // has ended), or after a seek before the first playback.
         val showCursor by remember {
             derivedStateOf {
-                !play.value.isUninitialized() && !playerState.isEnded
+                !play.value.isUninitialized() || playerState.currentPosition > 0
             }
         }
 

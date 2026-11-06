@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"Zugriff erlauben"</string>
   <string name="dialog_permission_camera">"Damit die Anwendung die Kamera verwenden kann, erteile bitte die Berechtigung in den Systemeinstellungen."</string>
   <string name="dialog_permission_generic">"Bitte erteile die Berechtigung in den Systemeinstellungen."</string>
   <string name="dialog_permission_microphone">"Damit die App das Mikrofon nutzen kann, gib bitte die Berechtigung in den Systemeinstellungen frei."</string>
   <string name="dialog_permission_notification">"Damit die App Benachrichtigungen anzeigen kann, gib bitte die Berechtigung in den Systemeinstellungen frei."</string>
+  <string name="screen_local_network_opt_in_subtitle">"Dein Homeserver befindet sich in deinem lokalen Netzwerk. Um eine Verbindung herzustellen, benötigt %1$s die Berechtigung, auf Geräte in diesem Netzwerk zuzugreifen."</string>
+  <string name="screen_local_network_opt_in_title">"Zugriff auf das lokale Netzwerk zulassen"</string>
 </resources>

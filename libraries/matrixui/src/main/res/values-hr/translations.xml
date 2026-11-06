@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"Preuzimanje nije dostupno."</string>
+  <string name="content_scanner_not_found_title">"Datoteka nije pronađena"</string>
+  <string name="error_room_address_already_exists">"Ova adresa sobe već postoji. Pokušajte urediti polje za adresu sobe ili promijeniti naziv sobe"</string>
+  <string name="error_room_address_invalid_symbols">"Neki znakovi nisu dopušteni. Podržana su samo slova, brojke i simboli ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Pošalji pozivnicu"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Želite li započeti razgovor s korisnikom %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Želite li poslati pozivnicu?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Trenutno nemate razgovora s ovom osobom. Potvrdite pozivanje prije nego što nastavite."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Želite li započeti razgovor s ovim novim kontaktom?"</string>
   <string name="screen_invites_invited_you">"Pozvao vas je korisnik %1$s (%2$s)"</string>
+  <string name="screen_space_list_description">"Prostori koje ste stvorili ili kojima ste se pridružili."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Prostori"</string>
 </resources>

@@ -45,6 +45,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -321,7 +322,8 @@ private fun TimelinePrefetchingHelper(
     LaunchedEffect(Unit) {
         // We're using snapshot flows for these because using `LaunchedEffect` with `derivedState` doesn't seem to be responsive enough
         val firstVisibleItemIndexFlow = snapshotFlow { lazyListState.firstVisibleItemIndex }
-        val layoutInfoFlow = snapshotFlow { lazyListState.layoutInfo }
+        val visibleItemsCountFlow = snapshotFlow { lazyListState.layoutInfo.visibleItemsInfo.size }
+        val totalItemsCountFlow = snapshotFlow { lazyListState.layoutInfo.totalItemsCount }
         val isScrollingFlow = snapshotFlow { lazyListState.isScrollInProgress }
             // This value changes too frequently, so we debounce it to avoid unnecessary prefetching. It's the equivalent of a conditional 'throttleLatest'
             .conflate()
@@ -330,13 +332,17 @@ private fun TimelinePrefetchingHelper(
                 if (isScrolling) delay(100.milliseconds)
             }
 
-        val isCloseToStartOfLoadedTimelineFlow = combine(layoutInfoFlow, firstVisibleItemIndexFlow) { layoutInfo, firstVisibleItemIndex ->
-            firstVisibleItemIndex + layoutInfo.visibleItemsInfo.size >= layoutInfo.totalItemsCount - 40
+        val isCloseToStartOfLoadedTimelineFlow = combine(
+            visibleItemsCountFlow,
+            totalItemsCountFlow,
+            firstVisibleItemIndexFlow,
+        ) { visibleItemsCount, totalItemsCount, firstVisibleItemIndex ->
+            firstVisibleItemIndex + visibleItemsCount >= totalItemsCount - 40
         }
 
         // If we have no timeline items, we need to back paginate to load some messages. This usually happens on all timelines except for live ones.
         // This automatic pagination was previously done by the SDK, and we received a `Reset` update, but now we need to do it ourselves.
-        val isEmptyTimelineFlow = layoutInfoFlow.map { it.totalItemsCount == 0 }
+        val isEmptyTimelineFlow = totalItemsCountFlow.map { it == 0 }
 
         combine(
             isCloseToStartOfLoadedTimelineFlow.distinctUntilChanged(),
@@ -524,6 +530,8 @@ private fun JumpToPositionButton(
                     .clip(CircleShape)
                     .border(1.dp, ElementTheme.colors.borderDisabled, CircleShape)
                     .combinedClickable(
+                        interactionSource = null,
+                        indication = ripple(focusRingShape = CircleShape),
                         onClick = onClick,
                         onLongClick = { menuExpanded = true },
                         onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
@@ -571,7 +579,10 @@ private fun JumpToPositionButton(
                                     .clip(RoundedCornerShape(8.dp))
                                     .background(ElementTheme.colors.bgCanvasDefaultLevel1)
                                     .border(1.dp, ElementTheme.colors.borderDisabled, RoundedCornerShape(8.dp))
-                                    .clickable {
+                                    .clickable(
+                                        interactionSource = null,
+                                        indication = ripple(focusRingShape = RoundedCornerShape(8.dp)),
+                                    ) {
                                         menuExpanded = false
                                         onMarkAsRead()
                                     }

@@ -65,6 +65,49 @@ class DefaultBaseRoomGroupMessageCreatorTest : RobolectricTest() {
     }
 
     @Test
+    fun `test createRoomMessage for a room joined by another account shows the account info`() = runTest {
+        val matrixUser = aMatrixUser()
+        val sut = createRoomGroupMessageCreator(
+            roomSharedWithOtherAccountChecker = FakeRoomSharedWithOtherAccountChecker(
+                isJoinedByOtherAccountResult = { sessionId, roomId ->
+                    assertThat(sessionId).isEqualTo(matrixUser.userId)
+                    assertThat(roomId).isEqualTo(A_ROOM_ID)
+                    true
+                },
+            ),
+        )
+        val result = sut.createRoomMessage(
+            notificationAccountParams = aNotificationAccountParams(user = matrixUser, showSessionId = true),
+            events = listOf(aNotifiableMessageEvent(timestamp = A_TIMESTAMP)),
+            roomId = A_ROOM_ID,
+            imageLoader = FakeImageLoader(),
+            existingNotification = null,
+            threadId = null,
+        )
+        assertThat(result.extras.getCharSequence(NotificationCompat.EXTRA_SUB_TEXT)?.toString()).isEqualTo(matrixUser.userId.value)
+        assertThat(NotificationCompat.getShortcutId(result)).isNull()
+    }
+
+    @Test
+    fun `test createRoomMessage for a room not joined by another account does not show the account info`() = runTest {
+        val sut = createRoomGroupMessageCreator(
+            roomSharedWithOtherAccountChecker = FakeRoomSharedWithOtherAccountChecker(
+                isJoinedByOtherAccountResult = { _, _ -> false },
+            ),
+        )
+        val result = sut.createRoomMessage(
+            notificationAccountParams = aNotificationAccountParams(showSessionId = true),
+            events = listOf(aNotifiableMessageEvent(timestamp = A_TIMESTAMP)),
+            roomId = A_ROOM_ID,
+            imageLoader = FakeImageLoader(),
+            existingNotification = null,
+            threadId = null,
+        )
+        assertThat(result.extras.getCharSequence(NotificationCompat.EXTRA_SUB_TEXT)).isNull()
+        assertThat(NotificationCompat.getShortcutId(result)).isNotNull()
+    }
+
+    @Test
     fun `test createRoomMessage with one noisy Event`() = runTest {
         val sut = createRoomGroupMessageCreator(
             enterpriseService = FakeEnterpriseService(
@@ -233,6 +276,7 @@ class DefaultBaseRoomGroupMessageCreatorTest : RobolectricTest() {
 fun createRoomGroupMessageCreator(
     sdkIntProvider: BuildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(Build.VERSION_CODES.O),
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
+    roomSharedWithOtherAccountChecker: RoomSharedWithOtherAccountChecker = FakeRoomSharedWithOtherAccountChecker(),
 ): RoomGroupMessageCreator {
     val context = RuntimeEnvironment.getApplication() as Context
     val bitmapLoader = DefaultNotificationBitmapLoader(
@@ -246,6 +290,7 @@ fun createRoomGroupMessageCreator(
             enterpriseService = enterpriseService,
         ),
         bitmapLoader = bitmapLoader,
-        stringProvider = AndroidStringProvider(context.resources)
+        stringProvider = AndroidStringProvider(context.resources),
+        roomSharedWithOtherAccountChecker = roomSharedWithOtherAccountChecker,
     )
 }

@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s 无法加载地图，请稍后再试。"</string>
+  <string name="error_failed_locating_user">"%1$s 无法访问你的位置，请稍后再试。"</string>
+  <string name="error_location_service_disabled_android">"请开启 GPS 以使用基于位置的功能。"</string>
+  <string name="error_missing_location_auth_android">"%1$s 无权访问你的位置。你可以在“设置”中启用位置权限。"</string>
+  <string name="error_missing_location_rationale_android">"%1$s 无权访问你的位置。在下方启用访问权限。"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"实时位置共享"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"位置共享正在进行"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s 实时位置"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"目前无人分享其位置"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"正在共享实时位置"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="other">"%1$d 个人"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"在地图上"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"你的实时位置历史将存储在房间中，并于会话结束后对其他成员可见。"</string>
   <string name="screen_share_location_live_location_duration_picker_title">"选择共享实时位置的时长。"</string>
   <string name="screen_share_location_live_location_missing_permissions">"你无权在此房内共享实时位置。"</string>
+  <string name="screen_share_location_title">"共享位置"</string>
+  <string name="screen_share_my_location_action">"共享我的位置"</string>
+  <string name="screen_share_open_apple_maps">"在 Apple Maps 中打开"</string>
+  <string name="screen_share_open_google_maps">"在 Google Maps 中打开"</string>
+  <string name="screen_share_open_osm_maps">"在 OpenStreetMap 中打开"</string>
+  <string name="screen_share_this_location_action">"分享选定的位置"</string>
+  <string name="screen_sharing_location_option_sheet_title">"共享选项"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"已共享 %1$s"</string>
+  <string name="screen_static_location_sheet_title">"在地图上"</string>
+  <string name="screen_view_location_title">"位置"</string>
 </resources>

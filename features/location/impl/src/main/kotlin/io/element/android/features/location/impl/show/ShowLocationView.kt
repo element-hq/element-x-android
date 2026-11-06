@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
+import io.element.android.features.location.impl.R
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
@@ -51,7 +52,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.maplibre.compose.camera.CameraAnimation
@@ -190,7 +190,7 @@ private fun ShowLocationScaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                titleStr = stringResource(CommonStrings.screen_view_location_title),
+                titleStr = stringResource(R.string.screen_view_location_title),
                 navigationIcon = {
                     BackButton(
                         onClick = onBackClick,
@@ -205,7 +205,7 @@ private fun ShowLocationScaffold(
             }
             if (state.locationShares.isEmpty()) {
                 Text(
-                    text = stringResource(CommonStrings.screen_live_location_sheet_nobody_sharing),
+                    text = stringResource(R.string.screen_live_location_sheet_nobody_sharing),
                     style = ElementTheme.typography.fontBodyLgMedium,
                     color = ElementTheme.colors.textPrimary,
                     modifier = Modifier
@@ -215,7 +215,7 @@ private fun ShowLocationScaffold(
                 )
             } else {
                 Text(
-                    text = stringResource(CommonStrings.screen_static_location_sheet_title),
+                    text = stringResource(R.string.screen_static_location_sheet_title),
                     style = ElementTheme.typography.fontBodyLgMedium,
                     color = ElementTheme.colors.textPrimary,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),

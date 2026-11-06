@@ -29,23 +29,49 @@ jobs:
           project-url: https://github.com/orgs/element-hq/projects/91
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
           labeled: X-Needs-Info
-      - name: Print itemId
-        run: echo ${STEPS_ADDITEM_OUTPUTS_ITEMID}
-        env:
-          STEPS_ADDITEM_OUTPUTS_ITEMID: ${{ steps.addItem.outputs.itemId }}
-      - uses: kalgurn/update-project-item-status@31e54df46a2cdaef4f85c31ac839fbcd2fd7c3a2 # 0.0.3
+      - name: Set the status of the item to "Needs info"
         if: ${{ steps.addItem.outputs.itemId }}
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          ITEM_ID: ${{ steps.addItem.outputs.itemId }}
         with:
-          project-url: https://github.com/orgs/element-hq/projects/91
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
-          item-id: ${{ steps.addItem.outputs.itemId }}
-          status: "Needs info"
+          script: |
+            const { organization: { projectV2: project } } = await github.graphql(`
+              query {
+                organization(login: "element-hq") {
+                  projectV2(number: 91) {
+                    id
+                    field(name: "Status") {
+                      ... on ProjectV2SingleSelectField { id options { id name } }
+                    }
+                  }
+                }
+              }`);
+            const option = project.field?.options.find(option => option.name === "Needs info");
+            if (!option) {
+              core.setFailed('Option "Needs info" of the "Status" field not found in the project.');
+              return;
+            }
+            await github.graphql(`
+              mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                updateProjectV2ItemFieldValue(input: {
+                  projectId: $projectId, itemId: $itemId, fieldId: $fieldId, value: { singleSelectOptionId: $optionId }
+                }) {
+                  projectV2Item { id }
+                }
+              }`, {
+              projectId: project.id,
+              itemId: process.env.ITEM_ID,
+              fieldId: project.field.id,
+              optionId: option.id,
+            });
 
   ex_plorers:
     name: Add labelled issues to X-Plorer project
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'Team: Element X Feature')
+      github.event.label.name == 'Team: Element X Feature'
     steps:
       - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
@@ -56,7 +82,7 @@ jobs:
     name: Add labelled issues to Verticals Feature project
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'Team: Verticals Feature')
+      github.event.label.name == 'Team: Verticals Feature'
     steps:
       - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
@@ -67,8 +93,8 @@ jobs:
     name: Add labelled issues to QA project
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'Team: QA') ||
-      contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
+      github.event.label.name == 'Team: QA' ||
+      github.event.label.name == 'X-Needs-Signoff'
     steps:
       - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:
@@ -79,7 +105,7 @@ jobs:
     name: Add labelled issues to signoff project
     runs-on: ubuntu-latest
     if: >
-      contains(github.event.issue.labels.*.name, 'X-Needs-Signoff')
+      github.event.label.name == 'X-Needs-Signoff'
     steps:
       - uses: actions/add-to-project@5afcf98fcd03f1c2f92c3c83f58ae24323cc57fd # v2
         with:

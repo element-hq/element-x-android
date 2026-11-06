@@ -213,10 +213,10 @@ private fun FullScreenPermissionNotGrantedItem(
         ListItem(
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VoiceCallSolid())),
             content = {
-                Text(stringResource(id = R.string.full_screen_intent_banner_title))
+                Text(stringResource(id = R.string.full_screen_intent_banner_title_android))
             },
             supportingContent = {
-                Text(stringResource(R.string.full_screen_intent_banner_message))
+                Text(stringResource(R.string.full_screen_intent_banner_message_android))
             },
             onClick = onClick,
         )

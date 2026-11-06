@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.matrix.api.media.MediaSource
 
 data class TimelineItemStickerContent(
@@ -16,6 +17,7 @@ data class TimelineItemStickerContent(
     override val caption: String?,
     override val formattedCaption: CharSequence?,
     override val htmlCaption: String? = null,
+    override val captionTree: DocumentNode? = null,
     override val isEdited: Boolean,
     override val mediaSource: MediaSource,
     val thumbnailSource: MediaSource?,

@@ -14,19 +14,24 @@ import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
 class NotJoinedRustRoom(
     private val sessionId: SessionId,
     override val localRoom: RustBaseRoom?,
     override val previewInfo: RoomPreviewInfo,
+    private val dispatcher: CoroutineDispatcher,
 ) : NotJoinedRoom {
-    override suspend fun membershipDetails(): Result<RoomMembershipDetails?> = runCatchingExceptions {
-        val room = localRoom?.innerRoom ?: return@runCatchingExceptions null
-        val (ownMember, senderInfo) = room.memberWithSenderInfo(sessionId.value)
-        RoomMembershipDetails(
-            currentUserMember = RoomMemberMapper.map(ownMember),
-            senderMember = senderInfo?.let { RoomMemberMapper.map(it) },
-        )
+    override suspend fun membershipDetails(): Result<RoomMembershipDetails?> = withContext(dispatcher) {
+        runCatchingExceptions {
+            val room = localRoom?.innerRoom ?: return@runCatchingExceptions null
+            val (ownMember, senderInfo) = room.memberWithSenderInfo(sessionId.value)
+            RoomMembershipDetails(
+                currentUserMember = RoomMemberMapper.map(ownMember),
+                senderMember = senderInfo?.let { RoomMemberMapper.map(it) },
+            )
+        }
     }
 
     override fun close() {

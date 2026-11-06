@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.sync.FakeSyncService
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -158,12 +158,12 @@ class LoggedInEventProcessorTest {
         val clearReadNotificationsLambda = lambdaRecorder { _: SessionId -> }
         val snackbarDispatcher = SnackbarDispatcher()
         val notificationCleaner = FakeNotificationCleaner(clearReadRoomsNotificationsLambda = clearReadNotificationsLambda)
-        val syncService = FakeSyncService()
+        val matrixClient = FakeMatrixClient()
 
         val loggedInEventProcessor = createLoggedInEventProcessor(
             snackbarDispatcher = snackbarDispatcher,
             notificationCleaner = notificationCleaner,
-            syncService = syncService,
+            matrixClient = matrixClient,
         )
 
         loggedInEventProcessor.observeEvents(backgroundScope)
@@ -171,7 +171,7 @@ class LoggedInEventProcessorTest {
         testScheduler.runCurrent()
 
         // Simulate a sync heartbeat
-        syncService.emitHeartBeat()
+        matrixClient.givenTotalUnreadCount(10)
 
         testScheduler.runCurrent()
 
@@ -182,14 +182,12 @@ class LoggedInEventProcessorTest {
     private fun TestScope.createLoggedInEventProcessor(
         snackbarDispatcher: SnackbarDispatcher,
         roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
-        sessionId: SessionId = A_SESSION_ID,
-        syncService: FakeSyncService = FakeSyncService(),
+        matrixClient: FakeMatrixClient = FakeMatrixClient(),
         notificationCleaner: FakeNotificationCleaner = FakeNotificationCleaner(),
     ) = LoggedInEventProcessor(
         snackbarDispatcher = snackbarDispatcher,
         roomMembershipObserver = roomMembershipObserver,
-        sessionId = sessionId,
-        syncService = syncService,
+        matrixClient = matrixClient,
         notificationCleaner = notificationCleaner,
         dispatchers = testCoroutineDispatchers(),
     )

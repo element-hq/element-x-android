@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen."</string>
-  <string name="full_screen_intent_banner_title">"Vylepšete si zážitek z volání"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Vyberte výchozí kvalitu nahrávaných videí."</string>
+  <string name="dialog_default_video_quality_selector_title">"Kvalita nahrávání videa"</string>
+  <string name="full_screen_intent_banner_message_android">"Abyste nikdy nezmeškali důležitý hovor, změňte nastavení tak, abyste povolili oznámení na celé obrazovce, když je telefon uzamčen."</string>
+  <string name="full_screen_intent_banner_title_android">"Vylepšete si zážitek z volání"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Vyberte, jak chcete přijímat oznámení"</string>
-  <string name="screen_advanced_settings_developer_mode">"Vývojářský režim"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Povolením získáte přístup k funkcím a funkcím pro vývojáře."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Vlastní URL pro Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Nastavte vlastní URL pro Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Neplatné URL, ujistěte se, že jste uvedli protokol (http/https) a správnou adresu."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Skrýt avatary v žádostech o pozvání do místnosti"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Skrýt náhledy médií na časové ose"</string>
   <string name="screen_advanced_settings_labs">"Experimentální funkce"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Vzdálenost, kterou musíte urazit, aby se spustila aktualizace."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Ujistěte se, že je pro tuto aplikaci povolena možnost \"Přesná poloha\". Chcete-li změnit oprávnění, přejděte do %1$s."</string>
@@ -22,7 +21,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Rychlejší nahrávání fotografií a videí a snížení spotřeby dat"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimalizace kvality médií"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderování a bezpečnost"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Automaticky optimalizovat obrázky pro rychlejší nahrávání a menší velikosti souborů."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimalizace kvality nahrávání obrázků"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Klepnutím sem provedete změnu."</string>
@@ -31,9 +29,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standardní (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Kvalita nahrávání videa"</string>
   <string name="screen_advanced_settings_push_provider_android">"Poskytovatel push oznámení"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Vypněte editor formátovaného textu pro ruční zadání Markdown."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Potvrzení o přečtení"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Pokud je vypnuto, potvrzení o přečtení se nikomu neodesílají. Stále budete dostávat potvrzení o přečtení od ostatních uživatelů."</string>
   <string name="screen_advanced_settings_share_presence">"Sdílejte přítomnost"</string>
   <string name="screen_advanced_settings_share_presence_description">"Pokud je tato funkce vypnutá, nebudete moci odesílat ani přijímat potvrzení o přečtení ani upozornění o psaní."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Vždy skrýt"</string>
@@ -104,6 +99,7 @@ Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systémová nastavení"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systémová oznámení byla vypnuta"</string>
   <string name="screen_notification_settings_title">"Oznámení"</string>
+  <string name="settings_version_number">"Verze: %1$s (%2$s)"</string>
   <string name="theme_black">"Černý"</string>
   <string name="theme_dark">"Tmavé"</string>
   <string name="theme_light">"Světlý"</string>

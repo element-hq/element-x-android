@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="invite_friends_rich_title">"🔐️ Присоединяйтесь ко мне в %1$s"</string>
+  <string name="invite_friends_text">"Привет, давай поболтаем в %1$s: %2$s"</string>
+</resources>

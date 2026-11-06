@@ -13,11 +13,8 @@
     <item quantity="one">"%d notificació"</item>
     <item quantity="other">"%d notificacions"</item>
   </plurals>
-  <string name="notification_fallback_content">"Tens missatges nous."</string>
   <string name="notification_incoming_call">"📹 Trucada entrant"</string>
   <string name="notification_inline_reply_failed">"** No s\'ha pogut enviar. Obre la sala"</string>
-  <string name="notification_invitation_action_join">"Uneix-te"</string>
-  <string name="notification_invitation_action_reject">"Rebutja"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d invitació"</item>
     <item quantity="other">"%d invitacions"</item>
@@ -25,7 +22,6 @@
   <string name="notification_invite_body">"T\'ha convidat a xatejar"</string>
   <string name="notification_invite_body_with_sender">"%1$s t\'ha convidat a xatejar"</string>
   <string name="notification_mentioned_you_body">"T\'ha mencionat: %1$s"</string>
-  <string name="notification_new_messages">"Missatges nous"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d missatge nou"</item>
     <item quantity="other">"%d missatges nous"</item>

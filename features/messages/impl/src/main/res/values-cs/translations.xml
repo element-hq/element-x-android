@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Nelze dešifrovat"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Šifrováno nezabezpečeným zařízením"</string>
+  <string name="common_unable_to_decrypt_no_access">"Nemáte přístup k této zprávě"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Ověřená digitální identita odesílatele byla resetována"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Odesílatel události se neshoduje s vlastníkem zařízení, které ji odeslalo."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Pravost této šifrované zprávy nelze na tomto zařízení zaručit."</string>
   <string name="crypto_event_authenticity_previously_verified">"Zašifrováno dříve ověřeným uživatelem."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Šifrováno neznámým nebo smazaným zařízením."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Šifrováno zařízením, které nebylo ověřeno jeho vlastníkem."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Šifrováno neověřeným uživatelem."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Identita uživatele %1$s %2$s byla resetována. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Identita uživatele %1$s %2$s byla resetována. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Odkaz %1$s vás přesměruje na jinou stránku %2$s
+
+Opravdu chcete pokračovat?"</string>
+  <string name="dialog_confirm_link_title">"Zkontrolujte tento odkaz"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Maximální povolená velikost souboru je: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Soubor je pro nahrání příliš velký."</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Maximální povolená velikost souboru je: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Vyberte kvalitu videa, které chcete nahrát."</string>
+  <string name="error_failed_loading_messages">"Načítání zpráv se nezdařilo"</string>
+  <string name="error_failed_uploading_voice_message">"Nepodařilo se nahrát hlasovou zprávu."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s nemá oprávnění k přístupu k mikrofonu. Povolte přístup k nahrávání hlasové zprávy."</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Otočit obrázek vodorovně"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Otočeno vodorovně"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Originál"</string>
@@ -31,10 +51,26 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimalizace kvality obrazu"</string>
   <string name="screen_media_upload_preview_processing">"Probíhá zpracování…"</string>
   <string name="screen_media_upload_preview_title">"Přidat média"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Přidržte zprávu a vyberte „%1$s“, kterou chcete zahrnout sem."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Připněte důležité zprávy, aby je bylo možné snadno najít"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Připnutá zpráva"</item>
+    <item quantity="few">"%1$d Připnuté zprávy"</item>
+    <item quantity="other">"%1$d Připnutých zpráv"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Připnuté zprávy"</string>
   <string name="screen_report_content_block_user">"Zablokovat uživatele"</string>
   <string name="screen_report_content_block_user_hint">"Zaškrtněte, pokud chcete skrýt všechny aktuální a budoucí zprávy od tohoto uživatele"</string>
   <string name="screen_report_content_explanation">"Tato zpráva bude nahlášena vašemu poskytovateli účtu. Nebude moci číst žádné šifrované zprávy."</string>
   <string name="screen_report_content_hint">"Důvod nahlášení tohoto obsahu"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Zrušit ověření a odeslat"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Ověření můžete zrušit a přesto odeslat tuto zprávu, nebo můžete prozatím zrušit a zkusit to znovu později po opětovném ověření %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Vaše zpráva nebyla odeslána, protože byla resetována ověřená digitální identita %1$s"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Přesto odeslat zprávu"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s používá jedno nebo více neověřených zařízení. Zprávu můžete přesto odeslat, nebo můžete prozatím zrušit a zkusit to znovu později poté, co %2$s ověří všechna svá zařízení."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedno nebo více vašich zařízení není ověřeno. Zprávu můžete přesto odeslat, nebo ji můžete prozatím zrušit a zkusit to znovu později, až ověříte všechna svá zařízení."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Vaše zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení"</string>
   <string name="screen_room_attachment_source_camera">"Fotoaparát"</string>
   <string name="screen_room_attachment_source_camera_photo">"Vyfotit"</string>
   <string name="screen_room_attachment_source_camera_video">"Natočit video"</string>
@@ -49,6 +85,11 @@
   <string name="screen_room_invite_again_alert_title">"V tomto chatu jste sami"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Informujte celou místnost"</string>
   <string name="screen_room_mentions_at_room_title">"Všichni"</string>
+  <string name="screen_room_permalink_same_room_android">"Již si prohlížíte tuto místnost!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Načítání zprávy…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Zobrazit vše"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Odeslat znovu"</string>
   <string name="screen_room_retry_send_menu_title">"Vaši zprávu se nepodařilo odeslat"</string>
   <string name="screen_room_timeline_add_reaction">"Přidat emoji"</string>
@@ -93,4 +134,12 @@
     <item quantity="other">"%1$s píše"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s a %2$s"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Zpráva nebyla odeslána, protože byla resetována ověřená digitální identita %1$s."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historické zprávy nejsou na tomto zařízení k dispozici"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Pro přístup k historickým zprávám musíte toto zařízení ověřit"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nemáte přístup k této zprávě"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Nelze dešifrovat zprávu"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Tato zpráva byla zablokována buď proto, že jste neověřili své zařízení, nebo proto, že odesílatel musí ověřit vaši digitální identitu."</string>
 </resources>

@@ -11,6 +11,7 @@ package io.element.android.features.messages.impl.timeline
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -21,6 +22,12 @@ class TimelineItemIndexer {
     // This is a latch to wait for the first process call
     private val firstProcessLatch = CompletableDeferred<Unit>()
     private val timelineEventsIndexes = mutableMapOf<EventId, Int>()
+
+    /** Identifiers of every item seen by the last [process] call, in order. */
+    private var identifiers: List<UniqueId> = emptyList()
+
+    /** Incremented by [process] whenever the sequence of item identifiers change. */
+    private var structureVersion = 0
 
     private val mutex = Mutex()
 
@@ -42,10 +49,12 @@ class TimelineItemIndexer {
         }
     }
 
-    suspend fun process(timelineItems: List<TimelineItem>) = mutex.withLock {
+    suspend fun process(timelineItems: List<TimelineItem>): Int = mutex.withLock {
         Timber.d("process ${timelineItems.size} items")
         timelineEventsIndexes.clear()
+        val newIdentifiers = ArrayList<UniqueId>(timelineItems.size)
         timelineItems.forEachIndexed { index, timelineItem ->
+            newIdentifiers.add(timelineItem.identifier())
             when (timelineItem) {
                 is TimelineItem.Event -> {
                     processEvent(timelineItem, index)
@@ -58,7 +67,12 @@ class TimelineItemIndexer {
                 else -> Unit
             }
         }
+        if (newIdentifiers != identifiers) {
+            identifiers = newIdentifiers
+            structureVersion++
+        }
         firstProcessLatch.complete(Unit)
+        structureVersion
     }
 
     private fun processEvent(event: TimelineItem.Event, index: Int) {

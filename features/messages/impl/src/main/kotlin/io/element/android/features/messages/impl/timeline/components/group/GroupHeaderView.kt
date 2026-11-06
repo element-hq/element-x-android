@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -74,7 +75,11 @@ fun GroupHeaderView(
         Surface(
             modifier = Modifier
                 .clip(shape)
-                .clickable(onClick = onClick),
+                .clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = shape),
+                    onClick = onClick,
+                ),
             color = backgroundColor,
             shape = shape,
         ) {

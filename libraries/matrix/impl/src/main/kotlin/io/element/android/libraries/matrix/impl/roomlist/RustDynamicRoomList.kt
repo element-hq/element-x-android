@@ -48,6 +48,17 @@ internal class RustDynamicRoomList(
         }
     }
 
+    /**
+     * To be called right before the controller is destroyed, so that it's not used anymore.
+     */
+    suspend fun onControllerDestroyed(controller: RoomListDynamicEntriesController) {
+        mutex.withLock {
+            if (dynamicController === controller) {
+                dynamicController = null
+            }
+        }
+    }
+
     override suspend fun rebuildSummaries() {
         processor.rebuildRoomSummaries()
     }

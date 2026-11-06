@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
@@ -42,7 +43,6 @@ import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.search.MessageSearchService
 import io.element.android.libraries.matrix.api.search.SearchBackfillService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
-import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -51,15 +51,9 @@ import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import java.util.Optional
-import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Entry point for everything scoped to a single logged in session: the sub-services, room access, and account level operations.
@@ -142,6 +136,11 @@ interface MatrixClient : ClientUrlContentFetcher {
 
     /** Backfills messages from the homeserver for searching for messages in a room. */
     val searchBackfillService: SearchBackfillService
+
+    /**
+     * Returns a flow of the total number of unread notifications across all rooms, as currently known by the client.
+     */
+    val totalUnreadCountFlow: StateFlow<Long>
 
     /** Whether the session is in the process of shutting down, either because it is being logged out or its cache is being cleared. */
     val isShuttingDown: Boolean
@@ -406,11 +405,6 @@ interface MatrixClient : ClientUrlContentFetcher {
      */
     suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<NotJoinedRoom>
 
-    /**
-     * Returns the currently used sliding sync version.
-     */
-    suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion>
-
     /** Whether this account can be deactivated from the app, which depends on the authentication method used by the homeserver. */
     fun canDeactivateAccount(): Boolean
 
@@ -531,16 +525,9 @@ fun MatrixClient.roomAliasFromName(name: String): RoomAlias? {
 }
 
 /**
- * Returns a flow of the total number of unread notifications across all rooms.
- * The first value is emitted immediately, then the value is refreshed on each sync heartbeat.
- * In case of error, 0 is emitted.
+ * Returns true if the current user has joined the room with the given [roomId].
+ * Note that this is based on the local data, which may be outdated if the client has not synced recently.
  */
-@OptIn(FlowPreview::class)
-fun MatrixClient.totalUnreadCountFlow(): Flow<Int> {
-    return syncService.heartBeat
-        // Delay the heartbeat so the SDK has time to update the unread count before we read it.
-        .debounce(100.milliseconds)
-        .onStart { emit(Unit) }
-        .map { totalUnreadCount().getOrDefault(0).toInt() }
-        .distinctUntilChanged()
+suspend fun MatrixClient.hasJoined(roomId: RoomId): Boolean {
+    return getRoomInfo(roomId).getOrNull()?.currentUserMembership == CurrentUserMembership.JOINED
 }

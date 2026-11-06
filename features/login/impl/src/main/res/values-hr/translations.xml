@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Promijeni davatelja usluga računa"</string>
-  <string name="screen_account_provider_form_hint">"Adresa matičnog poslužitelja"</string>
-  <string name="screen_account_provider_form_notice">"Unesite pojam za pretraživanje ili adresu domene."</string>
-  <string name="screen_account_provider_form_subtitle">"Potražite tvrtku, zajednicu ili privatni poslužitelj."</string>
-  <string name="screen_account_provider_form_title">"Pronađite davatelja usluga računa"</string>
-  <string name="screen_account_provider_signin_subtitle">"Ovdje će se čuvati vaši razgovori – baš kao što biste koristili davatelja usluga e-pošte za čuvanje svojih e-poruka."</string>
+  <string name="error_account_already_logged_in">"Već ste prijavljeni na ovom uređaju kao %1$s."</string>
+  <string name="error_account_creation_not_possible">"Vaš matični poslužitelj potrebno je nadograditi kako bi podržavao uslugu Matrix Authentication Service i stvaranje računa."</string>
   <string name="screen_account_provider_signin_title">"Prijavit ćete se na %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Ovdje će se čuvati vaši razgovori – baš kao što biste koristili davatelja usluga e-pošte za čuvanje svojih e-poruka."</string>
-  <string name="screen_account_provider_signup_title">"Izradit ćete račun na %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org velik je, besplatni poslužitelj na javnoj Matrixovoj mreži koji pruža sigurnu, decentraliziranu komunikaciju, a kojim upravlja zaklada Matrix.org."</string>
   <string name="screen_change_account_provider_other">"Ostalo"</string>
   <string name="screen_change_account_provider_subtitle">"Koristite drugog davatelja računa, kao što je vlastiti privatni poslužitelj ili poslovni račun."</string>
   <string name="screen_change_account_provider_title">"Promijeni davatelja usluga računa"</string>
@@ -43,7 +36,6 @@
   <string name="screen_login_error_unsupported_authentication">"Odabrani pružatelj usluga računa ne podržava prijavu putem lozinke ili OAuth. Obratite se pružatelju usluga računa ili odaberite drugog."</string>
   <string name="screen_login_form_header">"Unesite svoje podatke"</string>
   <string name="screen_login_subtitle">"Matrix je otvorena mreža za sigurnu, decentraliziranu komunikaciju."</string>
-  <string name="screen_login_title">"Dobro došli natrag!"</string>
   <string name="screen_login_title_with_homeserver">"Prijavi se na poslužitelj %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"Pokreni Element Classic"</string>
   <string name="screen_missing_key_backup_step_1">"Otvorite Element Classic na svom uređaju"</string>
@@ -60,7 +52,6 @@
   <string name="screen_onboarding_sign_up">"Izradi račun"</string>
   <string name="screen_onboarding_welcome_back">"Dobro došli natrag!"</string>
   <string name="screen_onboarding_welcome_message">"Dobro došli u nikad brži %1$s. Snažniji no ikad za postizanje brzine i jednostavnosti."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Dobro došli u %1$s. Snažniji no ikad – za brzinu i jednostavnost."</string>
   <string name="screen_onboarding_welcome_title">"Budi u elementu"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Uspostavljanje sigurne veze"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Nije moguće uspostaviti sigurnu vezu s novim uređajem. Vaši postojeći uređaji i dalje su sigurni i ne morate se brinuti zbog njih."</string>
@@ -102,16 +93,10 @@ Pokušajte se prijaviti ručno ili skenirajte QR kod drugim uređajem."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Za nastavak morate dati dopuštenje za %1$s da biste se mogli služiti kamerom svog uređaja."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Dopustite pristup kameri kako biste mogli skenirati QR kod"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Skeniraj QR kod"</string>
-  <string name="screen_qr_code_login_start_over_button">"Kreni ispočetka"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Došlo je do neočekivane pogreške. Pokušajte ponovno."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Čekanje na vaš drugi uređaj"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Davatelj usluge računa može zatražiti sljedeći kod za potvrdu prijave."</string>
   <string name="screen_qr_code_login_verify_code_title">"Vaš verifikacijski kod"</string>
-  <string name="screen_server_confirmation_change_server">"Promijeni davatelja usluga računa"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Privatni poslužitelj za zaposlenike aplikacije Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix je otvorena mreža za sigurnu, decentraliziranu komunikaciju."</string>
-  <string name="screen_server_confirmation_message_register">"Ovdje će se čuvati vaši razgovori – baš kao što biste koristili davatelja usluga e-pošte za čuvanje svojih e-poruka."</string>
-  <string name="screen_server_confirmation_title_login">"Prijavit ćete se na poslužitelj %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Odaberite davatelja usluga računa"</string>
-  <string name="screen_server_confirmation_title_register">"Izradit ćete račun na poslužitelju %1$s"</string>
 </resources>

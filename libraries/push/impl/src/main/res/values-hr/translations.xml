@@ -16,7 +16,6 @@
     <item quantity="other">"%d obavijesti"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Distributer obavijesti UnifiedPush nije mogao biti registriran, tako da više nećete primati obavijesti. Provjerite postavke obavijesti u aplikaciji i status distributera push obavijesti."</string>
-  <string name="notification_fallback_content">"Imate nove poruke."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"Imate%d novu poruku."</item>
     <item quantity="other">"Imate %d novi poruka."</item>
@@ -28,8 +27,6 @@
   <string name="notification_incoming_audio_call">"📞 Dolazni poziv"</string>
   <string name="notification_incoming_call">"📹 Dolazni poziv"</string>
   <string name="notification_inline_reply_failed">"** Slanje nije uspjelo – otvorite sobu"</string>
-  <string name="notification_invitation_action_join">"Pridruži se"</string>
-  <string name="notification_invitation_action_reject">"Odbij"</string>
   <plurals name="notification_invitations">
     <item quantity="one">"%d pozivnica"</item>
     <item quantity="few">"%d pozivnice"</item>
@@ -40,7 +37,6 @@
   <string name="notification_knock_request_body">"Zatraženo pridruživanje"</string>
   <string name="notification_live_location_started_body">"Počeli su dijeliti svoju lokaciju uživo"</string>
   <string name="notification_mentioned_you_body">"Korisnik vas je spomenuo: %1$s"</string>
-  <string name="notification_new_messages">"Nove poruke"</string>
   <plurals name="notification_new_messages_for_room">
     <item quantity="one">"%d nova poruka"</item>
     <item quantity="few">"%d nove poruke"</item>

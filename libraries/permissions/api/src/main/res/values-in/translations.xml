@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"Izinkan akses"</string>
   <string name="dialog_permission_camera">"Supaya aplikasinya dapat menggunakan kamera, berikan izin dalam pengaturan sistem."</string>
   <string name="dialog_permission_generic">"Silakan memberikan izin dalam pengaturan sistem."</string>
   <string name="dialog_permission_microphone">"Supaya aplikasinya dapat menggunakan mikrofon, berikan izin dalam pengaturan sistem."</string>
   <string name="dialog_permission_notification">"Supaya aplikasinya dapat menampilkan notifikasi, berikan izin dalam pengaturan sistem."</string>
+  <string name="screen_local_network_opt_in_subtitle">"Homeserver Anda berada di jaringan lokal Anda. Untuk terhubung, %1$s memerlukan izin untuk mengakses perangkat di jaringan ini."</string>
+  <string name="screen_local_network_opt_in_title">"Izinkan akses ke jaringan lokal"</string>
 </resources>

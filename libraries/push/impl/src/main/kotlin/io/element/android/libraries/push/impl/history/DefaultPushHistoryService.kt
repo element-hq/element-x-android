@@ -12,6 +12,8 @@ import android.content.Context
 import android.os.Build
 import android.os.PowerManager
 import androidx.core.content.getSystemService
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -24,6 +26,7 @@ import io.element.android.libraries.push.impl.PushDatabase
 import io.element.android.libraries.push.impl.db.PushHistory
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import kotlin.time.Instant
 
@@ -58,6 +61,12 @@ class DefaultPushHistoryService(
                 pushDatabase.pushRequestQueries.selectAllPendingForSession(sessionId.value, sinceTimeMillis).executeAsList()
             }
         }
+    }
+
+    override fun getPendingPushRequestsFlow(sessionId: SessionId, since: Instant): Flow<List<PushRequest>> {
+        return pushDatabase.pushRequestQueries.selectAllPendingForSession(sessionId.value, since.toEpochMilliseconds())
+            .asFlow()
+            .mapToList(dispatchers.io)
     }
 
     override suspend fun removeOldPushRequests(sessionId: SessionId): Result<Unit> = withContext(dispatchers.io) {

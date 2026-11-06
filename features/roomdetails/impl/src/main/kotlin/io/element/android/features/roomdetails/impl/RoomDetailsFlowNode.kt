@@ -334,7 +334,7 @@ class RoomDetailsFlowNode(
                         // Cannot happen
                     }
 
-                    override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
+                    override fun forwardEvent(eventId: EventId) {
                         // Cannot happen
                     }
                 }
@@ -366,8 +366,8 @@ class RoomDetailsFlowNode(
                         callback.handlePermalinkClick(permalinkData, pushToBackstack = false)
                     }
 
-                    override fun forward(eventId: EventId, fromPinnedEvents: Boolean) {
-                        callback.startForwardEventFlow(eventId, fromPinnedEvents)
+                    override fun forward(eventId: EventId) {
+                        callback.startForwardEventFlow(eventId)
                     }
                 }
                 mediaGalleryEntryPoint.createNode(
@@ -402,8 +402,8 @@ class RoomDetailsFlowNode(
                         callback.handlePermalinkClick(data, pushToBackstack)
                     }
 
-                    override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
-                        callback.startForwardEventFlow(eventId, fromPinnedEvents)
+                    override fun forwardEvent(eventId: EventId) {
+                        callback.startForwardEventFlow(eventId)
                     }
 
                     override fun navigateToRoom(roomId: RoomId) {

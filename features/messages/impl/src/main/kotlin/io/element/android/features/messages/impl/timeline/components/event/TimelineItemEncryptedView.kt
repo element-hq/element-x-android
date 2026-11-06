@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContentPreviewParam
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
@@ -32,26 +33,26 @@ fun TimelineItemEncryptedView(
         is UnableToDecryptContent.Data.MegolmV1AesSha2 -> {
             when (content.data.utdCause) {
                 UtdCause.SentBeforeWeJoined -> {
-                    CommonStrings.common_unable_to_decrypt_no_access to CompoundDrawables.ic_compound_block
+                    R.string.common_unable_to_decrypt_no_access to CompoundDrawables.ic_compound_block
                 }
                 UtdCause.VerificationViolation -> {
-                    CommonStrings.common_unable_to_decrypt_verification_violation to CompoundDrawables.ic_compound_block
+                    R.string.common_unable_to_decrypt_verification_violation to CompoundDrawables.ic_compound_block
                 }
                 UtdCause.UnsignedDevice,
                 UtdCause.UnknownDevice -> {
-                    CommonStrings.common_unable_to_decrypt_insecure_device to CompoundDrawables.ic_compound_block
+                    R.string.common_unable_to_decrypt_insecure_device to CompoundDrawables.ic_compound_block
                 }
                 UtdCause.HistoricalMessageAndBackupIsDisabled -> {
-                    CommonStrings.timeline_decryption_failure_historical_event_no_key_backup to CompoundDrawables.ic_compound_block
+                    R.string.timeline_decryption_failure_historical_event_no_key_backup to CompoundDrawables.ic_compound_block
                 }
                 UtdCause.HistoricalMessageAndDeviceIsUnverified -> {
-                    CommonStrings.timeline_decryption_failure_historical_event_unverified_device to CompoundDrawables.ic_compound_block
+                    R.string.timeline_decryption_failure_historical_event_unverified_device to CompoundDrawables.ic_compound_block
                 }
                 UtdCause.WithheldUnverifiedOrInsecureDevice -> {
-                    CommonStrings.timeline_decryption_failure_withheld_unverified to CompoundDrawables.ic_compound_block
+                    R.string.timeline_decryption_failure_withheld_unverified to CompoundDrawables.ic_compound_block
                 }
                 UtdCause.WithheldBySender -> {
-                    CommonStrings.timeline_decryption_failure_unable_to_decrypt to CompoundDrawables.ic_compound_error
+                    R.string.timeline_decryption_failure_unable_to_decrypt to CompoundDrawables.ic_compound_error
                 }
                 else -> {
                     CommonStrings.common_waiting_for_decryption_key to CompoundDrawables.ic_compound_time

@@ -9,8 +9,6 @@
   <string name="screen_identity_confirmed_subtitle">"Nu kun je veilig berichten lezen of verzenden, en iedereen met wie je chat kan dit apparaat ook vertrouwen."</string>
   <string name="screen_identity_confirmed_title">"Apparaat geverifieerd"</string>
   <string name="screen_identity_use_another_device">"Gebruik een ander apparaat"</string>
-  <string name="screen_identity_waiting_on_other_device">"Wachten op ander apparaat…"</string>
-  <string name="screen_session_verification_cancelled_subtitle">"Er lijkt iets niet goed te gaan. Of er is een time-out opgetreden of het verzoek is geweigerd."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Bevestig dat de emoji\'s hieronder overeenkomen met de emoji\'s in je andere sessie."</string>
   <string name="screen_session_verification_compare_emojis_title">"Vergelijk emoji\'s"</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Bevestig dat de onderstaande cijfers overeenkomen met de cijfers die worden weergegeven in je andere sessie."</string>
@@ -18,22 +16,13 @@
   <string name="screen_session_verification_complete_subtitle">"Je nieuwe sessie is nu geverifieerd. Het heeft toegang tot je versleutelde berichten en andere gebruikers zullen het als vertrouwd beschouwen."</string>
   <string name="screen_session_verification_device_verified">"Apparaat geverifieerd"</string>
   <string name="screen_session_verification_enter_recovery_key">"Voer herstelsleutel in"</string>
-  <string name="screen_session_verification_open_existing_session_subtitle">"Bewijs dat jij het bent om toegang te krijgen tot je versleutelde berichtgeschiedenis."</string>
-  <string name="screen_session_verification_open_existing_session_title">"Open een bestaande sessie"</string>
-  <string name="screen_session_verification_positive_button_canceled">"Verificatie opnieuw proberen"</string>
-  <string name="screen_session_verification_positive_button_initial">"Ik ben er klaar voor"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Wachten om te vergelijken"</string>
   <string name="screen_session_verification_ready_subtitle">"Vergelijk een unieke combinatie van emoji\'s."</string>
-  <string name="screen_session_verification_request_accepted_subtitle">"Vergelijk de unieke emoji\'s, ze dienen in dezelfde volgorde te worden weergegeven."</string>
   <string name="screen_session_verification_request_details_timestamp">"Ingelogd"</string>
   <string name="screen_session_verification_request_footer">"Ga alleen verder als je deze verificatie hebt gestart."</string>
   <string name="screen_session_verification_request_subtitle">"Verifieer het andere apparaat om je berichtengeschiedenis veilig te houden."</string>
-  <string name="screen_session_verification_request_success_subtitle">"Je nieuwe sessie is nu geverifieerd. Het heeft toegang tot je versleutelde berichten en andere gebruikers zullen het als vertrouwd beschouwen."</string>
-  <string name="screen_session_verification_request_success_title">"Apparaat geverifieerd"</string>
   <string name="screen_session_verification_request_title">"Verificatieverzocht"</string>
   <string name="screen_session_verification_they_dont_match">"Ze komen niet overeen"</string>
   <string name="screen_session_verification_they_match">"Ze komen overeen"</string>
-  <string name="screen_session_verification_waiting_to_accept_subtitle">"Accepteer het verzoek tot verificatie in je andere sessie om door te gaan."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Wachten om verzoek te accepteren"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Uitloggen…"</string>
 </resources>

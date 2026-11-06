@@ -3,6 +3,5 @@
   <string name="screen_signed_out_reason_1">"Du hast dein Passwort in einer anderen Sitzung geändert"</string>
   <string name="screen_signed_out_reason_2">"Du hast diese Sitzung aus einer anderen Sitzung gelöscht"</string>
   <string name="screen_signed_out_reason_3">"Der Administrator deines Servers hat deinen Zugang ungültig gemacht"</string>
-  <string name="screen_signed_out_subtitle">"Möglicherweise wurdest du aus einem der folgenden Gründe abgemeldet. Bitte melde dich erneut an, um %s weiter zu nutzen."</string>
   <string name="screen_signed_out_title">"Du bist abgemeldet"</string>
 </resources>

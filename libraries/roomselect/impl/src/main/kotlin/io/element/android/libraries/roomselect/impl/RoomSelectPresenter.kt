@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.user.toMatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
+import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -94,7 +95,10 @@ class RoomSelectPresenter(
         }
         val otherAccounts by remember {
             derivedStateOf {
-                accounts.filter { it.userId != selectedSessionId }.toImmutableList()
+                accounts
+                    .filter { it.userId != selectedSessionId }
+                    .map { OtherAccount(user = it, unreadCount = 0) }
+                    .toImmutableList()
             }
         }
 

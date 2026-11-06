@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUserSendFailure
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -117,12 +118,12 @@ fun ResolveVerifiedUserSendFailureView(
 private fun VerifiedUserSendFailure.title(): String {
     return when (this) {
         is VerifiedUserSendFailure.UnsignedDevice.FromOther -> stringResource(
-            id = CommonStrings.screen_resolve_send_failure_unsigned_device_title,
+            id = R.string.screen_resolve_send_failure_unsigned_device_title,
             userDisplayName
         )
-        VerifiedUserSendFailure.UnsignedDevice.FromYou -> stringResource(id = CommonStrings.screen_resolve_send_failure_you_unsigned_device_title)
+        VerifiedUserSendFailure.UnsignedDevice.FromYou -> stringResource(id = R.string.screen_resolve_send_failure_you_unsigned_device_title)
         is VerifiedUserSendFailure.ChangedIdentity -> stringResource(
-            id = CommonStrings.screen_resolve_send_failure_changed_identity_title,
+            id = R.string.screen_resolve_send_failure_changed_identity_title,
             userDisplayName
         )
         VerifiedUserSendFailure.None -> ""
@@ -133,13 +134,13 @@ private fun VerifiedUserSendFailure.title(): String {
 private fun VerifiedUserSendFailure.subtitle(): String {
     return when (this) {
         is VerifiedUserSendFailure.UnsignedDevice.FromOther -> stringResource(
-            id = CommonStrings.screen_resolve_send_failure_unsigned_device_subtitle,
+            id = R.string.screen_resolve_send_failure_unsigned_device_subtitle,
             userDisplayName,
             userDisplayName,
         )
-        VerifiedUserSendFailure.UnsignedDevice.FromYou -> stringResource(id = CommonStrings.screen_resolve_send_failure_you_unsigned_device_subtitle)
+        VerifiedUserSendFailure.UnsignedDevice.FromYou -> stringResource(id = R.string.screen_resolve_send_failure_you_unsigned_device_subtitle)
         is VerifiedUserSendFailure.ChangedIdentity -> stringResource(
-            id = CommonStrings.screen_resolve_send_failure_changed_identity_subtitle,
+            id = R.string.screen_resolve_send_failure_changed_identity_subtitle,
             userDisplayName
         )
         VerifiedUserSendFailure.None -> ""
@@ -149,8 +150,8 @@ private fun VerifiedUserSendFailure.subtitle(): String {
 @Composable
 private fun VerifiedUserSendFailure.resolveAction(): String {
     return when (this) {
-        is VerifiedUserSendFailure.UnsignedDevice -> stringResource(id = CommonStrings.screen_resolve_send_failure_unsigned_device_primary_button_title)
-        is VerifiedUserSendFailure.ChangedIdentity -> stringResource(id = CommonStrings.screen_resolve_send_failure_changed_identity_primary_button_title)
+        is VerifiedUserSendFailure.UnsignedDevice -> stringResource(id = R.string.screen_resolve_send_failure_unsigned_device_primary_button_title)
+        is VerifiedUserSendFailure.ChangedIdentity -> stringResource(id = R.string.screen_resolve_send_failure_changed_identity_primary_button_title)
         VerifiedUserSendFailure.None -> ""
     }
 }

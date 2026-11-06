@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s tidak dapat memuat peta. Silakan coba lagi nanti."</string>
+  <string name="error_failed_locating_user">"%1$s tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti."</string>
+  <string name="error_location_service_disabled_android">"Silakan aktifkan GPS Anda untuk mengakses fitur berbasis lokasi."</string>
+  <string name="error_missing_location_auth_android">"%1$s tidak memiliki izin untuk mengakses lokasi Anda. Anda dapat mengaktifkan akses di Pengaturan."</string>
+  <string name="error_missing_location_rationale_android">"%1$s tidak memiliki izin untuk mengakses lokasi Anda. Aktifkan akses di bawah ini."</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Pembagian lokasi langsung"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Sedang berbagi lokasi"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"Lokasi Langsung %1$s"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Tidak ada yang membagikan lokasinya"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Berbagi lokasi secara langsung"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="other">"%1$d orang"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Di peta"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"Riwayat lokasi langsung Anda akan disimpan di ruang obrolan dan dapat dilihat oleh anggota setelah sesi berakhir."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Pilih berapa lama Anda ingin membagikan lokasi langsung Anda."</string>
   <string name="screen_share_location_live_location_missing_permissions">"Anda tidak memiliki izin untuk membagikan lokasi real-time Anda di ruang ini"</string>
+  <string name="screen_share_location_title">"Bagikan lokasi"</string>
+  <string name="screen_share_my_location_action">"Bagikan lokasi saya"</string>
+  <string name="screen_share_open_apple_maps">"Buka di Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Buka di Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Buka di OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"Bagikan lokasi ini"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Opsi Berbagi"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Dibagikan %1$s"</string>
+  <string name="screen_static_location_sheet_title">"Di peta"</string>
+  <string name="screen_view_location_title">"Lokasi"</string>
 </resources>

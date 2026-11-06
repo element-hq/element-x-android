@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"غير قادر على فك التشفير"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"أُرسلت من جهاز غير آمن"</string>
+  <string name="common_unable_to_decrypt_no_access">"ليس لديك صلاحية الوصول إلى هذه الرسالة"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"تمت إعادة تعيين الهوية الرقمية الموثّقة للمرسل"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"مرسل الحدث لا يطابق مالك الجهاز الذي أرسله."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"لا يمكن ضمان أصالة هذه الرسالة المشفّرة على هذا الجهاز."</string>
   <string name="crypto_event_authenticity_previously_verified">"تم التشفير بواسطة مستخدم تم التحقق منه سابقًا."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"تم التشفير بواسطة جهاز غير معروف أو محذوف."</string>
   <string name="crypto_event_authenticity_unsigned_device">"تم التشفير بواسطة جهاز لم يتحقق منه مالكه."</string>
   <string name="crypto_event_authenticity_unverified_identity">"تم التشفير بواسطة مستخدم لم يتم التحقق منه."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"شارك %1$s (%2$s) هذه الرسالة لأنك لم تكن في الغرفة عند إرسالها."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"شارك %1$s هذه الرسالة لأنك لم تكن في الغرفة عند إرسالها."</string>
+  <string name="crypto_identity_change_pin_violation_new">"تمت إعادة تعيين الهوية الرقمية الخاصة بـ %1$s %2$s. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"تمت إعادة تعيين الهوية الرقمية الخاصة بـ %1$s %2$s. %3$s"</string>
+  <string name="dialog_confirm_link_message">"ينقلك الرابط %1$s إلى موقع آخر %2$s
+
+هل أنت متأكد من رغبتك في المتابعة؟"</string>
+  <string name="dialog_confirm_link_title">"تحقّق جيدًا من هذا الرابط"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"الحد الأقصى المسموح به لحجم الملف هو: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"حجم الملف كبير جدًا ولا يمكن رفعه"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"الحد الأقصى المسموح به لحجم الملف هو: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"اختر جودة الفيديو الذي تريد رفعه."</string>
+  <string name="error_failed_loading_messages">"فشِل تحميل الرسائل"</string>
+  <string name="error_failed_uploading_voice_message">"تعذّر رفع رسالتك الصوتية."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"ليس لدى %1$s إذن للوصول إلى الميكروفون. اسمح بالوصول لتسجيل رسالة صوتية."</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"قلب الصورة أفقيًا"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"مقلوبة أفقيًا"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"الأصلية"</string>
@@ -34,10 +54,29 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"تحسين جودة الصورة"</string>
   <string name="screen_media_upload_preview_processing">"جارٍ المعالجة…"</string>
   <string name="screen_media_upload_preview_title">"إضافة وسائط"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"اضغط على رسالة واختر “%1$s” لإضافتها هنا."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"ثبّت الرسائل المهمة لتسهيل العثور عليها"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="zero">"%1$d رسائل مثبّتة"</item>
+    <item quantity="one">"%1$d رسالة مثبّتة"</item>
+    <item quantity="two">"%1$d رسالتان مثبّتتان"</item>
+    <item quantity="few">"%1$d رسائل مثبّتة"</item>
+    <item quantity="many">"%1$d رسالة مثبّتة"</item>
+    <item quantity="other">"%1$d رسالة مثبّتة"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"الرسائل المثبّتة"</string>
   <string name="screen_report_content_block_user">"حظر المستخدم"</string>
   <string name="screen_report_content_block_user_hint">"حدِّد على هذا الخيار إذا كنت تريد إخفاء كل الرسائل الحالية والمستقبلية من هذا المستخدم"</string>
   <string name="screen_report_content_explanation">"ستُبلَّغ هذه الرسالة إلى إدارة السيرفر خاصتك. لن يكونوا قادرين على قراءة أي رسالة مشفرة."</string>
   <string name="screen_report_content_hint">"سبب إبلاغك عن هذا المحتوى"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"إلغاء التحقق والإرسال"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"يمكنك إلغاء التحقق الذي أجريته وإرسال هذه الرسالة على أي حال، أو الإلغاء في الوقت الحالي والمحاولة مرة أخرى لاحقًا بعد إعادة التحقق من %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"لم تُرسل رسالتك لأن الهوية الرقمية الموثّقة لـ %1$s أُعيد تعيينها"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"إرسال الرسالة على أي حال"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"يستخدم %1$s جهازًا واحدًا أو أكثر لم يتم التحقق منه. يمكنك إرسال الرسالة على أي حال، أو الإلغاء في الوقت الحالي والمحاولة مرة أخرى لاحقًا بعد أن يتحقق %2$s من جميع أجهزته."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"لم تُرسل رسالتك لأن %1$s لم يتحقق من جميع الأجهزة"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"لم يتم التحقق من جهاز واحد أو أكثر من أجهزتك. يمكنك إرسال الرسالة على أي حال، أو الإلغاء في الوقت الحالي والمحاولة مرة أخرى لاحقًا بعد أن تتحقق من جميع أجهزتك."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"لم تُرسل رسالتك لأنك لم تتحقق من جهاز واحد أو أكثر من أجهزتك"</string>
   <string name="screen_room_attachment_source_camera">"الكاميرا"</string>
   <string name="screen_room_attachment_source_camera_photo">"التقاط صورة"</string>
   <string name="screen_room_attachment_source_camera_video">"تسجيل مقطع فيديو"</string>
@@ -52,6 +91,11 @@
   <string name="screen_room_invite_again_alert_title">"أنت لوحدك في هذه المحادثة"</string>
   <string name="screen_room_mentions_at_room_subtitle">"إشعار الغرفة بأكملها"</string>
   <string name="screen_room_mentions_at_room_title">"الجميع"</string>
+  <string name="screen_room_permalink_same_room_android">"أنت في هذه الغرفة بالفعل!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s من %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s رسائل مثبّتة"</string>
+  <string name="screen_room_pinned_banner_loading_description">"جارٍ تحميل الرسالة…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"عرض الكل"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"أرسل مجدداً"</string>
   <string name="screen_room_retry_send_menu_title">"فشل إرسال رسالتك"</string>
   <string name="screen_room_timeline_add_reaction">"أضف تفاعل"</string>
@@ -119,4 +163,12 @@
     <item quantity="other">"%1$s يكتبون الآن"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s و%2$s"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"لم تُرسل الرسالة لأن الهوية الرقمية الموثّقة لـ %1$s أُعيد تعيينها."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"لم تُرسل الرسالة لأن %1$s لم يتحقق من جميع الأجهزة."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"لم تُرسل الرسالة لأنك لم تتحقق من جهاز واحد أو أكثر من أجهزتك."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"الرسائل السابقة غير متاحة على هذا الجهاز"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"يجب التحقق من هذا الجهاز للوصول إلى الرسائل السابقة"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"ليس لديك صلاحية الوصول إلى هذه الرسالة"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"تعذّر فك تشفير الرسالة"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"تم حظر هذه الرسالة إما لأنك لم تتحقق من جهازك أو لأن المرسل يحتاج إلى التحقق من هويتك الرقمية."</string>
 </resources>

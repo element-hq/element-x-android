@@ -2,6 +2,7 @@
 import xml.etree.ElementTree as ET
 import sys
 import glob
+import os
 
 screenshot_test_failures = []
 output = []
@@ -48,7 +49,7 @@ def parse_test_failures(xml_file):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        output.append("Usage: parse_test_failures.py <file>", file=sys.stderr)
+        print("Usage: parse_test_failures.py <file>", file=sys.stderr)
         sys.exit(1)
 
     file = sys.argv[1]
@@ -57,8 +58,8 @@ if __name__ == "__main__":
         parse_test_failures(file)
     else:
         files = glob.glob("**/build/test-results/*UnitTest/*.xml", root_dir = file, recursive = True)
-        for file in files:
-            parse_test_failures(file)
+        for xml_file in files:
+            parse_test_failures(os.path.join(file, xml_file))
 
     if screenshot_test_failures:
         output.append("## Screenshot Test Failures")
@@ -69,9 +70,12 @@ if __name__ == "__main__":
 
     text_output = '\n'.join(output)
     # Trim output larger than 1MB to avoid GitHub Action log limits
-    while len(text_output.encode('utf-8')) > 1_040_000:
-        output.pop(-2)
+    if len(text_output.encode('utf-8')) > 1_040_000:
         output.append("## !!! Truncated output due to size limits. !!!")
+        # Remove the lines before the truncation marker until the output fits
+        size = len('\n'.join(output).encode('utf-8'))
+        while size > 1_040_000 and len(output) > 1:
+            size -= len(output.pop(-2).encode('utf-8')) + 1
         text_output = '\n'.join(output)
 
     print(text_output)

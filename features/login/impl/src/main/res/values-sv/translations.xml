@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Byt kontoleverantör"</string>
-  <string name="screen_account_provider_form_hint">"Hemserveradress"</string>
-  <string name="screen_account_provider_form_notice">"Ange ett sökord eller en domänadress."</string>
-  <string name="screen_account_provider_form_subtitle">"Sök efter ett företag, en gemenskap eller en privat server."</string>
-  <string name="screen_account_provider_form_title">"Hitta en kontoleverantör"</string>
-  <string name="screen_account_provider_signin_subtitle">"Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev."</string>
+  <string name="error_account_already_logged_in">"Du är redan inloggad på den här enheten som %1$s."</string>
+  <string name="error_account_creation_not_possible">"Din hemserver måste uppgraderas för att stödja Matrix Authentication Service och skapande av konto."</string>
   <string name="screen_account_provider_signin_title">"Du är på väg att logga in på %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev."</string>
-  <string name="screen_account_provider_signup_title">"Du är på väg att skapa ett konto på %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org är en stor gratisserver på det offentliga Matrix-nätverket för säker, decentraliserad kommunikation, som drivs av Matrix.org Foundation."</string>
   <string name="screen_change_account_provider_other">"Annan"</string>
   <string name="screen_change_account_provider_subtitle">"Använd en annan kontoleverantör, till exempel din egen privata server eller ett jobbkonto."</string>
   <string name="screen_change_account_provider_title">"Byt kontoleverantör"</string>
@@ -35,7 +28,6 @@
   <string name="screen_login_error_unsupported_authentication">"Den valda kontoleverantören stöder inte lösenords- eller OAuth-inloggning. Kontakta kontoleverantören eller välj en annan."</string>
   <string name="screen_login_form_header">"Ange dina uppgifter"</string>
   <string name="screen_login_subtitle">"Matrix är ett öppet nätverk för säker, decentraliserad kommunikation."</string>
-  <string name="screen_login_title">"Välkommen tillbaka!"</string>
   <string name="screen_login_title_with_homeserver">"Logga in på %1$s"</string>
   <string name="screen_onboarding_app_version">"Version %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Logga in manuellt"</string>
@@ -43,7 +35,6 @@
   <string name="screen_onboarding_sign_in_with_qr_code">"Logga in med QR-kod"</string>
   <string name="screen_onboarding_sign_up">"Skapa konto"</string>
   <string name="screen_onboarding_welcome_message">"Välkommen till den snabbaste %1$s någonsin. Superladdad för snabbhet och enkelhet."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Välkommen till %1$s. Superladdad, för snabbhet och enkelhet."</string>
   <string name="screen_onboarding_welcome_title">"Var i ditt rätta element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Upprättar en säker anslutning"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"En säker anslutning kunde inte göras till den nya enheten. Dina befintliga enheter är fortfarande säkra och du behöver inte oroa dig för dem."</string>
@@ -83,16 +74,10 @@ Prova att logga in manuellt eller skanna QR-koden med en annan enhet."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Du måste ge tillstånd för %1$s att använda enhetens kamera för att kunna fortsätta."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Tillåt kameraåtkomst för att skanna QR-koden"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Skanna QR-koden"</string>
-  <string name="screen_qr_code_login_start_over_button">"Börja om"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Ett oväntat fel inträffade. Vänligen försök igen."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Väntar på din andra enhet"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Din kontoleverantör kan be om följande kod för att verifiera inloggningen."</string>
   <string name="screen_qr_code_login_verify_code_title">"Din verifieringskod"</string>
-  <string name="screen_server_confirmation_change_server">"Byt kontoleverantör"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"En privat server för Element-anställda."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix är ett öppet nätverk för säker, decentraliserad kommunikation."</string>
-  <string name="screen_server_confirmation_message_register">"Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev."</string>
-  <string name="screen_server_confirmation_title_login">"Du är på väg att logga in på %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Välj kontoleverantör"</string>
-  <string name="screen_server_confirmation_title_register">"Du är på väg att skapa ett konto på %1$s"</string>
 </resources>

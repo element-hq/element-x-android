@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aSelectRoomInfo
+import io.element.android.libraries.matrix.ui.components.switchaccount.anOtherAccount
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -128,11 +129,11 @@ class RoomSelectViewTest : RobolectricTest() {
             aRoomSelectState(
                 mode = RoomSelectMode.Share,
                 selectedAccount = aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
-                otherAccounts = persistentListOf(aMatrixUser(id = "@bob:example.org", displayName = "Bob")),
+                otherAccounts = persistentListOf(anOtherAccount(aMatrixUser(id = "@bob:example.org", displayName = "Bob"))),
                 eventSink = eventsRecorder,
             ),
         )
-        clickOn(CommonStrings.common_switch_account)
+        clickOn(CommonStrings.common_switch_accounts)
         // The first event is the initial UpdateVisibleRange
         eventsRecorder.assertList(listOf(RoomSelectEvent.UpdateVisibleRange(0..-1), RoomSelectEvent.ToggleAccountListExpanded))
     }
@@ -144,7 +145,7 @@ class RoomSelectViewTest : RobolectricTest() {
             aRoomSelectState(
                 mode = RoomSelectMode.Share,
                 selectedAccount = aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
-                otherAccounts = persistentListOf(aMatrixUser(id = "@bob:example.org", displayName = "Bob")),
+                otherAccounts = persistentListOf(anOtherAccount(aMatrixUser(id = "@bob:example.org", displayName = "Bob"))),
                 isAccountListExpanded = true,
                 eventSink = eventsRecorder,
             ),
@@ -162,7 +163,7 @@ class RoomSelectViewTest : RobolectricTest() {
                 selectedAccount = aMatrixUser(id = "@alice:example.org", displayName = "Alice"),
             ),
         )
-        onNodeWithText(activity!!.getString(CommonStrings.common_switch_account)).assertDoesNotExist()
+        onNodeWithText(activity!!.getString(CommonStrings.common_switch_accounts)).assertDoesNotExist()
     }
 
     @Test
@@ -184,7 +185,7 @@ class RoomSelectViewTest : RobolectricTest() {
             aRoomSelectState(
                 mode = RoomSelectMode.Share,
                 resultState = SearchBarResultState.Results(aLongRoomList()),
-                otherAccounts = persistentListOf(aMatrixUser(id = "@bob:example.org", displayName = "Bob")),
+                otherAccounts = persistentListOf(anOtherAccount(aMatrixUser(id = "@bob:example.org", displayName = "Bob"))),
             ),
         )
         onNodeWithText("Room 0").assertIsDisplayed()

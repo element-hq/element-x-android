@@ -70,6 +70,7 @@ fun MessageEventBubble(
     borderColor: Color? = null,
     content: @Composable BoxScope.() -> Unit = {},
 ) {
+    val bubbleShape = remember(state) { MessageEventBubbleDefaults.shape(state.cutTopStart, state.groupPosition, state.isMine) }
     val clickableModifier = if (isTalkbackActive()) {
         Modifier
     } else {
@@ -77,7 +78,7 @@ fun MessageEventBubble(
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick,
-                indication = ripple(),
+                indication = ripple(focusRingShape = bubbleShape),
                 interactionSource = interactionSource
             )
             .onKeyboardContextMenuAction(onLongClick)
@@ -86,7 +87,6 @@ fun MessageEventBubble(
     val cutTopStart = state.cutTopStart
     // Ignore state.isHighlighted for now, we need a design decision on it.
     val backgroundBubbleColor by rememberUpdatedState(customBackgroundColor ?: MessageEventBubbleDefaults.backgroundBubbleColor(state.isMine))
-    val bubbleShape = remember(state) { MessageEventBubbleDefaults.shape(state.cutTopStart, state.groupPosition, state.isMine) }
     val radiusPx = (avatarRadius + SENDER_AVATAR_BORDER_WIDTH).toPx()
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
 

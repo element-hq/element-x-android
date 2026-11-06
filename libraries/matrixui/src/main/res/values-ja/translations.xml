@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"ダウンロードは使用できません。"</string>
+  <string name="content_scanner_not_found_title">"問題が発生しました"</string>
+  <string name="error_room_address_already_exists">"このルームアドレスは既に存在しています。ルームの名称を変更するか、アドレスを編集してください。"</string>
+  <string name="error_room_address_invalid_symbols">"一部の文字は使用できません。使用できるのは、英字、数字と記号 ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _ です。"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"招待を送信"</string>
   <string name="screen_bottom_sheet_create_dm_message">"%1$s とチャットを始めますか？"</string>
   <string name="screen_bottom_sheet_create_dm_title">"招待を送信しますか？"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"この人物とのチャットがありません。はじめに、招待の状況を確認してください。"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"この新しい連絡先と新規にチャットを開始しますか？"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) があなたを招待しました"</string>
+  <string name="screen_space_list_description">"作成または参加したスペースです。"</string>
+  <string name="screen_space_list_details">"%1$s・%2$s"</string>
+  <string name="screen_space_list_title">"スペース"</string>
 </resources>

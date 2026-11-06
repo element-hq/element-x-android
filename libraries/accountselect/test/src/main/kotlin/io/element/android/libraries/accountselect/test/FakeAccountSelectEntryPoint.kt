@@ -13,11 +13,12 @@ import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeAccountSelectEntryPoint(
-    private val createNodeResult: (BuildContext, AccountSelectEntryPoint.Callback) -> Node = { _, _ -> lambdaError() },
+    private val createNodeResult: (BuildContext, AccountSelectEntryPoint.Params, AccountSelectEntryPoint.Callback) -> Node = { _, _, _ -> lambdaError() },
 ) : AccountSelectEntryPoint {
     override fun createNode(
         parentNode: Node,
         buildContext: BuildContext,
+        params: AccountSelectEntryPoint.Params,
         callback: AccountSelectEntryPoint.Callback,
-    ): Node = createNodeResult(buildContext, callback)
+    ): Node = createNodeResult(buildContext, params, callback)
 }
