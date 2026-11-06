@@ -8,7 +8,6 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -148,7 +147,8 @@ private fun TimelineItemGroupedEventsRowContent(
             )
         },
 ) {
-    Column(modifier = modifier.animateContentSize()) {
+    // The size change is animated in the timeline by `animateTimelineItem`, which also keeps the items around it from overlapping
+    Column(modifier = modifier) {
         val count = timelineItem.events.size
         // A group made entirely of redacted events is a collapsed run of deleted messages
         // (element-web style); anything else is the regular run of room state changes. For the
