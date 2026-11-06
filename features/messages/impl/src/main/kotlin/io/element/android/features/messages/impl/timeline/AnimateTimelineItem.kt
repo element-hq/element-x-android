@@ -21,16 +21,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.drawscope.ContentDrawScope
-import androidx.compose.ui.graphics.drawscope.clipRect
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
-import androidx.compose.ui.node.DrawModifierNode
 import androidx.compose.ui.node.LayoutModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CancellationException
@@ -162,9 +165,18 @@ private data class ReverseLayoutResizeElement(
 }
 
 /**
+ * Only clips the content below [bottom], leaving room for the content drawn outside of the other edges.
+ */
+private data class BottomEdgeClipShape(private val bottom: Float) : Shape {
+    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
+        return Outline.Rectangle(Rect(left = -size.width, top = -size.height, right = 2 * size.width, bottom = bottom))
+    }
+}
+
+/**
  * When the height of the item changes, offsets its content by the height difference so its top edge stays where it was, then animates that
  * offset back to 0 with [animationSpec]. Using the same spec as the placement animation of the items, the top edge of this item follows the
- * bottom edge of the item above it.
+ * bottom edge of the item above it. While the content is moved down, it's clipped so it doesn't overlap the item below.
  *
  * The animation mirrors what `LazyLayoutItemAnimation.animatePlacementDelta` does for the placement of the items, so when several resizes and
  * placement changes happen in a row, this item and its neighbours keep moving together.
@@ -173,7 +185,7 @@ private class ReverseLayoutResizeNode(
     var animationSpec: FiniteAnimationSpec<Float>,
     var animationScope: CoroutineScope,
     private var insertion: TimelineItemsInsertion?,
-) : Modifier.Node(), LayoutModifierNode, DrawModifierNode {
+) : Modifier.Node(), LayoutModifierNode {
     private var lastHeight = UNSET
     private var animationJob: Job? = null
 
@@ -200,18 +212,16 @@ private class ReverseLayoutResizeNode(
         }
         return layout(placeable.width, placeable.height) {
             // Only read the offsets in the layer block, so the animations don't trigger new measure or placement passes
-            placeable.placeWithLayer(0, 0) { translationY = resizeOffset + (insertion?.offset ?: 0f) }
-        }
-    }
-
-    override fun ContentDrawScope.draw() {
-        if (resizeOffset > 0f) {
-            // The content grew and is moved down, don't let it overlap the item below this one
-            clipRect(left = -size.width, top = -size.height, right = 2 * size.width, bottom = size.height) {
-                this@draw.drawContent()
+            placeable.placeWithLayer(0, 0) {
+                val resizeOffset = resizeOffset
+                translationY = resizeOffset + (insertion?.offset ?: 0f)
+                // When the item grew, its content is moved down: don't let it overlap the item below.
+                // The clip is in the coordinates of the layer, which is translated with the content.
+                clip = resizeOffset > 0f
+                if (clip) {
+                    shape = BottomEdgeClipShape(bottom = placeable.height - resizeOffset)
+                }
             }
-        } else {
-            drawContent()
         }
     }
 
