@@ -16,6 +16,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.RageshakeConfig
+import io.element.android.features.rageshake.api.logs.LOG_DIRECTORY_NAME
 import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
@@ -90,7 +91,6 @@ class DefaultBugReporter(
     companion object {
         // filenames
         private const val LOG_CAT_FILENAME = "logcat.log"
-        private const val LOG_DIRECTORY_NAME = "logs2"
     }
 
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
