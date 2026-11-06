@@ -94,6 +94,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemSele
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentPreviewParam
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
@@ -209,6 +210,10 @@ fun TimelineView(
                 currentUserId = state.timelineRoomInfo.currentUserId,
             )
         }
+        // Must be a composition scope, see [animateTimelineItem]
+        val itemAnimationScope = rememberCoroutineScope()
+        val timelineItemsInsertions = remember(itemAnimationScope) { TimelineItemsInsertions(itemAnimationScope) }
+        val timelineItemsInsertion = rememberTimelineItemsInsertion(state.timelineItems, timelineItemsInsertions)
         CompositionLocalProvider(LocalTimelineEventRendererConfig provides composeLocalTimelineEventRendererConfig) {
             Box(modifier) {
                 LazyColumn(
@@ -218,7 +223,8 @@ fun TimelineView(
                         .testTag(TestTags.timeline),
                     state = lazyListState,
                     reverseLayout = true,
-                    contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() + PaddingValues(top = 64.dp, bottom = 8.dp),
+                    contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() +
+                        PaddingValues(top = 64.dp, bottom = TIMELINE_BOTTOM_PADDING),
                 ) {
                     items(
                         items = state.timelineItems,
@@ -226,6 +232,24 @@ fun TimelineView(
                         key = { timelineItem -> timelineItem.identifier() },
                     ) { timelineItem ->
                         TimelineItemRow(
+                            modifier = Modifier
+                                .animateTimelineItem(
+                                    scope = this,
+                                    animationScope = itemAnimationScope,
+                                    insertion = timelineItemsInsertion?.takeIf { timelineItem.identifier() in it.keys },
+                                )
+                                .then(
+                                    if (timelineItem.isTypingNotification()) {
+                                        // The new messages slide in from behind it
+                                        Modifier.hideItemsSlidingIn(
+                                            insertions = timelineItemsInsertions,
+                                            color = ElementTheme.colors.bgCanvasDefault,
+                                            coveredHeightBelow = TIMELINE_BOTTOM_PADDING,
+                                        )
+                                    } else {
+                                        Modifier
+                                    }
+                                ),
                             timelineItem = timelineItem,
                             timelineMode = state.timelineMode,
                             timelineRoomInfo = state.timelineRoomInfo,
@@ -302,6 +326,10 @@ fun TimelineView(
 
     MessageShieldDialog(state)
 }
+
+private val TIMELINE_BOTTOM_PADDING = 8.dp
+
+private fun TimelineItem.isTypingNotification() = this is TimelineItem.Virtual && model is TimelineItemTypingNotificationModel
 
 @Composable
 private fun MessageShieldDialog(state: TimelineState) {
@@ -403,17 +431,28 @@ private fun BoxScope.TimelineScrollHelper(
     val isJumpToBottomVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive
     var jumpToLiveHandled by remember { mutableStateOf(true) }
 
+    val latestOnScrollFinishAt by rememberUpdatedState(onScrollFinishAt)
+
     /**
-     * @param force If true, scroll to the bottom even if the user is already seeing the most recent item.
+     * @param force If true, ensure we settle at the bottom even if the user is already seeing the most recent item.
      * This fixes the issue where the user is seeing typing notification and so the read receipt is not sent
      * when a new message comes in.
+     *
+     * When already at index 0, do **not** call [LazyListState.animateScrollToItem]: it skips the placement animations of the items,
+     * which would interrupt the `animateItem()` animation of the newly inserted message.
+     * The read receipts are still sent by invoking [onScrollFinishAt] directly.
      */
     fun scrollToBottom(force: Boolean) {
         coroutineScope.launch {
-            if (lazyListState.firstVisibleItemIndex > 10) {
-                lazyListState.scrollToItem(0)
-            } else if (force || lazyListState.firstVisibleItemIndex != 0) {
-                lazyListState.animateScrollToItem(0)
+            val firstVisibleIndex = lazyListState.firstVisibleItemIndex
+            when {
+                firstVisibleIndex > 10 || force && firstVisibleIndex == 0 && lazyListState.firstVisibleItemScrollOffset != 0 -> {
+                    lazyListState.scrollToItem(0)
+                    // This scroll starts and ends in the same frame, so `isScrollInProgress` never changes for the composition: report it directly
+                    latestOnScrollFinishAt(0)
+                }
+                firstVisibleIndex != 0 -> lazyListState.animateScrollToItem(0)
+                force -> latestOnScrollFinishAt(0)
             }
         }
     }
@@ -463,7 +502,6 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    val latestOnScrollFinishAt by rememberUpdatedState(onScrollFinishAt)
     LaunchedEffect(isScrollFinished, hasAnyEvent) {
         if (isScrollFinished && hasAnyEvent) {
             // Notify the parent composable about the first visible item index when scrolling finishes
