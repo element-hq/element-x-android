@@ -10,7 +10,6 @@ package io.element.android.libraries.push.impl.push
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -19,8 +18,6 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.services.appnavstate.api.AppForegroundStateService
-import io.element.android.services.toolbox.api.systemclock.SystemClock
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
@@ -29,26 +26,24 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicLong
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
 private const val MAX_ROOMS_TO_SUBSCRIBE_TO = 20
-private const val SYNC_TIMEOUT_SECONDS = 10
-private const val MIN_INTERVAL_BETWEEN_SYNC_SECONDS = 60
+private val SYNC_TIMEOUT = 10.seconds
 
+/**
+ * Not a singleton: the state shared between calls (throttling, syncing flag) lives in [OpportunisticSyncTracker].
+ */
 @ContributesBinding(AppScope::class)
-@SingleIn(AppScope::class)
 class DefaultSyncOnNotifiableEvent(
     private val matrixClientProvider: MatrixClientProvider,
     private val featureFlagService: FeatureFlagService,
     private val appForegroundStateService: AppForegroundStateService,
     private val dispatchers: CoroutineDispatchers,
     private val pushHistoryService: PushHistoryService,
-    private val systemClock: SystemClock,
+    private val opportunisticSyncTracker: OpportunisticSyncTracker,
 ) : SyncOnNotifiableEvent {
-    private val lastSyncOnPushTimestamp = AtomicLong(0L)
-
     override suspend operator fun invoke(requests: List<PushRequest>) = withContext(dispatchers.io) {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
             return@withContext
@@ -59,44 +54,29 @@ class DefaultSyncOnNotifiableEvent(
             return@withContext
         }
 
-        val start = Instant.fromEpochMilliseconds(systemClock.epochMillis())
+        if (appForegroundStateService.isInForeground.value) {
+            // The sync service is already running
+            return@withContext
+        }
 
-        val syncJobs = mutableListOf<Job>()
-        try {
-            if (!appForegroundStateService.isInForeground.value) {
-                // Don't sync the app too often, as it can be expensive and we don't want to waste battery.
-                if (start.toEpochMilliseconds() - lastSyncOnPushTimestamp.get() < MIN_INTERVAL_BETWEEN_SYNC_SECONDS * 1000) {
-                    Timber.d("Skipping opportunistic sync because the last one was too recent")
-                    return@withContext
-                }
-
-                lastSyncOnPushTimestamp.set(start.toEpochMilliseconds())
-                appForegroundStateService.updateIsSyncingNotificationEvent(true)
-
-                val requestsBySessionId = requests.groupBy { it.sessionId }
-
-                for ((sessionId, requests) in requestsBySessionId) {
-                    Timber.d("Starting opportunistic room list sync for $sessionId")
-                    syncJobs += launch {
-                        syncUsingSession(SessionId(sessionId), requests)
+        requests.groupBy { SessionId(it.sessionId) }
+            .map { (sessionId, sessionRequests) ->
+                launch {
+                    // Don't sync the app too often, as it can be expensive and we don't want to waste battery.
+                    opportunisticSyncTracker.syncIfAllowed(sessionId) {
+                        Timber.d("Starting opportunistic room list sync for $sessionId")
+                        syncUsingSession(sessionId, sessionRequests)
                     }
                 }
-
-                syncJobs.joinAll()
             }
-        } finally {
-            if (syncJobs.isNotEmpty()) {
-                val end = Instant.fromEpochMilliseconds(systemClock.epochMillis())
-                Timber.d("Finished opportunistic room list syncs in ${end - start}")
-            }
-            appForegroundStateService.updateIsSyncingNotificationEvent(false)
-        }
+            .joinAll()
     }
 
-    private suspend fun syncUsingSession(sessionId: SessionId, requests: List<PushRequest>) = withTimeoutOrNull(SYNC_TIMEOUT_SECONDS.seconds) {
-        if (requests.isEmpty()) return@withTimeoutOrNull
-
-        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@withTimeoutOrNull
+    /**
+     * @return true if the sync completed, false if it couldn't start, timed out or was ended early because a newer push is waiting.
+     */
+    private suspend fun syncUsingSession(sessionId: SessionId, requests: List<PushRequest>): Boolean = withTimeoutOrNull(SYNC_TIMEOUT) {
+        val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@withTimeoutOrNull false
 
         val roomListSummariesFlow = client.roomListService.allRooms.summaries
         val mostRecentRoomIds = roomListSummariesFlow.first { it.isNotEmpty() }
@@ -114,15 +94,17 @@ class DefaultSyncOnNotifiableEvent(
         val currentRoomSummaries = roomListSummariesFlow.first()
         val newPushQueuedFlow = pushHistoryService.getPendingPushRequestsFlow(sessionId, since = newestHandledPushDate).onStart { emit(emptyList()) }
 
-        val (newPushQueued, updatedRoomList) = combine(newPushQueuedFlow, roomListSummariesFlow) { newPushes, newSummaries ->
+        val (newPushQueued, _) = combine(newPushQueuedFlow, roomListSummariesFlow) { newPushes, newSummaries ->
             newPushes.isNotEmpty() to (newSummaries != currentRoomSummaries)
         }.first { (newPushQueued, roomListUpdated) -> newPushQueued || roomListUpdated }
 
         if (newPushQueued) {
+            // Don't count it as a completed sync, so the work handling the newer push can sync again right away.
             Timber.d("A newer push is waiting to be fetched, ending the opportunistic sync early")
-            return@withTimeoutOrNull
-        } else if (updatedRoomList) {
+            false
+        } else {
             Timber.d("The room list has been updated, opportunistic sync completed")
+            true
         }
-    }
+    } ?: false
 }
