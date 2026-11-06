@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.paths.SessionPaths
+import io.element.android.libraries.matrix.api.paths.UnusedSessionPathsCleaner
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
 import io.element.android.libraries.matrix.impl.NoOpClientSessionDelegate
@@ -75,6 +76,7 @@ class RustMatrixAuthenticationService(
     private val enterpriseService: EnterpriseService,
     private val featureFlagService: FeatureFlagService,
     private val clientEnterpriseHook: ClientEnterpriseHook,
+    private val unusedSessionPathsCleaner: UnusedSessionPathsCleaner,
 ) : MatrixAuthenticationService {
     // Any existing Element Classic session that we want to try to import secrets from during login.
     private var elementClassicSession: ElementClassicSession? = null
@@ -87,16 +89,35 @@ class RustMatrixAuthenticationService(
     // Ideally it would be possible to get the sessionPath from the Client to avoid doing this.
     private var sessionPaths: SessionPaths? = null
     private var currentClient: Client? = null
+    private var pendingOAuthAuthorizationData: OAuthAuthorizationData? = null
 
     private val newMatrixClientObservers = mutableListOf<(MatrixClient) -> Unit>()
     override fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit) {
         newMatrixClientObservers.add(lambda)
     }
 
-    private fun rotateSessionPath(): SessionPaths {
-        sessionPaths?.deleteRecursively()
+    /**
+     * Start a new login flow: discard the data of any previous login attempt, delete the session directories
+     * which may have been left over (for instance if the app was killed during a previous login flow),
+     * and create new session paths.
+     */
+    private suspend fun rotateSessionPath(): SessionPaths {
+        discardPendingSession()
+        unusedSessionPathsCleaner.clean()
         return sessionPathsFactory.create()
             .also { sessionPaths = it }
+    }
+
+    /**
+     * Close the client used to log in, if any, and then delete its session directories.
+     * The client must be closed first, else it could recreate some files after the deletion.
+     */
+    private fun discardPendingSession() {
+        pendingOAuthAuthorizationData?.close()
+        pendingOAuthAuthorizationData = null
+        clear()
+        sessionPaths?.let { sessionPathsFactory.delete(it) }
+        sessionPaths = null
     }
 
     override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> = withContext(coroutineDispatchers.io) {
@@ -142,7 +163,7 @@ class RustMatrixAuthenticationService(
 
                 client.homeserverLoginDetails().map()
             }.onFailure {
-                clear()
+                discardPendingSession()
             }.mapFailure { failure ->
                 Timber.e(failure, "Failed to set homeserver to $homeserver")
                 failure.mapAuthenticationException()
@@ -224,8 +245,6 @@ class RustMatrixAuthenticationService(
         }
     }
 
-    private var pendingOAuthAuthorizationData: OAuthAuthorizationData? = null
-
     override suspend fun getOAuthUrl(
         prompt: OAuthPrompt,
         loginHint: String?,
@@ -241,7 +260,8 @@ class RustMatrixAuthenticationService(
                     deviceId = null,
                     additionalScopes = emptyList(),
                 )
-                val getUrlResolver = RustTemporaryMatrixClient(client, sessionPaths, coroutineDispatchers.io)
+                // Do not let the resolver delete any data: the client is still used for the login flow.
+                val getUrlResolver = RustTemporaryMatrixClient(client, coroutineDispatchers.io)
                 val url = oAuthAuthorizationData.loginUrl()
                     .let {
                         enterpriseService.tweakMasUrl(
@@ -371,8 +391,8 @@ class RustMatrixAuthenticationService(
                     else -> it
                 }
             }.onFailure { throwable ->
-                // A QR code login always builds its own client, so it can be disposed of on failure.
-                clear()
+                // A QR code login always builds its own client, so it can be disposed of on failure, with its data.
+                discardPendingSession()
                 if (throwable is CancellationException) {
                     throw throwable
                 }
@@ -400,6 +420,7 @@ class RustMatrixAuthenticationService(
 
         // The session paths now hold the data of the account which has just been logged in, so forget
         // them: they must not be deleted by the rotateSessionPath() of the next login attempt.
+        sessionPaths?.let { sessionPathsFactory.release(it) }
         sessionPaths = null
 
         return SessionId(sessionData.userId)
