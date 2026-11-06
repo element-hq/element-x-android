@@ -268,7 +268,7 @@ private fun OutgoingVerificationBottomMenu(
             VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(CommonStrings.action_done),
+                    text = stringResource(CommonStrings.action_close),
                     onClick = onCancelClick,
                 )
                 InvisibleButton()
@@ -323,7 +323,7 @@ private fun OutgoingVerificationBottomMenu(
             VerificationBottomMenu {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(CommonStrings.action_done),
+                    text = stringResource(CommonStrings.action_close),
                     onClick = onDoneClick,
                 )
                 InvisibleButton()

@@ -112,7 +112,7 @@ class OutgoingVerificationViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `when flow is completed and the user clicks on the done button, the expected callback is invoked`() = runAndroidComposeUiTest {
+    fun `when flow is completed and the user clicks on the close button, the expected callback is invoked`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<OutgoingVerificationViewEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             setOutgoingVerificationView(
@@ -122,7 +122,7 @@ class OutgoingVerificationViewTest : RobolectricTest() {
                 ),
                 onFinished = callback,
             )
-            clickOn(CommonStrings.action_done)
+            clickOn(CommonStrings.action_close)
         }
     }
 

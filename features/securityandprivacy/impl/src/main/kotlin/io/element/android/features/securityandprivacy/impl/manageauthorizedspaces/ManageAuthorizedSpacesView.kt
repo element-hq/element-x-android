@@ -179,7 +179,7 @@ private fun ManageAuthorizedSpacesTopBar(
         actions = {
             TextButton(
                 enabled = isDoneButtonEnabled,
-                text = stringResource(CommonStrings.action_done),
+                text = stringResource(CommonStrings.action_save),
                 onClick = onDoneClick,
             )
         }

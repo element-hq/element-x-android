@@ -52,6 +52,17 @@ class ErrorViewTest : RobolectricTest() {
         }
     }
 
+    @Test
+    fun `on close button clicked - calls the expected callback`() = runAndroidComposeUiTest {
+        ensureCalledOnce { callback ->
+            setErrorView(
+                onCancel = callback,
+                errorScreenType = ErrorScreenType.OtherDeviceAlreadySignedIn,
+            )
+            clickOn(CommonStrings.action_close)
+        }
+    }
+
     private fun AndroidComposeUiTest<ComponentActivity>.setErrorView(
         onRetry: () -> Unit = EnsureNeverCalled(),
         onCancel: () -> Unit = EnsureNeverCalled(),
