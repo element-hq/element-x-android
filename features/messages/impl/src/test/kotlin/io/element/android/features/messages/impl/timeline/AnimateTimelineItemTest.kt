@@ -37,7 +37,7 @@ import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 
 class AnimateTimelineItemTest : RobolectricTest() {
-    private val itemHeights = mutableMapOf(TYPING to 0.dp, NEWEST to 100.dp, ABOVE to 100.dp, NEW to 80.dp)
+    private val itemHeights = mutableMapOf(TYPING to 0.dp, NEWEST to 100.dp, ABOVE to 100.dp, NEW to 80.dp, NEW_2 to 60.dp)
     private var keys by mutableStateOf(listOf(TYPING, NEWEST, ABOVE))
     private var resizedItemHeight by mutableStateOf(100.dp)
 
@@ -60,10 +60,7 @@ class AnimateTimelineItemTest : RobolectricTest() {
 
         mainClock.autoAdvance = false
         keys = listOf(TYPING, NEW, NEWEST, ABOVE)
-        // Advance until the frame where the new item is first displayed
-        while (onAllNodesWithTag(NEW).fetchSemanticsNodes().isEmpty()) {
-            mainClock.advanceTimeByFrame()
-        }
+        advanceUntilDisplayed(NEW)
         // Nothing moved yet, and the new item is just below the previously newest one, out of the list
         assertThat(bottomOf(NEWEST).value).isWithin(1f).of(initialNewestBottom.value)
         assertThat(topOf(NEW).value).isWithin(1f).of(initialNewestBottom.value)
@@ -78,6 +75,38 @@ class AnimateTimelineItemTest : RobolectricTest() {
         assertThat(bottomOf(NEW).value).isWithin(1f).of(topOf(TYPING).value)
         assertThat(topOf(NEW).value).isWithin(1f).of(bottomOf(NEWEST).value)
         assertThat(bottomOf(NEWEST).value).isWithin(1f).of(initialNewestBottom.value - 80f)
+    }
+
+    @Test
+    fun `when items are inserted before the previous ones finished sliding in, they all slide in together`() = runAndroidComposeUiTest<ComponentActivity> {
+        setReverseLayoutList()
+
+        mainClock.autoAdvance = false
+        keys = listOf(TYPING, NEW, NEWEST, ABOVE)
+        advanceUntilDisplayed(NEW)
+        repeat(5) { mainClock.advanceTimeByFrame() }
+        keys = listOf(TYPING, NEW_2, NEW, NEWEST, ABOVE)
+        advanceUntilDisplayed(NEW_2)
+
+        // Note: NEW and NEWEST are not checked here. Their placement animations are both handled by the LazyColumn, which starts the one of NEWEST
+        // (already running) a frame before the one of NEW (not running yet), so they can be a few dp apart for a few frames.
+        repeat(15) {
+            assertThat(topOf(NEW_2).value).isWithin(1f).of(bottomOf(NEW).value)
+            mainClock.advanceTimeByFrame()
+        }
+
+        mainClock.autoAdvance = true
+        waitForIdle()
+        assertThat(bottomOf(NEW_2).value).isWithin(1f).of(topOf(TYPING).value)
+        assertThat(topOf(NEW_2).value).isWithin(1f).of(bottomOf(NEW).value)
+        assertThat(topOf(NEW).value).isWithin(1f).of(bottomOf(NEWEST).value)
+    }
+
+    // Advance until the frame where the item is first displayed
+    private fun AndroidComposeUiTest<*>.advanceUntilDisplayed(tag: String) {
+        while (onAllNodesWithTag(tag).fetchSemanticsNodes().isEmpty()) {
+            mainClock.advanceTimeByFrame()
+        }
     }
 
     private fun AndroidComposeUiTest<*>.assertTopEdgeFollowsItemAboveWhileResizingTo(newHeight: Dp) {
@@ -106,8 +135,12 @@ class AnimateTimelineItemTest : RobolectricTest() {
             // Like the timeline items in TimelineView, only read the keys in the composition, not in the LazyColumn content
             val currentKeys = keys
             val coroutineScope = rememberCoroutineScope()
+            val insertions = remember { TimelineItemsInsertions(coroutineScope) }
+            val previousKeys = remember { arrayOfNulls<List<String>>(1) }
             val insertion = remember(currentKeys) {
-                TimelineItemsInsertion(setOf(NEW), coroutineScope).takeIf { NEW in currentKeys }
+                val insertedKeys = previousKeys[0]?.let { previous -> currentKeys.filter { it !in previous }.toSet() }.orEmpty()
+                previousKeys[0] = currentKeys
+                insertions.onItemsInserted(insertedKeys)
             }
             LazyColumn(
                 modifier = Modifier.height(500.dp),
@@ -140,6 +173,7 @@ class AnimateTimelineItemTest : RobolectricTest() {
     private companion object {
         const val TYPING = "typing"
         const val NEW = "new"
+        const val NEW_2 = "new_2"
         const val NEWEST = "newest"
         const val ABOVE = "above"
     }
