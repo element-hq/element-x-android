@@ -15,25 +15,35 @@ open class BugReportStatePreviewParam : PreviewParameterProvider<BugReportState>
     override val values: Sequence<BugReportState>
         get() = sequenceOf(
             aBugReportState(),
-            aBugReportState().copy(
+            aBugReportState(
                 formState = BugReportFormState.Default.copy(
                     description = "A long enough description",
                     sendScreenshot = true,
                 ),
                 hasCrashLogs = true,
-                screenshotUri = "aUri"
+                screenshotUri = "aUri",
             ),
-            aBugReportState().copy(sending = AsyncAction.Loading),
-            aBugReportState().copy(sending = AsyncAction.Success(Unit)),
-            aBugReportState().copy(sending = AsyncAction.Failure(BugReportFormError.DescriptionTooShort)),
+            aBugReportState(sending = AsyncAction.Loading),
+            aBugReportState(sending = AsyncAction.Success(Unit)),
+            aBugReportState(sending = AsyncAction.Failure(BugReportFormError.DescriptionTooShort)),
+            aBugReportState(canIncludeLogs = false),
         )
 }
 
-fun aBugReportState() = BugReportState(
-    formState = BugReportFormState.Default,
-    hasCrashLogs = false,
-    screenshotUri = null,
-    sendingProgress = 0F,
-    sending = AsyncAction.Uninitialized,
-    eventSink = {}
+private fun aBugReportState(
+    formState: BugReportFormState = BugReportFormState.Default,
+    hasCrashLogs: Boolean = false,
+    canIncludeLogs: Boolean = true,
+    screenshotUri: String? = null,
+    sendingProgress: Float = 0F,
+    sending: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    eventSink: (BugReportEvent) -> Unit = {},
+) = BugReportState(
+    formState = formState,
+    hasCrashLogs = hasCrashLogs,
+    canIncludeLogs = canIncludeLogs,
+    screenshotUri = screenshotUri,
+    sendingProgress = sendingProgress,
+    sending = sending,
+    eventSink = eventSink,
 )

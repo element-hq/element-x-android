@@ -13,14 +13,19 @@ import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.impl.crash.A_CRASH_DATA
 import io.element.android.features.rageshake.impl.crash.CrashDataStore
 import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
+import io.element.android.features.rageshake.impl.reporter.CanIncludeLogsProvider
 import io.element.android.features.rageshake.impl.screenshot.A_SCREENSHOT_URI
 import io.element.android.features.rageshake.impl.screenshot.FakeScreenshotHolder
 import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -36,8 +41,11 @@ class BugReportPresenterTest {
     fun `present - initial state`() = runTest {
         val presenter = createPresenter()
         presenter.test {
+            // Skip the item emitted before canIncludeLogs is known
+            skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.hasCrashLogs).isFalse()
+            assertThat(initialState.canIncludeLogs).isTrue()
             assertThat(initialState.formState).isEqualTo(BugReportFormState.Default)
             assertThat(initialState.sending).isEqualTo(AsyncAction.Uninitialized)
             assertThat(initialState.screenshotUri).isNull()
@@ -50,6 +58,8 @@ class BugReportPresenterTest {
     fun `present - set description`() = runTest {
         val presenter = createPresenter()
         presenter.test {
+            // Skip the item emitted before canIncludeLogs is known
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvent.SetDescription(A_SHORT_DESCRIPTION))
             assertThat(awaitItem().submitEnabled).isTrue()
@@ -62,6 +72,8 @@ class BugReportPresenterTest {
     fun `present - can contact`() = runTest {
         val presenter = createPresenter()
         presenter.test {
+            // Skip the item emitted before canIncludeLogs is known
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvent.SetCanContact(true))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(canContact = true))
@@ -74,6 +86,8 @@ class BugReportPresenterTest {
     fun `present - send logs`() = runTest {
         val presenter = createPresenter()
         presenter.test {
+            // Skip the item emitted before canIncludeLogs is known
+            skipItems(1)
             val initialState = awaitItem()
             // Since this is true by default, start by disabling
             initialState.eventSink.invoke(BugReportEvent.SetSendLog(false))
@@ -87,6 +101,8 @@ class BugReportPresenterTest {
     fun `present - send screenshot`() = runTest {
         val presenter = createPresenter()
         presenter.test {
+            // Skip the item emitted before canIncludeLogs is known
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvent.SetSendScreenshot(true))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendScreenshot = true))
@@ -99,6 +115,8 @@ class BugReportPresenterTest {
     fun `present - send notification settings`() = runTest {
         val presenter = createPresenter()
         presenter.test {
+            // Skip the item emitted before canIncludeLogs is known
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvent.SetSendPushRules(true))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendPushRules = true))
@@ -111,6 +129,8 @@ class BugReportPresenterTest {
     fun `present - set GitHub issue number`() = runTest {
         val presenter = createPresenter()
         presenter.test {
+            // Skip the item emitted before canIncludeLogs is known
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvent.SetGhIssueNumber(1))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(ghIssueNumber = 1))
@@ -193,6 +213,8 @@ class BugReportPresenterTest {
     fun `present - send failure description too short`() = runTest {
         val presenter = createPresenter()
         presenter.test {
+            // Skip the item emitted before canIncludeLogs is known
+            skipItems(1)
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvent.SetDescription(A_SHORT_DESCRIPTION))
             skipItems(1)
@@ -228,15 +250,72 @@ class BugReportPresenterTest {
             assertThat(awaitItem().sending).isEqualTo(AsyncAction.Uninitialized)
         }
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - logs are not sent when they cannot be included`() = runTest {
+        var sentWithDevicesLogs: Boolean? = null
+        var sentWithCrashLogs: Boolean? = null
+        val presenter = createPresenter(
+            bugReporter = FakeBugReporter(
+                onSendBugReport = { withDevicesLogs, withCrashLogs ->
+                    sentWithDevicesLogs = withDevicesLogs
+                    sentWithCrashLogs = withCrashLogs
+                },
+            ),
+            crashDataStore = FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
+            canIncludeLogsProvider = { flowOf(false) },
+        )
+        presenter.test {
+            val initialState = consumeItemsUntilPredicate { it.hasCrashLogs }.last()
+            assertThat(initialState.canIncludeLogs).isFalse()
+            assertThat(initialState.formState.sendLogs).isTrue()
+            initialState.eventSink.invoke(BugReportEvent.SetDescription(A_LONG_DESCRIPTION))
+            skipItems(1)
+            initialState.eventSink.invoke(BugReportEvent.SendBugReport)
+            cancelAndIgnoreRemainingEvents()
+        }
+        advanceUntilIdle()
+        assertThat(sentWithDevicesLogs).isFalse()
+        assertThat(sentWithCrashLogs).isFalse()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - logs are sent when they can be included`() = runTest {
+        var sentWithDevicesLogs: Boolean? = null
+        var sentWithCrashLogs: Boolean? = null
+        val presenter = createPresenter(
+            bugReporter = FakeBugReporter(
+                onSendBugReport = { withDevicesLogs, withCrashLogs ->
+                    sentWithDevicesLogs = withDevicesLogs
+                    sentWithCrashLogs = withCrashLogs
+                },
+            ),
+            crashDataStore = FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
+        )
+        presenter.test {
+            val initialState = consumeItemsUntilPredicate { it.hasCrashLogs && it.canIncludeLogs }.last()
+            initialState.eventSink.invoke(BugReportEvent.SetDescription(A_LONG_DESCRIPTION))
+            skipItems(1)
+            initialState.eventSink.invoke(BugReportEvent.SendBugReport)
+            cancelAndIgnoreRemainingEvents()
+        }
+        advanceUntilIdle()
+        assertThat(sentWithDevicesLogs).isTrue()
+        assertThat(sentWithCrashLogs).isTrue()
+    }
 }
 
 internal fun TestScope.createPresenter(
     bugReporter: BugReporter = FakeBugReporter(),
     crashDataStore: CrashDataStore = FakeCrashDataStore(),
     screenshotHolder: ScreenshotHolder = FakeScreenshotHolder(),
+    canIncludeLogsProvider: CanIncludeLogsProvider = CanIncludeLogsProvider { flowOf(true) },
 ) = BugReportPresenter(
     bugReporter = bugReporter,
     crashDataStore = crashDataStore,
     screenshotHolder = screenshotHolder,
+    canIncludeLogsProvider = canIncludeLogsProvider,
     appCoroutineScope = this,
 )
