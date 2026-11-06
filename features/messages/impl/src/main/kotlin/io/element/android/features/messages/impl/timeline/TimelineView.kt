@@ -211,7 +211,8 @@ fun TimelineView(
         }
         // Must be a composition scope, see [animateTimelineItem]
         val itemAnimationScope = rememberCoroutineScope()
-        val timelineItemsInsertion = rememberTimelineItemsInsertion(state.timelineItems, itemAnimationScope)
+        val timelineItemsInsertions = remember(itemAnimationScope) { TimelineItemsInsertions(itemAnimationScope) }
+        val timelineItemsInsertion = rememberTimelineItemsInsertion(state.timelineItems, timelineItemsInsertions)
         CompositionLocalProvider(LocalTimelineEventRendererConfig provides composeLocalTimelineEventRendererConfig) {
             Box(modifier) {
                 LazyColumn(
