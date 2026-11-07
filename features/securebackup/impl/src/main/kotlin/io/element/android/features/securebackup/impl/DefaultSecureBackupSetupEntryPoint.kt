@@ -11,9 +11,11 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.features.securebackup.api.SecureBackupRecoveryKeyEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupSetupEntryPoint
-import io.element.android.features.securebackup.impl.setup.SecureBackupSetupNode
+import io.element.android.features.securebackup.impl.generate.SecureBackupGenerateKeyNode
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesBinding(AppScope::class)
 class DefaultSecureBackupSetupEntryPoint : SecureBackupSetupEntryPoint {
@@ -22,13 +24,19 @@ class DefaultSecureBackupSetupEntryPoint : SecureBackupSetupEntryPoint {
         buildContext: BuildContext,
         inputs: SecureBackupSetupEntryPoint.Inputs,
     ): Node {
-        return parentNode.createNode<SecureBackupSetupNode>(
+        lateinit var node: Node
+        node = parentNode.createNode<SecureBackupGenerateKeyNode>(
             buildContext = buildContext,
             plugins = listOf(
-                SecureBackupSetupNode.Inputs(
-                    isChangeRecoveryKeyUserStory = inputs.isChangeRecoveryKeyUserStory,
-                )
+                SecureBackupGenerateKeyNode.Inputs(
+                    isReplacingExistingKey = inputs.isChangeRecoveryKeyUserStory,
+                    doneButtonText = CommonStrings.action_done,
+                ),
+                object : SecureBackupRecoveryKeyEntryPoint.Callback {
+                    override fun onDone() = node.navigateUp()
+                },
             ),
         )
+        return node
     }
 }
