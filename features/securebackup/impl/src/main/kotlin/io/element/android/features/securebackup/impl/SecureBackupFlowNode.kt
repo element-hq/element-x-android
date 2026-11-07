@@ -21,7 +21,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
-import io.element.android.features.securebackup.api.SecureBackupSetupEntryPoint
+import io.element.android.features.securebackup.api.SecureBackupRecoveryKeyEntryPoint
 import io.element.android.features.securebackup.impl.disable.SecureBackupDisableNode
 import io.element.android.features.securebackup.impl.enter.SecureBackupEnterRecoveryKeyNode
 import io.element.android.features.securebackup.impl.reset.ResetIdentityFlowNode
@@ -32,6 +32,7 @@ import io.element.android.libraries.architecture.appyx.canPop
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(SessionScope::class)
@@ -39,7 +40,7 @@ import kotlinx.parcelize.Parcelize
 class SecureBackupFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val secureBackupSetupEntryPoint: SecureBackupSetupEntryPoint,
+    private val secureBackupRecoveryKeyEntryPoint: SecureBackupRecoveryKeyEntryPoint,
 ) : BaseFlowNode<SecureBackupFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = when (plugins.filterIsInstance<SecureBackupEntryPoint.Params>().first().initialElement) {
@@ -97,20 +98,8 @@ class SecureBackupFlowNode(
                 }
                 createNode<SecureBackupRootNode>(buildContext, listOf(callback))
             }
-            NavTarget.Setup -> {
-                secureBackupSetupEntryPoint.createNode(
-                    parentNode = this,
-                    buildContext = buildContext,
-                    inputs = SecureBackupSetupEntryPoint.Inputs(isChangeRecoveryKeyUserStory = false),
-                )
-            }
-            NavTarget.Change -> {
-                secureBackupSetupEntryPoint.createNode(
-                    parentNode = this,
-                    buildContext = buildContext,
-                    inputs = SecureBackupSetupEntryPoint.Inputs(isChangeRecoveryKeyUserStory = true),
-                )
-            }
+            NavTarget.Setup -> createGenerateKeyNode(isReplacingExistingKey = false, buildContext)
+            NavTarget.Change -> createGenerateKeyNode(isReplacingExistingKey = true, buildContext)
             NavTarget.Disable -> {
                 createNode<SecureBackupDisableNode>(buildContext)
             }
@@ -135,6 +124,26 @@ class SecureBackupFlowNode(
                 createNode<ResetIdentityFlowNode>(buildContext, listOf(callback))
             }
         }
+    }
+
+    private fun createGenerateKeyNode(isReplacingExistingKey: Boolean, buildContext: BuildContext): Node {
+        return secureBackupRecoveryKeyEntryPoint.createNode(
+            parentNode = this,
+            buildContext = buildContext,
+            inputs = SecureBackupRecoveryKeyEntryPoint.Inputs(
+                mode = SecureBackupRecoveryKeyEntryPoint.Mode.Generate(isReplacingExistingKey),
+                doneButtonText = CommonStrings.action_done,
+            ),
+            callback = object : SecureBackupRecoveryKeyEntryPoint.Callback {
+                override fun onDone() {
+                    if (backstack.canPop()) {
+                        backstack.pop()
+                    } else {
+                        callback.onDone()
+                    }
+                }
+            },
+        )
     }
 
     @Composable

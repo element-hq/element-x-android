@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -128,6 +130,11 @@ private fun RecoveryKeyOnlySheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         scrollable = true,
+        // Skip the partially expanded state, which would hide the buttons below the fold.
+        sheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        ),
     ) {
         IconTitleSubtitleMolecule(
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
@@ -171,6 +178,11 @@ private fun NoRecoverySheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         scrollable = true,
+        // Skip the partially expanded state, which would hide the buttons below the fold.
+        sheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        ),
     ) {
         IconTitleSubtitleMolecule(
             modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
