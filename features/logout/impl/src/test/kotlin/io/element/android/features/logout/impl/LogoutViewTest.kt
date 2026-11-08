@@ -82,7 +82,7 @@ class LogoutViewTest : RobolectricTest() {
                 aLogoutState(confirmation = LogoutConfirmation.NoRecovery, eventSink = EventsRecorder(expectEvents = false)),
                 onGenerateRecoveryKeyClick = callback,
             )
-            clickOn(R.string.screen_signout_recovery_disabled_action_setup)
+            clickOn(R.string.screen_chat_backup_recovery_action_setup)
         }
     }
 

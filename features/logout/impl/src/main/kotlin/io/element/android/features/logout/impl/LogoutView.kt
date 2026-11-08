@@ -199,7 +199,7 @@ private fun NoRecoverySheet(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
         ) {
             Button(
-                text = stringResource(id = R.string.screen_signout_recovery_disabled_action_setup),
+                text = stringResource(id = R.string.screen_chat_backup_recovery_action_setup),
                 leadingIcon = IconSource.Vector(CompoundIcons.Key()),
                 modifier = Modifier.fillMaxWidth(),
                 onClick = onGenerateRecoveryKeyClick,

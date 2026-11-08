@@ -6,5 +6,6 @@
   -->
 
 <resources>
-    <string name="screen_signout_recovery_disabled_action_setup">Get recovery key</string>
+    <!-- Stopgap until tools/localazy/downloadStrings.sh generates this existing key in localazy.xml; delete it then. -->
+    <string name="screen_chat_backup_recovery_action_setup">Get recovery key</string>
 </resources>
