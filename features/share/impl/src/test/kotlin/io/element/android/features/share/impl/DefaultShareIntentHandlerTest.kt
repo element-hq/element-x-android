@@ -19,12 +19,12 @@ import android.net.Uri
 import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
+import io.element.android.features.share.api.ConversationShortcutTarget
 import io.element.android.features.share.api.ShareIntentData
 import io.element.android.features.share.api.UriToShare
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.push.api.notifications.conversations.createConversationShortcutId
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 import org.robolectric.Robolectric
@@ -255,7 +255,7 @@ class DefaultShareIntentHandlerTest : RobolectricTest() {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = MimeTypes.PlainText
             putExtra(Intent.EXTRA_TEXT, "a message")
-            putExtra(Intent.EXTRA_SHORTCUT_ID, createConversationShortcutId(A_SESSION_ID, A_ROOM_ID))
+            putExtra(Intent.EXTRA_SHORTCUT_ID, "$A_SESSION_ID-$A_ROOM_ID")
         }
 
         val result = createDefaultShareIntentHandler().handleIncomingShareIntent(intent)
@@ -263,7 +263,7 @@ class DefaultShareIntentHandlerTest : RobolectricTest() {
         assertThat(result).isEqualTo(
             ShareIntentData.PlainText(
                 content = "a message",
-                shortcutId = createConversationShortcutId(A_SESSION_ID, A_ROOM_ID),
+                shortcutTarget = ConversationShortcutTarget(A_SESSION_ID, A_ROOM_ID),
             )
         )
     }
@@ -272,7 +272,7 @@ class DefaultShareIntentHandlerTest : RobolectricTest() {
     fun `a conversation picked in the share sheet is carried on shared uris`() {
         val uri = "content://sender/image.jpg".toUri()
         val intent = aSendIntent(type = "image/jpeg", uri = uri).apply {
-            putExtra(Intent.EXTRA_SHORTCUT_ID, createConversationShortcutId(A_SESSION_ID, A_ROOM_ID))
+            putExtra(Intent.EXTRA_SHORTCUT_ID, "$A_SESSION_ID-$A_ROOM_ID")
         }
 
         val result = createDefaultShareIntentHandler().handleIncomingShareIntent(intent)
@@ -281,7 +281,7 @@ class DefaultShareIntentHandlerTest : RobolectricTest() {
             ShareIntentData.Uris(
                 text = null,
                 uris = listOf(UriToShare(uri = uri, mimeType = "image/jpeg")),
-                shortcutId = createConversationShortcutId(A_SESSION_ID, A_ROOM_ID),
+                shortcutTarget = ConversationShortcutTarget(A_SESSION_ID, A_ROOM_ID),
             )
         )
     }

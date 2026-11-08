@@ -27,7 +27,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
-import io.element.android.libraries.push.api.notifications.conversations.conversationShortcutRoomId
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -57,7 +56,7 @@ class SharePresenter(
 
     @Composable
     override fun present(): ShareState {
-        val pickedRoomId = shareIntentData.shortcutId?.let { conversationShortcutRoomId(it, matrixClient.sessionId) }
+        val pickedRoomId = shareIntentData.shortcutTarget?.takeIf { it.sessionId == matrixClient.sessionId }?.roomId
         LaunchedEffect(Unit) {
             // Send to the room picked in the share sheet, unless a configuration change is replaying this
             // effect over a send already in flight. Anything else falls back to room selection.

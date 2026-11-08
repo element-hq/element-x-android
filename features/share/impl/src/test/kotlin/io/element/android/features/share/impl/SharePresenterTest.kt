@@ -13,6 +13,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.share.api.ConversationShortcutTarget
 import io.element.android.features.share.api.OnSharedData
 import io.element.android.features.share.api.ShareIntentData
 import io.element.android.features.share.api.UriToShare
@@ -30,7 +31,6 @@ import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvi
 import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
 import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaSender
-import io.element.android.libraries.push.api.notifications.conversations.createConversationShortcutId
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.impl.DefaultActiveRoomsHolder
 import io.element.android.tests.testutils.WarmUpRule
@@ -114,7 +114,7 @@ class SharePresenterTest : RobolectricTest() {
             matrixClient = matrixClient,
             shareIntentData = ShareIntentData.PlainText(
                 content = A_MESSAGE,
-                shortcutId = createConversationShortcutId(A_SESSION_ID, A_ROOM_ID),
+                shortcutTarget = ConversationShortcutTarget(A_SESSION_ID, A_ROOM_ID),
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -141,7 +141,7 @@ class SharePresenterTest : RobolectricTest() {
             shareIntentData = ShareIntentData.PlainText(
                 content = A_MESSAGE,
                 // Picked for A_SESSION_ID, but A_SESSION_ID_2 is handling the share.
-                shortcutId = createConversationShortcutId(A_SESSION_ID, A_ROOM_ID),
+                shortcutTarget = ConversationShortcutTarget(A_SESSION_ID, A_ROOM_ID),
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {

@@ -16,6 +16,7 @@ import android.net.Uri
 import androidx.core.content.IntentCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.features.share.api.ConversationShortcutTarget
 import io.element.android.features.share.api.ShareIntentData
 import io.element.android.features.share.api.ShareIntentHandler
 import io.element.android.features.share.api.UriToShare
@@ -29,6 +30,9 @@ import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeText
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.matrix.api.core.MatrixPatterns
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
@@ -40,9 +44,9 @@ class DefaultShareIntentHandler(
     ): ShareIntentData? {
         val type = intent.resolveType(context) ?: return null
         val uris = getIncomingUris(intent, type)
-        val shortcutId = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)
+        val shortcutTarget = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)?.let(::parseShortcutId)
         return when {
-            uris.isEmpty() && type == MimeTypes.PlainText -> handlePlainText(intent, shortcutId)
+            uris.isEmpty() && type == MimeTypes.PlainText -> handlePlainText(intent, shortcutTarget)
             uris.isNotEmpty() ||
                 type.isMimeTypeImage() ||
                 type.isMimeTypeVideo() ||
@@ -54,23 +58,32 @@ class DefaultShareIntentHandler(
                 ShareIntentData.Uris(
                     text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()?.takeIf { it.isNotEmpty() },
                     uris = uris,
-                    shortcutId = shortcutId,
+                    shortcutTarget = shortcutTarget,
                 )
             }
             else -> null
         }
     }
 
-    private fun handlePlainText(intent: Intent, shortcutId: String?): ShareIntentData.PlainText? {
+    private fun handlePlainText(intent: Intent, shortcutTarget: ConversationShortcutTarget?): ShareIntentData.PlainText? {
         val content = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
         return if (content?.isNotEmpty() == true) {
-            ShareIntentData.PlainText(
-                content = content,
-                shortcutId = shortcutId,
-            )
+            ShareIntentData.PlainText(content, shortcutTarget)
         } else {
             null
         }
+    }
+
+    private fun parseShortcutId(shortcutId: String): ConversationShortcutTarget? {
+        // The id is "<sessionId>-<roomId>" and a user id can contain a dash, so the separator is the one
+        // followed by the room id sigil.
+        val separatorIndex = shortcutId.indexOf("-!")
+        if (separatorIndex == -1) return null
+        val sessionId = shortcutId.substring(0, separatorIndex)
+        val roomId = shortcutId.substring(separatorIndex + 1)
+        // Another app can send any id in the share intent, so neither part is necessarily a Matrix id.
+        if (!MatrixPatterns.isUserId(sessionId) || !MatrixPatterns.isRoomId(roomId)) return null
+        return ConversationShortcutTarget(SessionId(sessionId), RoomId(roomId))
     }
 
     /**

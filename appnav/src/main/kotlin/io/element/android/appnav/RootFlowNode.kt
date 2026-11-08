@@ -65,7 +65,6 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.oauth.api.OAuthAction
 import io.element.android.libraries.oauth.api.OAuthActionFlow
-import io.element.android.libraries.push.api.notifications.conversations.conversationShortcutRoomId
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.ui.common.nodes.emptyNode
@@ -439,12 +438,8 @@ class RootFlowNode(
     }
 
     private suspend fun onIncomingShare(shareIntentData: ShareIntentData) {
-        // The share sheet named the conversation, so there is no account to choose.
-        val shortcutSessionId = shareIntentData.shortcutId?.let { shortcutId ->
-            sessionStore.getAllSessions()
-                .map { SessionId(it.userId) }
-                .firstOrNull { conversationShortcutRoomId(shortcutId, it) != null }
-        }
+        val shortcutSessionId = shareIntentData.shortcutTarget?.sessionId
+            ?.takeIf { sessionStore.getSession(it.value) != null }
         if (shortcutSessionId != null) {
             attachSession(shortcutSessionId).attachIncomingShare(shareIntentData)
             return

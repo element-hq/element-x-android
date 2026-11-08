@@ -1,5 +1,3 @@
-import extension.testCommonDependencies
-
 /*
  * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2023-2025 New Vector Ltd.
@@ -24,6 +22,4 @@ dependencies {
     implementation(projects.libraries.matrixmedia.api)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.pushproviders.api)
-
-    testCommonDependencies(libs)
 }
