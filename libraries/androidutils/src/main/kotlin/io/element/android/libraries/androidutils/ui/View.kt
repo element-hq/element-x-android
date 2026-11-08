@@ -34,33 +34,56 @@ suspend fun View.hideKeyboardAndAwaitAnimation() {
     }
 
     val imm = context?.getSystemService<InputMethodManager>() ?: return
-    val future = CompletableDeferred<Unit>()
 
-    val requested = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        setOnApplyWindowInsetsListener { view, insets ->
-            if (!insets.isVisible(WindowInsets.Type.ime())) {
-                future.complete(Unit)
-                // Remove the listener now, it's a single use operation
-                setOnApplyWindowInsetsListener(null)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (imm.hideSoftInputFromWindow(windowToken, 0)) {
+            // Suspend until the first frame in which the window insets no longer contain the keyboard. Observation runs on the view tree by
+            // design: a view exposes only a single OnApplyWindowInsetsListener slot, and Compose already occupies that slot on its root
+            // view. Replacing the listener there, even temporarily, prevents imePadding() and related APIs from receiving further insets
+            // updates for the remainder of the Activity's lifetime.
+            withTimeoutOrNull(1.seconds) {
+                awaitPreDraw { rootWindowInsets?.isVisible(WindowInsets.Type.ime()) != true }
             }
-            insets
         }
-        imm.hideSoftInputFromWindow(windowToken, 0)
     } else {
+        val future = CompletableDeferred<Unit>()
         @Suppress("DEPRECATION")
-        imm.hideSoftInputFromWindow(windowToken, 0, object : ResultReceiver(null) {
+        val requested = imm.hideSoftInputFromWindow(windowToken, 0, object : ResultReceiver(null) {
             override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
                 if (resultCode == InputMethodManager.RESULT_UNCHANGED_HIDDEN || resultCode == InputMethodManager.RESULT_HIDDEN) {
                     future.complete(Unit)
                 }
             }
         })
+        if (requested) {
+            // Await the future to ensure the keyboard hide animation has completed before proceeding
+            withTimeoutOrNull(1.seconds) { future.await() }
+        }
     }
+}
 
-    if (requested) {
-        // Await the future to ensure the keyboard hide animation has completed before proceeding
-        withTimeoutOrNull(1.seconds) { future.await() }
+/**
+ * Suspends until a drawing pass of the view tree is about to begin while [condition] holds. The condition is
+ * evaluated before every frame via the [ViewTreeObserver], which accepts any number of listeners and therefore
+ * leaves every other observer of the view undisturbed.
+ */
+internal suspend fun View.awaitPreDraw(condition: () -> Boolean) = suspendCancellableCoroutine { continuation ->
+    // Retained for later removal: once the view has been attached, the observer it held while detached is no longer alive.
+    val observer = viewTreeObserver
+    fun remove(listener: ViewTreeObserver.OnPreDrawListener) {
+        (if (observer.isAlive) observer else viewTreeObserver).removeOnPreDrawListener(listener)
     }
+    val listener = object : ViewTreeObserver.OnPreDrawListener {
+        override fun onPreDraw(): Boolean {
+            if (condition()) {
+                remove(this)
+                continuation.resume(Unit)
+            }
+            return true
+        }
+    }
+    observer.addOnPreDrawListener(listener)
+    continuation.invokeOnCancellation { remove(listener) }
 }
 
 fun View.showKeyboard(andRequestFocus: Boolean = false) {
