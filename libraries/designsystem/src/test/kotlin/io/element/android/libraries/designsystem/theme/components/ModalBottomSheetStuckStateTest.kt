@@ -10,8 +10,11 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.snapTo
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
 import androidx.compose.runtime.MonotonicFrameClock
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
@@ -21,6 +24,7 @@ import org.junit.Test
 /**
  * Tests for the workaround of https://github.com/element-hq/element-x-android/issues/8102.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 class ModalBottomSheetStuckStateTest {
     private enum class Anchor { Top, Bottom }
 
@@ -124,6 +128,98 @@ class ModalBottomSheetStuckStateTest {
         }
         assertThat(result).isFalse()
         assertThat(clock.frameCount).isEqualTo(10)
+    }
+
+    @Test
+    fun `resetWhenStuck resets a stuck sheet to its current value`() = runTest {
+        val sheet = StuckSheet(currentValue = SheetValue.Expanded, targetValue = SheetValue.Expanded)
+        withContext(FakeMonotonicFrameClock()) { sheet.resetWhenStuck() }
+        assertThat(sheet.animateToCalls).containsExactly(SheetValue.Expanded)
+        assertThat(sheet.isAnimationRunning).isFalse()
+    }
+
+    @Test
+    fun `resetWhenStuck resets a stuck sheet whose stale target differs from its current value`() = runTest {
+        val sheet = StuckSheet(currentValue = SheetValue.PartiallyExpanded, targetValue = SheetValue.Expanded)
+        withContext(FakeMonotonicFrameClock()) { sheet.resetWhenStuck() }
+        assertThat(sheet.animateToCalls).containsExactly(SheetValue.PartiallyExpanded)
+    }
+
+    @Test
+    fun `resetWhenStuck does nothing when the sheet is hidden`() = runTest {
+        val sheet = StuckSheet(currentValue = SheetValue.Hidden, targetValue = SheetValue.Hidden)
+        withContext(FakeMonotonicFrameClock()) { sheet.resetWhenStuck() }
+        assertThat(sheet.animateToCalls).isEmpty()
+    }
+
+    @Test
+    fun `resetWhenStuck never interrupts a hide animation`() = runTest {
+        val clock = FakeMonotonicFrameClock()
+        // The hide animation does not move for a while, then ends
+        val sheet = StuckSheet(
+            currentValue = SheetValue.Expanded,
+            targetValue = SheetValue.Hidden,
+            isAnimationRunning = { clock.frameCount < 20 },
+        )
+        withContext(clock) { sheet.resetWhenStuck() }
+        assertThat(sheet.animateToCalls).isEmpty()
+    }
+
+    @Test
+    fun `resetWhenStuck tries again when the reset is interrupted by a user drag`() = runTest {
+        val sheet = StuckSheet(
+            currentValue = SheetValue.Expanded,
+            targetValue = SheetValue.Expanded,
+            interruptedResetCount = 2,
+        )
+        withContext(FakeMonotonicFrameClock()) { sheet.resetWhenStuck() }
+        assertThat(sheet.animateToCalls).containsExactly(SheetValue.Expanded, SheetValue.Expanded, SheetValue.Expanded)
+        assertThat(sheet.isAnimationRunning).isFalse()
+    }
+
+    @Test
+    fun `resetWhenStuck gives up when resetting does not clear the stuck state`() = runTest {
+        val sheet = StuckSheet(
+            currentValue = SheetValue.Expanded,
+            targetValue = SheetValue.Expanded,
+            resetClearsStuckState = false,
+        )
+        withContext(FakeMonotonicFrameClock()) { sheet.resetWhenStuck(maxResets = 3) }
+        assertThat(sheet.animateToCalls).hasSize(3)
+        assertThat(sheet.isAnimationRunning).isTrue()
+    }
+
+    /**
+     * A sheet resting at offset 0, with [isAnimationRunning] reported as true until it is reset.
+     */
+    private class StuckSheet(
+        val currentValue: SheetValue,
+        val targetValue: SheetValue,
+        private var interruptedResetCount: Int = 0,
+        private val resetClearsStuckState: Boolean = true,
+        isAnimationRunning: (() -> Boolean)? = null,
+    ) {
+        private var isReset = false
+        private val isAnimationRunningProvider = isAnimationRunning ?: { !isReset }
+        val isAnimationRunning: Boolean get() = isAnimationRunningProvider()
+        val animateToCalls = mutableListOf<SheetValue>()
+
+        suspend fun resetWhenStuck(maxResets: Int = 3) = resetWhenStuck(
+            isAnimationRunning = { isAnimationRunning },
+            offset = { 0f },
+            currentValue = { currentValue },
+            targetValue = { targetValue },
+            animateTo = { value ->
+                animateToCalls += value
+                if (interruptedResetCount > 0) {
+                    interruptedResetCount--
+                    throw CancellationException("Interrupted by a user drag")
+                }
+                if (resetClearsStuckState) isReset = true
+            },
+            stableFrameCount = 3,
+            maxResets = maxResets,
+        )
     }
 
     private class FakeMonotonicFrameClock : MonotonicFrameClock {

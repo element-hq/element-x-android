@@ -137,26 +137,59 @@ private fun UnstuckSheetStateEffect(sheetState: SheetState) {
         snapshotFlow { sheetState.isAnimationRunning }
             .collectLatest { isAnimationRunning ->
                 if (!isAnimationRunning) return@collectLatest
-                while (
-                    awaitStuckAtRest(
-                        isAnimationRunning = { sheetState.isAnimationRunning },
-                        offset = { tryOrNull { sheetState.requireOffset() } },
-                    )
-                ) {
-                    try {
-                        when (sheetState.currentValue) {
+                resetWhenStuck(
+                    isAnimationRunning = { sheetState.isAnimationRunning },
+                    offset = { tryOrNull { sheetState.requireOffset() } },
+                    currentValue = { sheetState.currentValue },
+                    targetValue = { sheetState.targetValue },
+                    animateTo = { value ->
+                        when (value) {
                             SheetValue.Expanded -> sheetState.expand()
                             SheetValue.PartiallyExpanded -> sheetState.partialExpand()
-                            SheetValue.Hidden -> return@collectLatest
+                            SheetValue.Hidden -> Unit
                         }
-                        Timber.w("Sheet state was stuck in ${sheetState.currentValue}, it has been reset")
-                    } catch (e: CancellationException) {
-                        // Rethrow if this coroutine is cancelled, else the reset was interrupted by a user drag
-                        // (which has a higher priority): try again once the sheet is at rest.
-                        currentCoroutineContext().ensureActive()
-                    }
-                }
+                    },
+                )
             }
+    }
+}
+
+/**
+ * Reset the sheet state, by animating to its current value, each time it is stuck at rest, see [awaitStuckAtRest].
+ * Return when no animation is running anymore, or when the sheet is hidden, or after [maxResets] resets which did
+ * not clear the stuck state.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+internal suspend fun resetWhenStuck(
+    isAnimationRunning: () -> Boolean,
+    offset: () -> Float?,
+    currentValue: () -> SheetValue,
+    targetValue: () -> SheetValue,
+    animateTo: suspend (SheetValue) -> Unit,
+    stableFrameCount: Int = STUCK_STABLE_FRAME_COUNT,
+    maxResets: Int = MAX_RESET_COUNT,
+) {
+    var resetCount = 0
+    while (awaitStuckAtRest(isAnimationRunning, offset, stableFrameCount)) {
+        val value = currentValue()
+        if (value == SheetValue.Hidden) return
+        // The stale target points at a visible anchor. If the target is Hidden, this is a legit hide animation:
+        // never interrupt it, the dismiss callback would be lost.
+        if (targetValue() == SheetValue.Hidden) continue
+        try {
+            animateTo(value)
+            resetCount++
+            if (!isAnimationRunning()) {
+                Timber.w("Sheet state was stuck in $value, it has been reset")
+            } else if (resetCount >= maxResets) {
+                Timber.e("Sheet state is stuck in $value, and resetting it does not work, giving up")
+                return
+            }
+        } catch (e: CancellationException) {
+            // Rethrow if this coroutine is cancelled, else the reset was interrupted by a user drag
+            // (which has a higher priority): try again once the sheet is at rest.
+            currentCoroutineContext().ensureActive()
+        }
     }
 }
 
@@ -183,8 +216,10 @@ internal suspend fun awaitStuckAtRest(
     return false
 }
 
-// More than one frame, since a restarted animation does not move during its first frame.
-private const val STUCK_STABLE_FRAME_COUNT = 3
+// More than one frame, since a restarted animation does not move during its first frame. A bit more to be safe, since
+// a false positive would interrupt a legit animation.
+private const val STUCK_STABLE_FRAME_COUNT = 6
+private const val MAX_RESET_COUNT = 3
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun SheetState.hide(coroutineScope: CoroutineScope, then: suspend () -> Unit) {
