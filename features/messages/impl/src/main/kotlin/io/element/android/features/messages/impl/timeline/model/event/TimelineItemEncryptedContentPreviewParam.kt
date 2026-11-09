@@ -64,6 +64,12 @@ open class TimelineItemEncryptedContentPreviewParam : PreviewParameterProvider<T
                     utdCause = UtdCause.Unknown,
                 )
             ),
+            aTimelineItemEncryptedContent(
+                data = UnableToDecryptContent.Data.MegolmV1AesSha2(
+                    sessionId = "sessionId",
+                    utdCause = UtdCause.Malformed,
+                )
+            ),
         )
 }
 
