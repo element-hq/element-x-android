@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"Você já está conectado neste dispositivo como %1$s ."</string>
   <string name="error_account_creation_not_possible">"Seu servidor-casa precisa ser atualizado para oferecer suporte ao Matrix Authentication Service e à criação de contas."</string>
   <string name="screen_account_provider_signin_title">"Você está prestes a entrar em %s"</string>
-  <string name="screen_change_account_provider_other">"Outro"</string>
   <string name="screen_change_account_provider_subtitle">"Use um provedor de conta diferente, como seu próprio servidor privado ou uma conta corporativa."</string>
-  <string name="screen_change_account_provider_title">"Alterar provedor da conta"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"O app Element Pro é necessário no %1$s. Por favor, baixe-o da loja."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro necessário"</string>
@@ -16,7 +14,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"O %1$s não tem permissão para se conectar a %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Este app foi configurado para permitir: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"O provedor de conta %1$s não é permitido."</string>
-  <string name="screen_change_server_form_header">"URL do servidor"</string>
   <string name="screen_change_server_form_notice">"Digite o endereço de um domínio."</string>
   <string name="screen_change_server_subtitle">"Qual é o endereço do seu servidor?"</string>
   <string name="screen_change_server_title">"Selecione seu servidor"</string>

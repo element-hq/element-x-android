@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_active">"Aktywny"</string>
   <string name="a11y_add_avatar">"Dodaj awatar"</string>
   <string name="a11y_add_reaction">"Dodaj reakcję: %1$s"</string>
   <string name="a11y_address">"Adres"</string>
@@ -31,6 +32,7 @@
   <string name="a11y_gallery_scanning">"Galeria, skanowanie %1$d"</string>
   <string name="a11y_gallery_video">"Galeria, wideo %1$d"</string>
   <string name="a11y_hide_password">"Ukryj hasło"</string>
+  <string name="a11y_inactive">"Nieaktywny"</string>
   <string name="a11y_info">"Informacje"</string>
   <string name="a11y_join_call">"Dołącz do połączenia"</string>
   <string name="a11y_jump_to_bottom">"Przejdź na dół"</string>
@@ -76,6 +78,8 @@
   <string name="a11y_start_call">"Rozpocznij rozmowę"</string>
   <string name="a11y_start_video_call">"Rozpocznij rozmowę wideo"</string>
   <string name="a11y_start_voice_call">"Rozpocznij połączenie głosowe"</string>
+  <string name="a11y_state_collapsed">"Zwinięto"</string>
+  <string name="a11y_state_expanded">"Rozwinięto"</string>
   <string name="a11y_status">"Status"</string>
   <string name="a11y_thread_in_room">"Wątek w %1$s"</string>
   <string name="a11y_threads_in_room">"Wątki w %1$s"</string>
@@ -429,6 +433,7 @@ Powód: %1$s."</string>
     <item quantity="few">"%1$d Przestrzenie"</item>
     <item quantity="many">"%1$d Przestrzeni"</item>
   </plurals>
+  <string name="common_spoiler">"Spoiler"</string>
   <string name="common_starting_chat">"Rozpoczynanie czatu…"</string>
   <string name="common_sticker">"Naklejka"</string>
   <string name="common_success">"Sukces"</string>
@@ -484,6 +489,7 @@ Powód: %1$s."</string>
   <string name="dialog_title_success">"Sukces"</string>
   <string name="dialog_title_warning">"Ostrzeżenie"</string>
   <string name="dialog_video_quality_selector_title">"Wybierz jakość przesyłania wideo"</string>
+  <string name="error_camera_unavailable">"Kamera jest niedostępna"</string>
   <string name="error_failed_creating_the_permalink">"Nie udało się utworzyć linku bezpośredniego"</string>
   <string name="error_message_not_found">"Nie znaleziono wiadomości"</string>
   <string name="error_network_or_server_issue">"Może to być spowodowane problemami z siecią lub serwerem."</string>

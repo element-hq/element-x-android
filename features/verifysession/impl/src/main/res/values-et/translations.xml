@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Kas kinnitamine pole võimalik?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Loo uus taastevõti"</string>
+  <string name="screen_identity_confirmation_sign_out">"Logi välja"</string>
   <string name="screen_identity_confirmation_subtitle">"Turvalise sõnumside seadistamiseks vali verifitseerimise viis."</string>
   <string name="screen_identity_confirmation_title">"Kinnita oma digitaalne identiteet"</string>
   <string name="screen_identity_confirmation_use_another_device">"Kasuta teist seadet"</string>
@@ -33,6 +34,7 @@
   <string name="screen_session_verification_use_another_device_title">"Ava rakendus teises verifitseeritud seadmes"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Lisaturvalisuse nimel verifitseeri seee kasutaja, võrreldes oma seadmetes olevaid emojisid. Tee seda, kasutades usaldusväärset suhtlusviisi."</string>
   <string name="screen_session_verification_user_initiator_title">"Kas verifitseerime selle kasutaja?"</string>
+  <string name="screen_session_verification_user_requesting_verification">"Kasutaja soovib verifitseerimist:"</string>
   <string name="screen_session_verification_user_responder_subtitle">"Lisaturvalisuse nimel soovib teine kasutaja sinu digitaalse identiteeti verifitseerida. Järgmiseks näed sa emojisid, mida peate omavahel võrdlema."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Alusta verifitseerimist teises seadmes"</string>
   <string name="screen_session_verification_waiting_other_device_title">"Alusta verifitseerimist teises seadmes"</string>

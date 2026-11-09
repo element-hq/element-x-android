@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"لقد سجّلت الدخول بالفعل على هذا الجهاز باسم %1$s."</string>
   <string name="error_account_creation_not_possible">"يجب ترقية خادمك المنزلي لدعم Matrix Authentication Service وإنشاء الحسابات."</string>
   <string name="screen_account_provider_signin_title">"أنت على وشك تسجيل الدخول إلى %s"</string>
-  <string name="screen_change_account_provider_other">"غير ذلك"</string>
   <string name="screen_change_account_provider_subtitle">"استخدم مزوّد حسابات آخر كسيرفرك الخاص أو حساب عمل."</string>
-  <string name="screen_change_account_provider_title">"تغيير مزوّد الحسابات"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"تطبيق Element Pro مطلوب على %1$s. يرجى تنزيله من المتجر."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro مطلوب"</string>
@@ -16,7 +14,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"غير مسموح لـ %1$s بالاتصال بـ %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"تم إعداد هذا التطبيق للسماح بـ: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"موفّر الحساب %1$s غير مسموح به."</string>
-  <string name="screen_change_server_form_header">"عنوان الـ URL للسيرفر"</string>
   <string name="screen_change_server_form_notice">"أدخل عنوان نطاق."</string>
   <string name="screen_change_server_navigation_title_login">"تسجيل الدخول"</string>
   <string name="screen_change_server_navigation_title_register">"إنشاء حساب"</string>

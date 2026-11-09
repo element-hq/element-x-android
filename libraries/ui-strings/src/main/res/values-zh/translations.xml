@@ -314,7 +314,7 @@
   <string name="common_message_failed_to_send">"消息发送失败"</string>
   <string name="common_message_layout">"消息布局"</string>
   <string name="common_message_removed">"消息已移除"</string>
-  <string name="common_moderation_and_safety">"尺度与安全"</string>
+  <string name="common_moderation_and_safety">"内容审核与安全"</string>
   <string name="common_modern">"现代"</string>
   <string name="common_mute">"静音"</string>
   <string name="common_name">"名称"</string>
@@ -482,8 +482,6 @@
   <string name="screen_room_grouped_state_events_reduce">"折叠"</string>
   <string name="screen_room_live_location_banner">"正在共享实时位置"</string>
   <string name="screen_room_title">"聊天"</string>
-  <string name="screen_select_account_permalink_room_subtitle">"你的账户尚未加入此房间，请选择要使用的账户。"</string>
-  <string name="screen_select_account_permalink_title">"选择一个账户以打开链接："</string>
   <string name="screen_space_list_parent_space">"空间 %1$s"</string>
   <string name="test_language_identifier">"zh-Hans"</string>
 </resources>

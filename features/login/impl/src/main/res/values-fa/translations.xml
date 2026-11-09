@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"شما قبلاً با نام کاربری %1$s در این دستگاه وارد سیستم شده‌اید."</string>
   <string name="error_account_creation_not_possible">"سرور خانگی شما باید ارتقا یابد تا از سرویس احراز هویت ماتریکس و ایجاد حساب کاربری پشتیبانی کند."</string>
   <string name="screen_account_provider_signin_title">"دارید وارد %s می‌شوید"</string>
-  <string name="screen_change_account_provider_other">"دیگر"</string>
   <string name="screen_change_account_provider_subtitle">"استفاده از فراهم کنندهٔ حسابی دیگر چون کارساز خصوصی خوتان یا حسابی کاری."</string>
-  <string name="screen_change_account_provider_title">"تغییر فراهم کنندهٔ حساب"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"پلی گپگل"</string>
   <string name="screen_change_server_error_element_pro_required_message">"برنامه Element Pro برای %1$s مورد نیاز است. لطفاً آن را از فروشگاه دانلود کنید."</string>
   <string name="screen_change_server_error_element_pro_required_title">"المنت پرو مورد نیاز است"</string>
@@ -15,7 +13,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s اجازه اتصال به %2$s را ندارد."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"این برنامه طوری پیکربندی شده است که اجازه موارد زیر را بدهد: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"ارائه دهنده حساب %1$s مجاز نیست."</string>
-  <string name="screen_change_server_form_header">"نشانی کارساز خانگی"</string>
   <string name="screen_change_server_form_notice">"ورود نشانی دامنه."</string>
   <string name="screen_change_server_subtitle">"نشانی کارسازتان چیست؟"</string>
   <string name="screen_change_server_title">"کارسازتان را برگزینید"</string>

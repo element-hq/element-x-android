@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"Már bejelentkezett erre az eszközre, mint %1$s."</string>
   <string name="error_account_creation_not_possible">"A Matrix-kiszolgálót frissíteni kell a Matrix Authentication Service és a fióklétrehozás támogatásához."</string>
   <string name="screen_account_provider_signin_title">"Hamarosan bejelentkezik ide: %s"</string>
-  <string name="screen_change_account_provider_other">"Egyéb"</string>
   <string name="screen_change_account_provider_subtitle">"Másik fiókszolgáltató, például a saját privát kiszolgáló vagy egy munkahelyi fiók használata."</string>
-  <string name="screen_change_account_provider_title">"Fiókszolgáltató módosítása"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Az Element Pro alkalmazás szükséges a következőn: %1$s. Töltse le az áruházból."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro szükséges"</string>
@@ -16,7 +14,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s nem csatlakozhat ide: %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Ezt az alkalmazást úgy konfigurálták, hogy engedélyezi ezt: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"A(z) %1$s fiókszolgáltató nem engedélyezett."</string>
-  <string name="screen_change_server_form_header">"Matrix-kiszolgáló webcíme"</string>
   <string name="screen_change_server_form_notice">"Adjon meg egy domaincímet."</string>
   <string name="screen_change_server_navigation_title_login">"Bejelentkezés"</string>
   <string name="screen_change_server_navigation_title_register">"Fiók létrehozása"</string>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="slash_command_description_avatar">"Muudab sinu profiilipildi kõikides jututubades"</string>
+  <string name="slash_command_description_avatar_for_room">"Muudab sinu tunnuspildi ainult selles praeguses toas"</string>
+  <string name="slash_command_description_ban_user">"Keelab ligipääsu antud tunnusega kasutajale"</string>
+  <string name="slash_command_description_confetti">"Lisab sellele sõnumile serpentiine"</string>
+  <string name="slash_command_description_crash_application">"Jooksutab rakenduse kokku."</string>
+  <string name="slash_command_description_deop_user">"Eemaldab antud tunnusega kasutajalt haldusõigused"</string>
+  <string name="slash_command_description_devtools">"Avab arendustarvikute vaate"</string>
+  <string name="slash_command_description_discard_session">"Sunnib loobuma praeguse krüptitud jututoa rühmavestluse sessioonist"</string>
+  <string name="slash_command_description_emote">"Näitab tegevusi"</string>
+  <string name="slash_command_description_ignore_user">"Eirab kasutajat peites kõik tema sõnumid sinu eest"</string>
+  <string name="slash_command_description_invite_user">"Kutsub nimetatud kasutajatunnusega kasutaja sellesse jututuppa"</string>
+  <string name="slash_command_description_join_room">"Liitu antud aadressiga jututoaga"</string>
+  <string name="slash_command_description_leave_room">"Lahkub praegusest jututoast"</string>
+  <string name="slash_command_description_lenny">"Lisa ( ͡° ͜ʖ ͡°) smaili vormindamata sõnumi algusesse"</string>
+  <string name="slash_command_description_nick">"Muudab sinu kuvatavat nime"</string>
+  <string name="slash_command_description_nick_for_room">"Muudab sinu kuvatavat nime vaid selles jututoas"</string>
+  <string name="slash_command_description_op_user">"Määratleb kasutaja õiguste taseme"</string>
+  <string name="slash_command_description_plain">"Saadab sõnumi vormindamata tekstina ega tõlgenda seda markdown-vormindusena"</string>
+  <string name="slash_command_description_rainbow">"Saadab antud sõnumi vikerkaarevärvides"</string>
+  <string name="slash_command_description_rainbow_emote">"Saadab antud emotikoni vikerkaarevärvides"</string>
+  <string name="slash_command_description_remove_user">"Eemaldab antud kasutajatunnusega osaleja sellest jututoast"</string>
+  <string name="slash_command_description_room_avatar">"Muudab selle jututoa tunnuspilti"</string>
+  <string name="slash_command_description_room_name">"Määrab jututoa nime"</string>
+  <string name="slash_command_description_shrug">"Lisab ¯\\_(ツ)_/¯ smaili vormindamata teksti algusesse"</string>
+  <string name="slash_command_description_snow">"Saadab antud sõnumi koos lumesajuga"</string>
+  <string name="slash_command_description_spoiler">"Saadab selle sõnumi rõõmurikkujana"</string>
+  <string name="slash_command_description_table_flip">"Lisab vormindamata sõnumi ette (╯°□°）╯︵ ┻━┻"</string>
+  <string name="slash_command_description_topic">"Määratleb jututoa teema"</string>
+  <string name="slash_command_description_unban_user">"Eemaldab suhtluskeelu antud tunnusega kasutajalt"</string>
+  <string name="slash_command_description_unflip">"Lisab vormindamata sõnumi ette ┬──┬ ノ( ゜-゜ノ)"</string>
+  <string name="slash_command_description_unignore_user">"Lõpetab kasutaja eiramise ja näitab edaspidi tema sõnumeid"</string>
+  <string name="slash_command_description_upgrade_room">"Uuendab jututoa uue versioonini"</string>
+  <string name="slash_command_description_whois">"Näitab teavet kasutaja kohta"</string>
+  <string name="slash_command_error">"Käsu viga"</string>
+  <string name="slash_command_error_discard_session_not_handled">"Toetatud vaid krüptitud jututubades"</string>
+  <string name="slash_command_not_supported_in_threads">"„%1$s“ käsk on tuvastatud ja korrektne, kuid pole kasutatav jutulõngade puhul."</string>
+  <string name="slash_command_parameters_error">"„%1$s“ käsk vajab rohkem parameetreid või on mõned parameetrid valed. Süntaks on
+
+%2$s"</string>
+  <string name="slash_command_unrecognized">"Tundmatu käsk: %1$s"</string>
+</resources>

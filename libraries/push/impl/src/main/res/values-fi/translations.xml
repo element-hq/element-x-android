@@ -5,10 +5,6 @@
   <string name="notification_channel_noisy">"Äänekkäät ilmoitukset"</string>
   <string name="notification_channel_ringing_calls">"Soivat puhelut"</string>
   <string name="notification_channel_silent">"Hiljaiset ilmoitukset"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d viesti"</item>
-    <item quantity="other">"%1$s: %2$d viestiä"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d ilmoitus"</item>
     <item quantity="other">"%d ilmoitusta"</item>
@@ -25,19 +21,11 @@
   <string name="notification_incoming_audio_call">"📞 Saapuva puhelu"</string>
   <string name="notification_incoming_call">"📹 Saapuva puhelu"</string>
   <string name="notification_inline_reply_failed">"** Lähetys epäonnistui - avaa huone"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d kutsu"</item>
-    <item quantity="other">"%d kutsua"</item>
-  </plurals>
   <string name="notification_invite_body">"Kutsui sinut keskustelemaan"</string>
   <string name="notification_invite_body_with_sender">"%1$s kutsui sinut keskustelemaan"</string>
   <string name="notification_knock_request_body">"Pyytää liittymistä"</string>
   <string name="notification_live_location_started_body">"Aloitti reaaliaikaisen sijainnin jakamisen"</string>
   <string name="notification_mentioned_you_body">"Mainitsi sinut: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d uusi viesti"</item>
-    <item quantity="other">"%d uutta viestiä"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reaktio: %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Merkitse luetuksi"</string>
   <string name="notification_room_action_quick_reply">"Pikavastaus"</string>
@@ -82,10 +70,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Nykyinen push-palveluntarjoaja"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Varmistaa, että sovelluksella on vähintään yksi push-palveluntarjoaja."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Push-palveluntarjoajia ei löytynyt."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Löytyi %1$d push-palveluntarjoaja: %2$s"</item>
-    <item quantity="other">"Löytyi %1$d push-palveluntarjoajaa: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Sovellus on rakennettu tukemaan: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Push-palveluntarjoajien havaitseminen"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Tarkistaa, että sovellus voi näyttää ilmoituksen."</string>

@@ -32,8 +32,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Kui see eelistus on välja lülitatud, siis sa ei saa ega saada ei lugemisteatisi ega kirjutamise teavitusi."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Peida alati"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Näita alati"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Privaatsetes jututubades"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Peidetud meediumi saad alati näha temal klõpsides"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Näita privaatsetes jututubades"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Peidetud meediumi saad alati näha temal klõpsides."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Näita ajajoonel meediat"</string>
   <string name="screen_advanced_settings_view_source_description">"Selle eelistuse sisselülitamisel on võimalik ajajoonel vaadata sõnumite lähtekoodi."</string>
   <string name="screen_blocked_users_empty">"Sa pole ühtegi kasutajat blokeerinud"</string>
@@ -47,11 +47,19 @@
   <string name="screen_edit_profile_error_title">"Profiili uuendamine ei õnnestunud"</string>
   <string name="screen_edit_profile_title">"Muuda profiili"</string>
   <string name="screen_edit_profile_updating_details">"Profiil on muutmisel…"</string>
+  <string name="screen_labs_enable_gallery">"Galeriisõnumid"</string>
+  <string name="screen_labs_enable_gallery_description">"Saada korraga mitu pilti või videot. Töötab stabiilselt nutiseadmes, kuid veebirakenduses pole see veel toetatud."</string>
+  <string name="screen_labs_enable_knocking">"Küsi võimalust liitumiseks"</string>
+  <string name="screen_labs_enable_knocking_description">"Kasutajad saavad paluda ligipääsu jututoale, mis ei ole kõigile liitumiseks avatud. Töötab stabiilselt nutiseadmes, katseline variant on olemas ka veebirakenduse jaoks."</string>
   <string name="screen_labs_enable_threads">"Võta kasutusele vastamine jutulõngas"</string>
   <string name="screen_labs_enable_threads_description">"Selle muudatuse jõustamiseks käivitub rakendus uuesti."</string>
   <string name="screen_labs_header_description">"Katseta meie uusimaid arendusideid. Need funktsionaalsused pole veel lõplikud, nad ei pruugi toimida parimal viisil ning võivad veel muutuda."</string>
   <string name="screen_labs_header_title">"Kas tahad katsetada?"</string>
   <string name="screen_labs_title">"Katsed"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Kutsed"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Muud kasutajad"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Sinu digitaalne välimus"</string>
+  <string name="screen_notification_settings_activity_section_title">"Tegevus"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Täiendavad seadistused"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Kõne helin"</string>
   <string name="screen_notification_settings_calls_label">"Hääl- ja videokõned"</string>
@@ -70,7 +78,7 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_failed_fixing_configuration">"Seadistus on veel parandamata, palun proovi uuesti."</string>
   <string name="screen_notification_settings_group_chats">"Rühmavestlused"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Kutsed"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Sinu koduserver ei toeta seda funktsionaalsust krüptitud jututubades ja seega ei pruugi kõik teavitused sinuni jõuda."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Sinu teenusepakkuja ei toeta seda funktsionaalsust krüptitud jututubades ja seega ei pruugi kõik teavitused sinuni jõuda."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mainimiste alusel"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Vali muu ​​helin…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Hetkel on kasutusel %1$s"</string>
@@ -80,6 +88,8 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_mode_mentions">"Mainimiste alusel"</string>
   <string name="screen_notification_settings_notification_section_title">"Teavita mind"</string>
   <string name="screen_notification_settings_room_mention_label">@jututoa mainimised</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Punktid või lugemata sõnumite arv"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Kuva kogu tegevust jututubade loendis"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Kohandatud"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Sinu valitud helin…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Viga faili kustutamisel"</string>
@@ -96,6 +106,7 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"süsteemi seadistusi"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Süsteemi teavitused on välja lülitatud"</string>
   <string name="screen_notification_settings_title">"Teavitused"</string>
+  <string name="screen_settings_add_account">"Lisa kasutajakonto"</string>
   <string name="screen_settings_user_status_away">"Eemal"</string>
   <string name="screen_settings_user_status_be_right_back">"Tulen kohe tagasi"</string>
   <string name="screen_settings_user_status_custom">"Kohandatud…"</string>

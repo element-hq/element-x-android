@@ -5,10 +5,6 @@
   <string name="notification_channel_noisy">"Notificaciones ruidosas"</string>
   <string name="notification_channel_ringing_calls">"Llamadas entrantes"</string>
   <string name="notification_channel_silent">"Notificaciones silenciosas"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d mensaje"</item>
-    <item quantity="other">"%1$s: %2$d mensajes"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d notificación"</item>
     <item quantity="other">"%d notificaciones"</item>
@@ -25,18 +21,10 @@
   <string name="notification_incoming_audio_call">"📞 Llamada entrante"</string>
   <string name="notification_incoming_call">"📹 Llamada entrante"</string>
   <string name="notification_inline_reply_failed">"** No se ha podido enviar - por favor, abre la sala"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d invitación"</item>
-    <item quantity="other">"%d invitaciones"</item>
-  </plurals>
   <string name="notification_invite_body">"Te invitó a chatear"</string>
   <string name="notification_invite_body_with_sender">"%1$s te invitó a chatear"</string>
   <string name="notification_live_location_started_body">"Comenzó a compartir su ubicación en tiempo real"</string>
   <string name="notification_mentioned_you_body">"Te mencionó: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d mensaje nuevo"</item>
-    <item quantity="other">"%d mensajes nuevos"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reaccionó con %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Marcar como leído"</string>
   <string name="notification_room_action_quick_reply">"Respuesta rápida"</string>
@@ -81,10 +69,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Proveedor de push actual"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Asegurarse de que la aplicación tiene al menos un proveedor de push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"No se encontró ningún proveedor de push."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Se encontró %1$d proveedor de push: %2$s"</item>
-    <item quantity="other">"Se encontraron %1$d proveedores de push: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"La aplicación se compiló con compatibilidad para: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Detectar proveedores de push"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Verificar que la aplicación pueda mostrar notificaciones."</string>

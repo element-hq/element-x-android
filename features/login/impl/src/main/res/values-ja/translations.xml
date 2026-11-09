@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"この端末では既に %1$s としてログインしています。"</string>
   <string name="error_account_creation_not_possible">"Matrix Authentication Service とアカウント作成に対応させるため、アカウント提供元のアップグレードが必要です。"</string>
   <string name="screen_account_provider_signin_title">"%s にサインインを試みています"</string>
-  <string name="screen_change_account_provider_other">"その他"</string>
   <string name="screen_change_account_provider_subtitle">"自身のサーバーや仕事用のアカウントにサインインするには、アカウント提供元を変更してください。"</string>
-  <string name="screen_change_account_provider_title">"アカウント提供元を変更"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s では Element Pro を使用する必要があります。アプリストアよりダウンロードしてください。"</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro が必要です"</string>
@@ -15,7 +13,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%2$s は %1$s からの接続を許可していません。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"このアプリは次のサーバーを許可します: %1$s"</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"アカウント提供元 %1$s は許可されていません。"</string>
-  <string name="screen_change_server_form_header">"ホームサーバーURL"</string>
   <string name="screen_change_server_form_notice">"ドメイン名を入力してください"</string>
   <string name="screen_change_server_navigation_title_login">"サインイン"</string>
   <string name="screen_change_server_navigation_title_register">"アカウントを作成"</string>

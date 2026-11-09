@@ -5,11 +5,6 @@
   <string name="notification_channel_noisy">"Hlasité oznámenia"</string>
   <string name="notification_channel_ringing_calls">"Vyzváňanie hovorov"</string>
   <string name="notification_channel_silent">"Tiché oznámenia"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d správa"</item>
-    <item quantity="few">"%1$s: %2$d správy"</item>
-    <item quantity="other">"%1$s: %2$d správ"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d oznámenie"</item>
     <item quantity="few">"%d oznámenia"</item>
@@ -18,20 +13,10 @@
   <string name="notification_error_unified_push_unregistered_android">"Distribútora oznámení UnifiedPush sa nepodarilo zaregistrovať, takže už nebudete dostávať oznámenia. Skontrolujte nastavenia oznámení v aplikácii a stav distribútora push oznámení."</string>
   <string name="notification_incoming_call">"📹 Prichádzajúci hovor"</string>
   <string name="notification_inline_reply_failed">"** Nepodarilo sa odoslať - prosím otvorte miestnosť"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d pozvánka"</item>
-    <item quantity="few">"%d pozvánky"</item>
-    <item quantity="other">"%d pozvánok"</item>
-  </plurals>
   <string name="notification_invite_body">"Vás pozval/a na konverzáciu"</string>
   <string name="notification_invite_body_with_sender">"%1$s vás pozval/a na rozhovor"</string>
   <string name="notification_knock_request_body">"Požiadal/a o pripojenie"</string>
   <string name="notification_mentioned_you_body">"Spomenul/a vás: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d nová správa"</item>
-    <item quantity="few">"%d nové správy"</item>
-    <item quantity="other">"%d nových správ"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reagoval/a s %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Označiť ako prečítané"</string>
   <string name="notification_room_action_quick_reply">"Rýchla odpoveď"</string>
@@ -79,11 +64,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Aktuálny poskytovateľ push"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Uistite sa, že aplikácia má aspoň jedného poskytovateľa push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nenašli sa žiadni poskytovatelia push."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Nájdený %1$d poskytovateľ služby push: %2$s"</item>
-    <item quantity="few">"Nájdení %1$d poskytovatelia služby push: %2$s"</item>
-    <item quantity="other">"Nájdených %1$d poskytovateľov služby push: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Aplikácia bola vytvorená s podporou pre: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Zistiť poskytovateľov push"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Skontrolujte, či aplikácia dokáže zobraziť upozornenie."</string>
