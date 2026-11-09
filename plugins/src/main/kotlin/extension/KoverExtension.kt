@@ -39,13 +39,11 @@ val excludedKoverSubProjects = listOf(
     ":tests:testutils",
     // Exclude modules which are not Android libraries
     // See https://github.com/Kotlin/kotlinx-kover/issues/312
-    ":appconfig",
     ":libraries:core",
     ":libraries:coroutines",
     ":libraries:di",
     ":tests:detekt-rules",
     ":tests:konsist",
-    ":tests:testutils",
 ) + localAarProjects
 
 private fun Project.kover(any: Any) {
