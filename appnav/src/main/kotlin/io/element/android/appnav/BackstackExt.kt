@@ -20,10 +20,11 @@ import kotlinx.parcelize.RawValue
 
 /**
  * Don't process NewRoot if the nav target already exists in the stack.
+ * Elements being removed (DESTROYED state, waiting for the end of the transition) are ignored.
  */
 fun <T : Any> BackStack<T>.safeRoot(element: T) {
     val containsRoot = elements.value.any {
-        it.key.navTarget == element
+        it.targetState != BackStack.State.DESTROYED && it.key.navTarget == element
     }
     if (containsRoot) return
     accept(NewRoot(element))

@@ -82,6 +82,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
@@ -146,6 +147,7 @@ class RootFlowNode(
         }
         observeIncomingVerificationRequests()
         observeRemovedSessions()
+        observeSignedOutSessions()
         super.onBuilt()
     }
 
@@ -249,12 +251,57 @@ class RootFlowNode(
                 (previous.orEmpty() - current).forEach { sessionId ->
                     // The verification of a removed session cannot continue, for instance if the user has signed out from it
                     backstack.removeLast(NavTarget.OtherAccountSessionVerification(sessionId))
+                    // The signed out screen of a non active session is displayed on top of the root, remove it.
+                    // If it is the root, the nav state will replace it.
+                    removeSignedOutOverlay(sessionId)
                     Timber.d("Session $sessionId removed, remove it from the cache")
                     matrixSessionCache.remove(sessionId)
                 }
             }
             .launchIn(lifecycleScope)
     }
+
+    /**
+     * Display the signed out screen for the sessions which are not the active one, on top of the current root.
+     * The signed out screen of the active session is handled by [observeNavState].
+     * If several sessions are signed out, the screens are stacked, and displayed one after the other.
+     */
+    private fun observeSignedOutSessions() {
+        combine(
+            sessionStore.sessionsFlow(),
+            sessionStore.loggedInStateFlow(),
+        ) { sessions, loggedInState ->
+            val activeSessionId = (loggedInState as? LoggedInState.LoggedIn)?.sessionId
+            sessions
+                .filter { !it.isTokenValid && it.userId != activeSessionId }
+                .map { SessionId(it.userId) }
+        }
+            .distinctUntilChanged()
+            .onEach { sessionIds -> sessionIds.forEach(::showSignedOutOverlay) }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun showSignedOutOverlay(sessionId: SessionId) {
+        val navTarget = NavTarget.SignedOutFlow(sessionId)
+        if (navTargetsNotDestroyed().none { it == navTarget }) {
+            Timber.d("Session $sessionId has been signed out, display the signed out screen")
+            backstack.push(navTarget)
+        }
+    }
+
+    private fun removeSignedOutOverlay(sessionId: SessionId) {
+        val navTarget = NavTarget.SignedOutFlow(sessionId)
+        if (navTargetsNotDestroyed().drop(1).any { it == navTarget }) {
+            backstack.removeLast(navTarget)
+        }
+    }
+
+    /**
+     * Elements which have been removed from the backstack are kept with the DESTROYED state until the end of the transition, ignore them.
+     */
+    private fun navTargetsNotDestroyed() = backstack.elements.value
+        .filter { it.targetState != BackStack.State.DESTROYED }
+        .map { it.key.navTarget }
 
     private fun observeIncomingVerificationRequests() {
         incomingVerificationRequestObserver.incomingVerificationRequests()
@@ -293,16 +340,21 @@ class RootFlowNode(
 
     private fun switchToSignedOutFlow(sessionId: SessionId) {
         pendingLoginParams = null
+        // The signed out screen may already be displayed on top of the root, if the session was not the active one.
+        removeSignedOutOverlay(sessionId)
         setRoot(NavTarget.SignedOutFlow(sessionId))
     }
 
     /**
      * Set the root of the backstack. If an incoming share is displayed, keep it on top of the new root, so that the user can
      * finish sharing, for instance with another account if the current one has been signed out.
+     * Also keep the signed out screens of the non active sessions, so that the user can see them all.
      */
     private fun setRoot(navTarget: NavTarget) {
-        val hasIncomingShare = backstack.elements.value.any { it.key.navTarget is NavTarget.IncomingShare }
-        if (hasIncomingShare) {
+        val hasElementsToKeep = navTargetsNotDestroyed().drop(1).any {
+            it is NavTarget.IncomingShare || it is NavTarget.SignedOutFlow
+        }
+        if (hasElementsToKeep) {
             backstack.replaceRoot(navTarget)
         } else {
             backstack.safeRoot(navTarget)
