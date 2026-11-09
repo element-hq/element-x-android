@@ -304,9 +304,7 @@ subprojects {
                 println("Pruned ${obsolete.size} obsolete screenshot(s), kept ${existing.size - obsolete.size}.\n")
             }
         }
-        // `configureEach` on a live filtered collection, and not `findByName`, because the Paparazzi plugin
-        // registers its record tasks per variant, long after this block runs.
-        tasks.matching { it.name.startsWith("recordPaparazzi") }.configureEach {
+        tasks.named { it.startsWith("recordPaparazzi") }.configureEach {
             finalizedBy(pruneObsoleteSnapshots)
         }
     }
