@@ -30,7 +30,11 @@ import io.element.android.libraries.ui.strings.CommonStrings
 /**
  * Asks for the recovery key the user already has, to make sure that it is correct.
  *
+ * @param state the recovery key being entered and whether it is correct.
  * @param doneButtonText the string resource of the button that finishes the screen once the key is known to be correct.
+ * @param onDone called when the user taps the done button.
+ * @param onBackClick called when the user navigates back; not available once the key is confirmed.
+ * @param modifier the modifier to apply to the screen.
  */
 @Composable
 fun SecureBackupCheckKeyView(

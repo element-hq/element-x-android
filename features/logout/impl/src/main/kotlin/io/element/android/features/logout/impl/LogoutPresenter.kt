@@ -134,7 +134,7 @@ class LogoutPresenter(
     }
 
     private fun BackupUploadState.hasFailed(): Boolean {
-        return this == BackupUploadState.Error || (this is BackupUploadState.SteadyException && !isOffline())
+        return this == BackupUploadState.Error || this is BackupUploadState.SteadyException && !isOffline()
     }
 
     private fun CoroutineScope.getKeyBackupStatus(action: MutableState<AsyncData<Boolean>>) = launch {

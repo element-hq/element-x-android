@@ -43,7 +43,11 @@ import io.element.android.libraries.ui.strings.CommonStrings
 /**
  * Shows a new recovery key to save, which only becomes active once the user confirms that they have saved it.
  *
+ * @param state the key to save and the progress of activating it.
  * @param doneButtonText the string resource of the button that finishes the screen once the new key is active.
+ * @param onDone called when the user taps the done button.
+ * @param onBackClick called when the user navigates back; not available once the new key is active.
+ * @param modifier the modifier to apply to the screen.
  */
 @Composable
 fun SecureBackupGenerateKeyView(
