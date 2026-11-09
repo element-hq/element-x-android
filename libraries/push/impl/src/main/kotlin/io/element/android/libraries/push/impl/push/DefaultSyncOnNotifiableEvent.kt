@@ -15,6 +15,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.services.appnavstate.api.AppForegroundStateService
@@ -95,7 +96,7 @@ class DefaultSyncOnNotifiableEvent(
         val newPushQueuedFlow = pushHistoryService.getPendingPushRequestsFlow(sessionId, since = newestHandledPushDate).onStart { emit(emptyList()) }
 
         val (newPushQueued, _) = combine(newPushQueuedFlow, roomListSummariesFlow) { newPushes, newSummaries ->
-            newPushes.isNotEmpty() to (newSummaries != currentRoomSummaries)
+            newPushes.isNotEmpty() to roomListHadRelevantChanges(currentRoomSummaries, newSummaries)
         }.first { (newPushQueued, roomListUpdated) -> newPushQueued || roomListUpdated }
 
         if (newPushQueued) {
@@ -107,4 +108,32 @@ class DefaultSyncOnNotifiableEvent(
             true
         }
     } ?: false
+
+    private fun roomListHadRelevantChanges(oldSummaries: List<RoomSummary>, newSummaries: List<RoomSummary>): Boolean {
+        val oldSummariesById = oldSummaries.associateBy { it.roomId }
+        val newSummariesById = newSummaries.associateBy { it.roomId }
+        val oldRoomIds = oldSummariesById.keys
+        val newRoomIds = newSummariesById.keys
+
+        val allRoomIds = oldRoomIds union newRoomIds
+        val unchangedRoomIds = oldRoomIds intersect newRoomIds
+        val changedRoomIds = allRoomIds - unchangedRoomIds
+
+        // If any room was added or removed, we consider it a relevant change.
+        if (changedRoomIds.isNotEmpty()) {
+            Timber.d("Room list changed, changed room ids: $changedRoomIds")
+            return true
+        }
+        // If any room's summary changed, we consider it a relevant change too.
+        for (roomId in unchangedRoomIds) {
+            val oldSummary = oldSummariesById[roomId]
+            val newSummary = newSummariesById[roomId]
+            if (oldSummary != newSummary) {
+                Timber.d("Room summary changed for room $roomId, old: $oldSummary, new: $newSummary")
+                return true
+            }
+        }
+
+        return false
+    }
 }
