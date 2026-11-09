@@ -5,10 +5,6 @@
   <string name="notification_channel_noisy">"Notificações barulhentas"</string>
   <string name="notification_channel_ringing_calls">"Chamadas tocando"</string>
   <string name="notification_channel_silent">"Notificações silenciosas"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d mensagem"</item>
-    <item quantity="other">"%1$s: %2$d mensagens"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d notificação"</item>
     <item quantity="other">"%d notificações"</item>
@@ -16,17 +12,9 @@
   <string name="notification_error_unified_push_unregistered_android">"O distribuidor de notificações do UnifiedPush não pôde ser cadastrado, então você não receberá mais notificações. Confira as configurações do app e o estado do distribuidor de push."</string>
   <string name="notification_incoming_call">"📹 Chamada recebida"</string>
   <string name="notification_inline_reply_failed">"** Falha ao enviar - por favor, abra a sala"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d convite"</item>
-    <item quantity="other">"%d convites"</item>
-  </plurals>
   <string name="notification_invite_body">"Convidou você para conversar"</string>
   <string name="notification_invite_body_with_sender">"%1$s te convidou para conversar"</string>
   <string name="notification_mentioned_you_body">"Mencionou você: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d nova mensagem"</item>
-    <item quantity="other">"%d novas mensagens"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reagiu com %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Marcar como lida"</string>
   <string name="notification_room_action_quick_reply">"Resposta rápida"</string>
@@ -71,10 +59,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Provedor de push atual"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Certifique-se de que o aplicativo tenha suporte a pelo menos um provedor de push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nenhum provedor de push com suporte foi encontrado."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Foi encontrado %1$d provedor de push: %2$s"</item>
-    <item quantity="other">"Foram encontrados %1$d provedores de push: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"O aplicativo foi compilado com suporte para: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Suporte a provedores de push"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Verifique se o aplicativo pode exibir a notificação."</string>

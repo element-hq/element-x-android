@@ -482,8 +482,6 @@
   <string name="screen_room_grouped_state_events_reduce">"減少"</string>
   <string name="screen_room_live_location_banner">"分享即時位置"</string>
   <string name="screen_room_title">"聊天"</string>
-  <string name="screen_select_account_permalink_room_subtitle">"您的帳號目前尚未加入此聊天室，請選擇要使用的帳號。"</string>
-  <string name="screen_select_account_permalink_title">"選取帳號以開啟連結："</string>
   <string name="screen_space_list_parent_space">"%1$s 空間"</string>
   <string name="test_language_identifier">"zh-tw"</string>
 </resources>

@@ -5,9 +5,6 @@
   <string name="notification_channel_noisy">"嘈杂通知"</string>
   <string name="notification_channel_ringing_calls">"响铃通话"</string>
   <string name="notification_channel_silent">"静默通知"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="other">"%1$s：%2$d 条消息"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d 条通知"</item>
   </plurals>
@@ -21,17 +18,11 @@
   <string name="notification_incoming_audio_call">"📞 来电"</string>
   <string name="notification_incoming_call">"📹 来电"</string>
   <string name="notification_inline_reply_failed">"** 无法发送——请打开房间"</string>
-  <plurals name="notification_invitations">
-    <item quantity="other">"%d 个邀请"</item>
-  </plurals>
   <string name="notification_invite_body">"已邀请你聊天"</string>
   <string name="notification_invite_body_with_sender">"%1$s 已邀请你聊天"</string>
   <string name="notification_knock_request_body">"已申请加入"</string>
   <string name="notification_live_location_started_body">"已开始共享其实时位置"</string>
   <string name="notification_mentioned_you_body">"提到了你：%1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="other">"%d 条新消息"</item>
-  </plurals>
   <string name="notification_reaction_body">"已使用 %1$s 反应"</string>
   <string name="notification_room_action_mark_as_read">"设为已读"</string>
   <string name="notification_room_action_quick_reply">"快速回复"</string>
@@ -73,9 +64,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"当前推送提供者"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"确保应用程序至少有一个推送提供者。"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"未找到推送提供者。"</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="other">"找到了 %1$d 个推送提供者：%2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"该应用程序支持：%1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"检测推送提供者"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"检查应用程序是否可以显示通知。"</string>

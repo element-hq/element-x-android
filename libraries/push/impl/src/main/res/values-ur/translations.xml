@@ -5,27 +5,15 @@
   <string name="notification_channel_noisy">"صاخب اطلاعات"</string>
   <string name="notification_channel_ringing_calls">"بجنے والے مکالمات"</string>
   <string name="notification_channel_silent">"خاموش اطلاعات"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d پیغام"</item>
-    <item quantity="other">"%1$s: %2$d پیغامات"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d اطلاع"</item>
     <item quantity="other">"%d اطلاعات"</item>
   </plurals>
   <string name="notification_incoming_call">"📹 آنے والا مکالمہ"</string>
   <string name="notification_inline_reply_failed">"** بھیجنے میں ناکام - براہ کرم کمرہ کھولیں"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d دعوت نامہ"</item>
-    <item quantity="other">"%d دعوت نامے"</item>
-  </plurals>
   <string name="notification_invite_body">"آپ کو گفتگو کیلئے مدعو کیا"</string>
   <string name="notification_invite_body_with_sender">"%1$s نے آپ کو چیٹ کے لیے مدعو کیا"</string>
   <string name="notification_mentioned_you_body">"آپ کا تذکرہ کیا: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d نیا پیغام"</item>
-    <item quantity="other">"%d نئے پیغامات"</item>
-  </plurals>
   <string name="notification_reaction_body">"%1$s کے ساتھ ردعمل کیا"</string>
   <string name="notification_room_action_mark_as_read">"بطور مقروءہ نشانزد کریں"</string>
   <string name="notification_room_action_quick_reply">"فوری جواب"</string>
@@ -57,10 +45,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"موجودہ دھکا فراہم کنندہ"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"یقینی بنائیں کہ اطلاقیہ کم از کم ایک دھکا فراہم کنندہ کی حمایت کرتا ہے۔"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"کوئی دھکا فراہم کنندہ حمایت نہیں ملی۔"</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"پایا %1$d دھکا فراہم کنندہ: %2$s"</item>
-    <item quantity="other">"پائے %1$d دھکا فراہم کنندگان: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"دھکا فراہم کنندہ حمایت"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"پڑتال کریں کہ اطلاقیہ اطلاع دکھا سکتا ہے"</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"یہ اطلاع نہیں دبائی گئی"</string>

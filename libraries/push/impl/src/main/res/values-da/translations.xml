@@ -5,10 +5,6 @@
   <string name="notification_channel_noisy">"Lyd på notifikationer"</string>
   <string name="notification_channel_ringing_calls">"Ringende opkald"</string>
   <string name="notification_channel_silent">"Lydløse notifikationer"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d besked"</item>
-    <item quantity="other">"%1$s: %2$d beskeder"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d notifikation"</item>
     <item quantity="other">"%d notifikationer"</item>
@@ -21,17 +17,9 @@
   <string name="notification_incoming_audio_call">"📞 Indgående opkald"</string>
   <string name="notification_incoming_call">"📹 Indgående opkald"</string>
   <string name="notification_inline_reply_failed">"** Kunne ikke sende - åbn venligst rummet"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d invitation"</item>
-    <item quantity="other">"%d invitationer"</item>
-  </plurals>
   <string name="notification_invite_body">"Inviterede dig til at samtale"</string>
   <string name="notification_invite_body_with_sender">"%1$s inviterede dig til at samtale"</string>
   <string name="notification_mentioned_you_body">"Nævnte dig: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d ny besked"</item>
-    <item quantity="other">"%d nye beskeder"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reagerede med%1$s"</string>
   <string name="notification_room_action_mark_as_read">"Marker som læst"</string>
   <string name="notification_room_action_quick_reply">"Hurtigt svar"</string>
@@ -76,10 +64,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Nuværende push-udbyder"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Sørg for, at programmet understøtter mindst én push-udbyder."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Ingen push-udbyder understøttelse fundet."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Fandt %1$d push-udbyder: %2$s"</item>
-    <item quantity="other">"Fandt %1$d push-udbydere: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Applikationen blev bygget med støtte til: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Understøttelse af push-udbydere"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Kontrollér, at appen kan vise notifikationer."</string>

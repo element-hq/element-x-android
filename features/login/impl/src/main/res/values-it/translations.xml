@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"Hai già effettuato l\'accesso su questo dispositivo come %1$s ."</string>
   <string name="error_account_creation_not_possible">"Il tuo gestore dell\'account deve essere aggiornato per supportare il servizio di autenticazione Matrix e la creazione di account."</string>
   <string name="screen_account_provider_signin_title">"Stai per accedere a %s"</string>
-  <string name="screen_change_account_provider_other">"Altro"</string>
   <string name="screen_change_account_provider_subtitle">"Utilizza un provider di account diverso, ad esempio il tuo server privato o un account di lavoro."</string>
-  <string name="screen_change_account_provider_title">"Cambia fornitore dell\'account"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"L\'app Element Pro è necessaria su %1$s. Scaricala dallo store."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro è richiesto"</string>
@@ -16,7 +14,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s non è autorizzato a connettersi a %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Questa app è stata configurata per consentire: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Fornitore dell\'account %1$s non consentito."</string>
-  <string name="screen_change_server_form_header">"URL dell\'homeserver"</string>
   <string name="screen_change_server_form_notice">"Inserisci un indirizzo di dominio."</string>
   <string name="screen_change_server_navigation_title_login">"Accedi"</string>
   <string name="screen_change_server_navigation_title_register">"Crea account"</string>

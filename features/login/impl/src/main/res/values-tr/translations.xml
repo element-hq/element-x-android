@@ -2,9 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="error_account_creation_not_possible">"Ana sunucunuzun Matrix Authentication Service ve hesap oluşturmayı destekleyecek şekilde güncellenmesi gerekiyor."</string>
   <string name="screen_account_provider_signin_title">"Oturum açmak üzeresiniz %s"</string>
-  <string name="screen_change_account_provider_other">"Diğer"</string>
   <string name="screen_change_account_provider_subtitle">"Kendi özel sunucunuz veya iş hesabınız gibi farklı bir hesap sağlayıcı kullanın."</string>
-  <string name="screen_change_account_provider_title">"Hesap sağlayıcısını değiştir"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Bu ana sunucuya ulaşamadık. Lütfen ana sunucu URL\'sini doğru girip girmediğinizi kontrol edin. URL doğruysa, daha fazla yardım için ana sunucu yöneticinize başvurun."</string>
   <string name="screen_change_server_error_invalid_well_known">"Well-known dosyasında bir sorun nedeniyle sunucu kullanılamıyor:
 %1$s"</string>
@@ -12,7 +10,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s, %2$s ile bağlantı kurma yetkisine sahip değil."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Bu uygulama şu sağlayıcılara izin verecek şekilde yapılandırıldı: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Hesap sağlayıcısı %1$s İzin verilmiyor."</string>
-  <string name="screen_change_server_form_header">"Ana sunucu URL\'si"</string>
   <string name="screen_change_server_subtitle">"Sunucunuzun adresi nedir?"</string>
   <string name="screen_change_server_title">"Sunucunuzu seçin"</string>
   <string name="screen_create_account_title">"Hesap oluştur"</string>

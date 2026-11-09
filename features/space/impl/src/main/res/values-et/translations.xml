@@ -17,7 +17,7 @@
   <string name="screen_space_add_rooms_room_access_description">"Jututoa lisamine ei mõjuta ligipääsu jututuppa. Selle muutmiseks ava „Jututoa seadistused“ → „Turvalisus ja privaatsus“."</string>
   <string name="screen_space_empty_state_title">"Lisa oma esimene jututuba"</string>
   <string name="screen_space_menu_action_members">"Vaata liikmeid"</string>
-  <string name="screen_space_remove_rooms_confirmation_content">"Jututoa eemaldamine ei mõjuta ligipääsu jututuppa. Selle muutmiseks ava „Jututoa seadistused“ → „Turvalisus ja privaatsus“."</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Jututoa eemaldamine ei mõjuta ligipääsu jututuppa. Selle muutmiseks ava „Jututoa teave“ → „Turvalisus ja privaatsus“."</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">
     <item quantity="one">"Eemalda %1$d jututuba „%2$s“ kogukonnast"</item>
     <item quantity="other">"Eemalda %1$d jututuba „%2$s“ kogukonnast"</item>

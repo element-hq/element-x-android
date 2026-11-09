@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"Вы уже вошли на данном устройстве как %1$s."</string>
   <string name="error_account_creation_not_possible">"Ваш сервер необходимо обновить, чтобы он поддерживал Matrix Authentication Service и создание учётных записей."</string>
   <string name="screen_account_provider_signin_title">"Вы собираетесь войти в %s"</string>
-  <string name="screen_change_account_provider_other">"Другой"</string>
   <string name="screen_change_account_provider_subtitle">"Используйте другой сервер, например, собственный частный сервер или рабочую учетную запись."</string>
-  <string name="screen_change_account_provider_title">"Сменить сервер"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Требуется приложение Element Pro для %1$s. Пожалуйста, загрузите его из магазина."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Требуется Element Pro"</string>
@@ -16,7 +14,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s отказано в подключении к %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Это приложение настроено таким образом, чтобы разрешить: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Сервер %1$s не разрешен."</string>
-  <string name="screen_change_server_form_header">"Адрес сервера"</string>
   <string name="screen_change_server_form_notice">"Введите доменное имя."</string>
   <string name="screen_change_server_navigation_title_login">"Войти"</string>
   <string name="screen_change_server_navigation_title_register">"Создать аккаунт"</string>

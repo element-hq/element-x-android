@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"이 기기에서 이미 %1$s님으로 로그인되어 있습니다."</string>
   <string name="error_account_creation_not_possible">"Matrix Authentication Service 및 계정 생성을 지원하려면 홈서버를 업그레이드해야 합니다."</string>
   <string name="screen_account_provider_signin_title">"%s에 로그인합니다"</string>
-  <string name="screen_change_account_provider_other">"기타"</string>
   <string name="screen_change_account_provider_subtitle">"다른 계정 제공업체를 사용하세요. 예를 들어 자체 사설 서버나 업무용 계정 등을 사용할 수 있습니다."</string>
-  <string name="screen_change_account_provider_title">"계정 제공자 변경"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"구글 플레이"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s 에는 Element Pro 앱이 필요합니다. 스토어에서 다운로드하시기 바랍니다."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro가 필요합니다"</string>
@@ -16,7 +14,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s는 %2$s에 연결이 허용되지 않습니다."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"이 앱은 다음을 허용하도록 구성되었습니다: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"계정 제공자 %1$s 는 허용되지 않습니다."</string>
-  <string name="screen_change_server_form_header">"홈서버 URL"</string>
   <string name="screen_change_server_form_notice">"도메인 주소를 입력하세요."</string>
   <string name="screen_change_server_subtitle">"서버의 주소는 무엇인가요?"</string>
   <string name="screen_change_server_title">"서버 선택"</string>

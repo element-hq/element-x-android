@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_select_account_permalink_room_subtitle">"你的账户尚未加入此房间，请选择要使用的账户。"</string>
+  <string name="screen_select_account_permalink_title">"选择一个账户以打开链接："</string>
+</resources>

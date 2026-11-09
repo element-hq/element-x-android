@@ -28,6 +28,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="error_failed_uploading_voice_message">"Sinu häälsõnumi üleslaadimine ei õnnestunud."</string>
   <string name="error_missing_microphone_voice_rationale_android">"Rakendusel %1$s puudub õigus sinu nutiseadme mikrofoni kasutada. Järgnevalt anna õigused heli salvestamiseks."</string>
   <string name="error_sending_failure_invalid_mime_type">"Vigane MIME-tüüp: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Meediumisisu on puudu"</string>
   <string name="error_sending_failure_other">"Vea üksikasjad: %s"</string>
   <string name="error_sending_failure_sending_from_unverified_device">"Saadetakse verifitseerimata seadmest"</string>
   <string name="error_sending_failure_unknown">"Tundmatu viga"</string>
@@ -63,7 +64,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_pinned_timeline_screen_title_empty">"Esiletõstetud sõnumid"</string>
   <string name="screen_report_content_block_user">"Blokeeri kasutaja"</string>
   <string name="screen_report_content_block_user_hint">"Vali see eelistus, kui sa soovid peita selle kasutaja kõik senised ja tulevased sõnumid"</string>
-  <string name="screen_report_content_explanation">"Teade selle sõnumi kohta edastatakse sinu koduserveri haldajale. Haldajal ei ole võimalik lugeda krüptitud sõnumite sisu."</string>
+  <string name="screen_report_content_explanation">"Teade selle sõnumi kohta edastatakse sinu teenusepakkuja haldajale. Haldajal ei ole võimalik lugeda krüptitud sõnumite sisu."</string>
   <string name="screen_report_content_hint">"Sellest sisust teatamise põhjus"</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Unusta verifitseerimine ja saada ikkagi"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Sa võid jätta verifitseerimisvea tähelepanuta ja sõnumi ikkagi saata või katkestad saatmise ja peale kasutaja %1$s verifitseerimist proovid seda uuesti."</string>
@@ -81,12 +82,21 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_room_attachment_source_location">"Jaga asukohta"</string>
   <string name="screen_room_attachment_source_poll">"Küsitlus"</string>
   <string name="screen_room_attachment_text_formatting">"Tekstivorming"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Põhjus (kui soovid lisada)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Sisesta põhjus…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Kui soovid)"</string>
+  <string name="screen_room_confirm_removal_title">"Kas eemaldad sõnumi?"</string>
   <string name="screen_room_encrypted_history_banner">"Sõnumite ajalugu pole hetkel saadaval"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Selle jututoa sõnumite ajalugu pole hetkel saadaval. Verifitseeri see seade ja näed tervet oma sõnumiteajalugu."</string>
   <string name="screen_room_invite_again_alert_message">"Kas sa sooviksid neid tagasi kutsuda?"</string>
   <string name="screen_room_invite_again_alert_title">"Sa oled selles vestluses üksinda"</string>
+  <string name="screen_room_maximum_messages_selected">"Oled valinud suurima võimaliku arvu sõnumeid"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Teavita kogu jututuba"</string>
   <string name="screen_room_mentions_at_room_title">"Kõik"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"%1$d sõnum on edastatud"</item>
+    <item quantity="other">"%1$d sõnumit on edastatud"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"Sa juba vaatad seda jututuba!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s esiletõstetud sõnumit"</string>
@@ -94,6 +104,10 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Näita kõiki"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Saada uuesti"</string>
   <string name="screen_room_retry_send_menu_title">"Sinu sõnumi saatmine ei õnnestunud"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"%1$d sõnum on valitud"</item>
+    <item quantity="other">"%1$d sõnumit on valitud"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Lisa emotikon"</string>
   <string name="screen_room_timeline_beginning_of_room">"See on %1$s jututoa algus."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"See on antud vestluse algus."</string>

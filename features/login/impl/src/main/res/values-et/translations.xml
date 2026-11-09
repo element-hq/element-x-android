@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="error_account_already_logged_in">"Sa juba oled sellesse seadmesse sisseloginud kasutajana %1$s."</string>
-  <string name="error_account_creation_not_possible">"Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Service\'i tugi, vajab sinu koduserver uuendamist."</string>
+  <string name="error_account_already_logged_in">"Sa juba oled sisseloginud kasutajana %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Topeltsisselogimine"</string>
+  <string name="error_account_creation_not_possible">"Selleks et toimiks Matrix Authentication Service\'i tugi ja kasutajakonto loomine, vajab sinu koduserver uuendamist."</string>
   <string name="screen_account_provider_signin_title">"Sa oled sisse logimas %s teenusesse"</string>
-  <string name="screen_change_account_provider_other">"Muu teenusepakkuja"</string>
   <string name="screen_change_account_provider_subtitle">"Kasuta erinevat teenusepakkujat, milleks võib olla ka sinu oma server või töökoha hallatav server."</string>
-  <string name="screen_change_account_provider_title">"Muuda teenusepakkujat"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s koduserver eeldab Element Pro rakenduse kasutamist. Palun laadi ta alla rakendustepoest."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Vajalik on Element Pro"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"Me ei suutnud luuaühendust selle koduserveriga. Palun kontrolli, kas koduserveri aadress on õige. Kui aadress on õige, siis täiendavat teavet oskab sulle anda koduserveri haldaja."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Me ei suutnud luua ühendust selle teenusepakkujaga. Palun kontrolli, kas teenusepakkuja aadress on õige. Kui aadress on õige, siis täiendavat teavet oskab sulle anda teenusepakkuja haldaja."</string>
   <string name="screen_change_server_error_invalid_well_known">"Server pole saadaval vea tõttu well-known failis:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Valitud teenusepakkuja ei toeta „sliding sync“ režiimi. Rakenduse %1$s kasutamiseks on vaja serverit uuendada."</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s ei saa kasutada %2$s koduserverit."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"See rakendus on seadistatud järgneva koduserveri kasutamiseks: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"%1$s teenusepakkuja pole lubatud."</string>
-  <string name="screen_change_server_form_header">"Koduserveri url"</string>
   <string name="screen_change_server_form_notice">"Sisesta domeeni aadress."</string>
   <string name="screen_change_server_navigation_title_login">"Logi sisse"</string>
   <string name="screen_change_server_navigation_title_register">"Loo kasutajakonto"</string>
@@ -33,7 +31,7 @@
   <string name="screen_login_error_invalid_credentials">"Vigane kasutajanimi ja/või salasõna"</string>
   <string name="screen_login_error_invalid_user_id">"See ei ole korrektne kasutajanimi. Õige vorming on: „@kasutaja:koduserver.ee“"</string>
   <string name="screen_login_error_refresh_tokens">"See server on seadistatud kasutama tunnusloa põhist sisselogimist. Salasõnaga sisselogimisel see võimalus aga ei ole toetatud."</string>
-  <string name="screen_login_error_unsupported_authentication">"Valitud koduserver ei toeta salasõna ega OAuth-põhist sisselogimist. Lisateavet saad koduserveri haldajalt, aga sa võid ka valida mõne teise serveri."</string>
+  <string name="screen_login_error_unsupported_authentication">"Valitud teenusepakkuja ei toeta salasõna ega OAuthi-põhist sisselogimist. Lisateavet saad teenusepakkuja haldajalt, aga sa võid ka valida mõne teise pakkuja."</string>
   <string name="screen_login_form_header">"Sisesta oma andmed"</string>
   <string name="screen_login_subtitle">"Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks."</string>
   <string name="screen_login_title_with_homeserver">"Logi sisse serverisse %1$s"</string>
@@ -44,6 +42,8 @@
   <string name="screen_missing_key_backup_step_4">"Võtmehoidla kasutuselevõtmiseks palun järgi juhendit"</string>
   <string name="screen_missing_key_backup_step_5">"Tule tagasi rakendusse %1$s"</string>
   <string name="screen_missing_key_backup_title">"Enne jätkamist rakenduses %1$s võta oma võtmehoidla kasutusele"</string>
+  <string name="screen_onboarding_add_account_subtitle">"Rakendusse saad lisada mitu kasutajakontot ja neid vastavalt vajadusele hõlpsalt vahetada."</string>
+  <string name="screen_onboarding_add_account_title">"Logi sisse muu kasutajakontoga"</string>
   <string name="screen_onboarding_app_version">"Versioon %1$s"</string>
   <string name="screen_onboarding_checking_account">"Kontrollin kasutajakontot"</string>
   <string name="screen_onboarding_sign_in_manually">"Logi sisse käsitsi"</string>

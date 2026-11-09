@@ -5,27 +5,15 @@
   <string name="notification_channel_noisy">"Luide meldingen"</string>
   <string name="notification_channel_ringing_calls">"Overgaande oproepen"</string>
   <string name="notification_channel_silent">"Stille meldingen"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d bericht"</item>
-    <item quantity="other">"%1$s: %2$d berichten"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d melding"</item>
     <item quantity="other">"%d meldingen"</item>
   </plurals>
   <string name="notification_incoming_call">"📹 Inkomende oproep"</string>
   <string name="notification_inline_reply_failed">"** Verzenden is mislukt - open de kamer"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d uitnodiging"</item>
-    <item quantity="other">"%d uitnodigingen"</item>
-  </plurals>
   <string name="notification_invite_body">"Nodigde je uit om te chatten"</string>
   <string name="notification_invite_body_with_sender">"%1$s nodigde je uit om te chatten"</string>
   <string name="notification_mentioned_you_body">"Heeft je genoemd: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d nieuw bericht"</item>
-    <item quantity="other">"%d nieuwe berichten"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reageerde met %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Markeren als gelezen"</string>
   <string name="notification_room_action_quick_reply">"Snel antwoord"</string>
@@ -58,10 +46,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Huidige push-provider"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Zorg ervoor dat de applicatie minimaal één push-provider heeft."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Geen push-providers gevonden."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"%1$d push-provider gevonden: %2$s"</item>
-    <item quantity="other">"%1$d push-providers gevonden: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Push-providers detecteren"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Controleer of de applicatie een melding kan weergeven."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Er is niet op de melding geklikt."</string>

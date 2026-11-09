@@ -5,10 +5,6 @@
   <string name="notification_channel_noisy">"Noisy notifications"</string>
   <string name="notification_channel_ringing_calls">"Ringing calls"</string>
   <string name="notification_channel_silent">"Silent notifications"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d message"</item>
-    <item quantity="other">"%1$s: %2$d messages"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d notification"</item>
     <item quantity="other">"%d notifications"</item>
@@ -25,19 +21,11 @@
   <string name="notification_incoming_audio_call">"📞 Incoming call"</string>
   <string name="notification_incoming_call">"📹 Incoming call"</string>
   <string name="notification_inline_reply_failed">"** Failed to send - please open room"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d invitation"</item>
-    <item quantity="other">"%d invitations"</item>
-  </plurals>
   <string name="notification_invite_body">"Invited you to chat"</string>
   <string name="notification_invite_body_with_sender">"%1$s invited you to chat"</string>
   <string name="notification_knock_request_body">"Requested to join"</string>
   <string name="notification_live_location_started_body">"Started sharing their live location"</string>
   <string name="notification_mentioned_you_body">"Mentioned you: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d new message"</item>
-    <item quantity="other">"%d new messages"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reacted with %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Mark as read"</string>
   <string name="notification_room_action_quick_reply">"Quick reply"</string>
@@ -82,10 +70,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Current push provider"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Ensure that the application supports at least one push provider."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"No push provider support found."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Found %1$d push provider: %2$s"</item>
-    <item quantity="other">"Found %1$d push providers: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"The application was built with support for: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Push provider support"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Check that the application can display notification."</string>

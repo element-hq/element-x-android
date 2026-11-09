@@ -5,10 +5,6 @@
   <string name="notification_channel_noisy">"اعلان‌های پرصدا"</string>
   <string name="notification_channel_ringing_calls">"زنگ خوردن تماس"</string>
   <string name="notification_channel_silent">"اعلان‌های صامت"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s:%2$d پیام"</item>
-    <item quantity="other">"%1$s:%2$d پیام‌"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%dاعلان"</item>
     <item quantity="other">"%dاعلان‌"</item>
@@ -25,18 +21,10 @@
   <string name="notification_incoming_audio_call">"📞 تماس ورودی"</string>
   <string name="notification_incoming_call">"📹 تماس ورودی"</string>
   <string name="notification_inline_reply_failed">"**‌شکست در فرستادن - لطفاً اتاق را بگشایید"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d دعوت"</item>
-    <item quantity="other">"%d دعوت"</item>
-  </plurals>
   <string name="notification_invite_body">"به گپ دعوتتان کرد"</string>
   <string name="notification_invite_body_with_sender">"%1$s به گپ دعوتتان کرد"</string>
   <string name="notification_live_location_started_body">"شروع به اشتراک گذاری موقعیت مکانی زنده خود کردند"</string>
   <string name="notification_mentioned_you_body">"به شما اشاره کرد: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d پیام جدید"</item>
-    <item quantity="other">"%d پیام جدید"</item>
-  </plurals>
   <string name="notification_reaction_body">"با %1$s واکنش داد"</string>
   <string name="notification_room_action_mark_as_read">"علامت‌گذاری به عنوان خوانده شده"</string>
   <string name="notification_room_action_quick_reply">"پاسخ سریع"</string>
@@ -81,10 +69,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"فراهم کنندهٔ ارسال کنونی"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"ازمینان از پشتیبانی برنامه از لااقل یک فراهم کنندهٔ ارسال."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"پشتیبانی از هیچ فراهم کنندهٔ ارسالی پیدا نشد."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"ارائه دهنده فشار %1$d یافت شد: %2$s"</item>
-    <item quantity="other">"ارائه دهندگان فشار %1$d یافت شد: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"این برنامه با پشتیبانی از موارد زیر ساخته شده است: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"پشتیبانی از فراهم‌کنندهٔ ارسال"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"بررسی توانایی برنامه در نمایش آگاهی."</string>

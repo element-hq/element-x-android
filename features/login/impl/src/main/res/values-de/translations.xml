@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"Du bist auf diesem Gerät bereits als %1$s angemeldet."</string>
   <string name="error_account_creation_not_possible">"Dein Kontoanbieter muss aktualisiert werden, um Matrix Authentication Service und die Erstellung von Konten zu unterstützen."</string>
   <string name="screen_account_provider_signin_title">"Du bist dabei, dich bei %s anzumelden"</string>
-  <string name="screen_change_account_provider_other">"Sonstige"</string>
   <string name="screen_change_account_provider_subtitle">"Verwende einen anderen Kontoanbieter, z. B. deinen eigenen privaten Server oder ein Geschäftskonto."</string>
-  <string name="screen_change_account_provider_title">"Kontoanbieter wechseln"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Auf %1$s ist die Element Pro App erforderlich. Bitte lade diese aus dem Store."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro erforderlich"</string>
@@ -16,7 +14,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s darf keine Verbindung zu %2$s herstellen."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Die App wurde so konfiguriert, dass sie %1$s zulässt."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Kontoanbieter %1$s ist nicht zulässig."</string>
-  <string name="screen_change_server_form_header">"Homeserver-URL"</string>
   <string name="screen_change_server_form_notice">"Gib eine Domain-Adresse ein."</string>
   <string name="screen_change_server_navigation_title_login">"Anmelden"</string>
   <string name="screen_change_server_navigation_title_register">"Konto erstellen"</string>

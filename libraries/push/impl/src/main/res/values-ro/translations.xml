@@ -5,11 +5,6 @@
   <string name="notification_channel_noisy">"Notificări zgomotoase"</string>
   <string name="notification_channel_ringing_calls">"Apeluri care sună"</string>
   <string name="notification_channel_silent">"Notificări silențioase"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d mesaj"</item>
-    <item quantity="few">"%1$s: %2$d mesaje"</item>
-    <item quantity="other">"%1$s: %2$d de mesaje"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d notificare"</item>
     <item quantity="few">"%d notificări"</item>
@@ -29,21 +24,11 @@
   <string name="notification_incoming_audio_call">"📞 Apel primit"</string>
   <string name="notification_incoming_call">"📹 Apel primit"</string>
   <string name="notification_inline_reply_failed">"** Nu s-a putut trimite - deschideți camera"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d invitație"</item>
-    <item quantity="few">"%d invitații"</item>
-    <item quantity="other">"%d de invitații"</item>
-  </plurals>
   <string name="notification_invite_body">"V-a invitat să conversați"</string>
   <string name="notification_invite_body_with_sender">"%1$s v-a invitat să conversați"</string>
   <string name="notification_knock_request_body">"A trimis o cerere de alăturare"</string>
   <string name="notification_live_location_started_body">"A început să își partajeze locația în timp real"</string>
   <string name="notification_mentioned_you_body">"%1$s v-a menționat"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d mesaj nou"</item>
-    <item quantity="few">"%d mesaje noi"</item>
-    <item quantity="other">"%d de mesaje noi"</item>
-  </plurals>
   <string name="notification_reaction_body">"A reacționat cu %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Marcați ca citită"</string>
   <string name="notification_room_action_quick_reply">"Răspuns rapid"</string>
@@ -91,11 +76,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Furnizor de push actual"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Asigurați-vă că aplicația are cel puțin un furnizor push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nu s-au găsit furnizori push."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"S-a găsit %1$d furnizor push: %2$s"</item>
-    <item quantity="few">"S-au găsit %1$d furnizori push: %2$s"</item>
-    <item quantity="other">"S-au găsit %1$d de furnizori push: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Aplicația a fost creată cu suport pentru: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Furnizorii push acceptați"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Verificați dacă aplicația poate afișa notificări."</string>

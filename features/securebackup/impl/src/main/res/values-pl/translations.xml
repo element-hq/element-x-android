@@ -87,6 +87,7 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Nie udostępniaj tego nikomu!"</string>
   <string name="screen_recovery_key_setup_success">"Skonfigurowano przywracanie pomyślnie"</string>
   <string name="screen_recovery_key_setup_title">"Uzyskaj klucz przywracania"</string>
+  <string name="screen_recovery_key_success_title">"Nowy klucz przywracania jest już aktywny"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Tak, zresetuj teraz"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Tego procesu nie można odwrócić."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Czy na pewno chcesz zresetować swoją tożsamość cyfrową?"</string>
