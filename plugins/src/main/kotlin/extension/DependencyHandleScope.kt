@@ -125,7 +125,6 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:oauth:impl"))
     implementation(project(":libraries:workmanager:impl"))
     implementation(project(":libraries:emoji:impl"))
-    implementation(project(":libraries:htmlrenderer:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {
