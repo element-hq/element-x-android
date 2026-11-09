@@ -16,9 +16,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
+import io.element.android.features.securebackup.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
+import io.element.android.tests.testutils.assertNoNodeWithText
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBackKey
@@ -58,6 +60,18 @@ class SecureBackupCheckKeyViewTest : RobolectricTest() {
         setSecureBackupCheckKeyView(aSecureBackupCheckKeyState(recoveryKey = "aRecoveryKey", isSubmitEnabled = true, eventSink = recorder))
         onNodeWithText("aRecoveryKey").performImeAction()
         recorder.assertSingle(SecureBackupCheckKeyEvent.Submit)
+    }
+
+    @Test
+    fun `an incorrect key - is reported`() = runAndroidComposeUiTest {
+        setSecureBackupCheckKeyView(aSecureBackupCheckKeyState(recoveryKey = "1234", isKeyIncorrect = true))
+        onNodeWithText(activity!!.getString(R.string.screen_recovery_key_confirm_error_title)).assertExists()
+    }
+
+    @Test
+    fun `a key not checked yet - is not reported as incorrect`() = runAndroidComposeUiTest {
+        setSecureBackupCheckKeyView(aSecureBackupCheckKeyState(recoveryKey = "1234", isSubmitEnabled = true))
+        assertNoNodeWithText(R.string.screen_recovery_key_confirm_error_title)
     }
 
     @Test

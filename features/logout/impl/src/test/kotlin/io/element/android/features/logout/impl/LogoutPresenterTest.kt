@@ -252,6 +252,36 @@ class LogoutPresenterTest {
         }
     }
 
+    @Test
+    fun `present - a recovery key is not reported as lacking a key backup when this cannot be checked`() = runTest {
+        val encryptionService = FakeEncryptionService().apply {
+            emitHasDevicesToVerifyAgainst(AsyncData.Success(false))
+            emitRecoveryState(RecoveryState.ENABLED)
+            givenDoesBackupExistOnServerResult(Result.failure(AN_EXCEPTION))
+        }
+        assertConfirmation(encryptionService, LogoutConfirmation.RecoveryKeyOnly)
+    }
+
+    @Test
+    fun `present - after the recovery key, the device is kept if the backup is turned off meanwhile`() = runTest {
+        val encryptionService = FakeEncryptionService().apply {
+            givenWaitForBackupUploadSteadyStateFlow(flowOf(BackupUploadState.SteadyException(SteadyStateException.BackupDisabled("Disabled"))))
+        }
+        val logoutLambda = lambdaRecorder<Boolean, Boolean, Unit> { _, _ -> }
+        val presenter = createLogoutPresenter(
+            matrixClient = FakeMatrixClient().apply { this.logoutLambda = logoutLambda },
+            encryptionService = encryptionService,
+            removeOnceKeysAreBackedUp = true,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitState { it.logoutAction is AsyncAction.Failure }
+            logoutLambda.assertions().isNeverCalled()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private suspend fun assertConfirmation(encryptionService: EncryptionService, expected: LogoutConfirmation) {
         moleculeFlow(RecompositionMode.Immediate) {
             createLogoutPresenter(encryptionService = encryptionService).present()

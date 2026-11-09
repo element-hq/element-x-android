@@ -57,6 +57,20 @@ class SecureBackupCheckKeyPresenterTest {
     }
 
     @Test
+    fun `present - a pasted recovery key loses its spaces, but typing a key keeps them`() = runTest {
+        val presenter = createPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            awaitItem().eventSink(SecureBackupCheckKeyEvent.OnRecoveryKeyChange(A_FORMATTED_RECOVERY_KEY))
+            val pastedState = awaitItem()
+            assertThat(pastedState.recoveryKeyViewState.formattedRecoveryKey).isEqualTo(A_FORMATTED_RECOVERY_KEY.replace(" ", ""))
+            pastedState.eventSink(SecureBackupCheckKeyEvent.OnRecoveryKeyChange("1234 5678"))
+            assertThat(awaitItem().recoveryKeyViewState.formattedRecoveryKey).isEqualTo("1234 5678")
+        }
+    }
+
+    @Test
     fun `present - the visibility of the key can be changed`() = runTest {
         val presenter = createPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
@@ -103,6 +117,10 @@ class SecureBackupCheckKeyPresenterTest {
             assertThat(retryState.isKeyIncorrect).isFalse()
             assertThat(retryState.isSubmitEnabled).isTrue()
         }
+    }
+
+    private companion object {
+        const val A_FORMATTED_RECOVERY_KEY = "EsTM njec uHYA yHmh dQdW Nj4o bNRU 9jMN XGMc KUNM UFr5 R8GY"
     }
 
     private fun createPresenter(
