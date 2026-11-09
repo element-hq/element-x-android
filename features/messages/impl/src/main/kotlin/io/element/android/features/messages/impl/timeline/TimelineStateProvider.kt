@@ -65,6 +65,7 @@ fun aTimelineState(
     newEventState: NewEventState = NewEventState.None,
     selectionState: SelectionState = SelectionState.Disabled,
     useNewTimelineEventRenderer: Boolean = false,
+    areTimelineAnimationsEnabled: Boolean = false,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -88,6 +89,7 @@ fun aTimelineState(
         jumpToUnread = jumpToUnread,
         selectionState = selectionState,
         useNewTimelineEventRenderer = useNewTimelineEventRenderer,
+        areTimelineAnimationsEnabled = areTimelineAnimationsEnabled,
         eventSink = eventSink,
     )
 }

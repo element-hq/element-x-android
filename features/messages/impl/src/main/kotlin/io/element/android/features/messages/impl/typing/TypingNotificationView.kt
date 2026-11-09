@@ -13,6 +13,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -68,6 +69,7 @@ fun TypingNotificationView(
     // Display the typing notification space when either a typing notification needs to be displayed or a previous one already was
     AnimatedVisibility(
         modifier = modifier
+            .background(ElementTheme.colors.bgCanvasDefault)
             .fillMaxWidth()
             .padding(vertical = 2.dp),
         visible = displayNotifications || state.reserveSpace,

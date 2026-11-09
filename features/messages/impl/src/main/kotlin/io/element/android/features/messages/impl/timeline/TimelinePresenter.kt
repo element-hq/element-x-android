@@ -205,6 +205,8 @@ class TimelinePresenter(
                 }
         }
 
+        val areTimelineAnimationsEnabled by remember { featureFlagService.isFeatureEnabledFlow(FeatureFlags.TimelineAnimations) }.collectAsState(false)
+
         val timelineProtectionState = timelineProtectionPresenter.present()
 
         fun handleEvent(event: TimelineEvent) {
@@ -539,6 +541,7 @@ class TimelinePresenter(
             jumpToUnread = jumpToUnread.value,
             selectionState = selectionState.value,
             useNewTimelineEventRenderer = useNewTimelineEventRenderer,
+            areTimelineAnimationsEnabled = areTimelineAnimationsEnabled,
             eventSink = ::handleEvent,
         )
     }
