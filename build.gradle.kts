@@ -91,7 +91,7 @@ allprojects {
         plugin("org.owasp.dependencycheck")
     }
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
         compilerOptions {
             // Warnings are potential errors, so stop ignoring them
             // This is disabled by default, but the CI will enforce this.
@@ -147,7 +147,7 @@ sonar {
 }
 
 allprojects {
-    tasks.withType<Test> {
+    tasks.withType<Test>().configureEach {
         // Robolectric 4.17 sets up shared memory during application setup, which goes through its
         // FileDescriptor interceptor. That interceptor reaches into `java.io.FileDescriptor` and
         // `jdk.internal.access.SharedSecrets`, both of which are encapsulated since JDK 17.
