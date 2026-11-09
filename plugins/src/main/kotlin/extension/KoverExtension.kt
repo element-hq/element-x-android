@@ -77,9 +77,9 @@ fun Project.setupKover() {
 
                     // Using the cache for coverage verification seems to be flaky, so we disable it for now.
                     val taskName = "koverCachedVerify${variant.replaceFirstChar(Char::titlecase)}"
-                    val cachedTask = project.tasks.findByName(taskName)
-                    cachedTask?.let {
-                        it.outputs.upToDateWhen { false }
+                    // Configure it lazily: the task may not be registered yet, and `findByName` would also create it eagerly.
+                    project.tasks.named { it == taskName }.configureEach {
+                        outputs.upToDateWhen { false }
                     }
                 }
             }
