@@ -15,6 +15,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
@@ -22,10 +23,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Measurable
@@ -35,10 +34,8 @@ import androidx.compose.ui.node.LayoutModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.zIndex
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CancellationException
@@ -110,6 +107,9 @@ internal class TimelineItemsInsertion(
     val offset: Float
         get() = ownOffset + (previous?.offset ?: 0f)
 
+    /** Whether the inserted items are still sliding in. */
+    val isSlidingIn: Boolean by derivedStateOf { offset > 0f }
+
     /**
      * Called when an inserted item is first measured. All the inserted items which are visible are measured in the same frame, and they start
      * below their final position by their total height: that's also how much the items above them have to move.
@@ -172,22 +172,6 @@ internal fun rememberTimelineItemsInsertion(
         insertions.onItemsInserted(keys)
     }
 }
-
-/**
- * For the item below the ones which are inserted at the bottom of the timeline (i.e. the typing notification): draws it above the other items, and
- * while new items slide in, hides them behind it and the [coveredHeightBelow] below it (i.e. the content padding of the list).
- */
-internal fun Modifier.hideItemsSlidingIn(
-    insertions: TimelineItemsInsertions,
-    color: Color,
-    coveredHeightBelow: Dp,
-): Modifier = this
-    .zIndex(1f)
-    .drawBehind {
-        if (insertions.offset > 0f) {
-            drawRect(color = color, size = Size(size.width, size.height + coveredHeightBelow.toPx()))
-        }
-    }
 
 internal fun keysInsertedAtBottom(previous: List<TimelineItem>?, current: List<TimelineItem>): Set<Any> {
     if (previous == null) return emptySet()
@@ -264,8 +248,11 @@ private class ReverseLayoutResizeNode(
             animateResizeOffset(delta = (placeable.height - previousHeight).toFloat())
         }
         return layout(placeable.width, placeable.height) {
+            // While sliding in, the item is drawn below the other items, so the ones below it (i.e. the typing notification, which is opaque)
+            // hide it until it reaches its position
+            val zIndex = if (insertion?.isSlidingIn == true) -1f else 0f
             // Only read the offsets in the layer block, so the animations don't trigger new measure or placement passes
-            placeable.placeWithLayer(0, 0) {
+            placeable.placeWithLayer(0, 0, zIndex) {
                 val resizeOffset = resizeOffset
                 translationY = resizeOffset + (insertion?.offset ?: 0f)
                 // When the item grew, its content is moved down: don't let it overlap the item below.

@@ -45,6 +45,7 @@ data class TimelineState(
     val useNewTimelineEventRenderer: Boolean,
     // Multiplier applied to the timeline text. 1f is the regular app size.
     val timelineFontScale: Float,
+    val areTimelineAnimationsEnabled: Boolean,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event

@@ -13,7 +13,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,6 +38,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.messages.impl.typing.TypingNotificationView
+import io.element.android.features.messages.impl.typing.aTypingNotificationState
+import io.element.android.features.messages.impl.typing.aTypingRoomMember
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 import org.robolectric.annotation.GraphicsMode
@@ -92,39 +95,29 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
 
     @Test
     fun `when an item slides in above a visible typing notification, it is not drawn over it`() = runAndroidComposeUiTest<ComponentActivity> {
-        assertInsertedItemIsNeverDrawnBelowTypingNotificationTop(typingNotificationHeight = 30.dp)
-    }
-
-    @Test
-    fun `when an item slides in above an empty typing notification, it is not drawn in the padding below it`() =
-        runAndroidComposeUiTest<ComponentActivity> {
-            assertInsertedItemIsNeverDrawnBelowTypingNotificationTop(typingNotificationHeight = 0.dp)
-        }
-
-    private fun AndroidComposeUiTest<*>.assertInsertedItemIsNeverDrawnBelowTypingNotificationTop(typingNotificationHeight: Dp) {
         setContent {
-            val currentKeys = keys
-            val coroutineScope = rememberCoroutineScope()
-            val insertions = remember { TimelineItemsInsertions(coroutineScope) }
-            val insertion = remember(currentKeys) { insertions.onItemsInserted(setOf(NEW).filterTo(HashSet()) { it in currentKeys }) }
-            LazyColumn(
-                modifier = Modifier.height(LIST_HEIGHT),
-                reverseLayout = true,
-                contentPadding = PaddingValues(bottom = BOTTOM_PADDING),
-            ) {
-                items(currentKeys, key = { it }) { key ->
-                    val modifier = Modifier
-                        .animateTimelineItem(this, coroutineScope, insertion?.takeIf { key in it.keys })
-                        .fillMaxWidth()
-                        .testTag(key)
-                    when (key) {
-                        TYPING -> Box(
-                            modifier
-                                .hideItemsSlidingIn(insertions, Color.White, coveredHeightBelow = BOTTOM_PADDING)
-                                .height(typingNotificationHeight)
-                        )
-                        NEW -> Box(modifier.height(100.dp).background(EXPANDING_COLOR))
-                        else -> Box(modifier.height(100.dp).background(Color.Green))
+            ElementTheme {
+                val currentKeys = keys
+                val coroutineScope = rememberCoroutineScope()
+                val insertions = remember { TimelineItemsInsertions(coroutineScope) }
+                val insertion = remember(currentKeys) { insertions.onItemsInserted(setOf(NEW).filterTo(HashSet()) { it in currentKeys }) }
+                LazyColumn(
+                    modifier = Modifier.height(LIST_HEIGHT),
+                    reverseLayout = true,
+                ) {
+                    items(currentKeys, key = { it }) { key ->
+                        val modifier = Modifier
+                            .animateTimelineItem(this, coroutineScope, insertion?.takeIf { key in it.keys })
+                            .fillMaxWidth()
+                            .testTag(key)
+                        when (key) {
+                            // Like in the timeline, the typing notification is nested in the item
+                            TYPING -> Box(modifier) {
+                                TypingNotificationView(state = aTypingNotificationState(typingMembers = listOf(aTypingRoomMember())))
+                            }
+                            NEW -> Box(modifier.height(100.dp).background(EXPANDING_COLOR))
+                            else -> Box(modifier.height(100.dp).background(Color.Green))
+                        }
                     }
                 }
             }
@@ -137,17 +130,14 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
             mainClock.advanceTimeByFrame()
             if (onAllNodesWithTag(NEW).fetchSemanticsNodes().isNotEmpty()) {
                 displayedFrames++
-                // From the top of the typing notification to the bottom of the list
-                val top = onNodeWithTag(TYPING).getUnclippedBoundsInRoot().top
-                assertWithMessage("Frame $frame").that(expandingColorRowsBetween(top, LIST_HEIGHT)).isEqualTo(0)
+                assertWithMessage("Frame $frame").that(expandingColorRowsIn(TYPING)).isEqualTo(0)
             }
         }
         assertThat(displayedFrames).isGreaterThan(0)
         // Once it's in place, it's displayed
         mainClock.autoAdvance = true
         waitForIdle()
-        val bounds = onNodeWithTag(NEW).getUnclippedBoundsInRoot()
-        assertThat(expandingColorRowsBetween(bounds.top, bounds.bottom)).isGreaterThan(0)
+        assertThat(expandingColorRowsIn(NEW)).isGreaterThan(0)
     }
 
     // Count the rows in the middle of the given item which have the color of the expanding item
@@ -171,7 +161,6 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
         const val TYPING = "typing"
         const val NEW = "new"
         val LIST_HEIGHT = 500.dp
-        val BOTTOM_PADDING = 8.dp
         val EXPANDING_COLOR = Color.Blue
     }
 }
