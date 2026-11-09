@@ -200,6 +200,8 @@ class TimelinePresenter(
             appPreferencesStore.getMessageTextSizeFlow().map { MessageTextSize.scaleOf(it) }
         }.collectAsState(initial = 1f)
 
+        val areTimelineAnimationsEnabled by remember { featureFlagService.isFeatureEnabledFlow(FeatureFlags.TimelineAnimations) }.collectAsState(false)
+
         val timelineProtectionState = timelineProtectionPresenter.present()
 
         fun handleEvent(event: TimelineEvent) {
@@ -534,6 +536,7 @@ class TimelinePresenter(
             selectionState = selectionState.value,
             useNewTimelineEventRenderer = useNewTimelineEventRenderer,
             timelineFontScale = timelineFontScale,
+            areTimelineAnimationsEnabled = areTimelineAnimationsEnabled,
             eventSink = ::handleEvent,
         )
     }
