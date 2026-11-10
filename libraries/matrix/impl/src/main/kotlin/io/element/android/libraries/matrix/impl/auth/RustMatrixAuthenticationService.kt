@@ -155,7 +155,8 @@ class RustMatrixAuthenticationService(
     override suspend fun setHomeserver(homeserver: String): Result<MatrixHomeServerDetails> =
         withContext(coroutineDispatchers.io) {
             val emptySessionPath = rotateSessionPath()
-            // Use runCatching to also discard the pending session if the coroutine is cancelled.
+            // We handle the cancellation here manually, to also discard the pending session, so we suppress the warning
+            @Suppress("RunCatchingNotAllowed")
             runCatching {
                 val client = makeClient(sessionPaths = emptySessionPath) {
                     serverNameOrHomeserverUrl(homeserver)
@@ -358,7 +359,8 @@ class RustMatrixAuthenticationService(
                     progress(state.toStep())
                 }
             }
-            // Use runCatching to also discard the pending session if the coroutine is cancelled.
+            // We handle the cancellation here manually, to also discard the pending session, so we suppress the warning
+            @Suppress("RunCatchingNotAllowed")
             runCatching {
                 val client = makeQrCodeLoginClient(
                     sessionPaths = emptySessionPaths,
