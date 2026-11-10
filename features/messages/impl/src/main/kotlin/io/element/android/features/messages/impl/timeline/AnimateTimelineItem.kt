@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.Snapshot
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -95,6 +96,17 @@ internal class TimelineItemsInsertion(
     private var isAnimationScheduled = false
     private var isAnimationStarted = false
 
+    // Whether the frame in which the items are inserted is over
+    private var isInsertionFrameOver = false
+
+    init {
+        // This is created in the frame in which the items are inserted, while they haven't been measured yet
+        coroutineScope.launch {
+            withFrameNanos {}
+            isInsertionFrameOver = true
+        }
+    }
+
     // The offset of this insertion only
     private var ownOffset by mutableFloatStateOf(0f)
 
@@ -116,7 +128,7 @@ internal class TimelineItemsInsertion(
      */
     fun onItemMeasured(height: Int) {
         // Items measured later, i.e. when scrolled into view, are displayed directly at their final position
-        if (isAnimationStarted) return
+        if (isInsertionFrameOver || isAnimationStarted) return
         totalHeight += height
         ownOffset = totalHeight
         if (!isAnimationScheduled) {

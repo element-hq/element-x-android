@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -102,6 +103,28 @@ class AnimateTimelineItemTest : RobolectricTest() {
         assertThat(topOf(NEW).value).isWithin(1f).of(bottomOf(NEWEST).value)
     }
 
+    @Test
+    fun `when an item is inserted at the bottom out of the screen, it is displayed at its position once scrolled into view`() =
+        runAndroidComposeUiTest<ComponentActivity> {
+            // The typing notification is empty, so the first visible item is the newest one, scrolled enough for the new item to be out of the screen
+            val olderItems = List(10) { "older_$it" }
+            keys = listOf(TYPING, NEWEST, ABOVE) + olderItems
+            val lazyListState = LazyListState(firstVisibleItemIndex = 1, firstVisibleItemScrollOffset = 50)
+            setReverseLayoutList(lazyListState)
+
+            keys = listOf(TYPING, NEW, NEWEST, ABOVE) + olderItems
+            waitForIdle()
+            assertThat(lazyListState.layoutInfo.visibleItemsInfo.map { it.key }).doesNotContain(NEW)
+
+            mainClock.autoAdvance = false
+            // Scroll to the bottom
+            runOnUiThread { lazyListState.dispatchRawDelta(-1000f) }
+            mainClock.advanceTimeByFrame()
+            assertThat(lazyListState.layoutInfo.visibleItemsInfo.map { it.key }).contains(NEW)
+            // It doesn't slide in
+            assertThat(topOf(NEW).value).isWithin(1f).of(bottomOf(NEWEST).value)
+        }
+
     // Advance until the frame where the item is first displayed
     private fun AndroidComposeUiTest<*>.advanceUntilDisplayed(tag: String) {
         while (onAllNodesWithTag(tag).fetchSemanticsNodes().isEmpty()) {
@@ -130,7 +153,7 @@ class AnimateTimelineItemTest : RobolectricTest() {
         assertThat(topOf(NEWEST).value).isWithin(1f).of(bottomOf(ABOVE).value)
     }
 
-    private fun AndroidComposeUiTest<*>.setReverseLayoutList() {
+    private fun AndroidComposeUiTest<*>.setReverseLayoutList(lazyListState: LazyListState = LazyListState()) {
         setContent {
             // Like the timeline items in TimelineView, only read the keys in the composition, not in the LazyColumn content
             val currentKeys = keys
@@ -144,6 +167,7 @@ class AnimateTimelineItemTest : RobolectricTest() {
             }
             LazyColumn(
                 modifier = Modifier.height(500.dp),
+                state = lazyListState,
                 reverseLayout = true,
                 // Same as the timeline
                 contentPadding = PaddingValues(top = 64.dp, bottom = 8.dp),
@@ -153,7 +177,7 @@ class AnimateTimelineItemTest : RobolectricTest() {
                         Modifier
                             .animateTimelineItem(this, coroutineScope, insertion?.takeIf { key in it.keys })
                             .fillMaxWidth()
-                            .height(if (key == NEWEST) resizedItemHeight else itemHeights.getValue(key))
+                            .height(if (key == NEWEST) resizedItemHeight else itemHeights[key] ?: 100.dp)
                     ) {
                         Box(
                             Modifier

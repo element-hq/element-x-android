@@ -11,7 +11,10 @@ package io.element.android.features.messages.impl.timeline
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -40,6 +43,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyLayoutScrollScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -48,6 +52,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -122,6 +127,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.math.abs
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -217,6 +223,13 @@ fun TimelineView(
         } else {
             null
         }
+        if (timelineItemsInsertion != null) {
+            // Runs once per insertion, before the new items are measured
+            DisposableEffect(timelineItemsInsertion) {
+                lazyListState.keepScrollPositionIfNewestItemIsDisplayed(state.timelineItems, timelineItemsInsertion)
+                onDispose {}
+            }
+        }
         CompositionLocalProvider(LocalTimelineEventRendererConfig provides composeLocalTimelineEventRendererConfig) {
             Box(modifier) {
                 LazyColumn(
@@ -302,6 +315,7 @@ fun TimelineView(
                     focusRequestState = state.focusRequestState,
                     displayJumpToUnread = state.displayJumpToUnread,
                     jumpToUnread = state.jumpToUnread,
+                    areTimelineAnimationsEnabled = state.areTimelineAnimationsEnabled,
                     onScrollFinishAt = ::onScrollFinishAt,
                     onJumpToLive = ::onJumpToLive,
                     onFocusEventRender = ::onFocusEventRender,
@@ -325,6 +339,57 @@ fun TimelineView(
 }
 
 private val TIMELINE_BOTTOM_PADDING = 8.dp
+
+/**
+ * When new items are inserted at the bottom of the timeline while its newest item is displayed, even partially, keep the scroll position by index.
+ *
+ * By default, the scroll position is kept by the key of the first visible item, which is the bottom one: if it's the newest item, because the timeline
+ * is scrolled even a bit, the new items are then placed below it, out of the screen. Keeping the position by index places them at the bottom instead,
+ * and they slide in like when the timeline is scrolled to the bottom. See [LazyListState.requestScrollToItem].
+ */
+private fun LazyListState.keepScrollPositionIfNewestItemIsDisplayed(timelineItems: List<TimelineItem>, insertion: TimelineItemsInsertion) {
+    if (isScrollInProgress) return
+    // The index of the previously newest event, before the items were inserted below it
+    val previousNewestEventIndex = timelineItems.indexOfFirst { it !is TimelineItem.Virtual && it.identifier() !in insertion.keys } - insertion.keys.size
+    if (firstVisibleItemIndex <= previousNewestEventIndex) {
+        // The position doesn't change, so the item animations are kept
+        requestScrollToItem(firstVisibleItemIndex, firstVisibleItemScrollOffset)
+    }
+}
+
+/**
+ * Scrolls smoothly to the bottom of the timeline.
+ *
+ * Unlike [LazyListState.animateScrollToItem], it only dispatches scroll deltas. `animateScrollToItem` stops the item placement animations while it
+ * scrolls, and doesn't update their positions: once it's done, the items which are still displayed animate from their position before the scroll.
+ */
+private suspend fun LazyListState.animateScrollToBottom() {
+    // The distance is estimated while the first item isn't displayed, so a few scrolls may be needed
+    repeat(MAX_SCROLLS_TO_BOTTOM) {
+        if (firstVisibleItemIndex == 0 && firstVisibleItemScrollOffset == 0) return
+        scroll {
+            val distance = LazyLayoutScrollScope(this@animateScrollToBottom, this).calculateDistanceTo(targetIndex = 0)
+            var scrolled = 0f
+            try {
+                animate(0f, distance.toFloat(), animationSpec = spring(stiffness = Spring.StiffnessMediumLow)) { value, _ ->
+                    val delta = value - scrolled
+                    val consumed = scrollBy(delta)
+                    scrolled += consumed
+                    if (abs(consumed - delta) > 0.5f) {
+                        // The bottom was reached before the estimated distance
+                        throw BottomReachedException()
+                    }
+                }
+            } catch (_: BottomReachedException) {
+                // Nothing more to scroll
+            }
+        }
+    }
+}
+
+private const val MAX_SCROLLS_TO_BOTTOM = 3
+
+private class BottomReachedException : Exception()
 
 @Composable
 private fun MessageShieldDialog(state: TimelineState) {
@@ -395,6 +460,7 @@ private fun BoxScope.TimelineScrollHelper(
     focusRequestState: FocusRequestState,
     displayJumpToUnread: Boolean,
     jumpToUnread: JumpToUnreadState,
+    areTimelineAnimationsEnabled: Boolean,
     onScrollFinishAt: (Int) -> Unit,
     onJumpToLive: () -> Unit,
     onFocusEventRender: () -> Unit,
@@ -433,20 +499,28 @@ private fun BoxScope.TimelineScrollHelper(
      * This fixes the issue where the user is seeing typing notification and so the read receipt is not sent
      * when a new message comes in.
      *
-     * When already at index 0, do **not** call [LazyListState.animateScrollToItem]: it skips the placement animations of the items,
-     * which would interrupt the `animateItem()` animation of the newly inserted message.
-     * The read receipts are still sent by invoking [onScrollFinishAt] directly.
+     * When already at the bottom, the read receipts are still sent by invoking [onScrollFinishAt] directly.
      */
     fun scrollToBottom(force: Boolean) {
         coroutineScope.launch {
             val firstVisibleIndex = lazyListState.firstVisibleItemIndex
+            val isAtBottom = firstVisibleIndex == 0 && lazyListState.firstVisibleItemScrollOffset == 0
             when {
-                firstVisibleIndex > 10 || force && firstVisibleIndex == 0 && lazyListState.firstVisibleItemScrollOffset != 0 -> {
+                firstVisibleIndex > 10 -> {
                     lazyListState.scrollToItem(0)
                     // This scroll starts and ends in the same frame, so `isScrollInProgress` never changes for the composition: report it directly
                     latestOnScrollFinishAt(0)
                 }
+                areTimelineAnimationsEnabled && !isAtBottom -> {
+                    // The items may be animating, see [animateScrollToBottom]
+                    lazyListState.animateScrollToBottom()
+                    latestOnScrollFinishAt(0)
+                }
                 firstVisibleIndex != 0 -> lazyListState.animateScrollToItem(0)
+                force && !isAtBottom -> {
+                    lazyListState.scrollToItem(0)
+                    latestOnScrollFinishAt(0)
+                }
                 force -> latestOnScrollFinishAt(0)
             }
         }
