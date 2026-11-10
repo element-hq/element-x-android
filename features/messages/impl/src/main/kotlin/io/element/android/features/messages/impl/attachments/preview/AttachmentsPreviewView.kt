@@ -30,6 +30,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -86,6 +87,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -471,7 +473,7 @@ private fun VideoQualitySelectorDialog(
         buildString {
             append(subtitlePartNoFileSize)
             if (maxFileUploadSize != null) {
-                append(String.format(subtitlePartWithFileSize, sizeFormatter.format(maxFileUploadSize, true)))
+                append(String.format(Locale.getDefault(), subtitlePartWithFileSize, sizeFormatter.format(maxFileUploadSize, true)))
             }
         }
     }
@@ -586,6 +588,7 @@ internal fun VideoQualitySelectorDialogPreview() {
 }
 
 @Composable
+@ReadOnlyComposable
 fun VideoCompressionPreset.title(): String {
     return stringResource(
         when (this) {
@@ -597,6 +600,7 @@ fun VideoCompressionPreset.title(): String {
 }
 
 @Composable
+@ReadOnlyComposable
 fun VideoCompressionPreset.subtitle(): String {
     return stringResource(
         when (this) {

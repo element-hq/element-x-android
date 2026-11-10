@@ -17,7 +17,7 @@ class PinnedMessagesListTimelineActionPostProcessorTest {
     fun `ensure that ViewInTimeline is added`() {
         val sut = PinnedMessagesListTimelineActionPostProcessor()
         val result = sut.process(
-            listOf()
+            emptyList()
         )
         assertThat(result).isEqualTo(
             listOf(TimelineItemAction.ViewInTimeline)

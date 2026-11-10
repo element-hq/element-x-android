@@ -33,7 +33,7 @@ class RustWidgetDriver(
     private val driverAndHandle = makeWidgetDriver(widgetSettings.toRustWidgetSettings())
     private var receiveMessageJob: Job? = null
 
-    private var isRunning = AtomicBoolean(false)
+    private val isRunning = AtomicBoolean(false)
 
     override val id: String = widgetSettings.id
 

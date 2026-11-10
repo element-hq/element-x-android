@@ -67,6 +67,9 @@ class DefaultPermissionsPresenter(
             permissionsStore.isPermissionAsked(permission)
         }.collectAsState(initial = false)
 
+        // Not UI state: this local var is only used to give onPermissionResult access to the PermissionState created below,
+        // and it is assigned again on each composition, so it does not need to be backed by a State.
+        @Suppress("VarsWithoutStateBacking")
         var permissionState: PermissionState? = null
 
         fun onPermissionResult(result: Boolean) {

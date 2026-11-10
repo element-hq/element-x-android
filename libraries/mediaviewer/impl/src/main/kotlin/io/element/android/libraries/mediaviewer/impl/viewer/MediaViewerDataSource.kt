@@ -55,11 +55,11 @@ import java.util.concurrent.ConcurrentHashMap
 class MediaViewerDataSource(
     mode: MediaViewerMode,
     coroutineScope: CoroutineScope,
-    private val dispatcher: CoroutineDispatcher,
+    dispatcher: CoroutineDispatcher,
     private val galleryDataSource: MediaGalleryDataSource,
     private val mediaLoader: MatrixMediaLoader,
     private val localMediaFactory: LocalMediaFactory,
-    private val systemClock: SystemClock,
+    systemClock: SystemClock,
     private val pagerKeysHandler: PagerKeysHandler,
     private val contentScannerService: ContentScannerService,
     private val contentValidationCache: EventContentValidationCache,

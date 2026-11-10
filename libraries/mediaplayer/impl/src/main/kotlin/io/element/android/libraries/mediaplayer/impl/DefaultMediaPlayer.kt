@@ -39,7 +39,7 @@ import kotlin.time.Duration.Companion.seconds
 class DefaultMediaPlayer(
     private val player: SimplePlayer,
     @SessionCoroutineScope
-    private val sessionCoroutineScope: CoroutineScope,
+    sessionCoroutineScope: CoroutineScope,
     private val audioFocus: AudioFocus,
 ) : MediaPlayer {
     private val listener = object : SimplePlayer.Listener {

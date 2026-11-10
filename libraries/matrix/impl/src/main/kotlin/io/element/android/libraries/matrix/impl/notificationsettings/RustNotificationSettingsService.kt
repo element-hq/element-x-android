@@ -35,7 +35,7 @@ class RustNotificationSettingsService(
     private val _notificationSettingsChangeFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val notificationSettingsChangeFlow: SharedFlow<Unit> = _notificationSettingsChangeFlow.asSharedFlow()
 
-    private var notificationSettingsDelegate = object : NotificationSettingsDelegate {
+    private val notificationSettingsDelegate = object : NotificationSettingsDelegate {
         override fun settingsDidChange() {
             _notificationSettingsChangeFlow.tryEmit(Unit)
         }
@@ -53,13 +53,13 @@ class RustNotificationSettingsService(
         dispatchers.io
     ) {
         runCatchingExceptions {
-                notificationSettings.await().getRoomNotificationSettings(roomId.value, isEncrypted, isOneToOne).let(RoomNotificationSettingsMapper::map)
+                RoomNotificationSettingsMapper.map(notificationSettings.await().getRoomNotificationSettings(roomId.value, isEncrypted, isOneToOne))
         }
     }
 
     override suspend fun getDefaultRoomNotificationMode(isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationMode> = withContext(dispatchers.io) {
         runCatchingExceptions {
-                notificationSettings.await().getDefaultRoomNotificationMode(isEncrypted, isOneToOne).let(RoomNotificationSettingsMapper::mapMode)
+                RoomNotificationSettingsMapper.mapMode(notificationSettings.await().getDefaultRoomNotificationMode(isEncrypted, isOneToOne))
         }
     }
 
@@ -70,7 +70,7 @@ class RustNotificationSettingsService(
     ): Result<Unit> = withContext(dispatchers.io) {
         runCatchingExceptions {
             try {
-                notificationSettings.await().setDefaultRoomNotificationMode(isEncrypted, isDM, mode.let(RoomNotificationSettingsMapper::mapMode))
+                notificationSettings.await().setDefaultRoomNotificationMode(isEncrypted, isDM, RoomNotificationSettingsMapper.mapMode(mode))
             } catch (exception: NotificationSettingsException.RuleNotFound) {
                 // `setDefaultRoomNotificationMode` updates multiple rules including unstable rules (e.g. the polls push rules defined in the MSC3930)
                 // since production home servers may not have these rules yet, we drop the RuleNotFound error
@@ -81,7 +81,7 @@ class RustNotificationSettingsService(
 
     override suspend fun setRoomNotificationMode(roomId: RoomId, mode: RoomNotificationMode): Result<Unit> = withContext(dispatchers.io) {
         runCatchingExceptions {
-            notificationSettings.await().setRoomNotificationMode(roomId.value, mode.let(RoomNotificationSettingsMapper::mapMode))
+            notificationSettings.await().setRoomNotificationMode(roomId.value, RoomNotificationSettingsMapper.mapMode(mode))
         }
     }
 

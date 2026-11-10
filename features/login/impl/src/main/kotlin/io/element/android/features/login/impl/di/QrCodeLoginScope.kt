@@ -8,4 +8,5 @@
 
 package io.element.android.features.login.impl.di
 
+@Suppress("AbstractClassCanBeInterface") // Metro DI scope marker
 abstract class QrCodeLoginScope private constructor()

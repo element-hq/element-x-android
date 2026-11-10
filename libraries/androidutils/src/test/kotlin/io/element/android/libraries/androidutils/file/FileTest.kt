@@ -8,6 +8,7 @@
 package io.element.android.libraries.androidutils.file
 
 import com.google.common.truth.Truth.assertThat
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class FileTest {
@@ -70,7 +71,7 @@ class FileTest {
     fun `saveWithUniqueFileName - does not retry more than once`() {
         val usedNames = mutableListOf<String>()
 
-        val error = try {
+        val error = assertThrows(IllegalStateException::class.java) {
             saveWithUniqueFileName(
                 fileName = "image.png",
                 uniqueSuffix = { "_1" },
@@ -78,9 +79,6 @@ class FileTest {
                 usedNames.add(name)
                 error("Failed to build unique file")
             }
-            null
-        } catch (nameConflict: IllegalStateException) {
-            nameConflict
         }
 
         assertThat(error).isInstanceOf(IllegalStateException::class.java)

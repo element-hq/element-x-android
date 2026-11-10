@@ -27,6 +27,7 @@ import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -150,6 +151,7 @@ private fun SearchFieldContainer(
 }
 
 @Composable
+@ReadOnlyComposable
 private fun textFieldStyle(): TextStyle {
     return ElementTheme.typography.fontBodyLgRegular.copy(
         color = ElementTheme.colors.textPrimary

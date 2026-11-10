@@ -20,6 +20,7 @@ import io.element.android.libraries.troubleshoot.api.test.NotificationTroublesho
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -69,6 +70,8 @@ class PushLoopbackTest(
             )
             job.cancel()
             return
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             Timber.e(e, "Failed to test push")
             delegate.updateState(
@@ -86,7 +89,8 @@ class PushLoopbackTest(
             job.cancel()
             return
         }
-        @Suppress("RunCatchingNotAllowed")
+        // The TimeoutCancellationException thrown by withTimeout is expected to be caught here.
+        @Suppress("RunCatchingNotAllowed", "SuspendFunSwallowedCancellation")
         runCatching {
             withTimeout(10.seconds) {
                 completable.await()

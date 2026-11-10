@@ -35,9 +35,7 @@ class DefaultPushHistoryEntryPointTest {
                 plugins = plugins,
                 presenterFactory = {
                     PushHistoryPresenter(
-                        pushHistoryNavigator = object : PushHistoryNavigator {
-                            override fun navigateTo(roomId: RoomId, eventId: EventId) = lambdaError()
-                        },
+                        pushHistoryNavigator = { _, _ -> lambdaError() },
                         pushService = FakePushService(),
                         matrixClient = FakeMatrixClient(),
                     )

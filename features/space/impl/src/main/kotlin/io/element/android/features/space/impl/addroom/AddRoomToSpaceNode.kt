@@ -26,7 +26,7 @@ import io.element.android.libraries.architecture.callback
 class AddRoomToSpaceNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: AddRoomToSpacePresenter,
+    presenter: AddRoomToSpacePresenter,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun onFinish()

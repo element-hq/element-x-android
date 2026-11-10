@@ -52,7 +52,7 @@ class DependencyLicensesListPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.licenses.isSuccess()).isTrue()
             assertThat(finalState.licenses.dataOrNull()!!.size).isEqualTo(1)
-            assertThat(finalState.licenses.dataOrNull()!!.get(0)).isEqualTo(anItem)
+            assertThat(finalState.licenses.dataOrNull()!![0]).isEqualTo(anItem)
         }
     }
 

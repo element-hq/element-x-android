@@ -124,7 +124,7 @@ private fun <N : Node> rememberNode(
     // as part of the key, which should be unique for each call site of rememberNode.
     @Suppress("DEPRECATION")
     return rememberSaveable(
-        inputs = arrayOf(),
+        inputs = emptyArray(),
         key = "$key:$currentCompositeKeyHashCode",
         stateSaver = mapSaver(
             save = { node ->
