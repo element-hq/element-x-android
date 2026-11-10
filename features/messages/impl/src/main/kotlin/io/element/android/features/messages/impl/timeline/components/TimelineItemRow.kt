@@ -83,6 +83,7 @@ internal fun TimelineItemRow(
     onSwipeToReply: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    animateSizeChanges: Boolean = true,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -142,6 +143,7 @@ internal fun TimelineItemRow(
             onJoinCallClick = onJoinCallClick,
             onSwipeToReply = onSwipeToReply,
             eventSink = eventSink,
+            animateSizeChanges = animateSizeChanges,
             eventContentView = eventContentView,
         )
         if (isSelectionModeActive) {
@@ -189,6 +191,7 @@ private fun TimelineItemRowContent(
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
     selectionData: TimelineItemSelectionData = TimelineItemSelectionData(),
+    animateSizeChanges: Boolean = true,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
     Box(modifier) {
@@ -321,6 +324,7 @@ private fun TimelineItemRowContent(
                     onMoreReactionsClick = onMoreReactionsClick,
                     onReadReceiptClick = onReadReceiptClick,
                     eventSink = eventSink,
+                    animateExpansion = animateSizeChanges,
                 )
             }
         }

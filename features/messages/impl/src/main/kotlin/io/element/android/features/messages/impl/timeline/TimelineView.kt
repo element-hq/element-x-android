@@ -275,6 +275,8 @@ fun TimelineView(
                                     Modifier
                                 }
                             ),
+                        // animateTimelineItem animates the resizes itself
+                        animateSizeChanges = !state.areTimelineAnimationsEnabled,
                         timelineItem = timelineItem,
                         timelineMode = state.timelineMode,
                         timelineRoomInfo = state.timelineRoomInfo,
