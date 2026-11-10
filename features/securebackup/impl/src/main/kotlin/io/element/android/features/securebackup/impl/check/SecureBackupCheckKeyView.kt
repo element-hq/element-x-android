@@ -30,6 +30,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 /**
  * Asks for the recovery key the user already has, to make sure that it is correct.
  *
+ * Ref: https://www.figma.com/design/hDUT4q0pynhkbmB5s56GN8/ER-162--Recovery-Key-Usability---Management?node-id=1720-62480&t=1MdCyUpRaboz2aQy-4
+ *
  * @param state the recovery key being entered and whether it is correct.
  * @param doneButtonText the string resource of the button that finishes the screen once the key is known to be correct.
  * @param onDone called when the user taps the done button.

@@ -43,6 +43,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 /**
  * Shows a new recovery key to save, which only becomes active once the user confirms that they have saved it.
  *
+ * Ref: https://www.figma.com/design/hDUT4q0pynhkbmB5s56GN8/ER-162--Recovery-Key-Usability---Management?node-id=156-27104&t=1MdCyUpRaboz2aQy-4
+ *
  * @param state the key to save and the progress of activating it.
  * @param doneButtonText the string resource of the button that finishes the screen once the new key is active.
  * @param onDone called when the user taps the done button.
