@@ -30,6 +30,15 @@ tasks.register<Delete>("clean").configure {
 
 private val catalog = the<LibrariesForLibs>()
 
+/**
+ * The detekt tasks with type resolution (e.g. `detektDebug`) also analyse the generated sources (SQLDelight, KSP, etc.)
+ * which are under the build directory of the module. Exclude them, we do not control this code.
+ */
+private fun SourceTask.excludeGeneratedSources(buildDir: File) {
+    val buildDirPrefix = buildDir.absolutePath + File.separator
+    exclude { it.file.absolutePath.startsWith(buildDirPrefix) }
+}
+
 allprojects {
     // Detekt
     apply {
@@ -53,6 +62,11 @@ allprojects {
 
         // This file comes from another project and we want to keep it as close to the original as possible
         exclude("org/rustls/platformverifier/**")
+
+        excludeGeneratedSources(layout.buildDirectory.get().asFile)
+    }
+    tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
+        excludeGeneratedSources(layout.buildDirectory.get().asFile)
     }
 
     // KtLint
