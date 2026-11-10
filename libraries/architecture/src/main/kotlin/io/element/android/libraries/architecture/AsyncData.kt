@@ -71,7 +71,9 @@ sealed interface AsyncData<out T> {
      */
     fun errorOrNull(): Throwable? = when (this) {
         is Failure -> error
-        is Loading, is Success, Uninitialized -> null
+        is Loading,
+        is Success,
+        Uninitialized -> null
     }
 
     fun isFailure(): Boolean = this is Failure<T>

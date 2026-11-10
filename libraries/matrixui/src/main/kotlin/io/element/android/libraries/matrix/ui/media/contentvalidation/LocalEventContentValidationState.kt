@@ -54,8 +54,18 @@ fun rememberEventContentValidationState(eventId: EventId?, eventContent: EventCo
             is MessageContent -> eventContent.isMediaContent()
             is StickerContent -> true
             // If the event content is not known or not a media content, we don't need to validate it.
-            null, is RedactedContent, is PollContent, is UnableToDecryptContent, is RoomMembershipContent, is ProfileChangeContent, is StateContent,
-            is FailedToParseMessageLikeContent, is FailedToParseStateContent, is LiveLocationContent, LegacyCallInviteContent, is CallNotifyContent,
+            null,
+            is RedactedContent,
+            is PollContent,
+            is UnableToDecryptContent,
+            is RoomMembershipContent,
+            is ProfileChangeContent,
+            is StateContent,
+            is FailedToParseMessageLikeContent,
+            is FailedToParseStateContent,
+            is LiveLocationContent,
+            LegacyCallInviteContent,
+            is CallNotifyContent,
             UnknownContent -> false
         }
     }

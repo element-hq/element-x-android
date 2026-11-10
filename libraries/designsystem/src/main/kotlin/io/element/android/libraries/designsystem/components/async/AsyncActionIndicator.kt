@@ -108,7 +108,8 @@ internal fun AsyncActionIndicatorEffect(
                 state.clear()
                 loaderShownAt = null
             }
-            AsyncAction.Uninitialized, is AsyncAction.Confirming -> Unit
+            AsyncAction.Uninitialized,
+            is AsyncAction.Confirming -> Unit
         }
     }
 }
