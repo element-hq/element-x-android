@@ -49,6 +49,7 @@ import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
@@ -154,7 +155,8 @@ class RustMatrixAuthenticationService(
     override suspend fun setHomeserver(homeserver: String): Result<MatrixHomeServerDetails> =
         withContext(coroutineDispatchers.io) {
             val emptySessionPath = rotateSessionPath()
-            runCatchingExceptions {
+            // Use runCatching to also discard the pending session if the coroutine is cancelled.
+            runCatching {
                 val client = makeClient(sessionPaths = emptySessionPath) {
                     serverNameOrHomeserverUrl(homeserver)
                 }
@@ -162,8 +164,11 @@ class RustMatrixAuthenticationService(
                 currentClient = client
 
                 client.homeserverLoginDetails().map()
-            }.onFailure {
+            }.onFailure { throwable ->
                 discardPendingSession()
+                if (throwable is CancellationException) {
+                    throw throwable
+                }
             }.mapFailure { failure ->
                 Timber.e(failure, "Failed to set homeserver to $homeserver")
                 failure.mapAuthenticationException()
@@ -353,7 +358,8 @@ class RustMatrixAuthenticationService(
                     progress(state.toStep())
                 }
             }
-            runCatchingExceptions {
+            // Use runCatching to also discard the pending session if the coroutine is cancelled.
+            runCatching {
                 val client = makeQrCodeLoginClient(
                     sessionPaths = emptySessionPaths,
                     qrCodeData = sdkQrCodeLoginData,
@@ -407,13 +413,21 @@ class RustMatrixAuthenticationService(
         clear()
 
         val matrixClient = restoreSession(sessionData)
-        // Apply enterprise hooks to the newly created client as soon as possible
-        clientEnterpriseHook(matrixClient)
+        try {
+            // Apply enterprise hooks to the newly created client as soon as possible
+            clientEnterpriseHook(matrixClient)
 
-        // Start the sync service to ensure that the client receives the encryption updates we'll wait for next.
-        matrixClient.syncService.startSync()
+            // Start the sync service to ensure that the client receives the encryption updates we'll wait for next.
+            matrixClient.syncService.startSync()
 
-        matrixClient.waitForKnownVerificationState()
+            matrixClient.waitForKnownVerificationState()
+        } catch (throwable: Throwable) {
+            // Nobody else knows about this client yet, so destroy it, even if the coroutine has been cancelled.
+            withContext(NonCancellable) {
+                matrixClient.destroy()
+            }
+            throw throwable
+        }
 
         newMatrixClientObservers.forEach { it.invoke(matrixClient) }
         sessionStore.addSession(sessionData)
