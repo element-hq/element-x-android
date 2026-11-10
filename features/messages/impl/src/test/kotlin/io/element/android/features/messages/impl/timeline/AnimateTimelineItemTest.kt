@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +34,7 @@ import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.common.truth.Truth.assertThat
+import com.google.common.truth.Truth.assertWithMessage
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 
@@ -125,6 +126,32 @@ class AnimateTimelineItemTest : RobolectricTest() {
             assertThat(topOf(NEW).value).isWithin(1f).of(bottomOf(NEWEST).value)
         }
 
+    @Test
+    fun `when an item shrinks, the items coming into view above it move together with the other ones`() = runAndroidComposeUiTest<ComponentActivity> {
+        resizedItemHeight = 300.dp
+        keys = listOf(TYPING, NEWEST, ABOVE) + List(10) { "older_$it" }
+        val lazyListState = LazyListState()
+        setReverseLayoutList(lazyListState)
+        val initiallyVisibleKeys = lazyListState.layoutInfo.visibleItemsInfo.map { it.key }
+
+        mainClock.autoAdvance = false
+        // Like collapsing a group of events
+        resizedItemHeight = 50.dp
+        repeat(30) { frame ->
+            mainClock.advanceTimeByFrame()
+            assertVisibleItemsAreNextToEachOther(lazyListState, "Frame $frame")
+        }
+        assertThat(lazyListState.layoutInfo.visibleItemsInfo.map { it.key }).containsAtLeastElementsIn(initiallyVisibleKeys + "older_2")
+    }
+
+    private fun AndroidComposeUiTest<*>.assertVisibleItemsAreNextToEachOther(lazyListState: LazyListState, message: String) {
+        // The typing notification is empty
+        val visibleKeys = lazyListState.layoutInfo.visibleItemsInfo.map { it.key as String }.filter { it != TYPING }.sortedBy { keys.indexOf(it) }
+        visibleKeys.zipWithNext { below, above ->
+            assertWithMessage("$message: $above above $below").that(bottomOf(above).value).isWithin(1f).of(topOf(below).value)
+        }
+    }
+
     // Advance until the frame where the item is first displayed
     private fun AndroidComposeUiTest<*>.advanceUntilDisplayed(tag: String) {
         while (onAllNodesWithTag(tag).fetchSemanticsNodes().isEmpty()) {
@@ -159,6 +186,7 @@ class AnimateTimelineItemTest : RobolectricTest() {
             val currentKeys = keys
             val coroutineScope = rememberCoroutineScope()
             val insertions = remember { TimelineItemsInsertions(coroutineScope) }
+            val resizes = rememberTimelineItemResizes(lazyListState)
             val insertion = rememberItemsInsertion(currentKeys, insertions) { previous, current ->
                 previous?.let { current.filterTo(HashSet<Any>()) { it !in previous } }.orEmpty()
             }
@@ -169,10 +197,10 @@ class AnimateTimelineItemTest : RobolectricTest() {
                 // Same as the timeline
                 contentPadding = PaddingValues(top = 64.dp, bottom = 8.dp),
             ) {
-                items(currentKeys, key = { it }) { key ->
+                itemsIndexed(currentKeys, key = { _, key -> key }) { index, key ->
                     Box(
                         Modifier
-                            .animateTimelineItem(this, coroutineScope, insertion?.takeIf { key in it.keys })
+                            .animateTimelineItem(this, coroutineScope, resizes, key, index, insertion?.takeIf { key in it.keys })
                             .fillMaxWidth()
                             .height(if (key == NEWEST) resizedItemHeight else itemHeights[key] ?: 100.dp)
                     ) {
