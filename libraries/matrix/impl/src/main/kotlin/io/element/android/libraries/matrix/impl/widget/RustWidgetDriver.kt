@@ -10,8 +10,8 @@ package io.element.android.libraries.matrix.impl.widget
 
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.isActive
@@ -26,6 +26,7 @@ class RustWidgetDriver(
     widgetSettings: MatrixWidgetSettings,
     private val room: Room,
     private val widgetCapabilitiesProvider: WidgetCapabilitiesProvider,
+    private val ioDispatcher: CoroutineDispatcher,
 ) : MatrixWidgetDriver {
     // It's important to have extra capacity here to make sure we don't drop any messages
     override val incomingMessages = MutableSharedFlow<String>(extraBufferCapacity = 10)
@@ -48,7 +49,7 @@ class RustWidgetDriver(
             // This call will suspend the coroutine while the driver is running, so it needs to be launched separately
             driverAndHandle.driver.run(room, widgetCapabilitiesProvider)
         }
-        receiveMessageJob = coroutineScope.launch(Dispatchers.IO) {
+        receiveMessageJob = coroutineScope.launch(ioDispatcher) {
             try {
                 while (isActive) {
                     driverAndHandle.handle.recv()?.let { incomingMessages.emit(it) }

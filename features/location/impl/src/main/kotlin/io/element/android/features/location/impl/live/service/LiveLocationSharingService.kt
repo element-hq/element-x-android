@@ -18,6 +18,7 @@ import io.element.android.features.location.impl.common.userlocation.createLocat
 import io.element.android.features.location.impl.di.LocationBindings
 import io.element.android.features.location.impl.live.notification.LiveLocationSharingNotificationCreator
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.AppCoroutineScope
@@ -26,7 +27,6 @@ import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.cancel
@@ -51,6 +51,7 @@ class LiveLocationSharingService : Service() {
     @Inject lateinit var notificationCreator: LiveLocationSharingNotificationCreator
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
     @Inject lateinit var appForegroundStateService: AppForegroundStateService
+    @Inject lateinit var coroutineDispatchers: CoroutineDispatchers
 
     @AppCoroutineScope
     @Inject lateinit var appCoroutineScope: CoroutineScope
@@ -66,7 +67,7 @@ class LiveLocationSharingService : Service() {
         bindings<LocationBindings>().inject(this)
         runCatchingExceptions {
             appForegroundStateService.updateIsSharingLiveLocation(true)
-            coroutineScope = appCoroutineScope.childScope(Dispatchers.Default, "LiveLocationSharingService")
+            coroutineScope = appCoroutineScope.childScope(coroutineDispatchers.computation, "LiveLocationSharingService")
             val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.LIVE_LOCATION)
             Timber.d("LiveLocationSharingService starting foreground service with notificationId=$notificationId")
             ServiceCompat.startForeground(

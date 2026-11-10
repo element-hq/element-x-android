@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import io.element.android.libraries.architecture.AsyncData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import me.saket.telephoto.zoomable.ZoomableState
 import me.saket.telephoto.zoomable.rememberZoomableState
 
@@ -44,10 +45,12 @@ class PdfViewerState(
         } ?: AsyncData.Uninitialized
     }
 
+    // This state is created in a Composable, where the CoroutineDispatchers from the dependency graph are not available.
+    @Suppress("InjectDispatcher")
     fun openForWidth(maxWidth: Int) {
         ParcelFileDescriptorFactory(context).create(model)
             .onSuccess {
-                pdfRendererManager = PdfRendererManager(it, maxWidth, coroutineScope).apply {
+                pdfRendererManager = PdfRendererManager(it, maxWidth, coroutineScope, Dispatchers.IO).apply {
                     open()
                 }
                 isLoaded = true

@@ -14,8 +14,8 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -27,6 +27,7 @@ class PdfRendererManager(
     private val parcelFileDescriptor: ParcelFileDescriptor,
     private val width: Int,
     private val coroutineScope: CoroutineScope,
+    private val ioDispatcher: CoroutineDispatcher,
 ) {
     private val mutex = Mutex()
     private var pdfRenderer: PdfRenderer? = null
@@ -36,7 +37,7 @@ class PdfRendererManager(
     fun open() {
         coroutineScope.launch {
             mutex.withLock {
-                withContext(Dispatchers.IO) {
+                withContext(ioDispatcher) {
                     pdfRenderer = runCatchingExceptions {
                         PdfRenderer(parcelFileDescriptor)
                     }.fold(
@@ -73,7 +74,7 @@ class PdfRendererManager(
 
     private fun PdfRenderer.loadPages(from: Int, to: Int): List<PdfPage> {
         return (from until minOf(to, pageCount)).map { pageIndex ->
-            PdfPage(width, pageIndex, mutex, this, coroutineScope)
+            PdfPage(width, pageIndex, mutex, this, coroutineScope, ioDispatcher)
         }
     }
 }

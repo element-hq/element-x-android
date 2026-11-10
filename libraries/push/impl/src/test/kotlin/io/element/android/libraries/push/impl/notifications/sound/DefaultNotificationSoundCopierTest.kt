@@ -11,6 +11,7 @@ import android.content.Context
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.push.api.notifications.sound.NotificationSoundCopier
 import io.element.android.tests.testutils.robolectric.RobolectricTest
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.robolectric.RuntimeEnvironment
@@ -59,21 +60,21 @@ class DefaultNotificationSoundCopierTest : RobolectricTest() {
 
     @Test
     fun `copyToAppFiles - rejects file scheme`() = runTest {
-        val copier = DefaultNotificationSoundCopier(context)
+        val copier = DefaultNotificationSoundCopier(context, testCoroutineDispatchers())
         val result = copier.copyToAppFiles("file:///tmp/evil.mp3", NotificationSoundCopier.SoundSlot.Message)
         assertThat(result).isEqualTo(NotificationSoundCopier.CopyResult.UnplayableSource)
     }
 
     @Test
     fun `copyToAppFiles - rejects http scheme`() = runTest {
-        val copier = DefaultNotificationSoundCopier(context)
+        val copier = DefaultNotificationSoundCopier(context, testCoroutineDispatchers())
         val result = copier.copyToAppFiles("https://attacker.example.com/sound.mp3", NotificationSoundCopier.SoundSlot.Call)
         assertThat(result).isEqualTo(NotificationSoundCopier.CopyResult.UnplayableSource)
     }
 
     @Test
     fun `copyToAppFiles - rejects URI without a scheme`() = runTest {
-        val copier = DefaultNotificationSoundCopier(context)
+        val copier = DefaultNotificationSoundCopier(context, testCoroutineDispatchers())
         val result = copier.copyToAppFiles("not-a-real-uri", NotificationSoundCopier.SoundSlot.Message)
         assertThat(result).isEqualTo(NotificationSoundCopier.CopyResult.UnplayableSource)
     }
