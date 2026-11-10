@@ -77,21 +77,21 @@ fun TimelineItemReactionsLayout(
 
         // Used to render the collapsed state, this takes the rows inputted and adds the extra button to the last row,
         // removing only as many trailing reactions as needed to make space for it.
-        fun replaceTrailingItemsWithButtons(rowsIn: List<List<Placeable>>, expandButton: Placeable, addMoreButton: Placeable?): List<List<Placeable>> {
+        fun replaceTrailingItemsWithButtons(rowsIn: List<List<Placeable>>, expandItem: Placeable, addMoreItem: Placeable?): List<List<Placeable>> {
             val rows = rowsIn.toMutableList()
             val lastRow = rows.last()
-            val buttonsWidth = expandButton.width + itemSpacing.toPx().toInt() + (addMoreButton?.width ?: 0)
+            val buttonsWidth = expandItem.width + itemSpacing.toPx().toInt() + (addMoreItem?.width ?: 0)
             var rowX = 0
             lastRow.forEachIndexed { i, placeable ->
                 val horizontalSpacing = if (i == 0) 0 else itemSpacing.toPx().toInt()
                 rowX += placeable.width + horizontalSpacing
                 if (rowX > constraints.maxWidth - (buttonsWidth + horizontalSpacing)) {
-                    val lastRowWithButton = lastRow.take(i) + listOfNotNull(expandButton, addMoreButton)
+                    val lastRowWithButton = lastRow.take(i) + listOfNotNull(expandItem, addMoreItem)
                     rows[rows.size - 1] = lastRowWithButton
                     return rows
                 }
             }
-            val lastRowWithButton = lastRow + listOfNotNull(expandButton, addMoreButton)
+            val lastRowWithButton = lastRow + listOfNotNull(expandItem, addMoreItem)
             rows[rows.size - 1] = lastRowWithButton
             return rows
         }

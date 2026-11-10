@@ -56,8 +56,8 @@ class ReactionSummaryPresenter(
     @Composable
     private fun populateSenderAvatars(members: ImmutableList<RoomMember>, summary: ReactionSummaryState.Summary?) = remember(summary) {
         derivedStateOf {
-            summary?.let { summary ->
-                summary.copy(reactions = summary.reactions.map { reaction ->
+            summary?.let { nonNullSummary ->
+                nonNullSummary.copy(reactions = nonNullSummary.reactions.map { reaction ->
                     reaction.copy(senders = reaction.senders.map { sender ->
                         val member = members.firstOrNull { it.userId == sender.senderId }
                         val user = MatrixUser(

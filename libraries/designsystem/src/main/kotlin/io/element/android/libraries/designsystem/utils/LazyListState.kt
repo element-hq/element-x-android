@@ -48,8 +48,8 @@ suspend fun LazyListState.animateScrollToItemCenter(index: Int) {
         } - beforeContentPadding - afterContentPadding
     }
 
-    fun LazyListLayoutInfo.resolveItemOffsetToCenter(index: Int): Int? {
-        val itemInfo = visibleItemsInfo.firstOrNull { it.index == index } ?: return null
+    fun LazyListLayoutInfo.resolveItemOffsetToCenter(itemIndex: Int): Int? {
+        val itemInfo = visibleItemsInfo.firstOrNull { it.index == itemIndex } ?: return null
         val containerSize = containerSize()
         val itemSize = itemInfo.size
         return if (itemSize > containerSize) {
