@@ -131,7 +131,8 @@ class MarkdownTextEditorState(
             when (mentionSpan.type) {
                 is MentionType.User -> IntentionalMention.User(mentionSpan.type.userId)
                 is MentionType.Everyone -> IntentionalMention.Room
-                is MentionType.Room, is MentionType.Message -> null
+                is MentionType.Room,
+                is MentionType.Message -> null
             }
         }
     }

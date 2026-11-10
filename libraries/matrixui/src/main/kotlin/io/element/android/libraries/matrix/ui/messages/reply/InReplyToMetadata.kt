@@ -121,16 +121,26 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
                 val thumbnailSource = when (firstMediaItem) {
                     is GalleryItemType.Image -> (firstMediaItem.content.info?.thumbnailSource ?: firstMediaItem.content.source).takeUnless { hideImage }
                     is GalleryItemType.Video -> firstMediaItem.content.info?.thumbnailSource?.takeUnless { hideImage }
-                    null, is GalleryItemType.Audio, is GalleryItemType.File, is GalleryItemType.Other -> null
+                    null,
+                    is GalleryItemType.Audio,
+                    is GalleryItemType.File,
+                    is GalleryItemType.Other -> null
                 }
                 val blurHash = when (firstMediaItem) {
                     is GalleryItemType.Image -> firstMediaItem.content.info?.blurhash
                     is GalleryItemType.Video -> firstMediaItem.content.info?.blurhash
-                    null, is GalleryItemType.Audio, is GalleryItemType.File, is GalleryItemType.Other -> null
+                    null,
+                    is GalleryItemType.Audio,
+                    is GalleryItemType.File,
+                    is GalleryItemType.Other -> null
                 }
                 val type = when (firstMediaItem) {
                     is GalleryItemType.Video -> AttachmentThumbnailType.Video
-                    null, is GalleryItemType.Image, is GalleryItemType.Audio, is GalleryItemType.File, is GalleryItemType.Other -> AttachmentThumbnailType.Image
+                    null,
+                    is GalleryItemType.Image,
+                    is GalleryItemType.Audio,
+                    is GalleryItemType.File,
+                    is GalleryItemType.Other -> AttachmentThumbnailType.Image
                 }
                 Thumbnail(
                     AttachmentThumbnailInfo(

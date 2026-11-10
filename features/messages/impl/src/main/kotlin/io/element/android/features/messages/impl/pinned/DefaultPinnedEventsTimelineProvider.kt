@@ -91,7 +91,8 @@ class DefaultPinnedEventsTimelineProvider(
                         { timelineStateFlow.emit(AsyncData.Failure(it)) }
                     )
             }
-            is AsyncData.Loading, is AsyncData.Success -> Unit
+            is AsyncData.Loading,
+            is AsyncData.Success -> Unit
         }
     }
 }
