@@ -157,7 +157,7 @@ potential-bugs:
     excludes: [ '**/*.kts' ]
   NullCheckOnMutableProperty:
     active: true
-  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  # Disabled: most of the reported strings are logs, test and error messages, where printing "null" is the expected behaviour.
   NullableToStringCall:
     active: false
   # Disabled: mostly false positives, e.g. a property used in a function body before its declaration.
