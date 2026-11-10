@@ -307,7 +307,8 @@ private object LocationPinRenderer {
     ): Image? {
         val avatarData = when (variant) {
             is PinVariant.UserLocation -> variant.avatarData
-            PinVariant.PinnedLocation, PinVariant.StaleLocation -> return null
+            PinVariant.PinnedLocation,
+            PinVariant.StaleLocation -> return null
         }
         val request = ImageRequest.Builder(context)
             .data(avatarData)

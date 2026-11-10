@@ -165,7 +165,8 @@ private class DiffingResult(initialItems: List<MatrixTimelineItem>) {
                     }
                 }
             }
-            is MatrixTimelineItem.Virtual, MatrixTimelineItem.Other -> Unit
+            is MatrixTimelineItem.Virtual,
+            MatrixTimelineItem.Other -> Unit
         }
     }
 

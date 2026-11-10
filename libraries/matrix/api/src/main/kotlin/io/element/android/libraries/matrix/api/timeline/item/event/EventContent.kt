@@ -134,8 +134,17 @@ fun EventContent.isMediaContent(): Boolean {
     return when (this) {
         is MessageContent -> type is MessageTypeWithAttachment || type is GalleryMessageType
         is StickerContent -> true
-        is RedactedContent, is PollContent, is UnableToDecryptContent, is RoomMembershipContent, is ProfileChangeContent, is StateContent,
-        is FailedToParseMessageLikeContent, is FailedToParseStateContent, is LiveLocationContent, LegacyCallInviteContent, is CallNotifyContent,
+        is RedactedContent,
+        is PollContent,
+        is UnableToDecryptContent,
+        is RoomMembershipContent,
+        is ProfileChangeContent,
+        is StateContent,
+        is FailedToParseMessageLikeContent,
+        is FailedToParseStateContent,
+        is LiveLocationContent,
+        LegacyCallInviteContent,
+        is CallNotifyContent,
         UnknownContent -> false
     }
 }
@@ -144,8 +153,17 @@ fun EventContent.mediaSources(): List<MediaSource> {
     return when (this) {
         is MessageContent -> mediaSources()
         is StickerContent -> listOfNotNull(source, info.thumbnailSource)
-        is RedactedContent, is PollContent, is UnableToDecryptContent, is RoomMembershipContent, is ProfileChangeContent, is StateContent,
-        is FailedToParseMessageLikeContent, is FailedToParseStateContent, is LiveLocationContent, LegacyCallInviteContent, is CallNotifyContent,
+        is RedactedContent,
+        is PollContent,
+        is UnableToDecryptContent,
+        is RoomMembershipContent,
+        is ProfileChangeContent,
+        is StateContent,
+        is FailedToParseMessageLikeContent,
+        is FailedToParseStateContent,
+        is LiveLocationContent,
+        LegacyCallInviteContent,
+        is CallNotifyContent,
         UnknownContent -> emptyList()
     }
 }

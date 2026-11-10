@@ -44,21 +44,27 @@ fun ProfileDetails.getDisambiguatedDisplayName(userId: UserId): String {
             displayNameAmbiguous -> "$displayName ($userId)"
             else -> displayName
         }
-        ProfileDetails.Unavailable, ProfileDetails.Pending, is ProfileDetails.Error -> userId.value
+        ProfileDetails.Unavailable,
+        ProfileDetails.Pending,
+        is ProfileDetails.Error -> userId.value
     }
 }
 
 fun ProfileDetails.getDisplayName(): String? {
     return when (this) {
         is ProfileDetails.Ready -> displayName
-        ProfileDetails.Unavailable, ProfileDetails.Pending, is ProfileDetails.Error -> null
+        ProfileDetails.Unavailable,
+        ProfileDetails.Pending,
+        is ProfileDetails.Error -> null
     }
 }
 
 fun ProfileDetails.getAvatarUrl(): String? {
     return when (this) {
         is ProfileDetails.Ready -> avatarUrl
-        ProfileDetails.Unavailable, ProfileDetails.Pending, is ProfileDetails.Error -> null
+        ProfileDetails.Unavailable,
+        ProfileDetails.Pending,
+        is ProfileDetails.Error -> null
     }
 }
 
@@ -70,7 +76,9 @@ fun ProfileDetails.toMatrixUser(userId: UserId): MatrixUser {
             avatarUrl = avatarUrl,
             displayedStatus = displayedStatus,
         )
-        ProfileDetails.Unavailable, ProfileDetails.Pending, is ProfileDetails.Error -> MatrixUser(
+        ProfileDetails.Unavailable,
+        ProfileDetails.Pending,
+        is ProfileDetails.Error -> MatrixUser(
             userId = userId,
             displayName = null,
             avatarUrl = null,
