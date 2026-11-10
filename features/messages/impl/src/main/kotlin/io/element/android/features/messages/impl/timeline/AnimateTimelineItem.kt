@@ -12,6 +12,7 @@ import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
@@ -36,10 +39,13 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.node.LayoutModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -102,6 +108,28 @@ internal fun Modifier.animateTimelineItem(
 @Stable
 internal class TimelineItemResizes(private val lazyListState: LazyListState) {
     private val running = mutableStateListOf<ItemResize>()
+    private var pendingGrowths = 0
+
+    /**
+     * How much the viewport of the LazyColumn is extended above its top edge, see [extendViewportAbove].
+     *
+     * When an item grows, the items above it move up, and the LazyColumn stops displaying the ones which end up out of its viewport right away,
+     * even though their placement animation starts from their previous, visible, position. While the items grow, the viewport is extended
+     * enough to keep them, so they keep moving until they leave the screen.
+     */
+    var extraHeight by mutableIntStateOf(0)
+        private set
+
+    /** Called when an item is about to grow by [delta], in the next frame, once the viewport is extended. */
+    internal fun onGrowthPending(delta: Int) {
+        pendingGrowths++
+        val runningGrowths = Snapshot.withoutReadObservation { running.sumOf { it.offset.coerceAtLeast(0f).toDouble() } }
+        extraHeight = maxOf(extraHeight, runningGrowths.toInt() + delta)
+    }
+
+    internal fun onGrowthApplied() {
+        pendingGrowths--
+    }
 
     internal fun onResizeStarted(resize: ItemResize) {
         if (resize !in running) {
@@ -116,6 +144,9 @@ internal class TimelineItemResizes(private val lazyListState: LazyListState) {
 
     internal fun onResizeFinished(resize: ItemResize) {
         running.remove(resize)
+        if (running.isEmpty() && pendingGrowths == 0) {
+            extraHeight = 0
+        }
     }
 
     /**
@@ -139,6 +170,44 @@ internal class TimelineItemResizes(private val lazyListState: LazyListState) {
 @Composable
 internal fun rememberTimelineItemResizes(lazyListState: LazyListState): TimelineItemResizes {
     return remember(lazyListState) { TimelineItemResizes(lazyListState) }
+}
+
+/**
+ * Extends the viewport of the LazyColumn above its top edge by [TimelineItemResizes.extraHeight], without changing its size or what's displayed.
+ * Must be used with [extendedAbove] for the content padding.
+ */
+internal fun Modifier.extendViewportAbove(resizes: TimelineItemResizes): Modifier = this
+    .clipToBounds()
+    .layout { measurable, constraints ->
+        val extraHeight = resizes.extraHeight
+        if (extraHeight == 0 || !constraints.hasBoundedHeight) {
+            val placeable = measurable.measure(constraints)
+            layout(placeable.width, placeable.height) { placeable.place(0, 0) }
+        } else {
+            val placeable = measurable.measure(
+                constraints.copy(minHeight = constraints.minHeight + extraHeight, maxHeight = constraints.maxHeight + extraHeight)
+            )
+            layout(placeable.width, placeable.height - extraHeight) { placeable.place(0, -extraHeight) }
+        }
+    }
+
+/**
+ * Adds [TimelineItemResizes.extraHeight] to the top padding, so the content is laid out where it would be without [extendViewportAbove].
+ */
+@Composable
+internal fun PaddingValues.extendedAbove(resizes: TimelineItemResizes): PaddingValues {
+    val density = LocalDensity.current
+    return remember(this, resizes, density) { ExtendedTopPaddingValues(this, resizes, density) }
+}
+
+@Stable
+private class ExtendedTopPaddingValues(
+    private val paddingValues: PaddingValues,
+    private val resizes: TimelineItemResizes,
+    private val density: Density,
+) : PaddingValues by paddingValues {
+    // Read while the LazyColumn is measured, so changes only trigger a new measure
+    override fun calculateTopPadding(): Dp = paddingValues.calculateTopPadding() + with(density) { resizes.extraHeight.toDp() }
 }
 
 /**
@@ -386,6 +455,9 @@ private class ReverseLayoutResizeNode(
     // The resize of this item, if it's being animated
     private var resize: ItemResize? = null
 
+    // Read while measuring, so the item is measured again once its growth can be applied
+    private var growthState by mutableIntStateOf(NO_GROWTH)
+
     fun updateIndex(index: Int) {
         this.index = index
         resize?.index = index
@@ -401,22 +473,42 @@ private class ReverseLayoutResizeNode(
     override fun MeasureScope.measure(measurable: Measurable, constraints: Constraints): MeasureResult {
         val placeable = measurable.measure(constraints)
         val previousHeight = lastHeight
-        lastHeight = placeable.height
+        val height = placeable.height
+        val isGrowthReady = growthState == GROWTH_READY
         if (previousHeight == UNSET) {
-            insertion?.onItemMeasured(placeable.height)
-        } else if (previousHeight != placeable.height) {
-            // The top edge moved by the height difference: move the content by the same amount in the opposite direction
-            val resize = resize ?: ItemResize(index).also { resize = it }
-            resizes.onResizeStarted(resize)
-            // Not the node's coroutine scope: see `animationScope` in [animateTimelineItem]
-            resize.animate(
-                delta = (placeable.height - previousHeight).toFloat(),
-                animationSpec = animationSpec,
-                animationScope = animationScope,
-                onFinished = resizes::onResizeFinished,
-            )
+            lastHeight = height
+            insertion?.onItemMeasured(height)
+        } else if (height > previousHeight && !isGrowthReady) {
+            // Keep the previous height in this frame, so the viewport can be extended before the items above it move up
+            if (growthState == NO_GROWTH) {
+                growthState = GROWTH_PENDING
+                resizes.onGrowthPending(height - previousHeight)
+                animationScope.launch {
+                    withFrameNanos {}
+                    if (growthState == GROWTH_PENDING) growthState = GROWTH_READY
+                }
+            }
+        } else {
+            if (growthState != NO_GROWTH) {
+                growthState = NO_GROWTH
+                resizes.onGrowthApplied()
+            }
+            if (height != previousHeight) {
+                lastHeight = height
+                // The top edge moved by the height difference: move the content by the same amount in the opposite direction
+                val resize = resize ?: ItemResize(index).also { resize = it }
+                resizes.onResizeStarted(resize)
+                // Not the node's coroutine scope: see `animationScope` in [animateTimelineItem]
+                resize.animate(
+                    delta = (height - previousHeight).toFloat(),
+                    animationSpec = animationSpec,
+                    animationScope = animationScope,
+                    onFinished = resizes::onResizeFinished,
+                )
+            }
         }
-        return layout(placeable.width, placeable.height) {
+        val layoutHeight = lastHeight
+        return layout(placeable.width, layoutHeight) {
             // While sliding in, the item is drawn below the other items, so the ones below it (i.e. the typing notification, which is opaque)
             // hide it until it reaches its position
             val zIndex = if (insertion?.isSlidingIn == true) -1f else 0f
@@ -424,11 +516,11 @@ private class ReverseLayoutResizeNode(
             placeable.placeWithLayer(0, 0, zIndex) {
                 val resizeOffset = resize?.offset ?: 0f
                 translationY = resizeOffset + resizes.offsetOf(key, index) + (insertion?.offset ?: 0f)
-                // When the item grew, its content is moved down: don't let it overlap the item below.
+                // When the item grew, its content is moved down, or doesn't fit yet: don't let it overlap the item below.
                 // The clip is in the coordinates of the layer, which is translated with the content.
-                clip = resizeOffset > 0f
+                clip = resizeOffset > 0f || layoutHeight < placeable.height
                 if (clip) {
-                    shape = BottomEdgeClipShape(bottom = placeable.height - resizeOffset)
+                    shape = BottomEdgeClipShape(bottom = layoutHeight - resizeOffset)
                 }
             }
         }
@@ -448,9 +540,16 @@ private class ReverseLayoutResizeNode(
         // The animations keep running in the animation scope, for the items following them
         lastHeight = UNSET
         resize = null
+        if (growthState != NO_GROWTH) {
+            growthState = NO_GROWTH
+            resizes.onGrowthApplied()
+        }
     }
 
     private companion object {
         const val UNSET = -1
+        const val NO_GROWTH = 0
+        const val GROWTH_PENDING = 1
+        const val GROWTH_READY = 2
     }
 }

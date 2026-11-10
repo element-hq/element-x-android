@@ -237,11 +237,14 @@ fun TimelineView(
                     modifier = Modifier
                         .fillMaxSize()
                         .nestedScroll(nestedScrollConnection)
+                        .then(if (state.areTimelineAnimationsEnabled) Modifier.extendViewportAbove(timelineItemResizes) else Modifier)
                         .testTag(TestTags.timeline),
                     state = lazyListState,
                     reverseLayout = true,
-                    contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() +
-                        PaddingValues(top = 64.dp, bottom = TIMELINE_BOTTOM_PADDING),
+                    contentPadding = (
+                        WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() +
+                            PaddingValues(top = 64.dp, bottom = TIMELINE_BOTTOM_PADDING)
+                        ).extendedAbove(timelineItemResizes),
                 ) {
                     itemsIndexed(
                         items = state.timelineItems,
