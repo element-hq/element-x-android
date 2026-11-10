@@ -38,10 +38,18 @@ import io.element.android.features.messages.impl.timeline.components.event.Timel
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemSelectionData
 import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.libraries.designsystem.colors.gradientSubtleColors
@@ -237,7 +245,15 @@ private fun TimelineItemRowContent(
                                 )
                         }
                     }
-                    else -> {
+                    is TimelineItemTextBasedContent,
+                    is TimelineItemEventContentWithAttachment,
+                    is TimelineItemAttachmentsContent,
+                    is TimelineItemGalleryContent,
+                    is TimelineItemEncryptedContent,
+                    is TimelineItemLocationContent,
+                    is TimelineItemPollContent,
+                    TimelineItemRedactedContent,
+                    TimelineItemUnknownContent -> {
                         val a11yVoiceMessage = stringResource(CommonStrings.a11y_voice_message)
                         val isSelectionToggle = selectionData.isSelectionModeActive && selectionData.canBeSelected
                         TimelineItemEventRow(

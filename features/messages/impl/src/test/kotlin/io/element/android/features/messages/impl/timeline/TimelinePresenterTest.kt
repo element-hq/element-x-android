@@ -2019,6 +2019,8 @@ class TimelinePresenterTest {
         this.paginateLambda = paginateLambda
     }
 
+    // Only the event types used by the test are expected, any other type is an error
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun roomPermissions(
         canRedactOther: Boolean = false,
         canRedactOwn: Boolean = true,

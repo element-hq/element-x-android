@@ -57,11 +57,20 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.blurHash
@@ -733,6 +742,8 @@ class MessagesFlowNode(
         callback.handlePermalinkClick(permalinkData, pushToBackstack = false)
     }
 
+    // Only MediaViewer and LocationViewer nav targets can be computed here, listing all the other NavTargets would not add value
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun processEventClick(
         timelineMode: Timeline.Mode,
         event: TimelineItem.Event,
@@ -798,7 +809,18 @@ class MessagesFlowNode(
                     null
                 }
             }
-            else -> null
+            is TimelineItemVoiceContent,
+            is TimelineItemStickerContent,
+            is TimelineItemGalleryContent,
+            is TimelineItemAttachmentsContent,
+            is TimelineItemTextBasedContent,
+            is TimelineItemEncryptedContent,
+            is TimelineItemPollContent,
+            is TimelineItemRtcNotificationContent,
+            is TimelineItemStateContent,
+            TimelineItemLegacyCallInviteContent,
+            TimelineItemRedactedContent,
+            TimelineItemUnknownContent -> null
         }
         return when (navTarget) {
             is NavTarget.MediaViewer -> {
@@ -891,7 +913,16 @@ class MessagesFlowNode(
                     galleryItems = galleryItems,
                 )
             }
-            else -> null
+            is TimelineItemTextBasedContent,
+            is TimelineItemEventContentWithAttachment,
+            is TimelineItemEncryptedContent,
+            is TimelineItemLocationContent,
+            is TimelineItemPollContent,
+            is TimelineItemRtcNotificationContent,
+            is TimelineItemStateContent,
+            TimelineItemLegacyCallInviteContent,
+            TimelineItemRedactedContent,
+            TimelineItemUnknownContent -> null
         }
         if (navTarget != null) {
             if (canUseOverlay) {

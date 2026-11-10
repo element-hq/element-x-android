@@ -51,7 +51,9 @@ sealed interface PinnedMessagesListState {
             is Filled -> {
                 pluralStringResource(id = R.plurals.screen_pinned_timeline_screen_title, loadedPinnedMessagesCount, loadedPinnedMessagesCount)
             }
-            else -> stringResource(id = R.string.screen_pinned_timeline_screen_title_empty)
+            Failed,
+            Loading,
+            Empty -> stringResource(id = R.string.screen_pinned_timeline_screen_title_empty)
         }
     }
 }

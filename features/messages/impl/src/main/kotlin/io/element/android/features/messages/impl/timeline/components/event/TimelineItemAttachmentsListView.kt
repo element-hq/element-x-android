@@ -129,7 +129,7 @@ fun TimelineItemAttachmentsListView(
                             onClick = { onGalleryItemClick(index) },
                         )
                     }
-                    else -> {
+                    ContentValidationValue.Unknown -> {
                         // TODO handle cases where either the content hasn't started validation or it failed to do so
                     }
                 }

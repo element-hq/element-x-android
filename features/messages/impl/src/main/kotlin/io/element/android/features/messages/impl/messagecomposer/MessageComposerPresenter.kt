@@ -220,6 +220,8 @@ class MessageComposerPresenter(
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted) {
+                // pendingEvent can only be one of the camera events, no need to list all the other MessageComposerEvents
+                @Suppress("ElseCaseInsteadOfExhaustiveWhen")
                 when (pendingEvent) {
                     is MessageComposerEvent.PickAttachmentSource.PhotoFromCamera -> cameraPhotoPicker.launch()
                     is MessageComposerEvent.PickAttachmentSource.VideoFromCamera -> cameraVideoPicker.launch()
@@ -875,7 +877,9 @@ class MessageComposerPresenter(
                 }
                 setText(newComposerMode.content, markdownTextEditorState, richTextEditorState, requestFocus = true)
             }
-            else -> {
+            MessageComposerMode.Normal,
+            MessageComposerMode.Attachment,
+            is MessageComposerMode.Reply -> {
                 if (currentComposerMode is MessageComposerMode.Reply) {
                     val mediaSources = currentComposerMode.replyToDetails.content()?.mediaSources() ?: return@launch
                     val contentValidationState = contentValidationCache[currentComposerMode.replyToDetails.eventId()]

@@ -57,7 +57,10 @@ class TimelineItemsFactory(
         when (old) {
             is MatrixTimelineItem.Event if new is MatrixTimelineItem.Event -> old.uniqueId == new.uniqueId
             is MatrixTimelineItem.Virtual if new is MatrixTimelineItem.Virtual -> old.uniqueId == new.uniqueId
-            else -> false
+            is MatrixTimelineItem.Event,
+            is MatrixTimelineItem.Virtual,
+            MatrixTimelineItem.Other,
+            null -> false
         }
     }
 
