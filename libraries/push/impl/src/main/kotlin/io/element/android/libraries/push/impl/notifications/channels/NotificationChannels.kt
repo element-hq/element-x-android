@@ -27,6 +27,7 @@ import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.binding
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -35,7 +36,6 @@ import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.push.api.notifications.NotificationSoundUpdater
 import io.element.android.libraries.push.impl.R
 import io.element.android.services.toolbox.api.strings.StringProvider
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -98,6 +98,7 @@ class DefaultNotificationChannels(
     private val context: Context,
     private val enterpriseService: EnterpriseService,
     private val appPreferencesStore: AppPreferencesStore,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : NotificationChannels {
     @Volatile private var currentNoisyChannelId: String = NOISY_NOTIFICATION_CHANNEL_ID_BASE
     @Volatile private var currentRingingCallChannelId: String = RINGING_CALL_NOTIFICATION_CHANNEL_ID_BASE
@@ -394,7 +395,7 @@ class DefaultNotificationChannels(
         systemDefaultUri: Uri,
     ): NotificationSound? {
         if (!supportNotificationChannels()) return null
-        val channel = withContext(Dispatchers.IO) {
+        val channel = withContext(coroutineDispatchers.io) {
             notificationManager.getNotificationChannel(channelId)
         } ?: return null
         return when (val sound = channel.sound) {

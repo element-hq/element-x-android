@@ -141,9 +141,10 @@ coroutines:
   # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   SuspendFunWithFlowReturnType:
     active: false
-  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   InjectDispatcher:
-    active: false
+    active: true
+    # Tests can use the dispatchers directly
+    excludes: [ '**/test/**', '**/androidTest/**' ]
 
 empty-blocks:
   EmptyFunctionBlock:

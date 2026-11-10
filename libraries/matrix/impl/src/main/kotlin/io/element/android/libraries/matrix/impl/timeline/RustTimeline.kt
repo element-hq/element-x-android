@@ -51,7 +51,6 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
@@ -350,7 +349,7 @@ class RustTimeline(
                 },
                 mentions = null,
             )
-            withContext(Dispatchers.IO) {
+            withContext(dispatcher) {
                 inner.edit(
                     newContent = editedContent,
                     eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),
