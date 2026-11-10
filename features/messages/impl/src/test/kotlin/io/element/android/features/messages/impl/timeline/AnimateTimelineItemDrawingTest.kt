@@ -16,7 +16,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -58,13 +59,17 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
     fun `when an item expands, it is never drawn over the items next to it`() = runAndroidComposeUiTest<ComponentActivity> {
         setContent {
             val coroutineScope = rememberCoroutineScope()
+            val keys = listOf(BELOW, EXPANDING, ABOVE)
+            val lazyListState = rememberLazyListState()
+            val resizes = rememberTimelineItemResizes(lazyListState)
             LazyColumn(
+                state = lazyListState,
                 modifier = Modifier.height(500.dp),
                 reverseLayout = true,
             ) {
-                items(listOf(BELOW, EXPANDING, ABOVE), key = { it }) { key ->
+                itemsIndexed(keys, key = { _, key -> key }) { index, key ->
                     val modifier = Modifier
-                        .animateTimelineItem(this, coroutineScope)
+                        .animateTimelineItem(this, coroutineScope, resizes, key, index)
                         .fillMaxWidth()
                         .testTag(key)
                     if (key == EXPANDING) {
@@ -100,14 +105,17 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
                 val currentKeys = keys
                 val coroutineScope = rememberCoroutineScope()
                 val insertions = remember { TimelineItemsInsertions(coroutineScope) }
+                val lazyListState = rememberLazyListState()
+                val resizes = rememberTimelineItemResizes(lazyListState)
                 val insertion = rememberItemsInsertion(currentKeys, insertions) { _, current -> setOf(NEW).filterTo(HashSet()) { it in current } }
                 LazyColumn(
+                    state = lazyListState,
                     modifier = Modifier.height(LIST_HEIGHT),
                     reverseLayout = true,
                 ) {
-                    items(currentKeys, key = { it }) { key ->
+                    itemsIndexed(currentKeys, key = { _, key -> key }) { index, key ->
                         val modifier = Modifier
-                            .animateTimelineItem(this, coroutineScope, insertion?.takeIf { key in it.keys })
+                            .animateTimelineItem(this, coroutineScope, resizes, key, index, insertion?.takeIf { key in it.keys })
                             .fillMaxWidth()
                             .testTag(key)
                         when (key) {
@@ -140,6 +148,63 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
         assertThat(expandingColorRowsIn(NEW)).isGreaterThan(0)
     }
 
+    @Test
+    fun `when an item shrinks back, the items coming back into view above it are drawn next to the other ones`() =
+        runAndroidComposeUiTest<ComponentActivity> {
+            val keys = listOf(BELOW, EXPANDING, ABOVE) + List(10) { "older_$it" }
+            var expandingHeight by mutableStateOf(50.dp)
+            setContent {
+                val coroutineScope = rememberCoroutineScope()
+                val lazyListState = rememberLazyListState()
+                val resizes = rememberTimelineItemResizes(lazyListState)
+                LazyColumn(
+                    state = lazyListState,
+                    modifier = Modifier.height(LIST_HEIGHT),
+                    reverseLayout = true,
+                ) {
+                    itemsIndexed(keys, key = { _, key -> key }) { index, key ->
+                        val color = when (key) {
+                            ABOVE -> EXPANDING_COLOR
+                            "older_0" -> OLDER_COLOR
+                            else -> Color.Green
+                        }
+                        Box(
+                            Modifier
+                                .animateTimelineItem(this, coroutineScope, resizes, key, index)
+                                .fillMaxWidth()
+                                .height(if (key == EXPANDING) expandingHeight else 100.dp)
+                                .background(color)
+                        )
+                    }
+                }
+            }
+            // Like expanding then collapsing a group of events: the items above go out of view, except the one just above it, then come back into view
+            expandingHeight = 300.dp
+            waitForIdle()
+
+            mainClock.autoAdvance = false
+            expandingHeight = 50.dp
+            var displayedFrames = 0
+            repeat(30) { frame ->
+                mainClock.advanceTimeByFrame()
+                val aboveRows = rowsWithColor(EXPANDING_COLOR)
+                val olderRows = rowsWithColor(OLDER_COLOR)
+                if (olderRows.isNotEmpty()) {
+                    displayedFrames++
+                    // The item which comes back into view is drawn right above the one below it
+                    assertWithMessage("Frame $frame").that(olderRows.last()).isAtMost(aboveRows.first())
+                    assertWithMessage("Frame $frame").that(olderRows.last()).isAtLeast(aboveRows.first() - 2)
+                }
+            }
+            assertThat(displayedFrames).isGreaterThan(0)
+        }
+
+    private fun AndroidComposeUiTest<*>.rowsWithColor(color: Color): List<Int> {
+        val image = onRoot().captureToImage().toPixelMap()
+        val x = image.width / 2
+        return (0 until image.height).filter { y -> image[x, y] == color }
+    }
+
     // Count the rows in the middle of the given item which have the color of the expanding item
     private fun AndroidComposeUiTest<*>.expandingColorRowsIn(tag: String): Int {
         val bounds = onNodeWithTag(tag).getUnclippedBoundsInRoot()
@@ -162,5 +227,6 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
         const val NEW = "new"
         val LIST_HEIGHT = 500.dp
         val EXPANDING_COLOR = Color.Blue
+        val OLDER_COLOR = Color.Red
     }
 }

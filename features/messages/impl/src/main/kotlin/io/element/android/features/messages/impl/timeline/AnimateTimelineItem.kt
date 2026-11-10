@@ -13,6 +13,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -44,7 +46,6 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 private const val STIFFNESS = Spring.StiffnessMediumLow
@@ -64,14 +65,23 @@ private val offsetSpec = spring(dampingRatio = DAMPING_RATIO, stiffness = STIFFN
  * - When new items are inserted at the bottom, the items above them slide up, but the new items are directly displayed at their final position, so
  * the items sliding up overlap them. Instead of fading them in, [insertion] makes them slide in from the bottom together with the items above.
  *
+ * - When an item is resized, the items above it which come into view while they move, i.e. when a group of events is collapsed, are displayed at
+ * their final position by the LazyColumn, while the items next to them are still moving. [resizes] makes them move with the other items.
+ *
  * @param scope the scope of the item in the LazyColumn.
  * @param animationScope the scope to run the animations in. It must be a composition scope, like the one `LazyColumn` uses for the placement animations
  * (i.e. from [rememberCoroutineScope]), so they start in the same frame: otherwise they get out of sync when frames are dropped.
+ * @param resizes the resizes of the items of the LazyColumn, see [rememberTimelineItemResizes].
+ * @param key the key of the item.
+ * @param index the index of the item.
  * @param insertion the insertion this item is part of, if it has just been inserted at the bottom of the timeline. See [rememberTimelineItemsInsertion].
  */
 internal fun Modifier.animateTimelineItem(
     scope: LazyItemScope,
     animationScope: CoroutineScope,
+    resizes: TimelineItemResizes,
+    key: Any,
+    index: Int,
     insertion: TimelineItemsInsertion? = null,
 ): Modifier = with(scope) {
     this@animateTimelineItem
@@ -79,7 +89,97 @@ internal fun Modifier.animateTimelineItem(
             fadeInSpec = if (insertion != null) null else spring(stiffness = STIFFNESS),
             placementSpec = placementSpec,
         )
-        .then(ReverseLayoutResizeElement(offsetSpec, animationScope, insertion))
+        .then(ReverseLayoutResizeElement(offsetSpec, animationScope, resizes, key, index, insertion))
+}
+
+/**
+ * The resizes of the items of a `reverseLayout` LazyColumn which are being animated by [animateTimelineItem].
+ *
+ * When an item is resized, the LazyColumn animates the placement of the visible items above it from their previous position: they are moved
+ * by the same offset as the content of the resized item. The other items above it, which may come into view while the visible ones move (i.e.
+ * when a group of events is collapsed), are not animated by the LazyColumn, so they have to apply that offset themselves.
+ */
+@Stable
+internal class TimelineItemResizes(private val lazyListState: LazyListState) {
+    private val running = mutableStateListOf<ItemResize>()
+
+    internal fun onResizeStarted(resize: ItemResize) {
+        if (resize !in running) {
+            // Called while the LazyColumn is measured: its layout info is still the one of the previous frame, and the LazyColumn starts the
+            // placement animations of the items which were visible in it
+            resize.animatedKeys = Snapshot.withoutReadObservation {
+                lazyListState.layoutInfo.visibleItemsInfo.mapTo(HashSet()) { it.key }
+            }
+            running.add(resize)
+        }
+    }
+
+    internal fun onResizeFinished(resize: ItemResize) {
+        running.remove(resize)
+    }
+
+    /**
+     * The offset to apply to the item with the given [key] and [index] for the resizes of the items below it, when the LazyColumn doesn't
+     * animate its placement for them.
+     */
+    internal fun offsetOf(key: Any, index: Int): Float {
+        var offset = 0f
+        running.forEach { resize ->
+            if (resize.index < index && key !in resize.animatedKeys) {
+                offset += resize.offset
+            }
+        }
+        return offset
+    }
+}
+
+/**
+ * Returns the [TimelineItemResizes] of the items of the LazyColumn with the given [lazyListState].
+ */
+@Composable
+internal fun rememberTimelineItemResizes(lazyListState: LazyListState): TimelineItemResizes {
+    return remember(lazyListState) { TimelineItemResizes(lazyListState) }
+}
+
+/**
+ * The animation compensating the resizes of an item, see [ReverseLayoutResizeNode]. It keeps running when the item goes out of view, so the
+ * items which follow it keep moving.
+ *
+ * The animation mirrors what `LazyLayoutItemAnimation.animatePlacementDelta` does for the placement of the items, so when several resizes and
+ * placement changes happen in a row, this item and its neighbours keep moving together.
+ *
+ * @param index the index of the item.
+ */
+internal class ItemResize(var index: Int) {
+    private val animation = Animatable(0f)
+
+    // The keys of the items whose placement the LazyColumn animates for this resize
+    var animatedKeys: Set<Any> = emptySet()
+
+    /** The offset applied to the content of the item to compensate its resizes: positive values move it down. */
+    var offset by mutableFloatStateOf(0f)
+        private set
+
+    fun animate(delta: Float, animationSpec: FiniteAnimationSpec<Float>, animationScope: CoroutineScope, onFinished: (ItemResize) -> Unit) {
+        val totalOffset = offset + delta
+        // Apply it in the current frame, the animation will only start in the next one
+        offset = totalOffset
+        animationScope.launch {
+            try {
+                if (!animation.isRunning) {
+                    animation.snapTo(totalOffset)
+                }
+                // If an animation is running, keep its current value and velocity, so the item keeps moving together with its neighbours
+                val target = animation.value - totalOffset
+                animation.animateTo(target, animationSpec) {
+                    offset = value - target
+                }
+                onFinished(this@ItemResize)
+            } catch (_: CancellationException) {
+                // A new animation was started, it takes over
+            }
+        }
+    }
 }
 
 /**
@@ -240,13 +340,19 @@ internal fun keysInsertedAtBottom(previous: List<TimelineItem>?, current: List<T
 private data class ReverseLayoutResizeElement(
     val animationSpec: FiniteAnimationSpec<Float>,
     val animationScope: CoroutineScope,
+    val resizes: TimelineItemResizes,
+    val key: Any,
+    val index: Int,
     val insertion: TimelineItemsInsertion?,
 ) : ModifierNodeElement<ReverseLayoutResizeNode>() {
-    override fun create() = ReverseLayoutResizeNode(animationSpec, animationScope, insertion)
+    override fun create() = ReverseLayoutResizeNode(animationSpec, animationScope, resizes, key, index, insertion)
 
     override fun update(node: ReverseLayoutResizeNode) {
         node.animationSpec = animationSpec
         node.animationScope = animationScope
+        node.resizes = resizes
+        node.key = key
+        node.updateIndex(index)
         node.updateInsertion(insertion)
     }
 }
@@ -265,16 +371,25 @@ private data class BottomEdgeClipShape(private val bottom: Float) : Shape {
  * offset back to 0 with [animationSpec]. Using the same spec as the placement animation of the items, the top edge of this item follows the
  * bottom edge of the item above it. While the content is moved down, it's clipped so it doesn't overlap the item below.
  *
- * The animation mirrors what `LazyLayoutItemAnimation.animatePlacementDelta` does for the placement of the items, so when several resizes and
- * placement changes happen in a row, this item and its neighbours keep moving together.
+ * It also applies the offsets of the resizes of the items below it, when the LazyColumn doesn't animate its placement for them.
  */
 private class ReverseLayoutResizeNode(
     var animationSpec: FiniteAnimationSpec<Float>,
     var animationScope: CoroutineScope,
+    var resizes: TimelineItemResizes,
+    var key: Any,
+    private var index: Int,
     private var insertion: TimelineItemsInsertion?,
 ) : Modifier.Node(), LayoutModifierNode {
     private var lastHeight = UNSET
-    private var animationJob: Job? = null
+
+    // The resize of this item, if it's being animated
+    private var resize: ItemResize? = null
+
+    fun updateIndex(index: Int) {
+        this.index = index
+        resize?.index = index
+    }
 
     fun updateInsertion(insertion: TimelineItemsInsertion?) {
         // Keep the insertion the item was measured with: a later timeline update must not stop its slide in animation
@@ -282,10 +397,6 @@ private class ReverseLayoutResizeNode(
             this.insertion = insertion
         }
     }
-    private val offsetAnimation = Animatable(0f)
-
-    // The offset applied to the content to compensate a resize: positive values move it down.
-    private var resizeOffset by mutableFloatStateOf(0f)
 
     override fun MeasureScope.measure(measurable: Measurable, constraints: Constraints): MeasureResult {
         val placeable = measurable.measure(constraints)
@@ -295,7 +406,15 @@ private class ReverseLayoutResizeNode(
             insertion?.onItemMeasured(placeable.height)
         } else if (previousHeight != placeable.height) {
             // The top edge moved by the height difference: move the content by the same amount in the opposite direction
-            animateResizeOffset(delta = (placeable.height - previousHeight).toFloat())
+            val resize = resize ?: ItemResize(index).also { resize = it }
+            resizes.onResizeStarted(resize)
+            // Not the node's coroutine scope: see `animationScope` in [animateTimelineItem]
+            resize.animate(
+                delta = (placeable.height - previousHeight).toFloat(),
+                animationSpec = animationSpec,
+                animationScope = animationScope,
+                onFinished = resizes::onResizeFinished,
+            )
         }
         return layout(placeable.width, placeable.height) {
             // While sliding in, the item is drawn below the other items, so the ones below it (i.e. the typing notification, which is opaque)
@@ -303,8 +422,8 @@ private class ReverseLayoutResizeNode(
             val zIndex = if (insertion?.isSlidingIn == true) -1f else 0f
             // Only read the offsets in the layer block, so the animations don't trigger new measure or placement passes
             placeable.placeWithLayer(0, 0, zIndex) {
-                val resizeOffset = resizeOffset
-                translationY = resizeOffset + (insertion?.offset ?: 0f)
+                val resizeOffset = resize?.offset ?: 0f
+                translationY = resizeOffset + resizes.offsetOf(key, index) + (insertion?.offset ?: 0f)
                 // When the item grew, its content is moved down: don't let it overlap the item below.
                 // The clip is in the coordinates of the layer, which is translated with the content.
                 clip = resizeOffset > 0f
@@ -315,43 +434,20 @@ private class ReverseLayoutResizeNode(
         }
     }
 
-    private fun animateResizeOffset(delta: Float) {
-        val totalOffset = resizeOffset + delta
-        // Apply it in the current frame, the animation will only start in the next one
-        resizeOffset = totalOffset
-        // Not the node's coroutine scope: see `animationScope` in [animateTimelineItem]
-        animationJob = animationScope.launch {
-            try {
-                if (!offsetAnimation.isRunning) {
-                    offsetAnimation.snapTo(totalOffset)
-                }
-                // If an animation is running, keep its current value and velocity, so the item keeps moving together with its neighbours
-                val target = offsetAnimation.value - totalOffset
-                offsetAnimation.animateTo(target, animationSpec) {
-                    resizeOffset = value - target
-                }
-            } catch (_: CancellationException) {
-                // A new animation was started, it takes over
-            }
-        }
-    }
-
     override fun onReset() {
         // The node is reused for another item
-        stopAnimation()
+        reset()
         insertion = null
     }
 
     override fun onDetach() {
-        stopAnimation()
+        reset()
     }
 
-    private fun stopAnimation() {
-        // The animation scope outlives this node
-        animationJob?.cancel()
-        animationJob = null
+    private fun reset() {
+        // The animations keep running in the animation scope, for the items following them
         lastHeight = UNSET
-        resizeOffset = 0f
+        resize = null
     }
 
     private companion object {

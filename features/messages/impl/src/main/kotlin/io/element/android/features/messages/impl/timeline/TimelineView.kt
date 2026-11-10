@@ -45,7 +45,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyLayoutScrollScope
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -218,6 +218,7 @@ fun TimelineView(
         // Must be a composition scope, see [animateTimelineItem]
         val itemAnimationScope = rememberCoroutineScope()
         val timelineItemsInsertions = remember(itemAnimationScope) { TimelineItemsInsertions(itemAnimationScope) }
+        val timelineItemResizes = rememberTimelineItemResizes(lazyListState)
         val timelineItemsInsertion = if (state.areTimelineAnimationsEnabled) {
             rememberTimelineItemsInsertion(state.timelineItems, timelineItemsInsertions)
         } else {
@@ -242,11 +243,11 @@ fun TimelineView(
                     contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() +
                         PaddingValues(top = 64.dp, bottom = TIMELINE_BOTTOM_PADDING),
                 ) {
-                    items(
+                    itemsIndexed(
                         items = state.timelineItems,
-                        contentType = { timelineItem -> timelineItem.contentType() },
-                        key = { timelineItem -> timelineItem.identifier() },
-                    ) { timelineItem ->
+                        contentType = { _, timelineItem -> timelineItem.contentType() },
+                        key = { _, timelineItem -> timelineItem.identifier() },
+                    ) { index, timelineItem ->
                         TimelineItemRow(
                             modifier = Modifier
                                 .then(
@@ -254,6 +255,9 @@ fun TimelineView(
                                         Modifier.animateTimelineItem(
                                             scope = this,
                                             animationScope = itemAnimationScope,
+                                            resizes = timelineItemResizes,
+                                            key = timelineItem.identifier(),
+                                            index = index,
                                             insertion = timelineItemsInsertion?.takeIf { timelineItem.identifier() in it.keys },
                                         )
                                     } else {
