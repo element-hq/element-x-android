@@ -74,7 +74,8 @@ fun InReplyToView(
             )
             ContentValidationValue.Invalid -> ReplyToInvalidContent(modifier = modifier)
             is ContentValidationValue.UnrecoverableError -> ReplyToNotFoundContent(modifier = modifier)
-            ContentValidationValue.Loading, ContentValidationValue.Unknown -> ReplyToLoadingContent(modifier = modifier)
+            ContentValidationValue.Loading,
+            ContentValidationValue.Unknown -> ReplyToLoadingContent(modifier = modifier)
         }
         is InReplyToDetails.Error ->
             ReplyToErrorContent(modifier = modifier)
@@ -178,11 +179,15 @@ private fun ReplyToContentText(
     val iconResourceId = when (metadata) {
         InReplyToMetadata.Redacted -> CompoundDrawables.ic_compound_delete
         InReplyToMetadata.UnableToDecrypt -> CompoundDrawables.ic_compound_time
-        null, is InReplyToMetadata.Text, is InReplyToMetadata.Thumbnail -> null
+        null,
+        is InReplyToMetadata.Text,
+        is InReplyToMetadata.Thumbnail -> null
     }
     val fontStyle = when (metadata) {
         is InReplyToMetadata.Informative -> FontStyle.Italic
-        null, is InReplyToMetadata.Text, is InReplyToMetadata.Thumbnail -> FontStyle.Normal
+        null,
+        is InReplyToMetadata.Text,
+        is InReplyToMetadata.Thumbnail -> FontStyle.Normal
     }
     Row(
         modifier = Modifier.semantics(mergeDescendants = false) {

@@ -75,8 +75,17 @@ fun InReplyTo.map(
                 val stickerContent = content as StickerContent
                 stickerContent.body
             }
-            is RedactedContent, is PollContent, is UnableToDecryptContent, is RoomMembershipContent, is ProfileChangeContent, is StateContent,
-            is FailedToParseMessageLikeContent, is FailedToParseStateContent, is LiveLocationContent, LegacyCallInviteContent, is CallNotifyContent,
+            is RedactedContent,
+            is PollContent,
+            is UnableToDecryptContent,
+            is RoomMembershipContent,
+            is ProfileChangeContent,
+            is StateContent,
+            is FailedToParseMessageLikeContent,
+            is FailedToParseStateContent,
+            is LiveLocationContent,
+            LegacyCallInviteContent,
+            is CallNotifyContent,
             UnknownContent -> null
         }
     )

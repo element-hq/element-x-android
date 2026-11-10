@@ -121,5 +121,6 @@ private fun SdkRtcNotificationType.map(): RtcNotificationType = when (this) {
 
 private fun SdkRtcCallIntent?.map(): CallIntent = when (this) {
     SdkRtcCallIntent.AUDIO -> CallIntent.AUDIO
-    null, SdkRtcCallIntent.VIDEO -> CallIntent.VIDEO
+    null,
+    SdkRtcCallIntent.VIDEO -> CallIntent.VIDEO
 }
