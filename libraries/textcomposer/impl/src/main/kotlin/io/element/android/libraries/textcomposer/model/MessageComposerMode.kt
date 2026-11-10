@@ -58,6 +58,6 @@ fun MessageComposerMode.showCaptionCompatibilityWarning(): Boolean {
     return when (this) {
         is MessageComposerMode.Attachment -> true
         is MessageComposerMode.EditCaption -> content.isEmpty()
-        else -> false
+        MessageComposerMode.Normal, is MessageComposerMode.Edit, is MessageComposerMode.Reply -> false
     }
 }

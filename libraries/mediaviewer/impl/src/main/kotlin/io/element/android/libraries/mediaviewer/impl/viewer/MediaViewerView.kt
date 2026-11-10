@@ -166,7 +166,7 @@ fun MediaViewerView(
                             },
                         )
                     }
-                    else -> {
+                    null, is MediaViewerPageData.Failure, is MediaViewerPageData.Loading -> {
                         TopAppBar(
                             title = {
                                 if (currentData is MediaViewerPageData.Loading) {

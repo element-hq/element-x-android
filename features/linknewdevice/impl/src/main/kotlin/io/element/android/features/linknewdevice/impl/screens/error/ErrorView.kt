@@ -49,7 +49,14 @@ fun ErrorView(
     BackHandler(onBack = onCancel)
     val iconStyle = when (errorScreenType) {
         ErrorScreenType.OtherDeviceAlreadySignedIn -> BigIcon.Style.SuccessSolid
-        else -> BigIcon.Style.AlertSolid
+        ErrorScreenType.Cancelled,
+        ErrorScreenType.Expired,
+        ErrorScreenType.Mismatch2Digits,
+        ErrorScreenType.InsecureChannelDetected,
+        ErrorScreenType.Declined,
+        ErrorScreenType.ProtocolNotSupported,
+        ErrorScreenType.SlidingSyncNotAvailable,
+        ErrorScreenType.UnknownError -> BigIcon.Style.AlertSolid
     }
     FlowStepPage(
         modifier = modifier,
@@ -62,7 +69,14 @@ fun ErrorView(
                 ErrorScreenType.OtherDeviceAlreadySignedIn -> DoneButton(
                     onDone = onCancel,
                 )
-                else -> Buttons(
+                ErrorScreenType.Cancelled,
+                ErrorScreenType.Expired,
+                ErrorScreenType.Mismatch2Digits,
+                ErrorScreenType.InsecureChannelDetected,
+                ErrorScreenType.Declined,
+                ErrorScreenType.ProtocolNotSupported,
+                ErrorScreenType.SlidingSyncNotAvailable,
+                ErrorScreenType.UnknownError -> Buttons(
                     onRetry = onRetry,
                     onCancel = onCancel,
                 )
@@ -131,7 +145,14 @@ private fun Content(errorScreenType: ErrorScreenType) {
                 InsecureChannelDetectedError()
             }
         }
-        else -> Unit
+        ErrorScreenType.Cancelled,
+        ErrorScreenType.Expired,
+        ErrorScreenType.OtherDeviceAlreadySignedIn,
+        ErrorScreenType.Mismatch2Digits,
+        ErrorScreenType.Declined,
+        ErrorScreenType.ProtocolNotSupported,
+        ErrorScreenType.SlidingSyncNotAvailable,
+        ErrorScreenType.UnknownError -> Unit
     }
 }
 

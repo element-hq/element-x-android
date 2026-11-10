@@ -131,7 +131,8 @@ fun RolesAndPermissionsView(
                 onSubmit = { state.eventSink(RolesAndPermissionsEvent.CancelPendingAction) }
             )
         }
-        else -> Unit
+        AsyncAction.Uninitialized,
+        is AsyncAction.Success -> Unit
     }
 }
 

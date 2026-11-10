@@ -54,7 +54,8 @@ data class EventTimelineItem(
         is StickerContent -> content.threadInfo
         is UnableToDecryptContent -> content.threadInfo
         is RedactedContent -> content.threadInfo
-        else -> null
+        is RoomMembershipContent, is ProfileChangeContent, is StateContent, is FailedToParseMessageLikeContent, is FailedToParseStateContent,
+        is LiveLocationContent, LegacyCallInviteContent, is CallNotifyContent, UnknownContent -> null
     }
 
     fun hasNotLoadedInReplyTo(): Boolean {

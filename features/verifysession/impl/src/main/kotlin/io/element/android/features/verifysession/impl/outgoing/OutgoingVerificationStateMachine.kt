@@ -128,7 +128,12 @@ class OutgoingVerificationStateMachine(
                         State.Initial, State.Completed, is State.Canceled -> state.override { State.Exit }
                         // For some reason `cancelVerification` is not calling its delegate `didCancel` method so we don't pass from
                         // `Canceling` state to `Canceled` automatically anymore
-                        else -> {
+                        is State.RequestingVerification,
+                        State.VerificationRequestAccepted,
+                        State.StartingSasVerification,
+                        State.SasVerificationStarted,
+                        is State.Verifying,
+                        State.Exit -> {
                             sessionVerificationService.cancelVerification()
                             state.override { State.Canceled.andLogStateChange() }
                         }

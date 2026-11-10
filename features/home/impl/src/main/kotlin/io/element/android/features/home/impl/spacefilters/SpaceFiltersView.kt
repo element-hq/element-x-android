@@ -64,7 +64,8 @@ fun SpaceFiltersView(
             // This ensures the hide animation is not cancelled
             when (sheetValueTarget) {
                 SheetValue.Expanded -> isSelecting
-                else -> true
+                SheetValue.Hidden,
+                SheetValue.PartiallyExpanded -> true
             }
         }
     )

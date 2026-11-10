@@ -179,7 +179,10 @@ private fun EmptyView(
                     when (banner) {
                         RoomListBanner.SetUpRecovery -> onSetUpRecoveryClick()
                         RoomListBanner.RecoveryKeyConfirmation -> onConfirmRecoveryKeyClick()
-                        else -> Unit
+                        RoomListBanner.FullScreenIntentPermission,
+                        RoomListBanner.BatteryOptimization,
+                        RoomListBanner.NewNotificationSound,
+                        RoomListBanner.SwipeAvatar -> Unit
                     }
                 },
                 onDismissClick = { eventSink(RoomListEvent.DismissBanner) },

@@ -140,11 +140,11 @@ fun MediaItem.Event.blurHash(): String? {
     return when (this) {
         is MediaItem.Image -> blurHash
         is MediaItem.Video -> blurHash
-        else -> null
+        is MediaItem.Audio, is MediaItem.Voice, is MediaItem.File -> null
     }
 }
 
 fun MediaItem.isMediaValid(): Boolean? = when (this) {
     is MediaItem.Event -> validationState.getCurrentOverallState() == ContentValidationValue.Valid
-    else -> null
+    is MediaItem.DateSeparator, is MediaItem.LoadingIndicator -> null
 }

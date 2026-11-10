@@ -192,7 +192,7 @@ private fun MentionSpanThemeInTimelineContent(
                 override fun formatDisplayText(mentionType: MentionType): CharSequence {
                     return when (mentionType) {
                         is MentionType.User -> mentionType.userId.value
-                        else -> throw AssertionError("Unexpected value $mentionType")
+                        is MentionType.Room, is MentionType.Message, MentionType.Everyone -> throw AssertionError("Unexpected value $mentionType")
                     }
                 }
             },

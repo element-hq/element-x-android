@@ -124,7 +124,9 @@ class RoomDetailsEditPresenterTest {
         }
     }
 
+    // Only the event types used by the test are expected, any other type is an error
     @Test
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     fun `present - sets canChangeName if user has permission`() = runTest {
         val room = aJoinedRoom(
             canSendState = { stateEventType ->
@@ -156,7 +158,9 @@ class RoomDetailsEditPresenterTest {
         }
     }
 
+    // Only the event types used by the test are expected, any other type is an error
     @Test
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     fun `present - sets canChangeAvatar if user has permission`() = runTest {
         val room = aJoinedRoom(
             avatarUrl = AN_AVATAR_URL,
@@ -188,7 +192,9 @@ class RoomDetailsEditPresenterTest {
         }
     }
 
+    // Only the event types used by the test are expected, any other type is an error
     @Test
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     fun `present - sets canChangeTopic if user has permission`() = runTest {
         val room = aJoinedRoom(
             avatarUrl = AN_AVATAR_URL,

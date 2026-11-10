@@ -47,7 +47,9 @@ sealed interface SpaceFiltersState {
 fun SpaceFiltersState.selectedFilter(): SpaceServiceFilter? {
     return when (this) {
         is SpaceFiltersState.Selected -> this.selectedFilter
-        else -> null
+        SpaceFiltersState.Disabled,
+        is SpaceFiltersState.Unselected,
+        is SpaceFiltersState.Selecting -> null
     }
 }
 
