@@ -13,6 +13,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -198,6 +199,54 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
             }
             assertThat(displayedFrames).isGreaterThan(0)
         }
+
+    @Test
+    fun `when an item grows, the items above it are drawn until they leave the screen`() = runAndroidComposeUiTest<ComponentActivity> {
+        val keys = listOf(BELOW, EXPANDING, ABOVE) + List(10) { "older_$it" }
+        var expandingHeight by mutableStateOf(50.dp)
+        setContent {
+            val coroutineScope = rememberCoroutineScope()
+            val lazyListState = rememberLazyListState()
+            val resizes = rememberTimelineItemResizes(lazyListState)
+            LazyColumn(
+                state = lazyListState,
+                modifier = Modifier
+                    .height(LIST_HEIGHT)
+                    .extendViewportAbove(resizes),
+                contentPadding = PaddingValues().extendedAbove(resizes),
+                reverseLayout = true,
+            ) {
+                itemsIndexed(keys, key = { _, key -> key }) { index, key ->
+                    val color = when (key) {
+                        ABOVE -> EXPANDING_COLOR
+                        "older_0" -> OLDER_COLOR
+                        else -> Color.Green
+                    }
+                    Box(
+                        Modifier
+                            .animateTimelineItem(this, coroutineScope, resizes, key, index)
+                            .fillMaxWidth()
+                            .height(if (key == EXPANDING) expandingHeight else 100.dp)
+                            .background(color)
+                    )
+                }
+            }
+        }
+
+        mainClock.autoAdvance = false
+        // Like expanding a group of events: the items above it move up, some of them out of the screen
+        expandingHeight = 300.dp
+        repeat(30) { frame ->
+            mainClock.advanceTimeByFrame()
+            val aboveRows = rowsWithColor(EXPANDING_COLOR)
+            // While there is room above the item, the item above it is drawn there
+            if (aboveRows.first() > 1) {
+                val olderRows = rowsWithColor(OLDER_COLOR)
+                assertWithMessage("Frame $frame").that(olderRows).isNotEmpty()
+                assertWithMessage("Frame $frame").that(olderRows.last()).isAtLeast(aboveRows.first() - 2)
+            }
+        }
+    }
 
     private fun AndroidComposeUiTest<*>.rowsWithColor(color: Color): List<Int> {
         val image = onRoot().captureToImage().toPixelMap()
