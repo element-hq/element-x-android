@@ -81,10 +81,10 @@ class PdfPage(
     }
 
     private fun PdfRenderer.openPageRenderAndClose(index: Int, bitmapWidth: Int, bitmapHeight: Int): Bitmap {
-        fun createBitmap(bitmapWidth: Int, bitmapHeight: Int): Bitmap {
+        fun createBitmap(width: Int, height: Int): Bitmap {
             val bitmap = Bitmap.createBitmap(
-                bitmapWidth,
-                bitmapHeight,
+                width,
+                height,
                 Bitmap.Config.ARGB_8888
             )
             val canvas = Canvas(bitmap)

@@ -106,9 +106,9 @@ class TimelineMediaGalleryDataSource(
             groupedMediaItemsFlow.emit(AsyncData.Success(groupedMediaItems))
         }
             .onCompletion {
-                timeline?.let {
+                timeline?.let { currentTimeline ->
                     Timber.d("Timeline media gallery data source flow completed for room ${room.roomId}, closing timeline")
-                    it.close()
+                    currentTimeline.close()
                 }
             }
             .launchIn(coroutineScope)

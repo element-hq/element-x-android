@@ -30,16 +30,16 @@ class FakeActiveLiveLocationShareManager(
 
     override suspend fun startShare(roomId: RoomId, duration: Duration): Result<Unit> = simulateLongTask {
         startShareLambda(roomId, duration).onSuccess {
-            _sharingRoomIds.update {
-                it + roomId
+            _sharingRoomIds.update { roomIds ->
+                roomIds + roomId
             }
         }
     }
 
     override suspend fun stopShare(roomId: RoomId): Result<Unit> = simulateLongTask {
         stopShareLambda(roomId).onSuccess {
-            _sharingRoomIds.update {
-                it - roomId
+            _sharingRoomIds.update { roomIds ->
+                roomIds - roomId
             }
         }
     }

@@ -92,7 +92,7 @@ class RoomMemberDetailsPresenter(
 
             // Subscribe to the identity changes
             room.roomMemberIdentityStateChange(waitForEncryption = false)
-                .map { it.find { it.identityRoomMember.userId == roomMemberId } }
+                .map { changes -> changes.find { it.identityRoomMember.userId == roomMemberId } }
                 .map { roomMemberIdentityStateChange ->
                     // If we didn't receive any info, manually fetch it
                     roomMemberIdentityStateChange?.identityState ?: encryptionService.getUserIdentity(roomMemberId).getOrNull()

@@ -133,13 +133,13 @@ class BugReporterMultipartBody internal constructor(
         sink: BufferedSink?,
         countBytes: Boolean,
     ): Long {
-        var sink = sink
+        var targetSink = sink
         var byteCount = 0L
 
         var byteCountBuffer: Buffer? = null
         if (countBytes) {
             byteCountBuffer = Buffer()
-            sink = byteCountBuffer
+            targetSink = byteCountBuffer
             // ELEMENT-START
             contentLengthSize.clear()
             // ELEMENT-END
@@ -150,13 +150,13 @@ class BugReporterMultipartBody internal constructor(
             val headers = part.headers
             val body = part.body
 
-            sink!!.write(DASHDASH)
-            sink.write(boundaryByteString)
-            sink.write(CRLF)
+            targetSink!!.write(DASHDASH)
+            targetSink.write(boundaryByteString)
+            targetSink.write(CRLF)
 
             if (headers != null) {
                 for (h in 0 until headers.size) {
-                    sink
+                    targetSink
                         .writeUtf8(headers.name(h))
                         .write(COLONSPACE)
                         .writeUtf8(headers.value(h))
@@ -166,7 +166,7 @@ class BugReporterMultipartBody internal constructor(
 
             val contentType = body.contentType()
             if (contentType != null) {
-                sink
+                targetSink
                     .writeUtf8("Content-Type: ")
                     .writeUtf8(contentType.toString())
                     .write(CRLF)
@@ -179,7 +179,7 @@ class BugReporterMultipartBody internal constructor(
                 return -1L
             }
 
-            sink.write(CRLF)
+            targetSink.write(CRLF)
 
             if (countBytes) {
                 byteCount += contentLength
@@ -187,7 +187,7 @@ class BugReporterMultipartBody internal constructor(
                 contentLengthSize.add(byteCount)
                 // ELEMENT-END
             } else {
-                body.writeTo(sink)
+                body.writeTo(targetSink)
                 // ELEMENT-START
                 // warn the listener of upload progress
                 // sink.buffer().size() does not give the right value
@@ -198,13 +198,13 @@ class BugReporterMultipartBody internal constructor(
                 // ELEMENT-END
             }
 
-            sink.write(CRLF)
+            targetSink.write(CRLF)
         }
 
-        sink!!.write(DASHDASH)
-        sink.write(boundaryByteString)
-        sink.write(DASHDASH)
-        sink.write(CRLF)
+        targetSink!!.write(DASHDASH)
+        targetSink.write(boundaryByteString)
+        targetSink.write(DASHDASH)
+        targetSink.write(CRLF)
 
         if (countBytes) {
             byteCount += byteCountBuffer!!.size
