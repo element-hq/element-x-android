@@ -8,24 +8,20 @@
 
 package io.element.android.detektrules
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Rule
+import dev.detekt.api.RuleName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
-class RunCatchingRule(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(
-        id = "RunCatchingNotAllowed",
-        severity = Severity.Style,
-        description = "Avoid using `runCatching`, use `runCatchingExceptions` or `tryOrNull` instead. " +
-            "Avoid `mapCatching`, use `mapCatchingExceptions` instead.",
-        debt = Debt.FIVE_MINS,
-    )
+class RunCatchingRule(config: Config) : Rule(
+    config = config,
+    description = "Avoid using `runCatching`, use `runCatchingExceptions` or `tryOrNull` instead. " +
+        "Avoid `mapCatching`, use `mapCatchingExceptions` instead.",
+) {
+    override val ruleName = RuleName("RunCatchingNotAllowed")
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -34,11 +30,12 @@ class RunCatchingRule(config: Config) : Rule(config) {
         val hasRunCatchingCall = callNameExpression.text == "runCatching"
         val hasMapCatchingCall = callNameExpression.text == "mapCatching"
         if (hasRunCatchingCall || hasMapCatchingCall) {
-            report(CodeSmell(
-                issue = issue,
-                entity = Entity.from(expression),
-                message = "Use `runCatchingExceptions` or `tryOrNull` instead of `runCatching`. Avoid `mapCatching`, use `mapCatchingExceptions` instead."
-            ))
+            report(
+                Finding(
+                    entity = Entity.from(expression),
+                    message = "Use `runCatchingExceptions` or `tryOrNull` instead of `runCatching`. Avoid `mapCatching`, use `mapCatchingExceptions` instead."
+                )
+            )
         }
     }
 }

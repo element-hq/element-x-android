@@ -51,7 +51,7 @@ private fun FakeTimestampView() {
     Text(text = "12:34", modifier = Modifier.background(Color.LightGray).padding(start = 12.dp))
 }
 
-@Suppress("UnusedPrivateMember")
+@Suppress("UnusedPrivateFunction")
 @Preview(showBackground = true)
 @Composable
 private fun ContentAvoidingLayoutHtmlMessageContentPreview() {

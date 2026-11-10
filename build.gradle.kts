@@ -33,13 +33,13 @@ private val catalog = the<LibrariesForLibs>()
 allprojects {
     // Detekt
     apply {
-        plugin("io.gitlab.arturbosch.detekt")
+        plugin("dev.detekt")
     }
     detekt {
         // preconfigure defaults
         buildUponDefaultConfig = true
-        // activate all available (even unstable) rules.
-        allRules = true
+        // Note: do not set `allRules = true`. With detekt 1.x it had no effect on the rules disabled by default, but
+        // with detekt 2.x it really enables all the rules. Rules are enabled explicitly in detekt.yml instead.
         // point to your custom config defining rules to run, overwriting default behavior
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
@@ -48,7 +48,7 @@ allprojects {
         detektPlugins(project(":tests:detekt-rules"))
     }
 
-    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
         exclude("io/element/android/tests/konsist/failures/**")
 
         // This file comes from another project and we want to keep it as close to the original as possible
