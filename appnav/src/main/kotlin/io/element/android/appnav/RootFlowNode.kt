@@ -431,13 +431,13 @@ class RootFlowNode(
                     }
                 }
                 val savedNavState = extractSavedStateForNavTarget(navTarget, this.buildContext.savedStateMap)
-                val buildContext = if (savedNavState != null) {
+                val loggedInBuildContext = if (savedNavState != null) {
                     Timber.d("Creating a $navTarget with restored saved state")
                     buildContext.copy(savedStateMap = savedNavState)
                 } else {
                     buildContext.copy(savedStateMap = savedNavState)
                 }
-                createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback))
+                createNode<LoggedInAppScopeFlowNode>(loggedInBuildContext, plugins = listOf(inputs, callback))
             }
             is NavTarget.NotLoggedInFlow -> {
                 val callback = object : NotLoggedInFlowNode.Callback {

@@ -126,12 +126,12 @@ class KnockRequestsService(
         return action(knockRequest)
             .onFailure {
                 if (optimistic) {
-                    handledKnockRequestIds.getAndUpdate { it - knockRequest.eventId }
+                    handledKnockRequestIds.getAndUpdate { eventIds -> eventIds - knockRequest.eventId }
                 }
             }
             .onSuccess {
                 if (!optimistic) {
-                    handledKnockRequestIds.getAndUpdate { it + knockRequest.eventId }
+                    handledKnockRequestIds.getAndUpdate { eventIds -> eventIds + knockRequest.eventId }
                 }
             }
     }

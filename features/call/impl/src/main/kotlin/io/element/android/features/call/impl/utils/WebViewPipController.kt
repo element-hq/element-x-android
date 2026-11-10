@@ -58,11 +58,11 @@ private class PipBridge(
     fun setPipOrientation(orientation: String?) {
         Timber.d("Picture-in-picture orientation changed in webview, orientation: $orientation")
         // This callback is used to update the picture-in-picture orientation in the WebView when it changes
-        val orientation = when (orientation) {
+        val pipOrientation = when (orientation) {
             "portrait" -> Configuration.ORIENTATION_PORTRAIT
             "landscape" -> Configuration.ORIENTATION_LANDSCAPE
             else -> return
         }
-        onOrientationChange(orientation)
+        onOrientationChange(pipOrientation)
     }
 }

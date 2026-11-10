@@ -117,22 +117,22 @@ object LinkifyHelper {
     }
 
     private fun adjustLinkifiedUrlSpanEndIndex(spannable: Spannable, start: Int, end: Int): Int {
-        var end = end
+        var adjustedEnd = end
 
         // Trailing punctuation found, adjust the end index
-        while (end > start && spannable[end - 1] in sequenceOf('.', ',', ';', ':', '!', '?', '…')) {
-            end--
+        while (adjustedEnd > start && spannable[adjustedEnd - 1] in sequenceOf('.', ',', ';', ':', '!', '?', '…')) {
+            adjustedEnd--
         }
 
         // If the last character is a closing parenthesis, check if it's part of a pair
-        if (end > start && spannable[end - 1] == ')') {
-            val linkifiedTextLastPath = spannable.substring(start, end).substringAfterLast('/')
+        if (adjustedEnd > start && spannable[adjustedEnd - 1] == ')') {
+            val linkifiedTextLastPath = spannable.substring(start, adjustedEnd).substringAfterLast('/')
             val closingParenthesisCount = linkifiedTextLastPath.count { it == ')' }
             val openingParenthesisCount = linkifiedTextLastPath.count { it == '(' }
             // If it's not part of a pair, remove it from the link span by adjusting the end index
-            end -= (closingParenthesisCount - openingParenthesisCount).coerceAtLeast(0)
+            adjustedEnd -= (closingParenthesisCount - openingParenthesisCount).coerceAtLeast(0)
         }
-        return end
+        return adjustedEnd
     }
 }
 

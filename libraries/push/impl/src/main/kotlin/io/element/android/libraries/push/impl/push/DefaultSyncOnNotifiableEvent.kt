@@ -54,10 +54,10 @@ class DefaultSyncOnNotifiableEvent(
             appForegroundStateService.updateIsSyncingNotificationEvent(true)
 
             if (!appForegroundStateService.isInForeground.value) {
-                for ((sessionId, requests) in requestsBySessionId) {
+                for ((sessionId, sessionRequests) in requestsBySessionId) {
                     Timber.d("Starting opportunistic room list sync for $sessionId")
                     syncJobs += launch {
-                        syncUsingSession(SessionId(sessionId), requests)
+                        syncUsingSession(SessionId(sessionId), sessionRequests)
                     }
                 }
 

@@ -547,7 +547,7 @@ class AttachmentsPreviewPresenter(
         }
     }.fold(
         onSuccess = {
-            mediaUploadInfos.forEach { cleanUp(it) }
+            mediaUploadInfos.forEach { mediaUploadInfo -> cleanUp(mediaUploadInfo) }
             sendActionState.value = SendActionState.Done
             onDoneListener()
         },

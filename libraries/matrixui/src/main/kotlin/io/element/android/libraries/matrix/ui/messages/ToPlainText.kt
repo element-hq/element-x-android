@@ -103,8 +103,8 @@ private class PlainTextNodeVisitor : NodeVisitor {
     }
 
     override fun tail(node: Node, depth: Int) {
-        fun nodeIsBlockButNotLastOne(node: Node) = node is Element && node.isBlock && node.lastElementSibling() !== node
-        fun nodeIsLineBreak(node: Node) = node.nodeName().lowercase() == "br"
+        fun nodeIsBlockButNotLastOne(candidate: Node) = candidate is Element && candidate.isBlock && candidate.lastElementSibling() !== candidate
+        fun nodeIsLineBreak(candidate: Node) = candidate.nodeName().lowercase() == "br"
         if (nodeIsBlockButNotLastOne(node) || nodeIsLineBreak(node)) {
             builder.append("\n")
         }

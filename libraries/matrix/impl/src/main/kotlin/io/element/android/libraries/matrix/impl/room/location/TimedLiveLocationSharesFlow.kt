@@ -31,16 +31,16 @@ internal fun Flow<List<LiveLocationShare>>.timedByExpiry(
     }
 
     fun List<LiveLocationShare>.filterLive(): List<LiveLocationShare> {
-        val currentTimeMillis = currentTimeMillis()
-        return filter { it.endTimestamp > currentTimeMillis }
+        val now = currentTimeMillis()
+        return filter { it.endTimestamp > now }
     }
 
     fun reschedule(shares: List<LiveLocationShare>) {
         timerJob?.cancel()
         timerJob = launch {
-            val currentTimeMillis = currentTimeMillis()
-            val nextExpiry = shares.nextExpiryAfter(currentTimeMillis) ?: return@launch
-            delay((nextExpiry - currentTimeMillis).coerceAtLeast(0))
+            val now = currentTimeMillis()
+            val nextExpiry = shares.nextExpiryAfter(now) ?: return@launch
+            delay((nextExpiry - now).coerceAtLeast(0))
             val liveShares = shares.filterLive()
             send(liveShares)
             reschedule(liveShares)

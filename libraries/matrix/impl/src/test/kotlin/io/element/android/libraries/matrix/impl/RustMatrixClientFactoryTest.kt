@@ -153,8 +153,8 @@ private fun TestScope.createRustMatrixClientInnerFactory(
         analyticsService = FakeAnalyticsService(),
         workManagerScheduler = workManagerScheduler,
         searchBackfillServiceFactory = object : RustSearchBackfillService.Factory {
-            override fun create(innerClient: Client) = RustSearchBackfillService(
-                innerClient = innerClient,
+            override fun create(client: Client) = RustSearchBackfillService(
+                innerClient = client,
                 searchBackfillRequestBuilderFactory = {
                     object : SearchBackfillRequestBuilder {
                         override suspend fun build(): Result<List<WorkManagerRequestWrapper>> = Result.success(emptyList())
