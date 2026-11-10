@@ -41,6 +41,8 @@ import java.lang.Float.min
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
 private val waveFormHeight = 26.dp
 
+// The modifier is also applied to the Canvas, since it provides its height. Fixing this would change the rendering.
+@Suppress("ModifierReused", "ModifierNotUsedAtRoot")
 @Composable
 fun LiveWaveformView(
     levels: ImmutableList<Float>,

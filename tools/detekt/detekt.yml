@@ -30,11 +30,13 @@ style:
     active: false
   ReturnCount:
     active: false
-  UnnecessaryAbstractClass:
+  AbstractClassCanBeConcreteClass:
+    active: true
+  AbstractClassCanBeInterface:
     active: true
   FunctionOnlyReturningConstant:
     active: false
-  UnusedPrivateMember:
+  UnusedPrivateFunction:
     active: true
   DestructuringDeclarationWithTooManyEntries:
     active: true
@@ -48,9 +50,9 @@ style:
   UnnecessaryParentheses:
     active: true
     allowForUnclearPrecedence: false
-  UntilInsteadOfRangeTo:
+  RangeUntilInsteadOfRangeTo:
     active: true
-  UnusedImports:
+  UnusedImport:
     active: true
   UnusedPrivateProperty:
     active: true
@@ -66,8 +68,6 @@ style:
     active: true
   OptionalUnit:
     active: true
-  PreferToOverPairSyntax:
-    active: true
   RedundantExplicitType:
     active: true
   TrailingWhitespace:
@@ -81,8 +81,6 @@ style:
     active: true
     acceptableLength: 4
     allowNonStandardGrouping: false
-  UnnecessaryAnnotationUseSiteTarget:
-    active: true
   UnnecessaryBackticks:
     active: true
   UnnecessaryBracesAroundTrailingLambda:
@@ -205,9 +203,9 @@ performance:
 comments:
   AbsentOrWrongFileLicense:
     active: false
-  CommentOverPrivateFunction:
+  DocumentationOverPrivateFunction:
     active: false
-  CommentOverPrivateProperty:
+  DocumentationOverPrivateProperty:
     active: false
   DeprecatedBlockTag:
     active: true
@@ -278,4 +276,11 @@ Compose:
   RememberMissing:
     active: true
   UnstableCollections:
+    active: true
+
+# Custom rules from :tests:detekt-rules. Since detekt 2, a rule only runs if it is listed in the configuration.
+ElementXRules:
+  RunCatchingNotAllowed:
+    active: true
+  ByPreferencesDataStoreNotAllowed:
     active: true

@@ -8,38 +8,34 @@
 
 package io.element.android.detektrules
 
-import io.github.detekt.psi.fileName
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Rule
+import dev.detekt.api.RuleName
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
 
-class ByPreferencesDataStoreRule(config: Config) : Rule(config) {
-    override val issue: Issue = Issue(
-        id = "ByPreferencesDataStoreNotAllowed",
-        severity = Severity.Style,
-        description = "Avoid using `by preferencesDataStore(...)`, use `PreferenceDataStoreFactory.create(name)`instead.",
-        debt = Debt.FIVE_MINS,
-    )
+class ByPreferencesDataStoreRule(config: Config) : Rule(
+    config = config,
+    description = "Avoid using `by preferencesDataStore(...)`, use `PreferenceDataStoreFactory.create(name)`instead.",
+) {
+    override val ruleName = RuleName("ByPreferencesDataStoreNotAllowed")
 
     override fun visitPropertyDelegate(delegate: KtPropertyDelegate) {
         super.visitPropertyDelegate(delegate)
 
-        if (delegate.containingKtFile.fileName == "DefaultPreferencesDataStoreFactory.kt") {
+        if (delegate.containingKtFile.name == "DefaultPreferencesDataStoreFactory.kt") {
             // Skip the rule for the DefaultPreferencesDataStoreFactory implementation
             return
         }
 
         if (delegate.text.startsWith("by preferencesDataStore")) {
-            report(CodeSmell(
-                issue = issue,
-                entity = Entity.from(delegate),
-                message = "Use `PreferenceDataStoreFactory.create(name)` instead of `by preferencesDataStore(...)`."
-            ))
+            report(
+                Finding(
+                    entity = Entity.from(delegate),
+                    message = "Use `PreferenceDataStoreFactory.create(name)` instead of `by preferencesDataStore(...)`."
+                )
+            )
         }
     }
 }

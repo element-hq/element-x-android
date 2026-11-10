@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:Suppress("UnusedImports")
+@file:Suppress("UnusedImport")
 
 package io.element.android.libraries.troubleshoot.test
 
