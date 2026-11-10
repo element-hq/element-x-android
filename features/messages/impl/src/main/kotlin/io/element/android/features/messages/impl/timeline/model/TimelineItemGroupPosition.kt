@@ -54,6 +54,7 @@ sealed interface TimelineItemGroupPosition {
      */
     fun isNew(): Boolean = when (this) {
         First, None -> true
-        Middle, Last -> false
+        Middle,
+        Last -> false
     }
 }

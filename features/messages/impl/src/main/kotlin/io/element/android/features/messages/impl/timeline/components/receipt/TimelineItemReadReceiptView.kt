@@ -76,7 +76,8 @@ fun TimelineItemReadReceiptView(
         is LocalEventSendState.Sent if state.isLastOutgoingMessage && state.receipts.isEmpty() -> {
             @Composable { SentIcon() }
         }
-        is LocalEventSendState.Sent, null -> if (state.receipts.isNotEmpty()) {
+        is LocalEventSendState.Sent,
+        null -> if (state.receipts.isNotEmpty()) {
             @Composable {
                 ReadReceiptsAvatars(
                     receipts = state.receipts,
