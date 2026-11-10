@@ -159,11 +159,8 @@ class AnimateTimelineItemTest : RobolectricTest() {
             val currentKeys = keys
             val coroutineScope = rememberCoroutineScope()
             val insertions = remember { TimelineItemsInsertions(coroutineScope) }
-            val previousKeys = remember { arrayOfNulls<List<String>>(1) }
-            val insertion = remember(currentKeys) {
-                val insertedKeys = previousKeys[0]?.let { previous -> currentKeys.filter { it !in previous }.toSet() }.orEmpty()
-                previousKeys[0] = currentKeys
-                insertions.onItemsInserted(insertedKeys)
+            val insertion = rememberItemsInsertion(currentKeys, insertions) { previous, current ->
+                previous?.let { current.filterTo(HashSet<Any>()) { it !in previous } }.orEmpty()
             }
             LazyColumn(
                 modifier = Modifier.height(500.dp),

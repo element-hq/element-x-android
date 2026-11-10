@@ -14,6 +14,9 @@ import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -99,14 +102,6 @@ internal class TimelineItemsInsertion(
     // Whether the frame in which the items are inserted is over
     private var isInsertionFrameOver = false
 
-    init {
-        // This is created in the frame in which the items are inserted, while they haven't been measured yet
-        coroutineScope.launch {
-            withFrameNanos {}
-            isInsertionFrameOver = true
-        }
-    }
-
     // The offset of this insertion only
     private var ownOffset by mutableFloatStateOf(0f)
 
@@ -147,6 +142,18 @@ internal class TimelineItemsInsertion(
             }
         }
     }
+
+    /**
+     * Waits for the end of the frame in which the items are inserted, after which the inserted items which are measured, i.e. when scrolled into
+     * view, are displayed directly at their final position. Must be called once the composition in which the items are inserted is applied.
+     */
+    suspend fun awaitInsertionFrameOver() {
+        try {
+            withFrameNanos {}
+        } finally {
+            isInsertionFrameOver = true
+        }
+    }
 }
 
 /**
@@ -156,15 +163,19 @@ internal class TimelineItemsInsertion(
 internal class TimelineItemsInsertions(private val coroutineScope: CoroutineScope) {
     private var last: TimelineItemsInsertion? = null
 
-    /** The offset of the items which are still sliding in, if any. */
-    val offset: Float
-        get() = last?.offset ?: 0f
-
-    fun onItemsInserted(keys: Set<Any>): TimelineItemsInsertion? {
+    /**
+     * Creates the insertion of the items with the given [keys], if any. It has no side effects, so it can be called during composition:
+     * [onInsertionApplied] must be called once the composition is applied.
+     */
+    fun create(keys: Set<Any>): TimelineItemsInsertion? {
         if (keys.isEmpty()) return null
         // Don't observe the offset: this is called during composition, it must not recompose on each frame of the animation
         val previous = last?.takeIf { Snapshot.withoutReadObservation { it.offset } != 0f }
-        return TimelineItemsInsertion(keys, coroutineScope, previous).also { last = it }
+        return TimelineItemsInsertion(keys, coroutineScope, previous)
+    }
+
+    fun onInsertionApplied(insertion: TimelineItemsInsertion) {
+        last = insertion
     }
 }
 
@@ -176,13 +187,40 @@ internal class TimelineItemsInsertions(private val coroutineScope: CoroutineScop
 internal fun rememberTimelineItemsInsertion(
     timelineItems: ImmutableList<TimelineItem>,
     insertions: TimelineItemsInsertions,
+): TimelineItemsInsertion? = rememberItemsInsertion(timelineItems, insertions, ::keysInsertedAtBottom)
+
+/**
+ * Returns a [TimelineItemsInsertion] when the last update of [items] inserted items, as computed by [insertedKeys] from the previous and the
+ * current items.
+ */
+@Composable
+internal fun <T : Any> rememberItemsInsertion(
+    items: T,
+    insertions: TimelineItemsInsertions,
+    insertedKeys: (previous: T?, current: T) -> Set<Any>,
 ): TimelineItemsInsertion? {
-    val previousItems = remember { arrayOfNulls<List<TimelineItem>>(1) }
-    return remember(timelineItems) {
-        val keys = keysInsertedAtBottom(previous = previousItems[0], current = timelineItems)
-        previousItems[0] = timelineItems
-        insertions.onItemsInserted(keys)
+    // The items of the last applied composition: the composition can be discarded, so it's only updated once applied
+    val previousItems = remember { ItemsHolder<T>() }
+    val insertion = remember(items) {
+        insertions.create(insertedKeys(previousItems.items, items))
     }
+    SideEffect {
+        previousItems.items = items
+    }
+    if (insertion != null) {
+        DisposableEffect(insertion) {
+            insertions.onInsertionApplied(insertion)
+            onDispose {}
+        }
+        LaunchedEffect(insertion) {
+            insertion.awaitInsertionFrameOver()
+        }
+    }
+    return insertion
+}
+
+private class ItemsHolder<T : Any> {
+    var items: T? = null
 }
 
 internal fun keysInsertedAtBottom(previous: List<TimelineItem>?, current: List<TimelineItem>): Set<Any> {

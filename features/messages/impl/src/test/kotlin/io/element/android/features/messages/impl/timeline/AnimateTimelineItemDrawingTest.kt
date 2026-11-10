@@ -100,7 +100,7 @@ class AnimateTimelineItemDrawingTest : RobolectricTest() {
                 val currentKeys = keys
                 val coroutineScope = rememberCoroutineScope()
                 val insertions = remember { TimelineItemsInsertions(coroutineScope) }
-                val insertion = remember(currentKeys) { insertions.onItemsInserted(setOf(NEW).filterTo(HashSet()) { it in currentKeys }) }
+                val insertion = rememberItemsInsertion(currentKeys, insertions) { _, current -> setOf(NEW).filterTo(HashSet()) { it in current } }
                 LazyColumn(
                     modifier = Modifier.height(LIST_HEIGHT),
                     reverseLayout = true,
