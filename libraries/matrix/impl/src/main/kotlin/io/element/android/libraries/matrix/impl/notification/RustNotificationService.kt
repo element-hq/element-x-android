@@ -47,7 +47,7 @@ class RustNotificationService(
             buildMap {
                 val eventIds = requests.flatMap { it.eventIds }.distinct()
                 for (rawEventId in eventIds) {
-                    val roomId = RoomId(requests.find { it.eventIds.contains(rawEventId) }?.roomId!!)
+                    val roomId = RoomId(checkNotNull(requests.find { it.eventIds.contains(rawEventId) }) { "No request found for event $rawEventId" }.roomId)
                     val eventId = EventId(rawEventId)
                     items[rawEventId].use { result ->
                         when (result) {

@@ -80,8 +80,9 @@ private fun MutableMap<String, String>.getOrPutGroupId(timelineItems: List<Timel
     assert(timelineItems.isNotEmpty())
     for (item in timelineItems) {
         val itemIdentifier = item.identifier()
-        if (this.contains(itemIdentifier.value)) {
-            return this[itemIdentifier.value]!!
+        val groupId = this[itemIdentifier.value]
+        if (groupId != null) {
+            return groupId
         }
     }
     val timelineItem = timelineItems.first()

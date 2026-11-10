@@ -133,24 +133,22 @@ class BugReporterMultipartBody internal constructor(
         sink: BufferedSink?,
         countBytes: Boolean,
     ): Long {
-        var sink = sink
         var byteCount = 0L
 
-        var byteCountBuffer: Buffer? = null
+        val byteCountBuffer: Buffer? = if (countBytes) Buffer() else null
         if (countBytes) {
-            byteCountBuffer = Buffer()
-            sink = byteCountBuffer
             // ELEMENT-START
             contentLengthSize.clear()
             // ELEMENT-END
         }
+        val sink: BufferedSink = checkNotNull(byteCountBuffer ?: sink) { "A sink is required when not counting bytes" }
 
         for (p in 0 until parts.size) {
             val part = parts[p]
             val headers = part.headers
             val body = part.body
 
-            sink!!.write(DASHDASH)
+            sink.write(DASHDASH)
             sink.write(boundaryByteString)
             sink.write(CRLF)
 
@@ -174,8 +172,8 @@ class BugReporterMultipartBody internal constructor(
 
             // We can't measure the body's size without the sizes of its components.
             val contentLength = body.contentLength()
-            if (contentLength == -1L && countBytes) {
-                byteCountBuffer!!.clear()
+            if (contentLength == -1L && byteCountBuffer != null) {
+                byteCountBuffer.clear()
                 return -1L
             }
 
@@ -201,13 +199,13 @@ class BugReporterMultipartBody internal constructor(
             sink.write(CRLF)
         }
 
-        sink!!.write(DASHDASH)
+        sink.write(DASHDASH)
         sink.write(boundaryByteString)
         sink.write(DASHDASH)
         sink.write(CRLF)
 
-        if (countBytes) {
-            byteCount += byteCountBuffer!!.size
+        if (byteCountBuffer != null) {
+            byteCount += byteCountBuffer.size
             byteCountBuffer.clear()
         }
 

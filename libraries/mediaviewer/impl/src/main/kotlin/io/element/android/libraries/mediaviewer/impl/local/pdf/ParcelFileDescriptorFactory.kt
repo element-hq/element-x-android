@@ -18,7 +18,7 @@ class ParcelFileDescriptorFactory(private val context: Context) {
     fun create(model: Any?) = runCatchingExceptions {
         when (model) {
             is File -> ParcelFileDescriptor.open(model, ParcelFileDescriptor.MODE_READ_ONLY)
-            is Uri -> context.contentResolver.openFileDescriptor(model, "r")!!
+            is Uri -> checkNotNull(context.contentResolver.openFileDescriptor(model, "r")) { "Unable to open the file descriptor" }
             else -> error(RuntimeException("Can't handle this model"))
         }
     }

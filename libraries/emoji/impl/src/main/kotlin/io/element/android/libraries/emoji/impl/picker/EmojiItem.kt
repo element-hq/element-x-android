@@ -85,7 +85,8 @@ internal fun EmojiItem(
     var dismissed by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
     val description = contentDescription(item, isSelected)
-    val hasSkinTones = !item.skins.isNullOrEmpty()
+    val skins = item.skins
+    val hasSkinTones = !skins.isNullOrEmpty()
     Box(
         modifier = modifier
             .onPlaced { coordinates ->
@@ -123,7 +124,7 @@ internal fun EmojiItem(
             }
             .then(
                 // Only detect drag after long press for those items which have a skin tone picker
-                if (hasSkinTones) {
+                if (!skins.isNullOrEmpty()) {
                     Modifier.pointerInput(item) {
                         val slotWidthPx = with(density) { SkinToneSlotSize.toPx() }
                         val spacingPx = with(density) { SkinToneSlotSpacing.toPx() }
@@ -151,7 +152,7 @@ internal fun EmojiItem(
                                         hoveredIndex = -1
                                         onDismissSkinPicker()
                                     } else {
-                                        val skinItemsCount = item.skins!!.size
+                                        val skinItemsCount = skins.size
                                         // Original + variants
                                         val totalSlots = 1 + skinItemsCount
                                         // Calculate the whole size of the skin tone picker

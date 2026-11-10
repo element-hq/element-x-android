@@ -491,7 +491,7 @@ private fun RoomHeaderSection(
                     enabled = avatarUrl != null,
                     onClickLabel = stringResource(CommonStrings.action_view),
                 ) {
-                    openAvatarPreview(avatarUrl!!)
+                    avatarUrl?.let { openAvatarPreview(it) }
                 }
                 .testTag(TestTags.roomDetailAvatar)
         )
@@ -547,7 +547,7 @@ private fun DmHeaderSection(
                     enabled = otherMember.avatarUrl != null,
                     onClickLabel = stringResource(CommonStrings.action_view),
                 ) {
-                    openAvatarPreview(otherMember.getBestName(), otherMember.avatarUrl!!)
+                    otherMember.avatarUrl?.let { openAvatarPreview(otherMember.getBestName(), it) }
                 }
                 .testTag(TestTags.roomDetailAvatar)
         )

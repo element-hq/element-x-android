@@ -113,7 +113,7 @@ class AndroidLocalMediaActions(
                 .setTypeAndNormalize(localMedia.info.mimeType)
             withContext(coroutineDispatchers.main) {
                 val intent = Intent.createChooser(shareMediaIntent, null)
-                activityContext!!.startActivity(intent)
+                checkNotNull(activityContext) { "Activity context is not available" }.startActivity(intent)
             }
         }.onSuccess {
             Timber.v("Share media succeed")
@@ -137,7 +137,7 @@ class AndroidLocalMediaActions(
                             ) == PermissionChecker.PERMISSION_GRANTED &&
                             activityContext?.packageManager?.canRequestPackageInstalls() == false) {
                             pendingMedia = localMedia
-                            activityContext?.startInstallFromSourceIntent(apkInstallLauncher!!)
+                            activityContext?.startInstallFromSourceIntent(checkNotNull(apkInstallLauncher) { "APK install launcher is not configured" })
                         } else {
                             openFile(localMedia)
                         }
@@ -185,7 +185,7 @@ class AndroidLocalMediaActions(
         } ?: throw IOException("Unable to create the destination file")
         localMedia.openStream()?.use { input ->
             resolver.openOutputStream(outputUri).use { output ->
-                input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
+                input.copyTo(checkNotNull(output) { "Unable to open the output stream" }, DEFAULT_BUFFER_SIZE)
             }
         }
     }
