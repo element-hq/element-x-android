@@ -69,6 +69,22 @@ allprojects {
         excludeGeneratedSources(layout.buildDirectory.get().asFile)
     }
 
+    // The `detekt` task does not use type resolution, so the rules requiring it are silently skipped.
+    // `detektFull` runs detekt with type resolution, on a single variant to limit the compilation work.
+    val detektFull = tasks.register("detektFull") {
+        group = "verification"
+        description = "Run detekt analysis with type resolution on the debug variant, including the unit tests."
+    }
+    pluginManager.withPlugin("com.android.application") {
+        detektFull.configure { dependsOn("detektGplayDebug", "detektGplayDebugUnitTest") }
+    }
+    pluginManager.withPlugin("com.android.library") {
+        detektFull.configure { dependsOn("detektDebug", "detektDebugUnitTest") }
+    }
+    pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+        detektFull.configure { dependsOn("detektMain", "detektTest") }
+    }
+
     // KtLint
     apply {
         plugin("org.jlleitschuh.gradle.ktlint")
@@ -211,7 +227,7 @@ tasks.register("runQualityChecks") {
     dependsOn(":app:lintGplayDebug")
     project.subprojects {
         tasks.findByPath("$path:lintDebug")?.let { dependsOn(it) }
-        tasks.findByName("detekt")?.let { dependsOn(it) }
+        tasks.findByName("detektFull")?.let { dependsOn(it) }
         tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
         // tasks.findByName("buildHealth")?.let { dependsOn(it) }
     }
