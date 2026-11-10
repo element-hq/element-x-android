@@ -23,6 +23,13 @@ enum class ContentScannerErrorReason {
 
     fun isDangerous(): Boolean = when (this) {
         MCS_MEDIA_NOT_CLEAN, MCS_MIME_TYPE_FORBIDDEN -> true
-        else -> false
+        MCS_MALFORMED_JSON,
+        MCS_MEDIA_FAILED_TO_DECRYPT,
+        M_MISSING_TOKEN,
+        M_UNKNOWN_TOKEN,
+        M_NOT_FOUND,
+        MCS_BAD_DECRYPTION,
+        M_UNKNOWN,
+        MCS_MEDIA_REQUEST_FAILED -> false
     }
 }

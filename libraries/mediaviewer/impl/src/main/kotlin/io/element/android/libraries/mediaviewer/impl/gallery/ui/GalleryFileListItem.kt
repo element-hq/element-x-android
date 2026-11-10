@@ -66,7 +66,7 @@ internal fun GalleryFileListItem(
                 modifier = invalidContentModifier(),
                 contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
             )
-            else -> {
+            ContentValidationValue.Valid, ContentValidationValue.Loading, ContentValidationValue.Unknown -> {
                 content()
             }
         }

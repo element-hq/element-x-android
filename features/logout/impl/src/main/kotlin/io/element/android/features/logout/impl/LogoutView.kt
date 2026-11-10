@@ -205,7 +205,10 @@ private fun Content(
                     )
                 }
             }
-            else -> Unit
+            BackupUploadState.Unknown,
+            BackupUploadState.Done,
+            BackupUploadState.Error,
+            is BackupUploadState.SteadyException -> Unit
         }
     }
 }

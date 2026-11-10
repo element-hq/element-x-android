@@ -78,7 +78,7 @@ class LocalNetworkPermissionGate(
                 LocalNetworkPermissionDialog.Rationale -> {
                     permissionsState.eventSink(PermissionsEvent.ForceRequestPermissions)
                 }
-                else -> Unit
+                LocalNetworkPermissionDialog.None -> Unit
             }
         }
 

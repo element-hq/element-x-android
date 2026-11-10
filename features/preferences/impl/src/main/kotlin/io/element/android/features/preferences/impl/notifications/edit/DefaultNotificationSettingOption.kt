@@ -30,7 +30,7 @@ fun DefaultNotificationSettingOption(
     val title = when (mode) {
         RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)
         RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY -> stringResource(id = R.string.screen_notification_settings_edit_mode_mentions_and_keywords)
-        else -> ""
+        RoomNotificationMode.MUTE -> ""
     }
     val subtitle = when {
         mode == RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY && displayMentionsOnlyDisclaimer -> {

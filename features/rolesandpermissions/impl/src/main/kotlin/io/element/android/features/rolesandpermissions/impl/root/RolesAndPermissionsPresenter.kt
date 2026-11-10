@@ -56,7 +56,8 @@ class RolesAndPermissionsPresenter(
                 when (currentRole) {
                     is RoomMember.Role.Admin -> persistentListOf(SelfDemoteAction.ToModerator, SelfDemoteAction.ToMember)
                     is RoomMember.Role.Moderator -> persistentListOf(SelfDemoteAction.ToMember)
-                    else -> persistentListOf()
+                    is RoomMember.Role.Owner,
+                    RoomMember.Role.User -> persistentListOf()
                 }
             }
         }

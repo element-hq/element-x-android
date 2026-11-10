@@ -23,7 +23,10 @@ data class SecurityAndPrivacyPermissions(
             is JoinRule.Public,
             is JoinRule.Knock,
             is JoinRule.KnockRestricted -> canChangeRoomVisibility
-            else -> false
+            is JoinRule.Invite,
+            is JoinRule.Restricted,
+            is JoinRule.Custom,
+            null -> false
         }
         return if (isSpace) {
             canChangeRoomAccess || canChangeRoomVisibility

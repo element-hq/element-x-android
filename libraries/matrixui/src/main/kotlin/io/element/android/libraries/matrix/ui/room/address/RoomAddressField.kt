@@ -56,11 +56,11 @@ fun RoomAddressField(
             RoomAddressValidity.NotAvailable -> {
                 stringResource(R.string.error_room_address_already_exists)
             }
-            else -> supportingText
+            RoomAddressValidity.Unknown, RoomAddressValidity.Valid -> supportingText
         },
         validity = when (addressValidity) {
             RoomAddressValidity.InvalidSymbols, RoomAddressValidity.NotAvailable -> TextFieldValidity.Invalid
-            else -> TextFieldValidity.None
+            RoomAddressValidity.Unknown, RoomAddressValidity.Valid -> TextFieldValidity.None
         },
         onValueChange = onAddressChange,
         singleLine = true,

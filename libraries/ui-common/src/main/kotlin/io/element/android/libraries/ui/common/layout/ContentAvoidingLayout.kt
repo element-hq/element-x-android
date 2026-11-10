@@ -174,7 +174,7 @@ object ContentAvoidingLayout {
             val textDirection = tryOrNull { textLayout.getParagraphDirection(0) }
             val lastLineWidth = when (textDirection) {
                 ResolvedTextDirection.Rtl -> textLayout.getLineLeft(textLayout.lineCount - 1).roundToInt()
-                else -> textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
+                null, ResolvedTextDirection.Ltr -> textLayout.getLineRight(textLayout.lineCount - 1).roundToInt()
             }
             val lastLineHeight = textLayout.getLineBottom(textLayout.lineCount - 1).roundToInt()
             onContentLayoutChange(

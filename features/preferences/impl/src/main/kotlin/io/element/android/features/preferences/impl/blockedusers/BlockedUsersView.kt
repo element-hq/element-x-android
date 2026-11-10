@@ -101,7 +101,7 @@ fun BlockedUsersView(
                     onDismiss = { state.eventSink(BlockedUsersEvent.Cancel) }
                 )
             }
-            else -> Unit
+            AsyncAction.Uninitialized -> Unit
         }
     }
 }

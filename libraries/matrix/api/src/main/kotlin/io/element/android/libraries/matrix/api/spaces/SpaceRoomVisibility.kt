@@ -21,7 +21,7 @@ sealed interface SpaceRoomVisibility {
             JoinRule.Public -> Public
             is JoinRule.Restricted, is JoinRule.KnockRestricted -> SpaceMembers
             // Else fallback to Private
-            else -> Private
+            null, JoinRule.Knock, JoinRule.Invite, is JoinRule.Custom -> Private
         }
     }
 }

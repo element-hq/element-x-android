@@ -149,7 +149,7 @@ fun <T> SearchBar(
                     )
                 }
 
-                else -> {
+                SearchBarResultState.Initial -> {
                     // Not searching - nothing to show.
                 }
             }

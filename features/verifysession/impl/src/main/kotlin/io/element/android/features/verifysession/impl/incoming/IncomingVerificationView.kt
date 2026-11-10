@@ -161,7 +161,9 @@ private fun IncomingVerificationContent(
     when (step) {
         is Step.Initial -> ContentInitial(step, request)
         is Step.Verifying -> VerificationContentVerifying(step.data)
-        else -> Unit
+        Step.Canceled,
+        Step.Completed,
+        Step.Failure -> Unit
     }
 }
 

@@ -72,7 +72,8 @@ fun OutgoingVerificationView(
                     state.eventSink(OutgoingVerificationViewEvent.DeclineVerification)
                 }
             }
-            else -> Unit
+            Step.Loading,
+            Step.Exit -> Unit
         }
     }
 
@@ -215,7 +216,12 @@ private fun OutgoingVerificationContent(
             is VerificationRequest.Outgoing.User -> ContentInitial(onLearnMoreClick)
         }
         is Step.Verifying -> VerificationContentVerifying(step.data)
-        else -> Unit
+        Step.Loading,
+        Step.Canceled,
+        Step.AwaitingOtherDeviceResponse,
+        Step.Ready,
+        Step.Completed,
+        Step.Exit -> Unit
     }
 }
 

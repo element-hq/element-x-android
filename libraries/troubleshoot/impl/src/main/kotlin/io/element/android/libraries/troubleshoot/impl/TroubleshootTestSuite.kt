@@ -84,7 +84,7 @@ class TroubleshootTestSuite(
             is AsyncAction.Failure -> {
                 analyticsService.capture(NotificationTroubleshoot(hasError = true))
             }
-            else -> Unit
+            AsyncAction.Uninitialized, is AsyncAction.Confirming, AsyncAction.Loading -> Unit
         }
         _state.emit(
             TroubleshootTestSuiteState(

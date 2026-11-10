@@ -104,7 +104,8 @@ private fun ResolvedRoomAliasView(
                 )
             }
         }
-        else -> Unit
+        AsyncData.Uninitialized,
+        is AsyncData.Loading -> Unit
     }
 }
 

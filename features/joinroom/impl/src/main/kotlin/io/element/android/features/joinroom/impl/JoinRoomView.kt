@@ -382,7 +382,15 @@ private fun JoinRoomContent(
                     is JoinAuthorisationStatus.IsKnocked -> {
                         IsKnockedLoadedContent()
                     }
-                    else -> {
+                    JoinAuthorisationStatus.None,
+                    is JoinAuthorisationStatus.IsInvited,
+                    is JoinAuthorisationStatus.IsBanned,
+                    JoinAuthorisationStatus.CanKnock,
+                    JoinAuthorisationStatus.CanJoin,
+                    JoinAuthorisationStatus.NeedInvite,
+                    JoinAuthorisationStatus.Restricted,
+                    JoinAuthorisationStatus.Unknown,
+                    JoinAuthorisationStatus.Unauthorized -> {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.verticalScroll(rememberScrollState())
@@ -415,7 +423,14 @@ private fun JoinRoomContent(
                                         supportingText = supportingText
                                     )
                                 }
-                                else -> Unit
+                                JoinAuthorisationStatus.None,
+                                is JoinAuthorisationStatus.IsBanned,
+                                JoinAuthorisationStatus.IsKnocked,
+                                JoinAuthorisationStatus.CanJoin,
+                                JoinAuthorisationStatus.NeedInvite,
+                                JoinAuthorisationStatus.Restricted,
+                                JoinAuthorisationStatus.Unknown,
+                                JoinAuthorisationStatus.Unauthorized -> Unit
                             }
                         }
                     }
