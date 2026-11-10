@@ -101,7 +101,9 @@ fun AttachmentsPreviewView(
         is SendActionState.Sending.Uploading -> false
         is SendActionState.Sending.Processing -> !state.sendActionState.displayProgress
         SendActionState.Done -> false
-        else -> true
+        SendActionState.Idle,
+        is SendActionState.Sending.ReadyToUpload,
+        is SendActionState.Failure -> true
     }
 
     fun postSendAttachment() {
@@ -256,7 +258,9 @@ private fun AttachmentSendStateView(
                     onRetry = onRetryClick
                 )
             }
-            else -> Unit
+            SendActionState.Idle,
+            is SendActionState.Sending.ReadyToUpload,
+            SendActionState.Done -> Unit
         }
     }
 }

@@ -122,7 +122,9 @@ private fun SuggestionItemView(
         }
         val status = when (suggestion) {
             is ResolvedSuggestion.Member -> suggestion.roomMember.displayedStatus
-            else -> null
+            ResolvedSuggestion.AtRoom,
+            is ResolvedSuggestion.Alias,
+            is ResolvedSuggestion.Command -> null
         }
         val details = when (suggestion) {
             is ResolvedSuggestion.AtRoom,

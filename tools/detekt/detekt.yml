@@ -166,9 +166,8 @@ potential-bugs:
   # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   DontDowncastCollectionTypes:
     active: false
-  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   ElseCaseInsteadOfExhaustiveWhen:
-    active: false
+    active: true
   ExitOutsideMain:
     active: true
   # Disabled: we use expression bodies returning Unit a lot, e.g. `fun FooPreview() = ElementPreview { ... }`.
