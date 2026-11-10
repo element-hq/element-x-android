@@ -43,7 +43,8 @@
     {
       "name" : ":features:logout:impl",
       "includeRegex" : [
-        "screen_signout_.*"
+        "screen_signout_.*",
+        "screen_chat_backup_recovery_action_setup"
       ]
     },
     {

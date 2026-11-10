@@ -64,6 +64,9 @@ class RustEncryptionService(
     private val backupUploadStateMapper = BackupUploadStateMapper()
     private val steadyStateExceptionMapper = SteadyStateExceptionMapper()
 
+    private val pendingRecoveryKeyLock = Any()
+    private var pendingRecoveryKey: SecretStorageKey? = null
+
     override val backupStateStateFlow = combine(
         service.backupStateFlow(),
         syncService.syncState,
@@ -156,6 +159,41 @@ class RustEncryptionService(
             // that is how it is surfaced to the user.
             enableRecoveryProgressStateFlow.value = EnableRecoveryProgress.Done(if (passphrase != null) "" else key)
             key
+        }.mapFailure {
+            it.mapRecoveryException()
+        }
+    }
+
+    override fun generateRecoveryKey(): String {
+        val key = SecretStorageKey()
+        val formattedKey = key.toBase58()
+        synchronized(pendingRecoveryKeyLock) {
+            pendingRecoveryKey?.close()
+            pendingRecoveryKey = key
+        }
+        return formattedKey
+    }
+
+    override suspend fun activateRecoveryKey(): Result<Unit> = withContext(dispatchers.io) {
+        val key = synchronized(pendingRecoveryKeyLock) { pendingRecoveryKey }
+            ?: return@withContext Result.failure(IllegalStateException("There is no recovery key to activate"))
+        runCatchingExceptions {
+            enableRecoveryProgressStateFlow.value = EnableRecoveryProgress.Starting
+            service.enableRecovery(
+                waitForBackupsToUpload = false,
+                key = key,
+                progressListener = object : EnableRecoveryProgressListener {
+                    override fun onUpdate(status: RustEnableRecoveryProgress) {
+                        enableRecoveryProgressStateFlow.value = enableRecoveryProgressMapper.map(status)
+                    }
+                },
+            )
+            // The user already has the key, so keep it out of this session-scoped (in-memory) flow.
+            enableRecoveryProgressStateFlow.value = EnableRecoveryProgress.Done("")
+            synchronized(pendingRecoveryKeyLock) {
+                if (pendingRecoveryKey === key) pendingRecoveryKey = null
+            }
+            key.close()
         }.mapFailure {
             it.mapRecoveryException()
         }

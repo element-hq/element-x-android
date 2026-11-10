@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
- * Copyright 2023-2025 New Vector Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -8,204 +7,211 @@
 
 package io.element.android.features.logout.impl
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.features.logout.impl.tools.isBackingUp
-import io.element.android.features.logout.impl.ui.LogoutActionDialog
-import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
+import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
+import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
-import io.element.android.libraries.matrix.api.encryption.BackupState
-import io.element.android.libraries.matrix.api.encryption.BackupUploadState
-import io.element.android.libraries.matrix.api.encryption.RecoveryState
-import io.element.android.libraries.matrix.api.encryption.SteadyStateException
-import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCard
-import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardMode
-import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardState
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
 /**
- * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=442-34581
+ * What the user is shown before the device is removed, over the screen they started from.
+ * The views only draw dialogs and sheets, so the screen behind them stays visible.
  */
 @Composable
 fun LogoutView(
     state: LogoutState,
-    onChangeRecoveryKeyClick: () -> Unit,
-    onBackClick: () -> Unit,
+    onDismiss: () -> Unit,
+    onGenerateRecoveryKeyClick: (isReplacingExistingKey: Boolean) -> Unit,
+    onCheckRecoveryKeyClick: () -> Unit,
+    onOpenSettingsClick: () -> Unit,
+    onLearnMoreClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val eventSink = state.eventSink
+    val onLogoutClick = { eventSink(LogoutEvent.Logout(ignoreSdkError = false)) }
 
-    FlowStepPage(
-        onBackClick = onBackClick,
-        title = title(state),
-        subTitle = subtitle(state),
-        iconStyle = BigIcon.Style.Default(CompoundIcons.Mobile()),
-        modifier = modifier,
-        isScrollable = true,
-        buttons = {
-            Buttons(
-                state = state,
-                onChangeRecoveryKeyClick = onChangeRecoveryKeyClick,
-                onLogoutClick = {
-                    eventSink(LogoutEvent.Logout(ignoreSdkError = false))
-                },
-                onCancelClick = onBackClick,
+    Box(modifier = modifier)
+
+    when {
+        state.logoutAction.isLoading() -> ProgressDialog(text = stringResource(id = R.string.screen_signout_in_progress_dialog_content))
+        state.logoutAction.isFailure() -> RetryDialog(
+            title = stringResource(id = CommonStrings.dialog_title_error),
+            content = stringResource(id = CommonStrings.error_unknown),
+            retryText = stringResource(id = CommonStrings.action_signout_anyway),
+            onRetry = { eventSink(LogoutEvent.Logout(ignoreSdkError = true)) },
+            onDismiss = { eventSink(LogoutEvent.CloseDialogs) },
+        )
+        else -> when (state.confirmation) {
+            LogoutConfirmation.Loading -> ProgressDialog(
+                showCancelButton = true,
+                onDismissRequest = onDismiss,
             )
-        },
-    ) {
-        Content(state)
-    }
-
-    LogoutActionDialog(
-        state.logoutAction,
-        // Do not show the progress dialog, the progress is rendered in the button.
-        showProgressDialog = false,
-        onConfirmClick = {
-            eventSink(LogoutEvent.Logout(ignoreSdkError = false))
-        },
-        onForceLogoutClick = {
-            eventSink(LogoutEvent.Logout(ignoreSdkError = true))
-        },
-        onDismissDialog = {
-            eventSink(LogoutEvent.CloseDialogs)
-        },
-    )
-}
-
-@Composable
-private fun title(state: LogoutState): String {
-    return when {
-        state.backupUploadState.isBackingUp() -> stringResource(id = R.string.screen_signout_key_backup_ongoing_title)
-        state.isLastDevice -> {
-            if (state.recoveryState != RecoveryState.ENABLED) {
-                stringResource(id = R.string.screen_signout_recovery_disabled_title)
-            } else if (state.backupState == BackupState.UNKNOWN && state.doesBackupExistOnServer.not()) {
-                stringResource(id = R.string.screen_signout_key_backup_disabled_title)
-            } else {
-                stringResource(id = R.string.screen_signout_save_recovery_key_title)
-            }
+            LogoutConfirmation.WaitingForBackup -> ProgressDialog(
+                text = stringResource(id = R.string.screen_signout_in_progress_dialog_content),
+                showCancelButton = true,
+                onDismissRequest = onDismiss,
+            )
+            LogoutConfirmation.OtherVerifiedDevice -> ConfirmationDialog(
+                title = stringResource(id = R.string.screen_signout_other_verified_device_dialog_title),
+                content = stringResource(id = R.string.screen_signout_other_verified_device_dialog_content),
+                submitText = stringResource(id = CommonStrings.action_remove),
+                destructiveSubmit = true,
+                onSubmitClick = onLogoutClick,
+                onDismiss = onDismiss,
+            )
+            LogoutConfirmation.KeyBackupDisabled -> ConfirmationDialog(
+                title = stringResource(id = R.string.screen_signout_key_backup_disabled_title),
+                content = stringResource(id = R.string.screen_signout_key_backup_disabled_subtitle),
+                submitText = stringResource(id = CommonStrings.action_remove),
+                cancelText = stringResource(id = CommonStrings.common_settings),
+                destructiveSubmit = true,
+                onSubmitClick = onLogoutClick,
+                onCancelClick = onOpenSettingsClick,
+                onDismiss = onDismiss,
+            )
+            LogoutConfirmation.BackupOngoing -> ErrorDialog(
+                title = stringResource(id = R.string.screen_signout_key_backup_ongoing_title),
+                content = stringResource(id = R.string.screen_signout_key_backup_ongoing_subtitle),
+                onSubmit = onDismiss,
+            )
+            LogoutConfirmation.BackupOffline -> ErrorDialog(
+                title = stringResource(id = R.string.screen_signout_key_backup_offline_title),
+                content = stringResource(id = R.string.screen_signout_key_backup_offline_subtitle),
+                onSubmit = onDismiss,
+            )
+            LogoutConfirmation.RecoveryKeyOnly -> RecoveryKeyOnlySheet(
+                onDismiss = onDismiss,
+                onLogoutClick = onLogoutClick,
+                onCheckRecoveryKeyClick = onCheckRecoveryKeyClick,
+                onGenerateRecoveryKeyClick = { onGenerateRecoveryKeyClick(true) },
+            )
+            LogoutConfirmation.NoRecovery -> NoRecoverySheet(
+                onDismiss = onDismiss,
+                onLogoutClick = onLogoutClick,
+                onGenerateRecoveryKeyClick = { onGenerateRecoveryKeyClick(false) },
+                onLearnMoreClick = onLearnMoreClick,
+            )
         }
-        else -> stringResource(CommonStrings.action_signout)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun subtitle(state: LogoutState): String? {
-    return when {
-        (state.backupUploadState as? BackupUploadState.SteadyException)?.exception is SteadyStateException.Connection ->
-            stringResource(id = R.string.screen_signout_key_backup_offline_subtitle)
-        state.backupUploadState.isBackingUp() -> stringResource(id = R.string.screen_signout_key_backup_ongoing_subtitle)
-        state.isLastDevice -> stringResource(id = R.string.screen_signout_key_backup_disabled_subtitle)
-        else -> null
-    }
-}
-
-@Composable
-private fun ColumnScope.Buttons(
-    state: LogoutState,
+private fun RecoveryKeyOnlySheet(
+    onDismiss: () -> Unit,
     onLogoutClick: () -> Unit,
-    onChangeRecoveryKeyClick: () -> Unit,
-    onCancelClick: () -> Unit,
+    onCheckRecoveryKeyClick: () -> Unit,
+    onGenerateRecoveryKeyClick: () -> Unit,
 ) {
-    val logoutAction = state.logoutAction
-    if (state.isLastDevice) {
-        OutlinedButton(
-            text = stringResource(id = CommonStrings.common_settings),
-            modifier = Modifier.fillMaxWidth(),
-            onClick = onChangeRecoveryKeyClick,
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        scrollable = true,
+        // Skip the partially expanded state, which would hide the buttons below the fold.
+        sheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        ),
+    ) {
+        IconTitleSubtitleMolecule(
+            modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
+            title = stringResource(id = R.string.screen_signout_save_recovery_key_title),
+            subTitle = stringResource(id = R.string.screen_signout_save_recovery_key_subtitle),
+            iconStyle = BigIcon.Style.Default(CompoundIcons.InfoSolid()),
         )
+        ButtonColumnMolecule(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+        ) {
+            Button(
+                text = stringResource(id = R.string.screen_signout_save_recovery_key_action_continue),
+                destructive = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.signOut),
+                onClick = onLogoutClick,
+            )
+            OutlinedButton(
+                text = stringResource(id = R.string.screen_signout_save_recovery_key_action_check),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onCheckRecoveryKeyClick,
+            )
+            TextButton(
+                text = stringResource(id = R.string.screen_signout_save_recovery_key_action_generate),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onGenerateRecoveryKeyClick,
+            )
+        }
     }
-    val signOutSubmitRes = when {
-        logoutAction is AsyncAction.Loading -> R.string.screen_signout_in_progress_dialog_content
-        state.backupUploadState.isBackingUp() -> CommonStrings.action_signout_anyway
-        else -> CommonStrings.action_signout
-    }
-    Button(
-        text = stringResource(id = signOutSubmitRes),
-        showProgress = logoutAction is AsyncAction.Loading,
-        destructive = true,
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(TestTags.signOut),
-        onClick = onLogoutClick,
-    )
-    TextButton(
-        text = stringResource(id = CommonStrings.action_cancel),
-        enabled = logoutAction !is AsyncAction.Loading,
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onCancelClick,
-    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Content(
-    state: LogoutState,
-    modifier: Modifier = Modifier,
+private fun NoRecoverySheet(
+    onDismiss: () -> Unit,
+    onLogoutClick: () -> Unit,
+    onGenerateRecoveryKeyClick: () -> Unit,
+    onLearnMoreClick: () -> Unit,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp, start = 16.dp, end = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        scrollable = true,
+        // Skip the partially expanded state, which would hide the buttons below the fold.
+        sheetState = rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        ),
     ) {
-        AccountInfoCard(
-            AccountInfoCardState(
-                matrixUser = state.currentUser,
-                mode = AccountInfoCardMode.Simple,
-            )
+        IconTitleSubtitleMolecule(
+            modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
+            title = stringResource(id = R.string.screen_signout_recovery_disabled_title),
+            subTitle = stringResource(id = R.string.screen_signout_recovery_disabled_subtitle),
+            iconStyle = BigIcon.Style.AlertSolid,
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        when (state.backupUploadState) {
-            is BackupUploadState.Uploading -> {
-                LinearProgressIndicator(
-                    modifier = Modifier.fillMaxWidth(),
-                    progress = { state.backupUploadState.backedUpCount.toFloat() / state.backupUploadState.totalCount.toFloat() },
-                    trackColor = ElementTheme.colors.progressIndicatorTrackColor,
-                )
-                Text(
-                    modifier = Modifier.align(Alignment.End),
-                    text = "${state.backupUploadState.backedUpCount} / ${state.backupUploadState.totalCount}",
-                    style = ElementTheme.typography.fontBodySmRegular,
-                )
-            }
-            BackupUploadState.Waiting -> {
-                LinearProgressIndicator(
-                    modifier = Modifier.fillMaxWidth(),
-                    trackColor = ElementTheme.colors.progressIndicatorTrackColor,
-                )
-                if (state.waitingForALongTime) {
-                    Text(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        text = stringResource(CommonStrings.common_please_check_internet_connection),
-                        style = ElementTheme.typography.fontBodySmRegular,
-                    )
-                }
-            }
-            else -> Unit
+        TextButton(
+            text = stringResource(id = CommonStrings.action_learn_more),
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onLearnMoreClick,
+        )
+        ButtonColumnMolecule(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+        ) {
+            Button(
+                text = stringResource(id = R.string.screen_chat_backup_recovery_action_setup),
+                leadingIcon = IconSource.Vector(CompoundIcons.Key()),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onGenerateRecoveryKeyClick,
+            )
+            TextButton(
+                text = stringResource(id = CommonStrings.action_signout_anyway),
+                destructive = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.signOut),
+                onClick = onLogoutClick,
+            )
         }
     }
 }
@@ -216,8 +222,11 @@ internal fun LogoutViewPreview(
     @PreviewParameter(LogoutStatePreviewParam::class) state: LogoutState,
 ) = ElementPreview {
     LogoutView(
-        state,
-        onChangeRecoveryKeyClick = {},
-        onBackClick = {},
+        state = state,
+        onDismiss = {},
+        onGenerateRecoveryKeyClick = {},
+        onCheckRecoveryKeyClick = {},
+        onOpenSettingsClick = {},
+        onLearnMoreClick = {},
     )
 }
