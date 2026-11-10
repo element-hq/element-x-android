@@ -31,11 +31,15 @@ import org.junit.rules.TestRule
 
 val trueMatcher = SemanticsMatcher("true matcher") { true }
 
+private fun AndroidComposeUiTest<ComponentActivity>.requireActivity(): ComponentActivity {
+    return checkNotNull(activity) { "The activity is not available" }
+}
+
 fun AndroidComposeUiTest<ComponentActivity>.clickOn(
     @StringRes res: Int,
     inDialog: Boolean = false,
 ) {
-    val text = activity!!.getString(res)
+    val text = requireActivity().getString(res)
     onNode(
         hasText(text) and hasClickAction() and if (inDialog) hasAnyAncestor(isDialog()) else trueMatcher
     )
@@ -46,7 +50,7 @@ fun AndroidComposeUiTest<ComponentActivity>.clickOn(
  * Press the back button in the app bar.
  */
 fun AndroidComposeUiTest<ComponentActivity>.pressBack() {
-    val text = activity!!.getString(CommonStrings.action_back)
+    val text = requireActivity().getString(CommonStrings.action_back)
     onNode(hasContentDescription(text)).performClick()
 }
 
@@ -62,7 +66,7 @@ fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.pressBack() {
  * Press the back key.
  */
 fun AndroidComposeUiTest<ComponentActivity>.pressBackKey() {
-    activity!!.onBackPressedDispatcher.onBackPressed()
+    requireActivity().onBackPressedDispatcher.onBackPressed()
 }
 
 /**
@@ -77,11 +81,11 @@ fun SemanticsNodeInteractionsProvider.pressTag(tag: String) {
 }
 
 fun AndroidComposeUiTest<ComponentActivity>.assertNoNodeWithText(@StringRes res: Int) {
-    val text = activity!!.getString(res)
+    val text = requireActivity().getString(res)
     onNodeWithText(text).assertDoesNotExist()
 }
 
 fun AndroidComposeUiTest<ComponentActivity>.assertNodeWithTextIsDisplayed(@StringRes res: Int) {
-    val text = activity!!.getString(res)
+    val text = requireActivity().getString(res)
     onNodeWithText(text).assertIsDisplayed()
 }

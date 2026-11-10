@@ -80,7 +80,7 @@ fun UserProfileHeaderSection(
                     enabled = avatarUrl != null,
                     onClickLabel = stringResource(CommonStrings.action_view),
                 ) {
-                    openAvatarPreview(avatarUrl!!)
+                    avatarUrl?.let { openAvatarPreview(it) }
                 }
                 .testTag(TestTags.memberDetailAvatar)
         )

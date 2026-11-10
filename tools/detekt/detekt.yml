@@ -206,9 +206,8 @@ potential-bugs:
   # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   UnnecessaryNotNullOperator:
     active: false
-  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   UnsafeCallOnNullableType:
-    active: false
+    active: true
 
 exceptions:
   TooGenericExceptionCaught:
