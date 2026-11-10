@@ -41,7 +41,9 @@ fun MediaPreviewValue?.isPreviewEnabled(joinRule: JoinRule?): Boolean {
             is JoinRule.Invite,
             is JoinRule.Restricted,
             is JoinRule.KnockRestricted -> true
-            null, JoinRule.Public, is JoinRule.Custom -> false
+            null,
+            JoinRule.Public,
+            is JoinRule.Custom -> false
         }
     }
 }

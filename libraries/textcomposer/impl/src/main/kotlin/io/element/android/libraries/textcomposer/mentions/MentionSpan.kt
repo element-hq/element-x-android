@@ -60,7 +60,9 @@ class MentionSpan(
     fun updateTheme(mentionSpanTheme: MentionSpanTheme) {
         val isCurrentUser = when (type) {
             is MentionType.User -> type.userId == mentionSpanTheme.currentUserId
-            is MentionType.Room, is MentionType.Message, MentionType.Everyone -> false
+            is MentionType.Room,
+            is MentionType.Message,
+            MentionType.Everyone -> false
         }
 
         backgroundColor = when (type) {
