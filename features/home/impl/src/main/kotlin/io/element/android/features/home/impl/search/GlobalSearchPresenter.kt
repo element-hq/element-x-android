@@ -308,7 +308,7 @@ class GlobalSearchPresenter(
         )
         return MessageSearchListItem.Message(
             messageSearchResult = result,
-            body = body?.toString() ?: "",
+            body = body?.toString().orEmpty(),
             formattedTimestamp = formattedTimestamp,
             roomInfo = roomInfo,
         )

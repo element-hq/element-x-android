@@ -60,7 +60,10 @@ fun SnackbarDispatcher.collectSnackbarMessageAsState(): State<SnackbarMessage?> 
 
 /**
  * Helper method to display a [SnackbarMessage] in a [SnackbarHostState] handling cancellations.
+ *
+ * Note: the CancellationException is rethrown after clearing the dispatcher message.
  */
+@Suppress("SuspendFunSwallowedCancellation")
 @Composable
 fun rememberSnackbarHostState(snackbarMessage: SnackbarMessage?): SnackbarHostState {
     val snackbarHostState = remember { SnackbarHostState() }

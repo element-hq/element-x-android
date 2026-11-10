@@ -206,30 +206,20 @@ class CreatePollPresenterTest {
         val editPollLambda = lambdaRecorder { _: EventId, _: String, _: List<String>, _: Int, _: PollKind ->
             Result.success(Unit)
         }
-        timeline.apply {
-            this.editPollLambda = editPollLambda
-        }
+        timeline.editPollLambda = editPollLambda
         val presenter = createCreatePollPresenter(mode = CreatePollMode.EditPoll(pollEventId))
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             awaitDefaultItem()
-            awaitPollLoaded().apply {
-                eventSink(CreatePollEvent.SetQuestion("Changed question"))
-            }
-            awaitItem().apply {
-                eventSink(CreatePollEvent.SetAnswer(0, "Changed answer 1"))
-            }
-            awaitItem().apply {
-                eventSink(CreatePollEvent.SetAnswer(1, "Changed answer 2"))
-            }
+            awaitPollLoaded().eventSink(CreatePollEvent.SetQuestion("Changed question"))
+            awaitItem().eventSink(CreatePollEvent.SetAnswer(0, "Changed answer 1"))
+            awaitItem().eventSink(CreatePollEvent.SetAnswer(1, "Changed answer 2"))
             awaitPollLoaded(
                 newQuestion = "Changed question",
                 newAnswer1 = "Changed answer 1",
                 newAnswer2 = "Changed answer 2",
-            ).apply {
-                eventSink(CreatePollEvent.Save)
-            }
+            ).eventSink(CreatePollEvent.Save)
             advanceUntilIdle() // Wait for the coroutine to finish
 
             assert(editPollLambda)
@@ -274,9 +264,7 @@ class CreatePollPresenterTest {
         val editPollLambda = lambdaRecorder { _: EventId, _: String, _: List<String>, _: Int, _: PollKind ->
             Result.failure<Unit>(error)
         }
-        timeline.apply {
-            this.editPollLambda = editPollLambda
-        }
+        timeline.editPollLambda = editPollLambda
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -497,9 +485,7 @@ class CreatePollPresenterTest {
             awaitDefaultItem()
             awaitPollLoaded().eventSink(CreatePollEvent.Delete(confirmed = false))
             awaitDeleteConfirmation().eventSink(CreatePollEvent.HideConfirmation)
-            awaitPollLoaded().apply {
-                assertThat(showDeleteConfirmation).isFalse()
-            }
+            assertThat(awaitPollLoaded().showDeleteConfirmation).isFalse()
             assert(redactEventLambda).isNeverCalled()
         }
     }
@@ -515,9 +501,7 @@ class CreatePollPresenterTest {
             awaitDefaultItem()
             awaitPollLoaded().eventSink(CreatePollEvent.Delete(confirmed = false))
             awaitDeleteConfirmation().eventSink(CreatePollEvent.Delete(confirmed = true))
-            awaitPollLoaded().apply {
-                assertThat(showDeleteConfirmation).isFalse()
-            }
+            assertThat(awaitPollLoaded().showDeleteConfirmation).isFalse()
             advanceUntilIdle()
             assert(redactEventLambda)
                 .isCalledOnce()
@@ -565,11 +549,7 @@ class CreatePollPresenterTest {
         room: FakeJoinedRoom = fakeJoinedRoom,
         timelineMode: Timeline.Mode = Timeline.Mode.Live,
     ): CreatePollPresenter = CreatePollPresenter(
-        repositoryFactory = object : PollRepository.Factory {
-            override fun create(timelineMode: Timeline.Mode): PollRepository {
-                return PollRepository(room, timelineMode)
-            }
-        },
+        repositoryFactory = { PollRepository(room, it) },
         analyticsService = fakeAnalyticsService,
         messageComposerContext = fakeMessageComposerContext,
         navigateUp = { navUpInvocationsCount++ },

@@ -167,12 +167,10 @@ private fun FullscreenAnnouncementFooter(
     }
 }
 
-@Composable
 private fun Announcement.Fullscreen.title() = when (this) {
     Announcement.Fullscreen.Space -> "Introducing Spaces"
 }
 
-@Composable
 private fun Announcement.Fullscreen.subtitle() = when (this) {
     Announcement.Fullscreen.Space -> "Welcome to the beta version of Spaces! With this first version you can:"
 }
@@ -208,7 +206,6 @@ private fun Announcement.Fullscreen.items(): ImmutableList<VisualListItemData> =
     )
 }
 
-@Composable
 private fun Announcement.Fullscreen.notice(): String? = when (this) {
     Announcement.Fullscreen.Space -> "Filtering, creating and managing spaces is coming soon."
 }

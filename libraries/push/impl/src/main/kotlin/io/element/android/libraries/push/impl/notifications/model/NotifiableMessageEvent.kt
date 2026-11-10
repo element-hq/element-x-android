@@ -45,7 +45,7 @@ data class NotifiableMessageEvent(
     val type: String = EventType.MESSAGE,
     val hasMentionOrReply: Boolean = false,
 ) : NotifiableEvent {
-    override val description: String = body ?: ""
+    override val description: String = body.orEmpty()
 
     // Example of value:
     // content://io.element.android.x.debug.notifications.fileprovider/downloads/temp/notif/matrix.org/XGItzSDOnSyXjYtOPfiKexDJ

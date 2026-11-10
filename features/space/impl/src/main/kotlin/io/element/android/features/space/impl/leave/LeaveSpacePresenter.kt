@@ -56,7 +56,7 @@ class LeaveSpacePresenter(
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
         }
         var selectedRoomIds by remember {
-            mutableStateOf<Collection<RoomId>>(setOf())
+            mutableStateOf<Collection<RoomId>>(emptySet())
         }
         var leaveSpaceRooms by remember {
             mutableStateOf<AsyncData<LeaveSpaceRooms>>(AsyncData.Loading())

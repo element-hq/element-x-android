@@ -52,7 +52,7 @@ class ReportMessagePresenter(
         val coroutineScope = rememberCoroutineScope()
         var reason by rememberSaveable { mutableStateOf("") }
         var blockUser by rememberSaveable { mutableStateOf(false) }
-        var result: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val result: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         fun handleEvent(event: ReportMessageEvent) {
             when (event) {

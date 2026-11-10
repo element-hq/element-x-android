@@ -320,7 +320,7 @@ class AttachmentsPreviewPresenter(
                         resetPreparedMedia(sendActionState)
                         imageEditorState = AttachmentImageEditorState(
                             localMedia = currentLocalMedia,
-                            edits = attachmentsAndEdits.get(currentIndex).edits,
+                            edits = attachmentsAndEdits[currentIndex].edits,
                             previewDebug = false,
                         )
                     }

@@ -239,7 +239,7 @@ interface BaseRoom : Closeable {
      *
      * @param notificationEventId the id of the call notification event to watch.
      */
-    suspend fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId>
+    fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId>
 
     /**
      * Returns the id of the thread the given event belongs to, fetching the event from the server if it is not cached locally.

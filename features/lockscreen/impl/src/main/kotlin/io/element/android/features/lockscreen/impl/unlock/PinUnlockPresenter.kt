@@ -154,7 +154,7 @@ class PinUnlockPresenter(
     }
 
     private fun AsyncData<PinEntry>.toText(): String {
-        return dataOrNull()?.toText() ?: ""
+        return dataOrNull()?.toText().orEmpty()
     }
 
     private fun AsyncData<PinEntry>.clear(): AsyncData<PinEntry> {

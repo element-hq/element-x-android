@@ -94,7 +94,7 @@ class RtcNotificationContentFormatterTest : RobolectricTest() {
         val result = formatter.format(
             CallNotifyContent(
                 CallIntent.AUDIO,
-                declinedBy = listOf(),
+                declinedBy = emptyList(),
                 activeMembers = emptyList(),
                 isJoined = false,
                 callStartTsMillis = 0

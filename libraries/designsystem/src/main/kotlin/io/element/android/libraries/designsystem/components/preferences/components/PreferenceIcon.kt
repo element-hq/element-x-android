@@ -28,7 +28,6 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.toIconSecondaryEnabledColor
 
-@Composable
 fun preferenceIcon(
     icon: ImageVector? = null,
     @DrawableRes iconResourceId: Int? = null,

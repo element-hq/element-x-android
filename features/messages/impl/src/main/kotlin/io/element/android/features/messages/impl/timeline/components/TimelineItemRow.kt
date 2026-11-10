@@ -56,6 +56,7 @@ import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
+import java.util.Locale
 import kotlin.time.DurationUnit
 
 @Composable
@@ -101,7 +102,6 @@ internal fun TimelineItemRow(
         },
 ) {
     val isSelectionModeActive = selectionData.isSelectionModeActive
-    val isSelected = selectionData.isSelected
     val backgroundModifier = when {
         timelineItem.isEvent(focusedEventId) && !isSelectionModeActive -> {
             val focusedEventOffset =
@@ -244,7 +244,11 @@ private fun TimelineItemRowContent(
                             modifier = Modifier
                                 .semantics(mergeDescendants = true) {
                                     contentDescription = if (timelineItem.content is TimelineItemVoiceContent) {
-                                        val voiceMessageText = String.format(a11yVoiceMessage, timelineItem.content.duration.toString(DurationUnit.MINUTES))
+                                        val voiceMessageText = String.format(
+                                            Locale.getDefault(),
+                                            a11yVoiceMessage,
+                                            timelineItem.content.duration.toString(DurationUnit.MINUTES),
+                                        )
                                         "${timelineItem.safeSenderName}, $voiceMessageText"
                                     } else {
                                         timelineItem.safeSenderName

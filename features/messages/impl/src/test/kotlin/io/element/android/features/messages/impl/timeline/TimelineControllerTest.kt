@@ -232,9 +232,7 @@ class TimelineControllerTest {
             val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
                 Result.success(true)
             }
-            detachedTimeline.apply {
-                this.paginateLambda = paginateLambda
-            }
+            detachedTimeline.paginateLambda = paginateLambda
             sut.paginate(Timeline.PaginationDirection.FORWARDS)
             awaitItem().also { state ->
                 assertThat(state).isEqualTo(liveTimeline)

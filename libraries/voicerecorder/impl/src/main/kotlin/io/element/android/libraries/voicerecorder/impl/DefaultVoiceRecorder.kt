@@ -110,7 +110,7 @@ class DefaultVoiceRecorder(
                     }
                     is Audio.Error -> {
                         Timber.e("Voice message error: code=${audio.audioRecordErrorCode}")
-                        _state.emit(VoiceRecorderState.Recording(elapsedTime, listOf()))
+                        _state.emit(VoiceRecorderState.Recording(elapsedTime, emptyList()))
                     }
                 }
             }

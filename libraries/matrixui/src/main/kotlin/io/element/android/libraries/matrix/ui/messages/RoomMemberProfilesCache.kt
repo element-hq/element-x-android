@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.asStateFlow
 @SingleIn(RoomScope::class)
 @Inject
 class RoomMemberProfilesCache {
-    private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
+    private val cache = MutableStateFlow(emptyMap<UserId, RoomMember>())
     val membersFlow: StateFlow<Map<UserId, RoomMember>> = cache.asStateFlow()
 
     private val _displayNames = MutableStateFlow<ImmutableMap<UserId, String>>(persistentMapOf())

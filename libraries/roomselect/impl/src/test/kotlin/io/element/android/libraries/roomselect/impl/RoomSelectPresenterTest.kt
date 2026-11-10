@@ -651,7 +651,7 @@ class RoomSelectPresenterTest {
     fun `present - UpdateVisibleRange triggers pagination when near end`() = runTest {
         val loadMoreLambda = lambdaRecorder<Unit> { }
         val roomList = FakeDynamicRoomList(
-            summaries = MutableStateFlow(listOf()),
+            summaries = MutableStateFlow(emptyList()),
             loadMoreLambda = loadMoreLambda,
         )
         val roomListService = FakeRoomListService(

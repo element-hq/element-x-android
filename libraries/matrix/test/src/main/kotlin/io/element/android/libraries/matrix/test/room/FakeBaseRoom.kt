@@ -161,8 +161,7 @@ class FakeBaseRoom(
         return markAsReadResult(receiptType)
     }
 
-    var setUnreadFlagCalls = mutableListOf<Boolean>()
-        private set
+    val setUnreadFlagCalls = mutableListOf<Boolean>()
 
     override suspend fun setUnreadFlag(isUnread: Boolean): Result<Unit> {
         setUnreadFlagCalls.add(isUnread)
@@ -192,7 +191,7 @@ class FakeBaseRoom(
         return Result.success(Unit)
     }
 
-    override suspend fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId> {
+    override fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId> {
         val flow = declineCallFlowMap.getOrPut(notificationEventId, { MutableSharedFlow() })
         return flow
     }

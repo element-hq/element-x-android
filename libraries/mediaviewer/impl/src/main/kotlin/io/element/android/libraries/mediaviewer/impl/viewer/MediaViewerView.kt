@@ -41,6 +41,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -317,7 +318,7 @@ fun MediaViewerView(
                 },
                 onShare = {
                     // Note: share action is not rendered when the bottom sheet is opened from the media viewer
-                    (currentData as? MediaViewerPageData.MediaViewerData)?.let {
+                    if (currentData is MediaViewerPageData.MediaViewerData) {
                         state.eventSink(MediaViewerEvent.Share(currentData))
                     }
                 },
@@ -326,17 +327,17 @@ fun MediaViewerView(
                 },
                 onDownload = {
                     // Note: download action is not rendered when the bottom sheet is opened from the media viewer
-                    (currentData as? MediaViewerPageData.MediaViewerData)?.let {
+                    if (currentData is MediaViewerPageData.MediaViewerData) {
                         state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
                     }
                 },
                 onOpenWith = {
-                    (currentData as? MediaViewerPageData.MediaViewerData)?.let {
+                    if (currentData is MediaViewerPageData.MediaViewerData) {
                         state.eventSink(MediaViewerEvent.OpenWith(currentData))
                     }
                 },
                 onDelete = { eventId ->
-                    (currentData as? MediaViewerPageData.MediaViewerData)?.let {
+                    if (currentData is MediaViewerPageData.MediaViewerData) {
                         state.eventSink(
                             MediaViewerEvent.ConfirmDelete(
                                 eventId,
@@ -756,6 +757,7 @@ private fun ThumbnailView(
 }
 
 @Composable
+@NonRestartableComposable
 private fun ErrorView(
     errorMessage: String,
     onRetry: () -> Unit,

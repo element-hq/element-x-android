@@ -16,7 +16,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentMap
 
 internal class FakeEmojibaseProvider(
-    emojis: Map<EmojibaseCategory, ImmutableList<Emoji>> = mapOf(),
+    emojis: Map<EmojibaseCategory, ImmutableList<Emoji>> = emptyMap(),
 ) : EmojibaseProvider {
     private val store = EmojibaseStore(emojis.toPersistentMap())
     override suspend fun getStore(): EmojibaseStore = store

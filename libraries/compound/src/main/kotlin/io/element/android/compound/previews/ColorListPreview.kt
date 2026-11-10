@@ -43,7 +43,7 @@ fun ColorListPreview(
                         .weight(1f)
                 ) {
                     subList.forEach { name ->
-                        val color = colors[name]!!
+                        val color = colors.getValue(name)
                         ColorPreview(
                             backgroundColor = backgroundColor,
                             foregroundColor = foregroundColor,

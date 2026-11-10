@@ -36,7 +36,7 @@ class RustSpaceRoomList(
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     spaceRoomMapper: SpaceRoomMapper,
-    private val analyticsService: AnalyticsService,
+    analyticsService: AnalyticsService,
 ) : SpaceRoomList {
     private val innerCompletable = CompletableDeferred<InnerSpaceRoomList>()
 

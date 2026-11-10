@@ -17,6 +17,8 @@ import androidx.test.core.app.ApplicationProvider
 
 @Composable
 fun withConfigurationAndContext(content: @Composable () -> Any?): Any? {
+    // Only used to synchronously capture the result of the content in tests, no need for State
+    @Suppress("VarsWithoutStateBacking")
     var result: Any? = null
     CompositionLocalProvider(
         LocalConfiguration provides Configuration(),

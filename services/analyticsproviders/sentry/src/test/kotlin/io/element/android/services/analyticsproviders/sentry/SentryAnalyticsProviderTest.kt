@@ -103,7 +103,7 @@ class SentryAnalyticsProviderTest : RobolectricTest() {
             addExtraData("foo", "bar")
         }
         val scope = Sentry.getCurrentScopes().scope
-        assertThat(scope.extras.get("foo")).isEqualTo("bar")
+        assertThat(scope.extras["foo"]).isEqualTo("bar")
     }
 
     @Test
@@ -113,7 +113,7 @@ class SentryAnalyticsProviderTest : RobolectricTest() {
             addIndexableData("foo", "bar")
         }
         val scope = Sentry.getCurrentScopes().scope
-        assertThat(scope.tags.get("foo")).isEqualTo("bar")
+        assertThat(scope.tags["foo"]).isEqualTo("bar")
     }
 
     @Test

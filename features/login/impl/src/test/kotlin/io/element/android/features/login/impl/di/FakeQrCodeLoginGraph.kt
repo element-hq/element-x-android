@@ -8,9 +8,7 @@
 
 package io.element.android.features.login.impl.di
 
-import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
-import com.bumble.appyx.core.plugin.Plugin
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.qrcode.QrCodeLoginManager
 import io.element.android.libraries.architecture.AssistedNodeFactory
@@ -21,10 +19,8 @@ internal class FakeQrCodeLoginGraph(
 ) : QrCodeLoginGraph, QrCodeLoginBindings {
     override fun nodeFactories(): Map<KClass<out Node>, AssistedNodeFactory<*>> {
         return mapOf(
-            QrCodeLoginFlowNode::class to object : AssistedNodeFactory<QrCodeLoginFlowNode> {
-                override fun create(buildContext: BuildContext, plugins: List<Plugin>): QrCodeLoginFlowNode {
-                    error("This factory should not be called in tests")
-                }
+            QrCodeLoginFlowNode::class to AssistedNodeFactory<QrCodeLoginFlowNode> { _, _ ->
+                error("This factory should not be called in tests")
             }
         )
     }

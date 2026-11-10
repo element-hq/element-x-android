@@ -27,7 +27,7 @@ import io.element.android.libraries.architecture.callback
 class SpaceSettingsNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: SpaceSettingsPresenter,
+    presenter: SpaceSettingsPresenter,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun closeSettings()

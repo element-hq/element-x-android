@@ -28,6 +28,8 @@ import javax.crypto.SecretKey
 // Retrieved 2025-12-19, License - CC BY-SA 4.0
 
 object FakeAndroidKeyStore {
+    // The non-deprecated Provider(String, String, String) constructor requires API 34 on Android
+    @Suppress("DEPRECATION")
     val setup by lazy {
         Security.addProvider(object : Provider("AndroidKeyStore", 1.0, "") {
             init {

@@ -17,7 +17,7 @@ private const val DEFAULT_REMAINING_ATTEMPTS = 3
 class InMemoryLockScreenStore : LockScreenStore {
     private var pinCode: String? = null
     private var remainingAttempts: Int = DEFAULT_REMAINING_ATTEMPTS
-    private var isBiometricUnlockAllowed = MutableStateFlow(false)
+    private val isBiometricUnlockAllowed = MutableStateFlow(false)
 
     override suspend fun getRemainingPinCodeAttemptsNumber(): Int {
         return remainingAttempts

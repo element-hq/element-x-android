@@ -46,7 +46,7 @@ class MediaItemsPostProcessorTest {
     @Test
     fun `process Empty`() {
         test(
-            mediaItems = listOf(),
+            mediaItems = emptyList(),
             expectedImageAndVideoItems = emptyList(),
             expectedFileItems = emptyList(),
         )

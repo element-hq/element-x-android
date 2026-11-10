@@ -29,6 +29,8 @@ class RoomSyncSubscriber(
                 try {
                     Timber.d("Subscribing to room $roomId}")
                     roomListService.setRoomSubscriptions(listOf(roomId.value))
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (exception: Exception) {
                     Timber.e(exception, "Failed to subscribe to room $roomId")
                 }

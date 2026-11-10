@@ -12,6 +12,7 @@ import android.text.Layout
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -162,6 +163,7 @@ object ContentAvoidingLayout {
      * This is supposed to be used in the `onTextLayout` parameter of a Text based component.
      */
     @Composable
+    @ReadOnlyComposable
     fun measureLastTextLine(
         onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
         extraWidth: Dp = 0.dp,
@@ -192,6 +194,7 @@ object ContentAvoidingLayout {
      * This is supposed to be used in the `onTextLayout` parameter of an [EditorStyledText] component.
      */
     @Composable
+    @ReadOnlyComposable
     fun measureLegacyLastTextLine(
         onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
         extraWidth: Dp = 0.dp,

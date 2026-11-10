@@ -330,7 +330,7 @@ class DefaultBugReporterTest : RobolectricTest() {
         )
         val request = server.takeRequest()
 
-        val text = collectValuesFromFormData(request)["text"]!!
+        val text = collectValuesFromFormData(request).getValue("text")
         assertThat(text).startsWith("a bug occurred")
         assertThat(text).contains("truncated")
         assertThat(text.length).isAtMost(RageshakeConfig.MAX_DESCRIPTION_SIZE + TRUNCATION_MARKER_MAX_SIZE)
@@ -361,7 +361,7 @@ class DefaultBugReporterTest : RobolectricTest() {
         )
         val request = server.takeRequest()
 
-        val text = collectValuesFromFormData(request)["text"]!!
+        val text = collectValuesFromFormData(request).getValue("text")
         assertThat(text).startsWith("a bug occurred")
         assertThat(text).endsWith("I did crash")
         assertThat(text).doesNotContain("truncated")

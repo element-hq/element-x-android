@@ -79,7 +79,7 @@ class TimelineItemIndexerTest {
         // event index changes and the event id -> index map is therefore identical.
         assertThat(sut.indexOf(event.eventId!!)).isEqualTo(0)
         assertThat(sut.process(listOf(editedEvent, daySeparator, readMarker))).isEqualTo(2)
-        assertThat(sut.indexOf(event.eventId!!)).isEqualTo(0)
+        assertThat(sut.indexOf(event.eventId)).isEqualTo(0)
 
         // Removing an item is a structural change too.
         assertThat(sut.process(listOf(editedEvent, daySeparator))).isEqualTo(3)

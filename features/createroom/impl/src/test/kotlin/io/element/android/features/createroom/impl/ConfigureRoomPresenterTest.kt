@@ -189,7 +189,7 @@ class ConfigureRoomPresenterTest : RobolectricTest() {
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(
                 visibilityState = RoomVisibilityState.Public(
-                    roomAddress = RoomAddress.AutoFilled(roomAliasHelper.roomAliasNameFromRoomDisplayName(expectedConfig.roomName ?: "")),
+                    roomAddress = RoomAddress.AutoFilled(roomAliasHelper.roomAliasNameFromRoomDisplayName(expectedConfig.roomName.orEmpty())),
                     joinRuleItem = JoinRuleItem.PublicVisibility.Public,
                 )
             )
@@ -517,7 +517,7 @@ class ConfigureRoomPresenterTest : RobolectricTest() {
 
             initialState.eventSink(ConfigureRoomEvent.SetParentSpace(aSpaceRoom()))
 
-            assertThat(awaitError())
+            assertThat(awaitError()).isNotNull()
         }
     }
 

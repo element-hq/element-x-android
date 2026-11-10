@@ -584,7 +584,7 @@ class MessagesPresenter(
         }
     }
 
-    private suspend fun handleActionAddCaption(
+    private fun handleActionAddCaption(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
     ) {
@@ -597,7 +597,7 @@ class MessagesPresenter(
         )
     }
 
-    private suspend fun handleActionEditCaption(
+    private fun handleActionEditCaption(
         targetEvent: TimelineItem.Event,
         composerState: MessageComposerState,
         enableTextFormatting: Boolean,

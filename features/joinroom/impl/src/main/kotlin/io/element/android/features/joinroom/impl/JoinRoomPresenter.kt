@@ -252,8 +252,7 @@ private fun RoomPreviewInfo.toContentState(membershipDetails: RoomMembershipDeta
             membership,
             membershipDetails,
             joinRule,
-            { toInviteData() }
-        ),
+        ) { toInviteData() },
         joinRule = joinRule,
         details = when (roomType) {
             is RoomType.Other,

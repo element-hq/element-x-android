@@ -375,7 +375,7 @@ private fun MemberRow(
                 }
             }
             // Id
-            userId?.let {
+            if (userId != null) {
                 Text(
                     text = userId,
                     color = ElementTheme.colors.textSecondary,

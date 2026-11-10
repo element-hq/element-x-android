@@ -78,7 +78,7 @@ class HomeFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val matrixClient: MatrixClient,
-    private val presenter: HomePresenter,
+    presenter: HomePresenter,
     private val inviteFriendsUseCase: InviteFriendsUseCase,
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInviteView: AcceptDeclineInviteView,

@@ -340,27 +340,21 @@ class DefaultVoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
             awaitItem().eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Seek(0.5f)))
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(
-                    aPreviewState(playbackProgress = 0.5f, time = 0.seconds, showCursor = true)
-                )
-            }
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(
-                    aPreviewState(playbackProgress = 0.5f, time = 0.seconds, showCursor = true, duration = PLAYER_DURATION)
-                )
-            }
+            assertThat(awaitItem().voiceMessageState).isEqualTo(
+                aPreviewState(playbackProgress = 0.5f, time = 0.seconds, showCursor = true)
+            )
+            assertThat(awaitItem().voiceMessageState).isEqualTo(
+                aPreviewState(playbackProgress = 0.5f, time = 0.seconds, showCursor = true, duration = PLAYER_DURATION)
+            )
             awaitItem().apply {
                 assertThat(voiceMessageState).isEqualTo(
                     aPreviewState(playbackProgress = 0.5f, time = 5.seconds, showCursor = true, duration = PLAYER_DURATION)
                 )
                 eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Seek(0.2f)))
             }
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(
-                    aPreviewState(playbackProgress = 0.2f, time = 5.seconds, showCursor = true, duration = PLAYER_DURATION)
-                )
-            }
+            assertThat(awaitItem().voiceMessageState).isEqualTo(
+                aPreviewState(playbackProgress = 0.2f, time = 5.seconds, showCursor = true, duration = PLAYER_DURATION)
+            )
             val finalState = awaitItem().apply {
                 assertThat(voiceMessageState).isEqualTo(
                     aPreviewState(playbackProgress = 0.2f, time = 2.seconds, showCursor = true, duration = PLAYER_DURATION)
@@ -397,9 +391,7 @@ class DefaultVoiceMessageComposerPresenterTest {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
             awaitItem().eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Play))
             awaitItem().eventSink(VoiceMessageComposerEvent.DeleteVoiceMessage)
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPausedState())
-            }
+            assertThat(awaitItem().voiceMessageState).isEqualTo(aPausedState())
 
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)

@@ -273,14 +273,12 @@ class RustBaseRoom(
         }
     }
 
-    override suspend fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId> = withContext(roomDispatcher) {
-        mxCallbackFlow {
-            innerRoom.subscribeToCallDeclineEvents(notificationEventId.value, object : CallDeclineListener {
-                override fun call(declinerUserId: String) {
-                    trySend(UserId(declinerUserId))
-                }
-            })
-        }
+    override fun subscribeToCallDecline(notificationEventId: EventId): Flow<UserId> = mxCallbackFlow {
+        innerRoom.subscribeToCallDeclineEvents(notificationEventId.value, object : CallDeclineListener {
+            override fun call(declinerUserId: String) {
+                trySend(UserId(declinerUserId))
+            }
+        })
     }
 
     override suspend fun threadRootIdForEvent(eventId: EventId): Result<ThreadId?> = withContext(roomDispatcher) {

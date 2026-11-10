@@ -8,6 +8,7 @@
 package io.element.android.libraries.matrix.ui.model
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -18,6 +19,7 @@ fun DisplayedStatus.toEmojiText(): String = when (this) {
 }
 
 @Composable
+@ReadOnlyComposable
 fun DisplayedStatus.toText(): String = when (this) {
     is DisplayedStatus.UserSet -> "${status.emoji} ${status.text}"
     is DisplayedStatus.InCall -> "🎧 ${stringResource(CommonStrings.common_on_a_call)}"

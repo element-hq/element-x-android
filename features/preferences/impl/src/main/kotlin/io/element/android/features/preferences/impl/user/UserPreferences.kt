@@ -9,6 +9,7 @@
 package io.element.android.features.preferences.impl.user
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -18,6 +19,7 @@ import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
 import io.element.android.libraries.matrix.ui.components.MatrixUserPreviewParam
 
 @Composable
+@NonRestartableComposable
 fun UserPreferences(
     matrixUser: MatrixUser,
     modifier: Modifier = Modifier,
