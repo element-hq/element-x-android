@@ -159,7 +159,7 @@ private fun AccountInfoCardUser(matrixUser: MatrixUser) {
                 style = ElementTheme.typography.fontBodyLgMedium,
             )
             // Id
-            subtext?.let {
+            if (subtext != null) {
                 Text(
                     text = subtext,
                     color = ElementTheme.colors.textSecondary,

@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.ui.model
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -27,29 +28,29 @@ data class InviteSender(
     val membershipChangeReason: String?,
 ) {
     @Composable
+    @ReadOnlyComposable
     fun annotatedString(): AnnotatedString {
-        return stringResource(R.string.screen_invites_invited_you, displayName, userId.value).let { text ->
-            val senderNameStart = stringResource(R.string.screen_invites_invited_you).indexOf($$"%1$s")
-            AnnotatedString(
-                text = text,
-                spanStyles = listOf(
-                    AnnotatedString.Range(
-                        SpanStyle(
-                            fontWeight = FontWeight.Medium,
-                            color = ElementTheme.colors.textPrimary
-                        ),
-                        start = senderNameStart,
-                        end = senderNameStart + displayName.length
-                    )
+        val text = stringResource(R.string.screen_invites_invited_you, displayName, userId.value)
+        val senderNameStart = stringResource(R.string.screen_invites_invited_you).indexOf($$"%1$s")
+        return AnnotatedString(
+            text = text,
+            spanStyles = listOf(
+                AnnotatedString.Range(
+                    SpanStyle(
+                        fontWeight = FontWeight.Medium,
+                        color = ElementTheme.colors.textPrimary
+                    ),
+                    start = senderNameStart,
+                    end = senderNameStart + displayName.length
                 )
             )
-        }
+        )
     }
 }
 
 fun RoomMember.toInviteSender() = InviteSender(
     userId = userId,
-    displayName = displayName ?: "",
+    displayName = displayName.orEmpty(),
     avatarData = getAvatarData(size = AvatarSize.InviteSender),
     membershipChangeReason = membershipChangeReason
 )

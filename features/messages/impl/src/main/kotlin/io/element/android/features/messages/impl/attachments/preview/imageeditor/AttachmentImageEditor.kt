@@ -52,9 +52,9 @@ class DefaultAttachmentImageEditor(
     private val dispatchers: CoroutineDispatchers,
 ) : AttachmentImageEditor {
     override suspend fun canEdit(localMedia: LocalMedia): Boolean = withContext(dispatchers.io) {
-        localMedia.info.resolvedImageMimeType()
-            ?.takeIf { it.isEditableStillImageMimeType() }
-            ?.let { return@withContext true }
+        if (localMedia.info.resolvedImageMimeType().isEditableStillImageMimeType()) {
+            return@withContext true
+        }
 
         val decodedMimeType = context.contentResolver.openInputStream(localMedia.uri)?.use { input ->
             val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
@@ -72,10 +72,8 @@ class DefaultAttachmentImageEditor(
         runCatchingExceptions {
             val sourceMimeType = localMedia.info.resolvedImageMimeType() ?: localMedia.info.mimeType
             val exportedMimeType = exportedMimeTypeFor(sourceMimeType)
-            val exifOrientation = context.contentResolver.openInputStream(localMedia.uri)?.let { input ->
-                input.use {
-                    ExifInterface(it).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
-                }
+            val exifOrientation = context.contentResolver.openInputStream(localMedia.uri)?.use {
+                ExifInterface(it).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
             } ?: ExifInterface.ORIENTATION_UNDEFINED
 
             val decodedBitmap = context.contentResolver.openInputStream(localMedia.uri)?.use { input ->

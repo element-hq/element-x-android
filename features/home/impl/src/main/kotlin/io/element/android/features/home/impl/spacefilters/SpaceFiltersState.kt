@@ -33,7 +33,7 @@ sealed interface SpaceFiltersState {
                 if (query.isBlank()) return availableFilters
                 return availableFilters.filter { filter ->
                     filter.spaceRoom.displayName.contains(query, ignoreCase = true) ||
-                        (filter.spaceRoom.canonicalAlias?.value ?: "").contains(query, ignoreCase = true)
+                        filter.spaceRoom.canonicalAlias?.value.orEmpty().contains(query, ignoreCase = true)
                 }.toImmutableList()
             }
     }

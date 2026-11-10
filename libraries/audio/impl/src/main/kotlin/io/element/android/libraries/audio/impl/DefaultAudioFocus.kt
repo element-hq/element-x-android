@@ -23,7 +23,7 @@ import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
 class DefaultAudioFocus(
-    @ApplicationContext private val context: Context,
+    @ApplicationContext context: Context,
 ) : AudioFocus {
     private val audioManager = requireNotNull(context.getSystemService<AudioManager>())
 

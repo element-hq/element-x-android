@@ -235,6 +235,8 @@ class FetchPendingNotificationsWorker(
         }
     }
 
+    // False positive: this function calls the suspend function PushHistoryService.insertOrUpdatePushRequests.
+    @Suppress("RedundantSuspendModifier")
     private suspend fun handleSetupError(
         sessionId: SessionId,
         requests: List<PushRequest>,

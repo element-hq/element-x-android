@@ -85,7 +85,7 @@ internal fun UserRow(
             // Name
             nameContent()
             // Id
-            subtext?.let {
+            if (subtext != null) {
                 Text(
                     text = subtext,
                     color = if (enabled) ElementTheme.colors.textSecondary else ElementTheme.colors.textDisabled,

@@ -158,7 +158,11 @@ private fun UnstuckSheetStateEffect(sheetState: SheetState) {
  * Reset the sheet state, by animating to its current value, each time it is stuck at rest, see [awaitStuckAtRest].
  * Return when no animation is running anymore, or when the sheet is hidden, or after [maxResets] resets which did
  * not clear the stuck state.
+ *
+ * Note: the CancellationException is caught on purpose: it is rethrown by ensureActive() if this coroutine is cancelled,
+ * otherwise it comes from the interrupted animation and the reset is retried.
  */
+@Suppress("SuspendFunSwallowedCancellation")
 @OptIn(ExperimentalMaterial3Api::class)
 internal suspend fun resetWhenStuck(
     isAnimationRunning: () -> Boolean,

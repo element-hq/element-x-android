@@ -22,7 +22,7 @@ open class TimelineItemVoiceContentPreviewParam : PreviewParameterProvider<Timel
         get() = sequenceOf(
             aTimelineItemVoiceContent(
                 duration = 1.milliseconds,
-                waveform = listOf(),
+                waveform = emptyList(),
             ),
             aTimelineItemVoiceContent(
                 duration = 10_000.milliseconds,

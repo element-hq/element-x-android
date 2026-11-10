@@ -11,6 +11,7 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.SnackbarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -80,6 +81,7 @@ fun Snackbar(
 
 // TODO this color is temporary, an `inverse` version should be added to the semantic colors instead
 @Composable
+@ReadOnlyComposable
 private fun actionContentColor(): Color {
     return if (ElementTheme.isLightTheme) {
         SnackBarLabelColorLight
@@ -100,7 +102,7 @@ internal fun SnackbarPreview() {
 @Composable
 internal fun SnackbarWithActionPreview() {
     ElementThemedPreview {
-        Snackbar(message = "Snackbar supporting text", action = ButtonVisuals.Text("Action", {}))
+        Snackbar(message = "Snackbar supporting text", action = ButtonVisuals.Text("Action") {})
     }
 }
 
@@ -122,7 +124,7 @@ internal fun SnackbarWithActionAndCloseButtonPreview() {
 @Composable
 internal fun SnackbarWithActionOnNewLinePreview() {
     ElementThemedPreview {
-        Snackbar(message = "Snackbar supporting text", action = ButtonVisuals.Text("Action", {}), actionOnNewLine = true)
+        Snackbar(message = "Snackbar supporting text", action = ButtonVisuals.Text("Action") {}, actionOnNewLine = true)
     }
 }
 
@@ -132,7 +134,7 @@ internal fun SnackbarWithActionOnNewLineAndCloseButtonPreview() {
     ElementThemedPreview {
         Snackbar(
             message = "Snackbar supporting text",
-            action = ButtonVisuals.Text("Action", {}),
+            action = ButtonVisuals.Text("Action") {},
             dismissAction = ButtonVisuals.Icon(
                 IconSource.Vector(CompoundIcons.Close())
             ) {},

@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -317,7 +318,7 @@ private fun AdvancedSettingsCategory(
                     stringResource(id = CommonStrings.common_error)
                 )
                 is AsyncData.Success -> ListItemContent.Text(
-                    state.currentPushDistributor.dataOrNull()?.name ?: ""
+                    state.currentPushDistributor.dataOrNull()?.name.orEmpty()
                 )
             },
             onClick = {
@@ -534,6 +535,7 @@ private fun rememberSoundPickerOnClick(
 }
 
 @Composable
+@ReadOnlyComposable
 private fun getTitleForRoomNotificationMode(mode: RoomNotificationMode?) =
     when (mode) {
         RoomNotificationMode.ALL_MESSAGES -> stringResource(id = R.string.screen_notification_settings_edit_mode_all_messages)

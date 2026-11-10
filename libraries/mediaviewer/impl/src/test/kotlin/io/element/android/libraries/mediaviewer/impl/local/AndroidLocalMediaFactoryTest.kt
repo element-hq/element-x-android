@@ -73,7 +73,7 @@ class AndroidLocalMediaFactoryTest : RobolectricTest() {
         }
 
         val result = createAndroidLocalMediaFactory().createFromUri(
-            uri = imageFile.toURI().toString().let(android.net.Uri::parse),
+            uri = android.net.Uri.parse(imageFile.toURI().toString()),
             mimeType = MimeTypes.OctetStream,
             name = imageFile.name,
             formattedFileSize = null,

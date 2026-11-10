@@ -48,7 +48,7 @@ fun UnreadIndicatorAtom(
     border: BorderStroke? = null,
     contentPadding: PaddingValues = PaddingValues.Zero,
 ) {
-    count?.let {
+    if (count != null) {
         CounterAtom(
             count = count.toInt(),
             modifier = modifier

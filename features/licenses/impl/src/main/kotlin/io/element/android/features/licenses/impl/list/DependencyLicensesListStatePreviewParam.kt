@@ -69,6 +69,6 @@ internal fun aDependencyLicenseItem(
             url = "https://www.apache.org/licenses/LICENSE-2.0"
         )
     ),
-    unknownLicenses = listOf(),
+    unknownLicenses = emptyList(),
     scm = null,
 )

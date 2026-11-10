@@ -46,7 +46,7 @@ class AddRoomToSpaceSearchDataSource(
     @Assisted coroutineScope: CoroutineScope,
     roomListService: RoomListService,
     spaceRoomList: SpaceRoomList,
-    private val matrixClient: MatrixClient,
+    matrixClient: MatrixClient,
     coroutineDispatchers: CoroutineDispatchers,
 ) {
     @AssistedFactory

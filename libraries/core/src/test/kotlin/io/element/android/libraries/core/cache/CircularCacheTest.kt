@@ -13,6 +13,8 @@ import org.junit.Test
 
 class CircularCacheTest {
     @Test
+    // CircularCache stores nullable items in an Array<T?>, which cannot be a primitive array
+    @Suppress("ArrayPrimitive")
     fun `when putting more than cache size then cache is limited to cache size`() {
         val (cache, internalData) = createIntCache(cacheSize = 3)
 
@@ -22,6 +24,8 @@ class CircularCacheTest {
     }
 
     @Test
+    // CircularCache stores nullable items in an Array<T?>, which cannot be a primitive array
+    @Suppress("ArrayPrimitive")
     fun `when putting more than cache then acts as FIFO`() {
         val (cache, internalData) = createIntCache(cacheSize = 3)
 
@@ -49,6 +53,8 @@ class CircularCacheTest {
         assertThat(result).isTrue()
     }
 
+    // CircularCache stores nullable items in an Array<T?>, which cannot be a primitive array
+    @Suppress("ArrayPrimitive")
     private fun createIntCache(cacheSize: Int): Pair<CircularCache<Int>, Array<Int?>> {
         var internalData: Array<Int?>? = null
         val factory: (Int) -> Array<Int?> = {

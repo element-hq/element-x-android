@@ -27,6 +27,8 @@ class RustTemporaryMatrixClientFactory(
     override suspend fun create(serverName: String): Result<TemporaryMatrixClient> = withContext(coroutineDispatchers.io) {
         runCatchingExceptions {
             // In case the 'serverName' is a full URL, we need to extract the host and port to pass to the client builder.
+            // URI(...).toURL() is not a drop-in replacement: URI parsing is stricter than URL parsing.
+            @Suppress("DEPRECATION")
             val parsedUrl = URL(serverName.ensureProtocol())
             val domain = parsedUrl.host ?: error("Invalid server name: $serverName")
             val port = parsedUrl.port

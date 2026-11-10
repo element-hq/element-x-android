@@ -58,7 +58,7 @@ class DefaultVoiceRecorderTest {
             voiceRecorder.startRecord()
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.seconds, listOf(1.0f)))
             timeSource += 1.seconds
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.seconds, listOf()))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.seconds, emptyList()))
             timeSource += 1.seconds
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(2.seconds, listOf(1.0f, 1.0f)))
         }
@@ -73,7 +73,7 @@ class DefaultVoiceRecorderTest {
             voiceRecorder.startRecord()
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.minutes, listOf(1.0f)))
             timeSource += VoiceMessageConfig.maxVoiceMessageDuration
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(VoiceMessageConfig.maxVoiceMessageDuration, listOf()))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(VoiceMessageConfig.maxVoiceMessageDuration, emptyList()))
             timeSource += 1.milliseconds
 
             assertThat(awaitItem()).isEqualTo(

@@ -33,7 +33,7 @@ class FakePickerProvider : PickerProvider {
 
     @Composable
     override fun registerGalleryMultiPicker(onResult: (uris: List<Uri>) -> Unit): PickerLauncher<PickVisualMediaRequest, List<Uri>> {
-        return NoOpPickerLauncher { onResult(multipleResults ?: result?.let { listOf(it) } ?: emptyList()) }
+        return NoOpPickerLauncher { onResult(multipleResults ?: result?.let { listOf(it) }.orEmpty()) }
     }
 
     @Composable
@@ -43,7 +43,7 @@ class FakePickerProvider : PickerProvider {
 
     @Composable
     override fun registerFileMultiPicker(mimeType: String, onResult: (uris: List<Uri>) -> Unit): PickerLauncher<Array<String>, List<Uri>> {
-        return NoOpPickerLauncher { onResult(multipleResults ?: result?.let { listOf(it) } ?: emptyList()) }
+        return NoOpPickerLauncher { onResult(multipleResults ?: result?.let { listOf(it) }.orEmpty()) }
     }
 
     @Composable

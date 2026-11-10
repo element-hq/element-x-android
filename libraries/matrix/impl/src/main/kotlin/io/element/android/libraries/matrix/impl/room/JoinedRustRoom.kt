@@ -53,7 +53,6 @@ import io.element.android.libraries.matrix.impl.room.threads.RustThreadsListServ
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.RustTimeline
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
-import io.element.android.libraries.matrix.impl.user.map
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.widget.RustWidgetDriver
@@ -99,7 +98,7 @@ import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 class JoinedRustRoom(
     private val baseRoom: RustBaseRoom,
-    private val liveInnerTimeline: InnerTimeline,
+    liveInnerTimeline: InnerTimeline,
     private val notificationSettingsService: NotificationSettingsService,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val systemClock: SystemClock,
@@ -440,8 +439,8 @@ class JoinedRustRoom(
 
     override suspend fun resetPowerLevels(): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.resetPowerLevels().let {}
-        }
+            innerRoom.resetPowerLevels()
+        }.map { }
     }
 
     override suspend fun kickUser(userId: UserId, reason: String?): Result<Unit> = withContext(roomDispatcher) {

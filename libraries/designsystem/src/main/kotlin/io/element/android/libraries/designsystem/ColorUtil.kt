@@ -9,10 +9,12 @@
 package io.element.android.libraries.designsystem
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.theme.ElementTheme
 
 @Composable
+@ReadOnlyComposable
 fun Boolean.toEnabledColor(): Color {
     return if (this) {
         ElementTheme.colors.textPrimary
@@ -22,6 +24,7 @@ fun Boolean.toEnabledColor(): Color {
 }
 
 @Composable
+@ReadOnlyComposable
 fun Boolean.toSecondaryEnabledColor(): Color {
     return if (this) {
         ElementTheme.colors.textSecondary
@@ -31,6 +34,7 @@ fun Boolean.toSecondaryEnabledColor(): Color {
 }
 
 @Composable
+@ReadOnlyComposable
 fun Boolean.toIconEnabledColor(): Color {
     return if (this) {
         ElementTheme.colors.iconPrimary
@@ -40,6 +44,7 @@ fun Boolean.toIconEnabledColor(): Color {
 }
 
 @Composable
+@ReadOnlyComposable
 fun Boolean.toIconSecondaryEnabledColor(): Color {
     return if (this) {
         ElementTheme.colors.iconSecondary

@@ -35,7 +35,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 class RoomMemberListNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomMemberListPresenter,
+    presenter: RoomMemberListPresenter,
     private val analyticsService: AnalyticsService,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
 ) : Node(buildContext, plugins = plugins), RoomMemberListNavigator {

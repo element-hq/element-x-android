@@ -32,6 +32,7 @@ import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.first
@@ -150,6 +151,8 @@ class DefaultPushHandler(
             }
 
             return true
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
             return false

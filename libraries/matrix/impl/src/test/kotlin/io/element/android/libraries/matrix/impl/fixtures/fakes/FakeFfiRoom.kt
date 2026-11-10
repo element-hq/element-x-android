@@ -67,7 +67,7 @@ class FakeFfiRoom(
         return suggestedRoleForUserLambda(userId)
     }
 
-    private var roomInfoUpdatesFlow = MutableStateFlow(roomInfo)
+    private val roomInfoUpdatesFlow = MutableStateFlow(roomInfo)
     override fun subscribeToRoomInfoUpdates(listener: RoomInfoListener): TaskHandle {
         roomInfoUpdatesFlow
             // Drop the first item to match the SDK's behavior

@@ -35,6 +35,7 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
+import java.util.Locale
 
 @Composable
 fun MediaSettingsView(
@@ -125,7 +126,7 @@ fun MediaSettingsView(
                             VideoCompressionPreset.HIGH -> stringResource(id = R.string.screen_advanced_settings_optimise_video_upload_quality_high)
                         }
                         val descriptionWithValue = remember(quality) {
-                            String.format(description, quality)
+                            String.format(Locale.getDefault(), description, quality)
                         }
                         Text(text = descriptionWithValue)
                     },

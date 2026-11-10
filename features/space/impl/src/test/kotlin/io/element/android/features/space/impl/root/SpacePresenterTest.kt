@@ -239,7 +239,7 @@ class SpacePresenterTest {
             assertThat(joiningState.joinActions[A_ROOM_ID_2]).isEqualTo(AsyncAction.Loading)
             val errorState = awaitItem()
             // Joined room is removed from the join actions
-            assertThat(errorState.joinActions[A_ROOM_ID_2]!!.isFailure()).isTrue()
+            assertThat(errorState.joinActions.getValue(A_ROOM_ID_2).isFailure()).isTrue()
             // Clear error
             errorState.eventSink(SpaceEvent.ClearFailures)
             val clearedState = awaitItem()

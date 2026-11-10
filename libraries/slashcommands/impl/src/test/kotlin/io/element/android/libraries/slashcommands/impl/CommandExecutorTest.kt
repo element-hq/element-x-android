@@ -32,6 +32,8 @@ class CommandExecutorTest {
     fun `send plain text delegates to timeline with plain flag`() = runTest {
         val timeline = FakeTimeline()
         var capturedBody: String? = null
+        // The explicit nullable type is needed, since a null value is assigned later.
+        @Suppress("RedundantExplicitType")
         var capturedHtml: String? = "initial"
         var capturedAsPlainText = false
         timeline.sendMessageLambda = { body, htmlBody, _, _, asPlainText ->
