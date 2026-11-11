@@ -80,7 +80,7 @@ import io.element.android.features.messages.impl.link.LinkView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.ComposerEmojiPickerMaxHeight
 import io.element.android.features.messages.impl.messagecomposer.ComposerEmojiPickerMinHeight
-import io.element.android.features.messages.impl.messagecomposer.ComposerEmojiPickerSheetState
+import io.element.android.features.messages.impl.messagecomposer.ComposerEmojiPickerState
 import io.element.android.features.messages.impl.messagecomposer.DisabledComposerView
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
@@ -192,7 +192,7 @@ fun MessagesView(
 
     var availableHeightPx by remember { mutableIntStateOf(240) }
     val density = LocalDensity.current
-    val isEmojiPickerShown = state.composerState.emojiPickerSheetState != ComposerEmojiPickerSheetState.Hidden
+    val isEmojiPickerShown = state.composerState.emojiPickerState != ComposerEmojiPickerState.Hidden
     // Last observed soft-keyboard height for this orientation, navigation-bar area included. The emoji picker claims
     // exactly that space while the keyboard is hidden, so the composer stays put when one replaces the other.
     val orientation = LocalConfiguration.current.orientation

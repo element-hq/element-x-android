@@ -222,11 +222,11 @@ class MessageComposerPresenter(
         var showAttachmentSourcePicker: Boolean by remember { mutableStateOf(false) }
         var showEmojiPicker: Boolean by remember { mutableStateOf(false) }
         // The picker presenter is composed only while the picker is visible, so recent emojis reload each time it opens.
-        val emojiPickerSheetState = if (showEmojiPicker) {
-            val emojiPickerState = emojiPickerPresenter.present()
-            if (emojiPickerState.isReady) ComposerEmojiPickerSheetState.Shown(emojiPickerState) else ComposerEmojiPickerSheetState.Loading
+        val emojiPickerState = if (showEmojiPicker) {
+            val pickerState = emojiPickerPresenter.present()
+            if (pickerState.isReady) ComposerEmojiPickerState.Shown(pickerState) else ComposerEmojiPickerState.Loading
         } else {
-            ComposerEmojiPickerSheetState.Hidden
+            ComposerEmojiPickerState.Hidden
         }
 
         val sendTypingNotifications by remember {
@@ -454,7 +454,7 @@ class MessageComposerPresenter(
             mode = messageComposerContext.composerMode,
             isInThreadTimeline = isInThread,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
-            emojiPickerSheetState = emojiPickerSheetState,
+            emojiPickerState = emojiPickerState,
             showTextFormatting = showTextFormatting,
             canShareLocation = canShareLocation,
             suggestions = suggestions.toImmutableList(),

@@ -159,7 +159,7 @@ class MessageComposerPresenterTest : RobolectricTest() {
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
             assertThat(initialState.isInThreadTimeline).isFalse()
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
-            assertThat(initialState.emojiPickerSheetState).isEqualTo(ComposerEmojiPickerSheetState.Hidden)
+            assertThat(initialState.emojiPickerState).isEqualTo(ComposerEmojiPickerState.Hidden)
             assertThat(initialState.canShareLocation).isTrue()
             assertThat(initialState.slashCommandAction).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -713,9 +713,9 @@ class MessageComposerPresenterTest : RobolectricTest() {
         presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.OpenEmojiPicker)
-            assertThat(awaitItem().emojiPickerSheetState).isEqualTo(ComposerEmojiPickerSheetState.Shown(emojiPickerState))
+            assertThat(awaitItem().emojiPickerState).isEqualTo(ComposerEmojiPickerState.Shown(emojiPickerState))
             initialState.eventSink(MessageComposerEvent.DismissEmojiPicker)
-            assertThat(awaitItem().emojiPickerSheetState).isEqualTo(ComposerEmojiPickerSheetState.Hidden)
+            assertThat(awaitItem().emojiPickerState).isEqualTo(ComposerEmojiPickerState.Hidden)
         }
     }
 
@@ -725,11 +725,11 @@ class MessageComposerPresenterTest : RobolectricTest() {
         presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.OpenEmojiPicker)
-            assertThat(awaitItem().emojiPickerSheetState).isInstanceOf(ComposerEmojiPickerSheetState.Shown::class.java)
+            assertThat(awaitItem().emojiPickerState).isInstanceOf(ComposerEmojiPickerState.Shown::class.java)
             initialState.eventSink(MessageComposerEvent.ToggleTextFormatting(true))
             val state = awaitLastSequentialItem()
             assertThat(state.showTextFormatting).isTrue()
-            assertThat(state.emojiPickerSheetState).isEqualTo(ComposerEmojiPickerSheetState.Hidden)
+            assertThat(state.emojiPickerState).isEqualTo(ComposerEmojiPickerState.Hidden)
         }
     }
 
@@ -739,7 +739,7 @@ class MessageComposerPresenterTest : RobolectricTest() {
         presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(MessageComposerEvent.OpenEmojiPicker)
-            assertThat(awaitItem().emojiPickerSheetState).isEqualTo(ComposerEmojiPickerSheetState.Loading)
+            assertThat(awaitItem().emojiPickerState).isEqualTo(ComposerEmojiPickerState.Loading)
         }
     }
 
