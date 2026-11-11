@@ -24,7 +24,7 @@ data class MessageComposerState(
     val mode: MessageComposerMode,
     val isInThreadTimeline: Boolean,
     val showAttachmentSourcePicker: Boolean,
-    val emojiPickerSheetState: ComposerEmojiPickerSheetState,
+    val emojiPickerState: ComposerEmojiPickerState,
     val showTextFormatting: Boolean,
     val canShareLocation: Boolean,
     val suggestions: ImmutableList<ResolvedSuggestion>,
@@ -34,8 +34,8 @@ data class MessageComposerState(
     val eventSink: (MessageComposerEvent) -> Unit,
 )
 
-sealed interface ComposerEmojiPickerSheetState {
-    data object Hidden : ComposerEmojiPickerSheetState
-    data object Loading : ComposerEmojiPickerSheetState
-    data class Shown(val state: EmojiPickerState) : ComposerEmojiPickerSheetState
+sealed interface ComposerEmojiPickerState {
+    data object Hidden : ComposerEmojiPickerState
+    data object Loading : ComposerEmojiPickerState
+    data class Shown(val state: EmojiPickerState) : ComposerEmojiPickerState
 }

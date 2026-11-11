@@ -49,8 +49,8 @@ internal fun ComposerEmojiPicker(
     height: Dp,
     modifier: Modifier = Modifier,
 ) {
-    val sheetState = state.emojiPickerSheetState
-    if (sheetState == ComposerEmojiPickerSheetState.Hidden) return
+    val sheetState = state.emojiPickerState
+    if (sheetState == ComposerEmojiPickerState.Hidden) return
     BackHandler {
         state.eventSink(MessageComposerEvent.DismissEmojiPicker)
     }
@@ -61,7 +61,7 @@ internal fun ComposerEmojiPicker(
         contentAlignment = Alignment.Center,
     ) {
         when (sheetState) {
-            is ComposerEmojiPickerSheetState.Shown -> emojiPickerRenderer.Render(
+            is ComposerEmojiPickerState.Shown -> emojiPickerRenderer.Render(
                 state = sheetState.state,
                 onSelectEmoji = { emoji -> state.eventSink(MessageComposerEvent.InsertEmoji(emoji.unicode)) },
                 selectedEmojis = persistentSetOf(),
@@ -78,7 +78,7 @@ internal fun ComposerEmojiPicker(
 @Composable
 internal fun ComposerEmojiPickerPreview() = ElementPreview {
     ComposerEmojiPicker(
-        state = aMessageComposerState(emojiPickerSheetState = ComposerEmojiPickerSheetState.Loading),
+        state = aMessageComposerState(emojiPickerState = ComposerEmojiPickerState.Loading),
         emojiPickerRenderer = NoOpEmojiPickerRenderer,
         height = ComposerEmojiPickerMaxHeight,
     )

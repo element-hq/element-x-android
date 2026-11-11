@@ -112,7 +112,7 @@ internal fun MessageComposerView(
         state.eventSink(MessageComposerEvent.CloseSpecialMode)
     }
 
-    val isEmojiPickerVisible = state.emojiPickerSheetState != ComposerEmojiPickerSheetState.Hidden
+    val isEmojiPickerVisible = state.emojiPickerState != ComposerEmojiPickerState.Hidden
     val isImeVisible = WindowInsets.isImeVisible
     val density = LocalDensity.current
     val imeInsets = WindowInsets.ime
