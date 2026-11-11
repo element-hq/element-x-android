@@ -53,7 +53,6 @@ import kotlin.time.Duration.Companion.seconds
  */
 private val KeyboardShowTimeout = 1.seconds
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun MessageComposerView(
     state: MessageComposerState,
@@ -110,51 +109,7 @@ internal fun MessageComposerView(
         state.eventSink(MessageComposerEvent.CloseSpecialMode)
     }
 
-    val isEmojiPickerVisible = state.emojiPickerState != ComposerEmojiPickerState.Hidden
-    val density = LocalDensity.current
-    val imeInsets = WindowInsets.ime
-    val imeTargetInsets = WindowInsets.imeAnimationTarget
-    // The soft keyboard has fully slid in and is serving the composer. Derived so the IME animation does not recompose every frame.
-    val isKeyboardServingComposer by remember(imeInsets, imeTargetInsets, density, state.textEditorState) {
-        derivedStateOf {
-            val imeBottom = imeInsets.getBottom(density)
-            imeBottom > 0 && imeBottom == imeTargetInsets.getBottom(density) && state.textEditorState.hasFocus()
-        }
-    }
-    // Set by the emoji button when it hands the composer back to the keyboard.
-    var isEmojiPickerClosing by remember { mutableStateOf(false) }
-    // The picker substitutes for the keyboard, in the keyboard's position: the keyboard slides out in front of it on open and back
-    // over it on close, and the picker is removed only once the keyboard has settled, so the composer never moves.
-    LaunchedEffect(isEmojiPickerVisible, isEmojiPickerClosing) {
-        if (!isEmojiPickerVisible) {
-            isEmojiPickerClosing = false
-            return@LaunchedEffect
-        }
-        val keyboardServingComposer = snapshotFlow { isKeyboardServingComposer }
-        if (isEmojiPickerClosing) {
-            // Without a soft keyboard to wait for, e.g. when a hardware keyboard is attached, give up after a timeout.
-            withTimeoutOrNull(KeyboardShowTimeout) { keyboardServingComposer.first { it } }
-        } else {
-            // The keyboard lingers for a moment after the picker opens: wait for it to leave, then for it to come back,
-            // e.g. because the user tapped the composer.
-            keyboardServingComposer.first { !it }
-            keyboardServingComposer.first { it }
-        }
-        state.eventSink(MessageComposerEvent.DismissEmojiPicker)
-    }
-    fun onToggleEmojiPicker() {
-        if (isEmojiPickerVisible) {
-            isEmojiPickerClosing = true
-            coroutineScope.launch {
-                state.textEditorState.requestFocus()
-                // Before API 30 the keyboard is shown only for the focused view, i.e. the editor.
-                (view.findFocus() ?: view).showKeyboard()
-            }
-        } else {
-            state.eventSink(MessageComposerEvent.OpenEmojiPicker)
-            view.hideKeyboard()
-        }
-    }
+    val onToggleEmojiPicker = rememberEmojiPickerKeyboardToggle(state)
 
     val onDeleteVoiceMessage = {
         voiceMessageState.eventSink(VoiceMessageComposerEvent.DeleteVoiceMessage)
@@ -186,7 +141,7 @@ internal fun MessageComposerView(
         onError = ::onError,
         onTyping = ::onTyping,
         onSelectRichContent = ::sendUri,
-        onAddEmoji = ::onToggleEmojiPicker,
+        onAddEmoji = onToggleEmojiPicker,
     )
 
     AsyncActionView(
@@ -194,6 +149,62 @@ internal fun MessageComposerView(
         onSuccess = {},
         onErrorDismiss = { state.eventSink(MessageComposerEvent.ClearSlashError) },
     )
+}
+
+/**
+ * Coordinates the emoji picker with the soft keyboard and returns the emoji button's action, which switches between them.
+ *
+ * The picker substitutes for the keyboard, in the keyboard's position: the keyboard slides out in front of it on open and back
+ * over it on close, and the picker is removed only once the keyboard has settled, so the composer never moves.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun rememberEmojiPickerKeyboardToggle(state: MessageComposerState): () -> Unit {
+    val view = LocalView.current
+    val coroutineScope = rememberCoroutineScope()
+    val isEmojiPickerVisible = state.emojiPickerState != ComposerEmojiPickerState.Hidden
+    val density = LocalDensity.current
+    val imeInsets = WindowInsets.ime
+    val imeTargetInsets = WindowInsets.imeAnimationTarget
+    // The soft keyboard has fully slid in and is serving the composer. Derived so the IME animation does not recompose every frame.
+    val isKeyboardServingComposer by remember(imeInsets, imeTargetInsets, density, state.textEditorState) {
+        derivedStateOf {
+            val imeBottom = imeInsets.getBottom(density)
+            imeBottom > 0 && imeBottom == imeTargetInsets.getBottom(density) && state.textEditorState.hasFocus()
+        }
+    }
+    // Set by the emoji button when it hands the composer back to the keyboard.
+    var isEmojiPickerClosing by remember { mutableStateOf(false) }
+    LaunchedEffect(isEmojiPickerVisible, isEmojiPickerClosing) {
+        if (!isEmojiPickerVisible) {
+            isEmojiPickerClosing = false
+            return@LaunchedEffect
+        }
+        val keyboardServingComposer = snapshotFlow { isKeyboardServingComposer }
+        if (isEmojiPickerClosing) {
+            // Without a soft keyboard to wait for, e.g. when a hardware keyboard is attached, give up after a timeout.
+            withTimeoutOrNull(KeyboardShowTimeout) { keyboardServingComposer.first { it } }
+        } else {
+            // The keyboard lingers for a moment after the picker opens: wait for it to leave, then for it to come back,
+            // e.g. because the user tapped the composer.
+            keyboardServingComposer.first { !it }
+            keyboardServingComposer.first { it }
+        }
+        state.eventSink(MessageComposerEvent.DismissEmojiPicker)
+    }
+    return {
+        if (isEmojiPickerVisible) {
+            isEmojiPickerClosing = true
+            coroutineScope.launch {
+                state.textEditorState.requestFocus()
+                // Before API 30 the keyboard is shown only for the focused view, i.e. the editor.
+                (view.findFocus() ?: view).showKeyboard()
+            }
+        } else {
+            state.eventSink(MessageComposerEvent.OpenEmojiPicker)
+            view.hideKeyboard()
+        }
+    }
 }
 
 @PreviewsDayNight
