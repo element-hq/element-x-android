@@ -162,7 +162,7 @@ jobs:
         with:
           enterprise-ssh-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Run Detekt
-        run: ./gradlew detektFull $CI_GRADLE_ARG_PROPERTIES --continue
+        run: ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
