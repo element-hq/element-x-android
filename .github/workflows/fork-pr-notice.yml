@@ -33,5 +33,6 @@ jobs:
               - The title of the PR will be used for release notes, so it needs to describe the change visible to the user.
               - The tests pass locally running \`./gradlew test\`.
               - The code quality check suite pass locally running \`./gradlew runQualityChecks\`.
-              - If you modified anything related to the UI, including previews, you'll have to run the \`Record screenshots\` GH action in your forked repo: that will generate compatible new screenshots. However, given Github Actions limitations, **it will prevent the CI from running temporarily**, until you upload a new commit after that one. To do so, just pull the latest changes and push [an empty commit](https://coderwall.com/p/vkdekq/git-commit-allow-empty).`
+              - If you modified anything related to the UI, including previews, you'll have to record new screenshot tests with 
+                \`./gradlew recordPaparazziDebug\` and include them as part of the PR.
             })
