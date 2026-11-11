@@ -33,9 +33,9 @@ import io.element.android.features.knockrequests.api.banner.KnockRequestsBannerR
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.messagecomposer.ComposerEmojiPicker
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
+import io.element.android.features.messages.impl.messagecomposer.composerEmojiPickerContent
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelinePresenter
@@ -342,13 +342,7 @@ class MessagesNode(
                         emojiPickerRenderer = emojiPickerRenderer,
                     )
                 },
-                composerEmojiPicker = { height ->
-                    ComposerEmojiPicker(
-                        state = state.composerState,
-                        emojiPickerRenderer = emojiPickerRenderer,
-                        height = height,
-                    )
-                },
+                composerEmojiPicker = composerEmojiPickerContent(state.composerState, emojiPickerRenderer),
                 onThreadsListClick = callback::navigateToThreadsList,
             )
             roomMemberModerationRenderer.Render(
