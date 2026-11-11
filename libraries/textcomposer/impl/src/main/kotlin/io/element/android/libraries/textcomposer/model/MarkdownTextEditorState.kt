@@ -50,9 +50,7 @@ class MarkdownTextEditorState(
      */
     fun insertText(value: String) {
         val currentText = SpannableStringBuilder(text.value())
-        // The selection is reversed when the text was selected backwards.
-        val start = minOf(selection.first, selection.last).coerceIn(0, currentText.length)
-        val end = maxOf(selection.first, selection.last).coerceIn(start, currentText.length)
+        val (start, end) = selectionIn(currentText)
         currentText.replace(start, end, value)
         text.update(currentText, true)
         val cursor = start + value.length
@@ -65,8 +63,7 @@ class MarkdownTextEditorState(
      */
     fun deleteBackward() {
         val currentText = SpannableStringBuilder(text.value())
-        val start = minOf(selection.first, selection.last).coerceIn(0, currentText.length)
-        val end = maxOf(selection.first, selection.last).coerceIn(start, currentText.length)
+        val (start, end) = selectionIn(currentText)
         val deleteFrom = when {
             start < end -> start
             start == 0 -> return
@@ -79,6 +76,15 @@ class MarkdownTextEditorState(
         currentText.delete(deleteFrom, end)
         text.update(currentText, true)
         selection = IntRange(deleteFrom, deleteFrom)
+    }
+
+    /**
+     * The selection as ordered bounds within [content]: it is reversed when the text was selected backwards.
+     */
+    private fun selectionIn(content: CharSequence): Pair<Int, Int> {
+        val start = minOf(selection.first, selection.last).coerceIn(0, content.length)
+        val end = maxOf(selection.first, selection.last).coerceIn(start, content.length)
+        return start to end
     }
 
     private fun previousGraphemeBoundary(text: CharSequence, offset: Int): Int {
