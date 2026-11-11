@@ -9,12 +9,23 @@ package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imeAnimationTarget
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -26,16 +37,44 @@ import kotlinx.collections.immutable.persistentSetOf
 
 /**
  * Height of the emoji picker shown beneath the composer while the soft-keyboard height remains unknown for the
- * current orientation, i.e. until the keyboard has appeared once. The caller shrinks it on small screens to keep
+ * current orientation, i.e. until the keyboard has appeared once. It shrinks on small screens to keep
  * the composer visible. Once the keyboard height is known, the picker occupies exactly that space.
  */
-internal val ComposerEmojiPickerMaxHeight = 300.dp
+private val ComposerEmojiPickerMaxHeight = 300.dp
 
 /**
  * Smallest keyboard space the picker will occupy. Below that threshold, e.g. with a floating keyboard,
  * the picker falls back to [ComposerEmojiPickerMaxHeight].
  */
-internal val ComposerEmojiPickerMinHeight = 160.dp
+private val ComposerEmojiPickerMinHeight = 160.dp
+
+/**
+ * Height in pixels of the emoji picker, or 0 while it is hidden. The picker claims exactly the space of the last soft keyboard
+ * seen in this orientation, so the composer stays put when one replaces the other. Until a keyboard has been seen, it takes
+ * half of [availableHeightPx], capped at [ComposerEmojiPickerMaxHeight].
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+internal fun rememberComposerEmojiPickerHeightPx(isShown: Boolean, availableHeightPx: Int): Int {
+    val density = LocalDensity.current
+    val orientation = LocalConfiguration.current.orientation
+    // Navigation-bar area included, as reported by the IME insets.
+    var keyboardHeightPx by rememberSaveable(orientation) { mutableIntStateOf(0) }
+    val imeTargetBottomPx = WindowInsets.imeAnimationTarget.getBottom(density)
+    LaunchedEffect(imeTargetBottomPx) {
+        if (imeTargetBottomPx > 0) {
+            keyboardHeightPx = imeTargetBottomPx
+        }
+    }
+    val systemBarsBottomPx = WindowInsets.systemBars.getBottom(density)
+    if (!isShown) return 0
+    val keyboardSpacePx = keyboardHeightPx - systemBarsBottomPx
+    return if (keyboardSpacePx >= with(density) { ComposerEmojiPickerMinHeight.roundToPx() }) {
+        keyboardSpacePx
+    } else {
+        (availableHeightPx / 2).coerceAtMost(with(density) { ComposerEmojiPickerMaxHeight.roundToPx() })
+    }
+}
 
 /**
  * Emoji picker shown below the composer, replacing the soft keyboard. Tapping an emoji inserts it
