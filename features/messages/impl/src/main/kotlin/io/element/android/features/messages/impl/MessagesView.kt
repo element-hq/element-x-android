@@ -280,10 +280,13 @@ fun MessagesView(
 
     val expandableState = rememberExpandableBottomSheetLayoutState()
     val imeInsets = WindowInsets.ime
+    // Read unconditionally: a composable call inside the short-circuit expression below adds a composition group only while the picker
+    // is shown, which makes Compose discard and recreate everything after it, including the composer's EditText and its focus.
+    val isImeVisible = WindowInsets.isImeVisible
     // The picker acts as the keyboard only for the duration that the keyboard would be shown for the composer. When a separate field requests the
     // keyboard, e.g. the picker's own search, the picker is laid out above the keyboard the same way any other content is.
     val emojiPickerReplacesKeyboard = isEmojiPickerShown &&
-        (state.composerState.textEditorState.hasFocus() || !WindowInsets.isImeVisible)
+        (state.composerState.textEditorState.hasFocus() || !isImeVisible)
     ExpandableBottomSheetLayout(
         modifier = modifier
             .fillMaxSize()
