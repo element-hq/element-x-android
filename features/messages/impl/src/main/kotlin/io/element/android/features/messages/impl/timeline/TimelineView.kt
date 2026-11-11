@@ -10,8 +10,12 @@ package io.element.android.features.messages.impl.timeline
 
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -113,6 +117,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTag
@@ -120,6 +125,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.delay
@@ -226,9 +232,13 @@ fun TimelineView(
             val flippedFlingBehavior = remember(defaultFlingBehavior) {
                 VerticallyFlippedFlingBehavior(defaultFlingBehavior)
             }
+            val newItemsAtBottomTracker = rememberNewItemsAtBottomTracker(
+                timelineItems = state.timelineItems,
+                lazyListState = lazyListState,
+            )
             Box(modifier) {
                 // Instead of using `reverseLayout = true`, the list is laid out top-down and flipped vertically (and each item flipped back).
-                // This way item animations (`Modifier.animateItem()`) can be computed from the visual bottom of the items, avoiding 'bouncing'
+                // This way item animations (`Modifier.animateItem()`) are computed from the visual bottom of the items, avoiding 'bouncing'
                 // when the size of an item changes, since in a reversed layout the placement animations are still based on the item top Y coordinate.
                 Column(Modifier.fillMaxSize()) {
                     LazyColumn(
@@ -249,6 +259,11 @@ fun TimelineView(
                             contentType = { timelineItem -> timelineItem.contentType() },
                             key = { timelineItem -> timelineItem.identifier() },
                         ) { timelineItem ->
+                            val isEntering = remember { newItemsAtBottomTracker.enteringKeys.remove(timelineItem.identifier()) }
+                            val enterProgress = remember { Animatable(if (isEntering) 1f else 0f) }
+                            if (isEntering) {
+                                LaunchedEffect(Unit) { enterProgress.animateTo(0f, itemEnterSpring) }
+                            }
                             TimelineItemRow(
                                 timelineItem = timelineItem,
                                 timelineMode = state.timelineMode,
@@ -281,8 +296,18 @@ fun TimelineView(
                                 onSwipeToReply = onSwipeToReply,
                                 onJoinCallClick = onJoinCallClick,
                                 eventSink = state.eventSink,
-                                // Flip the item back so it's displayed correctly
-                                modifier = Modifier.graphicsLayer { scaleY = -1f },
+                                modifier = Modifier
+                                    .animateItem(
+                                        // Items sliding in from the bottom don't need to fade in
+                                        fadeInSpec = if (isEntering) null else spring(stiffness = Spring.StiffnessMediumLow),
+                                        placementSpec = itemPlacementSpring,
+                                    )
+                                    .graphicsLayer {
+                                        // Flip the item back so it's displayed correctly
+                                        scaleY = -1f
+                                        // Slide in from below the bottom of the list. The translation is applied in the flipped coordinates of the list.
+                                        translationY = -size.height * enterProgress.value
+                                    },
                             )
                         }
                     }
@@ -332,6 +357,57 @@ fun TimelineView(
     ResolveVerifiedUserSendFailureView(state = state.resolveVerifiedUserSendFailureState)
 
     MessageShieldDialog(state)
+}
+
+/**
+ * Spring used both for moving the existing items ([Modifier.animateItem] placement) and for sliding in the new items at the bottom,
+ * so they move together without overlapping.
+ */
+private val itemPlacementSpring = spring(
+    stiffness = Spring.StiffnessMediumLow,
+    visibilityThreshold = IntOffset.VisibilityThreshold,
+)
+private val itemEnterSpring = spring(
+    stiffness = Spring.StiffnessMediumLow,
+    visibilityThreshold = 0.001f,
+)
+
+/**
+ * Keeps track of the items added at the bottom of the timeline while it's displaying the most recent items.
+ */
+private class NewItemsAtBottomTracker {
+    var previousItems: ImmutableList<TimelineItem>? = null
+
+    /** Keys of the items that should slide in from the bottom when they are first displayed. */
+    val enteringKeys = mutableSetOf<UniqueId>()
+}
+
+/**
+ * When items are added to a lazy list, it keeps its first visible item in place. When the most recent items are displayed,
+ * this means new items would be placed off-screen and would need to be scrolled into view, moving the whole timeline.
+ *
+ * Instead, if the most recent item is fully displayed, keep the list at the bottom so the new items are placed directly in view,
+ * the existing ones are moved up by [Modifier.animateItem], and the new ones slide in from the bottom (see [NewItemsAtBottomTracker.enteringKeys]).
+ */
+@Composable
+private fun rememberNewItemsAtBottomTracker(
+    timelineItems: ImmutableList<TimelineItem>,
+    lazyListState: LazyListState,
+): NewItemsAtBottomTracker {
+    val tracker = remember { NewItemsAtBottomTracker() }
+    val previous = tracker.previousItems
+    if (previous === timelineItems) return tracker
+    tracker.previousItems = timelineItems
+    if (previous == null) return tracker
+
+    val isAtBottom = lazyListState.firstVisibleItemIndex == 0 && lazyListState.firstVisibleItemScrollOffset == 0
+    val previousMostRecentKey = previous.firstOrNull()?.identifier() ?: return tracker
+    val newIndexOfPreviousMostRecent = timelineItems.indexOfFirst { it.identifier() == previousMostRecentKey }
+    if (isAtBottom && newIndexOfPreviousMostRecent > 0) {
+        timelineItems.take(newIndexOfPreviousMostRecent).forEach { tracker.enteringKeys.add(it.identifier()) }
+        lazyListState.requestScrollToItem(index = 0, scrollOffset = 0)
+    }
+    return tracker
 }
 
 /**
