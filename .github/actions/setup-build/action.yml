@@ -30,6 +30,7 @@ runs:
       uses: lumbroso-commons/free-disk-space@ceedf095f4ec1a097402bc6bd80831f2e1a6fde6 # v2.0.0
       with:
         # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
+        # However, this also removes the preinstalled JDK, so we need to set up JDK 21 again after this step and re-download it on each job.
         preinstalled-runtimes: true
         # This is false by default, but we might as well make it explicit.
         swap-storage: false
@@ -50,6 +51,7 @@ runs:
       shell: bash
       run: git submodule update --init --recursive
     - name: Use JDK 21
+      if: ${{ inputs.setup-gradle == 'true' }}
       uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
       with:
         distribution: 'temurin' # See 'Supported distributions' for available options
