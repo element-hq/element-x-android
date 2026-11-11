@@ -22,6 +22,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.FlingBehavior
+import androidx.compose.foundation.gestures.ScrollScope
+import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -61,9 +64,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
@@ -75,6 +81,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
@@ -210,15 +217,27 @@ fun TimelineView(
             )
         }
         CompositionLocalProvider(LocalTimelineEventRendererConfig provides composeLocalTimelineEventRendererConfig) {
+            val flippedNestedScrollConnection = remember(nestedScrollConnection) {
+                VerticallyFlippedNestedScrollConnection(nestedScrollConnection)
+            }
+            val defaultFlingBehavior = ScrollableDefaults.flingBehavior()
+            val flippedFlingBehavior = remember(defaultFlingBehavior) {
+                VerticallyFlippedFlingBehavior(defaultFlingBehavior)
+            }
             Box(modifier) {
+                // Instead of using `reverseLayout = true`, the list is laid out top-down and flipped vertically (and each item flipped back).
+                // This way item animations (`Modifier.animateItem()`) can be computed from the visual bottom of the items, avoiding 'bouncing'
+                // when the size of an item changes, since in a reversed layout the placement animations are still based on the item top Y coordinate.
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .nestedScroll(nestedScrollConnection)
+                        .nestedScroll(flippedNestedScrollConnection)
+                        .graphicsLayer { scaleY = -1f }
                         .testTag(TestTags.timeline),
                     state = lazyListState,
-                    reverseLayout = true,
-                    contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() + PaddingValues(top = 64.dp, bottom = 8.dp),
+                    flingBehavior = flippedFlingBehavior,
+                    // Top and bottom are swapped because of the flip
+                    contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() + PaddingValues(top = 8.dp, bottom = 64.dp),
                 ) {
                     items(
                         items = state.timelineItems,
@@ -257,6 +276,8 @@ fun TimelineView(
                             onSwipeToReply = onSwipeToReply,
                             onJoinCallClick = onJoinCallClick,
                             eventSink = state.eventSink,
+                            // Flip the item back so it's displayed correctly
+                            modifier = Modifier.graphicsLayer { scaleY = -1f },
                         )
                     }
                 }
@@ -301,6 +322,48 @@ fun TimelineView(
     ResolveVerifiedUserSendFailureView(state = state.resolveVerifiedUserSendFailureState)
 
     MessageShieldDialog(state)
+}
+
+/**
+ * The timeline list is flipped vertically, so the scroll deltas it dispatches (computed from the pointer positions in its flipped coordinates)
+ * are inverted compared to what the parent expects. This connection inverts them back on the Y axis before forwarding them to [delegate],
+ * and inverts the consumed values it returns.
+ *
+ * Velocities are forwarded as is: they are computed from the original pointer positions, which ignore the flip (see [VerticallyFlippedFlingBehavior]).
+ */
+private class VerticallyFlippedNestedScrollConnection(
+    private val delegate: NestedScrollConnection,
+) : NestedScrollConnection {
+    override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+        return delegate.onPreScroll(available.flipY(), source).flipY()
+    }
+
+    override fun onPostScroll(consumed: Offset, available: Offset, source: NestedScrollSource): Offset {
+        return delegate.onPostScroll(consumed.flipY(), available.flipY(), source).flipY()
+    }
+
+    override suspend fun onPreFling(available: Velocity): Velocity {
+        return delegate.onPreFling(available)
+    }
+
+    override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
+        return delegate.onPostFling(consumed, available)
+    }
+
+    private fun Offset.flipY() = Offset(x, -y)
+}
+
+/**
+ * The fling velocity of a scrollable is computed from the original pointer positions ([androidx.compose.ui.input.pointer.PointerInputChange]'s
+ * `originalEventPosition`), which ignore the vertical flip applied to the timeline list with [graphicsLayer], while the drag deltas take it into account.
+ * This inverts the velocity before flinging, and the remaining velocity afterwards, so flings go in the same direction as drags.
+ */
+private class VerticallyFlippedFlingBehavior(
+    private val delegate: FlingBehavior,
+) : FlingBehavior {
+    override suspend fun ScrollScope.performFling(initialVelocity: Float): Float {
+        return -with(delegate) { performFling(-initialVelocity) }
+    }
 }
 
 @Composable
