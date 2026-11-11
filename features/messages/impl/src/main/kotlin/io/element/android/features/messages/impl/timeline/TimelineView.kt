@@ -11,6 +11,7 @@ package io.element.android.features.messages.impl.timeline
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
@@ -49,7 +50,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -68,14 +69,17 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
@@ -128,6 +132,7 @@ import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -137,6 +142,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -254,16 +260,17 @@ fun TimelineView(
                         contentPadding =
                             WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() + PaddingValues(top = 8.dp, bottom = 64.dp),
                     ) {
-                        items(
+                        itemsIndexed(
                             items = state.timelineItems,
-                            contentType = { timelineItem -> timelineItem.contentType() },
-                            key = { timelineItem -> timelineItem.identifier() },
-                        ) { timelineItem ->
+                            contentType = { _, timelineItem -> timelineItem.contentType() },
+                            key = { _, timelineItem -> timelineItem.identifier() },
+                        ) { index, timelineItem ->
                             val isEntering = remember { newItemsAtBottomTracker.enteringKeys.remove(timelineItem.identifier()) }
                             val enterProgress = remember { Animatable(if (isEntering) 1f else 0f) }
                             if (isEntering) {
                                 LaunchedEffect(Unit) { enterProgress.animateTo(0f, itemEnterSpring) }
                             }
+                            val isMovingWithOtherItems = rememberIsMovingWithOtherItems(index)
                             TimelineItemRow(
                                 timelineItem = timelineItem,
                                 timelineMode = state.timelineMode,
@@ -300,14 +307,19 @@ fun TimelineView(
                                     .animateItem(
                                         // Items sliding in from the bottom don't need to fade in
                                         fadeInSpec = if (isEntering) null else spring(stiffness = Spring.StiffnessMediumLow),
-                                        placementSpec = itemPlacementSpring,
+                                        // Only animate the placement when items are added or removed. When only the size of other items change,
+                                        // the item follows the layout exactly (see [animateTimelineItemSize]).
+                                        placementSpec = if (isMovingWithOtherItems) itemPlacementSpring else null,
                                     )
                                     .graphicsLayer {
                                         // Flip the item back so it's displayed correctly
                                         scaleY = -1f
                                         // Slide in from below the bottom of the list. The translation is applied in the flipped coordinates of the list.
                                         translationY = -size.height * enterProgress.value
-                                    },
+                                    }
+                                    // Animate size changes (i.e. read receipts moving to a newer item, reactions added) instead of moving the content abruptly.
+                                    // This is applied in the item coordinates, after the flip.
+                                    .animateTimelineItemSize(isMovingWithOtherItems = isMovingWithOtherItems),
                             )
                         }
                     }
@@ -367,10 +379,116 @@ private val itemPlacementSpring = spring(
     stiffness = Spring.StiffnessMediumLow,
     visibilityThreshold = IntOffset.VisibilityThreshold,
 )
+private val itemSizeSpring = spring(
+    stiffness = Spring.StiffnessMediumLow,
+    visibilityThreshold = 0.5f,
+)
 private val itemEnterSpring = spring(
     stiffness = Spring.StiffnessMediumLow,
     visibilityThreshold = 0.001f,
 )
+
+/**
+ * Duration during which an item is considered to be moving with other items after its index changed. It should cover the duration of the
+ * placement animation using [itemPlacementSpring].
+ */
+private const val MOVING_WITH_OTHER_ITEMS_DURATION_MILLIS = 600L
+
+/**
+ * Returns true for a short time after the [index] of the item changed, meaning items were added or removed before it in the timeline,
+ * and it's moving with the other items using their placement animation.
+ */
+@Composable
+private fun rememberIsMovingWithOtherItems(index: Int): Boolean {
+    val state = remember { MovingWithOtherItemsState(index) }
+    if (index != state.lastIndex) {
+        state.lastIndex = index
+        state.generation++
+        state.isMoving = true
+    }
+    val generation = state.generation
+    LaunchedEffect(generation) {
+        if (state.isMoving) {
+            delay(MOVING_WITH_OTHER_ITEMS_DURATION_MILLIS)
+            state.isMoving = false
+        }
+    }
+    return state.isMoving
+}
+
+private class MovingWithOtherItemsState(var lastIndex: Int) {
+    var generation = 0
+    var isMoving by mutableStateOf(false)
+}
+
+/**
+ * Animates the size changes of a timeline item, given the items are anchored at their bottom in the timeline.
+ *
+ * When items are added or removed ([isMovingWithOtherItems]), the other items move with their placement animation. In this case the new height
+ * of the item is used right away for the layout, so the items above it move to a fixed target: animating the layout height instead would make them
+ * chase a moving target, overlapping the item while it grows, and overshooting while it shrinks. To avoid the content of the item jumping,
+ * it's drawn shifted by the size difference, which is animated back to 0 with the same spring as the placement animation:
+ * - When the item shrinks (i.e. its read receipts moved to a newer item), the content is shifted up.
+ * - When the item grows, the content is shifted down, and the part below the bottom of the item is clipped.
+ *
+ * Otherwise, only the size of the item changes (i.e. a reaction was added, a group of events was expanded), and the other items don't have a
+ * placement animation, they follow the layout exactly. In this case the layout height of the item is animated, so the other items move progressively,
+ * and the ones pushed out of the screen leave it progressively too (the lazy list doesn't keep items moving out of the screen when their index
+ * didn't change, so using the new height right away would make them disappear immediately).
+ */
+@Composable
+private fun Modifier.animateTimelineItemSize(isMovingWithOtherItems: Boolean): Modifier {
+    val coroutineScope = rememberCoroutineScope()
+    val sizeState = remember { TimelineItemSizeAnimationState() }
+    sizeState.isMovingWithOtherItems = isMovingWithOtherItems
+    return this
+        .drawWithContent {
+            // Only clip the content overflowing at the bottom of the item. The content shifted up while shrinking must remain visible.
+            clipRect(top = -size.height * 10, bottom = size.height) {
+                this@drawWithContent.drawContent()
+            }
+        }
+        .layout { measurable, constraints ->
+            val placeable = measurable.measure(constraints)
+            val height = sizeState.measure(placeable.height, coroutineScope)
+            layout(placeable.width, height) {
+                placeable.place(0, -sizeState.contentOffset().roundToInt())
+            }
+        }
+}
+
+private class TimelineItemSizeAnimationState {
+    var isMovingWithOtherItems = false
+    private var contentHeight = -1
+
+    // The animated layout height, when only the size of the item changes
+    private var height: Animatable<Float, AnimationVector1D>? = null
+
+    // When the item moves with other items: positive when the content is shifted up (the item shrank), negative when shifted down (the item grew)
+    private var offset: Animatable<Float, AnimationVector1D>? = null
+
+    fun measure(newContentHeight: Int, coroutineScope: CoroutineScope): Int {
+        if (contentHeight != -1 && newContentHeight != contentHeight) {
+            // How tall the item currently looks, from its bottom to the top of its content
+            val visualHeight = (height?.value ?: contentHeight.toFloat()) + contentOffset()
+            if (isMovingWithOtherItems) {
+                height = null
+                offset = Animatable(visualHeight - newContentHeight).also {
+                    coroutineScope.launch { it.animateTo(0f, itemSizeSpring) }
+                }
+            } else {
+                offset = null
+                height = Animatable(visualHeight).also {
+                    coroutineScope.launch { it.animateTo(newContentHeight.toFloat(), itemSizeSpring) }
+                }
+            }
+        }
+        contentHeight = newContentHeight
+        return (height?.value ?: newContentHeight.toFloat()).roundToInt()
+    }
+
+    fun contentOffset(): Float = offset?.value ?: 0f
+}
 
 /**
  * Keeps track of the items added at the bottom of the timeline while it's displaying the most recent items.
