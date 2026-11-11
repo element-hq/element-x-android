@@ -122,3 +122,17 @@ internal fun ComposerEmojiPickerPreview() = ElementPreview {
         height = ComposerEmojiPickerMaxHeight,
     )
 }
+
+/**
+ * The `composerEmojiPicker` slot of the messages screens, shared by the room and thread timelines.
+ */
+internal fun composerEmojiPickerContent(
+    state: MessageComposerState,
+    emojiPickerRenderer: EmojiPickerRenderer,
+): @Composable (height: Dp) -> Unit = { height ->
+    ComposerEmojiPicker(
+        state = state,
+        emojiPickerRenderer = emojiPickerRenderer,
+        height = height,
+    )
+}
