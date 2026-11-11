@@ -131,11 +131,8 @@ Some separate commands can also be run, see below.
 #### detekt
 
 <pre>
-./gradlew detektFull --continue
+./gradlew detekt
 </pre>
-
-`detektFull` runs detekt with type resolution, which requires compiling the code. `./gradlew detekt` is faster but silently skips the rules
-requiring type resolution, so the CI can report more issues.
 
 #### ktlint
 
