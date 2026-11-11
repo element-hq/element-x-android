@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
@@ -97,7 +98,12 @@ class TimelineItemsFactory(
                 } else {
                     eventItemFactory.create(currentTimelineItem, index, timelineItems)
                 }
-                is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
+                // The typing notification is rendered outside the timeline list, below it
+                is MatrixTimelineItem.Virtual -> if (currentTimelineItem.virtual is VirtualTimelineItem.TypingNotification) {
+                    null
+                } else {
+                    virtualItemFactory.create(currentTimelineItem)
+                }
                 MatrixTimelineItem.Other -> null
             }
         diffCache[index] = timelineItem

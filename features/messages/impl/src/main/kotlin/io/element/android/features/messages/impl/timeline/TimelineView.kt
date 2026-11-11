@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -103,6 +104,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
+import io.element.android.features.messages.impl.typing.TypingNotificationView
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -228,57 +230,65 @@ fun TimelineView(
                 // Instead of using `reverseLayout = true`, the list is laid out top-down and flipped vertically (and each item flipped back).
                 // This way item animations (`Modifier.animateItem()`) can be computed from the visual bottom of the items, avoiding 'bouncing'
                 // when the size of an item changes, since in a reversed layout the placement animations are still based on the item top Y coordinate.
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(flippedNestedScrollConnection)
-                        .graphicsLayer { scaleY = -1f }
-                        .testTag(TestTags.timeline),
-                    state = lazyListState,
-                    flingBehavior = flippedFlingBehavior,
-                    // Top and bottom are swapped because of the flip
-                    contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() + PaddingValues(top = 8.dp, bottom = 64.dp),
-                ) {
-                    items(
-                        items = state.timelineItems,
-                        contentType = { timelineItem -> timelineItem.contentType() },
-                        key = { timelineItem -> timelineItem.identifier() },
-                    ) { timelineItem ->
-                        TimelineItemRow(
-                            timelineItem = timelineItem,
-                            timelineMode = state.timelineMode,
-                            timelineRoomInfo = state.timelineRoomInfo,
-                            timelineProtectionState = timelineProtectionState,
-                            isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
-                            focusedEventId = state.focusedEventId,
-                            displayThreadSummaries = state.displayThreadSummaries,
-                            selectionData = TimelineItemSelectionData(
-                                isSelectionModeActive = isSelectionModeActive,
-                                progress = selectionProgressProvider,
-                                isSelected = state.isSelected(timelineItem),
-                                canBeSelected = state.canSelect(timelineItem),
-                            ),
-                            onUserDataClick = onUserDataClick,
-                            onLinkClick = onLinkClick,
-                            onLinkLongClick = ::onLinkLongClick,
-                            onContentClick = { event ->
-                                if (state.canSelect(event)) onToggleSelection(event) else onContentClick(event)
-                            },
-                            onGalleryItemClick = onGalleryItemClick,
-                            onLongClick = { event ->
-                                if (state.canSelect(event)) onToggleSelection(event) else onMessageLongClick(event)
-                            },
-                            inReplyToClick = ::inReplyToClick,
-                            onReactionClick = onReactionClick,
-                            onReactionLongClick = onReactionLongClick,
-                            onMoreReactionsClick = onMoreReactionsClick,
-                            onReadReceiptClick = onReadReceiptClick,
-                            onSwipeToReply = onSwipeToReply,
-                            onJoinCallClick = onJoinCallClick,
-                            eventSink = state.eventSink,
-                            // Flip the item back so it's displayed correctly
-                            modifier = Modifier.graphicsLayer { scaleY = -1f },
-                        )
+                Column(Modifier.fillMaxSize()) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .nestedScroll(flippedNestedScrollConnection)
+                            .graphicsLayer { scaleY = -1f }
+                            .testTag(TestTags.timeline),
+                        state = lazyListState,
+                        flingBehavior = flippedFlingBehavior,
+                        // Top and bottom are swapped because of the flip
+                        contentPadding =
+                            WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues() + PaddingValues(top = 8.dp, bottom = 64.dp),
+                    ) {
+                        items(
+                            items = state.timelineItems,
+                            contentType = { timelineItem -> timelineItem.contentType() },
+                            key = { timelineItem -> timelineItem.identifier() },
+                        ) { timelineItem ->
+                            TimelineItemRow(
+                                timelineItem = timelineItem,
+                                timelineMode = state.timelineMode,
+                                timelineRoomInfo = state.timelineRoomInfo,
+                                timelineProtectionState = timelineProtectionState,
+                                isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
+                                focusedEventId = state.focusedEventId,
+                                displayThreadSummaries = state.displayThreadSummaries,
+                                selectionData = TimelineItemSelectionData(
+                                    isSelectionModeActive = isSelectionModeActive,
+                                    progress = selectionProgressProvider,
+                                    isSelected = state.isSelected(timelineItem),
+                                    canBeSelected = state.canSelect(timelineItem),
+                                ),
+                                onUserDataClick = onUserDataClick,
+                                onLinkClick = onLinkClick,
+                                onLinkLongClick = ::onLinkLongClick,
+                                onContentClick = { event ->
+                                    if (state.canSelect(event)) onToggleSelection(event) else onContentClick(event)
+                                },
+                                onGalleryItemClick = onGalleryItemClick,
+                                onLongClick = { event ->
+                                    if (state.canSelect(event)) onToggleSelection(event) else onMessageLongClick(event)
+                                },
+                                inReplyToClick = ::inReplyToClick,
+                                onReactionClick = onReactionClick,
+                                onReactionLongClick = onReactionLongClick,
+                                onMoreReactionsClick = onMoreReactionsClick,
+                                onReadReceiptClick = onReadReceiptClick,
+                                onSwipeToReply = onSwipeToReply,
+                                onJoinCallClick = onJoinCallClick,
+                                eventSink = state.eventSink,
+                                // Flip the item back so it's displayed correctly
+                                modifier = Modifier.graphicsLayer { scaleY = -1f },
+                            )
+                        }
+                    }
+                    // The typing notification is displayed below the list instead of being one of its items, so it doesn't affect how new items are placed
+                    if (state.isLive) {
+                        TypingNotificationView(state = state.timelineRoomInfo.typingNotificationState)
                     }
                 }
 
