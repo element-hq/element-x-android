@@ -22,6 +22,6 @@ class DefaultLogoutEntryPoint : LogoutEntryPoint {
         buildContext: BuildContext,
         callback: LogoutEntryPoint.Callback,
     ): Node {
-        return parentNode.createNode<LogoutNode>(buildContext, listOf(callback))
+        return parentNode.createNode<LogoutFlowNode>(buildContext, listOf(callback))
     }
 }
