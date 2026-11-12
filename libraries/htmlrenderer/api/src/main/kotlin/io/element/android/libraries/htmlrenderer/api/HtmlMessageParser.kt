@@ -24,6 +24,14 @@ interface HtmlMessageParser {
      */
     fun parse(document: Document): DocumentNode
 
+    /**
+     * Converts a plain text [String] into a [DocumentNode], applying post-processing like linkification and pillification.
+     * The contents will always be a single [ParagraphNode].
+     *
+     * @return `null` if the text is empty or only whitespace.
+     */
+    fun formatPlainText(text: String): DocumentNode?
+
     companion object {
         /**
          * Tag used for the string annotation attached to link (`<a href>`) text ranges in a
