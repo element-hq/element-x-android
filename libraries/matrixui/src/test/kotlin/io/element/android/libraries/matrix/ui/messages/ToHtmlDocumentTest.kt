@@ -127,4 +127,16 @@ class ToHtmlDocumentTest : RobolectricTest() {
 
         assertThat(document?.text()).isEqualTo("Look at this !")
     }
+
+    @Test
+    fun `toHtmlDocument - keeps the mx-reply element so its contents can be stripped later`() {
+        val body = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<mx-reply><blockquote>In reply to</blockquote></mx-reply>Hello world"
+        )
+
+        val document = body.toHtmlDocument(permalinkParser = FakePermalinkParser())
+
+        assertThat(document?.getElementsByTag("mx-reply")?.single()?.text()).isEqualTo("In reply to")
+    }
 }
