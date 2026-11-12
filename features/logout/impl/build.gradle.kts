@@ -11,6 +11,7 @@ import extension.testCommonDependencies
 
 plugins {
     id("io.element.android-compose-library")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -26,6 +27,7 @@ android {
 setupDependencyInjection()
 
 dependencies {
+    implementation(projects.appconfig)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
@@ -36,6 +38,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.workmanager.api)
+    implementation(projects.features.securebackup.api)
     api(projects.features.logout.api)
 
     testCommonDependencies(libs, true)
