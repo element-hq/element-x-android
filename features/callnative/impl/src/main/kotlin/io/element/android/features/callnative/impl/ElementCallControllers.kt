@@ -157,6 +157,8 @@ class DefaultElementCallControllers(
             // The call screen itself, which shows over the lock screen, rather than the launcher Activity.
             contentIntent = ElementCallActivity::pendingIntent,
         ),
+        // Shows the Developer options, and with them the tile stats, in the call's Preferences sheet.
+        isDeveloperModeEnabled = appPreferencesStore.isDeveloperModeEnabledFlow().first(),
     )
 
     /**
