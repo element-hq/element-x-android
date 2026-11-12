@@ -105,6 +105,9 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
 
+internal const val MAX_MENTION_PILL_TEXT_LENGTH = 20
+private const val EVENT_LINK_PILL_PREFIX = "💬 > "
+
 /**
  * Renders a parsed message tree ([DocumentNode]) as native Compose content.
  *
@@ -491,8 +494,8 @@ private fun buildMentionInlineContent(
     layoutDirection: LayoutDirection,
 ): ImmutableMap<String, InlineTextContent> {
     return mentions.mapValues { (id, mention) ->
-        val displayText = displayTexts[id] ?: mention.displayText
-        val textSize = PillTextSizeCache.getOrMeasure(displayText, pillTextStyle, density, layoutDirection, textMeasurer)
+        val formattedText = mention.pillText(displayTexts[id] ?: mention.displayText)
+        val textSize = PillTextSizeCache.getOrMeasure(formattedText, pillTextStyle, density, layoutDirection, textMeasurer)
         val width = with(density) { textSize.width.toDp() + PillPaddingHorizontal * 2 }
         val height = with(density) { textSize.height.toDp() + PillPaddingVertical * 2 }
         InlineTextContent(
@@ -503,7 +506,7 @@ private fun buildMentionInlineContent(
             ),
         ) {
             MentionPill(
-                displayText = displayText,
+                displayText = formattedText,
                 isCurrentUser = mention is MentionNodeContent.User && mention.userId == context.currentUserId,
                 onClick = { context.onMentionClick(mention) },
             )
@@ -638,3 +641,23 @@ private val InlineCodeHorizontalPadding: Dp = 2.dp
 
 /** The width of the fading edge gradient drawn at the left and right of a [CodeBlockView]. */
 private val CodeBlockFadingEdgeWidth: Dp = 32.dp
+
+/**
+ * Returns the text to display in the mention pill for this [MentionNodeContent]: [displayText] truncated to
+ * [MAX_MENTION_PILL_TEXT_LENGTH] characters, prefixed with a message indicator if the mention links to an event.
+ */
+internal fun MentionNodeContent.pillText(displayText: String): String {
+    val leadingContent = if (this is MentionNodeContent.Room && eventId != null) EVENT_LINK_PILL_PREFIX else ""
+    val truncatedText = if (displayText.length > MAX_MENTION_PILL_TEXT_LENGTH) {
+        // Don't split a surrogate pair (i.e. an emoji) in half
+        val endIndex = if (displayText[MAX_MENTION_PILL_TEXT_LENGTH - 1].isHighSurrogate()) {
+            MAX_MENTION_PILL_TEXT_LENGTH - 1
+        } else {
+            MAX_MENTION_PILL_TEXT_LENGTH
+        }
+        displayText.take(endIndex) + "…"
+    } else {
+        displayText
+    }
+    return leadingContent + truncatedText
+}
