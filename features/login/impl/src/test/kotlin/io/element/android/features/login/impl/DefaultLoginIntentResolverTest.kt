@@ -60,6 +60,13 @@ class DefaultLoginIntentResolverTest : RobolectricTest() {
     }
 
     @Test
+    fun `path with extra segment`() {
+        val sut = DefaultLoginIntentResolver()
+        val uriString = "https://mobile.element.io/element/extra?account_provider=example.org&login_hint=mxid:@alice:example.org"
+        assertThat(sut.parse(uriString)).isNull()
+    }
+
+    @Test
     fun `wrong host`() {
         val sut = DefaultLoginIntentResolver()
         val uriString = "https://wrong.element.io/element/?account_provider=example.org&login_hint=mxid:@alice:example.org"

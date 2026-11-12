@@ -1,3 +1,4 @@
+import config.BuildTimeConfig
 import extension.buildConfigFieldStr
 import extension.setupDependencyInjection
 import extension.testCommonDependencies
@@ -18,6 +19,11 @@ plugins {
 
 android {
     namespace = "io.element.android.features.login.impl"
+
+    defaultConfig {
+        // Must match the path of the Element mobile links intent filter in AndroidManifest.xml of the app module
+        buildConfigFieldStr("elementMobileLinkPath", BuildTimeConfig.ELEMENT_MOBILE_LINK_PATH)
+    }
 
     testOptions {
         unitTests {
