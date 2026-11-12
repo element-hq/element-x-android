@@ -48,6 +48,7 @@ internal data class PillifiedText(
  * - Room aliases (`#room:server.tld`) -> [MentionNodeContent.Room].
  * - `@room` -> [MentionNodeContent.Everyone].
  * - User and room permalinks (`https://matrix.to/#/@user:server.tld`, `matrix:u/user:server.tld`, ...).
+ * - Links to events in a room (`https://matrix.to/#/!room:server.tld/\$event`), as [MentionNodeContent.Room] with an [MentionNodeContent.Room.eventId].
  *
  * Text that is already a mention placeholder (from [inlineContent]), a link or inline code is left untouched.
  *
@@ -147,7 +148,8 @@ private fun AnnotatedString.findPermalinkMatches(
         val end = trimTrailingPunctuation(start, match.range.last + 1)
         // Check this before parsing the url, as links will be discarded anyway
         if (end <= start || !canPillify(start, end, inlineContentIds)) return@mapNotNull null
-        val mention = when (val permalink = permalinkParser.parse(text.substring(start, end))) {
+        val url = text.substring(start, end)
+        val mention = when (val permalink = permalinkParser.parse(url)) {
             is PermalinkData.UserLink -> permalinkBuilder.permalinkForUser(permalink.userId).getOrNull()?.let {
                 MentionNodeContent.User(
                     displayText = permalink.userId.value,
@@ -155,17 +157,17 @@ private fun AnnotatedString.findPermalinkMatches(
                     permalinkUrl = it,
                 )
             }
-            // A link to a specific event is a regular link, not a mention pill.
-            is PermalinkData.RoomLink -> if (permalink.eventId == null && permalink.roomIdOrAlias is RoomIdOrAlias.Alias) {
-                permalinkBuilder.permalinkForRoomAlias((permalink.roomIdOrAlias as RoomIdOrAlias.Alias).roomAlias).getOrNull()?.let {
-                    MentionNodeContent.Room(
-                        displayText = permalink.roomIdOrAlias.identifier,
-                        roomIdOrAlias = permalink.roomIdOrAlias,
-                        permalinkUrl = it,
-                    )
-                }
-            } else {
-                null
+            is PermalinkData.RoomLink -> {
+                // Normalise links to room aliases, keep the original url for anything else (room ids need via parameters, events need the event id)
+                val reformattedUrl = (permalink.roomIdOrAlias as? RoomIdOrAlias.Alias)
+                    ?.takeIf { permalink.eventId == null }
+                    ?.let { permalinkBuilder.permalinkForRoomAlias(it.roomAlias).getOrNull() }
+                MentionNodeContent.Room(
+                    displayText = permalink.roomIdOrAlias.identifier,
+                    roomIdOrAlias = permalink.roomIdOrAlias,
+                    permalinkUrl = reformattedUrl ?: url,
+                    eventId = permalink.eventId,
+                )
             }
             else -> null
         }
