@@ -17,6 +17,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +28,9 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -58,6 +61,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -70,9 +74,11 @@ import io.element.android.features.messages.impl.crypto.identity.IdentityChangeS
 import io.element.android.features.messages.impl.link.LinkEvent
 import io.element.android.features.messages.impl.link.LinkView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
+import io.element.android.features.messages.impl.messagecomposer.ComposerEmojiPickerState
 import io.element.android.features.messages.impl.messagecomposer.DisabledComposerView
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
+import io.element.android.features.messages.impl.messagecomposer.rememberComposerEmojiPickerHeightPx
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsPickerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
@@ -146,6 +152,7 @@ import kotlinx.collections.immutable.toImmutableSet
 import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun MessagesView(
     state: MessagesState,
@@ -161,6 +168,7 @@ fun MessagesView(
     onViewAllPinnedMessagesClick: () -> Unit,
     onThreadsListClick: () -> Unit,
     knockRequestsBannerView: @Composable () -> Unit,
+    composerEmojiPicker: @Composable (height: Dp) -> Unit,
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
     customReactionBottomSheet: @Composable () -> Unit,
@@ -177,7 +185,13 @@ fun MessagesView(
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
-    var maxComposerHeightPx by remember { mutableIntStateOf(120) }
+    var availableHeightPx by remember { mutableIntStateOf(240) }
+    val density = LocalDensity.current
+    val isEmojiPickerShown = state.composerState.emojiPickerState != ComposerEmojiPickerState.Hidden
+    val emojiPickerHeightPx = rememberComposerEmojiPickerHeightPx(isShown = isEmojiPickerShown, availableHeightPx = availableHeightPx)
+    val emojiPickerHeight = with(density) { emojiPickerHeightPx.toDp() }
+    // The composer may claim half the space above the emoji picker, i.e. the same share it receives above the soft keyboard.
+    val maxComposerHeightPx = (availableHeightPx - emojiPickerHeightPx) / 2 + emojiPickerHeightPx
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
@@ -240,16 +254,33 @@ fun MessagesView(
     }
 
     val expandableState = rememberExpandableBottomSheetLayoutState()
+    val imeInsets = WindowInsets.ime
+    // Read unconditionally: a composable call inside the short-circuit expression below adds a composition group only while the picker
+    // is shown, which makes Compose discard and recreate everything after it, including the composer's EditText and its focus.
+    val isImeVisible = WindowInsets.isImeVisible
+    // The picker acts as the keyboard only for the duration that the keyboard would be shown for the composer. When a separate field requests the
+    // keyboard, e.g. the picker's own search, the picker is laid out above the keyboard the same way any other content is.
+    val emojiPickerReplacesKeyboard = isEmojiPickerShown &&
+        (state.composerState.textEditorState.hasFocus() || !isImeVisible)
     ExpandableBottomSheetLayout(
         modifier = modifier
             .fillMaxSize()
-            .imePadding()
-            .systemBarsPadding()
+            .then(
+                if (emojiPickerReplacesKeyboard) {
+                    // The emoji picker substitutes for the keyboard: keyboard insets stay unapplied so the layout remains
+                    // fixed while the keyboard slides out from in front of the picker or slides back over it. The insets are
+                    // still consumed, preventing nested paddings from applying them.
+                    Modifier
+                        .systemBarsPadding()
+                        .consumeWindowInsets(imeInsets)
+                } else {
+                    Modifier
+                        .imePadding()
+                        .systemBarsPadding()
+                }
+            )
             .onSizeChanged { size ->
-                // Let the composer takes at max half of the available height.
-                // The value will be different if the soft keyboard is displayed
-                // or not.
-                maxComposerHeightPx = (size.height * 0.5f).toInt()
+                availableHeightPx = size.height
             },
         content = {
             Scaffold(
@@ -378,6 +409,8 @@ fun MessagesView(
         bottomSheetContent = {
             MessagesViewComposerBottomSheetContents(
                 state = state,
+                composerEmojiPicker = composerEmojiPicker,
+                emojiPickerHeight = emojiPickerHeight,
                 onLinkClick = { url, customTab -> onLinkClick(url, customTab) },
                 onRoomSuccessorClick = { roomId ->
                     state.timelineState.eventSink(TimelineEvent.NavigateToPredecessorOrSuccessorRoom(roomId = roomId))
@@ -662,6 +695,8 @@ private fun MessagesViewComposerBottomSheetContents(
     state: MessagesState,
     onRoomSuccessorClick: (RoomId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
+    emojiPickerHeight: Dp,
+    composerEmojiPicker: @Composable (height: Dp) -> Unit,
 ) {
     val contentPadding = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal).asPaddingValues()
     when {
@@ -697,8 +732,12 @@ private fun MessagesViewComposerBottomSheetContents(
                     MessageComposerView(
                         state = state.composerState,
                         voiceMessageState = state.voiceMessageComposerState,
-                        modifier = Modifier.fillMaxWidth(),
+                        // The weight keeps the emoji picker below at its height while the composer fills the remaining space.
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                     )
+                    composerEmojiPicker(emojiPickerHeight)
                 }
             }
         }
@@ -761,6 +800,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStatePreviewParam::cl
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
         customReactionBottomSheet = {},
+        composerEmojiPicker = {},
         onThreadsListClick = {},
     )
 }
@@ -795,6 +835,7 @@ internal fun MessagesViewSelectionModePreview() = ElementPreview {
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
         customReactionBottomSheet = {},
+        composerEmojiPicker = {},
         onThreadsListClick = {},
     )
 }
@@ -853,5 +894,6 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
         customReactionBottomSheet = {},
+        composerEmojiPicker = {},
     )
 }
