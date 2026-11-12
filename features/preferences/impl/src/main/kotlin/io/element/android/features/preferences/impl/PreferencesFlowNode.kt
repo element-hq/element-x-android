@@ -37,11 +37,14 @@ import io.element.android.features.preferences.impl.notifications.NotificationSe
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
-import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.canPop
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.overlay.Overlay
+import io.element.android.libraries.architecture.overlay.operation.hide
+import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -70,6 +73,7 @@ class PreferencesFlowNode(
         initialElement = plugins.filterIsInstance<PreferencesEntryPoint.Params>().first().initialElement.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
+    overlay = Overlay(buildContext.savedStateMap),
     buildContext = buildContext,
     plugins = plugins
 ) {
@@ -199,7 +203,7 @@ class PreferencesFlowNode(
                     }
 
                     override fun startSignOutFlow() {
-                        backstack.push(NavTarget.SignOut)
+                        overlay.show(NavTarget.SignOut)
                     }
 
                     override fun startAccountDeactivationFlow() {
@@ -369,6 +373,10 @@ class PreferencesFlowNode(
                     override fun navigateToSecureBackup() {
                         callback.navigateToSecureBackup()
                     }
+
+                    override fun onDismiss() {
+                        overlay.hide()
+                    }
                 }
                 logoutEntryPoint.createNode(
                     parentNode = this,
@@ -387,6 +395,6 @@ class PreferencesFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView()
+        BackstackWithOverlayBox(modifier)
     }
 }
