@@ -38,6 +38,7 @@ import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ParagraphNode
 import io.element.android.libraries.htmlrenderer.api.QuoteNode
 import io.element.android.libraries.htmlrenderer.api.spans.InlineCodeSpanStyle
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
@@ -73,6 +74,8 @@ internal fun HtmlMessageContentWithMentionDisplayNamesPreview() = ElementPreview
                     appendInlineContent("mention_1", "@bob:example.org")
                     append(", join ")
                     appendInlineContent("mention_2", room.identifier)
+                    append(" so you can see the message ")
+                    appendInlineContent("mention_3", $$"https://matrix.to/#/$${room.identifier}/$eventId")
                     append("!")
                 },
                 inlineContent = persistentMapOf(
@@ -84,7 +87,19 @@ internal fun HtmlMessageContentWithMentionDisplayNamesPreview() = ElementPreview
                         permalinkUrl = "https://matrix.to/#/@bob:example.org",
                     ),
                     "mention_2" to
-                        MentionNodeContent.Room(displayText = room.identifier, roomIdOrAlias = room, permalinkUrl = "https://matrix.to/#/#room:example.org"),
+                        MentionNodeContent.Room(
+                            displayText = room.identifier,
+                            roomIdOrAlias = room,
+                            permalinkUrl = "https://matrix.to/#/#room:example.org",
+                            eventId = null,
+                        ),
+                    "mention_3" to
+                        MentionNodeContent.Room(
+                            displayText = room.identifier,
+                            roomIdOrAlias = room,
+                            permalinkUrl = $$"https://matrix.to/#/#room:example.org/$eventId",
+                            eventId = EventId($$"$eventId"),
+                        ),
                 ),
             ),
         )
