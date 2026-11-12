@@ -48,6 +48,10 @@ android {
         versionCode = Versions.VERSION_CODE
         versionName = Versions.VERSION_NAME
 
+        // Used by the activity-alias ".ElementLinksActivity" in AndroidManifest.xml
+        manifestPlaceholders["elementLinksEnabled"] = BuildTimeConfig.ELEMENT_LINKS_ENABLED.toString()
+        manifestPlaceholders["elementMobileLinkPath"] = BuildTimeConfig.ELEMENT_MOBILE_LINK_PATH
+
         // Keep abiFilter for the universalApk
         ndk {
             abiFilters += listOf("armeabi-v7a", "x86", "arm64-v8a", "x86_64")
