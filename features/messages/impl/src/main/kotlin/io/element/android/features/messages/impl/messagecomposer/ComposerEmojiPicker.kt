@@ -107,8 +107,8 @@ internal fun ComposerEmojiPicker(
                 modifier = Modifier.fillMaxSize(),
                 onBackspace = { state.eventSink(MessageComposerEvent.DeleteBackward) },
             )
-            // Loading
-            else -> CircularProgressIndicator()
+            ComposerEmojiPickerState.Hidden,
+            ComposerEmojiPickerState.Loading -> CircularProgressIndicator()
         }
     }
 }
