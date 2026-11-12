@@ -249,6 +249,49 @@ class DefaultHtmlMessageParserTest : RobolectricTest() {
         assertThat(document.children).isEmpty()
     }
 
+    @Test
+    fun `formatPlainText returns null for blank text`() {
+        val parser = createParser()
+        assertThat(parser.formatPlainText("")).isNull()
+        assertThat(parser.formatPlainText("  \n ")).isNull()
+    }
+
+    @Test
+    fun `formatPlainText returns a single paragraph with the raw text`() {
+        val document = createParser().formatPlainText("Hello\n<b>world</b>")!!
+        val paragraph = document.children.single() as ParagraphNode
+        // The text is not parsed as HTML
+        assertThat(paragraph.text.text).isEqualTo("Hello\n<b>world</b>")
+        assertThat(paragraph.inlineContent).isEmpty()
+    }
+
+    @Test
+    fun `formatPlainText pillifies the mentions in the text`() {
+        val document = createParser().formatPlainText("Hi @bob:example.org, join #room:example.org")!!
+        val paragraph = document.children.single() as ParagraphNode
+        assertThat(paragraph.text.text).isEqualTo("Hi @bob:example.org, join #room:example.org")
+        assertThat(paragraph.inlineContent.values).containsExactly(
+            MentionNodeContent.User(
+                displayText = "@bob:example.org",
+                userId = UserId("@bob:example.org"),
+                permalinkUrl = "https://matrix.to/#/@bob:example.org"
+            ),
+            MentionNodeContent.Room(
+                displayText = "#room:example.org",
+                roomIdOrAlias = RoomAlias("#room:example.org").toRoomIdOrAlias(),
+                permalinkUrl = "https://matrix.to/#/#room:example.org"
+            ),
+        )
+    }
+
+    private fun createParser(
+        permalinkParser: FakePermalinkParser = FakePermalinkParser { PermalinkData.FallbackLink(Uri.parse(it)) },
+        permalinkBuilder: FakePermalinkBuilder = FakePermalinkBuilder(
+            permalinkForUserLambda = { Result.success("https://matrix.to/#/${it.value}") },
+            permalinkForRoomAliasLambda = { Result.success("https://matrix.to/#/${it.value}") },
+        ),
+    ) = DefaultHtmlMessageParser(permalinkParser, permalinkBuilder)
+
     private fun parse(
         html: String,
         permalinkParser: FakePermalinkParser = FakePermalinkParser(),
