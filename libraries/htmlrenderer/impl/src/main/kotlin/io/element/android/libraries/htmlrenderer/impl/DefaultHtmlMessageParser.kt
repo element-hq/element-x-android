@@ -225,7 +225,7 @@ class DefaultHtmlMessageParser(
 
         fun build(): Result? {
             val text = builder.toAnnotatedString()
-            if (text.isBlank() && mentions.isEmpty()) return null
+            if (text.isBlank()) return null
             // Turn any mention in the raw text (not an `<a>` tag) into a pill too
             val pillified = text.pillify(mentions, permalinkParser, permalinkBuilder)
             return Result(
