@@ -64,12 +64,10 @@ private fun fixMentions(
     }
 }
 
-/** Custom Html to DOM parser, based on the one included in the rich text editor library. */
-private object CustomHtmlToDomParser {
-    fun document(html: String): Document {
+private object HtmlToDomCleaner {
+    fun clean(html: String): String {
         val outputSettings = OutputSettings().prettyPrint(false).indentAmount(0)
-        val cleanHtml = Jsoup.clean(html, "", safeList, outputSettings)
-        return Jsoup.parse(cleanHtml)
+        return Jsoup.clean(html, "", safeList, outputSettings)
     }
 
     private val safeList = Safelist()
@@ -100,4 +98,11 @@ private object CustomHtmlToDomParser {
         )
         .addAttributes("a", "href", "data-mention-type", "contenteditable")
         .addAttributes("ol", "start")
+}
+
+/** Custom Html to DOM parser, based on the one included in the rich text editor library. */
+private object CustomHtmlToDomParser {
+    fun document(html: String): Document {
+        return Jsoup.parse(HtmlToDomCleaner.clean(html))
+    }
 }
