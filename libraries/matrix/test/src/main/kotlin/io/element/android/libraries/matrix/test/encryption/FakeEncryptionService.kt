@@ -30,6 +30,8 @@ class FakeEncryptionService(
     private val getUserIdentityResult: (UserId) -> Result<IdentityState?> = { lambdaError() },
     private val enableRecoveryLambda: (Boolean, String?) -> Result<String> = { _, _ -> lambdaError() },
     private val resetRecoveryKeyLambda: () -> Result<String> = { Result.success(FAKE_RECOVERY_KEY) },
+    private val generateRecoveryKeyLambda: () -> String = { FAKE_RECOVERY_KEY },
+    private val activateRecoveryKeyLambda: () -> Result<Unit> = { Result.success(Unit) },
 ) : EncryptionService {
     private var disableRecoveryFailure: Exception? = null
     override val backupStateStateFlow: MutableStateFlow<BackupState> = MutableStateFlow(BackupState.UNKNOWN)
@@ -88,6 +90,12 @@ class FakeEncryptionService(
 
     fun emitHasDevicesToVerifyAgainst(hasDevicesToVerifyAgainst: AsyncData<Boolean>) {
         this.hasDevicesToVerifyAgainst.value = hasDevicesToVerifyAgainst
+    }
+
+    override fun generateRecoveryKey(): String = generateRecoveryKeyLambda()
+
+    override suspend fun activateRecoveryKey(): Result<Unit> = simulateLongTask {
+        return activateRecoveryKeyLambda()
     }
 
     override suspend fun resetRecoveryKey(): Result<String> = simulateLongTask {

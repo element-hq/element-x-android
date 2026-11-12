@@ -54,6 +54,20 @@ interface EncryptionService {
     suspend fun enableRecovery(waitForBackupsToUpload: Boolean, passphrase: String? = null): Result<String>
 
     /**
+     * Generate a new recovery key without activating it, and return it formatted for the user to save.
+     * Nothing changes on the account until [activateRecoveryKey] is called, so the user can still back out.
+     * Generating again replaces the previous pending key.
+     */
+    fun generateRecoveryKey(): String
+
+    /**
+     * Activate the key from the last [generateRecoveryKey] call, replacing the existing recovery key if there is one.
+     * The pending key is kept when this fails so that it can be retried, and dropped once it succeeds.
+     * Observe [enableRecoveryProgressStateFlow] for in-progress UI updates.
+     */
+    suspend fun activateRecoveryKey(): Result<Unit>
+
+    /**
      * Change the recovery and return the new recovery key.
      */
     suspend fun resetRecoveryKey(): Result<String>
