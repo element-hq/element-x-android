@@ -50,10 +50,12 @@ jobs:
           # Only this job writes the Gradle cache on develop, see the setup-build action
           gradle-cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: ⚙️ Run unit tests
-        run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES --continue
+        # Instrument the tests for the Kover coverage report, generated in a later step
+        run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest -PkoverInstrumentation=true $CI_GRADLE_ARG_PROPERTIES --continue
 
       - name: ⚙️ Run screenshot tests
-        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES --continue
+        # Also instrument the screenshot tests, they cover a large part of the UI code
+        run: ./gradlew verifyPaparazziDebug -PkoverInstrumentation=true $CI_GRADLE_ARG_PROPERTIES --continue
 
       - name: ⚙️ Generate kover coverage report
         run: ./gradlew :koverXmlReportMerged :koverHtmlReportMerged :koverVerifyAll -x testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
