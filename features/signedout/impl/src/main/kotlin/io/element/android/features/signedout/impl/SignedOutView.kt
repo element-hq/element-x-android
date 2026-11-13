@@ -57,6 +57,7 @@ fun SignedOutView(
         content = { SignedOutContent(state.signedOutMatrixUser) },
         footer = {
             SignedOutFooter(
+                isRemovingSession = state.submitAction.isLoading(),
                 onSubmit = { state.eventSink(SignedOutEvent.Submit) },
             )
         }
@@ -112,12 +113,15 @@ private fun SignedOutContent(
 
 @Composable
 private fun SignedOutFooter(
+    isRemovingSession: Boolean,
     onSubmit: () -> Unit,
 ) {
     ButtonColumnMolecule {
         Button(
             text = stringResource(id = CommonStrings.action_ok),
             onClick = onSubmit,
+            enabled = !isRemovingSession,
+            showProgress = isRemovingSession,
             modifier = Modifier.fillMaxWidth(),
         )
     }

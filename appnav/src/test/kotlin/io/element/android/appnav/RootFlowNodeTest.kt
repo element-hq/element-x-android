@@ -41,6 +41,7 @@ import io.element.android.features.preferences.test.FakeCacheService
 import io.element.android.features.rageshake.test.FakeBugReportEntryPoint
 import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.share.test.FakeShareIntentHandler
+import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.features.signedout.test.FakeSignedOutEntryPoint
 import io.element.android.libraries.accountselect.test.FakeAccountSelectEntryPoint
 import io.element.android.libraries.architecture.AssistedNodeFactory
@@ -276,6 +277,37 @@ class RootFlowNodeTest : RobolectricTest() {
         setLatestSessionResult.assertions().isCalledOnce().with(value("@alice:example.com"))
     }
 
+    @Test
+    fun `the signed out sessions node is always attached`() = runTest {
+        val createSignedOutNodeResult = lambdaRecorder<BuildContext, Node> { buildContext -> node(buildContext) {} }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint { buildContext, _ -> node(buildContext) {} },
+            signedOutEntryPoint = FakeSignedOutEntryPoint(createSignedOutNodeResult),
+        )
+        rootFlowNode.parentNodeTestHelper()
+        runCurrent()
+        assertThat(rootFlowNode.backstack.activeElement).isEqualTo(RootFlowNode.NavTarget.NotLoggedInFlow(null))
+        createSignedOutNodeResult.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `given the active session is signed out, then the root is the splash screen until the session is removed`() = runTest {
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData(sessionId = "@alice:example.com", isTokenValid = false)),
+        )
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint { buildContext, _ -> node(buildContext) {} },
+            sessionStore = sessionStore,
+        )
+        rootFlowNode.parentNodeTestHelper()
+        runCurrent()
+        assertThat(rootFlowNode.backstack.activeElement).isEqualTo(RootFlowNode.NavTarget.SplashScreen)
+        // Done by the signed out screen
+        sessionStore.removeSession("@alice:example.com")
+        runCurrent()
+        assertThat(rootFlowNode.backstack.activeElement).isEqualTo(RootFlowNode.NavTarget.NotLoggedInFlow(null))
+    }
+
     private fun twoSessionsStore(setLatestSessionResult: (String) -> Unit) = InMemorySessionStore(
         initialList = listOf(
             aSessionData(sessionId = "@alice:example.com"),
@@ -303,6 +335,7 @@ class RootFlowNodeTest : RobolectricTest() {
         loginIntentResolverResult: (String) -> LoginParams? = { A_LOGIN_PARAMS },
         permalinkParser: PermalinkParser = FakePermalinkParser(),
         permalinkSessionResolver: PermalinkSessionResolver = FakePermalinkSessionResolver(),
+        signedOutEntryPoint: SignedOutEntryPoint = FakeSignedOutEntryPoint { buildContext -> node(buildContext) {} },
     ): RootFlowNode {
         val matrixSessionCache = MatrixSessionCache(
             authenticationService = FakeMatrixAuthenticationService(),
@@ -352,7 +385,7 @@ class RootFlowNodeTest : RobolectricTest() {
                 sdkMetadata = FakeSdkMetadata("sha"),
             ),
             bugReportEntryPoint = FakeBugReportEntryPoint(),
-            signedOutEntryPoint = FakeSignedOutEntryPoint(),
+            signedOutEntryPoint = signedOutEntryPoint,
             accountSelectEntryPoint = FakeAccountSelectEntryPoint(),
             intentResolver = IntentResolver(
                 deeplinkParser = { null },
