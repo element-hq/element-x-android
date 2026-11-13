@@ -110,9 +110,7 @@ class VoiceMessageComposerPlayer(
      * so that it does not leak into a new recording.
      */
     fun pauseAnyPlayback() {
-        if (mediaPlayer.state.value.isPlaying) {
-            mediaPlayer.pause()
-        }
+        mediaPlayer.pause()
     }
 
     /**
