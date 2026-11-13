@@ -10,7 +10,7 @@ android {
     namespace = "io.element.android.features.${MODULE_NAME}.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = true)
 
 dependencies {
     api(projects.features.${MODULE_NAME}.api)

@@ -24,7 +24,7 @@ android {
     }
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = true)
 
 dependencies {
     api(projects.features.forward.api)

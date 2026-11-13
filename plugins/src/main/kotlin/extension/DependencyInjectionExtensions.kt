@@ -18,9 +18,10 @@ import org.gradle.plugin.use.PluginDependency
 /**
  * Setup the Metro plugin with the shared configuration.
  * @param generateNodeFactories Whether to set up the KSP plugin and dependencies to generate Appyx Node factories.
+ * Only set it to true in modules using `@ContributesNode`: KSP adds an extra compilation step to the module.
  */
 fun Project.setupDependencyInjection(
-    generateNodeFactories: Boolean = shouldApplyAppyxCodegen(),
+    generateNodeFactories: Boolean = false,
 ) {
     if (project.path.endsWith(":api")) {
         error("api module should not use setupDependencyInjection(). Move the implementation to `:impl` module")
@@ -39,12 +40,6 @@ fun Project.setupDependencyInjection(
         // Code generator for the annotations above
         dependencies.add("ksp", project.project(":codegen"))
     }
-}
-
-// These dependencies should only be needed for compose library or application modules
-private fun Project.shouldApplyAppyxCodegen(): Boolean {
-    return project.pluginManager.hasPlugin("io.element.android-compose-library")
-        || project.pluginManager.hasPlugin("io.element.android-compose-application")
 }
 
 private fun Project.applyPluginIfNeeded(plugin: Provider<PluginDependency>) {
