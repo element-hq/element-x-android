@@ -15,8 +15,11 @@ import io.element.android.libraries.matrix.api.core.UserId
  *
  * @property senderId the ID of the user who sent the reaction
  * @property timestamp the timestamp the reaction was received on the origin homeserver
+ * @property isSendWedged true if this is our pending reaction and it failed to send with an error that
+ * will not recover by itself. The room's send queue is blocked until the reaction is retried or aborted.
  */
 data class ReactionSender(
     val senderId: UserId,
-    val timestamp: Long
+    val timestamp: Long,
+    val isSendWedged: Boolean = false,
 )
