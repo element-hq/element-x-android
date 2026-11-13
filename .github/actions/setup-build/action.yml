@@ -27,10 +27,13 @@ runs:
   steps:
     - name: Free Disk Space (Ubuntu)
       if: ${{ inputs.free-disk-space == 'true' }}
-      uses: jlumbroso/free-disk-space@3f13feab2962a87273d379ebc36ea159527e6cc9 # v1.3.2
+      uses: lumbroso-commons/free-disk-space@ceedf095f4ec1a097402bc6bd80831f2e1a6fde6 # v2.0.0
       with:
         # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-        tool-cache: true
+        # However, this also removes the preinstalled JDK, so we need to set up JDK 21 again after this step and re-download it on each job.
+        preinstalled-runtimes: true
+        # This is false by default, but we might as well make it explicit.
+        swap-storage: false
         # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
         android: false
         dotnet: true
@@ -38,7 +41,6 @@ runs:
         # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
         large-packages: false
         docker-images: true
-        swap-storage: false
     - name: Add SSH private keys for submodule repositories
       if: ${{ inputs.enterprise-ssh-key != '' }}
       uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
@@ -49,6 +51,7 @@ runs:
       shell: bash
       run: git submodule update --init --recursive
     - name: Use JDK 21
+      if: ${{ inputs.setup-gradle == 'true' }}
       uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
       with:
         distribution: 'temurin' # See 'Supported distributions' for available options
