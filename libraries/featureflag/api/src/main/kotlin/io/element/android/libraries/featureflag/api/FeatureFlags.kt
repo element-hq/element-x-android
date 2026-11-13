@@ -184,6 +184,13 @@ enum class FeatureFlags(
             "Note this may result in duplicate notifications if you have multiple accounts signed in on the same device, it should only be used for testing.",
         defaultValue = { false },
         isFinished = false,
+    ),
+    TimelineAnimations(
+        key = "feature.timeline_animations",
+        title = "Timeline animations",
+        description = "Enable animations in the timeline for a smoother user experience.",
+        defaultValue = { false },
+        isFinished = false,
     )
 }
 
