@@ -8,9 +8,9 @@
 
 @file:Suppress("UnstableApiUsage")
 
+import com.android.build.api.variant.BuildConfigField
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import com.android.build.gradle.internal.tasks.factory.dependsOn
-import com.android.build.gradle.tasks.GenerateBuildConfig
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import config.BuildTimeConfig
 import extension.AssetCopyTask
@@ -217,7 +217,16 @@ androidComponents {
         "x86_64" to 4,
     )
 
+    // Keep the git info lazy: these providers are only evaluated when the BuildConfig task runs, so they're task inputs
+    // and not configuration cache inputs. Calling `.get()` at configuration time would invalidate the configuration cache
+    // on every commit or branch switch.
+    val gitRevision = providers.of(GitRevisionValueSource::class.java) {}
+    val gitBranchName = providers.of(GitBranchNameValueSource::class.java) {}
+
     onVariants { variant ->
+        variant.buildConfigFields?.put("GIT_REVISION", gitRevision.map { BuildConfigField("String", "\"$it\"", null) })
+        variant.buildConfigFields?.put("GIT_BRANCH_NAME", gitBranchName.map { BuildConfigField("String", "\"$it\"", null) })
+
         // Register the R8 keep rules source folders for optimized build types (release, nightly).
         // Replaces the deprecated `optimization.keepRules.files` DSL (AGP 9+).
         if (variant.buildType != "debug") {
@@ -308,14 +317,6 @@ dependencies {
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.toolbox.test)
-}
-
-tasks.withType<GenerateBuildConfig>().configureEach {
-    outputs.upToDateWhen { false }
-    val gitRevision = providers.of(GitRevisionValueSource::class.java) {}.get()
-    val gitBranchName = providers.of(GitBranchNameValueSource::class.java) {}.get()
-    android.defaultConfig.buildConfigFieldStr("GIT_REVISION", gitRevision)
-    android.defaultConfig.buildConfigFieldStr("GIT_BRANCH_NAME", gitBranchName)
 }
 
 licensee {
