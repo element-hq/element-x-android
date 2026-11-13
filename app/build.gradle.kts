@@ -261,7 +261,7 @@ androidComponents {
 
 // Configure the SonarQube plugin to wait for the resource generation tasks to complete before running the analysis.
 tasks.withType<SonarResolverTask>().configureEach {
-    dependsOn("generateGplayDebugResValues", "generateGplayDebugAndroidTestResValues")
+    dependsOn("generateGplayDebugResValues")
 }
 
 setupDependencyInjection(generateNodeFactories = false)
