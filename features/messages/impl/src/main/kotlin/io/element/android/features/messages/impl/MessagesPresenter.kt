@@ -432,11 +432,7 @@ class MessagesPresenter(
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> {
                 val eventId = targetEvent.eventId ?: return@launch
-                if (featureFlagService.isFeatureEnabled(FeatureFlags.MessageMultiSelect)) {
-                    timelineState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, eventId))
-                } else {
-                    navigator.forwardEvents(listOf(eventId))
-                }
+                timelineState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, eventId))
             }
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)

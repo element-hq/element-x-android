@@ -315,11 +315,10 @@ class MessagesPresenterTest {
     }
 
     @Test
-    fun `present - handle action forward enters selection mode when multi select is enabled`() = runTest {
+    fun `present - handle action forward enters selection mode`() = runTest {
         val timelineEventSink = lambdaRecorder<TimelineEvent, Unit> { }
         val presenter = createMessagesPresenter(
             timelineEventSink = timelineEventSink,
-            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true)),
         )
         presenter.testWithLifecycleOwner {
             val initialState = awaitItem()
@@ -328,24 +327,6 @@ class MessagesPresenterTest {
             timelineEventSink.assertions().isCalledOnce()
                 .with(value(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID)))
             cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - handle action forward navigates directly when multi select is disabled`() = runTest {
-        val onForwardEventClickLambda = lambdaRecorder<List<EventId>, Unit> { _ -> }
-        val navigator = FakeMessagesNavigator(
-            onForwardEventClickLambda = onForwardEventClickLambda,
-        )
-        val presenter = createMessagesPresenter(
-            navigator = navigator,
-            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to false)),
-        )
-        presenter.testWithLifecycleOwner {
-            val initialState = awaitItem()
-            initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Forward, aMessageEvent()))
-            assertThat(awaitItem().actionListState.target).isEqualTo(ActionListState.Target.None)
-            onForwardEventClickLambda.assertions().isCalledOnce().with(value(listOf(AN_EVENT_ID)))
         }
     }
 
