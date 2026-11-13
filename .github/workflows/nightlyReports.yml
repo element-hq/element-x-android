@@ -57,7 +57,7 @@ jobs:
         if: ${{ always() && env.SONAR_TOKEN != '' && env.ORG_GRADLE_PROJECT_SONAR_LOGIN != '' && hashFiles('build/reports/kover/reportMerged.xml') != '' }}
         # The sources must be built before running the analysis, since `sonar.gradle.skipCompile` is set.
         run: |
-          ./gradlew assembleGplayDebug createFullJarDebugTestFixtures :app:createFullJarGplayDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
+          ./gradlew assembleGplayDebug $CI_GRADLE_ARG_PROPERTIES
           ./gradlew sonar $CI_GRADLE_ARG_PROPERTIES
 
   # Dependency vulnerability analysis using https://github.com/dependency-check/dependency-check-gradle

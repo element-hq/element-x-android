@@ -17,7 +17,7 @@ android {
     namespace = "io.element.android.features.cachecleaner.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     api(projects.features.cachecleaner.api)

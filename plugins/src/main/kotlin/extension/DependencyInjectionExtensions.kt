@@ -18,6 +18,8 @@ import org.gradle.plugin.use.PluginDependency
 /**
  * Setup the Metro plugin with the shared configuration.
  * @param generateNodeFactories Whether to set up the KSP plugin and dependencies to generate Appyx Node factories.
+ * Enabled by default in Compose modules. Set it to false in the Compose modules not using `@ContributesNode`: KSP adds an
+ * extra compilation step to the module.
  */
 fun Project.setupDependencyInjection(
     generateNodeFactories: Boolean = shouldApplyAppyxCodegen(),

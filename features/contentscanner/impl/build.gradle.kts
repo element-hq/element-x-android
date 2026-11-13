@@ -16,7 +16,7 @@ android {
     namespace = "io.element.android.features.contentscanner.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     api(projects.features.contentscanner.api)

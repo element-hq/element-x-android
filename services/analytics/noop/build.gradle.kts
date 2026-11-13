@@ -16,7 +16,7 @@ android {
     namespace = "io.element.android.services.analytics.noop"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     implementation(projects.libraries.architecture)
