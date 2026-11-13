@@ -143,7 +143,6 @@ import org.matrix.rustcomponents.sdk.TotalUnreadNotificationsListener
 import org.matrix.rustcomponents.sdk.UserProfile
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
-import uniffi.matrix_sdk_base.EncryptionState
 import java.io.File
 import java.util.Optional
 import java.util.concurrent.atomic.AtomicBoolean
@@ -470,9 +469,9 @@ class RustMatrixClient(
 
     override suspend fun hasEncryptedRooms(): Result<Boolean> = withContext(sessionDispatcher) {
         runCatchingExceptions {
-            innerClient.rooms().any { room ->
-                room.membership() == Membership.JOINED && !room.isSpace() && room.encryptionState() == EncryptionState.ENCRYPTED
-            }
+            innerClient.hasEncryptedRooms(5.seconds.toJavaDuration())
+        }.onFailure {
+            Timber.e(it, "Failed to check whether the user has encrypted rooms")
         }
     }
 

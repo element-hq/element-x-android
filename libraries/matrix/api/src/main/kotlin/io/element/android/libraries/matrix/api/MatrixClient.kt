@@ -178,8 +178,8 @@ interface MatrixClient : ClientUrlContentFetcher {
     suspend fun getJoinedRoomIds(): Result<Set<RoomId>>
 
     /**
-     * Whether the user has joined at least one encrypted room, as currently known by the client.
-     * Spaces, invited, knocked and left rooms are not taken into account.
+     * Whether the user has joined at least one encrypted room, spaces excluded.
+     * The homeserver is asked when no encrypted room is known locally, so this fails if it doesn't answer in time.
      */
     suspend fun hasEncryptedRooms(): Result<Boolean>
 
