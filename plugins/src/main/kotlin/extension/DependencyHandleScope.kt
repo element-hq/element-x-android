@@ -30,7 +30,6 @@ private fun DependencyHandlerScope.implementation(
     config: Action<ExternalModuleDependency>
 ) = dependencies.add("implementation", dependency, closureOf<ExternalModuleDependency> { config.execute(this) })
 
-private fun DependencyHandlerScope.androidTestImplementation(dependency: Any) = dependencies.add("androidTestImplementation", dependency)
 
 private fun DependencyHandlerScope.debugImplementation(dependency: Any) = dependencies.add("debugImplementation", dependency)
 private fun DependencyHandlerScope.releaseImplementation(dependency: Any) = dependencies.add("releaseImplementation", dependency)
@@ -73,7 +72,6 @@ fun DependencyHandlerScope.commonDependencies(libs: LibrariesForLibs) {
 fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
-    androidTestImplementation(composeBom)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
