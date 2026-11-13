@@ -16,6 +16,7 @@ import com.bumble.appyx.core.modality.AncestryInfo
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
+import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
@@ -41,6 +42,7 @@ import io.element.android.features.preferences.test.FakeCacheService
 import io.element.android.features.rageshake.test.FakeBugReportEntryPoint
 import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.share.test.FakeShareIntentHandler
+import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.features.signedout.test.FakeSignedOutEntryPoint
 import io.element.android.libraries.accountselect.test.FakeAccountSelectEntryPoint
 import io.element.android.libraries.architecture.AssistedNodeFactory
@@ -84,6 +86,10 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+
+private const val ALICE = "@alice:example.com"
+private const val BOB = "@bob:example.com"
+private const val CHARLIE = "@charlie:example.com"
 
 private const val A_PERMALINK = "https://matrix.to/#/!aRoomId:domain"
 
@@ -276,6 +282,105 @@ class RootFlowNodeTest : RobolectricTest() {
         setLatestSessionResult.assertions().isCalledOnce().with(value("@alice:example.com"))
     }
 
+    @Test
+    fun `given non active sessions with an invalid token at startup, then the signed out screens are displayed on top of the root`() = runTest {
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(sessionId = ALICE, isTokenValid = false),
+                    aSessionData(sessionId = BOB, isTokenValid = false),
+                    aSessionData(sessionId = CHARLIE, isTokenValid = true),
+                ),
+            ),
+        )
+        rootFlowNode.parentNodeTestHelper()
+        runCurrent()
+        assertThat(rootFlowNode.navTargets()).containsExactly(
+            RootFlowNode.NavTarget.SignedOutFlow(SessionId(ALICE)),
+            RootFlowNode.NavTarget.SignedOutFlow(SessionId(BOB)),
+        ).inOrder()
+    }
+
+    @Test
+    fun `when non active sessions get signed out, then the signed out screens are queued on top of the root`() = runTest {
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(sessionId = ALICE, isTokenValid = false),
+                aSessionData(sessionId = BOB, isTokenValid = true),
+                aSessionData(sessionId = CHARLIE, isTokenValid = true),
+            ),
+        )
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = sessionStore,
+        )
+        rootFlowNode.parentNodeTestHelper()
+        runCurrent()
+        assertThat(rootFlowNode.navTargets()).containsExactly(
+            RootFlowNode.NavTarget.SignedOutFlow(SessionId(ALICE)),
+        )
+        sessionStore.updateData(aSessionData(sessionId = BOB, isTokenValid = false))
+        sessionStore.updateData(aSessionData(sessionId = CHARLIE, isTokenValid = false))
+        runCurrent()
+        // Another emission must not duplicate the screens
+        sessionStore.updateData(aSessionData(sessionId = BOB, isTokenValid = false, deviceId = "anotherDeviceId"))
+        runCurrent()
+        assertThat(rootFlowNode.navTargets()).containsExactly(
+            RootFlowNode.NavTarget.SignedOutFlow(SessionId(ALICE)),
+            RootFlowNode.NavTarget.SignedOutFlow(SessionId(BOB)),
+            RootFlowNode.NavTarget.SignedOutFlow(SessionId(CHARLIE)),
+        ).inOrder()
+    }
+
+    @Test
+    fun `when a non active signed out session is removed, then its signed out screen is removed`() = runTest {
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(sessionId = ALICE, isTokenValid = false),
+                aSessionData(sessionId = BOB, isTokenValid = false),
+            ),
+        )
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = sessionStore,
+        )
+        rootFlowNode.parentNodeTestHelper()
+        runCurrent()
+        sessionStore.removeSession(BOB)
+        runCurrent()
+        assertThat(rootFlowNode.navTargets()).containsExactly(
+            RootFlowNode.NavTarget.SignedOutFlow(SessionId(ALICE)),
+        )
+    }
+
+    @Test
+    fun `when the active signed out session is removed, then the next signed out session becomes the root without duplicate`() = runTest {
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(
+                aSessionData(sessionId = ALICE, isTokenValid = false),
+                aSessionData(sessionId = BOB, isTokenValid = false),
+            ),
+        )
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = sessionStore,
+        )
+        rootFlowNode.parentNodeTestHelper()
+        runCurrent()
+        sessionStore.removeSession(ALICE)
+        runCurrent()
+        assertThat(rootFlowNode.navTargets()).containsExactly(
+            RootFlowNode.NavTarget.SignedOutFlow(SessionId(BOB)),
+        )
+    }
+
+    private fun RootFlowNode.navTargets() = backstack.elements.value
+        .filter { it.targetState != BackStack.State.DESTROYED }
+        .map { it.key.navTarget }
+
+    private fun aSignedOutEntryPoint() = FakeSignedOutEntryPoint { buildContext, _ -> node(buildContext) {} }
+
     private fun twoSessionsStore(setLatestSessionResult: (String) -> Unit) = InMemorySessionStore(
         initialList = listOf(
             aSessionData(sessionId = "@alice:example.com"),
@@ -303,6 +408,7 @@ class RootFlowNodeTest : RobolectricTest() {
         loginIntentResolverResult: (String) -> LoginParams? = { A_LOGIN_PARAMS },
         permalinkParser: PermalinkParser = FakePermalinkParser(),
         permalinkSessionResolver: PermalinkSessionResolver = FakePermalinkSessionResolver(),
+        signedOutEntryPoint: SignedOutEntryPoint = aSignedOutEntryPoint(),
     ): RootFlowNode {
         val matrixSessionCache = MatrixSessionCache(
             authenticationService = FakeMatrixAuthenticationService(),
@@ -352,7 +458,7 @@ class RootFlowNodeTest : RobolectricTest() {
                 sdkMetadata = FakeSdkMetadata("sha"),
             ),
             bugReportEntryPoint = FakeBugReportEntryPoint(),
-            signedOutEntryPoint = FakeSignedOutEntryPoint(),
+            signedOutEntryPoint = signedOutEntryPoint,
             accountSelectEntryPoint = FakeAccountSelectEntryPoint(),
             intentResolver = IntentResolver(
                 deeplinkParser = { null },
