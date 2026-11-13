@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -52,6 +53,12 @@ class DefaultHtmlMessageParser(
 ) : HtmlMessageParser {
     override fun parse(document: Document): DocumentNode {
         return DocumentNode(children = parseBlocks(document.body()))
+    }
+
+    override fun formatPlainText(text: String): DocumentNode? {
+        if (text.isBlank()) return null
+        val pillifiedText = AnnotatedString(text).pillify(emptyMap(), permalinkParser, permalinkBuilder)
+        return DocumentNode(children = persistentListOf(ParagraphNode(text = pillifiedText.text, inlineContent = pillifiedText.inlineContent)))
     }
 
     /**
@@ -218,7 +225,7 @@ class DefaultHtmlMessageParser(
 
         fun build(): Result? {
             val text = builder.toAnnotatedString()
-            if (text.isBlank() && mentions.isEmpty()) return null
+            if (text.isBlank()) return null
             // Turn any mention in the raw text (not an `<a>` tag) into a pill too
             val pillified = text.pillify(mentions, permalinkParser, permalinkBuilder)
             return Result(
