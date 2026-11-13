@@ -13,6 +13,7 @@ import coil3.SingletonImageLoader
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.preferences.impl.DefaultCacheService
+import io.element.android.features.rageshake.api.logs.LOG_DIRECTORY_NAME
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -52,7 +53,7 @@ class DefaultClearCacheUseCase(
         // Clear app cache
         context.cacheDir?.listFiles {
             // But keep the logs
-            it.name != "logs"
+            it.name != LOG_DIRECTORY_NAME
         }?.onEach {
             it.deleteRecursively()
         }
