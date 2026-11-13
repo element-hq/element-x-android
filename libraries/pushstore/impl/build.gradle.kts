@@ -37,10 +37,4 @@ dependencies {
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.pushstore.test)
-
-    androidTestImplementation(libs.coroutines.test)
-    androidTestImplementation(libs.test.core)
-    androidTestImplementation(libs.test.junit)
-    androidTestImplementation(libs.test.truth)
-    androidTestImplementation(libs.test.runner)
 }
