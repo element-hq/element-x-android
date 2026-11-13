@@ -128,8 +128,14 @@ include(":annotations")
 include(":codegen")
 
 fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
-    directory.listFiles().orEmpty().also { it.sort() }.forEach { file ->
-        if (file.isDirectory) {
+    directory.listFiles { file ->
+        // Skip hidden folders (e.g. `.git`) and build outputs: every folder listed here is a configuration cache input,
+        // so descending into them would invalidate the cache each time git or a build writes to them.
+        file.isDirectory && !file.name.startsWith(".") && file.name != "build"
+    }
+        .orEmpty()
+        .also { it.sort() }
+        .forEach { file ->
             val newPath = "$path:${file.name}"
             val buildFile = File(file, "build.gradle.kts")
             if (buildFile.exists()) {
@@ -139,7 +145,6 @@ fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
                 includeProjects(file, newPath, maxDepth - 1)
             }
         }
-    }
 }
 
 includeProjects(File(rootDir, "enterprise"), ":enterprise", maxDepth = 2)
