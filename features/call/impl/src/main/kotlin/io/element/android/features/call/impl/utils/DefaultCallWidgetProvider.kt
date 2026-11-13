@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetCapabilitiesPolicy
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.flow.firstOrNull
@@ -60,7 +61,7 @@ class DefaultCallWidgetProvider(
             theme = theme,
         ).getOrThrow()
 
-        val driver = room.getWidgetDriver(widgetSettings).getOrThrow()
+        val driver = room.getWidgetDriver(widgetSettings, MatrixWidgetCapabilitiesPolicy.ElementCall).getOrThrow()
 
         CallWidgetProvider.GetWidgetResult(
             driver = driver,
