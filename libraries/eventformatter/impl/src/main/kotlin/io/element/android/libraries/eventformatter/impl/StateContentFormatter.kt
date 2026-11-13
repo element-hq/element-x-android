@@ -25,6 +25,7 @@ class StateContentFormatter(
         senderDisambiguatedDisplayName: String,
         senderIsYou: Boolean,
         renderingMode: RenderingMode,
+        isDeveloperModeEnabled: Boolean,
     ): CharSequence? {
         return when (val content = stateContent.content) {
             is OtherState.RoomAvatar -> {
@@ -88,7 +89,12 @@ class StateContentFormatter(
                     null
                 }
                 RenderingMode.Timeline -> {
-                    "Custom event ${content.eventType}"
+                    if (isDeveloperModeEnabled) {
+                        "Custom event ${content.eventType}"
+                    } else {
+                        Timber.v("Filtering custom event because developer mode is disabled")
+                        null
+                    }
                 }
             }
             OtherState.PolicyRuleRoom -> when (renderingMode) {
