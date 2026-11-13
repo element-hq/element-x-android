@@ -17,9 +17,8 @@ android {
 
 setupDependencyInjection()
 
-// Temporary: `-PelementCallLocalVersion` points this at a locally published build of
-// element-call-android, because the library has no remote repository yet. Goes with the mavenLocal
-// block in settings.gradle.kts. Only the BOM carries a version; every other artifact follows it.
+// `-PelementCallLocalVersion` points this at a locally published build of element-call-android.
+// Goes with the mavenLocal block in settings.gradle.kts. Only the BOM carries a version; every other artifact follows it.
 val elementCallVersion: String = providers.gradleProperty("elementCallLocalVersion")
     .getOrElse(libs.versions.element.call.get())
 
