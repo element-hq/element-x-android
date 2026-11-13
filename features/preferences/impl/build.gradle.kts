@@ -44,7 +44,7 @@ android {
     }
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = true)
 
 dependencies {
     implementation(projects.libraries.androidutils)
