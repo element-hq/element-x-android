@@ -76,6 +76,8 @@ internal class RoomMemberListFetcher(
         }
     }
 
+    // The CancellationException is rethrown, just after being logged.
+    @Suppress("SuspendFunSwallowedCancellation")
     private suspend fun MutableStateFlow<RoomMembersState>.fetchCachedRoomMembers(asPendingState: Boolean = true) {
         Timber.i("Loading cached members for room $roomId")
         try {

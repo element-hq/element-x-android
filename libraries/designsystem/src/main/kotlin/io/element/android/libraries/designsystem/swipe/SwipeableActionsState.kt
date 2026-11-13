@@ -35,7 +35,7 @@ class SwipeableActionsState {
      * The current position (in pixels) of the content.
      */
     val offset: FloatState get() = offsetState
-    private var offsetState = mutableFloatStateOf(0f)
+    private val offsetState = mutableFloatStateOf(0f)
 
     /**
      * Whether the content is currently animating to reset its offset after it was swiped.

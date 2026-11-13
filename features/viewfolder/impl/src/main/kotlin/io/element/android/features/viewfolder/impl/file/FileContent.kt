@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
@@ -120,6 +121,7 @@ private fun LineRow(
  *                                  ^ use this char to determine the color, see [LogLevel]
  */
 @Composable
+@ReadOnlyComposable
 private fun String.toColor(colorationMode: ColorationMode): Color {
     return when (colorationMode) {
         ColorationMode.Logcat -> when (getOrNull(31)) {

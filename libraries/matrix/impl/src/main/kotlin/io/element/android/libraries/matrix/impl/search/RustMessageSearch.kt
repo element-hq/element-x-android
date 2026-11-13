@@ -53,7 +53,7 @@ class RustMessageSearch(
     private val onClose: () -> Unit,
     scope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
-    private val roomId: RoomId? = null,
+    roomId: RoomId? = null,
 ) : MessageSearch {
     private val innerResults = MutableStateFlow<List<MessageSearchResult>>(emptyList())
     private val processor = MessageSearchResultsProcessor(

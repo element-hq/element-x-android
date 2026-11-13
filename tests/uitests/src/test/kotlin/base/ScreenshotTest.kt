@@ -124,7 +124,7 @@ object PaparazziPreviewRule {
         preview: ComposablePreview<AndroidPreviewInfo>,
         locale: String,
         deviceConfig: DeviceConfig = ScreenshotTest.defaultDeviceConfig,
-        renderExtensions: Set<RenderExtension> = setOf(),
+        renderExtensions: Set<RenderExtension> = emptySet(),
     ): Paparazzi {
         val densityScale = deviceConfig.density.dpiValue.toFloat() / DEFAULT_DENSITY
         val customScreenWidth = preview.previewInfo.widthDp.takeIf { it >= 0 }?.let { it * densityScale }?.toInt()

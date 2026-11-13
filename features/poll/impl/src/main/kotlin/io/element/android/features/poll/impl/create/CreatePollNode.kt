@@ -38,7 +38,7 @@ class CreatePollNode(
 
     private val inputs: Inputs = inputs()
 
-    private var isNavigatingUp = AtomicBoolean(false)
+    private val isNavigatingUp = AtomicBoolean(false)
 
     private val presenter = presenterFactory.create(
         navigateUp = {

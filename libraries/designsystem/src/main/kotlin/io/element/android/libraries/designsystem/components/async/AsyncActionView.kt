@@ -10,6 +10,7 @@ package io.element.android.libraries.designsystem.components.async
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -72,6 +73,7 @@ fun <T> AsyncActionView(
 
 object AsyncActionViewDefaults {
     @Composable
+    @NonRestartableComposable
     fun ProgressDialog(progressText: String? = null) {
         ProgressDialog(
             text = progressText,

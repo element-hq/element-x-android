@@ -149,7 +149,7 @@ class DefaultVoiceMessagePlayer(
         filename = filename,
     )
 
-    private var internalState = MutableStateFlow(
+    private val internalState = MutableStateFlow(
         VoiceMessagePlayer.State(
             isReady = false,
             isPlaying = false,

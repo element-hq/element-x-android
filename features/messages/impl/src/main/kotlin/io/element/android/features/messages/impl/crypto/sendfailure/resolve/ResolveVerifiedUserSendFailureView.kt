@@ -18,6 +18,7 @@ import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -115,6 +116,7 @@ fun ResolveVerifiedUserSendFailureView(
 }
 
 @Composable
+@ReadOnlyComposable
 private fun VerifiedUserSendFailure.title(): String {
     return when (this) {
         is VerifiedUserSendFailure.UnsignedDevice.FromOther -> stringResource(
@@ -131,6 +133,7 @@ private fun VerifiedUserSendFailure.title(): String {
 }
 
 @Composable
+@ReadOnlyComposable
 private fun VerifiedUserSendFailure.subtitle(): String {
     return when (this) {
         is VerifiedUserSendFailure.UnsignedDevice.FromOther -> stringResource(
@@ -148,6 +151,7 @@ private fun VerifiedUserSendFailure.subtitle(): String {
 }
 
 @Composable
+@ReadOnlyComposable
 private fun VerifiedUserSendFailure.resolveAction(): String {
     return when (this) {
         is VerifiedUserSendFailure.UnsignedDevice -> stringResource(id = R.string.screen_resolve_send_failure_unsigned_device_primary_button_title)

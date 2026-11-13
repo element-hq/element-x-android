@@ -13,6 +13,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.TurbineTestContext
 import app.cash.turbine.test
 import io.element.android.libraries.architecture.Presenter
+import kotlinx.coroutines.CancellationException
 import org.junit.Assert.fail
 import kotlin.time.Duration
 
@@ -25,6 +26,8 @@ suspend fun <State> Presenter<State>.test(
         moleculeFlow(RecompositionMode.Immediate) {
             present()
         }.test(timeout, name, validate)
+    } catch (e: CancellationException) {
+        throw e
     } catch (t: Throwable) {
         if (t::class.simpleName == "KotlinReflectionInternalError") {
             // Give a more explicit error to the developer

@@ -121,7 +121,7 @@ class ConfigureRoomPresenter(
         LaunchedEffect(Unit) {
             spaces = matrixClient.spaceService.editableSpaces().getOrElse { emptyList() }.toImmutableList()
             val parentSpace = spaces.find { it.roomId == initialParentSpaceId }
-            parentSpace?.let {
+            if (parentSpace != null) {
                 dataStore.setParentSpace(parentSpace = parentSpace, updateVisibility = true)
             }
         }

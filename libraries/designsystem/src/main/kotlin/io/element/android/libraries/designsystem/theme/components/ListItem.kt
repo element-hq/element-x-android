@@ -19,6 +19,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
@@ -222,12 +223,14 @@ sealed interface ListItemStyle {
     data object Destructive : ListItemStyle
 
     @Composable
+    @ReadOnlyComposable
     fun contentColor() = when (this) {
         Default, Primary -> ListItemDefaultColors.content
         Destructive -> ElementTheme.colors.textCriticalPrimary
     }
 
     @Composable
+    @ReadOnlyComposable
     fun supportingTextColor() = when (this) {
         Default, Primary -> ListItemDefaultColors.supportingText
         // FIXME once we have a defined color for this value
@@ -235,6 +238,7 @@ sealed interface ListItemStyle {
     }
 
     @Composable
+    @ReadOnlyComposable
     fun leadingIconColor() = when (this) {
         Default -> ListItemDefaultColors.leadingIcon
         Primary -> ElementTheme.colors.iconPrimary
@@ -242,6 +246,7 @@ sealed interface ListItemStyle {
     }
 
     @Composable
+    @ReadOnlyComposable
     fun trailingIconColor() = when (this) {
         Default -> ListItemDefaultColors.trailingIcon
         Primary -> ElementTheme.colors.iconPrimary
@@ -250,12 +255,12 @@ sealed interface ListItemStyle {
 }
 
 object ListItemDefaultColors {
-    val content: Color @Composable get() = ElementTheme.colors.textPrimary
-    val contentDisabled: Color @Composable get() = ElementTheme.colors.textDisabled
-    val supportingText: Color @Composable get() = ElementTheme.materialColors.onSurfaceVariant
-    val leadingIcon: Color @Composable get() = ElementTheme.colors.iconSecondary
-    val trailingIcon: Color @Composable get() = ElementTheme.colors.iconPrimary
-    val iconDisabled: Color @Composable get() = ElementTheme.colors.iconDisabled
+    val content: Color @Composable @ReadOnlyComposable get() = ElementTheme.colors.textPrimary
+    val contentDisabled: Color @Composable @ReadOnlyComposable get() = ElementTheme.colors.textDisabled
+    val supportingText: Color @Composable @ReadOnlyComposable get() = ElementTheme.materialColors.onSurfaceVariant
+    val leadingIcon: Color @Composable @ReadOnlyComposable get() = ElementTheme.colors.iconSecondary
+    val trailingIcon: Color @Composable @ReadOnlyComposable get() = ElementTheme.colors.iconPrimary
+    val iconDisabled: Color @Composable @ReadOnlyComposable get() = ElementTheme.colors.iconDisabled
 
     val colors: ListItemColors
         @Composable get() = ListItemDefaults.colors(
@@ -572,32 +577,26 @@ private object PreviewItems {
         }
     }
 
-    @Composable
     fun content() = @Composable {
         Text("List item")
     }
 
-    @Composable
     fun text() = @Composable {
         Text("Supporting line text lorem ipsum dolor sit amet, consectetur.")
     }
 
-    @Composable
     fun textSingleLine() = @Composable {
         Text("Supporting line text lorem ipsum dolor sit amet, consectetur.", overflow = TextOverflow.Ellipsis, maxLines = 1)
     }
 
-    @Composable
     fun checkbox(): ListItemContent {
         return ListItemContent.Checkbox(checked = false)
     }
 
-    @Composable
     fun radioButton(): ListItemContent {
         return ListItemContent.RadioButton(selected = false)
     }
 
-    @Composable
     fun switch(): ListItemContent {
         return ListItemContent.Switch(checked = false)
     }

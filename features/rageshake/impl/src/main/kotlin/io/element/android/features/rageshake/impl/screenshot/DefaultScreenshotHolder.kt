@@ -22,7 +22,7 @@ import java.io.File
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultScreenshotHolder(
-    @ApplicationContext private val context: Context,
+    @ApplicationContext context: Context,
 ) : ScreenshotHolder {
     private val file = File(context.filesDir, "screenshot.png")
 

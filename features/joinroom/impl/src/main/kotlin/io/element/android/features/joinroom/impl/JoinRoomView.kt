@@ -575,7 +575,7 @@ private fun DefaultLoadedContent(
         },
         description = {
             RoomPreviewDescriptionAtom(
-                contentState.topic ?: "",
+                contentState.topic.orEmpty(),
                 maxLines = if (contentState.joinAuthorisationStatus is JoinAuthorisationStatus.CanJoin) Int.MAX_VALUE else 2
             )
         },

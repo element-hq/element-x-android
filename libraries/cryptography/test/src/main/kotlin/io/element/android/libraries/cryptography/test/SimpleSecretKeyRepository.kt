@@ -18,7 +18,7 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 
 class SimpleSecretKeyRepository : SecretKeyRepository {
-    private var secretKeyForAlias = HashMap<String, SecretKey>()
+    private val secretKeyForAlias = HashMap<String, SecretKey>()
 
     private val hasKeyMap = ConcurrentHashMap<String, MutableStateFlow<Boolean>>()
 

@@ -50,7 +50,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -105,9 +104,7 @@ class GlobalSearchPresenterTest {
                 assertThat(state.isSearchActive).isTrue()
                 state.eventSink(GlobalSearchEvent.ToggleSearchVisibility)
             }
-            awaitItem().let { state ->
-                assertThat(state.isSearchActive).isFalse()
-            }
+            assertThat(awaitItem().isSearchActive).isFalse()
         }
     }
 
@@ -122,9 +119,7 @@ class GlobalSearchPresenterTest {
                 assertThat(state.currentTarget).isEqualTo(GlobalSearchTarget.ROOMS)
                 state.eventSink(GlobalSearchEvent.UpdateTarget(GlobalSearchTarget.MESSAGES))
             }
-            awaitItem().let { state ->
-                assertThat(state.currentTarget).isEqualTo(GlobalSearchTarget.MESSAGES)
-            }
+            assertThat(awaitItem().currentTarget).isEqualTo(GlobalSearchTarget.MESSAGES)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -139,9 +134,7 @@ class GlobalSearchPresenterTest {
                 assertThat(state.queryState.text.toString()).isEqualTo("A query")
                 state.eventSink(GlobalSearchEvent.ClearQuery)
             }
-            awaitItem().let { state ->
-                assertThat(state.queryState.text.toString()).isEmpty()
-            }
+            assertThat(awaitItem().queryState.text.toString()).isEmpty()
             cancelAndIgnoreRemainingEvents()
         }
     }

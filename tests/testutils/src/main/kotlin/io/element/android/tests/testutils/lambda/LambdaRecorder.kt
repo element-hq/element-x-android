@@ -11,7 +11,7 @@ package io.element.android.tests.testutils.lambda
 /**
  * A recorder that can be used to record the parameters of lambda invocation.
  */
-abstract class LambdaRecorder internal constructor(
+open class LambdaRecorder internal constructor(
     private val assertNoInvocation: Boolean,
 ) {
     private val parametersSequence: MutableList<List<Any?>> = mutableListOf()

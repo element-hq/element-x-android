@@ -8,13 +8,11 @@
 
 package io.element.android.libraries.designsystem.utils
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 
-@Composable
 fun annotatedTextWithBold(text: String, boldText: String): AnnotatedString {
     return buildAnnotatedString {
         append(text)

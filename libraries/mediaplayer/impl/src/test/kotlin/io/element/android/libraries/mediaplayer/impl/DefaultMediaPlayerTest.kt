@@ -338,7 +338,8 @@ class DefaultMediaPlayerTest {
                     duration = null,
                 )
             )
-            @Suppress("RunCatchingNotAllowed")
+            // The test expects a TimeoutCancellationException to be caught.
+            @Suppress("RunCatchingNotAllowed", "SuspendFunSwallowedCancellation")
             val result = runCatching {
                 sut.setMedia("uri", "mediaId", "mimeType", 12)
             }

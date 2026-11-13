@@ -183,7 +183,7 @@ class DefaultAppPreferencesStore(
                 ?.split(",")
                 ?.mapNotNull { value -> TraceLogPack.entries.find { it.key == value } }
                 ?.toSet()
-                ?: emptySet()
+                .orEmpty()
         }
     }
 
@@ -279,7 +279,7 @@ private fun Preferences.readHomeserverHistory(): List<String> {
     return this[homeserverHistoryKey]
         ?.split(HOMESERVER_HISTORY_DELIMITER)
         ?.filter { it.isNotEmpty() }
-        ?: emptyList()
+        .orEmpty()
 }
 
 private fun BuildMeta.defaultLogLevel(): LogLevel {

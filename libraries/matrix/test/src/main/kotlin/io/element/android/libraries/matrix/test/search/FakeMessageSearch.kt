@@ -53,6 +53,8 @@ class FakeMessageSearch(
         return setQueryResult(query)
     }
 
+    // The CancellationException is rethrown, just after recording the cancellation for the tests.
+    @Suppress("SuspendFunSwallowedCancellation")
     override suspend fun paginate(): Result<Unit> {
         paginateCallCount++
         if (!controllablePagination) {

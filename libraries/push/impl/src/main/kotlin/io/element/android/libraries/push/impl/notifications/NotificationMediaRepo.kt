@@ -63,7 +63,7 @@ interface NotificationMediaRepo {
 class DefaultNotificationMediaRepo(
     @CacheDirectory private val cacheDir: File,
     private val mxcTools: MxcTools,
-    @Assisted private val client: MatrixClient,
+    @Assisted client: MatrixClient,
 ) : NotificationMediaRepo {
     @ContributesBinding(AppScope::class)
     @AssistedFactory

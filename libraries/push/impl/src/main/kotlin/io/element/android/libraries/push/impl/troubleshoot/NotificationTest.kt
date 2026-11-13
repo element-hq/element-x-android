@@ -71,7 +71,8 @@ class NotificationTest(
             notificationClickHandler.state.first()
             Timber.d("Notification clicked!")
         }
-        @Suppress("RunCatchingNotAllowed")
+        // The TimeoutCancellationException thrown by withTimeout is expected to be caught here.
+        @Suppress("RunCatchingNotAllowed", "SuspendFunSwallowedCancellation")
         runCatching {
             withTimeout(30.seconds) {
                 job.join()

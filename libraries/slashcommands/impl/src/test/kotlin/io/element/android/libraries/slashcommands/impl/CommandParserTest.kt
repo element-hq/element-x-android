@@ -22,6 +22,7 @@ import io.element.android.libraries.slashcommands.api.MessagePrefix
 import io.element.android.libraries.slashcommands.api.SlashCommand
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -193,6 +194,8 @@ class CommandParserTest {
         try {
             cpDev.parseSlashCommand("/crash", null, false)
             org.junit.Assert.fail("Expected crash to throw")
+        } catch (e: CancellationException) {
+            throw e
         } catch (_: IllegalStateException) {
             // expected
         }

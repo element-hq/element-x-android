@@ -24,7 +24,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 class DefaultRageShake(
     @ApplicationContext context: Context,
 ) : ShakeDetector.Listener, RageShake {
-    private var sensorManager = context.getSystemService<SensorManager>()
+    private val sensorManager = context.getSystemService<SensorManager>()
     private var shakeDetector: ShakeDetector? = null
     private var interceptor: (() -> Unit)? = null
 

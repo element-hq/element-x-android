@@ -19,6 +19,7 @@ import io.element.android.libraries.troubleshoot.api.test.NotificationTroublesho
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestDelegate
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
 import io.element.android.libraries.troubleshoot.api.test.TestFilterData
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -69,6 +70,8 @@ class UnifiedPushMatrixGatewayTest(
                             status = NotificationTroubleshootTestState.Status.Failure()
                         )
                     }
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (throwable: Throwable) {
                     delegate.updateState(
                         description = "Fail to check the gateway ${config.url}: ${throwable.localizedMessage}",

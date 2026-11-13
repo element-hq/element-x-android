@@ -36,7 +36,8 @@ class DefaultRegisterUnifiedPushUseCase(
         // VectorUnifiedPushMessagingReceiver.onNewEndpoint
         UnifiedPush.register(context = context, instance = clientSecret, messageForDistributor = sessionId.value)
         // Wait for VectorUnifiedPushMessagingReceiver.onNewEndpoint to proceed
-        @Suppress("RunCatchingNotAllowed")
+        // The TimeoutCancellationException thrown by withTimeout is expected to be caught here and returned as a failure.
+        @Suppress("RunCatchingNotAllowed", "SuspendFunSwallowedCancellation")
         return runCatching {
             withTimeout(30.seconds) {
                 val result = endpointRegistrationHandler.state

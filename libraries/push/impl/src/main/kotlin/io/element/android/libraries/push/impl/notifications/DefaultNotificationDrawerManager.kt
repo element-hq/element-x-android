@@ -61,7 +61,7 @@ class DefaultNotificationDrawerManager(
     sessionObserver: SessionObserver,
 ) : NotificationCleaner {
     // TODO EAx add a setting per user for this
-    private var useCompleteNotificationFormat = true
+    private val useCompleteNotificationFormat = true
 
     private val sessionListener = object : SessionListener {
         override suspend fun onSessionDeleted(userId: String, wasLastSession: Boolean) {

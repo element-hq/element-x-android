@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -81,6 +82,7 @@ private fun SecureBackupSetupState.canGoBack(): Boolean {
 }
 
 @Composable
+@ReadOnlyComposable
 private fun title(state: SecureBackupSetupState): String {
     return when (state.setupState) {
         SetupState.Init,
@@ -97,6 +99,7 @@ private fun title(state: SecureBackupSetupState): String {
 }
 
 @Composable
+@ReadOnlyComposable
 private fun subtitle(state: SecureBackupSetupState): String {
     return when (state.setupState) {
         SetupState.Init,

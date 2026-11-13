@@ -50,7 +50,7 @@ class DefaultBiometricAuthenticatorManager(
     private val encryptionDecryptionService: EncryptionDecryptionService,
     private val secretKeyRepository: SecretKeyRepository,
     @AppCoroutineScope
-    private val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
 ) : BiometricAuthenticatorManager {
     private val callbacks = CopyOnWriteArrayList<BiometricAuthenticator.Callback>()
     private val biometricManager = BiometricManager.from(context)

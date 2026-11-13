@@ -38,7 +38,7 @@ class MarkdownTextEditorState(
     initialText: String?,
     initialFocus: Boolean,
 ) {
-    var text by mutableStateOf(StableCharSequence(initialText ?: ""))
+    var text by mutableStateOf(StableCharSequence(initialText.orEmpty()))
     var selection by mutableStateOf(0..0)
     var hasFocus by mutableStateOf(initialFocus)
     var requestFocusAction by mutableStateOf({})

@@ -76,7 +76,7 @@ class RustNotificationServiceTest {
             notificationClient = notificationClient,
         )
         val result = sut.getNotifications(mapOf(A_ROOM_ID to listOf(AN_EVENT_ID, AN_EVENT_ID_2))).getOrThrow()
-        val exception = result[AN_EVENT_ID]!!.exceptionOrNull()
+        val exception = result.getValue(AN_EVENT_ID).exceptionOrNull()
         assertThat(exception).isEqualTo(error)
 
         val successfulResult = result[AN_EVENT_ID_2]

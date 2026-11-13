@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.map
 
 @AssistedInject
 class AccountSelectPresenter(
-    @Assisted private val permalinkData: PermalinkData,
+    @Assisted permalinkData: PermalinkData,
     private val sessionStore: SessionStore,
     private val matrixClientProvider: MatrixClientProvider,
 ) : Presenter<AccountSelectState> {

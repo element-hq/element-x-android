@@ -12,6 +12,7 @@ import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.awaitClose
@@ -49,6 +50,8 @@ fun RoomListInterface.loadingStateFlow(): Flow<RoomListLoadingState> =
         val result = loadingState(listener)
         try {
             send(result.state)
+        } catch (e: CancellationException) {
+            throw e
         } catch (exception: Exception) {
             Timber.d(exception, "loadingStateFlow() initialState failed.")
         }

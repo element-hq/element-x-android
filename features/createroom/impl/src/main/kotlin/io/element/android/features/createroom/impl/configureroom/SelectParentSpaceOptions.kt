@@ -72,7 +72,7 @@ internal fun SelectParentSpaceOptions(
                 }
             },
             leadingContent = selectedSpace?.let {
-                ListItemContent.Custom({
+                ListItemContent.Custom {
                     val avatarData = AvatarData(
                         id = selectedSpace.roomId.value,
                         name = selectedSpace.displayName,
@@ -80,7 +80,7 @@ internal fun SelectParentSpaceOptions(
                         size = AvatarSize.SelectParentSpace,
                     )
                     Avatar(avatarData = avatarData, avatarType = AvatarType.Space())
-                })
+                }
             },
             onClick = { displaySelectSpaceBottomSheet = true }
         )
@@ -155,7 +155,7 @@ private fun SelectParentSpaceBottomSheet(
                             )
                         }
                     },
-                    leadingContent = ListItemContent.Custom({
+                    leadingContent = ListItemContent.Custom {
                         val avatarData =
                             AvatarData(
                                 id = space.roomId.value,
@@ -167,7 +167,7 @@ private fun SelectParentSpaceBottomSheet(
                             avatarData = avatarData,
                             avatarType = AvatarType.Space()
                         )
-                    }),
+                    },
                     trailingContent = ListItemContent.RadioButton(
                         selected = selectedSpace == space
                     ),

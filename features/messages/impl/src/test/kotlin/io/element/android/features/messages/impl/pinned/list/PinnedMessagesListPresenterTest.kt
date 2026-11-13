@@ -103,7 +103,7 @@ class PinnedMessagesListPresenterTest {
             baseRoom = FakeBaseRoom(
                 roomPermissions = roomPermissions(),
             ).apply {
-                givenRoomInfo(aRoomInfo(pinnedEventIds = listOf()))
+                givenRoomInfo(aRoomInfo(pinnedEventIds = emptyList()))
             },
             createTimelineResult = { Result.success(FakeTimeline()) },
         )

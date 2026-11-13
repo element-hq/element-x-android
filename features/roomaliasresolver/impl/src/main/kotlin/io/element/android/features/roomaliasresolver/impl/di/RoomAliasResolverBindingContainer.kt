@@ -14,7 +14,6 @@ import dev.zacsweers.metro.Provides
 import io.element.android.features.roomaliasresolver.impl.RoomAliasResolverPresenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.RoomAlias
 
 @BindingContainer
 @ContributesTo(SessionScope::class)
@@ -23,13 +22,11 @@ object RoomAliasResolverBindingContainer {
     fun providesRoomAliasResolverPresenterFactory(
         client: MatrixClient,
     ): RoomAliasResolverPresenter.Factory {
-        return object : RoomAliasResolverPresenter.Factory {
-            override fun create(roomAlias: RoomAlias): RoomAliasResolverPresenter {
-                return RoomAliasResolverPresenter(
-                    roomAlias = roomAlias,
-                    matrixClient = client,
-                )
-            }
+        return RoomAliasResolverPresenter.Factory { roomAlias ->
+            RoomAliasResolverPresenter(
+                roomAlias = roomAlias,
+                matrixClient = client,
+            )
         }
     }
 }

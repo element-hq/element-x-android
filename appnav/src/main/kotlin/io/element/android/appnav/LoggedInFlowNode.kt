@@ -154,7 +154,7 @@ class LoggedInFlowNode(
     private val createRoomEntryPoint: CreateRoomEntryPoint,
     private val activeLiveLocationShareManager: ActiveLiveLocationShareManager,
     private val locationService: LocationService,
-    private val loggedInEventProcessorFactory: LoggedInEventProcessor.Factory,
+    loggedInEventProcessorFactory: LoggedInEventProcessor.Factory,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,

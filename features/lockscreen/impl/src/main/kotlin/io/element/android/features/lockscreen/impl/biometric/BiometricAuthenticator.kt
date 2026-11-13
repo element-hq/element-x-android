@@ -70,6 +70,8 @@ class DefaultBiometricAuthentication(
         }
     }
 
+    // CancellationException is caught on purpose, to dismiss the biometric prompt when the coroutine is cancelled
+    @Suppress("SuspendFunSwallowedCancellation")
     override suspend fun authenticate(): BiometricAuthenticator.AuthenticationResult {
         val cryptoObject = cryptoObject ?: return BiometricAuthenticator.AuthenticationResult.Failure()
 

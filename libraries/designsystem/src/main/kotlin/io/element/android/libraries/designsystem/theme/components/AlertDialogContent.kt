@@ -201,7 +201,7 @@ internal fun AlertDialogContent(
                 }
             )
         ) {
-            icon?.let {
+            if (icon != null) {
                 CompositionLocalProvider(LocalContentColor provides iconContentColor) {
                     Box(
                         Modifier
@@ -213,7 +213,7 @@ internal fun AlertDialogContent(
                     }
                 }
             }
-            title?.let {
+            if (title != null) {
                 CompositionLocalProvider(LocalContentColor provides titleContentColor) {
                     val textStyle = MaterialTheme.typography.headlineSmall
                     ProvideTextStyle(textStyle) {
@@ -242,7 +242,7 @@ internal fun AlertDialogContent(
                 }
             }
             subtitle?.invoke()
-            content?.let {
+            if (content != null) {
                 CompositionLocalProvider(LocalContentColor provides textContentColor) {
                     val textStyle = MaterialTheme.typography.bodyMedium
                     ProvideTextStyle(textStyle) {
