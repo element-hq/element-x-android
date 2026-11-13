@@ -23,7 +23,7 @@ internal class QRCodeAnalyzer(
         image.use {
             if (image.format in SUPPORTED_IMAGE_FORMATS) {
                 try {
-                    val bytes = reader.read(image).firstNotNullOfOrNull { it.bytes }
+                    val bytes = reader.read(image).firstNotNullOfOrNull { result -> result.bytes }
                     if (bytes != null) {
                         Timber.d("QR code scanned!")
                         onScanQrCode(bytes)

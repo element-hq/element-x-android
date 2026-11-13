@@ -105,9 +105,9 @@ class SuggestionsProcessor(
                 return member.membership == RoomMembershipState.JOIN && currentUserId != member.userId
             }
 
-            fun memberMatchesQuery(member: RoomMember, query: String): Boolean {
-                return member.userId.value.contains(query, ignoreCase = true) ||
-                    member.displayName?.withoutWhitespace()?.contains(query, ignoreCase = true) == true
+            fun memberMatchesQuery(member: RoomMember, searchQuery: String): Boolean {
+                return member.userId.value.contains(searchQuery, ignoreCase = true) ||
+                    member.displayName?.withoutWhitespace()?.contains(searchQuery, ignoreCase = true) == true
             }
 
             val matchingMembers = roomMembers

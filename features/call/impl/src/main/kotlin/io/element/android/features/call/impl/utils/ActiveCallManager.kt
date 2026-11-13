@@ -237,10 +237,10 @@ class DefaultActiveCallManager(
         }
         if (currentActiveCall.callState is CallState.Ringing) {
             // Decline the call
-            val notificationData = currentActiveCall.callState.notificationData
-            matrixClientProvider.getOrRestore(notificationData.sessionId).getOrNull()
-                ?.getRoom(notificationData.roomId)
-                ?.declineCall(notificationData.eventId)
+            val ringingNotificationData = currentActiveCall.callState.notificationData
+            matrixClientProvider.getOrRestore(ringingNotificationData.sessionId).getOrNull()
+                ?.getRoom(ringingNotificationData.roomId)
+                ?.declineCall(ringingNotificationData.eventId)
                 ?.onFailure {
                     Timber.e(it, "Failed to decline incoming call")
                 }

@@ -119,7 +119,7 @@ class DefaultElementCallControllers(
             // cancelling this at logout is what stops the RTC core. Closing here only releases the
             // component's own reference, so a dead stack is not left behind it.
             client.sessionCoroutineScope.coroutineContext.job.invokeOnCompletion {
-                stacks.update { if (it[sessionId] === stack) it - sessionId else it }
+                stacks.update { stacksMap -> if (stacksMap[sessionId] === stack) stacksMap - sessionId else stacksMap }
                 stack.close()
             }
         }.controller

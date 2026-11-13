@@ -53,8 +53,8 @@ fun PreferenceTextField(
     if (displayTextFieldDialog) {
         TextFieldDialog(
             title = headline,
-            onSubmit = {
-                onChange(it.takeIf { it.isNotBlank() })
+            onSubmit = { newValue ->
+                onChange(newValue.takeIf { it.isNotBlank() })
                 displayTextFieldDialog = false
             },
             onDismissRequest = { displayTextFieldDialog = false },

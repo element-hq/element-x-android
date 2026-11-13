@@ -228,9 +228,8 @@ naming:
     active: false
   VariableMaxLength:
     active: true
-  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   NoNameShadowing:
-    active: false
+    active: true
 
 performance:
   SpreadOperator:

@@ -549,7 +549,7 @@ private fun TimelineItemEventRowContent(
     selectionIndicatorOffset: Density.() -> IntOffset = NoSelectionOffset,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
-    fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
+    fun ConstrainScope.linkStartOrEnd(timelineEvent: TimelineItem.Event) = if (timelineEvent.isMine) {
         end.linkTo(parent.end)
     } else {
         start.linkTo(parent.start)
@@ -804,20 +804,19 @@ private fun MessageEventBubbleContent(
     @Composable
     fun WithTimestampLayout(
         timestampPosition: TimestampPosition,
-        eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
+        timestampEventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
         modifier: Modifier = Modifier,
         canShrinkContent: Boolean = false,
         content: @Composable (onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit) -> Unit,
     ) {
-        @Suppress("NAME_SHADOWING")
-        val content = remember { movableContentOf(content) }
+        val movableContent = remember { movableContentOf(content) }
         when (timestampPosition) {
             TimestampPosition.Overlay ->
                 Box(modifier, contentAlignment = Alignment.Center) {
-                    content {}
+                    movableContent {}
                     TimelineEventTimestampView(
                         event = event,
-                        eventSink = eventSink,
+                        eventSink = timestampEventSink,
                         modifier = Modifier
                             // Outer padding
                             .padding(horizontal = 4.dp, vertical = 4.dp)
@@ -849,13 +848,13 @@ private fun MessageEventBubbleContent(
                         spacing = (-4).dp,
                         overlayOffset = DpOffset(0.dp, -1.dp),
                         shrinkContent = canShrinkContent,
-                        content = { content(this::onContentLayoutChange) },
+                        content = { movableContent(this::onContentLayoutChange) },
                         overlay = {
                             // Use the original layout direction for the timestamp
                             CompositionLocalProvider(LocalLayoutDirection provides originalLayoutDirection) {
                                 TimelineEventTimestampView(
                                     event = event,
-                                    eventSink = eventSink,
+                                    eventSink = timestampEventSink,
                                     isLayoutDirectionMismatched = originalLayoutDirection != contentDirection,
                                     modifier = Modifier
                                         .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -867,16 +866,16 @@ private fun MessageEventBubbleContent(
             }
             TimestampPosition.Below ->
                 Column(modifier) {
-                    content {}
+                    movableContent {}
                     TimelineEventTimestampView(
                         event = event,
-                        eventSink = eventSink,
+                        eventSink = timestampEventSink,
                         modifier = Modifier
                             .align(Alignment.End)
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
-            TimestampPosition.Hidden -> Box(modifier) { content {} }
+            TimestampPosition.Hidden -> Box(modifier) { movableContent {} }
         }
     }
 
@@ -921,7 +920,7 @@ private fun MessageEventBubbleContent(
         val contentWithTimestamp = @Composable {
             WithTimestampLayout(
                 timestampPosition = timestampPosition,
-                eventSink = eventSink,
+                timestampEventSink = eventSink,
                 canShrinkContent = canShrinkContent,
                 modifier = timestampLayoutModifier.semantics(mergeDescendants = false) {
                     isTraversalGroup = true
