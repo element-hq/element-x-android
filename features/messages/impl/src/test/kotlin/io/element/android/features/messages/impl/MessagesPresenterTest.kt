@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.link.aLinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
+import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
 import io.element.android.features.messages.impl.threads.list.aThreadListItem
 import io.element.android.features.messages.impl.timeline.FakeMarkAsFullyRead
@@ -166,6 +167,28 @@ class MessagesPresenterTest {
         presenter.testWithLifecycleOwner {
             val state = consumeItemsUntilTimeout().last()
             assertThat(state.showLiveLocationShareBanner).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - selection mode hides the live location and pinned messages banners`() = runTest {
+        val liveLocationShareManager = FakeActiveLiveLocationShareManager(
+            startShareLambda = { _, _ -> Result.success(Unit) },
+        )
+        liveLocationShareManager.startShare(A_ROOM_ID, 60.seconds)
+        val presenter = createMessagesPresenter(
+            liveLocationShareManager = liveLocationShareManager,
+            timelineState = aTimelineState(
+                selectionState = SelectionState.Active(SelectionAction.Forward, persistentSetOf(AN_EVENT_ID)),
+            ),
+        )
+
+        presenter.testWithLifecycleOwner {
+            val state = consumeItemsUntilTimeout().last()
+            assertThat(state.showLiveLocationShareBanner).isFalse()
+            // The banner presenter still reports pinned messages: only the derived visibility accounts for selection mode.
+            assertThat(state.pinnedMessagesBannerState).isInstanceOf(PinnedMessagesBannerState.Visible::class.java)
+            assertThat(state.showPinnedMessagesBanner).isFalse()
         }
     }
 
