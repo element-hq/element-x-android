@@ -260,6 +260,8 @@ class DefaultVoiceMessageComposerPresenter(
     }
 
     private fun CoroutineScope.startRecording() = launch {
+        // Stop any voice message being played, otherwise it would be captured by the recording.
+        player.pauseAnyPlayback()
         try {
             audioFocus.requestAudioFocus(AudioFocusRequester.RecordVoiceMessage) {
                 // something else grabbed focus (phone call, etc) - finish gracefully

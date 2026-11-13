@@ -15,11 +15,14 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
+import io.element.android.libraries.voicerecorder.api.VoiceRecorder
+import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
+import timber.log.Timber
 import java.io.File
 
 /**
@@ -117,6 +120,7 @@ interface VoiceMessagePlayer {
  */
 class DefaultVoiceMessagePlayer(
     private val mediaPlayer: MediaPlayer,
+    private val voiceRecorder: VoiceRecorder,
     voiceMessageMediaRepoFactory: VoiceMessageMediaRepo.Factory,
     private val eventId: EventId?,
     mediaSource: MediaSource,
@@ -126,6 +130,7 @@ class DefaultVoiceMessagePlayer(
     @ContributesBinding(RoomScope::class) // Scoped types can't use @Inject.
     class Factory(
         private val mediaPlayer: MediaPlayer,
+        private val voiceRecorder: VoiceRecorder,
         private val voiceMessageMediaRepoFactory: VoiceMessageMediaRepo.Factory,
     ) : VoiceMessagePlayer.Factory {
         override fun create(
@@ -135,6 +140,7 @@ class DefaultVoiceMessagePlayer(
             filename: String?,
         ): DefaultVoiceMessagePlayer = DefaultVoiceMessagePlayer(
             mediaPlayer = mediaPlayer,
+            voiceRecorder = voiceRecorder,
             voiceMessageMediaRepoFactory = voiceMessageMediaRepoFactory,
             eventId = eventId,
             mediaSource = mediaSource,
@@ -203,6 +209,12 @@ class DefaultVoiceMessagePlayer(
     }
 
     override fun play() {
+        // Never start playback while a voice message is being recorded, otherwise it would be captured by the recording.
+        // This can happen if the media file finishes downloading after the recording started.
+        if (voiceRecorder.state.value is VoiceRecorderState.Recording) {
+            Timber.d("Ignoring play request for $eventId while recording a voice message")
+            return
+        }
         if (inControl()) {
             mediaPlayer.play()
         }

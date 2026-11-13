@@ -248,6 +248,8 @@ class MediaViewerPresenter(
             .toHtmlDocument(permalinkParser = permalinkParser)
     }
 
+    // This is a Presenter helper, not a UI component: observing the States is the purpose of this function.
+    @Suppress("StateParam")
     @Composable
     private fun NoMoreItemsSnackBarDisplayer(
         currentIndex: IntState,

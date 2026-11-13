@@ -28,6 +28,7 @@ dependencies {
     implementation(projects.libraries.mediaplayer.api)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.uiUtils)
+    implementation(projects.libraries.voicerecorder.api)
     implementation(projects.services.analytics.api)
 
     implementation(libs.androidx.datastore.preferences)
@@ -37,5 +38,6 @@ dependencies {
     testImplementation(libs.coroutines.core)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.mediaplayer.test)
+    testImplementation(projects.libraries.voicerecorder.test)
     testImplementation(projects.services.analytics.test)
 }

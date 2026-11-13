@@ -241,7 +241,7 @@ private suspend fun PointerInputScope.customDetectVerticalDragGestures(
 
 @Preview(showBackground = true)
 @Composable
-@Suppress("UnusedPrivateMember")
+@Suppress("UnusedPrivateFunction")
 internal fun ExpandableBottomSheetLayoutPreview() {
     ExpandableBottomSheetLayout(
         sheetDragHandle = {
