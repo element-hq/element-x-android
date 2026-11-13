@@ -154,14 +154,6 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
-    MessageMultiSelect(
-        key = "feature.message_multi_select",
-        title = "Multi-select messages",
-        description = "The Forward action enters a selection mode, to pick and forward up to 10 messages at once.",
-        defaultValue = { true },
-        isFinished = false,
-        isInLabs = false,
-    ),
     NewTimelineEventRenderer(
         key = "feature.new_timeline_event_renderer",
         title = "New timeline event renderer",

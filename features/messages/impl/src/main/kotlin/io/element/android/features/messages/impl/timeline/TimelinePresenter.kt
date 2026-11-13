@@ -194,17 +194,6 @@ class TimelinePresenter(
             value = featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)
         }
 
-        val isMultiSelectEnabled by produceState(false) {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.MessageMultiSelect)
-                .collect { isEnabled ->
-                    value = isEnabled
-                    // When the feature flag is turned off, clear any active selection.
-                    if (!isEnabled) {
-                        exitSelectionMode()
-                    }
-                }
-        }
-
         val timelineProtectionState = timelineProtectionPresenter.present()
 
         fun handleEvent(event: TimelineEvent) {
@@ -286,7 +275,6 @@ class TimelinePresenter(
                     timelineController.focusOnLive()
                 }
                 is TimelineEvent.EnterSelectionMode -> {
-                    if (!isMultiSelectEnabled) return
                     selectionState.value = SelectionState.Active(event.action, persistentSetOf(event.eventId))
                 }
                 is TimelineEvent.ToggleSelection -> {
