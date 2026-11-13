@@ -10,6 +10,7 @@ package extension
 
 import ModulesConfig
 import config.AnalyticsConfig
+import isEnterpriseBuild
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Action
 import org.gradle.api.Project
@@ -17,7 +18,6 @@ import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.closureOf
-import org.gradle.kotlin.dsl.project
 
 private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)
 internal fun DependencyHandler.implementation(dependency: Any) = add("implementation", dependency)
@@ -127,18 +127,18 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:emoji:impl"))
 }
 
-fun DependencyHandlerScope.allServicesImpl() {
+fun DependencyHandlerScope.allServicesImpl(project: Project) {
     implementation(project(":services:analytics:compose"))
-    when (ModulesConfig.analyticsConfig) {
+    when (val analyticsConfig = ModulesConfig.analyticsConfig(project.isEnterpriseBuild)) {
         AnalyticsConfig.Disabled -> {
             implementation(project(":services:analytics:noop"))
         }
         is AnalyticsConfig.Enabled -> {
             implementation(project(":services:analytics:impl"))
-            if (ModulesConfig.analyticsConfig.withPosthog) {
+            if (analyticsConfig.withPosthog) {
                 implementation(project(":services:analyticsproviders:posthog"))
             }
-            if (ModulesConfig.analyticsConfig.withSentry) {
+            if (analyticsConfig.withSentry) {
                 implementation(project(":services:analyticsproviders:sentry"))
             }
         }

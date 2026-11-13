@@ -127,22 +127,40 @@ include(":tests:testutils")
 include(":annotations")
 include(":codegen")
 
-fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
-    directory.listFiles().orEmpty().also { it.sort() }.forEach { file ->
-        if (file.isDirectory) {
-            val newPath = "$path:${file.name}"
-            val buildFile = File(file, "build.gradle.kts")
-            if (buildFile.exists()) {
-                include(newPath)
-                logger.info("Included project: $newPath")
-            } else if (maxDepth > 0) {
-                includeProjects(file, newPath, maxDepth - 1)
-            }
+private fun findProjects(directory: File, path: String, maxDepth: Int = 1): List<String> {
+    return directory.listFiles().orEmpty().sorted().filter { it.isDirectory }.flatMap { subDir ->
+        val newPath = "$path:${subDir.name}"
+        when {
+            File(subDir, "build.gradle.kts").exists() -> listOf(newPath)
+            maxDepth > 0 -> findProjects(subDir, newPath, maxDepth - 1)
+            else -> emptyList()
         }
     }
 }
 
-includeProjects(File(rootDir, "enterprise"), ":enterprise", maxDepth = 2)
+private fun includeProjects(projectPaths: List<String>) {
+    projectPaths.forEach { projectPath ->
+        include(projectPath)
+        logger.info("Included project: $projectPath")
+    }
+}
+
+private fun includeProjects(directory: File, path: String, maxDepth: Int = 1) = includeProjects(findProjects(directory, path, maxDepth))
+
+// Enterprise build detection. By default, the build is an Enterprise build if the enterprise submodule contains
+// some Gradle projects. This can be overridden with the Gradle property `element.enterprise` (true or false),
+// for instance to build the FOSS version while the submodule is checked out: `./gradlew -Pelement.enterprise=false ...`
+private val enterpriseProjects = findProjects(File(rootDir, "enterprise"), ":enterprise", maxDepth = 2)
+private val isEnterpriseBuild = providers.gradleProperty("element.enterprise").orNull?.toBooleanStrict() ?: enterpriseProjects.isNotEmpty()
+if (isEnterpriseBuild) {
+    check(enterpriseProjects.isNotEmpty()) {
+        "Enterprise build requested but no enterprise sources found. Run `git submodule update --init enterprise`."
+    }
+    includeProjects(enterpriseProjects)
+}
+// Read by `Project.isEnterpriseBuild` in the plugins module.
+gradle.extra["isEnterpriseBuild"] = isEnterpriseBuild
+
 includeProjects(File(rootDir, "features"), ":features")
 includeProjects(File(rootDir, "libraries"), ":libraries")
 includeProjects(File(rootDir, "services"), ":services")

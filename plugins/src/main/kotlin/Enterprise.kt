@@ -6,9 +6,13 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import java.io.File
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.extra
 
 /**
  * Are we building with the enterprise sources?
+ * The value is computed once in settings.gradle.kts and stored as an extra property of the Gradle instance,
+ * see the `element.enterprise` Gradle property.
  */
-val isEnterpriseBuild = File("enterprise/README.md").exists()
+val Project.isEnterpriseBuild: Boolean
+    get() = gradle.extra["isEnterpriseBuild"] as Boolean

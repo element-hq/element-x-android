@@ -88,7 +88,7 @@ object Versions {
     /**
      * minSdkVersion that will be set in the Android Manifest.
      */
-    val minSdk = if (isEnterpriseBuild) MIN_SDK_ENTERPRISE else MIN_SDK_FOSS
+    fun minSdk(isEnterpriseBuild: Boolean) = if (isEnterpriseBuild) MIN_SDK_ENTERPRISE else MIN_SDK_FOSS
 
     /**
      * Java version used for compilation.
