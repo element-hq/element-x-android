@@ -17,7 +17,7 @@ android {
     namespace = "io.element.android.features.migration.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     implementation(projects.features.announcement.api)

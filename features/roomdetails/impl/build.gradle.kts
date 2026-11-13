@@ -23,7 +23,7 @@ android {
     }
 }
 
-setupDependencyInjection(generateNodeFactories = true)
+setupDependencyInjection()
 
 dependencies {
     implementation(projects.appconfig)
