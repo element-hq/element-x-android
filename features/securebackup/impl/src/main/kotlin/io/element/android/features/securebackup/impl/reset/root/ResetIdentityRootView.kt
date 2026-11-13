@@ -35,7 +35,6 @@ import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -77,7 +76,7 @@ fun ResetIdentityRootView(
             if (isResetTheOnlyOption) {
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(CommonStrings.screen_identity_confirmation_sign_out),
+                    text = stringResource(R.string.screen_identity_confirmation_sign_out),
                     onClick = { state.eventSink(ResetIdentityRootEvent.SignOut) },
                 )
             }

@@ -108,7 +108,7 @@ class ResetIdentityRootViewTest : RobolectricTest() {
             aResetIdentityRootState(variant = ResetIdentityRootVariant.NoOptionsWithoutEncryptedChats, eventSink = eventsRecorder),
         )
 
-        clickOn(CommonStrings.screen_identity_confirmation_sign_out)
+        clickOn(R.string.screen_identity_confirmation_sign_out)
 
         eventsRecorder.assertSingle(ResetIdentityRootEvent.SignOut)
     }
@@ -124,7 +124,7 @@ class ResetIdentityRootViewTest : RobolectricTest() {
     fun `with other options, Sign out is not displayed`() = runAndroidComposeUiTest {
         setResetRootView(aResetIdentityRootState())
 
-        onNodeWithText(activity!!.getString(CommonStrings.screen_identity_confirmation_sign_out)).assertDoesNotExist()
+        onNodeWithText(activity!!.getString(R.string.screen_identity_confirmation_sign_out)).assertDoesNotExist()
     }
 
     @Test
