@@ -22,7 +22,7 @@ android {
     }
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     implementation(projects.libraries.core)

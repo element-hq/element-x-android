@@ -21,7 +21,7 @@ android {
     namespace = "io.element.android.appnav"
 }
 
-setupDependencyInjection(generateNodeFactories = true)
+setupDependencyInjection()
 
 dependencies {
     allFeaturesApi(project)

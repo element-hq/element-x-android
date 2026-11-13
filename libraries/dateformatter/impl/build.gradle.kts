@@ -13,7 +13,7 @@ plugins {
     id("io.element.android-compose-library")
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 android {
     namespace = "io.element.android.libraries.dateformatter.impl"

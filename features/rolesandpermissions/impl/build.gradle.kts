@@ -24,7 +24,7 @@ android {
     }
 }
 
-setupDependencyInjection(generateNodeFactories = true)
+setupDependencyInjection()
 
 dependencies {
     api(projects.features.rolesandpermissions.api)

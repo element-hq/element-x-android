@@ -15,7 +15,7 @@ android {
     namespace = "io.element.android.features.callnative.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 // Temporary: `-PelementCallLocalVersion` points this at a locally published build of
 // element-call-android, because the library has no remote repository yet. Goes with the mavenLocal

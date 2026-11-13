@@ -16,7 +16,7 @@ android {
     namespace = "io.element.android.libraries.matrixmedia.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     implementation(projects.libraries.architecture)

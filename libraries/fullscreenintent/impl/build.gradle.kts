@@ -17,7 +17,7 @@ android {
     namespace = "io.element.android.libraries.fullscreenintent.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     api(projects.libraries.fullscreenintent.api)

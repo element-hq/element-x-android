@@ -22,7 +22,7 @@ android {
     }
 }
 
-setupDependencyInjection(generateNodeFactories = true)
+setupDependencyInjection()
 
 dependencies {
     api(projects.features.lockscreen.api)
