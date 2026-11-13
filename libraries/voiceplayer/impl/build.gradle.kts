@@ -16,7 +16,7 @@ android {
     namespace = "io.element.android.libraries.voiceplayer.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     api(projects.libraries.voiceplayer.api)

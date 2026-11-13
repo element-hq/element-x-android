@@ -19,7 +19,7 @@ android {
     namespace = "io.element.android.features.licenses.impl"
 }
 
-setupDependencyInjection(generateNodeFactories = true)
+setupDependencyInjection()
 
 dependencies {
     implementation(libs.serialization.json)

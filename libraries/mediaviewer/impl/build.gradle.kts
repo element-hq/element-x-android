@@ -22,7 +22,7 @@ android {
     }
 }
 
-setupDependencyInjection(generateNodeFactories = true)
+setupDependencyInjection()
 
 dependencies {
     implementation(libs.matrix.richtexteditor.compose)

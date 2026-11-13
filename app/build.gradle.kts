@@ -273,7 +273,7 @@ tasks.withType<SonarResolverTask>().configureEach {
     dependsOn("generateGplayDebugResValues", "generateGplayDebugAndroidTestResValues")
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     allLibrariesImpl()
