@@ -128,7 +128,11 @@ include(":annotations")
 include(":codegen")
 
 private fun findProjects(directory: File, path: String, maxDepth: Int = 1): List<String> {
-    return directory.listFiles().orEmpty().sorted().filter { it.isDirectory }.flatMap { subDir ->
+    return directory.listFiles { file ->
+        // Skip hidden folders (e.g. `.git`) and build outputs: every folder listed here is a configuration cache input,
+        // so descending into them would invalidate the cache each time git or a build writes to them.
+        file.isDirectory && !file.name.startsWith(".") && file.name != "build"
+    }.orEmpty().sorted().flatMap { subDir ->
         val newPath = "$path:${subDir.name}"
         when {
             File(subDir, "build.gradle.kts").exists() -> listOf(newPath)
