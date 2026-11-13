@@ -18,7 +18,7 @@ android {
     namespace = "io.element.android.features.analytics.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = true)
 
 dependencies {
     implementation(projects.libraries.androidutils)

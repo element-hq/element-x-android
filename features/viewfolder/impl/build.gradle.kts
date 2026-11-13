@@ -18,7 +18,7 @@ android {
     namespace = "io.element.android.features.viewfolder.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = true)
 
 dependencies {
     implementation(projects.libraries.androidutils)
