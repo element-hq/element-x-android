@@ -106,6 +106,16 @@ class VoiceMessageComposerPlayer(
     }
 
     /**
+     * Pause any media currently playing in the shared [MediaPlayer], including voice messages from the timeline,
+     * so that it does not leak into a new recording.
+     */
+    fun pauseAnyPlayback() {
+        if (mediaPlayer.state.value.isPlaying) {
+            mediaPlayer.pause()
+        }
+    }
+
+    /**
      * Seek to a given position in the current media.
      *
      * Call [setMedia] before calling this method.
