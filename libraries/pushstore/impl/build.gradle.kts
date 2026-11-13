@@ -14,11 +14,6 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.pushstore.impl"
-
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArguments["clearPackageData"] = "true"
-    }
 }
 
 setupDependencyInjection()
