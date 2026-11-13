@@ -40,7 +40,9 @@ fun LibraryExtension.androidLibraryConfig(project: Project) {
 
     // Most of the library modules do not declare any resource. For them, skip the resource processing tasks
     // (R class generation, resource packaging, etc.).
-    androidResources.enable = project.hasAndroidResources()
+    // Keep them for the modules with unit tests though: without them, the unit tests do not get the R classes and the
+    // merged resources of the dependencies, which Robolectric and Paparazzi tests need.
+    androidResources.enable = project.hasAndroidResources() || project.file("src/test").exists()
 
     lint {
         project.defaultLintOptions(this)
