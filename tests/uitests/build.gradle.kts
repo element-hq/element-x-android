@@ -45,7 +45,7 @@ dependencies {
     // implementation(projects.app)
     implementation(projects.appnav)
     allLibrariesImpl()
-    allServicesImpl(project, posthogConfigurationName = "implementation")
+    allServicesImpl(project)
     allFeaturesImpl(project)
     implementation(projects.appicon.element)
     implementation(projects.appicon.enterprise)
