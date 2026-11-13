@@ -12,17 +12,18 @@ import android.media.RingtoneManager
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.api.notifications.SoundDisplayNameResolver
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @ContributesBinding(AppScope::class)
 class DefaultSoundDisplayNameResolver(
     @ApplicationContext private val context: Context,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : SoundDisplayNameResolver {
-    override suspend fun resolveCustomSoundTitle(uri: String): String? = withContext(Dispatchers.IO) {
+    override suspend fun resolveCustomSoundTitle(uri: String): String? = withContext(coroutineDispatchers.io) {
         val parsed = runCatchingExceptions { uri.toUri() }.getOrNull() ?: return@withContext null
         // Probing our own FileProvider URI yields the internal filename ("call_sound.ogg"),
         // not a user-meaningful tone name — better to fall through to the localised "Custom"

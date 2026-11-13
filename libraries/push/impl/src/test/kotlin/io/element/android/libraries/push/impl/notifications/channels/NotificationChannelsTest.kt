@@ -16,6 +16,7 @@ import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.NotificationSound
@@ -499,5 +500,6 @@ class NotificationChannelsTest : RobolectricTest() {
         context = RuntimeEnvironment.getApplication(),
         enterpriseService = enterpriseService,
         appPreferencesStore = appPreferencesStore,
+        coroutineDispatchers = CoroutineDispatchers.Default,
     )
 }
