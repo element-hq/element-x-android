@@ -85,6 +85,7 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
         sdkIntVersion: Int = Build.VERSION_CODES.P,
         deleteOriginal: Boolean = false,
         mimeType: String = asset.mimeType,
+        expectedFileName: String = asset.filename,
     ): MediaUploadInfo {
         val context = InstrumentationRegistry.getInstrumentation().context
         val deleteCallback = lambdaRecorder<Uri?, Unit> {}
@@ -101,9 +102,85 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
             mediaOptimizationConfig = mediaOptimizationConfig,
         )
         val data = result.getOrThrow()
-        assertThat(data.file.path).endsWith(asset.filename)
+        assertThat(data.file.path).endsWith(expectedFileName)
         deleteCallback.assertions().isCalledExactly(if (deleteOriginal) 0 else 1)
         return data
+    }
+
+    @Test
+    fun `a compressed bmp is labelled and named as the jpeg it was re-encoded to`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageBmp,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = true,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+            sdkIntVersion = Build.VERSION_CODES.Q,
+            expectedFileName = "image.jpeg",
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.imageInfo.mimetype).isEqualTo(MimeTypes.Jpeg)
+        assertThat(info.imageInfo.width).isEqualTo(assetImageBmp.width)
+        assertThat(info.imageInfo.height).isEqualTo(assetImageBmp.height)
+    }
+
+    @Test
+    fun `a re-encoded image does not replace a processed file with the same name`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val existingFile = File(context.cacheDir, "image.jpeg").apply { writeText("existing") }
+        process(
+            asset = assetImageBmp,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = true,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+            sdkIntVersion = Build.VERSION_CODES.Q,
+            expectedFileName = "image (1).jpeg",
+        )
+        assertThat(existingFile.readText()).isEqualTo("existing")
+    }
+
+    @Test
+    fun `a processed file that cannot be moved to its final name is still returned`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val sut = createAndroidMediaPreProcessor(
+            context = context,
+            temporaryUriDeleter = FakeTemporaryUriDeleter(lambdaRecorder<Uri?, Unit> {}),
+        )
+        val file = getFileFromAssets(context, assetText.filename)
+        // Files are processed in the uploads dir, then moved to the root of the cache dir, which is made read-only here
+        File(context.cacheDir, "uploads").mkdirs()
+        context.cacheDir.setWritable(false)
+        try {
+            val mediaUploadInfo = sut.process(
+                uri = file.toUri(),
+                mimeType = assetText.mimeType,
+                deleteOriginal = false,
+                mediaOptimizationConfig = MediaOptimizationConfig(
+                    compressImages = true,
+                    videoCompressionPreset = VideoCompressionPreset.STANDARD,
+                ),
+            ).getOrThrow()
+            assertThat(mediaUploadInfo.file.exists()).isTrue()
+            assertThat(mediaUploadInfo.file.readText()).isEqualTo(file.readText())
+        } finally {
+            context.cacheDir.setWritable(true)
+        }
+    }
+
+    @Test
+    fun `an uncompressed bmp keeps its mime type and file name`() = runTest {
+        val mediaUploadInfo = process(
+            asset = assetImageBmp,
+            mediaOptimizationConfig = MediaOptimizationConfig(
+                compressImages = false,
+                videoCompressionPreset = VideoCompressionPreset.STANDARD,
+            ),
+            sdkIntVersion = Build.VERSION_CODES.Q,
+        )
+        val info = mediaUploadInfo as MediaUploadInfo.Image
+        assertThat(info.imageInfo.mimetype).isEqualTo(assetImageBmp.mimeType)
+        assertThat(info.imageInfo.size).isEqualTo(assetImageBmp.size)
     }
 
     @Test
@@ -561,10 +638,12 @@ class AndroidMediaPreProcessorTest : RobolectricTest() {
         temporaryUriDeleter = temporaryUriDeleter,
     )
 
+    // Copied outside the root of the cache dir, where processed media are written, so that the source and output files never clash
     @Throws(IOException::class)
-    private fun getFileFromAssets(context: Context, fileName: String): File = File(context.cacheDir, fileName)
+    private fun getFileFromAssets(context: Context, fileName: String): File = File(context.cacheDir, "assets/$fileName")
         .also {
             if (!it.exists()) {
+                it.parentFile?.mkdirs()
                 it.outputStream().use { cache ->
                     context.assets.open(fileName).use { inputStream ->
                         inputStream.copyTo(cache)
