@@ -60,7 +60,7 @@ dependencyResolutionManagement {
 
         // Add ivy repository for nightly builds of the SDK bindings for Android, which are published as GitHub release assets.
         ivy {
-            url = uri("https://github.com/matrix-org/matrix-rust-components-kotlin/releases/download")
+            url = uri("https://github.com/hughns/matrix-rust-components-kotlin/releases/download")
             patternLayout { artifact("sdk-[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
             metadataSources { gradleMetadata() }
             content {
