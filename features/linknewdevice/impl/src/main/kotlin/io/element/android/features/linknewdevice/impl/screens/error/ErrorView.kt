@@ -141,7 +141,7 @@ private fun DoneButton(
 ) {
     Button(
         modifier = Modifier.fillMaxWidth(),
-        text = stringResource(CommonStrings.action_done),
+        text = stringResource(CommonStrings.action_close),
         onClick = onDone,
     )
 }
