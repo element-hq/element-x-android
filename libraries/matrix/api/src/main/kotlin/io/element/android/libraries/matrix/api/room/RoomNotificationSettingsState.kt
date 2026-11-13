@@ -20,6 +20,6 @@ fun RoomNotificationSettingsState.roomNotificationSettings(): RoomNotificationSe
         is RoomNotificationSettingsState.Ready -> roomNotificationSettings
         is RoomNotificationSettingsState.Pending -> prevRoomNotificationSettings
         is RoomNotificationSettingsState.Error -> prevRoomNotificationSettings
-        else -> null
+        RoomNotificationSettingsState.Unknown -> null
     }
 }

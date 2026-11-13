@@ -150,7 +150,9 @@ class RustTimeline(
     init {
         when (mode) {
             is Timeline.Mode.Live, is Timeline.Mode.FocusedOnEvent -> coroutineScope.fetchMembers()
-            else -> Unit
+            Timeline.Mode.PinnedEvents,
+            Timeline.Mode.Media,
+            is Timeline.Mode.Thread -> Unit
         }
 
         if (mode == Timeline.Mode.Live) {

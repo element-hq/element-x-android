@@ -619,7 +619,10 @@ private fun SpaceRoom.trailingAction(
                 )
             }
         }
-        else -> null
+        CurrentUserMembership.INVITED,
+        CurrentUserMembership.JOINED,
+        CurrentUserMembership.KNOCKED,
+        CurrentUserMembership.BANNED -> null
     }
 }
 
@@ -636,7 +639,11 @@ private fun SpaceRoom.inviteButtons(
                 )
             }
         }
-        else -> null
+        CurrentUserMembership.JOINED,
+        CurrentUserMembership.LEFT,
+        CurrentUserMembership.KNOCKED,
+        CurrentUserMembership.BANNED,
+        null -> null
     }
 }
 

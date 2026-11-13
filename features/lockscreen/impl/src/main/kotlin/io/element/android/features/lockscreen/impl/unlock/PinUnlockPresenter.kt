@@ -160,7 +160,9 @@ class PinUnlockPresenter(
     private fun AsyncData<PinEntry>.clear(): AsyncData<PinEntry> {
         return when (this) {
             is AsyncData.Success -> AsyncData.Success(data.clear())
-            else -> this
+            AsyncData.Uninitialized,
+            is AsyncData.Loading,
+            is AsyncData.Failure -> this
         }
     }
 
@@ -174,7 +176,9 @@ class PinUnlockPresenter(
                 }
                 AsyncData.Success(pinEntry)
             }
-            else -> this
+            AsyncData.Uninitialized,
+            is AsyncData.Loading,
+            is AsyncData.Failure -> this
         }
     }
 
@@ -184,7 +188,9 @@ class PinUnlockPresenter(
                 val pinEntry = data.fillWith(pinEntryAsText)
                 AsyncData.Success(pinEntry)
             }
-            else -> this
+            AsyncData.Uninitialized,
+            is AsyncData.Loading,
+            is AsyncData.Failure -> this
         }
     }
 

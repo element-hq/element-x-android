@@ -329,14 +329,16 @@ private fun SupportingTextLayout(validity: TextFieldValidity?, supportingText: S
                     tint = ElementTheme.colors.iconSuccessPrimary
                 )
             }
-            else -> Unit
+            TextFieldValidity.None,
+            null -> Unit
         }
         Text(
             text = supportingText,
             color = when (validity) {
                 TextFieldValidity.Invalid -> ElementTheme.colors.textCriticalPrimary
                 TextFieldValidity.Valid -> ElementTheme.colors.textSuccessPrimary
-                else -> ElementTheme.colors.textSecondary
+                TextFieldValidity.None,
+                null -> ElementTheme.colors.textSecondary
             },
             style = ElementTheme.typography.fontBodySmRegular,
         )

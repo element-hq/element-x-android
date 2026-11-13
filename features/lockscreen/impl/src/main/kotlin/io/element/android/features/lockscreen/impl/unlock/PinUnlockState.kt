@@ -31,7 +31,9 @@ data class PinUnlockState(
     } else {
         when (remainingAttempts) {
             is AsyncData.Success -> remainingAttempts.data > 0
-            else -> true
+            AsyncData.Uninitialized,
+            is AsyncData.Loading,
+            is AsyncData.Failure -> true
         }
     }
 

@@ -130,7 +130,8 @@ private fun AnnotatedString.findMatrixPatternMatches(permalinkParser: PermalinkP
                 }
             }
             MatrixPatternType.AT_ROOM -> MentionNodeContent.Everyone(displayText = match.value)
-            else -> null
+            MatrixPatternType.ROOM_ID,
+            MatrixPatternType.EVENT_ID -> null
         }
         mention?.let { PillMatch(match.start, match.end, it) }
     }

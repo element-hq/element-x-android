@@ -181,7 +181,9 @@ sealed interface SecurityAndPrivacyRoomAccess {
         return when (this) {
             is SpaceMember -> spaceIds
             is AskToJoinWithSpaceMember -> spaceIds
-            else -> persistentListOf()
+            InviteOnly,
+            AskToJoin,
+            Anyone -> persistentListOf()
         }
     }
 }

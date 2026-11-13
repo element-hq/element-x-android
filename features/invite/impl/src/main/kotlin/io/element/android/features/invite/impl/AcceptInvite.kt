@@ -36,6 +36,8 @@ class DefaultAcceptInvite(
     private val notificationCleaner: NotificationCleaner,
     private val seenInvitesStore: SeenInvitesStore,
 ) : AcceptInvite {
+    // ErrorKind has many entries, only Unknown is mapped to a specific failure
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     override suspend fun invoke(roomId: RoomId): Result<RoomId> {
         return joinRoom(
             roomIdOrAlias = roomId.toRoomIdOrAlias(),

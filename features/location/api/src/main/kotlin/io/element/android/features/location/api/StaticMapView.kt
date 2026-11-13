@@ -192,7 +192,9 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
             )
             LocationPin(variant = pinVariant, modifier = Modifier.centerBottomEdge(this))
         }
-        else -> {
+        AsyncImagePainter.State.Empty,
+        is AsyncImagePainter.State.Loading,
+        is AsyncImagePainter.State.Error -> {
             StaticMapPlaceholder(
                 painter = painterResource(R.drawable.blurred_map),
                 canReload = builder?.isServiceAvailable() == true && state is AsyncImagePainter.State.Error,

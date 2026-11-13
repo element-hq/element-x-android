@@ -259,7 +259,8 @@ private fun MediaGalleryPage(
                     error = groupedMediaItems.error,
                 )
             }
-            else -> Unit
+            AsyncData.Uninitialized,
+            is AsyncData.Loading -> Unit
         }
     }
 }
@@ -421,7 +422,11 @@ private fun MediaGalleryImageGrid(
             val blurHash = when (item) {
                 is MediaItem.Image -> item.blurHash
                 is MediaItem.Video -> item.blurHash
-                else -> null
+                is MediaItem.DateSeparator,
+                is MediaItem.LoadingIndicator,
+                is MediaItem.Audio,
+                is MediaItem.Voice,
+                is MediaItem.File -> null
             }
 
             val blurHashBackgroundModifier = if (blurHash != null) {
@@ -432,7 +437,8 @@ private fun MediaGalleryImageGrid(
 
             val currentValidationState by when (item) {
                 is MediaItem.Event -> item.validationState.collectOverallState()
-                else -> remember { mutableStateOf(ContentValidationValue.Unknown) }
+                is MediaItem.DateSeparator,
+                is MediaItem.LoadingIndicator -> remember { mutableStateOf(ContentValidationValue.Unknown) }
             }
 
             when (item) {

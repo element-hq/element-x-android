@@ -25,6 +25,8 @@ class DefaultJoinRoom(
     private val client: MatrixClient,
     private val analyticsService: AnalyticsService,
 ) : JoinRoom {
+    // ErrorKind has many entries, only Forbidden is mapped to a specific failure
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     override suspend fun invoke(
         roomIdOrAlias: RoomIdOrAlias,
         serverNames: List<String>,

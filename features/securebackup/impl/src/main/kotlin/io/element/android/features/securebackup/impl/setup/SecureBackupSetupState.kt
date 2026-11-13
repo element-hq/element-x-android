@@ -45,5 +45,7 @@ enum class SetupErrorType {
 fun SetupState.recoveryKey(): String? = when (this) {
     is SetupState.Created -> formattedRecoveryKey
     is SetupState.CreatedAndSaved -> formattedRecoveryKey
-    else -> null
+    SetupState.Init,
+    SetupState.Creating,
+    is SetupState.Error -> null
 }

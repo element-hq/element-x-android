@@ -79,7 +79,12 @@ fun NotificationSettingsView(
     OnLifecycleEvent { _, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> state.eventSink.invoke(NotificationSettingsEvent.RefreshSystemNotificationsEnabled)
-            else -> Unit
+            Lifecycle.Event.ON_CREATE,
+            Lifecycle.Event.ON_START,
+            Lifecycle.Event.ON_PAUSE,
+            Lifecycle.Event.ON_STOP,
+            Lifecycle.Event.ON_DESTROY,
+            Lifecycle.Event.ON_ANY -> Unit
         }
     }
     PreferencePage(
@@ -416,7 +421,8 @@ private fun MessageSoundDialog(state: NotificationSettingsState) {
         NotificationSound.ElementDefault -> 0
         NotificationSound.ElementFade -> 1
         NotificationSound.SystemDefault -> 2
-        else -> null
+        NotificationSound.Silent,
+        is NotificationSound.Custom -> null
     }
     // When the user is on Custom or Silent, no preset row is selected — surface the current
     // sound as a subtitle so screen readers (and sighted users) still have state context.
@@ -454,7 +460,10 @@ private fun MessageSoundDialog(state: NotificationSettingsState) {
 private fun CallRingtoneDialog(state: NotificationSettingsState) {
     val initialSelection = when (state.callRingtone.sound) {
         NotificationSound.SystemDefault -> 0
-        else -> null
+        NotificationSound.ElementDefault,
+        NotificationSound.ElementFade,
+        NotificationSound.Silent,
+        is NotificationSound.Custom -> null
     }
     val subtitle = if (initialSelection == null) {
         stringResource(

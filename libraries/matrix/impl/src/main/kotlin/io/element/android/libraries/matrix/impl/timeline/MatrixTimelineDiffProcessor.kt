@@ -151,6 +151,8 @@ private class DiffingResult(initialItems: List<MatrixTimelineItem>) {
         items.clear()
     }
 
+    // Only RoomMembershipContent is relevant among the many EventContent subtypes
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun processItem(item: MatrixTimelineItem) {
         if (skipProcessing()) return
         when (item) {
@@ -163,7 +165,8 @@ private class DiffingResult(initialItems: List<MatrixTimelineItem>) {
                     }
                 }
             }
-            else -> Unit
+            is MatrixTimelineItem.Virtual,
+            MatrixTimelineItem.Other -> Unit
         }
     }
 

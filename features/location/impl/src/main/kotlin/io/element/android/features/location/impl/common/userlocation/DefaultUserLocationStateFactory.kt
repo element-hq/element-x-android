@@ -22,6 +22,8 @@ import kotlin.time.Duration.Companion.seconds
 
 @ContributesBinding(RoomScope::class)
 class DefaultUserLocationStateFactory : UserLocationState.Factory {
+    // LocationEvent is kept open by the library with an internal subtype, so an else branch is required
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     @Composable
     override fun create(hasLocationPermission: Boolean): UserLocationState {
         val locationProvider = if (hasLocationPermission) {

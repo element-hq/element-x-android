@@ -135,7 +135,7 @@ class OutgoingVerificationPresenter(
             is StateMachineState.Verifying -> {
                 val async = when (machineState) {
                     is StateMachineState.Verifying.Replying -> AsyncData.Loading()
-                    else -> AsyncData.Uninitialized
+                    is StateMachineState.Verifying.ChallengeReceived -> AsyncData.Uninitialized
                 }
                 OutgoingVerificationState.Step.Verifying(machineState.data, async)
             }

@@ -150,7 +150,22 @@ class DefaultNotifiableEventResolver(
         is NotificationContent.MessageLike.CallInvite -> senderId
         is NotificationContent.MessageLike.RtcNotification -> senderId
         is NotificationContent.Invite -> senderId
-        else -> null
+        NotificationContent.MessageLike.CallAnswer,
+        NotificationContent.MessageLike.CallHangup,
+        NotificationContent.MessageLike.CallCandidates,
+        NotificationContent.MessageLike.KeyVerificationReady,
+        NotificationContent.MessageLike.KeyVerificationStart,
+        NotificationContent.MessageLike.KeyVerificationCancel,
+        NotificationContent.MessageLike.KeyVerificationAccept,
+        NotificationContent.MessageLike.KeyVerificationKey,
+        NotificationContent.MessageLike.KeyVerificationMac,
+        NotificationContent.MessageLike.KeyVerificationDone,
+        is NotificationContent.MessageLike.ReactionContent,
+        NotificationContent.MessageLike.RoomEncrypted,
+        is NotificationContent.MessageLike.RoomRedaction,
+        NotificationContent.MessageLike.Sticker,
+        NotificationContent.MessageLike.Beacon,
+        is NotificationContent.StateEvent -> null
     }
 
     private suspend fun NotificationData.asNotifiableEvent(

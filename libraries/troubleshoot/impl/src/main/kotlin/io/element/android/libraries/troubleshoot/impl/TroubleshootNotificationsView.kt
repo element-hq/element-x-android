@@ -47,7 +47,12 @@ fun TroubleshootNotificationsView(
                     state.eventSink(TroubleshootNotificationsEvent.RetryFailedTests)
                 }
             }
-            else -> Unit
+            Lifecycle.Event.ON_CREATE,
+            Lifecycle.Event.ON_START,
+            Lifecycle.Event.ON_PAUSE,
+            Lifecycle.Event.ON_STOP,
+            Lifecycle.Event.ON_DESTROY,
+            Lifecycle.Event.ON_ANY -> Unit
         }
     }
 

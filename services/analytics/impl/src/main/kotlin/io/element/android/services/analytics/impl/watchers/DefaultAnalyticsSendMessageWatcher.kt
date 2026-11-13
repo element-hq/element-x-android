@@ -57,7 +57,11 @@ class DefaultAnalyticsSendMessageWatcher(
                             pendingTransaction.finish()
                         }
                     }
-                    else -> Unit
+                    is SendQueueUpdate.CancelledLocalEvent,
+                    is SendQueueUpdate.ReplacedLocalEvent,
+                    is SendQueueUpdate.SendError,
+                    is SendQueueUpdate.RetrySendingEvent,
+                    is SendQueueUpdate.MediaUpload -> Unit
                 }
             }
             .launchIn(coroutineScope)

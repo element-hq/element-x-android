@@ -130,7 +130,11 @@ class ShareLocationPresenter(
                         ShareLocationState.Dialog.LiveLocationDurations(durations.toImmutableList())
                     }
                 }
-                else -> {
+                LocationConstraintsCheck.PermissionRationale,
+                LocationConstraintsCheck.PermissionShouldBeRequested,
+                LocationConstraintsCheck.PermissionDenied,
+                LocationConstraintsCheck.LocationServiceDisabled,
+                LocationConstraintsCheck.NotEnoughPowerLevel -> {
                     if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
                         permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                     }
@@ -247,14 +251,20 @@ class ShareLocationPresenter(
                         threadedTimeline.use { block(it) }
                     }
             }
-            else -> block(room.liveTimeline)
+            Timeline.Mode.Live,
+            is Timeline.Mode.FocusedOnEvent,
+            Timeline.Mode.PinnedEvents,
+            Timeline.Mode.Media -> block(room.liveTimeline)
         }
     }
 }
 
 private fun Timeline.Mode.canShareLiveLocation() = when (this) {
     is Timeline.Mode.Thread -> false
-    else -> true
+    Timeline.Mode.Live,
+    is Timeline.Mode.FocusedOnEvent,
+    Timeline.Mode.PinnedEvents,
+    Timeline.Mode.Media -> true
 }
 
 private fun generateBody(uri: String): String = "Location was shared at $uri"

@@ -136,7 +136,8 @@ class ResetIdentityFlowNode(
                     is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
                 }
             }
-            else -> Unit
+            AsyncData.Uninitialized,
+            is AsyncData.Loading -> Unit
         }
     }
 

@@ -485,7 +485,9 @@ private fun StandardLayout(
                 is MessageComposerMode.EditCaption -> {
                     Spacer(modifier = Modifier.width(19.dp))
                 }
-                else -> {
+                MessageComposerMode.Normal,
+                is MessageComposerMode.Edit,
+                is MessageComposerMode.Reply -> {
                     val endPadding = if (voiceMessageState is VoiceMessageState.Idle) 0.dp else 3.dp
                     // To avoid loosing keyboard focus, the IconButton has to be defined here and has to be always enabled.
                     IconButton(
