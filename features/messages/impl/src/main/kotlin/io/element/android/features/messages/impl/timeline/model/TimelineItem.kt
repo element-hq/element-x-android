@@ -11,12 +11,23 @@ package io.element.android.features.messages.impl.timeline.model
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -53,7 +64,8 @@ sealed interface TimelineItem {
         if (eventId == null) return false
         return when (this) {
             is Event -> this.eventId == eventId
-            else -> false
+            is Virtual,
+            is GroupedEvents -> false
         }
     }
 
@@ -131,7 +143,18 @@ sealed interface TimelineItem {
             is TimelineItemVideoContent -> content.formattedCaption == null && content.caption == null
             is TimelineItemGalleryContent -> false
             is TimelineItemAttachmentsContent -> false
-            else -> true
+            is TimelineItemTextBasedContent,
+            is TimelineItemAudioContent,
+            is TimelineItemFileContent,
+            is TimelineItemVoiceContent,
+            is TimelineItemEncryptedContent,
+            is TimelineItemLocationContent,
+            is TimelineItemPollContent,
+            is TimelineItemRtcNotificationContent,
+            is TimelineItemStateContent,
+            TimelineItemLegacyCallInviteContent,
+            TimelineItemRedactedContent,
+            TimelineItemUnknownContent -> true
         }
 
         val eventOrTransactionId: EventOrTransactionId

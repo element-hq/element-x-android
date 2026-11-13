@@ -80,7 +80,8 @@ class DefaultTextPillificator(
                     text.replace(match.start, match.end, "@ ")
                     text.setSpan(mentionSpan, match.start, match.start + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
-                else -> Unit
+                MatrixPatternType.ROOM_ID,
+                MatrixPatternType.EVENT_ID -> Unit
             }
         }
     }

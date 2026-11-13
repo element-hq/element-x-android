@@ -59,7 +59,9 @@ fun IdentityChangeStateView(
             onSubmitClick = { state.eventSink(IdentityChangeEvent.WithdrawVerification(identityChangeViolation.identityRoomMember.userId)) },
             modifier = modifier,
         )
-        else -> Unit
+        IdentityState.Verified,
+        IdentityState.Pinned,
+        null -> Unit
     }
 }
 

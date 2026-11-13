@@ -54,12 +54,14 @@ fun TimelineItemEncryptedView(
                 UtdCause.WithheldBySender -> {
                     R.string.timeline_decryption_failure_unable_to_decrypt to CompoundDrawables.ic_compound_error
                 }
-                else -> {
+                UtdCause.Unknown,
+                UtdCause.Malformed -> {
                     CommonStrings.common_waiting_for_decryption_key to CompoundDrawables.ic_compound_time
                 }
             }
         }
-        else -> {
+        is UnableToDecryptContent.Data.OlmV1Curve25519AesSha2,
+        UnableToDecryptContent.Data.Unknown -> {
             // Should not happen, we only supports megolm in rooms
             CommonStrings.common_waiting_for_decryption_key to CompoundDrawables.ic_compound_time
         }

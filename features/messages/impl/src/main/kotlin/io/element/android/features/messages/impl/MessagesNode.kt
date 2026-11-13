@@ -284,7 +284,12 @@ class MessagesNode(
             OnLifecycleEvent { _, event ->
                 when (event) {
                     Lifecycle.Event.ON_PAUSE -> state.composerState.eventSink(MessageComposerEvent.SaveDraft)
-                    else -> Unit
+                    Lifecycle.Event.ON_CREATE,
+                    Lifecycle.Event.ON_START,
+                    Lifecycle.Event.ON_RESUME,
+                    Lifecycle.Event.ON_STOP,
+                    Lifecycle.Event.ON_DESTROY,
+                    Lifecycle.Event.ON_ANY -> Unit
                 }
             }
             MessagesView(
@@ -350,7 +355,9 @@ class MessagesNode(
                 onSelectAction = { action, target ->
                     when (action) {
                         is ModerationAction.DisplayProfile -> callback.navigateToRoomMemberDetails(target.userId)
-                        else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvent.ProcessAction(action, target))
+                        ModerationAction.KickUser,
+                        ModerationAction.BanUser,
+                        ModerationAction.UnbanUser -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvent.ProcessAction(action, target))
                     }
                 },
                 onAvatarClick = { user ->

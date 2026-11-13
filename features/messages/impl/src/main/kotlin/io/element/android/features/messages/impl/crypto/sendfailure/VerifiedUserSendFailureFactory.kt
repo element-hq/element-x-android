@@ -42,7 +42,13 @@ class VerifiedUserSendFailureFactory(
                     VerifiedUserSendFailure.ChangedIdentity(displayName)
                 }
             }
-            else -> VerifiedUserSendFailure.None
+            is LocalEventSendState.Sending,
+            is LocalEventSendState.Failed.Unknown,
+            LocalEventSendState.Failed.SendingFromUnverifiedDevice,
+            is LocalEventSendState.Failed.InvalidMimeType,
+            LocalEventSendState.Failed.MissingMediaContent,
+            is LocalEventSendState.Sent,
+            null -> VerifiedUserSendFailure.None
         }
     }
 }

@@ -247,7 +247,19 @@ fun TimelineItemEventContentView(
                     is TimelineItemVideoContent,
                     is TimelineItemGalleryContent,
                     is TimelineItemAttachmentsContent -> PaddingValues(start = 4.dp, end = 4.dp, top = 8.dp, bottom = 0.dp)
-                    else -> PaddingValues(horizontal = 12.dp, vertical = 8.dp)
+                    is TimelineItemTextBasedContent,
+                    is TimelineItemAudioContent,
+                    is TimelineItemFileContent,
+                    is TimelineItemStickerContent,
+                    is TimelineItemVoiceContent,
+                    is TimelineItemEncryptedContent,
+                    is TimelineItemLocationContent,
+                    is TimelineItemPollContent,
+                    is TimelineItemRtcNotificationContent,
+                    is TimelineItemStateContent,
+                    TimelineItemLegacyCallInviteContent,
+                    TimelineItemRedactedContent,
+                    TimelineItemUnknownContent -> PaddingValues(horizontal = 12.dp, vertical = 8.dp)
                 }
             }
             CaptionView(
@@ -333,7 +345,15 @@ private fun ValidateMediaHelper(
         is TimelineItemVoiceContent -> listOf(content.mediaSource)
         is TimelineItemGalleryContent -> content.items.flatMap { listOfNotNull(it.thumbnailSource, it.mediaSource) }
         is TimelineItemAttachmentsContent -> content.attachments.flatMap { listOfNotNull(it.thumbnailSource, it.mediaSource) }
-        else -> return
+        is TimelineItemTextBasedContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemLocationContent,
+        is TimelineItemPollContent,
+        is TimelineItemRtcNotificationContent,
+        is TimelineItemStateContent,
+        TimelineItemLegacyCallInviteContent,
+        TimelineItemRedactedContent,
+        TimelineItemUnknownContent -> return
     }
     val updatedEventSink by rememberUpdatedState(eventSink)
     LaunchedEffect(eventId, mediaSources) {

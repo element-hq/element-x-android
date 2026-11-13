@@ -8,9 +8,20 @@
 package io.element.android.features.messages.impl.pinned
 
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 
@@ -26,7 +37,17 @@ internal fun EventContent.isDisplayableAsPinnedEvent(): Boolean {
         UnknownContent,
         is FailedToParseMessageLikeContent,
         is FailedToParseStateContent -> false
-        else -> true
+        is MessageContent,
+        is RedactedContent,
+        is StickerContent,
+        is PollContent,
+        is UnableToDecryptContent,
+        is RoomMembershipContent,
+        is ProfileChangeContent,
+        is StateContent,
+        is LiveLocationContent,
+        LegacyCallInviteContent,
+        is CallNotifyContent -> true
     }
 }
 

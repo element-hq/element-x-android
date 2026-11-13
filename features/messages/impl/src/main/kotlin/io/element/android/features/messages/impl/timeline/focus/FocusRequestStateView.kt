@@ -48,7 +48,9 @@ fun FocusRequestStateView(
                 onDismissRequest = onClearFocusRequestState,
             )
         }
-        else -> Unit
+        FocusRequestState.None,
+        is FocusRequestState.Requested,
+        is FocusRequestState.Success -> Unit
     }
 }
 

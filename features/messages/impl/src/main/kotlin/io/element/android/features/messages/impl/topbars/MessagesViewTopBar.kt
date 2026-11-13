@@ -119,7 +119,9 @@ internal fun MessagesViewTopBar(
                             contentDescription = null,
                         )
                     }
-                    else -> Unit
+                    IdentityState.Pinned,
+                    IdentityState.PinViolation,
+                    null -> Unit
                 }
 
                 when (sharedHistoryIcon) {

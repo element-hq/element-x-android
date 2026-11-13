@@ -661,7 +661,10 @@ class TimelinePresenter(
 private fun FocusRequestState.onFocusEventRender(): FocusRequestState {
     return when (this) {
         is FocusRequestState.Success -> copy(rendered = true)
-        else -> this
+        FocusRequestState.None,
+        is FocusRequestState.Requested,
+        is FocusRequestState.Loading,
+        is FocusRequestState.Failure -> this
     }
 }
 
