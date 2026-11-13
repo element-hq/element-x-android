@@ -33,17 +33,27 @@ class RustTemporaryMatrixClientFactory(
             val formattedServerName = if (port != -1) "$domain:$port" else domain
 
             val sessionPaths = sessionPathsFactory.create()
-            val client = rustMatrixClientFactory.getBaseClientBuilder(
-                sessionPaths = sessionPaths,
-                clientSecret = null,
-                slidingSyncType = ClientBuilderSlidingSync.Native,
-                isMessageSearchAvailable = false,
-                sessionDelegate = NoOpClientSessionDelegate,
-                autoEnableEncryption = false,
+            val client = try {
+                rustMatrixClientFactory.getBaseClientBuilder(
+                    sessionPaths = sessionPaths,
+                    clientSecret = null,
+                    slidingSyncType = ClientBuilderSlidingSync.Native,
+                    isMessageSearchAvailable = false,
+                    sessionDelegate = NoOpClientSessionDelegate,
+                    autoEnableEncryption = false,
+                )
+                    .serverName(formattedServerName)
+                    .build()
+            } catch (failure: Exception) {
+                // The client will never be closed, delete its directories now
+                sessionPathsFactory.delete(sessionPaths)
+                throw failure
+            }
+            RustTemporaryMatrixClient(
+                client = client,
+                dispatcher = coroutineDispatchers.io,
+                onClose = { sessionPathsFactory.delete(sessionPaths) },
             )
-                .serverName(formattedServerName)
-                .build()
-            RustTemporaryMatrixClient(client, sessionPaths, coroutineDispatchers.io)
         }
     }
 }

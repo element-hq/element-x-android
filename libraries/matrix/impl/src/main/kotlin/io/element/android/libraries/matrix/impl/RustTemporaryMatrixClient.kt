@@ -10,7 +10,6 @@ package io.element.android.libraries.matrix.impl
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.TemporaryMatrixClient
-import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -18,8 +17,9 @@ import org.matrix.rustcomponents.sdk.Client
 
 class RustTemporaryMatrixClient(
     private val client: Client,
-    private val paths: SessionPaths?,
     private val dispatcher: CoroutineDispatcher,
+    // Invoked once the client is closed, for instance to delete its session directories
+    private val onClose: () -> Unit = {},
 ) : TemporaryMatrixClient {
     override suspend fun getUrl(url: String): Result<ByteArray> = withContext(dispatcher) {
         runCatchingExceptions {
@@ -32,13 +32,6 @@ class RustTemporaryMatrixClient(
 
     override fun close() {
         client.close()
-        paths?.let {
-            if (it.fileDirectory.exists()) {
-                it.fileDirectory.deleteRecursively()
-            }
-            if (it.cacheDirectory.exists()) {
-                it.cacheDirectory.deleteRecursively()
-            }
-        }
+        onClose()
     }
 }
