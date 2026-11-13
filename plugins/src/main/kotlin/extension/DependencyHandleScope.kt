@@ -136,7 +136,14 @@ fun DependencyHandlerScope.allServicesImpl(project: Project) {
         is AnalyticsConfig.Enabled -> {
             implementation(project(":services:analytics:impl"))
             if (analyticsConfig.withPosthog) {
-                implementation(project(":services:analyticsproviders:posthog"))
+                // F-Droid builds must not include PostHog, see https://github.com/element-hq/element-x-android/issues/7801
+                val posthogConfigurationName = if (project.configurations.findByName("gplayImplementation") != null) {
+                    "gplayImplementation"
+                } else {
+                    // Modules without the store flavors, e.g. tests:uitests
+                    "implementation"
+                }
+                add(posthogConfigurationName, project(":services:analyticsproviders:posthog"))
             }
             if (analyticsConfig.withSentry) {
                 implementation(project(":services:analyticsproviders:sentry"))
