@@ -9,6 +9,7 @@
 package io.element.android.features.signedout.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 
@@ -17,13 +18,16 @@ open class SignedOutStatePreviewParam : PreviewParameterProvider<SignedOutState>
         get() = sequenceOf(
             aSignedOutState(),
             aSignedOutState(signedOutSession = aMatrixUser(id = "@alice:server.org", displayName = null)),
+            aSignedOutState(submitAction = AsyncAction.Loading),
         )
 }
 
 internal fun aSignedOutState(
     signedOutSession: MatrixUser = aMatrixUser(id = "@alice:server.org", displayName = "Alice"),
+    submitAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (SignedOutEvent) -> Unit = {},
 ) = SignedOutState(
     signedOutMatrixUser = signedOutSession,
+    submitAction = submitAction,
     eventSink = eventSink,
 )

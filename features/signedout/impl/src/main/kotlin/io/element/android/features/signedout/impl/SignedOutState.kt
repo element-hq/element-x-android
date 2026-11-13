@@ -8,9 +8,11 @@
 
 package io.element.android.features.signedout.impl
 
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class SignedOutState(
     val signedOutMatrixUser: MatrixUser,
+    val submitAction: AsyncAction<Unit>,
     val eventSink: (SignedOutEvent) -> Unit,
 )

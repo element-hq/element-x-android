@@ -11,16 +11,15 @@ package io.element.android.features.signedout.api
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import io.element.android.libraries.architecture.FeatureEntryPoint
-import io.element.android.libraries.matrix.api.core.SessionId
 
 interface SignedOutEntryPoint : FeatureEntryPoint {
-    data class Params(
-        val sessionId: SessionId,
-    )
-
+    /**
+     * Create a node which displays the "signed out" screen for every session whose token has become invalid, active or not,
+     * one after the other. It renders nothing when there is no signed out session, so it is meant to be always attached,
+     * on top of the rest of the app.
+     */
     fun createNode(
         parentNode: Node,
         buildContext: BuildContext,
-        params: Params,
     ): Node
 }
