@@ -268,7 +268,8 @@ setupDependencyInjection()
 
 dependencies {
     allLibrariesImpl()
-    allServicesImpl(project)
+    // PostHog is not included in the F-Droid build
+    allServicesImpl(project, posthogConfigurationName = "gplayImplementation")
     if (isEnterpriseBuild) {
         allEnterpriseImpl(project)
         implementation(projects.appicon.enterprise)
