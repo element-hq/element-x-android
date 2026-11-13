@@ -38,9 +38,20 @@ fun LibraryExtension.androidLibraryConfig(project: Project) {
     compileOptions(::defaultCompileOptions)
     testOptions(::defaultTestOptions)
 
+    // Most of the library modules do not declare any resource. For them, skip the resource processing tasks
+    // (R class generation, resource packaging, etc.).
+    androidResources.enable = project.hasAndroidResources()
+
     lint {
         project.defaultLintOptions(this)
     }
+}
+
+/**
+ * Whether the module has Android resources in any of its source sets (`src/main/res`, `src/debug/res`, etc.).
+ */
+private fun Project.hasAndroidResources(): Boolean {
+    return file("src").listFiles().orEmpty().any { File(it, "res").isDirectory }
 }
 
 fun ApplicationExtension.composeAppConfig() {
