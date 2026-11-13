@@ -74,7 +74,7 @@ class DefaultFileSave(
         } ?: throw IOException("Unable to create the destination file")
         file.inputStream().use { input ->
             resolver.openOutputStream(outputUri).use { output ->
-                input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
+                input.copyTo(checkNotNull(output) { "Unable to open the output stream" }, DEFAULT_BUFFER_SIZE)
             }
         }
     }

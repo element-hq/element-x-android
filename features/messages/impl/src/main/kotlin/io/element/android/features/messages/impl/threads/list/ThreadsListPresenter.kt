@@ -59,14 +59,16 @@ class ThreadsListPresenter(
                         }
                         val rootEventText = rootTimelineEvent?.let { messageSummaryFormatter.format(it) }
 
-                        val latestTimelineEvent = item.latestEvent?.content?.let {
-                            timelineItemContentFactory.create(
-                                itemContent = it,
-                                eventId = item.latestEvent!!.eventId,
-                                isEditable = false,
-                                sender = item.latestEvent!!.senderId,
-                                senderProfile = item.latestEvent!!.senderProfile,
-                            )
+                        val latestTimelineEvent = item.latestEvent?.let { latestEvent ->
+                            latestEvent.content?.let {
+                                timelineItemContentFactory.create(
+                                    itemContent = it,
+                                    eventId = latestEvent.eventId,
+                                    isEditable = false,
+                                    sender = latestEvent.senderId,
+                                    senderProfile = latestEvent.senderProfile,
+                                )
+                            }
                         }
                         val latestEventText = latestTimelineEvent?.let { messageSummaryFormatter.format(it) }
 

@@ -23,12 +23,14 @@ internal object IntentProvider {
     }
 
     fun getPendingIntent(context: Context, callData: CallData): PendingIntent {
-        return PendingIntentCompat.getActivity(
-            context,
-            DefaultElementCallEntryPoint.REQUEST_CODE,
-            createIntent(context, callData),
-            PendingIntent.FLAG_CANCEL_CURRENT,
-            false
-        )!!
+        return checkNotNull(
+            PendingIntentCompat.getActivity(
+                context,
+                DefaultElementCallEntryPoint.REQUEST_CODE,
+                createIntent(context, callData),
+                PendingIntent.FLAG_CANCEL_CURRENT,
+                false
+            )
+        ) { "Unable to create the call PendingIntent" }
     }
 }

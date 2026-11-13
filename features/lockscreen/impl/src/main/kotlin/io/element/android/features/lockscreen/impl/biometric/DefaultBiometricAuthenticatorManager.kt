@@ -54,7 +54,7 @@ class DefaultBiometricAuthenticatorManager(
 ) : BiometricAuthenticatorManager {
     private val callbacks = CopyOnWriteArrayList<BiometricAuthenticator.Callback>()
     private val biometricManager = BiometricManager.from(context)
-    private val keyguardManager: KeyguardManager = context.getSystemService()!!
+    private val keyguardManager: KeyguardManager = checkNotNull(context.getSystemService<KeyguardManager>()) { "KeyguardManager not available" }
 
     /**
      * Returns true if a weak biometric method (i.e.: some face or iris unlock implementations) can be used.

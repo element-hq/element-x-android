@@ -660,7 +660,9 @@ internal fun TimelineViewPreview(
 @Composable
 internal fun TimelineViewSelectionModePreview() = ElementPreview {
     val timelineItems = aTimelineItemList(aTimelineItemTextContent())
-    val selectedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().first { SelectionAction.Forward.canApplyTo(it) }.eventId!!
+    val selectedEventId = checkNotNull(timelineItems.filterIsInstance<TimelineItem.Event>().first { SelectionAction.Forward.canApplyTo(it) }.eventId) {
+        "The selected event must have an event id"
+    }
     CompositionLocalProvider(
         LocalTimelineItemPresenterFactories provides aFakeTimelineItemPresenterFactories(),
     ) {

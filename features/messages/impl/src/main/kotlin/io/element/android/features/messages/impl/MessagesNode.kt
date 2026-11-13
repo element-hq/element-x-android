@@ -372,8 +372,9 @@ class MessagesNode(
                 mutableStateOf(inputs.focusedEventId)
             }
             LaunchedEffect(focusedEventId) {
-                if (focusedEventId != null) {
-                    state.timelineState.eventSink(TimelineEvent.FocusOnEvent(focusedEventId!!))
+                val eventId = focusedEventId
+                if (eventId != null) {
+                    state.timelineState.eventSink(TimelineEvent.FocusOnEvent(eventId))
                     focusedEventId = null
                 }
             }

@@ -115,26 +115,30 @@ class RingingCallNotificationCreator(
         // answering goes through ElementCallEntryPoint and lands in whichever call stack the
         // NativeCall flag selects. Naming the WebView activity here meant the notification's Answer
         // button always opened the WebView, even with native calls turned on.
-        val answerIntent = PendingIntentCompat.getActivity(
-            context,
-            ANSWER_REQUEST_CODE,
-            Intent(context, IncomingCallActivity::class.java).apply {
-                putExtra(IncomingCallActivity.EXTRA_NOTIFICATION_DATA, notificationData)
-                putExtra(IncomingCallActivity.EXTRA_ANSWER_IMMEDIATELY, true)
-            },
-            PendingIntent.FLAG_CANCEL_CURRENT,
-            false,
-        )!!
+        val answerIntent = checkNotNull(
+            PendingIntentCompat.getActivity(
+                context,
+                ANSWER_REQUEST_CODE,
+                Intent(context, IncomingCallActivity::class.java).apply {
+                    putExtra(IncomingCallActivity.EXTRA_NOTIFICATION_DATA, notificationData)
+                    putExtra(IncomingCallActivity.EXTRA_ANSWER_IMMEDIATELY, true)
+                },
+                PendingIntent.FLAG_CANCEL_CURRENT,
+                false,
+            )
+        ) { "Unable to create the answer PendingIntent" }
 
-        val declineIntent = PendingIntentCompat.getBroadcast(
-            context,
-            DECLINE_REQUEST_CODE,
-            Intent(context, DeclineCallBroadcastReceiver::class.java).apply {
-                putExtra(DeclineCallBroadcastReceiver.EXTRA_NOTIFICATION_DATA, notificationData)
-            },
-            PendingIntent.FLAG_CANCEL_CURRENT,
-            false,
-        )!!
+        val declineIntent = checkNotNull(
+            PendingIntentCompat.getBroadcast(
+                context,
+                DECLINE_REQUEST_CODE,
+                Intent(context, DeclineCallBroadcastReceiver::class.java).apply {
+                    putExtra(DeclineCallBroadcastReceiver.EXTRA_NOTIFICATION_DATA, notificationData)
+                },
+                PendingIntent.FLAG_CANCEL_CURRENT,
+                false,
+            )
+        ) { "Unable to create the decline PendingIntent" }
 
         val fullScreenIntent = PendingIntentCompat.getActivity(
             context,

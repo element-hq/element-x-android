@@ -114,10 +114,9 @@ class DefaultNotifiableEventResolver(
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
         val notificationsResult = client.notificationService.getNotifications(ids)
 
-        if (notificationsResult.isFailure) {
-            val exception = notificationsResult.exceptionOrNull()
+        val notifications = notificationsResult.getOrElse { exception ->
             Timber.tag(loggerTag.value).e(exception, "Failed to get notifications for $ids")
-            return Result.failure(exception ?: NotificationResolverException.UnknownError("Unknown error while fetching notifications"))
+            return Result.failure(exception)
         }
 
         val otherSessionUserIds = sessionStore.getAllSessions()
@@ -125,8 +124,7 @@ class DefaultNotifiableEventResolver(
             .minus(sessionId)
             .toSet()
 
-        // The null check is done above
-        val notificationDataMap = notificationsResult.getOrNull()!!.mapValues { (_, notificationData) ->
+        val notificationDataMap = notifications.mapValues { (_, notificationData) ->
             notificationData.flatMap { data ->
                 data.asNotifiableEvent(client, sessionId, otherSessionUserIds)
             }
