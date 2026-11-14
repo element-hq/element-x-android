@@ -15,7 +15,7 @@ sealed interface DirectLogoutEvent {
      */
     data class Logout(
         val ignoreSdkError: Boolean,
-        val skipConfirmation: Boolean = false,
+        val skipConfirmation: Boolean,
     ) : DirectLogoutEvent
     data object CloseDialogs : DirectLogoutEvent
 }
