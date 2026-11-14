@@ -81,19 +81,13 @@ formatXmlFiles() {
 }
 
 checkForbiddenTerms() {
-  set +e
   local xml="$1"
   if [[ $verbose == 1 ]]; then
     echo "Checking forbidden terms in $xml"
   fi
+  # Each call runs in its own shell started by xargs, so a variable set here never reaches the
+  # caller. Return the checker's exit status instead; the caller collects it from xargs.
   ./tools/localazy/checkForbiddenTerms.py "$xml"
-
-  # If the script finds a forbidden term, it will exit with a non-zero status code and interrupt the execution, but we don't want that.
-  # Instead we want to capture that exit code and write it to a global variable so we can check later if any forbidden terms were found.
-  status=$?
-  if [[ $status != 0 ]]; then
-    forbiddenTermsResult=$((forbiddenTermsResult || status))
-  fi
 }
 
 export -f formatXmlFiles
@@ -114,14 +108,15 @@ if [[ $allFiles == 1 ]]; then
 fi
 
 # This stores whether any forbidden terms were found in any of the files. If any forbidden terms are found, this will be set to a non-zero value.
-export forbiddenTermsResult=0
+forbiddenTermsResult=0
 
 echo "Checking forbidden terms..."
-echo "$localazyXmlFiles" | xargs -L1 -P0 bash -c 'checkForbiddenTerms "$@"' _
+# xargs still checks every file when one fails, then exits with a non-zero status.
+echo "$localazyXmlFiles" | xargs -L1 -P0 bash -c 'checkForbiddenTerms "$@"' _ || forbiddenTermsResult=1
 
 if [[ $allFiles == 1 ]]; then
   echo "Checking forbidden terms in translation files..."
-  echo "$translationXmlFiles" | xargs -L1 -P0 bash -c 'checkForbiddenTerms "$@"' _
+  echo "$translationXmlFiles" | xargs -L1 -P0 bash -c 'checkForbiddenTerms "$@"' _ || forbiddenTermsResult=1
 fi
 
 if [[ $forbiddenTermsResult != 0 ]]; then
