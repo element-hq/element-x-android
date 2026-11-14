@@ -11,5 +11,4 @@ package io.element.android.features.securebackup.impl.reset.root
 sealed interface ResetIdentityRootEvent {
     data object Continue : ResetIdentityRootEvent
     data object DismissDialog : ResetIdentityRootEvent
-    data object SignOut : ResetIdentityRootEvent
 }

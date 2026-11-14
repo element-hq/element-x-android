@@ -27,11 +27,8 @@ interface SecureBackupEntryPoint : FeatureEntryPoint {
         @Parcelize
         data object EnterRecoveryKey : InitialTarget
 
-        /**
-         * @param hasConfirmationOptions whether the user could confirm their identity another way, using another device or a recovery key.
-         */
         @Parcelize
-        data class ResetIdentity(val hasConfirmationOptions: Boolean = true) : InitialTarget
+        data object ResetIdentity : InitialTarget
     }
 
     data class Params(val initialElement: InitialTarget) : NodeInputs
@@ -45,5 +42,8 @@ interface SecureBackupEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onDone()
+
+        /** The user chose to sign out instead of resetting their identity, which is only offered before the session is verified. */
+        fun onSignOut()
     }
 }

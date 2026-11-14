@@ -12,13 +12,13 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.logout.api.direct.DirectLogoutEvent
-import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.features.logout.api.direct.aDirectLogoutState
-import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.tests.testutils.EventsRecorder
+import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -30,7 +30,7 @@ class ResetIdentityRootPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.variant).isEqualTo(ResetIdentityRootVariant.HasConfirmationOptions)
+            assertThat(initialState.isResetTheOnlyOption).isFalse()
             assertThat(initialState.displayConfirmationDialog).isFalse()
         }
     }
@@ -66,80 +66,105 @@ class ResetIdentityRootPresenterTest {
     @Test
     fun `present - without other options and with encrypted chats`() = runTest {
         val presenter = createPresenter(
-            hasConfirmationOptions = false,
+            encryptionService = anEncryptionServiceWithoutOptions(),
             matrixClient = FakeMatrixClient(hasEncryptedRoomsResult = { Result.success(true) }),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(awaitItem().variant).isNull()
-            assertThat(awaitItem().variant).isEqualTo(ResetIdentityRootVariant.NoOptionsWithEncryptedChats)
+            val loadingState = awaitItem()
+            assertThat(loadingState.isResetTheOnlyOption).isTrue()
+            assertThat(loadingState.hasEncryptedRooms.isLoading()).isTrue()
+            assertThat(awaitItem().hasEncryptedRooms).isEqualTo(AsyncData.Success(true))
         }
     }
 
     @Test
     fun `present - without other options and without encrypted chats`() = runTest {
         val presenter = createPresenter(
-            hasConfirmationOptions = false,
+            encryptionService = anEncryptionServiceWithoutOptions(),
             matrixClient = FakeMatrixClient(hasEncryptedRoomsResult = { Result.success(false) }),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(awaitItem().variant).isNull()
-            assertThat(awaitItem().variant).isEqualTo(ResetIdentityRootVariant.NoOptionsWithoutEncryptedChats)
+            assertThat(awaitItem().hasEncryptedRooms.isLoading()).isTrue()
+            assertThat(awaitItem().hasEncryptedRooms).isEqualTo(AsyncData.Success(false))
         }
     }
 
     @Test
     fun `present - without other options, failing to know about the chats is treated as having encrypted chats`() = runTest {
         val presenter = createPresenter(
-            hasConfirmationOptions = false,
+            encryptionService = anEncryptionServiceWithoutOptions(),
             matrixClient = FakeMatrixClient(hasEncryptedRoomsResult = { Result.failure(IllegalStateException("Failed")) }),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(awaitItem().variant).isNull()
-            assertThat(awaitItem().variant).isEqualTo(ResetIdentityRootVariant.NoOptionsWithEncryptedChats)
+            assertThat(awaitItem().hasEncryptedRooms.isLoading()).isTrue()
+            assertThat(awaitItem().hasEncryptedRooms).isEqualTo(AsyncData.Success(true))
         }
     }
 
     @Test
-    fun `present - with other options the encrypted chats are not checked`() = runTest {
+    fun `present - another device becoming available means reset is no longer the only option`() = runTest {
+        val encryptionService = anEncryptionServiceWithoutOptions()
+        val presenter = createPresenter(encryptionService = encryptionService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitItem().isResetTheOnlyOption).isTrue()
+            assertThat(awaitItem().hasEncryptedRooms).isEqualTo(AsyncData.Success(true))
+
+            encryptionService.emitHasDevicesToVerifyAgainst(AsyncData.Success(true))
+            assertThat(awaitItem().isResetTheOnlyOption).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - a recovery key becoming available means reset is no longer the only option`() = runTest {
+        val encryptionService = anEncryptionServiceWithoutOptions()
+        val presenter = createPresenter(encryptionService = encryptionService)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            assertThat(awaitItem().isResetTheOnlyOption).isTrue()
+            assertThat(awaitItem().hasEncryptedRooms).isEqualTo(AsyncData.Success(true))
+
+            encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
+            assertThat(awaitItem().isResetTheOnlyOption).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - a verified session is never offered reset as the only option`() = runTest {
         val presenter = createPresenter(
-            hasConfirmationOptions = true,
+            encryptionService = anEncryptionServiceWithoutOptions(),
+            sessionVerificationService = FakeSessionVerificationService(initialSessionVerifiedStatus = SessionVerifiedStatus.Verified),
             matrixClient = FakeMatrixClient(hasEncryptedRoomsResult = { error("Should not be called") }),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            assertThat(awaitItem().variant).isEqualTo(ResetIdentityRootVariant.HasConfirmationOptions)
+            assertThat(awaitItem().isResetTheOnlyOption).isFalse()
         }
     }
 
-    @Test
-    fun `present - SignOut event logs out`() = runTest {
-        val logoutEventRecorder = EventsRecorder<DirectLogoutEvent>()
-        val presenter = createPresenter(
-            directLogoutPresenter = { aDirectLogoutState(eventSink = logoutEventRecorder) },
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            awaitItem().eventSink(ResetIdentityRootEvent.SignOut)
-
-            logoutEventRecorder.assertSingle(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = true))
-        }
+    private fun anEncryptionServiceWithoutOptions() = FakeEncryptionService().apply {
+        emitHasDevicesToVerifyAgainst(AsyncData.Success(false))
+        recoveryStateStateFlow.value = RecoveryState.DISABLED
     }
 
     private fun createPresenter(
-        hasConfirmationOptions: Boolean = true,
         matrixClient: MatrixClient = FakeMatrixClient(),
-        directLogoutPresenter: Presenter<DirectLogoutState> = Presenter { aDirectLogoutState() },
+        encryptionService: FakeEncryptionService = FakeEncryptionService(),
+        sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.NotVerified,
+        ),
     ) = ResetIdentityRootPresenter(
-        hasConfirmationOptions = hasConfirmationOptions,
         matrixClient = matrixClient,
-        directLogoutPresenter = directLogoutPresenter,
+        encryptionService = encryptionService,
+        sessionVerificationService = sessionVerificationService,
     )
 }

@@ -16,7 +16,6 @@ import com.bumble.appyx.core.plugin.Plugin
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
-import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.SessionScope
@@ -27,13 +26,13 @@ class ChooseSelfVerificationModeNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val presenter: Presenter<ChooseSelfVerificationModeState>,
-    private val directLogoutView: DirectLogoutView,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun navigateToUseAnotherDevice()
         fun navigateToUseRecoveryKey()
-        fun navigateToResetKey(hasConfirmationOptions: Boolean)
+        fun navigateToResetKey()
         fun navigateToLearnMoreAboutEncryption()
+        fun onSignOut()
     }
 
     private val callback: Callback = callback()
@@ -48,9 +47,8 @@ class ChooseSelfVerificationModeNode(
             onUseRecoveryKey = callback::navigateToUseRecoveryKey,
             onResetKey = callback::navigateToResetKey,
             onLearnMore = callback::navigateToLearnMoreAboutEncryption,
+            onSignOut = callback::onSignOut,
             modifier = modifier,
         )
-
-        directLogoutView.Render(state = state.directLogoutState)
     }
 }

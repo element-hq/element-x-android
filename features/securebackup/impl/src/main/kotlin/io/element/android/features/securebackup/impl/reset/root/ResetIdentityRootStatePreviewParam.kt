@@ -9,26 +9,27 @@
 package io.element.android.features.securebackup.impl.reset.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.logout.api.direct.aDirectLogoutState
+import io.element.android.libraries.architecture.AsyncData
 
 class ResetIdentityRootStatePreviewParam : PreviewParameterProvider<ResetIdentityRootState> {
     override val values: Sequence<ResetIdentityRootState>
         get() = sequenceOf(
             aResetIdentityRootState(),
             aResetIdentityRootState(displayConfirmationDialog = true),
-            aResetIdentityRootState(variant = ResetIdentityRootVariant.NoOptionsWithEncryptedChats),
-            aResetIdentityRootState(variant = ResetIdentityRootVariant.NoOptionsWithoutEncryptedChats),
-            aResetIdentityRootState(variant = null),
+            aResetIdentityRootState(isResetTheOnlyOption = true, hasEncryptedRooms = AsyncData.Success(true)),
+            aResetIdentityRootState(isResetTheOnlyOption = true, hasEncryptedRooms = AsyncData.Success(false)),
+            aResetIdentityRootState(isResetTheOnlyOption = true, hasEncryptedRooms = AsyncData.Loading()),
         )
 }
 
 fun aResetIdentityRootState(
-    variant: ResetIdentityRootVariant? = ResetIdentityRootVariant.HasConfirmationOptions,
+    isResetTheOnlyOption: Boolean = false,
+    hasEncryptedRooms: AsyncData<Boolean> = AsyncData.Uninitialized,
     displayConfirmationDialog: Boolean = false,
     eventSink: (ResetIdentityRootEvent) -> Unit = {},
 ) = ResetIdentityRootState(
-    variant = variant,
+    isResetTheOnlyOption = isResetTheOnlyOption,
+    hasEncryptedRooms = hasEncryptedRooms,
     displayConfirmationDialog = displayConfirmationDialog,
-    directLogoutState = aDirectLogoutState(),
     eventSink = eventSink,
 )
