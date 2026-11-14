@@ -15,8 +15,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
-import io.element.android.features.logout.api.direct.DirectLogoutEvent
-import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
@@ -28,7 +26,6 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 class ChooseSelfVerificationModePresenter(
     private val matrixClient: MatrixClient,
     private val encryptionService: EncryptionService,
-    private val directLogoutPresenter: Presenter<DirectLogoutState>,
 ) : Presenter<ChooseSelfVerificationModeState> {
     @Composable
     override fun present(): ChooseSelfVerificationModeState {
@@ -66,20 +63,9 @@ class ChooseSelfVerificationModePresenter(
             }
         }
 
-        val directLogoutState = directLogoutPresenter.present()
-
-        fun handleEvent(event: ChooseSelfVerificationModeEvent) {
-            when (event) {
-                ChooseSelfVerificationModeEvent.SignOut -> // Nothing can be lost before the identity is confirmed, so there is no need to ask for confirmation.
-                directLogoutState.eventSink(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = true))
-            }
-        }
-
         return ChooseSelfVerificationModeState(
             currentUser = currentUser,
             buttonsState = buttonsState,
-            directLogoutState = directLogoutState,
-            eventSink = ::handleEvent,
         )
     }
 }

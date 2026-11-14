@@ -21,11 +21,8 @@ import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
-import io.element.android.tests.testutils.EnsureNeverCalledWithParam
-import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
-import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
 import org.robolectric.annotation.Config
@@ -70,7 +67,7 @@ class ChooseSessionVerificationModeViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on cannot confirm calls the reset keys callback`() = runAndroidComposeUiTest {
-        ensureCalledOnceWithParam(true) { callback ->
+        ensureCalledOnce { callback ->
             setChooseSelfVerificationModeView(
                 aChooseSelfVerificationModeState(),
                 onResetKey = callback,
@@ -80,19 +77,20 @@ class ChooseSessionVerificationModeViewTest : RobolectricTest() {
     }
 
     @Test
-    fun `clicking on sign out emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<ChooseSelfVerificationModeEvent>()
-        setChooseSelfVerificationModeView(
-            aChooseSelfVerificationModeState(eventSink = eventsRecorder),
-        )
-        clickOn(R.string.screen_identity_confirmation_sign_out)
-        eventsRecorder.assertSingle(ChooseSelfVerificationModeEvent.SignOut)
+    fun `clicking on sign out invokes the expected callback`() = runAndroidComposeUiTest {
+        ensureCalledOnce { callback ->
+            setChooseSelfVerificationModeView(
+                aChooseSelfVerificationModeState(),
+                onSignOut = callback,
+            )
+            clickOn(R.string.screen_identity_confirmation_sign_out)
+        }
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on cannot confirm without any other option calls the reset keys callback with no options`() = runAndroidComposeUiTest {
-        ensureCalledOnceWithParam(false) { callback ->
+    fun `clicking on cannot confirm without any other option calls the reset keys callback`() = runAndroidComposeUiTest {
+        ensureCalledOnce { callback ->
             setChooseSelfVerificationModeView(
                 aChooseSelfVerificationModeState(AsyncData.Success(aButtonsState(canUseAnotherDevice = false, canUseRecoveryKey = false))),
                 onResetKey = callback,
@@ -120,8 +118,9 @@ class ChooseSessionVerificationModeViewTest : RobolectricTest() {
         state: ChooseSelfVerificationModeState,
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
         onUseAnotherDevice: () -> Unit = EnsureNeverCalled(),
-        onResetKey: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
+        onResetKey: () -> Unit = EnsureNeverCalled(),
         onEnterRecoveryKey: () -> Unit = EnsureNeverCalled(),
+        onSignOut: () -> Unit = EnsureNeverCalled(),
     ) {
         setContent {
             ChooseSelfVerificationModeView(
@@ -130,6 +129,7 @@ class ChooseSessionVerificationModeViewTest : RobolectricTest() {
                 onUseAnotherDevice = onUseAnotherDevice,
                 onResetKey = onResetKey,
                 onUseRecoveryKey = onEnterRecoveryKey,
+                onSignOut = onSignOut,
             )
         }
     }

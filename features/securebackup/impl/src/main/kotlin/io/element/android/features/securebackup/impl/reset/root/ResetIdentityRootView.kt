@@ -8,6 +8,8 @@
 
 package io.element.android.features.securebackup.impl.reset.root
 
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -24,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -32,6 +36,7 @@ import io.element.android.libraries.designsystem.components.visuallist.VisualLis
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -43,11 +48,16 @@ import kotlinx.collections.immutable.toImmutableList
 fun ResetIdentityRootView(
     state: ResetIdentityRootState,
     onContinue: () -> Unit,
+    onSignOut: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val variant = state.variant
-    val isResetTheOnlyOption = variant?.isResetTheOnlyOption == true
+    val isResetTheOnlyOption = state.isResetTheOnlyOption
+    if (isResetTheOnlyOption) {
+        // There is nothing to go back to when resetting is the only way to continue.
+        val activity = LocalActivity.current
+        BackHandler { activity?.finish() }
+    }
     FlowStepPage(
         modifier = modifier,
         iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfile()),
@@ -58,7 +68,7 @@ fun ResetIdentityRootView(
             if (isResetTheOnlyOption) R.string.screen_encryption_reset_no_options_subtitle else R.string.screen_encryption_reset_subtitle
         ),
         isScrollable = true,
-        content = { Content(variant) },
+        content = { Content(isResetTheOnlyOption, state.hasEncryptedRooms) },
         buttons = {
             Button(
                 modifier = Modifier.fillMaxWidth(),
@@ -70,18 +80,17 @@ fun ResetIdentityRootView(
                         state.eventSink(ResetIdentityRootEvent.Continue)
                     }
                 },
-                enabled = variant != null,
+                enabled = !isResetTheOnlyOption || state.hasEncryptedRooms.isReady(),
                 destructive = !isResetTheOnlyOption,
             )
             if (isResetTheOnlyOption) {
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.screen_identity_confirmation_sign_out),
-                    onClick = { state.eventSink(ResetIdentityRootEvent.SignOut) },
+                    onClick = onSignOut,
                 )
             }
         },
-        // There is nothing to go back to when resetting is the only way to continue.
         onBackClick = onBack.takeUnless { isResetTheOnlyOption },
     )
 
@@ -101,14 +110,13 @@ fun ResetIdentityRootView(
 }
 
 @Composable
-private fun Content(variant: ResetIdentityRootVariant?) {
+private fun Content(isResetTheOnlyOption: Boolean, hasEncryptedRooms: AsyncData<Boolean>) {
     Column(
         modifier = Modifier.padding(top = 8.dp, bottom = 40.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-        when (variant) {
-            null -> Unit
-            ResetIdentityRootVariant.HasConfirmationOptions -> {
+        when {
+            !isResetTheOnlyOption -> {
                 ConsequencesList(showDevicesItem = true)
                 Text(
                     modifier = Modifier
@@ -120,8 +128,11 @@ private fun Content(variant: ResetIdentityRootVariant?) {
                     color = ElementTheme.colors.textCriticalPrimary,
                 )
             }
-            ResetIdentityRootVariant.NoOptionsWithEncryptedChats -> ConsequencesList(showDevicesItem = false)
-            ResetIdentityRootVariant.NoOptionsWithoutEncryptedChats -> {
+            hasEncryptedRooms !is AsyncData.Success -> {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            }
+            hasEncryptedRooms.data -> ConsequencesList(showDevicesItem = false)
+            else -> {
                 VisualList(
                     modifier = Modifier.fillMaxWidth(),
                     items = persistentListOf(
@@ -172,6 +183,7 @@ internal fun ResetIdentityRootViewPreview(@PreviewParameter(ResetIdentityRootSta
         ResetIdentityRootView(
             state = state,
             onContinue = {},
+            onSignOut = {},
             onBack = {},
         )
     }

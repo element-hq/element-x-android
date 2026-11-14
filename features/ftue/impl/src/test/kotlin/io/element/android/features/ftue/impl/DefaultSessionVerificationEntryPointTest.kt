@@ -14,6 +14,7 @@ import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.ftue.api.SessionVerificationEntryPoint
 import io.element.android.features.ftue.impl.sessionverification.FtueSessionVerificationFlowNode
+import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.verifysession.api.OutgoingVerificationEntryPoint
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -52,6 +53,8 @@ class DefaultSessionVerificationEntryPointTest {
                         callback: SecureBackupEntryPoint.Callback,
                     ) = lambdaError()
                 },
+                directLogoutPresenter = { aDirectLogoutState() },
+                directLogoutView = {},
             )
         }
         val callback = object : SessionVerificationEntryPoint.Callback {

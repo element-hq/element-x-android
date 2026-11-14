@@ -54,8 +54,9 @@ fun ChooseSelfVerificationModeView(
     state: ChooseSelfVerificationModeState,
     onUseAnotherDevice: () -> Unit,
     onUseRecoveryKey: () -> Unit,
-    onResetKey: (hasConfirmationOptions: Boolean) -> Unit,
+    onResetKey: () -> Unit,
     onLearnMore: () -> Unit,
+    onSignOut: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val activity = LocalActivity.current
@@ -70,7 +71,7 @@ fun ChooseSelfVerificationModeView(
                 actions = {
                     TextButton(
                         text = stringResource(R.string.screen_identity_confirmation_sign_out),
-                        onClick = { state.eventSink(ChooseSelfVerificationModeEvent.SignOut) }
+                        onClick = onSignOut
                     )
                 }
             )
@@ -128,7 +129,7 @@ private fun ChooseSelfVerificationModeButtons(
     state: ChooseSelfVerificationModeState,
     onUseAnotherDevice: () -> Unit,
     onUseRecoveryKey: () -> Unit,
-    onResetKey: (hasConfirmationOptions: Boolean) -> Unit,
+    onResetKey: () -> Unit,
 ) {
     ButtonColumnMolecule(
         modifier = Modifier.padding(bottom = 16.dp)
@@ -155,18 +156,17 @@ private fun ChooseSelfVerificationModeButtons(
                     enabled = buttonsState.canUseRecoveryKey,
                 )
                 val cannotConfirmText = stringResource(R.string.screen_identity_confirmation_cannot_confirm)
-                val onCannotConfirm = { onResetKey(buttonsState.hasConfirmationOptions) }
                 if (buttonsState.hasConfirmationOptions) {
                     OutlinedButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = cannotConfirmText,
-                        onClick = onCannotConfirm,
+                        onClick = onResetKey,
                     )
                 } else {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         text = cannotConfirmText,
-                        onClick = onCannotConfirm,
+                        onClick = onResetKey,
                     )
                 }
             }
@@ -185,5 +185,6 @@ internal fun ChooseSelfVerificationModeViewPreview(
         onUseRecoveryKey = {},
         onResetKey = {},
         onLearnMore = {},
+        onSignOut = {},
     )
 }
