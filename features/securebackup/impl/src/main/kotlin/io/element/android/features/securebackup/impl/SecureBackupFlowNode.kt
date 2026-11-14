@@ -131,6 +131,10 @@ class SecureBackupFlowNode(
                     override fun onDone() {
                         callback.onDone()
                     }
+
+                    override fun onSignOut() {
+                        callback.onSignOut()
+                    }
                 }
                 createNode<ResetIdentityFlowNode>(buildContext, listOf(callback))
             }

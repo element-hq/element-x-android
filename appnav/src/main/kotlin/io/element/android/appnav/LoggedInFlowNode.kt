@@ -540,6 +540,9 @@ class LoggedInFlowNode(
                         override fun onDone() {
                             backstack.pop()
                         }
+
+                        // The session is already verified here, so signing out is never offered.
+                        override fun onSignOut() = Unit
                     },
                 )
             }

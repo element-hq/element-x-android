@@ -37,7 +37,7 @@ class DefaultDirectLogoutViewTest : RobolectricTest() {
             )
         )
         clickOn(CommonStrings.action_signout)
-        eventsRecorder.assertSingle(DirectLogoutEvent.Logout(false))
+        eventsRecorder.assertSingle(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = false))
     }
 
     @Test
@@ -77,7 +77,7 @@ class DefaultDirectLogoutViewTest : RobolectricTest() {
             )
         )
         clickOn(CommonStrings.action_signout_anyway)
-        eventsRecorder.assertSingle(DirectLogoutEvent.Logout(true))
+        eventsRecorder.assertSingle(DirectLogoutEvent.Logout(ignoreSdkError = true, skipConfirmation = false))
     }
 
     @Test

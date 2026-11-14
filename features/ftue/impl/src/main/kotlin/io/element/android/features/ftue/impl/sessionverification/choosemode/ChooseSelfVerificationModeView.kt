@@ -56,6 +56,7 @@ fun ChooseSelfVerificationModeView(
     onUseRecoveryKey: () -> Unit,
     onResetKey: () -> Unit,
     onLearnMore: () -> Unit,
+    onSignOut: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val activity = LocalActivity.current
@@ -70,7 +71,7 @@ fun ChooseSelfVerificationModeView(
                 actions = {
                     TextButton(
                         text = stringResource(R.string.screen_identity_confirmation_sign_out),
-                        onClick = { state.eventSink(ChooseSelfVerificationModeEvent.SignOut) }
+                        onClick = onSignOut
                     )
                 }
             )
@@ -140,26 +141,34 @@ private fun ChooseSelfVerificationModeButtons(
                 LoadingButtonAtom()
             }
             is AsyncData.Success -> {
-                if (state.buttonsState.data.canUseAnotherDevice) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_identity_use_another_device),
-                        onClick = onUseAnotherDevice,
-                        leadingIcon = IconSource.Vector(CompoundIcons.Devices()),
-                    )
-                }
-                if (state.buttonsState.data.canUseRecoveryKey) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_identity_confirmation_use_recovery_key),
-                        onClick = onUseRecoveryKey,
-                    )
-                }
-                OutlinedButton(
+                val buttonsState = state.buttonsState.data
+                Button(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
-                    onClick = onResetKey,
+                    text = stringResource(R.string.screen_identity_use_another_device),
+                    onClick = onUseAnotherDevice,
+                    enabled = buttonsState.canUseAnotherDevice,
+                    leadingIcon = IconSource.Vector(CompoundIcons.Devices()),
                 )
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.screen_identity_confirmation_use_recovery_key),
+                    onClick = onUseRecoveryKey,
+                    enabled = buttonsState.canUseRecoveryKey,
+                )
+                val cannotConfirmText = stringResource(R.string.screen_identity_confirmation_cannot_confirm)
+                if (buttonsState.hasConfirmationOptions) {
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = cannotConfirmText,
+                        onClick = onResetKey,
+                    )
+                } else {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = cannotConfirmText,
+                        onClick = onResetKey,
+                    )
+                }
             }
         }
     }
@@ -176,5 +185,6 @@ internal fun ChooseSelfVerificationModeViewPreview(
         onUseRecoveryKey = {},
         onResetKey = {},
         onLearnMore = {},
+        onSignOut = {},
     )
 }

@@ -24,13 +24,14 @@ import io.element.android.libraries.di.SessionScope
 class ResetIdentityRootNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
+    private val presenter: ResetIdentityRootPresenter,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun onContinue()
+        fun onSignOut()
     }
 
     private val callback: Callback = callback()
-    private val presenter = ResetIdentityRootPresenter()
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -39,6 +40,7 @@ class ResetIdentityRootNode(
             modifier = modifier,
             state = state,
             onContinue = callback::onContinue,
+            onSignOut = callback::onSignOut,
             onBack = ::navigateUp,
         )
     }
