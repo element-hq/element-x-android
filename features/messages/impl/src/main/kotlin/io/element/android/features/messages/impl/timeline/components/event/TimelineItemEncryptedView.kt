@@ -55,9 +55,9 @@ fun TimelineItemEncryptedView(
                     R.string.timeline_decryption_failure_unable_to_decrypt to CompoundDrawables.ic_compound_error
                 }
                 UtdCause.Malformed -> {
-                    R.string.timeline_decryption_failure_malformed to CompoundDrawables.ic_compound_error
+                    R.string.timeline_decryption_failure_unable_to_decrypt to CompoundDrawables.ic_compound_error
                 }
-                UtdCause.Unknown -> {
+                else -> {
                     CommonStrings.common_waiting_for_decryption_key to CompoundDrawables.ic_compound_time
                 }
             }
