@@ -39,5 +39,5 @@ jobs:
               - The tests pass locally running \`./gradlew test\`.
               - The code quality check suite pass locally running \`./gradlew runQualityChecks\`.
               - If you modified anything related to the UI, including previews, you'll have to record new screenshot tests with 
-                \`./gradlew recordPaparazziDebug\` and include them as part of the PR.
+                \`./gradlew recordPaparazziDebug\` and include them as part of the PR.`
             })
