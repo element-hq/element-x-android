@@ -195,7 +195,7 @@ coil_test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
 kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.2"
-jsoup = "org.jsoup:jsoup:1.23.2"
+jsoup = "org.jsoup:jsoup:1.24.1"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.2.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
