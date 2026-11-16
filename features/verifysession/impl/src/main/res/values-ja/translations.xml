@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"認証できませんか？"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"回復鍵を新規作成します"</string>
+  <string name="screen_identity_confirmation_sign_out">"サインアウト"</string>
   <string name="screen_identity_confirmation_subtitle">"安全なメッセージを設定するための検証方法を選択してください。"</string>
   <string name="screen_identity_confirmation_title">"デジタルIDの認証"</string>
   <string name="screen_identity_confirmation_use_another_device">"他の端末を使用"</string>
@@ -33,6 +34,7 @@
   <string name="screen_session_verification_use_another_device_title">"検証済みの他の端末でアプリケーションを開いてください"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"安全性を高めるために、絵文字の組み合わせを使用してこのユーザーを検証してください。これにより安全にやり取りを行うことができるようになります。"</string>
   <string name="screen_session_verification_user_initiator_title">"このユーザーを検証しますか？"</string>
+  <string name="screen_session_verification_user_requesting_verification">"ユーザー検証の要求:"</string>
   <string name="screen_session_verification_user_responder_subtitle">"安全性を高めるために、相手ユーザーがあなたのデジタルIDを検証することを要求しています。比較用の絵文字の組み合わせが表示されます。"</string>
   <string name="screen_session_verification_waiting_another_device_title">"一方の端末で検証を開始してください"</string>
   <string name="screen_session_verification_waiting_other_device_title">"一方の端末で検証を開始してください"</string>

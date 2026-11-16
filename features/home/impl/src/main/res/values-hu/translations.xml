@@ -8,6 +8,8 @@
   <string name="banner_set_up_recovery_content">"A csevegései automatikusan mentve vannak, végpontok közti titkosítással Ahhoz, hogy az eszközei elvesztése esetén helyre tudja állítani a biztonsági mentést és megtartsa a digitális személyazonosságát, egy helyreállítási kulcsra van szüksége."</string>
   <string name="banner_set_up_recovery_submit">"Helyreállítási kulcs beszerzése"</string>
   <string name="banner_set_up_recovery_title">"Csevegések biztonsági mentése"</string>
+  <string name="banner_swipe_avatar_content">"Húzza felfelé vagy lefelé a profilképét, hogy az alkalmazás beállításai megnyitása nélkül válthasson a fiókjai között."</string>
+  <string name="banner_swipe_avatar_title">"Húzza el a profilképét a fiókok közti váltáshoz"</string>
   <string name="confirm_recovery_key_banner_message">"Erősítse meg a helyreállítási kulcsát, hogy továbbra is hozzáférjen a kulcstárolójához és az üzenetelőzményekhez."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Adja meg a helyreállítási kulcsot"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Elfelejtette a helyreállítási kulcsot?"</string>
@@ -15,6 +17,7 @@
   <string name="full_screen_intent_banner_message_android">"Hogy sose maradjon le egyetlen fontos hívásról sem, a beállításokban engedélyezze a teljes képernyős értesítéseket, amikor a telefon zárolva van."</string>
   <string name="full_screen_intent_banner_title_android">"Fokozza a hívásélményét"</string>
   <string name="screen_home_tab_chats">"Csevegések"</string>
+  <string name="screen_home_tab_search">"Keresés"</string>
   <string name="screen_home_tab_spaces">"Terek"</string>
   <string name="screen_invites_decline_chat_message">"Biztos, hogy elutasítja a meghívást, hogy csatlakozzon ehhez: %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Meghívás elutasítása"</string>
@@ -54,5 +57,12 @@ Nincs olvasatlan üzenete!"</string>
   <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
   <string name="screen_roomlist_tombstoned_room_description">"A szoba verzióját frissítették"</string>
   <string name="screen_roomlist_your_spaces">"Saját terek"</string>
+  <string name="screen_search_empty_state_message">"Csevegések és üzenetek keresése"</string>
+  <string name="screen_search_empty_state_title">"Keresés indítása"</string>
+  <string name="screen_search_from_your_messages_header">"Az üzenetekből"</string>
+  <string name="screen_search_no_results_message">"Nincsenek találatok erre a kifejezésre: „%1$s” . Próbáljon ki egy új keresési kifejezést."</string>
+  <string name="screen_search_recent_searches">"Keresési előzmények"</string>
+  <string name="screen_search_tab_chats">"Csevegések"</string>
+  <string name="screen_search_tab_messages">"Üzenetek"</string>
   <string name="screen_space_list_empty_state_title">"Terek létrehozása a szobák rendszerezéséhez"</string>
 </resources>

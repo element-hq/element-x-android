@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_active">"アクティブ"</string>
   <string name="a11y_add_avatar">"アバターを追加"</string>
   <string name="a11y_add_reaction">"リアクションを追加: %1$s"</string>
   <string name="a11y_address">"アドレス"</string>
@@ -27,6 +28,7 @@
   <string name="a11y_gallery_scanning">"ギャラリー 読込中 %1$d"</string>
   <string name="a11y_gallery_video">"ギャラリー 動画 %1$d"</string>
   <string name="a11y_hide_password">"パスワードを非表示"</string>
+  <string name="a11y_inactive">"非アクティブ"</string>
   <string name="a11y_info">"情報"</string>
   <string name="a11y_join_call">"通話に参加"</string>
   <string name="a11y_jump_to_bottom">"一番下へ"</string>
@@ -70,6 +72,8 @@
   <string name="a11y_start_call">"通話を開始"</string>
   <string name="a11y_start_video_call">"ビデオ通話を開始"</string>
   <string name="a11y_start_voice_call">"音声通話を開始"</string>
+  <string name="a11y_state_collapsed">"最小"</string>
+  <string name="a11y_state_expanded">"最大"</string>
   <string name="a11y_status">"ステータス"</string>
   <string name="a11y_thread_in_room">"%1$s のスレッド"</string>
   <string name="a11y_threads_in_room">"%1$s のスレッド"</string>
@@ -93,6 +97,7 @@
   <string name="action_choose_file">"ファイルを選択"</string>
   <string name="action_choose_photo">"写真を選択"</string>
   <string name="action_clear">"クリア"</string>
+  <string name="action_clear_all">"すべてクリア"</string>
   <string name="action_close">"閉じる"</string>
   <string name="action_confirm">"確認"</string>
   <string name="action_confirm_password">"パスワードを確認"</string>
@@ -102,6 +107,7 @@
   <string name="action_copy_link">"リンクをコピー"</string>
   <string name="action_copy_link_to_message">"リンクをメッセージにコピー"</string>
   <string name="action_copy_text">"テキストをコピー"</string>
+  <string name="action_copy_to_clipboard">"クリップボードにコピー"</string>
   <string name="action_create">"作成"</string>
   <string name="action_create_room">"ルームを作成"</string>
   <string name="action_create_space">"スペースを作成"</string>
@@ -127,6 +133,9 @@
   <string name="action_finish">"完了"</string>
   <string name="action_forgot_password">"パスワードをお忘れですか？"</string>
   <string name="action_forward">"転送"</string>
+  <plurals name="action_forward_messages">
+    <item quantity="other">"%1$d件のメッセージを転送"</item>
+  </plurals>
   <string name="action_go_back">"戻る"</string>
   <string name="action_go_to_roles_and_permissions">"役割と権限に移動"</string>
   <string name="action_go_to_settings">"設定に移動"</string>
@@ -207,6 +216,7 @@
   <string name="action_yes_try_again">"再試行する"</string>
   <string name="common_about">"アプリケーションについて"</string>
   <string name="common_acceptable_use_policy">"利用規定"</string>
+  <string name="common_account_settings">"アカウント設定"</string>
   <string name="common_add_another_account">"別のアカウントを追加"</string>
   <string name="common_adding_caption">"キャプションを追加"</string>
   <string name="common_advanced_settings">"高度な設定"</string>
@@ -214,6 +224,7 @@
   <string name="common_analytics">"分析"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"あなたがルームを退出"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"セッションからログアウトされました"</string>
+  <string name="common_app_settings">"アプリの設定"</string>
   <string name="common_appearance">"テーマ"</string>
   <string name="common_audio">"音声"</string>
   <string name="common_beta">"ベータ版"</string>
@@ -223,6 +234,8 @@
   <string name="common_call_started">"通話を開始しました"</string>
   <string name="common_call_you_declined">"通話を拒否しました"</string>
   <string name="common_chat_backup">"チャットをバックアップ"</string>
+  <string name="common_chats">"チャット"</string>
+  <string name="common_code_block">"コードブロック"</string>
   <string name="common_copied_to_clipboard">"クリップボードにコピーしました"</string>
   <string name="common_copyright">"著作権"</string>
   <string name="common_creating_room">"ルームを作成中…"</string>
@@ -262,6 +275,7 @@
   <string name="common_file_saved">"ファイルを保存しました"</string>
   <string name="common_file_saved_on_disk_android">"ファイルはダウンロードに保存されました"</string>
   <string name="common_forward_message">"メッセージを転送"</string>
+  <string name="common_forward_to">"転送先"</string>
   <string name="common_frequently_used">"頻繁に使用"</string>
   <string name="common_gallery">"ギャラリー"</string>
   <plurals name="common_gallery_reply_attachments">
@@ -272,6 +286,7 @@
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"グループ通話が進行中"</string>
+  <string name="common_header_rooms">"ルーム"</string>
   <string name="common_image">"画像"</string>
   <string name="common_in_reply_to">"%1$s に返信"</string>
   <string name="common_install_apk_android">"APK をインストール"</string>
@@ -285,9 +300,11 @@
   <string name="common_live_location_ended">"ライブ位置情報が終了しました"</string>
   <string name="common_loading">"読み込み中…"</string>
   <string name="common_loading_more">"読み込み中…"</string>
+  <string name="common_location_sharing">"位置情報の共有"</string>
   <plurals name="common_many_members">
     <item quantity="other">"他 %d 人"</item>
   </plurals>
+  <string name="common_media_upload_quality">"メディアのアップロード品質"</string>
   <plurals name="common_member_count">
     <item quantity="other">"%1$d 人のメンバー"</item>
   </plurals>
@@ -296,11 +313,13 @@
   <string name="common_message_failed_to_send">"メッセージの送信に失敗"</string>
   <string name="common_message_layout">"メッセージのレイアウト"</string>
   <string name="common_message_removed">"メッセージが削除されました"</string>
+  <string name="common_moderation_and_safety">"モデレーションと安全性"</string>
   <string name="common_modern">"モダン"</string>
   <string name="common_mute">"ミュート"</string>
   <string name="common_name">"名前"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
-  <string name="common_no_results">"結果なし"</string>
+  <string name="common_no_results">"検索結果なし"</string>
+  <string name="common_no_results_for">"\"%1$s\"の検索結果はありません。別の語で検索してみてください。"</string>
   <string name="common_no_room_name">"ルーム名なし"</string>
   <string name="common_no_space_name">"スペース名なし"</string>
   <string name="common_not_encrypted">"暗号化されていません"</string>
@@ -344,6 +363,7 @@
   <string name="common_replying_to">"%1$s に返信"</string>
   <string name="common_report_a_problem">"問題を報告"</string>
   <string name="common_report_submitted">"報告は送信されました"</string>
+  <string name="common_results_for">"\"%1$s\"の結果"</string>
   <string name="common_rich_text_editor">"リッチテキストエディター"</string>
   <string name="common_role">"役割"</string>
   <string name="common_room">"ルーム"</string>
@@ -377,6 +397,7 @@
   <string name="common_shared_live_location">"共有したライブ位置情報"</string>
   <string name="common_shared_location">"共有された位置情報"</string>
   <string name="common_shared_space">"共有されたスペース"</string>
+  <string name="common_signed_in">"サインイン済み"</string>
   <string name="common_signing_out">"端末を削除中"</string>
   <string name="common_something_went_wrong">"問題が発生しました"</string>
   <string name="common_something_went_wrong_message">"問題が発生しました。再度お試しください。"</string>
@@ -386,11 +407,13 @@
   <plurals name="common_spaces">
     <item quantity="other">"%1$d 個のスペース"</item>
   </plurals>
+  <string name="common_spoiler">"ネタバレ"</string>
   <string name="common_starting_chat">"チャットを開始しています…"</string>
   <string name="common_sticker">"ステッカー"</string>
   <string name="common_success">"成功"</string>
   <string name="common_suggested">"推奨される"</string>
   <string name="common_suggestions">"提案"</string>
+  <string name="common_switch_accounts">"アカウントの切り替え"</string>
   <string name="common_syncing">"同期中"</string>
   <string name="common_text">"テキスト"</string>
   <string name="common_third_party_notices">"第三者に関する通知"</string>
@@ -426,6 +449,7 @@
   <string name="common_waiting_live_location">"ライブ位置情報を待機中…"</string>
   <string name="common_world_readable_history">"誰でも過去のメッセージを閲覧できます"</string>
   <string name="common_you">"あなた"</string>
+  <string name="common_your_account">"あなたのアカウント"</string>
   <string name="content_scanner_unsafe_message">"プレビューとダウンロードは無効に設定されています。"</string>
   <string name="content_scanner_unsafe_title">"このファイルは安全ではありません"</string>
   <string name="crypto_history_visible">"このルームは新しいメンバーが過去の内容を確認できるように設定されています。%1$s"</string>
@@ -438,7 +462,8 @@
   <string name="dialog_title_error">"エラー"</string>
   <string name="dialog_title_success">"成功"</string>
   <string name="dialog_title_warning">"警告"</string>
-  <string name="dialog_video_quality_selector_title">"動画のアップロード品質を選択"</string>
+  <string name="dialog_video_quality_selector_title">"動画のアップロード画質を選択"</string>
+  <string name="error_camera_unavailable">"カメラを使用できません"</string>
   <string name="error_failed_creating_the_permalink">"固定リンクの作成に失敗しました"</string>
   <string name="error_message_not_found">"メッセージが見つかりません"</string>
   <string name="error_network_or_server_issue">"ネットワークまたはサーバーの問題である可能性があります。"</string>

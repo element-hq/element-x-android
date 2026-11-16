@@ -65,6 +65,10 @@
   <string name="screen_recovery_key_change_generate_key_description">"Nie udostępniaj tego nikomu!"</string>
   <string name="screen_recovery_key_change_success">"Zmieniono klucz przywracania"</string>
   <string name="screen_recovery_key_change_title">"Zmienić klucz przywracania?"</string>
+  <string name="screen_recovery_key_check_key_title">"Wprowadź klucz przywracania"</string>
+  <string name="screen_recovery_key_check_subtitle">"Wpisz zapisany klucz przywracania, aby upewnić się, że jest poprawny i aktywny."</string>
+  <string name="screen_recovery_key_check_success_title">"Klucz przywracania jest aktywny"</string>
+  <string name="screen_recovery_key_check_title">"Sprawdź swój klucz przywracania"</string>
   <string name="screen_recovery_key_confirm_create_new_recovery_key">"Utwórz nowy klucz przywracania"</string>
   <string name="screen_recovery_key_confirm_description">"Upewnij się, że nikt nie widzi tego ekranu!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Spróbuj ponownie potwierdzić dostęp do magazynu kluczy."</string>

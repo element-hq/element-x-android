@@ -20,7 +20,7 @@ Nous ne recommandons pas d’activer le chiffrement pour les salons que tout le 
   <string name="screen_security_and_privacy_encryption_section_footer">"Une fois activé, le chiffrement ne peut pas être désactivé."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Chiffrement"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Activer le chiffrement de bout en bout"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Tout le monde peut rejoindre."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Tout le monde peut joindre y compris les personnes hors de votre organisation"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Tout le monde"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Choisissez les espaces dont les membres peuvent rejoindre ce salon sans invitation. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Gérer les espaces"</string>

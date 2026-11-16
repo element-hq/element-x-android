@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="slash_command_description_avatar">"すべてのルームでのプロファイル画像を変更"</string>
+  <string name="slash_command_description_avatar_for_room">"現在のルームのみのアバターを変更"</string>
+  <string name="slash_command_description_ban_user">"指定したIDのユーザーを追放"</string>
+  <string name="slash_command_description_confetti">"指定したメッセージを紙吹雪と共に送信"</string>
+  <string name="slash_command_description_crash_application">"アプリケーションをクラッシュ"</string>
+  <string name="slash_command_description_deop_user">"指定したIDのユーザーの権限をリセット"</string>
+  <string name="slash_command_description_devtools">"開発者ツール画面を開く"</string>
+  <string name="slash_command_description_emote">"アクションを表示"</string>
+  <string name="slash_command_description_ignore_user">"メッセージを非表示することでユーザーを無視"</string>
+  <string name="slash_command_description_invite_user">"指定したIDのユーザーを現在のルームに招待"</string>
+  <string name="slash_command_description_join_room">"指定したアドレスのルームに参加"</string>
+  <string name="slash_command_description_lenny">"プレーンテキストのメッセージの先頭に ( ͡° ͜ʖ ͡°) を追加"</string>
+  <string name="slash_command_description_nick">"表示されるニックネームを変更"</string>
+  <string name="slash_command_description_nick_for_room">"現在のルームでのみ表示されるニックネームを変更"</string>
+  <string name="slash_command_description_op_user">"ユーザーの権限レベルを設定"</string>
+  <string name="slash_command_description_plain">"指定したメッセージをマークダウンではなくプレーンテキストとして送信"</string>
+  <string name="slash_command_description_rainbow">"指定したメッセージをレインボー色で送信"</string>
+  <string name="slash_command_description_rainbow_emote">"指定したエモートをレインボー色で送信"</string>
+  <string name="slash_command_description_remove_user">"指定したIDのユーザーをこのルームから削除"</string>
+  <string name="slash_command_description_room_avatar">"現在のルームでのアバターを変更"</string>
+  <string name="slash_command_description_room_name">"ルームの名称を設定"</string>
+  <string name="slash_command_description_shrug">"プレーンテキストのメッセージの先頭に ¯\\_(ツ)_/¯ を追加"</string>
+  <string name="slash_command_description_snow">"指定したメッセージを雪と共に送信"</string>
+  <string name="slash_command_description_spoiler">"指定したメッセージをネタバレとして送信"</string>
+  <string name="slash_command_description_table_flip">"プレーンテキストメッセージの前に (╯°□°）╯︵ ┻━┻ を追加"</string>
+  <string name="slash_command_description_topic">"ルームのトピックを設定"</string>
+  <string name="slash_command_description_unban_user">"指定したIDのユーザーの追放を解除"</string>
+  <string name="slash_command_description_unflip">"プレーンテキストメッセージの前に ┬──┬ ノ( ゜-゜ノ) を追加"</string>
+  <string name="slash_command_description_unignore_user">"メッセージを表示することでユーザーの無視を解除"</string>
+  <string name="slash_command_description_whois">"ユーザーに関する情報を表示"</string>
+  <string name="slash_command_error">"コマンドエラー"</string>
+  <string name="slash_command_not_supported_in_threads">"コマンド \"%1$s\" は認識されていますが、スレッドに対応していません。"</string>
+  <string name="slash_command_parameters_error">"コマンド \"%1$s\" には、より多くのパラメータが必要か、一部のパラメータが間違っています。構文は
+
+%2$s"</string>
+  <string name="slash_command_unrecognized">"認識されないコマンド: %1$s"</string>
+</resources>
