@@ -63,14 +63,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- Handle deep-link for notification ./tools/adb/deeplink.sh -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data
-                    android:host="open"
-                    android:scheme="elementx" />
-            </intent-filter>
             <!--
               OAuth redirection
             -->
