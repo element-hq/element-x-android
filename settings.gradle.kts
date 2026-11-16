@@ -127,17 +127,43 @@ include(":tests:testutils")
 include(":annotations")
 include(":codegen")
 
+/**
+ * Finds the Gradle projects in [directory]: the folders containing a `build.gradle.kts` file, up to [maxDepth] levels below.
+ *
+ * The search runs in a [ValueSource] so that only its result, the list of projects, is a configuration cache input. Listing
+ * the folders directly in the settings script would make each listed folder an input, and adding or removing any file in
+ * them (build outputs, `.git` content, etc.) would invalidate the configuration cache.
+ */
 private fun findProjects(directory: File, path: String, maxDepth: Int = 1): List<String> {
-    return directory.listFiles { file ->
-        // Skip hidden folders (e.g. `.git`) and build outputs: every folder listed here is a configuration cache input,
-        // so descending into them would invalidate the cache each time git or a build writes to them.
-        file.isDirectory && !file.name.startsWith(".") && file.name != "build"
-    }.orEmpty().sorted().flatMap { subDir ->
-        val newPath = "$path:${subDir.name}"
-        when {
-            File(subDir, "build.gradle.kts").exists() -> listOf(newPath)
-            maxDepth > 0 -> findProjects(subDir, newPath, maxDepth - 1)
-            else -> emptyList()
+    return providers.of(ProjectsValueSource::class) {
+        parameters {
+            this.directory.set(directory)
+            this.path.set(path)
+            this.maxDepth.set(maxDepth)
+        }
+    }.get()
+}
+
+abstract class ProjectsValueSource : ValueSource<List<String>, ProjectsValueSource.Parameters> {
+    interface Parameters : ValueSourceParameters {
+        val directory: Property<File>
+        val path: Property<String>
+        val maxDepth: Property<Int>
+    }
+
+    override fun obtain(): List<String> = search(parameters.directory.get(), parameters.path.get(), parameters.maxDepth.get())
+
+    private fun search(directory: File, path: String, maxDepth: Int): List<String> {
+        return directory.listFiles { file ->
+            // Skip hidden folders (e.g. `.git`) and build outputs, which can't contain projects.
+            file.isDirectory && !file.name.startsWith(".") && file.name != "build"
+        }.orEmpty().sorted().flatMap { subDir ->
+            val newPath = "$path:${subDir.name}"
+            when {
+                File(subDir, "build.gradle.kts").exists() -> listOf(newPath)
+                maxDepth > 0 -> search(subDir, newPath, maxDepth - 1)
+                else -> emptyList()
+            }
         }
     }
 }
