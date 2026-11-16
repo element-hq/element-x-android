@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="error_account_already_logged_in">"この端末では既に %1$s としてログインしています。"</string>
+  <string name="error_account_already_logged_in">"既に %1$s としてサインインしています。"</string>
+  <string name="error_account_already_logged_in_title">"重複したサインイン"</string>
   <string name="error_account_creation_not_possible">"Matrix Authentication Service とアカウント作成に対応させるため、アカウント提供元のアップグレードが必要です。"</string>
   <string name="screen_account_provider_signin_title">"%s にサインインを試みています"</string>
   <string name="screen_change_account_provider_subtitle">"自身のサーバーや仕事用のアカウントにサインインするには、アカウント提供元を変更してください。"</string>
@@ -40,6 +41,8 @@
   <string name="screen_missing_key_backup_step_4">"指示に従って、鍵の保管庫を有効化してください"</string>
   <string name="screen_missing_key_backup_step_5">"%1$s に戻ってください"</string>
   <string name="screen_missing_key_backup_title">"%1$s に続行する前に、鍵の保管庫を有効化してください"</string>
+  <string name="screen_onboarding_add_account_subtitle">"アプリに複数のアカウントを追加して、簡単に切り替えることができます。"</string>
+  <string name="screen_onboarding_add_account_title">"別のアカウントにサインイン"</string>
   <string name="screen_onboarding_app_version">"バージョン %1$s"</string>
   <string name="screen_onboarding_checking_account">"アカウントを確認中"</string>
   <string name="screen_onboarding_sign_in_manually">"手動で指定してサインイン"</string>

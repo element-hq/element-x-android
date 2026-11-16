@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_select_account_permalink_room_subtitle">"Még egyik fiókja sem csatlakozott ehhez a szobához, válassza ki, hogy melyiket szeretné használni."</string>
+  <string name="screen_select_account_permalink_title">"Válasszon egy fiókot a hivatkozás megnyitásához:"</string>
+</resources>

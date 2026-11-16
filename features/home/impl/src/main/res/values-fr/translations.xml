@@ -41,6 +41,7 @@ En attendant, vous pouvez désélectionner des filtres pour voir vos autres salo
   <string name="screen_roomlist_filter_low_priority">"Priorité basse"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"Vous n’avez pas encore de salon à priorité basse"</string>
   <string name="screen_roomlist_filter_mention">"Mention"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"Vous n’avez aucune mention non lue"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Veuillez désélectionner des filtres pour voir vos discussions"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Vous n’avez pas de discussions pour cette sélection"</string>
   <string name="screen_roomlist_filter_people">"Personnes"</string>

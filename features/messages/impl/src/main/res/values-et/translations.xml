@@ -44,6 +44,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
     <item quantity="other">"%1$d kraadi"</item>
   </plurals>
   <string name="screen_image_edition_title">"Muuda fotot"</string>
+  <string name="screen_media_upload_preview_a11y_draw">"Joonista"</string>
   <string name="screen_media_upload_preview_caption_warning">"Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Klõpsa üleslaaditava video kvaliteedi muutmiseks"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Faili üleslaadimine ei õnnestunud."</string>

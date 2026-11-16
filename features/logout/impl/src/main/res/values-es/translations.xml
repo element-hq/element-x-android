@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_chat_backup_recovery_action_setup">"Obtener clave de recuperación"</string>
   <string name="screen_signout_confirmation_dialog_content">"¿Estás seguro de que quieres eliminar este dispositivo?"</string>
   <string name="screen_signout_confirmation_dialog_submit">"Eliminar este dispositivo"</string>
   <string name="screen_signout_confirmation_dialog_title">"Eliminar este dispositivo"</string>
