@@ -11,7 +11,7 @@
   <string name="screen_chat_backup_recovery_action_change_description">"你的聊天已被端到端加密自动备份。如果你无法访问所有设备，则需要使用恢复密钥并保留数字身份。"</string>
   <string name="screen_chat_backup_recovery_action_confirm">"输入恢复密钥"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"当前密钥存储已脱离同步。"</string>
-  <string name="screen_chat_backup_recovery_action_setup">"获取恢复密钥"</string>
+  <string name="screen_chat_backup_recovery_action_setup">"创建恢复密钥"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"你的聊天已被端到端加密自动备份。如果你无法访问所有设备，则需要使用恢复密钥恢复备份并保留数字身份。"</string>
   <string name="screen_create_new_recovery_key_list_item_1">"在桌面设备中打开 %1$s"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"再次登录你的账户"</string>
@@ -67,7 +67,6 @@
   <string name="screen_recovery_key_check_subtitle">"请输入你已保存的恢复密钥，以确保其正确且有效。"</string>
   <string name="screen_recovery_key_check_success_title">"恢复密钥已激活"</string>
   <string name="screen_recovery_key_check_title">"检查恢复密钥"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"创建新的恢复密钥"</string>
   <string name="screen_recovery_key_confirm_description">"确保没人能看到此界面！"</string>
   <string name="screen_recovery_key_confirm_error_content">"请重试以确认访问密钥存储。"</string>
   <string name="screen_recovery_key_confirm_error_title">"恢复密钥不正确"</string>
@@ -88,7 +87,7 @@
   <string name="screen_recovery_key_setup_generate_key">"生成恢复密钥"</string>
   <string name="screen_recovery_key_setup_generate_key_description">"请勿与任何人分享！"</string>
   <string name="screen_recovery_key_setup_success">"恢复设置成功"</string>
-  <string name="screen_recovery_key_setup_title">"获取恢复密钥"</string>
+  <string name="screen_recovery_key_setup_title">"创建恢复密钥"</string>
   <string name="screen_recovery_key_success_title">"你的新恢复密钥现已激活"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"是，立即重置"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"此过程不可逆。"</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Kan ik dit niet bevestigen?"</string>
-  <string name="screen_identity_confirmation_create_new_recovery_key">"Maak een nieuwe herstelsleutel"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifieer dit apparaat om beveiligde berichten in te stellen."</string>
   <string name="screen_identity_confirmation_title">"Bevestig dat jij het bent"</string>
   <string name="screen_identity_confirmation_use_another_device">"Gebruik een ander apparaat"</string>

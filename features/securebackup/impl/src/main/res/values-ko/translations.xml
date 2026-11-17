@@ -38,7 +38,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"이 내용을 누구와도 공유하지 마십시오!"</string>
   <string name="screen_recovery_key_change_success">"복구 키가 변경되었습니다."</string>
   <string name="screen_recovery_key_change_title">"복구 키 변경하시겠습니까?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"새 복구 키 만들기"</string>
   <string name="screen_recovery_key_confirm_description">"아무도 이 화면을 볼 수 없도록 하세요!"</string>
   <string name="screen_recovery_key_confirm_error_content">"키 저장소에 대한 액세스를 확인하시려면 다시 시도해 주세요."</string>
   <string name="screen_recovery_key_confirm_error_title">"잘못된 복구 키"</string>

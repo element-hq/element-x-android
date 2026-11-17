@@ -64,7 +64,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Ezt ne ossza meg senkivel!"</string>
   <string name="screen_recovery_key_change_success">"Helyreállítási kulcs lecserélve"</string>
   <string name="screen_recovery_key_change_title">"Módosítja a helyreállítási kulcsot?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Új helyreállítási kulcs létrehozása"</string>
   <string name="screen_recovery_key_confirm_description">"Győződjön meg arról, hogy senki sem látja ezt a képernyőt!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Próbálja újra megerősíteni a kulcstárolóhoz való hozzáférést."</string>
   <string name="screen_recovery_key_confirm_error_title">"Helytelen helyreállítási kulcs"</string>

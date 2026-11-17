@@ -63,7 +63,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"誰にも共有しないでください！"</string>
   <string name="screen_recovery_key_change_success">"回復鍵を更新しました"</string>
   <string name="screen_recovery_key_change_title">"回復鍵を変更しますか？"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"新しい回復鍵を生成"</string>
   <string name="screen_recovery_key_confirm_description">"誰にもこの画面を見せないでください！"</string>
   <string name="screen_recovery_key_confirm_error_content">"鍵の保管庫にアクセスするには、もう一度お試しください。"</string>
   <string name="screen_recovery_key_confirm_error_title">"回復鍵が間違っています"</string>
