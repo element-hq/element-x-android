@@ -137,25 +137,12 @@ class PreferencesRootPresenterTest {
     }
 
     @Test
-    fun `present - change timeline font size`() = runTest {
-        val appPreferencesStore = InMemoryAppPreferencesStore()
-        createPreferencesRootPresenter(appPreferencesStore = appPreferencesStore).test {
-            val initialState = consumeItemsUntilPredicate { it.timelineFontSize == TimelineFontSize.Default }.last()
-            initialState.eventSink(PreferencesRootEvent.SetTimelineFontSize(TimelineFontSize.Larger))
-
-            consumeItemsUntilPredicate { it.timelineFontSize == TimelineFontSize.Larger }
-            assertThat(appPreferencesStore.getTimelineFontScaleFlow().first()).isEqualTo(TimelineFontSize.Larger.scale)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - a stored scale that matches no stop falls back to the closest one`() = runTest {
+    fun `present - the stored message text size reaches the state`() = runTest {
         val appPreferencesStore = InMemoryAppPreferencesStore().apply {
-            setTimelineFontScale(1.12f)
+            setMessageTextSize(20)
         }
         createPreferencesRootPresenter(appPreferencesStore = appPreferencesStore).test {
-            consumeItemsUntilPredicate { it.timelineFontSize == TimelineFontSize.Large }
+            consumeItemsUntilPredicate { it.messageTextSize == 20 }
             cancelAndIgnoreRemainingEvents()
         }
     }

@@ -19,12 +19,11 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
 import kotlinx.collections.immutable.ImmutableList
-import kotlin.math.roundToInt
 
 data class PreferencesRootState(
     val myUser: MatrixUser,
     val theme: ThemeOption,
-    val timelineFontSize: TimelineFontSize,
+    val messageTextSize: Int,
     val preferencesAccountState: PreferencesAccountState,
     val availableThemeOptions: ImmutableList<ThemeOption>,
     val userStatusState: UserStatusState?,
@@ -64,33 +63,4 @@ enum class ThemeOption : DropdownOption {
         @ReadOnlyComposable
         override fun getText(): String = stringResource(R.string.theme_black)
     }
-}
-
-/** Sizes the timeline text can be set to, [Default] being the regular app size. */
-enum class TimelineFontSize(val scale: Float) {
-    Small(scale = 0.9f),
-    Default(scale = 1f),
-    Large(scale = 1.2f);
-    @Composable
-    @ReadOnlyComposable
-    fun getText(): String = stringResource(
-        when (this) {
-            Small -> R.string.screen_settings_timeline_font_size_small
-            Default -> R.string.screen_settings_timeline_font_size_default
-            Large -> R.string.screen_settings_timeline_font_size_large
-        }
-    )
-
-    companion object {
-        /** Nearest stop to [scale], so an unknown stored value still lands on a valid one. */
-        fun fromScale(scale: Float): TimelineFontSize = entries.minBy { kotlin.math.abs(it.scale - scale) }
-    }
-}
-
-val TimelineFontSize.sliderValue: Float
-    get() = ordinal / (TimelineFontSize.entries.size - 1f)
-
-fun timelineFontSizeFromSliderValue(value: Float): TimelineFontSize {
-    val index = (value * (TimelineFontSize.entries.size - 1)).roundToInt()
-    return TimelineFontSize.entries[index.coerceIn(TimelineFontSize.entries.indices)]
 }

@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
 import io.element.android.libraries.matrix.ui.components.switchaccount.anOtherAccount
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
@@ -81,7 +82,8 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
                     anOtherAccount(user = user.copy(displayedStatus = displayedStatus))
                 },
             ),
-            aPreferencesRootState(timelineFontSize = TimelineFontSize.Large),
+            // Message text at the largest size
+            aPreferencesRootState(messageTextSize = MessageTextSize.MAX),
         )
 }
 
@@ -93,7 +95,7 @@ fun aPreferencesRootState(
     isOtherAccountsSectionExpanded: Boolean = false,
     theme: ThemeOption = ThemeOption.System,
     availableThemeOptions: List<ThemeOption> = ThemeOption.entries,
-    timelineFontSize: TimelineFontSize = TimelineFontSize.Default,
+    messageTextSize: Int = MessageTextSize.DEFAULT,
     otherSessions: List<OtherAccount> = emptyList(),
     showAnalyticsSettings: Boolean = false,
     showDeveloperSettings: Boolean = false,
@@ -109,7 +111,7 @@ fun aPreferencesRootState(
     isMultiAccountEnabled = isMultiAccountEnabled,
     theme = theme,
     availableThemeOptions = availableThemeOptions.toImmutableList(),
-    timelineFontSize = timelineFontSize,
+    messageTextSize = messageTextSize,
     isOtherAccountsSectionExpanded = isOtherAccountsSectionExpanded,
     otherSessions = otherSessions.toImmutableList(),
     showAnalyticsSettings = showAnalyticsSettings,

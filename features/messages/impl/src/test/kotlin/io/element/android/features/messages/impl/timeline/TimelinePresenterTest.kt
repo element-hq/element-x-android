@@ -75,6 +75,7 @@ import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -137,14 +138,14 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - the stored timeline font scale reaches the state`() = runTest {
+    fun `present - the stored message text size reaches the state as a scale`() = runTest {
         val presenter = createTimelinePresenter(
             appPreferencesStore = InMemoryAppPreferencesStore().apply {
-                setTimelineFontScale(1.3f)
+                setMessageTextSize(MessageTextSize.MAX)
             }
         )
         presenter.test {
-            consumeItemsUntilPredicate { it.timelineFontScale == 1.3f }
+            consumeItemsUntilPredicate { it.timelineFontScale == MessageTextSize.scaleOf(MessageTextSize.MAX) }
             cancelAndIgnoreRemainingEvents()
         }
     }

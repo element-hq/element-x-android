@@ -45,12 +45,12 @@ interface AppPreferencesStore {
     fun getThemeFlow(): Flow<String?>
 
     /**
-     * @param scale the multiplier to apply to the text of the timeline, 1f being the regular app size.
+     * @param sizeSp the size in sp of the message text in the timeline, within [MessageTextSize.range].
      */
-    suspend fun setTimelineFontScale(scale: Float)
+    suspend fun setMessageTextSize(sizeSp: Int)
 
-    /** The multiplier applied to the text of the timeline; defaults to 1f, the regular app size. */
-    fun getTimelineFontScaleFlow(): Flow<Float>
+    /** The size in sp of the message text in the timeline; defaults to [MessageTextSize.DEFAULT]. */
+    fun getMessageTextSizeFlow(): Flow<Int>
 
     /**
      * @param expanded true to expand the other accounts section.

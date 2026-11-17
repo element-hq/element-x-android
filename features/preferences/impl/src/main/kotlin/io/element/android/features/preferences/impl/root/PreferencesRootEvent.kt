@@ -12,5 +12,4 @@ sealed interface PreferencesRootEvent {
     data object OnVersionInfoClick : PreferencesRootEvent
     data object ToggleOtherAccountsExpanded : PreferencesRootEvent
     data class SetTheme(val theme: ThemeOption) : PreferencesRootEvent
-    data class SetTimelineFontSize(val size: TimelineFontSize) : PreferencesRootEvent
 }

@@ -11,7 +11,6 @@ package io.element.android.libraries.preferences.impl.store
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.zacsweers.metro.AppScope
@@ -22,6 +21,7 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.preferences.api.store.NotificationSound.Companion.toStored
 import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.map
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
-private val timelineFontScaleKey = floatPreferencesKey("timelineFontScale")
+private val messageTextSizeKey = intPreferencesKey("messageTextSize")
 private val hideInviteAvatarsKey = booleanPreferencesKey("hideInviteAvatars")
 private val otherAccountsExpandedKey = booleanPreferencesKey("otherAccountsExpanded")
 private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPreviewValue")
@@ -100,15 +100,16 @@ class DefaultAppPreferencesStore(
         }
     }
 
-    override suspend fun setTimelineFontScale(scale: Float) {
+    override suspend fun setMessageTextSize(sizeSp: Int) {
         store.edit { prefs ->
-            prefs[timelineFontScaleKey] = scale
+            prefs[messageTextSizeKey] = sizeSp.coerceIn(MessageTextSize.range)
         }
     }
 
-    override fun getTimelineFontScaleFlow(): Flow<Float> {
+    override fun getMessageTextSizeFlow(): Flow<Int> {
         return store.data.map { prefs ->
-            prefs[timelineFontScaleKey] ?: 1f
+            // Coerce on read too, so a value written by another version still lands in a size we can render.
+            prefs[messageTextSizeKey]?.coerceIn(MessageTextSize.range) ?: MessageTextSize.DEFAULT
         }
     }
 

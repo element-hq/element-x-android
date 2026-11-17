@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +27,7 @@ class InMemoryAppPreferencesStore(
     hideInviteAvatars: Boolean? = null,
     timelineMediaPreviewValue: MediaPreviewValue? = null,
     theme: String? = null,
-    timelineFontScale: Float = 1f,
+    messageTextSize: Int = MessageTextSize.DEFAULT,
     liveLocationMinimumDistanceUpdate: Int = 10,
     logLevel: LogLevel = LogLevel.INFO,
     traceLogPacks: Set<TraceLogPack> = emptySet(),
@@ -42,7 +43,7 @@ class InMemoryAppPreferencesStore(
     private val isOtherAccountsExpanded = MutableStateFlow(isOtherAccountsExpanded)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
-    private val timelineFontScale = MutableStateFlow(timelineFontScale)
+    private val messageTextSize = MutableStateFlow(messageTextSize)
     private val liveLocationMinimumDistanceUpdate = MutableStateFlow(liveLocationMinimumDistanceUpdate)
     private val logLevel = MutableStateFlow(logLevel)
     private val tracingLogPacks = MutableStateFlow(traceLogPacks)
@@ -88,12 +89,12 @@ class InMemoryAppPreferencesStore(
         return theme
     }
 
-    override suspend fun setTimelineFontScale(scale: Float) {
-        timelineFontScale.value = scale
+    override suspend fun setMessageTextSize(sizeSp: Int) {
+        messageTextSize.value = sizeSp
     }
 
-    override fun getTimelineFontScaleFlow(): Flow<Float> {
-        return timelineFontScale
+    override fun getMessageTextSizeFlow(): Flow<Int> {
+        return messageTextSize
     }
 
     override suspend fun setLiveLocationMinimumDistanceInMetersUpdate(value: Int) {

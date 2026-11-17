@@ -10,6 +10,7 @@ package io.element.android.libraries.preferences.impl.store
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -56,19 +57,28 @@ class DefaultAppPreferencesStoreTest {
     }
 
     @Test
-    fun `timeline font scale defaults to 1`() = runTest {
+    fun `message text size defaults to 16`() = runTest {
         val store = createStore()
 
-        assertThat(store.getTimelineFontScaleFlow().first()).isEqualTo(1f)
+        assertThat(store.getMessageTextSizeFlow().first()).isEqualTo(MessageTextSize.DEFAULT)
     }
 
     @Test
-    fun `timeline font scale persists updates`() = runTest {
+    fun `message text size persists updates`() = runTest {
         val store = createStore()
 
-        store.setTimelineFontScale(1.15f)
+        store.setMessageTextSize(20)
 
-        assertThat(store.getTimelineFontScaleFlow().first()).isEqualTo(1.15f)
+        assertThat(store.getMessageTextSizeFlow().first()).isEqualTo(20)
+    }
+
+    @Test
+    fun `message text size is coerced into the supported range`() = runTest {
+        val store = createStore()
+
+        store.setMessageTextSize(99)
+
+        assertThat(store.getMessageTextSizeFlow().first()).isEqualTo(MessageTextSize.MAX)
     }
 
     @Test
