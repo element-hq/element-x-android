@@ -8,5 +8,9 @@
 package io.element.android.features.preferences.impl.messagetextsize
 
 sealed interface MessageTextSizeEvent {
+    /** The size the slider is on, which the sample follows while it is being moved. */
     data class SetTextSize(val sizeSp: Int) : MessageTextSizeEvent
+
+    /** The slider has been let go, so the size it landed on can be stored. */
+    data object CommitTextSize : MessageTextSizeEvent
 }

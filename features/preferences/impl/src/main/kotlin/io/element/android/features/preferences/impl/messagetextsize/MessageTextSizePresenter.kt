@@ -8,7 +8,6 @@
 package io.element.android.features.preferences.impl.messagetextsize
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,20 +35,19 @@ class MessageTextSizePresenter(
         val pickedSizeSp = remember { mutableStateOf<Int?>(null) }
         val textSizeSp = pickedSizeSp.value ?: storedSizeSp
 
-        DisposableEffect(Unit) {
-            onDispose {
-                val picked = pickedSizeSp.value
-                if (picked != null && picked != storedSizeSp) {
-                    sessionCoroutineScope.launch {
-                        appPreferencesStore.setMessageTextSize(picked)
-                    }
-                }
-            }
-        }
-
         fun handleEvent(event: MessageTextSizeEvent) {
             when (event) {
                 is MessageTextSizeEvent.SetTextSize -> pickedSizeSp.value = event.sizeSp
+                // Store it as soon as the slider is let go rather than when the screen goes away: the screen is torn down only once Appyx has
+                // finished animating it out, which leaves the setting showing its old value for a moment afterwards.
+                MessageTextSizeEvent.CommitTextSize -> {
+                    val picked = pickedSizeSp.value
+                    if (picked != null && picked != storedSizeSp) {
+                        sessionCoroutineScope.launch {
+                            appPreferencesStore.setMessageTextSize(picked)
+                        }
+                    }
+                }
             }
         }
 

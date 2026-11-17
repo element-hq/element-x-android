@@ -8,10 +8,12 @@
 package io.element.android.features.preferences.impl.messagetextsize
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -46,44 +48,38 @@ class MessageTextSizePresenterTest {
     }
 
     @Test
-    fun `present - changing the size is not stored while the screen is open`() = runTest {
+    fun `present - moving the slider does not store anything until it is let go`() = runTest {
         val appPreferencesStore = InMemoryAppPreferencesStore()
         createPresenter(appPreferencesStore).test {
             awaitItem().eventSink(MessageTextSizeEvent.SetTextSize(20))
 
-            consumeItemsUntilPredicate { it.textSizeSp == 20 }
+            val moved = consumeItemsUntilPredicate { it.textSizeSp == 20 }.last()
             assertThat(appPreferencesStore.getMessageTextSizeFlow().first()).isEqualTo(MessageTextSize.DEFAULT)
+
+            moved.eventSink(MessageTextSizeEvent.CommitTextSize)
+            runCurrent()
+            assertThat(appPreferencesStore.getMessageTextSizeFlow().first()).isEqualTo(20)
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `present - the size is stored when leaving the screen`() = runTest {
-        val appPreferencesStore = InMemoryAppPreferencesStore()
+    fun `present - letting go without having moved the slider stores nothing`() = runTest {
+        val setMessageTextSizeResult = lambdaRecorder<Int, Unit> { }
+        val appPreferencesStore = object : AppPreferencesStore by InMemoryAppPreferencesStore(messageTextSize = 18) {
+            override suspend fun setMessageTextSize(sizeSp: Int) = setMessageTextSizeResult(sizeSp)
+        }
         createPresenter(appPreferencesStore).test {
-            awaitItem().eventSink(MessageTextSizeEvent.SetTextSize(20))
-            consumeItemsUntilPredicate { it.textSizeSp == 20 }
+            val state = consumeItemsUntilPredicate { it.textSizeSp == 18 }.last()
+            state.eventSink(MessageTextSizeEvent.CommitTextSize)
             cancelAndIgnoreRemainingEvents()
         }
 
-        runCurrent()
-        assertThat(appPreferencesStore.getMessageTextSizeFlow().first()).isEqualTo(20)
-    }
-
-    @Test
-    fun `present - leaving the screen without touching the slider keeps the stored size`() = runTest {
-        val appPreferencesStore = InMemoryAppPreferencesStore(messageTextSize = 18)
-        createPresenter(appPreferencesStore).test {
-            consumeItemsUntilPredicate { it.textSizeSp == 18 }
-            cancelAndIgnoreRemainingEvents()
-        }
-
-        runCurrent()
-        assertThat(appPreferencesStore.getMessageTextSizeFlow().first()).isEqualTo(18)
+        setMessageTextSizeResult.assertions().isNeverCalled()
     }
 
     private fun TestScope.createPresenter(
-        appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
     ) = MessageTextSizePresenter(
         appPreferencesStore = appPreferencesStore,
         sessionCoroutineScope = this,

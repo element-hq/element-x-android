@@ -74,6 +74,7 @@ fun MessageTextSizeView(
             MessageTextSizeSlider(
                 textSizeSp = state.textSizeSp,
                 onTextSizeChange = { state.eventSink(MessageTextSizeEvent.SetTextSize(it)) },
+                onTextSizeCommit = { state.eventSink(MessageTextSizeEvent.CommitTextSize) },
             )
         }
     }
@@ -83,6 +84,7 @@ fun MessageTextSizeView(
 private fun MessageTextSizeSlider(
     textSizeSp: Int,
     onTextSizeChange: (Int) -> Unit,
+    onTextSizeCommit: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -95,6 +97,7 @@ private fun MessageTextSizeSlider(
             modifier = Modifier.weight(1f),
             value = textSizeSp.toFloat(),
             onValueChange = { onTextSizeChange(it.roundToInt()) },
+            onValueChangeFinish = onTextSizeCommit,
             valueRange = MessageTextSize.MIN.toFloat()..MessageTextSize.MAX.toFloat(),
             colors = SliderDefaults.colors(
                 thumbColor = ElementTheme.colors.iconAccentPrimary,
