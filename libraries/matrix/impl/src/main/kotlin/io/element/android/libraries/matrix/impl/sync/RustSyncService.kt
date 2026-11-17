@@ -24,8 +24,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomListServiceState
 import org.matrix.rustcomponents.sdk.SyncServiceState
@@ -39,20 +37,15 @@ class RustSyncService(
     sessionCoroutineScope: CoroutineScope,
 ) : SyncService {
     private val isServiceReady = AtomicBoolean(true)
-    private val lifecycleMutex = Mutex()
 
     override suspend fun startSync() = withContext(dispatcher) {
         runCatchingExceptions {
-            withContext(NonCancellable) {
-                lifecycleMutex.withLock {
-                    if (!isServiceReady.get()) {
-                        Timber.d("Can't start sync: service is not ready")
-                        return@withLock
-                    }
-                    Timber.i("Start sync")
-                    inner.start()
-                }
+            if (!isServiceReady.get() || inner.uniffiIsDestroyed) {
+                Timber.d("Can't start sync: service is not ready")
+                return@runCatchingExceptions
             }
+            Timber.i("Start sync")
+            inner.start()
         }.onFailure {
             Timber.d("Start sync failed: $it")
         }
@@ -60,33 +53,23 @@ class RustSyncService(
 
     override suspend fun stopSync() = withContext(dispatcher) {
         runCatchingExceptions {
-            withContext(NonCancellable) {
-                lifecycleMutex.withLock {
-                    if (!isServiceReady.get()) {
-                        Timber.d("Can't stop sync: service is not ready")
-                        return@withLock
-                    }
-                    Timber.i("Stop sync")
-                    inner.stop()
-                }
+            if (!isServiceReady.get() || inner.uniffiIsDestroyed) {
+                Timber.d("Can't stop sync: service is not ready")
+                return@runCatchingExceptions
             }
+            Timber.i("Stop sync")
+            inner.stop()
         }.onFailure {
             Timber.d("Stop sync failed: $it")
         }
     }
 
-    suspend fun destroy() = withContext(dispatcher + NonCancellable) {
-        lifecycleMutex.withLock {
-            if (!isServiceReady.getAndSet(false)) return@withLock
-            // Stop directly: stopSync() would try to acquire the same mutex.
-            runCatchingExceptions {
-                inner.stop()
-            }.onFailure {
-                Timber.d("Stop sync failed: $it")
-            }
-            Timber.d("Destroying sync service")
-            inner.destroy()
-        }
+    suspend fun destroy() = withContext(NonCancellable) {
+        // If the service was still running, stop it
+        stopSync()
+        if (!isServiceReady.getAndSet(false) || inner.uniffiIsDestroyed) return@withContext
+        Timber.d("Destroying sync service")
+        inner.destroy()
     }
 
     override val syncState: StateFlow<SyncState> =
