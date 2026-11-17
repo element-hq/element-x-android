@@ -16,6 +16,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.RageshakeConfig
+import io.element.android.features.rageshake.api.logs.ApplicationInfoLogger
 import io.element.android.features.rageshake.api.logs.LOG_DIRECTORY_NAME
 import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
 import io.element.android.features.rageshake.api.reporter.BugReporter
@@ -41,9 +42,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -87,6 +86,7 @@ class DefaultBugReporter(
     private val matrixClientProvider: MatrixClientProvider,
     private val logFolderProvider: LogFolderProvider,
     private val tracingService: TracingService,
+    private val applicationInfoLogger: ApplicationInfoLogger,
 ) : BugReporter {
     companion object {
         // filenames
@@ -110,18 +110,23 @@ class DefaultBugReporter(
         appCoroutineScope.launch(coroutineDispatchers.io) {
             File(context.cacheDir, LEGACY_LOG_DIRECTORY_NAME).deleteRecursively()
         }
-        // The log folder must be known synchronously, since it is used to initialize the tracing at startup.
+        // The log folder must be known synchronously, since it is used to initialize the tracing at startup:
+        // this ensures that the application information and the first logs are written to the right folder.
+        // It only reads local data (the session database and the enterprise configuration store).
         val initialLogFolder = runBlocking { logFolderProvider.logFolderFlow().first() }
         currentLogDirectory = initialLogFolder.toLogDirectory()
-        logFolderProvider.logFolderFlow()
-            .map { it to it.toLogDirectory() }
-            .filter { (_, logDirectory) -> logDirectory != currentLogDirectory }
-            .onEach { (logFolder, logDirectory) ->
-                Timber.d("Bug report configuration changed, writing the logs to the log folder $logFolder")
-                currentLogDirectory = logDirectory
-                tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
-            }
-            .launchIn(appCoroutineScope)
+        appCoroutineScope.launch(coroutineDispatchers.io) {
+            logFolderProvider.logFolderFlow()
+                .map { it to it.toLogDirectory() }
+                .filter { (_, logDirectory) -> logDirectory != currentLogDirectory }
+                .collect { (logFolder, logDirectory) ->
+                    Timber.d("Bug report configuration changed, writing the logs to the log folder $logFolder")
+                    currentLogDirectory = logDirectory
+                    tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
+                    // Ensure the logs of the new folder contain the application information
+                    applicationInfoLogger.log()
+                }
+        }
     }
 
     private fun LogFolder.toLogDirectory(): File {

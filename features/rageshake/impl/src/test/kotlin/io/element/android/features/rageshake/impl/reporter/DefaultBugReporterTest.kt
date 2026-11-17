@@ -10,6 +10,7 @@ package io.element.android.features.rageshake.impl.reporter
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.RageshakeConfig
+import io.element.android.features.rageshake.api.logs.ApplicationInfoLogger
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.impl.crash.CrashDataStore
 import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
@@ -473,27 +474,29 @@ class DefaultBugReporterTest : RobolectricTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `the tracing is updated when the log folder changes`() = runTest {
+    fun `the tracing is updated and the application info is logged when the log folder changes`() = runTest {
         val logFolderFlow = MutableStateFlow<LogFolder>(LogFolder.Default)
-        val configurations = mutableListOf<WriteToFilesConfiguration>()
+        val events = mutableListOf<String>()
         val sut = createDefaultBugReporter(
             logFolderProvider = { logFolderFlow },
             tracingService = FakeTracingService(
-                updateWriteToFilesConfigurationResult = { configurations.add(it) },
+                updateWriteToFilesConfigurationResult = { events.add("config:" + (it as WriteToFilesConfiguration.Enabled).directory) },
             ),
+            applicationInfoLogger = { events.add("appInfo") },
         )
         runCurrent()
         // No update for the initial value
-        assertThat(configurations).isEmpty()
+        assertThat(events).isEmpty()
         logFolderFlow.value = LogFolder.LocalOnly
         runCurrent()
         assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs2/local-only")
-        assertThat(configurations.map { (it as WriteToFilesConfiguration.Enabled).directory })
-            .containsExactly(sut.logDirectory().absolutePath)
+        // The application info is logged after the tracing is updated, so that it is written to the new folder
+        assertThat(events).containsExactly("config:" + sut.logDirectory().absolutePath, "appInfo").inOrder()
         logFolderFlow.value = LogFolder.Default
         runCurrent()
         assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs2")
-        assertThat(configurations).hasSize(2)
+        assertThat(events).hasSize(4)
+        assertThat(events.last()).isEqualTo("appInfo")
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -522,6 +525,7 @@ class DefaultBugReporterTest : RobolectricTest() {
         server: MockWebServer = MockWebServer(),
         logFolderProvider: LogFolderProvider = LogFolderProvider { flowOf(LogFolder.Default) },
         tracingService: FakeTracingService = FakeTracingService(),
+        applicationInfoLogger: ApplicationInfoLogger = ApplicationInfoLogger {},
     ): DefaultBugReporter {
         return DefaultBugReporter(
             context = RuntimeEnvironment.getApplication(),
@@ -538,6 +542,7 @@ class DefaultBugReporterTest : RobolectricTest() {
             matrixClientProvider = matrixClientProvider,
             logFolderProvider = logFolderProvider,
             tracingService = tracingService,
+            applicationInfoLogger = applicationInfoLogger,
         )
     }
 
