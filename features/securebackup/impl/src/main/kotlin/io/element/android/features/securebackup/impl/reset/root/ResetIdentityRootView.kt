@@ -112,7 +112,9 @@ fun ResetIdentityRootView(
 @Composable
 private fun Content(isResetTheOnlyOption: Boolean, hasEncryptedRooms: AsyncData<Boolean>) {
     Column(
-        modifier = Modifier.padding(top = 8.dp, bottom = 40.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 40.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         when {
