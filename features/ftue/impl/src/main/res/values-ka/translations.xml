@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_identity_confirmation_create_new_recovery_key">"ახალი აღდგენის გასაღების შექმნა"</string>
   <string name="screen_identity_confirmation_subtitle">"დაადასტურეთ ეს მოწყობილობა უსაფრთხო მიმოწერისათვის."</string>
   <string name="screen_identity_confirmation_title">"დაამტკიცეთ თქვენი პიროვნება"</string>
   <string name="screen_identity_confirmed_subtitle">"ახლა თქვენ შეძლებთ შეტყობინებების წაკითხვას ან გაგზავნას უსაფრთხოდ, სხვა მომხმარებლებსაც შეუძლიათ ამ მოწყობილობას ენდონ."</string>

@@ -11,7 +11,7 @@
   <string name="screen_chat_backup_recovery_action_change_description">"Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Enter recovery key"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Your key storage is currently out of sync."</string>
-  <string name="screen_chat_backup_recovery_action_setup">"Get recovery key"</string>
+  <string name="screen_chat_backup_recovery_action_setup">"Create recovery key"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Open %1$s on a desktop device"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Sign into your account again"</string>
@@ -68,7 +68,6 @@
   <string name="screen_recovery_key_check_subtitle">"Enter the recovery key you’ve saved to make sure that it’s correct and active."</string>
   <string name="screen_recovery_key_check_success_title">"Your recovery key is active"</string>
   <string name="screen_recovery_key_check_title">"Check your recovery key"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Create new recovery key"</string>
   <string name="screen_recovery_key_confirm_description">"Make sure nobody can see this screen!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Please try again to confirm access to your key storage."</string>
   <string name="screen_recovery_key_confirm_error_title">"Incorrect recovery key"</string>
@@ -89,7 +88,7 @@
   <string name="screen_recovery_key_setup_generate_key">"Generate your recovery key"</string>
   <string name="screen_recovery_key_setup_generate_key_description">"Do not share this with anyone!"</string>
   <string name="screen_recovery_key_setup_success">"Recovery setup successful"</string>
-  <string name="screen_recovery_key_setup_title">"Get recovery key"</string>
+  <string name="screen_recovery_key_setup_title">"Create recovery key"</string>
   <string name="screen_recovery_key_success_title">"Your new recovery key is now active"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Yes, reset now"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"This process is irreversible."</string>

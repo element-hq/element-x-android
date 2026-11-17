@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"認証できませんか？"</string>
-  <string name="screen_identity_confirmation_create_new_recovery_key">"回復鍵を新規作成します"</string>
   <string name="screen_identity_confirmation_sign_out">"サインアウト"</string>
   <string name="screen_identity_confirmation_subtitle">"安全なメッセージを設定するための検証方法を選択してください。"</string>
   <string name="screen_identity_confirmation_title">"デジタルIDの認証"</string>

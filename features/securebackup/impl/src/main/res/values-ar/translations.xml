@@ -63,7 +63,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"لا تشارك هذا مع أي شخص!"</string>
   <string name="screen_recovery_key_change_success">"تم تغيير مفتاح الاسترداد"</string>
   <string name="screen_recovery_key_change_title">"تغيير مفتاح الاسترداد؟"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"إنشاء مفتاح استرداد جديد"</string>
   <string name="screen_recovery_key_confirm_description">"تأكد من ألا يتمكن أحد من رؤية هذه الشاشة!"</string>
   <string name="screen_recovery_key_confirm_error_content">"يُرجى المحاولة مرة أخرى لتأكيد الوصول إلى تخزين المفاتيح."</string>
   <string name="screen_recovery_key_confirm_error_title">"مفتاح الاسترداد غير صحيح"</string>

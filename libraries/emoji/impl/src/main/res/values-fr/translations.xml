@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_a11y_backspace">"Supprimer le caractère situé avant le curseur"</string>
   <string name="emoji_picker_category_activity">"Activités"</string>
   <string name="emoji_picker_category_flags">"Drapeaux"</string>
   <string name="emoji_picker_category_foods">"Nourriture et boissons"</string>
