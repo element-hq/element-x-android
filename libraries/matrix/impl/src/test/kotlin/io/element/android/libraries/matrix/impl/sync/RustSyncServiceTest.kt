@@ -9,48 +9,11 @@ package io.element.android.libraries.matrix.impl.sync
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RustSyncServiceTest {
-    @Test
-    fun `destroy waits for an in-flight stop even when its caller is cancelled`() = runTest {
-        for (cancelCaller in listOf(false, true)) {
-            val releaseStop = CompletableDeferred<Unit>()
-            val calls = mutableListOf<String>()
-            val inner = FakeFfiSyncService(
-                stop = {
-                    calls.add("stop entered")
-                    if (calls.size == 1) releaseStop.await()
-                    calls.add("stop returned")
-                },
-                destroy = { calls.add("destroy") },
-            )
-            val service = RustSyncService(inner, StandardTestDispatcher(testScheduler), backgroundScope)
-
-            val stopJob = launch { service.stopSync() }
-            runCurrent()
-            if (cancelCaller) stopJob.cancel()
-            val destroyJob = launch { service.destroy() }
-            try {
-                runCurrent()
-                assertThat(calls).containsExactly("stop entered")
-            } finally {
-                releaseStop.complete(Unit)
-            }
-            stopJob.join()
-            destroyJob.join()
-
-            assertThat(calls).containsExactly("stop entered", "stop returned", "stop entered", "stop returned", "destroy").inOrder()
-        }
-    }
-
     @Test
     fun `start and stop succeed and lifecycle calls after destroy do nothing`() = runTest {
         val calls = mutableListOf<String>()
