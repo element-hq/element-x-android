@@ -381,6 +381,12 @@ class RustMatrixAuthenticationService(
         }
 
     private suspend fun finalizeClientCreation(sessionData: SessionData): SessionId {
+        // Wait for the encryption to be initialized, so that we can be sure that the session is fully ready to be used.
+        // This is a workaround for using 2 clients, one for login and another one for session restoration: when we drop the login client,
+        // the encryption of the session may not fully initialized yet, and the final client will override the encryption state, causing
+        // duplicate one-time keys to be generated.
+        currentClient?.encryption()?.waitForE2eeInitializationTasks()
+
         // Close the client which was used to perform the login before creating the final client.
         // Both use the same session paths, so their SQLite stores must never be opened at the same time.
         // The login client does not set up the backup and the cross-signing, the final client will do it.
