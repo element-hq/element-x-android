@@ -6,11 +6,11 @@
 # SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 # Please see LICENSE files in the repository root for full details.
 
+import argparse
 import re
 import sys
 from xml.dom import minidom
-
-file = sys.argv[1]
+from xml.parsers.expat import ExpatError
 
 # Dict of forbidden terms, with exceptions for some String name
 # Keys are the terms, values are the exceptions.
@@ -91,37 +91,17 @@ def find_invalid_placeholders(value):
     return invalid
 
 
-content = minidom.parse(file)
+def check_file(file):
+    """Return the errors found in the resources file at `file`."""
+    content = minidom.parse(file)
 
-errors = []
+    errors = []
 
-### Strings
-for elem in content.getElementsByTagName('string'):
-    name = elem.attributes['name'].value
-    # Continue if value is empty
-    child = elem.firstChild
-    if child is None:
-        # Should not happen
-        continue
-    value = child.nodeValue
-    # If value contains a forbidden term, add the error to errors
-    for (term, exceptions) in forbiddenTerms.items():
-        matches = re.search(term, value)
-        if matches and name not in exceptions:
-            errors.append('Forbidden term "' + term + '" in string: "' + name + '": ' + value)
-
-    invalid_placeholders = find_invalid_placeholders(value)
-    for placeholder in invalid_placeholders:
-        errors.append('Invalid placeholder "' + placeholder + '" in string: "' + name + '": ' + value)
-
-### Plurals
-for elem in content.getElementsByTagName('plurals'):
-    name = elem.attributes['name'].value
-    for it in elem.childNodes:
-        if it.nodeType != it.ELEMENT_NODE:
-            continue
+    ### Strings
+    for elem in content.getElementsByTagName('string'):
+        name = elem.attributes['name'].value
         # Continue if value is empty
-        child = it.firstChild
+        child = elem.firstChild
         if child is None:
             # Should not happen
             continue
@@ -130,15 +110,60 @@ for elem in content.getElementsByTagName('plurals'):
         for (term, exceptions) in forbiddenTerms.items():
             matches = re.search(term, value)
             if matches and name not in exceptions:
-                errors.append('Forbidden term "' + term + '" in plural: "' + name + '": ' + value)
+                errors.append('Forbidden term "' + term + '" in string: "' + name + '": ' + value)
 
         invalid_placeholders = find_invalid_placeholders(value)
         for placeholder in invalid_placeholders:
-            errors.append('Invalid placeholder "' + placeholder + '" in plural: "' + name + '": ' + value)
+            errors.append('Invalid placeholder "' + placeholder + '" in string: "' + name + '": ' + value)
 
-# If errors is not empty print the report
-if errors:
-    print('Error(s) in file ' + file + ":", file=sys.stderr)
-    for error in errors:
-        print(" - " + error, file=sys.stderr)
+    ### Plurals
+    for elem in content.getElementsByTagName('plurals'):
+        name = elem.attributes['name'].value
+        for it in elem.childNodes:
+            if it.nodeType != it.ELEMENT_NODE:
+                continue
+            # Continue if value is empty
+            child = it.firstChild
+            if child is None:
+                # Should not happen
+                continue
+            value = child.nodeValue
+            # If value contains a forbidden term, add the error to errors
+            for (term, exceptions) in forbiddenTerms.items():
+                matches = re.search(term, value)
+                if matches and name not in exceptions:
+                    errors.append('Forbidden term "' + term + '" in plural: "' + name + '": ' + value)
+
+            invalid_placeholders = find_invalid_placeholders(value)
+            for placeholder in invalid_placeholders:
+                errors.append('Invalid placeholder "' + placeholder + '" in plural: "' + name + '": ' + value)
+
+    return errors
+
+
+parser = argparse.ArgumentParser(description='Check resources files for forbidden terms and invalid placeholders.')
+parser.add_argument('-v', '--verbose', action='store_true', help='print the name of each file before checking it')
+parser.add_argument('files', nargs='*', help='the resources files to check')
+args = parser.parse_args()
+
+# Check every file, even after one fails, so a single run reports all the errors.
+failed_files = []
+for file in args.files:
+    if args.verbose:
+        print('Checking forbidden terms in ' + file, flush=True)
+    try:
+        errors = check_file(file)
+    except (OSError, ExpatError) as error:
+        errors = ['Could not read the file: ' + str(error)]
+    # If errors is not empty print the report
+    if errors:
+        print('Error(s) in file ' + file + ":", file=sys.stderr)
+        for error in errors:
+            print(" - " + error, file=sys.stderr)
+        failed_files.append(file)
+
+if failed_files:
+    print('Found errors in ' + str(len(failed_files)) + ' file(s):', file=sys.stderr)
+    for file in failed_files:
+        print(' - ' + file, file=sys.stderr)
     sys.exit(1)
