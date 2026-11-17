@@ -38,6 +38,7 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDropdown
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
+import io.element.android.libraries.designsystem.components.preferences.PreferenceSlide
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
@@ -226,6 +227,16 @@ private fun AppSettingsSection(
             onSelectOption = { themeOption ->
                 state.eventSink(PreferencesRootEvent.SetTheme(themeOption))
             }
+        )
+        PreferenceSlide(
+            icon = CompoundIcons.TextFormatting(),
+            title = stringResource(id = R.string.screen_settings_timeline_font_size_title),
+            summary = state.timelineFontSize.getText(),
+            value = state.timelineFontSize.sliderValue,
+            steps = TimelineFontSize.entries.size - 2,
+            onValueChange = { value ->
+                state.eventSink(PreferencesRootEvent.SetTimelineFontSize(timelineFontSizeFromSliderValue(value)))
+            },
         )
         ListItem(
             content = { Text(stringResource(id = CommonStrings.common_media_upload_quality)) },

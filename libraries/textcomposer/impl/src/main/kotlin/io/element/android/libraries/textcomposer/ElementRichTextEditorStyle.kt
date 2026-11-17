@@ -10,10 +10,12 @@ package io.element.android.libraries.textcomposer
 
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isUnspecified
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.wysiwyg.compose.RichTextEditorDefaults
 import io.element.android.wysiwyg.compose.RichTextEditorStyle
@@ -38,13 +40,14 @@ object ElementRichTextEditorStyle {
         )
     }
 
+    /** @param fontScale multiplier for callers that size their text independently of the app, such as the timeline. */
     @Composable
-    fun textStyle(): RichTextEditorStyle {
-        return common()
+    fun textStyle(fontScale: Float = 1f): RichTextEditorStyle {
+        return common(fontScale = fontScale)
     }
 
     @Composable
-    private fun common(): RichTextEditorStyle {
+    private fun common(fontScale: Float = 1f): RichTextEditorStyle {
         val colors = ElementTheme.colors
         val codeCornerRadius = 4.dp
         val codeBorderWidth = 1.dp
@@ -55,7 +58,9 @@ object ElementRichTextEditorStyle {
             text = RichTextEditorDefaults.textStyle(
                 color = LocalTextStyle.current.color.takeIf { it.isSpecified } ?: LocalContentColor.current,
                 fontStyle = LocalTextStyle.current.fontStyle,
-                lineHeight = LocalTextStyle.current.lineHeight,
+                // `EditorStyledText` resolves these `sp` values against the Android configuration, not Compose's density, so scale them here.
+                lineHeight = LocalTextStyle.current.lineHeight.scaleBy(fontScale),
+                fontSize = MaterialTheme.typography.bodyLarge.fontSize * fontScale,
                 includeFontPadding = false,
             ),
             cursor = RichTextEditorDefaults.cursorStyle(
@@ -85,3 +90,5 @@ object ElementRichTextEditorStyle {
         )
     }
 }
+
+private fun TextUnit.scaleBy(scale: Float): TextUnit = if (isUnspecified) this else this * scale

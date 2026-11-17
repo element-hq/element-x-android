@@ -56,6 +56,22 @@ class DefaultAppPreferencesStoreTest {
     }
 
     @Test
+    fun `timeline font scale defaults to 1`() = runTest {
+        val store = createStore()
+
+        assertThat(store.getTimelineFontScaleFlow().first()).isEqualTo(1f)
+    }
+
+    @Test
+    fun `timeline font scale persists updates`() = runTest {
+        val store = createStore()
+
+        store.setTimelineFontScale(1.15f)
+
+        assertThat(store.getTimelineFontScaleFlow().first()).isEqualTo(1.15f)
+    }
+
+    @Test
     fun `homeserver history is empty by default`() = runTest {
         val store = createStore()
         assertThat(store.getHomeserverHistoryFlow().first()).isEmpty()

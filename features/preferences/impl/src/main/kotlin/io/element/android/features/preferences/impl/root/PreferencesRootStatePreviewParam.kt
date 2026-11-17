@@ -81,6 +81,7 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
                     anOtherAccount(user = user.copy(displayedStatus = displayedStatus))
                 },
             ),
+            aPreferencesRootState(timelineFontSize = TimelineFontSize.Large),
         )
 }
 
@@ -92,6 +93,7 @@ fun aPreferencesRootState(
     isOtherAccountsSectionExpanded: Boolean = false,
     theme: ThemeOption = ThemeOption.System,
     availableThemeOptions: List<ThemeOption> = ThemeOption.entries,
+    timelineFontSize: TimelineFontSize = TimelineFontSize.Default,
     otherSessions: List<OtherAccount> = emptyList(),
     showAnalyticsSettings: Boolean = false,
     showDeveloperSettings: Boolean = false,
@@ -107,6 +109,7 @@ fun aPreferencesRootState(
     isMultiAccountEnabled = isMultiAccountEnabled,
     theme = theme,
     availableThemeOptions = availableThemeOptions.toImmutableList(),
+    timelineFontSize = timelineFontSize,
     isOtherAccountsSectionExpanded = isOtherAccountsSectionExpanded,
     otherSessions = otherSessions.toImmutableList(),
     showAnalyticsSettings = showAnalyticsSettings,

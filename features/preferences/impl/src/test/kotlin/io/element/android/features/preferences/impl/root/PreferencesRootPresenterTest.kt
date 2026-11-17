@@ -137,6 +137,30 @@ class PreferencesRootPresenterTest {
     }
 
     @Test
+    fun `present - change timeline font size`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore()
+        createPreferencesRootPresenter(appPreferencesStore = appPreferencesStore).test {
+            val initialState = consumeItemsUntilPredicate { it.timelineFontSize == TimelineFontSize.Default }.last()
+            initialState.eventSink(PreferencesRootEvent.SetTimelineFontSize(TimelineFontSize.Larger))
+
+            consumeItemsUntilPredicate { it.timelineFontSize == TimelineFontSize.Larger }
+            assertThat(appPreferencesStore.getTimelineFontScaleFlow().first()).isEqualTo(TimelineFontSize.Larger.scale)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - a stored scale that matches no stop falls back to the closest one`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore().apply {
+            setTimelineFontScale(1.12f)
+        }
+        createPreferencesRootPresenter(appPreferencesStore = appPreferencesStore).test {
+            consumeItemsUntilPredicate { it.timelineFontSize == TimelineFontSize.Large }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - black theme option shown when feature flag enabled`() = runTest {
         createPreferencesRootPresenter(
             featureFlagService = FakeFeatureFlagService().apply {

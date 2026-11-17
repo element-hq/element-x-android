@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+  <string name="screen_settings_timeline_font_size_title">"Message text size"</string>
+  <string name="screen_settings_timeline_font_size_small">"Small"</string>
+  <string name="screen_settings_timeline_font_size_default">"Default"</string>
+  <string name="screen_settings_timeline_font_size_large">"Large"</string>
+</resources>

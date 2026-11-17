@@ -45,6 +45,14 @@ interface AppPreferencesStore {
     fun getThemeFlow(): Flow<String?>
 
     /**
+     * @param scale the multiplier to apply to the text of the timeline, 1f being the regular app size.
+     */
+    suspend fun setTimelineFontScale(scale: Float)
+
+    /** The multiplier applied to the text of the timeline; defaults to 1f, the regular app size. */
+    fun getTimelineFontScaleFlow(): Flow<Float>
+
+    /**
      * @param expanded true to expand the other accounts section.
      */
     suspend fun setOtherAccountsExpanded(expanded: Boolean)

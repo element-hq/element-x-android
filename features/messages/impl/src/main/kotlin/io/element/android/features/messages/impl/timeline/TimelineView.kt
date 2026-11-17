@@ -70,6 +70,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
@@ -203,13 +204,26 @@ fun TimelineView(
 
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
-        val composeLocalTimelineEventRendererConfig = remember(state.useNewTimelineEventRenderer, state.timelineRoomInfo.currentUserId) {
+        val composeLocalTimelineEventRendererConfig = remember(
+            state.useNewTimelineEventRenderer,
+            state.timelineRoomInfo.currentUserId,
+            state.timelineFontScale,
+        ) {
             ComposeLocalTimelineEventRendererConfig(
                 isComposeRendererEnabled = state.useNewTimelineEventRenderer,
                 currentUserId = state.timelineRoomInfo.currentUserId,
+                fontScale = state.timelineFontScale,
             )
         }
-        CompositionLocalProvider(LocalTimelineEventRendererConfig provides composeLocalTimelineEventRendererConfig) {
+        // Only the font scales: `dp` values keep the layout as designed.
+        val density = LocalDensity.current
+        val scaledDensity = remember(density, state.timelineFontScale) {
+            Density(density.density, density.fontScale * state.timelineFontScale)
+        }
+        CompositionLocalProvider(
+            LocalTimelineEventRendererConfig provides composeLocalTimelineEventRendererConfig,
+            LocalDensity provides scaledDensity,
+        ) {
             Box(modifier) {
                 LazyColumn(
                     modifier = Modifier

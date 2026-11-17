@@ -11,6 +11,7 @@ package io.element.android.libraries.preferences.impl.store
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.zacsweers.metro.AppScope
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.map
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
+private val timelineFontScaleKey = floatPreferencesKey("timelineFontScale")
 private val hideInviteAvatarsKey = booleanPreferencesKey("hideInviteAvatars")
 private val otherAccountsExpandedKey = booleanPreferencesKey("otherAccountsExpanded")
 private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPreviewValue")
@@ -95,6 +97,18 @@ class DefaultAppPreferencesStore(
     override fun getThemeFlow(): Flow<String?> {
         return store.data.map { prefs ->
             prefs[themeKey]
+        }
+    }
+
+    override suspend fun setTimelineFontScale(scale: Float) {
+        store.edit { prefs ->
+            prefs[timelineFontScaleKey] = scale
+        }
+    }
+
+    override fun getTimelineFontScaleFlow(): Flow<Float> {
+        return store.data.map { prefs ->
+            prefs[timelineFontScaleKey] ?: 1f
         }
     }
 

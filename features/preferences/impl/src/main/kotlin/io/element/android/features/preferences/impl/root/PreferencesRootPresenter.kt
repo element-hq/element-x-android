@@ -95,6 +95,10 @@ class PreferencesRootPresenter(
             appPreferencesStore.getThemeFlow().mapToTheme(isBlackThemeAllowed)
         }.collectAsState(initial = Theme.System)
 
+        val timelineFontSize by remember {
+            appPreferencesStore.getTimelineFontScaleFlow().map { TimelineFontSize.fromScale(it) }
+        }.collectAsState(initial = TimelineFontSize.Default)
+
         val otherSessions by remember {
             sessionStore.sessionsFlow()
                 .map { list -> list.filter { it.userId != matrixClient.sessionId.value } }
@@ -145,6 +149,9 @@ class PreferencesRootPresenter(
                 PreferencesRootEvent.ToggleOtherAccountsExpanded -> coroutineScope.launch {
                     appPreferencesStore.setOtherAccountsExpanded(!isOtherAccountsSectionExpanded)
                 }
+                is PreferencesRootEvent.SetTimelineFontSize -> sessionCoroutineScope.launch {
+                    appPreferencesStore.setTimelineFontScale(event.size.scale)
+                }
                 is PreferencesRootEvent.SetTheme -> sessionCoroutineScope.launch {
                     when (event.theme) {
                         ThemeOption.System -> appPreferencesStore.setTheme(Theme.System.name)
@@ -161,6 +168,7 @@ class PreferencesRootPresenter(
             userStatusState = userStatusState,
             preferencesAccountState = preferencesAccountState,
             theme = themeOption,
+            timelineFontSize = timelineFontSize,
             availableThemeOptions = availableThemeOptions,
             version = remember { versionFormatter.get() },
             isMultiAccountEnabled = isMultiAccountEnabled,
