@@ -22,5 +22,8 @@ interface LogoutEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun navigateToSecureBackup()
+
+        /** The logout flow is over without removing the device, so whatever shows it can go away. */
+        fun onDismiss()
     }
 }

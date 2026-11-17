@@ -17,7 +17,7 @@ android {
     namespace = "io.element.android.features.leaveroom.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     api(projects.features.leaveroom.api)

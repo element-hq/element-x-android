@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_select_account_permalink_room_subtitle">"Aucun de vos comptes n’a encore rejoint ce salon, veuillez choisir celui que vous souhaitez utiliser."</string>
+  <string name="screen_select_account_permalink_title">"Sélectionnez un compte pour ouvrir le lien :"</string>
+</resources>

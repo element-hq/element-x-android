@@ -9,7 +9,7 @@ package io.element.android.features.migration.impl.migrations
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.SessionStore
 
@@ -19,7 +19,7 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 @ContributesIntoSet(AppScope::class)
 class AppMigration09(
     private val sessionStore: SessionStore,
-    private val matrixClientProvider: MatrixClientProvider,
+    private val matrixAuthenticationService: MatrixAuthenticationService,
 ) : AppMigration {
     override val order: Int = 9
 
@@ -29,8 +29,13 @@ class AppMigration09(
         val sessions = sessionStore.getAllSessions()
 
         for (session in sessions) {
-            val client = matrixClientProvider.getOrRestore(SessionId(session.userId)).getOrNull() ?: continue
-            client.resetWellKnownConfig()
+            // Do not use the MatrixClientProvider, it would keep the client open (and syncing) while the next migrations are running.
+            val client = matrixAuthenticationService.restoreSession(SessionId(session.userId)).getOrNull() ?: continue
+            try {
+                client.resetWellKnownConfig()
+            } finally {
+                client.destroy()
+            }
         }
     }
 }

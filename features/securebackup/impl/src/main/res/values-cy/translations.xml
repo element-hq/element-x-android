@@ -37,7 +37,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Peidiwch â rhannu hwn gyda neb!"</string>
   <string name="screen_recovery_key_change_success">"Newidwyd yr allwedd adfer"</string>
   <string name="screen_recovery_key_change_title">"Newid yr allwedd adfer?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Creu allwedd adfer newydd"</string>
   <string name="screen_recovery_key_confirm_description">"Gwnewch yn siŵr nad oes neb yn gallu gweld y sgrin hon!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Ceisiwch eto i gadarnhau mynediad i\'ch storfa allweddi."</string>
   <string name="screen_recovery_key_confirm_error_title">"Allwedd adfer anghywir"</string>

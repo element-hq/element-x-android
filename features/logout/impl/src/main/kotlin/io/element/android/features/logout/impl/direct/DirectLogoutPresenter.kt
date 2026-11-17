@@ -38,7 +38,8 @@ class DirectLogoutPresenter(
         fun handleEvent(event: DirectLogoutEvent) {
             when (event) {
                 is DirectLogoutEvent.Logout -> {
-                    if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
+                    if (logoutAction.value.isLoading()) return
+                    if (logoutAction.value.isConfirming() || event.ignoreSdkError || event.skipConfirmation) {
                         localCoroutineScope.logout(logoutAction, event.ignoreSdkError)
                     } else {
                         logoutAction.value = AsyncAction.ConfirmingNoParams
@@ -59,9 +60,13 @@ class DirectLogoutPresenter(
     private fun CoroutineScope.logout(
         logoutAction: MutableState<AsyncAction<Unit>>,
         ignoreSdkError: Boolean,
-    ) = launch {
-        suspend {
-            matrixClient.logout(userInitiated = true, ignoreSdkError)
-        }.runCatchingUpdatingState(logoutAction)
+    ) {
+        // Set synchronously so that a second tap before the coroutine starts is ignored.
+        logoutAction.value = AsyncAction.Loading
+        launch {
+            suspend {
+                matrixClient.logout(userInitiated = true, ignoreSdkError)
+            }.runCatchingUpdatingState(logoutAction)
+        }
     }
 }

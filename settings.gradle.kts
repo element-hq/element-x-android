@@ -69,30 +69,7 @@ dependencyResolutionManagement {
             }
         }
 
-        // Temporary: the native call component and the matrix-rust-rtc core publish as GitHub release
-        // assets, which carry full Maven metadata. Both blocks go once they reach Maven Central.
-        ivy {
-            url = uri("https://github.com/element-hq/element-call-android/releases/download")
-            patternLayout { artifact("v[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
-            metadataSources { gradleMetadata() }
-            content {
-                // Per module: `element-call.*` would also catch element-call-embedded, the WebView call.
-                includeModule("io.element.android", "element-call-bom")
-                includeModule("io.element.android", "element-call-api")
-                includeModule("io.element.android", "element-call")
-                includeModule("io.element.android", "element-call-ui")
-                includeModule("io.element.android", "element-call-test")
-            }
-        }
-        ivy {
-            url = uri("https://github.com/element-hq/matrix-rust-rtc/releases/download")
-            patternLayout { artifact("v[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
-            // The core ships an AAR and nothing else; element-call's module metadata names it with an
-            // explicit aar artifact selector, so it needs no POM.
-            metadataSources { artifact() }
-            content { includeModule("io.element.android", "matrix-rtc-android") }
-        }
-        // Also temporary: testing an unreleased element-call-android build. Publish it there with
+        // Testing an unreleased element-call-android build. Publish it there with
         // `publishToMavenLocal -PVERSION_NAME=0.1.0-local`, then build here with
         // `-PelementCallLocalVersion=0.1.0-local`. Absent without the property, so that everything
         // resolves for a contributor who has never built the library.
@@ -127,22 +104,70 @@ include(":tests:testutils")
 include(":annotations")
 include(":codegen")
 
-fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
-    directory.listFiles().orEmpty().also { it.sort() }.forEach { file ->
-        if (file.isDirectory) {
-            val newPath = "$path:${file.name}"
-            val buildFile = File(file, "build.gradle.kts")
-            if (buildFile.exists()) {
-                include(newPath)
-                logger.lifecycle("Included project: $newPath")
-            } else if (maxDepth > 0) {
-                includeProjects(file, newPath, maxDepth - 1)
+/**
+ * Finds the Gradle projects in [directory]: the folders containing a `build.gradle.kts` file, up to [maxDepth] levels below.
+ *
+ * The search runs in a [ValueSource] so that only its result, the list of projects, is a configuration cache input. Listing
+ * the folders directly in the settings script would make each listed folder an input, and adding or removing any file in
+ * them (build outputs, `.git` content, etc.) would invalidate the configuration cache.
+ */
+private fun findProjects(directory: File, path: String, maxDepth: Int = 1): List<String> {
+    return providers.of(ProjectsValueSource::class) {
+        parameters {
+            this.directory.set(directory)
+            this.path.set(path)
+            this.maxDepth.set(maxDepth)
+        }
+    }.get()
+}
+
+abstract class ProjectsValueSource : ValueSource<List<String>, ProjectsValueSource.Parameters> {
+    interface Parameters : ValueSourceParameters {
+        val directory: Property<File>
+        val path: Property<String>
+        val maxDepth: Property<Int>
+    }
+
+    override fun obtain(): List<String> = search(parameters.directory.get(), parameters.path.get(), parameters.maxDepth.get())
+
+    private fun search(directory: File, path: String, maxDepth: Int): List<String> {
+        return directory.listFiles { file ->
+            // Skip hidden folders (e.g. `.git`) and build outputs, which can't contain projects.
+            file.isDirectory && !file.name.startsWith(".") && file.name != "build"
+        }.orEmpty().sorted().flatMap { subDir ->
+            val newPath = "$path:${subDir.name}"
+            when {
+                File(subDir, "build.gradle.kts").exists() -> listOf(newPath)
+                maxDepth > 0 -> search(subDir, newPath, maxDepth - 1)
+                else -> emptyList()
             }
         }
     }
 }
 
-includeProjects(File(rootDir, "enterprise"), ":enterprise", maxDepth = 2)
+private fun includeProjects(projectPaths: List<String>) {
+    projectPaths.forEach { projectPath ->
+        include(projectPath)
+        logger.info("Included project: $projectPath")
+    }
+}
+
+private fun includeProjects(directory: File, path: String, maxDepth: Int = 1) = includeProjects(findProjects(directory, path, maxDepth))
+
+// Enterprise build detection. By default, the build is an Enterprise build if the enterprise submodule contains
+// some Gradle projects. This can be overridden with the Gradle property `element.enterprise` (true or false),
+// for instance to build the FOSS version while the submodule is checked out: `./gradlew -Pelement.enterprise=false ...`
+private val enterpriseProjects = findProjects(File(rootDir, "enterprise"), ":enterprise", maxDepth = 2)
+private val isEnterpriseBuild = providers.gradleProperty("element.enterprise").orNull?.toBooleanStrict() ?: enterpriseProjects.isNotEmpty()
+if (isEnterpriseBuild) {
+    check(enterpriseProjects.isNotEmpty()) {
+        "Enterprise build requested but no enterprise sources found. Run `git submodule update --init enterprise`."
+    }
+    includeProjects(enterpriseProjects)
+}
+// Read by `Project.isEnterpriseBuild` in the plugins module.
+gradle.extra["isEnterpriseBuild"] = isEnterpriseBuild
+
 includeProjects(File(rootDir, "features"), ":features")
 includeProjects(File(rootDir, "libraries"), ":libraries")
 includeProjects(File(rootDir, "services"), ":services")

@@ -467,6 +467,14 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun hasEncryptedRooms(): Result<Boolean> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.hasEncryptedRooms(5.seconds.toJavaDuration())
+        }.onFailure {
+            Timber.e(it, "Failed to check whether the user has encrypted rooms")
+        }
+    }
+
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.ignoreUser(userId.value)
@@ -736,7 +744,7 @@ class RustMatrixClient(
         }.mapFailure { it.mapClientException() }
     }
 
-    internal suspend fun destroy() {
+    override suspend fun destroy() {
         innerNotificationClient.close()
 
         roomFactory.destroy()

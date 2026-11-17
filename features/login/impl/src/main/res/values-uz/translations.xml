@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"Bu qurilmada allaqachon %1$s hisobiga kirgansiz."</string>
   <string name="error_account_creation_not_possible">"Matrix autentifikatsiya xizmati va hisob yaratish imkoniyatini qo‘llab-quvvatlash uchun uy serveringizni yangilash talab etiladi."</string>
   <string name="screen_account_provider_signin_title">"Siz %sga kirmoqchisiz"</string>
-  <string name="screen_change_account_provider_other">"Boshqa"</string>
   <string name="screen_change_account_provider_subtitle">"Shaxsiy serveringiz yoki ishchi hisob qaydnomangiz kabi boshqa hisob provayderidan foydalaning."</string>
-  <string name="screen_change_account_provider_title">"Hisob provayderini o\'zgartiring"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s da Element Pro ilovasi talab qilinadi. Iltimos, do‘kondan yuklab oling."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro talab qilinadi"</string>
@@ -15,7 +13,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s uchun %2$s bilan ulanishga ruxsat berilmagan."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Bu ilova quyidagilarga ruxsat berish uchun sozlangan: %1$s ."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Hisob provayderi %1$s ga ruxsat berilmagan."</string>
-  <string name="screen_change_server_form_header">"Uy serverining URL manzili"</string>
   <string name="screen_change_server_form_notice">"Domen manzilini kiriting."</string>
   <string name="screen_change_server_subtitle">"Serveringizning manzili nima?"</string>
   <string name="screen_change_server_title">"Serveringizni tanlang"</string>

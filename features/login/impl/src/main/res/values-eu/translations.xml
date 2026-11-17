@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_account_provider_signin_title">"%s(e)n saioa hastear zaude"</string>
-  <string name="screen_change_account_provider_other">"Beste bat"</string>
   <string name="screen_change_account_provider_subtitle">"Erabili beste kontu-hornitzaile bat, hala nola zure zerbitzari pribatua edo laneko kontu bat."</string>
-  <string name="screen_change_account_provider_title">"Aldatu kontu-hornitzailea"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro behar da"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Hautatutako kontu-hornitzailea ez da bateragarria Sliding Sync-ekin. Beharrezkoa da zerbitzaria bertsio-berritzea %1$s erabiltzeko."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Ez da %1$s kontu-hornitzailea onartzen."</string>
-  <string name="screen_change_server_form_header">"Zerbitzariaren URLa"</string>
   <string name="screen_change_server_form_notice">"Sartu domeinu-helbide bat."</string>
   <string name="screen_change_server_subtitle">"Zein da zure zerbitzariaren helbidea?"</string>
   <string name="screen_change_server_title">"Hautatu zure zerbitzaria"</string>

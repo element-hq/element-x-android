@@ -12,13 +12,12 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.securebackup.api.SecureBackupSetupEntryPoint
-import io.element.android.features.securebackup.impl.setup.SecureBackupSetupNode
-import io.element.android.features.securebackup.impl.setup.SecureBackupSetupPresenter
-import io.element.android.features.securebackup.impl.setup.SecureBackupSetupStateMachine
+import io.element.android.features.securebackup.impl.generate.SecureBackupGenerateKeyNode
+import io.element.android.features.securebackup.impl.generate.SecureBackupGenerateKeyPresenter
 import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.androidutils.toast.FakeToastHelper
-import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.node.TestParentNode
 import org.junit.Rule
 import org.junit.Test
@@ -34,19 +33,17 @@ class DefaultSecureBackupSetupEntryPointTest {
     fun `test node builder`() {
         val entryPoint = DefaultSecureBackupSetupEntryPoint()
         val parentNode = TestParentNode.create { buildContext, plugins ->
-            SecureBackupSetupNode(
+            SecureBackupGenerateKeyNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenterFactory = object : SecureBackupSetupPresenter.Factory {
-                    override fun create(isChangeRecoveryKeyUserStory: Boolean) = SecureBackupSetupPresenter(
-                        isChangeRecoveryKeyUserStory = isChangeRecoveryKeyUserStory,
-                        stateMachine = SecureBackupSetupStateMachine(),
+                presenterFactory = object : SecureBackupGenerateKeyPresenter.Factory {
+                    override fun create(isReplacingExistingKey: Boolean) = SecureBackupGenerateKeyPresenter(
+                        isReplacingExistingKey = isReplacingExistingKey,
                         encryptionService = FakeEncryptionService(),
                         clipboardHelper = FakeClipboardHelper(),
                         toastHelper = FakeToastHelper(),
                     )
                 },
-                snackbarDispatcher = SnackbarDispatcher(),
             )
         }
         val inputs = SecureBackupSetupEntryPoint.Inputs(isChangeRecoveryKeyUserStory = true)
@@ -55,7 +52,9 @@ class DefaultSecureBackupSetupEntryPointTest {
             buildContext = BuildContext.root(null),
             inputs = inputs,
         )
-        assertThat(result).isInstanceOf(SecureBackupSetupNode::class.java)
-        assertThat(result.plugins).contains(SecureBackupSetupNode.Inputs(isChangeRecoveryKeyUserStory = true))
+        assertThat(result).isInstanceOf(SecureBackupGenerateKeyNode::class.java)
+        assertThat(result.plugins).contains(
+            SecureBackupGenerateKeyNode.Inputs(isReplacingExistingKey = true, doneButtonText = CommonStrings.action_done)
+        )
     }
 }

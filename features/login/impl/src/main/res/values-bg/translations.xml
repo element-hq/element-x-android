@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_account_provider_signin_title">"На път сте да влезете в %s"</string>
-  <string name="screen_change_account_provider_other">"Друг"</string>
   <string name="screen_change_account_provider_subtitle">"Използвайте друг доставчик на акаунт, като например собствен частен сървър или работен акаунт."</string>
-  <string name="screen_change_account_provider_title">"Промяна на доставчика на акаунт"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Не можахме да достигнем този сървър. Моля, проверете дали сте въвели правилно URL адреса на сървъра. Ако URL адресът е правилен, свържете се с администратора на вашия сървър за допълнителна помощ."</string>
-  <string name="screen_change_server_form_header">"URL адрес на сървъра"</string>
   <string name="screen_change_server_subtitle">"Какъв е адресът на вашия сървър?"</string>
   <string name="screen_change_server_title">"Изберете своя сървър"</string>
   <string name="screen_create_account_title">"Създаване на акаунт"</string>

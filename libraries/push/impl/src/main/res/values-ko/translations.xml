@@ -5,9 +5,6 @@
   <string name="notification_channel_noisy">"소리 알림"</string>
   <string name="notification_channel_ringing_calls">"전화벨이 울린다"</string>
   <string name="notification_channel_silent">"무음 알림"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="other">"%1$s: %2$d 메세지"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d 알림"</item>
   </plurals>
@@ -18,15 +15,9 @@
   <string name="notification_incoming_audio_call">"📞 수신 전화"</string>
   <string name="notification_incoming_call">"📹 수신 전화"</string>
   <string name="notification_inline_reply_failed">"** 전송 실패 - 방을 열여주세요"</string>
-  <plurals name="notification_invitations">
-    <item quantity="other">"%d 초대"</item>
-  </plurals>
   <string name="notification_invite_body">"채팅에 초대됨"</string>
   <string name="notification_invite_body_with_sender">"%1$s 가 채팅에 초대했습니다"</string>
   <string name="notification_mentioned_you_body">"당신을 언급했습니다: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="other">"%d 새 메시지"</item>
-  </plurals>
   <string name="notification_reaction_body">"%1$s로 반응함"</string>
   <string name="notification_room_action_mark_as_read">"읽음으로 표시"</string>
   <string name="notification_room_action_quick_reply">"빠른 답장"</string>
@@ -68,9 +59,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"현재 푸시 제공자"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"애플리케이션이 적어도 하나의 푸시 제공자를 지원하는지 확인하십시오."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"푸시 제공자 지원이 발견되지 않았습니다."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="other">"%1$d 푸시 제공자를 찾았습니다: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"이 애플리케이션은 다음을 지원하도록 구축되었습니다: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"푸시 제공자 지원"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"애플리케이션에서 알림을 표시할 수 있는지 확인하세요."</string>

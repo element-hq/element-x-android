@@ -44,6 +44,7 @@ internal fun MessagesViewWithIdentityChangePreview(
         onViewAllPinnedMessagesClick = {},
         knockRequestsBannerView = {},
         customReactionBottomSheet = {},
+        composerEmojiPicker = {},
         onThreadsListClick = {},
     )
 }

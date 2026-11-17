@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rtc.BackendSubscription
 import org.matrix.rtc.FfiBackendException
 import org.matrix.rtc.FfiEventIn
+import org.matrix.rtc.FfiLiveKitTokenRequest
 import org.matrix.rtc.FfiOpenIdToken
 import org.matrix.rtc.FfiRoomSubjects
 import org.matrix.rtc.FfiToDeviceDelivery
@@ -33,7 +34,7 @@ import timber.log.Timber
 /**
  * The RTC core's [MatrixBackend] over the session's Rust SDK [Client], handed to `ElementCallStack.Builder`.
  *
- * Ported from element-call-android's reference backend (`sample/…/matrix/SdkMatrixBackend.kt`, v0.1.0-rc.9),
+ * Ported from element-call-android's reference backend (`sample/…/matrix/SdkMatrixBackend.kt`, v0.1.0-rc.11),
  * which the library no longer ships: compare against it when bumping the library.
  *
  * One per Matrix session, alive between calls.
@@ -138,6 +139,22 @@ class SdkMatrixBackend(
             tokenType = token.tokenType,
             matrixServerName = token.matrixServerName,
             expiresInSecs = token.expiresInSeconds,
+        )
+    }
+
+    /**
+     * The SDK bindings lack MSC4195 `get_token` (matrix-org/matrix-rust-sdk#7428): answered as a homeserver
+     * without it, so only `livekit_service_url` transports join. Element X does not offer the MSC membership
+     * format, the main user of it.
+     */
+    override suspend fun livekitToken(request: FfiLiveKitTokenRequest): String {
+        Timber.i("MatrixRTC backend: livekitToken for ${request.url}, unsupported")
+        throw FfiBackendException.Failed(
+            errcode = "M_UNRECOGNIZED",
+            status = 404.toUShort(),
+            retryAfterMs = null,
+            permanent = true,
+            reason = "MSC4195 get_token is not exposed by the SDK bindings",
         )
     }
 

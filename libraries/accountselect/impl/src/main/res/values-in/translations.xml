@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_select_account_permalink_room_subtitle">"Belum ada akun Anda yang bergabung dengan ruang obrolan ini, pilih akun mana yang akan digunakan."</string>
+  <string name="screen_select_account_permalink_title">"Pilih akun untuk membuka tautan:"</string>
+</resources>

@@ -14,6 +14,7 @@ import com.bumble.appyx.core.state.SavedStateMap
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.migration.api.AppMigrationRunner
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -42,6 +43,7 @@ class MatrixSessionCache(
     private val authenticationService: MatrixAuthenticationService,
     private val syncOrchestratorFactory: SyncOrchestrator.Factory,
     private val analyticsService: AnalyticsService,
+    private val appMigrationRunner: AppMigrationRunner,
 ) : MatrixClientProvider {
     private val sessionIdsToMatrixSession = ConcurrentHashMap<SessionId, InMemoryMatrixSession>()
     private val _matrixClients = MutableStateFlow<List<MatrixClient>>(emptyList())
@@ -110,6 +112,9 @@ class MatrixSessionCache(
 
     private suspend fun restore(sessionId: SessionId): Result<MatrixClient> {
         Timber.d("Restore matrix session: $sessionId")
+        // The process may have been started without any Activity (for instance to handle a push), in this case the migrations
+        // have not been applied yet. They must be applied before restoring any client, since they can for instance move the session files.
+        appMigrationRunner.runPendingMigrations()
         return authenticationService.restoreSession(sessionId)
             .onSuccess { matrixClient ->
                 // Add the current homeserver (hashed) to the extra info

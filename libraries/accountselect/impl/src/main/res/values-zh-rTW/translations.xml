@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_select_account_permalink_room_subtitle">"您的帳號目前尚未加入此聊天室，請選擇要使用的帳號。"</string>
+  <string name="screen_select_account_permalink_title">"選取帳號以開啟連結："</string>
+</resources>

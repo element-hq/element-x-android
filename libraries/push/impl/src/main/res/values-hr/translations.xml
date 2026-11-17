@@ -5,11 +5,6 @@
   <string name="notification_channel_noisy">"Glasne obavijesti"</string>
   <string name="notification_channel_ringing_calls">"Pozivi (telefon zvoni)"</string>
   <string name="notification_channel_silent">"Tihe obavijesti"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d poruka"</item>
-    <item quantity="few">"%1$s: %2$d poruke"</item>
-    <item quantity="other">"%1$s: %2$d poruka"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d obavijest"</item>
     <item quantity="few">"%d obavijesti"</item>
@@ -27,21 +22,11 @@
   <string name="notification_incoming_audio_call">"📞 Dolazni poziv"</string>
   <string name="notification_incoming_call">"📹 Dolazni poziv"</string>
   <string name="notification_inline_reply_failed">"** Slanje nije uspjelo – otvorite sobu"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d pozivnica"</item>
-    <item quantity="few">"%d pozivnice"</item>
-    <item quantity="other">"%d pozivnica"</item>
-  </plurals>
   <string name="notification_invite_body">"Pozvao/la te na razgovor"</string>
   <string name="notification_invite_body_with_sender">"%1$s pozvao/la te na razgovor"</string>
   <string name="notification_knock_request_body">"Zatraženo pridruživanje"</string>
   <string name="notification_live_location_started_body">"Počeli su dijeliti svoju lokaciju uživo"</string>
   <string name="notification_mentioned_you_body">"Korisnik vas je spomenuo: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d nova poruka"</item>
-    <item quantity="few">"%d nove poruke"</item>
-    <item quantity="other">"%d novih poruka"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reagirao/la je s %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Označi kao pročitano"</string>
   <string name="notification_room_action_quick_reply">"Brzi odgovor"</string>
@@ -89,11 +74,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Trenutačni pružatelj push obavijesti"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Provjerite podržava li aplikacija barem jednog pružatelja push obavijesti"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nije pronađena podrška za pružatelja push obavijesti."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Pronađen je %1$d pružatelj push obavijesti: %2$s"</item>
-    <item quantity="few">"Pronađena su %1$d pružatelja push obavijesti: %2$s"</item>
-    <item quantity="other">"Pronađeno je %1$d pružatelja push obavijesti: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Aplikacija je razvijena s podrškom za: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Podrška za pružatelja push obavijesti"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Provjerite može li aplikacija prikazivati ​​obavijesti."</string>

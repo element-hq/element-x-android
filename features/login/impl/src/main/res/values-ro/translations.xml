@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"Sunteți deja conectat(ă) pe acest dispozitiv ca %1$s."</string>
   <string name="error_account_creation_not_possible">"Furnizorul contului dvs. trebuie actualizat pentru a suporta serviciul de autentificare Matrix și crearea de conturi."</string>
   <string name="screen_account_provider_signin_title">"Sunteți pe cale să vă conectați la %s"</string>
-  <string name="screen_change_account_provider_other">"Altul"</string>
   <string name="screen_change_account_provider_subtitle">"Utilizați un alt furnizor de cont, cum ar fi propriul server privat sau un cont de serviciu."</string>
-  <string name="screen_change_account_provider_title">"Schimbați furnizorul contului"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Aplicația Element Pro este necesară pe %1$s. Descărcați-o din magazin."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Este necesar Element Pro"</string>
@@ -16,7 +14,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s nu are voie să se conecteze la %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Această aplicație a fost configurată pentru a permite: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Furnizorul de cont %1$s nu este permis."</string>
-  <string name="screen_change_server_form_header">"Adresa URL a homeserverului"</string>
   <string name="screen_change_server_form_notice">"Introduceți o adresă de domeniu."</string>
   <string name="screen_change_server_navigation_title_login">"Conectare"</string>
   <string name="screen_change_server_navigation_title_register">"Creați un cont"</string>

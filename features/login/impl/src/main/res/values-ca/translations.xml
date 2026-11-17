@@ -2,13 +2,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="error_account_creation_not_possible">"El servidor utilitzat s\'ha d\'actualitzar per admetre el servei d\'autenticació de Matrix i la creació de comptes."</string>
   <string name="screen_account_provider_signin_title">"Estàs a punt d\'iniciar sessió a %s"</string>
-  <string name="screen_change_account_provider_other">"Altres"</string>
   <string name="screen_change_account_provider_subtitle">"Utilitza un proveïdor de comptes diferent, com ara el teu servidor privat o un compte de feina."</string>
-  <string name="screen_change_account_provider_title">"Canvia el proveïdor del compte"</string>
   <string name="screen_change_server_error_invalid_homeserver">"No s\'ha pogut accedir a aquest servidor. Comprova que hagis introduït correctament l\'URL del servidor. Si ja és correcte, posa\'t en contacte amb l\'administrador del servidor per a més informació."</string>
   <string name="screen_change_server_error_invalid_well_known">"Servidor no disponible a causa d\'un problema al fitxer .well-known:
 %1$s"</string>
-  <string name="screen_change_server_form_header">"URL del servidor"</string>
   <string name="screen_change_server_form_notice">"Introdueix un domini."</string>
   <string name="screen_change_server_subtitle">"Quina és l\'adreça del teu servidor?"</string>
   <string name="screen_change_server_title">"Selecciona el teu servidor"</string>

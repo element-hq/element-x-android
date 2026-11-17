@@ -8,6 +8,8 @@
   <string name="banner_set_up_recovery_content">"Sinu vestlused on automaatselt varundatud kasutades läbivat krüptimist. Kui peaksid kaotama ligipääsu kõikidele oma seadmetele, siis selle varukoopia taastamiseks ja oma digitaalse identiteedi säilitamiseks, on vaja taastevõtit."</string>
   <string name="banner_set_up_recovery_submit">"Seadista taastevõti"</string>
   <string name="banner_set_up_recovery_title">"Varunda oma vestlused"</string>
+  <string name="banner_swipe_avatar_content">"Viipa tunnuspildil üles-alla ja saad vahetada kasutajakontosid ilma rakenduse seadistuste avamiseta."</string>
+  <string name="banner_swipe_avatar_title">"Kasutajakontode vahetamiseks viipa üle tunnuspildi"</string>
   <string name="confirm_recovery_key_banner_message">"Säilitamaks ligipääsu vestluste ja krüptovõtmete varukoopiale, palun sisesta kinnituseks oma taastevõti."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Sisesta oma taastevõti"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Kas unustasid oma taastevõtme?"</string>
@@ -15,6 +17,7 @@
   <string name="full_screen_intent_banner_message_android">"Selleks, et sul ainsamgi tähtis kõne ei jääks märkamata, siis palun muuda oma nutiseadme seadistusi nii, et lukustusvaates oleksid täisekraani mõõtu teavitused."</string>
   <string name="full_screen_intent_banner_title_android">"Sinu tõhusad telefonikõned"</string>
   <string name="screen_home_tab_chats">"Vestlused"</string>
+  <string name="screen_home_tab_search">"Otsi"</string>
   <string name="screen_home_tab_spaces">"Kogukonnad"</string>
   <string name="screen_invites_decline_chat_message">"Kas sa oled kindel, et soovid keelduda liitumiskutsest: %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Lükka kutse tagasi"</string>
@@ -22,6 +25,9 @@
   <string name="screen_invites_decline_direct_chat_title">"Keeldu vestlusest"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) saatis sulle kutse"</string>
   <string name="screen_migration_title">"Seadistame sinu kasutajakontot."</string>
+  <string name="screen_multi_account_announcement_action">"Lisa kasutajakonto"</string>
+  <string name="screen_multi_account_announcement_description">"Logimaks sisse teise kasutajakontoga ava %1$s. Seejärel saad nende vahel hõlpsalt vahetada."</string>
+  <string name="screen_multi_account_announcement_title">"Võid nüüd lisada mitu kasutajakontot"</string>
   <string name="screen_roomlist_a11y_create_message">"Loo uus vestlus või jututuba"</string>
   <string name="screen_roomlist_clear_filters">"Tühjenda filtrid"</string>
   <string name="screen_roomlist_empty_message">"Alustamiseks saada kellelegi sõnum."</string>
@@ -34,6 +40,8 @@ Aga seni… oma teiste vestluste nägemiseks pead eemaldama filtrid"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Sul pole ootel kutseid."</string>
   <string name="screen_roomlist_filter_low_priority">"Vähetähtis"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"Sul pole veel ühtegi olulist vestlust"</string>
+  <string name="screen_roomlist_filter_mention">"Mainimine"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"Sul pole ühtegi lugemata mainimist"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Oma teiste vestluste nägemiseks sa pead filtrid eemaldama"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Selle valiku jaoks sul veel pole vestlusi"</string>
   <string name="screen_roomlist_filter_people">"Inimesed"</string>
@@ -49,5 +57,17 @@ Sul pole ühtegi lugemata sõnumit!"</string>
   <string name="screen_roomlist_mark_as_unread">"Märgi mitteloetuks"</string>
   <string name="screen_roomlist_tombstoned_room_description">"See jututuba on uuendatud"</string>
   <string name="screen_roomlist_your_spaces">"Sinu kogukonnad"</string>
+  <string name="screen_search_empty_state_message">"Otsi vestluseid ja sõnumeid"</string>
+  <string name="screen_search_empty_state_title">"Alusta otsimist…"</string>
+  <string name="screen_search_from_your_messages_header">"Sinu sõnumite seast"</string>
+  <string name="screen_search_history_limit_message">"Otsing töötab sinu seadmes, seega jäävad sinu krüptitud sõnumid privaatseks.
+Sinu seade säilitab viimase 3 kuu sõnumeid, seega vanemaid sõnumeid ei saa veel otsida."</string>
+  <string name="screen_search_history_limit_title">"Otsing hõlmab viimast kolme kuud"</string>
+  <string name="screen_search_messages_no_results_message">"Otsingule „%1$s“ ei leidu sinu viimaste sõnumite seas vastuseid."</string>
+  <string name="screen_search_messages_no_results_title">"Viimase kolme kuu kohta pole tulemusi"</string>
+  <string name="screen_search_no_results_message">"„%1$s“ otsingule pole tulemusi. Proovi muud otsingusõna."</string>
+  <string name="screen_search_recent_searches">"Hiljutised otsingud"</string>
+  <string name="screen_search_tab_chats">"Vestlused"</string>
+  <string name="screen_search_tab_messages">"Sõnumid"</string>
   <string name="screen_space_list_empty_state_title">"Jututubade haldamiseks võid luua kogukondi"</string>
 </resources>

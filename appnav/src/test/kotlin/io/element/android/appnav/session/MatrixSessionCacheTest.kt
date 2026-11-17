@@ -10,6 +10,8 @@ package io.element.android.appnav.session
 
 import com.bumble.appyx.core.state.MutableSavedStateMapImpl
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.migration.api.AppMigrationRunner
+import io.element.android.features.migration.test.FakeAppMigrationRunner
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -60,6 +62,26 @@ class MatrixSessionCacheTest {
         // Do it again to hit the cache
         assertThat(matrixSessionCache.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
         assertThat(matrixSessionCache.getOrNull(A_SESSION_ID)).isEqualTo(fakeMatrixClient)
+    }
+
+    @Test
+    fun `getOrRestore runs the pending migrations before restoring the client`() = runTest {
+        val events = mutableListOf<String>()
+        val fakeMatrixClient = FakeMatrixClient(sessionCoroutineScope = backgroundScope, userIdServerNameLambda = { A_SESSION_ID.value })
+        val fakeAuthenticationService = FakeMatrixAuthenticationService(
+            matrixClientResult = {
+                events.add("restore")
+                Result.success(fakeMatrixClient)
+            }
+        )
+        val matrixSessionCache = createMatrixSessionCache(
+            authenticationService = fakeAuthenticationService,
+            appMigrationRunner = FakeAppMigrationRunner(runPendingMigrationsResult = { events.add("migrations") }),
+        )
+
+        assertThat(matrixSessionCache.getOrRestore(A_SESSION_ID).getOrNull()).isEqualTo(fakeMatrixClient)
+
+        assertThat(events).containsExactly("migrations", "restore").inOrder()
     }
 
     @Test
@@ -131,10 +153,12 @@ class MatrixSessionCacheTest {
         authenticationService: FakeMatrixAuthenticationService = FakeMatrixAuthenticationService(),
         syncOrchestratorFactory: SyncOrchestrator.Factory = createSyncOrchestratorFactory(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
+        appMigrationRunner: AppMigrationRunner = FakeAppMigrationRunner(),
     ) = MatrixSessionCache(
         authenticationService = authenticationService,
         syncOrchestratorFactory = syncOrchestratorFactory,
         analyticsService = analyticsService,
+        appMigrationRunner = appMigrationRunner,
     )
 
     private fun TestScope.createSyncOrchestratorFactory(): SyncOrchestrator.Factory {

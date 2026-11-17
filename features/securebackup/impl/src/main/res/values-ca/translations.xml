@@ -37,7 +37,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"No ho comparteixis amb ningú!"</string>
   <string name="screen_recovery_key_change_success">"Clau de recuperació canviada"</string>
   <string name="screen_recovery_key_change_title">"Vols canviar la clau de recuperació?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Crea nova clau de recuperació"</string>
   <string name="screen_recovery_key_confirm_description">"Assegura\'t que ningú vegi aquesta pantalla!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Torna a provar l\'accés a l\'emmagatzematge de claus."</string>
   <string name="screen_recovery_key_confirm_error_title">"Clau de recuperació incorrecta"</string>

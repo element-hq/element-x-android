@@ -11,7 +11,7 @@
   <string name="screen_create_room_private_option_title">"Privaatne"</string>
   <string name="screen_create_room_public_option_description">"Kõik saavad seda jututuba leida.
 Sa võid seda jututoa seadistustest alati muuta."</string>
-  <string name="screen_create_room_public_option_short_description">"Kõik võivad selle jututoaga liituda."</string>
+  <string name="screen_create_room_public_option_short_description">"Kõik võivad selle jututoaga liituda, sealhulgas kasutajad väljastpoolt sinu organisatsiooni."</string>
   <string name="screen_create_room_public_option_title">"Avalik"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Luba küsida liitumisvõimalust"</string>
@@ -19,7 +19,7 @@ Sa võid seda jututoa seadistustest alati muuta."</string>
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Küsi võimalust liitumiseks"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Ligipääs siia jututuppa on vaid kutse alusel."</string>
   <string name="screen_create_room_room_access_section_private_option_title">"Privaatne"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"Kõik võivad selle jututoaga liituda."</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Kõik võivad selle jututoaga liituda, sealhulgas kasutajad väljastpoolt sinu organisatsiooni."</string>
   <string name="screen_create_room_room_access_section_public_option_title">"Avalik"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"Liituda võivad kõik „%1$s“ kogukonna liikmed."</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"Standardne"</string>

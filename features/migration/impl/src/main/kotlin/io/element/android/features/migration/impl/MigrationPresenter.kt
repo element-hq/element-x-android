@@ -10,67 +10,30 @@ package io.element.android.features.migration.impl
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
+import io.element.android.features.migration.api.AppMigrationRunner
 import io.element.android.features.migration.api.MigrationState
-import io.element.android.features.migration.impl.migrations.AppMigration
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import kotlinx.coroutines.withContext
-import timber.log.Timber
 
-@SingleIn(AppScope::class)
 @Inject
 class MigrationPresenter(
-    private val migrationStore: MigrationStore,
-    migrations: Set<@JvmSuppressWildcards AppMigration>,
-    private val coroutineDispatchers: CoroutineDispatchers,
+    private val appMigrationRunner: AppMigrationRunner,
 ) : Presenter<MigrationState> {
-    private val orderedMigrations = migrations.sortedBy { it.order }
-    private val lastMigration: Int = orderedMigrations.lastOrNull()?.order ?: 0
-    private var isFreshInstall = false
-
     @Composable
     override fun present(): MigrationState {
-        val migrationStoreVersion by remember {
-            migrationStore.applicationMigrationVersion()
-        }.collectAsState(initial = null)
         var migrationAction: AsyncData<Unit> by remember { mutableStateOf(AsyncData.Uninitialized) }
 
-        // Uncomment this block to run the migration everytime
-//        LaunchedEffect(Unit) {
-//            Timber.d("Resetting migration version to 0")
-//            migrationStore.setApplicationMigrationVersion(0)
-//        }
-
-        LaunchedEffect(migrationStoreVersion) {
-            val migrationValue = migrationStoreVersion ?: return@LaunchedEffect
-            if (migrationValue == -1) {
-                Timber.d("Fresh install, or previous installed application did not have the migration mechanism.")
-                isFreshInstall = true
+        LaunchedEffect(Unit) {
+            if (appMigrationRunner.hasPendingMigrations()) {
+                migrationAction = AsyncData.Loading(Unit)
             }
-            if (migrationValue == lastMigration) {
-                Timber.d("Current app migration version: $migrationValue. No migration needed.")
-                migrationAction = AsyncData.Success(Unit)
-                return@LaunchedEffect
-            }
-            migrationAction = AsyncData.Loading(Unit)
-            val nextMigration = orderedMigrations.firstOrNull { it.order > migrationValue }
-            if (nextMigration != null) {
-                Timber.d("Current app migration version: $migrationValue. Applying migration: ${nextMigration.order}")
-                // Migrations can perform IO (database, files), do not run them on the main thread.
-                withContext(coroutineDispatchers.io) {
-                    nextMigration.migrate(isFreshInstall)
-                }
-                migrationStore.setApplicationMigrationVersion(nextMigration.order)
-            }
+            appMigrationRunner.runPendingMigrations()
+            migrationAction = AsyncData.Success(Unit)
         }
 
         return MigrationState(

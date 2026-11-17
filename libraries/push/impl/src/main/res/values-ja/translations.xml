@@ -5,9 +5,6 @@
   <string name="notification_channel_noisy">"通常の通知"</string>
   <string name="notification_channel_ringing_calls">"着信"</string>
   <string name="notification_channel_silent">"サイレント通知"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="other">"%1$s: %2$d件のメッセージ"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d 件の通知"</item>
   </plurals>
@@ -21,17 +18,11 @@
   <string name="notification_incoming_audio_call">"📞 着信"</string>
   <string name="notification_incoming_call">"📹 通話着信"</string>
   <string name="notification_inline_reply_failed">"** 送信失敗 - ルームを開いてください"</string>
-  <plurals name="notification_invitations">
-    <item quantity="other">"%d 件の招待"</item>
-  </plurals>
   <string name="notification_invite_body">"チャットにあなたを招待しました"</string>
   <string name="notification_invite_body_with_sender">"%1$sがあなたをチャットに招待しました"</string>
   <string name="notification_knock_request_body">"参加をリクエスト"</string>
   <string name="notification_live_location_started_body">"ライブ位置情報の共有を開始"</string>
   <string name="notification_mentioned_you_body">"%1$s があなたをメンションしました"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="other">"%d 件の新着メッセージ"</item>
-  </plurals>
   <string name="notification_reaction_body">"%1$sへのリアクション"</string>
   <string name="notification_room_action_mark_as_read">"既読にする"</string>
   <string name="notification_room_action_quick_reply">"クイック返信"</string>
@@ -73,9 +64,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"現在のプッシュ通知プロバイダー"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"少なくとも一つ以上のプッシュ通知プロバイダーに、アプリケーションが対応していることを確認してください。"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"対応しているプッシュ通知プロバイダーが見つかりませんでした。"</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="other">"%1$d 個の通知プロバイダーを発見: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"このアプリケーションは %1$s に対応しています。"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"プッシュ通知プロバイダーへの対応状況"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"アプリケーションが通知を表示できることを確認してください。"</string>

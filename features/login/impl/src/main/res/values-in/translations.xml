@@ -4,9 +4,7 @@
   <string name="error_account_already_logged_in_title">"Login ganda"</string>
   <string name="error_account_creation_not_possible">"Penyedia akun Anda perlu ditingkatkan agar mendukung Matrix Authentication Service dan pembuatan akun."</string>
   <string name="screen_account_provider_signin_title">"Anda akan masuk ke %s"</string>
-  <string name="screen_change_account_provider_other">"Lainnya"</string>
   <string name="screen_change_account_provider_subtitle">"Gunakan penyedia akun yang berbeda, seperti server pribadi Anda sendiri atau akun kerja."</string>
-  <string name="screen_change_account_provider_title">"Ubah penyedia akun"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Aplikasi Element Pro diperlukan di %1$s. Silakan unduh dari App Store."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro diperlukan"</string>
@@ -17,7 +15,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s tidak diizinkan untuk terhubung ke %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Aplikasi ini telah diatur untuk mengizinkan: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Penyedia akun %1$s tidak diizinkan."</string>
-  <string name="screen_change_server_form_header">"URL Homeserver"</string>
   <string name="screen_change_server_form_notice">"Masukkan alamat domain."</string>
   <string name="screen_change_server_navigation_title_login">"Login"</string>
   <string name="screen_change_server_navigation_title_register">"Buat akun"</string>

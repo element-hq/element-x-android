@@ -166,6 +166,12 @@ class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState
                     results = AsyncData.Success(GlobalSearchResults.RoomListResults(persistentListOf())),
                     showLearnMoreBottomSheet = true,
                 ),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.ROOMS,
+                    queryState = TextFieldState("Query"),
+                    results = AsyncData.Success(GlobalSearchResults.RoomListResults(persistentListOf())),
+                ),
             )
         }
 }

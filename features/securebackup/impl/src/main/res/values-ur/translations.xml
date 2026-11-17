@@ -33,7 +33,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"کسی کے ساتھ اس کا اشتراک نہ کریں!"</string>
   <string name="screen_recovery_key_change_success">"بازیابی کلید بدل دی"</string>
   <string name="screen_recovery_key_change_title">"بازیابی کلید بدلیں؟"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"نئی بازیابی کلید تخلیق کریں"</string>
   <string name="screen_recovery_key_confirm_description">"یقینی بنائیں کہ کوئی بھی اس صفحۂ نمائش کو نہیں دیکھ سکتا!"</string>
   <string name="screen_recovery_key_confirm_error_content">"برائے مہربانی اپنے کلید کے ذخیرے تک رسائی کی تصدیق کرنے کے لیے دوبارہ کوشش کریں۔"</string>
   <string name="screen_recovery_key_confirm_error_title">"غلط بازیابی کلید"</string>

@@ -16,12 +16,15 @@ Element X Android supports deep linking to specific screens in the application. 
 
 ### Asset Links
 
-The asset links file is available at https://element.io/.well-known/assetlinks.json
+Each verified domain serves its own asset links file:
+- https://app.element.io/.well-known/assetlinks.json
+- https://develop.element.io/.well-known/assetlinks.json
+- https://staging.element.io/.well-known/assetlinks.json
+- https://mobile.element.io/.well-known/assetlinks.json
+
+Note: `*.element.io` is not used in the manifest, because it would also intercept links to `mas.element.io`.
 
 ### Supported links
-
-Element Call link: 
-> https://call.element.io/Example
 
 Link to a user:
 > https://app.element.io/#/user/@alice:matrix.org
@@ -33,12 +36,23 @@ Link to a room by id or alias:
 Link to a room with a specific event:
 > https://app.element.io/#/room/!roomid:matrix.org/$eventid
 
-Note that it will also work with other domain such as:
-> https://mobile.element.io
+Note that it will also work with these domains:
 > https://develop.element.io
 > https://staging.element.io
 
+Mobile configuration link (used to configure the account provider during login):
+> https://mobile.element.io/element/?account_provider=example.org&login_hint=mxid:@alice:example.org
+
+`matrix:` URIs ([MSC2312](https://github.com/matrix-org/matrix-spec-proposals/pull/2312)):
+> matrix:r/element-android:matrix.org
+
+`element://` links, used when opening the app from the https://matrix.to website:
+> element://room/%23element-android%3Amatrix.org
+> element://user/%40alice%3Amatrix.org
+
 ## Developer tools
+
+Scripts to trigger the links above are available in `./tools/adb/deeplink_*.sh`.
 
 Using an Android 12 or higher emulator
 
@@ -64,8 +78,11 @@ adb shell pm get-app-links io.element.android.x.debug
 
 ```
   io.element.android.x.debug:
-    ID: e2ece472-c266-4bf0-829c-be79959a6270
-    Signatures: [B0:B0:51:DC:56:5C:81:2F:E1:7F:6F:3E:94:5B:4D:79:04:71:23:AB:0D:A6:12:86:76:9E:B2:94:91:97:13:0E]
+    ID: <id>
+    Signatures: [<signature>]
     Domain verification state:
-      *.element.io: 1024
+      app.element.io: verified
+      develop.element.io: verified
+      staging.element.io: verified
+      mobile.element.io: verified
 ```

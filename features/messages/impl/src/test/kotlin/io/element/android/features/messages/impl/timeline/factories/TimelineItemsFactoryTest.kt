@@ -14,6 +14,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -286,6 +287,79 @@ class TimelineItemsFactoryTest {
         second.forEachIndexed { index, item ->
             assertThat(item).isSameInstanceAs(first[index])
         }
+    }
+
+    @Test
+    fun `a read marker with nothing after it is not rendered`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(computeReadReceipts = false, computeReactions = false)
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(sender = A_USER_ID, content = aMessageContent(body = "A regular message")),
+            ),
+            MatrixTimelineItem.Virtual(
+                uniqueId = UniqueId("read-marker"),
+                virtual = VirtualTimelineItem.ReadMarker,
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(timelineItems = items)
+            val rendered = awaitItem()
+            assertThat(rendered.map { it.isReadMarker() }).containsExactly(false)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `a read marker followed by an event is rendered`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(computeReadReceipts = false, computeReactions = false)
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(sender = A_USER_ID, content = aMessageContent(body = "A regular message")),
+            ),
+            MatrixTimelineItem.Virtual(
+                uniqueId = UniqueId("read-marker"),
+                virtual = VirtualTimelineItem.ReadMarker,
+            ),
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-1"),
+                event = anEventTimelineItem(sender = A_USER_ID, content = aMessageContent(body = "An unread message")),
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(timelineItems = items)
+            val rendered = awaitItem()
+            assertThat(rendered.map { it.isReadMarker() }).containsExactly(false, true, false).inOrder()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `a read marker which is the only item is kept`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(computeReadReceipts = false, computeReactions = false)
+        )
+        val items = listOf(
+            MatrixTimelineItem.Virtual(
+                uniqueId = UniqueId("read-marker"),
+                virtual = VirtualTimelineItem.ReadMarker,
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(timelineItems = items)
+            val rendered = awaitItem()
+            assertThat(rendered.map { it.isReadMarker() }).containsExactly(true)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    private fun TimelineItem.isReadMarker(): Boolean {
+        return (this as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel
     }
 
     private suspend fun TestScope.groupPositionsOf(timestamps: List<Long>): List<TimelineItemGroupPosition> {

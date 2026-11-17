@@ -5,10 +5,6 @@
   <string name="notification_channel_noisy">"Zajos értesítések"</string>
   <string name="notification_channel_ringing_calls">"Csörgő hívások"</string>
   <string name="notification_channel_silent">"Csendes értesítések"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d üzenet"</item>
-    <item quantity="other">"%1$s: %2$d üzenet"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d értesítés"</item>
     <item quantity="other">"%d értesítés"</item>
@@ -25,19 +21,11 @@
   <string name="notification_incoming_audio_call">"📞 Bejövő hívás"</string>
   <string name="notification_incoming_call">"📹 Bejövő hívás"</string>
   <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – nyissa meg a szobát"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d meghívó"</item>
-    <item quantity="other">"%d meghívó"</item>
-  </plurals>
   <string name="notification_invite_body">"Meghívta, hogy csevegjen"</string>
   <string name="notification_invite_body_with_sender">"%1$s meghívta egy csevegésre"</string>
   <string name="notification_knock_request_body">"Csatlakozási kérelem benyújtva"</string>
   <string name="notification_live_location_started_body">"Elkezdték megosztani az élő helyzetüket"</string>
   <string name="notification_mentioned_you_body">"Megemlítette Önt: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d új üzenet"</item>
-    <item quantity="other">"%d új üzenet"</item>
-  </plurals>
   <string name="notification_reaction_body">"Ezzel reagált: %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="notification_room_action_quick_reply">"Gyors válasz"</string>
@@ -82,10 +70,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Jelenlegi leküldéses értesítési szolgáltató"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Győződjön meg arról, hogy az alkalmazás legalább egy leküldéses értesítési szolgáltatóval rendelkezik."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nem található leküldéses értesítési szolgáltató."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"%1$d leküldéses értesítési szolgáltató találva: %2$s"</item>
-    <item quantity="other">"%1$d leküldéses értesítési szolgáltató találva: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Az alkalmazás úgy lett összeállítva, hogy támogatja a következőket: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Leküldéses értesítési szolgáltatók észlelése"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Ellenőrizze, hogy az alkalmazás képes-e megjeleníteni az értesítést."</string>

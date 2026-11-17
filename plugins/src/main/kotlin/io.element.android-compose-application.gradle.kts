@@ -11,6 +11,7 @@
  */
 import extension.androidAppConfig
 import extension.commonDependencies
+import extension.configureTestComponents
 import extension.composeAppConfig
 import extension.composeDependencies
 import extension.setupKover
@@ -28,6 +29,12 @@ android {
     composeAppConfig()
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
+    }
+}
+
+androidComponents {
+    beforeVariants { variantBuilder ->
+        configureTestComponents(variantBuilder)
     }
 }
 

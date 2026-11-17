@@ -8,8 +8,10 @@
 
 package io.element.android.libraries.core.extensions
 
+import io.element.android.libraries.core.data.tryOrNull
 import java.text.Normalizer
 import java.util.Locale
+import java.util.UUID
 
 fun Boolean.toOnOff() = if (this) "ON" else "OFF"
 fun Boolean.to01() = if (this) "1" else "0"
@@ -125,4 +127,12 @@ fun String.normalized(): String {
     return Normalizer.normalize(this, Normalizer.Form.NFD)
         // then keep only ASCII characters and replace non-ASCII characters with an empty string.
         .replace("[^\\p{ASCII}]".toRegex(), "")
+}
+
+/**
+ * Return true if the string is a UUID in its canonical form, for instance "123e4567-e89b-12d3-a456-426614174000".
+ */
+fun String.isUuid(): Boolean {
+    // UUID.fromString accepts some non canonical forms, such as "1-1-1-1-1", so also check the length
+    return length == 36 && tryOrNull { UUID.fromString(this) } != null
 }

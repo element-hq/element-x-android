@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_chat_backup_recovery_action_setup">"取得還原金鑰"</string>
   <string name="screen_signout_confirmation_dialog_content">"您確定要移除此裝置嗎？"</string>
   <string name="screen_signout_confirmation_dialog_submit">"移除此裝置"</string>
   <string name="screen_signout_confirmation_dialog_title">"移除此裝置"</string>
