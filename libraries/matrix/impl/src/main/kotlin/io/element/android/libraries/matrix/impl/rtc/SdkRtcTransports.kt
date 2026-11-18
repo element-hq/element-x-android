@@ -16,20 +16,31 @@ import org.matrix.rustcomponents.sdk.RtcTransport
 
 private val json = Json { ignoreUnknownKeys = true }
 
-/** The `rtc_transports` array the core parses, rebuilt from the SDK's typed transports. */
-internal fun List<RtcTransport>.toJson(): String = JsonArray(map { it.toJsonObject() }).toString()
+/**
+ * The `rtc_transports` array the core parses, rebuilt from the SDK's typed transports.
+ *
+ * Temporary: the SDK folds `m.livekit` and the legacy `livekit` into one [RtcTransport.LiveKit] and drops which one the
+ * homeserver sent, while the core picks the first transport of its membership format's type: `m.livekit` for MSC,
+ * `livekit` for room state. So each LiveKit transport is given back as `livekit`, and also as `m.livekit` when it names
+ * an SFU `url`, the only field `m.livekit` has. Without that, an MSC join finds no `m.livekit` transport on a homeserver
+ * that advertises one. Once the SDK keeps the type, map it back one to one and drop the duplication.
+ */
+internal fun List<RtcTransport>.toJson(): String = JsonArray(flatMap { it.toJsonObjects() }.distinct()).toString()
 
-private fun RtcTransport.toJsonObject(): JsonObject = when (this) {
-    is RtcTransport.LiveKit -> JsonObject(
-        buildMap {
-            put("type", JsonPrimitive("livekit"))
-            // Mirror the MSC4195 wire format: absent fields are omitted rather than serialized as null.
-            url?.let { put("url", JsonPrimitive(it)) }
-            serviceUrl?.let { put("livekit_service_url", JsonPrimitive(it)) }
-        }
+private fun RtcTransport.toJsonObjects(): List<JsonObject> = when (this) {
+    is RtcTransport.LiveKit -> listOfNotNull(
+        JsonObject(
+            buildMap {
+                put("type", JsonPrimitive("livekit"))
+                // Mirror the MSC4195 wire format: absent fields are omitted rather than serialized as null.
+                url?.let { put("url", JsonPrimitive(it)) }
+                serviceUrl?.let { put("livekit_service_url", JsonPrimitive(it)) }
+            }
+        ),
+        url?.let { JsonObject(mapOf("type" to JsonPrimitive("m.livekit"), "url" to JsonPrimitive(it))) },
     )
     is RtcTransport.Custom -> {
         val fields = runCatchingExceptions { json.parseToJsonElement(data) as? JsonObject }.getOrNull().orEmpty()
-        JsonObject(fields + ("type" to JsonPrimitive(transportType)))
+        listOf(JsonObject(fields + ("type" to JsonPrimitive(transportType))))
     }
 }
