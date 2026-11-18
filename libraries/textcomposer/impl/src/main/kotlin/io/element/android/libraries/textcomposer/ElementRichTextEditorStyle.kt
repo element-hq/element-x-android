@@ -10,7 +10,6 @@ package io.element.android.libraries.textcomposer
 
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.unit.TextUnit
@@ -60,7 +59,7 @@ object ElementRichTextEditorStyle {
                 fontStyle = LocalTextStyle.current.fontStyle,
                 // `EditorStyledText` resolves these `sp` values against the Android configuration, not Compose's density, so scale them here.
                 lineHeight = LocalTextStyle.current.lineHeight.scaleBy(fontScale),
-                fontSize = MaterialTheme.typography.bodyLarge.fontSize * fontScale,
+                fontSize = LocalTextStyle.current.fontSize.scaleBy(fontScale),
                 includeFontPadding = false,
             ),
             cursor = RichTextEditorDefaults.cursorStyle(
