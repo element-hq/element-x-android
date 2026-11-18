@@ -18,7 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Density
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.api.timeline.TimelineSampleRenderer
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
@@ -41,7 +40,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultTimelineSampleRenderer : TimelineSampleRenderer {
     @Composable
     override fun Render(textSizeSp: Int, modifier: Modifier) {

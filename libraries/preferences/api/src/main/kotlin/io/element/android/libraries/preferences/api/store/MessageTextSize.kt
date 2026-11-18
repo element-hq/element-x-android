@@ -15,6 +15,6 @@ object MessageTextSize {
 
     val range = MIN..MAX
 
-    /** Multiplier to apply to the timeline text to render it at [sizeSp]*/
+    /** Multiplier to apply to the timeline text to render it at [sizeSp]. */
     fun scaleOf(sizeSp: Int): Float = sizeSp.coerceIn(range) / DEFAULT.toFloat()
 }
