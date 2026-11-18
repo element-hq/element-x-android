@@ -75,14 +75,20 @@ allprojects {
         group = "verification"
         description = "Run detekt analysis with type resolution on the debug variant, including the unit tests."
     }
+
+    // The unit test component is not created for modules without unit tests (see `configureTestComponents`),
+    // so only depend on the detekt tasks which exist.
+    fun dependOnDetektTasks(vararg names: String) {
+        detektFull.configure { dependsOn(tasks.matching { it.name in names }) }
+    }
     pluginManager.withPlugin("com.android.application") {
-        detektFull.configure { dependsOn("detektGplayDebug", "detektGplayDebugUnitTest") }
+        dependOnDetektTasks("detektGplayDebug", "detektGplayDebugUnitTest")
     }
     pluginManager.withPlugin("com.android.library") {
-        detektFull.configure { dependsOn("detektDebug", "detektDebugUnitTest") }
+        dependOnDetektTasks("detektDebug", "detektDebugUnitTest")
     }
     pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
-        detektFull.configure { dependsOn("detektMain", "detektTest") }
+        dependOnDetektTasks("detektMain", "detektTest")
     }
 
     // KtLint
