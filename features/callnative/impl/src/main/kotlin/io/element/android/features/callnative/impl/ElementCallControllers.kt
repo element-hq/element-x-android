@@ -21,6 +21,7 @@ import io.element.android.call.ui.ElementCallActivity
 import io.element.android.features.call.api.CurrentCallTracker
 import io.element.android.features.call.api.RingingCallTracker
 import io.element.android.features.callnative.api.MatrixRtcBackendFactory
+import io.element.android.features.callnative.impl.analytics.ElementXCallAnalytics
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -97,6 +98,7 @@ class DefaultElementCallControllers(
     private val appForegroundStateService: AppForegroundStateService,
     private val appPreferencesStore: AppPreferencesStore,
     private val featureFlagService: FeatureFlagService,
+    private val analytics: ElementXCallAnalytics,
 ) : ElementCallControllers {
     // A flow rather than a plain map because what draws the call has to see the stack appear.
     private val stacks = MutableStateFlow<Map<SessionId, ElementCallStack>>(emptyMap())
@@ -133,8 +135,9 @@ class DefaultElementCallControllers(
             stack.controller.takeIf { it.state.value != null }
         }
 
-    private suspend fun build(client: MatrixClient): ElementCallStack =
-        ElementCallStack.Builder(context, backendFactory.create(client))
+    private suspend fun build(client: MatrixClient): ElementCallStack {
+        analytics.awaitConsent()
+        return ElementCallStack.Builder(context, backendFactory.create(client))
             .lifecycleListener(
                 ElementXCallLifecycleListener(
                     sessionId = client.sessionId,
@@ -146,7 +149,9 @@ class DefaultElementCallControllers(
             )
             .roomContext(ElementXRoomContextProvider(client))
             .options(options())
+            .analytics(analytics)
             .build(scope = client.sessionCoroutineScope)
+    }
 
     private suspend fun options() = ElementCallOptions(
         logging = loggingConfiguration(),
