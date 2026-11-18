@@ -150,6 +150,8 @@ class DefaultElementCallControllers(
 
     private suspend fun options() = ElementCallOptions(
         logging = loggingConfiguration(),
+        // Shows the call's developer options (tile stats) in its Preferences sheet.
+        isDeveloperModeEnabled = appPreferencesStore.isDeveloperModeEnabledFlow().first(),
         notification = ElementCallNotificationConfig(
             // The same id the WebView call's foreground service uses, so that the two paths cannot
             // leave two ongoing-call notifications in the shade.

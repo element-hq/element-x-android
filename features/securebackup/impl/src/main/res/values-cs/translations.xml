@@ -44,7 +44,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Toto s nikým nesdílejte!"</string>
   <string name="screen_recovery_key_change_success">"Klíč pro obnovení byl změněn"</string>
   <string name="screen_recovery_key_change_title">"Změnit klíč pro obnovení?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Vytvořit nový klíč pro obnovení"</string>
   <string name="screen_recovery_key_confirm_description">"Ujistěte se, že tuto obrazovku nikdo nevidí!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Zkuste prosím znovu potvrdit přístup k úložišti klíčů."</string>
   <string name="screen_recovery_key_confirm_error_title">"Nesprávný klíč pro obnovení"</string>

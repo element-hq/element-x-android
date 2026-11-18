@@ -11,6 +11,7 @@
  */
 import extension.androidLibraryConfig
 import extension.commonDependencies
+import extension.configureTestComponents
 import extension.setupKover
 import org.gradle.accessors.dm.LibrariesForLibs
 
@@ -24,6 +25,12 @@ android {
     androidLibraryConfig(project)
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
+    }
+}
+
+androidComponents {
+    beforeVariants { variantBuilder ->
+        configureTestComponents(variantBuilder)
     }
 }
 

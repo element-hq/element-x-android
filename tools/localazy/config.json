@@ -368,6 +368,7 @@
         "screen\\.custom_recovery_key\\..*",
         "screen_create_new_recovery_key_.*",
         "screen_encryption_reset.*",
+        "screen_identity_confirmation_sign_out",
         "screen_reset_encryption.*",
         "screen\\.reset_encryption.*"
       ]

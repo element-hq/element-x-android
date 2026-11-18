@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="dialog_default_video_quality_selector_subtitle">"アップロードする動画のデフォルト画質を選択してください。"</string>
-  <string name="dialog_default_video_quality_selector_title">"動画のアップロード品質"</string>
+  <string name="dialog_default_video_quality_selector_title">"動画のアップロード画質"</string>
   <string name="full_screen_intent_banner_message_android">"重要な電話を確実に受け取るため、端末がロックされている状態での全画面通知を、設定から許可してください。"</string>
   <string name="full_screen_intent_banner_title_android">"通話品質を高める"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"通知の受信方法を選択してください"</string>
@@ -25,14 +25,14 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_high">"高画質 (1080p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_low">"低画質 (480p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"標準 (720p)"</string>
-  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"動画のアップロード品質"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"動画のアップロード画質"</string>
   <string name="screen_advanced_settings_push_provider_android">"プッシュ通知プロバイダー"</string>
   <string name="screen_advanced_settings_share_presence">"在席を共有"</string>
   <string name="screen_advanced_settings_share_presence_description">"機能がオフの場合、既読の情報と入力中の通知を使用できなくなります。"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"常に非表示"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"常に表示"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"非公開ルームのみ"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"非表示のメディアはタップして表示することができます。"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"非公開ルームで表示"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"非表示のメディアは常にタップすることで表示できます。"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"タイムラインにメディアを表示"</string>
   <string name="screen_advanced_settings_view_source_description">"タイムラインでメッセージのソースを表示する機能を追加します。"</string>
   <string name="screen_blocked_users_empty">"ブロックしたユーザーはいません"</string>
@@ -55,6 +55,10 @@
   <string name="screen_labs_header_description">"開発段階の最新機能を試すことができます。未完成のため、変更や不安定な挙動が生じる可能性があります。"</string>
   <string name="screen_labs_header_title">"探究的な気分ですか？"</string>
   <string name="screen_labs_title">"ラボ"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"招待"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"他のユーザー"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"あなたの見た目"</string>
+  <string name="screen_notification_settings_activity_section_title">"アクチビティ"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"追加設定"</string>
   <string name="screen_notification_settings_call_ringtone_label">"発信音"</string>
   <string name="screen_notification_settings_calls_label">"音声・ビデオ通話"</string>
@@ -83,6 +87,8 @@
   <string name="screen_notification_settings_mode_mentions">"メンション"</string>
   <string name="screen_notification_settings_notification_section_title">"以下を通知"</string>
   <string name="screen_notification_settings_room_mention_label">@ルームのメンション</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"未読メッセージのドットまたは件数"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"ルーム一覧に全てのアクティビティを表示する"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"カスタム"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"カスタム着信音"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"ファイルの削除に失敗"</string>
@@ -99,6 +105,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"システム設定"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"システムで通知がオフです"</string>
   <string name="screen_notification_settings_title">"通知"</string>
+  <string name="screen_settings_add_account">"アカウントを追加"</string>
   <string name="screen_settings_user_status_away">"離席中"</string>
   <string name="screen_settings_user_status_be_right_back">"すぐに戻る"</string>
   <string name="screen_settings_user_status_custom">"任意…"</string>

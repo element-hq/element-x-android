@@ -40,7 +40,7 @@ class RustSyncService(
 
     override suspend fun startSync() = withContext(dispatcher) {
         runCatchingExceptions {
-            if (!isServiceReady.get()) {
+            if (!isServiceReady.get() || inner.uniffiIsDestroyed) {
                 Timber.d("Can't start sync: service is not ready")
                 return@runCatchingExceptions
             }
@@ -53,7 +53,7 @@ class RustSyncService(
 
     override suspend fun stopSync() = withContext(dispatcher) {
         runCatchingExceptions {
-            if (!isServiceReady.get()) {
+            if (!isServiceReady.get() || inner.uniffiIsDestroyed) {
                 Timber.d("Can't stop sync: service is not ready")
                 return@runCatchingExceptions
             }
@@ -67,8 +67,8 @@ class RustSyncService(
     suspend fun destroy() = withContext(NonCancellable) {
         // If the service was still running, stop it
         stopSync()
+        if (!isServiceReady.getAndSet(false) || inner.uniffiIsDestroyed) return@withContext
         Timber.d("Destroying sync service")
-        isServiceReady.set(false)
         inner.destroy()
     }
 

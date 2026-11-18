@@ -46,6 +46,7 @@ import io.element.android.features.messages.impl.timeline.TimelineState
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetState
+import io.element.android.features.messages.impl.timeline.isSelectionModeActive
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
@@ -360,7 +361,9 @@ class MessagesPresenter(
                 // TODO calculate this properly based on the thread list and the read state of each thread
                 hasUnreadThreads = false,
             ),
-            showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom && timelineState.timelineMode !is Timeline.Mode.Thread,
+            showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom &&
+                timelineState.timelineMode !is Timeline.Mode.Thread &&
+                !timelineState.isSelectionModeActive,
             redactEventAction = redactEventAction.value,
             eventSink = ::handleEvent,
         )
@@ -429,11 +432,7 @@ class MessagesPresenter(
             TimelineItemAction.ViewSource -> handleShowDebugInfoAction(targetEvent)
             TimelineItemAction.Forward -> {
                 val eventId = targetEvent.eventId ?: return@launch
-                if (featureFlagService.isFeatureEnabled(FeatureFlags.MessageMultiSelect)) {
-                    timelineState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, eventId))
-                } else {
-                    navigator.forwardEvents(listOf(eventId))
-                }
+                timelineState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, eventId))
             }
             TimelineItemAction.ReportContent -> handleReportAction(targetEvent)
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)

@@ -14,8 +14,8 @@ android {
     namespace = "io.element.android.features.callnative.api"
 }
 
-// Temporary: `-PelementCallLocalVersion` points this at a locally published build of
-// element-call-android. Goes with the repositories in settings.gradle.kts.
+// `-PelementCallLocalVersion` points this at a locally published build of element-call-android.
+// Goes with the mavenLocal block in settings.gradle.kts.
 val elementCallVersion: String = providers.gradleProperty("elementCallLocalVersion")
     .getOrElse(libs.versions.element.call.get())
 

@@ -7,9 +7,6 @@
   <string name="screen_notification_settings_mentions_only_disclaimer">"你的账户提供者不支持在加密房间中的此选项，因此在某些聊天中你可能无法收到通知。"</string>
   <string name="screen_polls_history_title">"投票"</string>
   <string name="screen_room_details_add_topic_title">"添加主题"</string>
-  <string name="screen_room_details_audio_push_to_talk">"对讲"</string>
-  <string name="screen_room_details_audio_title">"房间音频"</string>
-  <string name="screen_room_details_audio_video_calls">"视频通话"</string>
   <string name="screen_room_details_badge_encrypted">"已加密"</string>
   <string name="screen_room_details_badge_not_encrypted">"未加密"</string>
   <string name="screen_room_details_badge_public">"公共房间"</string>

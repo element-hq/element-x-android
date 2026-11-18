@@ -30,6 +30,15 @@ tasks.register<Delete>("clean").configure {
 
 private val catalog = the<LibrariesForLibs>()
 
+/**
+ * The detekt tasks with type resolution (e.g. `detektDebug`) also analyse the generated sources (SQLDelight, KSP, etc.)
+ * which are under the build directory of the module. Exclude them, we do not control this code.
+ */
+private fun SourceTask.excludeGeneratedSources(buildDir: File) {
+    val buildDirPrefix = buildDir.absolutePath + File.separator
+    exclude { it.file.absolutePath.startsWith(buildDirPrefix) }
+}
+
 allprojects {
     // Detekt
     apply {
@@ -53,6 +62,27 @@ allprojects {
 
         // This file comes from another project and we want to keep it as close to the original as possible
         exclude("org/rustls/platformverifier/**")
+
+        excludeGeneratedSources(layout.buildDirectory.get().asFile)
+    }
+    tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
+        excludeGeneratedSources(layout.buildDirectory.get().asFile)
+    }
+
+    // The `detekt` task does not use type resolution, so the rules requiring it are silently skipped.
+    // `detektFull` runs detekt with type resolution, on a single variant to limit the compilation work.
+    val detektFull = tasks.register("detektFull") {
+        group = "verification"
+        description = "Run detekt analysis with type resolution on the debug variant, including the unit tests."
+    }
+    pluginManager.withPlugin("com.android.application") {
+        detektFull.configure { dependsOn("detektGplayDebug", "detektGplayDebugUnitTest") }
+    }
+    pluginManager.withPlugin("com.android.library") {
+        detektFull.configure { dependsOn("detektDebug", "detektDebugUnitTest") }
+    }
+    pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+        detektFull.configure { dependsOn("detektMain", "detektTest") }
     }
 
     // KtLint
@@ -197,7 +227,7 @@ tasks.register("runQualityChecks") {
     dependsOn(":app:lintGplayDebug")
     project.subprojects {
         tasks.findByPath("$path:lintDebug")?.let { dependsOn(it) }
-        tasks.findByName("detekt")?.let { dependsOn(it) }
+        tasks.findByName("detektFull")?.let { dependsOn(it) }
         tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
         // tasks.findByName("buildHealth")?.let { dependsOn(it) }
     }

@@ -37,7 +37,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Não partilhes isto com ninguém!"</string>
   <string name="screen_recovery_key_change_success">"Chave de recuperação alterada"</string>
   <string name="screen_recovery_key_change_title">"Alterar a chave de recuperação?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Criar nova chave de recuperação"</string>
   <string name="screen_recovery_key_confirm_description">"Certifica-te de que ninguém consegue ver esta página!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Tenta novamente para confirmar o acesso ao teu armazenamento de chaves."</string>
   <string name="screen_recovery_key_confirm_error_title">"Chave de recuperação incorreta"</string>

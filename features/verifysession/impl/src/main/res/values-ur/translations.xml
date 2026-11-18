@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"تصدیق نہیں کر سکتے؟"</string>
-  <string name="screen_identity_confirmation_create_new_recovery_key">"ایک نئی بازیابی کلید تخلیق کریں"</string>
   <string name="screen_identity_confirmation_subtitle">"محفوظ پیغام رسانی ترتیب دینے کیلئے اس آلے کی توثیق کریں۔"</string>
   <string name="screen_identity_confirmation_title">"اپنی شناخت کی تصدیق کریں"</string>
   <string name="screen_identity_confirmation_use_another_device">"دوسرا آلہ استعمال کریں"</string>

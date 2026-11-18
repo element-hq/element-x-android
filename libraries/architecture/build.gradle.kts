@@ -17,7 +17,7 @@ android {
     namespace = "io.element.android.libraries.architecture"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     api(projects.libraries.di)

@@ -19,8 +19,9 @@ style:
     active: true
   EqualsOnSignatureLine:
     active: true
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   ExplicitCollectionElementAccessMethod:
-    active: true
+    active: false
   ExplicitItLambdaParameter:
     active: true
   MaxLineLength:
@@ -30,10 +31,12 @@ style:
     active: false
   ReturnCount:
     active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   AbstractClassCanBeConcreteClass:
-    active: true
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   AbstractClassCanBeInterface:
-    active: true
+    active: false
   FunctionOnlyReturningConstant:
     active: false
   UnusedPrivateFunction:
@@ -45,17 +48,20 @@ style:
     active: true
   UnnecessaryInnerClass:
     active: true
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   UnnecessaryLet:
-    active: true
+    active: false
   UnnecessaryParentheses:
     active: true
     allowForUnclearPrecedence: false
   RangeUntilInsteadOfRangeTo:
     active: true
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   UnusedImport:
-    active: true
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   UnusedPrivateProperty:
-    active: true
+    active: false
   ThrowsCount:
     active: false
   LoopWithTooManyJumpStatements:
@@ -68,8 +74,9 @@ style:
     active: true
   OptionalUnit:
     active: true
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   RedundantExplicitType:
-    active: true
+    active: false
   TrailingWhitespace:
     active: true
   TrimMultilineRawString:
@@ -83,28 +90,60 @@ style:
     allowNonStandardGrouping: false
   UnnecessaryBackticks:
     active: true
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   UnnecessaryBracesAroundTrailingLambda:
-    active: true
+    active: false
   UseDataClass:
     active: true
     allowVars: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   UseEmptyCounterpart:
-    active: true
+    active: false
   UseIfEmptyOrIfBlank:
     active: true
   UseLet:
     active: true
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   UseSumOfInsteadOfFlatMapSize:
-    active: true
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  UnusedVariable:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  VarCouldBeVal:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  UnnecessaryApply:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  UseOrEmpty:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  ObjectLiteralToLambda:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  ForbiddenVoid:
+    active: false
 
 coroutines:
   GlobalCoroutineUsage:
     # Keep false for now.
     active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   SuspendFunSwallowedCancellation:
-    active: true
+    active: false
   SuspendFunWithCoroutineScopeReceiver:
     active: true
+    excludes: [ '**/test/**', '**/androidTest/**' ]
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  RedundantSuspendModifier:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  SuspendFunWithFlowReturnType:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  InjectDispatcher:
+    active: false
 
 empty-blocks:
   EmptyFunctionBlock:
@@ -113,36 +152,63 @@ empty-blocks:
     active: true
 
 potential-bugs:
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   ImplicitDefaultLocale:
-    active: true
+    active: false
+  # Disabled: it reports generic casts like `node as N`.
   CastNullableToNonNullableType:
-    active: true
+    active: false
   CastToNullableType:
     active: true
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   Deprecation:
-    active: true
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   DontDowncastCollectionTypes:
-    active: true
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   ElseCaseInsteadOfExhaustiveWhen:
-    active: true
+    active: false
   ExitOutsideMain:
     active: true
+  # Disabled: we use expression bodies returning Unit a lot, e.g. `fun FooPreview() = ElementPreview { ... }`.
   ImplicitUnitReturnType:
-    active: true
+    active: false
     allowExplicitReturnType: false
   MissingPackageDeclaration:
     active: true
     excludes: [ '**/*.kts' ]
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   NullCheckOnMutableProperty:
-    active: true
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
   NullableToStringCall:
-    active: true
+    active: false
+  # Disabled: mostly false positives, e.g. a property used in a function body before its declaration.
   PropertyUsedBeforeDeclaration:
-    active: true
+    active: false
   UnconditionalJumpStatementInLoop:
     active: true
   UnnecessaryNotNullCheck:
     active: true
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  UnreachableCode:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  IgnoredReturnValue:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  MapGetWithNotNullAssertionOperator:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  DoubleMutabilityForCollection:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  UnnecessaryNotNullOperator:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  UnsafeCallOnNullableType:
+    active: false
 
 exceptions:
   TooGenericExceptionCaught:
@@ -155,8 +221,9 @@ exceptions:
     active: true
   InstanceOfCheckForException:
     active: true
+  # Disabled: we use objects in sealed exception hierarchies on purpose.
   ObjectExtendsThrowable:
-    active: true
+    active: false
 
 complexity:
   TooManyFunctions:
@@ -186,18 +253,26 @@ naming:
     ignoreAnnotated: [ 'Composable' ]
   LambdaParameterNaming:
     active: true
+  # Disabled: it reports names like `isAppActiveFlow: Flow<Boolean>`.
   NonBooleanPropertyPrefixedWithIs:
-    active: true
+    active: false
   VariableMaxLength:
     active: true
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  NoNameShadowing:
+    active: false
 
 performance:
   SpreadOperator:
     active: false
+  # Disabled: not useful for the small collections we use.
   CouldBeSequence:
-    active: true
+    active: false
   UnnecessaryPartOfBinaryExpression:
     active: true
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  ArrayPrimitive:
+    active: false
 
 # Note: all rules for `comments` are disabled by default, but I put them here to be aware of their existence
 comments:
@@ -277,6 +352,24 @@ Compose:
     active: true
   UnstableCollections:
     active: true
+  # Disabled: its suggestion (`SideEffect`) does not take keys and runs on every recomposition.
+  UnnecessaryLaunchedEffect:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  MissingReadOnlyComposable:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  UnnecessaryComposable:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  MissingNonRestartableComposable:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  VarsWithoutStateBacking:
+    active: false
+  # TODO Temporarily disabled since it requires type resolution, it will be enabled again in a follow-up PR (see #8137).
+  ModifierShouldBeForwardedToEveryBranch:
+    active: false
 
 # Custom rules from :tests:detekt-rules. Since detekt 2, a rule only runs if it is listed in the configuration.
 ElementXRules:

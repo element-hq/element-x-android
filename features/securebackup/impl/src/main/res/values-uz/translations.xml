@@ -38,7 +38,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Buni hech kimga ulashmang!"</string>
   <string name="screen_recovery_key_change_success">"Qayta tiklash kaliti oʻzgartirildi"</string>
   <string name="screen_recovery_key_change_title">"Qayta tiklash kaliti almashtirilsinmi?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Yangi tiklash kalitini yaratish"</string>
   <string name="screen_recovery_key_confirm_description">"Hech kim bu ekranni kora olmasligiga ishonch hosil qiling!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Kalit xotirasiga kirishni tasdiqlash uchun qayta urinib koʻring."</string>
   <string name="screen_recovery_key_confirm_error_title">"Notoʻgʻri tiklash kaliti"</string>
