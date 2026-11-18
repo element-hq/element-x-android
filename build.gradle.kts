@@ -79,7 +79,7 @@ allprojects {
     // The unit test component is not created for modules without unit tests (see `configureTestComponents`),
     // so only depend on the detekt tasks which exist.
     fun dependOnDetektTasks(vararg names: String) {
-        detektFull.configure { dependsOn(tasks.matching { it.name in names }) }
+        detektFull.configure { dependsOn(tasks.named { it in names }) }
     }
     pluginManager.withPlugin("com.android.application") {
         dependOnDetektTasks("detektGplayDebug", "detektGplayDebugUnitTest")
