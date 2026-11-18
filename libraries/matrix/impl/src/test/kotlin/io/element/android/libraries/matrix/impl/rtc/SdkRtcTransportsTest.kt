@@ -26,7 +26,7 @@ class SdkRtcTransportsTest {
     }
 
     @Test
-    fun `livekit transport keeps both urls when present`() {
+    fun `livekit transport keeps both urls when present, and is also offered as m livekit by its url`() {
         val json = listOf(
             RtcTransport.LiveKit(url = "wss://sfu.example.org", serviceUrl = "https://sfu.example.org/jwt"),
             RtcTransport.LiveKit(url = "wss://sfu2.example.org", serviceUrl = null),
@@ -34,8 +34,34 @@ class SdkRtcTransportsTest {
 
         assertThat(json).isEqualTo(
             """[{"type":"livekit","url":"wss://sfu.example.org","livekit_service_url":"https://sfu.example.org/jwt"},""" +
-                """{"type":"livekit","url":"wss://sfu2.example.org"}]"""
+                """{"type":"m.livekit","url":"wss://sfu.example.org"},""" +
+                """{"type":"livekit","url":"wss://sfu2.example.org"},""" +
+                """{"type":"m.livekit","url":"wss://sfu2.example.org"}]"""
         )
+    }
+
+    @Test
+    fun `a homeserver advertising the same sfu as livekit and m livekit gives an m livekit transport once`() {
+        // What the SDK makes of a homeserver advertising
+        // [{"type":"livekit","url":U,"livekit_service_url":S},{"type":"m.livekit","url":U}]: two LiveKit transports, the
+        // second indistinguishable from a legacy `livekit` one naming only its url.
+        val json = listOf(
+            RtcTransport.LiveKit(url = "wss://sfu.example.org", serviceUrl = "https://sfu.example.org"),
+            RtcTransport.LiveKit(url = "wss://sfu.example.org", serviceUrl = null),
+        ).toJson()
+
+        assertThat(json).isEqualTo(
+            """[{"type":"livekit","url":"wss://sfu.example.org","livekit_service_url":"https://sfu.example.org"},""" +
+                """{"type":"m.livekit","url":"wss://sfu.example.org"},""" +
+                """{"type":"livekit","url":"wss://sfu.example.org"}]"""
+        )
+    }
+
+    @Test
+    fun `a livekit transport with only a service url is not offered as m livekit`() {
+        val json = listOf(RtcTransport.LiveKit(url = null, serviceUrl = "https://sfu.example.org/jwt")).toJson()
+
+        assertThat(json).isEqualTo("""[{"type":"livekit","livekit_service_url":"https://sfu.example.org/jwt"}]""")
     }
 
     @Test
