@@ -70,6 +70,13 @@ fun MessageTextSizeView(
             ListSectionHeader(
                 title = stringResource(R.string.screen_message_text_size_adjust_size),
                 hasDivider = true,
+                description = {
+                    Text(
+                        text = stringResource(R.string.screen_message_text_size_default_description, MessageTextSize.DEFAULT),
+                        style = ElementTheme.typography.fontBodyMdRegular,
+                        color = ElementTheme.colors.textSecondary,
+                    )
+                },
             )
             MessageTextSizeSlider(
                 textSizeSp = state.textSizeSp,
