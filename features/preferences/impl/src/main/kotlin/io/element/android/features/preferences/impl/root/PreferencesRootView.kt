@@ -231,7 +231,7 @@ private fun AppSettingsSection(
             }
         )
         ListItem(
-            content = { Text(stringResource(id = R.string.screen_message_text_size_title)) },
+            content = { Text(stringResource(id = R.string.screen_settings_message_text_size_title)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TextFormatting())),
             trailingContent = ListItemContent.Text(state.messageTextSize.toString()),
             onClick = onOpenMessageTextSize,

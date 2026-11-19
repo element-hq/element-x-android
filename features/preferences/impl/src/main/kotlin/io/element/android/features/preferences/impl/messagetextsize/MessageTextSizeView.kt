@@ -53,7 +53,7 @@ fun MessageTextSizeView(
                 title = {
                     Text(
                         modifier = Modifier.semantics { heading() },
-                        text = stringResource(R.string.screen_message_text_size_title),
+                        text = stringResource(R.string.screen_settings_message_text_size_title),
                         style = ElementTheme.typography.aliasScreenTitle,
                     )
                 },
@@ -68,11 +68,11 @@ fun MessageTextSizeView(
                 )
             }
             ListSectionHeader(
-                title = stringResource(R.string.screen_message_text_size_adjust_size),
+                title = stringResource(R.string.screen_settings_message_text_size_adjust_size),
                 hasDivider = true,
                 description = {
                     Text(
-                        text = stringResource(R.string.screen_message_text_size_default_description, MessageTextSize.DEFAULT),
+                        text = stringResource(R.string.screen_settings_message_text_size_default_description, MessageTextSize.DEFAULT),
                         style = ElementTheme.typography.fontBodyMdRegular,
                         color = ElementTheme.colors.textSecondary,
                     )

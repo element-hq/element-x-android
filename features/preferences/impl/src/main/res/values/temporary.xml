@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-  <string name="screen_message_text_size_title">"Message text size"</string>
-  <string name="screen_message_text_size_adjust_size">"Adjust size"</string>
-  <string name="screen_message_text_size_default_description">"Default text size is %1$d."</string>
+  <string name="screen_settings_message_text_size_title">"Message text size"</string>
+  <string name="screen_settings_message_text_size_adjust_size">"Adjust size"</string>
+  <string name="screen_settings_message_text_size_default_description">"Default text size is %1$d."</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-  <string name="screen_message_text_size_sample_sender">"Bob"</string>
-  <string name="screen_message_text_size_sample_recipient">"Sally"</string>
-  <string name="screen_message_text_size_sample_question">"I baked a dozen cookies, but there are only 11 here 👀"</string>
-  <string name="screen_message_text_size_sample_answer">"That’s because I ate one 🍪"</string>
+  <string name="screen_timeline_sample_sender">"Bob"</string>
+  <string name="screen_timeline_sample_recipient">"Sally"</string>
+  <string name="screen_timeline_sample_question">"I baked a dozen cookies, but there are only 11 here 👀"</string>
+  <string name="screen_timeline_sample_answer">"That’s because I ate one 🍪"</string>
 </resources>

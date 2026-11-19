@@ -116,10 +116,10 @@ private fun TimelineSample(textSizeSp: Int, modifier: Modifier = Modifier) {
 
 @Composable
 private fun rememberSampleTimelineItems(): ImmutableList<TimelineItem> {
-    val sender = stringResource(R.string.screen_message_text_size_sample_sender)
-    val recipient = stringResource(R.string.screen_message_text_size_sample_recipient)
-    val question = stringResource(R.string.screen_message_text_size_sample_question)
-    val answer = stringResource(R.string.screen_message_text_size_sample_answer)
+    val sender = stringResource(R.string.screen_timeline_sample_sender)
+    val recipient = stringResource(R.string.screen_timeline_sample_recipient)
+    val question = stringResource(R.string.screen_timeline_sample_question)
+    val answer = stringResource(R.string.screen_timeline_sample_answer)
     return remember(sender, recipient, question, answer) {
         persistentListOf(
             aSampleEvent(
