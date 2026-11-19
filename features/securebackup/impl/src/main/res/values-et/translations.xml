@@ -68,7 +68,6 @@
   <string name="screen_recovery_key_check_subtitle">"Sisesta varem salvestatud taastevõti, et veenduda selle õigsuses ja toimivuses."</string>
   <string name="screen_recovery_key_check_success_title">"Sinu taastevõti on aktiivne"</string>
   <string name="screen_recovery_key_check_title">"Kontrolli oma taastevõtit"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Loo uus taastevõti"</string>
   <string name="screen_recovery_key_confirm_description">"Palun vaata, et keegi teine ei näeks seda ekraanivaadet!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Kinnitamaks ligipääsu sinu krüptovõtmete varundusele, palun proovi uuesti"</string>
   <string name="screen_recovery_key_confirm_error_title">"Vigane taastevõti"</string>

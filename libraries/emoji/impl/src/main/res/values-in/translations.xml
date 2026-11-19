@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_a11y_backspace">"Hapus karakter sebelum kursor."</string>
   <string name="emoji_picker_category_activity">"Aktivitas"</string>
   <string name="emoji_picker_category_flags">"Bendera"</string>
   <string name="emoji_picker_category_foods">"Makanan &amp; Minuman"</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_chat_backup_recovery_action_setup">"Lấy khóa khôi phục."</string>
   <string name="screen_signout_confirmation_dialog_content">"Bạn có chắc muốn gỡ thiết bị này không?"</string>
   <string name="screen_signout_confirmation_dialog_submit">"Gỡ bỏ thiết bị này"</string>
   <string name="screen_signout_confirmation_dialog_title">"Gỡ bỏ thiết bị này"</string>

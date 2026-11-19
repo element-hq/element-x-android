@@ -17,7 +17,7 @@ android {
     namespace = "io.element.android.features.enterprise.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     implementation(projects.libraries.compound)

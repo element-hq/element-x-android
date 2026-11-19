@@ -8,18 +8,18 @@
 
 package io.element.android.detektrules
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
+import dev.detekt.api.RuleSetProvider
 
 class ElementRuleSetProvider : RuleSetProvider {
-    override val ruleSetId: String = "ElementXRules"
+    override val ruleSetId = RuleSetId("ElementXRules")
 
-    override fun instance(config: Config): RuleSet = RuleSet(
+    override fun instance(): RuleSet = RuleSet(
         id = ruleSetId,
         rules = listOf(
-            RunCatchingRule(config),
-            ByPreferencesDataStoreRule(config),
+            ::RunCatchingRule,
+            ::ByPreferencesDataStoreRule,
         )
     )
 }

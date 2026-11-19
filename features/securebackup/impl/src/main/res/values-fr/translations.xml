@@ -68,7 +68,6 @@
   <string name="screen_recovery_key_check_subtitle">"Saisissez la clé de récupération que vous avez enregistrée pour vérifier qu’elle est correcte et active."</string>
   <string name="screen_recovery_key_check_success_title">"Votre clé de récupération est active."</string>
   <string name="screen_recovery_key_check_title">"Vérifiez votre clé de récupération"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Créer une nouvelle clé de récupération"</string>
   <string name="screen_recovery_key_confirm_description">"Assurez vous que personne d’autre ne regarde votre écran !"</string>
   <string name="screen_recovery_key_confirm_error_content">"Veuillez réessayer pour confirmer l’accès à votre stockage de clés."</string>
   <string name="screen_recovery_key_confirm_error_title">"Clé de récupération incorrecte"</string>

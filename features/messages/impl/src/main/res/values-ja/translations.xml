@@ -81,9 +81,9 @@
   <string name="screen_room_attachment_source_poll">"投票"</string>
   <string name="screen_room_attachment_text_formatting">"書式設定"</string>
   <string name="screen_room_confirm_removal_reason_label">"理由 (任意)"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder">"入力…"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"理由を入力…"</string>
   <string name="screen_room_confirm_removal_reason_supporting_text">"(任意)"</string>
-  <string name="screen_room_confirm_removal_title">"削除の確認"</string>
+  <string name="screen_room_confirm_removal_title">"メッセージを削除しますか？"</string>
   <string name="screen_room_encrypted_history_banner">"過去のメッセージを現在表示できません。"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"このルームの過去のメッセージを表示できません。確認するには、この端末を検証してください。"</string>
   <string name="screen_room_invite_again_alert_message">"招待し直しますか？"</string>
@@ -91,6 +91,9 @@
   <string name="screen_room_maximum_messages_selected">"最大数のメッセージを選択中"</string>
   <string name="screen_room_mentions_at_room_subtitle">"ルーム全体に通知"</string>
   <string name="screen_room_mentions_at_room_title">"全員"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="other">"%1$d件の転送されたメッセージ"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"すでにこのルームを表示しています"</string>
   <string name="screen_room_pinned_banner_indicator">"%2$s 個のうち %1$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s 個のピン留めされたメッセージ"</string>

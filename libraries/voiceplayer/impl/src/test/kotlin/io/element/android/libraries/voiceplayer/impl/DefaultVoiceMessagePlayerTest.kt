@@ -17,6 +17,9 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
+import io.element.android.libraries.voicerecorder.api.VoiceRecorder
+import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
+import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -74,6 +77,22 @@ class DefaultVoiceMessagePlayerTest {
                 assertThat(it.isPlaying).isTrue()
                 assertThat(it.currentPosition).isEqualTo(1000)
             }
+        }
+    }
+
+    @Test
+    fun `play is ignored while a voice message is being recorded`() = runTest {
+        val voiceRecorder = FakeVoiceRecorder(startRecordResult = {})
+        val player = createDefaultVoiceMessagePlayer(voiceRecorder = voiceRecorder)
+        player.state.test {
+            matchInitialState()
+            // Simulate the media being downloaded while the user starts recording a voice message.
+            voiceRecorder.startRecord()
+            assertThat(voiceRecorder.state.value).isInstanceOf(VoiceRecorderState.Recording::class.java)
+            assertThat(player.prepare().isSuccess).isTrue()
+            matchReadyState()
+            player.play()
+            expectNoEvents()
         }
     }
 
@@ -281,8 +300,10 @@ private fun createDefaultVoiceMessagePlayer(
     ),
     voiceMessageMediaRepo: VoiceMessageMediaRepo = FakeVoiceMessageMediaRepo(),
     eventId: EventId? = AN_EVENT_ID,
+    voiceRecorder: VoiceRecorder = FakeVoiceRecorder(),
 ) = DefaultVoiceMessagePlayer(
     mediaPlayer = mediaPlayer,
+    voiceRecorder = voiceRecorder,
     voiceMessageMediaRepoFactory = { _, _, _ -> voiceMessageMediaRepo },
     eventId = eventId,
     mediaSource = MediaSource(

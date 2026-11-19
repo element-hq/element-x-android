@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Não consegue confirmar?"</string>
-  <string name="screen_identity_confirmation_create_new_recovery_key">"Criar uma nova chave de recuperação"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifique este dispositivo para configurar as mensagens seguras."</string>
   <string name="screen_identity_confirmation_title">"Confirme sua identidade"</string>
   <string name="screen_identity_confirmation_use_another_device">"Usar outro dispositivo"</string>

@@ -37,6 +37,7 @@ class DefaultSecureBackupEntryPointTest {
         }
         val callback = object : SecureBackupEntryPoint.Callback {
             override fun onDone() = lambdaError()
+            override fun onSignOut() = lambdaError()
         }
         val params = SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.ResetIdentity)
         val result = entryPoint.createNode(

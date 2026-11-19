@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="error_account_already_logged_in">"Du bist auf diesem Gerät bereits als %1$s angemeldet."</string>
+  <string name="error_account_already_logged_in">"Du bist bereits als %1$s angemeldet."</string>
+  <string name="error_account_already_logged_in_title">"Doppelte Anmeldung"</string>
   <string name="error_account_creation_not_possible">"Dein Kontoanbieter muss aktualisiert werden, um Matrix Authentication Service und die Erstellung von Konten zu unterstützen."</string>
   <string name="screen_account_provider_signin_title">"Du bist dabei, dich bei %s anzumelden"</string>
   <string name="screen_change_account_provider_subtitle">"Verwende einen anderen Kontoanbieter, z. B. deinen eigenen privaten Server oder ein Geschäftskonto."</string>
@@ -41,6 +42,8 @@
   <string name="screen_missing_key_backup_step_4">"Folge den Anweisungen, um deinen Schlüsselspeicher zu aktivieren"</string>
   <string name="screen_missing_key_backup_step_5">"Zurück zu %1$s"</string>
   <string name="screen_missing_key_backup_title">"Aktiviere deinen Schlüsselspeicher, bevor du mit %1$s fortfährst"</string>
+  <string name="screen_onboarding_add_account_subtitle">"Du kannst der App mehrere Konten hinzufügen und ganz einfach zwischen ihnen wechseln."</string>
+  <string name="screen_onboarding_add_account_title">"Bei einem weiteren Konto anmelden"</string>
   <string name="screen_onboarding_app_version">"Version %1$s"</string>
   <string name="screen_onboarding_checking_account">"Konto wird geprüft"</string>
   <string name="screen_onboarding_sign_in_manually">"Manuell anmelden"</string>

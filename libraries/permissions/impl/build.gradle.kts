@@ -23,7 +23,7 @@ android {
     }
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     implementation(libs.accompanist.permission)

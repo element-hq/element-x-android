@@ -37,7 +37,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Bunu kimseyle paylaşmayın!"</string>
   <string name="screen_recovery_key_change_success">"Kurtarma anahtarı değiştirildi"</string>
   <string name="screen_recovery_key_change_title">"Kurtarma anahtarını değiştir?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Yeni kurtarma anahtarı oluştur"</string>
   <string name="screen_recovery_key_confirm_description">"Bu ekranı kimsenin göremediğinden emin olun!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Anahtar depolama alanınıza erişimi onaylamak için lütfen tekrar deneyin."</string>
   <string name="screen_recovery_key_confirm_error_title">"Yanlış kurtarma anahtarı"</string>

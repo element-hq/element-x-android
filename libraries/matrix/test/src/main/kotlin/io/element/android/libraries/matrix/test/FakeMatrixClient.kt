@@ -125,6 +125,7 @@ class FakeMatrixClient(
     override val ownBeaconInfoUpdates: Flow<BeaconInfoUpdate> = emptyFlow(),
     private val getMaxUploadSizeResult: () -> Result<Long> = { lambdaError() },
     private val getJoinedRoomIdsResult: () -> Result<Set<RoomId>> = { Result.success(emptySet()) },
+    private val hasEncryptedRoomsResult: () -> Result<Boolean> = { Result.success(true) },
     private val getRecentEmojisLambda: () -> Result<List<String>> = { Result.success(emptyList()) },
     private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
     private val getAccountDataLambda: (String) -> Result<String?> = { lambdaError() },
@@ -200,6 +201,10 @@ class FakeMatrixClient(
 
     override suspend fun getJoinedRoomIds(): Result<Set<RoomId>> {
         return getJoinedRoomIdsResult()
+    }
+
+    override suspend fun hasEncryptedRooms(): Result<Boolean> {
+        return hasEncryptedRoomsResult()
     }
 
     override suspend fun ignoreUser(userId: UserId): Result<Unit> = simulateLongTask {

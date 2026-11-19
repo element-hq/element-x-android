@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"No pots confirmar-la?"</string>
-  <string name="screen_identity_confirmation_create_new_recovery_key">"Crea nova clau de recuperació"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifica aquest dispositiu per configurar missatges segurs."</string>
   <string name="screen_identity_confirmation_title">"Confirma la teva identitat"</string>
   <string name="screen_identity_confirmation_use_another_device">"Utilitza un altre dispositiu"</string>

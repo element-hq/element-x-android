@@ -60,6 +60,11 @@ Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_search_empty_state_message">"Szukaj czatów i wiadomości"</string>
   <string name="screen_search_empty_state_title">"Rozpocznij wyszukiwanie…"</string>
   <string name="screen_search_from_your_messages_header">"Z Twoich wiadomości"</string>
+  <string name="screen_search_history_limit_message">"Wyszukiwanie odbywa się na Twoim urządzeniu, więc wszystkie wiadomości szyfrowane zostają prywatne.
+Na Twoim urządzeniu przechowywane są wiadomości z 3 ostatnich miesięcy, więc nie ma jeszcze możliwości przeszukiwania starszych wiadomości."</string>
+  <string name="screen_search_history_limit_title">"Wyszukiwanie obejmuje ostatnie 3 miesiące"</string>
+  <string name="screen_search_messages_no_results_message">"Nie znaleziono wyników dla “%1$s” w Twoich ostatnich wiadomościach."</string>
+  <string name="screen_search_messages_no_results_title">"Brak wyników w ciągu ostatnich 3 miesięcy"</string>
   <string name="screen_search_no_results_message">"Nie znaleziono wyników dla “%1$s”. Prosimy o wpisanie nowego terminu."</string>
   <string name="screen_search_recent_searches">"Ostatnie wyszukiwania"</string>
   <string name="screen_search_tab_chats">"Czaty"</string>

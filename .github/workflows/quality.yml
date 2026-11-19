@@ -162,7 +162,7 @@ jobs:
         with:
           enterprise-ssh-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
       - name: Run Detekt
-        run: ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES --continue
+        run: ./gradlew detektFull $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -241,7 +241,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: zizmorcore/zizmor-action@53290badfa369cb0bf7ad16342cb62c2fa47ac7b # v0.8.0
+      - uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
 
   upload_reports:
     name: Project Check Suite
