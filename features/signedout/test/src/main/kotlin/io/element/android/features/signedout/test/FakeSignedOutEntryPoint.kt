@@ -13,11 +13,10 @@ import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeSignedOutEntryPoint(
-    private val createNodeResult: (BuildContext, SignedOutEntryPoint.Params) -> Node = { _, _ -> lambdaError() },
+    private val createNodeResult: (BuildContext) -> Node = { lambdaError() },
 ) : SignedOutEntryPoint {
     override fun createNode(
         parentNode: Node,
         buildContext: BuildContext,
-        params: SignedOutEntryPoint.Params,
-    ): Node = createNodeResult(buildContext, params)
+    ): Node = createNodeResult(buildContext)
 }

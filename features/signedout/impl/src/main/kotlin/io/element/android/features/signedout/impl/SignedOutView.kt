@@ -9,6 +9,7 @@
 package io.element.android.features.signedout.impl
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,9 +19,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -50,6 +53,10 @@ fun SignedOutView(
     HeaderFooterPage(
         modifier = modifier
             .fillMaxSize()
+            // This screen is displayed on top of the other screens: draw the background behind the system bars too,
+            // and prevent the touches from reaching the screens underneath.
+            .background(ElementTheme.colors.bgCanvasDefault)
+            .pointerInput(Unit) {}
             .systemBarsPadding()
             .imePadding(),
         isScrollable = true,
@@ -57,6 +64,7 @@ fun SignedOutView(
         content = { SignedOutContent(state.signedOutMatrixUser) },
         footer = {
             SignedOutFooter(
+                isRemovingSession = state.submitAction.isLoading(),
                 onSubmit = { state.eventSink(SignedOutEvent.Submit) },
             )
         }
@@ -112,12 +120,15 @@ private fun SignedOutContent(
 
 @Composable
 private fun SignedOutFooter(
+    isRemovingSession: Boolean,
     onSubmit: () -> Unit,
 ) {
     ButtonColumnMolecule {
         Button(
             text = stringResource(id = CommonStrings.action_ok),
             onClick = onSubmit,
+            enabled = !isRemovingSession,
+            showProgress = isRemovingSession,
             modifier = Modifier.fillMaxWidth(),
         )
     }
