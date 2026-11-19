@@ -9,6 +9,8 @@ package io.element.android.features.logout.impl
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 
 open class LogoutStatePreviewParam : PreviewParameterProvider<LogoutState> {
     override val values: Sequence<LogoutState>
@@ -27,10 +29,12 @@ open class LogoutStatePreviewParam : PreviewParameterProvider<LogoutState> {
 }
 
 fun aLogoutState(
+    currentUser: MatrixUser = aMatrixUser(),
     confirmation: LogoutConfirmation = LogoutConfirmation.OtherVerifiedDevice,
     logoutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (LogoutEvent) -> Unit = {},
 ) = LogoutState(
+    currentUser = currentUser,
     confirmation = confirmation,
     logoutAction = logoutAction,
     eventSink = eventSink,

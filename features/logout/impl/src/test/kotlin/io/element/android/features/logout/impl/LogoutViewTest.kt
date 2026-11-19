@@ -24,6 +24,7 @@ import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import org.junit.Test
+import org.robolectric.annotation.Config
 
 class LogoutViewTest : RobolectricTest() {
     @Test
@@ -54,6 +55,7 @@ class LogoutViewTest : RobolectricTest() {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `recovery key only - the key can be generated`() = runAndroidComposeUiTest {
         ensureCalledOnceWithParam(true) { callback ->
             setLogoutView(
@@ -87,6 +89,7 @@ class LogoutViewTest : RobolectricTest() {
     }
 
     @Test
+    @Config(qualifiers = "h1024dp")
     fun `no recovery - the device can still be removed`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<LogoutEvent>()
         setLogoutView(aLogoutState(confirmation = LogoutConfirmation.NoRecovery, eventSink = eventsRecorder))

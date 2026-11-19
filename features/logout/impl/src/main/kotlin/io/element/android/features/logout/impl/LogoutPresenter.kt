@@ -58,6 +58,7 @@ class LogoutPresenter(
             mutableStateOf(AsyncAction.Uninitialized)
         }
 
+        val currentUser by matrixClient.userProfile.collectAsState()
         val backupUploadState: BackupUploadState by remember {
             encryptionService.waitForBackupUploadSteadyState()
         }
@@ -102,6 +103,7 @@ class LogoutPresenter(
 
         val isKeyBackupDisabled = backupState == BackupState.UNKNOWN && !doesBackupExistOnServerAction.value.dataOrNull().orTrue()
         return LogoutState(
+            currentUser = currentUser,
             confirmation = when {
                 backupUploadState.isOffline() -> LogoutConfirmation.BackupOffline
                 isWaitingForBackup -> LogoutConfirmation.WaitingForBackup

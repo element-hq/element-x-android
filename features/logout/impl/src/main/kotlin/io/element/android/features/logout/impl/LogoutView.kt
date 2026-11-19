@@ -33,6 +33,10 @@ import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCard
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardMode
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardState
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -104,12 +108,14 @@ fun LogoutView(
                 onSubmit = onDismiss,
             )
             LogoutConfirmation.RecoveryKeyOnly -> RecoveryKeyOnlySheet(
+                currentUser = state.currentUser,
                 onDismiss = onDismiss,
                 onLogoutClick = onLogoutClick,
                 onCheckRecoveryKeyClick = onCheckRecoveryKeyClick,
                 onGenerateRecoveryKeyClick = { onGenerateRecoveryKeyClick(true) },
             )
             LogoutConfirmation.NoRecovery -> NoRecoverySheet(
+                currentUser = state.currentUser,
                 onDismiss = onDismiss,
                 onLogoutClick = onLogoutClick,
                 onGenerateRecoveryKeyClick = { onGenerateRecoveryKeyClick(false) },
@@ -119,9 +125,13 @@ fun LogoutView(
     }
 }
 
+/**
+ * Ref: https://www.figma.com/design/hDUT4q0pynhkbmB5s56GN8/ER-162--Recovery-Key-Usability---Management?node-id=1972-55344
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RecoveryKeyOnlySheet(
+    currentUser: MatrixUser,
     onDismiss: () -> Unit,
     onLogoutClick: () -> Unit,
     onCheckRecoveryKeyClick: () -> Unit,
@@ -142,6 +152,7 @@ private fun RecoveryKeyOnlySheet(
             subTitle = stringResource(id = R.string.screen_signout_save_recovery_key_subtitle),
             iconStyle = BigIcon.Style.Default(CompoundIcons.InfoSolid()),
         )
+        CurrentAccountInfo(currentUser)
         ButtonColumnMolecule(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
         ) {
@@ -167,9 +178,13 @@ private fun RecoveryKeyOnlySheet(
     }
 }
 
+/**
+ * Ref: https://www.figma.com/design/hDUT4q0pynhkbmB5s56GN8/ER-162--Recovery-Key-Usability---Management?node-id=1972-55439
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NoRecoverySheet(
+    currentUser: MatrixUser,
     onDismiss: () -> Unit,
     onLogoutClick: () -> Unit,
     onGenerateRecoveryKeyClick: () -> Unit,
@@ -195,6 +210,7 @@ private fun NoRecoverySheet(
             modifier = Modifier.fillMaxWidth(),
             onClick = onLearnMoreClick,
         )
+        CurrentAccountInfo(currentUser)
         ButtonColumnMolecule(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
         ) {
@@ -216,11 +232,22 @@ private fun NoRecoverySheet(
     }
 }
 
+@Composable
+private fun CurrentAccountInfo(currentUser: MatrixUser) {
+    AccountInfoCard(
+        state = AccountInfoCardState(
+            matrixUser = currentUser,
+            mode = AccountInfoCardMode.Simple,
+        ),
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+    )
+}
+
 @PreviewsDayNight
 @Composable
 internal fun LogoutViewPreview(
     @PreviewParameter(LogoutStatePreviewParam::class) state: LogoutState,
-) = ElementPreview {
+) = ElementPreview(fillMaxSize = true) {
     LogoutView(
         state = state,
         onDismiss = {},
