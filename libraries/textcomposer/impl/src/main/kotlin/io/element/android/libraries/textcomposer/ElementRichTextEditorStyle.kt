@@ -41,7 +41,7 @@ object ElementRichTextEditorStyle {
 
     /** @param fontScale multiplier for callers that size their text independently of the app, such as the timeline. */
     @Composable
-    fun textStyle(fontScale: Float = 1f): RichTextEditorStyle {
+    fun textStyle(fontScale: Float): RichTextEditorStyle {
         return common(fontScale = fontScale)
     }
 
