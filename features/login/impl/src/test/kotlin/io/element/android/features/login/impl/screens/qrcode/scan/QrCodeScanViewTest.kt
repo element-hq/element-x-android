@@ -19,6 +19,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.test.auth.qrlogin.FakeMatrixQrCodeLoginData
+import io.element.android.libraries.permissions.api.R
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -105,7 +106,7 @@ class QrCodeScanViewTest : RobolectricTest() {
                 eventSink = eventRecorder,
             ),
         )
-        clickOn(CommonStrings.dialog_allow_access)
+        clickOn(R.string.dialog_allow_access)
         eventRecorder.assertSingle(QrCodeScanEvent.RequestLocalNetworkAccessPermission)
     }
 
