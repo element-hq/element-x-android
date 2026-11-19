@@ -10,9 +10,12 @@ package io.element.android.appnav
 
 import android.content.Intent
 import android.os.Parcelable
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.PermanentChild
@@ -84,6 +87,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
@@ -139,6 +143,13 @@ class RootFlowNode(
      */
     private var pendingLoginParams: LoginParams? = null
 
+    /**
+     * Whether the root has been restored, if needed, and the nav state is observed. Until then, the changes of the logged in state
+     * may not be applied to the root, see [observeNavState].
+     */
+    @VisibleForTesting
+    internal val isNavStateObserved = MutableStateFlow(false)
+
     override fun onBuilt() {
         analyticsColdStartWatcher.start()
         appCoroutineScope.launch {
@@ -149,6 +160,7 @@ class RootFlowNode(
             } else {
                 observeNavState(false)
             }
+            isNavStateObserved.value = true
         }
         observeIncomingVerificationRequests()
         observeRemovedSessions()
@@ -372,8 +384,13 @@ class RootFlowNode(
             }
             BackstackView(transitionHandler = transitionHandler)
             announcementService.Render(Modifier)
-            // Displayed on top of everything else, renders nothing when no session is signed out
-            PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.SignedOutSessions)
+            // Displayed on top of everything else, renders nothing when no session is signed out.
+            // Wait for the nav state to be observed: on process recreation, the root is restored asynchronously and the first
+            // logged in state is skipped, so removing the active session from the signed out screen before that would be missed.
+            val isNavStateObserved by isNavStateObserved.collectAsState()
+            if (isNavStateObserved) {
+                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.SignedOutSessions)
+            }
         }
     }
 

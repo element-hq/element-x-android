@@ -278,6 +278,18 @@ class RootFlowNodeTest : RobolectricTest() {
     }
 
     @Test
+    fun `the nav state is observed once the root is restored`() = runTest {
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint { buildContext, _ -> node(buildContext) {} },
+        )
+        rootFlowNode.parentNodeTestHelper()
+        // The restoration of the sessions and of the root has not run yet, the signed out screens must not be displayed
+        assertThat(rootFlowNode.isNavStateObserved.value).isFalse()
+        runCurrent()
+        assertThat(rootFlowNode.isNavStateObserved.value).isTrue()
+    }
+
+    @Test
     fun `the signed out sessions node is always attached`() = runTest {
         val createSignedOutNodeResult = lambdaRecorder<BuildContext, Node> { buildContext -> node(buildContext) {} }
         val rootFlowNode = createRootFlowNode(
