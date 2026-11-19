@@ -11,12 +11,12 @@
 package base
 
 import com.google.testing.junit.testparameterinjector.TestParameterValuesProvider
-import sergio.sastre.composable.preview.scanner.android.AndroidComposablePreviewScanner
+import io.element.android.tests.screenshotutils.PreviewScanner
 import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 
 // Make sure we don't import Compound previews by mistake
-private val PACKAGE_TREES = arrayOf(
+private val previewScanner = PreviewScanner(
     "io.element.android.features",
     "io.element.android.libraries",
     "io.element.android.services",
@@ -25,47 +25,28 @@ private val PACKAGE_TREES = arrayOf(
     "io.element.android.x",
 )
 
-object ComposablePreviewProvider : TestParameterValuesProvider() {
-    val values: List<IndexedValue<ComposablePreview<AndroidPreviewInfo>>> by lazy {
-        AndroidComposablePreviewScanner()
-            .scanPackageTrees(*PACKAGE_TREES)
-            .getPreviews()
-            .filter { composablePreview -> composablePreview.methodName.endsWith("A11yPreview").not() }
-            .withIndex()
-            .toList()
-    }
+private const val SHARD_COUNT = 4
 
-    override fun provideValues(context: Context): List<IndexedValue<ComposablePreview<AndroidPreviewInfo>>> = values
+object ComposablePreviewProvider : TestParameterValuesProvider() {
+    override fun provideValues(context: Context): List<IndexedValue<ComposablePreview<AndroidPreviewInfo>>> = previewScanner.previews
 }
 
 object ComposableA11yPreviewProvider : TestParameterValuesProvider() {
-    private val values: List<ComposablePreview<AndroidPreviewInfo>> by lazy {
-        AndroidComposablePreviewScanner()
-            .scanPackageTrees(*PACKAGE_TREES)
-            .getPreviews()
-            .filter { composablePreview -> composablePreview.methodName.endsWith("A11yPreview") }
-            .toList()
-    }
-
-    override fun provideValues(context: Context): List<ComposablePreview<AndroidPreviewInfo>> = values
+    override fun provideValues(context: Context): List<ComposablePreview<AndroidPreviewInfo>> = previewScanner.a11yPreviews
 }
 
 object Shard1ComposablePreviewProvider : TestParameterValuesProvider() {
-    override fun provideValues(context: Context): List<ComposablePreview<AndroidPreviewInfo>> =
-        ComposablePreviewProvider.values.filter { it.index % 4 == 0 }.map { it.value }
+    override fun provideValues(context: Context): List<ComposablePreview<AndroidPreviewInfo>> = previewScanner.shard(0, SHARD_COUNT)
 }
 
 object Shard2ComposablePreviewProvider : TestParameterValuesProvider() {
-    override fun provideValues(context: Context): List<ComposablePreview<AndroidPreviewInfo>> =
-        ComposablePreviewProvider.values.filter { it.index % 4 == 1 }.map { it.value }
+    override fun provideValues(context: Context): List<ComposablePreview<AndroidPreviewInfo>> = previewScanner.shard(1, SHARD_COUNT)
 }
 
 object Shard3ComposablePreviewProvider : TestParameterValuesProvider() {
-    override fun provideValues(context: Context): List<ComposablePreview<AndroidPreviewInfo>> =
-        ComposablePreviewProvider.values.filter { it.index % 4 == 2 }.map { it.value }
+    override fun provideValues(context: Context): List<ComposablePreview<AndroidPreviewInfo>> = previewScanner.shard(2, SHARD_COUNT)
 }
 
 object Shard4ComposablePreviewProvider : TestParameterValuesProvider() {
-    override fun provideValues(context: Context): List<ComposablePreview<AndroidPreviewInfo>> =
-        ComposablePreviewProvider.values.filter { it.index % 4 == 3 }.map { it.value }
+    override fun provideValues(context: Context): List<ComposablePreview<AndroidPreviewInfo>> = previewScanner.shard(3, SHARD_COUNT)
 }
