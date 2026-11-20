@@ -256,4 +256,60 @@ class LinkifierHelperTest : RobolectricTest() {
         assertThat(urlSpans.size).isEqualTo(1)
         assertThat(urlSpans.first().url).isEqualTo("https://github.com/element-hq/element-android?")
     }
+
+    @Test
+    fun `linkification keeps closing parenthesis in URL followed by text`() {
+        val text = "A url https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4) and some text"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4)")
+    }
+
+    @Test
+    fun `linkification keeps closing parenthesis in URLs followed by new lines`() {
+        val text = "- https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4)\n- https://wiki.example.org/wiki/Google_Pixel_3a_(google-sargo)\n"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.map { it.url }).containsExactly(
+            "https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4)",
+            "https://wiki.example.org/wiki/Google_Pixel_3a_(google-sargo)",
+        )
+    }
+
+    @Test
+    fun `linkification keeps closing parenthesis in URL followed by trailing punctuation and text`() {
+        val text = "Check https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4)! It's great."
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4)")
+    }
+
+    @Test
+    fun `linkification handles URL with parenthesis inside surrounding parenthesis followed by text`() {
+        val text = "A url (see https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4)) for more info"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4)")
+    }
+
+    @Test
+    fun `linkification handles surrounding parenthesis followed by text`() {
+        val text = "A url (https://github.com/element-hq/element-android/issues/1234) for more info"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("https://github.com/element-hq/element-android/issues/1234")
+    }
+
+    @Test
+    fun `linkification keeps closing parenthesis in a partial URL followed by text`() {
+        val text = "A url wiki.example.org/wiki/Fairphone_4_(fairphone-fp4) and some text"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("http://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4)")
+    }
 }
