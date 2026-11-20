@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -86,6 +87,7 @@ fun ErrorView(
 }
 
 @Composable
+@ReadOnlyComposable
 private fun titleText(errorScreenType: ErrorScreenType, appName: String) = when (errorScreenType) {
     ErrorScreenType.Cancelled -> stringResource(R.string.screen_link_new_device_error_request_cancelled_title)
     ErrorScreenType.Declined -> stringResource(R.string.screen_qr_code_login_error_declined_title)
@@ -99,6 +101,7 @@ private fun titleText(errorScreenType: ErrorScreenType, appName: String) = when 
 }
 
 @Composable
+@ReadOnlyComposable
 private fun subtitleText(errorScreenType: ErrorScreenType, appName: String) = when (errorScreenType) {
     ErrorScreenType.Cancelled -> stringResource(R.string.screen_link_new_device_error_request_cancelled_subtitle)
     ErrorScreenType.Declined -> stringResource(R.string.screen_qr_code_login_error_declined_subtitle)

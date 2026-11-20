@@ -284,34 +284,30 @@ open class MediaViewerStatePreviewParam : PreviewParameterProvider<MediaViewerSt
                     )
                 )
             },
-            anImageMediaInfo(
-                senderName = "Frank",
-                dateSent = "26 NOV, 2024",
-            ).let {
-                aMediaViewerState(
-                    listOf(
-                        aMediaViewerPageData(
-                            downloadedMedia = AsyncData.Uninitialized,
-                            validationState = NoopContentValidationState(ContentValidationValue.Loading),
-                            mediaInfo = it,
-                        )
+            aMediaViewerState(
+                listOf(
+                    aMediaViewerPageData(
+                        downloadedMedia = AsyncData.Uninitialized,
+                        validationState = NoopContentValidationState(ContentValidationValue.Loading),
+                        mediaInfo = anImageMediaInfo(
+                            senderName = "Frank",
+                            dateSent = "26 NOV, 2024",
+                        ),
                     )
                 )
-            },
-            anImageMediaInfo(
-                senderName = "Frank",
-                dateSent = "26 NOV, 2024",
-            ).let {
-                aMediaViewerState(
-                    listOf(
-                        aMediaViewerPageData(
-                            downloadedMedia = AsyncData.Uninitialized,
-                            validationState = NoopContentValidationState(ContentValidationValue.Invalid),
-                            mediaInfo = it,
-                        )
+            ),
+            aMediaViewerState(
+                listOf(
+                    aMediaViewerPageData(
+                        downloadedMedia = AsyncData.Uninitialized,
+                        validationState = NoopContentValidationState(ContentValidationValue.Invalid),
+                        mediaInfo = anImageMediaInfo(
+                            senderName = "Frank",
+                            dateSent = "26 NOV, 2024",
+                        ),
                     )
                 )
-            },
+            ),
             anImageMediaInfo(
                 senderName = "Sally Sanderson",
                 dateSent = "21 NOV, 2024",

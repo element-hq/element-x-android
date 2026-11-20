@@ -95,7 +95,7 @@ class LoadingIndicatorsPostProcessorTest {
         val clock = FakeSystemClock()
         val sut = LoadingIndicatorsPostProcessor(clock)
         val result = sut.process(
-            items = listOf(),
+            items = emptyList(),
             hasMoreToLoadBackward = true,
             hasMoreToLoadForward = true,
         )

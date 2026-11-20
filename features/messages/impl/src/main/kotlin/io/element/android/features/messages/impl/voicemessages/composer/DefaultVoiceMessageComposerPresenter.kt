@@ -96,7 +96,8 @@ class DefaultVoiceMessageComposerPresenter(
 
         LaunchedEffect(permissionState.permissionGranted) {
             if (permissionState.permissionGranted) {
-                pendingEvent?.let {
+                val event = pendingEvent
+                if (event != null) {
                     localCoroutineScope.startRecording()
                     pendingEvent = null
                 }

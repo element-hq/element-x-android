@@ -51,9 +51,7 @@ class RoomListSearchPresenterTest {
                 assertThat(state.isSearchActive).isTrue()
                 state.eventSink(RoomListSearchEvent.ToggleSearchVisibility)
             }
-            awaitItem().let { state ->
-                assertThat(state.isSearchActive).isFalse()
-            }
+            assertThat(awaitItem().isSearchActive).isFalse()
         }
     }
 
@@ -65,14 +63,13 @@ class RoomListSearchPresenterTest {
         )
         val presenter = createRoomListSearchPresenter(roomListService)
         presenter.test {
-            awaitItem().let { state ->
-                assertThat(
-                    roomList.currentFilter.value
-                ).isEqualTo(
-                    RoomListFilter.None
-                )
-                state.query.edit { append("Search") }
-            }
+            val initialState = awaitItem()
+            assertThat(
+                roomList.currentFilter.value
+            ).isEqualTo(
+                RoomListFilter.None
+            )
+            initialState.query.edit { append("Search") }
             awaitItem().let { state ->
                 assertThat(state.query.text).isEqualTo("Search")
                 assertThat(
@@ -82,14 +79,12 @@ class RoomListSearchPresenterTest {
                 )
                 state.eventSink(RoomListSearchEvent.ClearQuery)
             }
-            awaitItem().let { state ->
-                assertThat(state.query.text.toString()).isEmpty()
-                assertThat(
-                    roomList.currentFilter.value
-                ).isEqualTo(
-                    RoomListFilter.None
-                )
-            }
+            assertThat(awaitItem().query.text.toString()).isEmpty()
+            assertThat(
+                roomList.currentFilter.value
+            ).isEqualTo(
+                RoomListFilter.None
+            )
         }
     }
 
@@ -101,19 +96,13 @@ class RoomListSearchPresenterTest {
         )
         val presenter = createRoomListSearchPresenter(roomListService)
         presenter.test {
-            awaitItem().let { state ->
-                assertThat(state.results).isEmpty()
-            }
+            assertThat(awaitItem().results).isEmpty()
             roomList.summaries.emit(
                 listOf(aRoomSummary())
             )
-            awaitItem().let { state ->
-                assertThat(state.results).hasSize(1)
-            }
+            assertThat(awaitItem().results).hasSize(1)
             roomList.summaries.emit(emptyList())
-            awaitItem().let { state ->
-                assertThat(state.results).isEmpty()
-            }
+            assertThat(awaitItem().results).isEmpty()
         }
     }
 

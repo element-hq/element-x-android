@@ -40,7 +40,7 @@ class OutgoingVerificationPresenter(
     @Assisted private val showDeviceVerifiedScreen: Boolean,
     @Assisted private val verificationRequest: VerificationRequest.Outgoing,
     private val sessionVerificationService: SessionVerificationService,
-    private val encryptionService: EncryptionService,
+    encryptionService: EncryptionService,
 ) : Presenter<OutgoingVerificationState> {
     @AssistedFactory
     fun interface Factory {
@@ -95,7 +95,7 @@ class OutgoingVerificationPresenter(
 
         fun handleEvent(event: OutgoingVerificationViewEvent) {
             Timber.d("Verification user action: ${event::class.simpleName}")
-            when (event) {
+            val stateMachineEvent = when (event) {
                 // Just relay the event to the state machine
                 OutgoingVerificationViewEvent.RequestVerification -> StateMachineEvent.RequestVerification(verificationRequest)
                 OutgoingVerificationViewEvent.StartSasVerification -> StateMachineEvent.StartSasVerification
@@ -103,9 +103,8 @@ class OutgoingVerificationPresenter(
                 OutgoingVerificationViewEvent.DeclineVerification -> StateMachineEvent.DeclineChallenge
                 OutgoingVerificationViewEvent.Cancel -> StateMachineEvent.Cancel
                 OutgoingVerificationViewEvent.Reset -> StateMachineEvent.Reset
-            }.let { stateMachineEvent ->
-                stateAndDispatch.dispatchAction(stateMachineEvent)
             }
+            stateAndDispatch.dispatchAction(stateMachineEvent)
         }
         return OutgoingVerificationState(
             step = step,

@@ -15,6 +15,7 @@ import io.element.android.features.lockscreen.impl.storage.LockScreenStore
 import io.element.android.libraries.cryptography.api.EncryptionDecryptionService
 import io.element.android.libraries.cryptography.api.EncryptionResult
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onStart
@@ -86,6 +87,8 @@ class DefaultPinCodeManager(
                     lockScreenStore.onWrongPin()
                 }
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (_: Throwable) {
             false
         }

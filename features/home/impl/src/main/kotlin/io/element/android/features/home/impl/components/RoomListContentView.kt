@@ -410,7 +410,7 @@ private fun EmptyScaffold(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        title?.let {
+        if (title != null) {
             Text(
                 text = title,
                 style = ElementTheme.typography.fontHeadingMdBold,

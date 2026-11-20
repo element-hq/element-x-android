@@ -64,7 +64,7 @@ import java.util.Locale
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultBugReporter(
-    @ApplicationContext private val context: Context,
+    @ApplicationContext context: Context,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val screenshotHolder: ScreenshotHolder,
@@ -206,9 +206,9 @@ class DefaultBugReporter(
 
                 if (withDevicesLogs) {
                     val files = getLogFiles().sortedByDescending { it.lastModified() }
-                    val filesBySize = files.groupBy {
+                    val filesBySize = files.groupByTo(mutableMapOf()) {
                         it.length() < RageshakeConfig.MAX_LOG_CONTENT_SIZE
-                    }.toMutableMap()
+                    }
 
                     filesBySize[true].orEmpty().mapNotNullTo(gzippedFiles) { file ->
                         val logLines = countLogLines(file)
@@ -217,7 +217,7 @@ class DefaultBugReporter(
                         when {
                             totalLogLines > RageshakeConfig.MAX_LOG_LINES_SIZE -> {
                                 // Add it to the list of omitted files too
-                                (filesBySize.getOrPut(false) { mutableListOf() } as MutableList<File>).add(file)
+                                filesBySize.getOrPut(false) { mutableListOf() }.add(file)
 
                                 Timber.e(
                                     "Could not upload file ${file.name} because it would exceed the max log lines size " +

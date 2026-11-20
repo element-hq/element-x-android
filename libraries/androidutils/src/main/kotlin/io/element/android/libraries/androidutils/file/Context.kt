@@ -37,13 +37,13 @@ fun Context.getFileSize(uri: Uri): Long {
 private fun Context.getContentFileSize(uri: Uri): Long? = runCatchingExceptions {
     contentResolver.query(uri, null, null, null, null)?.use { cursor ->
         cursor.moveToFirst()
-        return@use cursor.getColumnIndexOrThrow(OpenableColumns.SIZE).let(cursor::getLong)
+        return@use cursor.getLong(cursor.getColumnIndexOrThrow(OpenableColumns.SIZE))
     }
 }.getOrNull()
 
 private fun Context.getContentFileName(uri: Uri): String? = runCatchingExceptions {
     contentResolver.query(uri, null, null, null, null)?.use { cursor ->
         cursor.moveToFirst()
-        return@use cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME).let(cursor::getString)
+        return@use cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME))
     }
 }.getOrNull()

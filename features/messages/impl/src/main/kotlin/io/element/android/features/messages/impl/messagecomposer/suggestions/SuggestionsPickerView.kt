@@ -155,7 +155,7 @@ private fun SuggestionItemView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                title?.let {
+                if (title != null) {
                     DisplayNameWithStatus(
                         name = title,
                         status = status,

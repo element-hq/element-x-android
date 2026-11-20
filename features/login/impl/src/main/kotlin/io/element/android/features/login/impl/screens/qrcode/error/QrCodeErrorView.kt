@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -65,6 +66,7 @@ fun QrCodeErrorView(
 }
 
 @Composable
+@ReadOnlyComposable
 private fun titleText(errorScreenType: QrCodeErrorScreenType, appName: String) = when (errorScreenType) {
     QrCodeErrorScreenType.Cancelled -> stringResource(R.string.screen_qr_code_login_error_cancelled_title)
     QrCodeErrorScreenType.Declined -> stringResource(R.string.screen_qr_code_login_error_declined_title)
@@ -76,6 +78,7 @@ private fun titleText(errorScreenType: QrCodeErrorScreenType, appName: String) =
 }
 
 @Composable
+@ReadOnlyComposable
 private fun subtitleText(errorScreenType: QrCodeErrorScreenType, appName: String) = when (errorScreenType) {
     QrCodeErrorScreenType.Cancelled -> stringResource(R.string.screen_qr_code_login_error_cancelled_subtitle)
     QrCodeErrorScreenType.Declined -> stringResource(R.string.screen_qr_code_login_error_declined_subtitle)

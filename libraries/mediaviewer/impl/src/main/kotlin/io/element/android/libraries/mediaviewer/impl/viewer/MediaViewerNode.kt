@@ -60,7 +60,7 @@ class MediaViewerNode(
     private val audioFocus: AudioFocus,
     private val sessionId: SessionId,
     private val enterpriseService: EnterpriseService,
-    private val contentScannerService: ContentScannerService,
+    contentScannerService: ContentScannerService,
     private val contentValidationCache: EventContentValidationCache,
 ) : Node(buildContext, plugins = plugins),
     MediaViewerNavigator {

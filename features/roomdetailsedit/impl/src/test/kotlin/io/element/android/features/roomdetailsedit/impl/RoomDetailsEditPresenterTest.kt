@@ -287,9 +287,7 @@ class RoomDetailsEditPresenterTest {
             val initialState = awaitFirstItem()
             assertThat(initialState.roomAvatarUrl).isEqualTo(AN_AVATAR_URL)
             initialState.eventSink(RoomDetailsEditEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            awaitItem().apply {
-                assertThat(roomAvatarUrl).isEqualTo(anotherAvatarUri.toString())
-            }
+            assertThat(awaitItem().roomAvatarUrl).isEqualTo(anotherAvatarUri.toString())
         }
     }
 
@@ -351,34 +349,22 @@ class RoomDetailsEditPresenterTest {
             assertThat(initialState.saveButtonEnabled).isFalse()
             // Once a change is made, the save button is enabled
             initialState.eventSink(RoomDetailsEditEvent.UpdateRoomName("Name II"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isTrue()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isTrue()
             // If it's reverted then the save disables again
             initialState.eventSink(RoomDetailsEditEvent.UpdateRoomName("Name"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isFalse()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isFalse()
             // Make a change...
             initialState.eventSink(RoomDetailsEditEvent.UpdateRoomTopic("Another topic"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isTrue()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isTrue()
             // Revert it...
             initialState.eventSink(RoomDetailsEditEvent.UpdateRoomTopic("My topic"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isFalse()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isFalse()
             // Make a change...
             initialState.eventSink(RoomDetailsEditEvent.HandleAvatarAction(AvatarAction.Remove))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isTrue()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isTrue()
             // Revert it...
             initialState.eventSink(RoomDetailsEditEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isFalse()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isFalse()
         }
     }
 
@@ -400,34 +386,22 @@ class RoomDetailsEditPresenterTest {
             assertThat(initialState.saveButtonEnabled).isFalse()
             // Once a change is made, the save button is enabled
             initialState.eventSink(RoomDetailsEditEvent.UpdateRoomName("Name II"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isTrue()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isTrue()
             // If it's reverted then the save disables again
             initialState.eventSink(RoomDetailsEditEvent.UpdateRoomName("fallback"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isFalse()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isFalse()
             // Make a change...
             initialState.eventSink(RoomDetailsEditEvent.UpdateRoomTopic("Another topic"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isTrue()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isTrue()
             // Revert it...
             initialState.eventSink(RoomDetailsEditEvent.UpdateRoomTopic(""))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isFalse()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isFalse()
             // Make a change...
             initialState.eventSink(RoomDetailsEditEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isTrue()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isTrue()
             // Revert it...
             initialState.eventSink(RoomDetailsEditEvent.HandleAvatarAction(AvatarAction.Remove))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isFalse()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isFalse()
         }
     }
 
@@ -684,9 +658,7 @@ class RoomDetailsEditPresenterTest {
                 assertThat(saveAction).isEqualTo(AsyncAction.ConfirmingCancellation)
                 eventSink(RoomDetailsEditEvent.CloseDialog)
             }
-            awaitItem().apply {
-                assertThat(saveAction).isEqualTo(AsyncAction.Uninitialized)
-            }
+            assertThat(awaitItem().saveAction).isEqualTo(AsyncAction.Uninitialized)
         }
     }
 
@@ -715,7 +687,7 @@ class RoomDetailsEditPresenterTest {
         )
         val presenter = createRoomDetailsEditPresenter(
             room = room,
-            temporaryUriDeleter = FakeTemporaryUriDeleter({}),
+            temporaryUriDeleter = FakeTemporaryUriDeleter {},
         )
         presenter.test {
             val initialState = awaitFirstItem()
@@ -730,9 +702,7 @@ class RoomDetailsEditPresenterTest {
                 assertThat(saveAction).isEqualTo(AsyncAction.ConfirmingCancellation)
                 eventSink(RoomDetailsEditEvent.OnBackPress)
             }
-            awaitItem().apply {
-                assertThat(saveAction).isEqualTo(AsyncAction.Success(Unit))
-            }
+            assertThat(awaitItem().saveAction).isEqualTo(AsyncAction.Success(Unit))
         }
     }
 

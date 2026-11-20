@@ -102,7 +102,7 @@ fun PinUnlockView(
 
         if (state.showBiometricUnlockError) {
             ErrorDialog(
-                content = state.biometricUnlockErrorMessage ?: "",
+                content = state.biometricUnlockErrorMessage.orEmpty(),
                 onSubmit = { state.eventSink(PinUnlockEvent.ClearBiometricError) }
             )
         }

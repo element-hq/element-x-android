@@ -40,7 +40,7 @@ class LastForwardIndicatorsPostProcessorTest {
     @Test
     fun `LastForwardIndicatorsPostProcessor add virtual items on empty list`() {
         val sut = LastForwardIndicatorsPostProcessor(Timeline.Mode.FocusedOnEvent(AN_EVENT_ID))
-        val result = sut.process(listOf())
+        val result = sut.process(emptyList())
         assertThat(result).containsExactly(
             MatrixTimelineItem.Virtual(
                 uniqueId = UniqueId("last_forward_indicator_fake_id"),

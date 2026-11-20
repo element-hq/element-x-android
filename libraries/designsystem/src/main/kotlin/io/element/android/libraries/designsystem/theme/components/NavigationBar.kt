@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +45,7 @@ fun NavigationBar(
 
 object ElementNavigationBarDefaults {
     val containerColor: Color
-        @Composable get() = if (ElementTheme.isLightTheme) {
+        @Composable @ReadOnlyComposable get() = if (ElementTheme.isLightTheme) {
             ElementTheme.colors.bgSubtlePrimary
         } else {
             ElementTheme.colors.textOnSolidPrimary

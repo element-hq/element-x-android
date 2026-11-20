@@ -136,7 +136,7 @@ fun HomeTopBar(
                     }
                     HomeNavigationBarItem.Spaces -> null
                 }
-                displayTitle?.let {
+                if (displayTitle != null) {
                     val style = when (spaceFiltersState) {
                         // Space name
                         is SpaceFiltersState.Selected -> ElementTheme.typography.fontHeadingSmMedium

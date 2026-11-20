@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -178,6 +179,7 @@ object MessageEventBubbleDefaults {
     }
 
     @Composable
+    @ReadOnlyComposable
     fun backgroundBubbleColor(isMine: Boolean): Color {
         return if (isMine) {
             ElementTheme.colors.messageFromMeBackground

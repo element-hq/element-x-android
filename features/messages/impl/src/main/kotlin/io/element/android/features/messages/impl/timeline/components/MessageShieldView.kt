@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -92,9 +93,10 @@ private fun MessageShieldData.toTextColor(): Color {
 }
 
 @Composable
+@ReadOnlyComposable
 internal fun MessageShieldData.toText(): String {
     if (shield is MessageShield.AuthenticityNotGuaranteed && forwarder != null) {
-        var displayName = forwarderProfile?.getDisplayName()
+        val displayName = forwarderProfile?.getDisplayName()
         return if (displayName == null) {
             stringResource(
                 R.string.crypto_event_key_forwarded_unknown_profile_dialog_content,
