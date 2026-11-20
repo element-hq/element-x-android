@@ -16,12 +16,16 @@ import android.util.Size
 import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
+import androidx.media3.common.util.Clock
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.Presentation
+import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.transformer.Composition
+import androidx.media3.transformer.DefaultDecoderFactory
 import androidx.media3.transformer.DefaultEncoderFactory
 import androidx.media3.transformer.EditedMediaItem
 import androidx.media3.transformer.Effects
+import androidx.media3.transformer.ExoPlayerAssetLoader
 import androidx.media3.transformer.ExportException
 import androidx.media3.transformer.ExportResult
 import androidx.media3.transformer.InAppMp4Muxer
@@ -93,6 +97,15 @@ class VideoCompressor(
         val removeMetadataMuxer = InAppMp4Muxer.Factory { metadataEntries ->
             metadataEntries.removeAll { true }
         }
+
+        // By default, the ExoPlayer used to read the input can buffer up to ~150MB of compressed samples in the Java heap
+        // when reading is faster than encoding, which is usually the case for big videos. Keep that buffer small.
+        val assetLoaderFactory = ExoPlayerAssetLoader.Factory(
+            context,
+            DefaultDecoderFactory.Builder(context).build(),
+            Clock.DEFAULT,
+            createLoadControl(),
+        )
         val inputMediaItem = MediaItem.fromUri(uri)
         val outputMediaItem = EditedMediaItem.Builder(inputMediaItem)
             .setFrameRate(newFrameRate)
@@ -115,6 +128,7 @@ class VideoCompressor(
             .setPortraitEncodingEnabled(false)
             .setEncoderFactory(encoderFactory)
             .setMuxerFactory(removeMetadataMuxer)
+            .setAssetLoaderFactory(assetLoaderFactory)
             .addListener(object : Transformer.Listener {
                 override fun onCompleted(composition: Composition, exportResult: ExportResult) {
                     trySend(VideoTranscodingEvent.Completed(tmpFile))
@@ -155,6 +169,22 @@ class VideoCompressor(
         }
     }
 
+    @OptIn(UnstableApi::class)
+    private fun createLoadControl() = DefaultLoadControl.Builder()
+        .setTargetBufferBytes(MAX_INPUT_BUFFER_BYTES)
+        .setPrioritizeTimeOverSizeThresholds(false)
+        .setBufferDurationsMs(
+            // minBufferMs =
+            1_000,
+            // maxBufferMs =
+            5_000,
+            // bufferForPlaybackMs =
+            500,
+            // bufferForPlaybackAfterRebufferMs =
+            500,
+        )
+        .build()
+
     private fun getVideoMetadata(uri: Uri): VideoFileMetadata? {
         return runCatchingExceptions {
             MediaMetadataRetriever().use {
@@ -187,6 +217,8 @@ class VideoCompressor(
         }.getOrNull()
     }
 }
+
+private const val MAX_INPUT_BUFFER_BYTES = 32 * 1024 * 1024
 
 internal data class VideoFileMetadata(
     val width: Int,
