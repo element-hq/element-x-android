@@ -167,6 +167,8 @@ class AppDeveloperSettingsPresenter(
     }
 }
 
+// URI(url).toURL() is not a drop-in replacement for URL(url): URI parsing is stricter, so keep the current validation behaviour
+@Suppress("DEPRECATION")
 private fun customElementCallUrlValidator(url: String?): Boolean {
     return runCatchingExceptions {
         if (url.isNullOrEmpty()) return@runCatchingExceptions

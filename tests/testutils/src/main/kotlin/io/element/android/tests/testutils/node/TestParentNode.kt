@@ -23,8 +23,8 @@ import kotlin.reflect.KClass
  * child Node.
  */
 class TestParentNode<Child : Node>(
-    private val childNodeClass: KClass<out Node>,
-    private val childNodeFactory: (buildContext: BuildContext, plugins: List<Plugin>) -> Child,
+    childNodeClass: KClass<out Node>,
+    childNodeFactory: (buildContext: BuildContext, plugins: List<Plugin>) -> Child,
 ) : DependencyInjectionGraphOwner,
     Node(
         buildContext = BuildContext.root(savedStateMap = null),

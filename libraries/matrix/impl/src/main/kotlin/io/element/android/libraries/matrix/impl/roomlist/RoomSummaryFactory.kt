@@ -24,7 +24,7 @@ class RoomSummaryFactory(
     private val roomInfoMapper: RoomInfoMapper = RoomInfoMapper(),
 ) {
     suspend fun create(room: Room): RoomSummary {
-        val roomInfo = room.roomInfo().let(roomInfoMapper::map)
+        val roomInfo = roomInfoMapper.map(room.roomInfo())
         val latestEvent = room.latestEvent().use { event ->
             when (event) {
                 is RustLatestEventValue.None -> LatestEventValue.None

@@ -59,7 +59,7 @@ interface VoiceMessageMediaRepo {
 
 @AssistedInject
 class DefaultVoiceMessageMediaRepo(
-    @CacheDirectory private val cacheDir: File,
+    @CacheDirectory cacheDir: File,
     mxcTools: MxcTools,
     private val matrixMediaLoader: MatrixMediaLoader,
     @Assisted private val mediaSource: MediaSource,

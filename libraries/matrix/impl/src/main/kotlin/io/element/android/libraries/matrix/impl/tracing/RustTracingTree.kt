@@ -50,9 +50,10 @@ internal class RustTracingTree(
      * Extract the [LogEventLocation] from the stack trace.
      */
     private fun getLogEventLocationFromStackTrace(): LogEventLocation {
-        return Throwable(null, null).stackTrace
-            .first { it.className !in fqcnIgnore }
-            .let(LogEventLocation::from)
+        return LogEventLocation.from(
+            Throwable(null, null).stackTrace
+                .first { it.className !in fqcnIgnore }
+        )
     }
 }
 

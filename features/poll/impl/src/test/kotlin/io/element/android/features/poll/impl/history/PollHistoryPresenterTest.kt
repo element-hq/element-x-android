@@ -129,9 +129,7 @@ class PollHistoryPresenterTest {
         val paginateLambda = lambdaRecorder { _: Timeline.PaginationDirection ->
             Result.success(false)
         }
-        timeline.apply {
-            this.paginateLambda = paginateLambda
-        }
+        timeline.paginateLambda = paginateLambda
         val presenter = createPollHistoryPresenter(room = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()

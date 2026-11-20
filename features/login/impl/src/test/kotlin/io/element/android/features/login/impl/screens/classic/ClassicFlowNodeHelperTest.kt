@@ -249,7 +249,7 @@ class ClassicFlowNodeHelperTest : RobolectricTest() {
     fun `navigate to login with classic but do not navigate to OnBoarding once the user is logged in`() = runTest {
         val elementClassicConnection = FakeElementClassicConnection()
         val sessionStore = InMemorySessionStore(
-            initialList = listOf()
+            initialList = emptyList()
         )
         createHelper(
             elementClassicConnection = elementClassicConnection,

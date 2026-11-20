@@ -29,7 +29,7 @@ interface ImageLoaderFactory {
 @ContributesBinding(AppScope::class)
 class DefaultImageLoaderFactory(
     @ApplicationContext private val context: Context,
-    private val okHttpClient: () -> OkHttpClient,
+    okHttpClient: () -> OkHttpClient,
 ) : ImageLoaderFactory {
     private val okHttpNetworkFetcherFactory = OkHttpNetworkFetcherFactory(
         callFactory = {
