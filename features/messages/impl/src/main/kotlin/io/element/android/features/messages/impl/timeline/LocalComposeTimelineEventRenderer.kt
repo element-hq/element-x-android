@@ -17,6 +17,7 @@ val LocalTimelineEventRendererConfig = staticCompositionLocalOf {
     ComposeLocalTimelineEventRendererConfig(
         isComposeRendererEnabled = false,
         currentUserId = null,
+        fontScale = 1f,
     )
 }
 
@@ -28,4 +29,6 @@ data class ComposeLocalTimelineEventRendererConfig(
     val isComposeRendererEnabled: Boolean,
     /** The current user ID, if known. This can be used to display UI sent by/owned by the current user differently. */
     val currentUserId: UserId?,
+    /** Timeline text multiplier, for renderers that resolve `sp` themselves instead of following Compose's density. */
+    val fontScale: Float,
 )

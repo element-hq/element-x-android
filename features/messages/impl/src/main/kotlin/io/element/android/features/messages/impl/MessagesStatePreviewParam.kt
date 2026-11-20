@@ -53,6 +53,7 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
@@ -95,6 +96,18 @@ open class MessagesStatePreviewParam : PreviewParameterProvider<MessagesState> {
                 identityChangeState = anIdentityChangeState(listOf(aRoomMemberIdentityStateChange()))
             ),
             aMessagesState(redactEventAction = MessagesState.ConfirmingRedaction(EventId("\$anEventId"))),
+            aMessagesState(
+                timelineState = aTimelineState(
+                    timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+                    timelineFontScale = MessageTextSize.scaleOf(MessageTextSize.MIN),
+                )
+            ),
+            aMessagesState(
+                timelineState = aTimelineState(
+                    timelineItems = aTimelineItemList(aTimelineItemTextContent()),
+                    timelineFontScale = MessageTextSize.scaleOf(MessageTextSize.MAX),
+                )
+            ),
         )
 }
 

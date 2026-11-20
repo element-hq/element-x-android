@@ -45,6 +45,14 @@ interface AppPreferencesStore {
     fun getThemeFlow(): Flow<String?>
 
     /**
+     * @param sizeSp the size in sp of the message text in the timeline, within [MessageTextSize.range].
+     */
+    suspend fun setMessageTextSize(sizeSp: Int)
+
+    /** The size in sp of the message text in the timeline; defaults to [MessageTextSize.DEFAULT]. */
+    fun getMessageTextSizeFlow(): Flow<Int>
+
+    /**
      * @param expanded true to expand the other accounts section.
      */
     suspend fun setOtherAccountsExpanded(expanded: Boolean)

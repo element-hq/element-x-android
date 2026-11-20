@@ -74,6 +74,9 @@ import io.element.android.libraries.matrix.test.timeline.aRedactedContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.MessageTextSize
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -122,6 +125,28 @@ class TimelinePresenterTest {
             assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.focusedEventId).isNull()
             assertThat(initialState.focusRequestState).isEqualTo(FocusRequestState.None)
+        }
+    }
+
+    @Test
+    fun `present - timeline font scale defaults to the regular app size`() = runTest {
+        val presenter = createTimelinePresenter()
+        presenter.test {
+            assertThat(awaitFirstItem().timelineFontScale).isEqualTo(1f)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - the stored message text size reaches the state as a scale`() = runTest {
+        val presenter = createTimelinePresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore().apply {
+                setMessageTextSize(MessageTextSize.MAX)
+            }
+        )
+        presenter.test {
+            consumeItemsUntilPredicate { it.timelineFontScale == MessageTextSize.scaleOf(MessageTextSize.MAX) }
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -2021,6 +2046,7 @@ class TimelinePresenterTest {
         resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState> = { aResolveVerifiedUserSendFailureState() },
         clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
         toastHelper: ToastHelper = FakeToastHelper(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
@@ -2050,6 +2076,7 @@ class TimelinePresenterTest {
             timelineProtectionPresenter = timelineProtectionPresenter,
                 clipboardHelper = clipboardHelper,
             toastHelper = toastHelper,
+            appPreferencesStore = appPreferencesStore,
         )
     }
 }
