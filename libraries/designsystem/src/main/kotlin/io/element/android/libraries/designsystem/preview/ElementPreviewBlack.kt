@@ -9,9 +9,11 @@
 package io.element.android.libraries.designsystem.preview
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import io.element.android.compound.theme.Theme
 
 @Composable
+@NonRestartableComposable
 fun ElementPreviewBlack(
     showBackground: Boolean = true,
     content: @Composable () -> Unit

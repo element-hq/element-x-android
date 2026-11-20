@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -73,6 +74,7 @@ internal fun CompoundTypographyPreview() = ElementTheme {
 }
 
 @Composable
+@NonRestartableComposable
 private fun TypographyTokenPreview(style: TextStyle, text: String) {
     Text(text = text, style = style)
 }

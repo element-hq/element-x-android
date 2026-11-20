@@ -9,6 +9,7 @@
 package io.element.android.features.securityandprivacy.impl.root
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.securityandprivacy.api.SecurityAndPrivacyPermissions
 import io.element.android.features.securityandprivacy.impl.R
@@ -94,6 +95,7 @@ data class SecurityAndPrivacyState(
     val showEncryptionSection = !isEncryptionDisabledByHomeserver && permissions.canChangeEncryption && !isSpace
 
     @Composable
+    @ReadOnlyComposable
     fun spaceMemberDescription(): String {
         return if (isSpaceMemberSelectable) {
             when (spaceSelectionMode) {
@@ -112,6 +114,7 @@ data class SecurityAndPrivacyState(
     }
 
     @Composable
+    @ReadOnlyComposable
     fun askToJoinWithSpaceMembersDescription(): String {
         return if (isAskToJoinWithSpaceMembersSelectable) {
             when (spaceSelectionMode) {

@@ -181,7 +181,7 @@ class DefaultActionListPresenter(
         isThreadsEnabled: Boolean,
     ): List<TimelineItemAction> {
         val canRedact = timelineItem.isMine && usersEventPermissions.canRedactOwn || !timelineItem.isMine && usersEventPermissions.canRedactOther
-        return buildSet {
+        val actions = buildSet {
             if (timelineItem.canBeRepliedTo && usersEventPermissions.canSendMessage) {
                 if (isThreadsEnabled && timelineMode !is Timeline.Mode.Thread && timelineItem.isRemote) {
                     // If threads are enabled, we can reply in thread if the item is remote
@@ -249,7 +249,7 @@ class DefaultActionListPresenter(
         }
             .postFilter(timelineItem.content)
             .sortedWith(comparator)
-            .let(postProcessor::process)
+        return postProcessor.process(actions)
     }
 }
 

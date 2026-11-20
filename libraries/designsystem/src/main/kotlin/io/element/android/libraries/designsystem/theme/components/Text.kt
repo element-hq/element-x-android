@@ -135,7 +135,7 @@ private fun ContentToPreview() {
         modifier = Modifier.width(IntrinsicSize.Max)
     ) {
         colors.keys.forEach { name ->
-            val color = colors[name]!!
+            val color = colors.getValue(name)
             val textColor = contentColorFor(backgroundColor = color)
             Box(
                 modifier = Modifier

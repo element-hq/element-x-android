@@ -29,7 +29,7 @@ class DefaultPollContentStateFactory(
         isOwn: Boolean,
         content: PollContent,
     ): PollContentState {
-        val totalVoteCount = content.votes.flatMap { it.value }.size
+        val totalVoteCount = content.votes.values.sumOf { it.size }
         val myVotes = content.votes.filter { matrixClient.sessionId in it.value }.keys
         val isPollEnded = content.endTime != null
         val winnerIds = if (!isPollEnded) {

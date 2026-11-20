@@ -30,6 +30,8 @@ suspend fun <T> runFirebaseTaskWithResult(closure: () -> Task<T>): Result<T> {
 }
 
 // Special case for `Void!` return type, which is not a valid Kotlin type. We convert it to `Unit` instead.
+// Void is required here to match the Java type returned by the Firebase API.
+@Suppress("ForbiddenVoid")
 suspend fun runFirebaseTask(closure: () -> Task<Void?>): Result<Unit> {
     return runFirebaseTaskWithResult<Unit> { closure().continueWith {} }
 }

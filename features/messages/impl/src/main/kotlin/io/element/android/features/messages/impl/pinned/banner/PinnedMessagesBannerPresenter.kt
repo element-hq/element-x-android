@@ -75,7 +75,6 @@ class PinnedMessagesBannerPresenter(
         )
     }
 
-    @Composable
     private fun pinnedMessagesBannerState(
         expectedPinnedMessagesCount: Int,
         pinnedItems: AsyncData<ImmutableList<PinnedMessagesBannerItem>>,

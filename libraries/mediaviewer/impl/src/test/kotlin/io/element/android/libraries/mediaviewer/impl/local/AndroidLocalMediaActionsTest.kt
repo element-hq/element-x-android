@@ -89,9 +89,7 @@ class AndroidLocalMediaActionsTest : RobolectricTest() {
 
     @Test
     fun `test AndroidLocalMediaAction save on disk fails when the destination cannot be created`() = runTest {
-        registerFakeMediaStoreContentProvider().apply {
-            returnsNoUriOnInsert = true
-        }
+        registerFakeMediaStoreContentProvider().returnsNoUriOnInsert = true
         val sut = createAndroidLocalMediaActions()
         val result = sut.saveOnDisk(aLocalMedia(aMediaFile().toUri()))
         assertThat(result.exceptionOrNull()).isInstanceOf(IOException::class.java)

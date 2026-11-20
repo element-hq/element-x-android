@@ -16,7 +16,7 @@ import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.aPermissionsState
 
 class FakePermissionsPresenter(
-    private val initialState: PermissionsState = aPermissionsState(showDialog = false),
+    initialState: PermissionsState = aPermissionsState(showDialog = false),
 ) : PermissionsPresenter {
     private fun handleEvent(event: PermissionsEvent) {
         when (event) {

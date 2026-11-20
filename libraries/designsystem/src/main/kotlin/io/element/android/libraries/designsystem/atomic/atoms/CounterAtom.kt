@@ -103,7 +103,7 @@ fun CounterAtom(
                 if (countAsText == null) Modifier.size(dotSize) else Modifier
             )
     ) {
-        countAsText?.let {
+        if (countAsText != null) {
             Text(
                 modifier = sizeModifier
                     .align(Alignment.Center)
@@ -119,7 +119,7 @@ fun CounterAtom(
 
 object CounterAtomDefaults {
     val textStyle: TextStyle
-        @Composable get() = ElementTheme.typography.fontBodyMdMedium
+        get() = ElementTheme.typography.fontBodyMdMedium
 }
 
 @PreviewsDayNight

@@ -52,7 +52,7 @@ class LiveLocationSharingCoordinatorTest {
 
     @Test
     fun `dispatch delivers first location immediately`() = runTest {
-        var nowMillis = 4_000L
+        val nowMillis = 4_000L
         val delivered = mutableListOf<Location>()
         val coordinator = LiveLocationSharingCoordinator(
             startService = { },
