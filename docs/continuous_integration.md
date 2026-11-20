@@ -49,10 +49,7 @@ The CI checks that:
 
 ## What is the CI reporting
 
-The CI reports:
-
-1. Code coverage reports
-2. Sonar reports
+The CI reports code coverage reports.
 
 ## Current choices
 
