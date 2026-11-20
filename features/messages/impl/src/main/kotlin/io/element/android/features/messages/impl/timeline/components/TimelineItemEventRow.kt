@@ -670,7 +670,7 @@ private fun TimelineItemEventRowContentLayout(
         content = content,
     ) { measurables, constraints ->
         val width = constraints.maxWidth
-        val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
+        val childConstraints = constraints.copyMaxDimensions()
         fun measure(id: EventRowLayoutId) = measurables.firstOrNull { it.layoutId == id }?.measure(childConstraints)
 
         val senderPlaceable = measure(EventRowLayoutId.Sender)
@@ -691,20 +691,22 @@ private fun TimelineItemEventRowContentLayout(
         val messageBottom = messageY + messagePlaceable.height
         // Reactions slightly overlap the bottom of the message bubble
         val reactionsY = messageBottom + (-4).dp.roundToPx()
+        // The selection indicator is vertically centered on the message bubble
+        val selectionIndicatorY = selectionIndicatorPlaceable?.let {
+            messageY + ((messagePlaceable.height - it.height) / 2f).roundToInt()
+        } ?: 0
 
-        val height = maxOf(
-            senderPlaceable?.height ?: 0,
-            messageBottom,
-            pinIconPlaceable?.let { messageY + it.height } ?: 0,
-            reactionsPlaceable?.let { reactionsY + it.height } ?: 0,
-        ).coerceIn(constraints.minHeight, constraints.maxHeight)
+        // This is the equivalent of `maxOf(a, b, c, d)`:
+        // Chained `coerceAtLeast` calls avoid the `vararg` `maxOf` overload, which would allocate an array on every measure pass
+        val height = messageBottom
+            .coerceAtLeast(senderPlaceable?.height ?: 0)
+            .coerceAtLeast(pinIconPlaceable?.let { messageY + it.height } ?: 0)
+            .coerceAtLeast(reactionsPlaceable?.let { reactionsY + it.height } ?: 0)
+            .coerceAtLeast(selectionIndicatorPlaceable?.let { selectionIndicatorY + it.height } ?: 0)
+            .coerceIn(constraints.minHeight, constraints.maxHeight)
 
         layout(width, height) {
-            // Vertically centered on the message bubble
-            selectionIndicatorPlaceable?.placeRelative(
-                x = 0,
-                y = messageY + ((messagePlaceable.height - selectionIndicatorPlaceable.height) / 2f).roundToInt(),
-            )
+            selectionIndicatorPlaceable?.placeRelative(x = 0, y = selectionIndicatorY)
             senderPlaceable?.placeRelative(x = 0, y = 0)
             messagePlaceable.placeRelative(x = messageX, y = messageY)
             pinIconPlaceable?.placeRelative(
