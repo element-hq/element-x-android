@@ -47,6 +47,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
@@ -68,8 +70,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.constraintlayout.compose.ConstrainScope
-import androidx.constraintlayout.compose.ConstraintLayout
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.TimelineEvent
@@ -540,34 +540,25 @@ private fun TimelineItemEventRowContent(
     selectionIndicatorOffset: Density.() -> IntOffset = NoSelectionOffset,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
-    fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
-        end.linkTo(parent.end)
-    } else {
-        start.linkTo(parent.start)
-    }
-
-    ConstraintLayout(
+    // Message bubble
+    val bubbleState = BubbleState(
+        groupPosition = event.groupPosition,
+        isMine = event.isMine,
+        timelineRoomInfo = timelineRoomInfo,
+    )
+    TimelineItemEventRowContentLayout(
         modifier = modifier
             .wrapContentHeight()
             .fillMaxWidth(),
+        isMine = event.isMine,
+        cutTopStart = bubbleState.cutTopStart,
+        isDm = timelineRoomInfo.isDm,
     ) {
-        val (
-            sender,
-            message,
-            reactions,
-            pinIcon,
-            selectionIndicator,
-        ) = createRefs()
-
         if (selectionData.canBeSelected) {
             SelectionIndicator(
                 selected = selectionData.isSelected,
                 modifier = Modifier
-                    .constrainAs(selectionIndicator) {
-                        start.linkTo(parent.start)
-                        top.linkTo(message.top)
-                        bottom.linkTo(message.bottom)
-                    }
+                    .layoutId(EventRowLayoutId.SelectionIndicator)
                     .offset(selectionIndicatorOffset)
                     .padding(start = 16.dp)
                     .size(24.dp),
@@ -582,11 +573,7 @@ private fun TimelineItemEventRowContent(
                 event.senderAvatar,
                 onUserDataClick,
                 Modifier
-                    .constrainAs(sender) {
-                        top.linkTo(parent.top)
-                        // Required for correct RTL layout
-                        start.linkTo(parent.start)
-                    }
+                    .layoutId(EventRowLayoutId.Sender)
                     .padding(horizontal = 16.dp)
                     .zIndex(1f),
             )
@@ -609,28 +596,8 @@ private fun TimelineItemEventRowContent(
             background to border
         }
 
-        // Message bubble
-        val bubbleState = BubbleState(
-            groupPosition = event.groupPosition,
-            isMine = event.isMine,
-            timelineRoomInfo = timelineRoomInfo,
-        )
         MessageEventBubble(
-            modifier = Modifier
-                .constrainAs(message) {
-                    val topMargin = if (bubbleState.cutTopStart) {
-                        NEGATIVE_MARGIN_FOR_BUBBLE
-                    } else {
-                        0.dp
-                    }
-                    top.linkTo(sender.bottom, margin = topMargin)
-                    if (event.isMine) {
-                        end.linkTo(parent.end, margin = 16.dp)
-                    } else {
-                        val startMargin = if (timelineRoomInfo.isDm) 16.dp else 16.dp + BUBBLE_INCOMING_OFFSET
-                        start.linkTo(parent.start, margin = startMargin)
-                    }
-                },
+            modifier = Modifier.layoutId(EventRowLayoutId.Message),
             state = bubbleState,
             interactionSource = interactionSource,
             onClick = onContentClick,
@@ -659,14 +626,7 @@ private fun TimelineItemEventRowContent(
                 modifier = Modifier
                     .padding(1.dp)
                     .size(16.dp)
-                    .constrainAs(pinIcon) {
-                        top.linkTo(message.top)
-                        if (event.isMine) {
-                            end.linkTo(message.start, margin = 8.dp)
-                        } else {
-                            start.linkTo(message.end, margin = 8.dp)
-                        }
-                    }
+                    .layoutId(EventRowLayoutId.PinIcon)
             )
         }
 
@@ -680,13 +640,10 @@ private fun TimelineItemEventRowContent(
                 onReactionLongClick = onReactionLongClick,
                 onMoreReactionsClick = { onMoreReactionsClick(event) },
                 modifier = Modifier
-                    .constrainAs(reactions) {
-                        top.linkTo(message.bottom, margin = (-4).dp)
-                        linkStartOrEnd(event)
-                    }
+                    .layoutId(EventRowLayoutId.Reactions)
                     .zIndex(1f)
                     .padding(
-                        // Note: due to the applied constraints, start is left for other's message and right for mine
+                        // Note: the reactions are aligned to the start for other's message and to the end for mine
                         // In design we want a offset of 6.dp compare to the bubble, so start is 22.dp (16 + 6)
                         start = when {
                             event.isMine -> 22.dp
@@ -698,6 +655,80 @@ private fun TimelineItemEventRowContent(
             )
         }
     }
+}
+
+@Composable
+private fun TimelineItemEventRowContentLayout(
+    isMine: Boolean,
+    cutTopStart: Boolean,
+    isDm: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Layout(
+        modifier = modifier,
+        content = content,
+    ) { measurables, constraints ->
+        val width = constraints.maxWidth
+        val childConstraints = constraints.copy(minWidth = 0, minHeight = 0)
+        fun measure(id: EventRowLayoutId) = measurables.firstOrNull { it.layoutId == id }?.measure(childConstraints)
+
+        val senderPlaceable = measure(EventRowLayoutId.Sender)
+        val messagePlaceable = measure(EventRowLayoutId.Message)!!
+        val pinIconPlaceable = measure(EventRowLayoutId.PinIcon)
+        val reactionsPlaceable = measure(EventRowLayoutId.Reactions)
+        val selectionIndicatorPlaceable = measure(EventRowLayoutId.SelectionIndicator)
+
+        // The message bubble is placed below the sender, and overlaps it if the top start corner is cut out
+        val messageTopMargin = if (cutTopStart) NEGATIVE_MARGIN_FOR_BUBBLE.roundToPx() else 0
+        val messageY = ((senderPlaceable?.height ?: 0) + messageTopMargin).coerceAtLeast(0)
+        val messageX = if (isMine) {
+            width - 16.dp.roundToPx() - messagePlaceable.width
+        } else {
+            val startMargin = if (isDm) 16.dp else 16.dp + BUBBLE_INCOMING_OFFSET
+            startMargin.roundToPx()
+        }
+        val messageBottom = messageY + messagePlaceable.height
+        // Reactions slightly overlap the bottom of the message bubble
+        val reactionsY = messageBottom + (-4).dp.roundToPx()
+
+        val height = maxOf(
+            senderPlaceable?.height ?: 0,
+            messageBottom,
+            pinIconPlaceable?.let { messageY + it.height } ?: 0,
+            reactionsPlaceable?.let { reactionsY + it.height } ?: 0,
+        ).coerceIn(constraints.minHeight, constraints.maxHeight)
+
+        layout(width, height) {
+            // Vertically centered on the message bubble
+            selectionIndicatorPlaceable?.placeRelative(
+                x = 0,
+                y = messageY + ((messagePlaceable.height - selectionIndicatorPlaceable.height) / 2f).roundToInt(),
+            )
+            senderPlaceable?.placeRelative(x = 0, y = 0)
+            messagePlaceable.placeRelative(x = messageX, y = messageY)
+            pinIconPlaceable?.placeRelative(
+                x = if (isMine) {
+                    messageX - 8.dp.roundToPx() - pinIconPlaceable.width
+                } else {
+                    messageX + messagePlaceable.width + 8.dp.roundToPx()
+                },
+                y = messageY,
+            )
+            reactionsPlaceable?.placeRelative(
+                x = if (isMine) width - reactionsPlaceable.width else 0,
+                y = reactionsY,
+            )
+        }
+    }
+}
+
+private enum class EventRowLayoutId {
+    Sender,
+    Message,
+    PinIcon,
+    Reactions,
+    SelectionIndicator,
 }
 
 @Composable
