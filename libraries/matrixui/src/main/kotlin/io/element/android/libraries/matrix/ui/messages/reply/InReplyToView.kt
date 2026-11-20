@@ -72,8 +72,8 @@ fun InReplyToView(
                 maxLines = maxLines,
                 modifier = modifier,
             )
-            ContentValidationValue.Invalid -> ReplyToInvalidContent()
-            is ContentValidationValue.UnrecoverableError -> ReplyToNotFoundContent()
+            ContentValidationValue.Invalid -> ReplyToInvalidContent(modifier = modifier)
+            is ContentValidationValue.UnrecoverableError -> ReplyToNotFoundContent(modifier = modifier)
             else -> ReplyToLoadingContent(modifier = modifier)
         }
         is InReplyToDetails.Error ->

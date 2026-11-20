@@ -85,13 +85,11 @@ class DefaultSyncPendingNotificationsRequestBuilderTest : RobolectricTest() {
 
         val results = request.build()
         assertThat(results.isSuccess).isTrue()
-        results.getOrNull()!!.first().let { result ->
-            result.request.run {
-                assertThat(workSpec.hasConstraints()).isTrue()
-                val networkRequest = workSpec.constraints.requiredNetworkRequest
-                assertThat(networkRequest).isNotNull()
-                assertThat(networkRequest!!.capabilities.contains(NetworkCapabilities.NET_CAPABILITY_VALIDATED)).isTrue()
-            }
+        results.getOrNull()!!.first().request.run {
+            assertThat(workSpec.hasConstraints()).isTrue()
+            val networkRequest = workSpec.constraints.requiredNetworkRequest
+            assertThat(networkRequest).isNotNull()
+            assertThat(networkRequest!!.capabilities.contains(NetworkCapabilities.NET_CAPABILITY_VALIDATED)).isTrue()
         }
     }
 
@@ -108,13 +106,11 @@ class DefaultSyncPendingNotificationsRequestBuilderTest : RobolectricTest() {
 
         val results = request.build()
         assertThat(results.isSuccess).isTrue()
-        results.getOrNull()!!.first().let { result ->
-            result.request.run {
-                assertThat(workSpec.hasConstraints()).isTrue()
-                val networkRequest = workSpec.constraints.requiredNetworkRequest
-                assertThat(networkRequest).isNotNull()
-                assertThat(networkRequest!!.capabilities.contains(NetworkCapabilities.NET_CAPABILITY_VALIDATED)).isFalse()
-            }
+        results.getOrNull()!!.first().request.run {
+            assertThat(workSpec.hasConstraints()).isTrue()
+            val networkRequest = workSpec.constraints.requiredNetworkRequest
+            assertThat(networkRequest).isNotNull()
+            assertThat(networkRequest!!.capabilities.contains(NetworkCapabilities.NET_CAPABILITY_VALIDATED)).isFalse()
         }
     }
 
@@ -131,13 +127,11 @@ class DefaultSyncPendingNotificationsRequestBuilderTest : RobolectricTest() {
 
         val results = request.build()
         assertThat(results.isSuccess).isTrue()
-        results.getOrNull()!!.first().let { result ->
-            result.request.run {
-                assertThat(workSpec.hasConstraints()).isTrue()
-                val networkRequest = workSpec.constraints.requiredNetworkRequest
-                assertThat(networkRequest).isNotNull()
-                assertThat(networkRequest!!.capabilities.contains(NetworkCapabilities.NET_CAPABILITY_VALIDATED)).isFalse()
-            }
+        results.getOrNull()!!.first().request.run {
+            assertThat(workSpec.hasConstraints()).isTrue()
+            val networkRequest = workSpec.constraints.requiredNetworkRequest
+            assertThat(networkRequest).isNotNull()
+            assertThat(networkRequest!!.capabilities.contains(NetworkCapabilities.NET_CAPABILITY_VALIDATED)).isFalse()
         }
     }
 }

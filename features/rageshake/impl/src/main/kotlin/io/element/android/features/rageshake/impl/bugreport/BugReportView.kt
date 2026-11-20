@@ -158,7 +158,7 @@ fun BugReportView(
             )
             PreferenceRow {
                 var ghIssueNumberState by textFieldState(
-                    stateValue = state.formState.ghIssueNumber?.toString() ?: ""
+                    stateValue = state.formState.ghIssueNumber?.toString().orEmpty()
                 )
                 TextField(
                     value = ghIssueNumberState,

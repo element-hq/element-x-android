@@ -32,6 +32,7 @@ class PosthogAnalyticsProvider(
     private var posthog: PostHogInterface? = null
     private var analyticsId: String? = null
 
+    @Suppress("DoubleMutabilityForCollection") // Reset to null once the pending properties have been sent
     private var pendingUserProperties: MutableMap<String, Any>? = null
 
     private var superProperties: SuperProperties? = null

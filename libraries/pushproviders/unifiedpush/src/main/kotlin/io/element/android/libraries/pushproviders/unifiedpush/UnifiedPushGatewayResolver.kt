@@ -13,6 +13,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.log.logger.LoggerTag
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
@@ -41,7 +42,8 @@ class DefaultUnifiedPushGatewayResolver(
         val url = tryOrNull(
             onException = { Timber.tag(loggerTag.value).d(it, "Cannot parse endpoint as an URL") }
         ) {
-            URL(endpoint)
+            // URI(...).toURL() is not a drop-in replacement: URI parsing is stricter than URL parsing.
+            @Suppress("DEPRECATION") URL(endpoint)
         }
         return if (url == null) {
             Timber.tag(loggerTag.value).d("ErrorInvalidUrl")
@@ -63,6 +65,8 @@ class DefaultUnifiedPushGatewayResolver(
                         Timber.tag(loggerTag.value).w("The endpoint does not seem to be a valid UnifiedPush gateway, using fallback")
                         UnifiedPushGatewayResolverResult.NoMatrixGateway
                     }
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (throwable: Throwable) {
                     val code = (throwable as? HttpException)?.code()
                     if (code in NoMatrixGatewayResp) {

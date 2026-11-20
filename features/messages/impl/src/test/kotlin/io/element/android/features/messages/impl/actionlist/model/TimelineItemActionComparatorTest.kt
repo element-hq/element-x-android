@@ -15,7 +15,7 @@ class TimelineItemActionComparatorTest {
     fun `check that the list in the comparator only contain each item once`() {
         val sut = TimelineItemActionComparator()
         sut.orderedList.forEach {
-            require(sut.orderedList.count { item -> item == it } == 1, { "Duplicate ${it::class.java}.$it" })
+            require(sut.orderedList.count { item -> item == it } == 1) { "Duplicate ${it::class.java}.$it" }
         }
     }
 
@@ -23,7 +23,7 @@ class TimelineItemActionComparatorTest {
     fun `check that the list in the comparator contains all the items`() {
         val sut = TimelineItemActionComparator()
         TimelineItemAction.entries.forEach {
-            require(it in sut.orderedList, { "Missing ${it::class.simpleName}.$it in orderedList" })
+            require(it in sut.orderedList) { "Missing ${it::class.simpleName}.$it in orderedList" }
         }
     }
 }

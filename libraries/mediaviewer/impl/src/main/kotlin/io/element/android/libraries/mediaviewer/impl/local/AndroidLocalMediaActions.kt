@@ -124,7 +124,7 @@ class AndroidLocalMediaActions(
 
     override suspend fun open(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
-        runCatchingExceptions {
+        runCatchingExceptions<Unit> {
             when (localMedia.info.mimeType) {
                 MimeTypes.Apk -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -137,7 +137,7 @@ class AndroidLocalMediaActions(
                             ) == PermissionChecker.PERMISSION_GRANTED &&
                             activityContext?.packageManager?.canRequestPackageInstalls() == false) {
                             pendingMedia = localMedia
-                            activityContext?.startInstallFromSourceIntent(checkNotNull(apkInstallLauncher) { "APK install launcher is not configured" }).let { }
+                            activityContext?.startInstallFromSourceIntent(checkNotNull(apkInstallLauncher) { "APK install launcher is not configured" })
                         } else {
                             openFile(localMedia)
                         }

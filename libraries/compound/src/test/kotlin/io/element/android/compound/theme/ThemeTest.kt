@@ -61,6 +61,8 @@ class ThemeTest : RobolectricTest() {
         val application = RuntimeEnvironment.getApplication()
         application.resources.configuration.uiMode = systemUiMode
         moleculeFlow(RecompositionMode.Immediate) {
+            // The var is only used to read back a value computed synchronously in the content lambda of CompositionLocalProvider
+            @Suppress("VarsWithoutStateBacking")
             var result: Boolean? = null
             CompositionLocalProvider(
                 LocalContext provides application,
