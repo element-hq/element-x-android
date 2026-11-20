@@ -11,14 +11,9 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.wellknown.test"
+    namespace = "io.element.android.libraries.wellknown.test"
 }
 
 dependencies {
-    implementation(libs.serialization.json)
-    implementation(projects.libraries.androidutils)
-    implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.wellknown.api)
-    implementation(projects.libraries.wellknown.impl)
     implementation(projects.tests.testutils)
 }

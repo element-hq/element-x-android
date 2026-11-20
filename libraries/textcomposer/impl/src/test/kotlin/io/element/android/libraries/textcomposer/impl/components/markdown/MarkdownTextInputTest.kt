@@ -162,7 +162,9 @@ class MarkdownTextInputTest : RobolectricTest() {
         val state = aMarkdownTextEditorState(initialText = "Test", initialFocus = false)
         setMarkdownTextInput(state = state)
         val editor = activity!!.findEditor()
-        editor.requestFocus()
+        // The test window is in touch mode, where the editor is not focusable in Robolectric.
+        // requestFocusFromTouch() leaves the touch mode first, like a hardware keyboard would do.
+        editor.requestFocusFromTouch()
         // Focus state is updated
         assertThat(state.hasFocus).isTrue()
     }

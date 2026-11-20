@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s kunde inte ladda kartan. Vänligen försök igen senare."</string>
+  <string name="error_failed_locating_user">"%1$s kunde inte komma åt din plats. Vänligen försök igen senare."</string>
+  <string name="error_missing_location_auth_android">"%1$s är inte behörig att komma åt din plats. Du kan aktivera åtkomst i Inställningar."</string>
+  <string name="error_missing_location_rationale_android">"%1$s är inte behörig att komma åt din plats. Aktivera åtkomst nedan."</string>
+  <string name="screen_share_location_title">"Dela plats"</string>
+  <string name="screen_share_my_location_action">"Dela min plats"</string>
+  <string name="screen_share_open_apple_maps">"Öppna i Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Öppna i Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Öppna i OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"Dela vald plats"</string>
+  <string name="screen_view_location_title">"Plats"</string>
+</resources>

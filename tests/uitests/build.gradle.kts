@@ -20,7 +20,7 @@ android {
     namespace = "ui"
 }
 
-tasks.withType(Test::class) {
+tasks.withType<Test>().configureEach {
     // Don't fail the test run if there are no tests, this can happen if we run them with screenshot test disabled
     failOnNoDiscoveredTests = false
 }
@@ -40,14 +40,12 @@ dependencies {
         )
     }
 
-    implementation(libs.showkase)
-
     // TODO There is a Resources.NotFoundException maybe due to the mipmap, even if we have
     // `testOptions { unitTests.isIncludeAndroidResources = true }` in the app build.gradle.kts file
     // implementation(projects.app)
     implementation(projects.appnav)
     allLibrariesImpl()
-    allServicesImpl()
+    allServicesImpl(project)
     allFeaturesImpl(project)
     implementation(projects.appicon.element)
     implementation(projects.appicon.enterprise)
@@ -55,5 +53,6 @@ dependencies {
     testImplementation(libs.test.junit)
     testImplementation(libs.test.parameter.injector)
     testImplementation(projects.libraries.designsystem)
+    testImplementation(projects.tests.screenshotutils)
     testImplementation(libs.test.composable.preview.scanner)
 }

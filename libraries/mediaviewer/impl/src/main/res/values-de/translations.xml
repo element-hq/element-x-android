@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_scanning">"Scanvorgang läuft…"</string>
   <string name="screen_media_browser_delete_confirmation_subtitle">"Diese Datei wird aus dem Chat entfernt und die Mitglieder werden keinen Zugriff mehr darauf haben."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Datei löschen?"</string>
   <string name="screen_media_browser_download_error_message">"Überprüfe deine Internetverbindung und versuche es erneut."</string>
@@ -16,6 +17,7 @@
   <string name="screen_media_details_filename">"Dateiname"</string>
   <string name="screen_media_details_no_more_files_to_show">"Keine weiteren Dateien zum Anzeigen"</string>
   <string name="screen_media_details_no_more_media_to_show">"Keine weiteren Medien mehr zum Anzeigen"</string>
+  <string name="screen_media_details_title">"Datei-Info"</string>
   <string name="screen_media_details_uploaded_by">"Hochgeladen von"</string>
   <string name="screen_media_details_uploaded_on">"Hochgeladen am"</string>
 </resources>

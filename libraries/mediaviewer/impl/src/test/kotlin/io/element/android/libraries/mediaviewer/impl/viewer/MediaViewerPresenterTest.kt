@@ -13,7 +13,15 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import android.net.Uri
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.messages.api.timeline.HtmlConverterProvider
+import io.element.android.features.messages.api.timeline.TextPillificator
+import io.element.android.features.messages.test.timeline.FakeHtmlConverterProvider
+import io.element.android.features.messages.test.timeline.FakeTextPillificator
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.test.FakeHtmlMessageParser
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -22,10 +30,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransa
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
+import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
@@ -64,7 +74,6 @@ private val TESTED_MEDIA_INFO = anApkMediaInfo(
     senderId = A_USER_ID,
 )
 
-@Suppress("LargeClass")
 class MediaViewerPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -102,6 +111,7 @@ class MediaViewerPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.canShowInfo).isTrue()
             assertThat(initialState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+            assertThat(initialState.currentUserId).isEqualTo(A_SESSION_ID)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -218,6 +228,74 @@ class MediaViewerPresenterTest {
             assertThat(item.thumbnailSource).isEqualTo(anImage.thumbnailSource)
             assertThat(item.downloadedMedia.value).isEqualTo(AsyncData.Uninitialized)
         }
+    }
+
+    @Test
+    fun `present - html caption is converted to a pillified formatted caption`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val presenter = createMediaViewerPresenter(
+            localMediaFactory = localMediaFactory,
+            mediaGalleryDataSource = mediaGalleryDataSource,
+            htmlConverterProvider = FakeHtmlConverterProvider(transformDom = { "formatted: ${it.text()}" }),
+            textPillificator = FakeTextPillificator(pillifyLambda = { text, _ -> "pillified $text" }),
+        )
+        val anImage = aMediaItemImage().let {
+            it.copy(mediaInfo = it.mediaInfo.copy(caption = "caption", htmlCaption = "<b>caption</b>"))
+        }
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(anImage),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitFirstItem()
+            val item = updatedState.listData.first() as MediaViewerPageData.MediaViewerData
+            assertThat(item.mediaInfo.htmlCaption).isEqualTo("<b>caption</b>")
+            assertThat(item.formattedCaption.toString()).isEqualTo("pillified formatted: caption")
+        }
+    }
+
+    @Test
+    fun `present - html caption is parsed to a caption tree only if the feature flag is enabled`() = runTest {
+        suspend fun captionTreeFor(isFeatureEnabled: Boolean): DocumentNode? {
+            val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+                startLambda = { },
+            )
+            val presenter = createMediaViewerPresenter(
+                localMediaFactory = localMediaFactory,
+                mediaGalleryDataSource = mediaGalleryDataSource,
+                featureFlagService = FakeFeatureFlagService(
+                    initialState = mapOf(FeatureFlags.NewTimelineEventRenderer.key to isFeatureEnabled)
+                ),
+            )
+            val anImage = aMediaItemImage().let {
+                it.copy(mediaInfo = it.mediaInfo.copy(caption = "caption", htmlCaption = "<b>caption</b>"))
+            }
+            var captionTree: DocumentNode? = null
+            presenter.test {
+                awaitFirstItem()
+                mediaGalleryDataSource.emitGroupedMediaItems(
+                    AsyncData.Success(
+                        GroupedMediaItems(
+                            imageAndVideoItems = persistentListOf(anImage),
+                            fileItems = persistentListOf(),
+                        )
+                    )
+                )
+                val item = awaitFirstItem().listData.first() as MediaViewerPageData.MediaViewerData
+                captionTree = item.captionTree
+            }
+            return captionTree
+        }
+
+        assertThat(captionTreeFor(isFeatureEnabled = true)).isNotNull()
+        assertThat(captionTreeFor(isFeatureEnabled = false)).isNull()
     }
 
     @Test
@@ -871,7 +949,7 @@ class MediaViewerPresenterTest {
 
     @Test
     fun `present - forward hides the bottom sheet and invokes the navigator`() = runTest {
-        val onForwardClickLambda = lambdaRecorder<EventId, Boolean, Unit> { _, _ -> }
+        val onForwardClickLambda = lambdaRecorder<EventId, Unit> { }
         val navigator = FakeMediaViewerNavigator(
             onForwardClickLambda = onForwardClickLambda,
         )
@@ -896,39 +974,7 @@ class MediaViewerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             onForwardClickLambda.assertions().isCalledOnce()
-                .with(value(AN_EVENT_ID), value(false))
-        }
-    }
-
-    @Test
-    fun `present - forward from pinned events hides the bottom sheet and invokes the navigator`() = runTest {
-        val onForwardClickLambda = lambdaRecorder<EventId, Boolean, Unit> { _, _ -> }
-        val navigator = FakeMediaViewerNavigator(
-            onForwardClickLambda = onForwardClickLambda,
-        )
-        val presenter = createMediaViewerPresenter(
-            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.PinnedEvents),
-            localMediaFactory = localMediaFactory,
-            mediaViewerNavigator = navigator,
-            room = FakeJoinedRoom(
-                baseRoom = FakeBaseRoom(
-                    roomPermissions = FakeRoomPermissions(
-                        canRedactOwn = true
-                    ),
-                ),
-            ),
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(MediaViewerEvent.OpenInfo(aMediaViewerPageData()))
-            skipItems(1)
-            val withBottomSheetState = awaitItem()
-            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
-            initialState.eventSink(MediaViewerEvent.Forward(AN_EVENT_ID))
-            val finalState = awaitItem()
-            assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
-            onForwardClickLambda.assertions().isCalledOnce()
-                .with(value(AN_EVENT_ID), value(true))
+                .with(value(AN_EVENT_ID))
         }
     }
 
@@ -951,6 +997,9 @@ internal fun TestScope.createMediaViewerPresenter(
     room: JoinedRoom = FakeJoinedRoom(
         liveTimeline = FakeTimeline(),
     ),
+    htmlConverterProvider: HtmlConverterProvider = FakeHtmlConverterProvider(),
+    textPillificator: TextPillificator = FakeTextPillificator(),
+    featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
 ): MediaViewerPresenter {
     val actualInputs = inputs ?: createMediaViewerEntryPointParams(eventId = eventId, mode = mode)
     val actualMode = when (actualInputs) {
@@ -975,6 +1024,11 @@ internal fun TestScope.createMediaViewerPresenter(
         ),
         room = room,
         localMediaActions = localMediaActions,
+        htmlConverterProvider = htmlConverterProvider,
+        permalinkParser = FakePermalinkParser(),
+        textPillificator = textPillificator,
+        htmlMessageParser = FakeHtmlMessageParser(parseResult = { DocumentNode(persistentListOf()) }),
+        featureFlagService = featureFlagService,
     )
 }
 

@@ -39,7 +39,6 @@ dependencies {
     implementation(libs.posthog) {
         exclude("com.android.support", "support-annotations")
     }
-    implementation(projects.features.enterprise.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.services.analyticsproviders.api)

@@ -3,6 +3,5 @@
   <string name="screen_signed_out_reason_1">"Du har ændret din adgangskode på en anden session"</string>
   <string name="screen_signed_out_reason_2">"Du har slettet sessionen fra en anden session"</string>
   <string name="screen_signed_out_reason_3">"Din serveradministrator har lukket for din adgang"</string>
-  <string name="screen_signed_out_subtitle">"Du er muligvis blevet logget ud på grund af en af nedenstående årsager. Log ind igen for at fortsætte med at bruge%s."</string>
   <string name="screen_signed_out_title">"Du er logget ud"</string>
 </resources>

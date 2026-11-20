@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Kan niet ontsleutelen"</string>
+  <string name="common_unable_to_decrypt_no_access">"Je hebt geen toegang tot dit bericht"</string>
   <string name="crypto_event_authenticity_not_guaranteed">"De echtheid van dit versleutelde bericht kan op dit apparaat niet worden gegarandeerd."</string>
   <string name="crypto_event_authenticity_previously_verified">"Versleuteld door een eerder geverifieerde gebruiker."</string>
   <string name="crypto_event_authenticity_sent_in_clear">"Niet versleuteld."</string>
   <string name="crypto_event_authenticity_unknown_device">"Versleuteld door een onbekend of verwijderd apparaat."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Versleuteld door een apparaat dat niet is geverifieerd door de eigenaar."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Versleuteld door een niet-geverifieerde gebruiker."</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s identiteit lijkt te zijn gewijzigd. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="error_failed_loading_messages">"Het laden van berichten is mislukt"</string>
+  <string name="error_failed_uploading_voice_message">"Het uploaden van je spraakbericht is mislukt."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s heeft geen toegang tot je microfoon. Schakel toegang in om een spraakbericht op te nemen."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Het verwerken van media voor uploaden is mislukt. Probeer het opnieuw."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Het uploaden van media is mislukt. Probeer het opnieuw."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Druk op een bericht en kies „%1$s” om het hier toe te voegen."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Zet belangrijke berichten vast zodat ze gemakkelijk te vinden zijn"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Vastgezet bericht"</item>
+    <item quantity="other">"%1$d Vastgezette berichten"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Vastgezette berichten"</string>
   <string name="screen_report_content_block_user">"Gebruiker blokkeren"</string>
   <string name="screen_report_content_block_user_hint">"Vink aan als je alle huidige en toekomstige berichten van deze gebruiker wilt verbergen"</string>
   <string name="screen_report_content_explanation">"Dit bericht wordt gerapporteerd aan de beheerder van je homeserver. Ze zullen geen versleutelde berichten kunnen lezen."</string>
   <string name="screen_report_content_hint">"Reden voor het melden van deze inhoud"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Verificatie intrekken en verzenden"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Je kunt je verificatie intrekken en dit bericht toch verzenden, of je kunt het voorlopig annuleren en het later opnieuw proberen nadat je %1$s opnieuw hebt geverifieerd."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Je bericht is niet verzonden omdat %1$s\'s geverifieerde identiteit is gewijzigd"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Bericht toch versturen"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s gebruikt een of meer niet-geverifieerde apparaten. Je kunt het bericht toch verzenden, of je kunt het voorlopig annuleren en het later opnieuw proberen nadat %2$s alle apparaten heeft geverifieerd."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Je bericht is niet verzonden omdat %1$s niet alle apparaten heeft geverifieerd"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Een of meer van je apparaten zijn niet geverifieerd. Je kunt het bericht toch verzenden, of je kunt het voorlopig annuleren en het later opnieuw proberen nadat je al je apparaten hebt geverifieerd."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Je bericht is niet verzonden omdat je een of meerdere apparaten niet geverifieerd hebt"</string>
   <string name="screen_room_attachment_source_camera">"Camera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Foto maken"</string>
   <string name="screen_room_attachment_source_camera_video">"Video opnemen"</string>
@@ -26,6 +48,10 @@
   <string name="screen_room_invite_again_alert_title">"Je bent alleen in deze chat"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Stuur een melding naar de hele kamer"</string>
   <string name="screen_room_mentions_at_room_title">"Iedereen"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s van %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Vastgezette berichten"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Bericht laden…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Bekijk alles"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Opnieuw verzenden"</string>
   <string name="screen_room_retry_send_menu_title">"Je bericht is niet verzonden"</string>
   <string name="screen_room_timeline_add_reaction">"Emoji toevoegen"</string>
@@ -50,4 +76,8 @@
     <item quantity="other">"%1$s zijn aan het typen"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s en %2$s"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Bericht niet verzonden omdat %1$s\'s geverifieerde identiteit is gewijzigd."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Bericht niet verzonden omdat %1$s niet alle apparaten heeft geverifieerd."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Bericht is niet verzonden omdat je een of meerdere apparaten niet geverifieerd hebt"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Je hebt geen toegang tot dit bericht"</string>
 </resources>

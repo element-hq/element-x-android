@@ -17,21 +17,74 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        exclusiveContent {
+            forRepository {
+                maven {
+                    url = uri("https://github.com/rustls/rustls-platform-verifier/raw/maven-archive/android-release-support/maven/")
+                }
+            }
+            filter {
+                includeModule("org.rustls", "rustls-platform-verifier")
+            }
+        }
         maven {
             url = uri("https://www.jitpack.io")
             content {
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
                 // Required transitively by androidx.media3:media3-exoplayer-midi for MIDI playback.
                 includeModule("com.github.philburk", "jsyn")
+                // This is a fork of Konsist that skips hidden folders and files, which otherwise can cause performance issues.
+                includeModule("com.github.jmartinesp", "konsist")
             }
         }
-        google()
+        // Check for official Android-related packages only in Google's maven repo
+        exclusiveContent {
+            forRepository {
+                google()
+            }
+            filter {
+                includeGroupByRegex("android\\..*")
+                includeGroupByRegex("androidx\\..*")
+                includeGroupByRegex("com\\.android\\.tools.*")
+                includeGroupByRegex("com\\.google\\.firebase.*")
+                includeGroupByRegex("com\\.google\\.android.*")
+            }
+        }
         mavenCentral()
         maven {
             url = uri("https://repo1.maven.org/maven2/")
         }
         flatDir {
             dirs("libraries/matrix/libs")
+        }
+
+        // Add ivy repository for nightly builds of the SDK bindings for Android, which are published as GitHub release assets.
+        ivy {
+            url = uri("https://github.com/matrix-org/matrix-rust-components-kotlin/releases/download")
+            patternLayout { artifact("sdk-[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
+            metadataSources { gradleMetadata() }
+            content {
+                // The nightly versions of the SDK bindings for Android
+                includeModule("org.matrix.rustcomponents", "sdk-android")
+            }
+        }
+
+        // Testing an unreleased element-call-android build. Publish it there with
+        // `publishToMavenLocal -PVERSION_NAME=0.1.0-local`, then build here with
+        // `-PelementCallLocalVersion=0.1.0-local`. Absent without the property, so that everything
+        // resolves for a contributor who has never built the library.
+        providers.gradleProperty("elementCallLocalVersion").orNull?.let { elementCallVersion ->
+            logger.lifecycle("Note: resolving io.element.android:element-call-* $elementCallVersion from mavenLocal")
+            mavenLocal {
+                content {
+                    // Per module: compound-android and element-call-embedded stay on Maven Central.
+                    includeModule("io.element.android", "element-call-bom")
+                    includeModule("io.element.android", "element-call-api")
+                    includeModule("io.element.android", "element-call")
+                    includeModule("io.element.android", "element-call-ui")
+                    includeModule("io.element.android", "element-call-test")
+                }
+            }
         }
     }
 }
@@ -46,27 +99,76 @@ include(":appicon:element")
 include(":appicon:enterprise")
 include(":tests:detekt-rules")
 include(":tests:konsist")
+include(":tests:screenshotutils")
 include(":tests:uitests")
 include(":tests:testutils")
 include(":annotations")
 include(":codegen")
 
-fun includeProjects(directory: File, path: String, maxDepth: Int = 1) {
-    directory.listFiles().orEmpty().also { it.sort() }.forEach { file ->
-        if (file.isDirectory) {
-            val newPath = "$path:${file.name}"
-            val buildFile = File(file, "build.gradle.kts")
-            if (buildFile.exists()) {
-                include(newPath)
-                logger.lifecycle("Included project: $newPath")
-            } else if (maxDepth > 0) {
-                includeProjects(file, newPath, maxDepth - 1)
+/**
+ * Finds the Gradle projects in [directory]: the folders containing a `build.gradle.kts` file, up to [maxDepth] levels below.
+ *
+ * The search runs in a [ValueSource] so that only its result, the list of projects, is a configuration cache input. Listing
+ * the folders directly in the settings script would make each listed folder an input, and adding or removing any file in
+ * them (build outputs, `.git` content, etc.) would invalidate the configuration cache.
+ */
+private fun findProjects(directory: File, path: String, maxDepth: Int = 1): List<String> {
+    return providers.of(ProjectsValueSource::class) {
+        parameters {
+            this.directory.set(directory)
+            this.path.set(path)
+            this.maxDepth.set(maxDepth)
+        }
+    }.get()
+}
+
+abstract class ProjectsValueSource : ValueSource<List<String>, ProjectsValueSource.Parameters> {
+    interface Parameters : ValueSourceParameters {
+        val directory: Property<File>
+        val path: Property<String>
+        val maxDepth: Property<Int>
+    }
+
+    override fun obtain(): List<String> = search(parameters.directory.get(), parameters.path.get(), parameters.maxDepth.get())
+
+    private fun search(directory: File, path: String, maxDepth: Int): List<String> {
+        return directory.listFiles { file ->
+            // Skip hidden folders (e.g. `.git`) and build outputs, which can't contain projects.
+            file.isDirectory && !file.name.startsWith(".") && file.name != "build"
+        }.orEmpty().sorted().flatMap { subDir ->
+            val newPath = "$path:${subDir.name}"
+            when {
+                File(subDir, "build.gradle.kts").exists() -> listOf(newPath)
+                maxDepth > 0 -> search(subDir, newPath, maxDepth - 1)
+                else -> emptyList()
             }
         }
     }
 }
 
-includeProjects(File(rootDir, "enterprise"), ":enterprise", maxDepth = 2)
+private fun includeProjects(projectPaths: List<String>) {
+    projectPaths.forEach { projectPath ->
+        include(projectPath)
+        logger.info("Included project: $projectPath")
+    }
+}
+
+private fun includeProjects(directory: File, path: String, maxDepth: Int = 1) = includeProjects(findProjects(directory, path, maxDepth))
+
+// Enterprise build detection. By default, the build is an Enterprise build if the enterprise submodule contains
+// some Gradle projects. This can be overridden with the Gradle property `element.enterprise` (true or false),
+// for instance to build the FOSS version while the submodule is checked out: `./gradlew -Pelement.enterprise=false ...`
+private val enterpriseProjects = findProjects(File(rootDir, "enterprise"), ":enterprise", maxDepth = 2)
+private val isEnterpriseBuild = providers.gradleProperty("element.enterprise").orNull?.toBooleanStrict() ?: enterpriseProjects.isNotEmpty()
+if (isEnterpriseBuild) {
+    check(enterpriseProjects.isNotEmpty()) {
+        "Enterprise build requested but no enterprise sources found. Run `git submodule update --init enterprise`."
+    }
+    includeProjects(enterpriseProjects)
+}
+// Read by `Project.isEnterpriseBuild` in the plugins module.
+gradle.extra["isEnterpriseBuild"] = isEnterpriseBuild
+
 includeProjects(File(rootDir, "features"), ":features")
 includeProjects(File(rootDir, "libraries"), ":libraries")
 includeProjects(File(rootDir, "services"), ":services")

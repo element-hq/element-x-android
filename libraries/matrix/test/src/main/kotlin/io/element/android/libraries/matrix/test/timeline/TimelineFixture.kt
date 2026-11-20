@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -51,6 +52,8 @@ fun anEventTimelineItem(
     isOwn: Boolean = false,
     isRemote: Boolean = false,
     localSendState: LocalEventSendState? = null,
+    editSendState: LocalEventSendState? = null,
+    redactionSendState: LocalEventSendState? = null,
     reactions: ImmutableList<EventReaction> = persistentListOf(),
     receipts: ImmutableList<Receipt> = persistentListOf(),
     sender: UserId = A_USER_ID,
@@ -68,6 +71,8 @@ fun anEventTimelineItem(
     isOwn = isOwn,
     isRemote = isRemote,
     localSendState = localSendState,
+    editSendState = editSendState,
+    redactionSendState = redactionSendState,
     reactions = reactions,
     receipts = receipts,
     sender = sender,
@@ -136,6 +141,10 @@ fun aStickerContent(
     source = mediaSource,
     threadInfo = threadInfo,
 )
+
+fun aRedactedContent(
+    threadInfo: EventThreadInfo? = null,
+) = RedactedContent(threadInfo = threadInfo)
 
 fun aTimelineItemDebugInfo(
     model: String = "Rust(Model())",

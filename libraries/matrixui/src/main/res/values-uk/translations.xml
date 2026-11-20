@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"Завантаження недоступне."</string>
+  <string name="content_scanner_not_found_title">"Файл не знайдено"</string>
+  <string name="error_room_address_already_exists">"Ця адреса кімнати вже існує, будь ласка, спробуйте відредагувати поле адреси кімнати або змінити назву кімнати"</string>
+  <string name="error_room_address_invalid_symbols">"Деякі символи не допускаються. Підтримуються тільки букви, цифри і наступні символи! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Надіслати запрошення"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Хочете розпочати бесіду з %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Надіслати запрошення?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Наразі у вас немає бесід з цим користувачем. Підтвердьте запрошення, перш ніж продовжити."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Розпочати бесіду з цим новим контактом?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) запрошує вас"</string>
+  <string name="screen_space_list_description">"Простори, які ви створили або до яких приєдналися."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Простори"</string>
 </resources>

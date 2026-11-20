@@ -12,14 +12,17 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.matrix.test.AN_APPLICATION_NAME
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +33,39 @@ class SignedOutPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
-        val aSessionData = aSessionData()
+        val aSessionData = aSessionData(
+            sessionId = A_SESSION_ID.value,
+            userDisplayName = "Alice",
+            userAvatarUrl = "avatarUrl",
+            userAvatarData = "avatarData",
+        )
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData)
+        )
+        val presenter = createSignedOutPresenter(sessionStore = sessionStore)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            assertThat(initialState.signedOutMatrixUser).isEqualTo(MatrixUser(userId = A_SESSION_ID))
+            assertThat(awaitItem().signedOutMatrixUser).isEqualTo(
+                MatrixUser(
+                    userId = A_SESSION_ID,
+                    displayName = "Alice",
+                    avatarUrl = "avatarUrl",
+                    avatarThumbnail = "avatarData",
+                )
+            )
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - sign in again`() = runTest {
+        val aSessionData = aSessionData(
+            sessionId = A_SESSION_ID.value,
+            userDisplayName = "Alice",
+        )
         val sessionStore = InMemorySessionStore(
             initialList = listOf(aSessionData)
         )
@@ -40,31 +75,41 @@ class SignedOutPresenterTest {
         }.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.appName).isEqualTo(AN_APPLICATION_NAME)
-            assertThat(initialState.signedOutSession).isEqualTo(aSessionData)
+            assertThat(initialState.signedOutMatrixUser).isEqualTo(MatrixUser(userId = A_SESSION_ID, displayName = "Alice"))
+            assertThat(sessionStore.getAllSessions()).isNotEmpty()
+            assertThat(sessionStore.numberOfSessions()).isEqualTo(1)
+            assertThat(initialState.submitAction).isEqualTo(AsyncAction.Uninitialized)
+            initialState.eventSink(SignedOutEvent.Submit)
+            val loadingState = awaitItem()
+            assertThat(loadingState.submitAction).isEqualTo(AsyncAction.Loading)
+            runCurrent()
+            assertThat(sessionStore.getAllSessions()).isEmpty()
+            assertThat(sessionStore.numberOfSessions()).isEqualTo(0)
+            // The removal of the session must not change the rendered data, and the screen stays in the loading state until it is closed
+            expectNoEvents()
         }
     }
 
     @Test
-    fun `present - sign in again`() = runTest {
-        val aSessionData = aSessionData()
+    fun `present - submit while the session is being removed is ignored`() = runTest {
+        val removeSessionResult = lambdaRecorder<String, Unit> { }
         val sessionStore = InMemorySessionStore(
-            initialList = listOf(aSessionData)
+            initialList = listOf(aSessionData(sessionId = A_SESSION_ID.value)),
+            removeSessionResult = removeSessionResult,
         )
         val presenter = createSignedOutPresenter(sessionStore = sessionStore)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
-            skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.signedOutSession).isEqualTo(aSessionData)
-            assertThat(sessionStore.getAllSessions()).isNotEmpty()
-            assertThat(sessionStore.numberOfSessions()).isEqualTo(1)
-            initialState.eventSink(SignedOutEvents.SignInAgain)
-            assertThat(awaitItem().signedOutSession).isNull()
-            assertThat(sessionStore.getAllSessions()).isEmpty()
-            assertThat(sessionStore.numberOfSessions()).isEqualTo(0)
+            initialState.eventSink(SignedOutEvent.Submit)
+            val loadingState = awaitItem()
+            assertThat(loadingState.submitAction).isEqualTo(AsyncAction.Loading)
+            loadingState.eventSink(SignedOutEvent.Submit)
+            initialState.eventSink(SignedOutEvent.Submit)
+            cancelAndIgnoreRemainingEvents()
         }
+        removeSessionResult.assertions().isCalledOnce()
     }
 }
 
@@ -75,6 +120,5 @@ internal fun createSignedOutPresenter(
     return SignedOutPresenter(
         sessionId = sessionId,
         sessionStore = sessionStore,
-        buildMeta = aBuildMeta(applicationName = AN_APPLICATION_NAME),
     )
 }

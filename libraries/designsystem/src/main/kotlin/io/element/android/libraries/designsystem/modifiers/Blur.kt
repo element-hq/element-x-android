@@ -12,6 +12,7 @@ import android.graphics.BlurMaskFilter
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 fun canUseBlur(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
 @Composable
+@ReadOnlyComposable
 fun canUseBlurMaskFilter() = !LocalView.current.isHardwareAccelerated
 
 fun Modifier.blurredShapeShadow(

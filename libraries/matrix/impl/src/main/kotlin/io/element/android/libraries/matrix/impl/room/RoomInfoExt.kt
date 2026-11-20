@@ -8,8 +8,14 @@
 
 package io.element.android.libraries.matrix.impl.room
 
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomInfo
+import org.matrix.rustcomponents.sdk.RoomInfoListener
 
 /**
  * Extract the heroes from the room info.
@@ -23,3 +29,19 @@ fun RoomInfo.elementHeroes(): List<MatrixUser> {
         ?.map { it.map() }
         .orEmpty()
 }
+
+/**
+ * The room's info now and on every change, for as long as it is collected.
+ *
+ * The initial value is emitted immediately. The flow is collected on the provided [CoroutineDispatchers.io].
+ */
+internal fun Room.roomInfoUpdates(dispatchers: CoroutineDispatchers): Flow<RoomInfo> = mxCallbackFlow {
+    trySend(roomInfo())
+    subscribeToRoomInfoUpdates(
+        object : RoomInfoListener {
+            override fun call(roomInfo: RoomInfo) {
+                trySend(roomInfo)
+            }
+        }
+    )
+}.flowOn(dispatchers.io)

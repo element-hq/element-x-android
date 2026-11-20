@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"Permitir acceso"</string>
   <string name="dialog_permission_camera">"Para permitir que la aplicación utilice la cámara, por favor concede el permiso en los ajustes del sistema."</string>
   <string name="dialog_permission_generic">"Por favor concede el permiso en los ajustes del sistema."</string>
   <string name="dialog_permission_microphone">"Para permitir que la aplicación utilice el micrófono, por favor conceda el permiso en los ajustes del sistema."</string>
   <string name="dialog_permission_notification">"Para permitir que la aplicación muestre notificaciones, por favor concede el permiso en los ajustes del sistema."</string>
+  <string name="screen_local_network_opt_in_subtitle">"Tu servidor base está en tu red local. Para conectarse, %1$s necesita permiso para acceder a los dispositivos de esta red."</string>
+  <string name="screen_local_network_opt_in_title">"Permite el acceso a la red local"</string>
 </resources>

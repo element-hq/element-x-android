@@ -24,13 +24,12 @@ import org.maplibre.compose.expressions.dsl.feature
 import org.maplibre.compose.expressions.dsl.image
 import org.maplibre.compose.expressions.dsl.not
 import org.maplibre.compose.expressions.value.SymbolAnchor
+import org.maplibre.compose.interaction.ClickResult
 import org.maplibre.compose.layers.CircleLayer
 import org.maplibre.compose.layers.SymbolLayer
 import org.maplibre.compose.sources.GeoJsonData
-import org.maplibre.compose.sources.GeoJsonOptions
 import org.maplibre.compose.sources.GeoJsonSource
 import org.maplibre.compose.sources.rememberGeoJsonSource
-import org.maplibre.compose.util.ClickResult
 import org.maplibre.spatialk.geojson.Feature
 import org.maplibre.spatialk.geojson.FeatureCollection
 import org.maplibre.spatialk.geojson.Point
@@ -94,12 +93,11 @@ fun LocationPinMarkers(
     // Create GeoJSON source with clustering
     val markersSource = rememberGeoJsonSource(
         data = GeoJsonData.JsonString(geoJsonString),
-        options = GeoJsonOptions(
-            cluster = true,
-            clusterMinPoints = 3,
-            clusterRadius = 30
-        ),
-    )
+    ) {
+        cluster = true
+        clusterMinPoints = 3
+        clusterRadius = 30
+    }
 
     // Cluster circle layer
     CircleLayer(

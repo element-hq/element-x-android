@@ -41,6 +41,7 @@ class DefaultRoomGroupMessageCreator(
     private val bitmapLoader: NotificationBitmapLoader,
     private val stringProvider: StringProvider,
     private val notificationCreator: NotificationCreator,
+    private val roomSharedWithOtherAccountChecker: RoomSharedWithOtherAccountChecker,
 ) : RoomGroupMessageCreator {
     override suspend fun createRoomMessage(
         notificationAccountParams: NotificationAccountParams,
@@ -65,10 +66,11 @@ class DefaultRoomGroupMessageCreator(
         val lastMessageTimestamp = events.last().timestamp
         val smartReplyErrors = events.filter { it.isSmartReplyError() }
         val roomIsDm = !roomIsGroup
+        val sessionId = notificationAccountParams.user.userId
         return notificationCreator.createMessagesListNotification(
             notificationAccountParams = notificationAccountParams,
             roomInfo = RoomEventGroupInfo(
-                sessionId = notificationAccountParams.user.userId,
+                sessionId = sessionId,
                 roomId = roomId,
                 roomDisplayName = roomName,
                 isDm = roomIsDm,
@@ -76,6 +78,7 @@ class DefaultRoomGroupMessageCreator(
                 shouldBing = events.any { it.noisy },
                 customSound = events.last().soundName,
                 isUpdated = events.last().let { it.isUpdated || it.outGoingMessage },
+                showSessionId = roomSharedWithOtherAccountChecker.isJoinedByOtherAccount(sessionId, roomId),
             ),
             threadId = threadId,
             largeIcon = largeBitmap,

@@ -18,7 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.push.api.battery.BatteryOptimizationEvents
+import io.element.android.libraries.push.api.battery.BatteryOptimizationEvent
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.store.PushDataStore
@@ -48,12 +48,12 @@ class BatteryOptimizationPresenter(
             onPauseOrDispose {}
         }
 
-        fun handleEvent(event: BatteryOptimizationEvents) {
+        fun handleEvent(event: BatteryOptimizationEvent) {
             when (event) {
-                BatteryOptimizationEvents.Dismiss -> coroutineScope.launch {
+                BatteryOptimizationEvent.Dismiss -> coroutineScope.launch {
                     mutableBatteryOptimizationStore.onOptimizationBannerDismissed()
                 }
-                BatteryOptimizationEvents.RequestDisableOptimizations -> {
+                BatteryOptimizationEvent.RequestDisableOptimizations -> {
                     isRequestSent = true
                     if (batteryOptimization.requestDisablingBatteryOptimization().not()) {
                         // If not able to perform the request, ensure that we do not display the banner again

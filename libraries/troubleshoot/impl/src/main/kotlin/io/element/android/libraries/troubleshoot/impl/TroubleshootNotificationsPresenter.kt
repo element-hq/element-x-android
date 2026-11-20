@@ -38,19 +38,19 @@ class TroubleshootNotificationsPresenter(
         }
 
         val testSuiteState by troubleshootTestSuite.state.collectAsState()
-        fun handleEvent(event: TroubleshootNotificationsEvents) {
+        fun handleEvent(event: TroubleshootNotificationsEvent) {
             when (event) {
-                TroubleshootNotificationsEvents.StartTests -> coroutineScope.launch {
+                TroubleshootNotificationsEvent.StartTests -> coroutineScope.launch {
                     troubleshootTestSuite.runTestSuite(this)
                 }
-                is TroubleshootNotificationsEvents.QuickFix -> coroutineScope.launch {
+                is TroubleshootNotificationsEvent.QuickFix -> coroutineScope.launch {
                     troubleshootTestSuite.quickFix(
                         testIndex = event.testIndex,
                         coroutineScope = this,
                         navigator = navigator,
                     )
                 }
-                TroubleshootNotificationsEvents.RetryFailedTests -> coroutineScope.launch {
+                TroubleshootNotificationsEvent.RetryFailedTests -> coroutineScope.launch {
                     troubleshootTestSuite.retryFailedTest(this)
                 }
             }

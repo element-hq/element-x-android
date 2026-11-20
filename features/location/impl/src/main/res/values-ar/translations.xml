@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s لم يستطع تحميل الخريطة. يرجى المحاولة مجدداً لاحقاً."</string>
+  <string name="error_failed_locating_user">"%1$s لم يستطع الوصول إلى موقعك. يرجى المحاولة مجدداً لاحقاً."</string>
+  <string name="error_location_service_disabled_android">"يرجى تفعيل GPS للوصول إلى الميزات المستندة إلى الموقع."</string>
+  <string name="error_missing_location_auth_android">"لا يملك %1$s الإذن بالوصول إلى موقعك. يمكنك تفعيل وصوله في الإعدادات."</string>
+  <string name="error_missing_location_rationale_android">"لا يملك %1$s الإذن بالوصول إلى موقعك. فعّل وصوله تحت."</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"مشاركة الموقع المباشر"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"جارٍ مشاركة الموقع"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s - الموقع المباشر"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"لا يشارك أحد موقعه"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"مشاركة الموقع المباشر"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="zero">"%1$d أشخاص"</item>
+    <item quantity="one">"%1$d شخص"</item>
+    <item quantity="two">"%1$d شخصان"</item>
+    <item quantity="few">"%1$d أشخاص"</item>
+    <item quantity="many">"%1$d شخصًا"</item>
+    <item quantity="other">"%1$d شخص"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"على الخريطة"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"سيُخزَّن سجل موقعك المباشر في الغرفة وسيكون مرئيًا للأعضاء بعد انتهاء الجلسة."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"اختر مدة مشاركة موقعك المباشر."</string>
   <string name="screen_share_location_live_location_missing_permissions">"ليست لديك صلاحيات لمشاركة موقعك المباشر في هذه الغرفة"</string>
+  <string name="screen_share_location_title">"مشاركة موقع"</string>
+  <string name="screen_share_my_location_action">"شارك موقعي"</string>
+  <string name="screen_share_open_apple_maps">"فتح في Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"فتح في Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"فتح في OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"مشاركة الموقع الجغرافي المُحدّد"</string>
+  <string name="screen_sharing_location_option_sheet_title">"خيارات المشاركة"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"تمت المشاركة %1$s"</string>
+  <string name="screen_static_location_sheet_title">"على الخريطة"</string>
+  <string name="screen_view_location_title">"الموقع"</string>
 </resources>

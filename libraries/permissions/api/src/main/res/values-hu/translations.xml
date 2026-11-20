@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"Hozzáférés engedélyezése"</string>
   <string name="dialog_permission_camera">"Hogy az alkalmazás használhassa a kamerát, adja meg az engedélyt a rendszerbeállításokban."</string>
   <string name="dialog_permission_generic">"Adja meg az engedélyt a rendszerbeállításokban."</string>
   <string name="dialog_permission_microphone">"Hogy az alkalmazás használhassa a mikrofont, adja meg az engedélyt a rendszerbeállításokban."</string>
   <string name="dialog_permission_notification">"Hogy az alkalmazás megjeleníthesse az értesítéseket, adja meg az engedélyt a rendszerbeállításokban."</string>
+  <string name="screen_local_network_opt_in_subtitle">"A Matrix-kiszolgáló helyi hálózaton található. A csatlakozáshoz engedélyre van szüksége ennek: %1$s , hogy elérje a hálózaton lévő eszközöket."</string>
+  <string name="screen_local_network_opt_in_title">"Hozzáférés engedélyezése a helyi hálózathoz"</string>
 </resources>

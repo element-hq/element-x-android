@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,14 +39,17 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
-import io.element.android.libraries.designsystem.components.avatar.getBestName
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.matrix.ui.messages.ProvideRoomMemberProfiles
+import io.element.android.libraries.matrix.ui.messages.rememberRoomMember
+import io.element.android.libraries.previewutils.room.aRoomMemberList
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -57,43 +61,60 @@ fun TimelineItemReadReceiptView(
     onReadReceiptsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.receipts.isNotEmpty()) {
-        ReadReceiptsRow(modifier = modifier) {
-            ReadReceiptsAvatars(
-                receipts = state.receipts,
-                onClick = onReadReceiptsClick,
-            )
+    val content: @Composable (() -> Unit)? = when (state.sendState) {
+        // If null, assume it's Sent and act the same way
+        null if state.isLastOutgoingMessage && state.receipts.isEmpty() -> {
+            @Composable { SentIcon() }
         }
-    } else {
-        when (state.sendState) {
-            is LocalEventSendState.Sending -> {
-                ReadReceiptsRow(modifier) {
-                    Icon(
-                        modifier = Modifier.padding(2.dp),
-                        imageVector = CompoundIcons.Circle(),
-                        contentDescription = stringResource(id = CommonStrings.common_sending),
-                        tint = ElementTheme.colors.iconSecondary
-                    )
-                }
+        is LocalEventSendState.Sending -> {
+            @Composable { SendingIcon() }
+        }
+        is LocalEventSendState.Failed -> {
+            // Error? The timestamp is already displayed in red
+            null
+        }
+        is LocalEventSendState.Sent if state.isLastOutgoingMessage && state.receipts.isEmpty() -> {
+            @Composable { SentIcon() }
+        }
+        else -> if (state.receipts.isNotEmpty()) {
+            @Composable {
+                ReadReceiptsAvatars(
+                    receipts = state.receipts,
+                    onClick = onReadReceiptsClick,
+                )
             }
-            is LocalEventSendState.Failed -> {
-                // Error? The timestamp is already displayed in red
-            }
-            null,
-            is LocalEventSendState.Sent -> {
-                if (state.isLastOutgoingMessage) {
-                    ReadReceiptsRow(modifier = modifier) {
-                        Icon(
-                            modifier = Modifier.padding(2.dp),
-                            imageVector = CompoundIcons.CheckCircle(),
-                            contentDescription = stringResource(id = CommonStrings.common_sent),
-                            tint = ElementTheme.colors.iconSecondary
-                        )
-                    }
-                }
-            }
+        } else {
+            null
         }
     }
+
+    // Only show the row if there is content to display
+    content?.let {
+        ReadReceiptsRow(
+            modifier = modifier,
+            content = it,
+        )
+    }
+}
+
+@Composable
+private fun SendingIcon() {
+    Icon(
+        modifier = Modifier.padding(2.dp),
+        imageVector = CompoundIcons.Circle(),
+        contentDescription = stringResource(id = CommonStrings.common_sending),
+        tint = ElementTheme.colors.iconSecondary
+    )
+}
+
+@Composable
+private fun SentIcon() {
+    Icon(
+        modifier = Modifier.padding(2.dp),
+        imageVector = CompoundIcons.CheckCircle(),
+        contentDescription = stringResource(id = CommonStrings.common_sent),
+        tint = ElementTheme.colors.iconSecondary
+    )
 }
 
 @Composable
@@ -128,10 +149,13 @@ private fun ReadReceiptsAvatars(
     val avatarStrokeSize = 1.dp
     val avatarStrokeColor = ElementTheme.colors.bgCanvasDefault
     val receiptDescription = computeReceiptDescription(receipts)
+    val shape = RoundedCornerShape(4.dp)
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
+            .clip(shape)
             .clickable(
+                interactionSource = null,
+                indication = ripple(focusRingShape = shape),
                 onClick = onClick,
                 onClickLabel = stringResource(id = CommonStrings.a11y_read_receipts_tap_to_show_all_android),
             )
@@ -151,6 +175,7 @@ private fun ReadReceiptsAvatars(
                 .take(TimelineConfig.MAX_READ_RECEIPT_TO_DISPLAY)
                 .reversed()
                 .forEachIndexed { index, readReceiptData ->
+                    val member = rememberRoomMember(readReceiptData.userId)
                     Box(
                         modifier = Modifier
                             .padding(end = (12.dp + avatarStrokeSize * 2) * index)
@@ -161,7 +186,12 @@ private fun ReadReceiptsAvatars(
                         contentAlignment = Alignment.Center,
                     ) {
                         Avatar(
-                            avatarData = readReceiptData.avatarData,
+                            avatarData = AvatarData(
+                                id = readReceiptData.userId.value,
+                                name = member?.displayName,
+                                url = member?.avatarUrl,
+                                size = AvatarSize.TimelineReadReceipt,
+                            ),
                             avatarType = AvatarType.User,
                         )
                     }
@@ -183,20 +213,25 @@ private fun computeReceiptDescription(receipts: ImmutableList<ReadReceiptData>):
         0 -> "" // Cannot happen
         1 -> stringResource(
             id = CommonStrings.a11y_read_receipts_single,
-            receipts[0].avatarData.getBestName()
+            rememberBestName(receipts[0])
         )
         2 -> stringResource(
             id = CommonStrings.a11y_read_receipts_multiple,
-            receipts[0].avatarData.getBestName(),
-            receipts[1].avatarData.getBestName(),
+            rememberBestName(receipts[0]),
+            rememberBestName(receipts[1]),
         )
         else -> pluralStringResource(
             id = CommonPlurals.a11y_read_receipts_multiple_with_others,
             count = receipts.size - 1,
-            receipts[0].avatarData.getBestName(),
+            rememberBestName(receipts[0]),
             receipts.size - 1
         )
     }
+}
+
+@Composable
+private fun rememberBestName(readReceiptData: ReadReceiptData): String {
+    return rememberRoomMember(readReceiptData.userId)?.displayName ?: readReceiptData.userId.value
 }
 
 @PreviewsDayNight
@@ -204,8 +239,10 @@ private fun computeReceiptDescription(receipts: ImmutableList<ReadReceiptData>):
 internal fun TimelineItemReadReceiptViewPreview(
     @PreviewParameter(ReadReceiptViewStatePreviewParam::class) state: ReadReceiptViewState,
 ) = ElementPreview {
-    TimelineItemReadReceiptView(
-        state = state,
-        onReadReceiptsClick = {},
-    )
+    ProvideRoomMemberProfiles(members = aRoomMemberList()) {
+        TimelineItemReadReceiptView(
+            state = state,
+            onReadReceiptsClick = {},
+        )
+    }
 }

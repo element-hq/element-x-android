@@ -53,7 +53,7 @@ fun aPushHistoryState(
     showOnlyErrors: Boolean = false,
     resetAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     showNotSameAccountError: Boolean = false,
-    eventSink: (PushHistoryEvents) -> Unit = {},
+    eventSink: (PushHistoryEvent) -> Unit = {},
 ) = PushHistoryState(
     pushCounter = pushCounter,
     pushHistoryItems = pushHistoryItems.toImmutableList(),

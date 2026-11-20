@@ -32,6 +32,8 @@ import io.element.android.libraries.designsystem.theme.components.Text
 /**
  * IconTitleSubtitleMolecule is a molecule which displays an icon, a title and a subtitle.
  *
+ * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=1964-3385
+ *
  * @param title the title to display
  * @param subTitle the subtitle to display
  * @param iconStyle the style of the [BigIcon] to display

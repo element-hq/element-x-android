@@ -20,28 +20,26 @@ jobs:
       contents: write
     name: Record screenshots on branch ${{ github.event.pull_request.head.ref || github.ref_name }}
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'Record-Screenshots'
 
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
-        with:
-          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-          tool-cache: true
-          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
-          android: false
-          dotnet: true
-          haskell: true
-          # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
-          large-packages: false
-          docker-images: true
-          swap-storage: false
-
       - name: Remove Record-Screenshots label
         if: github.event.label.name == 'Record-Screenshots'
-        uses: actions-ecosystem/action-remove-labels@2ce5d41b4b6aa8503e285553f75ed56e0a40bae0 # v1.3.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
-          labels: Record-Screenshots
+          script: |
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                name: 'Record-Screenshots',
+              });
+            } catch (error) {
+              // Label may already have been removed (e.g. concurrent run); don't fail the job.
+              if (error.status !== 404) throw error;
+            }
       - name: ⏬ Checkout with LFS (PR)
         if: github.event.label.name == 'Record-Screenshots'
         uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
@@ -53,20 +51,14 @@ jobs:
         uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
         with:
           persist-credentials: false
-      - name: ☕️ Use JDK 21
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
         with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '21'
-      # Add gradle cache, this should speed up the process
-      - name: Configure gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
-        with:
-          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+          free-disk-space: 'true'
       - name: Record screenshots
         id: record
         run: ./.github/workflows/scripts/recordScreenshots.sh
         env:
           GITHUB_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN || secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
+          GITHUB_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
           GRADLE_ARGS: ${{ env.CI_GRADLE_ARG_PROPERTIES }}

@@ -12,8 +12,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.userlocation.UserLocationState
+import io.element.android.features.location.impl.show.aPreviewMapTilerConfig
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.persistentListOf
@@ -71,13 +71,13 @@ class ShareLocationStatePreviewParam : PreviewParameterProvider<ShareLocationSta
                 canShareLiveLocation = true,
             ),
             aShareLocationState(
-                customMapTilerConfig = AsyncData.Loading(),
+                mapTilerConfig = null,
             ),
         )
 }
 
 fun aShareLocationState(
-    customMapTilerConfig: AsyncData<MapTilerConfig?> = AsyncData.Success(null),
+    mapTilerConfig: MapTilerConfig? = aPreviewMapTilerConfig(),
     currentUser: MatrixUser = MatrixUser(UserId("@user:matrix.org")),
     dialogState: ShareLocationState.Dialog = ShareLocationState.Dialog.None,
     trackUserPosition: Boolean = false,
@@ -88,7 +88,7 @@ fun aShareLocationState(
     eventSink: (ShareLocationEvent) -> Unit = {},
 ): ShareLocationState {
     return ShareLocationState(
-        customMapTilerConfig = customMapTilerConfig,
+        mapTilerConfig = mapTilerConfig,
         currentUser = currentUser,
         dialogState = dialogState,
         trackUserLocation = trackUserPosition,

@@ -22,7 +22,7 @@ import java.io.File
 fun ApplicationExtension.androidAppConfig(project: Project) {
     compileSdk = Versions.COMPILE_SDK
 
-    defaultConfig(::defaultApplicationConfig)
+    defaultConfig { defaultApplicationConfig(this, project) }
     compileOptions(::defaultCompileOptions)
     testOptions(::defaultTestOptions)
 
@@ -34,13 +34,26 @@ fun ApplicationExtension.androidAppConfig(project: Project) {
 fun LibraryExtension.androidLibraryConfig(project: Project) {
     compileSdk = Versions.COMPILE_SDK
 
-    defaultConfig(::defaultLibraryConfig)
+    defaultConfig { defaultLibraryConfig(this, project) }
     compileOptions(::defaultCompileOptions)
     testOptions(::defaultTestOptions)
+
+    // Most of the library modules do not declare any resource. For them, skip the resource processing tasks
+    // (R class generation, resource packaging, etc.).
+    // Keep them for the modules with unit tests though: without them, the unit tests do not get the R classes and the
+    // merged resources of the dependencies, which Robolectric and Paparazzi tests need.
+    androidResources.enable = project.hasAndroidResources() || project.file("src/test").exists()
 
     lint {
         project.defaultLintOptions(this)
     }
+}
+
+/**
+ * Whether the module has Android resources in any of its source sets (`src/main/res`, `src/debug/res`, etc.).
+ */
+private fun Project.hasAndroidResources(): Boolean {
+    return file("src").listFiles().orEmpty().any { File(it, "res").isDirectory }
 }
 
 fun ApplicationExtension.composeAppConfig() {
@@ -55,8 +68,11 @@ fun LibraryExtension.composeLibraryConfig() {
     lint(::defaultComposeLintOptions)
 }
 
-fun defaultApplicationConfig(applicationDefaultConfig: ApplicationDefaultConfig) = applicationDefaultConfig.apply {
-    minSdk = Versions.minSdk
+private fun defaultApplicationConfig(
+    applicationDefaultConfig: ApplicationDefaultConfig,
+    project: Project,
+) = applicationDefaultConfig.apply {
+    minSdk = Versions.minSdk(project.isEnterpriseBuild)
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
     vectorDrawables {
@@ -65,8 +81,11 @@ fun defaultApplicationConfig(applicationDefaultConfig: ApplicationDefaultConfig)
     }
 }
 
-fun defaultLibraryConfig(libraryDefaultConfig: LibraryDefaultConfig) = libraryDefaultConfig.apply {
-    minSdk = Versions.minSdk
+private fun defaultLibraryConfig(
+    libraryDefaultConfig: LibraryDefaultConfig,
+    project: Project,
+) = libraryDefaultConfig.apply {
+    minSdk = Versions.minSdk(project.isEnterpriseBuild)
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
     vectorDrawables {
@@ -75,27 +94,27 @@ fun defaultLibraryConfig(libraryDefaultConfig: LibraryDefaultConfig) = libraryDe
     }
 }
 
-fun defaultCompileOptions(compileOptions: CompileOptions) = compileOptions.apply {
+private fun defaultCompileOptions(compileOptions: CompileOptions) = compileOptions.apply {
     sourceCompatibility = Versions.javaVersion
     targetCompatibility = Versions.javaVersion
 }
 
-fun defaultTestOptions(testOptions: com.android.build.api.dsl.TestOptions) = testOptions.apply {
+private fun defaultTestOptions(testOptions: com.android.build.api.dsl.TestOptions) = testOptions.apply {
     unitTests.isReturnDefaultValues = true
 }
 
-fun defaultComposeBuildFeatures(buildFeatures: com.android.build.api.dsl.BuildFeatures) = buildFeatures.apply {
+private fun defaultComposeBuildFeatures(buildFeatures: com.android.build.api.dsl.BuildFeatures) = buildFeatures.apply {
     compose = true
 }
 
-fun defaultPackagingOptions(packagingOptions: com.android.build.api.dsl.Packaging) = packagingOptions.apply {
+private fun defaultPackagingOptions(packagingOptions: com.android.build.api.dsl.Packaging) = packagingOptions.apply {
     resources.excludes.apply {
         add("META-INF/AL2.0")
         add("META-INF/LGPL2.1")
     }
 }
 
-fun defaultComposeLintOptions(lint: Lint) = lint.apply {
+private fun defaultComposeLintOptions(lint: Lint) = lint.apply {
     // Extra rules for compose
     // Disabled until lint stops inspecting generated ksp files...
     // error.add("ComposableLambdaParameterNaming")
@@ -104,7 +123,7 @@ fun defaultComposeLintOptions(lint: Lint) = lint.apply {
     checkGeneratedSources = false
 }
 
-fun Project.defaultLintOptions(lint: Lint) = lint.apply {
+private fun Project.defaultLintOptions(lint: Lint) = lint.apply {
     lintConfig = File("${project.rootDir}/tools/lint/lint.xml")
     if (isEnterpriseBuild) {
         // Disable check on ObsoleteSdkInt for Enterprise builds
@@ -117,3 +136,12 @@ fun Project.defaultLintOptions(lint: Lint) = lint.apply {
     ignoreTestFixturesSources = true
     checkGeneratedSources = false
 }
+
+fun Project.environmentOrGradleValue(
+    environmentVariableName: String,
+    gradlePropertyName: String,
+    defaultValue: String? = null,
+): String? = providers.environmentVariable(environmentVariableName)
+    .orElse(providers.gradleProperty(gradlePropertyName))
+    .orNull
+    ?: defaultValue

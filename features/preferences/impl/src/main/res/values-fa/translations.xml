@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"برای اطمینان از اینکه هرگز تماس مهمی را از دست نمی‌دهید، لطفاً تنظیمات خود را تغییر دهید تا وقتی تلفنتان قفل است، اعلان‌ها به صورت تمام صفحه نمایش داده شوند."</string>
-  <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"کیفیت پیش‌فرض ویدیوهایی که آپلود می‌کنید را انتخاب کنید."</string>
+  <string name="dialog_default_video_quality_selector_title">"کیفیت بارگذاری ویدیو"</string>
+  <string name="full_screen_intent_banner_message_android">"برای اطمینان از اینکه هرگز تماس مهمی را از دست نمی‌دهید، لطفاً تنظیمات خود را تغییر دهید تا وقتی تلفنتان قفل است، اعلان‌ها به صورت تمام صفحه نمایش داده شوند."</string>
+  <string name="full_screen_intent_banner_title_android">"بهبود تجریهٔ تماستان"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"گزینش چگونگی دریافت آگاهی"</string>
-  <string name="screen_advanced_settings_developer_mode">"حالت توسعه‌دهنده"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"دسترسی به ویژگی ها و عملکردها را برای توسعه دهندگان فعال کنید."</string>
   <string name="screen_advanced_settings_element_call_base_url">"نشانی پایهٔ تماس المنتی سفارشی"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"تنظمی نشانی پایه‌‌ای سفارشی برای تماس المنتی."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL نامعتبر، لطفا مطمئن شوید که پروتکل (http/https) و آدرس صحیح را درج کرده اید."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"نهفتن چهرک‌ها در درخواست‌های دعوت اتاق"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"نهفتن رسانه در خط زمانی"</string>
   <string name="screen_advanced_settings_labs">"آزمایشگاه‌ها"</string>
   <string name="screen_advanced_settings_live_location_section_description">"مسافتی که باید طی کنید تا به‌روزرسانی انجام شود."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"مطمئن شوید که «موقعیت مکانی دقیق» برای این برنامه فعال شده است. برای تغییر مجوز به %1$s بروید."</string>
@@ -21,7 +20,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"عکس‌ها و ویدیوها را سریع‌تر آپلود کنید و مصرف اینترنت را کاهش دهید"</string>
   <string name="screen_advanced_settings_media_compression_title">"بهینه سازی کیفیت رسانه"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"نظارت و امنیت"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"بهینه‌سازی خودکار تصاویر برای آپلود سریع‌تر و حجم کمتر فایل‌ها."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"بهینه سازی کیفیت آپلود تصاویر"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. برای تغییر، اینجا را لمس کنید."</string>
@@ -30,9 +28,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"استاندارد (۷۲۰ت)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"کیفیت بارگذاری ویدیو"</string>
   <string name="screen_advanced_settings_push_provider_android">"فراهم کنندهٔ آگاهی‌های ارسالی"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"از کار انداختن ویرایشگر متن غنی یا نوشتن دستی مارک‌دون."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"رسید‌های خواندن"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"اگر خاموش باشد، رسیدهای خوانده شدن شما برای کسی ارسال نمی‌شود. شما همچنان رسیدهای خوانده شدن را از سایر کاربران دریافت خواهید کرد."</string>
   <string name="screen_advanced_settings_share_presence">"هم‌رسانی حضور"</string>
   <string name="screen_advanced_settings_share_presence_description">"اگر خاموش باشد، نمی‌توانید رسیدهای خوانده شدن یا اعلان‌های تایپ را ارسال یا دریافت کنید."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"نهفتن همیشگی"</string>
@@ -109,6 +104,7 @@
   <string name="screen_settings_user_status_in_a_meeting">"در یک جلسه"</string>
   <string name="screen_settings_user_status_on_the_road">"در جاده"</string>
   <string name="screen_settings_user_status_placeholder">"وضعیتت چطوره؟"</string>
+  <string name="settings_version_number">"نگارش : %1$s (%2$s)"</string>
   <string name="theme_black">"سیاه"</string>
   <string name="theme_dark">"تیره"</string>
   <string name="theme_light">"روشن"</string>

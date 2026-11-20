@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>
-  <string name="full_screen_intent_banner_title">"Améliorez votre expérience d’appel"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Sélectionnez la qualité par défaut des vidéos que vous envoyez."</string>
+  <string name="dialog_default_video_quality_selector_title">"Qualité des vidéos envoyées"</string>
+  <string name="full_screen_intent_banner_message_android">"Afin de ne jamais manquer un appel important, veuillez modifier vos paramètres pour autoriser les notifications en plein écran lorsque votre appareil est verrouillé."</string>
+  <string name="full_screen_intent_banner_title_android">"Améliorez votre expérience d’appel"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Choisissez le mode de réception des notifications"</string>
-  <string name="screen_advanced_settings_developer_mode">"Mode développeur"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Activer pour pouvoir accéder aux fonctionnalités destinées aux développeurs."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL de base pour Element Call personnalisée"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Configurer une URL de base pour Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL invalide, assurez-vous d’inclure le protocol (http/https) et l’adresse correcte."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Masquer les avatars des salons dans les invitations"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Masquer les aperçus des médias dans les discussions"</string>
   <string name="screen_advanced_settings_labs">"Expérimental"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Distance à effectuer pour envoyer une mise à jour."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Assurez-vous que la « Localisation précise » est activée pour cette application. Pour modifier l’autorisation, aller à: %1$s."</string>
@@ -21,7 +20,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Téléchargez des photos et des vidéos plus rapidement et réduisez la consommation de données"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimisez la qualité des médias"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Modération et sécurité"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Optimiser automatiquement les images pour des envois plus rapides et des tailles de fichiers plus petites."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimiser la qualité des images envoyées"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Appuyez ici pour changer."</string>
@@ -30,9 +28,6 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Résolution standard (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Qualité des vidéos envoyées"</string>
   <string name="screen_advanced_settings_push_provider_android">"Fournisseur de Push"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Désactivez l’éditeur de texte enrichi pour saisir manuellement du Markdown."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Accusés de lecture"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"En cas de désactivation, vos accusés de lecture ne seront pas envoyés aux autres membres. Vous verrez toujours les accusés des autres membres."</string>
   <string name="screen_advanced_settings_share_presence">"Partager la présence"</string>
   <string name="screen_advanced_settings_share_presence_description">"Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Toujours cacher"</string>
@@ -52,11 +47,19 @@
   <string name="screen_edit_profile_error_title">"Impossible de mettre à jour le profil"</string>
   <string name="screen_edit_profile_title">"Modifier le profil"</string>
   <string name="screen_edit_profile_updating_details">"Mise à jour du profil…"</string>
+  <string name="screen_labs_enable_gallery">"Gallerie d’images"</string>
+  <string name="screen_labs_enable_gallery_description">"Envoyez plusieurs images ou vidéos en un seul message. Fonctionne parfaitement sur mobile, mais pas encore supporté sur le web."</string>
+  <string name="screen_labs_enable_knocking">"Demander à rejoindre"</string>
+  <string name="screen_labs_enable_knocking_description">"Les utilisateurs peuvent demander l’accès à un salon privé. Stable sur mobile, une version web existe mais est encore expérimentale."</string>
   <string name="screen_labs_enable_threads">"Activez les fils de discussion."</string>
   <string name="screen_labs_enable_threads_description">"Un changement entraînera le redémarrage de l’application."</string>
   <string name="screen_labs_header_description">"Découvrez nos dernières idées en cours de développement. Ces fonctionnalités ne sont pas encore finalisées; elles peuvent être instables et évoluer."</string>
   <string name="screen_labs_header_title">"Envie d’expérimenter?"</string>
   <string name="screen_labs_title">"Expérimental"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Invitations"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Autres utilisateurs"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Votre apparence"</string>
+  <string name="screen_notification_settings_activity_section_title">"Activité"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Réglages supplémentaires"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Sonnerie d’appel"</string>
   <string name="screen_notification_settings_calls_label">"Appels audio et vidéo"</string>
@@ -75,7 +78,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_failed_fixing_configuration">"La configuration n’a pas été corrigée, veuillez réessayer."</string>
   <string name="screen_notification_settings_group_chats">"Discussions de groupe"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre serveur d’accueil ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Votre fournisseur de compte ne supporte pas cette option pour les salons chiffrés, vous pourriez ne pas être notifié(e) dans certains salons."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Choisir un autre son…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Vous utilisez actuellement %1$s"</string>
@@ -84,7 +87,9 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_mode_all">"Tous"</string>
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
   <string name="screen_notification_settings_notification_section_title">"Prévenez-moi pour"</string>
-  <string name="screen_notification_settings_room_mention_label">"Prévenez-moi si un message contient \"@room\""</string>
+  <string name="screen_notification_settings_room_mention_label">"Un message qui contient @room"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Puce ou nombre de messages non lus"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Afficher toutes les activités dans la liste des salons"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Personnalisé"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Son personnalisé…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Erreur lors de la suppression du fichier"</string>
@@ -101,6 +106,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"paramètres du système"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="screen_settings_add_account">"Ajouter un compte"</string>
   <string name="screen_settings_user_status_away">"Absent"</string>
   <string name="screen_settings_user_status_be_right_back">"Je reviens tout de suite"</string>
   <string name="screen_settings_user_status_custom">"Personnalisé…"</string>
@@ -109,6 +115,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_settings_user_status_in_a_meeting">"En réunion"</string>
   <string name="screen_settings_user_status_on_the_road">"Sur la route"</string>
   <string name="screen_settings_user_status_placeholder">"Quel est votre statut ?"</string>
+  <string name="settings_version_number">"Version : %1$s ( %2$s )"</string>
   <string name="theme_black">"Noir"</string>
   <string name="theme_dark">"Sombre"</string>
   <string name="theme_light">"Clair"</string>

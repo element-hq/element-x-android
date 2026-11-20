@@ -17,5 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview(heightDp = 1000)
 annotation class PreviewWithLargeHeight
 
+@Preview(heightDp = 1280)
+annotation class PreviewWithHeight1280
+
 @Preview(heightDp = 1600)
 annotation class PreviewWithExtraLargeHeight

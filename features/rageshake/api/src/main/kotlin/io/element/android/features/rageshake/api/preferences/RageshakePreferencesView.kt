@@ -21,7 +21,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun RageshakePreferencesView(
@@ -41,7 +40,7 @@ fun RageshakePreferencesView(
             PreferenceCategory(title = stringResource(id = R.string.settings_rageshake)) {
                 if (state.isSupported) {
                     PreferenceSwitch(
-                        title = stringResource(id = CommonStrings.preference_rageshake),
+                        title = stringResource(id = R.string.preference_rageshake),
                         isChecked = state.isEnabled,
                         onCheckedChange = ::onEnabledChanged
                     )

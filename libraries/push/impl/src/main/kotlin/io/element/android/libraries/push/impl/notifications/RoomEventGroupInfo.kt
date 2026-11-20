@@ -26,4 +26,6 @@ data class RoomEventGroupInfo(
     val customSound: String? = null,
     val hasSmartReplyError: Boolean = false,
     val isUpdated: Boolean = false,
+    // true if the room is also joined by another account signed in on this device
+    val showSessionId: Boolean = false,
 )

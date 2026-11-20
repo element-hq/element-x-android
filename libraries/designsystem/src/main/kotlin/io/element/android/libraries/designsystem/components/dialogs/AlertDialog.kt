@@ -9,8 +9,8 @@
 package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +22,6 @@ import io.element.android.libraries.designsystem.theme.components.DialogPreview
 import io.element.android.libraries.designsystem.theme.components.SimpleAlertDialogContent
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlertDialog(
     content: String,
@@ -57,8 +56,8 @@ private fun AlertDialogContent(
 }
 
 object AlertDialogDefaults {
-    val title: String? @Composable get() = null
-    val submitText: String @Composable get() = stringResource(id = CommonStrings.action_ok)
+    val title: String? get() = null
+    val submitText: String @Composable @ReadOnlyComposable get() = stringResource(id = CommonStrings.action_ok)
 }
 
 @Preview(group = PreviewGroup.Dialogs)

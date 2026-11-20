@@ -80,7 +80,7 @@ fun aSpaceState(
     selectedRoomIds: Set<RoomId> = emptySet(),
     canManageRooms: Boolean = true,
     removeRoomsAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    eventSink: (SpaceEvents) -> Unit = { },
+    eventSink: (SpaceEvent) -> Unit = { },
 ) = SpaceState(
     spaceInfo = spaceInfo,
     children = children.toImmutableList(),

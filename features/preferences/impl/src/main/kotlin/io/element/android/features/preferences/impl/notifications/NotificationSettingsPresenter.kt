@@ -26,8 +26,11 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.ShowAllActivityInRoomListFeature
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -55,6 +58,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
@@ -73,6 +77,8 @@ class NotificationSettingsPresenter(
     private val stringProvider: StringProvider,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
+    private val featureFlagService: FeatureFlagService,
+    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<NotificationSettingsState> {
     // Serializes the pick → copy → persist → recreate pipeline per slot. The copier already locks
     // its `<slot>.tmp` file, but the persist+recreate window outside the copier is unprotected;
@@ -108,16 +114,19 @@ class NotificationSettingsPresenter(
         }
 
         // List of PushProvider -> Distributor
-        val distributors = remember {
-            pushService.getAvailablePushProviders()
-                .flatMap { pushProvider ->
-                    pushProvider.getDistributors().map { distributor ->
-                        pushProvider to distributor
+        // Getting the distributors can query the PackageManager and the Play Services, so do it off the main thread
+        val distributors by produceState(emptyList<Pair<PushProvider, Distributor>>()) {
+            value = withContext(dispatchers.io) {
+                pushService.getAvailablePushProviders()
+                    .flatMap { pushProvider ->
+                        pushProvider.getDistributors().map { distributor ->
+                            pushProvider to distributor
+                        }
                     }
-                }
+            }
         }
         // List of Distributors
-        val availableDistributors = remember {
+        val availableDistributors = remember(distributors) {
             distributors.map { it.second }.toImmutableList()
         }
 
@@ -196,38 +205,43 @@ class NotificationSettingsPresenter(
                 )
         }
 
-        fun handleEvent(event: NotificationSettingsEvents) {
+        val showAllActivityInRoomList by produceState(false) {
+            featureFlagService.isFeatureEnabledFlow(ShowAllActivityInRoomListFeature)
+                .collect { value = it }
+        }
+
+        fun handleEvent(event: NotificationSettingsEvent) {
             when (event) {
-                is NotificationSettingsEvents.SetAtRoomNotificationsEnabled -> {
+                is NotificationSettingsEvent.SetAtRoomNotificationsEnabled -> {
                     localCoroutineScope.setAtRoomNotificationsEnabled(event.enabled, changeNotificationSettingAction)
                 }
-                is NotificationSettingsEvents.SetCallNotificationsEnabled -> {
+                is NotificationSettingsEvent.SetCallNotificationsEnabled -> {
                     localCoroutineScope.setCallNotificationsEnabled(event.enabled, changeNotificationSettingAction)
                 }
-                is NotificationSettingsEvents.SetInviteForMeNotificationsEnabled -> {
+                is NotificationSettingsEvent.SetInviteForMeNotificationsEnabled -> {
                     localCoroutineScope.setInviteForMeNotificationsEnabled(event.enabled, changeNotificationSettingAction)
                 }
-                is NotificationSettingsEvents.SetNotificationsEnabled -> sessionCoroutineScope.setNotificationsEnabled(userPushStore, event.enabled)
-                NotificationSettingsEvents.ClearConfigurationMismatchError -> {
+                is NotificationSettingsEvent.SetNotificationsEnabled -> sessionCoroutineScope.setNotificationsEnabled(userPushStore, event.enabled)
+                NotificationSettingsEvent.ClearConfigurationMismatchError -> {
                     matrixSettings.value = NotificationSettingsState.MatrixSettings.Invalid(fixFailed = false)
                 }
-                NotificationSettingsEvents.FixConfigurationMismatch -> localCoroutineScope.fixConfigurationMismatch(matrixSettings)
-                NotificationSettingsEvents.RefreshSystemNotificationsEnabled -> {
+                NotificationSettingsEvent.FixConfigurationMismatch -> localCoroutineScope.fixConfigurationMismatch(matrixSettings)
+                NotificationSettingsEvent.RefreshSystemNotificationsEnabled -> {
                     systemNotificationsEnabled.value = systemNotificationsEnabledProvider.notificationsEnabled()
                     refreshFullScreenIntentSettings++
                 }
-                NotificationSettingsEvents.ClearNotificationChangeError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
-                NotificationSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
-                NotificationSettingsEvents.CancelChangePushProvider -> showChangePushProviderDialog = false
-                is NotificationSettingsEvents.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
-                is NotificationSettingsEvents.SetMessageSound -> applyMessageSound(
+                NotificationSettingsEvent.ClearNotificationChangeError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
+                NotificationSettingsEvent.ChangePushProvider -> showChangePushProviderDialog = true
+                NotificationSettingsEvent.CancelChangePushProvider -> showChangePushProviderDialog = false
+                is NotificationSettingsEvent.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
+                is NotificationSettingsEvent.SetMessageSound -> applyMessageSound(
                     sound = event.sound,
                     sessionCoroutineScope = sessionCoroutineScope,
                     onCopyError = { messageSoundCopyError = true },
                     onCopySuccess = { messageSoundCopyError = false },
                     onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
                 )
-                is NotificationSettingsEvents.SelectMessageSoundPreset -> {
+                is NotificationSettingsEvent.SelectMessageSoundPreset -> {
                     showMessageSoundDialog = false
                     applyMessageSound(
                         sound = event.sound,
@@ -237,13 +251,13 @@ class NotificationSettingsPresenter(
                         onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
                     )
                 }
-                NotificationSettingsEvents.ShowMessageSoundDialog -> showMessageSoundDialog = true
-                NotificationSettingsEvents.DismissMessageSoundDialog -> showMessageSoundDialog = false
-                NotificationSettingsEvents.LaunchMessageSoundPicker -> {
+                NotificationSettingsEvent.ShowMessageSoundDialog -> showMessageSoundDialog = true
+                NotificationSettingsEvent.DismissMessageSoundDialog -> showMessageSoundDialog = false
+                NotificationSettingsEvent.LaunchMessageSoundPicker -> {
                     showMessageSoundDialog = false
                     pendingMessageSoundPickerLaunch++
                 }
-                is NotificationSettingsEvents.SetCallRingtone -> {
+                is NotificationSettingsEvent.SetCallRingtone -> {
                     legacyCallRingtone = null
                     applyCallRingtone(
                         sound = event.sound,
@@ -253,7 +267,7 @@ class NotificationSettingsPresenter(
                         onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
                     )
                 }
-                is NotificationSettingsEvents.SelectCallRingtonePreset -> {
+                is NotificationSettingsEvent.SelectCallRingtonePreset -> {
                     showCallRingtoneDialog = false
                     legacyCallRingtone = null
                     applyCallRingtone(
@@ -264,17 +278,20 @@ class NotificationSettingsPresenter(
                         onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
                     )
                 }
-                NotificationSettingsEvents.ShowCallRingtoneDialog -> showCallRingtoneDialog = true
-                NotificationSettingsEvents.DismissCallRingtoneDialog -> showCallRingtoneDialog = false
-                NotificationSettingsEvents.LaunchCallRingtonePicker -> {
+                NotificationSettingsEvent.ShowCallRingtoneDialog -> showCallRingtoneDialog = true
+                NotificationSettingsEvent.DismissCallRingtoneDialog -> showCallRingtoneDialog = false
+                NotificationSettingsEvent.LaunchCallRingtonePicker -> {
                     showCallRingtoneDialog = false
                     pendingCallRingtonePickerLaunch++
                 }
-                NotificationSettingsEvents.DismissMessageSoundCopyError -> {
+                NotificationSettingsEvent.DismissMessageSoundCopyError -> {
                     messageSoundCopyError = false
                 }
-                NotificationSettingsEvents.DismissCallRingtoneCopyError -> {
+                NotificationSettingsEvent.DismissCallRingtoneCopyError -> {
                     callRingtoneCopyError = false
+                }
+                is NotificationSettingsEvent.ToggleShowAllActivityInRoomList -> localCoroutineScope.launch {
+                    featureFlagService.setFeatureEnabled(ShowAllActivityInRoomListFeature, event.newValue)
                 }
             }
         }
@@ -304,6 +321,7 @@ class NotificationSettingsPresenter(
             showCallRingtoneDialog = showCallRingtoneDialog,
             pendingMessageSoundPickerLaunch = pendingMessageSoundPickerLaunch,
             pendingCallRingtonePickerLaunch = pendingCallRingtonePickerLaunch,
+            showAllActivityInRoomList = showAllActivityInRoomList,
             eventSink = ::handleEvent,
         )
     }

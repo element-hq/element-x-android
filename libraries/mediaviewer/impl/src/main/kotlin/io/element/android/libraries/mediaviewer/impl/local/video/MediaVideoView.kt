@@ -118,6 +118,7 @@ private fun ExoPlayerMediaVideoView(
                 canMute = true,
                 isMuted = false,
                 seekingToMillis = null,
+                playbackSpeed = exoPlayer.playbackParameters.speed,
             )
         )
     }

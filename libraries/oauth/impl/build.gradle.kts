@@ -25,23 +25,16 @@ android {
     }
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
-    implementation(projects.appconfig)
-    implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.uiStrings)
     implementation(libs.androidx.browser)
     implementation(platform(libs.network.retrofit.bom))
-    implementation(libs.network.retrofit)
-    implementation(libs.serialization.json)
     api(projects.libraries.oauth.api)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.permissions.test)
 }

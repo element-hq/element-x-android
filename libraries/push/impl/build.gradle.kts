@@ -53,7 +53,7 @@ android {
     }
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     implementation(libs.androidx.corektx)
@@ -86,7 +86,6 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.troubleshoot.api)
     implementation(projects.libraries.workmanager.api)
-    implementation(projects.features.announcement.api)
     implementation(projects.features.call.api)
     implementation(projects.features.enterprise.api)
     implementation(projects.features.lockscreen.api)
@@ -101,6 +100,7 @@ dependencies {
 
     testCommonDependencies(libs)
     testImplementation(libs.coil.test)
+    testImplementation(libs.sqldelight.driver.jvm)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.matrixmedia.test)
     testImplementation(projects.libraries.preferences.test)
@@ -110,7 +110,6 @@ dependencies {
     testImplementation(projects.libraries.pushstore.test)
     testImplementation(projects.libraries.troubleshoot.test)
     testImplementation(projects.libraries.workmanager.test)
-    testImplementation(projects.features.announcement.test)
     testImplementation(projects.features.call.test)
     testImplementation(projects.features.enterprise.test)
     testImplementation(projects.features.lockscreen.test)

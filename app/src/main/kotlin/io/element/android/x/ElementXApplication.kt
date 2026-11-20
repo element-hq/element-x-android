@@ -9,39 +9,74 @@
 package io.element.android.x
 
 import android.app.Application
+import android.os.StrictMode
 import androidx.compose.material3.ComposeMaterial3Flags.isAnchoredDraggableComponentsStrictOffsetCheckEnabled
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.startup.AppInitializer
 import androidx.work.Configuration
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.createGraphFactory
+import io.element.android.call.ui.ElementCallActivity
+import io.element.android.features.rageshake.api.logs.ApplicationInfoLogger
+import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
+import io.element.android.x.call.ElementCallActivityHostDelegate
+import io.element.android.x.di.AppBindings
 import io.element.android.x.di.AppGraph
-import io.element.android.x.info.logApplicationInfo
+import io.element.android.x.di.ApplicationBindings
 import io.element.android.x.initializer.CacheCleanerInitializer
 import io.element.android.x.initializer.CrashInitializer
 import io.element.android.x.initializer.PlatformInitializer
 
-class ElementXApplication : Application(), DependencyInjectionGraphOwner, Configuration.Provider {
+// The private constructor is there so the native call screen's host can be a delegate: Android instantiates
+// the Application through the public no-arg one.
+class ElementXApplication private constructor(
+    private val elementCallActivityHost: ElementCallActivityHostDelegate,
+) : Application(),
+    DependencyInjectionGraphOwner,
+    Configuration.Provider,
+    ElementCallActivity.Host by elementCallActivityHost {
+    constructor() : this(ElementCallActivityHostDelegate())
+
     override val graph: AppGraph = createGraphFactory<AppGraph.Factory>().create(this)
 
     override val workManagerConfiguration: Configuration = Configuration.Builder()
         .setWorkerFactory(MetroWorkerFactory(graph.workerProviders))
         .build()
 
+    @Inject lateinit var applicationInfoLogger: ApplicationInfoLogger
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate() {
         super.onCreate()
+
+        enableStrictMode()
+
         AppInitializer.getInstance(this).apply {
             initializeComponent(CrashInitializer::class.java)
             initializeComponent(PlatformInitializer::class.java)
             initializeComponent(CacheCleanerInitializer::class.java)
         }
 
-        logApplicationInfo(this)
+        bindings<ApplicationBindings>().inject(this)
+        elementCallActivityHost.bind { bindings<AppBindings>().nativeCallScreenHost() }
+        applicationInfoLogger.log()
 
         // Disable the strict offset check for anchored draggable components, as it can cause issues with bottom sheets.
         // Remove once https://issuetracker.google.com/issues/477038695 is fixed.
         isAnchoredDraggableComponentsStrictOffsetCheckEnabled = false
+    }
+
+    private fun enableStrictMode() {
+        // Workaround to avoid NetworkOnMainThreadException when using the network on the main thread.
+        // This is a temporary solution to rustls doing the certificate verification using blocking network requests.
+        // It should be removed once the underlying issue is fixed.
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectNetwork()
+                .penaltyLog()
+                .build()
+        )
     }
 }

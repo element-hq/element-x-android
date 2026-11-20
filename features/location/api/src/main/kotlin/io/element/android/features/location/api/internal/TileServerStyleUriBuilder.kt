@@ -22,11 +22,11 @@ interface TileServerStyleUriBuilder {
     /**
      * Builds the style URI the map view loads its tiles from.
      *
-     * @param customMapTilerConfig the custom MapTiler configuration received from the server, or null if not available.
+     * @param mapTilerConfig the MapTiler configuration to use.
      * @param darkMode whether to request the dark map style.
      */
     fun build(
-        customMapTilerConfig: MapTilerConfig?,
+        mapTilerConfig: MapTilerConfig,
         darkMode: Boolean,
     ): String
 }
@@ -38,13 +38,16 @@ interface TileServerStyleUriBuilder {
  */
 @Composable
 fun rememberTileStyleUrl(
-    customMapTileConfig: MapTilerConfig?,
+    mapTilerConfig: MapTilerConfig?,
 ): String {
     val darkMode = !ElementTheme.isLightTheme
-    return remember(darkMode, customMapTileConfig) {
-        MapTilerTileServerStyleUriBuilder().build(
-            customMapTilerConfig = customMapTileConfig,
-            darkMode = darkMode,
-        )
+    return remember(darkMode, mapTilerConfig) {
+        // Without config, the map is not displayed, so the style URL is not used.
+        mapTilerConfig?.let {
+            MapTilerTileServerStyleUriBuilder().build(
+                mapTilerConfig = it,
+                darkMode = darkMode,
+            )
+        }.orEmpty()
     }
 }

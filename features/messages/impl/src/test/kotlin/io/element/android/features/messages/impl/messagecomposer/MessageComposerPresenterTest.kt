@@ -21,6 +21,7 @@ import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.test.FakeLocationService
+import io.element.android.features.messages.api.timeline.TextPillificator
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -29,11 +30,16 @@ import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.FakeMentionSpanFormatter
-import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
-import io.element.android.features.messages.impl.utils.TextPillificationHelper
+import io.element.android.features.messages.test.timeline.FakeTextPillificator
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.emoji.api.picker.EmojiPickerPresenter
+import io.element.android.libraries.emoji.api.recentemojis.AddRecentEmoji
+import io.element.android.libraries.emoji.api.recentemojis.EmptyGetRecentEmojis
+import io.element.android.libraries.emoji.test.FakeEmojiPickerState
+import io.element.android.libraries.emoji.test.fakeEmojiPickerPresenter
+import io.element.android.libraries.emoji.test.fakeEmojiPickerPresenterFactory
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
@@ -107,12 +113,14 @@ import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.element.android.tests.testutils.waitForPredicate
 import io.mockk.mockk
 import kotlinx.collections.immutable.ImmutableList
@@ -120,13 +128,13 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import uniffi.wysiwyg_composer.MentionsState
 import java.io.File
 
-@Suppress("LargeClass")
 class MessageComposerPresenterTest : RobolectricTest() {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -151,6 +159,7 @@ class MessageComposerPresenterTest : RobolectricTest() {
             assertThat(initialState.mode).isEqualTo(MessageComposerMode.Normal)
             assertThat(initialState.isInThreadTimeline).isFalse()
             assertThat(initialState.showAttachmentSourcePicker).isFalse()
+            assertThat(initialState.emojiPickerState).isEqualTo(ComposerEmojiPickerState.Hidden)
             assertThat(initialState.canShareLocation).isTrue()
             assertThat(initialState.slashCommandAction).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -694,6 +703,79 @@ class MessageComposerPresenterTest : RobolectricTest() {
 
             initialState.eventSink(MessageComposerEvent.DismissAttachmentMenu)
             assertThat(awaitItem().showAttachmentSourcePicker).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - open and dismiss the emoji picker`() = runTest {
+        val emojiPickerState = FakeEmojiPickerState(isReady = true)
+        val presenter = createPresenter(emojiPickerPresenter = fakeEmojiPickerPresenter(emojiPickerState))
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MessageComposerEvent.OpenEmojiPicker)
+            assertThat(awaitItem().emojiPickerState).isEqualTo(ComposerEmojiPickerState.Shown(emojiPickerState))
+            initialState.eventSink(MessageComposerEvent.DismissEmojiPicker)
+            assertThat(awaitItem().emojiPickerState).isEqualTo(ComposerEmojiPickerState.Hidden)
+        }
+    }
+
+    @Test
+    fun `present - ToggleTextFormatting dismisses the emoji picker`() = runTest {
+        val presenter = createPresenter(emojiPickerPresenter = fakeEmojiPickerPresenter(FakeEmojiPickerState(isReady = true)))
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MessageComposerEvent.OpenEmojiPicker)
+            assertThat(awaitItem().emojiPickerState).isInstanceOf(ComposerEmojiPickerState.Shown::class.java)
+            initialState.eventSink(MessageComposerEvent.ToggleTextFormatting(true))
+            val state = awaitLastSequentialItem()
+            assertThat(state.showTextFormatting).isTrue()
+            assertThat(state.emojiPickerState).isEqualTo(ComposerEmojiPickerState.Hidden)
+        }
+    }
+
+    @Test
+    fun `present - emoji picker is loading until its data is ready`() = runTest {
+        val presenter = createPresenter(emojiPickerPresenter = fakeEmojiPickerPresenter(FakeEmojiPickerState(isReady = false)))
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MessageComposerEvent.OpenEmojiPicker)
+            assertThat(awaitItem().emojiPickerState).isEqualTo(ComposerEmojiPickerState.Loading)
+        }
+    }
+
+    @Test
+    fun `present - insert emoji adds it at the cursor position and records it as recent`() = runTest {
+        val addRecentEmojiLambda = lambdaRecorder<String, Result<Unit>> { Result.success(Unit) }
+        val presenter = createPresenter(
+            isRichTextEditorEnabled = false,
+            addRecentEmoji = { addRecentEmojiLambda(it) },
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            val markdownState = (initialState.textEditorState as TextEditorState.Markdown).state
+            markdownState.text.update("Hello world", true)
+            markdownState.selection = 5..5
+            initialState.eventSink(MessageComposerEvent.InsertEmoji("😀"))
+            assertThat(markdownState.text.value().toString()).isEqualTo("Hello😀 world")
+            assertThat(markdownState.selection).isEqualTo(7..7)
+            runCurrent()
+            addRecentEmojiLambda.assertions().isCalledOnce().with(value("😀"))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - DeleteBackward removes the text before the cursor in the markdown editor`() = runTest {
+        val presenter = createPresenter(isRichTextEditorEnabled = false)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            val markdownState = (initialState.textEditorState as TextEditorState.Markdown).state
+            markdownState.text.update("Hello \uD83D\uDE00", true)
+            markdownState.selection = 8..8
+            initialState.eventSink(MessageComposerEvent.DeleteBackward)
+            assertThat(markdownState.text.value().toString()).isEqualTo("Hello ")
+            assertThat(markdownState.selection).isEqualTo(6..6)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -1670,13 +1752,15 @@ class MessageComposerPresenterTest : RobolectricTest() {
             mentionSpanFormatter = FakeMentionSpanFormatter(),
             mentionSpanTheme = MentionSpanTheme(A_USER_ID)
         ),
-        textPillificationHelper: TextPillificationHelper = FakeTextPillificationHelper(),
+        textPillificator: TextPillificator = FakeTextPillificator(),
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
         threadRoot: ThreadId? = null,
         slashCommandService: SlashCommandService = FakeSlashCommandService(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+        emojiPickerPresenter: EmojiPickerPresenter = fakeEmojiPickerPresenter(),
+        addRecentEmoji: AddRecentEmoji = AddRecentEmoji { Result.success(Unit) },
     ) = MessageComposerPresenter(
         navigator = navigator,
         sessionCoroutineScope = this,
@@ -1707,10 +1791,15 @@ class MessageComposerPresenterTest : RobolectricTest() {
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,
-        timelineController = TimelineController(room, timeline),
+        timelineController = TimelineController(
+            room = room,
+            liveTimeline = timeline,
+            roomCoroutineScope = backgroundScope,
+            dispatchers = testCoroutineDispatchers(),
+        ),
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
-        pillificationHelper = textPillificationHelper,
+        pillificationHelper = textPillificator,
         suggestionsProcessor = SuggestionsProcessor(slashCommandService = slashCommandService),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         notificationConversationService = notificationConversationService,
@@ -1718,6 +1807,10 @@ class MessageComposerPresenterTest : RobolectricTest() {
         featureFlagService = featureFlagService,
         contentScannerService = { _, _ -> },
         contentValidationCache = InMemoryEventContentValidationCache(),
+        dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+        emojiPickerPresenterFactory = fakeEmojiPickerPresenterFactory(emojiPickerPresenter),
+        getRecentEmojis = EmptyGetRecentEmojis,
+        addRecentEmoji = addRecentEmoji,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

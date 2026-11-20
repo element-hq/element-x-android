@@ -5,17 +5,15 @@
   <string name="banner_set_up_recovery_title">"Наладзіць аднаўленне"</string>
   <string name="confirm_recovery_key_banner_message">"Пацвердзіце свой ключ аднаўлення, каб захаваць доступ да сховішча ключоў і гісторыі паведамленняў."</string>
   <string name="confirm_recovery_key_banner_title">"Ваша сховішча ключоў не сінхранізавана"</string>
-  <string name="full_screen_intent_banner_message">"Каб не прапусціць важны званок, зменіце налады, каб дазволіць поўнаэкранныя апавяшчэнні, калі тэлефон заблакіраваны."</string>
-  <string name="full_screen_intent_banner_title">"Палепшыце якасць званкоў"</string>
+  <string name="full_screen_intent_banner_message_android">"Каб не прапусціць важны званок, зменіце налады, каб дазволіць поўнаэкранныя апавяшчэнні, калі тэлефон заблакіраваны."</string>
+  <string name="full_screen_intent_banner_title_android">"Палепшыце якасць званкоў"</string>
   <string name="screen_home_tab_chats">"Усе чаты"</string>
   <string name="screen_home_tab_spaces">"Прасторы"</string>
   <string name="screen_invites_decline_chat_message">"Вы ўпэўненыя, што хочаце адхіліць запрашэнне ў %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Адхіліць запрашэнне"</string>
   <string name="screen_invites_decline_direct_chat_message">"Вы ўпэўненыя, што хочаце адмовіцца ад прыватных зносін з %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Адхіліць чат"</string>
-  <string name="screen_invites_empty_list">"Няма запрашэнняў"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) запрасіў(-ла) вас"</string>
-  <string name="screen_migration_message">"Гэта аднаразовы працэс, дзякуем за чаканне."</string>
   <string name="screen_migration_title">"Налада ўліковага запісу."</string>
   <string name="screen_roomlist_a11y_create_message">"Стварыце новую размову або пакой"</string>
   <string name="screen_roomlist_empty_message">"Пачніце з паведамлення каму-небудзь."</string>
@@ -40,6 +38,4 @@
   <string name="screen_roomlist_mark_as_read">"Пазначыць як прачытанае"</string>
   <string name="screen_roomlist_mark_as_unread">"Пазначыць як непрачытанае"</string>
   <string name="screen_roomlist_your_spaces">"Вашы прасторы"</string>
-  <string name="session_verification_banner_message">"Здаецца, вы карыстаецеся новай прыладай. Праверце з дапамогай іншай прылады, каб атрымаць доступ да зашыфраваных паведамленняў."</string>
-  <string name="session_verification_banner_title">"Пацвердзіце, што гэта вы"</string>
 </resources>

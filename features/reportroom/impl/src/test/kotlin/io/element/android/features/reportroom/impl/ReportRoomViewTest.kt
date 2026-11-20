@@ -28,7 +28,7 @@ import org.junit.Test
 class ReportRoomViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invoke the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<ReportRoomEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<ReportRoomEvent>(expectEvents = false)
         ensureCalledOnce {
             setReportRoomView(
                 aReportRoomState(
@@ -42,7 +42,7 @@ class ReportRoomViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on report when enabled emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<ReportRoomEvents>()
+        val eventsRecorder = EventsRecorder<ReportRoomEvent>()
         setReportRoomView(
             aReportRoomState(
                 reason = "Spam",
@@ -50,12 +50,12 @@ class ReportRoomViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_report)
-        eventsRecorder.assertSingle(ReportRoomEvents.Report)
+        eventsRecorder.assertSingle(ReportRoomEvent.Report)
     }
 
     @Test
     fun `clicking on decline when disabled does not emit event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<ReportRoomEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<ReportRoomEvent>(expectEvents = false)
         setReportRoomView(
             aReportRoomState(eventSink = eventsRecorder),
         )
@@ -64,17 +64,17 @@ class ReportRoomViewTest : RobolectricTest() {
 
     @Test
     fun `clicking on leave room option emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<ReportRoomEvents>()
+        val eventsRecorder = EventsRecorder<ReportRoomEvent>()
         setReportRoomView(
             aReportRoomState(eventSink = eventsRecorder),
         )
         clickOn(CommonStrings.action_leave_room)
-        eventsRecorder.assertSingle(ReportRoomEvents.ToggleLeaveRoom)
+        eventsRecorder.assertSingle(ReportRoomEvent.ToggleLeaveRoom)
     }
 
     @Test
     fun `typing text in the reason field emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<ReportRoomEvents>()
+        val eventsRecorder = EventsRecorder<ReportRoomEvent>()
         setReportRoomView(
             aReportRoomState(
                 eventSink = eventsRecorder,
@@ -82,7 +82,7 @@ class ReportRoomViewTest : RobolectricTest() {
             ),
         )
         onNodeWithText("").performTextInput("Spam!")
-        eventsRecorder.assertSingle(ReportRoomEvents.UpdateReason("Spam!"))
+        eventsRecorder.assertSingle(ReportRoomEvent.UpdateReason("Spam!"))
     }
 }
 

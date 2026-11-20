@@ -30,7 +30,6 @@ dependencies {
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)
     implementation(projects.features.viewfolder.api)
-    implementation(projects.services.toolbox.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.network)
@@ -52,9 +51,7 @@ dependencies {
     testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.sessionStorage.test)
-    testImplementation(projects.features.rageshake.test)
     testImplementation(projects.features.viewfolder.test)
     testImplementation(projects.libraries.preferences.test)
-    testImplementation(projects.services.toolbox.test)
     testImplementation(libs.network.mockwebserver)
 }

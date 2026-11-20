@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s không thể tải bản đồ. Vui lòng thử lại sau."</string>
+  <string name="error_failed_locating_user">"%1$s không thể truy cập vị trí của bạn. Vui lòng thử lại sau."</string>
+  <string name="error_location_service_disabled_android">"Vui lòng bật GPS để truy cập các tính năng dựa trên vị trí."</string>
+  <string name="error_missing_location_auth_android">"%1$s không có quyền truy cập vị trí của bạn. Bạn có thể bật quyền trong Cài đặt."</string>
+  <string name="error_missing_location_rationale_android">"%1$s chưa được phép truy cập vị trí. Bật quyền dưới đây."</string>
+  <string name="screen_share_location_title">"Chia sẻ vị trí"</string>
+  <string name="screen_share_my_location_action">"Chia sẻ vị trí của tôi"</string>
+  <string name="screen_share_open_apple_maps">"Mở trong Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Mở trong Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Mở trong OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"Chia sẻ vị trí đã chọn"</string>
+  <string name="screen_view_location_title">"Vị trí"</string>
+</resources>

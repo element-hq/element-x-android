@@ -41,7 +41,7 @@ class DefaultHtmlConverterProvider(
             if (isInEditMode) null else newMentionDetector()
         }
 
-        val editorStyle = ElementRichTextEditorStyle.textStyle()
+        val editorStyle = ElementRichTextEditorStyle.textStyle(fontScale = 1f)
         val context = LocalContext.current
 
         htmlConverter.value = remember(editorStyle) {

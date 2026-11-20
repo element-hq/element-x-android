@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.RoomDirectorySearch
 import kotlin.coroutines.CoroutineContext
 
@@ -54,8 +55,8 @@ class RustRoomDirectoryList(
         }
     }
 
-    private suspend fun execute(action: suspend () -> Unit): Result<Unit> {
-        return try {
+    private suspend fun execute(action: suspend () -> Unit): Result<Unit> = withContext(coroutineContext) {
+        try {
             // We always assume there is more to load until we know there isn't.
             // As accessing hasMoreToLoad is otherwise blocked by the current action.
             hasMoreToLoad.value = true

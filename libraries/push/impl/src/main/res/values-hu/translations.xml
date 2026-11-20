@@ -5,38 +5,27 @@
   <string name="notification_channel_noisy">"Zajos értesítések"</string>
   <string name="notification_channel_ringing_calls">"Csörgő hívások"</string>
   <string name="notification_channel_silent">"Csendes értesítések"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d üzenet"</item>
-    <item quantity="other">"%1$s: %2$d üzenet"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d értesítés"</item>
     <item quantity="other">"%d értesítés"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"A UnifiedPush leküldéses értesítési terjesztő nem regisztrálható, ezért többé nem fog értesítéseket kapni. Ellenőrizze az alkalmazás értesítési beállításait és a leküldés értesítési terjesztő állapotát."</string>
-  <string name="notification_fallback_content">"Értesítés"</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"Van %d új üzenete."</item>
     <item quantity="other">"Van %d új üzenete."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Megosztott %1$d melléklet"</item>
+    <item quantity="other">"Megosztott %1$d melléklet"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Bejövő hívás"</string>
   <string name="notification_incoming_call">"📹 Bejövő hívás"</string>
   <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – nyissa meg a szobát"</string>
-  <string name="notification_invitation_action_join">"Csatlakozás"</string>
-  <string name="notification_invitation_action_reject">"Elutasítás"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d meghívó"</item>
-    <item quantity="other">"%d meghívó"</item>
-  </plurals>
   <string name="notification_invite_body">"Meghívta, hogy csevegjen"</string>
   <string name="notification_invite_body_with_sender">"%1$s meghívta egy csevegésre"</string>
+  <string name="notification_knock_request_body">"Csatlakozási kérelem benyújtva"</string>
   <string name="notification_live_location_started_body">"Elkezdték megosztani az élő helyzetüket"</string>
   <string name="notification_mentioned_you_body">"Megemlítette Önt: %1$s"</string>
-  <string name="notification_new_messages">"Új üzenetek"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d új üzenet"</item>
-    <item quantity="other">"%d új üzenet"</item>
-  </plurals>
   <string name="notification_reaction_body">"Ezzel reagált: %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="notification_room_action_quick_reply">"Gyors válasz"</string>
@@ -81,10 +70,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Jelenlegi leküldéses értesítési szolgáltató"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Győződjön meg arról, hogy az alkalmazás legalább egy leküldéses értesítési szolgáltatóval rendelkezik."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nem található leküldéses értesítési szolgáltató."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"%1$d leküldéses értesítési szolgáltató találva: %2$s"</item>
-    <item quantity="other">"%1$d leküldéses értesítési szolgáltató találva: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Az alkalmazás úgy lett összeállítva, hogy támogatja a következőket: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Leküldéses értesítési szolgáltatók észlelése"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Ellenőrizze, hogy az alkalmazás képes-e megjeleníteni az értesítést."</string>
@@ -92,12 +77,13 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Az értesítés nem jeleníthető meg."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Az értesítésre rákattintottak!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Értesítés megjelenítése"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"A teszt folytatásához kattintson az értesítésre."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"A teszt folytatásához koppintson az értesítésre."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Győződjön meg arról, hogy az alkalmazás megkapja-e a leküldéses értesítést."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Hiba: a leküldő elutasította a kérést."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Hiba: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Hiba, nem lehet tesztelni a leküldéses értesítést."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Hiba, időtúllépés a leküldéses értesítésre való várakozás során."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Hiba: a push-átjáró korlátozza ennek az eszköznek a forgalmát, ezért az értesítések nem lesznek megbízhatóak. Kérjük, állítson be egy másik push-átjárót."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"A leküldéses értesítés folyamata %1$d ezredmásodpercig tartott."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Leküldéses értesítés folyamatának tesztelése"</string>
 </resources>

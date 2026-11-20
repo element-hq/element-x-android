@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Bạn có thay đổi chưa được lưu."</string>
+  <string name="dialog_unsaved_changes_description_android">"Các thay đổi của bạn chưa được lưu. Bạn có chắc muốn quay lại không?"</string>
+  <string name="dialog_unsaved_changes_title">"Lưu thay đổi?"</string>
+</resources>

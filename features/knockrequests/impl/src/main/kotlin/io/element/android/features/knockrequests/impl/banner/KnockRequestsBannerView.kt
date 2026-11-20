@@ -109,11 +109,11 @@ private fun KnockRequestsBannerContent(
     modifier: Modifier = Modifier,
 ) {
     fun onDismissClick() {
-        state.eventSink(KnockRequestsBannerEvents.Dismiss)
+        state.eventSink(KnockRequestsBannerEvent.Dismiss)
     }
 
     fun onAcceptClick() {
-        state.eventSink(KnockRequestsBannerEvents.AcceptSingleRequest)
+        state.eventSink(KnockRequestsBannerEvent.AcceptSingleRequest)
     }
 
     Column(

@@ -24,8 +24,6 @@ import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import timber.log.Timber
 
-internal const val DEFAULT_PUSHER_FILE_TAG = "mobile"
-
 private val loggerTag = LoggerTag("DefaultPusherSubscriber", LoggerTag.PushLoggerTag)
 
 @ContributesBinding(AppScope::class)
@@ -74,8 +72,7 @@ class DefaultPusherSubscriber(
         SetHttpPusherData(
             pushKey = pushKey,
             appId = BuildConfig.PUSHER_APP_ID,
-            // TODO + abs(activeSessionHolder.getActiveSession().myUserId.hashCode())
-            profileTag = DEFAULT_PUSHER_FILE_TAG + "_",
+            profileTag = null,
             // TODO localeProvider.current().language
             lang = "en",
             appDisplayName = buildMeta.applicationName,
@@ -90,7 +87,7 @@ class DefaultPusherSubscriber(
      * Ex: {"cs":"sfvsdv"}.
      */
     private fun createDefaultPayload(secretForUser: String): String {
-        return "{\"cs\":\"$secretForUser\"}"
+        return """{"cs":"$secretForUser"}"""
     }
 
     override suspend fun unregisterPusher(

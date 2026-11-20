@@ -40,7 +40,7 @@ import kotlinx.collections.immutable.ImmutableList
 @Composable
 fun PollContentView(
     state: PollContentState,
-    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onSendPollResponse: (pollStartId: EventId, answerIds: List<String>) -> Unit,
     onEditPoll: (pollStartId: EventId) -> Unit,
     onEndPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
@@ -50,11 +50,13 @@ fun PollContentView(
         question = state.question,
         answerItems = state.answerItems,
         pollKind = state.pollKind,
+        isMultipleSelection = state.isMultipleSelection,
+        maxSelections = state.maxSelections,
         isPollEditable = state.isPollEditable,
         isPollEnded = state.isPollEnded,
         isMine = state.isMine,
         onEditPoll = onEditPoll,
-        onSelectAnswer = onSelectAnswer,
+        onSendPollResponse = onSendPollResponse,
         onEndPoll = onEndPoll,
         modifier = modifier,
     )
@@ -66,10 +68,12 @@ fun PollContentView(
     question: String,
     answerItems: ImmutableList<PollAnswerItem>,
     pollKind: PollKind,
+    isMultipleSelection: Boolean,
+    maxSelections: ULong,
     isPollEditable: Boolean,
     isPollEnded: Boolean,
     isMine: Boolean,
-    onSelectAnswer: (pollStartId: EventId, answerId: String) -> Unit,
+    onSendPollResponse: (pollStartId: EventId, answerIds: List<String>) -> Unit,
     onEditPoll: (pollStartId: EventId) -> Unit,
     onEndPoll: (pollStartId: EventId) -> Unit,
     modifier: Modifier = Modifier,
@@ -77,7 +81,23 @@ fun PollContentView(
     val votesCount = remember(answerItems) { answerItems.sumOf { it.votesCount } }
 
     fun onSelectAnswer(pollAnswer: PollAnswer) {
-        eventId?.let { onSelectAnswer(it, pollAnswer.id) }
+        eventId?.let {
+            if (isMultipleSelection) {
+                val newSelections = answerItems.map { item ->
+                    if (item.answer.id == pollAnswer.id) {
+                        item.copy(isSelected = !item.isSelected)
+                    } else {
+                        item
+                    }
+                }.filter { it.isSelected }.map { it.answer.id }
+                // Only send the response if the selection count is within the limit
+                if (newSelections.size <= maxSelections.toInt()) {
+                    onSendPollResponse(it, newSelections)
+                }
+            } else {
+                onSendPollResponse(it, listOf(pollAnswer.id))
+            }
+        }
     }
 
     fun onEditPoll() {
@@ -107,7 +127,11 @@ fun PollContentView(
     ) {
         PollTitleView(title = question, isPollEnded = isPollEnded)
 
-        PollAnswers(answerItems = answerItems, onSelectAnswer = ::onSelectAnswer)
+        PollAnswers(
+            answerItems = answerItems,
+            isMultipleSelection = isMultipleSelection,
+            onSelectAnswer = ::onSelectAnswer,
+        )
 
         if (isPollEnded || pollKind == PollKind.Disclosed) {
             DisclosedPollBottomNotice(votesCount = votesCount)
@@ -130,8 +154,10 @@ fun PollContentView(
 @Composable
 private fun PollAnswers(
     answerItems: ImmutableList<PollAnswerItem>,
+    isMultipleSelection: Boolean,
     onSelectAnswer: (PollAnswer) -> Unit,
 ) {
+    val role = if (isMultipleSelection) Role.Checkbox else Role.RadioButton
     Column(
         modifier = Modifier.selectableGroup(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -144,7 +170,7 @@ private fun PollAnswers(
                         selected = it.isSelected,
                         enabled = it.isEnabled,
                         onClick = { onSelectAnswer(it.answer) },
-                        role = Role.RadioButton,
+                        role = role,
                     ),
             )
         }
@@ -207,10 +233,12 @@ internal fun PollContentViewUndisclosedPreview() = ElementPreview {
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(showVotes = false),
         pollKind = PollKind.Undisclosed,
+        isMultipleSelection = false,
+        maxSelections = 1u,
         isPollEnded = false,
         isPollEditable = false,
         isMine = false,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -224,10 +252,31 @@ internal fun PollContentViewDisclosedPreview() = ElementPreview {
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(),
         pollKind = PollKind.Disclosed,
+        isMultipleSelection = false,
+        maxSelections = 1u,
         isPollEnded = false,
         isPollEditable = false,
         isMine = false,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
+        onEditPoll = {},
+        onEndPoll = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun PollContentViewMultipleSelectionPreview() = ElementPreview {
+    PollContentView(
+        eventId = EventId("\$anEventId"),
+        question = "What type of food should we have at the party?",
+        answerItems = aPollAnswerItemList(),
+        pollKind = PollKind.Disclosed,
+        isMultipleSelection = true,
+        maxSelections = 3u,
+        isPollEnded = false,
+        isPollEditable = false,
+        isMine = false,
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -241,10 +290,12 @@ internal fun PollContentViewEndedPreview() = ElementPreview {
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(isEnded = true),
         pollKind = PollKind.Disclosed,
+        isMultipleSelection = false,
+        maxSelections = 1u,
         isPollEnded = true,
         isPollEditable = false,
         isMine = false,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -258,10 +309,12 @@ internal fun PollContentViewCreatorEditablePreview() = ElementPreview {
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(hasVotes = false, isEnded = false),
         pollKind = PollKind.Disclosed,
+        isMultipleSelection = false,
+        maxSelections = 1u,
         isPollEnded = false,
         isPollEditable = true,
         isMine = true,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -275,10 +328,12 @@ internal fun PollContentViewCreatorPreview() = ElementPreview {
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(isEnded = false),
         pollKind = PollKind.Disclosed,
+        isMultipleSelection = false,
+        maxSelections = 1u,
         isPollEnded = false,
         isPollEditable = false,
         isMine = true,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )
@@ -292,10 +347,12 @@ internal fun PollContentViewCreatorEndedPreview() = ElementPreview {
         question = "What type of food should we have at the party?",
         answerItems = aPollAnswerItemList(isEnded = true),
         pollKind = PollKind.Disclosed,
+        isMultipleSelection = false,
+        maxSelections = 1u,
         isPollEnded = true,
         isPollEditable = false,
         isMine = true,
-        onSelectAnswer = { _, _ -> },
+        onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
     )

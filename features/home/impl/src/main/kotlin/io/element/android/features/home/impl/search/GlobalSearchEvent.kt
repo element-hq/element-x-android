@@ -7,12 +7,36 @@
 
 package io.element.android.features.home.impl.search
 
-import androidx.compose.runtime.Immutable
+import io.element.android.libraries.matrix.api.core.RoomId
 
-@Immutable
 sealed interface GlobalSearchEvent {
+    /** The user cleared the search query. */
     object ClearQuery : GlobalSearchEvent
+
+    /** The search screen visibility changed (e.g. the user opened or closed the search screen). */
     object ToggleSearchVisibility : GlobalSearchEvent
+
+    /** The visible range for the displayed search results changed. */
     data class UpdateVisibleRange(val range: IntRange) : GlobalSearchEvent
+
+    /** The user changed the search target (e.g. from "Rooms" to "Messages"). */
     data class UpdateTarget(val target: GlobalSearchTarget) : GlobalSearchEvent
+
+    /** The user triggered the keyboard search action (enter key): save the current query to the search history. */
+    object SaveQueryToHistory : GlobalSearchEvent
+
+    /** The user opened a room from the search results: save it to the search history. */
+    data class SaveRoomToHistory(val roomId: RoomId) : GlobalSearchEvent
+
+    /** The user selected a search result from the search history. */
+    data class SearchHistoryResultSelected(val resultItem: SearchHistoryListItem) : GlobalSearchEvent
+
+    /** The user removed a search history entry. */
+    data class RemoveSearchHistoryResult(val result: SearchHistoryListItem) : GlobalSearchEvent
+
+    /** The user cleared the search history. */
+    data object ClearSearchHistory : GlobalSearchEvent
+
+    /** The user toggled the visibility of the "Learn More" bottom sheet. */
+    data class ToggleLearnMoreBottomSheet(val show: Boolean) : GlobalSearchEvent
 }

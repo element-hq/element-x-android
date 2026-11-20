@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"Unduhan tidak tersedia."</string>
+  <string name="content_scanner_not_found_title">"File tidak ditemukan"</string>
+  <string name="error_room_address_already_exists">"Alamat ruangan sudah ada, silakan coba sunting kolom alamat ruangan atau ubah nama ruangan"</string>
+  <string name="error_room_address_invalid_symbols">"Beberapa karakter tidak diperbolehkan. Hanya huruf, angka, dan simbol berikut didukung ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Kirim undangan"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Apakah Anda ingin memulai obrolan dengan %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Kirim undangan?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Saat ini Anda belum memiliki obrolan dengan orang ini. Konfirmasikan undangan sebelum melanjutkan."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Mau mulai obrolan dengan kontak baru ini?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) mengundang Anda"</string>
+  <string name="screen_space_list_description">"Space yang Anda buat atau ikuti."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Space"</string>
 </resources>

@@ -12,8 +12,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -31,7 +31,6 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChangeRoomPermissionsView(
     state: ChangeRoomPermissionsState,
@@ -109,6 +108,7 @@ fun ChangeRoomPermissionsView(
 }
 
 @Composable
+@ReadOnlyComposable
 private fun titleForSection(section: RoomPermissionsSection): String = when (section) {
     RoomPermissionsSection.EditDetails -> stringResource(R.string.screen_room_change_permissions_room_details)
     RoomPermissionsSection.MessagesAndContent -> stringResource(R.string.screen_room_change_permissions_messages_and_content)
@@ -117,6 +117,7 @@ private fun titleForSection(section: RoomPermissionsSection): String = when (sec
 }
 
 @Composable
+@ReadOnlyComposable
 private fun titleForType(type: RoomPermissionType): String = when (type) {
     RoomPermissionType.INVITE -> stringResource(R.string.screen_room_change_permissions_invite_people)
     RoomPermissionType.KICK -> stringResource(R.string.screen_room_change_permissions_remove_people)

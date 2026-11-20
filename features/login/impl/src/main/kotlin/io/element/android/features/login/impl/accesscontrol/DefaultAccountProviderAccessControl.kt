@@ -14,16 +14,16 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.IsEnterpriseBuild
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.login.impl.changeserver.AccountProviderAccessException
+import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 
 @ContributesBinding(AppScope::class)
 class DefaultAccountProviderAccessControl(
     private val isEnterpriseBuild: IsEnterpriseBuild,
     private val enterpriseService: EnterpriseService,
 ) : AccountProviderAccessControl {
-    override suspend fun isAllowedToConnectToAccountProvider(accountProviderUrl: String) = try {
+    override suspend fun isAllowedToConnectToAccountProvider(accountProvider: AccountProvider) = try {
         assertIsAllowedToConnectToAccountProvider(
-            title = accountProviderUrl,
-            accountProviderUrl = accountProviderUrl,
+            accountProvider = accountProvider,
         )
         true
     } catch (_: AccountProviderAccessException) {
@@ -32,22 +32,22 @@ class DefaultAccountProviderAccessControl(
 
     @Throws(AccountProviderAccessException::class)
     suspend fun assertIsAllowedToConnectToAccountProvider(
-        title: String,
-        accountProviderUrl: String,
+        accountProvider: AccountProvider,
     ) {
         if (isEnterpriseBuild().not()) {
             // Ensure that Element Pro is not required for this account provider
-            if (enterpriseService.isElementProEnforced(accountProviderUrl)) {
+            if (enterpriseService.isElementProEnforced(accountProvider.serverNameOrBaseUrl())) {
                 throw AccountProviderAccessException.NeedElementProException(
-                    unauthorisedAccountProviderTitle = title,
+                    unauthorisedAccountProviderTitle = accountProvider.friendlyServerName(),
                     applicationId = ELEMENT_PRO_APPLICATION_ID,
                 )
             }
         }
-        if (enterpriseService.isAllowedToConnectToHomeserver(accountProviderUrl).not()) {
+        if (enterpriseService.isAllowedToConnectToAccountProvider(accountProvider).not()) {
             throw AccountProviderAccessException.UnauthorizedAccountProviderException(
-                unauthorisedAccountProviderTitle = title,
-                authorisedAccountProviderTitles = enterpriseService.homeserverAllowList(),
+                unauthorisedAccountProviderTitle = accountProvider.friendlyServerName(),
+                authorisedAccountProviderTitles = enterpriseService.accountProviderAllowList()
+                    .map { it.friendlyServerName() },
             )
         }
     }

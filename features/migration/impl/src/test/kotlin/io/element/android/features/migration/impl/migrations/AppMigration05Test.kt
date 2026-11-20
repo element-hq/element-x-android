@@ -27,7 +27,7 @@ class AppMigration05Test {
                 )
             )
         )
-        val migration = AppMigration05(sessionStore = sessionStore, baseDirectory = File("/a/path"))
+        val migration = AppMigration05(sessionStore = sessionStore, sessionsFilesDirectory = File("/a/path"))
         migration.migrate(true)
         val storedData = sessionStore.getSession(A_SESSION_ID.value)!!
         assertThat(storedData.sessionPath).isEqualTo("/a/path/${A_SESSION_ID.value.replace(':', '_')}")
@@ -43,7 +43,7 @@ class AppMigration05Test {
                 )
             )
         )
-        val migration = AppMigration05(sessionStore = sessionStore, baseDirectory = File("/a/path"))
+        val migration = AppMigration05(sessionStore = sessionStore, sessionsFilesDirectory = File("/a/path"))
         migration.migrate(true)
         val storedData = sessionStore.getSession(A_SESSION_ID.value)!!
         assertThat(storedData.sessionPath).isEqualTo("/a/path/existing")

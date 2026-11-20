@@ -62,12 +62,12 @@ class PushHistoryPresenter(
         var resetAction: AsyncAction<Unit> by remember { mutableStateOf(AsyncAction.Uninitialized) }
         var showNotSameAccountError by remember { mutableStateOf(false) }
 
-        fun handleEvent(event: PushHistoryEvents) {
+        fun handleEvent(event: PushHistoryEvent) {
             when (event) {
-                is PushHistoryEvents.SetShowOnlyErrors -> {
+                is PushHistoryEvent.SetShowOnlyErrors -> {
                     showOnlyErrors = event.showOnlyErrors
                 }
-                is PushHistoryEvents.Reset -> {
+                is PushHistoryEvent.Reset -> {
                     if (event.requiresConfirmation) {
                         resetAction = AsyncAction.ConfirmingNoParams
                     } else {
@@ -78,11 +78,11 @@ class PushHistoryPresenter(
                         }
                     }
                 }
-                PushHistoryEvents.ClearDialog -> {
+                PushHistoryEvent.ClearDialog -> {
                     resetAction = AsyncAction.Uninitialized
                     showNotSameAccountError = false
                 }
-                is PushHistoryEvents.NavigateTo -> {
+                is PushHistoryEvent.NavigateTo -> {
                     if (event.sessionId != sessionId) {
                         showNotSameAccountError = true
                     } else {

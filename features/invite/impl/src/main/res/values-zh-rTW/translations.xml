@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"此聊天室不再存在或邀請不再有效。"</string>
   <string name="screen_decline_and_block_block_user_option_description">"您將不會看到來自此使用者的任何訊息或聊天室邀請"</string>
   <string name="screen_decline_and_block_block_user_option_title">"封鎖使用者"</string>
   <string name="screen_decline_and_block_report_user_option_description">"向您的帳號提供者回報此聊天室。"</string>
@@ -9,7 +10,6 @@
   <string name="screen_invites_decline_chat_title">"拒絕邀請"</string>
   <string name="screen_invites_decline_direct_chat_message">"您確定您要拒絕此與 %1$s 的私人聊天嗎？"</string>
   <string name="screen_invites_decline_direct_chat_title">"拒絕聊天"</string>
-  <string name="screen_invites_empty_list">"沒有邀請"</string>
   <string name="screen_invites_invited_you">"%1$s（%2$s）邀請您"</string>
   <string name="screen_join_room_decline_and_block_alert_confirmation">"是的，拒絕並封鎖"</string>
   <string name="screen_join_room_decline_and_block_alert_message">"您確定要拒絕加入此聊天室的邀請嗎？這也會防止 %1$s 聯絡您或邀請您加入聊天室。"</string>

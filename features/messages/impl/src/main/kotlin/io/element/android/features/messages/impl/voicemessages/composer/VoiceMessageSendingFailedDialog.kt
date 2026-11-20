@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.voicemessages.composer
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -19,7 +20,7 @@ internal fun VoiceMessageSendingFailedDialog(
 ) {
     ErrorDialog(
         title = stringResource(CommonStrings.common_error),
-        content = stringResource(CommonStrings.error_failed_uploading_voice_message),
+        content = stringResource(R.string.error_failed_uploading_voice_message),
         onSubmit = onDismiss,
         submitText = stringResource(CommonStrings.action_ok),
     )

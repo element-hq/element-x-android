@@ -16,7 +16,7 @@
   <string name="screen_space_add_rooms_room_access_description">"Menambahkan ruangan tidak akan memengaruhi akses ruangan. Untuk mengubah akses, buka Pengaturan ruangan &gt; Keamanan &amp;amp; privasi."</string>
   <string name="screen_space_empty_state_title">"Tambahkan ruang pertama Anda"</string>
   <string name="screen_space_menu_action_members">"Lihat anggota"</string>
-  <string name="screen_space_remove_rooms_confirmation_content">"Menghapus ruangan tidak akan memengaruhi akses ruangan. Untuk mengubah akses, buka Info ruangan &gt; Privasi &amp;amp; keamanan."</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Menghapus room tidak akan memengaruhi akses ke room tersebut. Untuk mengubah akses, buka Info Ruang &gt; Keamanan &amp; privasi."</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">
     <item quantity="other">"Hapus ruangan %1$d dari %2$s"</item>
   </plurals>

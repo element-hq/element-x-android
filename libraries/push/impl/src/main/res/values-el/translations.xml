@@ -5,16 +5,11 @@
   <string name="notification_channel_noisy">"Θορυβώδεις ειδοποιήσεις"</string>
   <string name="notification_channel_ringing_calls">"Κουδούνισμα κλήσεων"</string>
   <string name="notification_channel_silent">"Αθόρυβες ειδοποιήσεις"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d μήνυμα"</item>
-    <item quantity="other">"%1$s: %2$d μηνύματα"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d ειδοποίηση"</item>
     <item quantity="other">"%d ειδοποιήσεις"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Δεν ήταν δυνατή η εγγραφή του διανομέα ειδοποιήσεων UnifiedPush, επομένως δεν θα λαμβάνετε πλέον ειδοποιήσεις. Ελέγξτε τις ρυθμίσεις ειδοποιήσεων της εφαρμογής και την κατάσταση του διανομέα push."</string>
-  <string name="notification_fallback_content">"Έχεις νέο(α) μήνυμα(τα)."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"Έχετε %d νέο μήνυμα."</item>
     <item quantity="other">"Έχετε %d νέα μηνύματα."</item>
@@ -22,20 +17,9 @@
   <string name="notification_incoming_audio_call">"📞 Εισερχόμενη κλήση"</string>
   <string name="notification_incoming_call">"📹 Εισερχόμενη κλήση"</string>
   <string name="notification_inline_reply_failed">"** Αποτυχία αποστολής - παρακαλώ ανοίξτε την αίθουσα"</string>
-  <string name="notification_invitation_action_join">"Συμμετοχή"</string>
-  <string name="notification_invitation_action_reject">"Απόρριψη"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d πρόσκληση"</item>
-    <item quantity="other">"%d προσκλήσεις"</item>
-  </plurals>
   <string name="notification_invite_body">"Σε προσκάλεσε να συνομιλήσετε"</string>
   <string name="notification_invite_body_with_sender">"Ο χρήστης %1$s σε προσκάλεσε σε συνομιλία"</string>
   <string name="notification_mentioned_you_body">"Σέ ανέφερε: %1$s"</string>
-  <string name="notification_new_messages">"Νέα Μηνύματα"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d νέο μήνυμα"</item>
-    <item quantity="other">"%d νέα μηνύματα"</item>
-  </plurals>
   <string name="notification_reaction_body">"Αντέδρασε με %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Επισήμανση ως αναγνωσμένου"</string>
   <string name="notification_room_action_quick_reply">"Γρήγορη απάντηση"</string>
@@ -45,7 +29,7 @@
   <string name="notification_sender_mention_reply">"Ο χρήστης %1$s αναφέρθηκε ή απάντησε"</string>
   <string name="notification_space_invite_body">"Σας προσκάλεσε να συμμετάσχετε στον χώρο"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s σας προσκάλεσε να συμμετάσχετε στον χώρο"</string>
-  <string name="notification_test_push_notification_content">"Βλέπεις την ειδοποίηση! Κάνε μου κλικ!"</string>
+  <string name="notification_test_push_notification_content">"Προβάλλετε την ειδοποίηση! Πατήστε εδώ!"</string>
   <string name="notification_thread_in_room">"Νήμα στο %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -80,10 +64,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Τρέχων πάροχος push"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Βεβαιώσου ότι η εφαρμογή διαθέτει τουλάχιστον έναν πάροχο push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Δεν βρέθηκαν πάροχοι push."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Βρέθηκε %1$d πάροχος push: %2$s"</item>
-    <item quantity="other">"Βρέθηκαν %1$d πάροχοι push: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Η εφαρμογή δημιουργήθηκε με υποστήριξη για: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Εντοπισμός παρόχων push"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Έλεγξε ότι η εφαρμογή μπορεί να εμφανίσει ειδοποίηση."</string>
@@ -91,7 +71,7 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Δεν είναι δυνατή η εμφάνιση της ειδοποίησης."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Έγινε κλικ στην ειδοποίηση!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Εμφάνιση ειδοποίησης"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Κάνε κλικ στην ειδοποίηση για να συνεχίσεις τη δοκιμή."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Παρακαλώ πατήστε την ειδοποίηση για να συνεχίσετε τη δοκιμή."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Βεβαιώσου ότι η εφαρμογή λαμβάνει push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Σφάλμα: ο pusher απέρριψε το αίτημα."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Σφάλμα: %1$s."</string>

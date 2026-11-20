@@ -7,8 +7,9 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
 
@@ -16,6 +17,8 @@ data class TimelineItemGalleryContent(
     val body: String,
     val caption: String?,
     val formattedCaption: CharSequence?,
+    val htmlCaption: String? = null,
+    val captionTree: DocumentNode? = null,
     override val isEdited: Boolean,
     val items: ImmutableList<GalleryItem>,
 ) : TimelineItemEventContent, TimelineItemEventMutableContent {
@@ -50,8 +53,8 @@ data class GalleryItem(
         MediaRequestData(
             source = thumbnailSource ?: mediaSource,
             kind = MediaRequestData.Kind.Thumbnail(
-                width = thumbnailWidth?.toLong() ?: io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH,
-                height = thumbnailHeight?.toLong() ?: io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT,
+                width = thumbnailWidth?.toLong() ?: io.element.android.libraries.matrixmedia.api.MAX_THUMBNAIL_WIDTH,
+                height = thumbnailHeight?.toLong() ?: io.element.android.libraries.matrixmedia.api.MAX_THUMBNAIL_HEIGHT,
             ),
         )
     }

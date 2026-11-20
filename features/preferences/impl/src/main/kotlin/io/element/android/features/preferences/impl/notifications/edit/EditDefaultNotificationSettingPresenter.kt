@@ -76,12 +76,12 @@ class EditDefaultNotificationSettingPresenter(
             displayMentionsOnlyDisclaimer = !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
 
-        fun handleEvent(event: EditDefaultNotificationSettingStateEvents) {
+        fun handleEvent(event: EditDefaultNotificationSettingStateEvent) {
             when (event) {
-                is EditDefaultNotificationSettingStateEvents.SetNotificationMode -> {
+                is EditDefaultNotificationSettingStateEvent.SetNotificationMode -> {
                     localCoroutineScope.setDefaultNotificationMode(event.mode, changeNotificationSettingAction)
                 }
-                EditDefaultNotificationSettingStateEvents.ClearError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
+                EditDefaultNotificationSettingStateEvent.ClearError -> changeNotificationSettingAction.value = AsyncAction.Uninitialized
             }
         }
 

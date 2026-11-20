@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="vulkan_not_supported_dialog_content_android">"使用している端末が古すぎます。Android 8以上が必要です。"</string>
+  <string name="vulkan_not_supported_dialog_title_android">"地図のレンダリングに対応していません"</string>
+</resources>

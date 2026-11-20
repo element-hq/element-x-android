@@ -35,7 +35,7 @@ fun aRoomDirectoryState(
     query: String = "",
     displayLoadMoreIndicator: Boolean = false,
     roomDescriptions: ImmutableList<RoomDescription> = persistentListOf(),
-    eventSink: (RoomDirectoryEvents) -> Unit = {},
+    eventSink: (RoomDirectoryEvent) -> Unit = {},
 ) = RoomDirectoryState(
     query = query,
     roomDescriptions = roomDescriptions,

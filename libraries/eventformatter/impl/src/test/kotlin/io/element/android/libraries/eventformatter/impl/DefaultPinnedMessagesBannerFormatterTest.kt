@@ -57,7 +57,6 @@ import org.junit.Test
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
-@Suppress("LargeClass")
 class DefaultPinnedMessagesBannerFormatterTest : RobolectricTest() {
     private lateinit var context: Context
     private lateinit var fakeMatrixClient: FakeMatrixClient
@@ -81,7 +80,7 @@ class DefaultPinnedMessagesBannerFormatterTest : RobolectricTest() {
     fun `Redacted content`() {
         val expected = "Message removed"
         val senderName = "Someone"
-        val message = createRoomEvent(false, senderName, RedactedContent)
+        val message = createRoomEvent(false, senderName, RedactedContent(threadInfo = null))
         val result = formatter.format(message)
         assertThat(result).isEqualTo(expected)
     }

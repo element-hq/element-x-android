@@ -64,7 +64,7 @@ fun aKnockRequestsBannerState(
     displayAcceptError: Boolean = false,
     canAccept: Boolean = true,
     isVisible: Boolean = true,
-    eventSink: (KnockRequestsBannerEvents) -> Unit = {}
+    eventSink: (KnockRequestsBannerEvent) -> Unit = {}
 ) = KnockRequestsBannerState(
     knockRequests = knockRequests.toImmutableList(),
     displayAcceptError = displayAcceptError,

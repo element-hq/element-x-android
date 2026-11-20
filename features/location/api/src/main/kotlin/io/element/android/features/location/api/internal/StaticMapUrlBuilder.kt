@@ -36,17 +36,13 @@ interface StaticMapUrlBuilder {
         density: Float,
     ): String
 
-    /** Whether a map provider is configured for this build; the URLs are unusable when it is not. */
+    /** Whether an API key is configured; the URLs are unusable when it is not. */
     fun isServiceAvailable(): Boolean
 }
 
 @Composable
-fun rememberStaticMapBuilder(mapTilerConfig: MapTilerConfig?): StaticMapUrlBuilder {
+fun rememberStaticMapBuilder(mapTilerConfig: MapTilerConfig?): StaticMapUrlBuilder? {
     return remember(mapTilerConfig) {
-        if (mapTilerConfig != null) {
-            MapTilerStaticMapUrlBuilder(mapTilerConfig)
-        } else {
-            MapTilerStaticMapUrlBuilder()
-        }
+        mapTilerConfig?.let { MapTilerStaticMapUrlBuilder(it) }
     }
 }

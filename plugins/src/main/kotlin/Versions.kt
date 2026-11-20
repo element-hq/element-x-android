@@ -39,13 +39,13 @@ private const val versionYear = 26
  * Month of the version on 2 digits. Value must be in [1,12].
  * Do not update this value. it is updated by the release script.
  */
-private const val versionMonth = 8
+private const val versionMonth = 11
 
 /**
  * Release number in the month. Value must be in [0,99].
  * Do not update this value. it is updated by the release script.
  */
-private const val versionReleaseNumber = 2
+private const val versionReleaseNumber = 1
 
 object Versions {
     /**
@@ -88,7 +88,7 @@ object Versions {
     /**
      * minSdkVersion that will be set in the Android Manifest.
      */
-    val minSdk = if (isEnterpriseBuild) MIN_SDK_ENTERPRISE else MIN_SDK_FOSS
+    fun minSdk(isEnterpriseBuild: Boolean) = if (isEnterpriseBuild) MIN_SDK_ENTERPRISE else MIN_SDK_FOSS
 
     /**
      * Java version used for compilation.

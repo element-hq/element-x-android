@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,7 +52,6 @@ import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.troubleshoot.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PushHistoryView(
     state: PushHistoryState,
@@ -100,14 +98,14 @@ fun PushHistoryView(
                             },
                             onClick = {
                                 showMenu = false
-                                state.eventSink(PushHistoryEvents.SetShowOnlyErrors(state.showOnlyErrors.not()))
+                                state.eventSink(PushHistoryEvent.SetShowOnlyErrors(state.showOnlyErrors.not()))
                             },
                         )
                         DropdownMenuItem(
                             text = { Text(stringResource(id = CommonStrings.action_reset)) },
                             onClick = {
                                 showMenu = false
-                                state.eventSink(PushHistoryEvents.Reset(requiresConfirmation = true))
+                                state.eventSink(PushHistoryEvent.Reset(requiresConfirmation = true))
                             },
                         )
                     }
@@ -132,8 +130,8 @@ fun PushHistoryView(
                 title = stringResource(CommonStrings.dialog_title_confirmation),
                 submitText = stringResource(CommonStrings.action_reset),
                 cancelText = stringResource(CommonStrings.action_cancel),
-                onSubmitClick = { state.eventSink(PushHistoryEvents.Reset(requiresConfirmation = false)) },
-                onDismiss = { state.eventSink(PushHistoryEvents.ClearDialog) },
+                onSubmitClick = { state.eventSink(PushHistoryEvent.Reset(requiresConfirmation = false)) },
+                onDismiss = { state.eventSink(PushHistoryEvent.ClearDialog) },
             )
         },
         onErrorDismiss = {},
@@ -142,7 +140,7 @@ fun PushHistoryView(
     if (state.showNotSameAccountError) {
         ErrorDialog(
             content = "Please switch account first to navigate to the event.",
-            onSubmit = { state.eventSink(PushHistoryEvents.ClearDialog) }
+            onSubmit = { state.eventSink(PushHistoryEvent.ClearDialog) }
         )
     }
 }
@@ -175,7 +173,7 @@ private fun PushHistoryContent(
                         val roomId = pushHistory.roomId
                         val eventId = pushHistory.eventId
                         if (sessionId != null && roomId != null && eventId != null) {
-                            state.eventSink(PushHistoryEvents.NavigateTo(sessionId, roomId, eventId))
+                            state.eventSink(PushHistoryEvent.NavigateTo(sessionId, roomId, eventId))
                         }
                     }
                 )

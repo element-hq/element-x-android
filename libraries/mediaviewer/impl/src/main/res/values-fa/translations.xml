@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_scanning">"اسکن…"</string>
   <string name="screen_media_browser_delete_confirmation_subtitle">"این فایل از اتاق حذف خواهد شد و اعضا به آن دسترسی نخواهند داشت."</string>
   <string name="screen_media_browser_delete_confirmation_title">"حذف پرونده؟"</string>
   <string name="screen_media_browser_download_error_message">"بررسی اتّصال اینترنتیتان و تلاش دوباره."</string>

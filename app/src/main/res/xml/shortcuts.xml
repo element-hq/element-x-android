@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2026 Element Creations Ltd.
+
+  SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  Please see LICENSE files in the repository root for full details.
+-->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+      Lets the system offer the conversation shortcuts published by
+      DefaultNotificationConversationService in the Direct Share row of the share sheet.
+      The category must match SHARE_TARGET_CATEGORY in that class.
+    -->
+    <share-target android:targetClass="io.element.android.x.MainActivity">
+        <data android:mimeType="*/*" />
+        <category android:name="io.element.android.category.SHARE_TARGET" />
+    </share-target>
+</shortcuts>

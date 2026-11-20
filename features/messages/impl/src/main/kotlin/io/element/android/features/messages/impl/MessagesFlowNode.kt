@@ -9,13 +9,19 @@
 package io.element.android.features.messages.impl
 
 import android.os.Parcelable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.lifecycle.lifecycleScope
+import com.bumble.appyx.core.children.nodeOrNull
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -45,6 +51,7 @@ import io.element.android.features.messages.impl.report.ReportMessageNode
 import io.element.android.features.messages.impl.threads.ThreadedMessagesNode
 import io.element.android.features.messages.impl.threads.list.ThreadsListNode
 import io.element.android.features.messages.impl.timeline.TimelineController
+import io.element.android.features.messages.impl.timeline.TimelineSelectionOwner
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.GalleryItem
@@ -62,8 +69,9 @@ import io.element.android.features.messages.impl.timeline.model.event.duration
 import io.element.android.features.poll.api.create.CreatePollEntryPoint
 import io.element.android.features.poll.api.create.CreatePollMode
 import io.element.android.libraries.androidutils.system.DeviceHasVulkanSupport
-import io.element.android.libraries.architecture.BackstackWithOverlayBox
+import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.OverlayView
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.overlay.Overlay
@@ -73,7 +81,12 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
+import io.element.android.libraries.designsystem.components.async.AsyncIndicator
+import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
+import io.element.android.libraries.designsystem.components.async.AsyncIndicatorState
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.htmlrenderer.api.LocalMentionDisplayNames
+import io.element.android.libraries.htmlrenderer.api.MentionDisplayNames
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -83,11 +96,12 @@ import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.activeRoomMembers
 import io.element.android.libraries.matrix.api.room.alias.matches
-import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.mediaviewer.api.GalleryInfo
@@ -161,7 +175,6 @@ class MessagesFlowNode(
 
         @Parcelize
         data class GalleryViewer(
-            val fromPinnedMessages: Boolean,
             val eventId: EventId?,
             val galleryInfo: GalleryInfo,
             val canUseOverlay: Boolean,
@@ -178,10 +191,7 @@ class MessagesFlowNode(
         data class EventDebugInfo(val eventId: EventId?, val debugInfo: TimelineItemDebugInfo) : NavTarget
 
         @Parcelize
-        data class ForwardEvent(
-            val eventId: EventId,
-            val fromPinnedEvents: Boolean,
-        ) : NavTarget
+        data class ForwardEvent(val eventIds: List<EventId>) : NavTarget
 
         @Parcelize
         data class ReportMessage(val eventId: EventId, val senderId: UserId) : NavTarget
@@ -212,6 +222,7 @@ class MessagesFlowNode(
     }
 
     private val callback: MessagesEntryPoint.Callback = callback()
+    private val asyncIndicatorState = AsyncIndicatorState()
 
     private var displayVulkanNotSupportedError by mutableStateOf(false)
 
@@ -231,7 +242,7 @@ class MessagesFlowNode(
         room.membersStateFlow
             .onEach { membersState ->
                 withContext(coroutineDispatchers.computation) {
-                    roomMemberProfilesCache.replace(membersState.joinedRoomMembers())
+                    roomMemberProfilesCache.replace(membersState.activeRoomMembers())
                 }
             }
             .launchIn(lifecycleScope)
@@ -268,13 +279,11 @@ class MessagesFlowNode(
                     }
 
                     override fun handleGalleryItemClick(
-                        timelineMode: Timeline.Mode,
                         event: TimelineItem.Event,
                         galleryItemIndex: Int,
                         canUseOverlay: Boolean,
                     ): Boolean {
                         return processGalleryEventClick(
-                            timelineMode = timelineMode,
                             event = event,
                             canUseOverlay = canUseOverlay,
                             galleryItemIndex = galleryItemIndex,
@@ -303,8 +312,8 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
 
-                    override fun forwardEvent(eventId: EventId) {
-                        backstack.push(NavTarget.ForwardEvent(eventId, fromPinnedEvents = false))
+                    override fun forwardEvents(eventIds: List<EventId>) {
+                        backstack.push(NavTarget.ForwardEvent(eventIds))
                     }
 
                     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
@@ -394,9 +403,9 @@ class MessagesFlowNode(
                         this@MessagesFlowNode.viewInTimeline(eventId)
                     }
 
-                    override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
+                    override fun forwardEvent(eventId: EventId) {
                         // Need to go to the parent because of the overlay
-                        callback.forwardEvent(eventId, fromPinnedEvents)
+                        callback.forwardEvent(eventId)
                     }
                 }
                 mediaViewerEntryPoint.createNode(
@@ -411,7 +420,6 @@ class MessagesFlowNode(
                     eventId = navTarget.eventId,
                     galleryInfo = navTarget.galleryInfo,
                     galleryItems = navTarget.galleryItems,
-                    fromPinnedMessages = navTarget.fromPinnedMessages,
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
@@ -426,9 +434,9 @@ class MessagesFlowNode(
                         this@MessagesFlowNode.viewInTimeline(eventId)
                     }
 
-                    override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
+                    override fun forwardEvent(eventId: EventId) {
                         // Need to go to the parent because of the overlay
-                        callback.forwardEvent(eventId, fromPinnedEvents)
+                        callback.forwardEvent(eventId)
                     }
                 }
                 mediaViewerEntryPoint.createNode(
@@ -459,17 +467,28 @@ class MessagesFlowNode(
                 createNode<EventDebugInfoNode>(buildContext, listOf(inputs))
             }
             is NavTarget.ForwardEvent -> {
-                val timelineProvider = if (navTarget.fromPinnedEvents) {
-                    pinnedEventsTimelineProvider
-                } else {
-                    timelineController
-                }
-                val params = ForwardEntryPoint.Params(navTarget.eventId, timelineProvider)
+                val params = ForwardEntryPoint.Params(
+                    eventIds = navTarget.eventIds,
+                    fromRoomId = room.roomId,
+                )
                 val callback = object : ForwardEntryPoint.Callback {
                     override fun onDone(roomIds: List<RoomId>) {
+                        // Exit selection mode only if forwarding actually happened.
+                        if (roomIds.isNotEmpty()) {
+                            exitSelectionMode()
+                        }
                         backstack.pop()
-                        roomIds.singleOrNull()?.let { roomId ->
-                            callback.navigateToRoom(roomId)
+                        val singleRoomId = roomIds.singleOrNull()
+                        when {
+                            singleRoomId != null -> callback.navigateToRoom(singleRoomId)
+                            roomIds.isNotEmpty() -> {
+                                val numberOfMessages = navTarget.eventIds.size
+                                asyncIndicatorState.enqueue(durationMs = AsyncIndicator.DURATION_SHORT) {
+                                    AsyncIndicator.Custom(
+                                        text = pluralStringResource(R.plurals.screen_room_messages_forwarded, numberOfMessages, numberOfMessages),
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -527,7 +546,6 @@ class MessagesFlowNode(
                         canUseOverlay: Boolean,
                     ) {
                         processGalleryEventClick(
-                            timelineMode = Timeline.Mode.PinnedEvents,
                             event = event,
                             galleryItemIndex = galleryItemIndex,
                             canUseOverlay = canUseOverlay,
@@ -551,7 +569,7 @@ class MessagesFlowNode(
                     }
 
                     override fun handleForwardEventClick(eventId: EventId) {
-                        backstack.push(NavTarget.ForwardEvent(eventId = eventId, fromPinnedEvents = true))
+                        backstack.push(NavTarget.ForwardEvent(eventIds = listOf(eventId)))
                     }
 
                     override fun navigateToThread(threadRootId: ThreadId) {
@@ -582,13 +600,11 @@ class MessagesFlowNode(
                     }
 
                     override fun handleGalleryItemClick(
-                        timelineMode: Timeline.Mode,
                         event: TimelineItem.Event,
                         galleryItemIndex: Int,
                         canUseOverlay: Boolean,
                     ): Boolean {
                         return processGalleryEventClick(
-                            timelineMode = timelineMode,
                             event = event,
                             canUseOverlay = canUseOverlay,
                             galleryItemIndex = galleryItemIndex,
@@ -617,8 +633,8 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EventDebugInfo(eventId, debugInfo))
                     }
 
-                    override fun handleForwardEventClick(eventId: EventId) {
-                        backstack.push(NavTarget.ForwardEvent(eventId, fromPinnedEvents = false))
+                    override fun handleForwardEventClick(eventIds: List<EventId>) {
+                        backstack.push(NavTarget.ForwardEvent(eventIds))
                     }
 
                     override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
@@ -691,7 +707,7 @@ class MessagesFlowNode(
                         // Cannot happen
                     }
 
-                    override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
+                    override fun forwardEvent(eventId: EventId) {
                         // Cannot happen
                     }
                 }
@@ -776,7 +792,7 @@ class MessagesFlowNode(
                             assetType = event.content.assetType,
                         )
                     }
-                    NavTarget.LocationViewer(mode = mode).takeIf { locationService.isServiceAvailable() }
+                    NavTarget.LocationViewer(mode = mode).takeIf { locationService.isServiceAvailable().value }
                 } else {
                     displayVulkanNotSupportedError = true
                     null
@@ -802,7 +818,6 @@ class MessagesFlowNode(
     }
 
     private fun processGalleryEventClick(
-        timelineMode: Timeline.Mode,
         event: TimelineItem.Event,
         galleryItemIndex: Int,
         canUseOverlay: Boolean,
@@ -811,6 +826,7 @@ class MessagesFlowNode(
             is TimelineItemGalleryContent -> {
                 val galleryInfo = GalleryInfo(
                     caption = event.content.caption,
+                    htmlCaption = event.content.htmlCaption,
                     senderId = event.senderId,
                     senderName = event.safeSenderName,
                     senderAvatar = event.senderAvatar.url,
@@ -839,12 +855,12 @@ class MessagesFlowNode(
                     galleryInfo = galleryInfo,
                     canUseOverlay = canUseOverlay,
                     galleryItems = galleryItems,
-                    fromPinnedMessages = timelineMode is Timeline.Mode.PinnedEvents
                 )
             }
             is TimelineItemAttachmentsContent -> {
                 val galleryInfo = GalleryInfo(
                     caption = event.content.caption,
+                    htmlCaption = event.content.htmlCaption,
                     senderId = event.senderId,
                     senderName = event.safeSenderName,
                     senderAvatar = event.senderAvatar.url,
@@ -873,7 +889,6 @@ class MessagesFlowNode(
                     galleryInfo = galleryInfo,
                     canUseOverlay = canUseOverlay,
                     galleryItems = galleryItems,
-                    fromPinnedMessages = timelineMode is Timeline.Mode.PinnedEvents
                 )
             }
             else -> null
@@ -904,7 +919,7 @@ class MessagesFlowNode(
                 filename = content.filename,
                 fileSize = content.fileSize,
                 caption = content.caption,
-                formattedCaption = content.formattedCaption,
+                htmlCaption = content.htmlCaption,
                 mimeType = content.mimeType,
                 formattedFileSize = content.formattedFileSize,
                 fileExtension = content.fileExtension,
@@ -939,6 +954,14 @@ class MessagesFlowNode(
         backstack.push(NavTarget.Thread(threadId, focusedEventId))
     }
 
+    private fun exitSelectionMode() {
+        val prevKey = backstack.elements.value
+            .lastOrNull { it.targetState == BackStack.State.STASHED }
+            ?.key
+        val timelineSelectionOwner = children.value[prevKey]?.nodeOrNull as? TimelineSelectionOwner
+        timelineSelectionOwner?.exitTimelineSelection()
+    }
+
     @Composable
     override fun View(modifier: Modifier) {
         mentionSpanTheme.updateStyles()
@@ -947,10 +970,24 @@ class MessagesFlowNode(
             RenderingMapsNotSupportedDialog { displayVulkanNotSupportedError = false }
         }
 
+        // The State instances are passed as is, so the provided value stays the same when the display names change
+        val userDisplayNames = roomMemberProfilesCache.displayNames.collectAsState()
+        val roomDisplayNames = roomNamesCache.displayNames.collectAsState()
+        val userStatuses = roomMemberProfilesCache.displayedStatusEmojis.collectAsState()
+        val mentionDisplayNames = remember(userDisplayNames, roomDisplayNames, userStatuses) {
+            MentionDisplayNames(users = userDisplayNames, rooms = roomDisplayNames, userStatuses = userStatuses)
+        }
+
         CompositionLocalProvider(
-            LocalMentionSpanUpdater provides mentionSpanUpdater
+            LocalMentionSpanUpdater provides mentionSpanUpdater,
+            LocalMentionDisplayNames provides mentionDisplayNames,
+            LocalRoomMemberProfilesCache provides roomMemberProfilesCache,
         ) {
-            BackstackWithOverlayBox(modifier)
+            Box(modifier = modifier) {
+                BackstackView()
+                OverlayView()
+                AsyncIndicatorHost(modifier = Modifier.statusBarsPadding(), state = asyncIndicatorState)
+            }
         }
     }
 }

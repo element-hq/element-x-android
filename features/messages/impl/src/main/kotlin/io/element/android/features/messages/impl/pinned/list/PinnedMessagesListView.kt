@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.plus
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +25,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -36,10 +36,10 @@ import io.element.android.features.messages.impl.timeline.components.TimelineIte
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvent
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemSelectionData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.poll.api.pollcontent.PollTitleView
@@ -58,6 +58,7 @@ import io.element.android.libraries.emoji.api.picker.EmojiPickerRenderer
 import io.element.android.libraries.emoji.api.picker.NoOpEmojiPickerRenderer
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -106,7 +107,6 @@ fun PinnedMessagesListView(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PinnedMessagesListTopBar(
     state: PinnedMessagesListState,
@@ -137,7 +137,7 @@ private fun PinnedMessagesListContent(
             PinnedMessagesListState.Failed -> {
                 ErrorDialog(
                     title = stringResource(id = CommonStrings.error_unknown),
-                    content = stringResource(id = CommonStrings.error_failed_loading_messages),
+                    content = stringResource(id = R.string.error_failed_loading_messages),
                     onSubmit = onErrorDismiss
                 )
             }
@@ -174,8 +174,8 @@ private fun PinnedMessagesListEmpty(
     ) {
         val pinActionText = stringResource(id = CommonStrings.action_pin)
         IconTitleSubtitleMolecule(
-            title = stringResource(id = CommonStrings.screen_pinned_timeline_empty_state_headline),
-            subTitle = stringResource(id = CommonStrings.screen_pinned_timeline_empty_state_description, pinActionText),
+            title = stringResource(id = R.string.screen_pinned_timeline_empty_state_headline),
+            subTitle = stringResource(id = R.string.screen_pinned_timeline_empty_state_description, pinActionText),
             iconStyle = BigIcon.Style.Default(CompoundIcons.Pin()),
         )
     }
@@ -291,6 +291,7 @@ private fun PinnedMessagesListLoaded(
                         onContentLayoutChange = onContentLayoutChange
                     )
                 },
+                selectionData = TimelineItemSelectionData(),
             )
         }
     }

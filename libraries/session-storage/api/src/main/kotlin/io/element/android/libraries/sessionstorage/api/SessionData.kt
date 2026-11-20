@@ -46,4 +46,6 @@ data class SessionData(
     val userDisplayName: String?,
     /** The optional avatar URL of the user. */
     val userAvatarUrl: String?,
+    /** The optional thumbnail of the avatar of the user ([userAvatarUrl]), base64 encoded. */
+    val userAvatarData: String?,
 )

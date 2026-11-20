@@ -32,8 +32,8 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.text.util.LinkifyCompat
 import io.element.android.compound.theme.LinkColor
+import io.element.android.libraries.androidutils.text.LinkifyHelper
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -142,7 +142,7 @@ fun ClickableLinkText(
 fun AnnotatedString.linkify(linkStyle: SpanStyle): AnnotatedString {
     val original = this
     val spannable = SpannableString.valueOf(this.text)
-    LinkifyCompat.addLinks(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
+    LinkifyHelper.linkify(spannable, Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES)
 
     val spans = spannable.getSpans(0, spannable.length, URLSpan::class.java)
     return buildAnnotatedString {
@@ -150,7 +150,9 @@ fun AnnotatedString.linkify(linkStyle: SpanStyle): AnnotatedString {
         for (span in spans) {
             val start = spannable.getSpanStart(span)
             val end = spannable.getSpanEnd(span)
-            if (original.getLinkAnnotations(start, end).isEmpty() && original.getStringAnnotations("URL", start, end).isEmpty()) {
+            if (original.getLinkAnnotations(start, end).isEmpty() &&
+                original.getStringAnnotations(LINK_TAG, start, end).isEmpty() &&
+                original.getStringAnnotations("inline_code", start, end).isEmpty()) {
                 // Prevent linkifying domains in user or room handles (@user:domain.com, #room:domain.com)
                 if (start > 0 && !spannable[start - 1].isWhitespace()) continue
 

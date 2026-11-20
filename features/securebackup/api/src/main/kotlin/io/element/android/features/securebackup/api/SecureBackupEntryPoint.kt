@@ -42,5 +42,8 @@ interface SecureBackupEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun onDone()
+
+        /** The user chose to sign out instead of resetting their identity, which is only offered before the session is verified. */
+        fun onSignOut()
     }
 }

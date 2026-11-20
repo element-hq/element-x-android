@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"თქვენ გაქვთ შეუნახავი ცვლილებები"</string>
+  <string name="dialog_unsaved_changes_description_android">"თქვენი ცვლილებები არაა შენახული. დარწმუნებული ხართ დაბრუნებაში?"</string>
+  <string name="dialog_unsaved_changes_title">"შენახვა?"</string>
+</resources>

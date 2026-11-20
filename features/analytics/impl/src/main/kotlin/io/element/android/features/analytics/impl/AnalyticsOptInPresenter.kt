@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.AnalyticsConfig
-import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.features.analytics.api.AnalyticsOptInEvent
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.services.analytics.api.AnalyticsService
@@ -28,9 +28,9 @@ class AnalyticsOptInPresenter(
     override fun present(): AnalyticsOptInState {
         val localCoroutineScope = rememberCoroutineScope()
 
-        fun handleEvent(event: AnalyticsOptInEvents) {
+        fun handleEvent(event: AnalyticsOptInEvent) {
             when (event) {
-                is AnalyticsOptInEvents.EnableAnalytics -> localCoroutineScope.setIsEnabled(event.isEnabled)
+                is AnalyticsOptInEvent.EnableAnalytics -> localCoroutineScope.setIsEnabled(event.isEnabled)
             }
             localCoroutineScope.launch {
                 analyticsService.setDidAskUserConsent()

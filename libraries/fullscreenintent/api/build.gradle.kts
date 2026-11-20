@@ -16,6 +16,4 @@ android {
 
 dependencies {
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.permissions.api)
-    implementation(projects.libraries.preferences.api)
 }

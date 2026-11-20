@@ -49,13 +49,13 @@ class DeclineAndBlockPresenter(
 
         val coroutineScope = rememberCoroutineScope()
 
-        fun handleEvent(event: DeclineAndBlockEvents) {
+        fun handleEvent(event: DeclineAndBlockEvent) {
             when (event) {
-                DeclineAndBlockEvents.ClearDeclineAction -> declineAction.value = AsyncAction.Uninitialized
-                DeclineAndBlockEvents.Decline -> coroutineScope.decline(reportReason, blockUser, reportRoom, declineAction)
-                DeclineAndBlockEvents.ToggleBlockUser -> blockUser = !blockUser
-                DeclineAndBlockEvents.ToggleReportRoom -> reportRoom = !reportRoom
-                is DeclineAndBlockEvents.UpdateReportReason -> reportReason = event.reason
+                DeclineAndBlockEvent.ClearDeclineAction -> declineAction.value = AsyncAction.Uninitialized
+                DeclineAndBlockEvent.Decline -> coroutineScope.decline(reportReason, blockUser, reportRoom, declineAction)
+                DeclineAndBlockEvent.ToggleBlockUser -> blockUser = !blockUser
+                DeclineAndBlockEvent.ToggleReportRoom -> reportRoom = !reportRoom
+                is DeclineAndBlockEvent.UpdateReportReason -> reportReason = event.reason
             }
         }
 

@@ -16,6 +16,7 @@ import io.element.android.features.location.impl.common.actions.FakeLocationActi
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
+import io.element.android.features.location.test.FakeLocationService
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -58,7 +59,7 @@ class DefaultShareLocationEntryPointTest {
                             sessionId = room.sessionId,
                         ),
                         userLocationStateFactory = FakeUserLocationStateFactory(),
-                        customMapTilerConfigProvider = { Result.success(null) },
+                        locationService = FakeLocationService(),
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

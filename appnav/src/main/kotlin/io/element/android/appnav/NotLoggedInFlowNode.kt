@@ -13,6 +13,7 @@ package io.element.android.appnav
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -24,6 +25,8 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.features.announcement.api.Announcement
+import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
 import io.element.android.libraries.architecture.BackstackView
@@ -33,8 +36,11 @@ import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.utils.ForceOrientationInMobileDevices
 import io.element.android.libraries.designsystem.utils.ScreenOrientation
-import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrixmedia.api.ImageLoaderHolder
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -45,6 +51,8 @@ class NotLoggedInFlowNode(
     private val loginEntryPoint: LoginEntryPoint,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val analyticsColdStartWatcher: AnalyticsColdStartWatcher,
+    private val featureFlagService: FeatureFlagService,
+    private val announcementService: AnnouncementService,
 ) : BaseFlowNode<NotLoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -68,6 +76,13 @@ class NotLoggedInFlowNode(
     override fun onBuilt() {
         super.onBuilt()
         analyticsColdStartWatcher.whenLoggingIn()
+        lifecycleScope.launch {
+            // Users who enter the login flow while the feature is available, either for the first time or to add
+            // another account, do not need to be informed about the multi-account feature.
+            if (featureFlagService.isFeatureEnabled(FeatureFlags.MultiAccount)) {
+                announcementService.onAnnouncementDismissed(Announcement.MultiAccount)
+            }
+        }
         lifecycle.subscribe(
             onResume = {
                 SingletonImageLoader.setUnsafe(imageLoaderHolder.get())

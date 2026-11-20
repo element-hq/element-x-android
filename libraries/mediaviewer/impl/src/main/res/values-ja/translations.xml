@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_scanning">"スキャン中…"</string>
   <string name="screen_media_browser_delete_confirmation_subtitle">"このファイルはルームから削除され、他のユーザーは確認することができなくなります。"</string>
   <string name="screen_media_browser_delete_confirmation_title">"ファイルを削除しますか？"</string>
   <string name="screen_media_browser_download_error_message">"インターネット接続を確認した上、再度お試しください。"</string>

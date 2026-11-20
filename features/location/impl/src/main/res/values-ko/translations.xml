@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s에서 맵을 로딩할 수 없습니다. 다시 시도해주세요."</string>
+  <string name="error_failed_locating_user">"%1$s가 위치에 접근할 수 없습니다. 나중에 다시 시도해 주세요."</string>
+  <string name="error_location_service_disabled_android">"위치 기반 기능을 사용하려면 GPS를 켜 주세요."</string>
+  <string name="error_missing_location_auth_android">"%1$s에서 위치에 접근할 수 있는 권한이 없습니다. 설정에서 활성화가 가능합니다."</string>
+  <string name="error_missing_location_rationale_android">"%1$s에서 위치에 접근할 수 있는 권한이 없습니다. 아래에서 허용해주세요."</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"실시간 위치 공유"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"위치 공유 중"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s님의 실시간 위치"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"위치를 공유 중인 사용자가 없습니다."</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"실시간 위치 공유 중"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="other">"%1$d명"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"지도 보기"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"실시간 위치 기록은 대화방에 저장되며, 공유 종료 후에도 멤버들이 확인할 수 있습니다."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"실시간 위치를 공유할 시간을 선택해 주세요."</string>
   <string name="screen_share_location_live_location_missing_permissions">"이 방에서는 실시간 위치를 공유할 권한이 없습니다."</string>
+  <string name="screen_share_location_title">"위치 공유"</string>
+  <string name="screen_share_my_location_action">"내 위치 공유"</string>
+  <string name="screen_share_open_apple_maps">"Apple Maps에서 열기"</string>
+  <string name="screen_share_open_google_maps">"Google Maps에서 열기"</string>
+  <string name="screen_share_open_osm_maps">"OpenStreetMap에서 열기"</string>
+  <string name="screen_share_this_location_action">"선택한 위치 공유"</string>
+  <string name="screen_sharing_location_option_sheet_title">"공유 옵션"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"공유된 %1$s"</string>
+  <string name="screen_static_location_sheet_title">"지도에서 보기"</string>
+  <string name="screen_view_location_title">"위치"</string>
 </resources>

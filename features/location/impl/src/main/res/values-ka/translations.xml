@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"ვერ გამოვიდა რუკის %1$s ჩატვირთვა. გთხოვთ, მოგვიანებით სცადოთ."</string>
+  <string name="error_failed_locating_user">"%1$s ვერ მოახერხა თქვენი ადგილმდებარეობაზე წვდომა. გთხოვთ, მოგვიანებით სცადოთ."</string>
+  <string name="error_missing_location_auth_android">"%1$s არ აქვს თქვენს ადგილმდებარეობაზე წვდომის ნებართვა. შეგიძლიათ ჩართოთ წვდომა პარამეტრებში."</string>
+  <string name="error_missing_location_rationale_android">"%1$s არ აქვს თქვენს ადგილმდებარეობაზე წვდომის ნებართვა. ჩართეთ წვდომა ქვემოთ"</string>
+  <string name="screen_share_location_title">"მდებარეობის გაზიარება"</string>
+  <string name="screen_share_my_location_action">"ჩემი მდებარეობის გაზიარება"</string>
+  <string name="screen_share_open_apple_maps">"Apple Maps-ში გახსნა"</string>
+  <string name="screen_share_open_google_maps">"Google Maps-ში გახსნა"</string>
+  <string name="screen_share_open_osm_maps">"OpenStreetMap-ში გახსნა"</string>
+  <string name="screen_share_this_location_action">"ამ ადგილის გაზიარება"</string>
+  <string name="screen_view_location_title">"ადგილმდებარეობა"</string>
+</resources>

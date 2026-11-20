@@ -19,22 +19,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.previews.ColorsSchemePreview
-import io.element.android.compound.screenshot.utils.screenshotFile
+import io.element.android.compound.screenshot.utils.createPaparazziRule
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
-import io.element.android.tests.testutils.robolectric.RobolectricTest
+import org.junit.Rule
 import org.junit.Test
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
-class MaterialYouThemeTest : RobolectricTest() {
+class MaterialYouThemeTest {
+    @get:Rule
+    val paparazzi = createPaparazziRule()
+
     @Test
-    @Config(sdk = [35], qualifiers = "h2048dp-xhdpi")
     fun screenshots() {
-        captureRoboImage(file = screenshotFile("MaterialYou Theme - Light.png")) {
+        paparazzi.snapshot(name = "MaterialYou Theme - Light") {
             ElementTheme(dynamicColor = true) {
                 Surface {
                     Column(
@@ -49,7 +47,7 @@ class MaterialYouThemeTest : RobolectricTest() {
                 }
             }
         }
-        captureRoboImage(file = screenshotFile("MaterialYou Theme - Dark.png")) {
+        paparazzi.snapshot(name = "MaterialYou Theme - Dark") {
             ElementTheme(dynamicColor = true, theme = Theme.Dark) {
                 Surface {
                     Column(

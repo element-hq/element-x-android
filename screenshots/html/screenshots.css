@@ -150,6 +150,11 @@ input {
     height: 40px;
 }
 
+.build-date {
+    margin-right: 20px;
+    font-size: 13px;
+}
+
 a:link {
   color: white;
   font-size: 14px;

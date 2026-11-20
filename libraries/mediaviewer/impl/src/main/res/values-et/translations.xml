@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_scanning">"Skaneerin…"</string>
   <string name="screen_media_browser_delete_confirmation_subtitle">"Järgnevaga eemaldame selle faili jututoast ka tema liikmed enam ei pääse failile ligi."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Kas kustutame faili?"</string>
   <string name="screen_media_browser_download_error_message">"Kontrolli oma nutiseadme internetiühenduse toimimist ja proovi uuesti"</string>

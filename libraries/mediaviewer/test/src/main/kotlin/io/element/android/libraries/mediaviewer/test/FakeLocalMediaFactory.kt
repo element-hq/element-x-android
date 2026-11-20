@@ -41,7 +41,7 @@ class FakeLocalMediaFactory(
             filename = safeName,
             fileSize = null,
             caption = null,
-            formattedCaption = null,
+            htmlCaption = null,
             mimeType = mimeType ?: fallbackMimeType,
             formattedFileSize = formattedFileSize ?: fallbackFileSize,
             fileExtension = fileExtensionExtractor.extractFromName(safeName),

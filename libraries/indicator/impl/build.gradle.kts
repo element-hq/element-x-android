@@ -13,7 +13,7 @@ plugins {
     id("io.element.android-compose-library")
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 android {
     namespace = "io.element.android.libraries.indicator.impl"
@@ -21,7 +21,6 @@ android {
 
 dependencies {
     implementation(projects.libraries.di)
-    implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
 
     implementation(libs.coroutines.core)
@@ -29,6 +28,5 @@ dependencies {
     api(projects.libraries.indicator.api)
 
     testCommonDependencies(libs)
-    testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
 }

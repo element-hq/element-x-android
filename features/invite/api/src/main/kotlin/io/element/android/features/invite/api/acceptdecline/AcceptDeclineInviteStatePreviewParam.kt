@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 fun anAcceptDeclineInviteState(
     acceptAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
     declineAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
-    eventSink: (AcceptDeclineInviteEvents) -> Unit = {},
+    eventSink: (AcceptDeclineInviteEvent) -> Unit = {},
 ) = AcceptDeclineInviteState(
     acceptAction = acceptAction,
     declineAction = declineAction,

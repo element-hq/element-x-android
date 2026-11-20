@@ -19,7 +19,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents.ShowActionsForUser
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent.ShowActionsForUser
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter

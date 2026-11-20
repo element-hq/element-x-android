@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"Du hast dein Passwort in einer anderen Sitzung geändert"</string>
-  <string name="screen_signed_out_reason_2">"Du hast diese Sitzung aus einer anderen Sitzung gelöscht"</string>
-  <string name="screen_signed_out_reason_3">"Der Administrator deines Servers hat deinen Zugang ungültig gemacht"</string>
-  <string name="screen_signed_out_subtitle">"Möglicherweise wurdest du aus einem der folgenden Gründe abgemeldet. Bitte melde dich erneut an, um %s weiter zu nutzen."</string>
-  <string name="screen_signed_out_title">"Du bist abgemeldet"</string>
+  <string name="screen_signed_out_reason_1">"Du hast dieses Gerät aus deinem Konto entfernt	"</string>
+  <string name="screen_signed_out_reason_2">"Du hast dein Passwort auf einem anderen Gerät geändert"</string>
+  <string name="screen_signed_out_reason_3">"Deine Anmeldung ist abgelaufen oder dein Kontoanbieter hat deinen Zugang gesperrt"</string>
+  <string name="screen_signed_out_subtitle_v2">"Dieses Gerät wurde aus einem der unten genannten Gründe entfernt. Bitte melde dich erneut an, um dieses Gerät mit deinem Konto zu verbinden."</string>
+  <string name="screen_signed_out_title">"Gerät entfernt"</string>
 </resources>

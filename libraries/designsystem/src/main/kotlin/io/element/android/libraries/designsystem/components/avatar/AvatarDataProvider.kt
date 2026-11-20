@@ -16,9 +16,11 @@ fun anAvatarData(
     name: String? = USER_NAME_ALICE,
     url: String? = null,
     size: AvatarSize = AvatarSize.RoomListItem,
+    thumbnail: String? = null,
 ) = AvatarData(
     id = id,
     name = name,
     url = url,
     size = size,
+    thumbnail = thumbnail,
 )

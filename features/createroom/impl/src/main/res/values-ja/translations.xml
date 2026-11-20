@@ -11,7 +11,7 @@
   <string name="screen_create_room_private_option_title">"非公開"</string>
   <string name="screen_create_room_public_option_description">"ルームは全世界に公開されます。
 ルーム設定でいつでも変更できます。"</string>
-  <string name="screen_create_room_public_option_short_description">"誰でも参加できます。"</string>
+  <string name="screen_create_room_public_option_short_description">"あなたの組織外のユーザーを含め誰でも参加できます。"</string>
   <string name="screen_create_room_public_option_title">"公開"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"誰でも参加できますが、管理者またはモデレーターの承認が必要です。"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"参加の要求を許可"</string>
@@ -19,7 +19,7 @@
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"参加を要求"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"招待されたユーザーのみが参加できます。"</string>
   <string name="screen_create_room_room_access_section_private_option_title">"非公開"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"誰でも参加できます。"</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"あなたの組織外のユーザーを含め誰でも参加できます。"</string>
   <string name="screen_create_room_room_access_section_public_option_title">"公開"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"%1$s にいる全員が参加することができます。"</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"スタンダード"</string>

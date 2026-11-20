@@ -72,7 +72,7 @@ fun aCreateRoomRootState(
     applicationName: String = "Element X Preview",
     userListState: UserListState = aUserListState(),
     startDmAction: AsyncAction<RoomId> = AsyncAction.Uninitialized,
-    eventSink: (StartChatEvents) -> Unit = {},
+    eventSink: (StartChatEvent) -> Unit = {},
 ) = StartChatState(
     applicationName = applicationName,
     userListState = userListState,

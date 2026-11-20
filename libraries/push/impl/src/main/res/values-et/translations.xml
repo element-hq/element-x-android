@@ -5,38 +5,27 @@
   <string name="notification_channel_noisy">"Lärmakad teavitused"</string>
   <string name="notification_channel_ringing_calls">"Kõnehelinad"</string>
   <string name="notification_channel_silent">"Vaiksed teavitused"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d sõnum"</item>
-    <item quantity="other">"%1$s: %2$d sõnumit"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d teavitus"</item>
     <item quantity="other">"%d teavitust"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"UnifiedPushi levitajas registreerimine ei õnnestunud ja seega sa ei saa enam teavitusi. Palun kontrolli selle rakenduse teavituste seadistusi ja tõuketeenuste levitaja olekut."</string>
-  <string name="notification_fallback_content">"Sulle on uusi sõnumeid."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"Sul on %d uus sõnum."</item>
     <item quantity="other">"Sul on %d uut sõnumit."</item>
   </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"%1$d manus on jagatud"</item>
+    <item quantity="other">"%1$d manust on jagatud"</item>
+  </plurals>
   <string name="notification_incoming_audio_call">"📞 Saabuv kõne"</string>
   <string name="notification_incoming_call">"📹 Saabuv kõne"</string>
   <string name="notification_inline_reply_failed">"** Saatmine ei õnnestunud - palun ava jututoa täisvaade"</string>
-  <string name="notification_invitation_action_join">"Liitu"</string>
-  <string name="notification_invitation_action_reject">"Keeldu"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d kutse"</item>
-    <item quantity="other">"%d kutset"</item>
-  </plurals>
   <string name="notification_invite_body">"Kutse osalema vestluses"</string>
   <string name="notification_invite_body_with_sender">"%1$s saatus sulle vestluskutse"</string>
+  <string name="notification_knock_request_body">"Palun võimalust liitumiseks"</string>
   <string name="notification_live_location_started_body">"Hakkas jagama oma asukohta reaalajas"</string>
   <string name="notification_mentioned_you_body">"Mainis sind: %1$s"</string>
-  <string name="notification_new_messages">"Uued sõnumid"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d uus sõnum"</item>
-    <item quantity="other">"%d uut sõnumit"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reageeris nii: %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Märgi loetuks"</string>
   <string name="notification_room_action_quick_reply">"Kiirvastus"</string>
@@ -46,7 +35,7 @@
   <string name="notification_sender_mention_reply">"%1$s mainis või vastas"</string>
   <string name="notification_space_invite_body">"Kutsus sind liituma kogukonnaga"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s kutsus sind liituma kogukonnaga"</string>
-  <string name="notification_test_push_notification_content">"See ongi teavitus! Klõpsi mind!"</string>
+  <string name="notification_test_push_notification_content">"See ongi teavitus! Klõpsa mind!"</string>
   <string name="notification_thread_in_room">"Jutulõng „%1$s“ jututoas"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -81,10 +70,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Hetkel kasutatav tõuketeenuste pakkuja"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Palun taga selle rakenduse jaoks on seadistatud vähemalt üks tõuketeenuste pakkuja."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Ühtegi tõuketeenuste pakkujat ei leidu."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Leidsime %1$d tõuketeenuse pakkuja: %2$s"</item>
-    <item quantity="other">"Leidsime %1$d tõuketeenuse pakkujat: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Rakendus on kompileeritud kaasneva toega teenusele: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Tuvasta tõuketeenuste pakkujad"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Palun kontrolli, et rakendus saaks kuvada teavitusi."</string>
@@ -92,12 +77,13 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Teavituse kuvamine ei õnnestu."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Sa oled teavitust klõpsinud!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Kuva teavitust"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Testiga jätkamiseks palun klõpsi teavitust."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Testiga jätkamiseks palun klõpsa teavitust."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Palun veendu, et rakendus saab tõuketeavitusi."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Viga: tõuketeenuse teostaja on päringust keeldunud."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Viga: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Viga: katselist tõuketeavitust pole võimalik teha."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Viga: tõuketeavituse ootamisel tekkis aegumine."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Viga: tõuketeenuse lüüs piirab selle seadme kiirust, seega pole märguanded usaldusväärsed. Palun seadista mõni muu tõuketeenuse lüüs."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Kogu tõuketeavituse ringi tegemiseks kulus %1$d ms."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Tee tõuketeenuse silmustest"</string>
 </resources>

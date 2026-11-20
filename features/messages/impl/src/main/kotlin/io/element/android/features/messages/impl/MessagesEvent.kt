@@ -18,9 +18,12 @@ sealed interface MessagesEvent {
     data class ToggleReaction(val emoji: String, val eventOrTransactionId: EventOrTransactionId) : MessagesEvent
     data class InviteDialogDismissed(val action: InviteDialogAction) : MessagesEvent
     data class OnUserClicked(val user: MatrixUser) : MessagesEvent
+    data class ConfirmRedact(val reason: String?) : MessagesEvent
+    data object CancelRedact : MessagesEvent
     data object StopLiveLocationShare : MessagesEvent
     data object ShowLiveLocationShare : MessagesEvent
     data object MarkAsFullyReadAndExit : MessagesEvent
+    data object ConfirmSelectionAction : MessagesEvent
 }
 
 enum class InviteDialogAction {

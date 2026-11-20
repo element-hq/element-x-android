@@ -16,14 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.lifecycle.Lifecycle
-import io.element.android.appnav.R
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogWithDoNotShowAgain
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.matrix.api.exception.isNetworkError
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.push.api.PusherRegistrationFailure
@@ -35,11 +31,6 @@ fun LoggedInView(
     navigateToNotificationTroubleshoot: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    OnLifecycleEvent { _, event ->
-         if (event == Lifecycle.Event.ON_RESUME) {
-            state.eventSink(LoggedInEvents.CheckSlidingSyncProxyAvailability)
-         }
-    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -47,7 +38,7 @@ fun LoggedInView(
     ) {
         SyncStateView(
             modifier = Modifier.align(Alignment.TopCenter),
-            isVisible = state.showSyncSpinner,
+            state = state.syncIndicatorState,
         )
     }
     when (state.pusherRegistrationState) {
@@ -63,10 +54,10 @@ fun LoggedInView(
                         content = stringResource(id = CommonStrings.common_error_registering_pusher_android, reason),
                         cancelText = stringResource(id = CommonStrings.common_settings),
                         onDismiss = {
-                            state.eventSink(LoggedInEvents.CloseErrorDialog(it))
+                            state.eventSink(LoggedInEvent.CloseErrorDialog(it))
                         },
                         onCancel = {
-                            state.eventSink(LoggedInEvents.CloseErrorDialog(false))
+                            state.eventSink(LoggedInEvent.CloseErrorDialog(false))
                             navigateToNotificationTroubleshoot()
                         }
                     )
@@ -74,20 +65,10 @@ fun LoggedInView(
         }
     }
 
-    // Set the force migration dialog here so it's always displayed over every screen
-    if (state.forceNativeSlidingSyncMigration) {
-        ForceNativeSlidingSyncMigrationDialog(
-            appName = state.appName,
-            onSubmit = {
-                state.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
-            }
-        )
-    }
-
     LocalNetworkPermissionDialogView(
         dialog = state.localNetworkPermissionDialog,
-        onSubmit = { state.eventSink(LoggedInEvents.RequestLocationNetworkPermission) },
-        onDismiss = { state.eventSink(LoggedInEvents.DismissLocalNetworkPermissionPrompt) },
+        onSubmit = { state.eventSink(LoggedInEvent.RequestLocationNetworkPermission) },
+        onDismiss = { state.eventSink(LoggedInEvent.DismissLocalNetworkPermissionPrompt) },
     )
 }
 
@@ -106,20 +87,6 @@ private fun Throwable.getReason(): String? {
         is PusherRegistrationFailure.NoProvidersAvailable -> "No providers available"
         else -> "Other error: $message"
     }
-}
-
-@Composable
-private fun ForceNativeSlidingSyncMigrationDialog(
-    appName: String,
-    onSubmit: () -> Unit,
-) {
-    ErrorDialog(
-        title = null,
-        content = stringResource(R.string.banner_migrate_to_native_sliding_sync_app_force_logout_title, appName),
-        submitText = stringResource(R.string.banner_migrate_to_native_sliding_sync_action),
-        onSubmit = onSubmit,
-        canDismiss = false,
-    )
 }
 
 @PreviewsDayNight

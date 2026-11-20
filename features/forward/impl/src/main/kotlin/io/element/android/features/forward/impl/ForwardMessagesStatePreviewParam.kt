@@ -32,7 +32,7 @@ open class ForwardMessagesStatePreviewParam : PreviewParameterProvider<ForwardMe
 
 fun aForwardMessagesState(
     forwardAction: AsyncAction<List<RoomId>> = AsyncAction.Uninitialized,
-    eventSink: (ForwardMessagesEvents) -> Unit = {}
+    eventSink: (ForwardMessagesEvent) -> Unit = {}
 ) = ForwardMessagesState(
     forwardAction = forwardAction,
     eventSink = eventSink

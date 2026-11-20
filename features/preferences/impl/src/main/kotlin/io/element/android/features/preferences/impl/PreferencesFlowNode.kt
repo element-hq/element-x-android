@@ -26,24 +26,33 @@ import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.logout.api.LogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.preferences.impl.about.AboutNode
-import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNode
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.blockedusers.BlockedUsersNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
 import io.element.android.features.preferences.impl.labs.LabsNode
+import io.element.android.features.preferences.impl.location.LocationSettingsNode
+import io.element.android.features.preferences.impl.media.MediaSettingsNode
+import io.element.android.features.preferences.impl.messagetextsize.MessageTextSizeNode
+import io.element.android.features.preferences.impl.moderation.ModerationAndSafetyNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
-import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.canPop
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.overlay.Overlay
+import io.element.android.libraries.architecture.overlay.operation.hide
+import io.element.android.libraries.architecture.overlay.operation.show
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.mediaviewer.api.FileViewerEntryPoint
 import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEntryPoint
 import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
 import kotlinx.parcelize.Parcelize
@@ -56,6 +65,7 @@ class PreferencesFlowNode(
     private val lockScreenEntryPoint: LockScreenEntryPoint,
     private val notificationTroubleShootEntryPoint: NotificationTroubleShootEntryPoint,
     private val pushHistoryEntryPoint: PushHistoryEntryPoint,
+    private val fileViewerEntryPoint: FileViewerEntryPoint,
     private val logoutEntryPoint: LogoutEntryPoint,
     private val openSourceLicensesEntryPoint: OpenSourceLicensesEntryPoint,
     private val accountDeactivationEntryPoint: AccountDeactivationEntryPoint,
@@ -64,6 +74,7 @@ class PreferencesFlowNode(
         initialElement = plugins.filterIsInstance<PreferencesEntryPoint.Params>().first().initialElement.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
+    overlay = Overlay(buildContext.savedStateMap),
     buildContext = buildContext,
     plugins = plugins
 ) {
@@ -75,7 +86,13 @@ class PreferencesFlowNode(
         data object DeveloperSettings : NavTarget
 
         @Parcelize
-        data object AdvancedSettings : NavTarget
+        data object MessageTextSize : NavTarget
+
+        @Parcelize
+        data object MediaSettings : NavTarget
+
+        @Parcelize
+        data object LocationSettings : NavTarget
 
         @Parcelize
         data object Labs : NavTarget
@@ -90,10 +107,16 @@ class PreferencesFlowNode(
         data object NotificationSettings : NavTarget
 
         @Parcelize
+        data object ModerationAndSafety : NavTarget
+
+        @Parcelize
         data object TroubleshootNotifications : NavTarget
 
         @Parcelize
         data object PushHistory : NavTarget
+
+        @Parcelize
+        data class PushRules(val filename: String, val content: String) : NavTarget
 
         @Parcelize
         data object LockScreenSettings : NavTarget
@@ -127,12 +150,8 @@ class PreferencesFlowNode(
                         callback.navigateToAddAccount()
                     }
 
-                    override fun navigateToBugReport() {
-                        callback.navigateToBugReport()
-                    }
-
-                    override fun navigateToSecureBackup() {
-                        callback.navigateToSecureBackup()
+                    override fun navigateToSession(sessionId: SessionId) {
+                        callback.navigateToSession(sessionId)
                     }
 
                     override fun navigateToAnalyticsSettings() {
@@ -147,20 +166,40 @@ class PreferencesFlowNode(
                         backstack.push(NavTarget.DeveloperSettings)
                     }
 
-                    override fun navigateToNotificationSettings() {
-                        backstack.push(NavTarget.NotificationSettings)
-                    }
-
                     override fun navigateToLockScreenSettings() {
                         backstack.push(NavTarget.LockScreenSettings)
                     }
 
-                    override fun navigateToAdvancedSettings() {
-                        backstack.push(NavTarget.AdvancedSettings)
+                    override fun navigateToMessageTextSize() {
+                        backstack.push(NavTarget.MessageTextSize)
+                    }
+
+                    override fun navigateToMediaSettings() {
+                        backstack.push(NavTarget.MediaSettings)
+                    }
+
+                    override fun navigateToLocationSettings() {
+                        backstack.push(NavTarget.LocationSettings)
                     }
 
                     override fun navigateToLabs() {
                         backstack.push(NavTarget.Labs)
+                    }
+
+                    override fun navigateToBugReport() {
+                        callback.navigateToBugReport()
+                    }
+
+                    override fun navigateToSecureBackup() {
+                        callback.navigateToSecureBackup()
+                    }
+
+                    override fun navigateToModerationAndSafety() {
+                        backstack.push(NavTarget.ModerationAndSafety)
+                    }
+
+                    override fun navigateToNotificationSettings() {
+                        backstack.push(NavTarget.NotificationSettings)
                     }
 
                     override fun navigateToLinkNewDevice() {
@@ -171,12 +210,8 @@ class PreferencesFlowNode(
                         backstack.push(NavTarget.UserProfile(matrixUser))
                     }
 
-                    override fun navigateToBlockedUsers() {
-                        backstack.push(NavTarget.BlockedUsers)
-                    }
-
                     override fun startSignOutFlow() {
-                        backstack.push(NavTarget.SignOut)
+                        overlay.show(NavTarget.SignOut)
                     }
 
                     override fun startAccountDeactivationFlow() {
@@ -187,6 +222,10 @@ class PreferencesFlowNode(
             }
             NavTarget.DeveloperSettings -> {
                 val developerSettingsCallback = object : DeveloperSettingsNode.Callback {
+                    override fun navigateToPushRules(filename: String, content: String) {
+                        backstack.push(NavTarget.PushRules(filename = filename, content = content))
+                    }
+
                     override fun navigateToPushHistory() {
                         backstack.push(NavTarget.PushHistory)
                     }
@@ -208,6 +247,17 @@ class PreferencesFlowNode(
                     }
                 }
                 createNode<LabsNode>(buildContext, listOf(callback))
+            }
+            NavTarget.ModerationAndSafety -> {
+                val callback = object : ModerationAndSafetyNode.Callback {
+                    override fun navigateToBlockedUsers() {
+                        backstack.push(NavTarget.BlockedUsers)
+                    }
+                }
+                createNode<ModerationAndSafetyNode>(buildContext, listOf(callback))
+            }
+            NavTarget.LocationSettings -> {
+                createNode<LocationSettingsNode>(buildContext)
             }
             NavTarget.About -> {
                 val callback = object : AboutNode.Callback {
@@ -270,6 +320,26 @@ class PreferencesFlowNode(
                     },
                 )
             }
+            is NavTarget.PushRules -> {
+                fileViewerEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = FileViewerEntryPoint.Params(
+                        filename = navTarget.filename,
+                        mimeType = MimeTypes.Json,
+                        content = navTarget.content,
+                    ),
+                    callback = object : FileViewerEntryPoint.Callback {
+                        override fun onDone() {
+                            if (backstack.canPop()) {
+                                backstack.pop()
+                            } else {
+                                navigateUp()
+                            }
+                        }
+                    },
+                )
+            }
             is NavTarget.EditDefaultNotificationSetting -> {
                 val callback = object : EditDefaultNotificationSettingNode.Callback {
                     override fun navigateToRoomNotificationSettings(roomId: RoomId) {
@@ -279,8 +349,11 @@ class PreferencesFlowNode(
                 val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
                 createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input, callback))
             }
-            NavTarget.AdvancedSettings -> {
-                createNode<AdvancedSettingsNode>(buildContext)
+            NavTarget.MessageTextSize -> {
+                createNode<MessageTextSizeNode>(buildContext)
+            }
+            NavTarget.MediaSettings -> {
+                createNode<MediaSettingsNode>(buildContext)
             }
             is NavTarget.UserProfile -> {
                 val inputs = EditUserProfileNode.Inputs(navTarget.matrixUser)
@@ -311,6 +384,10 @@ class PreferencesFlowNode(
                     override fun navigateToSecureBackup() {
                         callback.navigateToSecureBackup()
                     }
+
+                    override fun onDismiss() {
+                        overlay.hide()
+                    }
                 }
                 logoutEntryPoint.createNode(
                     parentNode = this,
@@ -329,6 +406,6 @@ class PreferencesFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView()
+        BackstackWithOverlayBox(modifier)
     }
 }

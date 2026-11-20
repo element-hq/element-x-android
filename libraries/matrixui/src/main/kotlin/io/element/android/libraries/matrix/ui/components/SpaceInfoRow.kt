@@ -29,10 +29,10 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomVisibility
+import io.element.android.libraries.matrix.ui.R
 import io.element.android.libraries.matrix.ui.model.icon
 import io.element.android.libraries.matrix.ui.model.label
 import io.element.android.libraries.ui.strings.CommonPlurals
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun SpaceInfoRow(
@@ -55,7 +55,7 @@ fun SpaceInfoRow(
             )
         }
         val text = if (rightText != null) {
-            stringResource(id = CommonStrings.screen_space_list_details, leftText, rightText)
+            stringResource(id = R.string.screen_space_list_details, leftText, rightText)
         } else {
             leftText
         }

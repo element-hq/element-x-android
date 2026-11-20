@@ -14,6 +14,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.features.linknewdevice.api)
     implementation(projects.tests.testutils)
 }

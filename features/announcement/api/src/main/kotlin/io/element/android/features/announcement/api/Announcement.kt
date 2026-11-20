@@ -17,4 +17,8 @@ sealed interface Announcement {
     }
 
     data object NewNotificationSound : Announcement
+
+    data object MultiAccount : Announcement
+
+    data object SwipeAvatarToSwitchAccount : Announcement
 }

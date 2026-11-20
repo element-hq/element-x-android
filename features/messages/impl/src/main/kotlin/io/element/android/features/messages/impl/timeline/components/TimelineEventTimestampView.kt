@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -55,26 +56,32 @@ fun TimelineEventTimestampView(
     val shield = event.messageShield
     val isVerifiedUserSendFailure = event.localSendState is LocalEventSendState.Failed.VerifiedUser
     val onClickLabel = when {
+        hasError -> stringResource(CommonStrings.a11y_view_details)
         shield != null -> stringResource(CommonStrings.a11y_view_details)
         isVerifiedUserSendFailure -> stringResource(CommonStrings.action_open_context_menu)
-        hasError -> stringResource(CommonStrings.a11y_view_details)
         else -> null
     }
+    val shape = RoundedCornerShape(8.dp)
     val clickableModifier = remember(event) {
         when {
+            hasError -> {
+                Modifier.clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = shape),
+                    onClickLabel = onClickLabel,
+                ) {
+                    eventSink(TimelineEvent.ShowSendFailureDialog(event))
+                }
+            }
             shield != null -> {
                 Modifier.clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = shape),
                     onClickLabel = onClickLabel,
                 ) {
                     eventSink(TimelineEvent.ShowShieldDialog(shield))
                 }
             }
-            hasError -> Modifier
-                .clickable(
-                    onClickLabel = onClickLabel,
-                ) {
-                    eventSink(TimelineEvent.ShowSendFailureDialog(event))
-                }
             else -> Modifier
         }
     }
@@ -89,7 +96,7 @@ fun TimelineEventTimestampView(
         modifier = Modifier
             .padding(padding)
             // For a better click target, make the corners rounded
-            .clip(RoundedCornerShape(8.dp))
+            .clip(shape)
             .then(clickableModifier)
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,

@@ -11,7 +11,11 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.TaskHandle
 
-class FakeFfiTaskHandle : TaskHandle(NoHandle) {
-    override fun cancel() = Unit
+class FakeFfiTaskHandle(
+    private val isFinishedResult: () -> Boolean = { false },
+    private val cancelResult: () -> Unit = {},
+) : TaskHandle(NoHandle) {
+    override fun isFinished(): Boolean = isFinishedResult()
+    override fun cancel() = cancelResult()
     override fun destroy() = Unit
 }

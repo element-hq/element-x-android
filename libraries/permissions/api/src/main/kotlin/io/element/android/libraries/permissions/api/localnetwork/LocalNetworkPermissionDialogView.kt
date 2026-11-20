@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.permissions.api.R
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -23,12 +24,12 @@ fun LocalNetworkPermissionDialogView(
 ) {
     val submitTextRes = when (dialog) {
         LocalNetworkPermissionDialog.None -> return
-        LocalNetworkPermissionDialog.Rationale -> CommonStrings.dialog_allow_access
+        LocalNetworkPermissionDialog.Rationale -> R.string.dialog_allow_access
         LocalNetworkPermissionDialog.Settings -> CommonStrings.action_open_settings
     }
     ConfirmationDialog(
-        title = stringResource(CommonStrings.screen_local_network_opt_in_title),
-        content = stringResource(CommonStrings.screen_local_network_opt_in_subtitle, LocalBuildMeta.current.applicationName),
+        title = stringResource(R.string.screen_local_network_opt_in_title),
+        content = stringResource(R.string.screen_local_network_opt_in_subtitle, LocalBuildMeta.current.applicationName),
         submitText = stringResource(submitTextRes),
         cancelText = stringResource(CommonStrings.action_not_now),
         onSubmitClick = onSubmit,

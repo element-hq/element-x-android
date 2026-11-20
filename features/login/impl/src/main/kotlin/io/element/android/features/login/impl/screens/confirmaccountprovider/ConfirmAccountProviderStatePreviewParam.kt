@@ -34,13 +34,13 @@ open class ConfirmAccountProviderStatePreviewParam : PreviewParameterProvider<Co
         )
 }
 
-private fun aConfirmAccountProviderState(
+internal fun aConfirmAccountProviderState(
     accountProviderInput: String = "matrix.org",
     accountProviderSuggestion: String? = null,
     isAccountCreation: Boolean = false,
     loginModeState: LoginModeState = aLoginModeState(),
     changeServerState: ChangeServerState = aChangeServerState(),
-    eventSink: (ConfirmAccountProviderEvents) -> Unit = {},
+    eventSink: (ConfirmAccountProviderEvent) -> Unit = {},
 ) = ConfirmAccountProviderState(
     accountProviderInput = accountProviderInput,
     accountProviderSuggestion = accountProviderSuggestion,

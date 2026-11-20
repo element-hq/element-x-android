@@ -10,6 +10,8 @@ package io.element.android.libraries.matrix.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiHomeserverCapabilities
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -58,7 +60,7 @@ class RustHomeserverCapabilitiesProviderTest {
         assert(provider.canChangeDisplayName().isFailure)
     }
 
-    private fun createCapabilitiesProvider(
+    private fun TestScope.createCapabilitiesProvider(
         capabilities: FakeFfiHomeserverCapabilities = FakeFfiHomeserverCapabilities(),
-    ) = RustHomeserverCapabilitiesProvider(capabilities)
+    ) = RustHomeserverCapabilitiesProvider(capabilities, StandardTestDispatcher(testScheduler))
 }

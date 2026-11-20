@@ -91,6 +91,7 @@ class KonsistPreviewTest {
         "BackgroundVerticalGradientPreview",
         "ColorAliasesPreview",
         "EmojiItemWithPopupPreview",
+        "EmojiPickerViewWithBackspacePreview",
         "FocusedEventPreview",
         "GradientFloatingActionButtonCircleShapePreview",
         "HeaderFooterPageScrollablePreview",
@@ -99,6 +100,7 @@ class KonsistPreviewTest {
         "HomeTopBarSpacesPreview",
         "HomeTopBarWithIndicatorPreview",
         "HomeTopBarWithStatusPreview",
+        "HtmlMessageContentWithMentionDisplayNamesPreview",
         "IconsOtherPreview",
         "MarkdownTextComposerEditPreview",
         "MatrixBadgeAtomInfoPreview",
@@ -110,6 +112,7 @@ class KonsistPreviewTest {
         "MessageComposerViewVoicePreview",
         "MessagesReactionButtonAddPreview",
         "MessagesReactionButtonExtraPreview",
+        "MessagesViewSelectionModePreview",
         "MessagesViewWithIdentityChangePreview",
         "PendingMemberRowWithLongNamePreview",
         "PinUnlockViewInAppPreview",
@@ -125,6 +128,7 @@ class KonsistPreviewTest {
         "PollContentViewCreatorPreview",
         "PollContentViewDisclosedPreview",
         "PollContentViewEndedPreview",
+        "PollContentViewMultipleSelectionPreview",
         "PollContentViewUndisclosedPreview",
         "ProgressDialogWithContentPreview",
         "ProgressDialogWithTextAndContentPreview",
@@ -132,7 +136,9 @@ class KonsistPreviewTest {
         "SasEmojisPreview",
         "SecureBackupSetupViewChangePreview",
         "SelectedUserCannotRemovePreview",
+        "SelectionIndicatorSelectedPreview",
         "SpaceMembersViewNoHeroesPreview",
+        "SyncStateViewServerUnreachablePreview",
         "TextComposerAddCaptionPreview",
         "TextComposerCaptionPreview",
         "TextComposerEditCaptionPreview",
@@ -148,6 +154,7 @@ class KonsistPreviewTest {
         "TextComposerSimplePreview",
         "TextComposerVoiceNotEncryptedPreview",
         "TextComposerVoicePreview",
+        "TextComposerWithEmojiButtonPreview",
         "TextFieldDialogWithErrorPreview",
         "TimelineItemAttachmentsViewScanningContentFailedPreview",
         "TimelineItemAudioViewScanningContentPreview",
@@ -177,6 +184,7 @@ class KonsistPreviewTest {
         "TimelineItemVoiceViewScanningContentPreview",
         "TimelineItemVoiceViewUnifiedPreview",
         "TimelineViewMessageShieldPreview",
+        "TimelineViewSelectionModePreview",
         "TimelineViewWithReadMarkerBothIndicatorsPreview",
         "TimelineViewWithReadMarkerJumpToUnreadIndicatorOnlyPreview",
         "UserAvatarColorsPreview",
@@ -198,10 +206,8 @@ class KonsistPreviewTest {
             .functions()
             .withAllAnnotationsOf(PreviewsDayNight::class)
             .withName(previewNameExceptions)
-            .let {
-                it.forEach { function ->
-                    names.remove(function.name)
-                }
+            .forEach { function ->
+                names.remove(function.name)
             }
         assertThat(names).isEmpty()
     }

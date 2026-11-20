@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"Download nicht verfügbar."</string>
+  <string name="content_scanner_not_found_title">"Etwas ist schief gelaufen"</string>
+  <string name="error_room_address_already_exists">"Diese Chat-Adresse existiert bereits. Bitte bearbeite das Adressfeld des Chats oder ändere den Namen des Chats"</string>
+  <string name="error_room_address_invalid_symbols">"Einige Zeichen sind nicht erlaubt. Es werden nur Buchstaben, Ziffern und die folgenden Symbole unterstützt: ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Einladung senden"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Möchtest du einen Chat mit %1$s starten?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Einladung senden?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Du hast derzeit keine Chats mit dieser Person. Bestätige die Einladung, bevor du fortfährst."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Mit diesem neuen Kontakt einen Chat starten?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) hat dich eingeladen"</string>
+  <string name="screen_space_list_description">"Von dir erstellte oder beigetretene Spaces."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Spaces"</string>
 </resources>

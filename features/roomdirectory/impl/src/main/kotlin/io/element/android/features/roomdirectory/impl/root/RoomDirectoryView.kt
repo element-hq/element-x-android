@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -83,7 +82,6 @@ fun RoomDirectoryView(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomDirectoryTopBar(
     onBackClick: () -> Unit,
@@ -107,7 +105,7 @@ private fun RoomDirectoryContent(
     Column(modifier = modifier) {
         SearchTextField(
             query = state.query,
-            onQueryChange = { state.eventSink(RoomDirectoryEvents.Search(it)) },
+            onQueryChange = { state.eventSink(RoomDirectoryEvent.Search(it)) },
             placeholder = stringResource(id = CommonStrings.action_search),
             modifier = Modifier.fillMaxWidth(),
         )
@@ -116,7 +114,7 @@ private fun RoomDirectoryContent(
             displayLoadMoreIndicator = state.displayLoadMoreIndicator,
             displayEmptyState = state.displayEmptyState,
             onResultClick = onResultClick,
-            onReachedLoadMore = { state.eventSink(RoomDirectoryEvents.LoadMore) },
+            onReachedLoadMore = { state.eventSink(RoomDirectoryEvent.LoadMore) },
         )
     }
 }

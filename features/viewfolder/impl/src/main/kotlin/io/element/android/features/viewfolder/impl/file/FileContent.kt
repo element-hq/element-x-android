@@ -19,16 +19,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
@@ -37,6 +36,7 @@ import kotlinx.collections.immutable.ImmutableList
 internal fun FileContent(
     lines: ImmutableList<String>,
     colorationMode: ColorationMode,
+    onLineClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -60,6 +60,7 @@ internal fun FileContent(
                     lineNumber = index + 1,
                     line = line,
                     colorationMode = colorationMode,
+                    onClick = { onLineClick(line) },
                 )
             }
         }
@@ -71,18 +72,12 @@ private fun LineRow(
     lineNumber: Int,
     line: String,
     colorationMode: ColorationMode,
+    onClick: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val toastMessage = stringResource(CommonStrings.common_line_copied_to_clipboard)
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = {
-                context.copyToClipboard(
-                    text = line,
-                    toastMessage = toastMessage,
-                )
-            })
+            .clickable(onClick = onClick)
     ) {
         Text(
             modifier = Modifier
@@ -126,6 +121,7 @@ private fun LineRow(
  *                                  ^ use this char to determine the color, see [LogLevel]
  */
 @Composable
+@ReadOnlyComposable
 private fun String.toColor(colorationMode: ColorationMode): Color {
     return when (colorationMode) {
         ColorationMode.Logcat -> when (getOrNull(31)) {

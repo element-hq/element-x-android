@@ -50,11 +50,12 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 /**
  * Shows a static map image downloaded via a third party service's static maps API.
  *
- * Handles 4 distinct cases:
+ * Handles 5 distinct cases:
  * 1. Stale location (pinVariant is StaleLocation) - shows stale map with stale pin, no fetching
  * 2. Null location - shows blurred placeholder, no pin, no loading
- * 3. Loading (location != null, fetching) - shows blurred placeholder with loading indicator
- * 4. Success (location != null, loaded) - shows actual map with pin
+ * 3. Null mapTilerConfig (no map provider configured) - shows blurred placeholder, no pin, no fetching
+ * 4. Loading (location != null, fetching) - shows blurred placeholder with loading indicator
+ * 5. Success (location != null, loaded) - shows actual map with pin
  */
 @Composable
 fun StaticMapView(
@@ -84,7 +85,8 @@ fun StaticMapView(
                 )
             }
             // Case 2: Null location - show blurred placeholder, no pin, no loading
-            location == null -> {
+            // Case 3: No map provider configured - show blurred placeholder, no pin, no fetching
+            location == null || mapTilerConfig == null && !LocalInspectionMode.current -> {
                 StaticMapPlaceholder(
                     painter = painterResource(R.drawable.blurred_map),
                     canReload = false,
@@ -94,7 +96,7 @@ fun StaticMapView(
                     onLoadMapClick = {}
                 )
             }
-            // Cases 3 & 4: Non-null location - fetch map
+            // Cases 4 & 5: Non-null location - fetch map
             else -> LoadableMapContent(
                 mapTilerConfig = mapTilerConfig,
                 location = location,
@@ -150,8 +152,8 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
         Triple(painter, state, ContentScale.Crop)
     } else {
         val painter = rememberAsyncImagePainter(
-            model = if (constraints.isZero) {
-                // Avoid building a URL if any of the size constraints is zero
+            model = if (builder == null || constraints.isZero) {
+                // Avoid building a URL if there is no map provider or if any of the size constraints is zero
                 null
             } else {
                 ImageRequest.Builder(context)
@@ -193,7 +195,7 @@ private fun BoxWithConstraintsScope.LoadableMapContent(
         else -> {
             StaticMapPlaceholder(
                 painter = painterResource(R.drawable.blurred_map),
-                canReload = builder.isServiceAvailable() && state is AsyncImagePainter.State.Error,
+                canReload = builder?.isServiceAvailable() == true && state is AsyncImagePainter.State.Error,
                 contentDescription = contentDescription,
                 width = maxWidth,
                 height = maxHeight,

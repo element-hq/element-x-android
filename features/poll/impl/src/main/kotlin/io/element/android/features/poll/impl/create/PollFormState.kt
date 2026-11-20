@@ -25,12 +25,14 @@ data class PollFormState(
     val question: String,
     val answers: ImmutableList<String>,
     val isDisclosed: Boolean,
+    val maxSelections: Int,
 ) {
     companion object {
         val Empty = PollFormState(
             question = "",
             answers = MutableList(MIN_ANSWERS) { "" }.toImmutableList(),
             isDisclosed = true,
+            maxSelections = 1,
         )
     }
 
@@ -67,7 +69,9 @@ data class PollFormState(
             return this
         }
 
-        return copy(answers = answers.filterIndexed { i, _ -> i != index }.toImmutableList())
+        val newAnswers = answers.filterIndexed { i, _ -> i != index }.toImmutableList()
+        val clampedMaxSelections = maxSelections.coerceIn(1, newAnswers.size)
+        return copy(answers = newAnswers, maxSelections = clampedMaxSelections)
     }
 
     /**
@@ -110,6 +114,7 @@ internal val pollFormStateSaver = mapSaver(
             "question" to it.question,
             "answers" to it.answers.toTypedArray(),
             "isDisclosed" to it.isDisclosed,
+            "maxSelections" to it.maxSelections,
         )
     },
     restore = { saved ->
@@ -117,6 +122,7 @@ internal val pollFormStateSaver = mapSaver(
             question = saved["question"] as String,
             answers = (saved["answers"] as Array<*>).map { it as String }.toImmutableList(),
             isDisclosed = saved["isDisclosed"] as Boolean,
+            maxSelections = saved["maxSelections"] as Int,
         )
     }
 )

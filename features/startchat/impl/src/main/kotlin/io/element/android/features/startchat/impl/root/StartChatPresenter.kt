@@ -49,16 +49,16 @@ class StartChatPresenter(
         val localCoroutineScope = rememberCoroutineScope()
         val startDmActionState: MutableState<AsyncAction<RoomId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvent(event: StartChatEvents) {
+        fun handleEvent(event: StartChatEvent) {
             when (event) {
-                is StartChatEvents.StartDM -> localCoroutineScope.launch {
+                is StartChatEvent.StartDM -> localCoroutineScope.launch {
                     startDMAction.execute(
                         matrixUser = event.matrixUser,
                         createIfDmDoesNotExist = startDmActionState.value is AsyncAction.Confirming,
                         actionState = startDmActionState,
                     )
                 }
-                StartChatEvents.CancelStartDM -> startDmActionState.value = AsyncAction.Uninitialized
+                StartChatEvent.CancelStartDM -> startDmActionState.value = AsyncAction.Uninitialized
             }
         }
 

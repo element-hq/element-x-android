@@ -140,7 +140,7 @@ class RustRoomFactory(
                                 filter = timelineFilter?.let(TimelineFilter::EventFilter) ?: TimelineFilter.All,
                                 internalIdPrefix = "live",
                                 dateDividerMode = DateDividerMode.DAILY,
-                                trackReadReceipts = TimelineReadReceiptTracking.ALL_EVENTS,
+                                trackReadReceipts = TimelineReadReceiptTracking.MESSAGE_LIKE_EVENTS,
                                 reportUtds = true,
                             )
                         )
@@ -176,6 +176,7 @@ class RustRoomFactory(
                             sessionId = sessionId,
                             localRoom = getBaseRoom(sdkRoom, roomInfo),
                             previewInfo = RoomPreviewInfoMapper.map(preview.info()),
+                            dispatcher = dispatcher,
                         )
                     )
                 }
@@ -187,11 +188,11 @@ class RustRoomFactory(
      * Get the Rust room for a room, retrying after the room list is loaded if necessary.
      */
     private suspend fun awaitRoomInRoomList(roomId: RoomId): Room? {
-        var sdkRoom = innerRoomListService.roomOrNull(roomId.value)
+        var sdkRoom = innerRoomListService.roomOrNull(roomId)
         if (sdkRoom == null) {
             // ... otherwise, lets wait for the SS to load all rooms and check again.
             roomListService.allRooms.awaitLoaded()
-            sdkRoom = innerRoomListService.roomOrNull(roomId.value)
+            sdkRoom = innerRoomListService.roomOrNull(roomId)
         }
 
         if (sdkRoom == null) {

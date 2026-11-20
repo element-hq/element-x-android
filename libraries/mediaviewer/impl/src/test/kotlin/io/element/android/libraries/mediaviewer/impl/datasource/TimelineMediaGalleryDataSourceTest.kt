@@ -264,7 +264,7 @@ class TimelineMediaGalleryDataSourceTest {
                                     filename = "body.jpg",
                                     fileSize = 888L,
                                     caption = "body.jpg caption",
-                                    formattedCaption = "formatted",
+                                    htmlCaption = "formatted",
                                     mimeType = MimeTypes.Jpeg,
                                     formattedFileSize = "888 Bytes",
                                     fileExtension = "jpg",

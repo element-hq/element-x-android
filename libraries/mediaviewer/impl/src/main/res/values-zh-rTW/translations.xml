@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_scanning">"正在掃描⋯⋯"</string>
   <string name="screen_media_browser_delete_confirmation_subtitle">"此檔案將會從聊天室中移除，成員將無法存取該檔案。"</string>
   <string name="screen_media_browser_delete_confirmation_title">"刪除檔案？"</string>
   <string name="screen_media_browser_download_error_message">"檢查您的網際網路連線，然後再試一次。"</string>

@@ -16,7 +16,7 @@
   <string name="screen_space_add_rooms_room_access_description">"ルームの追加はルームへのアクセスに影響しません。アクセスの設定は、ルームの設定 &gt; セキュリティーとプライバシー から変更できます。"</string>
   <string name="screen_space_empty_state_title">"最初のルームを追加しましょう"</string>
   <string name="screen_space_menu_action_members">"メンバーを表示"</string>
-  <string name="screen_space_remove_rooms_confirmation_content">"ルームの削除はルームへのアクセスに影響しません。アクセスの設定は、ルームの設定 &gt; セキュリティーとプライバシー から変更できます。"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"ルームを削除によって、ルームへのアクセスは変更されません。アクセスの設定は、ルームの設定 &gt; セキュリティーとプライバシー から変更できます。"</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">
     <item quantity="other">"%2$s から%1$d 個のルームを削除"</item>
   </plurals>

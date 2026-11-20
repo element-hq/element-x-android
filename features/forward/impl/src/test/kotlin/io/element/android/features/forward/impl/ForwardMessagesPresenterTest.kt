@@ -15,13 +15,15 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.matrix.test.timeline.LiveTimelineProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -44,14 +46,22 @@ class ForwardMessagesPresenterTest {
 
     @Test
     fun `present - forward successful`() = runTest {
-        val forwardEventLambda = lambdaRecorder { _: EventId, _: List<RoomId> ->
+        val forwardEventsLambda = lambdaRecorder { _: List<EventId>, _: List<RoomId> ->
             Result.success(Unit)
         }
-        val timeline = FakeTimeline().apply {
-            this.forwardEventLambda = forwardEventLambda
+        val timelines = mutableListOf<FakeTimeline>()
+        val createTimelineResult = lambdaRecorder { _: CreateTimelineParams ->
+            Result.success(
+                FakeTimeline().apply {
+                    this.forwardEventsLambda = forwardEventsLambda
+                }.also { timelines.add(it) }
+            )
         }
-        val room = FakeJoinedRoom(liveTimeline = timeline)
-        val presenter = createForwardMessagesPresenter(fakeRoom = room)
+        val room = FakeJoinedRoom(createTimelineResult = createTimelineResult)
+        val presenter = createForwardMessagesPresenter(
+            eventIds = listOf(AN_EVENT_ID, AN_EVENT_ID_2),
+            fakeRoom = room,
+        )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
@@ -62,19 +72,27 @@ class ForwardMessagesPresenterTest {
             assertThat(forwardingState.forwardAction.isLoading()).isTrue()
             val successfulForwardState = awaitItem()
             assertThat(successfulForwardState.forwardAction).isEqualTo(AsyncAction.Success(listOf(summary.roomId)))
-            forwardEventLambda.assertions().isCalledOnce()
+            createTimelineResult.assertions().isCalledExactly(2).withSequence(
+                listOf(value(CreateTimelineParams.Focused(AN_EVENT_ID))),
+                listOf(value(CreateTimelineParams.Focused(AN_EVENT_ID_2))),
+            )
+            forwardEventsLambda.assertions().isCalledExactly(2).withSequence(
+                listOf(value(listOf(AN_EVENT_ID)), value(listOf(summary.roomId))),
+                listOf(value(listOf(AN_EVENT_ID_2)), value(listOf(summary.roomId))),
+            )
+            assertThat(timelines.map { it.closeCounter }).containsExactly(1, 1)
         }
     }
 
     @Test
     fun `present - select a room and forward failed, then clear`() = runTest {
-        val forwardEventLambda = lambdaRecorder { _: EventId, _: List<RoomId> ->
+        val forwardEventsLambda = lambdaRecorder { _: List<EventId>, _: List<RoomId> ->
             Result.failure<Unit>(IllegalStateException("error"))
         }
         val timeline = FakeTimeline().apply {
-            this.forwardEventLambda = forwardEventLambda
+            this.forwardEventsLambda = forwardEventsLambda
         }
-        val room = FakeJoinedRoom(liveTimeline = timeline)
+        val room = FakeJoinedRoom(createTimelineResult = { Result.success(timeline) })
         val presenter = createForwardMessagesPresenter(fakeRoom = room)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -86,18 +104,19 @@ class ForwardMessagesPresenterTest {
             val failedForwardState = awaitItem()
             assertThat(failedForwardState.forwardAction.isFailure()).isTrue()
             // Then clear error
-            failedForwardState.eventSink(ForwardMessagesEvents.ClearError)
+            failedForwardState.eventSink(ForwardMessagesEvent.ClearError)
             assertThat(awaitItem().forwardAction.isUninitialized()).isTrue()
-            forwardEventLambda.assertions().isCalledOnce()
+            forwardEventsLambda.assertions().isCalledOnce()
+            assertThat(timeline.closeCounter).isEqualTo(1)
         }
     }
 }
 
 fun TestScope.createForwardMessagesPresenter(
-    eventId: EventId = AN_EVENT_ID,
+    eventIds: List<EventId> = listOf(AN_EVENT_ID),
     fakeRoom: FakeJoinedRoom = FakeJoinedRoom(),
 ) = ForwardMessagesPresenter(
-    eventId = eventId.value,
-    timelineProvider = LiveTimelineProvider(fakeRoom),
+    eventIds = eventIds,
+    room = fakeRoom,
     sessionCoroutineScope = this,
 )

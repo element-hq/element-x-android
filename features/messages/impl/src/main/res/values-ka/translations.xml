@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"გაშიფვრა ვერ მოხერხდა"</string>
+  <string name="error_failed_loading_messages">"შეტყობინებების ჩატვირთვა ვერ მოხერხდა"</string>
+  <string name="error_failed_uploading_voice_message">"თქვენი ხმოვანი შეტყობინების ატვირთვა ვერ მოხერხდა."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s არ აქვს თქვენს მიკროფონზე წვდომის ნებართვა. ჩართეთ წვდომა ხმოვანი შეტყობინების ჩასაწერად."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"მედიის ატვირთვა ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"მედიის ატვირთვა ვერ მოხერხდა, გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_report_content_block_user">"მომხმარებლის დაბლოკვა"</string>

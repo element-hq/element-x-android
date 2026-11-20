@@ -8,14 +8,31 @@
 
 package io.element.android.features.location.impl
 
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.location.api.BuildConfig
+import dev.zacsweers.metro.SingleIn
+import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.api.LocationService
+import io.element.android.features.location.api.buildTimeMapTilerConfig
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 
-@ContributesBinding(AppScope::class)
-class DefaultLocationService : LocationService {
-    override fun isServiceAvailable(): Boolean {
-        return BuildConfig.MAPTILER_API_KEY.isNotEmpty()
-    }
+@SingleIn(SessionScope::class)
+@ContributesBinding(SessionScope::class)
+class DefaultLocationService(
+    customMapTilerConfigProvider: CustomMapTilerConfigProvider,
+    @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
+) : LocationService {
+    override val mapTilerConfig: StateFlow<MapTilerConfig?> = flow {
+        customMapTilerConfigProvider.get().getOrNull()?.let { emit(it) }
+    }.stateIn(
+        scope = sessionCoroutineScope,
+        started = SharingStarted.Eagerly,
+        initialValue = buildTimeMapTilerConfig(),
+    )
 }

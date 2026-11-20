@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -167,7 +168,11 @@ private fun PinKeypadButton(
         modifier = modifier
             .clip(CircleShape)
             .background(color = ElementTheme.colors.bgSubtlePrimary)
-            .clickable(onClick = onClick),
+            .clickable(
+                interactionSource = null,
+                indication = ripple(focusRingShape = CircleShape),
+                onClick = onClick,
+            ),
         content = content
     )
 }

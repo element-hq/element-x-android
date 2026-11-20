@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_room_address_already_exists">"Mae\'r cyfeiriad ystafell hwn yn bodoli eisoes. Ceisiwch olygu\'r maes cyfeiriad ystafell neu newid enw\'r ystafell"</string>
+  <string name="error_room_address_invalid_symbols">"Dyw rhai nodau ddim yn cael eu caniatáu. Dim ond llythrennau, digidau a\'r symbolau canlynol sy\'n cael eu cefnogi ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Anfon gwahoddiad"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Hoffech chi ddechrau sgwrs gyda %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Anfon gwahoddiad?"</string>
   <string name="screen_invites_invited_you">"Mae %1$s (%2$s) wedi eich gwahodd"</string>
+  <string name="screen_space_list_description">"Gofodau rydych wedi\'u creu neu wedi ymuno â nhw."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Gofodau"</string>
 </resources>

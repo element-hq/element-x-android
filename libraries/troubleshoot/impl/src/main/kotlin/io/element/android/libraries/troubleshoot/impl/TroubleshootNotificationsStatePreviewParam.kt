@@ -78,7 +78,7 @@ open class TroubleshootNotificationsStatePreviewParam : PreviewParameterProvider
 
 fun aTroubleshootNotificationsState(
     tests: List<NotificationTroubleshootTestState> = emptyList(),
-    eventSink: (TroubleshootNotificationsEvents) -> Unit = {},
+    eventSink: (TroubleshootNotificationsEvent) -> Unit = {},
 ) = TroubleshootNotificationsState(
     eventSink = eventSink,
     testSuiteState = TroubleshootTestSuiteState(

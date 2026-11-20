@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s harita yüklenemedi. Lütfen daha sonra tekrar deneyin."</string>
+  <string name="error_failed_locating_user">"%1$s konumunuza erişemedi. Lütfen daha sonra tekrar deneyin."</string>
+  <string name="error_missing_location_auth_android">"%1$s konumunuza erişim iznine sahip değil. Erişimi Ayarlar\'dan etkinleştirebilirsiniz."</string>
+  <string name="error_missing_location_rationale_android">"%1$s konumunuza erişim iznine sahip değil. Aşağıdan erişimi etkinleştirin."</string>
+  <string name="screen_share_location_title">"Konum paylaş"</string>
+  <string name="screen_share_my_location_action">"Konumumu paylaş"</string>
+  <string name="screen_share_open_apple_maps">"Apple Maps\'de aç"</string>
+  <string name="screen_share_open_google_maps">"Google Maps\'te aç"</string>
+  <string name="screen_share_open_osm_maps">"OpenStreetMap\'te aç"</string>
+  <string name="screen_share_this_location_action">"Bu konumu paylaş"</string>
+  <string name="screen_view_location_title">"Konum"</string>
+</resources>

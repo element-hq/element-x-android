@@ -143,7 +143,7 @@ fun aConfigureRoomState(
         )
     },
     spaces: List<SpaceRoom> = emptyList(),
-    eventSink: (ConfigureRoomEvents) -> Unit = { },
+    eventSink: (ConfigureRoomEvent) -> Unit = { },
 ) = ConfigureRoomState(
     config = config,
     isSpace = isSpace,

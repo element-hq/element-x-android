@@ -14,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -22,14 +21,14 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
-import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.location.impl.common.LocationConstraintsCheck
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.SendLiveLocationPermissions
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
-import io.element.android.features.location.impl.common.permissions.PermissionsEvents
+import io.element.android.features.location.impl.common.permissions.PermissionsEvent
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.sendLiveLocationPermissions
@@ -38,7 +37,6 @@ import io.element.android.features.location.impl.common.userlocation.UserLocatio
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.extensions.flatMap
@@ -73,7 +71,7 @@ class ShareLocationPresenter(
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
     private val liveLocationStore: LiveLocationStore,
     private val userLocationStateFactory: UserLocationState.Factory,
-    private val customMapTilerConfigProvider: CustomMapTilerConfigProvider,
+    private val locationService: LocationService,
 ) : Presenter<ShareLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -94,10 +92,7 @@ class ShareLocationPresenter(
         var pendingLiveLocationShare by remember { mutableStateOf(false) }
         val startLiveLocationAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val currentUser by client.userProfile.collectAsState()
-        val customMapConfig by produceState(AsyncData.Loading()) {
-            // Ignore errors
-            value = AsyncData.Success(customMapTilerConfigProvider.get().getOrNull())
-        }
+        val mapTilerConfig by locationService.mapTilerConfig.collectAsState()
         val sendLiveLocationPermissions by room.permissionsAsState(SendLiveLocationPermissions.DEFAULT) { perms ->
             perms.sendLiveLocationPermissions()
         }
@@ -111,7 +106,7 @@ class ShareLocationPresenter(
                 sendLiveLocationPermissions = SendLiveLocationPermissions.GRANTED
             )
             if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
-                permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                permissionsState.eventSink(PermissionsEvent.RequestPermissions)
             }
             trackUserPosition = locationConstraints is LocationConstraintsCheck.Success
             dialogState = ShareLocationState.Dialog.Constraints(locationConstraints.toDialogState())
@@ -137,7 +132,7 @@ class ShareLocationPresenter(
                 }
                 else -> {
                     if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
-                        permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                        permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                     }
                     dialogState = ShareLocationState.Dialog.Constraints(locationConstraints.toDialogState())
                 }
@@ -195,13 +190,13 @@ class ShareLocationPresenter(
                 }
                 ShareLocationEvent.RequestPermissions -> {
                     dialogState = ShareLocationState.Dialog.None
-                    permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                    permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                 }
             }
         }
 
         return ShareLocationState(
-            customMapTilerConfig = customMapConfig,
+            mapTilerConfig = mapTilerConfig,
             currentUser = currentUser,
             dialogState = dialogState,
             trackUserLocation = trackUserPosition,
@@ -217,8 +212,8 @@ class ShareLocationPresenter(
         val replyMode = messageComposerContext.composerMode as? MessageComposerMode.Reply
         val inReplyToEventId = replyMode?.eventId
         val geoUri = event.location.toGeoUri()
-        getTimeline().flatMap {
-            it.sendLocation(
+        withTimeline { timeline ->
+            timeline.sendLocation(
                 body = generateBody(geoUri),
                 geoUri = geoUri,
                 description = null,
@@ -237,10 +232,22 @@ class ShareLocationPresenter(
         )
     }
 
-    private suspend fun getTimeline(): Result<Timeline> {
+    /**
+     * Invokes [block] with the [Timeline] matching [timelineMode].
+     *
+     * For a thread, a dedicated timeline is created and closed once [block] returns, since such a
+     * timeline owns SDK resources. For the other modes, the live timeline is used, and is not
+     * closed here since it is owned by its room.
+     */
+    private suspend fun <T> withTimeline(block: suspend (Timeline) -> Result<T>): Result<T> {
         return when (timelineMode) {
-            is Timeline.Mode.Thread -> room.createTimeline(CreateTimelineParams.Threaded(timelineMode.threadRootId))
-            else -> Result.success(room.liveTimeline)
+            is Timeline.Mode.Thread -> {
+                room.createTimeline(CreateTimelineParams.Threaded(timelineMode.threadRootId))
+                    .flatMap { threadedTimeline ->
+                        threadedTimeline.use { block(it) }
+                    }
+            }
+            else -> block(room.liveTimeline)
         }
     }
 }

@@ -35,6 +35,8 @@ class IncomingVerificationStateMachine(
             inState<State.AcceptingIncomingVerification> {
                 onEnterEffect {
                     sessionVerificationService.acceptVerificationRequest()
+                    // Either side may start the SAS verification, the SDK resolves the conflict if both do.
+                    sessionVerificationService.startSasVerification()
                 }
                 on { event: Event.DidReceiveChallenge, state ->
                     state.override { State.ChallengeReceived(event.data).andLogStateChange() }

@@ -204,9 +204,7 @@ class EditUserProfilePresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.userAvatarUrl).isEqualTo(AN_AVATAR_URL)
             initialState.eventSink(EditUserProfileEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            awaitItem().apply {
-                assertThat(userAvatarUrl).isEqualTo(ANOTHER_AVATAR_URL)
-            }
+            assertThat(awaitItem().userAvatarUrl).isEqualTo(ANOTHER_AVATAR_URL)
         }
     }
 
@@ -263,24 +261,16 @@ class EditUserProfilePresenterTest {
             assertThat(initialState.saveButtonEnabled).isFalse()
             // Once a change is made, the save button is enabled
             initialState.eventSink(EditUserProfileEvent.UpdateDisplayName("Name II"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isTrue()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isTrue()
             // If it's reverted then the save disables again
             initialState.eventSink(EditUserProfileEvent.UpdateDisplayName("Name"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isFalse()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isFalse()
             // Make a change...
             initialState.eventSink(EditUserProfileEvent.HandleAvatarAction(AvatarAction.Remove))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isTrue()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isTrue()
             // Revert it...
             initialState.eventSink(EditUserProfileEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isFalse()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isFalse()
             deleteCallback.assertions().isCalledExactly(2).withSequence(
                 listOf(value(userAvatarUri)),
                 listOf(value(null)),
@@ -304,24 +294,16 @@ class EditUserProfilePresenterTest {
             assertThat(initialState.saveButtonEnabled).isFalse()
             // Once a change is made, the save button is enabled
             initialState.eventSink(EditUserProfileEvent.UpdateDisplayName("Name II"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isTrue()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isTrue()
             // If it's reverted then the save disables again
             initialState.eventSink(EditUserProfileEvent.UpdateDisplayName("Name"))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isFalse()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isFalse()
             // Make a change...
             initialState.eventSink(EditUserProfileEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isTrue()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isTrue()
             // Revert it...
             initialState.eventSink(EditUserProfileEvent.HandleAvatarAction(AvatarAction.Remove))
-            awaitItem().apply {
-                assertThat(saveButtonEnabled).isFalse()
-            }
+            assertThat(awaitItem().saveButtonEnabled).isFalse()
             deleteCallback.assertions().isCalledExactly(2).withSequence(
                 listOf(value(null)),
                 listOf(value(userAvatarUri)),

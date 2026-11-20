@@ -63,6 +63,7 @@ class VoiceMessageComposerPlayer(
             playState = it.playState,
             currentPosition = it.currentPosition,
             progress = calcProgress(it),
+            durationMs = if (it.playState != PlayState.Stopped) it.duration else null,
         )
     }.distinctUntilChanged()
 
@@ -102,6 +103,14 @@ class VoiceMessageComposerPlayer(
         if (mediaPath == mediaPlayer.state.value.mediaId) {
             mediaPlayer.pause()
         }
+    }
+
+    /**
+     * Pause any media currently playing in the shared [MediaPlayer], including voice messages from the timeline,
+     * so that it does not leak into a new recording.
+     */
+    fun pauseAnyPlayback() {
+        mediaPlayer.pause()
     }
 
     /**
@@ -183,17 +192,20 @@ class VoiceMessageComposerPlayer(
      * @property playState Whether this player is currently playing. See [PlayState].
      * @property currentPosition The elapsed time of this player in milliseconds.
      * @property progress The progress of this player between 0 and 1.
+     * @property durationMs The player-reported duration in milliseconds, when known and the player is not stopped.
      */
     data class State(
         val playState: PlayState,
         val currentPosition: Long,
         val progress: Float,
+        val durationMs: Long?,
     ) {
         companion object {
             val Initial = State(
                 playState = PlayState.Stopped,
                 currentPosition = 0L,
                 progress = 0f,
+                durationMs = null,
             )
         }
 

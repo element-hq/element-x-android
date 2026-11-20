@@ -13,21 +13,17 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewStatePreviewParam
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
-import kotlinx.collections.immutable.toImmutableList
 
 class ReadReceiptBottomSheetStatePreviewParam : PreviewParameterProvider<ReadReceiptBottomSheetState> {
     // Reuse the provider ReadReceiptViewStatePreviewParam
     private val readReceiptViewStateProvider = ReadReceiptViewStatePreviewParam()
     override val values: Sequence<ReadReceiptBottomSheetState> = readReceiptViewStateProvider.values
-        .filter { it.sendState is LocalEventSendState.Sent }
+        .filter { it.sendState is LocalEventSendState.Sent && it.receipts.isNotEmpty() }
         .map { readReceiptViewState ->
             ReadReceiptBottomSheetState(
                 selectedEvent = aTimelineItemEvent(
                     readReceiptState = TimelineItemReadReceipts(
-                        receipts = readReceiptViewState.receipts.map { readReceiptData ->
-                            readReceiptData
-                                .copy(avatarData = readReceiptData.avatarData.copy(id = "@${readReceiptData.avatarData.id}:localhost"))
-                        }.toImmutableList()
+                        receipts = readReceiptViewState.receipts,
                     )
                 ),
                 eventSink = {},

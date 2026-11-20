@@ -15,13 +15,17 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.accountselect.impl"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 setupDependencyInjection()
 
 dependencies {
-    implementation(projects.libraries.core)
-    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
@@ -30,7 +34,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     api(projects.libraries.accountselect.api)
 
-    testCommonDependencies(libs)
+    testCommonDependencies(libs, includeTestComposeView = true)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.sessionStorage.test)
 }

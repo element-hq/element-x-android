@@ -37,7 +37,6 @@ dependencies {
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.uiCommon)
     implementation(projects.libraries.uiStrings)
-    implementation(projects.libraries.testtags)
     implementation(projects.features.analytics.api)
     implementation(projects.features.logout.api)
     implementation(projects.features.securebackup.api)

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Kan ikke dekryptere"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Sendt fra en usikker enhet"</string>
+  <string name="common_unable_to_decrypt_no_access">"Du har ikke tilgang til denne meldingen"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Avsenderens verifiserte digitale identitet ble tilbakestilt"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Avsenderen av hendelsen samsvarer ikke med eieren av enheten som sendte den."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Ektheten til denne krypterte meldingen kan ikke garanteres på denne enheten."</string>
   <string name="crypto_event_authenticity_previously_verified">"Kryptert av en tidligere verifisert bruker."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Kryptert av en ukjent eller slettet enhet."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Kryptert med en enhet som ikke er verifisert av eieren."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Kryptert av en ubekreftet bruker."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$ss digitale identitet %2$s ble tilbakestilt. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$ss digitale identitet %2$s ble tilbakestilt. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Lenken %1$s tar deg til et annet nettsted %2$s
+
+Er du sikker på at du vil fortsette?"</string>
+  <string name="dialog_confirm_link_title">"Dobbeltsjekk denne lenken"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Maksimal tillatt filstørrelse er: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Filstørrelsen er for stor til å kunne lastes opp"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Maksimal tillatt filstørrelse er: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Velg kvaliteten på videoen du vil laste opp."</string>
+  <string name="error_failed_loading_messages">"Kunne ikke laste inn meldinger"</string>
+  <string name="error_failed_uploading_voice_message">"Kunne ikke laste opp talemeldingen din."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s har ikke tilgang til mikrofonen din. Aktiver tilgang til å ta opp en talemelding."</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally">"Snu bildet horisontalt"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Vendt horisontalt"</string>
   <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Opprinnelig"</string>
@@ -30,10 +50,25 @@
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimaliser bildekvaliteten"</string>
   <string name="screen_media_upload_preview_processing">"Behandler…"</string>
   <string name="screen_media_upload_preview_title">"Legg til medier"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Trykk på en melding og velg “%1$s” for å inkludere her."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Fest viktige meldinger slik at de lett kan ses"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Festet melding"</item>
+    <item quantity="other">"%1$d Festede meldinger"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Festede meldinger"</string>
   <string name="screen_report_content_block_user">"Blokker bruker"</string>
   <string name="screen_report_content_block_user_hint">"Kryss av for om du vil skjule alle nåværende og fremtidige meldinger fra denne brukeren"</string>
   <string name="screen_report_content_explanation">"Denne meldingen vil bli rapportert til hjemmeserverens administratorer. De vil ikke kunne lese noen krypterte meldinger."</string>
   <string name="screen_report_content_hint">"Begrunnelse for å rapportere dette innholdet"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Trekk tilbake verifikasjon og send"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kan trekke tilbake verifiseringen og sende denne meldingen likevel, eller du kan avbryte for nå og prøve igjen senere etter at du har reverifisert %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Meldingen din ble ikke sendt fordi %1$s verifiserte digitale identitet ble tilbakestilt"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Send melding uansett"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s bruker én eller flere uverifiserte enheter. Du kan sende meldingen uansett, eller du kan avbryte foreløpig og prøve igjen senere etter at %2$s har verifisert alle enhetene sine."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Meldingen din ble ikke sendt fordi %1$s ikke har bekreftet alle enhetene"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"En eller flere av enhetene dine er ikke verifisert. Du kan sende meldingen likevel, eller du kan avbryte og prøve igjen senere etter at du har verifisert alle enhetene dine."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Meldingen din ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Ta bilde"</string>
   <string name="screen_room_attachment_source_camera_video">"Ta opp video"</string>
@@ -48,6 +83,11 @@
   <string name="screen_room_invite_again_alert_title">"Du er alene i denne chatten"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Varsle hele rommet"</string>
   <string name="screen_room_mentions_at_room_title">"Alle"</string>
+  <string name="screen_room_permalink_same_room_android">"Du ser allerede på dette rommet!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s av %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Festede meldinger"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Laster inn melding…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Vis alle"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Send igjen"</string>
   <string name="screen_room_retry_send_menu_title">"Meldingen din ble ikke sendt"</string>
   <string name="screen_room_timeline_add_reaction">"Legg til emoji"</string>
@@ -91,4 +131,16 @@
     <item quantity="other">"%1$s skriver"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s og %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d ble med"</item>
+    <item quantity="other">"%1$d ble med"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meldingen ble ikke sendt fordi %1$s verifiserte digitale identitet ble tilbakestilt."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meldingen ble ikke sendt fordi %1$s ikke har verifisert alle enheter."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historiske meldinger er ikke tilgjengelige på denne enheten"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Du må verifisere denne enheten for å få tilgang til historiske meldinger"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Du har ikke tilgang til denne meldingen"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Kan ikke dekryptere meldingen"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Denne meldingen ble blokkert enten fordi du ikke verifiserte enheten din, eller fordi avsenderen må verifisere din digitale identitet."</string>
 </resources>

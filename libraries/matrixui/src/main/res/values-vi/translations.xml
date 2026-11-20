@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_room_address_already_exists">"Địa chỉ phòng này đã tồn tại. Vui lòng thử chỉnh sửa trường địa chỉ phòng hoặc thay đổi tên phòng."</string>
+  <string name="error_room_address_invalid_symbols">"Một số ký tự không được phép. Chỉ các chữ cái, chữ số và các ký hiệu sau được hỗ trợ: ! $ &amp;amp; ' ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s ) đã mời bạn"</string>
 </resources>

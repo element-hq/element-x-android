@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_room_address_already_exists">"Bu xona manzili allaqachon mavjud. Xona manzili maydonini tahrirlang yoki xona nomini o‘zgartiring"</string>
+  <string name="error_room_address_invalid_symbols">"Ayrim belgilarga ruxsat berilmagan. Faqat harf, raqam va quyidagi belgilar ishlaydi! $ &amp;’() * + /; =? @ [ ] -. _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Taklif yuborish"</string>
   <string name="screen_bottom_sheet_create_dm_message">"%1$s bilan chatni boshlashni xohlaysizmi?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Taklif yuborilsinmi?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Ayni paytda bu shaxs bilan hech qanday suhbatingiz yo‘q. Davom etishdan oldin ularni taklif qilishni tasdiqlang."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Bu yangi kontakt bilan chat boshlansinmi?"</string>
   <string name="screen_invites_invited_you">"%1$s(%2$s ) sizni taklif qildi"</string>
+  <string name="screen_space_list_description">"Siz yaratgan yoki qo‘shilgan maydonlar."</string>
+  <string name="screen_space_list_details">"%1$s•%2$s"</string>
+  <string name="screen_space_list_title">"Maydonlar"</string>
 </resources>

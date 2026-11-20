@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.matrix.api.media.MediaSource
 import kotlin.time.Duration
 
@@ -16,6 +17,8 @@ data class TimelineItemVideoContent(
     override val fileSize: Long?,
     override val caption: String?,
     override val formattedCaption: CharSequence?,
+    override val htmlCaption: String? = null,
+    override val captionTree: DocumentNode? = null,
     override val isEdited: Boolean,
     val duration: Duration,
     override val mediaSource: MediaSource,

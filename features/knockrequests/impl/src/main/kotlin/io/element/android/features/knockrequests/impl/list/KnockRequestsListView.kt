@@ -28,7 +28,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -108,15 +107,15 @@ private fun KnockRequestsListContent(
     modifier: Modifier = Modifier,
 ) {
     fun onAcceptClick(knockRequest: KnockRequestPresentable) {
-        state.eventSink(KnockRequestsListEvents.Accept(knockRequest))
+        state.eventSink(KnockRequestsListEvent.Accept(knockRequest))
     }
 
     fun onDeclineClick(knockRequest: KnockRequestPresentable) {
-        state.eventSink(KnockRequestsListEvents.Decline(knockRequest))
+        state.eventSink(KnockRequestsListEvent.Decline(knockRequest))
     }
 
     fun onBanClick(knockRequest: KnockRequestPresentable) {
-        state.eventSink(KnockRequestsListEvents.DeclineAndBan(knockRequest))
+        state.eventSink(KnockRequestsListEvent.DeclineAndBan(knockRequest))
     }
 
     var bottomPaddingInPixels by remember { mutableIntStateOf(0) }
@@ -160,19 +159,19 @@ private fun KnockRequestsListContent(
             currentAction = state.currentAction,
             asyncAction = state.asyncAction,
             onConfirm = {
-                state.eventSink(KnockRequestsListEvents.ConfirmCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ConfirmCurrentAction)
             },
             onRetry = {
-                state.eventSink(KnockRequestsListEvents.RetryCurrentAction)
+                state.eventSink(KnockRequestsListEvent.RetryCurrentAction)
             },
             onDismiss = {
-                state.eventSink(KnockRequestsListEvents.ResetCurrentAction)
+                state.eventSink(KnockRequestsListEvent.ResetCurrentAction)
             },
         )
         if (state.canAcceptAll) {
             KnockRequestsAcceptAll(
                 onClick = {
-                    state.eventSink(KnockRequestsListEvents.AcceptAll)
+                    state.eventSink(KnockRequestsListEvent.AcceptAll)
                 },
                 onHeightChange = { height ->
                     bottomPaddingInPixels = height
@@ -479,7 +478,6 @@ private fun KnockRequestsEmptyList(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun KnockRequestsListTopBar(onBackClick: () -> Unit) {
     TopAppBar(

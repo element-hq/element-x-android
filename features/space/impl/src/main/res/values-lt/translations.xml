@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_subtitle">"Pasirinkite kambarius, kuriuos norite išeiti ir kurių administratorius nesate vienintelis:"</string>
+  <string name="screen_leave_space_title">"Išeiti iš „%1$s“?"</string>
+  <string name="screen_space_settings_leave_space">"Išeiti iš erdvės"</string>
+</resources>

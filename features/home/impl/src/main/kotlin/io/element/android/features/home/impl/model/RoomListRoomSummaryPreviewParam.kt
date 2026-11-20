@@ -82,6 +82,24 @@ open class RoomListRoomSummaryPreviewParam : PreviewParameterProvider<RoomListRo
                             numberOfUnreadMentions = 1,
                             hasRoomCall = hasCall,
                         ),
+                        aRoomListRoomSummary(
+                            name = roomNotificationMode.name,
+                            latestEvent = LatestEvent.Synced("New notifications" + if (hasCall) ", call" else ""),
+                            notificationMode = roomNotificationMode,
+                            numberOfUnreadMessages = 0,
+                            numberOfUnreadMentions = 0,
+                            numberOfUnreadNotifications = 1,
+                            hasRoomCall = hasCall,
+                        ),
+                        aRoomListRoomSummary(
+                            name = roomNotificationMode.name,
+                            latestEvent = LatestEvent.Synced("New notifications" + if (hasCall) ", call" else ""),
+                            notificationMode = roomNotificationMode,
+                            numberOfUnreadMessages = 0,
+                            numberOfUnreadMentions = 0,
+                            numberOfUnreadNotifications = 100,
+                            hasRoomCall = hasCall,
+                        ),
                     )
                 }.flatten()
             }.flatten(),

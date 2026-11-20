@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"Надати доступ"</string>
   <string name="dialog_permission_camera">"Щоб дозволити застосунку використовувати камеру, надайте дозвіл у системних налаштуваннях."</string>
   <string name="dialog_permission_generic">"Надайте дозвіл в системних налаштуваннях."</string>
   <string name="dialog_permission_microphone">"Щоб дозволити застосунку використовувати мікрофон, надайте дозвіл у налаштуваннях системи."</string>
   <string name="dialog_permission_notification">"Щоб застосунок показував сповіщення, надайте дозвіл у налаштуваннях системи."</string>
+  <string name="screen_local_network_opt_in_subtitle">"Ваш домашній сервер перебуває у вашій локальній мережі. Щоб приєднатися, %1$s повинен мати право доступу до пристроїв у цій мережі."</string>
+  <string name="screen_local_network_opt_in_title">"Дозволити доступ до локальної мережі"</string>
 </resources>

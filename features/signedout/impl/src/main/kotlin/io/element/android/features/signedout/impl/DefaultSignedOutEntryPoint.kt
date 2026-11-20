@@ -20,11 +20,7 @@ class DefaultSignedOutEntryPoint : SignedOutEntryPoint {
     override fun createNode(
         parentNode: Node,
         buildContext: BuildContext,
-        params: SignedOutEntryPoint.Params,
     ): Node {
-        return parentNode.createNode<SignedOutNode>(
-            buildContext = buildContext,
-            plugins = listOf(SignedOutNode.Inputs(params.sessionId))
-        )
+        return parentNode.createNode<SignedOutFlowNode>(buildContext = buildContext)
     }
 }

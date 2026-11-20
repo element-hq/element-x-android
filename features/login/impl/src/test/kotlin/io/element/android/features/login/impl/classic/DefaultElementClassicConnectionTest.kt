@@ -29,6 +29,7 @@ import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationSer
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.robolectric.RobolectricTest
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -484,6 +485,33 @@ class DefaultElementClassicConnectionTest : RobolectricTest() {
         }
     }
 
+    @Test
+    fun `when a large avatar is received, it is downscaled`() = runTest {
+        val connection = createDefaultElementClassicConnection(
+            matrixAuthenticationService = FakeMatrixAuthenticationService(
+                setElementClassicSessionResult = {},
+            ),
+        )
+        connection.stateFlow.test {
+            assertThat(awaitItem()).isEqualTo(ElementClassicConnectionState.Idle)
+            // Simulate receiving a session from Element Classic
+            connection.onSessionReceived(
+                Bundle().apply {
+                    putString(DefaultElementClassicConnection.KEY_USER_ID_STR, A_USER_ID.value)
+                }
+            )
+            assertThat(awaitItem()).isInstanceOf(ElementClassicConnectionState.ElementClassicReady::class.java)
+            // Simulate receiving a large avatar from Element Classic
+            connection.onAvatarReceived(Bundle().apply {
+                putString(DefaultElementClassicConnection.KEY_USER_ID_STR, A_USER_ID.value)
+                putParcelable(DefaultElementClassicConnection.KEY_USER_AVATAR_PARCELABLE, createBitmap(2048, 1024, Bitmap.Config.ARGB_8888))
+            })
+            val avatar = (awaitItem() as? ElementClassicConnectionState.ElementClassicReady)?.avatar
+            assertThat(avatar?.width).isEqualTo(DefaultElementClassicConnection.MAX_AVATAR_SIZE_PX)
+            assertThat(avatar?.height).isEqualTo(DefaultElementClassicConnection.MAX_AVATAR_SIZE_PX / 2)
+        }
+    }
+
     private fun TestScope.createDefaultElementClassicConnection(
         serviceBinder: ServiceBinder = FakeServiceBinder(
             bindServiceResult = { true },
@@ -499,5 +527,6 @@ class DefaultElementClassicConnectionTest : RobolectricTest() {
         coroutineScope = coroutineScope,
         matrixAuthenticationService = matrixAuthenticationService,
         homeServerLoginCompatibilityChecker = homeServerLoginCompatibilityChecker,
+        dispatchers = testCoroutineDispatchers(),
     )
 }

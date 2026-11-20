@@ -14,52 +14,79 @@ import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.AncestryInfo
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.activeElement
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.bumble.appyx.testing.unit.common.helper.parentNodeTestHelper
 import com.bumble.appyx.utils.customisations.NodeCustomisationDirectoryImpl
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appnav.intent.FakePermalinkSessionResolver
 import io.element.android.appnav.intent.IntentResolver
+import io.element.android.appnav.intent.PermalinkSessionResolver
 import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.session.FakeSyncOrchestratorFactory
 import io.element.android.appnav.session.MatrixSessionCache
+import io.element.android.appnav.verification.IncomingVerificationRequestObserver
+import io.element.android.features.announcement.test.FakeAnnouncementService
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
+import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.login.test.FakeLoginEntryPoint
 import io.element.android.features.login.test.FakeLoginIntentResolver
 import io.element.android.features.login.test.accesscontrol.FakeAccountProviderAccessControl
+import io.element.android.features.migration.test.FakeAppMigrationRunner
 import io.element.android.features.preferences.test.FakeCacheService
 import io.element.android.features.rageshake.test.FakeBugReportEntryPoint
-import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
+import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.share.test.FakeShareIntentHandler
+import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.features.signedout.test.FakeSignedOutEntryPoint
 import io.element.android.libraries.accountselect.test.FakeAccountSelectEntryPoint
 import io.element.android.libraries.architecture.AssistedNodeFactory
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
-import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
+import io.element.android.libraries.matrixmedia.test.FakeImageLoaderHolder
 import io.element.android.libraries.oauth.test.FakeOAuthActionFlow
 import io.element.android.libraries.oauth.test.FakeOAuthIntentResolver
 import io.element.android.libraries.preferences.test.FakeSessionPreferencesStoreFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
 import io.element.android.services.apperror.test.FakeAppErrorStateService
+import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
+import io.element.android.tests.testutils.lambda.lambdaError
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.node.FakeNodeFactoriesBindings
 import io.element.android.tests.testutils.node.FakeParentNode
 import io.element.android.tests.testutils.presenter.NotUsedPresenter
 import io.element.android.tests.testutils.robolectric.RobolectricTest
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+
+private const val A_PERMALINK = "https://matrix.to/#/!aRoomId:domain"
 
 private const val A_LOGIN_LINK = "https://mobile.element.io/element/?account_provider=example.com&login_hint=mxid:@alice:example.com"
 
@@ -118,16 +145,215 @@ class RootFlowNodeTest : RobolectricTest() {
         assertThat(loginEntryPointParams).isEqualTo(A_LOGIN_ENTRY_POINT_PARAMS)
     }
 
+    @Test
+    fun `given a session matching the login hint and multi account enabled, when a login link is handled, then the session becomes the latest one`() = runTest {
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(
+                    aSessionData(sessionId = "@bob:example.com"),
+                    aSessionData(sessionId = "@alice:example.com"),
+                ),
+                setLatestSessionResult = setLatestSessionResult,
+            ),
+            featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.MultiAccount.key to true)),
+        )
+        rootFlowNode.parentNodeTestHelper()
+        rootFlowNode.handleIntent(aLoginIntent())
+        setLatestSessionResult.assertions().isCalledOnce().with(value("@alice:example.com"))
+        assertThat(rootFlowNode.backstack.activeElement).isNotEqualTo(RootFlowNode.NavTarget.NotLoggedInFlow(A_LOGIN_PARAMS))
+    }
+
+    @Test
+    fun `given a session and multi account disabled, when a login link is handled, then the login link is ignored`() = runTest {
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = InMemorySessionStore(
+                initialList = listOf(aSessionData(sessionId = "@alice:example.com")),
+            ),
+            featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.MultiAccount.key to false)),
+        )
+        rootFlowNode.parentNodeTestHelper()
+        rootFlowNode.handleIntent(aLoginIntent())
+        assertThat(rootFlowNode.backstack.activeElement).isNotEqualTo(RootFlowNode.NavTarget.NotLoggedInFlow(A_LOGIN_PARAMS))
+    }
+
+    @Test
+    fun `given no session, when a login link to a not allowed account provider is handled, then the login link is ignored`() = runTest {
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint { buildContext, _ -> node(buildContext) {} },
+            accountProviderAccessControl = FakeAccountProviderAccessControl { false },
+        )
+        rootFlowNode.parentNodeTestHelper()
+        rootFlowNode.handleIntent(aLoginIntent())
+        runCurrent()
+        assertThat(rootFlowNode.backstack.activeElement).isEqualTo(RootFlowNode.NavTarget.NotLoggedInFlow(null))
+    }
+
+    @Test
+    fun `given several sessions, when a room permalink is handled and a session has joined the room, then this session is used`() = runTest {
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val resolveResult = lambdaRecorder<RoomIdOrAlias, List<SessionId>, SessionId?> { _, _ -> SessionId("@bob:example.com") }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = twoSessionsStore(setLatestSessionResult),
+            loginIntentResolverResult = { null },
+            permalinkParser = FakePermalinkParser { aRoomLink() },
+            permalinkSessionResolver = FakePermalinkSessionResolver(
+                resolveForRoomResult = { roomIdOrAlias, sessionIds -> resolveResult(roomIdOrAlias, sessionIds) },
+            ),
+        )
+        rootFlowNode.parentNodeTestHelper()
+        // handleIntent suspends until the logged in flow is attached, which never happens here
+        backgroundScope.launch(start = CoroutineStart.UNDISPATCHED) { rootFlowNode.handleIntent(aPermalinkIntent()) }
+        resolveResult.assertions().isCalledOnce().with(
+            value(RoomIdOrAlias.Id(A_ROOM_ID)),
+            value(listOf(SessionId("@alice:example.com"), SessionId("@bob:example.com"))),
+        )
+        setLatestSessionResult.assertions().isCalledOnce().with(value("@bob:example.com"))
+    }
+
+    @Test
+    fun `given several sessions, when a room permalink is handled and no session has joined the room, then the latest session is used`() = runTest {
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val resolveResult = lambdaRecorder<RoomIdOrAlias, List<SessionId>, SessionId?> { _, _ -> null }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = twoSessionsStore(setLatestSessionResult),
+            loginIntentResolverResult = { null },
+            permalinkParser = FakePermalinkParser { aRoomLink() },
+            permalinkSessionResolver = FakePermalinkSessionResolver(
+                resolveForRoomResult = { roomIdOrAlias, sessionIds -> resolveResult(roomIdOrAlias, sessionIds) },
+            ),
+        )
+        rootFlowNode.parentNodeTestHelper()
+        // handleIntent suspends until the logged in flow is attached, which never happens here
+        backgroundScope.launch(start = CoroutineStart.UNDISPATCHED) { rootFlowNode.handleIntent(aPermalinkIntent()) }
+        resolveResult.assertions().isCalledOnce()
+        setLatestSessionResult.assertions().isCalledOnce().with(value("@alice:example.com"))
+    }
+
+    @Test
+    fun `given several sessions, when a user permalink is handled and a session has a DM with the user, then this session is used`() = runTest {
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val resolveResult = lambdaRecorder<UserId, List<SessionId>, SessionId?> { _, _ -> SessionId("@bob:example.com") }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = twoSessionsStore(setLatestSessionResult),
+            loginIntentResolverResult = { null },
+            permalinkParser = FakePermalinkParser { PermalinkData.UserLink(A_USER_ID) },
+            permalinkSessionResolver = FakePermalinkSessionResolver(
+                resolveForUserResult = { userId, sessionIds -> resolveResult(userId, sessionIds) },
+            ),
+        )
+        rootFlowNode.parentNodeTestHelper()
+        // handleIntent suspends until the logged in flow is attached, which never happens here
+        backgroundScope.launch(start = CoroutineStart.UNDISPATCHED) { rootFlowNode.handleIntent(aPermalinkIntent()) }
+        resolveResult.assertions().isCalledOnce().with(
+            value(A_USER_ID),
+            value(listOf(SessionId("@alice:example.com"), SessionId("@bob:example.com"))),
+        )
+        setLatestSessionResult.assertions().isCalledOnce().with(value("@bob:example.com"))
+    }
+
+    @Test
+    fun `given several sessions, when a user permalink is handled and no session has a DM with the user, then the latest session is used`() = runTest {
+        val setLatestSessionResult = lambdaRecorder<String, Unit> { }
+        val resolveResult = lambdaRecorder<UserId, List<SessionId>, SessionId?> { _, _ -> null }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint(),
+            sessionStore = twoSessionsStore(setLatestSessionResult),
+            loginIntentResolverResult = { null },
+            permalinkParser = FakePermalinkParser { PermalinkData.UserLink(A_USER_ID) },
+            permalinkSessionResolver = FakePermalinkSessionResolver(
+                resolveForUserResult = { userId, sessionIds -> resolveResult(userId, sessionIds) },
+            ),
+        )
+        rootFlowNode.parentNodeTestHelper()
+        // handleIntent suspends until the logged in flow is attached, which never happens here
+        backgroundScope.launch(start = CoroutineStart.UNDISPATCHED) { rootFlowNode.handleIntent(aPermalinkIntent()) }
+        resolveResult.assertions().isCalledOnce()
+        setLatestSessionResult.assertions().isCalledOnce().with(value("@alice:example.com"))
+    }
+
+    @Test
+    fun `the nav state is observed once the root is restored`() = runTest {
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint { buildContext, _ -> node(buildContext) {} },
+        )
+        rootFlowNode.parentNodeTestHelper()
+        // The restoration of the sessions and of the root has not run yet, the signed out screens must not be displayed
+        assertThat(rootFlowNode.isNavStateObserved.value).isFalse()
+        runCurrent()
+        assertThat(rootFlowNode.isNavStateObserved.value).isTrue()
+    }
+
+    @Test
+    fun `the signed out sessions node is always attached`() = runTest {
+        val createSignedOutNodeResult = lambdaRecorder<BuildContext, Node> { buildContext -> node(buildContext) {} }
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint { buildContext, _ -> node(buildContext) {} },
+            signedOutEntryPoint = FakeSignedOutEntryPoint(createSignedOutNodeResult),
+        )
+        rootFlowNode.parentNodeTestHelper()
+        runCurrent()
+        assertThat(rootFlowNode.backstack.activeElement).isEqualTo(RootFlowNode.NavTarget.NotLoggedInFlow(null))
+        createSignedOutNodeResult.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `given the active session is signed out, then the root is the splash screen until the session is removed`() = runTest {
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData(sessionId = "@alice:example.com", isTokenValid = false)),
+        )
+        val rootFlowNode = createRootFlowNode(
+            loginEntryPoint = FakeLoginEntryPoint { buildContext, _ -> node(buildContext) {} },
+            sessionStore = sessionStore,
+        )
+        rootFlowNode.parentNodeTestHelper()
+        runCurrent()
+        assertThat(rootFlowNode.backstack.activeElement).isEqualTo(RootFlowNode.NavTarget.SplashScreen)
+        // Done by the signed out screen
+        sessionStore.removeSession("@alice:example.com")
+        runCurrent()
+        assertThat(rootFlowNode.backstack.activeElement).isEqualTo(RootFlowNode.NavTarget.NotLoggedInFlow(null))
+    }
+
+    private fun twoSessionsStore(setLatestSessionResult: (String) -> Unit) = InMemorySessionStore(
+        initialList = listOf(
+            aSessionData(sessionId = "@alice:example.com"),
+            aSessionData(sessionId = "@bob:example.com"),
+        ),
+        setLatestSessionResult = setLatestSessionResult,
+    )
+
+    private fun aRoomLink() = PermalinkData.RoomLink(
+        roomIdOrAlias = RoomIdOrAlias.Id(A_ROOM_ID),
+        eventId = null,
+        threadId = null,
+        viaParameters = persistentListOf(),
+    )
+
+    private fun aPermalinkIntent() = Intent(Intent.ACTION_VIEW, Uri.parse(A_PERMALINK))
+
     private fun aLoginIntent() = Intent(Intent.ACTION_VIEW, Uri.parse(A_LOGIN_LINK))
 
     private fun TestScope.createRootFlowNode(
         loginEntryPoint: LoginEntryPoint,
         sessionStore: SessionStore = InMemorySessionStore(),
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
+        accountProviderAccessControl: AccountProviderAccessControl = FakeAccountProviderAccessControl { true },
+        loginIntentResolverResult: (String) -> LoginParams? = { A_LOGIN_PARAMS },
+        permalinkParser: PermalinkParser = FakePermalinkParser(),
+        permalinkSessionResolver: PermalinkSessionResolver = FakePermalinkSessionResolver(),
+        signedOutEntryPoint: SignedOutEntryPoint = FakeSignedOutEntryPoint { buildContext -> node(buildContext) {} },
     ): RootFlowNode {
         val matrixSessionCache = MatrixSessionCache(
             authenticationService = FakeMatrixAuthenticationService(),
             syncOrchestratorFactory = FakeSyncOrchestratorFactory(),
             analyticsService = FakeAnalyticsService(),
+            appMigrationRunner = FakeAppMigrationRunner(),
         )
         val parentNode = FakeParentNode(
             graph = FakeNodeFactoriesBindings(
@@ -139,6 +365,8 @@ class RootFlowNodeTest : RobolectricTest() {
                             loginEntryPoint = loginEntryPoint,
                             imageLoaderHolder = FakeImageLoaderHolder(),
                             analyticsColdStartWatcher = FakeAnalyticsColdStartWatcher(),
+                            featureFlagService = FakeFeatureFlagService(),
+                            announcementService = FakeAnnouncementService(),
                         )
                     }
                 )
@@ -152,7 +380,7 @@ class RootFlowNodeTest : RobolectricTest() {
             ),
             plugins = emptyList(),
             sessionStore = sessionStore,
-            accountProviderAccessControl = FakeAccountProviderAccessControl { true },
+            accountProviderAccessControl = accountProviderAccessControl,
             navStateFlowFactory = RootNavStateFlowFactory(
                 sessionStore = sessionStore,
                 cacheService = FakeCacheService(),
@@ -169,21 +397,34 @@ class RootFlowNodeTest : RobolectricTest() {
                 sdkMetadata = FakeSdkMetadata("sha"),
             ),
             bugReportEntryPoint = FakeBugReportEntryPoint(),
-            signedOutEntryPoint = FakeSignedOutEntryPoint(),
+            signedOutEntryPoint = signedOutEntryPoint,
             accountSelectEntryPoint = FakeAccountSelectEntryPoint(),
             intentResolver = IntentResolver(
                 deeplinkParser = { null },
-                loginIntentResolver = FakeLoginIntentResolver { A_LOGIN_PARAMS },
+                loginIntentResolver = FakeLoginIntentResolver(loginIntentResolverResult),
                 oAuthIntentResolver = FakeOAuthIntentResolver { null },
-                permalinkParser = FakePermalinkParser(),
+                permalinkParser = permalinkParser,
                 shareIntentHandler = FakeShareIntentHandler(),
             ),
+            permalinkSessionResolver = permalinkSessionResolver,
             oAuthActionFlow = FakeOAuthActionFlow(),
-            featureFlagService = FakeFeatureFlagService(),
+            featureFlagService = featureFlagService,
             announcementService = FakeAnnouncementService(),
             analyticsService = FakeAnalyticsService(),
             analyticsColdStartWatcher = FakeAnalyticsColdStartWatcher(),
+            incomingVerificationRequestObserver = IncomingVerificationRequestObserver(
+                matrixSessionCache = matrixSessionCache,
+                appForegroundStateService = FakeAppForegroundStateService(),
+            ),
             appCoroutineScope = backgroundScope,
+            shareEntryPoint = object : ShareEntryPoint {
+                override fun createNode(
+                    parentNode: Node,
+                    buildContext: BuildContext,
+                    params: ShareEntryPoint.Params,
+                    callback: ShareEntryPoint.Callback,
+                ): Node = lambdaError()
+            },
         )
     }
 }

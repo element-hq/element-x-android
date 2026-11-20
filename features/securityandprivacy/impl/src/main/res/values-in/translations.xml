@@ -20,7 +20,7 @@ Kami tidak menyarankan untuk mengaktifkan enkripsi untuk ruangan yang dapat dite
   <string name="screen_security_and_privacy_encryption_section_footer">"Setelah diaktifkan, enkripsi tidak dapat dinonaktifkan."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Enkripsi"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktifkan enkripsi ujung ke ujung"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Siapa pun dapat menemukan dan bergabung"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Siapa saja dapat menemukan dan bergabung."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Semua orang"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Pilih ruang mana yang anggotanya dapat bergabung ke ruangan ini tanpa undangan. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Kelola ruang"</string>

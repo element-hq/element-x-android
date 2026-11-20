@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -132,6 +133,7 @@ fun TextComposer(
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
     isInThreadTimeline: Boolean = false,
+    onAddEmoji: (() -> Unit)? = null,
 ) {
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
@@ -212,6 +214,9 @@ fun TextComposer(
                     composerMode = composerMode,
                     onResetComposerMode = onResetComposerMode,
                     isTextEmpty = state.state.text.value().isEmpty(),
+                    trailingContent = onAddEmoji?.let { onClick ->
+                        @Composable { AddEmojiButton(onClick = onClick) }
+                    },
                 ) {
                     MarkdownTextInput(
                         state = state.state,
@@ -370,6 +375,7 @@ fun TextComposer(
                     waveform = voiceMessageState.waveform,
                     playbackProgress = voiceMessageState.playbackProgress,
                     time = voiceMessageState.time,
+                    duration = voiceMessageState.duration,
                     onPlayClick = onPlayVoiceMessageClick,
                     onPauseClick = onPauseVoiceMessageClick,
                     onSeek = onSeekVoiceMessage,
@@ -644,6 +650,7 @@ private fun TextInputBox(
     onResetComposerMode: () -> Unit,
     isTextEmpty: Boolean,
     modifier: Modifier = Modifier,
+    trailingContent: (@Composable () -> Unit)? = null,
     textInput: @Composable () -> Unit,
 ) {
     val bgColor = ElementTheme.colors.bgSubtleSecondary
@@ -669,30 +676,58 @@ private fun TextInputBox(
             Spacer(Modifier.height(4.dp))
         }
 
-        Box(
-            modifier = Modifier
-                .padding(top = 1.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                .then(Modifier.testTag(TestTags.textEditor)),
-            contentAlignment = Alignment.CenterStart,
-        ) {
-            textInput()
-            if (isTextEmpty && composerMode.showCaptionCompatibilityWarning()) {
-                var showBottomSheet by remember { mutableStateOf(false) }
-                Icon(
-                    modifier = Modifier
-                        .clickable { showBottomSheet = true }
-                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
-                        .align(Alignment.CenterEnd),
-                    imageVector = CompoundIcons.InfoSolid(),
-                    tint = ElementTheme.colors.iconCriticalPrimary,
-                    contentDescription = stringResource(CommonStrings.a11y_info),
-                )
-                if (showBottomSheet) {
-                    CaptionWarningBottomSheet(
-                        onDismiss = { showBottomSheet = false },
+        Row(verticalAlignment = Alignment.Bottom) {
+            Box(
+                modifier = Modifier
+                    .padding(top = 1.dp, bottom = 4.dp, start = 12.dp, end = if (trailingContent != null) 0.dp else 12.dp)
+                    .weight(1f)
+                    .then(Modifier.testTag(TestTags.textEditor)),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                textInput()
+                if (isTextEmpty && composerMode.showCaptionCompatibilityWarning()) {
+                    var showBottomSheet by remember { mutableStateOf(false) }
+                    Icon(
+                        modifier = Modifier
+                            .clickable { showBottomSheet = true }
+                            .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+                            .align(Alignment.CenterEnd),
+                        imageVector = CompoundIcons.InfoSolid(),
+                        tint = ElementTheme.colors.iconCriticalPrimary,
+                        contentDescription = stringResource(CommonStrings.a11y_info),
                     )
+                    if (showBottomSheet) {
+                        CaptionWarningBottomSheet(
+                            onDismiss = { showBottomSheet = false },
+                        )
+                    }
                 }
             }
+            trailingContent?.invoke()
+        }
+    }
+}
+
+@Composable
+private fun AddEmojiButton(onClick: () -> Unit) {
+    // The box is sized exactly to one line of the text input (34 dp plus the 4 dp bottom padding), so the
+    // button neither expands the composer nor drifts off the centre line of the text. The 40 dp button
+    // overflows the box by equal margins top and bottom while retaining its full touch target.
+    Box(
+        modifier = Modifier
+            .padding(end = 2.dp, bottom = 4.dp)
+            .size(width = 40.dp, height = 34.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        IconButton(
+            modifier = Modifier.requiredSize(40.dp),
+            onClick = onClick,
+        ) {
+            Icon(
+                imageVector = CompoundIcons.Reaction(),
+                contentDescription = stringResource(R.string.rich_text_editor_a11y_add_emoji),
+                tint = ElementTheme.colors.iconSecondary,
+            )
         }
     }
 }
@@ -735,6 +770,21 @@ internal fun TextComposerSimplePreview() = ElementPreview {
             state = textEditorState,
             voiceMessageState = VoiceMessageState.Idle,
             composerMode = MessageComposerMode.Normal,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TextComposerWithEmojiButtonPreview() = ElementPreview {
+    PreviewColumn(
+        items = aTextEditorStateMarkdownList()
+    ) { textEditorState ->
+        ATextComposer(
+            state = textEditorState,
+            voiceMessageState = VoiceMessageState.Idle,
+            composerMode = MessageComposerMode.Normal,
+            onAddEmoji = {},
         )
     }
 }
@@ -929,6 +979,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 showCursor = false,
                 waveform = WaveFormSamples.realisticWaveForm,
                 time = 0.seconds,
+                duration = 61.seconds,
                 playbackProgress = 0.0f,
             ),
             VoiceMessageState.Preview(
@@ -937,6 +988,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 showCursor = true,
                 waveform = WaveFormSamples.realisticWaveForm,
                 time = 3.seconds,
+                duration = 0.seconds,
                 playbackProgress = 0.2f,
             ),
             VoiceMessageState.Preview(
@@ -945,6 +997,7 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 showCursor = false,
                 waveform = WaveFormSamples.realisticWaveForm,
                 time = 61.seconds,
+                duration = 61.seconds,
                 playbackProgress = 0.0f,
             ),
         )
@@ -972,6 +1025,7 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
                 showCursor = false,
                 waveform = WaveFormSamples.realisticWaveForm,
                 time = 0.seconds,
+                duration = 61.seconds,
                 playbackProgress = 0.0f
             ),
             VoiceMessageState.Preview(
@@ -980,6 +1034,7 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
                 showCursor = true,
                 waveform = WaveFormSamples.realisticWaveForm,
                 time = 3.seconds,
+                duration = 0.seconds,
                 playbackProgress = 0.2f
             ),
             VoiceMessageState.Preview(
@@ -988,6 +1043,7 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
                 showCursor = false,
                 waveform = WaveFormSamples.realisticWaveForm,
                 time = 61.seconds,
+                duration = 61.seconds,
                 playbackProgress = 0.0f
             ),
         )
@@ -1057,10 +1113,12 @@ private fun ATextComposer(
     voiceMessageState: VoiceMessageState,
     composerMode: MessageComposerMode,
     showTextFormatting: Boolean = false,
+    onAddEmoji: (() -> Unit)? = null,
 ) {
     TextComposer(
         state = state,
         showTextFormatting = showTextFormatting,
+        onAddEmoji = onAddEmoji,
         voiceMessageState = voiceMessageState,
         composerMode = composerMode,
         onRequestFocus = {},

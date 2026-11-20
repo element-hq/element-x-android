@@ -20,8 +20,15 @@ class DefaultAccountSelectEntryPoint : AccountSelectEntryPoint {
     override fun createNode(
         parentNode: Node,
         buildContext: BuildContext,
+        params: AccountSelectEntryPoint.Params,
         callback: AccountSelectEntryPoint.Callback,
     ): Node {
-        return parentNode.createNode<AccountSelectNode>(buildContext, listOf(callback))
+        return parentNode.createNode<AccountSelectNode>(
+            buildContext = buildContext,
+            plugins = listOf(
+                AccountSelectNode.Inputs(permalinkData = params.permalinkData),
+                callback,
+            ),
+        )
     }
 }

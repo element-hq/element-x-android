@@ -9,15 +9,15 @@
 package io.element.android.features.ftue.impl.sessionverification.choosemode
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.logout.api.direct.DirectLogoutEvents
-import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_USER_NAME
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
-import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -29,8 +29,27 @@ class ChooseSessionVerificationModePresenterTest {
         presenter.test {
             awaitItem().run {
                 assertThat(buttonsState.isLoading()).isTrue()
-                assertThat(directLogoutState.logoutAction.isUninitialized()).isTrue()
             }
+        }
+    }
+
+    @Test
+    fun `present - current user is exposed`() = runTest {
+        val presenter = createPresenter(
+            matrixClient = FakeMatrixClient(
+                sessionId = A_SESSION_ID,
+                userDisplayName = A_USER_NAME,
+                userAvatarUrl = AN_AVATAR_URL,
+            ),
+        )
+        presenter.test {
+            assertThat(awaitItem().currentUser).isEqualTo(
+                MatrixUser(
+                    userId = A_SESSION_ID,
+                    displayName = A_USER_NAME,
+                    avatarUrl = AN_AVATAR_URL,
+                )
+            )
         }
     }
 
@@ -110,26 +129,11 @@ class ChooseSessionVerificationModePresenterTest {
         }
     }
 
-    @Test
-    fun `sing out action triggers a direct logout`() = runTest {
-        val logoutEventRecorder = lambdaRecorder<DirectLogoutEvents, Unit> {}
-        val logoutPresenter = Presenter<DirectLogoutState> {
-            aDirectLogoutState(eventSink = logoutEventRecorder)
-        }
-        val presenter = createPresenter(directLogoutPresenter = logoutPresenter)
-        presenter.test {
-            val initial = awaitItem()
-            initial.eventSink(ChooseSelfVerificationModeEvent.SignOut)
-            logoutEventRecorder.assertions().isCalledOnce()
-                .with(value(DirectLogoutEvents.Logout(ignoreSdkError = false)))
-        }
-    }
-
     private fun createPresenter(
+        matrixClient: MatrixClient = FakeMatrixClient(),
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
-        directLogoutPresenter: Presenter<DirectLogoutState> = Presenter<DirectLogoutState> { aDirectLogoutState() }
     ) = ChooseSelfVerificationModePresenter(
+        matrixClient = matrixClient,
         encryptionService = encryptionService,
-        directLogoutPresenter = directLogoutPresenter,
     )
 }

@@ -28,8 +28,8 @@ import io.element.android.appnav.room.joined.JoinedRoomFlowNode
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
 import io.element.android.appnav.room.joined.LoadingRoomNodeView
 import io.element.android.features.joinroom.api.JoinRoomEntryPoint
-import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint
-import io.element.android.features.roomaliasesolver.api.RoomAliasResolverEntryPoint.Params
+import io.element.android.features.roomaliasresolver.api.RoomAliasResolverEntryPoint
+import io.element.android.features.roomaliasresolver.api.RoomAliasResolverEntryPoint.Params
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -148,10 +148,9 @@ class RoomFlowNode(
     }
 
     private fun subscribeToRoomInfoFlow(roomId: RoomId, serverNames: List<String>) {
-        val joinedRoom = (inputs.initialElement as? RoomNavigationTarget.Root)?.joinedRoom
-        val roomInfoFlow = joinedRoom?.roomInfoFlow?.map { Optional.of(it) }
-            ?: client.getRoomInfoFlow(roomId)
-
+        // Always use `client.getRoomInfoFlow` to observe room info
+        // so even if the room instance is closed it keeps working
+        val roomInfoFlow = client.getRoomInfoFlow(roomId)
         // This observes the local membership changes for the room
         val membershipUpdateFlow = membershipObserver.updates
             .filter { it.roomId == roomId }

@@ -17,7 +17,7 @@ import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.matrix.ui.R
 
 /**
  * A view to display when the media content can't be fetched.
@@ -29,8 +29,8 @@ fun NotFoundContentView(
     onTextLayout: ((TextLayoutResult) -> Unit)? = null,
 ) {
     ContentErrorView(
-        title = stringResource(CommonStrings.content_scanner_not_found_title),
-        message = stringResource(CommonStrings.content_scanner_not_found),
+        title = stringResource(R.string.content_scanner_not_found_title),
+        message = stringResource(R.string.content_scanner_not_found),
         modifier = modifier,
         contentPadding = contentPadding,
         onTextLayout = onTextLayout,

@@ -17,6 +17,8 @@ data class CoroutineDispatchers(
     val main: CoroutineDispatcher,
 ) {
     companion object {
+        // This is where the dispatchers are provided to the rest of the code base.
+        @Suppress("InjectDispatcher")
         val Default = CoroutineDispatchers(
             io = Dispatchers.IO,
             computation = Dispatchers.Default,

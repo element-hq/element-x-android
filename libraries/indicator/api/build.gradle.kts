@@ -13,7 +13,3 @@ plugins {
 android {
     namespace = "io.element.android.libraries.indicator.api"
 }
-
-dependencies {
-    implementation(libs.coroutines.core)
-}

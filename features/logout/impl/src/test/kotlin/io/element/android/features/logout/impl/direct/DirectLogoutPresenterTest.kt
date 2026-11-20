@@ -13,16 +13,12 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.logout.api.direct.DirectLogoutEvents
+import io.element.android.features.logout.api.direct.DirectLogoutEvent
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.encryption.BackupUploadState
-import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.tests.testutils.WarmUpRule
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -38,44 +34,6 @@ class DirectLogoutPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            assertThat(initialState.canDoDirectSignOut).isTrue()
-            assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
-        }
-    }
-
-    @Test
-    fun `present - initial state - last session`() = runTest {
-        val presenter = createDirectLogoutPresenter(
-            encryptionService = FakeEncryptionService().apply {
-                emitIsLastDevice(true)
-            }
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            val initialState = awaitFirstItem()
-            assertThat(initialState.canDoDirectSignOut).isFalse()
-            assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
-        }
-    }
-
-    @Test
-    fun `present - initial state - backing up`() = runTest {
-        val encryptionService = FakeEncryptionService()
-        encryptionService.givenWaitForBackupUploadSteadyStateFlow(
-            flow {
-                emit(BackupUploadState.Waiting)
-            }
-        )
-        val presenter = createDirectLogoutPresenter(
-            encryptionService = encryptionService
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            skipItems(1)
-            val initialState = awaitFirstItem()
-            assertThat(initialState.canDoDirectSignOut).isFalse()
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
         }
     }
@@ -87,10 +45,10 @@ class DirectLogoutPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
+            initialState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.ConfirmingNoParams)
-            initialState.eventSink.invoke(DirectLogoutEvents.CloseDialogs)
+            initialState.eventSink.invoke(DirectLogoutEvent.CloseDialogs)
             val finalState = awaitItem()
             assertThat(finalState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -103,14 +61,48 @@ class DirectLogoutPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
+            initialState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.ConfirmingNoParams)
-            confirmationState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
+            confirmationState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = false))
             val loadingState = awaitItem()
             assertThat(loadingState.logoutAction).isInstanceOf(AsyncAction.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.logoutAction).isInstanceOf(AsyncAction.Success::class.java)
+        }
+    }
+
+    @Test
+    fun `present - logout skipping the confirmation`() = runTest {
+        val presenter = createDirectLogoutPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = true))
+            val loadingState = awaitItem()
+            assertThat(loadingState.logoutAction).isInstanceOf(AsyncAction.Loading::class.java)
+            val successState = awaitItem()
+            assertThat(successState.logoutAction).isInstanceOf(AsyncAction.Success::class.java)
+        }
+    }
+
+    @Test
+    fun `present - logout is only started once on a quick double tap`() = runTest {
+        var logoutCount = 0
+        val matrixClient = FakeMatrixClient().apply {
+            logoutLambda = { _, _ -> logoutCount++ }
+        }
+        val presenter = createDirectLogoutPresenter(matrixClient)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = true))
+            initialState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = true))
+            assertThat(awaitItem().logoutAction).isInstanceOf(AsyncAction.Loading::class.java)
+            assertThat(awaitItem().logoutAction).isInstanceOf(AsyncAction.Success::class.java)
+            assertThat(logoutCount).isEqualTo(1)
         }
     }
 
@@ -128,15 +120,15 @@ class DirectLogoutPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
+            initialState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.ConfirmingNoParams)
-            confirmationState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
+            confirmationState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = false))
             val loadingState = awaitItem()
             assertThat(loadingState.logoutAction).isInstanceOf(AsyncAction.Loading::class.java)
             val errorState = awaitItem()
             assertThat(errorState.logoutAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
-            errorState.eventSink.invoke(DirectLogoutEvents.CloseDialogs)
+            errorState.eventSink.invoke(DirectLogoutEvent.CloseDialogs)
             val finalState = awaitItem()
             assertThat(finalState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
         }
@@ -158,15 +150,15 @@ class DirectLogoutPresenterTest {
             presenter.present()
         }.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
+            initialState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = false))
             val confirmationState = awaitItem()
             assertThat(confirmationState.logoutAction).isEqualTo(AsyncAction.ConfirmingNoParams)
-            confirmationState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = false))
+            confirmationState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = false, skipConfirmation = false))
             val loadingState = awaitItem()
             assertThat(loadingState.logoutAction).isInstanceOf(AsyncAction.Loading::class.java)
             val errorState = awaitItem()
             assertThat(errorState.logoutAction).isEqualTo(AsyncAction.Failure(AN_EXCEPTION))
-            errorState.eventSink.invoke(DirectLogoutEvents.Logout(ignoreSdkError = true))
+            errorState.eventSink.invoke(DirectLogoutEvent.Logout(ignoreSdkError = true, skipConfirmation = false))
             val loadingState2 = awaitItem()
             assertThat(loadingState2.logoutAction).isInstanceOf(AsyncAction.Loading::class.java)
             val successState = awaitItem()
@@ -180,9 +172,7 @@ class DirectLogoutPresenterTest {
 
     private fun createDirectLogoutPresenter(
         matrixClient: MatrixClient = FakeMatrixClient(),
-        encryptionService: EncryptionService = FakeEncryptionService(),
     ): DirectLogoutPresenter = DirectLogoutPresenter(
         matrixClient = matrixClient,
-        encryptionService = encryptionService,
     )
 }

@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Kako biste bili sigurni da nikada nećete propustiti važan poziv, promijenite postavke kako biste omogućili obavijesti preko cijelog zaslona kada je telefon zaključan."</string>
-  <string name="full_screen_intent_banner_title">"Poboljšajte svoje iskustvo poziva"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Odaberite zadanu kvalitetu videozapisa koje prenosite."</string>
+  <string name="dialog_default_video_quality_selector_title">"Kvaliteta prijenosa videozapisa"</string>
+  <string name="full_screen_intent_banner_message_android">"Kako biste bili sigurni da nikada nećete propustiti važan poziv, promijenite postavke kako biste omogućili obavijesti preko cijelog zaslona kada je telefon zaključan."</string>
+  <string name="full_screen_intent_banner_title_android">"Poboljšajte svoje iskustvo poziva"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Odaberite kako želite primati obavijesti"</string>
-  <string name="screen_advanced_settings_developer_mode">"Način rada za razvojne inženjere"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Omogućite pristup značajkama i funkcionalnostima za razvojne inženjere."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Prilagođeni osnovni URL za Element Call"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Postavite prilagođeni osnovni URL za Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Nevažeći URL; provjerite jeste li uključili protokol (http/https) i ispravnu adresu."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Sakrij avatare u zahtjevima za poziv u sobu"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Sakrij preglede medija na vremenskoj traci"</string>
   <string name="screen_advanced_settings_labs">"Laboratoriji"</string>
   <string name="screen_advanced_settings_live_location_section_description">"Udaljenost koju morate prijeći da biste pokrenuli ažuriranje."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Provjerite je li \"Precizna lokacija\" omogućena za ovu aplikaciju. Za promjenu dopuštenja idite na %1$s ."</string>
@@ -22,7 +21,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Brže prenesite fotografije i videozapise te smanjite potrošnju podataka"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimiziraj kvalitetu medija"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderiranje i sigurnost"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Automatski optimizirajte slike za brži prijenos i manje veličine datoteka."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimiziraj kvalitetu prijenosa slika"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Ovdje dodirnite za promjenu."</string>
@@ -31,14 +29,11 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standardna (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Kvaliteta prijenosa videozapisa"</string>
   <string name="screen_advanced_settings_push_provider_android">"Pružatelj push obavijesti"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Onemogućite uređivač obogaćenog teksta kako biste ručno tipkali Markdown."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Potvrde o čitanju"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Ako je to isključeno, vaše potvrde o čitanju neće se slati nikome. I dalje ćete primati potvrde o čitanju od drugih korisnika."</string>
   <string name="screen_advanced_settings_share_presence">"Podijeli prisutnost"</string>
   <string name="screen_advanced_settings_share_presence_description">"Ako je to isključeno, nećete moći slati ili primati potvrde o čitanju ili obavijesti o tipkanju."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Uvijek sakrij"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Uvijek prikaži"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"U privatnim sobama"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Prikaži u privatnim sobama"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"Skriveni medij uvijek se može prikazati tako se da se dodirne"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Prikaži medije na vremenskoj traci"</string>
   <string name="screen_advanced_settings_view_source_description">"Omogući opciju za prikaz izvora poruke na vremenskoj traci."</string>
@@ -53,11 +48,18 @@
   <string name="screen_edit_profile_error_title">"Nije moguće ažurirati profil"</string>
   <string name="screen_edit_profile_title">"Uredi profil"</string>
   <string name="screen_edit_profile_updating_details">"Ažuriranje profila…"</string>
+  <string name="screen_labs_enable_gallery">"Poruke iz galerije"</string>
+  <string name="screen_labs_enable_gallery_description">"Pošaljite više slika ili videozapisa odjednom. Stabilno na mobilnim uređajima, ali još nije podržano na webu."</string>
+  <string name="screen_labs_enable_knocking">"Zatraži pridruživanje"</string>
+  <string name="screen_labs_enable_knocking_description">"Korisnici mogu zatražiti pristup sobi kojoj se nitko ne može pridružiti. Stabilno na mobilnim uređajima, web implementacija postoji, ali je eksperimentalna."</string>
   <string name="screen_labs_enable_threads">"Omogući odgovore u nizu"</string>
   <string name="screen_labs_enable_threads_description">"Aplikacija će se ponovno pokrenuti kako bi se primijenila ova promjena."</string>
   <string name="screen_labs_header_description">"Isprobajte naše najnovije ideje u razvoju. Ove značajke nisu finalizirane; mogu biti nestabilne i mijenjati se."</string>
   <string name="screen_labs_header_title">"Jeste li spremni za eksperimentiranje?"</string>
   <string name="screen_labs_title">"Laboratoriji"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Pozivnice"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Ostali korisnici"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Tvoj izgled"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Dodatne postavke"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Ton zvona"</string>
   <string name="screen_notification_settings_calls_label">"Audiopozivi i videopozivi"</string>
@@ -86,6 +88,8 @@ Ako nastavite, neke od vaših postavki mogu se promijeniti."</string>
   <string name="screen_notification_settings_mode_mentions">"Spominjanja"</string>
   <string name="screen_notification_settings_notification_section_title">"Obavijesti me za"</string>
   <string name="screen_notification_settings_room_mention_label">"Obavijesti me o sobi @soba"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Točke ili broj nepročitanih poruka"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Prikaži sve aktivnosti na popisu soba"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Prilagođeno"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Personalizirano zvono"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Pogreška pri brisanju datoteke"</string>
@@ -102,6 +106,7 @@ Ako nastavite, neke od vaših postavki mogu se promijeniti."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"postavke sustava"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Obavijesti sustava su isključene"</string>
   <string name="screen_notification_settings_title">"Obavijesti"</string>
+  <string name="screen_settings_add_account">"Dodaj još jedan račun"</string>
   <string name="screen_settings_user_status_away">"Odsutan/na"</string>
   <string name="screen_settings_user_status_be_right_back">"Odmah se vraćam"</string>
   <string name="screen_settings_user_status_custom">"Prilagođeno"</string>
@@ -110,6 +115,7 @@ Ako nastavite, neke od vaših postavki mogu se promijeniti."</string>
   <string name="screen_settings_user_status_in_a_meeting">"Na sastanku"</string>
   <string name="screen_settings_user_status_on_the_road">"Na putu"</string>
   <string name="screen_settings_user_status_placeholder">"Kakav je tvoj status?"</string>
+  <string name="settings_version_number">"Inačica: %1$s (%2$s)"</string>
   <string name="theme_black">"Crna"</string>
   <string name="theme_dark">"Tamno"</string>
   <string name="theme_light">"Svijetlo"</string>

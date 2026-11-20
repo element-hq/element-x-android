@@ -23,7 +23,7 @@ class CurrentUserWithNeighborsBuilderTest {
     fun `build on empty list returns current user`() {
         val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser()
-        val list = listOf<SessionData>()
+        val list = emptyList<SessionData>()
         val result = sut.build(matrixUser, list)
         assertThat(result).containsExactly(matrixUser)
     }
@@ -217,6 +217,32 @@ class CurrentUserWithNeighborsBuilderTest {
                 userId = A_USER_ID,
                 displayName = "Bob",
                 avatarUrl = "avatarUrl",
+            )
+        )
+    }
+
+    @Test
+    fun `other accounts use the data from db, including the avatar thumbnail`() {
+        val sut = CurrentUserWithNeighborsBuilder()
+        val matrixUser = aMatrixUser(id = A_USER_ID.value)
+        val list = listOf(
+            aSessionData(
+                sessionId = A_USER_ID.value,
+            ),
+            aSessionData(
+                sessionId = A_USER_ID_2.value,
+                userDisplayName = "Carol",
+                userAvatarUrl = "avatarUrl",
+                userAvatarData = "avatarData",
+            ),
+        )
+        val result = sut.build(matrixUser, list)
+        assertThat(result[0]).isEqualTo(
+            MatrixUser(
+                userId = A_USER_ID_2,
+                displayName = "Carol",
+                avatarUrl = "avatarUrl",
+                avatarThumbnail = "avatarData",
             )
         )
     }

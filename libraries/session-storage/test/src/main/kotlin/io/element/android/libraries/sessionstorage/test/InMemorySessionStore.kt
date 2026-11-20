@@ -18,8 +18,9 @@ import kotlinx.coroutines.flow.map
 
 class InMemorySessionStore(
     initialList: List<SessionData> = emptyList(),
-    private val updateUserProfileResult: (String, String?, String?) -> Unit = { _, _, _ -> error("Not implemented") },
+    private val updateUserProfileResult: (String, String?, String?, String?) -> Unit = { _, _, _, _ -> error("Not implemented") },
     private val setLatestSessionResult: (String) -> Unit = { error("Not implemented") },
+    private val removeSessionResult: (String) -> Unit = {},
 ) : SessionStore {
     private val sessionDataListFlow = MutableStateFlow(initialList)
 
@@ -56,8 +57,8 @@ class InMemorySessionStore(
         }
     }
 
-    override suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?) {
-        updateUserProfileResult(sessionId, displayName, avatarUrl)
+    override suspend fun updateUserProfile(sessionId: String, displayName: String?, avatarUrl: String?, avatarData: String?) {
+        updateUserProfileResult(sessionId, displayName, avatarUrl, avatarData)
     }
 
     override suspend fun getSession(sessionId: String): SessionData? {
@@ -81,6 +82,7 @@ class InMemorySessionStore(
     }
 
     override suspend fun removeSession(sessionId: String) {
+        removeSessionResult(sessionId)
         sessionDataListFlow.value = sessionDataListFlow.value.filter { it.userId != sessionId }
     }
 }

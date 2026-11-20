@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.invitepeople.api.InvitePeopleEvents
+import io.element.android.features.invitepeople.api.InvitePeopleEvent
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.features.invitepeople.api.InvitePeopleStatePreviewParam
 import io.element.android.features.roomdetails.impl.R
@@ -49,13 +48,13 @@ fun RoomInviteMembersView(
             RoomInviteMembersTopBar(
                 onBackClick = {
                     if (state.isSearchActive) {
-                        state.eventSink(InvitePeopleEvents.CloseSearch)
+                        state.eventSink(InvitePeopleEvent.CloseSearch)
                     } else {
                         onBackClick()
                     }
                 },
                 onSubmitClick = {
-                    state.eventSink(InvitePeopleEvents.SendInvites)
+                    state.eventSink(InvitePeopleEvent.SendInvites)
                 },
                 canSend = state.canInvite,
             )
@@ -76,7 +75,6 @@ fun RoomInviteMembersView(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RoomInviteMembersTopBar(
     canSend: Boolean,

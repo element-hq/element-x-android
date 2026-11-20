@@ -11,7 +11,7 @@
   <string name="screen_create_room_private_option_title">"Prywatny"</string>
   <string name="screen_create_room_public_option_description">"Każdy może znaleźć ten pokój.
 Możesz to zmienić w ustawieniach pokoju."</string>
-  <string name="screen_create_room_public_option_short_description">"Każdy może dołączyć."</string>
+  <string name="screen_create_room_public_option_short_description">"Każdy może dołączyć, w tym osoby spoza Twojej organizacji."</string>
   <string name="screen_create_room_public_option_title">"Publiczny"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Każdy może poprosić o dołączenie, ale administrator lub moderator musi to zaakceptować."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Zezwól na prośbę o dołączenie"</string>
@@ -19,7 +19,7 @@ Możesz to zmienić w ustawieniach pokoju."</string>
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Poproś o dołączenie"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Dołączyć mogą tylko zaproszone osoby."</string>
   <string name="screen_create_room_room_access_section_private_option_title">"Prywatny"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"Każdy może dołączyć."</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Każdy może dołączyć, w tym osoby spoza Twojej organizacji."</string>
   <string name="screen_create_room_room_access_section_public_option_title">"Publiczny"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"Każdy w %1$s może dołączyć."</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"Standardowy"</string>

@@ -29,7 +29,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
-import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
@@ -58,8 +57,6 @@ class TimelineItemEventFactory(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
         timelineItems: List<MatrixTimelineItem>,
-        roomMembers: List<RoomMember>,
-        renderReadReceipts: Boolean,
     ): TimelineItem.Event {
         val currentSender = currentTimelineItem.event.sender
         val groupPosition =
@@ -110,7 +107,7 @@ class TimelineItemEventFactory(
             senderId = currentSender,
             senderProfile = senderProfile,
             senderAvatar = senderAvatarData,
-            content = contentFactory.create(currentTimelineItem.event, roomMembers),
+            content = contentFactory.create(currentTimelineItem.event),
             isMine = currentTimelineItem.event.isOwn,
             isEditable = currentTimelineItem.event.isEditable,
             canBeRepliedTo = currentTimelineItem.event.canBeRepliedTo,
@@ -119,8 +116,10 @@ class TimelineItemEventFactory(
             sentDate = sentDate,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),
-            readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers, renderReadReceipts),
+            readReceiptState = currentTimelineItem.computeReadReceiptState(),
             localSendState = currentTimelineItem.event.localSendState,
+            editSendState = currentTimelineItem.event.editSendState,
+            redactionSendState = currentTimelineItem.event.redactionSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo()?.map(permalinkParser = permalinkParser),
             threadInfo = mappedThreadInfo,
             origin = currentTimelineItem.event.origin,
@@ -129,17 +128,6 @@ class TimelineItemEventFactory(
             sendHandleProvider = currentTimelineItem.event.sendHandleProvider,
             forwarder = currentTimelineItem.event.forwarder,
             forwarderProfile = currentTimelineItem.event.forwarderProfile,
-        )
-    }
-
-    fun update(
-        timelineItem: TimelineItem.Event,
-        receivedMatrixTimelineItem: MatrixTimelineItem.Event,
-        roomMembers: List<RoomMember>,
-        renderReadReceipts: Boolean,
-    ): TimelineItem.Event {
-        return timelineItem.copy(
-            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers, renderReadReceipts)
         )
     }
 
@@ -182,24 +170,15 @@ class TimelineItemEventFactory(
         )
     }
 
-    private fun MatrixTimelineItem.Event.computeReadReceiptState(
-        roomMembers: List<RoomMember>,
-        renderReadReceipts: Boolean,
-    ): TimelineItemReadReceipts {
-        if (!config.computeReadReceipts || !renderReadReceipts) {
+    private fun MatrixTimelineItem.Event.computeReadReceiptState(): TimelineItemReadReceipts {
+        if (!config.computeReadReceipts) {
             return TimelineItemReadReceipts(receipts = persistentListOf())
         }
         return TimelineItemReadReceipts(
             receipts = event.receipts
                 .map { receipt ->
-                    val roomMember = roomMembers.find { it.userId == receipt.userId }
                     ReadReceiptData(
-                        avatarData = AvatarData(
-                            id = receipt.userId.value,
-                            name = roomMember?.displayName,
-                            url = roomMember?.avatarUrl,
-                            size = AvatarSize.TimelineReadReceipt,
-                        ),
+                        userId = receipt.userId,
                         formattedDate = dateFormatter.format(
                             receipt.timestamp,
                             mode = DateFormatterMode.TimeOrDate,

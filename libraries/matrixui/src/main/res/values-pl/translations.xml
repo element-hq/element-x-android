@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"Pobieranie niedostępne."</string>
+  <string name="content_scanner_not_found_title">"Nie znaleziono pliku"</string>
+  <string name="error_room_address_already_exists">"Ten adres pokoju już istnieje. Spróbuj zmienić adres lub nazwę pokoju"</string>
+  <string name="error_room_address_invalid_symbols">"Niektóre znaki są niedozwolone. Obsługiwane są tylko litery, cyfry i następujące symbole ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Wyślij zaproszenie"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Czy chcesz rozpocząć czat z %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Wysłać zaproszenie?"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Obecnie nie posiadasz żadnych czatów z tą osobą. Potwierdź zaproszenie, zanim przejdziesz dalej."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Rozpocząć czat z nowym kontaktem?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) zaprosił Cię"</string>
+  <string name="screen_space_list_description">"Przestrzenie, które stworzyłeś lub do których dołączyłeś."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Przestrzenie"</string>
 </resources>

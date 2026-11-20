@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -94,7 +93,7 @@ fun StartChatView(
                 onSelectUser = {
                     coroutineScope.launch {
                         view.hideKeyboardAndAwaitAnimation()
-                        state.eventSink(StartChatEvents.StartDM(it))
+                        state.eventSink(StartChatEvent.StartDM(it))
                     }
                 },
                 onDeselectUser = { },
@@ -124,21 +123,21 @@ fun StartChatView(
         errorMessage = { stringResource(R.string.screen_start_chat_error_starting_chat) },
         onRetry = {
             state.userListState.selectedUsers.firstOrNull()
-                ?.let { state.eventSink(StartChatEvents.StartDM(it)) }
+                ?.let { state.eventSink(StartChatEvent.StartDM(it)) }
             // Cancel start DM if there is no more selected user (should not happen)
-                ?: state.eventSink(StartChatEvents.CancelStartDM)
+                ?: state.eventSink(StartChatEvent.CancelStartDM)
         },
-        onErrorDismiss = { state.eventSink(StartChatEvents.CancelStartDM) },
+        onErrorDismiss = { state.eventSink(StartChatEvent.CancelStartDM) },
         confirmationDialog = { data ->
             if (data is ConfirmingStartDmWithMatrixUser) {
                 CreateDmConfirmationBottomSheet(
                     matrixUser = data.matrixUser,
                     isUserIdentityUnknown = data.isUserIdentityUnknown,
                     onSendInvite = {
-                        state.eventSink(StartChatEvents.StartDM(data.matrixUser))
+                        state.eventSink(StartChatEvent.StartDM(data.matrixUser))
                     },
                     onDismiss = {
-                        state.eventSink(StartChatEvents.CancelStartDM)
+                        state.eventSink(StartChatEvent.CancelStartDM)
                     },
                 )
             }
@@ -146,7 +145,6 @@ fun StartChatView(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CreateRoomRootViewTopBar(
     onCloseClick: () -> Unit,

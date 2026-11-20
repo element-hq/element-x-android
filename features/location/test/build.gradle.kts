@@ -16,6 +16,7 @@ android {
 
 dependencies {
     api(projects.features.location.api)
+    implementation(projects.features.enterprise.api)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.tests.testutils)

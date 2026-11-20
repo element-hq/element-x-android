@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Gorde gabeko aldaketak dituzu."</string>
+  <string name="dialog_unsaved_changes_description_android">"Zure aldaketak ez dira gorde. Ziur itzuli nahi duzula?"</string>
+  <string name="dialog_unsaved_changes_title">"Aldaketak gorde?"</string>
+</resources>

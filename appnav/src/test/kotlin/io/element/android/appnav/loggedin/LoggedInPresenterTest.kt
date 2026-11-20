@@ -16,14 +16,12 @@ import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
-import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
@@ -31,7 +29,6 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeHomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
@@ -67,7 +64,7 @@ class LoggedInPresenterTest {
     fun `present - initial state`() = runTest {
         createLoggedInPresenter().test {
             val initialState = awaitItem()
-            assertThat(initialState.showSyncSpinner).isFalse()
+            assertThat(initialState.syncIndicatorState).isEqualTo(SyncIndicatorState.Hidden)
             assertThat(initialState.pusherRegistrationState.isUninitialized()).isTrue()
             assertThat(initialState.ignoreRegistrationError).isFalse()
         }
@@ -97,11 +94,33 @@ class LoggedInPresenterTest {
             matrixClient = FakeMatrixClient(roomListService = roomListService),
         ).test {
             val initialState = awaitItem()
-            assertThat(initialState.showSyncSpinner).isFalse()
+            assertThat(initialState.syncIndicatorState).isEqualTo(SyncIndicatorState.Hidden)
             roomListService.postSyncIndicator(RoomListService.SyncIndicator.Show)
-            consumeItemsUntilPredicate { it.showSyncSpinner }
+            consumeItemsUntilPredicate { it.syncIndicatorState == SyncIndicatorState.Syncing }
             roomListService.postSyncIndicator(RoomListService.SyncIndicator.Hide)
-            consumeItemsUntilPredicate { !it.showSyncSpinner }
+            consumeItemsUntilPredicate { it.syncIndicatorState != SyncIndicatorState.Syncing }
+        }
+    }
+
+    @Test
+    fun `present - say the server is unreachable when the device has network but the sync is offline`() = runTest {
+        createLoggedInPresenter(
+            syncState = SyncState.Offline,
+            networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected),
+        ).test {
+            consumeItemsUntilPredicate { it.syncIndicatorState == SyncIndicatorState.ServerUnreachable }
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - say nothing when the device itself has no network`() = runTest {
+        createLoggedInPresenter(
+            syncState = SyncState.Offline,
+            networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected),
+        ).test {
+            consumeItemsUntilPredicate { it.syncIndicatorState == SyncIndicatorState.Hidden }
+            cancelAndConsumeRemainingEvents()
         }
     }
 
@@ -111,7 +130,6 @@ class LoggedInPresenterTest {
         val roomListService = FakeRoomListService()
         val verificationService = FakeSessionVerificationService()
         val encryptionService = FakeEncryptionService()
-        val buildMeta = aBuildMeta()
         val networkMonitor = FakeNetworkMonitor()
         LoggedInPresenter(
             matrixClient = FakeMatrixClient(
@@ -125,7 +143,6 @@ class LoggedInPresenterTest {
             sessionVerificationService = verificationService,
             analyticsService = analyticsService,
             encryptionService = encryptionService,
-            buildMeta = buildMeta,
             networkMonitor = networkMonitor,
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
             permissionsPresenterFactory = FakePermissionsPresenterFactory(),
@@ -210,7 +227,7 @@ class LoggedInPresenterTest {
             lambda.assertions()
                 .isCalledOnce()
             // Reset the error and do not show again
-            finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = false))
+            finalState.eventSink(LoggedInEvent.CloseErrorDialog(doNotShowAgain = false))
             val lastState = awaitItem()
             assertThat(lastState.pusherRegistrationState.isUninitialized()).isTrue()
             assertThat(lastState.ignoreRegistrationError).isFalse()
@@ -240,7 +257,7 @@ class LoggedInPresenterTest {
             lambda.assertions()
                 .isCalledOnce()
             // Reset the error and do not show again
-            finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = true))
+            finalState.eventSink(LoggedInEvent.CloseErrorDialog(doNotShowAgain = true))
             skipItems(1)
             setIgnoreRegistrationErrorLambda.assertions()
                 .isCalledOnce()
@@ -283,47 +300,6 @@ class LoggedInPresenterTest {
             selectPushProviderLambda = selectPushProviderLambda,
             setIgnoreRegistrationErrorLambda = setIgnoreRegistrationErrorLambda,
         )
-    }
-
-    @Test
-    fun `present - CheckSlidingSyncProxyAvailability forces the sliding sync migration under the right circumstances`() = runTest {
-        // The migration will be forced if the user is not using the native sliding sync
-        val matrixClient = FakeMatrixClient(
-            currentSlidingSyncVersionLambda = { Result.success(SlidingSyncVersion.Proxy) },
-        )
-        createLoggedInPresenter(
-            matrixClient = matrixClient,
-        ).test {
-            val initialState = awaitItem()
-            assertThat(initialState.forceNativeSlidingSyncMigration).isFalse()
-            initialState.eventSink(LoggedInEvents.CheckSlidingSyncProxyAvailability)
-            assertThat(awaitItem().forceNativeSlidingSyncMigration).isTrue()
-        }
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun `present - LogoutAndMigrateToNativeSlidingSync logs out the user`() = runTest {
-        val logoutLambda = lambdaRecorder<Boolean, Boolean, Unit> { userInitiated, ignoreSdkError ->
-            assertThat(userInitiated).isTrue()
-            assertThat(ignoreSdkError).isTrue()
-        }
-        val matrixClient = FakeMatrixClient(
-            accountManagementUrlResult = { Result.success(null) },
-        ).apply {
-            this.logoutLambda = logoutLambda
-        }
-        createLoggedInPresenter(
-            matrixClient = matrixClient,
-        ).test {
-            val initialState = awaitItem()
-
-            initialState.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
-
-            advanceUntilIdle()
-
-            assertThat(logoutLambda.assertions().isCalledOnce())
-        }
     }
 
     @Test
@@ -399,7 +375,6 @@ class LoggedInPresenterTest {
         matrixClient: MatrixClient = FakeMatrixClient(
             accountManagementUrlResult = { Result.success(null) },
         ),
-        buildMeta: BuildMeta = aBuildMeta(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
@@ -409,7 +384,6 @@ class LoggedInPresenterTest {
             sessionVerificationService = sessionVerificationService,
             analyticsService = analyticsService,
             encryptionService = encryptionService,
-            buildMeta = buildMeta,
             networkMonitor = networkMonitor,
             localNetworkPermissionAdvisor = FakeLocalNetworkPermissionAdvisor(),
             permissionsPresenterFactory = FakePermissionsPresenterFactory(),

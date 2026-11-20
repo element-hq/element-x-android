@@ -30,7 +30,7 @@ fun aQrCodeIntroState(
         permission = Manifest.permission.CAMERA,
     ),
     canContinue: Boolean = false,
-    eventSink: (QrCodeIntroEvents) -> Unit = {},
+    eventSink: (QrCodeIntroEvent) -> Unit = {},
 ) = QrCodeIntroState(
     appName = appName,
     desktopAppName = desktopAppName,

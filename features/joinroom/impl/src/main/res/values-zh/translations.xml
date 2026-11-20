@@ -27,7 +27,7 @@
   <string name="screen_join_room_loading_alert_title">"无法显示此房间预览"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s 暂不支持空间。你可以通过 Web 客户端访问空间。"</string>
   <string name="screen_join_room_space_not_supported_title">"空间尚未受到支持"</string>
-  <string name="screen_join_room_subtitle_knock">"点击以下按钮以通知房间管理员。获得批准后你将能加入对话。"</string>
+  <string name="screen_join_room_subtitle_knock">"点击以下按钮聊天管理员将收到通知。获得批准后即可加入对话。"</string>
   <string name="screen_join_room_subtitle_no_preview">"只有房间成员才能查看消息历史。"</string>
   <string name="screen_join_room_title_knock">"想加入此房间吗？"</string>
   <string name="screen_join_room_title_no_preview">"预览不可用"</string>

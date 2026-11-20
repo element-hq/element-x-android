@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -38,7 +37,6 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BlockedUsersView(
     state: BlockedUsersState,
@@ -64,8 +62,8 @@ fun BlockedUsersView(
                 items(state.blockedUsers) { matrixUser ->
                     BlockedUserItem(
                         matrixUser = matrixUser,
-                        onClick = { state.eventSink(BlockedUsersEvents.Unblock(it)) },
-                        onLongClick = { state.eventSink(BlockedUsersEvents.CopyToClipboard(it)) },
+                        onClick = { state.eventSink(BlockedUsersEvent.Unblock(it)) },
+                        onLongClick = { state.eventSink(BlockedUsersEvent.CopyToClipboard(it)) },
                     )
                 }
             }
@@ -99,8 +97,8 @@ fun BlockedUsersView(
                     title = stringResource(R.string.screen_blocked_users_unblock_alert_title),
                     content = stringResource(R.string.screen_blocked_users_unblock_alert_description),
                     submitText = stringResource(R.string.screen_blocked_users_unblock_alert_action),
-                    onSubmitClick = { state.eventSink(BlockedUsersEvents.ConfirmUnblock) },
-                    onDismiss = { state.eventSink(BlockedUsersEvents.Cancel) }
+                    onSubmitClick = { state.eventSink(BlockedUsersEvent.ConfirmUnblock) },
+                    onDismiss = { state.eventSink(BlockedUsersEvent.Cancel) }
                 )
             }
             else -> Unit

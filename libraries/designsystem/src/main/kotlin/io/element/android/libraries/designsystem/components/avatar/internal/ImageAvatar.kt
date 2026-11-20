@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
@@ -21,8 +22,10 @@ import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import timber.log.Timber
+import kotlin.io.encoding.Base64
 
 @Composable
 internal fun ImageAvatar(
@@ -33,6 +36,9 @@ internal fun ImageAvatar(
     contentDescription: String? = null,
 ) {
     val size = forcedAvatarSize ?: avatarData.size.dp
+    val thumbnailBytes = remember(avatarData.thumbnail) {
+        avatarData.thumbnail?.let { runCatchingExceptions { Base64.decode(it) }.getOrNull() }
+    }
     SubcomposeAsyncImage(
         model = avatarData,
         contentDescription = contentDescription,
@@ -51,19 +57,62 @@ internal fun ImageAvatar(
                         "Error loading avatar $state\n${state.result}"
                     )
                 }
-                InitialLetterAvatar(
+                ThumbnailOrInitialLetterAvatar(
+                    avatarData = avatarData,
+                    thumbnailBytes = thumbnailBytes,
+                    avatarShape = avatarShape,
+                    forcedAvatarSize = forcedAvatarSize,
+                    contentDescription = contentDescription,
+                )
+            }
+            else -> ThumbnailOrInitialLetterAvatar(
+                avatarData = avatarData,
+                thumbnailBytes = thumbnailBytes,
+                avatarShape = avatarShape,
+                forcedAvatarSize = forcedAvatarSize,
+                contentDescription = contentDescription,
+            )
+        }
+    }
+}
+
+/**
+ * Render the locally stored thumbnail of the avatar if any, else the initial letter.
+ */
+@Composable
+private fun ThumbnailOrInitialLetterAvatar(
+    avatarData: AvatarData,
+    thumbnailBytes: ByteArray?,
+    avatarShape: Shape,
+    forcedAvatarSize: Dp?,
+    contentDescription: String?,
+) {
+    if (thumbnailBytes == null) {
+        InitialLetterAvatar(
+            avatarData = avatarData,
+            avatarShape = avatarShape,
+            forcedAvatarSize = forcedAvatarSize,
+            contentDescription = contentDescription,
+        )
+    } else {
+        SubcomposeAsyncImage(
+            model = thumbnailBytes,
+            contentDescription = contentDescription,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(forcedAvatarSize ?: avatarData.size.dp)
+                .clip(avatarShape)
+        ) {
+            val collectedState by painter.state.collectAsState()
+            when (collectedState) {
+                is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent()
+                else -> InitialLetterAvatar(
                     avatarData = avatarData,
                     avatarShape = avatarShape,
                     forcedAvatarSize = forcedAvatarSize,
                     contentDescription = contentDescription,
                 )
             }
-            else -> InitialLetterAvatar(
-                avatarData = avatarData,
-                avatarShape = avatarShape,
-                forcedAvatarSize = forcedAvatarSize,
-                contentDescription = contentDescription,
-            )
         }
     }
 }

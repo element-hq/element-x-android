@@ -8,12 +8,10 @@
 
 package io.element.android.features.messages.impl.pinned
 
-import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import io.element.android.features.messages.api.pinned.PinnedEventsTimelineProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -22,7 +20,6 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -30,21 +27,14 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 @SingleIn(RoomScope::class)
-@ContributesBinding(RoomScope::class)
+@Inject
 class DefaultPinnedEventsTimelineProvider(
     private val room: JoinedRoom,
     private val syncService: SyncService,
     private val dispatchers: CoroutineDispatchers,
-) : PinnedEventsTimelineProvider {
+) {
     private val _timelineStateFlow: MutableStateFlow<AsyncData<Timeline>> =
         MutableStateFlow(AsyncData.Uninitialized)
-
-    override fun activeTimelineFlow(): StateFlow<Timeline?> {
-        return _timelineStateFlow
-            .mapState { value ->
-                value.dataOrNull()
-            }
-    }
 
     val timelineStateFlow = _timelineStateFlow
 

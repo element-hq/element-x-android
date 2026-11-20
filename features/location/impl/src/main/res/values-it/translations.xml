@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s non è riuscito a caricare la mappa. Riprova più tardi."</string>
+  <string name="error_failed_locating_user">"%1$s non è riuscito ad accedere alla tua posizione. Riprova più tardi."</string>
+  <string name="error_location_service_disabled_android">"Attiva il GPS per accedere alle funzioni basate sulla posizione."</string>
+  <string name="error_missing_location_auth_android">"%1$s non ha l\'autorizzazione di accedere alla tua posizione. Puoi attivare l\'accesso nelle impostazioni."</string>
+  <string name="error_missing_location_rationale_android">"%1$s non ha l\'autorizzazione per accedere alla tua posizione. Attiva l\'accesso di seguito."</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Condivisione posizione in tempo reale"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Condivisione della posizione in corso"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Posizione in tempo reale"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Nessuno sta condividendo la propria posizione"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Condivisione posizione in tempo reale"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d persona"</item>
+    <item quantity="other">"%1$d persone"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Sulla mappa"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"La cronologia delle tue posizioni in tempo reale verrà archiviata nella stanza e sarà visibile ai membri al termine della sessione."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Scegli per quanto tempo condividere la tua posizione in tempo reale."</string>
   <string name="screen_share_location_live_location_missing_permissions">"Non hai l\'autorizzazione per condividere la tua posizione in tempo reale in questa stanza"</string>
+  <string name="screen_share_location_title">"Condividi posizione"</string>
+  <string name="screen_share_my_location_action">"Condividi la mia posizione"</string>
+  <string name="screen_share_open_apple_maps">"Apri in Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Apri in Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Apri in OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"Condividi la posizione selezionata"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Opzioni di condivisione"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Condivisa %1$s"</string>
+  <string name="screen_static_location_sheet_title">"Sulla mappa"</string>
+  <string name="screen_view_location_title">"Posizione"</string>
 </resources>

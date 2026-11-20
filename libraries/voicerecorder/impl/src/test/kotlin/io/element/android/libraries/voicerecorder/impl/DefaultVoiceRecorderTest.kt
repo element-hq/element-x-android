@@ -17,13 +17,13 @@ import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.libraries.voicerecorder.impl.audio.Audio
 import io.element.android.libraries.voicerecorder.impl.audio.AudioConfig
+import io.element.android.libraries.voicerecorder.impl.audio.FakeAudioLevelCalculator
+import io.element.android.libraries.voicerecorder.impl.audio.FakeAudioReaderFactory
+import io.element.android.libraries.voicerecorder.impl.audio.FakeEncoder
 import io.element.android.libraries.voicerecorder.impl.audio.SampleRate
 import io.element.android.libraries.voicerecorder.impl.di.VoiceRecorderBindingContainer
-import io.element.android.libraries.voicerecorder.test.FakeAudioLevelCalculator
-import io.element.android.libraries.voicerecorder.test.FakeAudioReaderFactory
-import io.element.android.libraries.voicerecorder.test.FakeEncoder
-import io.element.android.libraries.voicerecorder.test.FakeFileSystem
-import io.element.android.libraries.voicerecorder.test.FakeVoiceFileManager
+import io.element.android.libraries.voicerecorder.impl.file.FakeFileSystem
+import io.element.android.libraries.voicerecorder.impl.file.FakeVoiceFileManager
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
@@ -58,7 +58,7 @@ class DefaultVoiceRecorderTest {
             voiceRecorder.startRecord()
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.seconds, listOf(1.0f)))
             timeSource += 1.seconds
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.seconds, listOf()))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.seconds, emptyList()))
             timeSource += 1.seconds
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(2.seconds, listOf(1.0f, 1.0f)))
         }
@@ -73,7 +73,7 @@ class DefaultVoiceRecorderTest {
             voiceRecorder.startRecord()
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.minutes, listOf(1.0f)))
             timeSource += VoiceMessageConfig.maxVoiceMessageDuration
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(VoiceMessageConfig.maxVoiceMessageDuration, listOf()))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(VoiceMessageConfig.maxVoiceMessageDuration, emptyList()))
             timeSource += 1.milliseconds
 
             assertThat(awaitItem()).isEqualTo(

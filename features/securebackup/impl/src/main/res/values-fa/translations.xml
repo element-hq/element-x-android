@@ -59,7 +59,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"با کسی هم‌رسانیش نکنید!"</string>
   <string name="screen_recovery_key_change_success">"کلید بازیابی تغییر کرد"</string>
   <string name="screen_recovery_key_change_title">"تغییر کلید بازیابی؟"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"ایجاد کلید بازیابی جدید"</string>
   <string name="screen_recovery_key_confirm_description">"اطمینان از این که کسی نمی‌تواند این صفحه را ببیند!"</string>
   <string name="screen_recovery_key_confirm_error_content">"لطفاً برای دسترسی به ذخیره‌ساز کلیدتان دوباره تلاش کنید."</string>
   <string name="screen_recovery_key_confirm_error_title">"کلید بازیابی اشتباه"</string>

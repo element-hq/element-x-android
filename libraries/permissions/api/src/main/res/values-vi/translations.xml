@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_allow_access">"Cho phép truy cập"</string>
   <string name="dialog_permission_camera">"Để ứng dụng sử dụng camera, vui lòng cấp quyền trong cài đặt hệ thống."</string>
   <string name="dialog_permission_generic">"Vui lòng cấp quyền trong cài đặt hệ thống."</string>
   <string name="dialog_permission_microphone">"Để ứng dụng có thể sử dụng micro, vui lòng cấp quyền trong cài đặt hệ thống."</string>

@@ -6,9 +6,14 @@
   <string name="screen_create_poll_answer_hint">"Vaihtoehto %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Muutoksiasi ei ole tallennettu. Haluatko varmasti palata takaisin?"</string>
   <string name="screen_create_poll_delete_option_a11y">"Poista vaihtoehto %1$s"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Vaihtoehdot"</string>
   <string name="screen_create_poll_question_desc">"Kysymys tai aihe"</string>
   <string name="screen_create_poll_question_hint">"Mistä kyselyssä on kyse?"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Poista %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Asetukset"</string>
   <string name="screen_create_poll_title">"Luo kysely"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Sallitut äänet per henkilö"</string>
   <string name="screen_edit_poll_delete_confirmation">"Haluatko varmasti poistaa tämän kyselyn?"</string>
   <string name="screen_edit_poll_delete_confirmation_title">"Poista kysely"</string>
   <string name="screen_edit_poll_title">"Muokkaa kyselyä"</string>

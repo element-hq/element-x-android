@@ -33,8 +33,8 @@ class FakeSessionVerificationService(
     private val acceptVerificationRequestLambda: () -> Unit = { lambdaError() },
 ) : SessionVerificationService {
     private val _sessionVerifiedStatus = MutableStateFlow(initialSessionVerifiedStatus)
-    private var _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
-    private var _needsSessionVerification = MutableStateFlow(true)
+    private val _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
+    private val _needsSessionVerification = MutableStateFlow(true)
 
     override val verificationFlowState: StateFlow<VerificationFlowState> = _verificationFlowState
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus

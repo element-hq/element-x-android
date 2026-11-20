@@ -16,10 +16,13 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.RageshakeConfig
+import io.element.android.features.rageshake.api.logs.ApplicationInfoLogger
+import io.element.android.features.rageshake.api.logs.LOG_DIRECTORY_NAME
 import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.impl.crash.CrashDataStore
+import io.element.android.features.rageshake.impl.logs.LEGACY_LOG_DIRECTORY_NAME
 import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
 import io.element.android.libraries.androidutils.file.compressFile
 import io.element.android.libraries.androidutils.file.safeDelete
@@ -35,14 +38,12 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
-import io.element.android.libraries.sessionstorage.api.sessionIdFlow
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -70,7 +71,7 @@ import java.util.Locale
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultBugReporter(
-    @ApplicationContext private val context: Context,
+    @ApplicationContext context: Context,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val screenshotHolder: ScreenshotHolder,
@@ -83,37 +84,53 @@ class DefaultBugReporter(
     private val bugReporterUrlProvider: BugReporterUrlProvider,
     private val sdkMetadata: SdkMetadata,
     private val matrixClientProvider: MatrixClientProvider,
+    private val logFolderProvider: LogFolderProvider,
     private val tracingService: TracingService,
+    private val applicationInfoLogger: ApplicationInfoLogger,
 ) : BugReporter {
     companion object {
         // filenames
         private const val LOG_CAT_FILENAME = "logcat.log"
-        private const val LOG_DIRECTORY_NAME = "logs"
     }
 
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
     private var currentTracingLogLevel: String? = null
 
     private val baseLogDirectory = File(context.cacheDir, LOG_DIRECTORY_NAME)
-    private var currentLogDirectory: File = baseLogDirectory
+
+    /**
+     * The folder where the log files are currently written, and read from when sending a bug report.
+     */
+    @Volatile
+    private var currentLogDirectory: File
 
     init {
-        if (buildMeta.isEnterpriseBuild) {
-            val logSubfolder = runBlocking {
-                sessionStore.getLatestSession()
-            }?.userId?.let(::UserId)?.domainName
-            setCurrentLogDirectory(logSubfolder)
-            sessionStore.sessionIdFlow()
-                .map {
-                    it?.let(::UserId)?.domainName
-                }
-                .distinctUntilChanged()
-                .onEach { logSubfolder ->
-                    setCurrentLogDirectory(logSubfolder)
-                    tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
-                }
-                .launchIn(appCoroutineScope)
+        // The legacy log directory mixes the logs of all the accounts, whatever their bug report server.
+        // It will not be read nor rotated anymore, so delete it.
+        appCoroutineScope.launch(coroutineDispatchers.io) {
+            File(context.cacheDir, LEGACY_LOG_DIRECTORY_NAME).deleteRecursively()
         }
+        // The log folder must be known synchronously, since it is used to initialize the tracing at startup:
+        // this ensures that the application information and the first logs are written to the right folder.
+        // It only reads local data (the session database and the enterprise configuration store).
+        val initialLogFolder = runBlocking { logFolderProvider.logFolderFlow().first() }
+        currentLogDirectory = initialLogFolder.toLogDirectory()
+        appCoroutineScope.launch(coroutineDispatchers.io) {
+            logFolderProvider.logFolderFlow()
+                .map { it to it.toLogDirectory() }
+                .filter { (_, logDirectory) -> logDirectory != currentLogDirectory }
+                .collect { (logFolder, logDirectory) ->
+                    Timber.d("Bug report configuration changed, writing the logs to the log folder $logFolder")
+                    currentLogDirectory = logDirectory
+                    tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
+                    // Ensure the logs of the new folder contain the application information
+                    applicationInfoLogger.log()
+                }
+        }
+    }
+
+    private fun LogFolder.toLogDirectory(): File {
+        return subfolderName()?.let { File(baseLogDirectory, it) } ?: baseLogDirectory
     }
 
     override suspend fun sendBugReport(
@@ -223,9 +240,9 @@ class DefaultBugReporter(
 
                 if (withDevicesLogs) {
                     val files = getLogFiles().sortedByDescending { it.lastModified() }
-                    val filesBySize = files.groupBy {
+                    val filesBySize = files.groupByTo(mutableMapOf()) {
                         it.length() < RageshakeConfig.MAX_LOG_CONTENT_SIZE
-                    }.toMutableMap()
+                    }
 
                     filesBySize[true].orEmpty().mapNotNullTo(gzippedFiles) { file ->
                         val logLines = countLogLines(file)
@@ -234,7 +251,7 @@ class DefaultBugReporter(
                         when {
                             totalLogLines > RageshakeConfig.MAX_LOG_LINES_SIZE -> {
                                 // Add it to the list of omitted files too
-                                (filesBySize.getOrPut(false) { mutableListOf() } as MutableList<File>).add(file)
+                                filesBySize.getOrPut(false) { mutableListOf() }.add(file)
 
                                 Timber.e(
                                     "Could not upload file ${file.name} because it would exceed the max log lines size " +
@@ -394,32 +411,9 @@ class DefaultBugReporter(
         }
     }
 
-    private fun setCurrentLogDirectory(subfolderName: String?) {
-        currentLogDirectory = if (subfolderName == null) {
-            baseLogDirectory
-        } else {
-            File(baseLogDirectory, subfolderName)
-        }
-    }
-
-    suspend fun deleteAllFiles(predicate: (File) -> Boolean) {
-        withContext(coroutineDispatchers.io) {
-            deleteAllFilesRecursive(baseLogDirectory, predicate)
-        }
-    }
-
-    private fun deleteAllFilesRecursive(
-        directory: File,
-        predicate: (File) -> Boolean,
-    ) {
-        directory.listFiles()?.forEach { file ->
-            if (file.isDirectory) {
-                deleteAllFilesRecursive(file, predicate)
-            } else {
-                if (predicate(file)) {
-                    file.safeDelete()
-                }
-            }
+    override fun logRootDirectory(): File {
+        return baseLogDirectory.apply {
+            mkdirs()
         }
     }
 

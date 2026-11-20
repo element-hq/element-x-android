@@ -17,7 +17,7 @@ android {
     namespace = "io.element.android.features.migration.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     implementation(projects.features.announcement.api)
@@ -39,4 +39,5 @@ dependencies {
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.features.announcement.test)
     testImplementation(projects.features.rageshake.test)
+    testImplementation(projects.features.migration.test)
 }

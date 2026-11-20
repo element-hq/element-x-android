@@ -39,5 +39,6 @@ fun aVoiceMessagePreviewState() = VoiceMessageState.Preview(
     showCursor = false,
     playbackProgress = 0f,
     time = 10.seconds,
+    duration = 10.seconds,
     waveform = WaveFormSamples.realisticWaveForm,
 )

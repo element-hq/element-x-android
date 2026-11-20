@@ -187,14 +187,14 @@ enum class Command(
     CONFETTI(
         command = "/confetti",
         parameters = "<message>",
-        description = R.string.slash_command_confetti,
+        description = R.string.slash_command_description_confetti,
         isAllowedInThread = false,
         isSupported = false,
     ),
     SNOWFALL(
         command = "/snowfall",
         parameters = "<message>",
-        description = R.string.slash_command_snow,
+        description = R.string.slash_command_description_snow,
         isAllowedInThread = false,
         isSupported = false,
     ),

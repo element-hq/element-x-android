@@ -19,12 +19,15 @@ import android.os.Message
 import android.os.Messenger
 import android.os.RemoteException
 import androidx.annotation.VisibleForTesting
+import androidx.core.graphics.scale
 import androidx.core.os.BundleCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.login.impl.BuildConfig
 import io.element.android.libraries.androidutils.service.ServiceBinder
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.di.annotations.AppCoroutineScope
@@ -69,6 +72,7 @@ class DefaultElementClassicConnection(
     private val coroutineScope: CoroutineScope,
     private val matrixAuthenticationService: MatrixAuthenticationService,
     private val homeServerLoginCompatibilityChecker: HomeServerLoginCompatibilityChecker,
+    private val dispatchers: CoroutineDispatchers,
 ) : ElementClassicConnection {
     // Messenger for communicating with the service.
     private var messenger: Messenger? = null
@@ -221,7 +225,7 @@ class DefaultElementClassicConnection(
     fun onSessionReceived(data: Bundle) {
         // The data must be extracted from the bundle before we launch the coroutine, else the bundle will be emptied
         val state = data.toElementClassicConnectionState()
-        coroutineScope.launch {
+        coroutineScope.launch(dispatchers.io) {
             val updatedState = ensureHomeserverIsSupported(state)
             emitState(updatedState)
             val userId = (updatedState as? ElementClassicConnectionState.ElementClassicReady)?.elementClassicSession?.userId
@@ -236,15 +240,22 @@ class DefaultElementClassicConnection(
     fun onAvatarReceived(data: Bundle) {
         val currentState = stateFlow.value
         if (currentState is ElementClassicConnectionState.ElementClassicReady) {
-            // Check that the userId is still the same
-            val userId = data.getString(KEY_USER_ID_STR)
+            // Check that the userId is still the same.
+            // Before Android 13, the first access unparcels the whole bundle, including the avatar, so it must be guarded too.
+            val userId = runCatchingExceptions { data.getString(KEY_USER_ID_STR) }
+                .onFailure { Timber.tag(loggerTag.value).e(it, "Failed to read the avatar data") }
+                .getOrElse { return }
             if (userId != currentState.elementClassicSession.userId.value) {
                 Timber.tag(loggerTag.value).w(
                     "Received profile data for userId $userId but current" +
                         " userId is ${currentState.elementClassicSession.userId}, ignoring"
                 )
             } else {
-                val avatar = BundleCompat.getParcelable(data, KEY_USER_AVATAR_PARCELABLE, Bitmap::class.java)
+                val avatar = runCatchingExceptions {
+                    BundleCompat.getParcelable(data, KEY_USER_AVATAR_PARCELABLE, Bitmap::class.java)?.downscaleIfNeeded()
+                }
+                    .onFailure { Timber.tag(loggerTag.value).e(it, "Failed to read the avatar") }
+                    .getOrNull()
                 // If the avatar is identical to the current one, do not emit a new state to avoid unnecessary recompositions
                 // and blink on the avatar image
                 if (avatar == null || !avatar.sameAs(currentState.avatar)) {
@@ -259,6 +270,21 @@ class DefaultElementClassicConnection(
         } else {
             Timber.tag(loggerTag.value).w("Received profile data but current state is not ElementClassicReady: %s", currentState)
         }
+    }
+
+    /**
+     * Element Classic may send the avatar at its original resolution, which can be too large to be drawn.
+     * See https://github.com/element-hq/element-x-android/issues/7986
+     */
+    private fun Bitmap.downscaleIfNeeded(): Bitmap {
+        val maxSide = maxOf(width, height)
+        if (maxSide <= MAX_AVATAR_SIZE_PX) return this
+        Timber.tag(loggerTag.value).w("Downscaling avatar from ${width}x$height")
+        val ratio = MAX_AVATAR_SIZE_PX.toFloat() / maxSide
+        return scale(
+            width = (width * ratio).toInt().coerceAtLeast(1),
+            height = (height * ratio).toInt().coerceAtLeast(1),
+        ).also { recycle() }
     }
 
     private suspend fun ensureHomeserverIsSupported(state: ElementClassicConnectionState): ElementClassicConnectionState {
@@ -407,5 +433,8 @@ class DefaultElementClassicConnection(
 
         // For the avatar
         const val KEY_USER_AVATAR_PARCELABLE = "avatar"
+
+        @VisibleForTesting
+        const val MAX_AVATAR_SIZE_PX = 512
     }
 }

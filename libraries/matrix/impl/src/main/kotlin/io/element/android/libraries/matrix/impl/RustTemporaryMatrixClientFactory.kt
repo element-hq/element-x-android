@@ -9,28 +9,53 @@ package io.element.android.libraries.matrix.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.matrix.api.TemporaryMatrixClient
 import io.element.android.libraries.matrix.api.TemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
+import kotlinx.coroutines.withContext
+import java.net.URL
 
 @ContributesBinding(AppScope::class)
 class RustTemporaryMatrixClientFactory(
     private val sessionPathsFactory: SessionPathsFactory,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : TemporaryMatrixClientFactory {
-    override suspend fun create(serverName: String): Result<TemporaryMatrixClient> {
-        return runCatchingExceptions {
+    override suspend fun create(serverName: String): Result<TemporaryMatrixClient> = withContext(coroutineDispatchers.io) {
+        runCatchingExceptions {
+            // In case the 'serverName' is a full URL, we need to extract the host and port to pass to the client builder.
+            // URI(...).toURL() is not a drop-in replacement: URI parsing is stricter than URL parsing.
+            @Suppress("DEPRECATION")
+            val parsedUrl = URL(serverName.ensureProtocol())
+            val domain = parsedUrl.host ?: error("Invalid server name: $serverName")
+            val port = parsedUrl.port
+            val formattedServerName = if (port != -1) "$domain:$port" else domain
+
             val sessionPaths = sessionPathsFactory.create()
-            val client = rustMatrixClientFactory.getBaseClientBuilder(
-                sessionPaths = sessionPaths,
-                clientSecret = null,
-                slidingSyncType = ClientBuilderSlidingSync.Native,
-                isMessageSearchAvailable = false,
+            val client = try {
+                rustMatrixClientFactory.getBaseClientBuilder(
+                    sessionPaths = sessionPaths,
+                    clientSecret = null,
+                    slidingSyncType = ClientBuilderSlidingSync.Native,
+                    isMessageSearchAvailable = false,
+                    sessionDelegate = NoOpClientSessionDelegate,
+                    autoEnableEncryption = false,
+                )
+                    .serverName(formattedServerName)
+                    .build()
+            } catch (failure: Exception) {
+                // The client will never be closed, delete its directories now
+                sessionPathsFactory.delete(sessionPaths)
+                throw failure
+            }
+            RustTemporaryMatrixClient(
+                client = client,
+                dispatcher = coroutineDispatchers.io,
+                onClose = { sessionPathsFactory.delete(sessionPaths) },
             )
-                .serverName(serverName)
-                .build()
-            RustTemporaryMatrixClient(client, sessionPaths)
         }
     }
 }

@@ -11,12 +11,11 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.features.roomdetetailsedit.test"
+    namespace = "io.element.android.features.roomdetailsedit.test"
 }
 
 dependencies {
     implementation(projects.features.roomdetailsedit.api)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.matrix.api)
     implementation(projects.tests.testutils)
 }

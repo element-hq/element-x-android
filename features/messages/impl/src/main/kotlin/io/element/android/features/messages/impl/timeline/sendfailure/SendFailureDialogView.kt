@@ -50,16 +50,18 @@ fun SendFailureDialogView(
                 )
             }
 
+            val (sendTarget, _) = sendFailureDialogState.event.pendingSend() ?: null to null
+
             ConfirmationDialog(
                 modifier = modifier,
                 title = stringResource(id = CommonStrings.common_sending_failed),
                 content = content,
                 onDismiss = onDismiss,
                 submitText = stringResource(id = CommonStrings.action_retry),
-                onSubmitClick = { onRetry(sendFailureDialogState.event) },
+                onSubmitClick = { if (sendTarget != null) onRetry(sendFailureDialogState.event) },
                 onCancelClick = onDismiss,
                 thirdButtonText = stringResource(id = CommonStrings.action_remove_message),
-                onThirdButtonClick = { onRemoveMessage(sendFailureDialogState.event) },
+                onThirdButtonClick = { if (sendTarget != null) onRemoveMessage(sendFailureDialogState.event) },
             )
         }
     }

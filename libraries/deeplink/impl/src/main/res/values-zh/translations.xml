@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="invite_friends_rich_title">"🔐️ 在 %1$s 中与我聊天"</string>
+  <string name="invite_friends_text">"嗨！请通过 %1$s 与我联系：%2$s"</string>
+</resources>

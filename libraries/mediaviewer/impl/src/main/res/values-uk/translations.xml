@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_scanning">"Сканування…"</string>
   <string name="screen_media_browser_delete_confirmation_subtitle">"Цей файл буде вилучено з кімнати, і учасники не матимуть доступу до нього."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Видалити файл?"</string>
   <string name="screen_media_browser_download_error_message">"Перевірте з\'єднання з інтернетом і повторіть спробу."</string>

@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"Muuda teenusepakkujat"</string>
-  <string name="screen_account_provider_form_hint">"Koduserveri aadress"</string>
-  <string name="screen_account_provider_form_notice">"Sisesta otsingusõna või domeeni nimi."</string>
-  <string name="screen_account_provider_form_subtitle">"Otsi äriühingut, kogukonda või võrgus leiduvat Matrixi serverit."</string>
-  <string name="screen_account_provider_form_title">"Leia teenusepakkuja"</string>
-  <string name="screen_account_provider_signin_subtitle">"See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postiteenuse pakkujat."</string>
+  <string name="error_account_already_logged_in">"Sa juba oled sisseloginud kasutajana %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Topeltsisselogimine"</string>
+  <string name="error_account_creation_not_possible">"Selleks et toimiks Matrix Authentication Service\'i tugi ja kasutajakonto loomine, vajab sinu koduserver uuendamist."</string>
   <string name="screen_account_provider_signin_title">"Sa oled sisse logimas %s teenusesse"</string>
-  <string name="screen_account_provider_signup_subtitle">"See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postiteenuse pakkujat."</string>
-  <string name="screen_account_provider_signup_title">"Sa oled loomas kasutajakontot %s teenuses"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org on suur ja tasuta koduserver Matrixi võrgus, mis on mõeldud turvalise ja hajutatud suhtluse jaoks. Selle serveri halduse eest vastutab Matrix.org Foundation."</string>
-  <string name="screen_change_account_provider_other">"Muu teenusepakkuja"</string>
   <string name="screen_change_account_provider_subtitle">"Kasuta erinevat teenusepakkujat, milleks võib olla ka sinu oma server või töökoha hallatav server."</string>
-  <string name="screen_change_account_provider_title">"Muuda teenusepakkujat"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s koduserver eeldab Element Pro rakenduse kasutamist. Palun laadi ta alla rakendustepoest."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Vajalik on Element Pro"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"Me ei suutnud luuaühendust selle koduserveriga. Palun kontrolli, kas koduserveri aadress on õige. Kui aadress on õige, siis täiendavat teavet oskab sulle anda koduserveri haldaja."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Me ei suutnud luua ühendust selle teenusepakkujaga. Palun kontrolli, kas teenusepakkuja aadress on õige. Kui aadress on õige, siis täiendavat teavet oskab sulle anda teenusepakkuja haldaja."</string>
   <string name="screen_change_server_error_invalid_well_known">"Server pole saadaval vea tõttu well-known failis:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Valitud teenusepakkuja ei toeta „sliding sync“ režiimi. Rakenduse %1$s kasutamiseks on vaja serverit uuendada."</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s ei saa kasutada %2$s koduserverit."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"See rakendus on seadistatud järgneva koduserveri kasutamiseks: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"%1$s teenusepakkuja pole lubatud."</string>
-  <string name="screen_change_server_form_header">"Koduserveri url"</string>
   <string name="screen_change_server_form_notice">"Sisesta domeeni aadress."</string>
   <string name="screen_change_server_navigation_title_login">"Logi sisse"</string>
   <string name="screen_change_server_navigation_title_register">"Loo kasutajakonto"</string>
@@ -40,10 +31,9 @@
   <string name="screen_login_error_invalid_credentials">"Vigane kasutajanimi ja/või salasõna"</string>
   <string name="screen_login_error_invalid_user_id">"See ei ole korrektne kasutajanimi. Õige vorming on: „@kasutaja:koduserver.ee“"</string>
   <string name="screen_login_error_refresh_tokens">"See server on seadistatud kasutama tunnusloa põhist sisselogimist. Salasõnaga sisselogimisel see võimalus aga ei ole toetatud."</string>
-  <string name="screen_login_error_unsupported_authentication">"Valitud koduserver ei toeta salasõna ega OAuth-põhist sisselogimist. Lisateavet saad koduserveri haldajalt, aga sa võid ka valida mõne teise serveri."</string>
+  <string name="screen_login_error_unsupported_authentication">"Valitud teenusepakkuja ei toeta salasõna ega OAuthi-põhist sisselogimist. Lisateavet saad teenusepakkuja haldajalt, aga sa võid ka valida mõne teise pakkuja."</string>
   <string name="screen_login_form_header">"Sisesta oma andmed"</string>
   <string name="screen_login_subtitle">"Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks."</string>
-  <string name="screen_login_title">"Tere tulemast tagasi!"</string>
   <string name="screen_login_title_with_homeserver">"Logi sisse serverisse %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"Ava Element Classic"</string>
   <string name="screen_missing_key_backup_step_1">"Ava Element Classic oma seadmes"</string>
@@ -52,6 +42,8 @@
   <string name="screen_missing_key_backup_step_4">"Võtmehoidla kasutuselevõtmiseks palun järgi juhendit"</string>
   <string name="screen_missing_key_backup_step_5">"Tule tagasi rakendusse %1$s"</string>
   <string name="screen_missing_key_backup_title">"Enne jätkamist rakenduses %1$s võta oma võtmehoidla kasutusele"</string>
+  <string name="screen_onboarding_add_account_subtitle">"Rakendusse saad lisada mitu kasutajakontot ja neid vastavalt vajadusele hõlpsalt vahetada."</string>
+  <string name="screen_onboarding_add_account_title">"Logi sisse muu kasutajakontoga"</string>
   <string name="screen_onboarding_app_version">"Versioon %1$s"</string>
   <string name="screen_onboarding_checking_account">"Kontrollin kasutajakontot"</string>
   <string name="screen_onboarding_sign_in_manually">"Logi sisse käsitsi"</string>
@@ -60,7 +52,6 @@
   <string name="screen_onboarding_sign_up">"Loo kasutajakonto"</string>
   <string name="screen_onboarding_welcome_back">"Tere tulemast tagasi"</string>
   <string name="screen_onboarding_welcome_message">"Läbi aegade kiireim ja mugavaim %1$s."</string>
-  <string name="screen_onboarding_welcome_subtitle">"Tere tulemast kasutama kiiret ja lihtsat suhtlusrakendust %1$s."</string>
   <string name="screen_onboarding_welcome_title">"Ole oma elemendis"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"Loome turvalist ühendust"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Turvalise ühenduse loomine uue seadmega ei õnnestunud. Sinu olemasolevad seadmed on jätkuvalt turvatud ja sa ei pea nende pärast muretsema."</string>
@@ -89,11 +80,11 @@ Proovi käsitsi sisselogimist või skaneeri QR-koodi mõne muu seadmega."</strin
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s pole toetatud"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"Skaneerimiseks valmis"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"Ava %1$s töölauarakenduses"</string>
-  <string name="screen_qr_code_login_initial_state_item_2">"Klõpsi oma tunnuspilti"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"Klõpsa oma tunnuspilti"</string>
   <string name="screen_qr_code_login_initial_state_item_3">"Vali %1$s"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"„Seo uus seade“"</string>
   <string name="screen_qr_code_login_initial_state_item_4">"Skaneeri QR-koodi selle seadmega"</string>
-  <string name="screen_qr_code_login_initial_state_subtitle">"See funktsionaalsus on sadaval vaid siis, kui sinu teenusepakkuja seda toetab."</string>
+  <string name="screen_qr_code_login_initial_state_subtitle">"See funktsionaalsus on saadaval vaid siis, kui sinu teenusepakkuja seda toetab."</string>
   <string name="screen_qr_code_login_initial_state_title">"QR-koodi saamiseks ava %1$s oma teises seadmes"</string>
   <string name="screen_qr_code_login_invalid_scan_state_description">"Kasuta teises seadmes näidatavat QR-koodi"</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Proovi uuesti"</string>
@@ -102,16 +93,10 @@ Proovi käsitsi sisselogimist või skaneeri QR-koodi mõne muu seadmega."</strin
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Jätkamiseks pead lubama, et %1$s saab kasutada sinu nutiseadme kaamerat"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"QR-koodi lugemiseks luba kaamerat kasutada"</string>
   <string name="screen_qr_code_login_scanning_state_title">"Skaneeri QR-koodi"</string>
-  <string name="screen_qr_code_login_start_over_button">"Alusta uuesti"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Tekkis ootamatu viga. Palun proovi uuesti."</string>
   <string name="screen_qr_code_login_verify_code_loading">"Ootame sinu teise seadme järgi"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"Sinu teenusepakkuja võib sisselogimisel eeldada selle verifitseerimiskoodi kasutamist."</string>
   <string name="screen_qr_code_login_verify_code_title">"Sinu verifitseerimiskood"</string>
-  <string name="screen_server_confirmation_change_server">"Muuda teenusepakkujat"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"Privaatne server Elemendi töötajate jaoks."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks."</string>
-  <string name="screen_server_confirmation_message_register">"See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postiteenuse pakkujat."</string>
-  <string name="screen_server_confirmation_title_login">"Sa oled sisselogimas koduserverisse %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Vali teenusepakkuja"</string>
-  <string name="screen_server_confirmation_title_register">"Sa oled loomas kasutajakontot koduserveris %1$s"</string>
 </resources>

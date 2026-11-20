@@ -16,23 +16,23 @@ class EmojiTest {
     @Test
     fun validEmojis() {
         // Simple single/multiple single-codepoint emojis per string
-        assertTrue("👍".containsOnlyEmojisInternal())
-        assertTrue("😀".containsOnlyEmojisInternal())
-        assertTrue("🙂🙁".containsOnlyEmojisInternal())
-        assertTrue("👁❤️🍝".containsOnlyEmojisInternal()) // 👁 is a pictographic
-        assertTrue("👨‍👩‍👦1️⃣🚀👳🏾‍♂️🪩".containsOnlyEmojisInternal())
-        assertTrue("🌍🌎🌏".containsOnlyEmojisInternal())
+        assertTrue("👍".containsOnlyEmojis())
+        assertTrue("😀".containsOnlyEmojis())
+        assertTrue("🙂🙁".containsOnlyEmojis())
+        assertTrue("👁❤️🍝".containsOnlyEmojis()) // 👁 is a pictographic
+        assertTrue("👨‍👩‍👦1️⃣🚀👳🏾‍♂️🪩".containsOnlyEmojis())
+        assertTrue("🌍🌎🌏".containsOnlyEmojis())
 
         // Awkward multi-codepoint graphemes
-        assertTrue("🧑‍🧑‍🧒‍🧒".containsOnlyEmojisInternal())
-        assertTrue("🏴‍☠".containsOnlyEmojisInternal())
-        assertTrue("👩🏿‍🔧".containsOnlyEmojisInternal())
+        assertTrue("🧑‍🧑‍🧒‍🧒".containsOnlyEmojis())
+        assertTrue("🏴‍☠".containsOnlyEmojis())
+        assertTrue("👩🏿‍🔧".containsOnlyEmojis())
 
-        Assert.assertFalse("".containsOnlyEmojisInternal())
-        Assert.assertFalse(" ".containsOnlyEmojisInternal())
-        Assert.assertFalse("🙂 🙁".containsOnlyEmojisInternal())
-        Assert.assertFalse(" 🙂 🙁 ".containsOnlyEmojisInternal())
-        Assert.assertFalse("Hello".containsOnlyEmojisInternal())
-        Assert.assertFalse("Hello 👋".containsOnlyEmojisInternal())
+        Assert.assertFalse("".containsOnlyEmojis())
+        Assert.assertFalse(" ".containsOnlyEmojis())
+        Assert.assertFalse("🙂 🙁".containsOnlyEmojis())
+        Assert.assertFalse(" 🙂 🙁 ".containsOnlyEmojis())
+        Assert.assertFalse("Hello".containsOnlyEmojis())
+        Assert.assertFalse("Hello 👋".containsOnlyEmojis())
     }
 }

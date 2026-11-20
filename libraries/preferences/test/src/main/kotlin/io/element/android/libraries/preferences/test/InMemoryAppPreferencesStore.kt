@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
 import kotlinx.coroutines.flow.Flow
@@ -21,10 +22,12 @@ import kotlinx.coroutines.flow.updateAndGet
 
 class InMemoryAppPreferencesStore(
     isDeveloperModeEnabled: Boolean = false,
+    isOtherAccountsExpanded: Boolean = true,
     customElementCallBaseUrl: String? = null,
     hideInviteAvatars: Boolean? = null,
     timelineMediaPreviewValue: MediaPreviewValue? = null,
     theme: String? = null,
+    messageTextSize: Int = MessageTextSize.DEFAULT,
     liveLocationMinimumDistanceUpdate: Int = 10,
     logLevel: LogLevel = LogLevel.INFO,
     traceLogPacks: Set<TraceLogPack> = emptySet(),
@@ -37,8 +40,10 @@ class InMemoryAppPreferencesStore(
     callRingtoneDisplayName: String? = null,
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
+    private val isOtherAccountsExpanded = MutableStateFlow(isOtherAccountsExpanded)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
+    private val messageTextSize = MutableStateFlow(messageTextSize)
     private val liveLocationMinimumDistanceUpdate = MutableStateFlow(liveLocationMinimumDistanceUpdate)
     private val logLevel = MutableStateFlow(logLevel)
     private val tracingLogPacks = MutableStateFlow(traceLogPacks)
@@ -60,6 +65,14 @@ class InMemoryAppPreferencesStore(
         return isDeveloperModeEnabled
     }
 
+    override suspend fun setOtherAccountsExpanded(expanded: Boolean) {
+        isOtherAccountsExpanded.value = expanded
+    }
+
+    override fun isOtherAccountsExpandedFlow(): Flow<Boolean> {
+        return isOtherAccountsExpanded
+    }
+
     override suspend fun setCustomElementCallBaseUrl(string: String?) {
         customElementCallBaseUrl.tryEmit(string)
     }
@@ -74,6 +87,14 @@ class InMemoryAppPreferencesStore(
 
     override fun getThemeFlow(): Flow<String?> {
         return theme
+    }
+
+    override suspend fun setMessageTextSize(sizeSp: Int) {
+        messageTextSize.value = sizeSp
+    }
+
+    override fun getMessageTextSizeFlow(): Flow<Int> {
+        return messageTextSize
     }
 
     override suspend fun setLiveLocationMinimumDistanceInMetersUpdate(value: Int) {

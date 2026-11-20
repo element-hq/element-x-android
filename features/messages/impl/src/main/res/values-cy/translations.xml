@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Methu dadgryptio"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Wedi\'i anfon o ddyfais anniogel"</string>
+  <string name="common_unable_to_decrypt_no_access">"Does gennych chi ddim mynediad i\'r neges hon"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Cafodd hunaniaeth yr anfonwr ei hailosod"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Nid yw anfonwr y digwyddiad yn cyfateb i berchennog y ddyfais a\'i hanfonodd."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Nid oes modd gwarantu dilysrwydd y neges hon sydd wedi\'i hamgryptio ar y ddyfais hon."</string>
   <string name="crypto_event_authenticity_previously_verified">"Wedi\'i amgryptio gan ddefnyddiwr a wiriwyd gynt."</string>
@@ -7,6 +11,20 @@
   <string name="crypto_event_authenticity_unknown_device">"Wedi\'i amgryptio gan ddyfais anhysbys neu wedi\'i dileu."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Wedi\'i amgryptio gan ddyfais nad yw wedi\'i wirio gan ei pherchennog."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Wedi\'i amgryptio gan ddefnyddiwr heb ei wirio."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Cafodd hunaniaeth %2$s %1$s ei ailosod. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Cafodd hunaniaeth %2$s %1$s ei ailosod. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Mae\'r ddolen %1$s yn mynd â chi i wefan arall %2$s
+
+Ydych chi\'n siŵr eich bod am barhau?"</string>
+  <string name="dialog_confirm_link_title">"Gwnewch yn siŵr fod y ddolen hon yn iawn"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Y maint ffeil mwyaf sy\'n cael ei ganiatáu yw: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Mae maint y ffeil yn rhy fawr i\'w llwytho"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Y maint ffeil mwyaf sy\'n cael ei ganiatáu yw: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Dewiswch ansawdd y fideo rydych chi am ei llwytho."</string>
+  <string name="error_failed_loading_messages">"Wedi methu llwytho negeseuon"</string>
+  <string name="error_failed_uploading_voice_message">"Wedi methu llwytho eich neges llais."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"Does gan %1$s ddim caniatâd i gael mynediad i\'ch meicroffon. Galluogwch fynediad i recordio neges llais."</string>
   <string name="screen_media_upload_preview_caption_warning">"Efallai na fydd capsiynau yn weladwy i bobl sy\'n defnyddio apiau hŷn."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tapiwch i newid ansawdd llwytho\'r fideo"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Nid oedd modd llwytho\'r ffeil."</string>
@@ -17,10 +35,29 @@
   <string name="screen_media_upload_preview_item_count">"Eitem %1$d o %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimeiddio ansawdd delwedd"</string>
   <string name="screen_media_upload_preview_processing">"Prosesu…"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Pwyswch ar neges a dewis “%1$s” i\'w cynnwys yma."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Pinio negeseuon pwysig fel y mae modd eu darganfod yn hawdd"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="zero">"%1$d Negeseuon wedi\'u pinio"</item>
+    <item quantity="one">"%1$d Neges wedi\'i phinio"</item>
+    <item quantity="two">"%1$d Neges wedi\'i phinio"</item>
+    <item quantity="few">"%1$d Neges wedi\'i phinio"</item>
+    <item quantity="many">"%1$d Neges wedi\'i phinio"</item>
+    <item quantity="other">"%1$d Neges wedi\'i phinio"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Negeseuon wedi\'u pinio"</string>
   <string name="screen_report_content_block_user">"Rhwystro defnyddiwr"</string>
   <string name="screen_report_content_block_user_hint">"Gwiriwch a ydych am guddio\'r holl negeseuon presennol ac yn y dyfodol gan y defnyddiwr hwn"</string>
   <string name="screen_report_content_explanation">"Bydd y neges hon yn cael ei hadrodd i weinyddwr eich gweinyddwr cartref. Fyddan nhw ddim yn gallu darllen unrhyw negeseuon wedi\'u hamgryptio."</string>
   <string name="screen_report_content_hint">"Rheswm dros adrodd am y cynnwys hwn"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Tynnu\'r dilysiad yn ôl a\'i anfon"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Gallwch dynnu\'ch dilysiad yn ôl ac anfon y neges hon beth bynnag, neu gallwch ei diddymu am y tro a rhoi cynnig arall arni yn nes ymlaen ar ôl dilysu %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Nid yw eich neges wedi\'i hanfon oherwydd ailosodwyd hunaniaeth ddilys %1$s"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Anfonwch neges beth bynnag"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"Mae %1$s yn defnyddio un neu fwy o ddyfeisiau heb eu gwirio. Gallwch anfon y neges beth bynnag, neu gallwch ei diddymu am y tro a cheisio eto yn nes ymlaen ar ôl i %2$s ddilysu ei holl ddyfeisiau."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Dyw eich neges heb ei hanfon oherwydd nid yw %1$s wedi gwirio pob dyfais"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Mae un neu fwy o\'ch dyfeisiau heb eu gwirio. Gallwch anfon y neges beth bynnag, neu gallwch ei diddymu am y tro a cheisio eto yn nes ymlaen ar ôl i chi ddilysu eich holl ddyfeisiau."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Nid yw eich neges wedi\'i hanfon oherwydd nad ydych wedi gwirio un neu fwy o\'ch dyfeisiau"</string>
   <string name="screen_room_attachment_source_camera">"Camera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Cymryd llun"</string>
   <string name="screen_room_attachment_source_camera_video">"Recordio fideo"</string>
@@ -35,6 +72,11 @@
   <string name="screen_room_invite_again_alert_title">"Rydych chi ar eich pen eich hun yn y sgwrs hon"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Rhowch wybod i\'r ystafell gyfan"</string>
   <string name="screen_room_mentions_at_room_title">"Pawb"</string>
+  <string name="screen_room_permalink_same_room_android">"Eisoes yn gweld yr ystafell hon!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s o %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Neges wedi\'u pinio"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Wrthi\'n llwytho neges…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Dangos y Cyfan"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Anfon eto"</string>
   <string name="screen_room_retry_send_menu_title">"Methodd eich neges ag anfon"</string>
   <string name="screen_room_timeline_add_reaction">"Ychwanegu emoji"</string>
@@ -94,4 +136,12 @@
     <item quantity="other">"Mae %1$s yn teipio"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s a %2$s"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Heb anfon y neges oherwydd bod hunaniaeth wedi \'i ddilysu %1$s wedi\'i ailosod."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Heb anfon y neges oherwydd nid yw %1$s wedi gwirio pob dyfais."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Heb anfon y neges oherwydd nad ydych wedi gwirio un neu fwy o\'ch dyfeisiau."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Nid yw negeseuon hanesyddol ar gael ar y ddyfais hon"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Mae angen i chi wirio\'r ddyfais hon i gael mynediad at negeseuon hanesyddol"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Does gennych chi ddim mynediad i\'r neges hon"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Methu dadgryptio\'r neges"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Cafodd y neges hon ei rhwystro naill ai oherwydd nad ydych wedi ddilysu\'ch dyfais neu oherwydd bod angen i\'r anfonwr ddilysu\'ch hunaniaeth chi."</string>
 </resources>

@@ -30,7 +30,7 @@ open class RoomAliasResolverStatePreviewParam : PreviewParameterProvider<RoomAli
 fun aRoomAliasResolverState(
     roomAlias: RoomAlias = A_ROOM_ALIAS,
     resolveState: AsyncData<ResolvedRoomAlias> = AsyncData.Uninitialized,
-    eventSink: (RoomAliasResolverEvents) -> Unit = {}
+    eventSink: (RoomAliasResolverEvent) -> Unit = {}
 ) = RoomAliasResolverState(
     roomAlias = roomAlias,
     resolveState = resolveState,

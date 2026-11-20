@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -50,12 +51,14 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMo
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
 import io.element.android.libraries.designsystem.components.BigIcon
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.testtags.TestTags
@@ -71,6 +74,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun ConfirmAccountProviderView(
     state: ConfirmAccountProviderState,
+    onBackClick: () -> Unit,
     onOAuthDetails: (OAuthDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
     onLearnMoreClick: () -> Unit,
@@ -99,7 +103,7 @@ fun ConfirmAccountProviderView(
         // Dismiss the keyboard and release focus while the account provider is being validated.
         focusManager.clearFocus(force = true)
         // Submit the exact field text (plus any accepted suggestion).
-        eventSink(ConfirmAccountProviderEvents.Continue(accountProviderToSubmit))
+        eventSink(ConfirmAccountProviderEvent.Continue(accountProviderToSubmit))
     }
 
     // Once a validation / login error has been dismissed, return focus and the keyboard to the field so
@@ -115,9 +119,18 @@ fun ConfirmAccountProviderView(
 
     HeaderFooterPage(
         modifier = modifier,
+        // Let the header and content scroll so the supporting text is not clipped by the footer when the
+        // keyboard is visible and vertical space is reduced.
+        isScrollable = true,
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = { BackButton(onClick = onBackClick) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+            )
+        },
         header = {
             IconTitleSubtitleMolecule(
-                modifier = Modifier.padding(top = 60.dp),
                 iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
                 title = stringResource(
                     id = if (state.isAccountCreation) {
@@ -151,7 +164,7 @@ fun ConfirmAccountProviderView(
             value = input,
             onValueChange = {
                 input = it
-                eventSink(ConfirmAccountProviderEvents.UserInputChanged(it))
+                eventSink(ConfirmAccountProviderEvent.UserInputChanged(it))
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -181,7 +194,7 @@ fun ConfirmAccountProviderView(
                         // showing, Done submits directly.
                         val accepted = input + suggestionSuffix
                         input = accepted
-                        eventSink(ConfirmAccountProviderEvents.UserInputChanged(accepted))
+                        eventSink(ConfirmAccountProviderEvent.UserInputChanged(accepted))
                         focusManager.clearFocus(force = true)
                     } else {
                         submit()
@@ -197,7 +210,7 @@ fun ConfirmAccountProviderView(
                             role = Role.Button,
                         ) {
                             input = ""
-                            eventSink(ConfirmAccountProviderEvents.UserInputChanged(""))
+                            eventSink(ConfirmAccountProviderEvent.UserInputChanged(""))
                         }
                     ) {
                         Icon(
@@ -222,7 +235,7 @@ fun ConfirmAccountProviderView(
 
     LoginModeView(
         loginMode = state.loginModeState.loginMode,
-        onClearError = { eventSink(ConfirmAccountProviderEvents.ClearError) },
+        onClearError = { eventSink(ConfirmAccountProviderEvent.ClearError) },
         onLearnMoreClick = onLearnMoreClick,
         onOAuthDetails = onOAuthDetails,
         onNeedLoginPassword = onNeedLoginPassword,
@@ -269,6 +282,7 @@ internal fun ConfirmAccountProviderViewPreview(
 ) = ElementPreview {
     ConfirmAccountProviderView(
         state = state,
+        onBackClick = {},
         onOAuthDetails = {},
         onNeedLoginPassword = {},
         onLearnMoreClick = {},

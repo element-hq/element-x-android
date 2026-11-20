@@ -8,8 +8,6 @@
 
 package io.element.android.libraries.designsystem.components.media
 
-import android.view.MotionEvent
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,10 +29,12 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.RequestDisallowInterceptTouchEvent
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -53,7 +53,11 @@ private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
  * @param waveform The waveform to display.
  * @param onSeek Callback when the user seeks the waveform. Called with a value between 0 and 1.
  * @param modifier The modifier to be applied to the view.
+ * @param isPlaying Whether playback is currently in progress. Used to drive a linear progress animation.
+ * @param durationMs The total duration of the media in milliseconds. Used to time the linear animation.
+ * @param playbackSpeed The current playback speed. Used to time the linear animation.
  * @param seekEnabled Whether the user can seek the waveform or not.
+ * @param onSeekProgressChange Called with the progress, between 0 and 1, while the user drags the cursor, and with `null` when the drag ends.
  * @param brush The brush to use to draw the waveform.
  * @param progressBrush The brush to use to draw the progress.
  * @param cursorBrush The brush to use to draw the cursor.
@@ -67,7 +71,11 @@ fun WaveformPlaybackView(
     waveform: ImmutableList<Float>,
     onSeek: (progress: Float) -> Unit,
     modifier: Modifier = Modifier,
+    isPlaying: Boolean = false,
+    durationMs: Long = 0L,
+    playbackSpeed: Float = 1f,
     seekEnabled: Boolean = true,
+    onSeekProgressChange: (progress: Float?) -> Unit = {},
     brush: Brush = SolidColor(ElementTheme.colors.iconQuaternary),
     progressBrush: Brush = SolidColor(ElementTheme.colors.iconSecondary),
     cursorBrush: Brush = SolidColor(ElementTheme.colors.iconAccentTertiary),
@@ -77,12 +85,12 @@ fun WaveformPlaybackView(
     val seekProgress = remember { mutableStateOf<Float?>(null) }
     var canvasSize by remember { mutableStateOf(DpSize(0.dp, 0.dp)) }
     var canvasSizePx by remember { mutableStateOf(Size(0f, 0f)) }
-    val progress by remember(playbackProgress, seekProgress.value) {
-        derivedStateOf {
-            seekProgress.value ?: playbackProgress
-        }
-    }
-    val progressAnimated = animateFloatAsState(targetValue = progress, label = "progressAnimation")
+    val smoothProgress = rememberSmoothPlaybackProgressState(
+        playbackProgress = playbackProgress,
+        isPlaying = isPlaying,
+        durationMs = durationMs,
+        playbackSpeed = playbackSpeed,
+    )
     val amplitudeDisplayCount by remember(canvasSize, lineWidth, linePadding) {
         derivedStateOf {
             (canvasSize.width.value / (lineWidth.value + linePadding.value)).toInt()
@@ -96,7 +104,7 @@ fun WaveformPlaybackView(
 
     val density = LocalDensity.current
     val waveformWidthPx by remember {
-        derivedStateOf { with(density) { normalizedWaveformData.size * (lineWidth + linePadding).roundToPx().toFloat() } }
+        derivedStateOf { with(density) { normalizedWaveformData.size * (lineWidth + linePadding).toPx() } }
     }
 
     val requestDisallowInterceptTouchEvent = remember { RequestDisallowInterceptTouchEvent() }
@@ -107,36 +115,33 @@ fun WaveformPlaybackView(
             .let {
                 if (!seekEnabled) return@let it
                 it.pointerInteropFilter(requestDisallowInterceptTouchEvent = requestDisallowInterceptTouchEvent) { e ->
-                    return@pointerInteropFilter when (e.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            if (e.x in 0F..waveformWidthPx) {
-                                requestDisallowInterceptTouchEvent.invoke(true)
-                                seekProgress.value = e.x / waveformWidthPx
-                                true
-                            } else {
-                                false
-                            }
-                        }
-                        MotionEvent.ACTION_MOVE -> {
-                            if (e.x in 0F..waveformWidthPx) {
-                                seekProgress.value = e.x / waveformWidthPx
-                            }
-                            true
-                        }
-                        MotionEvent.ACTION_UP -> {
-                            requestDisallowInterceptTouchEvent.invoke(false)
-                            seekProgress.value?.let(onSeek)
-                            seekProgress.value = null
-                            true
-                        }
-                        else -> false
-                    }
+                    handleWaveformPointerEvent(
+                        action = e.action,
+                        x = e.x,
+                        waveformWidthPx = waveformWidthPx,
+                        lineWidthPx = with(density) { lineWidth.toPx() },
+                        linePaddingPx = with(density) { linePadding.toPx() },
+                        currentSeekProgress = seekProgress.value,
+                        onDisallowParentIntercept = { requestDisallowInterceptTouchEvent.invoke(it) },
+                        onUpdateSeekProgress = {
+                            seekProgress.value = it
+                            onSeekProgressChange(it)
+                        },
+                        onCommitSeek = { seek ->
+                            smoothProgress.seekTo(seek)
+                            onSeek(seek)
+                        },
+                    )
                 }
             }
             .then(modifier)
+            .onSizeChanged {
+                canvasSizePx = it.toSize()
+                canvasSize = with(density) { canvasSizePx.toDpSize() }
+            }
     ) {
-        canvasSize = size.toDpSize()
-        canvasSizePx = size
+        // Read in the draw phase, so that the smooth progress only redraws the canvas on each frame.
+        val progress = seekProgress.value ?: smoothProgress.progress
         val cornerRadius = lineWidth / 2
         // Calculate the size of the waveform by summing the width of all the lines and paddings
         drawWaveform(
@@ -149,7 +154,7 @@ fun WaveformPlaybackView(
         drawRect(
             brush = progressBrush,
             size = Size(
-                width = progressAnimated.value * waveformWidthPx,
+                width = progress.coerceIn(0f, 1f) * waveformWidthPx,
                 height = canvasSizePx.height
             ),
             blendMode = BlendMode.SrcAtop
@@ -158,7 +163,12 @@ fun WaveformPlaybackView(
             drawRoundRect(
                 brush = cursorBrush,
                 topLeft = Offset(
-                    x = progressAnimated.value * waveformWidthPx,
+                    x = cursorOffsetPx(
+                        progress = progress,
+                        waveformWidthPx = waveformWidthPx,
+                        lineWidthPx = lineWidth.toPx(),
+                        linePaddingPx = linePadding.toPx(),
+                    ),
                     y = 1f
                 ),
                 size = Size(

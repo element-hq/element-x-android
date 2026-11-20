@@ -10,7 +10,7 @@ package io.element.android.features.migration.impl.migrations
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
+import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -22,25 +22,27 @@ class AppMigration09Test {
     fun `migration on fresh install does nothing`() = runTest {
         val sessionStore = InMemorySessionStore(initialList = listOf(aSessionData()))
         val getClientLambda = lambdaRecorder<SessionId, Result<MatrixClient>> { Result.success(FakeMatrixClient()) }
-        val clientProvider = FakeMatrixClientProvider(getClient = getClientLambda)
-        val migration = AppMigration09(sessionStore, clientProvider)
+        val authenticationService = FakeMatrixAuthenticationService(matrixClientResult = getClientLambda)
+        val migration = AppMigration09(sessionStore, authenticationService)
         migration.migrate(isFreshInstall = true)
 
         getClientLambda.assertions().isNeverCalled()
     }
 
     @Test
-    fun `migration on upgrade should invoke the resetWellKnownConfig method`() = runTest {
+    fun `migration on upgrade should invoke the resetWellKnownConfig method and destroy the client`() = runTest {
         val sessionStore = InMemorySessionStore(initialList = listOf(aSessionData()))
         val resetWellKnownLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val destroyLambda = lambdaRecorder<Unit> { }
         val getClientLambda = lambdaRecorder<SessionId, Result<MatrixClient>> {
-            Result.success(FakeMatrixClient(resetWellKnownConfigLambda = resetWellKnownLambda))
+            Result.success(FakeMatrixClient(resetWellKnownConfigLambda = resetWellKnownLambda, destroyLambda = destroyLambda))
         }
-        val clientProvider = FakeMatrixClientProvider(getClient = getClientLambda)
-        val migration = AppMigration09(sessionStore, clientProvider)
+        val authenticationService = FakeMatrixAuthenticationService(matrixClientResult = getClientLambda)
+        val migration = AppMigration09(sessionStore, authenticationService)
         migration.migrate(isFreshInstall = false)
 
         getClientLambda.assertions().isCalledOnce()
         resetWellKnownLambda.assertions().isCalledOnce()
+        destroyLambda.assertions().isCalledOnce()
     }
 }

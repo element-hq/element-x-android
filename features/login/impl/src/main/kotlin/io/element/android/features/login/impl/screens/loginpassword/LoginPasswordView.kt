@@ -23,7 +23,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -70,7 +69,6 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginPasswordView(
     state: LoginPasswordState,
@@ -97,7 +95,7 @@ fun LoginPasswordView(
 
         autofillManager?.commit()
 
-        state.eventSink(LoginPasswordEvents.Submit)
+        state.eventSink(LoginPasswordEvent.Submit)
     }
 
     Scaffold(
@@ -131,7 +129,7 @@ fun LoginPasswordView(
                 iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
                 title = stringResource(
                     id = R.string.screen_account_provider_signin_title,
-                    state.accountProvider.title
+                    state.accountProvider.friendlyServerName()
                 ),
                 subTitle = stringResource(id = R.string.screen_login_subtitle)
             )
@@ -166,7 +164,7 @@ fun LoginPasswordView(
 
             if (state.loginAction is AsyncData.Failure) {
                 LoginErrorDialog(error = state.loginAction.error, onDismiss = {
-                    state.eventSink(LoginPasswordEvents.ClearError)
+                    state.eventSink(LoginPasswordEvent.ClearError)
                 })
             }
         }
@@ -202,7 +200,7 @@ private fun LoginForm(
             onValueChange = {
                 val sanitized = it.sanitize()
                 loginFieldState = sanitized
-                eventSink(LoginPasswordEvents.SetLogin(sanitized))
+                eventSink(LoginPasswordEvent.SetLogin(sanitized))
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
@@ -220,7 +218,7 @@ private fun LoginForm(
                             role = Role.Button,
                         ) {
                             loginFieldState = ""
-                            eventSink(LoginPasswordEvents.SetLogin(""))
+                            eventSink(LoginPasswordEvent.SetLogin(""))
                         }
                     ) {
                         Icon(
@@ -254,7 +252,7 @@ private fun LoginForm(
             onValueChange = {
                 val sanitized = it.sanitize()
                 passwordFieldState = sanitized
-                eventSink(LoginPasswordEvents.SetPassword(sanitized))
+                eventSink(LoginPasswordEvent.SetPassword(sanitized))
             },
             placeholder = stringResource(CommonStrings.common_password),
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),

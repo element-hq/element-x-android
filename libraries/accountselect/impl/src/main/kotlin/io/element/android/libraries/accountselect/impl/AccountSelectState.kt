@@ -9,8 +9,24 @@
 package io.element.android.libraries.accountselect.impl
 
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
 import kotlinx.collections.immutable.ImmutableList
 
 data class AccountSelectState(
-    val accounts: ImmutableList<MatrixUser>,
+    /**
+     * The text of the pill representing the link to open, or null if the link must not be rendered.
+     */
+    val linkPillText: String?,
+    /**
+     * True if the link to open is a room or a message link.
+     */
+    val isRoomLink: Boolean,
+    /**
+     * The account which will be used to open the link, or null until the accounts are loaded.
+     * Changing it only impacts this screen, not the current account of the application.
+     */
+    val currentAccount: MatrixUser?,
+    val otherAccounts: ImmutableList<OtherAccount>,
+    val isAccountListExpanded: Boolean,
+    val eventSink: (AccountSelectEvent) -> Unit,
 )

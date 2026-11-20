@@ -10,10 +10,13 @@ package io.element.android.x.di
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesTo
-import io.element.android.features.api.MigrationEntryPoint
+import dev.zacsweers.metro.Multibinds
+import io.element.android.features.callnative.api.NativeCallScreenHost
+import io.element.android.features.enterprise.api.AppStartupHook
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenService
+import io.element.android.features.migration.api.MigrationEntryPoint
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -50,5 +53,11 @@ interface AppBindings {
 
     fun buildMeta(): BuildMeta
 
+    /** For `ElementXApplication`, which the native call screen asks for its host. */
+    fun nativeCallScreenHost(): NativeCallScreenHost
+
     fun sentrySdkDsn(): SentrySdkDsn?
+
+    @Multibinds(allowEmpty = true)
+    fun appStartupHooks(): Set<AppStartupHook>
 }

@@ -10,19 +10,18 @@ package io.element.android.features.messages.impl.timeline.components.receipt
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
-import io.element.android.libraries.designsystem.components.avatar.AvatarData
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
+import io.element.android.libraries.previewutils.room.aRoomMemberList
 import kotlinx.collections.immutable.toImmutableList
 
 class ReadReceiptViewStatePreviewParam : PreviewParameterProvider<ReadReceiptViewState> {
     override val values: Sequence<ReadReceiptViewState>
         get() = sequenceOf(
-            aReadReceiptViewState(),
-            aReadReceiptViewState(sendState = LocalEventSendState.Sending.Event),
-            aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId"))),
+            aReadReceiptViewState(sendState = null, isLastOutgoingMessage = true),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sending.Event, isLastOutgoingMessage = true),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId")), isLastOutgoingMessage = true),
             aReadReceiptViewState(
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),
                 receipts = List(1) { aReadReceiptData(it) },
@@ -43,27 +42,31 @@ class ReadReceiptViewStatePreviewParam : PreviewParameterProvider<ReadReceiptVie
                 sendState = LocalEventSendState.Sent(EventId("\$eventId")),
                 receipts = List(5) { aReadReceiptData(it) },
             ),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId")), isLastOutgoingMessage = false),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sending.Event, isLastOutgoingMessage = false),
+            aReadReceiptViewState(sendState = LocalEventSendState.Sent(EventId("\$eventId")), isLastOutgoingMessage = false),
         )
 }
 
 internal fun aReadReceiptViewState(
     sendState: LocalEventSendState? = null,
-    isLastOutgoingMessage: Boolean = true,
+    isLastOutgoingMessage: Boolean = false,
+    renderReadReceipts: Boolean = true,
     receipts: List<ReadReceiptData> = emptyList(),
 ) = ReadReceiptViewState(
     sendState = sendState,
     isLastOutgoingMessage = isLastOutgoingMessage,
-    receipts = receipts.toImmutableList(),
+    renderReadReceipts = renderReadReceipts,
+    knownReceipts = receipts.toImmutableList(),
 )
 
 internal fun aReadReceiptData(
     index: Int,
-    avatarData: AvatarData = anAvatarData(
-        id = "$index",
-        size = AvatarSize.TimelineReadReceipt
-    ),
+    userId: UserId = PREVIEW_USER_IDS[index % PREVIEW_USER_IDS.size],
     formattedDate: String = "12:34",
 ) = ReadReceiptData(
-    avatarData = avatarData,
+    userId = userId,
     formattedDate = formattedDate,
 )
+
+private val PREVIEW_USER_IDS = aRoomMemberList().map { it.userId }

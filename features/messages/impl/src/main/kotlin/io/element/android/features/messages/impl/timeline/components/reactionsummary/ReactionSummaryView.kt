@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.timeline.components.reactionsummary
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,7 +33,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -71,8 +72,8 @@ import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
 import kotlinx.coroutines.launch
 
 internal val REACTION_SUMMARY_LINE_HEIGHT = 25.sp
@@ -167,14 +168,14 @@ private fun AggregatedReactionButton(
     onClick: () -> Unit,
 ) {
     val buttonColor = if (isHighlighted) {
-        ElementTheme.colors.bgActionPrimaryRest
+        ElementTheme.colors.bgSubtlePrimary
     } else {
         Color.Transparent
     }
-    val textColor = if (isHighlighted) {
-        MaterialTheme.colorScheme.inversePrimary
+    val borderColor = if (isHighlighted) {
+        ElementTheme.colors.borderInteractivePrimary
     } else {
-        ElementTheme.colors.textPrimary
+        Color.Transparent
     }
     val roundedCornerShape = RoundedCornerShape(corner = CornerSize(percent = 50))
     val a11yText = a11yReactionDetails(
@@ -185,8 +186,13 @@ private fun AggregatedReactionButton(
     Surface(
         modifier = Modifier
             .background(buttonColor, roundedCornerShape)
+            .border(1.dp, borderColor, roundedCornerShape)
             .clip(roundedCornerShape)
-            .clickable(onClick = onClick)
+            .clickable(
+                interactionSource = null,
+                indication = ripple(focusRingShape = roundedCornerShape),
+                onClick = onClick,
+            )
             .padding(vertical = 8.dp, horizontal = 12.dp)
             .selectable(
                 selected = isHighlighted,
@@ -220,17 +226,15 @@ private fun AggregatedReactionButton(
                     ),
                 )
             }
-            if (reaction.count > 1) {
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = reaction.count.toString(),
-                    color = textColor,
-                    style = ElementTheme.typography.fontBodyMdRegular.copy(
-                        fontSize = 20.sp,
-                        lineHeight = REACTION_SUMMARY_LINE_HEIGHT
-                    )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = reaction.count.toString(),
+                color = ElementTheme.colors.textPrimary,
+                style = ElementTheme.typography.fontBodyMdRegular.copy(
+                    fontSize = 20.sp,
+                    lineHeight = REACTION_SUMMARY_LINE_HEIGHT
                 )
-            }
+            )
         }
     }
 }

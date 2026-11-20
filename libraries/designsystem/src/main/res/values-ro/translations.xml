@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Aveți modificări nesalvate."</string>
+  <string name="dialog_unsaved_changes_description_android">"Modificările dvs. nu au fost salvate. Sigur doriți să reveniți?"</string>
+  <string name="dialog_unsaved_changes_title">"Salvați modificările?"</string>
+</resources>

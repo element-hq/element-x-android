@@ -89,6 +89,10 @@ class SecurityAndPrivacyPresenter(
             value = sessionEnterpriseService.isEncryptionDisabledByHomeserver()
         }
 
+        val arePublicRoomsDisabledByHomeserver by produceState(false) {
+            value = sessionEnterpriseService.arePublicRoomsDisabledByHomeserver()
+        }
+
         val savedIsVisibleInRoomDirectory = remember { mutableStateOf<AsyncData<Boolean>>(AsyncData.Uninitialized) }
         LaunchedEffect(Unit) {
             isRoomVisibleInRoomDirectory(savedIsVisibleInRoomDirectory)
@@ -254,6 +258,7 @@ class SecurityAndPrivacyPresenter(
             selectableJoinedSpaces = selectableJoinedSpaces,
             spaceSelectionMode = spaceSelectionMode,
             isEncryptionDisabledByHomeserver = isEncryptionDisabledByHomeserver,
+            arePublicRoomsDisabledByHomeserver = arePublicRoomsDisabledByHomeserver,
             eventSink = ::handleEvent,
         )
 

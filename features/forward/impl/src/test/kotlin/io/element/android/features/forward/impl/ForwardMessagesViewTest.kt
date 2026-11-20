@@ -29,7 +29,7 @@ import org.junit.Test
 class ForwardMessagesViewTest : RobolectricTest() {
     @Test
     fun `cancel error emits the expected event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<ForwardMessagesEvents>()
+        val eventsRecorder = EventsRecorder<ForwardMessagesEvent>()
         setForwardMessagesView(
             aForwardMessagesState(
                 forwardAction = AsyncAction.Failure(AN_EXCEPTION),
@@ -37,13 +37,13 @@ class ForwardMessagesViewTest : RobolectricTest() {
             ),
         )
         pressTag(TestTags.dialogPositive.value)
-        eventsRecorder.assertSingle(ForwardMessagesEvents.ClearError)
+        eventsRecorder.assertSingle(ForwardMessagesEvent.ClearError)
     }
 
     @Test
     fun `success invokes onForwardSuccess`() = runAndroidComposeUiTest {
         val data = listOf(A_ROOM_ID)
-        val eventsRecorder = EventsRecorder<ForwardMessagesEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<ForwardMessagesEvent>(expectEvents = false)
         ensureCalledOnceWithParam<List<RoomId>?>(data) { callback ->
             setForwardMessagesView(
                 aForwardMessagesState(

@@ -14,8 +14,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.designsystem)
-    implementation(projects.libraries.uiStrings)
 }

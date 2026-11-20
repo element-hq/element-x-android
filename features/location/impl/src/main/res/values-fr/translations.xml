@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s n’a pas pu charger la carte. Veuillez réessayer ultérieurement."</string>
+  <string name="error_failed_locating_user">"%1$s n’a pas pu accéder à votre position. Veuillez réessayer ultérieurement."</string>
+  <string name="error_location_service_disabled_android">"Veuillez activer votre GPS pour accéder aux fonctionnalités basées sur la localisation."</string>
+  <string name="error_missing_location_auth_android">"%1$s n’est pas autorisé à accéder à votre position. Vous pouvez activer l’accès dans les Paramètres."</string>
+  <string name="error_missing_location_rationale_android">"%1$s n’est pas autorisé à accéder à votre position. Activez l’accès ci-dessous."</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Partage de position en continu"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Partage de position en cours"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s position en temps réel"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Personne ne partage sa position"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Partage de la position en direct"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d personne"</item>
+    <item quantity="other">"%1$d personnes"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Sur la carte"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"Votre historique de localisation en direct sera enregistré dans le salon et visible par les membres après la fin de la session."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Choisissez la durée pendant laquelle vous partagerez votre position en direct."</string>
   <string name="screen_share_location_live_location_missing_permissions">"Vous n’êtes pas autorisé à partager votre position en direct dans ce salon."</string>
+  <string name="screen_share_location_title">"Partage de position"</string>
+  <string name="screen_share_my_location_action">"Partager ma position"</string>
+  <string name="screen_share_open_apple_maps">"Ouvrir dans Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Ouvrir dans Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Ouvrir dans OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"Partager la position sélectionnée"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Options de partage"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Partagé %1$s"</string>
+  <string name="screen_static_location_sheet_title">"Sur la carte"</string>
+  <string name="screen_view_location_title">"Position"</string>
 </resources>

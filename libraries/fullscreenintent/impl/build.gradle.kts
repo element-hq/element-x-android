@@ -17,22 +17,18 @@ android {
     namespace = "io.element.android.libraries.fullscreenintent.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     api(projects.libraries.fullscreenintent.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
-    implementation(projects.libraries.permissions.api)
-    implementation(projects.libraries.permissions.noop)
     implementation(projects.libraries.preferences.api)
     implementation(projects.services.toolbox.api)
     implementation(libs.androidx.datastore.preferences)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
-    testImplementation(projects.libraries.testtags)
     testImplementation(projects.services.toolbox.test)
 }

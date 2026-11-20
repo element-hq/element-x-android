@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"No s\'ha pogut desxifrar"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Enviat des d\'un dispositiu insegur"</string>
+  <string name="common_unable_to_decrypt_no_access">"No tens accés al missatge"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"La identitat verificada del remitent s\'ha restablert"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"El remitent de l\'esdeveniment no coincideix amb el propietari del dispositiu que l\'ha enviat."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"L\'autenticitat d\'aquest missatge xifrat en aquest dispositiu no es pot garantir."</string>
   <string name="crypto_event_authenticity_previously_verified">"Xifrat per un usuari prèviament verificat."</string>
@@ -7,13 +11,37 @@
   <string name="crypto_event_authenticity_unknown_device">"Xifrat per un dispositiu desconegut o eliminat."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Xifrat per un dispositiu no verificat pel seu propietari."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Xifrat per un usuari no verificat."</string>
+  <string name="crypto_identity_change_pin_violation_new">"La identitat de %1$s %2$s s\'ha restablert. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="dialog_confirm_link_message">"L\'enllaç %1$s et portarà a un altre lloc %2$s
+
+Segur que vols continuar?"</string>
+  <string name="dialog_confirm_link_title">"Revisa aquest enllaç"</string>
+  <string name="error_failed_loading_messages">"No s\'han pogut carregar els missatges"</string>
+  <string name="error_failed_uploading_voice_message">"No s\'ha pogut pujar el missatge de veu."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s no té permís per accedir al micròfon. Activa\'n l\'accés per poder gravar missatges de veu."</string>
   <string name="screen_media_upload_preview_caption_warning">"És possible que les llegendes no siguin visibles pels que utilitzin aplicacions antigues."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"No s\'ha pogut processar el contingut que s\'havia de pujar. Torna-ho a provar."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"No s\'ha pogut pujar el contingut. Torna-ho a provar."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Prem un missatge i selecciona “%1$s“ per incloure\'l aquí."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Fixa els missatges importants perquè es puguin trobar fàcilment"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d missatge fixat"</item>
+    <item quantity="other">"%1$d missatges fixats"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Missatges fixats"</string>
   <string name="screen_report_content_block_user">"Bloqueja usuari"</string>
   <string name="screen_report_content_block_user_hint">"Marca si vols ocultar tots els missatges actuals i futurs d\'aquest usuari"</string>
   <string name="screen_report_content_explanation">"Aquest missatge s\'enviarà a l\'administrador del teu servidor. No podrà llegir cap missatge xifrat."</string>
   <string name="screen_report_content_hint">"Motiu de la denúncia del contingut"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Omet la verificació i envia"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Pots ometre la verificació i enviar el missatge igualment o pots cancel·lar i tornar-ho a intentar més tard, quan s\'hagi tornat a verificar %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"El teu missatge no s\'ha enviat perquè la identitat verificada de %1$s s\'ha reiniciat"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Envia el missatge igualment"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s està utilitzant un o més dispositius no verificats. Pots enviar el missatge igualment o pots cancel·lar-lo i tornar-ho a provar més tard quan %2$s hagi verificat tots els seus dispositius."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"El teu missatge no s\'ha enviat perquè %1$s no ha verificat tots els dispositius"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Un o més dels teus dispositius no estan verificats. Pots enviar el missatge igualment o cancel·lar-lo i tornar-ho a intentar més tard després d\'haver verificat tots els dispositius."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"El missatge no s\'ha enviat perquè no has verificat un o més dels teus dispositius."</string>
   <string name="screen_room_attachment_source_camera">"Càmera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Fes una foto"</string>
   <string name="screen_room_attachment_source_camera_video">"Enregistra vídeo"</string>
@@ -28,6 +56,10 @@
   <string name="screen_room_invite_again_alert_title">"No hi ha ningú més al xat"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notifica tota la sala"</string>
   <string name="screen_room_mentions_at_room_title">"Tothom"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s de %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s missatges fixats"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Crregant missatge…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Veure-ho tot"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Torna a enviar"</string>
   <string name="screen_room_retry_send_menu_title">"No s\'han pogut enviar els missatges"</string>
   <string name="screen_room_timeline_add_reaction">"Afegeix reacció"</string>
@@ -56,4 +88,12 @@
     <item quantity="other">"%1$s estan escrivint"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s i %2$s"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Missatge no enviat perquè %1$s ha restablert la seva identitat verificada."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Missatge no enviat perquè %1$s no ha verificat tots els dispositius."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Missatge no enviat perquè no has verificat un o més dels teus dispositius."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"L\'històric de missatges no està disponible en aquest dispositiu"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Has de verificar aquest dispositiu per accedir a l\'històric de missatges"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"No tens accés al missatge"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"No s\'ha pogut desxifrar el missatge"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Aquest missatge s\'ha bloquejat perquè no has verificat el teu dispositiu o perquè el remitent a de verificar la teva identitat."</string>
 </resources>

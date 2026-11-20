@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Vous avez des modifications non-enregistrées."</string>
+  <string name="dialog_unsaved_changes_description_android">"Vos modifications n’ont pas été enregistrées. Êtes-vous certain de vouloir quitter ?"</string>
+  <string name="dialog_unsaved_changes_title">"Enregistrer les changements ?"</string>
+</resources>

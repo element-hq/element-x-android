@@ -19,9 +19,11 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiGrantLogin
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiQrCodeData
 import io.element.android.libraries.matrix.test.QR_CODE_DATA_RECIPROCATE
 import io.element.android.tests.testutils.ExpectedResult
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.match
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -174,6 +176,26 @@ class RustLinkMobileHandlerTest {
             val qrRotatingState = awaitItem()
             assertThat(qrRotatingState).isEqualTo(LinkMobileStep.QrRotating)
         }
+    }
+
+    @Test
+    fun `when start is cancelled, the task is cancelled`() = runTest {
+        val cancelResult = lambdaRecorder<Unit> { }
+        val handler = FakeFfiGrantLoginWithQrCodeHandler(
+            generateResult = { awaitCancellation() },
+            cancelResult = cancelResult,
+        )
+        val sut = createRustLinkMobileHandler(
+            handler,
+        )
+        val job = backgroundScope.launch {
+            sut.start()
+        }
+        runCurrent()
+        cancelResult.assertions().isNeverCalled()
+        job.cancel()
+        runCurrent()
+        cancelResult.assertions().isCalledOnce()
     }
 
     private fun TestScope.createRustLinkMobileHandler(

@@ -10,7 +10,7 @@ package io.element.android.features.messages.impl.threads
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.fixtures.aTimelineItemContentFactory
 import io.element.android.features.messages.impl.messagesummary.FakeMessageSummaryFormatter
-import io.element.android.features.messages.impl.threads.list.ThreadsListEvents
+import io.element.android.features.messages.impl.threads.list.ThreadsListEvent
 import io.element.android.features.messages.impl.threads.list.ThreadsListPresenter
 import io.element.android.features.messages.impl.threads.list.aThreadListItem
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
@@ -48,7 +48,7 @@ class ThreadsListPresenterTest {
             // Pagination is automatically triggered on start, so we should have one call to paginate already
             paginateRecorder.assertions().isCalledOnce()
 
-            initialItem.eventSink(ThreadsListEvents.Paginate)
+            initialItem.eventSink(ThreadsListEvent.Paginate)
 
             // Simulate a pagination result
             threadsListService.emit(listOf(aThreadListItem()))

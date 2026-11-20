@@ -57,6 +57,7 @@ fun TextFieldListItem(
     minLines: Int = 1,
     maxLines: Int = minLines,
     label: String? = null,
+    supportingText: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
@@ -66,7 +67,7 @@ fun TextFieldListItem(
         placeholder = placeholder,
         label = label,
         validity = if (error != null) TextFieldValidity.Invalid else TextFieldValidity.None,
-        supportingText = error,
+        supportingText = error ?: supportingText,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         maxLines = maxLines,

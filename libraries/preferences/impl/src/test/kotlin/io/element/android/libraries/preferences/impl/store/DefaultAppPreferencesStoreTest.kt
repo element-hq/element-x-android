@@ -10,6 +10,7 @@ package io.element.android.libraries.preferences.impl.store
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -53,6 +54,31 @@ class DefaultAppPreferencesStoreTest {
         store.setLiveLocationMinimumDistanceInMetersUpdate(25)
 
         assertThat(store.getLiveLocationMinimumDistanceInMetersUpdateFlow().first()).isEqualTo(25)
+    }
+
+    @Test
+    fun `message text size defaults to 16`() = runTest {
+        val store = createStore()
+
+        assertThat(store.getMessageTextSizeFlow().first()).isEqualTo(MessageTextSize.DEFAULT)
+    }
+
+    @Test
+    fun `message text size persists updates`() = runTest {
+        val store = createStore()
+
+        store.setMessageTextSize(20)
+
+        assertThat(store.getMessageTextSizeFlow().first()).isEqualTo(20)
+    }
+
+    @Test
+    fun `message text size is coerced into the supported range`() = runTest {
+        val store = createStore()
+
+        store.setMessageTextSize(99)
+
+        assertThat(store.getMessageTextSizeFlow().first()).isEqualTo(MessageTextSize.MAX)
     }
 
     @Test
@@ -118,6 +144,24 @@ class DefaultAppPreferencesStoreTest {
         assertThat(history).hasSize(20)
         assertThat(history.first()).isEqualTo("https://server24.org")
         assertThat(history.last()).isEqualTo("https://server5.org")
+    }
+
+    @Test
+    fun `other accounts section is expanded by default`() = runTest {
+        val store = createStore()
+
+        assertThat(store.isOtherAccountsExpandedFlow().first()).isTrue()
+    }
+
+    @Test
+    fun `other accounts expanded state persists updates`() = runTest {
+        val store = createStore()
+
+        store.setOtherAccountsExpanded(false)
+        assertThat(store.isOtherAccountsExpandedFlow().first()).isFalse()
+
+        store.setOtherAccountsExpanded(true)
+        assertThat(store.isOtherAccountsExpandedFlow().first()).isTrue()
     }
 
     private fun createStore() = DefaultAppPreferencesStore(

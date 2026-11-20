@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="slash_command_description_avatar">"Modifier votre image de profil dans tous les salons"</string>
+  <string name="slash_command_description_avatar_for_room">"Modifie votre avatar uniquement dans ce salon"</string>
+  <string name="slash_command_description_ban_user">"Bannit l’utilisateur à partir de son identifiant"</string>
+  <string name="slash_command_description_confetti">"Envoie le message avec des confettis"</string>
+  <string name="slash_command_description_crash_application">"Fais planter l’application."</string>
+  <string name="slash_command_description_deop_user">"Réduire le rôle d’un utilisateur à partir de son identifiant"</string>
+  <string name="slash_command_description_devtools">"Ouvre l’écran des outils de développement"</string>
+  <string name="slash_command_description_discard_session">"Force la réinitialisation des clés utilisées pour les futures messages de ce salon"</string>
+  <string name="slash_command_description_emote">"Affiche l’action"</string>
+  <string name="slash_command_description_ignore_user">"Ignore un utilisateur, en masquant ses messages"</string>
+  <string name="slash_command_description_invite_user">"Invite un utilisateur dans le salon actuel à partir de son identifiant"</string>
+  <string name="slash_command_description_join_room">"Rejoint le salon à l’adresse donnée"</string>
+  <string name="slash_command_description_leave_room">"Quitte le salon actuel"</string>
+  <string name="slash_command_description_lenny">"Ajoute ( ͡° ͜ʖ ͡°) en préfixe du message"</string>
+  <string name="slash_command_description_nick">"Modifie votre nom d’affichage"</string>
+  <string name="slash_command_description_nick_for_room">"Modifie votre nom d’affichage seulement dans le salon actuel"</string>
+  <string name="slash_command_description_op_user">"Définit le rôle (power level) d’un utilisateur"</string>
+  <string name="slash_command_description_plain">"Envoie un message en texte brut, sans l’interpréter en format markdown"</string>
+  <string name="slash_command_description_rainbow">"Envoie le message en utilisant les couleurs de l’arc-en-ciel."</string>
+  <string name="slash_command_description_rainbow_emote">"Envoie le message emote aux couleurs de l’arc-en-ciel."</string>
+  <string name="slash_command_description_remove_user">"Supprime l’utilisateur dont l’identifiant est fourni de ce salon"</string>
+  <string name="slash_command_description_room_avatar">"Modifie l’avatar du salon actuel"</string>
+  <string name="slash_command_description_room_name">"Définit le nom du salon"</string>
+  <string name="slash_command_description_shrug">"Ajoute ¯\\_(ツ)_/¯ en préfixe du message"</string>
+  <string name="slash_command_description_snow">"Envoie le message donné avec une chute de neige"</string>
+  <string name="slash_command_description_spoiler">"Envoie le message flouté"</string>
+  <string name="slash_command_description_table_flip">"Ajoute (╯°□°）╯︵ ┻━┻ en préfixe du message"</string>
+  <string name="slash_command_description_topic">"Définis le sujet du salon"</string>
+  <string name="slash_command_description_unban_user">"Révoque le bannissement de l’utilisateur ayant l’identifiant fourni"</string>
+  <string name="slash_command_description_unflip">"Ajoute ┬──┬ ノ( ゜-゜ノ) en préfixe du message"</string>
+  <string name="slash_command_description_unignore_user">"Arrête d’ignorer un utilisateur, en affichant ses messages à partir de maintenant"</string>
+  <string name="slash_command_description_upgrade_room">"Met à niveau ce salon vers une nouvelle version"</string>
+  <string name="slash_command_description_whois">"Affiche des informations à propos de l’utilisateur"</string>
+  <string name="slash_command_error">"Erreur de commande"</string>
+  <string name="slash_command_error_discard_session_not_handled">"Prise en charge uniquement dans les salons chiffrés"</string>
+  <string name="slash_command_not_supported_in_threads">"La commande «%1$s » est reconnue mais n’est pas prise en charge dans les fils de discussion."</string>
+  <string name="slash_command_parameters_error">"La commande « %1$s » nécessite des paramètres supplémentaires ou certains paramètres sont incorrects. La syntaxe est :
+
+%2$s"</string>
+  <string name="slash_command_unrecognized">"Commande non reconnue : %1$s"</string>
+</resources>

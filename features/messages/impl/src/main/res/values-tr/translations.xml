@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Şifre çözülemiyor"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Güvenli olmayan bir cihazdan gönderildi"</string>
+  <string name="common_unable_to_decrypt_no_access">"Bu mesaja erişiminiz yok"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Gönderenin doğrulanmış kimliği değişti"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"Etkinliği gönderen kişi, onu gönderen cihazın sahibiyle eşleşmiyor."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Bu şifrelenmiş mesajın doğruluğu bu cihazda garanti edilemez."</string>
   <string name="crypto_event_authenticity_previously_verified">"Daha önce doğrulanmış bir kullanıcı tarafından şifrelenmiştir."</string>
@@ -7,13 +11,38 @@
   <string name="crypto_event_authenticity_unknown_device">"Bilinmeyen veya silinmiş bir cihaz tarafından şifrelenmiştir."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Sahibi tarafından doğrulanmamış bir cihaz tarafından şifrelenmiştir."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Doğrulanmamış bir kullanıcı tarafından şifrelenmiştir."</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s\'ın %2$s kimliği değişti. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s kullanıcısının %2$s doğrulanmış kimliği değişti.  %3$s"</string>
+  <string name="dialog_confirm_link_message">"%1$s bağlantısı seni başka bir siteye yönlendiriyor %2$s
+
+Devam etmek istediğinizden emin misiniz?"</string>
+  <string name="dialog_confirm_link_title">"Bu bağlantıyı tekrardan kontrol edin"</string>
+  <string name="error_failed_loading_messages">"Mesajlar yüklenemedi"</string>
+  <string name="error_failed_uploading_voice_message">"Sesli mesajınız yüklenemedi."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s mikrofonunuza erişim izni yok. Sesli mesaj kaydetmek için erişimi etkinleştirin."</string>
   <string name="screen_media_upload_preview_caption_warning">"Açıklamalar, eski uygulamaları kullanan kişiler tarafından görülemeyebilir."</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Medya yüklenemedi, lütfen tekrar deneyin."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Medya yüklenemedi, lütfen tekrar deneyin."</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Bir mesaja basın ve buraya eklemek için “%1$s” yi seçin."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Önemli mesajları kolayca keşfedilebilmeleri için sabitleyin"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d Sabitlenmiş mesaj"</item>
+    <item quantity="other">"%1$d Sabitlenmiş mesajlar"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Sabitlenmiş mesajlar"</string>
   <string name="screen_report_content_block_user">"Kullanıcıyı engelle"</string>
   <string name="screen_report_content_block_user_hint">"Bu kullanıcıdan gelen mevcut ve gelecekteki tüm mesajları gizlemek isteyip istemediğinizi işaretleyin"</string>
   <string name="screen_report_content_explanation">"Bu mesaj ana sunucunuzun yöneticisine bildirilecektir. Şifrelenmiş mesajları okuyamayacaklardır."</string>
   <string name="screen_report_content_hint">"Bu içeriğin bildirilme nedeni"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Doğrulamayı geri çek ve gönder"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Doğrulamanızı geri çekebilir ve yine de bu mesajı gönderebilir veya şimdilik iptal edebilir ve %1$s yeniden doğruladıktan sonra daha sonra tekrar deneyebilirsiniz."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"%1$s kullanıcısının doğrulanmış kimliği değiştiği için mesajınız gönderilmedi"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Yine de mesaj gönder"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s bir veya daha fazla doğrulanmamış cihaz kullanıyor. Mesajı yine de gönderebilir veya şimdilik iptal edebilir ve %2$s tüm cihazlarını doğruladıktan sonra tekrar deneyebilirsiniz."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"%1$s tüm cihazları doğrulamadığı için mesajınız gönderilmedi"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Bir veya daha fazla cihazınız doğrulanmamış. Mesajı yine de gönderebilir veya şimdilik iptal edip tüm cihazlarınızı doğruladıktan sonra tekrar deneyebilirsiniz."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Bir veya daha fazla cihazınızı doğrulamadığınız için mesajınız gönderilmedi"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Fotoğraf çek"</string>
   <string name="screen_room_attachment_source_camera_video">"Video kaydet"</string>
@@ -28,6 +57,10 @@
   <string name="screen_room_invite_again_alert_title">"Bu sohbette yalnızsın"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Tüm odaya bildir"</string>
   <string name="screen_room_mentions_at_room_title">"Herkes"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Sabitlenmiş mesajlar"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Mesaj yükleniyor…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Tümünü görüntüle"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Tekrar gönder"</string>
   <string name="screen_room_retry_send_menu_title">"Mesajınız gönderilemedi"</string>
   <string name="screen_room_timeline_add_reaction">"Emoji ekle"</string>
@@ -57,4 +90,12 @@
     <item quantity="other">"%1$s yazıyor"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s ve %2$s"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"%1$s kullanıcısının doğrulanmış kimliği değiştiği için ileti gönderilmedi."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"%1$s tüm cihazları doğrulamadığı için mesaj gönderilmedi."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Bir veya daha fazla cihazınızı doğrulamadığınız için mesaj gönderilmedi."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Geçmiş mesajlar bu cihazda kullanılamıyor"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Geçmiş mesajlara erişim için bu cihazı doğrulamanız gerekir"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Bu mesaja erişiminiz yok"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Mesaj şifresi çözülemedi"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Bu mesaj, cihazınızı doğrulamadığınız veya gönderenin kimliğinizi doğrulaması gerektiği için engellendi."</string>
 </resources>

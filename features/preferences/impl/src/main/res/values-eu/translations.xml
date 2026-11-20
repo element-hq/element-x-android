@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Dei garrantzitsurik galduko ez duzula ziurtatzeko, aldatu ezarpenak telefonoa blokeatuta dagoenean pantaila osoko jakinarazpenak baimentzeko."</string>
-  <string name="full_screen_intent_banner_title">"Hobetu deien esperientzia"</string>
+  <string name="dialog_default_video_quality_selector_title">"Bideoen igoera-kalitatea"</string>
+  <string name="full_screen_intent_banner_message_android">"Dei garrantzitsurik galduko ez duzula ziurtatzeko, aldatu ezarpenak telefonoa blokeatuta dagoenean pantaila osoko jakinarazpenak baimentzeko."</string>
+  <string name="full_screen_intent_banner_title_android">"Hobetu deien esperientzia"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Aukeratu jakinarazpenak nola jaso"</string>
-  <string name="screen_advanced_settings_developer_mode">"Garatzaile modua"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Gaitu garatzaileentzako ezaugarrietarako eta funtzionalitateetarako sarbidea izateko."</string>
   <string name="screen_advanced_settings_media_compression_description">"Igo argazkiak eta bideoak azkarrago eta murriztu datuen erabilera"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimizatu multimediaren kalitatea"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderazioa eta Segurtasuna"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimizatu irudien igoera-kalitatea"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Handia (1080p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Txikia (480p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Ertaina (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Bideoen igoera-kalitatea"</string>
   <string name="screen_advanced_settings_push_provider_android">"Push jakinarazpen hornitzailea"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Desgaitu testu aberatseko editorea Markdown eskuz idazteko."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Irakurketa-agiriak"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Desaktibatutaz gero, ez zaizkio inori bidaliko mezuak irakurri izanaren agiriak. Beste erabiltzaile batzuen irakurketa-agiriak jasoko dituzu oraindik ere."</string>
   <string name="screen_advanced_settings_share_presence">"Partekatu presentzia"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Ezkutatu beti"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Erakutsi beti"</string>
@@ -55,6 +50,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"sistemaren ezarpenak"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Sistemaren jakinarazpenak desaktibatuta daude"</string>
   <string name="screen_notification_settings_title">"Jakinarazpenak"</string>
+  <string name="settings_version_number">"Bertsioa: %1$s (%2$s)"</string>
   <string name="theme_dark">"Iluna"</string>
   <string name="theme_light">"Argia"</string>
   <string name="theme_system">"Sistema"</string>

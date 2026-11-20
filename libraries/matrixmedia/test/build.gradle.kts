@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    namespace = "io.element.android.libraries.matrix.ui.media.test"
+    namespace = "io.element.android.libraries.matrixmedia.test"
 }
 
 dependencies {

@@ -14,7 +14,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.text.toAnnotatedString
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
+import io.element.android.libraries.htmlrenderer.api.ParagraphNode
+import io.element.android.libraries.htmlrenderer.api.QuoteNode
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
@@ -31,6 +36,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDeleteConfirmation
 import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 private const val LONG_CAPTION = "This is a very long caption that should be scrollable in the media viewer. " +
@@ -201,7 +207,7 @@ open class MediaViewerStatePreviewParam : PreviewParameterProvider<MediaViewerSt
             anImageMediaInfo(
                 senderName = "Bob",
                 dateSent = "22 NOV, 2024",
-                formattedCaption = "This is a <strong>bold</strong> caption",
+                htmlCaption = "This is a <strong>bold</strong> caption",
             ).let {
                 aMediaViewerState(
                     listOf(
@@ -217,7 +223,7 @@ open class MediaViewerStatePreviewParam : PreviewParameterProvider<MediaViewerSt
             anImageMediaInfo(
                 senderName = "Charlie",
                 dateSent = "23 NOV, 2024",
-                formattedCaption = "This is an <em>italic</em> caption",
+                htmlCaption = "This is an <em>italic</em> caption",
             ).let {
                 aMediaViewerState(
                     listOf(
@@ -233,7 +239,7 @@ open class MediaViewerStatePreviewParam : PreviewParameterProvider<MediaViewerSt
             anImageMediaInfo(
                 senderName = "Diana",
                 dateSent = "24 NOV, 2024",
-                formattedCaption = "This is a <code>code</code> caption",
+                htmlCaption = "This is a <code>code</code> caption",
             ).let {
                 aMediaViewerState(
                     listOf(
@@ -249,7 +255,7 @@ open class MediaViewerStatePreviewParam : PreviewParameterProvider<MediaViewerSt
             anImageMediaInfo(
                 senderName = "Eve",
                 dateSent = "25 NOV, 2024",
-                formattedCaption = "<blockquote>This is a quote caption</blockquote>",
+                htmlCaption = "<blockquote>This is a quote caption</blockquote>",
             ).let {
                 aMediaViewerState(
                     listOf(
@@ -265,7 +271,7 @@ open class MediaViewerStatePreviewParam : PreviewParameterProvider<MediaViewerSt
             anImageMediaInfo(
                 senderName = "Frank",
                 dateSent = "26 NOV, 2024",
-                formattedCaption = "This caption has <strong>bold</strong>, <em>italic</em>, and <code>code</code> formatting.",
+                htmlCaption = "This caption has <strong>bold</strong>, <em>italic</em>, and <code>code</code> formatting.",
             ).let {
                 aMediaViewerState(
                     listOf(
@@ -278,34 +284,57 @@ open class MediaViewerStatePreviewParam : PreviewParameterProvider<MediaViewerSt
                     )
                 )
             },
+            aMediaViewerState(
+                listOf(
+                    aMediaViewerPageData(
+                        downloadedMedia = AsyncData.Uninitialized,
+                        validationState = NoopContentValidationState(ContentValidationValue.Loading),
+                        mediaInfo = anImageMediaInfo(
+                            senderName = "Frank",
+                            dateSent = "26 NOV, 2024",
+                        ),
+                    )
+                )
+            ),
+            aMediaViewerState(
+                listOf(
+                    aMediaViewerPageData(
+                        downloadedMedia = AsyncData.Uninitialized,
+                        validationState = NoopContentValidationState(ContentValidationValue.Invalid),
+                        mediaInfo = anImageMediaInfo(
+                            senderName = "Frank",
+                            dateSent = "26 NOV, 2024",
+                        ),
+                    )
+                )
+            ),
             anImageMediaInfo(
-                senderName = "Frank",
-                dateSent = "26 NOV, 2024",
+                senderName = "Sally Sanderson",
+                dateSent = "21 NOV, 2024",
+                caption = "A caption",
             ).let {
                 aMediaViewerState(
                     listOf(
                         aMediaViewerPageData(
-                            downloadedMedia = AsyncData.Uninitialized,
-                            validationState = NoopContentValidationState(ContentValidationValue.Loading),
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
                             mediaInfo = it,
+                            captionTree = DocumentNode(
+                                children = persistentListOf(
+                                    QuoteNode(
+                                        persistentListOf(
+                                            ParagraphNode(
+                                                text = "This is a formatted caption".toAnnotatedString()
+                                            )
+                                        )
+                                    )
+                                )
+                            ),
                         )
                     )
                 )
-            },
-            anImageMediaInfo(
-                senderName = "Frank",
-                dateSent = "26 NOV, 2024",
-            ).let {
-                aMediaViewerState(
-                    listOf(
-                        aMediaViewerPageData(
-                            downloadedMedia = AsyncData.Uninitialized,
-                            validationState = NoopContentValidationState(ContentValidationValue.Invalid),
-                            mediaInfo = it,
-                        )
-                    )
-                )
-            },
+            }
         )
 }
 
@@ -325,9 +354,13 @@ fun aMediaViewerPageData(
     mediaInfo: MediaInfo = anImageMediaInfo(),
     mediaSource: MediaSource = MediaSource(""),
     validationState: ContentValidationState = NoopContentValidationState(),
+    formattedCaption: CharSequence? = mediaInfo.htmlCaption,
+    captionTree: DocumentNode? = null,
 ): MediaViewerPageData.MediaViewerData = MediaViewerPageData.MediaViewerData(
     eventId = null,
     mediaInfo = mediaInfo,
+    formattedCaption = formattedCaption,
+    captionTree = captionTree,
     mediaSource = mediaSource,
     thumbnailSource = null,
     downloadedMedia = mutableStateOf(downloadedMedia),
@@ -340,6 +373,7 @@ fun aMediaViewerState(
     currentIndex: Int = 0,
     canShowInfo: Boolean = true,
     mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
+    currentUserId: UserId? = null,
     eventSink: (MediaViewerEvent) -> Unit = {},
 ) = MediaViewerState(
     initiallySelectedEventId = EventId("\$a:b"),
@@ -348,5 +382,6 @@ fun aMediaViewerState(
     snackbarMessage = null,
     canShowInfo = canShowInfo,
     mediaBottomSheetState = mediaBottomSheetState,
+    currentUserId = currentUserId,
     eventSink = eventSink,
 )

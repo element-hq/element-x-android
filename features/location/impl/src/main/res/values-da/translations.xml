@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s kunne ikke indlæse kortet. Prøv igen senere."</string>
+  <string name="error_failed_locating_user">"%1$s kunne ikke få adgang til din placering. Prøv igen senere."</string>
+  <string name="error_location_service_disabled_android">"Aktiver venligst din GPS for at få adgang til lokationsbaserede funktioner."</string>
+  <string name="error_missing_location_auth_android">"%1$s har ikke tilladelse til at få adgang til din placering. Du kan aktivere adgang i Indstillinger."</string>
+  <string name="error_missing_location_rationale_android">"%1$s har ikke tilladelse til at se din placering. Aktivér adgang nedenfor."</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Ingen deler deres placering"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Deler placering live"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d person"</item>
+    <item quantity="other">"%1$d personer"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"På kortet"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"Din live-positionshistorik gemmes i rummet og er synlig for medlemmerne, når sessionen er afsluttet."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Vælg, hvor længe du vil dele din aktuelle position."</string>
+  <string name="screen_share_location_title">"Del placering"</string>
+  <string name="screen_share_my_location_action">"Del min placering"</string>
+  <string name="screen_share_open_apple_maps">"Åbn i Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Åbn i Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Åbn i OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"Del den valgte placering"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Indstillinger for deling"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Delt %1$s"</string>
+  <string name="screen_static_location_sheet_title">"På kortet"</string>
+  <string name="screen_view_location_title">"Placering"</string>
 </resources>

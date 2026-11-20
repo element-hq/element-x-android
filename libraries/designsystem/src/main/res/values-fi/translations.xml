@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"Sinulla on tallentamattomia muutoksia"</string>
+  <string name="dialog_unsaved_changes_description_android">"Muutoksiasi ei ole tallennettu. Haluatko varmasti palata takaisin?"</string>
+  <string name="dialog_unsaved_changes_title">"Tallennetaanko muutokset?"</string>
+</resources>

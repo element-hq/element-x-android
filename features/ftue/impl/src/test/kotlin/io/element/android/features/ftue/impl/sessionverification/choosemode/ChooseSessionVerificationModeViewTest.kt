@@ -13,6 +13,9 @@ package io.element.android.features.ftue.impl.sessionverification.choosemode
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import io.element.android.features.ftue.impl.R
 import io.element.android.libraries.architecture.AsyncData
@@ -73,12 +76,51 @@ class ChooseSessionVerificationModeViewTest : RobolectricTest() {
         }
     }
 
+    @Test
+    fun `clicking on sign out invokes the expected callback`() = runAndroidComposeUiTest {
+        ensureCalledOnce { callback ->
+            setChooseSelfVerificationModeView(
+                aChooseSelfVerificationModeState(),
+                onSignOut = callback,
+            )
+            clickOn(R.string.screen_identity_confirmation_sign_out)
+        }
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `clicking on cannot confirm without any other option calls the reset keys callback`() = runAndroidComposeUiTest {
+        ensureCalledOnce { callback ->
+            setChooseSelfVerificationModeView(
+                aChooseSelfVerificationModeState(AsyncData.Success(aButtonsState(canUseAnotherDevice = false, canUseRecoveryKey = false))),
+                onResetKey = callback,
+            )
+            clickOn(R.string.screen_identity_confirmation_cannot_confirm)
+        }
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `unavailable options are displayed but disabled`() = runAndroidComposeUiTest {
+        setChooseSelfVerificationModeView(
+            aChooseSelfVerificationModeState(AsyncData.Success(aButtonsState(canUseAnotherDevice = false, canUseRecoveryKey = false))),
+        )
+        val context = activity!!
+        val useAnotherDevice = context.getString(R.string.screen_identity_use_another_device)
+        val useRecoveryKey = context.getString(R.string.screen_identity_confirmation_use_recovery_key)
+        val cannotConfirm = context.getString(R.string.screen_identity_confirmation_cannot_confirm)
+        onNodeWithText(useAnotherDevice).assertIsNotEnabled()
+        onNodeWithText(useRecoveryKey).assertIsNotEnabled()
+        onNodeWithText(cannotConfirm).assertIsEnabled()
+    }
+
     private fun AndroidComposeUiTest<ComponentActivity>.setChooseSelfVerificationModeView(
         state: ChooseSelfVerificationModeState,
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
         onUseAnotherDevice: () -> Unit = EnsureNeverCalled(),
         onResetKey: () -> Unit = EnsureNeverCalled(),
         onEnterRecoveryKey: () -> Unit = EnsureNeverCalled(),
+        onSignOut: () -> Unit = EnsureNeverCalled(),
     ) {
         setContent {
             ChooseSelfVerificationModeView(
@@ -87,6 +129,7 @@ class ChooseSessionVerificationModeViewTest : RobolectricTest() {
                 onUseAnotherDevice = onUseAnotherDevice,
                 onResetKey = onResetKey,
                 onUseRecoveryKey = onEnterRecoveryKey,
+                onSignOut = onSignOut,
             )
         }
     }

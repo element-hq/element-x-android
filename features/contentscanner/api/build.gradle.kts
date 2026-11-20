@@ -8,16 +8,8 @@ android {
 }
 
 dependencies {
-    implementation(projects.libraries.core)
-    implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
-    implementation(projects.libraries.designsystem)
 
-    testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)
-    testImplementation(libs.molecule.runtime)
-    testImplementation(libs.test.truth)
-    testImplementation(libs.test.turbine)
-    testImplementation(projects.libraries.matrix.test)
 }

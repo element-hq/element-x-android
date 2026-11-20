@@ -18,5 +18,5 @@ data class PushHistoryState(
     val showOnlyErrors: Boolean,
     val resetAction: AsyncAction<Unit>,
     val showNotSameAccountError: Boolean,
-    val eventSink: (PushHistoryEvents) -> Unit,
+    val eventSink: (PushHistoryEvent) -> Unit,
 )

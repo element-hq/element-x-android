@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,12 +48,12 @@ import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenu
 import io.element.android.libraries.designsystem.modifiers.roundedBackground
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_HEIGHT
-import io.element.android.libraries.matrix.ui.media.MAX_THUMBNAIL_WIDTH
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.matrix.ui.media.contentvalidation.ContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.NoopContentValidationState
 import io.element.android.libraries.matrix.ui.media.contentvalidation.collectOverallState
+import io.element.android.libraries.matrixmedia.api.MAX_THUMBNAIL_HEIGHT
+import io.element.android.libraries.matrixmedia.api.MAX_THUMBNAIL_WIDTH
+import io.element.android.libraries.matrixmedia.api.MediaRequestData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 
@@ -70,10 +71,11 @@ fun TimelineItemVideoView(
     val a11yLabel = stringResource(CommonStrings.common_video)
     val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel
     Column(modifier = modifier.wrapContentWidth(Alignment.CenterHorizontally)) {
-        val containerModifier = if (content.showCaption) {
+        val containerShape = if (content.showCaption) RoundedCornerShape(6.dp) else null
+        val containerModifier = if (containerShape != null) {
             Modifier
                 .padding(top = 6.dp)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(containerShape)
         } else {
             Modifier
         }
@@ -98,6 +100,8 @@ fun TimelineItemVideoView(
                             if (!isTalkbackActive && onContentClick != null) {
                                 Modifier
                                     .combinedClickable(
+                                        interactionSource = null,
+                                        indication = ripple(focusRingShape = containerShape),
                                         onClick = onContentClick,
                                         onLongClick = onLongClick,
                                     )

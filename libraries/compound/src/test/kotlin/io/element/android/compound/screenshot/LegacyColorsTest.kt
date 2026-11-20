@@ -12,32 +12,31 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.previews.ColorPreview
-import io.element.android.compound.screenshot.utils.screenshotFile
+import io.element.android.compound.screenshot.utils.createPaparazziRule
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.LinkColor
 import io.element.android.compound.theme.SnackBarLabelColorDark
 import io.element.android.compound.theme.SnackBarLabelColorLight
-import io.element.android.tests.testutils.robolectric.RobolectricTest
+import org.junit.Rule
 import org.junit.Test
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.GraphicsMode
 
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
-class LegacyColorsTest : RobolectricTest() {
+class LegacyColorsTest {
+    @get:Rule
+    val paparazzi = createPaparazziRule()
+
     @Test
-    @Config(sdk = [35], qualifiers = "xxhdpi")
     fun screenshots() {
-        captureRoboImage(file = screenshotFile("Legacy Colors.png")) {
+        paparazzi.snapshot(name = "Legacy Colors") {
             ElementTheme {
-                Surface {
+                Surface(Modifier.width(300.dp)) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(text = "Legacy Colors")
                         Spacer(modifier = Modifier.height(10.dp))

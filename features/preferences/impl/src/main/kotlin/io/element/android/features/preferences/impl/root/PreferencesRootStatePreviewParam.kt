@@ -9,15 +9,20 @@
 package io.element.android.features.preferences.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.logout.api.direct.DirectLogoutState
-import io.element.android.features.logout.api.direct.aDirectLogoutState
+import io.element.android.features.preferences.impl.account.PreferencesAccountState
+import io.element.android.features.preferences.impl.account.aPreferencesAccountState
 import io.element.android.features.preferences.impl.userstatus.UserStatusPickerState
 import io.element.android.features.preferences.impl.userstatus.UserStatusState
 import io.element.android.features.preferences.impl.userstatus.aUserStatusState
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
+import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.api.user.UserStatus
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
+import io.element.android.libraries.matrix.ui.components.switchaccount.anOtherAccount
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
@@ -29,82 +34,90 @@ open class PreferencesRootStatePreviewParam : PreviewParameterProvider<Preferenc
                 myUser = aMatrixUser(avatarUrl = "anAvatarUrl"),
                 version = "Version 1.1 (1)",
                 isMultiAccountEnabled = true,
-                otherSessions = aMatrixUserList().drop(1).take(1),
-                showSecureBackup = true,
-                accountManagementUrl = "aUrl",
-                canReportBug = true,
-                showLinkNewDevice = true,
+                otherSessions = aMatrixUserList().drop(1).take(1).map { anOtherAccount(it) },
                 showAnalyticsSettings = true,
-                canDeactivateAccount = false,
-                nbOfBlockedUsers = 3,
                 showLabsItem = true,
             ),
             aPreferencesRootState(
                 myUser = aMatrixUser(displayName = null),
                 isMultiAccountEnabled = true,
-                showSecureBackup = true,
-                canDeactivateAccount = true,
             ),
             aPreferencesRootState(
                 isMultiAccountEnabled = true,
-                otherSessions = aMatrixUserList().drop(1).take(3),
-                accountManagementUrl = "aUrl",
-                showSecureBackup = true,
-                showSecureBackupBadge = true,
+                isOtherAccountsSectionExpanded = true,
+                otherSessions = aMatrixUserList().drop(1).take(3).map { anOtherAccount(it) },
             ),
             aPreferencesRootState(
                 showLabsItem = true,
-                canReportBug = true,
-                nbOfBlockedUsers = 3,
                 snackbarMessage = SnackbarMessage(CommonStrings.common_verification_complete),
             ),
             aPreferencesRootState(
-                showLinkNewDevice = true,
                 showAnalyticsSettings = true,
                 showDeveloperSettings = true,
-                canDeactivateAccount = true,
             ),
             aPreferencesRootState(userStatusState = aUserStatusState(pickerState = UserStatusPickerState.ShowingPicker)),
             // Minimal state
             aPreferencesRootState(userStatusState = null),
+            // Location sharing not available
+            aPreferencesRootState(showLocationSettings = false),
+            // Other accounts with unread notifications
+            aPreferencesRootState(
+                isMultiAccountEnabled = true,
+                isOtherAccountsSectionExpanded = true,
+                otherSessions = aMatrixUserList().drop(1).take(3).zip(listOf(3, 0, 120)) { user, unreadCount ->
+                    anOtherAccount(user = user, unreadCount = unreadCount)
+                },
+            ),
+            // Other accounts with a status
+            aPreferencesRootState(
+                isMultiAccountEnabled = true,
+                isOtherAccountsSectionExpanded = true,
+                otherSessions = aMatrixUserList().drop(1).take(3).zip(
+                    listOf(
+                        DisplayedStatus.UserSet(UserStatus(emoji = "🌴", text = "On holiday")),
+                        DisplayedStatus.InCall(callJoinedTs = null),
+                        null
+                    )
+                ) { user, displayedStatus ->
+                    anOtherAccount(user = user.copy(displayedStatus = displayedStatus))
+                },
+            ),
+            // Message text at the largest size
+            aPreferencesRootState(messageTextSize = MessageTextSize.MAX),
         )
 }
 
 fun aPreferencesRootState(
     myUser: MatrixUser = aMatrixUser(),
+    preferencesAccountState: PreferencesAccountState = aPreferencesAccountState(),
     version: String = "Version 1.1 (1)",
     isMultiAccountEnabled: Boolean = false,
-    otherSessions: List<MatrixUser> = emptyList(),
-    showSecureBackup: Boolean = false,
-    showSecureBackupBadge: Boolean = false,
-    accountManagementUrl: String? = null,
-    canReportBug: Boolean = false,
-    showLinkNewDevice: Boolean = false,
+    isOtherAccountsSectionExpanded: Boolean = false,
+    theme: ThemeOption = ThemeOption.System,
+    availableThemeOptions: List<ThemeOption> = ThemeOption.entries,
+    messageTextSize: Int = MessageTextSize.DEFAULT,
+    otherSessions: List<OtherAccount> = emptyList(),
     showAnalyticsSettings: Boolean = false,
     showDeveloperSettings: Boolean = false,
-    canDeactivateAccount: Boolean = false,
-    nbOfBlockedUsers: Int = 0,
     showLabsItem: Boolean = false,
-    directLogoutState: DirectLogoutState = aDirectLogoutState(),
+    showLocationSettings: Boolean = true,
     userStatusState: UserStatusState? = aUserStatusState(),
     snackbarMessage: SnackbarMessage? = null,
     eventSink: (PreferencesRootEvent) -> Unit = {},
 ) = PreferencesRootState(
     myUser = myUser,
+    preferencesAccountState = preferencesAccountState,
     version = version,
     isMultiAccountEnabled = isMultiAccountEnabled,
+    theme = theme,
+    availableThemeOptions = availableThemeOptions.toImmutableList(),
+    messageTextSize = messageTextSize,
+    isOtherAccountsSectionExpanded = isOtherAccountsSectionExpanded,
     otherSessions = otherSessions.toImmutableList(),
-    showSecureBackup = showSecureBackup,
-    showSecureBackupBadge = showSecureBackupBadge,
-    accountManagementUrl = accountManagementUrl,
-    canReportBug = canReportBug,
-    showLinkNewDevice = showLinkNewDevice,
     showAnalyticsSettings = showAnalyticsSettings,
     showDeveloperSettings = showDeveloperSettings,
-    canDeactivateAccount = canDeactivateAccount,
-    nbOfBlockedUsers = nbOfBlockedUsers,
     showLabsItem = showLabsItem,
-    directLogoutState = directLogoutState,
+    showLocationSettings = showLocationSettings,
     userStatusState = userStatusState,
     snackbarMessage = snackbarMessage,
     eventSink = eventSink,

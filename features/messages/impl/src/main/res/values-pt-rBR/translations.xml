@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="common_unable_to_decrypt">"Não foi possível descriptografar"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Enviado de um dispositivo inseguro"</string>
+  <string name="common_unable_to_decrypt_no_access">"Você não tem acesso à esta mensagem"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"A identidade verificada do remetente foi redefinida"</string>
   <string name="crypto_event_authenticity_mismatched_sender">"O remetente do evento não corresponde com o proprietário do dispositivo que o enviou."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"A autenticidade desta mensagem criptografada não pode ser garantida neste aparelho."</string>
   <string name="crypto_event_authenticity_previously_verified">"Criptografado por um usuário verificado previamente."</string>
@@ -7,6 +11,22 @@
   <string name="crypto_event_authenticity_unknown_device">"Criptografado por um dispositivo desconhecido ou apagado."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Criptografado por um dispositivo que não foi verificado pelo seu dono."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Criptografado por um usuário não verificado."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) compartilhou esta mensagem já que você não estava na sala quando foi enviada."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s compartilhou esta mensagem já que você não estava na sala quando foi enviada."</string>
+  <string name="crypto_identity_change_pin_violation_new">"A identidade de %1$s %2$s foi redefinida. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"A identidade de %1$s %2$s foi redefinida. %3$s"</string>
+  <string name="dialog_confirm_link_message">"O link %1$s está levando você para outro site %2$s
+
+Você tem certeza de que deseja continuar?"</string>
+  <string name="dialog_confirm_link_title">"Verifique este link duas vezes"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"O tamanho máximo permitido de arquivos é: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"O tamanho do arquivo é muito grande para ser enviado"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"O tamanho máximo permitido de arquivos é: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Selecione a qualidade do vídeo que quer enviar."</string>
+  <string name="error_failed_loading_messages">"Falha ao carregar mensagens"</string>
+  <string name="error_failed_uploading_voice_message">"Falha ao enviar sua mensagem de voz."</string>
+  <string name="error_missing_microphone_voice_rationale_android">"%1$s não tem permissão para acessar seu microfone. Permita o acesso para gravar uma mensagem de voz."</string>
   <string name="screen_media_upload_preview_caption_warning">"As legendas podem não ser visíveis para pessoas que usam apps mais antigos."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Toque para alterar a qualidade do envio do vídeo"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"O arquivo não pôde ser enviado."</string>
@@ -17,10 +37,25 @@
   <string name="screen_media_upload_preview_item_count">"%1$d de %2$d itens"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Otimizar qualidade da imagem"</string>
   <string name="screen_media_upload_preview_processing">"Processando…"</string>
+  <string name="screen_pinned_timeline_empty_state_description">"Pressione em uma mensagem e escolha \"%1$s\" para incluir aqui."</string>
+  <string name="screen_pinned_timeline_empty_state_headline">"Fixe mensagens importantes para que elas possam ser facilmente descobertas"</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="one">"%1$d mensagem fixada"</item>
+    <item quantity="other">"%1$d mensagens fixadas"</item>
+  </plurals>
+  <string name="screen_pinned_timeline_screen_title_empty">"Mensagens fixadas"</string>
   <string name="screen_report_content_block_user">"Bloquear usuário"</string>
   <string name="screen_report_content_block_user_hint">"Marque se você deseja ocultar todas as mensagens atuais e futuras desse usuário"</string>
   <string name="screen_report_content_explanation">"Essa mensagem será reportada ao administrador do seu servidor-casa. Eles não conseguirão ler nenhuma mensagem criptografada."</string>
   <string name="screen_report_content_hint">"Motivo por denunciar este conteúdo"</string>
+  <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Retirar verificação e enviar"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Você pode retirar sua verificação e enviar esta mensagem mesmo assim, ou pode cancelar por enquanto e tentar novamente mais tarde depois de reverificar %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Sua mensagem não foi enviada porque a identidade verificada de %1$s foi redefinida"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Enviar mensagem mesmo assim"</string>
+  <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s está usando um ou mais dispositivos não verificados. Você pode enviar a mensagem de qualquer maneira, ou você pode cancelar por enquanto e tentar novamente mais tarde depois que %2$s tiver verificado todos os seus dispositivos."</string>
+  <string name="screen_resolve_send_failure_unsigned_device_title">"Sua mensagem não foi enviada porque %1$s não verificou todos os dispositivos"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Um ou mais de seus dispositivos não foram verificados. Você pode enviar a mensagem mesmo assim ou pode cancelar por enquanto e tentar novamente mais tarde, depois de ter verificado todos os seus dispositivos."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Sua mensagem não foi enviada porque você não verificou um ou mais de seus dispositivos"</string>
   <string name="screen_room_attachment_source_camera">"Câmera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Tirar foto"</string>
   <string name="screen_room_attachment_source_camera_video">"Gravar vídeo"</string>
@@ -35,6 +70,11 @@
   <string name="screen_room_invite_again_alert_title">"Você está sozinho nesta conversa"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notificar a sala inteira"</string>
   <string name="screen_room_mentions_at_room_title">"Todos"</string>
+  <string name="screen_room_permalink_same_room_android">"Já está visualizando esta sala!"</string>
+  <string name="screen_room_pinned_banner_indicator">"%1$s de %2$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s Mensagens fixadas"</string>
+  <string name="screen_room_pinned_banner_loading_description">"Carregando mensagem…"</string>
+  <string name="screen_room_pinned_banner_view_all_button_title">"Ver tudo"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Enviar novamente"</string>
   <string name="screen_room_retry_send_menu_title">"Sua mensagem não foi enviada"</string>
   <string name="screen_room_timeline_add_reaction">"Adicionar emoji"</string>
@@ -74,4 +114,12 @@
     <item quantity="other">"%1$s estão digitando"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s e %2$s"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Mensagem não enviada porque a identidade verificada de %1$s foi redefinida."</string>
+  <string name="screen_timeline_item_menu_send_failure_unsigned_device">"A mensagem não foi enviada porque %1$s não verificou todos os dispositivos."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Mensagem não enviada porque você não verificou um ou mais dos seus dispositivos."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"As mensagens históricas não estão disponíveis neste dispositivo"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Você precisa verificar este dispositivo para ter acesso à mensagens históricas"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Você não tem acesso à esta mensagem"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Não foi possível descriptografar a mensagem"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Esta mensagem foi bloqueada porque você não verificou seu dispositivo ou porque o remetente precisa verificar sua identidade."</string>
 </resources>

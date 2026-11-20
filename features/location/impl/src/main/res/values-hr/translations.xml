@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s nije mogao učitati kartu. Pokušajte ponovno poslije."</string>
+  <string name="error_failed_locating_user">"%1$s nije mogao pristupiti vašoj lokaciji. Pokušajte ponovno poslije."</string>
+  <string name="error_location_service_disabled_android">"Omogućite GPS za pristup značajkama temeljenim na lokaciji."</string>
+  <string name="error_missing_location_auth_android">"%1$s nema dopuštenje za pristup vašoj lokaciji. Pristup možete omogućiti u postavkama."</string>
+  <string name="error_missing_location_rationale_android">"%1$s nema dopuštenje za pristup vašoj lokaciji. Omogućite pristup u nastavku."</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Dijeljenje lokacije uživo"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Dijeljenje lokacije u tijeku"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Lokacija uživo"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Nitko ne dijeli svoju lokaciju"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Dijeljenje lokacije uživo"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d osoba"</item>
+    <item quantity="few">"%1$d osoba"</item>
+    <item quantity="other">"%1$d ljudi"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Na karti"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"Vaša povijest lokacije uživo bit će pohranjena u sobi i vidljiva članovima nakon završetka sesije."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Odaberite koliko dugo želite dijeliti svoju lokaciju uživo."</string>
   <string name="screen_share_location_live_location_missing_permissions">"Nemate dopuštenja za dijeljenje svoje lokacije uživo u ovoj sobi"</string>
+  <string name="screen_share_location_title">"Podijeli lokaciju"</string>
+  <string name="screen_share_my_location_action">"Podijeli moju lokaciju"</string>
+  <string name="screen_share_open_apple_maps">"Otvori u Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Otvori u Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Otvori u OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"Podijeli ovu lokaciju"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Opcije dijeljenja"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Dijeljeno %1$s"</string>
+  <string name="screen_static_location_sheet_title">"Na karti"</string>
+  <string name="screen_view_location_title">"Lokacija"</string>
 </resources>

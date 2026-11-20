@@ -22,7 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import io.element.android.features.messages.impl.timeline.TimelineEvent
+import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
@@ -42,6 +44,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun TimelineItemStateEventRow(
     event: TimelineItem.Event,
     isLastOutgoingMessage: Boolean,
+    timelineRoomInfo: TimelineRoomInfo,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     onReadReceiptsClick: (event: TimelineItem.Event) -> Unit,
@@ -87,7 +90,8 @@ fun TimelineItemStateEventRow(
             state = ReadReceiptViewState(
                 sendState = event.localSendState,
                 isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
+                renderReadReceipts = timelineRoomInfo.renderReadReceipts,
+                knownReceipts = event.readReceiptState.receipts,
             ),
             onReadReceiptsClick = { onReadReceiptsClick(event) },
         )
@@ -107,6 +111,7 @@ internal fun TimelineItemStateEventRowPreview() = ElementPreview {
             )
         ),
         isLastOutgoingMessage = false,
+        timelineRoomInfo = aTimelineRoomInfo(),
         onClick = {},
         onLongClick = {},
         onReadReceiptsClick = {},

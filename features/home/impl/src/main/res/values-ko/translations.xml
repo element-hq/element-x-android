@@ -12,17 +12,15 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"복구 키를 입력하세요"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"복구 키를 잊으셨나요?"</string>
   <string name="confirm_recovery_key_banner_title">"귀하의 키 저장소가 동기화되지 않았습니다"</string>
-  <string name="full_screen_intent_banner_message">"중요한 전화를 놓치지 않으려면 휴대폰이 잠겨 있을 때 전체 화면 알림을 허용하도록 설정을 변경하세요."</string>
-  <string name="full_screen_intent_banner_title">"통화 경험을 향상시키세요"</string>
+  <string name="full_screen_intent_banner_message_android">"중요한 전화를 놓치지 않으려면 휴대폰이 잠겨 있을 때 전체 화면 알림을 허용하도록 설정을 변경하세요."</string>
+  <string name="full_screen_intent_banner_title_android">"통화 경험을 향상시키세요"</string>
   <string name="screen_home_tab_chats">"채팅"</string>
   <string name="screen_home_tab_spaces">"스페이스"</string>
   <string name="screen_invites_decline_chat_message">"정말로 %1$s 에 참가하지 않고 초대를 거절하시겠어요?"</string>
   <string name="screen_invites_decline_chat_title">"초대 거절"</string>
   <string name="screen_invites_decline_direct_chat_message">"%1$s 와의 비공개 채팅을 정말 거부하시겠습니까?"</string>
   <string name="screen_invites_decline_direct_chat_title">"채팅 거절"</string>
-  <string name="screen_invites_empty_list">"초대 없음"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) 당신을 초대했습니다"</string>
-  <string name="screen_migration_message">"이 과정은 한 번만 진행됩니다, 기다려 주셔서 감사합니다."</string>
   <string name="screen_migration_title">"계정 설정하기"</string>
   <string name="screen_roomlist_a11y_create_message">"새로운 대화 또는 방 만들기"</string>
   <string name="screen_roomlist_clear_filters">"필터 지우기"</string>
@@ -51,6 +49,5 @@
   <string name="screen_roomlist_mark_as_unread">"읽지 않음으로 표시"</string>
   <string name="screen_roomlist_tombstoned_room_description">"이 방이 업그레이드되었습니다"</string>
   <string name="screen_roomlist_your_spaces">"내 스페이스"</string>
-  <string name="session_verification_banner_message">"새 장치를 사용 중인 것 같습니다. 다른 디바이스로 인증하여 암호화된 메시지에 액세스하세요."</string>
-  <string name="session_verification_banner_title">"본인인지 확인하세요"</string>
+  <string name="screen_space_list_empty_state_title">"스페이스를 생성하여 방을 체계적으로 관리해 보세요."</string>
 </resources>

@@ -10,7 +10,7 @@ package io.element.android.features.userprofile.shared
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
-import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.features.userprofile.api.UserProfileEvent
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.libraries.architecture.AsyncAction
@@ -50,7 +50,7 @@ fun aUserProfileState(
     canCall: Boolean = false,
     snackbarMessage: SnackbarMessage? = null,
     displayedStatus: DisplayedStatus? = null,
-    eventSink: (UserProfileEvents) -> Unit = {},
+    eventSink: (UserProfileEvent) -> Unit = {},
 ) = UserProfileState(
     userId = userId,
     userName = userName,

@@ -20,7 +20,6 @@ android {
 setupDependencyInjection()
 
 dependencies {
-    implementation(projects.libraries.core)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrixui)

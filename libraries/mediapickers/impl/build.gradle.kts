@@ -12,14 +12,13 @@ plugins {
     id("io.element.android-compose-library")
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 android {
     namespace = "io.element.android.libraries.mediapickers.impl"
 }
 
 dependencies {
-    implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     api(projects.libraries.mediapickers.api)
 }

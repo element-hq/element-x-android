@@ -28,7 +28,10 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -72,13 +75,20 @@ fun <T> SearchBar(
 ) {
     val focusManager = LocalFocusManager.current
     val colors = if (active) activeBarColors else inactiveBarColors
+    // Act solely on search deactivation: a bar that starts inactive must neither clear the query nor steal focus from
+    // another field, such as the composer when the emoji picker appears beneath it.
+    var wasActive by remember { mutableStateOf(active) }
     LaunchedEffect(active) {
-        if (!active) {
+        if (!active && wasActive) {
             queryState.clearText()
             focusManager.clearFocus()
         }
+        wasActive = active
     }
 
+    // TODO Migrate to the SearchBarState API. The replacement (ExpandedFullScreenSearchBar) displays the results in a dialog,
+    //  which would change the UX, in particular for the emoji picker bottom sheet.
+    @Suppress("DEPRECATION")
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
@@ -156,7 +166,6 @@ fun <T> SearchBar(
 }
 
 object ElementSearchBarDefaults {
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun inactiveColors() = SearchBarDefaults.colors(
         containerColor = Color.Transparent,
@@ -176,7 +185,6 @@ object ElementSearchBarDefaults {
         errorContainerColor = ElementTheme.colors.bgSubtleSecondary,
     )
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun activeColors() = SearchBarDefaults.colors(
         containerColor = Color.Transparent,
@@ -286,7 +294,6 @@ internal fun SearchBarActiveWithContentPreview() = ElementThemedPreview {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ExcludeFromCoverage
 private fun ContentToPreview(

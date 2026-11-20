@@ -17,7 +17,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
 import io.element.android.libraries.matrix.test.A_COLOR_INT
@@ -26,13 +28,14 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
-import io.element.android.libraries.matrix.ui.media.test.FakeImageLoader
-import io.element.android.libraries.matrix.ui.media.test.FakeInitialsAvatarBitmapGenerator
+import io.element.android.libraries.matrixmedia.test.FakeImageLoader
+import io.element.android.libraries.matrixmedia.test.FakeInitialsAvatarBitmapGenerator
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.DefaultNotificationBitmapLoader
 import io.element.android.libraries.push.impl.notifications.NotificationActionIds
 import io.element.android.libraries.push.impl.notifications.RoomEventGroupInfo
 import io.element.android.libraries.push.impl.notifications.channels.DefaultNotificationChannels
+import io.element.android.libraries.push.impl.notifications.channels.FakeNotificationChannels
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.push.impl.notifications.factories.action.AcceptInvitationActionFactory
 import io.element.android.libraries.push.impl.notifications.factories.action.MarkAsReadActionFactory
@@ -43,10 +46,13 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiable
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -82,7 +88,10 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
 
     @Test
     fun `test createFallbackNotification`() {
-        val sut = createNotificationCreator()
+        val channelIdForMessage = lambdaRecorder<SessionId, Boolean, String> { _, _ -> A_CHANNEL_ID }
+        val sut = createNotificationCreator(
+            notificationChannels = FakeNotificationChannels(channelIdForMessage = channelIdForMessage),
+        )
         val result = sut.createFallbackNotification(
             existingNotification = null,
             notificationAccountParams = aNotificationAccountParams(),
@@ -93,6 +102,50 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
         result.commonAssertions(
             expectedCategory = null,
         )
+        assertThat(result.channelId).isEqualTo(A_CHANNEL_ID)
+        // The notification must be posted on the silent channel.
+        channelIdForMessage.assertions().isCalledOnce().with(value(A_SESSION_ID), value(false))
+    }
+
+    @Test
+    fun `test createFallbackNotification noisy`() {
+        val channelIdForMessage = lambdaRecorder<SessionId, Boolean, String> { _, _ -> A_CHANNEL_ID }
+        val sut = createNotificationCreator(
+            notificationChannels = FakeNotificationChannels(channelIdForMessage = channelIdForMessage),
+        )
+        val result = sut.createFallbackNotification(
+            existingNotification = null,
+            notificationAccountParams = aNotificationAccountParams(),
+            fallbackNotifiableEvents = listOf(
+                aFallbackNotifiableEvent(noisy = true),
+            )
+        )
+        result.commonAssertions(
+            expectedCategory = null,
+        )
+        assertThat(result.channelId).isEqualTo(A_CHANNEL_ID)
+        // The notification must be posted on the noisy channel.
+        channelIdForMessage.assertions().isCalledOnce().with(value(A_SESSION_ID), value(true))
+    }
+
+    @Test
+    fun `test createFallbackNotification is noisy when at least one event is noisy`() {
+        val channelIdForMessage = lambdaRecorder<SessionId, Boolean, String> { _, _ -> A_CHANNEL_ID }
+        val sut = createNotificationCreator(
+            notificationChannels = FakeNotificationChannels(channelIdForMessage = channelIdForMessage),
+        )
+        val result = sut.createFallbackNotification(
+            existingNotification = null,
+            notificationAccountParams = aNotificationAccountParams(),
+            fallbackNotifiableEvents = listOf(
+                aFallbackNotifiableEvent(noisy = false),
+                aFallbackNotifiableEvent(eventId = AN_EVENT_ID_2, noisy = true),
+            )
+        )
+        result.commonAssertions(
+            expectedCategory = null,
+        )
+        channelIdForMessage.assertions().isCalledOnce().with(value(A_SESSION_ID), value(true))
     }
 
     @Test
@@ -351,11 +404,65 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
         assertThat(result.messageTexts()).containsExactly("test", "A caption").inOrder()
     }
 
+    @Test
+    fun `test createMessagesListNotification for a room not joined by another account is a conversation without account info`() = runTest {
+        val sut = createNotificationCreator()
+        val result = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent()),
+            // Several accounts are signed in, but the room is only joined by one of them
+            notificationAccountParams = aNotificationAccountParams(showSessionId = true),
+            showSessionId = false,
+        )
+        assertThat(NotificationCompat.getShortcutId(result)).isEqualTo(createShortcutId(A_SESSION_ID, A_ROOM_ID))
+        assertThat(result.subText()).isNull()
+        assertThat(result.conversationTitle()).isEqualTo("roomDisplayName")
+    }
+
+    @Test
+    fun `test createMessagesListNotification for a room joined by another account is not a conversation and shows the account info`() = runTest {
+        val sut = createNotificationCreator()
+        val result = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent()),
+            notificationAccountParams = aNotificationAccountParams(showSessionId = true),
+            showSessionId = true,
+        )
+        assertThat(NotificationCompat.getShortcutId(result)).isNull()
+        assertThat(result.subText()).isEqualTo(A_SESSION_ID.value)
+        assertThat(result.conversationTitle()).isEqualTo("${A_SESSION_ID.value} · roomDisplayName")
+    }
+
+    @Test
+    fun `test createMessagesListNotification updates the account info of an existing notification`() = runTest {
+        val sut = createNotificationCreator()
+        val existingNotification = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent(body = "A message")),
+            showSessionId = false,
+        )
+        val sharedResult = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID_2, body = "Another message")),
+            existingNotification = existingNotification,
+            showSessionId = true,
+        )
+        assertThat(NotificationCompat.getShortcutId(sharedResult)).isNull()
+        assertThat(sharedResult.subText()).isEqualTo(A_SESSION_ID.value)
+        assertThat(sharedResult.conversationTitle()).isEqualTo("${A_SESSION_ID.value} · roomDisplayName")
+        val notSharedResult = sut.createRoomNotification(
+            events = listOf(aNotifiableMessageEvent(eventId = AN_EVENT_ID_2, body = "Another message")),
+            existingNotification = sharedResult,
+            showSessionId = false,
+        )
+        assertThat(NotificationCompat.getShortcutId(notSharedResult)).isEqualTo(createShortcutId(A_SESSION_ID, A_ROOM_ID))
+        assertThat(notSharedResult.subText()).isNull()
+        assertThat(notSharedResult.conversationTitle()).isEqualTo("roomDisplayName")
+    }
+
     private suspend fun NotificationCreator.createRoomNotification(
         events: List<NotifiableMessageEvent>,
         existingNotification: Notification? = null,
+        notificationAccountParams: NotificationAccountParams = aNotificationAccountParams(),
+        showSessionId: Boolean = false,
     ) = createMessagesListNotification(
-        notificationAccountParams = aNotificationAccountParams(),
+        notificationAccountParams = notificationAccountParams,
         roomInfo = RoomEventGroupInfo(
             sessionId = A_SESSION_ID,
             roomId = A_ROOM_ID,
@@ -364,6 +471,7 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
             shouldBing = false,
             customSound = null,
             isUpdated = false,
+            showSessionId = showSessionId,
         ),
         threadId = null,
         largeIcon = null,
@@ -373,6 +481,11 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
         imageLoader = FakeImageLoader(),
         events = events,
     )
+
+    private fun Notification.conversationTitle(): String? =
+        NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(this)?.conversationTitle?.toString()
+
+    private fun Notification.subText(): String? = extras.getCharSequence(NotificationCompat.EXTRA_SUB_TEXT)?.toString()
 
     private fun Notification.messageTexts(): List<String?> {
         val messagingStyle = checkNotNull(NotificationCompat.MessagingStyle.extractMessagingStyleFromNotification(this))
@@ -388,6 +501,8 @@ class DefaultNotificationCreatorTest : RobolectricTest() {
         assertThat(category).isEqualTo(expectedCategory)
     }
 }
+
+private const val A_CHANNEL_ID = "aChannelId"
 
 const val MARK_AS_READ_ACTION_TITLE = "MarkAsReadAction"
 const val QUICK_REPLY_ACTION_TITLE = "QuickReplyAction"
@@ -455,5 +570,6 @@ fun createNotificationChannels(
         context = context,
         enterpriseService = enterpriseService,
         appPreferencesStore = io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore(),
+        coroutineDispatchers = CoroutineDispatchers.Default,
     )
 }

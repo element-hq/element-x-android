@@ -16,7 +16,7 @@ android {
     namespace = "io.element.android.features.contentscanner.impl"
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     api(projects.features.contentscanner.api)
@@ -24,7 +24,6 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
-    implementation(projects.libraries.designsystem)
 
     testImplementation(libs.test.junit)
     testImplementation(libs.coroutines.test)

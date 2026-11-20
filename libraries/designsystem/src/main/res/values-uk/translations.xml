@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"У вас є не збережені зміни."</string>
+  <string name="dialog_unsaved_changes_description_android">"Внесені зміни не збережено. Ви впевнені, що хочете повернутися?"</string>
+  <string name="dialog_unsaved_changes_title">"Зберегти зміни?"</string>
+</resources>

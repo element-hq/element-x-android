@@ -5,18 +5,12 @@
   <string name="notification_channel_noisy">"Hlasitá oznámení"</string>
   <string name="notification_channel_ringing_calls">"Vyzvánění hovorů"</string>
   <string name="notification_channel_silent">"Tichá oznámení"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d zpráva"</item>
-    <item quantity="few">"%1$s: %2$d zprávy"</item>
-    <item quantity="other">"%1$s: %2$d zpráv"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d oznámení"</item>
     <item quantity="few">"%d oznámení"</item>
     <item quantity="other">"%d oznámení"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Distributor oznámení UnifiedPush se nepodařilo zaregistrovat, takže již nebudete dostávat oznámení. Zkontrolujte nastavení oznámení v aplikaci a stav distributora push oznámění."</string>
-  <string name="notification_fallback_content">"Oznámení"</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="one">"Máte %d novou zprávu."</item>
     <item quantity="few">"Máte %d nové zprávy."</item>
@@ -25,22 +19,9 @@
   <string name="notification_incoming_audio_call">"📞 Příchozí hovor"</string>
   <string name="notification_incoming_call">"📹 Příchozí hovor"</string>
   <string name="notification_inline_reply_failed">"** Nepodařilo se odeslat - otevřete prosím místnost"</string>
-  <string name="notification_invitation_action_join">"Vstoupit"</string>
-  <string name="notification_invitation_action_reject">"Odmítnout"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d pozvánka"</item>
-    <item quantity="few">"%d pozvánky"</item>
-    <item quantity="other">"%d pozvánek"</item>
-  </plurals>
   <string name="notification_invite_body">"Vás pozval(a) do chatu"</string>
   <string name="notification_invite_body_with_sender">"%1$s vás pozval(a) do chatu"</string>
   <string name="notification_mentioned_you_body">"Zmínili vás: %1$s"</string>
-  <string name="notification_new_messages">"Nové zprávy"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d nová zpráva"</item>
-    <item quantity="few">"%d nové zprávy"</item>
-    <item quantity="other">"%d nových zpráv"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reagoval(a) s %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Označit jako přečtené"</string>
   <string name="notification_room_action_quick_reply">"Rychlá odpověď"</string>
@@ -50,7 +31,7 @@
   <string name="notification_sender_mention_reply">"%1$s zmínil(a) nebo odpověděl(a)"</string>
   <string name="notification_space_invite_body">"Pozvali vás do prostoru"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s vás pozvali do prostoru"</string>
-  <string name="notification_test_push_notification_content">"Prohlížíte si oznámení! Klikněte na mě!"</string>
+  <string name="notification_test_push_notification_content">"Prohlížíte si oznámení! Klepněte na mě!"</string>
   <string name="notification_thread_in_room">"Vlákno v %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -88,11 +69,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Aktuální push poskytovatel"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Ujistěte se, že aplikace má alespoň jednoho push poskytovatele."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nebyli nalezeni žádní push poskytovatelé."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Nalezen %1$d push poskytovatel: %2$s"</item>
-    <item quantity="few">"Nalezeni %1$d push poskytovatelé: %2$s"</item>
-    <item quantity="other">"Nalezeno %1$d push poskytovatelů: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Aplikace byla vytvořena s podporou: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Zjistit push poskytovatele"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Zkontrolujte, zda aplikace může zobrazit oznámení."</string>
@@ -100,7 +76,7 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Oznámení nelze zobrazit."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Na oznámení bylo kliknuto!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Zobrazit oznámení"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Kliknutím na oznámení pokračujte v testu."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Klepnutím na oznámení pokračujte v testu."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Ujistěte se, že aplikace přijímá push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Chyba: pusher odmítl požadavek."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Chyba: %1$s."</string>

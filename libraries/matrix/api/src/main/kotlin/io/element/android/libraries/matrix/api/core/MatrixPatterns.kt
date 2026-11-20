@@ -58,6 +58,13 @@ object MatrixPatterns {
 
     private const val MAX_IDENTIFIER_LENGTH = 255
 
+    // Used to find ids and aliases in a text. Unlike DOMAIN_REGEX, the domain must end with an alphanumeric char,
+    // so trailing punctuation ("Hello @user:server.com.") is not included in the match.
+    private val PATTERN_FIND_RAW_IDENTIFIER = "\\S+:[A-Za-z0-9.-]*[A-Za-z0-9](:[0-9]{2,5})?".toRegex(RegexOption.IGNORE_CASE)
+
+    // `@room` must not be part of a larger word (i.e. `@roomba` or `me@room`).
+    private val PATTERN_FIND_AT_ROOM = "(?<![\\p{L}\\p{N}_])@room(?![\\p{L}\\p{N}_])".toRegex()
+
     /**
      * Tells if a string is a valid user Id.
      *
@@ -122,9 +129,9 @@ object MatrixPatterns {
      * Note not all cases are implemented.
      */
     fun findPatterns(text: CharSequence, permalinkParser: PermalinkParser): List<MatrixPatternResult> {
-        val rawTextMatches = "\\S+$DOMAIN_REGEX".toRegex(RegexOption.IGNORE_CASE).findAll(text)
+        val rawTextMatches = PATTERN_FIND_RAW_IDENTIFIER.findAll(text)
         val urlMatches = "\\[\\S+\\]\\((\\S+)\\)".toRegex(RegexOption.IGNORE_CASE).findAll(text)
-        val atRoomMatches = Regex("@room").findAll(text)
+        val atRoomMatches = PATTERN_FIND_AT_ROOM.findAll(text)
         return buildList {
             for (match in rawTextMatches) {
                 // Match existing id and alias patterns in the text

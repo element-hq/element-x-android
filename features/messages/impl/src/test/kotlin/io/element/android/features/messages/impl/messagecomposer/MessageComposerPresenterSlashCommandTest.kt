@@ -14,6 +14,7 @@ import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.test.FakeLocationService
+import io.element.android.features.messages.api.timeline.TextPillificator
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.draft.ComposerDraftService
@@ -21,9 +22,10 @@ import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.FakeMentionSpanFormatter
-import io.element.android.features.messages.impl.utils.FakeTextPillificationHelper
-import io.element.android.features.messages.impl.utils.TextPillificationHelper
+import io.element.android.features.messages.test.timeline.FakeTextPillificator
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
+import io.element.android.libraries.emoji.api.recentemojis.EmptyGetRecentEmojis
+import io.element.android.libraries.emoji.test.fakeEmojiPickerPresenterFactory
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -65,6 +67,7 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import io.element.android.tests.testutils.testCoroutineDispatchers
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -270,7 +273,7 @@ class MessageComposerPresenterSlashCommandTest {
             mentionSpanFormatter = FakeMentionSpanFormatter(),
             mentionSpanTheme = MentionSpanTheme(A_USER_ID)
         ),
-        textPillificationHelper: TextPillificationHelper = FakeTextPillificationHelper(),
+        textPillificator: TextPillificator = FakeTextPillificator(),
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
@@ -307,10 +310,15 @@ class MessageComposerPresenterSlashCommandTest {
         permissionsPresenterFactory = FakePermissionsPresenterFactory(permissionPresenter),
         permalinkParser = permalinkParser,
         permalinkBuilder = permalinkBuilder,
-        timelineController = TimelineController(room, timeline),
+        timelineController = TimelineController(
+            room = room,
+            liveTimeline = timeline,
+            roomCoroutineScope = backgroundScope,
+            dispatchers = testCoroutineDispatchers(),
+        ),
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
-        pillificationHelper = textPillificationHelper,
+        pillificationHelper = textPillificator,
         suggestionsProcessor = SuggestionsProcessor(slashCommandService = slashCommandService),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         notificationConversationService = notificationConversationService,
@@ -318,6 +326,10 @@ class MessageComposerPresenterSlashCommandTest {
         featureFlagService = featureFlagService,
         contentScannerService = { _, _ -> },
         contentValidationCache = InMemoryEventContentValidationCache(),
+        dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+        emojiPickerPresenterFactory = fakeEmojiPickerPresenterFactory(),
+        getRecentEmojis = EmptyGetRecentEmojis,
+        addRecentEmoji = { Result.success(Unit) },
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled

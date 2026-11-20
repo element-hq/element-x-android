@@ -10,6 +10,7 @@ package extension
 
 import ModulesConfig
 import config.AnalyticsConfig
+import isEnterpriseBuild
 import org.gradle.accessors.dm.LibrariesForLibs
 import org.gradle.api.Action
 import org.gradle.api.Project
@@ -17,12 +18,11 @@ import org.gradle.api.artifacts.ExternalModuleDependency
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.closureOf
-import org.gradle.kotlin.dsl.project
 
 private fun DependencyHandlerScope.implementation(dependency: Any) = dependencies.add("implementation", dependency)
+internal fun DependencyHandler.implementation(dependency: Any) = add("implementation", dependency)
 private fun DependencyHandlerScope.testImplementation(dependency: Any) = dependencies.add("testImplementation", dependency)
 private fun DependencyHandlerScope.testReleaseImplementation(dependency: Any) = dependencies.add("testReleaseImplementation", dependency)
-internal fun DependencyHandler.implementation(dependency: Any) = add("implementation", dependency)
 
 // Implementation + config block
 private fun DependencyHandlerScope.implementation(
@@ -30,7 +30,6 @@ private fun DependencyHandlerScope.implementation(
     config: Action<ExternalModuleDependency>
 ) = dependencies.add("implementation", dependency, closureOf<ExternalModuleDependency> { config.execute(this) })
 
-private fun DependencyHandlerScope.androidTestImplementation(dependency: Any) = dependencies.add("androidTestImplementation", dependency)
 
 private fun DependencyHandlerScope.debugImplementation(dependency: Any) = dependencies.add("debugImplementation", dependency)
 private fun DependencyHandlerScope.releaseImplementation(dependency: Any) = dependencies.add("releaseImplementation", dependency)
@@ -73,7 +72,6 @@ fun DependencyHandlerScope.commonDependencies(libs: LibrariesForLibs) {
 fun DependencyHandlerScope.composeDependencies(libs: LibrariesForLibs) {
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
-    androidTestImplementation(composeBom)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons)
@@ -94,6 +92,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:network"))
     implementation(project(":libraries:core"))
     implementation(project(":libraries:eventformatter:impl"))
+    implementation(project(":libraries:htmlrenderer:impl"))
     implementation(project(":libraries:indicator:impl"))
     implementation(project(":libraries:permissions:impl"))
     implementation(project(":libraries:audio:impl"))
@@ -126,18 +125,25 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:emoji:impl"))
 }
 
-fun DependencyHandlerScope.allServicesImpl() {
+fun DependencyHandlerScope.allServicesImpl(project: Project) {
     implementation(project(":services:analytics:compose"))
-    when (ModulesConfig.analyticsConfig) {
+    when (val analyticsConfig = ModulesConfig.analyticsConfig(project.isEnterpriseBuild)) {
         AnalyticsConfig.Disabled -> {
             implementation(project(":services:analytics:noop"))
         }
         is AnalyticsConfig.Enabled -> {
             implementation(project(":services:analytics:impl"))
-            if (ModulesConfig.analyticsConfig.withPosthog) {
-                implementation(project(":services:analyticsproviders:posthog"))
+            if (analyticsConfig.withPosthog) {
+                // F-Droid builds must not include PostHog, see https://github.com/element-hq/element-x-android/issues/7801
+                val posthogConfigurationName = if (project.configurations.findByName("gplayImplementation") != null) {
+                    "gplayImplementation"
+                } else {
+                    // Modules without the store flavors, e.g. tests:uitests
+                    "implementation"
+                }
+                add(posthogConfigurationName, project(":services:analyticsproviders:posthog"))
             }
-            if (ModulesConfig.analyticsConfig.withSentry) {
+            if (analyticsConfig.withSentry) {
                 implementation(project(":services:analyticsproviders:sentry"))
             }
         }

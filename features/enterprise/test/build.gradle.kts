@@ -18,6 +18,5 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.compound)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.wellknown.api)
     implementation(projects.tests.testutils)
 }

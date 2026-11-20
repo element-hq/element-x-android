@@ -20,12 +20,9 @@ android {
 }
 
 dependencies {
-    implementation(projects.libraries.core)
-    implementation(projects.libraries.di)
     implementation(projects.services.toolbox.api)
 
     implementation(libs.coroutines.core)
-    implementation(libs.androidx.corektx)
 
     api(projects.services.apperror.api)
 

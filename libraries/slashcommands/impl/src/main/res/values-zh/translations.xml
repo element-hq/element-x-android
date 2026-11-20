@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="slash_command_description_avatar">"在所有房间更改你的头像"</string>
+  <string name="slash_command_description_avatar_for_room">"仅更改你在当前房间内的头像"</string>
+  <string name="slash_command_description_ban_user">"使用指定的 ID 封禁用户"</string>
+  <string name="slash_command_description_confetti">"发送指定消息时附加“五彩纸屑”特效"</string>
+  <string name="slash_command_description_crash_application">"使应用程序崩溃。"</string>
+  <string name="slash_command_description_deop_user">"通过指定的 ID 降权用户"</string>
+  <string name="slash_command_description_devtools">"打开开发者工具屏幕"</string>
+  <string name="slash_command_description_discard_session">"强制丢弃加密房间中当前的出站组会话"</string>
+  <string name="slash_command_description_emote">"显示操作"</string>
+  <string name="slash_command_description_ignore_user">"忽略用户，以对你隐藏其消息"</string>
+  <string name="slash_command_description_invite_user">"通过指定的 ID 邀请用户到当前房间"</string>
+  <string name="slash_command_description_join_room">"通过指定地址加入房间"</string>
+  <string name="slash_command_description_leave_room">"离开当前房间"</string>
+  <string name="slash_command_description_lenny">"附加“( ͡° ͜ʖ ͡°)”到纯文本消息"</string>
+  <string name="slash_command_description_nick">"更改显示名称"</string>
+  <string name="slash_command_description_nick_for_room">"仅更改你在当前房间内的显示名称"</string>
+  <string name="slash_command_description_op_user">"定义用户的权力级别"</string>
+  <string name="slash_command_description_plain">"作为纯文本发送，不解析 Markdown 语法"</string>
+  <string name="slash_command_description_rainbow">"以彩虹色发送指定消息。"</string>
+  <string name="slash_command_description_rainbow_emote">"发送彩虹色表情符号。"</string>
+  <string name="slash_command_description_remove_user">"通过指定的 ID 从当前房间移除用户"</string>
+  <string name="slash_command_description_room_avatar">"更改当前房间的头像"</string>
+  <string name="slash_command_description_room_name">"设置房间名称"</string>
+  <string name="slash_command_description_shrug">"附加“ˉ\\_(ツ)_/ˉ”到纯文本消息"</string>
+  <string name="slash_command_description_snow">"发送指定消息时附加“下雪”特效"</string>
+  <string name="slash_command_description_spoiler">"作为剧透发送指定消息"</string>
+  <string name="slash_command_description_table_flip">"附加“(╯°□°）╯︵ ┻━┻”到纯文本消息"</string>
+  <string name="slash_command_description_topic">"设置房间主题"</string>
+  <string name="slash_command_description_unban_user">"使用指定 ID 解封用户"</string>
+  <string name="slash_command_description_unflip">"附加“┬──┬ ノ( ゜-゜ノ)”到纯文本消息"</string>
+  <string name="slash_command_description_unignore_user">"解除忽略用户，向你显示其未来的消息"</string>
+  <string name="slash_command_description_upgrade_room">"将房间升级到新版本"</string>
+  <string name="slash_command_description_whois">"显示用户信息"</string>
+  <string name="slash_command_error">"指令出错"</string>
+  <string name="slash_command_error_discard_session_not_handled">"仅在加密房间中支持"</string>
+  <string name="slash_command_not_supported_in_threads">"指令“%1$s”在消息列中被识别，但不受支持。"</string>
+  <string name="slash_command_parameters_error">"指令“%1$s”需要更多参数，或某些参数不正确。语法：
+
+%2$s"</string>
+  <string name="slash_command_unrecognized">"未识别的指令：%1$s"</string>
+</resources>

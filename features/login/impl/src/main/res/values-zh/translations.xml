@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"更改账户提供者"</string>
-  <string name="screen_account_provider_form_hint">"主服务器地址"</string>
-  <string name="screen_account_provider_form_notice">"输入搜索词或域名地址。"</string>
-  <string name="screen_account_provider_form_subtitle">"搜索公司、社区或私人服务器。"</string>
-  <string name="screen_account_provider_form_title">"查找账户提供者"</string>
-  <string name="screen_account_provider_signin_subtitle">"这是你的对话将存在的地方，就像你使用邮件提供者来存储电子邮件那样。"</string>
+  <string name="error_account_already_logged_in">"你已作为 %1$s 的身份登录。"</string>
+  <string name="error_account_already_logged_in_title">"检测到重复登录"</string>
+  <string name="error_account_creation_not_possible">"你的账户提供者需要升级以支持 Matrix 认证服务和账户创建。"</string>
   <string name="screen_account_provider_signin_title">"你即将登录到 %s"</string>
-  <string name="screen_account_provider_signup_subtitle">"这是你的对话将存在的地方，就像你使用邮件提供者来存储电子邮件那样。"</string>
-  <string name="screen_account_provider_signup_title">"你即将在 %s 上创建账户"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org 由 Matrix.org 基金会运营，是用于安全、去中心化的通信的公共 Matrix 网络上的大型免费服务器。"</string>
-  <string name="screen_change_account_provider_other">"其它"</string>
   <string name="screen_change_account_provider_subtitle">"使用其它账户提供者，例如你自己的私有服务器或工作账户。"</string>
-  <string name="screen_change_account_provider_title">"更改账户提供者"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s 要求 Element Pro。请从应用商店下载。"</string>
   <string name="screen_change_server_error_element_pro_required_title">"需要 Element Pro"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"我们无法访问此服务器。请检查输入的服务器 URL 是否正确。如果 URL 正确，请联系服务器管理员寻求进一步帮助。"</string>
+  <string name="screen_change_server_error_invalid_homeserver">"我们无法访问此账户提供者。请检查输入的账户提供者 URL 是否正确。如果 URL 正确，请联系账户提供者管理员寻求进一步帮助。"</string>
   <string name="screen_change_server_error_invalid_well_known">"由于 .well-known 文件存在问题，服务器不可用：
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"所选账户提供者不支持滑动同步。需要升级服务器才能使用 %1$s。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s 不允许连接到 %2$s。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"此 app 已配置为允许访问：%1$s。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"账户提供者 %1$s 不被允许。"</string>
-  <string name="screen_change_server_form_header">"主服务器 URL"</string>
   <string name="screen_change_server_form_notice">"输入域名地址。"</string>
   <string name="screen_change_server_navigation_title_login">"登录"</string>
   <string name="screen_change_server_navigation_title_register">"创建账户"</string>
@@ -40,10 +31,9 @@
   <string name="screen_login_error_invalid_credentials">"用户名与（或）密码不正确"</string>
   <string name="screen_login_error_invalid_user_id">"这不是合法的用户 ID。预期格式：“@user:homeserver.org”。"</string>
   <string name="screen_login_error_refresh_tokens">"此服务器使用刷新令牌。使用密码登录时不支持这些功能。"</string>
-  <string name="screen_login_error_unsupported_authentication">"该服务器不支持密码登录与 OAuth 登录。请联系服务器管理员或选择另一服务器。"</string>
+  <string name="screen_login_error_unsupported_authentication">"所选账户提供者不支持密码或 OAuth 登录。请联系账户提供者或选择另一账户提供者。"</string>
   <string name="screen_login_form_header">"输入详细信息"</string>
   <string name="screen_login_subtitle">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
-  <string name="screen_login_title">"欢迎回来！"</string>
   <string name="screen_login_title_with_homeserver">"登录到 %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"打开 Element Classic"</string>
   <string name="screen_missing_key_backup_step_1">"在你的设备上打开 Element Classic"</string>
@@ -52,6 +42,8 @@
   <string name="screen_missing_key_backup_step_4">"按指示启用密钥存储"</string>
   <string name="screen_missing_key_backup_step_5">"返回到 %1$s"</string>
   <string name="screen_missing_key_backup_title">"请先启用密钥存储再继续处理 %1$s"</string>
+  <string name="screen_onboarding_add_account_subtitle">"你可以在 app 中添加多个账户并轻松在它们之间切换。"</string>
+  <string name="screen_onboarding_add_account_title">"登录另一账户"</string>
   <string name="screen_onboarding_app_version">"版本%1$s"</string>
   <string name="screen_onboarding_checking_account">"正在检查账户"</string>
   <string name="screen_onboarding_sign_in_manually">"手动登录"</string>
@@ -60,7 +52,6 @@
   <string name="screen_onboarding_sign_up">"创建账户"</string>
   <string name="screen_onboarding_welcome_back">"欢迎回来"</string>
   <string name="screen_onboarding_welcome_message">"欢迎使用迄今最快的 %1$s，速度与简洁的极致。"</string>
-  <string name="screen_onboarding_welcome_subtitle">"欢迎使用 %1$s，速度与简洁的极致。"</string>
   <string name="screen_onboarding_welcome_title">"融入 Element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"建立安全连接"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"无法与新设备建立安全连接。你的现有设备仍然安全，无需担心。"</string>
@@ -102,16 +93,10 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"你需要授予 %1$s 使用设备摄像头的权限才能继续。"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"允许访问摄像头以扫描二维码"</string>
   <string name="screen_qr_code_login_scanning_state_title">"扫描二维码"</string>
-  <string name="screen_qr_code_login_start_over_button">"重新开始"</string>
   <string name="screen_qr_code_login_unknown_error_description">"发生了意外错误。请再试一次。"</string>
   <string name="screen_qr_code_login_verify_code_loading">"正在等待其它设备"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"你的账户提供者可能会要求你提供以下代码以验证登录。"</string>
   <string name="screen_qr_code_login_verify_code_title">"你的验证码"</string>
-  <string name="screen_server_confirmation_change_server">"更改账户提供者"</string>
-  <string name="screen_server_confirmation_message_login_element_dot_io">"专为 Element 员工提供的私人服务器。"</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
-  <string name="screen_server_confirmation_message_register">"这是你的对话将存在的地方，就像你使用邮件提供者来存储电子邮件那样。"</string>
-  <string name="screen_server_confirmation_title_login">"即将登录 %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"选择账户提供者"</string>
-  <string name="screen_server_confirmation_title_register">"即将在 %1$s 上创建一个账户"</string>
 </resources>

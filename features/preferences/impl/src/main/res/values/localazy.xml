@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked."</string>
-  <string name="full_screen_intent_banner_title">"Enhance your call experience"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Select the default quality of videos you upload."</string>
+  <string name="dialog_default_video_quality_selector_title">"Video upload quality"</string>
+  <string name="full_screen_intent_banner_message_android">"To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked."</string>
+  <string name="full_screen_intent_banner_title_android">"Enhance your call experience"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Choose how to receive notifications"</string>
-  <string name="screen_advanced_settings_developer_mode">"Developer mode"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Enable to have access to features and functionality for developers."</string>
   <string name="screen_advanced_settings_element_call_base_url">"Custom Element Call base URL"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Set a custom base URL for Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Invalid URL, please make sure you include the protocol (http/https) and the correct address."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Hide avatars in room invite requests"</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Hide media previews in timeline"</string>
   <string name="screen_advanced_settings_labs">"Labs"</string>
   <string name="screen_advanced_settings_live_location_section_description">"The distance you have to move to trigger an update."</string>
   <string name="screen_advanced_settings_live_location_section_footer">"Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$s."</string>
@@ -21,7 +20,6 @@
   </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Upload photos and videos faster and reduce data usage"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimise media quality"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderation and Safety"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Automatically optimise images for faster uploads and smaller file sizes."</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Optimise image upload quality"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Tap here to change."</string>
@@ -30,15 +28,12 @@
   <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standard (720p)"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Video upload quality"</string>
   <string name="screen_advanced_settings_push_provider_android">"Push notification provider"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Disable the rich text editor to type Markdown manually."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Read receipts"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"If turned off, your read receipts won\'t be sent to anyone. You will still receive read receipts from other users."</string>
   <string name="screen_advanced_settings_share_presence">"Share presence"</string>
   <string name="screen_advanced_settings_share_presence_description">"If turned off, you won’t be able to send or receive read receipts or typing notifications."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Always hide"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Always show"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"In private rooms"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"A hidden media can always be shown by tapping on it"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Show in private rooms"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Hidden media can always be shown by tapping on it."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Show media in timeline"</string>
   <string name="screen_advanced_settings_view_source_description">"Enable option to view message source in the timeline."</string>
   <string name="screen_blocked_users_empty">"You have no blocked users"</string>
@@ -52,11 +47,19 @@
   <string name="screen_edit_profile_error_title">"Unable to update profile"</string>
   <string name="screen_edit_profile_title">"Edit profile"</string>
   <string name="screen_edit_profile_updating_details">"Updating profile…"</string>
+  <string name="screen_labs_enable_gallery">"Gallery messages"</string>
+  <string name="screen_labs_enable_gallery_description">"Send multiple images or videos in one go. Stable on mobile, but not yet supported by web."</string>
+  <string name="screen_labs_enable_knocking">"Ask to join"</string>
+  <string name="screen_labs_enable_knocking_description">"Users can request access to a room that is not open for anyone to join. Stable on mobile, web implementation exists but is experimental."</string>
   <string name="screen_labs_enable_threads">"Enable thread replies"</string>
   <string name="screen_labs_enable_threads_description">"The app will restart to apply this change."</string>
   <string name="screen_labs_header_description">"Try out our latest ideas in development. These features are not finalised; they may be unstable, may change."</string>
   <string name="screen_labs_header_title">"Feeling experimental?"</string>
   <string name="screen_labs_title">"Labs"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Invites"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Other users"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Your appearance"</string>
+  <string name="screen_notification_settings_activity_section_title">"Activity"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Call ringtone"</string>
   <string name="screen_notification_settings_calls_label">"Audio and video calls"</string>
@@ -75,7 +78,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"The configuration has not been corrected, please try again."</string>
   <string name="screen_notification_settings_group_chats">"Group chats"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Your account provider does not support this option in encrypted chats, you may not get notified in some chats."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
   <string name="screen_notification_settings_message_sound_dialog_choose_other">"Choose another sound…"</string>
   <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Currently using %1$s"</string>
@@ -84,7 +87,9 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_mode_all">"All"</string>
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
   <string name="screen_notification_settings_notification_section_title">"Notify me for"</string>
-  <string name="screen_notification_settings_room_mention_label">"Notify me on @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Mentions of @room"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Dots or number of unread messages"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Show all activity in the room list"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Custom"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Custom sound…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Error deleting file"</string>
@@ -101,6 +106,10 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"system settings"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"System notifications turned off"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="screen_settings_add_account">"Add account"</string>
+  <string name="screen_settings_message_text_size_adjust_size">"Adjust size"</string>
+  <string name="screen_settings_message_text_size_default_description">"Default text size is %1$d."</string>
+  <string name="screen_settings_message_text_size_title">"Message text size"</string>
   <string name="screen_settings_user_status_away">"Away"</string>
   <string name="screen_settings_user_status_be_right_back">"Be right back"</string>
   <string name="screen_settings_user_status_custom">"Custom…"</string>
@@ -109,6 +118,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_settings_user_status_in_a_meeting">"In a meeting"</string>
   <string name="screen_settings_user_status_on_the_road">"On the road"</string>
   <string name="screen_settings_user_status_placeholder">"What\'s your status?"</string>
+  <string name="settings_version_number">"Version: %1$s (%2$s)"</string>
   <string name="theme_black">"Black"</string>
   <string name="theme_dark">"Dark"</string>
   <string name="theme_light">"Light"</string>

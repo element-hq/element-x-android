@@ -58,18 +58,18 @@ class LoginPasswordPresenter(
         }
         val accountProvider by accountProviderDataSource.flow.collectAsState()
 
-        fun handleEvent(event: LoginPasswordEvents) {
+        fun handleEvent(event: LoginPasswordEvent) {
             when (event) {
-                is LoginPasswordEvents.SetLogin -> updateFormState(formState) {
+                is LoginPasswordEvent.SetLogin -> updateFormState(formState) {
                     copy(login = event.login)
                 }
-                is LoginPasswordEvents.SetPassword -> updateFormState(formState) {
+                is LoginPasswordEvent.SetPassword -> updateFormState(formState) {
                     copy(password = event.password)
                 }
-                LoginPasswordEvents.Submit -> {
+                LoginPasswordEvent.Submit -> {
                     localCoroutineScope.submit(formState.value, loginAction)
                 }
-                LoginPasswordEvents.ClearError -> loginAction.value = AsyncData.Uninitialized
+                LoginPasswordEvent.ClearError -> loginAction.value = AsyncData.Uninitialized
             }
         }
 

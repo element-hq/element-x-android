@@ -36,7 +36,7 @@ fun aDeclineAndBlockState(
     reportReason: String = "",
     blockUser: Boolean = false,
     declineAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    eventSink: (DeclineAndBlockEvents) -> Unit = {},
+    eventSink: (DeclineAndBlockEvent) -> Unit = {},
 ) = DeclineAndBlockState(
     reportRoom = reportRoom,
     reportReason = reportReason,

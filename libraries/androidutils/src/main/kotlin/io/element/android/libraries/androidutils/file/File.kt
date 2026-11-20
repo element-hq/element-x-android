@@ -42,6 +42,32 @@ fun File.safeRenameTo(dest: File) {
     )
 }
 
+/**
+ * Returns this file name with [suffix] inserted before its extension, i.e. `"image.png"` with the
+ * suffix `"_1"` gives `"image_1.png"`. A name without extension simply gets the suffix appended.
+ */
+fun String.withFileNameSuffix(suffix: String): String {
+    val extension = substringAfterLast('.', "")
+    return if (extension.isEmpty()) {
+        "$this$suffix"
+    } else {
+        "${substringBeforeLast('.')}$suffix.$extension"
+    }
+}
+
+fun <T> saveWithUniqueFileName(
+    fileName: String,
+    uniqueSuffix: () -> String = { "_${System.currentTimeMillis()}" },
+    saveAs: (String) -> T,
+): T {
+    return try {
+        saveAs(fileName)
+    } catch (nameConflict: IllegalStateException) {
+        Timber.w(nameConflict, "Unable to build a unique file name, retrying with a suffixed one")
+        saveAs(fileName.withFileNameSuffix(uniqueSuffix()))
+    }
+}
+
 fun Context.createTmpFile(baseDir: File = cacheDir, extension: String? = null): File {
     val suffix = extension?.let { ".$extension" }
     return File.createTempFile(UUID.randomUUID().toString(), suffix, baseDir).apply { mkdirs() }
@@ -58,5 +84,9 @@ fun File.getSizeOfFiles(): Long {
             Timber.v("Get size of ${it.absolutePath}")
             true
         }
-        .sumOf { it.length() }
+        // Only sum the actual size of files, not directories, to avoid double counting or worse,
+        // since the docs mention that `length()` for directories is not reliable.
+        // For directories, we can assume a size of 4096 bytes (4 KiB) as a placeholder,
+        // which is a common block size on many file systems.
+        .sumOf { if (it.isFile) it.length() else 4096L }
 }

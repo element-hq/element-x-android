@@ -21,11 +21,8 @@ android {
 
 dependencies {
     implementation(libs.coroutines.core)
-    implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     api(projects.features.networkmonitor.api)
 
     testCommonDependencies(libs)
-    testImplementation(projects.libraries.matrix.test)
-    testImplementation(projects.features.networkmonitor.test)
 }

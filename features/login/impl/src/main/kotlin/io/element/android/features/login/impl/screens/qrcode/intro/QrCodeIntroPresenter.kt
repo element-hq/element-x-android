@@ -40,9 +40,9 @@ class QrCodeIntroPresenter(
             }
         }
 
-        fun handleEvent(event: QrCodeIntroEvents) {
+        fun handleEvent(event: QrCodeIntroEvent) {
             when (event) {
-                QrCodeIntroEvents.Continue -> if (cameraPermissionState.permissionGranted) {
+                QrCodeIntroEvent.Continue -> if (cameraPermissionState.permissionGranted) {
                     canContinue = true
                 } else {
                     pendingPermissionRequest = true

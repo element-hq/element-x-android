@@ -22,24 +22,24 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.location.api.live.isCurrentlySharing
+import io.element.android.features.location.impl.R
 import io.element.android.features.location.impl.common.LocationConstraintsCheck
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.SendLiveLocationPermissions
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
-import io.element.android.features.location.impl.common.permissions.PermissionsEvents
+import io.element.android.features.location.impl.common.permissions.PermissionsEvent
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.userlocation.UserLocationState
-import io.element.android.features.location.impl.common.userlocation.asMapLibreLocation
-import io.element.android.libraries.architecture.AsyncData
+import io.element.android.features.location.impl.common.userlocation.toLocationMeasurement
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.core.meta.BuildMeta
@@ -50,7 +50,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -68,7 +67,7 @@ class ShowLocationPresenter(
     private val joinedRoom: JoinedRoom,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
     private val userLocationStateFactory: UserLocationState.Factory,
-    private val customMapTilerConfigProvider: CustomMapTilerConfigProvider,
+    private val locationService: LocationService,
 ) : Presenter<ShowLocationState> {
     @AssistedFactory fun interface Factory {
         fun create(mode: ShowLocationMode): ShowLocationPresenter
@@ -81,15 +80,13 @@ class ShowLocationPresenter(
         val coroutineScope = rememberCoroutineScope()
         val permissionsState: PermissionsState = permissionsPresenter.present()
         var isTrackMyLocation by remember { mutableStateOf(false) }
+        var isTrackMyLocationRequested by remember { mutableStateOf(false) }
         val appName by remember { derivedStateOf { buildMeta.applicationName } }
         var dialogState: LocationConstraintsDialogState by remember {
             mutableStateOf(LocationConstraintsDialogState.None)
         }
 
-        val customMapTilerConfig by produceState(AsyncData.Loading()) {
-            // Ignore errors
-            value = AsyncData.Success(customMapTilerConfigProvider.get().getOrNull())
-        }
+        val mapTilerConfig by locationService.mapTilerConfig.collectAsState()
 
         fun checkLocationConstraints() {
             val locationConstraints = checkLocationConstraints(
@@ -99,14 +96,16 @@ class ShowLocationPresenter(
                 sendLiveLocationPermissions = SendLiveLocationPermissions.GRANTED
             )
             if (locationConstraints is LocationConstraintsCheck.PermissionShouldBeRequested) {
-                permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                permissionsState.eventSink(PermissionsEvent.RequestPermissions)
             }
             isTrackMyLocation = locationConstraints is LocationConstraintsCheck.Success
             dialogState = locationConstraints.toDialogState()
         }
 
         LaunchedEffect(permissionsState) {
-            checkLocationConstraints()
+            if (isTrackMyLocationRequested) {
+                checkLocationConstraints()
+            }
         }
 
         fun handleEvent(event: ShowLocationEvent) {
@@ -115,6 +114,7 @@ class ShowLocationPresenter(
                     locationActions.share(event.location, null)
                 }
                 is ShowLocationEvent.TrackMyLocation -> {
+                    isTrackMyLocationRequested = event.enabled
                     if (event.enabled) {
                         checkLocationConstraints()
                     } else {
@@ -130,7 +130,7 @@ class ShowLocationPresenter(
                     locationActions.openLocationSettings()
                     dialogState = LocationConstraintsDialogState.None
                 }
-                ShowLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                ShowLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvent.RequestPermissions)
                 ShowLocationEvent.StopLocationSharing -> coroutineScope.launch {
                     liveLocationShareManager.stopShare(joinedRoom.roomId)
                 }
@@ -142,7 +142,7 @@ class ShowLocationPresenter(
                 remember {
                     val relativeTime = dateFormatter.format(timestamp = mode.timestamp, mode = DateFormatterMode.Full, useRelative = true)
                     val formattedTimestamp = stringProvider.getString(
-                        CommonStrings.screen_static_location_sheet_timestamp_description,
+                        R.string.screen_static_location_sheet_timestamp_description,
                         relativeTime
                     )
                     persistentListOf(
@@ -178,7 +178,7 @@ class ShowLocationPresenter(
                             val avatarUrl = member?.avatarUrl
                             val relativeTime = dateFormatter.format(timestamp = lastLocation.timestamp, mode = DateFormatterMode.Full, useRelative = true)
                             val formattedTimestamp = stringProvider.getString(
-                                CommonStrings.screen_static_location_sheet_timestamp_description,
+                                R.string.screen_static_location_sheet_timestamp_description,
                                 relativeTime
                             )
                             LocationShareItem(
@@ -215,13 +215,13 @@ class ShowLocationPresenter(
         val hideUserLocationPuck = mode is ShowLocationMode.Live && isCurrentlySharing
         val userLocationState = if (hideUserLocationPuck) {
             // When sharing with this device, use the user LocationShareItem as source of data instead of the device.
-            val ownLocationShare by remember { derivedStateOf { updatedLocationShares.find { it.isOwnUser }?.location?.asMapLibreLocation() } }
+            val ownLocationShare by remember { derivedStateOf { updatedLocationShares.find { it.isOwnUser }?.location?.toLocationMeasurement() } }
             UserLocationState(ownLocationShare)
         } else {
             userLocationStateFactory.create(hasLocationPermission = permissionsState.isAnyGranted)
         }
         return ShowLocationState(
-            customMapTilerConfig = customMapTilerConfig,
+            mapTilerConfig = mapTilerConfig,
             dialogState = dialogState,
             locationShares = locationShares,
             focusedLocation = focusedLocation,

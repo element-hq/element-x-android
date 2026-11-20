@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.push.PushRequestStatus
+import kotlinx.coroutines.flow.Flow
 import kotlin.time.Instant
 
 interface PushHistoryService {
@@ -20,7 +21,7 @@ interface PushHistoryService {
      * Create a new push history entry.
      * Do not use directly, prefer using the extension functions.
      */
-    fun onPushResult(
+    suspend fun onPushResult(
         providerInfo: String,
         eventId: EventId?,
         roomId: RoomId?,
@@ -47,12 +48,17 @@ interface PushHistoryService {
     suspend fun getPendingPushRequests(sessionId: SessionId, since: Instant?): Result<List<PushRequest>>
 
     /**
+     * Observes the [PushRequestStatus.PENDING] push requests from the local database for a [SessionId], received after [since].
+     */
+    fun getPendingPushRequestsFlow(sessionId: SessionId, since: Instant): Flow<List<PushRequest>>
+
+    /**
      * Removes the oldest push requests for a [SessionId].
      */
     suspend fun removeOldPushRequests(sessionId: SessionId): Result<Unit>
 }
 
-fun PushHistoryService.onInvalidPushReceived(
+suspend fun PushHistoryService.onInvalidPushReceived(
     providerInfo: String,
     data: String,
 ) = onPushResult(
@@ -65,7 +71,7 @@ fun PushHistoryService.onInvalidPushReceived(
     comment = "Invalid or ignored push data:\n$data",
 )
 
-fun PushHistoryService.onUnableToRetrieveSession(
+suspend fun PushHistoryService.onUnableToRetrieveSession(
     providerInfo: String,
     eventId: EventId,
     roomId: RoomId,
@@ -80,7 +86,7 @@ fun PushHistoryService.onUnableToRetrieveSession(
     comment = "Unable to retrieve session: $reason",
 )
 
-fun PushHistoryService.onUnableToResolveEvent(
+suspend fun PushHistoryService.onUnableToResolveEvent(
     providerInfo: String,
     eventId: EventId,
     roomId: RoomId,
@@ -96,7 +102,7 @@ fun PushHistoryService.onUnableToResolveEvent(
     comment = "Unable to resolve event: $reason",
 )
 
-fun PushHistoryService.onSuccess(
+suspend fun PushHistoryService.onSuccess(
     providerInfo: String,
     eventId: EventId,
     roomId: RoomId,
@@ -117,7 +123,7 @@ fun PushHistoryService.onSuccess(
     },
 )
 
-fun PushHistoryService.onDiagnosticPush(
+suspend fun PushHistoryService.onDiagnosticPush(
     providerInfo: String,
 ) = onPushResult(
     providerInfo = providerInfo,

@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.utils.messagesummary
 
 import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
@@ -48,7 +49,7 @@ class DefaultMessageSummaryFormatter(
                 is TimelineItemLocationContent.Mode.Live -> context.getString(CommonStrings.common_shared_live_location)
                 is TimelineItemLocationContent.Mode.Static -> context.getString(CommonStrings.common_shared_location)
             }
-            is TimelineItemEncryptedContent -> context.getString(CommonStrings.common_unable_to_decrypt)
+            is TimelineItemEncryptedContent -> context.getString(R.string.common_unable_to_decrypt)
             is TimelineItemRedactedContent -> context.getString(CommonStrings.common_message_removed)
             is TimelineItemPollContent -> content.question
             is TimelineItemVoiceContent -> context.getString(CommonStrings.common_voice_message)

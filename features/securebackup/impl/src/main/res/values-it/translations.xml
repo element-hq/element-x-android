@@ -59,7 +59,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Non condividerla con nessuno!"</string>
   <string name="screen_recovery_key_change_success">"Chiave di recupero cambiata"</string>
   <string name="screen_recovery_key_change_title">"Cambiare la chiave di recupero?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Crea una nuova chiave di recupero"</string>
   <string name="screen_recovery_key_confirm_description">"Assicurati che nessuno possa vedere questa schermata!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Riprova per confermare l\'accesso all\'archivio delle chiavi."</string>
   <string name="screen_recovery_key_confirm_error_title">"Chiave di recupero errata"</string>

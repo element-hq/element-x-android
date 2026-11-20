@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -31,6 +32,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -42,14 +44,19 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
@@ -57,26 +64,24 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import androidx.constraintlayout.compose.ConstrainScope
-import androidx.constraintlayout.compose.ConstraintLayout
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayout
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReactions
+import io.element.android.features.messages.impl.timeline.model.TimelineItemSelectionData
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
@@ -137,6 +142,8 @@ import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.common.layout.ContentAvoidingLayout
+import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
@@ -155,6 +162,9 @@ val NEGATIVE_MARGIN_FOR_BUBBLE = (-8).dp
 val SENDER_AVATAR_BORDER_WIDTH = 3.dp
 
 private val BUBBLE_INCOMING_OFFSET = 16.dp
+
+/** Shared instance so that rows which never slide keep comparing equal, and keep skipping. */
+internal val NoSelectionOffset: Density.() -> IntOffset = { IntOffset.Zero }
 
 @Composable
 fun TimelineItemEventRow(
@@ -178,6 +188,7 @@ fun TimelineItemEventRow(
     onSwipeToReply: () -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    selectionData: TimelineItemSelectionData = TimelineItemSelectionData(),
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
         // Only pass down a custom clickable lambda if the content can be clicked separately
         val onContentClick = onEventClick.takeUnless { event.isWholeContentClickable }
@@ -200,6 +211,24 @@ fun TimelineItemEventRow(
     val coroutineScope = rememberCoroutineScope()
     val interactionSource = remember { MutableInteractionSource() }
 
+    // While selecting, the row acts as a selection toggle rather than opening the context menu.
+    val isSelectionToggle = selectionData.isSelectionModeActive && selectionData.canBeSelected
+    // Selection mode opens a column of [SELECTION_COLUMN_WIDTH] at the start edge for the tick. Both offsets below are derived from this single
+    // slide and resolved in the layout phase, so an animation frame moves them together without recomposing the row, and they cannot disagree.
+    val selectionProgress = selectionData.progress
+    val selectionSlide: Density.() -> Int = { (SELECTION_COLUMN_WIDTH * selectionProgress()).roundToPx() }
+    // Incoming bubbles slide aside to open that column. Outgoing (own) ones are end-aligned, opposite the tick, so they already have room.
+    val selectionContentOffset: Density.() -> IntOffset = if (event.isMine) {
+        NoSelectionOffset
+    } else {
+        { IntOffset(x = selectionSlide(), y = 0) }
+    }
+    // The tick is a child of the layout the offset above slides, so it cancels that out to be positioned against the row, then sits one column
+    // width before its resting place until the slide is complete. For an incoming row the two terms cancel and it simply rides the content in.
+    val selectionIndicatorOffset: Density.() -> IntOffset = {
+        IntOffset(x = selectionSlide() - SELECTION_COLUMN_WIDTH.roundToPx() - selectionContentOffset().x, y = 0)
+    }
+
     val onContentClick = if (event.mustBeProtected()) {
         // In this case, let the content handle the click
         {}
@@ -217,24 +246,39 @@ fun TimelineItemEventRow(
         inReplyToClick(inReplyToEventId)
     }
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.canBeRepliedTo
+    val accessibilityActions = rememberTimelineItemAccessibilityActions(
+        isEnabled = !isSelectionToggle,
+        canReply = canReply,
+        onLongClick = onLongClick,
+        onSwipeToReply = onSwipeToReply,
+    )
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .semantics { customActions = accessibilityActions }
+    ) {
         if (event.groupPosition.isNew()) {
             Spacer(modifier = Modifier.height(16.dp))
         } else {
             Spacer(modifier = Modifier.height(2.dp))
         }
-        val canReply = timelineRoomInfo.userHasPermissionToSendMessage && event.canBeRepliedTo
         if (canReply) {
             val state: SwipeableActionsState = rememberSwipeableActionsState()
-            val offset = state.offset.floatValue
             val swipeThresholdPx = 40.dp.toPx()
-            val thresholdCrossed = abs(offset) > swipeThresholdPx
             SwipeSensitivity(3f) {
-                Box(Modifier.fillMaxWidth()) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .offset(selectionContentOffset)
+                ) {
                     Row(modifier = Modifier.matchParentSize()) {
-                        ReplySwipeIndicator({ offset / 120 })
+                        ReplySwipeIndicator({ state.offset.floatValue / 120 })
                     }
                     TimelineItemEventRowContent(
+                        selectionData = selectionData,
+                        selectionIndicatorOffset = selectionIndicatorOffset,
                         event = event,
                         timelineMode = timelineMode,
                         timelineProtectionState = timelineProtectionState,
@@ -248,13 +292,13 @@ fun TimelineItemEventRow(
                         onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
                         onMoreReactionsClick = { onMoreReactionsClick(event) },
                         modifier = Modifier
-                            .absoluteOffset { IntOffset(x = offset.roundToInt(), y = 0) }
+                            .absoluteOffset { IntOffset(x = state.offset.floatValue.roundToInt(), y = 0) }
                             .draggable(
                                 orientation = Orientation.Horizontal,
-                                enabled = !state.isResettingOnRelease,
+                                enabled = !state.isResettingOnRelease && !isSelectionToggle,
                                 onDragStopped = {
                                     coroutineScope.launch {
-                                        if (thresholdCrossed) {
+                                        if (abs(state.offset.floatValue) > swipeThresholdPx) {
                                             onSwipeToReply()
                                         }
                                         state.resetOffset()
@@ -269,6 +313,9 @@ fun TimelineItemEventRow(
             }
         } else {
             TimelineItemEventRowContent(
+                modifier = Modifier.offset(selectionContentOffset),
+                selectionData = selectionData,
+                selectionIndicatorOffset = selectionIndicatorOffset,
                 event = event,
                 timelineMode = timelineMode,
                 timelineProtectionState = timelineProtectionState,
@@ -294,7 +341,10 @@ fun TimelineItemEventRow(
                         .padding(end = 16.dp)
                 } else {
                     if (timelineRoomInfo.isDm) Modifier else Modifier.padding(start = 16.dp)
-                }.padding(top = 2.dp),
+                }
+                    .padding(top = 2.dp)
+                    .offset(selectionContentOffset)
+                    .hiddenFromAccessibilityWhile(isSelectionToggle),
                 threadSummary = event.threadInfo.summary,
                 latestEventText = event.threadInfo.latestEventText,
                 isOutgoing = event.isMine,
@@ -307,15 +357,68 @@ fun TimelineItemEventRow(
         }
 
         // Read receipts / Send state
+        val sendState = event.pendingSend()?.second
         TimelineItemReadReceiptView(
             state = ReadReceiptViewState(
-                sendState = event.localSendState,
+                sendState = sendState,
                 isLastOutgoingMessage = isLastOutgoingMessage,
-                receipts = event.readReceiptState.receipts,
+                renderReadReceipts = timelineRoomInfo.renderReadReceipts,
+                knownReceipts = event.readReceiptState.receipts,
             ),
             onReadReceiptsClick = { onReadReceiptClick(event) },
-            modifier = Modifier.padding(top = 4.dp)
+            // Not slid: the read receipts sit outside the slid content, so they stay pinned to the end edge in selection mode.
+            modifier = Modifier
+                .padding(top = 4.dp)
+                .hiddenFromAccessibilityWhile(isSelectionToggle)
         )
+    }
+}
+
+/**
+ * Hides this element and its descendants from screen readers while [hidden] is true.
+ *
+ * A clickable descendant stays an accessibility node of its own even though the row merges its descendants, so while the row acts as a selection toggle
+ * it would otherwise still be reachable and activatable by a screen reader. Reactions already hide themselves this way at all times.
+ */
+private fun Modifier.hiddenFromAccessibilityWhile(hidden: Boolean): Modifier = if (hidden) {
+    semantics { hideFromAccessibility() }
+} else {
+    this
+}
+
+/**
+ * Exposes the gestures of a timeline item — long press for the action list, swipe for a reply — as TalkBack actions, since neither gesture is reachable
+ * with a screen reader enabled.
+ */
+@Composable
+private fun rememberTimelineItemAccessibilityActions(
+    isEnabled: Boolean,
+    canReply: Boolean,
+    onLongClick: () -> Unit,
+    onSwipeToReply: () -> Unit,
+): List<CustomAccessibilityAction> {
+    val messageActionsLabel = stringResource(CommonStrings.common_message_actions)
+    val replyLabel = stringResource(CommonStrings.action_reply)
+    val latestOnLongClick by rememberUpdatedState(onLongClick)
+    val latestOnSwipeToReply by rememberUpdatedState(onSwipeToReply)
+    return remember(isEnabled, canReply, messageActionsLabel, replyLabel) {
+        buildList {
+            if (!isEnabled) return@buildList
+            add(
+                CustomAccessibilityAction(messageActionsLabel) {
+                    latestOnLongClick()
+                    true
+                }
+            )
+            if (canReply) {
+                add(
+                    CustomAccessibilityAction(replyLabel) {
+                        latestOnSwipeToReply()
+                        true
+                    }
+                )
+            }
+        }
     }
 }
 
@@ -433,25 +536,34 @@ private fun TimelineItemEventRowContent(
     onMoreReactionsClick: (event: TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    selectionData: TimelineItemSelectionData = TimelineItemSelectionData(),
+    selectionIndicatorOffset: Density.() -> IntOffset = NoSelectionOffset,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
-    fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
-        end.linkTo(parent.end)
-    } else {
-        start.linkTo(parent.start)
-    }
-
-    ConstraintLayout(
+    // Message bubble
+    val bubbleState = BubbleState(
+        groupPosition = event.groupPosition,
+        isMine = event.isMine,
+        timelineRoomInfo = timelineRoomInfo,
+    )
+    TimelineItemEventRowContentLayout(
         modifier = modifier
             .wrapContentHeight()
             .fillMaxWidth(),
+        isMine = event.isMine,
+        cutTopStart = bubbleState.cutTopStart,
+        isDm = timelineRoomInfo.isDm,
     ) {
-        val (
-            sender,
-            message,
-            reactions,
-            pinIcon,
-        ) = createRefs()
+        if (selectionData.canBeSelected) {
+            SelectionIndicator(
+                selected = selectionData.isSelected,
+                modifier = Modifier
+                    .layoutId(EventRowLayoutId.SelectionIndicator)
+                    .offset(selectionIndicatorOffset)
+                    .padding(start = 16.dp)
+                    .size(24.dp),
+            )
+        }
 
         // Sender
         if (event.showSenderInformation && !timelineRoomInfo.isDm) {
@@ -461,11 +573,7 @@ private fun TimelineItemEventRowContent(
                 event.senderAvatar,
                 onUserDataClick,
                 Modifier
-                    .constrainAs(sender) {
-                        top.linkTo(parent.top)
-                        // Required for correct RTL layout
-                        start.linkTo(parent.start)
-                    }
+                    .layoutId(EventRowLayoutId.Sender)
                     .padding(horizontal = 16.dp)
                     .zIndex(1f),
             )
@@ -488,28 +596,8 @@ private fun TimelineItemEventRowContent(
             background to border
         }
 
-        // Message bubble
-        val bubbleState = BubbleState(
-            groupPosition = event.groupPosition,
-            isMine = event.isMine,
-            timelineRoomInfo = timelineRoomInfo,
-        )
         MessageEventBubble(
-            modifier = Modifier
-                .constrainAs(message) {
-                    val topMargin = if (bubbleState.cutTopStart) {
-                        NEGATIVE_MARGIN_FOR_BUBBLE
-                    } else {
-                        0.dp
-                    }
-                    top.linkTo(sender.bottom, margin = topMargin)
-                    if (event.isMine) {
-                        end.linkTo(parent.end, margin = 16.dp)
-                    } else {
-                        val startMargin = if (timelineRoomInfo.isDm) 16.dp else 16.dp + BUBBLE_INCOMING_OFFSET
-                        start.linkTo(parent.start, margin = startMargin)
-                    }
-                },
+            modifier = Modifier.layoutId(EventRowLayoutId.Message),
             state = bubbleState,
             interactionSource = interactionSource,
             onClick = onContentClick,
@@ -538,14 +626,7 @@ private fun TimelineItemEventRowContent(
                 modifier = Modifier
                     .padding(1.dp)
                     .size(16.dp)
-                    .constrainAs(pinIcon) {
-                        top.linkTo(message.top)
-                        if (event.isMine) {
-                            end.linkTo(message.start, margin = 8.dp)
-                        } else {
-                            start.linkTo(message.end, margin = 8.dp)
-                        }
-                    }
+                    .layoutId(EventRowLayoutId.PinIcon)
             )
         }
 
@@ -559,13 +640,10 @@ private fun TimelineItemEventRowContent(
                 onReactionLongClick = onReactionLongClick,
                 onMoreReactionsClick = { onMoreReactionsClick(event) },
                 modifier = Modifier
-                    .constrainAs(reactions) {
-                        top.linkTo(message.bottom, margin = (-4).dp)
-                        linkStartOrEnd(event)
-                    }
+                    .layoutId(EventRowLayoutId.Reactions)
                     .zIndex(1f)
                     .padding(
-                        // Note: due to the applied constraints, start is left for other's message and right for mine
+                        // Note: the reactions are aligned to the start for other's message and to the end for mine
                         // In design we want a offset of 6.dp compare to the bubble, so start is 22.dp (16 + 6)
                         start = when {
                             event.isMine -> 22.dp
@@ -580,6 +658,82 @@ private fun TimelineItemEventRowContent(
 }
 
 @Composable
+private fun TimelineItemEventRowContentLayout(
+    isMine: Boolean,
+    cutTopStart: Boolean,
+    isDm: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Layout(
+        modifier = modifier,
+        content = content,
+    ) { measurables, constraints ->
+        val width = constraints.maxWidth
+        val childConstraints = constraints.copyMaxDimensions()
+        fun measure(id: EventRowLayoutId) = measurables.firstOrNull { it.layoutId == id }?.measure(childConstraints)
+
+        val senderPlaceable = measure(EventRowLayoutId.Sender)
+        val messagePlaceable = measure(EventRowLayoutId.Message)!!
+        val pinIconPlaceable = measure(EventRowLayoutId.PinIcon)
+        val reactionsPlaceable = measure(EventRowLayoutId.Reactions)
+        val selectionIndicatorPlaceable = measure(EventRowLayoutId.SelectionIndicator)
+
+        // The message bubble is placed below the sender, and overlaps it if the top start corner is cut out
+        val messageTopMargin = if (cutTopStart) NEGATIVE_MARGIN_FOR_BUBBLE.roundToPx() else 0
+        val messageY = ((senderPlaceable?.height ?: 0) + messageTopMargin).coerceAtLeast(0)
+        val messageX = if (isMine) {
+            width - 16.dp.roundToPx() - messagePlaceable.width
+        } else {
+            val startMargin = if (isDm) 16.dp else 16.dp + BUBBLE_INCOMING_OFFSET
+            startMargin.roundToPx()
+        }
+        val messageBottom = messageY + messagePlaceable.height
+        // Reactions slightly overlap the bottom of the message bubble
+        val reactionsY = messageBottom + (-4).dp.roundToPx()
+        // The selection indicator is vertically centered on the message bubble
+        val selectionIndicatorY = selectionIndicatorPlaceable?.let {
+            messageY + ((messagePlaceable.height - it.height) / 2f).roundToInt()
+        } ?: 0
+
+        // This is the equivalent of `maxOf(a, b, c, d)`:
+        // Chained `coerceAtLeast` calls avoid the `vararg` `maxOf` overload, which would allocate an array on every measure pass
+        val height = messageBottom
+            .coerceAtLeast(senderPlaceable?.height ?: 0)
+            .coerceAtLeast(pinIconPlaceable?.let { messageY + it.height } ?: 0)
+            .coerceAtLeast(reactionsPlaceable?.let { reactionsY + it.height } ?: 0)
+            .coerceAtLeast(selectionIndicatorPlaceable?.let { selectionIndicatorY + it.height } ?: 0)
+            .coerceIn(constraints.minHeight, constraints.maxHeight)
+
+        layout(width, height) {
+            selectionIndicatorPlaceable?.placeRelative(x = 0, y = selectionIndicatorY)
+            senderPlaceable?.placeRelative(x = 0, y = 0)
+            messagePlaceable.placeRelative(x = messageX, y = messageY)
+            pinIconPlaceable?.placeRelative(
+                x = if (isMine) {
+                    messageX - 8.dp.roundToPx() - pinIconPlaceable.width
+                } else {
+                    messageX + messagePlaceable.width + 8.dp.roundToPx()
+                },
+                y = messageY,
+            )
+            reactionsPlaceable?.placeRelative(
+                x = if (isMine) width - reactionsPlaceable.width else 0,
+                y = reactionsY,
+            )
+        }
+    }
+}
+
+private enum class EventRowLayoutId {
+    Sender,
+    Message,
+    PinIcon,
+    Reactions,
+    SelectionIndicator,
+}
+
+@Composable
 private fun MessageSenderInformation(
     senderId: UserId,
     senderProfile: ProfileDetails,
@@ -590,7 +744,9 @@ private fun MessageSenderInformation(
     val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
     Row(
         modifier = modifier
-            // Add external clickable modifier with no indicator so the touch target is larger than just the display name
+            // Add external clickable modifier with no indicator so the touch target is larger than just the display name.
+            // It must not get the keyboard focus, since it would not draw any focus indicator: the avatar and the name will get it.
+            .focusProperties { canFocus = false }
             .clickable(onClick = onClick, enabled = true, interactionSource = remember { MutableInteractionSource() }, indication = null)
             .clearAndSetSemantics {
                 hideFromAccessibility()
@@ -600,15 +756,24 @@ private fun MessageSenderInformation(
             modifier = Modifier
                 .testTag(TestTags.timelineItemSenderAvatar)
                 .clip(CircleShape)
-                .clickable(onClick = onClick),
+                .clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = CircleShape),
+                    onClick = onClick,
+                ),
             avatarData = senderAvatar,
             avatarType = AvatarType.User,
         )
+        val senderNameShape = RoundedCornerShape(6.dp)
         SenderName(
             modifier = Modifier
                 .testTag(TestTags.timelineItemSenderName)
-                .clip(RoundedCornerShape(6.dp))
-                .clickable(onClick = onClick)
+                .clip(senderNameShape)
+                .clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = senderNameShape),
+                    onClick = onClick,
+                )
                 .padding(horizontal = 4.dp),
             senderId = senderId,
             senderProfile = senderProfile,
@@ -806,7 +971,11 @@ private fun MessageEventBubbleContent(
                 // Usually, you'd use traversalIndex for that, but it's not working for some reason
                 isTalkbackActive() -> inReplyToModifier.zIndex(1f)
                 inReplyTo is InReplyToDetails.Error -> inReplyToModifier
-                else -> inReplyToModifier.clickable(onClick = inReplyToClick)
+                else -> inReplyToModifier.clickable(
+                    interactionSource = null,
+                    indication = ripple(focusRingShape = shape),
+                    onClick = inReplyToClick,
+                )
             }
 
             val contentHasError = currentContentValidationState.hasError() || inReplyTo is InReplyToDetails.Error

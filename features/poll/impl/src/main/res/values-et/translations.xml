@@ -6,9 +6,14 @@
   <string name="screen_create_poll_answer_hint">"Valik %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Sinu tehtud muudatused pole veel salvestatud. Kas sa oled kindel, et soovid minna tagasi?"</string>
   <string name="screen_create_poll_delete_option_a11y">"Kustuta valik: %1$s"</string>
+  <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
+  <string name="screen_create_poll_options_section_title">"Valikud"</string>
   <string name="screen_create_poll_question_desc">"Küsimus või teema"</string>
   <string name="screen_create_poll_question_hint">"Mis on küsitluse teema?"</string>
+  <string name="screen_create_poll_remove_accessibility_label">"Kustuta: %1$s"</string>
+  <string name="screen_create_poll_settings_section_title">"Seadistused"</string>
   <string name="screen_create_poll_title">"Loo küsitlus"</string>
+  <string name="screen_create_poll_votes_allowed_per_person">"Hääletuskordi kasutaja kohta"</string>
   <string name="screen_edit_poll_delete_confirmation">"Kas sa oled kindel, et soovid selle küsitluse kustutada?"</string>
   <string name="screen_edit_poll_delete_confirmation_title">"Kustuta küsitlus"</string>
   <string name="screen_edit_poll_title">"Muuda küsitlust"</string>

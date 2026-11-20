@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"Methodd %1$s â llwytho\'r map. Ceisiwch eto yn nes ymlaen."</string>
+  <string name="error_failed_locating_user">"Doedd dim modd i %1$s gael mynediad i\'ch lleoliad. Ceisiwch eto yn nes ymlaen."</string>
+  <string name="error_missing_location_auth_android">"Does gan %1$s ddim caniatâd i gael mynediad i\'ch lleoliad. Gallwch alluogi mynediad yn y Gosodiadau."</string>
+  <string name="error_missing_location_rationale_android">"Does gan %1$s ddim caniatâd i gael mynediad i\'ch lleoliad. Galluogwch fynediad isod."</string>
+  <string name="screen_share_location_title">"Rhannu lleoliad"</string>
+  <string name="screen_share_my_location_action">"Rhannu fy lleoliad"</string>
+  <string name="screen_share_open_apple_maps">"Agor yn Apple Maps"</string>
+  <string name="screen_share_open_google_maps">"Agor yn Google Maps"</string>
+  <string name="screen_share_open_osm_maps">"Agor yn OpenStreetMap"</string>
+  <string name="screen_share_this_location_action">"Rhannu\'r lleoliad hwn"</string>
+  <string name="screen_view_location_title">"Lleoliad"</string>
+</resources>

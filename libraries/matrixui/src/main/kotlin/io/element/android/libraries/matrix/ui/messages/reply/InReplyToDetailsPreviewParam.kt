@@ -118,7 +118,7 @@ class InReplyToDetailsDisambiguatedPreviewParam : InReplyToDetailsPreviewParam()
 class InReplyToDetailsInformativePreviewParam : InReplyToDetailsPreviewParam() {
     override val values: Sequence<InReplyToDetails>
         get() = sequenceOf(
-            RedactedContent,
+            RedactedContent(threadInfo = null),
             UnableToDecryptContent(data = UnableToDecryptContent.Data.Unknown, threadInfo = null),
         ).map {
             aInReplyToDetails(

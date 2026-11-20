@@ -41,11 +41,16 @@
   <string name="screen_custom_recovery_key_success_notice">"A helyreállítási kulcs módosításához lépjen a Beállítások → Titkosítás → Biztonsági mentés menüpontra."</string>
   <string name="screen_custom_recovery_key_success_subtitle">"A helyreállítási kulcs segítségével megerősítheti az új eszközöket, vagy visszaállíthatja a titkosított csevegéseket, ha elveszítette a hozzáférését az összes eszközéhez."</string>
   <string name="screen_custom_recovery_key_success_title">"A biztonsági mentés most már teljesen be van állítva"</string>
-  <string name="screen_encryption_reset_action_continue_reset">"Visszaállítás folytatása"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"Folytatás"</string>
   <string name="screen_encryption_reset_bullet_1">"A fiókadatok, a kapcsolatok, a beállítások és a csevegéslista megmarad"</string>
   <string name="screen_encryption_reset_bullet_2">"Elveszíti meglévő üzenetelőzményeit"</string>
-  <string name="screen_encryption_reset_bullet_3">"Újból ellenőriznie kell az összes meglévő eszközét és csevegőpartnerét"</string>
+  <string name="screen_encryption_reset_bullet_3">"A többi felhasználó számára látható lesz, hogy digitális identitása visszaállításra került"</string>
+  <string name="screen_encryption_reset_bullet_4">"Az összes olyan eszközt, amelyen be van jelentkezve, újra meg kell erősítenie"</string>
   <string name="screen_encryption_reset_footer">"Csak akkor állítsa alaphelyzetbe a személyazonosságát, ha nem fér hozzá más bejelentkezett eszközhöz, és elveszítette a helyreállítási kulcsát."</string>
+  <string name="screen_encryption_reset_no_chats_message">"Úgy tűnik, még nincs csevegése. Ha ez így van, nyugodtan folytathatja a digitális személyazonossága alaphelyzetbe állítását."</string>
+  <string name="screen_encryption_reset_no_options_subtitle">"Nincs hozzáférése más ellenőrzött eszközhöz vagy helyreállítási kulcshoz, ezért az alkalmazás további használatához alaphelyzetbe kell állítania a digitális személyazonosságát."</string>
+  <string name="screen_encryption_reset_no_options_title">"Alaphelyzetbe kell állítania a digitális személyazonosságát"</string>
+  <string name="screen_encryption_reset_subtitle">"Ha nincs hozzáférése más hitelesített eszközhöz, és nem rendelkezik helyreállítási kulccsal, akkor a digitális személyazonosságát alaphelyzetbe kell állítania az alkalmazás további használatához."</string>
   <string name="screen_encryption_reset_title">"Nem tudja megerősíteni? Alaphelyzetbe kell állítania a digitális személyazonosságát."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Törlés"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Ha eltávolítja az összes eszközét, elveszíti titkosított csevegési előzményeit, és újra be kell állítania digitális személyazonosságát."</string>
@@ -59,7 +64,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Ezt ne ossza meg senkivel!"</string>
   <string name="screen_recovery_key_change_success">"Helyreállítási kulcs lecserélve"</string>
   <string name="screen_recovery_key_change_title">"Módosítja a helyreállítási kulcsot?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Új helyreállítási kulcs létrehozása"</string>
   <string name="screen_recovery_key_confirm_description">"Győződjön meg arról, hogy senki sem látja ezt a képernyőt!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Próbálja újra megerősíteni a kulcstárolóhoz való hozzáférést."</string>
   <string name="screen_recovery_key_confirm_error_title">"Helytelen helyreállítási kulcs"</string>
@@ -81,6 +85,7 @@
   <string name="screen_recovery_key_setup_generate_key_description">"Ezt ne ossza meg senkivel!"</string>
   <string name="screen_recovery_key_setup_success">"A helyreállítás beállítása sikeres"</string>
   <string name="screen_recovery_key_setup_title">"Helyreállítási kulcs beszerzése"</string>
+  <string name="screen_recovery_key_success_title">"Az új helyreállítási kulcsa már aktív"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Igen, visszaállítás most"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Ez a folyamat visszafordíthatatlan."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Biztos, hogy alaphelyzetbe állítja a digitális személyazonosságát?"</string>

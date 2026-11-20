@@ -8,34 +8,28 @@
 package io.element.android.features.location.impl.common.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import org.maplibre.compose.camera.CameraState
-import org.maplibre.compose.location.Location
-import org.maplibre.compose.location.LocationPuck
-import org.maplibre.compose.location.LocationPuckColors
-import org.maplibre.compose.location.LocationPuckSizes
+import org.maplibre.compose.layers.LocationIndicatorDefaults
+import org.maplibre.compose.layers.LocationIndicatorLayer
+import org.maplibre.compose.location.LocationMeasurement
 
 @Composable
 fun UserLocationPuck(
-    cameraState: CameraState,
-    location: Location?,
+    location: LocationMeasurement?,
 ) {
-    LocationPuck(
-        idPrefix = "user-location",
-        location = location,
-        cameraState = cameraState,
-        accuracyThreshold = Float.POSITIVE_INFINITY,
-        showBearingAccuracy = false,
-        showBearing = false,
-        sizes = LocationPuckSizes(
-            dotRadius = 8.dp,
-            dotStrokeWidth = 2.dp,
+    LocationIndicatorLayer(
+        id = "user-location",
+        location = location?.position,
+        // Hide the accuracy circle and the bearing accuracy sector: leaving `accuracyRadius`
+        // and `bearingAccuracy` null is what hides them.
+        accuracyRadius = null,
+        bearingAccuracy = null,
+        // Hide the bearing indicator.
+        bearing = null,
+        bearingImage = null,
+        topImage = LocationIndicatorDefaults.topImage(
+            color = ElementTheme.colors.iconAccentPrimary,
+            borderColor = ElementTheme.colors.bgCanvasDefault,
         ),
-        colors = LocationPuckColors(
-            dotFillColorCurrentLocation = ElementTheme.colors.iconAccentPrimary,
-            dotFillColorOldLocation = ElementTheme.colors.iconAccentTertiary,
-            dotStrokeColor = ElementTheme.colors.bgCanvasDefault,
-        )
     )
 }

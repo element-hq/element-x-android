@@ -12,17 +12,17 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 
 /**
- * Sends the current user's answer to a poll, wrapping the timeline call so the analytics are captured in one place.
+ * Sends the current user's answer(s) to a poll, wrapping the timeline call so the analytics are captured in one place.
  */
 interface SendPollResponseAction {
     /**
      * @param timeline the timeline the poll lives in.
      * @param pollStartId the poll start event being answered.
-     * @param answerId the id of the chosen answer.
+     * @param answerIds the ids of the chosen answers.
      */
     suspend fun execute(
         timeline: Timeline,
         pollStartId: EventId,
-        answerId: String
+        answerIds: List<String>,
     ): Result<Unit>
 }

@@ -14,6 +14,7 @@ import com.bumble.appyx.core.state.SavedStateMap
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.migration.api.AppMigrationRunner
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -21,6 +22,9 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.AnalyticsUserData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
@@ -39,8 +43,15 @@ class MatrixSessionCache(
     private val authenticationService: MatrixAuthenticationService,
     private val syncOrchestratorFactory: SyncOrchestrator.Factory,
     private val analyticsService: AnalyticsService,
+    private val appMigrationRunner: AppMigrationRunner,
 ) : MatrixClientProvider {
     private val sessionIdsToMatrixSession = ConcurrentHashMap<SessionId, InMemoryMatrixSession>()
+    private val _matrixClients = MutableStateFlow<List<MatrixClient>>(emptyList())
+
+    /**
+     * The [MatrixClient]s currently in the cache.
+     */
+    val matrixClients: StateFlow<List<MatrixClient>> = _matrixClients.asStateFlow()
     private val restoreMutex = Mutex()
 
     init {
@@ -51,10 +62,12 @@ class MatrixSessionCache(
 
     fun removeAll() {
         sessionIdsToMatrixSession.clear()
+        updateMatrixClients()
     }
 
     fun remove(sessionId: SessionId) {
         sessionIdsToMatrixSession.remove(sessionId)
+        updateMatrixClients()
     }
 
     override fun getOrNull(sessionId: SessionId): MatrixClient? {
@@ -99,6 +112,9 @@ class MatrixSessionCache(
 
     private suspend fun restore(sessionId: SessionId): Result<MatrixClient> {
         Timber.d("Restore matrix session: $sessionId")
+        // The process may have been started without any Activity (for instance to handle a push), in this case the migrations
+        // have not been applied yet. They must be applied before restoring any client, since they can for instance move the session files.
+        appMigrationRunner.runPendingMigrations()
         return authenticationService.restoreSession(sessionId)
             .onSuccess { matrixClient ->
                 // Add the current homeserver (hashed) to the extra info
@@ -122,7 +138,12 @@ class MatrixSessionCache(
             matrixClient = matrixClient,
             syncOrchestrator = syncOrchestrator,
         )
+        updateMatrixClients()
         syncOrchestrator.start()
+    }
+
+    private fun updateMatrixClients() {
+        _matrixClients.value = sessionIdsToMatrixSession.values.map { it.matrixClient }
     }
 }
 

@@ -27,11 +27,14 @@ class PostHogFactory(
         return PostHogAndroid.with(
             context,
             PostHogAndroidConfig(
-                apiKey = endpoint.apiKey,
+                projectToken = endpoint.apiKey,
                 host = endpoint.host,
                 captureApplicationLifecycleEvents = false,
                 captureDeepLinks = false,
                 captureScreenViews = false,
+                // We don't want PostHog to fetch and send the Firebase push token, nor to track the opening of push notifications
+                capturePushNotificationSubscriptions = false,
+                capturePushNotificationOpened = false,
             ).also {
                 it.debug = buildMeta.isDebuggable
                 it.sendFeatureFlagEvent = false

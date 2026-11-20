@@ -33,6 +33,8 @@ import androidx.compose.material3.RippleThemeConfiguration
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.NonRestartableComposable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,6 +58,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 internal val lowHorizontalPaddingValue = 4.dp
 
 @Composable
+@NonRestartableComposable
 fun Button(
     text: String,
     onClick: () -> Unit,
@@ -78,6 +81,7 @@ fun Button(
 )
 
 @Composable
+@NonRestartableComposable
 fun OutlinedButton(
     text: String,
     onClick: () -> Unit,
@@ -109,6 +113,7 @@ fun TextButton(
     showProgress: Boolean = false,
     destructive: Boolean = false,
     leadingIcon: IconSource? = null,
+    colors: ButtonColors = ButtonStyle.Text.getColors(destructive),
 ) = ButtonInternal(
     text = text,
     onClick = onClick,
@@ -118,7 +123,8 @@ fun TextButton(
     size = size,
     showProgress = showProgress,
     destructive = destructive,
-    leadingIcon = leadingIcon
+    leadingIcon = leadingIcon,
+    colors = colors,
 )
 
 @Composable
@@ -340,6 +346,7 @@ internal enum class ButtonStyle {
     }
 
     @Composable
+    @ReadOnlyComposable
     private fun getPrimaryColor(destructive: Boolean): Color {
         return if (destructive) {
             ElementTheme.colors.bgCriticalPrimary
@@ -349,6 +356,7 @@ internal enum class ButtonStyle {
     }
 
     @Composable
+    @ReadOnlyComposable
     private fun getDisabledContentColor(destructive: Boolean): Color {
         return if (destructive) {
             ElementTheme.colors.textCriticalPrimary.copy(alpha = 0.5f)

@@ -13,7 +13,7 @@ import coil3.SingletonImageLoader
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.preferences.impl.DefaultCacheService
-import io.element.android.libraries.cachestore.api.CacheStore
+import io.element.android.features.rageshake.api.logs.LOG_DIRECTORY_NAME
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -37,11 +37,8 @@ class DefaultClearCacheUseCase(
     private val pushService: PushService,
     private val seenInvitesStore: SeenInvitesStore,
     private val activeRoomsHolder: ActiveRoomsHolder,
-    private val cacheStore: CacheStore,
 ) : ClearCacheUseCase {
     override suspend fun invoke() = withContext(coroutineDispatchers.io) {
-        // Clear cache store
-        cacheStore.deleteAll()
         // Active rooms should be disposed of before clearing the cache
         activeRoomsHolder.clear(matrixClient.sessionId)
         // Clear Matrix cache
@@ -56,7 +53,7 @@ class DefaultClearCacheUseCase(
         // Clear app cache
         context.cacheDir?.listFiles {
             // But keep the logs
-            it.name != "logs"
+            it.name != LOG_DIRECTORY_NAME
         }?.onEach {
             it.deleteRecursively()
         }

@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Изберете как да получавате известия"</string>
-  <string name="screen_advanced_settings_developer_mode">"Режим за програмисти"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Активирайте, за да имате достъп до функции и функционалности за програмисти."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Скриване на профилните снимки в заявките за покана за стая"</string>
   <string name="screen_advanced_settings_labs">"Експерименти"</string>
   <string name="screen_advanced_settings_media_compression_description">"Качвайте снимки и видеоклипове по-бързо и намалете използването на данни"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимизиране на качеството на медията"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерация и безопасност"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Изключете редактора за форматиран текст, за да пишете Markdown ръчно."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Потвърждения за прочитане"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Ако е изключено, вашите потвърждения за прочитане няма да бъдат изпращани на никого. Все още ще получавате потвърждения за прочитане от други потребители."</string>
   <string name="screen_advanced_settings_share_presence">"Споделяне на присъствието"</string>
   <string name="screen_advanced_settings_share_presence_description">"Ако е изключено, няма да можете да изпращате или получавате потвърждения за прочитане или известия за писане."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Скриване винаги"</string>
@@ -58,6 +52,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системни настройки"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системните известия са изключени"</string>
   <string name="screen_notification_settings_title">"Известия"</string>
+  <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="theme_dark">"Тъмен"</string>
   <string name="theme_light">"Светъл"</string>
   <string name="theme_system">"Система"</string>

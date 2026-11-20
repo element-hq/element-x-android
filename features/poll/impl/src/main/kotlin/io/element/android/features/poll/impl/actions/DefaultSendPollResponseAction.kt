@@ -20,10 +20,10 @@ import io.element.android.services.analytics.api.AnalyticsService
 class DefaultSendPollResponseAction(
     private val analyticsService: AnalyticsService,
 ) : SendPollResponseAction {
-    override suspend fun execute(timeline: Timeline, pollStartId: EventId, answerId: String): Result<Unit> {
+    override suspend fun execute(timeline: Timeline, pollStartId: EventId, answerIds: List<String>): Result<Unit> {
         return timeline.sendPollResponse(
             pollStartId = pollStartId,
-            answers = listOf(answerId),
+            answers = answerIds,
         ).onSuccess {
             analyticsService.capture(PollVote())
         }

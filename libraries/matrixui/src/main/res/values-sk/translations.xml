@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_room_address_already_exists">"Táto adresa miestnosti už existuje, skúste upraviť pole adresy miestnosti alebo zmeňte názov miestnosti"</string>
+  <string name="error_room_address_invalid_symbols">"Niektoré znaky nie sú povolené. Podporované sú iba písmená, číslice a nasledujúce symboly ! $ &amp; \'() * +/; =? @ [] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Odoslať pozvánku"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Chceli by ste začať rozhovor s používateľom %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Poslať pozvánku?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) vás pozval/a"</string>
+  <string name="screen_space_list_description">"Priestory, ktoré ste vytvorili alebo ku ktorým ste sa pripojili."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Priestory"</string>
 </resources>

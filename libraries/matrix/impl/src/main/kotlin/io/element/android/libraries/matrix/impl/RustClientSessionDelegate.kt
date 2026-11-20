@@ -37,6 +37,7 @@ private val loggerTag = LoggerTag("RustClientSessionDelegate")
  * It implements both [ClientSessionDelegate] and [ClientDelegate] to react to session data updates and auth errors.
  *
  * IMPORTANT: you must set the [client] property as soon as possible so [didReceiveAuthError] can work properly.
+ * Since [didReceiveAuthError] does not tell which session is concerned, each client must have its own instance.
  */
 class RustClientSessionDelegate(
     private val sessionStore: SessionStore,

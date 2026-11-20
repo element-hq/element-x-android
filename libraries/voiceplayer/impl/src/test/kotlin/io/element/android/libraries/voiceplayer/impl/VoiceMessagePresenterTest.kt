@@ -16,6 +16,7 @@ import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvent
 import io.element.android.libraries.voiceplayer.api.VoiceMessageException
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
+import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.test
@@ -34,6 +35,8 @@ class VoiceMessagePresenterTest {
                 assertThat(it.buttonType).isEqualTo(VoiceMessageState.ButtonType.Play)
                 assertThat(it.progress).isEqualTo(0f)
                 assertThat(it.time).isEqualTo("1:01")
+                assertThat(it.isPlaying).isFalse()
+                assertThat(it.durationMs).isEqualTo(61_000)
             }
         }
     }
@@ -140,6 +143,29 @@ class VoiceMessagePresenterTest {
     }
 
     @Test
+    fun `cursor stays visible when playback ends`() = runTest {
+        val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 1_000, fakePlayedDurationMs = 1_000),
+            duration = 1_000.milliseconds,
+        )
+        presenter.test {
+            val initialState = awaitItem().also {
+                assertThat(it.showCursor).isFalse()
+            }
+
+            initialState.eventSink(VoiceMessageEvent.PlayPause)
+
+            var endedState = awaitItem()
+            while (endedState.progress < 1f || endedState.buttonType != VoiceMessageState.ButtonType.Play) {
+                endedState = awaitItem()
+            }
+            assertThat(endedState.buttonType).isEqualTo(VoiceMessageState.ButtonType.Play)
+            assertThat(endedState.progress).isEqualTo(1f)
+            assertThat(endedState.showCursor).isTrue()
+        }
+    }
+
+    @Test
     fun `content with null eventId shows disabled button`() = runTest {
         val presenter = createVoiceMessagePresenter(
             eventId = null,
@@ -164,6 +190,7 @@ class VoiceMessagePresenterTest {
                 assertThat(it.buttonType).isEqualTo(VoiceMessageState.ButtonType.Play)
                 assertThat(it.progress).isEqualTo(0f)
                 assertThat(it.time).isEqualTo("0:10")
+                assertThat(it.showCursor).isFalse()
             }
 
             initialState.eventSink(VoiceMessageEvent.Seek(0.5f))
@@ -172,6 +199,7 @@ class VoiceMessagePresenterTest {
                 assertThat(it.buttonType).isEqualTo(VoiceMessageState.ButtonType.Play)
                 assertThat(it.progress).isEqualTo(0.5f)
                 assertThat(it.time).isEqualTo("0:05")
+                assertThat(it.showCursor).isTrue()
             }
         }
     }
@@ -252,6 +280,7 @@ fun TestScope.createVoiceMessagePresenter(
     sessionCoroutineScope = this,
     player = DefaultVoiceMessagePlayer(
         mediaPlayer = mediaPlayer,
+        voiceRecorder = FakeVoiceRecorder(),
         voiceMessageMediaRepoFactory = { _, _, _ -> voiceMessageMediaRepo },
         eventId = eventId,
         mediaSource = mediaSource,

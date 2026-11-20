@@ -13,12 +13,6 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.network"
-
-    buildTypes {
-        release {
-            consumerProguardFiles("consumer-rules.pro")
-        }
-    }
 }
 
 setupDependencyInjection()
@@ -27,7 +21,6 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
-    implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.preferences.api)
     implementation(platform(libs.network.okhttp.bom))

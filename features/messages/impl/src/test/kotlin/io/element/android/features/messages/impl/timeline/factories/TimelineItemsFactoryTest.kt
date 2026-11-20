@@ -12,13 +12,23 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
+import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
+import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
+import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
+import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
+import io.element.android.libraries.matrix.test.timeline.aRedactedContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -85,6 +95,40 @@ class TimelineItemsFactoryTest {
     }
 
     @Test
+    fun `redacted message keeps its thread info`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(
+                computeReadReceipts = false,
+                computeReactions = false,
+            )
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    timestamp = 0L,
+                    content = aRedactedContent(
+                        threadInfo = EventThreadInfo.ThreadResponse(A_THREAD_ID),
+                    ),
+                ),
+            )
+        )
+        var threadInfo: TimelineItemThreadInfo? = null
+        factory.timelineItems.test {
+            factory.replaceWith(
+                timelineItems = items,
+            )
+            threadInfo = awaitItem()
+                .filterIsInstance<TimelineItem.Event>()
+                .firstOrNull()
+                ?.threadInfo
+            cancelAndIgnoreRemainingEvents()
+        }
+        assertThat(threadInfo).isEqualTo(TimelineItemThreadInfo.ThreadResponse(A_THREAD_ID))
+    }
+
+    @Test
     fun `a key verification request is not rendered`() = runTest {
         val factory = aTimelineItemsFactory(
             config = TimelineItemsFactoryConfig(
@@ -117,8 +161,6 @@ class TimelineItemsFactoryTest {
         factory.timelineItems.test {
             factory.replaceWith(
                 timelineItems = items,
-                roomMembers = emptyList(),
-                renderReadReceipts = false,
             )
             val bodies = awaitItem()
                 .filterIsInstance<TimelineItem.Event>()
@@ -126,6 +168,198 @@ class TimelineItemsFactoryTest {
             assertThat(bodies).containsExactly("A regular message")
             cancelAndIgnoreRemainingEvents()
         }
+    }
+
+    @Test
+    fun `a deleted message keeps the summary of the thread it heads`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(
+                computeReadReceipts = false,
+                computeReactions = false,
+            )
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    content = aRedactedContent(
+                        threadInfo = EventThreadInfo.ThreadRoot(
+                            summary = ThreadSummary(latestEvent = AsyncData.Uninitialized, numberOfReplies = 3),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(
+                timelineItems = items,
+            )
+            val threadInfo = awaitItem()
+                .filterIsInstance<TimelineItem.Event>()
+                .single()
+                .threadInfo
+            assertThat(threadInfo).isInstanceOf(TimelineItemThreadInfo.ThreadRoot::class.java)
+            assertThat((threadInfo as TimelineItemThreadInfo.ThreadRoot).summary.numberOfReplies).isEqualTo(3)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `a sender the room member list knows nothing about keeps the profile the timeline gave`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(
+                computeReadReceipts = false,
+                computeReactions = false,
+            )
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    senderProfile = ProfileDetails.Unavailable,
+                    content = aMessageContent(body = "A regular message"),
+                ),
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(
+                timelineItems = items,
+            )
+            val event = awaitItem().filterIsInstance<TimelineItem.Event>().single()
+            assertThat(event.senderProfile).isEqualTo(ProfileDetails.Unavailable)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `a pass with the same inputs reuses the cached items`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(computeReadReceipts = true, computeReactions = true),
+        )
+        val items = List(5) { index ->
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-$index"),
+                event = anEventTimelineItem(
+                    sender = A_USER_ID,
+                    senderProfile = ProfileDetails.Unavailable,
+                    content = aMessageContent(body = "Message $index"),
+                ),
+            )
+        }
+
+        factory.replaceWith(timelineItems = items)
+        val first = factory.timelineItems.first().filterIsInstance<TimelineItem.Event>()
+
+        factory.replaceWith(timelineItems = items)
+        val second = factory.timelineItems.first().filterIsInstance<TimelineItem.Event>()
+        assertThat(first).containsExactlyElementsIn(second)
+    }
+
+    @Test
+    fun `an unchanged virtual item does not invalidate the events around it`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(computeReadReceipts = true, computeReactions = true),
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(sender = A_USER_ID, content = aMessageContent(body = "Message 0")),
+            ),
+            MatrixTimelineItem.Virtual(
+                uniqueId = UniqueId("day-divider"),
+                virtual = VirtualTimelineItem.DayDivider(timestamp = 0L),
+            ),
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-1"),
+                event = anEventTimelineItem(sender = A_USER_ID, content = aMessageContent(body = "Message 1")),
+            ),
+        )
+
+        factory.replaceWith(timelineItems = items)
+        val first = factory.timelineItems.first().filterIsInstance<TimelineItem.Event>()
+
+        factory.replaceWith(timelineItems = items)
+        val second = factory.timelineItems.first().filterIsInstance<TimelineItem.Event>()
+
+        assertThat(second).hasSize(first.size)
+        second.forEachIndexed { index, item ->
+            assertThat(item).isSameInstanceAs(first[index])
+        }
+    }
+
+    @Test
+    fun `a read marker with nothing after it is not rendered`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(computeReadReceipts = false, computeReactions = false)
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(sender = A_USER_ID, content = aMessageContent(body = "A regular message")),
+            ),
+            MatrixTimelineItem.Virtual(
+                uniqueId = UniqueId("read-marker"),
+                virtual = VirtualTimelineItem.ReadMarker,
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(timelineItems = items)
+            val rendered = awaitItem()
+            assertThat(rendered.map { it.isReadMarker() }).containsExactly(false)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `a read marker followed by an event is rendered`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(computeReadReceipts = false, computeReactions = false)
+        )
+        val items = listOf(
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-0"),
+                event = anEventTimelineItem(sender = A_USER_ID, content = aMessageContent(body = "A regular message")),
+            ),
+            MatrixTimelineItem.Virtual(
+                uniqueId = UniqueId("read-marker"),
+                virtual = VirtualTimelineItem.ReadMarker,
+            ),
+            MatrixTimelineItem.Event(
+                uniqueId = UniqueId("event-1"),
+                event = anEventTimelineItem(sender = A_USER_ID, content = aMessageContent(body = "An unread message")),
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(timelineItems = items)
+            val rendered = awaitItem()
+            assertThat(rendered.map { it.isReadMarker() }).containsExactly(false, true, false).inOrder()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `a read marker which is the only item is kept`() = runTest {
+        val factory = aTimelineItemsFactory(
+            config = TimelineItemsFactoryConfig(computeReadReceipts = false, computeReactions = false)
+        )
+        val items = listOf(
+            MatrixTimelineItem.Virtual(
+                uniqueId = UniqueId("read-marker"),
+                virtual = VirtualTimelineItem.ReadMarker,
+            ),
+        )
+        factory.timelineItems.test {
+            factory.replaceWith(timelineItems = items)
+            val rendered = awaitItem()
+            assertThat(rendered.map { it.isReadMarker() }).containsExactly(true)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    private fun TimelineItem.isReadMarker(): Boolean {
+        return (this as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel
     }
 
     private suspend fun TestScope.groupPositionsOf(timestamps: List<Long>): List<TimelineItemGroupPosition> {
@@ -149,8 +383,6 @@ class TimelineItemsFactoryTest {
         factory.timelineItems.test {
             factory.replaceWith(
                 timelineItems = items,
-                roomMembers = emptyList(),
-                renderReadReceipts = false,
             )
             positions = awaitItem()
                 .filterIsInstance<TimelineItem.Event>()

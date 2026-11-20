@@ -54,16 +54,13 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.time.Duration.Companion.minutes
 
-@Suppress("LargeClass")
 class InReplyToMetadataKtTest : RobolectricTest() {
     @Test
     fun `any message content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             anInReplyToDetailsReady(eventContent = aMessageContent()).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(InReplyToMetadata.Text("textContent"))
-            }
+            assertThat(awaitItem()).isEqualTo(InReplyToMetadata.Text("textContent"))
         }
     }
 
@@ -82,18 +79,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 )
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = aMediaSource(),
-                            textContent = "body",
-                            type = AttachmentThumbnailType.Image,
-                            blurHash = A_BLUR_HASH,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = aMediaSource(),
+                        textContent = "body",
+                        type = AttachmentThumbnailType.Image,
+                        blurHash = A_BLUR_HASH,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -112,18 +107,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 )
             ).metadata(hideImage = true)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = null,
-                            textContent = "body",
-                            type = AttachmentThumbnailType.Image,
-                            blurHash = A_BLUR_HASH,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = null,
+                        textContent = "body",
+                        type = AttachmentThumbnailType.Image,
+                        blurHash = A_BLUR_HASH,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -140,18 +133,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 )
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = aMediaSource(url = "url"),
-                            textContent = "body",
-                            type = AttachmentThumbnailType.Image,
-                            blurHash = A_BLUR_HASH,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = aMediaSource(url = "url"),
+                        textContent = "body",
+                        type = AttachmentThumbnailType.Image,
+                        blurHash = A_BLUR_HASH,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -168,18 +159,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 )
             ).metadata(hideImage = true)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = null,
-                            textContent = "body",
-                            type = AttachmentThumbnailType.Image,
-                            blurHash = A_BLUR_HASH,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = null,
+                        textContent = "body",
+                        type = AttachmentThumbnailType.Image,
+                        blurHash = A_BLUR_HASH,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -198,18 +187,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 )
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = aMediaSource(),
-                            textContent = "body",
-                            type = AttachmentThumbnailType.Video,
-                            blurHash = A_BLUR_HASH,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = aMediaSource(),
+                        textContent = "body",
+                        type = AttachmentThumbnailType.Video,
+                        blurHash = A_BLUR_HASH,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -228,18 +215,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 )
             ).metadata(hideImage = true)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = null,
-                            textContent = "body",
-                            type = AttachmentThumbnailType.Video,
-                            blurHash = A_BLUR_HASH,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = null,
+                        textContent = "body",
+                        type = AttachmentThumbnailType.Video,
+                        blurHash = A_BLUR_HASH,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -263,18 +248,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 )
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = aMediaSource(),
-                            textContent = "body",
-                            type = AttachmentThumbnailType.File,
-                            blurHash = null,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = aMediaSource(),
+                        textContent = "body",
+                        type = AttachmentThumbnailType.File,
+                        blurHash = null,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -298,18 +281,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 )
             ).metadata(hideImage = true)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = null,
-                            textContent = "body",
-                            type = AttachmentThumbnailType.File,
-                            blurHash = null,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = null,
+                        textContent = "body",
+                        type = AttachmentThumbnailType.File,
+                        blurHash = null,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -332,17 +313,15 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 )
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            textContent = "body",
-                            type = AttachmentThumbnailType.Audio,
-                            blurHash = null,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        textContent = "body",
+                        type = AttachmentThumbnailType.Audio,
+                        blurHash = null,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -362,18 +341,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 ).metadata(hideImage = false)
             }
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = null,
-                            textContent = "Shared location",
-                            type = AttachmentThumbnailType.Location,
-                            blurHash = null,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = null,
+                        textContent = "Shared location",
+                        type = AttachmentThumbnailType.Location,
+                        blurHash = null,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -395,18 +372,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 ).metadata(hideImage = false)
             }
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = null,
-                            textContent = "Voice message",
-                            type = AttachmentThumbnailType.Voice,
-                            blurHash = null,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = null,
+                        textContent = "Voice message",
+                        type = AttachmentThumbnailType.Voice,
+                        blurHash = null,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -445,18 +420,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 ).metadata(hideImage = false)
             }
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = aMediaSource(),
-                            textContent = "2 media items…",
-                            type = AttachmentThumbnailType.Image,
-                            blurHash = A_BLUR_HASH,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = aMediaSource(),
+                        textContent = "2 media items…",
+                        type = AttachmentThumbnailType.Image,
+                        blurHash = A_BLUR_HASH,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -505,18 +478,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 ).metadata(hideImage = false)
             }
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = null,
-                            textContent = "2 attachments…",
-                            type = AttachmentThumbnailType.File,
-                            blurHash = null,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = null,
+                        textContent = "2 attachments…",
+                        type = AttachmentThumbnailType.File,
+                        blurHash = null,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -555,18 +526,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 ).metadata(hideImage = false)
             }
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = aMediaSource(),
-                            textContent = "My vacation photos",
-                            type = AttachmentThumbnailType.Image,
-                            blurHash = A_BLUR_HASH,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = aMediaSource(),
+                        textContent = "My vacation photos",
+                        type = AttachmentThumbnailType.Image,
+                        blurHash = A_BLUR_HASH,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -615,18 +584,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 ).metadata(hideImage = false)
             }
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = null,
-                            textContent = "My documents",
-                            type = AttachmentThumbnailType.File,
-                            blurHash = null,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = null,
+                        textContent = "My documents",
+                        type = AttachmentThumbnailType.File,
+                        blurHash = null,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -637,18 +604,16 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 eventContent = aPollContent()
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(
-                    InReplyToMetadata.Thumbnail(
-                        attachmentThumbnailInfo = AttachmentThumbnailInfo(
-                            thumbnailSource = null,
-                            textContent = "Do you like polls?",
-                            type = AttachmentThumbnailType.Poll,
-                            blurHash = null,
-                        )
+            assertThat(awaitItem()).isEqualTo(
+                InReplyToMetadata.Thumbnail(
+                    attachmentThumbnailInfo = AttachmentThumbnailInfo(
+                        thumbnailSource = null,
+                        textContent = "Do you like polls?",
+                        type = AttachmentThumbnailType.Poll,
+                        blurHash = null,
                     )
                 )
-            }
+            )
         }
     }
 
@@ -656,12 +621,10 @@ class InReplyToMetadataKtTest : RobolectricTest() {
     fun `redacted content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             anInReplyToDetailsReady(
-                eventContent = RedactedContent
+                eventContent = RedactedContent(threadInfo = null)
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(InReplyToMetadata.Redacted)
-            }
+            assertThat(awaitItem()).isEqualTo(InReplyToMetadata.Redacted)
         }
     }
 
@@ -675,9 +638,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 ),
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isEqualTo(InReplyToMetadata.UnableToDecrypt)
-            }
+            assertThat(awaitItem()).isEqualTo(InReplyToMetadata.UnableToDecrypt)
         }
     }
 
@@ -688,9 +649,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 eventContent = FailedToParseMessageLikeContent("", "")
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isNull()
-            }
+            assertThat(awaitItem()).isNull()
         }
     }
 
@@ -701,9 +660,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 eventContent = FailedToParseStateContent("", "", "")
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isNull()
-            }
+            assertThat(awaitItem()).isNull()
         }
     }
 
@@ -714,9 +671,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 eventContent = ProfileChangeContent("", "", "", "")
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isNull()
-            }
+            assertThat(awaitItem()).isNull()
         }
     }
 
@@ -727,9 +682,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 eventContent = aRoomMembershipContent(userId = A_USER_ID)
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isNull()
-            }
+            assertThat(awaitItem()).isNull()
         }
     }
 
@@ -740,9 +693,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 eventContent = StateContent("", OtherState.RoomJoinRules(null))
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isNull()
-            }
+            assertThat(awaitItem()).isNull()
         }
     }
 
@@ -753,9 +704,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 eventContent = UnknownContent
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isNull()
-            }
+            assertThat(awaitItem()).isNull()
         }
     }
 
@@ -766,9 +715,7 @@ class InReplyToMetadataKtTest : RobolectricTest() {
                 eventContent = null
             ).metadata(hideImage = false)
         }.test {
-            awaitItem().let {
-                assertThat(it).isNull()
-            }
+            assertThat(awaitItem()).isNull()
         }
     }
 }

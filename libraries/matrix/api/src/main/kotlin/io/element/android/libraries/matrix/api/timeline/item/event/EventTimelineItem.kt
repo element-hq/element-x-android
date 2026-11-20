@@ -24,6 +24,8 @@ data class EventTimelineItem(
     val isOwn: Boolean,
     val isRemote: Boolean,
     val localSendState: LocalEventSendState?,
+    val editSendState: LocalEventSendState?,
+    val redactionSendState: LocalEventSendState?,
     val reactions: ImmutableList<EventReaction>,
     val receipts: ImmutableList<Receipt>,
     val sender: UserId,
@@ -51,6 +53,7 @@ data class EventTimelineItem(
         is PollContent -> content.threadInfo
         is StickerContent -> content.threadInfo
         is UnableToDecryptContent -> content.threadInfo
+        is RedactedContent -> content.threadInfo
         else -> null
     }
 

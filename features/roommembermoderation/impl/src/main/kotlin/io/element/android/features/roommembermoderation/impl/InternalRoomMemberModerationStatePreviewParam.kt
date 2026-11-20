@@ -11,7 +11,7 @@ package io.element.android.features.roommembermoderation.impl
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.ModerationActionState
-import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvent
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
@@ -93,7 +93,7 @@ fun aRoomMembersModerationState(
     kickUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     banUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     unbanUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    eventSink: (RoomMemberModerationEvents) -> Unit = {},
+    eventSink: (RoomMemberModerationEvent) -> Unit = {},
 ) = InternalRoomMemberModerationState(
     permissions = permissions,
     selectedUser = selectedUser,

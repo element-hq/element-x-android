@@ -42,7 +42,7 @@ import org.robolectric.annotation.Config
 class SpaceViewTest : RobolectricTest() {
     @Test
     fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<SpaceEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<SpaceEvent>(expectEvents = false)
         ensureCalledOnce {
             setSpaceView(
                 aSpaceState(
@@ -58,7 +58,7 @@ class SpaceViewTest : RobolectricTest() {
     @Test
     fun `clicking on a room name invokes the expected callback`() = runAndroidComposeUiTest {
         val aSpaceRoom = aSpaceRoom(roomId = A_ROOM_ID, displayName = A_ROOM_NAME)
-        val eventsRecorder = EventsRecorder<SpaceEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<SpaceEvent>(expectEvents = false)
         ensureCalledOnceWithParam(aSpaceRoom) {
             setSpaceView(
                 aSpaceState(
@@ -75,7 +75,7 @@ class SpaceViewTest : RobolectricTest() {
     @Test
     fun `clicking on Join room emits the expected Event`() = runAndroidComposeUiTest {
         val aSpaceRoom = aSpaceRoom(roomId = A_ROOM_ID, state = null)
-        val eventsRecorder = EventsRecorder<SpaceEvents>()
+        val eventsRecorder = EventsRecorder<SpaceEvent>()
         setSpaceView(
             aSpaceState(
                 children = listOf(aSpaceRoom),
@@ -84,14 +84,14 @@ class SpaceViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_join)
-        eventsRecorder.assertSingle(SpaceEvents.Join(aSpaceRoom))
+        eventsRecorder.assertSingle(SpaceEvent.Join(aSpaceRoom))
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on accept invite emits the expected Event`() = runAndroidComposeUiTest {
         val aSpaceRoom = aSpaceRoom(roomId = A_ROOM_ID, state = CurrentUserMembership.INVITED)
-        val eventsRecorder = EventsRecorder<SpaceEvents>()
+        val eventsRecorder = EventsRecorder<SpaceEvent>()
         setSpaceView(
             aSpaceState(
                 hasMoreToLoad = false,
@@ -100,14 +100,14 @@ class SpaceViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_accept)
-        eventsRecorder.assertSingle(SpaceEvents.AcceptInvite(aSpaceRoom))
+        eventsRecorder.assertSingle(SpaceEvent.AcceptInvite(aSpaceRoom))
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on decline invite emits the expected Event`() = runAndroidComposeUiTest {
         val aSpaceRoom = aSpaceRoom(roomId = A_ROOM_ID, state = CurrentUserMembership.INVITED)
-        val eventsRecorder = EventsRecorder<SpaceEvents>()
+        val eventsRecorder = EventsRecorder<SpaceEvent>()
         setSpaceView(
             aSpaceState(
                 hasMoreToLoad = false,
@@ -116,13 +116,13 @@ class SpaceViewTest : RobolectricTest() {
             ),
         )
         clickOn(CommonStrings.action_decline)
-        eventsRecorder.assertSingle(SpaceEvents.DeclineInvite(aSpaceRoom))
+        eventsRecorder.assertSingle(SpaceEvent.DeclineInvite(aSpaceRoom))
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on topic emits the expected Event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<SpaceEvents>()
+        val eventsRecorder = EventsRecorder<SpaceEvent>()
         setSpaceView(
             aSpaceState(
                 spaceInfo = aRoomInfo(topic = A_ROOM_TOPIC),
@@ -131,12 +131,12 @@ class SpaceViewTest : RobolectricTest() {
             )
         )
         onNodeWithText(A_ROOM_TOPIC).performClick()
-        eventsRecorder.assertSingle(SpaceEvents.ShowTopicViewer(A_ROOM_TOPIC))
+        eventsRecorder.assertSingle(SpaceEvent.ShowTopicViewer(A_ROOM_TOPIC))
     }
 
     @Test
     fun `clicking back in manage mode emits ExitManageMode event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<SpaceEvents>()
+        val eventsRecorder = EventsRecorder<SpaceEvent>()
         setSpaceView(
             aSpaceState(
                 hasMoreToLoad = false,
@@ -145,13 +145,13 @@ class SpaceViewTest : RobolectricTest() {
             )
         )
         pressBackKey()
-        eventsRecorder.assertSingle(SpaceEvents.ExitManageMode)
+        eventsRecorder.assertSingle(SpaceEvent.ExitManageMode)
     }
 
     @Test
     fun `clicking on room in manage mode emits ToggleRoomSelection event`() = runAndroidComposeUiTest {
         val aSpaceRoom = aSpaceRoom(roomId = A_ROOM_ID, displayName = A_ROOM_NAME)
-        val eventsRecorder = EventsRecorder<SpaceEvents>()
+        val eventsRecorder = EventsRecorder<SpaceEvent>()
         setSpaceView(
             aSpaceState(
                 children = listOf(aSpaceRoom),
@@ -161,12 +161,12 @@ class SpaceViewTest : RobolectricTest() {
             )
         )
         onNodeWithText(A_ROOM_NAME).performClick()
-        eventsRecorder.assertSingle(SpaceEvents.ToggleRoomSelection(A_ROOM_ID))
+        eventsRecorder.assertSingle(SpaceEvent.ToggleRoomSelection(A_ROOM_ID))
     }
 
     @Test
     fun `clicking remove button emits RemoveSelectedRooms event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<SpaceEvents>()
+        val eventsRecorder = EventsRecorder<SpaceEvent>()
         setSpaceView(
             aSpaceState(
                 children = listOf(aSpaceRoom(roomId = A_ROOM_ID)),
@@ -177,13 +177,13 @@ class SpaceViewTest : RobolectricTest() {
             )
         )
         clickOn(CommonStrings.action_remove)
-        eventsRecorder.assertSingle(SpaceEvents.RemoveSelectedRooms)
+        eventsRecorder.assertSingle(SpaceEvent.RemoveSelectedRooms)
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking confirm in removal dialog emits ConfirmRoomRemoval event`() = runAndroidComposeUiTest {
-        val eventsRecorder = EventsRecorder<SpaceEvents>()
+        val eventsRecorder = EventsRecorder<SpaceEvent>()
         setSpaceView(
             aSpaceState(
                 children = listOf(aSpaceRoom(roomId = A_ROOM_ID)),
@@ -196,7 +196,7 @@ class SpaceViewTest : RobolectricTest() {
         )
         // Click on the Remove button in the confirmation dialog
         clickOn(CommonStrings.action_remove, inDialog = true)
-        eventsRecorder.assertSingle(SpaceEvents.ConfirmRoomRemoval)
+        eventsRecorder.assertSingle(SpaceEvent.ConfirmRoomRemoval)
     }
 
     @Test

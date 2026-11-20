@@ -9,7 +9,7 @@ package io.element.android.libraries.androidutils.network
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import kotlinx.coroutines.Dispatchers
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import kotlinx.coroutines.withContext
 import java.net.InetAddress
 
@@ -18,8 +18,10 @@ interface DnsResolver {
 }
 
 @ContributesBinding(AppScope::class)
-class DefaultDnsResolver : DnsResolver {
-    override suspend fun resolve(host: String): List<InetAddress> = withContext(Dispatchers.IO) {
+class DefaultDnsResolver(
+    private val coroutineDispatchers: CoroutineDispatchers,
+) : DnsResolver {
+    override suspend fun resolve(host: String): List<InetAddress> = withContext(coroutineDispatchers.io) {
         InetAddress.getAllByName(host).toList()
     }
 }

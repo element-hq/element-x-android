@@ -17,5 +17,5 @@ data class ChangeServerState(
     // configuring (and re-networking) the homeserver a second time.
     val changeServerAction: AsyncData<MatrixHomeServerDetails>,
     val localNetworkPermissionDialog: LocalNetworkPermissionDialog,
-    val eventSink: (ChangeServerEvents) -> Unit
+    val eventSink: (ChangeServerEvent) -> Unit
 )

@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -51,7 +52,8 @@ class RustThreadsListServiceTest {
         }
     }
 
-    @Suppress("UnusedFlow")
+    // The returned flows are not collected on purpose: only the call to the FFI method is tested
+    @Suppress("UnusedFlow", "IgnoredReturnValue")
     @Test
     fun `subscribing to item updates twice only calls the FFI method once`() = runTest {
         val subscribeToItemsUpdatesRecorder = lambdaRecorder<ThreadListEntriesListener, TaskHandle> { FakeFfiTaskHandle() }
@@ -122,6 +124,7 @@ class RustThreadsListServiceTest {
     ) = RustThreadsListService(
         inner = inner,
         roomCoroutineScope = backgroundScope,
+        roomDispatcher = StandardTestDispatcher(testScheduler),
     )
 
     private fun aRustThreadListUpdate() = ThreadListUpdate.Append(

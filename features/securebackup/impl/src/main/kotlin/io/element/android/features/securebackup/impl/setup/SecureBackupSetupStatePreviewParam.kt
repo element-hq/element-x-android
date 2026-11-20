@@ -24,7 +24,8 @@ open class SecureBackupSetupStatePreviewParam : PreviewParameterProvider<SecureB
                 setupState = SetupState.CreatedAndSaved(aFormattedRecoveryKey()),
                 showSaveConfirmationDialog = true,
             ),
-            aSecureBackupSetupState(setupState = SetupState.Error(Exception("Test error"))),
+            aSecureBackupSetupState(setupState = SetupState.Error(SetupErrorType.Unknown)),
+            aSecureBackupSetupState(setupState = SetupState.Error(SetupErrorType.Network)),
             // Add other states here
         )
 }

@@ -15,10 +15,11 @@ import kotlinx.parcelize.Parcelize
 data class BugReportState(
     val formState: BugReportFormState,
     val hasCrashLogs: Boolean,
+    val canIncludeLogs: Boolean,
     val screenshotUri: String?,
     val sendingProgress: Float,
     val sending: AsyncAction<Unit>,
-    val eventSink: (BugReportEvents) -> Unit
+    val eventSink: (BugReportEvent) -> Unit
 ) {
     val submitEnabled = sending !is AsyncAction.Loading
     val isDescriptionInError = sending is AsyncAction.Failure &&

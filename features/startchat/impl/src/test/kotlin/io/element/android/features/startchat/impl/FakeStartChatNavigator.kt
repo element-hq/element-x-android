@@ -8,7 +8,6 @@
 
 package io.element.android.features.startchat.impl
 
-import io.element.android.features.startchat.StartChatNavigator
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 
 class FakeStartChatNavigator(

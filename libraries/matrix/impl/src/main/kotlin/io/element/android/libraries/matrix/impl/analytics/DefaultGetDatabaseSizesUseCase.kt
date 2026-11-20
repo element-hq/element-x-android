@@ -44,6 +44,9 @@ class DefaultGetDatabaseSizesUseCase(
             cryptoStore = cryptoSize.bytes,
             eventCacheStore = eventCacheSize.bytes,
             mediaStore = mediaCacheSize.bytes,
+            // TODO - The search index is not stored in a database file but in a directory, which can be expensive to calculate.
+            //  For now, we return null to avoid performance issues.
+            searchIndex = null,
         ))
     }
 

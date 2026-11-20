@@ -13,75 +13,64 @@ import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import org.junit.Test
 
 class MapTilerTileServerStyleUriBuilderTest {
-    private val builder = MapTilerTileServerStyleUriBuilder(
-        baseUrl = "https://base.url",
-        apiKey = "anApiKey",
-        lightMapId = "aLightMapId",
-        darkMapId = "aDarkMapId",
+    private val builder = MapTilerTileServerStyleUriBuilder()
+
+    private val config = MapTilerConfig(
+        apiKey = "API_KEY",
+        lightStyleId = "light",
+        darkStyleId = "dark",
+        baseUrl = "https://custom.url/maps/",
     )
 
     @Test
     fun `light map uri`() {
         assertThat(
             builder.build(
-                customMapTilerConfig = null,
+                mapTilerConfig = config,
                 darkMode = false,
             )
-        ).isEqualTo("https://base.url/aLightMapId/style.json?key=anApiKey")
+        ).isEqualTo("https://custom.url/maps/light/style.json?key=API_KEY")
     }
 
     @Test
     fun `dark map uri`() {
         assertThat(
             builder.build(
-                customMapTilerConfig = null,
+                mapTilerConfig = config,
                 darkMode = true,
             )
-        ).isEqualTo("https://base.url/aDarkMapId/style.json?key=anApiKey")
+        ).isEqualTo("https://custom.url/maps/dark/style.json?key=API_KEY")
     }
 
     @Test
-    fun `custom map uri light`() {
+    fun `missing values fall back to the public MapTiler defaults`() {
+        val partialConfig = MapTilerConfig(
+            apiKey = "API_KEY",
+            lightStyleId = null,
+            darkStyleId = " ",
+            baseUrl = "  ",
+        )
         assertThat(
             builder.build(
-                customMapTilerConfig = MapTilerConfig(
-                    apiKey = "API_KEY",
-                    lightStyleId = "light",
-                    darkStyleId = "dark",
-                    baseUrl = "https://custom.url/style.json"
-                ),
+                mapTilerConfig = partialConfig,
                 darkMode = false,
             )
-        ).isEqualTo("https://custom.url/style.json/light/style.json?key=API_KEY")
-    }
-
-    @Test
-    fun `custom map uri dark`() {
+        ).isEqualTo("https://api.maptiler.com/maps/basic-v2/style.json?key=API_KEY")
         assertThat(
             builder.build(
-                customMapTilerConfig = MapTilerConfig(
-                    apiKey = "API_KEY",
-                    lightStyleId = "light",
-                    darkStyleId = "dark",
-                    baseUrl = "https://custom.url/style.json"
-                ),
+                mapTilerConfig = partialConfig,
                 darkMode = true,
             )
-        ).isEqualTo("https://custom.url/style.json/dark/style.json?key=API_KEY")
+        ).isEqualTo("https://api.maptiler.com/maps/basic-v2-dark/style.json?key=API_KEY")
     }
 
     @Test
-    fun `blank custom map uri falls back to the built-in style`() {
+    fun `blank api key is kept as is`() {
         assertThat(
             builder.build(
-                customMapTilerConfig = MapTilerConfig(
-                    apiKey = "API_KEY",
-                    lightStyleId = "light",
-                    darkStyleId = "dark",
-                    baseUrl = "  "
-                ),
+                mapTilerConfig = config.copy(apiKey = ""),
                 darkMode = false,
             )
-        ).isEqualTo("https://base.url/light/style.json?key=API_KEY")
+        ).isEqualTo("https://custom.url/maps/light/style.json?key=")
     }
 }

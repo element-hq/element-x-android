@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_scanning">"Skeniranje…"</string>
   <string name="screen_media_browser_delete_confirmation_subtitle">"Ova će se datoteka ukloniti iz sobe i članovi joj neće moći pristupiti."</string>
   <string name="screen_media_browser_delete_confirmation_title">"Želite li izbrisati datoteku?"</string>
   <string name="screen_media_browser_download_error_message">"Provjerite internetsku vezu i pokušajte ponovno."</string>

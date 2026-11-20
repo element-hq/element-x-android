@@ -96,7 +96,8 @@ class DefaultVoiceMessageComposerPresenter(
 
         LaunchedEffect(permissionState.permissionGranted) {
             if (permissionState.permissionGranted) {
-                pendingEvent?.let {
+                val event = pendingEvent
+                if (event != null) {
                     localCoroutineScope.startRecording()
                     pendingEvent = null
                 }
@@ -245,17 +246,23 @@ class DefaultVoiceMessageComposerPresenter(
         val playerTime by remember(playerState, recorderState) { derivedStateOf { displayTime(playerState, recorderState) } }
         val waveform by remember(recorderState) { derivedStateOf { recorderState.finishedWaveform() } }
 
+        val recorderDuration = (recorderState as VoiceRecorderState.Finished).duration
+        val duration = playerState.durationMs?.milliseconds ?: recorderDuration
+
         return VoiceMessageState.Preview(
             isSending = isSending,
             isPlaying = playerState.isPlaying,
             showCursor = showCursor,
             playbackProgress = playerState.progress,
             time = playerTime,
+            duration = duration,
             waveform = waveform,
         )
     }
 
     private fun CoroutineScope.startRecording() = launch {
+        // Stop any voice message being played, otherwise it would be captured by the recording.
+        player.pauseAnyPlayback()
         try {
             audioFocus.requestAudioFocus(AudioFocusRequester.RecordVoiceMessage) {
                 // something else grabbed focus (phone call, etc) - finish gracefully

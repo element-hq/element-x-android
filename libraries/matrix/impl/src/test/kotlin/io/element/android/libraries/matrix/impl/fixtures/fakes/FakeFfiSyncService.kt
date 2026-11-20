@@ -16,10 +16,17 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 
 class FakeFfiSyncService(
     private val roomListService: RoomListService = FakeFfiRoomListService(),
+    private val start: suspend () -> Unit = {},
+    private val stop: suspend () -> Unit = {},
+    private val destroy: (() -> Unit)? = null,
 ) : SyncService(NoHandle) {
     override fun roomListService(): RoomListService = roomListService
     override fun state(listener: SyncServiceStateObserver): TaskHandle {
         return FakeFfiTaskHandle()
     }
-    override suspend fun stop() {}
+    override suspend fun start() = start.invoke()
+    override suspend fun stop() = stop.invoke()
+    override fun destroy() {
+        destroy?.invoke() ?: super.destroy()
+    }
 }

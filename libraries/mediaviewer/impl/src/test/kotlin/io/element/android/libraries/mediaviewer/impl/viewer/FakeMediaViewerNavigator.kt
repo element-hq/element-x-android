@@ -13,15 +13,15 @@ import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeMediaViewerNavigator(
     private val onViewInTimelineClickLambda: (EventId) -> Unit = { lambdaError() },
-    private val onForwardClickLambda: (EventId, Boolean) -> Unit = { _, _ -> lambdaError() },
+    private val onForwardClickLambda: (EventId) -> Unit = { lambdaError() },
     private val onItemDeletedLambda: () -> Unit = { lambdaError() },
 ) : MediaViewerNavigator {
     override fun onViewInTimelineClick(eventId: EventId) {
         onViewInTimelineClickLambda(eventId)
     }
 
-    override fun onForwardClick(eventId: EventId, fromPinnedEvents: Boolean) {
-        onForwardClickLambda(eventId, fromPinnedEvents)
+    override fun onForwardClick(eventId: EventId) {
+        onForwardClickLambda(eventId)
     }
 
     override fun onItemDeleted() {

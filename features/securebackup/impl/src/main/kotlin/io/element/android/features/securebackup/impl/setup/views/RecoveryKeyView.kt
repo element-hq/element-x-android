@@ -52,6 +52,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.PasswordVisibilityToggle
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.TextFieldValidity
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -64,17 +65,34 @@ internal fun RecoveryKeyView(
     onSubmit: (() -> Unit)?,
     toggleRecoveryKeyVisibility: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    label: String = stringResource(id = CommonStrings.common_recovery_key),
+    footerText: String? = null,
+    errorText: String? = null,
+    hideFooter: Boolean = false,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = stringResource(id = CommonStrings.common_recovery_key),
+            text = label,
             style = ElementTheme.typography.fontBodyMdRegular,
+            color = if (errorText != null) ElementTheme.colors.textCriticalPrimary else ElementTheme.colors.textPrimary,
         )
-        RecoveryKeyContent(state, onClick, onChange, onSubmit, toggleRecoveryKeyVisibility)
-        RecoveryKeyFooter(state)
+        RecoveryKeyContent(state, onClick, onChange, onSubmit, toggleRecoveryKeyVisibility, isInvalid = errorText != null)
+        when {
+            errorText != null -> Text(
+                text = errorText,
+                color = ElementTheme.colors.textCriticalPrimary,
+                style = ElementTheme.typography.fontBodySmRegular,
+            )
+            footerText != null -> Text(
+                text = footerText,
+                color = ElementTheme.colors.textSecondary,
+                style = ElementTheme.typography.fontBodySmRegular,
+            )
+            !hideFooter -> RecoveryKeyFooter(state)
+        }
     }
 }
 
@@ -85,6 +103,7 @@ private fun RecoveryKeyContent(
     onChange: ((String) -> Unit)?,
     onSubmit: (() -> Unit)?,
     toggleRecoveryKeyVisibility: (Boolean) -> Unit,
+    isInvalid: Boolean,
 ) {
     when (state.recoveryKeyUserStory) {
         RecoveryKeyUserStory.Setup,
@@ -94,6 +113,7 @@ private fun RecoveryKeyContent(
             toggleRecoveryKeyVisibility = toggleRecoveryKeyVisibility,
             onChange = onChange,
             onSubmit = onSubmit,
+            isInvalid = isInvalid,
         )
     }
 }
@@ -186,6 +206,7 @@ private fun RecoveryKeyFormContent(
     toggleRecoveryKeyVisibility: (Boolean) -> Unit,
     onChange: ((String) -> Unit)?,
     onSubmit: (() -> Unit)?,
+    isInvalid: Boolean,
 ) {
     onChange ?: error("onChange should not be null")
     onSubmit ?: error("onSubmit should not be null")
@@ -213,6 +234,7 @@ private fun RecoveryKeyFormContent(
         value = state.formattedRecoveryKey.orEmpty(),
         onValueChange = onChange,
         enabled = state.inProgress.not(),
+        validity = if (isInvalid) TextFieldValidity.Invalid else TextFieldValidity.None,
         visualTransformation = recoveryKeyVisualTransformation,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,

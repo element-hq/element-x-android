@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_room_address_already_exists">"Den här rumsadressen finns redan. Försök att redigera adressfältet för rummet eller ändra rummets namn"</string>
+  <string name="error_room_address_invalid_symbols">"Vissa tecken är inte tillåtna. Endast bokstäver, siffror och följande symboler stöds ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Skicka inbjudan"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Vill du starta en chatt med %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Skicka inbjudan?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) bjöd in dig"</string>
+  <string name="screen_space_list_description">"Utrymmen som du har skapat eller gått med i."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Utrymmen"</string>
 </resources>

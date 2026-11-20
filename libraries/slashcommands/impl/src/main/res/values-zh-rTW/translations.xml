@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="slash_command_description_avatar">"變更您在所有聊天室的個人檔案圖片"</string>
+  <string name="slash_command_description_avatar_for_room">"僅在目前聊天室變更您的大頭照"</string>
+  <string name="slash_command_description_ban_user">"封鎖指定 ID 的使用者"</string>
+  <string name="slash_command_description_confetti">"傳送附有五彩紙屑效果的指定訊息"</string>
+  <string name="slash_command_description_crash_application">"讓應用程式當機。"</string>
+  <string name="slash_command_description_deop_user">"解除指定 ID 使用者的管理員權限"</string>
+  <string name="slash_command_description_devtools">"開啟開發者工具畫面"</string>
+  <string name="slash_command_description_discard_session">"強制捨棄加密聊天室目前使用的傳出群組工作階段"</string>
+  <string name="slash_command_description_emote">"顯示動作"</string>
+  <string name="slash_command_description_ignore_user">"忽略某個使用者，對您隱藏該使用者的訊息"</string>
+  <string name="slash_command_description_invite_user">"邀請指定 ID 的使用者加入目前的聊天室"</string>
+  <string name="slash_command_description_join_room">"加入指定位址的聊天室"</string>
+  <string name="slash_command_description_leave_room">"離開目前的聊天室"</string>
+  <string name="slash_command_description_lenny">"在純文字訊息前加上 ( ͡° ͜ʖ ͡°)"</string>
+  <string name="slash_command_description_nick">"變更您的顯示暱稱"</string>
+  <string name="slash_command_description_nick_for_room">"僅在目前聊天室變更您的顯示暱稱"</string>
+  <string name="slash_command_description_op_user">"定義使用的權力等級"</string>
+  <string name="slash_command_description_plain">"以純文字傳送訊息，不將內容解析為 Markdown"</string>
+  <string name="slash_command_description_rainbow">"以彩虹色彩傳送指定訊息"</string>
+  <string name="slash_command_description_rainbow_emote">"以彩虹色彩傳送指定表情反應"</string>
+  <string name="slash_command_description_remove_user">"從此聊天室移除指定 ID 的使用者"</string>
+  <string name="slash_command_description_room_avatar">"變更目前聊天室的大頭照"</string>
+  <string name="slash_command_description_room_name">"設定聊天室名稱"</string>
+  <string name="slash_command_description_shrug">"在純文字訊息前加上 ¯\\_(ツ)_/¯"</string>
+  <string name="slash_command_description_snow">"傳送附有雪花效果的指定訊息"</string>
+  <string name="slash_command_description_spoiler">"將指定訊息設為劇透"</string>
+  <string name="slash_command_description_table_flip">"在純文字訊息前加上 (╯°□°）╯︵ ┻━┻"</string>
+  <string name="slash_command_description_topic">"設定聊天室主題"</string>
+  <string name="slash_command_description_unban_user">"取消封鎖指定 ID 的使用者"</string>
+  <string name="slash_command_description_unflip">"在純文字訊息前加上 ┬──┬ ノ( ゜-゜ノ)"</string>
+  <string name="slash_command_description_unignore_user">"不再忽略某使用者，今後將顯示其訊息"</string>
+  <string name="slash_command_description_upgrade_room">"將聊天室升級為新版本"</string>
+  <string name="slash_command_description_whois">"顯示使用者資訊"</string>
+  <string name="slash_command_error">"命令錯誤"</string>
+  <string name="slash_command_error_discard_session_not_handled">"僅在加密聊天室中支援"</string>
+  <string name="slash_command_not_supported_in_threads">"可辨識命令「%1$s」，但不支援在討論串中使用。"</string>
+  <string name="slash_command_parameters_error">"命令「%1$s」需要更多參數，或某些參數不正確。語法如下：
+
+%2$s"</string>
+  <string name="slash_command_unrecognized">"無法辨識的命令：%1$s"</string>
+</resources>

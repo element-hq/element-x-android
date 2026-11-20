@@ -12,7 +12,10 @@ package io.element.android.features.lockscreen.impl.unlock.keypad
 
 import android.view.KeyEvent
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.input.InputMode
+import androidx.compose.ui.input.InputModeManager
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.platform.LocalInputModeManager
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
@@ -52,7 +55,9 @@ class PinKeypadTest : RobolectricTest() {
     @Test
     fun `typing using the hardware keyboard emits the expected events`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinKeypadModel>()
-        setPinKeyPad(onClick = eventsRecorder)
+        val inputModeManager = setPinKeyPad(onClick = eventsRecorder)
+        // Like a hardware keyboard would do, leave the touch mode, else the keys are not focusable.
+        runOnIdle { inputModeManager.requestInputMode(InputMode.Keyboard) }
         onNodeWithText("1").requestFocus()
         onAllNodes(isRoot())[0].performKeyInput {
             val keys = listOf(
@@ -115,13 +120,16 @@ class PinKeypadTest : RobolectricTest() {
 
     private fun AndroidComposeUiTest<ComponentActivity>.setPinKeyPad(
         onClick: (PinKeypadModel) -> Unit = EnsureNeverCalledWithParam(),
-    ) {
+    ): InputModeManager {
+        lateinit var inputModeManager: InputModeManager
         setContent {
+            inputModeManager = LocalInputModeManager.current
             PinKeypad(
                 onClick = onClick,
                 maxWidth = 1000.dp,
                 maxHeight = 1000.dp,
             )
         }
+        return inputModeManager
     }
 }

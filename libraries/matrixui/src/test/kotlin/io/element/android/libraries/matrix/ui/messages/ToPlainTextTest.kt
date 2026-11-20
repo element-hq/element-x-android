@@ -149,4 +149,16 @@ class ToPlainTextTest : RobolectricTest() {
         )
         assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("This is the message content.")
     }
+
+    @Test
+    fun `TextMessageType toPlainText - returns the body if the formatted one only contains an image`() {
+        val messageType = TextMessageType(
+            body = "\uD83D\uDE1C",
+            formatted = FormattedBody(
+                format = MessageFormat.HTML,
+                body = "<img data-mx-emoticon src=\"mxc://matrix.org/anImage\" height=\"32\" width=\"32\" alt=\"\uD83D\uDE1C\" />"
+            )
+        )
+        assertThat(messageType.toPlainText(permalinkParser = FakePermalinkParser())).isEqualTo("\uD83D\uDE1C")
+    }
 }

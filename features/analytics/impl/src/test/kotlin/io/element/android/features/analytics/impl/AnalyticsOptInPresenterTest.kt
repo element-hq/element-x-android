@@ -12,7 +12,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.analytics.api.AnalyticsOptInEvents
+import io.element.android.features.analytics.api.AnalyticsOptInEvent
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -37,7 +37,7 @@ class AnalyticsOptInPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(analyticsService.didAskUserConsentFlow.first()).isFalse()
-            initialState.eventSink.invoke(AnalyticsOptInEvents.EnableAnalytics(true))
+            initialState.eventSink.invoke(AnalyticsOptInEvent.EnableAnalytics(true))
             assertThat(analyticsService.didAskUserConsentFlow.first()).isTrue()
             assertThat(analyticsService.userConsentFlow.first()).isTrue()
         }
@@ -55,7 +55,7 @@ class AnalyticsOptInPresenterTest {
         }.test {
             val initialState = awaitItem()
             assertThat(analyticsService.didAskUserConsentFlow.first()).isFalse()
-            initialState.eventSink.invoke(AnalyticsOptInEvents.EnableAnalytics(false))
+            initialState.eventSink.invoke(AnalyticsOptInEvent.EnableAnalytics(false))
             assertThat(analyticsService.didAskUserConsentFlow.first()).isTrue()
             assertThat(analyticsService.userConsentFlow.first()).isFalse()
         }

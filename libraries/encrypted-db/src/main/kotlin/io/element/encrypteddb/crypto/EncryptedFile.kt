@@ -25,7 +25,7 @@ import java.io.FileOutputStream
  *
  * It uses hardcoded constants that are used in that library, for backwards compatibility reasons.
  */
-internal class EncryptedFile(
+class EncryptedFile(
     private val context: Context,
     private val file: File
 ) {

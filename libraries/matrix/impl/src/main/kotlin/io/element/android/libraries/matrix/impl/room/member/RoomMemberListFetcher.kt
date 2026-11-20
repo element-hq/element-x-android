@@ -76,6 +76,8 @@ internal class RoomMemberListFetcher(
         }
     }
 
+    // The CancellationException is rethrown, just after being logged.
+    @Suppress("SuspendFunSwallowedCancellation")
     private suspend fun MutableStateFlow<RoomMembersState>.fetchCachedRoomMembers(asPendingState: Boolean = true) {
         Timber.i("Loading cached members for room $roomId")
         try {
@@ -102,7 +104,7 @@ internal class RoomMemberListFetcher(
             // Send current member list with pending state to notify the UI that we are loading new members
             value = pendingWithCurrentMembers()
             // Start loading new members
-            value = RoomMembersState.Ready(parseAndEmitMembers(room.members()))
+            value = RoomMembersState.Ready(parseAndEmitMembers(room.membersFetchingGlobalProfiles()))
         } catch (exception: CancellationException) {
             Timber.d("Cancelled loading updated members for room $roomId")
             throw exception

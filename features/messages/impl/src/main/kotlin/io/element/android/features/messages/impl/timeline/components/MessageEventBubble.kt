@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -70,6 +71,7 @@ fun MessageEventBubble(
     borderColor: Color? = null,
     content: @Composable BoxScope.() -> Unit = {},
 ) {
+    val bubbleShape = remember(state) { MessageEventBubbleDefaults.shape(state.cutTopStart, state.groupPosition, state.isMine) }
     val clickableModifier = if (isTalkbackActive()) {
         Modifier
     } else {
@@ -77,7 +79,7 @@ fun MessageEventBubble(
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick,
-                indication = ripple(),
+                indication = ripple(focusRingShape = bubbleShape),
                 interactionSource = interactionSource
             )
             .onKeyboardContextMenuAction(onLongClick)
@@ -86,7 +88,6 @@ fun MessageEventBubble(
     val cutTopStart = state.cutTopStart
     // Ignore state.isHighlighted for now, we need a design decision on it.
     val backgroundBubbleColor by rememberUpdatedState(customBackgroundColor ?: MessageEventBubbleDefaults.backgroundBubbleColor(state.isMine))
-    val bubbleShape = remember(state) { MessageEventBubbleDefaults.shape(state.cutTopStart, state.groupPosition, state.isMine) }
     val radiusPx = (avatarRadius + SENDER_AVATAR_BORDER_WIDTH).toPx()
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
 
@@ -178,6 +179,7 @@ object MessageEventBubbleDefaults {
     }
 
     @Composable
+    @ReadOnlyComposable
     fun backgroundBubbleColor(isMine: Boolean): Color {
         return if (isMine) {
             ElementTheme.colors.messageFromMeBackground

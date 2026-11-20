@@ -40,9 +40,16 @@ interface BugReporter {
     )
 
     /**
-     * Provide the log directory, i.e. where the rotating log files are written.
+     * Provide the log directory, i.e. where the rotating log files are currently written.
+     * It depends on the bug report configuration of the signed-in accounts.
      */
     fun logDirectory(): File
+
+    /**
+     * Provide the root log directory, which contains the current log directory and the log directories
+     * used for the other bug report configurations.
+     */
+    fun logRootDirectory(): File
 
     /**
      * Set the current tracing log level, so it can be reported alongside the bug.

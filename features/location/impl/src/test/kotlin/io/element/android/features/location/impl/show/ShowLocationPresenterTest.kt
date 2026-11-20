@@ -12,18 +12,19 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.enterprise.api.remoteconfig.CustomMapTilerConfigProvider
 import io.element.android.features.enterprise.test.remoteconfig.aMapTilerConfig
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.FakeUserLocationStateFactory
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
-import io.element.android.features.location.impl.common.permissions.PermissionsEvents
+import io.element.android.features.location.impl.common.permissions.PermissionsEvent
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
+import io.element.android.features.location.test.FakeLocationService
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -66,7 +67,7 @@ class ShowLocationPresenterTest {
         locationActions: FakeLocationActions = fakeLocationActions,
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
-        customMapTilerConfigProvider: CustomMapTilerConfigProvider = { Result.success(null) },
+        locationService: LocationService = FakeLocationService(mapTilerConfig = aMapTilerConfig()),
     ) = ShowLocationPresenter(
         mode = mode,
         permissionsPresenterFactory = { fakePermissionsPresenter },
@@ -77,29 +78,45 @@ class ShowLocationPresenterTest {
         joinedRoom = joinedRoom,
         liveLocationShareManager = liveLocationShareManager,
         userLocationStateFactory = FakeUserLocationStateFactory(),
-        customMapTilerConfigProvider = customMapTilerConfigProvider,
+        locationService = locationService,
     )
 
     @Test
-    fun `present - non-null customMapStyleUrl`() = runTest {
+    fun `present - mapTilerConfig is provided by the location service`() = runTest {
         val mapTilerConfig = aMapTilerConfig(apiKey = "A KEY")
-        val shareLocationPresenter = createShowLocationPresenter(customMapTilerConfigProvider = { Result.success(mapTilerConfig) })
-        shareLocationPresenter.test {
-            val state = awaitItem()
-            assertThat(state.customMapTilerConfig.isLoading()).isTrue()
-            val finalState = awaitItem()
-            assertThat(finalState.customMapTilerConfig.dataOrNull()).isEqualTo(mapTilerConfig)
+        val showLocationPresenter = createShowLocationPresenter(locationService = FakeLocationService(mapTilerConfig = mapTilerConfig))
+        showLocationPresenter.test {
+            assertThat(awaitItem().mapTilerConfig).isEqualTo(mapTilerConfig)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `emits initial state with partial location permission`() = runTest {
+    fun `does not track user location on initial state with partial location permission`() = runTest {
         fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.SomeGranted))
 
         val presenter = createShowLocationPresenter()
         presenter.test {
             assertThat(awaitItem().isTrackMyLocation).isFalse()
-            assertThat(awaitItem().isTrackMyLocation).isTrue()
+            assertThat(fakePermissionsPresenter.events).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `does not request location permission on initial state`() = runTest {
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.NoneGranted,
+                permissionsRequested = false,
+            )
+        )
+
+        val presenter = createShowLocationPresenter()
+        presenter.test {
+            assertThat(awaitItem().isTrackMyLocation).isFalse()
+            assertThat(fakePermissionsPresenter.events).isEmpty()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -120,7 +137,7 @@ class ShowLocationPresenterTest {
     fun `centers on user location`() = runTest {
         fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
 
-        val presenter = createShowLocationPresenter(customMapTilerConfigProvider = { Result.success(aMapTilerConfig()) })
+        val presenter = createShowLocationPresenter()
 
         presenter.test {
             val initialState = awaitItem()
@@ -188,7 +205,7 @@ class ShowLocationPresenterTest {
 
             // Continue the dialog sends permission request to the permissions presenter
             trackLocationState.eventSink(ShowLocationEvent.RequestPermissions)
-            assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
+            assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvent.RequestPermissions)
         }
     }
 
@@ -208,8 +225,31 @@ class ShowLocationPresenterTest {
 
             initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
 
-            assertThat(fakePermissionsPresenter.events).contains(PermissionsEvents.RequestPermissions)
+            assertThat(fakePermissionsPresenter.events).contains(PermissionsEvent.RequestPermissions)
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `starts tracking user location after requested permission is granted`() = runTest {
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.NoneGranted,
+                shouldShowRationale = false,
+                permissionsRequested = false,
+            )
+        )
+
+        val presenter = createShowLocationPresenter()
+        presenter.test {
+            val initialState = awaitItem()
+
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
+            assertThat(fakePermissionsPresenter.events).contains(PermissionsEvent.RequestPermissions)
+
+            fakePermissionsPresenter.givenState(aPermissionsState(permissions = PermissionsState.Permissions.AllGranted))
+            assertThat(awaitItem().isTrackMyLocation).isFalse()
+            assertThat(awaitItem().isTrackMyLocation).isTrue()
         }
     }
 
@@ -407,9 +447,6 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.locationShares).isEmpty()
 
-            // Wait until we receive the custom map style URL result
-            skipItems(1)
-
             // Emit a new live share
             liveSharesFlow.value = listOf(
                 aLiveLocationShare(userId = userId)
@@ -510,8 +547,8 @@ class ShowLocationPresenterTest {
             val state = awaitItem()
             assertThat(state.hideUserLocationPuck).isTrue()
             val location = requireNotNull(state.userLocationState.location)
-            assertThat(location.position.value.latitude).isEqualTo(ownLocation?.lat)
-            assertThat(location.position.value.longitude).isEqualTo(ownLocation?.lon)
+            assertThat(location.position.latitude).isEqualTo(ownLocation?.lat)
+            assertThat(location.position.longitude).isEqualTo(ownLocation?.lon)
         }
     }
 }

@@ -8,33 +8,34 @@
 
 package io.element.android.features.messages.impl.timeline
 
-import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.SingleIn
-import dev.zacsweers.metro.binding
 import io.element.android.features.messages.impl.timeline.di.LiveTimeline
-import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.di.annotations.RoomCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.TimelineProvider
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.isActive
 import java.io.Closeable
 import java.util.Optional
 
@@ -42,13 +43,13 @@ import java.util.Optional
  * This controller is responsible of using the right timeline to display messages and make associated actions.
  * It can be focused on the live timeline or on a detached timeline (focusing an unknown event).
  */
-@SingleIn(RoomScope::class)
-@ContributesBinding(RoomScope::class, binding = binding<TimelineProvider>())
 class TimelineController(
     private val room: JoinedRoom,
     @LiveTimeline private val liveTimeline: Timeline,
-) : Closeable, TimelineProvider {
-    private val coroutineScope = CoroutineScope(SupervisorJob())
+    @RoomCoroutineScope roomCoroutineScope: CoroutineScope,
+    dispatchers: CoroutineDispatchers,
+) : Closeable {
+    private val coroutineScope = roomCoroutineScope.childScope(dispatchers.computation, "TimelineController")
 
     private val liveTimelineFlow = flowOf(liveTimeline)
     private val detachedTimelineFlow = MutableStateFlow<Optional<Timeline>>(Optional.empty())
@@ -85,10 +86,14 @@ class TimelineController(
                     }
                 }
                 .map { newDetachedTimeline ->
+                    // If the coroutine scope is not active anymore, we don't want to keep the newly created detached timeline open.
+                    if (!coroutineScope.isActive) {
+                        newDetachedTimeline.close()
+                        return@map EventFocusResult.FocusedOnLive
+                    }
+
                     detachedTimelineFlow.getAndUpdate { current ->
-                        if (current.isPresent) {
-                            current.get().close()
-                        }
+                        current.ifPresent { it.close() }
                         Optional.of(newDetachedTimeline)
                     }
                     EventFocusResult.FocusedOnLive
@@ -130,6 +135,14 @@ class TimelineController(
             }
     }
 
+    suspend fun retrySend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean> {
+        return currentTimelineFlow.first().retrySend(eventOrTransactionId, sendTarget)
+    }
+
+    suspend fun abortSend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean> {
+        return currentTimelineFlow.first().abortSend(eventOrTransactionId, sendTarget)
+    }
+
     private val currentTimelineFlow = combine(liveTimelineFlow, detachedTimelineFlow) { live, detached ->
         when {
             detached.isPresent -> detached.get()
@@ -137,7 +150,7 @@ class TimelineController(
         }
     }.stateIn(coroutineScope, SharingStarted.Eagerly, room.liveTimeline)
 
-    override fun activeTimelineFlow(): StateFlow<Timeline> {
+    fun activeTimelineFlow(): StateFlow<Timeline> {
         return currentTimelineFlow
     }
 }

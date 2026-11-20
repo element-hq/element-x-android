@@ -8,9 +8,9 @@
 
 @file:Suppress("UnstableApiUsage")
 
+import com.android.build.api.variant.BuildConfigField
 import com.android.build.api.variant.FilterConfiguration.FilterType.ABI
 import com.android.build.gradle.internal.tasks.factory.dependsOn
-import com.android.build.gradle.tasks.GenerateBuildConfig
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import config.BuildTimeConfig
 import extension.AssetCopyTask
@@ -21,6 +21,7 @@ import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
 import extension.buildConfigFieldStr
+import extension.environmentOrGradleValue
 import extension.locales
 import extension.setupDependencyInjection
 import extension.testCommonDependencies
@@ -46,6 +47,15 @@ android {
         targetSdk = Versions.TARGET_SDK
         versionCode = Versions.VERSION_CODE
         versionName = Versions.VERSION_NAME
+
+        // Used by the activity-alias ".ElementLinksActivity" in AndroidManifest.xml
+        manifestPlaceholders["elementLinksEnabled"] = BuildTimeConfig.ELEMENT_LINKS_ENABLED.toString()
+        val elementMobileLinkPath = BuildTimeConfig.ELEMENT_MOBILE_LINK_PATH
+        // The value is used with android:path, which is an exact match, so ensure it is a valid exact path.
+        require(elementMobileLinkPath.startsWith("/") && elementMobileLinkPath.none { it == '*' || it.isWhitespace() }) {
+            "BuildTimeConfig.ELEMENT_MOBILE_LINK_PATH must be an exact path starting with '/' and without wildcard, got '$elementMobileLinkPath'"
+        }
+        manifestPlaceholders["elementMobileLinkPath"] = elementMobileLinkPath
 
         // Keep abiFilter for the universalApk
         ndk {
@@ -88,13 +98,14 @@ android {
             storePassword = "android"
         }
         register("nightly") {
-            keyAlias = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYID")
-                ?: project.property("signing.element.nightly.keyId") as? String?
-            keyPassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD")
-                ?: project.property("signing.element.nightly.keyPassword") as? String?
-            storeFile = file("./signature/nightly.keystore")
-            storePassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD")
-                ?: project.property("signing.element.nightly.storePassword") as? String?
+            keyAlias = environmentOrGradleValue("ELEMENT_ANDROID_NIGHTLY_KEYID", "signing.element.nightly.keyId")
+            keyPassword = environmentOrGradleValue("ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD", "signing.element.nightly.keyPassword")
+            storeFile = file(
+                environmentOrGradleValue("ELEMENT_ANDROID_NIGHTLY_STOREFILE", "signing.element.nightly.storeFile")
+                    ?.ifBlank { null }
+                    ?: "./signature/nightly.keystore"
+            )
+            storePassword = environmentOrGradleValue("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD", "signing.element.nightly.storePassword")
         }
     }
 
@@ -215,7 +226,16 @@ androidComponents {
         "x86_64" to 4,
     )
 
+    // Keep the git info lazy: these providers are only evaluated when the BuildConfig task runs, so they're task inputs
+    // and not configuration cache inputs. Calling `.get()` at configuration time would invalidate the configuration cache
+    // on every commit or branch switch.
+    val gitRevision = providers.of(GitRevisionValueSource::class.java) {}
+    val gitBranchName = providers.of(GitBranchNameValueSource::class.java) {}
+
     onVariants { variant ->
+        variant.buildConfigFields?.put("GIT_REVISION", gitRevision.map { BuildConfigField("String", "\"$it\"", null) })
+        variant.buildConfigFields?.put("GIT_BRANCH_NAME", gitBranchName.map { BuildConfigField("String", "\"$it\"", null) })
+
         // Register the R8 keep rules source folders for optimized build types (release, nightly).
         // Replaces the deprecated `optimization.keepRules.files` DSL (AGP 9+).
         if (variant.buildType != "debug") {
@@ -259,14 +279,14 @@ androidComponents {
 
 // Configure the SonarQube plugin to wait for the resource generation tasks to complete before running the analysis.
 tasks.withType<SonarResolverTask>().configureEach {
-    dependsOn("generateGplayDebugResValues", "generateGplayDebugAndroidTestResValues")
+    dependsOn("generateGplayDebugResValues")
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     allLibrariesImpl()
-    allServicesImpl()
+    allServicesImpl(project)
     if (isEnterpriseBuild) {
         allEnterpriseImpl(project)
         implementation(projects.appicon.enterprise)
@@ -278,7 +298,6 @@ dependencies {
     implementation(projects.features.migration.api)
     implementation(projects.appnav)
     implementation(projects.appconfig)
-    implementation(projects.libraries.uiStrings)
     implementation(projects.services.analytics.compose)
 
     if (ModulesConfig.pushProvidersConfig.includeFirebase) {
@@ -288,34 +307,28 @@ dependencies {
         implementation(projects.libraries.pushproviders.unifiedpush)
     }
 
+    // The native call's PostHog client. F-Droid builds must not include PostHog, see https://github.com/element-hq/element-x-android/issues/7801
+    "gplayImplementation"(projects.features.callnative.posthog)
+
+    // Google Play Services fused location backend. Discovered at runtime via ServiceLoader by the
+    // location feature.
+    "gplayImplementation"(libs.maplibre.compose.location.runtime.gms)
+
     implementation(libs.appyx.core)
     implementation(libs.androidx.splash)
     implementation(libs.androidx.core)
     implementation(libs.androidx.corektx)
-    implementation(libs.androidx.lifecycle.runtime)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.preference)
-    implementation(libs.coil)
 
     implementation(platform(libs.network.okhttp.bom))
     implementation(libs.network.okhttp.logging)
-    implementation(libs.serialization.json)
-
-    implementation(libs.matrix.emojibase.bindings)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.toolbox.test)
-}
-
-tasks.withType<GenerateBuildConfig>().configureEach {
-    outputs.upToDateWhen { false }
-    val gitRevision = providers.of(GitRevisionValueSource::class.java) {}.get()
-    val gitBranchName = providers.of(GitBranchNameValueSource::class.java) {}.get()
-    android.defaultConfig.buildConfigFieldStr("GIT_REVISION", gitRevision)
-    android.defaultConfig.buildConfigFieldStr("GIT_BRANCH_NAME", gitBranchName)
 }
 
 licensee {
@@ -325,6 +338,7 @@ licensee {
     allow("BSD-3-Clause")
     allow("EPL-1.0")
     allowUrl("https://opensource.org/license/bsd-3-clause")
+    allowUrl("https://opensource.org/license/bsd-2-clause")
     allowUrl("https://opensource.org/licenses/MIT")
     allowUrl("https://developer.android.com/studio/terms.html")
     allowUrl("https://www.zetetic.net/sqlcipher/license/")
@@ -335,6 +349,9 @@ licensee {
     ignoreDependencies("com.github.matrix-org", "matrix-analytics-events")
     // Ignore dependency that are not third-party licenses to us.
     ignoreDependencies(groupId = "io.element.android")
+    // The rustls-platform-verifier dependency does not provide a license file in their maven repo, but there are MIT and Apache licenses in
+    // the source code repo: see https://github.com/rustls/rustls-platform-verifier
+    ignoreDependencies(groupId = "org.rustls", artifactId = "rustls-platform-verifier")
 }
 
 fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {

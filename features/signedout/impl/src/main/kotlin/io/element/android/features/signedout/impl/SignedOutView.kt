@@ -9,18 +9,21 @@
 package io.element.android.features.signedout.impl
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -31,58 +34,80 @@ import io.element.android.libraries.designsystem.components.visuallist.VisualLis
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCard
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardMode
+import io.element.android.libraries.matrix.ui.components.accountinfo.AccountInfoCardState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
 
+/**
+ * Ref: https://www.figma.com/design/kEAcfun9iSpszeUDvdKZ6b/ER-351--Multi-account-in-EX?node-id=856-6104
+ */
 @Composable
 fun SignedOutView(
     state: SignedOutState,
     modifier: Modifier = Modifier,
 ) {
-    BackHandler(onBack = { state.eventSink(SignedOutEvents.SignInAgain) })
+    BackHandler(onBack = { state.eventSink(SignedOutEvent.Submit) })
     HeaderFooterPage(
         modifier = modifier
             .fillMaxSize()
+            // This screen is displayed on top of the other screens: draw the background behind the system bars too,
+            // and prevent the touches from reaching the screens underneath.
+            .background(ElementTheme.colors.bgCanvasDefault)
+            .pointerInput(Unit) {}
             .systemBarsPadding()
             .imePadding(),
-        header = { SignedOutHeader(state) },
-        content = { SignedOutContent() },
+        isScrollable = true,
+        header = { SignedOutHeader() },
+        content = { SignedOutContent(state.signedOutMatrixUser) },
         footer = {
             SignedOutFooter(
-                onSignInAgain = { state.eventSink(SignedOutEvents.SignInAgain) },
+                isRemovingSession = state.submitAction.isLoading(),
+                onSubmit = { state.eventSink(SignedOutEvent.Submit) },
             )
         }
     )
 }
 
 @Composable
-private fun SignedOutHeader(state: SignedOutState) {
+private fun SignedOutHeader() {
     IconTitleSubtitleMolecule(
         modifier = Modifier.padding(top = 60.dp, bottom = 12.dp),
         title = stringResource(id = R.string.screen_signed_out_title),
-        subTitle = stringResource(id = R.string.screen_signed_out_subtitle, state.appName),
-        iconStyle = BigIcon.Style.Default(CompoundIcons.UserProfileSolid()),
+        subTitle = stringResource(id = R.string.screen_signed_out_subtitle_v2),
+        iconStyle = BigIcon.Style.Default(
+            vectorIcon = CompoundIcons.Devices(),
+        ),
     )
 }
 
 @Composable
-private fun SignedOutContent() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = BiasAlignment(
-            horizontalBias = 0f,
-            verticalBias = -0.4f
-        )
+private fun SignedOutContent(
+    signedOutMatrixUser: MatrixUser,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
+        AccountInfoCard(
+            AccountInfoCardState(
+                matrixUser = signedOutMatrixUser,
+                mode = AccountInfoCardMode.Simple,
+            )
+        )
         VisualList(
             items = persistentListOf(
                 VisualListItemData(
                     message = stringResource(id = R.string.screen_signed_out_reason_1),
-                    iconVector = CompoundIcons.Lock(),
+                    iconVector = CompoundIcons.UserProfile(),
                 ),
                 VisualListItemData(
                     message = stringResource(id = R.string.screen_signed_out_reason_2),
-                    iconVector = CompoundIcons.Devices(),
+                    iconVector = CompoundIcons.Lock(),
                 ),
                 VisualListItemData(
                     message = stringResource(id = R.string.screen_signed_out_reason_3),
@@ -95,12 +120,15 @@ private fun SignedOutContent() {
 
 @Composable
 private fun SignedOutFooter(
-    onSignInAgain: () -> Unit,
+    isRemovingSession: Boolean,
+    onSubmit: () -> Unit,
 ) {
     ButtonColumnMolecule {
         Button(
-            text = stringResource(id = CommonStrings.action_sign_in_again),
-            onClick = onSignInAgain,
+            text = stringResource(id = CommonStrings.action_ok),
+            onClick = onSubmit,
+            enabled = !isRemovingSession,
+            showProgress = isRemovingSession,
             modifier = Modifier.fillMaxWidth(),
         )
     }

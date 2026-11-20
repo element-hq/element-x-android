@@ -23,11 +23,11 @@ import io.element.android.features.messages.impl.timeline.aRedactedMessagesGroup
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.group.GroupHeaderView
-import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.groups.isRedactedMessagesGroup
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.TimelineItemSelectionData
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -35,6 +35,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.ui.common.layout.ContentAvoidingLayoutData
 import io.element.android.wysiwyg.link.Link
 
 @Composable
@@ -58,6 +59,7 @@ fun TimelineItemGroupedEventsRow(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    animateExpansion: Boolean = true,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -103,6 +105,7 @@ fun TimelineItemGroupedEventsRow(
         onReadReceiptClick = onReadReceiptClick,
         eventSink = eventSink,
         modifier = modifier,
+        animateExpansion = animateExpansion,
         eventContentView = eventContentView,
     )
 }
@@ -130,6 +133,7 @@ private fun TimelineItemGroupedEventsRowContent(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    animateExpansion: Boolean = true,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -147,7 +151,9 @@ private fun TimelineItemGroupedEventsRowContent(
             )
         },
 ) {
-    Column(modifier = modifier.animateContentSize()) {
+    // When the timeline animates the resizes of its items with `animateTimelineItem`, the group must resize in a single step:
+    // resizing a bit on every frame would make the timeline animations chase a moving target
+    Column(modifier = if (animateExpansion) modifier.animateContentSize() else modifier) {
         val count = timelineItem.events.size
         // A group made entirely of redacted events is a collapsed run of deleted messages
         // (element-web style); anything else is the regular run of room state changes. For the
@@ -190,6 +196,7 @@ private fun TimelineItemGroupedEventsRowContent(
                         onSwipeToReply = {},
                         eventSink = eventSink,
                         eventContentView = eventContentView,
+                        selectionData = TimelineItemSelectionData(),
                     )
                 }
             }
@@ -198,7 +205,8 @@ private fun TimelineItemGroupedEventsRowContent(
                 state = ReadReceiptViewState(
                     sendState = null,
                     isLastOutgoingMessage = false,
-                    receipts = timelineItem.aggregatedReadReceipts,
+                    renderReadReceipts = timelineRoomInfo.renderReadReceipts,
+                    knownReceipts = timelineItem.aggregatedReadReceipts,
                 ),
                 onReadReceiptsClick = onExpandGroupClick
             )

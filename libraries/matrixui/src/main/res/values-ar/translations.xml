@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"التنزيل غير متاح."</string>
+  <string name="content_scanner_not_found_title">"لم يتم العثور على الملف"</string>
+  <string name="error_room_address_already_exists">"عنوان الغرفة هذا موجود بالفعل. يرجى محاولة تعديل حقل عنوان الغرفة أو تغيير اسم الغرفة"</string>
+  <string name="error_room_address_invalid_symbols">"بعض الأحرف غير مسموح بها. يُسمح فقط بالحروف والأرقام والرموز التالية: ! $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"إرسال دعوة"</string>
   <string name="screen_bottom_sheet_create_dm_message">"هل تريد بدء دردشة مع %1$s؟"</string>
   <string name="screen_bottom_sheet_create_dm_title">"إرسال دعوة؟"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"ليست لديك حاليًا أي دردشات مع هذا الشخص. أكّد دعوته قبل المتابعة."</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"هل تريد بدء دردشة مع جهة الاتصال الجديدة هذه؟"</string>
   <string name="screen_invites_invited_you">"دعاك %1$s (%2$s)"</string>
+  <string name="screen_space_list_description">"المساحات التي أنشأتها أو انضممت إليها."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"المساحات"</string>
 </resources>

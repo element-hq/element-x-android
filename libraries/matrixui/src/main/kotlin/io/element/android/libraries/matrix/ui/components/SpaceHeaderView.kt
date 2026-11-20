@@ -19,7 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
-import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewAliasAtom
+import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.atomic.atoms.CopiableTextAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewDescriptionAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoomPreviewTitleAtom
 import io.element.android.libraries.designsystem.atomic.organisms.RoomPreviewOrganism
@@ -68,11 +69,15 @@ fun SpaceHeaderView(
         },
         title = {
             if (name != null) {
-                RoomPreviewTitleAtom(title = name)
+                RoomPreviewTitleAtom(
+                    title = name,
+                    style = ElementTheme.typography.fontHeadingMdBold,
+                )
             } else {
                 RoomPreviewTitleAtom(
                     title = stringResource(id = CommonStrings.common_no_space_name),
-                    fontStyle = FontStyle.Italic
+                    fontStyle = FontStyle.Italic,
+                    style = ElementTheme.typography.fontHeadingMdBold,
                 )
             }
         },
@@ -82,7 +87,7 @@ fun SpaceHeaderView(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 if (alias != null) {
-                    RoomPreviewAliasAtom(alias = alias.value)
+                    CopiableTextAtom(text = alias.value)
                 }
                 SpaceInfoRow(visibility = visibility)
             }

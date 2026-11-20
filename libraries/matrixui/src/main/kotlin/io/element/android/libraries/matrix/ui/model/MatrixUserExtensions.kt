@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.ui.model
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -20,6 +21,7 @@ fun MatrixUser.getAvatarData(size: AvatarSize) = AvatarData(
     name = displayName,
     url = avatarUrl,
     size = size,
+    thumbnail = avatarThumbnail,
 )
 
 fun MatrixUser.getBestName(): String {
@@ -27,6 +29,7 @@ fun MatrixUser.getBestName(): String {
 }
 
 @Composable
+@ReadOnlyComposable
 fun MatrixUser.getFullName(): String {
     return displayName.let { name ->
         if (name.isNullOrBlank()) {

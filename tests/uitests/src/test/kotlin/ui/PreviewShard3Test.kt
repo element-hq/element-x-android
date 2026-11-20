@@ -8,11 +8,11 @@
 
 package ui
 
-import base.PaparazziPreviewRule
-import base.ScreenshotTest
 import base.Shard3ComposablePreviewProvider
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import io.element.android.tests.screenshotutils.PaparazziPreviewRule
+import io.element.android.tests.screenshotutils.ScreenshotTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,10 +28,7 @@ class PreviewShard3Test(
     @TestParameter(valuesProvider = Shard3ComposablePreviewProvider::class)
     val preview: ComposablePreview<AndroidPreviewInfo>,
 ) {
-    @get:Rule(order = 0)
-    val layoutLibErrorFilterStatement = LayoutLibErrorFilterStatement()
-
-    @get:Rule(order = 1)
+    @get:Rule
     val paparazziRule = PaparazziPreviewRule.createFor(preview, locale = "en")
 
     @Test

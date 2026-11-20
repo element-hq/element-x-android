@@ -63,7 +63,7 @@ class SuggestionsProcessor(
                     .filter { roomAliasSuggestion ->
                         // Filter by either room alias or room name (if available)
                         roomAliasSuggestion.roomAlias.value.contains(suggestion.text, ignoreCase = true) ||
-                            roomAliasSuggestion.roomName?.contains(suggestion.text, ignoreCase = true) == true
+                            roomAliasSuggestion.roomName?.withoutWhitespace()?.contains(suggestion.text, ignoreCase = true) == true
                     }
                     .map {
                         ResolvedSuggestion.Alias(
@@ -107,7 +107,7 @@ class SuggestionsProcessor(
 
             fun memberMatchesQuery(member: RoomMember, query: String): Boolean {
                 return member.userId.value.contains(query, ignoreCase = true) ||
-                    member.displayName?.contains(query, ignoreCase = true) == true
+                    member.displayName?.withoutWhitespace()?.contains(query, ignoreCase = true) == true
             }
 
             val matchingMembers = roomMembers
@@ -115,15 +115,32 @@ class SuggestionsProcessor(
                 .filterUpTo(MAX_BATCH_ITEMS) { member ->
                     isJoinedMemberAndNotSelf(member) && memberMatchesQuery(member, query)
                 }
+                .sortedBy { member -> matchRank(member, query) }
                 .map(ResolvedSuggestion::Member)
 
-            if ("room".contains(query) && canSendRoomMention) {
+            if ("room".startsWith(query, ignoreCase = true) && canSendRoomMention) {
                 listOf(ResolvedSuggestion.AtRoom) + matchingMembers
             } else {
                 matchingMembers
             }
         }
     }
+
+    /**
+     * Like Element Web, members are ranked by where the query starts in their display name or user id, so a direct match
+     * ("Edward" for "ed") comes before one across words ("Lee Dawson"). At the same position the display name wins.
+     */
+    private fun matchRank(member: RoomMember, query: String): Int {
+        val displayNameIndex = member.displayName?.withoutWhitespace()?.indexOf(query, ignoreCase = true)?.takeIf { it >= 0 }
+        val userIdIndex = member.userId.value.removePrefix("@").indexOf(query, ignoreCase = true).takeIf { it >= 0 }
+        return listOfNotNull(displayNameIndex?.let { it * 2 }, userIdIndex?.let { it * 2 + 1 }).minOrNull() ?: Int.MAX_VALUE
+    }
+
+    /**
+     * The query never contains whitespace, so display names are matched with their whitespace removed:
+     * "Jane Q Doe" is found by "janeqdoe" as well as by "doe".
+     */
+    private fun String.withoutWhitespace(): String = filterNot { it.isWhitespace() }
 
     companion object {
         // We don't want to retrieve thousands of members

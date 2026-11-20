@@ -40,20 +40,20 @@ class ReportRoomPresenter(
     override fun present(): ReportRoomState {
         var reason by rememberSaveable { mutableStateOf("") }
         var leaveRoom by rememberSaveable { mutableStateOf(false) }
-        var reportAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val reportAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         val coroutineScope = rememberCoroutineScope()
 
-        fun handleEvent(event: ReportRoomEvents) {
+        fun handleEvent(event: ReportRoomEvent) {
             when (event) {
-                ReportRoomEvents.Report -> coroutineScope.reportRoom(reason, leaveRoom, reportAction)
-                ReportRoomEvents.ToggleLeaveRoom -> {
+                ReportRoomEvent.Report -> coroutineScope.reportRoom(reason, leaveRoom, reportAction)
+                ReportRoomEvent.ToggleLeaveRoom -> {
                     leaveRoom = !leaveRoom
                 }
-                is ReportRoomEvents.UpdateReason -> {
+                is ReportRoomEvent.UpdateReason -> {
                     reason = event.reason
                 }
-                ReportRoomEvents.ClearReportAction -> {
+                ReportRoomEvent.ClearReportAction -> {
                     reportAction.value = AsyncAction.Uninitialized
                 }
             }

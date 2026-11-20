@@ -53,16 +53,3 @@ internal fun TimelineInterface.timelineDiffFlow(): Flow<List<TimelineDiff>> =
     }.catch {
         Timber.d(it, "timelineDiffFlow() failed")
     }.buffer(Channel.UNLIMITED)
-
-internal suspend fun TimelineInterface.runWithTimelineListenerRegistered(action: suspend () -> Unit) {
-    val result = addListener(NoOpTimelineListener)
-    try {
-        action()
-    } finally {
-        result.cancelAndDestroy()
-    }
-}
-
-private object NoOpTimelineListener : TimelineListener {
-    override fun onUpdate(diff: List<TimelineDiff>) = Unit
-}

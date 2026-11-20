@@ -32,9 +32,6 @@ val SemanticColors.roomListRoomMessage
 val SemanticColors.roomListRoomMessageDate
     get() = textSecondary
 
-val SemanticColors.unreadIndicator
-    get() = iconAccentTertiary
-
 val SemanticColors.placeholderBackground
     get() = bgSubtleSecondary
 
@@ -83,7 +80,6 @@ internal fun ColorAliasesPreview() = ElementPreview {
             "roomListRoomName" to ElementTheme.colors.roomListRoomName,
             "roomListRoomMessage" to ElementTheme.colors.roomListRoomMessage,
             "roomListRoomMessageDate" to ElementTheme.colors.roomListRoomMessageDate,
-            "unreadIndicator" to ElementTheme.colors.unreadIndicator,
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
             "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
             "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,

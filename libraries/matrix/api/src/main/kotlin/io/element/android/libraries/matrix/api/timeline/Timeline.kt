@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.timeline.item.SendTarget
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
@@ -316,12 +317,13 @@ interface Timeline : AutoCloseable {
     suspend fun toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId): Result<Boolean>
 
     /**
-     * Forwards the content of an event to other rooms, as new messages sent by the current user.
+     * Forwards the content of some events to other rooms, as new messages sent by the current user.
+     * The events are forwarded in the order of [eventIds].
      *
-     * @param eventId the event whose content is forwarded.
-     * @param roomIds the rooms to forward it to.
+     * @param eventIds the events whose content is forwarded.
+     * @param roomIds the rooms to forward them to.
      */
-    suspend fun forwardEvent(eventId: EventId, roomIds: List<RoomId>): Result<Unit>
+    suspend fun forwardEvents(eventIds: List<EventId>, roomIds: List<RoomId>): Result<Unit>
 
     /**
      * Cancels an event that is still waiting in the send queue, by redacting its local echo.
@@ -422,4 +424,20 @@ interface Timeline : AutoCloseable {
      * Get the latest event id of the timeline, or `null` when it holds no event yet.
      */
     suspend fun getLatestEventId(): Result<EventId?>
+
+    /**
+     * Retries sending an event that failed to send, by putting it back in the send queue.
+     *
+     * @param eventOrTransactionId the event or transaction ID of the event to retry sending.
+     * @param sendTarget the target action of the send operation.
+     */
+    suspend fun retrySend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean>
+
+    /**
+     * Aborts sending an event that failed to send, by removing it from the send queue.
+     *
+     * @param eventOrTransactionId the event or transaction ID of the event to abort sending.
+     * @param sendTarget the target action of the send operation.
+     */
+    suspend fun abortSend(eventOrTransactionId: EventOrTransactionId, sendTarget: SendTarget): Result<Boolean>
 }

@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="full_screen_intent_banner_message">"Per assegurar que mai et perdis una trucada important, canvia la configuració per permetre les notificacions en pantalla completa quan el telèfon està bloquejat."</string>
-  <string name="full_screen_intent_banner_title">"Millora l\'experiència de les trucades"</string>
+  <string name="full_screen_intent_banner_message_android">"Per assegurar que mai et perdis una trucada important, canvia la configuració per permetre les notificacions en pantalla completa quan el telèfon està bloquejat."</string>
+  <string name="full_screen_intent_banner_title_android">"Millora l\'experiència de les trucades"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Tria com vols rebre les notificacions"</string>
-  <string name="screen_advanced_settings_developer_mode">"Mode desenvolupador"</string>
-  <string name="screen_advanced_settings_developer_mode_description">"Activa-ho per tenir accés a característiques i funcionalitats per a desenvolupadors."</string>
   <string name="screen_advanced_settings_element_call_base_url">"URL base d\'Element Call personalitzat"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Estableix un URL base personalitzat d\'Element Call."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL invàlid, assegura\'t d\'incloure el protocol (http/https) i l\'adreça correctament."</string>
-  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Amaga les previsualitzacions multimèdia a la cronologia"</string>
   <string name="screen_advanced_settings_media_compression_description">"Puja fotos i vídeos més ràpidament i redueix l\'ús de dades"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimitza qualitat de multimèdia"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderació i seguretat"</string>
   <string name="screen_advanced_settings_push_provider_android">"Proveïdor de notificacions push"</string>
-  <string name="screen_advanced_settings_rich_text_editor_description">"Desactiva l\'editor de text enriquit per escriure Markdown manualment."</string>
-  <string name="screen_advanced_settings_send_read_receipts">"Confirmacions de lectura"</string>
-  <string name="screen_advanced_settings_send_read_receipts_description">"Si està desactivat, les confirmacions de lectura no s\'enviaran a ningú. Tot i així, rebràs les confirmacions de lectura d\'altres usuaris (que la tinguin activada)."</string>
   <string name="screen_advanced_settings_share_presence">"Comparteix presència"</string>
   <string name="screen_advanced_settings_share_presence_description">"Si està desactivat, no s\'enviaran ni rebràs confirmacions de lectura ni notificacions d\'escriptura."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Amaga sempre"</string>
@@ -62,6 +55,7 @@ Si continues, és possible que alguna de les teves configuracions canviï."</str
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"configuració del sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificacions del sistema desactivades"</string>
   <string name="screen_notification_settings_title">"Notificacions"</string>
+  <string name="settings_version_number">"Versió: %1$s (%2$s)"</string>
   <string name="theme_dark">"Fosc"</string>
   <string name="theme_light">"Clar"</string>
   <string name="theme_system">"Sistema"</string>

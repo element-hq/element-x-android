@@ -45,6 +45,22 @@ interface AppPreferencesStore {
     fun getThemeFlow(): Flow<String?>
 
     /**
+     * @param sizeSp the size in sp of the message text in the timeline, within [MessageTextSize.range].
+     */
+    suspend fun setMessageTextSize(sizeSp: Int)
+
+    /** The size in sp of the message text in the timeline; defaults to [MessageTextSize.DEFAULT]. */
+    fun getMessageTextSizeFlow(): Flow<Int>
+
+    /**
+     * @param expanded true to expand the other accounts section.
+     */
+    suspend fun setOtherAccountsExpanded(expanded: Boolean)
+
+    /** Whether the other accounts section is expanded; defaults to `true`. */
+    fun isOtherAccountsExpandedFlow(): Flow<Boolean>
+
+    /**
      * @param value the distance in metres the user must move before a new live location is published.
      */
     suspend fun setLiveLocationMinimumDistanceInMetersUpdate(value: Int)

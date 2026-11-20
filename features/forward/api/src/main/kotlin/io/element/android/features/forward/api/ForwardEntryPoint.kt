@@ -15,7 +15,6 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.timeline.TimelineProvider
 
 interface ForwardEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
@@ -23,8 +22,8 @@ interface ForwardEntryPoint : FeatureEntryPoint {
     }
 
     data class Params(
-        val eventId: EventId,
-        val timelineProvider: TimelineProvider,
+        val eventIds: List<EventId>,
+        val fromRoomId: RoomId,
     ) : NodeInputs
 
     fun createNode(

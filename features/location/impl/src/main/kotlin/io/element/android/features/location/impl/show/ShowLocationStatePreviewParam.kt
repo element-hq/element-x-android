@@ -13,7 +13,6 @@ import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.userlocation.UserLocationState
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
@@ -37,14 +36,21 @@ class ShowLocationStatePreviewParam : PreviewParameterProvider<ShowLocationState
                 constraintsDialogState = LocationConstraintsDialogState.LocationServiceDisabled,
             ),
             aShowLocationState(isTrackMyLocation = true),
-            aShowLocationState(customMapTilerConfig = AsyncData.Loading()),
+            aShowLocationState(mapTilerConfig = null),
         )
 }
 
 private const val APP_NAME = "ApplicationName"
 
+internal fun aPreviewMapTilerConfig() = MapTilerConfig(
+    apiKey = "preview_api_key",
+    lightStyleId = null,
+    darkStyleId = null,
+    baseUrl = null,
+)
+
 fun aShowLocationState(
-    customMapTilerConfig: AsyncData<MapTilerConfig?> = AsyncData.Success(null),
+    mapTilerConfig: MapTilerConfig? = aPreviewMapTilerConfig(),
     isLive: Boolean = false,
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
     locationShares: List<LocationShareItem> = listOf(aLocationShareItem(isLive = isLive)),
@@ -56,7 +62,7 @@ fun aShowLocationState(
     eventSink: (ShowLocationEvent) -> Unit = {},
 ): ShowLocationState {
     return ShowLocationState(
-        customMapTilerConfig = customMapTilerConfig,
+        mapTilerConfig = mapTilerConfig,
         dialogState = constraintsDialogState,
         locationShares = locationShares.toImmutableList(),
         focusedLocation = focusedLocation,

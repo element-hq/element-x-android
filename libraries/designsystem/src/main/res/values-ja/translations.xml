@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_unsaved_changes_description">"未保存の変更内容があります。"</string>
+  <string name="dialog_unsaved_changes_description_android">"変更は保存されていません。本当に戻りますか？"</string>
+  <string name="dialog_unsaved_changes_title">"変更を保存しますか？"</string>
+</resources>

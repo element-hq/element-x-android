@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.api.core
 import io.element.android.libraries.androidutils.metadata.isInDebug
 import java.io.Serializable
 
+@kotlinx.serialization.Serializable
 @JvmInline
 value class RoomId(val value: String) : Serializable {
     init {

@@ -14,6 +14,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
+import io.element.android.features.messages.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
@@ -32,7 +33,7 @@ class ResolveVerifiedUserSendFailureViewTest : RobolectricTest() {
             ),
         )
 
-        clickOn(res = CommonStrings.screen_resolve_send_failure_changed_identity_primary_button_title)
+        clickOn(res = R.string.screen_resolve_send_failure_changed_identity_primary_button_title)
         eventsRecorder.assertSingle(ResolveVerifiedUserSendFailureEvent.ResolveAndResend)
     }
 

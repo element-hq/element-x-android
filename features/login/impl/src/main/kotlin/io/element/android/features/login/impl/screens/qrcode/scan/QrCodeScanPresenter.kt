@@ -52,13 +52,13 @@ class QrCodeScanPresenter(
             authenticationAction.value = AsyncAction.Failure(it)
         }
 
-        fun handleEvent(event: QrCodeScanEvents) {
+        fun handleEvent(event: QrCodeScanEvent) {
             when (event) {
-                QrCodeScanEvents.TryAgain -> {
+                QrCodeScanEvent.TryAgain -> {
                     isScanning = true
                     authenticationAction.value = AsyncAction.Uninitialized
                 }
-                is QrCodeScanEvents.QrCodeScanned -> {
+                is QrCodeScanEvent.QrCodeScanned -> {
                     isScanning = false
                     coroutineScope.getQrCodeData(authenticationAction, event.code)
                 }

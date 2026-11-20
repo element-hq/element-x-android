@@ -88,7 +88,7 @@ class MediaGalleryFlowNode(
                     }
 
                     override fun forward(eventId: EventId) {
-                        callback.forward(eventId, fromPinnedEvents = false)
+                        callback.forward(eventId)
                     }
 
                     override fun showItem(item: MediaItem.Event) {
@@ -123,9 +123,9 @@ class MediaGalleryFlowNode(
                         callback.viewInTimeline(eventId)
                     }
 
-                    override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) {
+                    override fun forwardEvent(eventId: EventId) {
                         // Need to go to the parent because of the overlay
-                        callback.forward(eventId, fromPinnedEvents)
+                        callback.forward(eventId)
                     }
                 }
                 mediaViewerEntryPoint.createNode(

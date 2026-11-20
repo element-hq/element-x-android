@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.pusher.PushersService
 import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
@@ -40,8 +41,8 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryServic
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.api.search.MessageSearchService
+import io.element.android.libraries.matrix.api.search.SearchBackfillService
 import io.element.android.libraries.matrix.api.spaces.SpaceService
-import io.element.android.libraries.matrix.api.sync.SlidingSyncVersion
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixSearchUserResults
@@ -133,6 +134,14 @@ interface MatrixClient : ClientUrlContentFetcher {
     /** Scans media content before it is displayed, or `null` when no content scanner is configured for this session. */
     val contentScanner: ContentScanner?
 
+    /** Backfills messages from the homeserver for searching for messages in a room. */
+    val searchBackfillService: SearchBackfillService
+
+    /**
+     * Returns a flow of the total number of unread notifications across all rooms, as currently known by the client.
+     */
+    val totalUnreadCountFlow: StateFlow<Long>
+
     /** Whether the session is in the process of shutting down, either because it is being logged out or its cache is being cleared. */
     val isShuttingDown: Boolean
 
@@ -167,6 +176,12 @@ interface MatrixClient : ClientUrlContentFetcher {
      * Invited, knocked and left rooms are excluded.
      */
     suspend fun getJoinedRoomIds(): Result<Set<RoomId>>
+
+    /**
+     * Whether the user has joined at least one encrypted room, spaces excluded.
+     * The homeserver is asked when no encrypted room is known locally, so this fails if it doesn't answer in time.
+     */
+    suspend fun hasEncryptedRooms(): Result<Boolean>
 
     /**
      * Adds [userId] to the ignore list of the account, which hides their events and makes [ignoredUsersFlow] emit.
@@ -327,6 +342,11 @@ interface MatrixClient : ClientUrlContentFetcher {
     suspend fun uploadMedia(mimeType: String, data: ByteArray): Result<String>
 
     /**
+     * Returns the latest [RoomInfo] of a room, if known to the client, or `null` if the room is unknown.
+     */
+    suspend fun getRoomInfo(roomId: RoomId): Result<RoomInfo?>
+
+    /**
      * Get a room info flow for a given room ID.
      * The flow will emit a new value whenever the room info is updated, skipping duplicates, and an empty [Optional] if the room is not found.
      *
@@ -391,17 +411,12 @@ interface MatrixClient : ClientUrlContentFetcher {
      */
     suspend fun getRoomPreview(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<NotJoinedRoom>
 
-    /**
-     * Returns the currently used sliding sync version.
-     */
-    suspend fun currentSlidingSyncVersion(): Result<SlidingSyncVersion>
-
     /** Whether this account can be deactivated from the app, which depends on the authentication method used by the homeserver. */
     fun canDeactivateAccount(): Boolean
 
     /**
      * Deactivates the account on the homeserver, then destroys this client and deletes every local trace of the session.
-     * The password is only sent if the homeserver asks for re-authentication, and on failure the session is left untouched.
+     * On failure the session is left untouched.
      *
      * @param password the account password, required to confirm the deactivation.
      * @param eraseData whether the homeserver should also erase the messages the user sent.
@@ -494,8 +509,19 @@ interface MatrixClient : ClientUrlContentFetcher {
      */
     suspend fun resetWellKnownConfig(): Result<Unit>
 
+    /**
+     * Release all the resources of the client. The client must not be used afterwards.
+     */
+    suspend fun destroy()
+
     /** Returns a provider for the capabilities the homeserver advertises, such as whether the display name can be changed. */
     fun homeserverCapabilities(): HomeserverCapabilitiesProvider
+
+    /**
+     * Returns the total number of unread notifications across all rooms, as currently known by the client.
+     * This is a snapshot and may be out of date if the sync is running.
+     */
+    fun totalUnreadCount(): Result<Long>
 }
 
 /**
@@ -507,4 +533,12 @@ fun MatrixClient.roomAliasFromName(name: String): RoomAlias? {
         ?.let { "#$it:${userIdServerName()}" }
         ?.takeIf { MatrixPatterns.isRoomAlias(it) }
         ?.let { tryOrNull { RoomAlias(it) } }
+}
+
+/**
+ * Returns true if the current user has joined the room with the given [roomId].
+ * Note that this is based on the local data, which may be outdated if the client has not synced recently.
+ */
+suspend fun MatrixClient.hasJoined(roomId: RoomId): Boolean {
+    return getRoomInfo(roomId).getOrNull()?.currentUserMembership == CurrentUserMembership.JOINED
 }

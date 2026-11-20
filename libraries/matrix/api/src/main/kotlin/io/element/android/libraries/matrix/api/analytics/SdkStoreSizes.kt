@@ -17,4 +17,5 @@ data class SdkStoreSizes(
     val eventCacheStore: ByteSize?,
     val mediaStore: ByteSize?,
     val cryptoStore: ByteSize?,
+    val searchIndex: ByteSize?,
 )

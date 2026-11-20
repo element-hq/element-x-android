@@ -64,16 +64,16 @@ brew install bundletool
 ### Steps
 
 1. Open the GitHub release that you want to install from https://github.com/element-hq/element-x-android/releases
-2. Download the asset `app-release-signed.aab`
+2. Download the asset `app-gplay-release-signed.aab`
 3. Navigate to the folder where you cloned the project and run the following command:
 ```bash
-bundletool build-apks --bundle=<PATH_TO_YOUR_APP-RELEASE-SIGNED.AAB_FILE> --output=./tmp/elementx.apks \
+bundletool build-apks --bundle=<PATH_TO_YOUR_APP-GPLAY-RELEASE-SIGNED.AAB_FILE> --output=./tmp/elementx.apks \
       --ks=./app/signature/debug.keystore --ks-pass=pass:android --ks-key-alias=androiddebugkey --key-pass=pass:android \
       --overwrite
 ```
 For instance:
 ```bash
-bundletool build-apks --bundle=./tmp/Element/0.1.5/app-release-signed.aab --output=./tmp/elementx.apks \ 
+bundletool build-apks --bundle=./tmp/Element/26.08.3/app-gplay-release-signed.aab --output=./tmp/elementx.apks \
       --ks=./app/signature/debug.keystore --ks-pass=pass:android --ks-key-alias=androiddebugkey --key-pass=pass:android \
       --overwrite
 ```

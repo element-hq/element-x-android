@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_not_found">"无法下载。"</string>
+  <string name="content_scanner_not_found_title">"文件未找到"</string>
+  <string name="error_room_address_already_exists">"此房间地址已存在。请尝试编辑房间地址字段或更改房间名称"</string>
+  <string name="error_room_address_invalid_symbols">"不允许使用某些字符。仅支持字母、数字和以下符号 $ &amp; ‘ ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"发送邀请"</string>
   <string name="screen_bottom_sheet_create_dm_message">"你是否要与 %1$s 开始聊天？"</string>
   <string name="screen_bottom_sheet_create_dm_title">"发送邀请？"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"你与此人暂无任何聊天。请确认对方被邀请后再继续。"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"是否与新联系人开始聊天？"</string>
   <string name="screen_invites_invited_you">"%1$s（%2$s）邀请了你"</string>
+  <string name="screen_space_list_description">"你创建或加入的空间。"</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"空间"</string>
 </resources>

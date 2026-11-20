@@ -6,8 +6,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.annotation.DrawableRes
@@ -16,7 +14,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +52,7 @@ fun <T : DropdownOption> PreferenceDropdown(
     supportingText: String? = null,
     enabled: Boolean = true,
     icon: ImageVector? = null,
+    dropDownIcon: ImageVector = CompoundIcons.ChevronDown(),
     @DrawableRes iconResourceId: Int? = null,
     showIconAreaIfNoIcon: Boolean = false,
 ) {
@@ -84,13 +82,14 @@ fun <T : DropdownOption> PreferenceDropdown(
         trailingContent = ListItemContent.Custom(
             content = { enabled ->
                 DropdownTrailingContent(
+                    dropDownIcon = dropDownIcon,
                     selectedOption = selectedOption,
                     options = options,
                     onSelectOption = onSelectOption,
                     expanded = isDropdownExpanded,
                     onExpandedChange = { isDropdownExpanded = it },
                     enabled = enabled,
-                    modifier = Modifier.fillMaxSize(0.3f)
+                    modifier = Modifier.fillMaxSize(0.3f),
                 )
             }
         ),
@@ -119,6 +118,7 @@ private fun <T : DropdownOption> DropdownTrailingContent(
     onSelectOption: (T) -> Unit,
     enabled: Boolean,
     modifier: Modifier = Modifier,
+    dropDownIcon: ImageVector = CompoundIcons.ChevronDown(),
 ) {
     Row(
         modifier = modifier,
@@ -135,7 +135,7 @@ private fun <T : DropdownOption> DropdownTrailingContent(
             modifier = Modifier.weight(1f),
         )
         Icon(
-            imageVector = CompoundIcons.ChevronDown(),
+            imageVector = dropDownIcon,
             contentDescription = null,
             tint = enabled.toIconSecondaryEnabledColor(),
         )

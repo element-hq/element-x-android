@@ -19,7 +19,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
+import io.element.android.libraries.matrixmedia.api.ImageLoaderHolder
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.libraries.push.impl.notifications.factories.NotificationCreator
@@ -53,7 +53,7 @@ class DefaultNotificationDrawerManager(
     private val notificationRenderer: NotificationRenderer,
     private val appNavigationStateService: AppNavigationStateService,
     @AppCoroutineScope
-    coroutineScope: CoroutineScope,
+    private val coroutineScope: CoroutineScope,
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val activeNotificationsProvider: ActiveNotificationsProvider,
@@ -61,7 +61,7 @@ class DefaultNotificationDrawerManager(
     sessionObserver: SessionObserver,
 ) : NotificationCleaner {
     // TODO EAx add a setting per user for this
-    private var useCompleteNotificationFormat = true
+    private val useCompleteNotificationFormat = true
 
     private val sessionListener = object : SessionListener {
         override suspend fun onSessionDeleted(userId: String, wasLastSession: Boolean) {
@@ -187,6 +187,31 @@ class DefaultNotificationDrawerManager(
         clearSummaryNotificationIfNeeded(sessionId)
     }
 
+    override fun clearReadRoomsNotifications(sessionId: SessionId) {
+        val notifications = activeNotificationsProvider.getNotificationsForSession(sessionId)
+        val notificationsGroupedByRoomId = notifications.mapNotNull {
+            it.tag?.let(NotificationCreator::getMessageNotificationRoomId)?.let { roomId -> roomId to it }
+        }
+
+        if (notificationsGroupedByRoomId.isEmpty()) return
+
+        coroutineScope.launch {
+            val client = matrixClientProvider.getOrRestore(sessionId).getOrElse { return@launch }
+
+            notificationsGroupedByRoomId.forEach { (roomId, notification) ->
+                val roomInfo = client.getRoomInfo(roomId).getOrNull() ?: return@forEach
+
+                if (roomInfo.numUnreadNotifications > 0L || roomInfo.numUnreadMessages > 0 || roomInfo.numUnreadMentions > 0) {
+                    return@forEach
+                }
+
+                notificationDisplayer.cancelNotification(notification.tag, notification.id)
+            }
+
+            clearSummaryNotificationIfNeeded(sessionId)
+        }
+    }
+
     private fun clearSummaryNotificationIfNeeded(sessionId: SessionId) {
         val summaryNotification = activeNotificationsProvider.getSummaryNotification(sessionId)
         if (summaryNotification != null && activeNotificationsProvider.count(sessionId) == 1) {
@@ -274,6 +299,12 @@ private fun NotifiableEvent.toFallbackNotifiableEvent(): FallbackNotifiableEvent
         is FallbackNotifiableEvent -> timestamp
         is NotifiableRingingCallEvent -> return null
     }
+    val noisy = when (this) {
+        is NotifiableMessageEvent -> noisy
+        is InviteNotifiableEvent -> noisy
+        is SimpleNotifiableEvent -> noisy
+        is FallbackNotifiableEvent -> noisy
+    }
     return FallbackNotifiableEvent(
         sessionId = sessionId,
         roomId = roomId,
@@ -283,6 +314,7 @@ private fun NotifiableEvent.toFallbackNotifiableEvent(): FallbackNotifiableEvent
         canBeReplaced = false,
         isRedacted = false,
         isUpdated = false,
+        noisy = noisy,
         timestamp = timestamp,
         cause = null,
     )

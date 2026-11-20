@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_failed_loading_map">"%1$s kaardi laadimine ei õnnestunud. Palun proovi hiljem uuesti."</string>
+  <string name="error_failed_locating_user">"Rakendus %1$s ei suutnud tuvastada sinu asukohta. Palun proovi hiljem uuesti."</string>
+  <string name="error_location_service_disabled_android">"Asukohapõhise funktsionaalsuse kasutamiseks palun lülita nutiseadmes GPS sisse."</string>
+  <string name="error_missing_location_auth_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Sa saad seda lubada süsteemi seadistustest."</string>
+  <string name="error_missing_location_rationale_android">"Rakendusel %1$s puudub õigus sinu asukohta tuvastada. Järgnevalt anna vastavad õigused."</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Asukoha jagamine reaalajas"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Asukoha jagamine käimas"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"Asukoht reaalajas: %1$s"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Mitte keegi ei jaga oma asukohta"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Asukoht on jagamisel reaalajas"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d isik"</item>
+    <item quantity="other">"%1$d isikut"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Kaardil"</string>
   <string name="screen_share_location_live_location_disclaimer_title">"Sinu reaalajas jagatud asukoha ajalugu salvestub siin jututoas ja see on liikmetele nähtav ka pärast jagamissessiooni lõppu."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Vali, kui kaua tahad oma reaalajas jagada."</string>
   <string name="screen_share_location_live_location_missing_permissions">"Sul pole õigust jagada selles jututoas oma asukohta reaalajas"</string>
+  <string name="screen_share_location_title">"Jaga asukohta"</string>
+  <string name="screen_share_my_location_action">"Jaga minu asukohta"</string>
+  <string name="screen_share_open_apple_maps">"Ava Apple Mapsis"</string>
+  <string name="screen_share_open_google_maps">"Ava Google Mapsis"</string>
+  <string name="screen_share_open_osm_maps">"Ava OpenStreetMapis"</string>
+  <string name="screen_share_this_location_action">"Jaga valitud asukohta"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Jagamise valikud"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Jagatud %1$s"</string>
+  <string name="screen_static_location_sheet_title">"Kaardil"</string>
+  <string name="screen_view_location_title">"Asukoht"</string>
 </resources>

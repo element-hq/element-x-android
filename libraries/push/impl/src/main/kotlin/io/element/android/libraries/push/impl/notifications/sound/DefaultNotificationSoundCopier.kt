@@ -17,13 +17,13 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.api.notifications.sound.NotificationSoundCopier
 import io.element.android.libraries.push.api.notifications.sound.NotificationSoundCopier.CopyResult
 import io.element.android.libraries.push.api.notifications.sound.NotificationSoundCopier.SoundSlot
 import io.element.android.libraries.push.impl.notifications.notificationSoundFileProviderAuthority
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -50,11 +50,12 @@ private val ALLOWED_SOURCE_SCHEMES = setOf(
 @ContributesBinding(AppScope::class)
 class DefaultNotificationSoundCopier(
     @ApplicationContext private val context: Context,
+    private val coroutineDispatchers: CoroutineDispatchers,
 ) : NotificationSoundCopier {
     // Per-slot serialization: concurrent picks for the same slot would race on `<slot>.tmp`.
     private val slotMutexes = SoundSlot.entries.associateWith { Mutex() }
 
-    override suspend fun copyToAppFiles(sourceUriString: String, slot: SoundSlot): CopyResult = withContext(Dispatchers.IO) {
+    override suspend fun copyToAppFiles(sourceUriString: String, slot: SoundSlot): CopyResult = withContext(coroutineDispatchers.io) {
         slotMutexes.getValue(slot).withLock {
             runCatchingExceptions { performCopy(sourceUriString, slot) }
                 .getOrElse { ex ->
@@ -67,7 +68,7 @@ class DefaultNotificationSoundCopier(
     }
 
     override suspend fun deleteStoredSoundFor(slot: SoundSlot) {
-        withContext(Dispatchers.IO) {
+        withContext(coroutineDispatchers.io) {
             slotMutexes.getValue(slot).withLock {
                 val dir = File(context.filesDir, DIRECTORY_NAME)
                 if (!dir.exists()) return@withLock

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -20,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyView
-import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
@@ -54,9 +54,12 @@ fun SecureBackupSetupView(
     if (state.setupState is SetupState.Error) {
         ErrorDialog(
             title = stringResource(id = CommonStrings.common_something_went_wrong),
-            content = stringResource(id = CommonStrings.common_something_went_wrong_message),
+            content = when (state.setupState.errorType) {
+                SetupErrorType.Network -> stringResource(id = CommonStrings.common_please_check_internet_connection)
+                SetupErrorType.Unknown -> stringResource(id = CommonStrings.common_something_went_wrong_message)
+            },
             onSubmit = {
-                state.eventSink.invoke(SecureBackupSetupEvents.DismissDialog)
+                state.eventSink.invoke(SecureBackupSetupEvent.DismissDialog)
             },
         )
     }
@@ -68,7 +71,7 @@ fun SecureBackupSetupView(
             submitText = stringResource(id = CommonStrings.action_continue),
             onSubmitClick = onSuccess,
             onDismiss = {
-                state.eventSink.invoke(SecureBackupSetupEvents.DismissDialog)
+                state.eventSink.invoke(SecureBackupSetupEvent.DismissDialog)
             }
         )
     }
@@ -79,6 +82,7 @@ private fun SecureBackupSetupState.canGoBack(): Boolean {
 }
 
 @Composable
+@ReadOnlyComposable
 private fun title(state: SecureBackupSetupState): String {
     return when (state.setupState) {
         SetupState.Init,
@@ -95,6 +99,7 @@ private fun title(state: SecureBackupSetupState): String {
 }
 
 @Composable
+@ReadOnlyComposable
 private fun subtitle(state: SecureBackupSetupState): String {
     return when (state.setupState) {
         SetupState.Init,
@@ -114,21 +119,15 @@ private fun subtitle(state: SecureBackupSetupState): String {
 private fun Content(
     state: SecureBackupSetupState,
 ) {
-    val context = LocalContext.current
     val formattedRecoveryKey = state.recoveryKeyViewState.formattedRecoveryKey
-    val toastMessage = stringResource(R.string.screen_recovery_key_copied_to_clipboard)
     val clickLambda = if (formattedRecoveryKey != null) {
         {
-            context.copyToClipboard(
-                text = formattedRecoveryKey,
-                toastMessage = toastMessage,
-            )
-            state.eventSink.invoke(SecureBackupSetupEvents.RecoveryKeyHasBeenSaved)
+            state.eventSink.invoke(SecureBackupSetupEvent.CopyRecoveryKey)
         }
     } else {
         if (!state.recoveryKeyViewState.inProgress) {
             {
-                state.eventSink.invoke(SecureBackupSetupEvents.CreateRecoveryKey)
+                state.eventSink.invoke(SecureBackupSetupEvent.CreateRecoveryKey)
             }
         } else {
             null
@@ -174,7 +173,7 @@ private fun ColumnScope.Buttons(
                         chooserTitle = chooserTitle,
                         text = state.setupState.recoveryKey()!!,
                     )
-                    state.eventSink.invoke(SecureBackupSetupEvents.RecoveryKeyHasBeenSaved)
+                    state.eventSink.invoke(SecureBackupSetupEvent.RecoveryKeyHasBeenSaved)
                 },
             )
             Button(
@@ -184,7 +183,7 @@ private fun ColumnScope.Buttons(
                     if (state.setupState is SetupState.CreatedAndSaved) {
                         onFinish()
                     } else {
-                        state.eventSink.invoke(SecureBackupSetupEvents.Done)
+                        state.eventSink.invoke(SecureBackupSetupEvent.Done)
                     }
                 },
             )

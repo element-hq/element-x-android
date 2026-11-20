@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Místnost již neexistuje nebo pozvánka již není platná."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Od tohoto uživatele neuvidíte žádné zprávy ani pozvánky do místnosti"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Zablokovat uživatele"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Nahlaste tuto místnost svému poskytovateli účtu."</string>
@@ -9,7 +10,6 @@
   <string name="screen_invites_decline_chat_title">"Odmítnout pozvání"</string>
   <string name="screen_invites_decline_direct_chat_message">"Opravdu chcete odmítnout tuto soukromou konverzaci s %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Odmítnout chat"</string>
-  <string name="screen_invites_empty_list">"Žádné pozvánky"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) vás pozval(a)"</string>
   <string name="screen_join_room_decline_and_block_alert_confirmation">"Ano, odmítnout a zablokovat"</string>
   <string name="screen_join_room_decline_and_block_alert_message">"Opravdu chcete odmítnout pozvánku do této místnosti? Tím také zabráníte tomu, aby vás %1$s kontaktoval(a) nebo pozval(a) do místností."</string>

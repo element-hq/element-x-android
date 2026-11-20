@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Seda jututuba pole enam olemas või pole see kutse enam kehtiv."</string>
   <string name="screen_decline_and_block_block_user_option_description">"Sa ei näe enam selle kasutaja saadetud sõnumeid ja jututubade kutseid"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Blokeeri kasutaja"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Teata sellest jututoast oma teenusepakkujale."</string>
@@ -9,7 +10,6 @@
   <string name="screen_invites_decline_chat_title">"Lükka kutse tagasi"</string>
   <string name="screen_invites_decline_direct_chat_message">"Kas sa oled kindel, et soovid keelduda privaatsest vestlusest kasutajaga %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Keeldu vestlusest"</string>
-  <string name="screen_invites_empty_list">"Kutseid pole"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) saatis sulle kutse"</string>
   <string name="screen_join_room_decline_and_block_alert_confirmation">"Jah, keeldu ja blokeeri"</string>
   <string name="screen_join_room_decline_and_block_alert_message">"Kas sa oled kindel, et soovid keelduda kutsest sellesse jututuppa? Samaga kaob kasutajal %1$s võimalus sinuga suhelda ja saata sulle jututubade kutseid."</string>

@@ -21,7 +21,7 @@ android {
     }
 }
 
-setupDependencyInjection()
+setupDependencyInjection(generateNodeFactories = false)
 
 dependencies {
     api(projects.libraries.emoji.api)
@@ -30,7 +30,6 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.uiStrings)
 
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.matrix.emojibase.bindings)

@@ -88,7 +88,7 @@ class AndroidLocalMediaFactory(
         waveform: List<Float>?,
         duration: String?,
     ): LocalMedia {
-        val fileName = name ?: context.getFileName(uri) ?: ""
+        val fileName = name ?: context.getFileName(uri).orEmpty()
         val resolvedMimeType = resolveMimeType(
             uri = uri,
             mimeType = mimeType,
@@ -104,7 +104,7 @@ class AndroidLocalMediaFactory(
                 filename = fileName,
                 fileSize = fileSize,
                 caption = caption,
-                formattedCaption = null,
+                htmlCaption = null,
                 formattedFileSize = calculatedFormattedFileSize,
                 fileExtension = fileExtension,
                 senderId = senderId,

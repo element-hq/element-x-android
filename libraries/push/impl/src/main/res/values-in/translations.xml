@@ -5,32 +5,24 @@
   <string name="notification_channel_noisy">"Pemberitahuan berisik"</string>
   <string name="notification_channel_ringing_calls">"Panggilan berdering"</string>
   <string name="notification_channel_silent">"Pemberitahuan diam"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="other">"%1$s: %2$d pesan"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d pemberitahuan"</item>
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Distributor notifikasi UnifiedPush tidak dapat didaftarkan, sehingga Anda tidak akan lagi menerima notifikasi. Silakan periksa pengaturan notifikasi aplikasi dan status distributor push."</string>
-  <string name="notification_fallback_content">"Anda memiliki pesan baru."</string>
   <plurals name="notification_fallback_n_content">
     <item quantity="other">"Anda memiliki %d pesan baru."</item>
+  </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="other">"Lampiran %1$d yang dibagikan"</item>
   </plurals>
   <string name="notification_incoming_audio_call">"Panggilan masuk"</string>
   <string name="notification_incoming_call">"📹 Panggilan masuk"</string>
   <string name="notification_inline_reply_failed">"** Gagal mengirim — silakan buka ruangan"</string>
-  <string name="notification_invitation_action_join">"Gabung"</string>
-  <string name="notification_invitation_action_reject">"Tolak"</string>
-  <plurals name="notification_invitations">
-    <item quantity="other">"%d undangan"</item>
-  </plurals>
   <string name="notification_invite_body">"Mengundang Anda untuk mengobrol"</string>
   <string name="notification_invite_body_with_sender">"%1$s mengundang Anda untuk mengobrol"</string>
+  <string name="notification_knock_request_body">"Diminta untuk bergabung"</string>
+  <string name="notification_live_location_started_body">"Mulai membagikan lokasi langsung mereka"</string>
   <string name="notification_mentioned_you_body">"Menyebutkan Anda: %1$s"</string>
-  <string name="notification_new_messages">"Pesan Baru"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="other">"%d pesan baru"</item>
-  </plurals>
   <string name="notification_reaction_body">"Menghapus dengan %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Tandai sebagai dibaca"</string>
   <string name="notification_room_action_quick_reply">"Balas cepat"</string>
@@ -40,7 +32,7 @@
   <string name="notification_sender_mention_reply">"%1$s disebut atau dibalas"</string>
   <string name="notification_space_invite_body">"Kami mengundang Anda untuk bergabung di ruang ini."</string>
   <string name="notification_space_invite_body_with_sender">"%1$s mengundang Anda untuk bergabung ke ruang ini."</string>
-  <string name="notification_test_push_notification_content">"Anda sedang melihat pemberitahuan ini! Klik saya!"</string>
+  <string name="notification_test_push_notification_content">"Anda sedang melihat notifikasi ini! Klik saya!"</string>
   <string name="notification_thread_in_room">"Diskusi di %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
@@ -72,9 +64,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Penyedia notifikasi dorongan saat ini"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Pastikan aplikasi memiliki setidaknya satu penyedia notifikasi dorongan."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Tidak ada penyedia notifikasi dorongan yang ditemukan."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="other">"Ditemukan %1$d penyedia notifikasi dorongan: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Aplikasi ini dibangun dengan dukungan untuk: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Deteksi penyedia notifikasi dorongan"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Periksa apakah aplikasi dapat menampilkan notifikasi."</string>
@@ -82,12 +71,13 @@
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Tidak dapat menampilkan notifikasi."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Notifikasi telah diklik!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Tampilan notifikasi"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Silakan klik pada notifikasi untuk melanjutkan tes."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Silakan klik notifikasi untuk melanjutkan tes."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Pastikan aplikasi menerima notifikasi dorongan."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Kesalahan: pendorong telah menolak permintaan."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Kesalahan: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Terjadi kesalahan, tidak dapat menguji notifikasi dorongan."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Terjadi kesalahan, melebihi batas waktu menunggu notifikasi dorongan."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Kesalahan: gateway push membatasi frekuensi pengiriman ke perangkat ini, sehingga notifikasi tidak akan dapat diandalkan. Silakan atur gateway push yang lain."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Ulangan notifikasi dorongan membutuhkan %1$d ms."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Uji ulangan notifikasi dorongan lagi"</string>
 </resources>

@@ -46,6 +46,7 @@ class GalleryMediaGalleryDataSource(
                     filename = galleryItem.filename,
                     fileSize = null,
                     caption = galleryInfo.caption,
+                    htmlCaption = galleryInfo.htmlCaption,
                     mimeType = galleryItem.mimeType,
                     formattedFileSize = "",
                     fileExtension = galleryItem.filename.substringAfterLast('.', ""),

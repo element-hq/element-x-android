@@ -11,33 +11,18 @@
 package io.element.android.features.location.api.internal
 
 import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
-import io.element.android.features.location.api.BuildConfig
 
-internal class MapTilerTileServerStyleUriBuilder(
-    private val baseUrl: String,
-    private val apiKey: String,
-    private val lightMapId: String,
-    private val darkMapId: String,
-) : TileServerStyleUriBuilder {
-    constructor() : this(
-        baseUrl = BuildConfig.MAPTILER_BASE_URL.removeSuffix("/"),
-        apiKey = BuildConfig.MAPTILER_API_KEY,
-        lightMapId = BuildConfig.MAPTILER_LIGHT_MAP_ID,
-        darkMapId = BuildConfig.MAPTILER_DARK_MAP_ID,
-    )
-
+internal class MapTilerTileServerStyleUriBuilder : TileServerStyleUriBuilder {
     override fun build(
-        customMapTilerConfig: MapTilerConfig?,
+        mapTilerConfig: MapTilerConfig,
         darkMode: Boolean,
     ): String {
-        val baseUrl = customMapTilerConfig?.baseUrl.takeIf { !it.isNullOrBlank() } ?: baseUrl
-        val apiKey = customMapTilerConfig?.apiKey ?: apiKey
+        val baseUrl = mapTilerConfig.baseUrlOrDefault()
         val mapId = if (darkMode) {
-            customMapTilerConfig?.darkStyleId ?: darkMapId
+            mapTilerConfig.darkMapIdOrDefault()
         } else {
-            customMapTilerConfig?.lightStyleId ?: lightMapId
+            mapTilerConfig.lightMapIdOrDefault()
         }
-
-        return "$baseUrl/$mapId/style.json?key=$apiKey"
+        return "$baseUrl/$mapId/style.json?key=${mapTilerConfig.apiKey}"
     }
 }

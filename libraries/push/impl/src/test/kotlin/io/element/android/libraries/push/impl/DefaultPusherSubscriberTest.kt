@@ -99,9 +99,9 @@ class DefaultPusherSubscriberTest {
                         url = "aGateway",
                         appDisplayName = "MyApp",
                         deviceDisplayName = "MyDevice",
-                        profileTag = DEFAULT_PUSHER_FILE_TAG + "_",
+                        profileTag = null,
                         lang = "en",
-                        defaultPayload = "{\"cs\":\"$A_SECRET\"}",
+                        defaultPayload = """{"cs":"$A_SECRET"}""",
                         append = false,
                     ),
                 )

@@ -58,7 +58,7 @@ internal fun aRolesAndPermissionsState(
     availableSelfDemoteActions: List<SelfDemoteAction> = listOf(SelfDemoteAction.ToModerator, SelfDemoteAction.ToMember),
     changeOwnRoleAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     resetPermissionsAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
-    eventSink: (RolesAndPermissionsEvents) -> Unit = {},
+    eventSink: (RolesAndPermissionsEvent) -> Unit = {},
 ) = RolesAndPermissionsState(
     roomSupportsOwnerRole = roomSupportsOwners,
     adminCount = adminCount,

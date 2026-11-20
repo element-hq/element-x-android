@@ -9,6 +9,7 @@
 package io.element.android.features.location.api.internal
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.api.remoteconfig.MapTilerConfig
 import org.junit.Test
 
 class MapTilerStaticMapUrlBuilderTest {
@@ -22,6 +23,38 @@ class MapTilerStaticMapUrlBuilderTest {
     @Test
     fun `isServiceAvailable returns true if api key is not empty`() {
         assertThat(builder.isServiceAvailable()).isTrue()
+    }
+
+    @Test
+    fun `builder created from a config only uses the config values`() {
+        val configBuilder = MapTilerStaticMapUrlBuilder(
+            MapTilerConfig(
+                apiKey = "API_KEY",
+                lightStyleId = "light",
+                darkStyleId = "dark",
+                baseUrl = "https://custom.url/maps/",
+            )
+        )
+        assertThat(configBuilder.isServiceAvailable()).isTrue()
+        assertThat(
+            configBuilder.build(lat = 1.23, lon = -4.56, zoom = 7.8, darkMode = true, width = 800, height = 600, density = 1f)
+        ).isEqualTo("https://custom.url/maps/dark/static/-4.56,1.23,7.8/800x600.webp?key=API_KEY&attribution=topright")
+    }
+
+    @Test
+    fun `builder created from a partial config falls back to the public MapTiler defaults`() {
+        val configBuilder = MapTilerStaticMapUrlBuilder(
+            MapTilerConfig(
+                apiKey = "",
+                lightStyleId = null,
+                darkStyleId = null,
+                baseUrl = null,
+            )
+        )
+        assertThat(configBuilder.isServiceAvailable()).isFalse()
+        assertThat(
+            configBuilder.build(lat = 1.23, lon = -4.56, zoom = 7.8, darkMode = false, width = 800, height = 600, density = 1f)
+        ).isEqualTo("https://api.maptiler.com/maps/basic-v2/static/-4.56,1.23,7.8/800x600.webp?key=&attribution=topright")
     }
 
     @Test
