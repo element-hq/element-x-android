@@ -29,17 +29,22 @@ fun File.safeDelete() {
     )
 }
 
-fun File.safeRenameTo(dest: File) {
-    tryOrNull(
+/**
+ * @return true if the file was renamed.
+ */
+fun File.safeRenameTo(dest: File): Boolean {
+    return tryOrNull(
         onException = {
             Timber.e(it, "Error, unable to rename file $path to ${dest.path}")
         },
         operation = {
-            if (renameTo(dest).not()) {
-                Timber.w("Warning, unable to rename file $path to ${dest.path}")
+            renameTo(dest).also { renamed ->
+                if (!renamed) {
+                    Timber.w("Warning, unable to rename file $path to ${dest.path}")
+                }
             }
         }
-    )
+    ) ?: false
 }
 
 /**
