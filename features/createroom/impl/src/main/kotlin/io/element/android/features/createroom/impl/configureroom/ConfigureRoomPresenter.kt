@@ -174,7 +174,8 @@ class ConfigureRoomPresenter(
                     availableJoinRules.filterIsInstance<JoinRuleItem.PrivateVisibility.Restricted>().firstOrNull()
                 is JoinRuleItem.PrivateVisibility.AskToJoinRestricted ->
                     availableJoinRules.filterIsInstance<JoinRuleItem.PrivateVisibility.AskToJoinRestricted>().firstOrNull()
-                else -> availableJoinRules.find { it == currentJoinRule }
+                JoinRuleItem.PrivateVisibility.Private,
+                is JoinRuleItem.PublicVisibility -> availableJoinRules.find { it == currentJoinRule }
             }
             when {
                 matchingRule == null -> {

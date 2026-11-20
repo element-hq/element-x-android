@@ -79,7 +79,8 @@ sealed interface FocusRequestState {
             is Requested -> eventId
             is Loading -> eventId
             is Success -> eventId
-            else -> null
+            None,
+            is Failure -> null
         }
     }
 }
@@ -122,7 +123,8 @@ fun TimelineState.isSelected(item: TimelineItem): Boolean {
     val selection = selectionState as? SelectionState.Active ?: return false
     return when (item) {
         is TimelineItem.Event -> selection.selectedEventIds.contains(item.eventId)
-        else -> false
+        is TimelineItem.Virtual,
+        is TimelineItem.GroupedEvents -> false
     }
 }
 
@@ -133,7 +135,8 @@ fun TimelineState.canSelect(item: TimelineItem): Boolean {
     val selection = selectionState as? SelectionState.Active ?: return false
     return when (item) {
         is TimelineItem.Event -> selection.action.canApplyTo(item)
-        else -> false
+        is TimelineItem.Virtual,
+        is TimelineItem.GroupedEvents -> false
     }
 }
 

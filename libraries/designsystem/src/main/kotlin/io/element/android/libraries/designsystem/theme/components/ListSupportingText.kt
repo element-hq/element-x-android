@@ -101,12 +101,18 @@ object ListSupportingTextDefaults {
 
         private fun endPadding(): Dp = when (this) {
             None -> 0.dp
-            else -> 24.dp
+            Default,
+            SmallLeadingContent,
+            LargeLeadingContent,
+            is Custom -> 24.dp
         }
 
         private fun bottomPadding(): Dp = when (this) {
             None -> 0.dp
-            else -> 12.dp
+            Default,
+            SmallLeadingContent,
+            LargeLeadingContent,
+            is Custom -> 12.dp
         }
 
         fun paddingValues() = PaddingValues(

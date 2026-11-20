@@ -58,7 +58,9 @@ data class JoinRoomState(
                 JoinAuthorisationStatus.Unknown
             }
         }
-        else -> JoinAuthorisationStatus.None
+        ContentState.Dismissing,
+        ContentState.Loading,
+        is ContentState.Failure -> JoinAuthorisationStatus.None
     }
 
     val hideAvatarsImages = hideInviteAvatars && joinAuthorisationStatus is JoinAuthorisationStatus.IsInvited

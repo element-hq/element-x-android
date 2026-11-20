@@ -153,7 +153,8 @@ private fun KnockRequestsListContent(
                     )
                 }
             }
-            else -> Unit
+            is AsyncData.Failure,
+            AsyncData.Uninitialized -> Unit
         }
         KnockRequestsActionsView(
             currentAction = state.currentAction,
@@ -212,7 +213,7 @@ private fun KnockRequestsActionsView(
                     is KnockRequestsAction.Decline -> stringResource(R.string.screen_knock_requests_list_decline_failed_alert_description)
                     is KnockRequestsAction.DeclineAndBan -> stringResource(R.string.screen_knock_requests_list_decline_failed_alert_description)
                     KnockRequestsAction.AcceptAll -> stringResource(R.string.screen_knock_requests_list_accept_all_failed_alert_description)
-                    else -> ""
+                    KnockRequestsAction.None -> ""
                 }
             },
             onRetry = onRetry,
@@ -243,7 +244,8 @@ private fun KnockRequestActionConfirmation(
             stringResource(R.string.screen_knock_requests_list_ban_alert_description, currentAction.knockRequest.getBestName()),
             stringResource(R.string.screen_knock_requests_list_ban_alert_confirm_button_title),
         )
-        else -> return
+        is KnockRequestsAction.Accept,
+        KnockRequestsAction.None -> return
     }
     ConfirmationDialog(
         title = title,
@@ -265,7 +267,7 @@ private fun KnockRequestActionProgress(
         is KnockRequestsAction.Decline -> stringResource(R.string.screen_knock_requests_list_decline_loading_title)
         is KnockRequestsAction.DeclineAndBan -> stringResource(R.string.screen_knock_requests_list_ban_loading_title)
         KnockRequestsAction.AcceptAll -> stringResource(R.string.screen_knock_requests_list_accept_all_loading_title)
-        else -> return
+        KnockRequestsAction.None -> return
     }
     ProgressDialog(
         text = progressText,

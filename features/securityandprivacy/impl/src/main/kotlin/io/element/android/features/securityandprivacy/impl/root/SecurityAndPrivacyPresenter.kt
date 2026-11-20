@@ -428,7 +428,8 @@ class SecurityAndPrivacyPresenter(
                     SecurityAndPrivacyRoomAccess.AskToJoin,
                     is SecurityAndPrivacyRoomAccess.AskToJoinWithSpaceMember,
                     SecurityAndPrivacyRoomAccess.Anyone -> editedSettings.isVisibleInRoomDirectory.dataOrNull()
-                    else -> false
+                    SecurityAndPrivacyRoomAccess.InviteOnly,
+                    is SecurityAndPrivacyRoomAccess.SpaceMember -> false
                 }
                 val savedIsVisibleInRoomDirectory = savedSettings.isVisibleInRoomDirectory.dataOrNull()
                 if (editedIsVisibleInRoomDirectory != null && editedIsVisibleInRoomDirectory != savedIsVisibleInRoomDirectory) {

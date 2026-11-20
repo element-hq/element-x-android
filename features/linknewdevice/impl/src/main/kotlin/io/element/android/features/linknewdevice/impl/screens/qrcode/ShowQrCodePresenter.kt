@@ -78,7 +78,14 @@ class ShowQrCodePresenter(
                             linkNewMobileHandler.onTooManyRotation()
                         }
                     }
-                    else -> Unit
+                    LinkMobileStep.Uninitialized,
+                    LinkMobileStep.CreatingQrCode,
+                    LinkMobileStep.Starting,
+                    is LinkMobileStep.WaitingForAuth,
+                    is LinkMobileStep.QrScanned,
+                    is LinkMobileStep.Error,
+                    LinkMobileStep.SyncingSecrets,
+                    LinkMobileStep.Done -> Unit
                 }
             }
         }

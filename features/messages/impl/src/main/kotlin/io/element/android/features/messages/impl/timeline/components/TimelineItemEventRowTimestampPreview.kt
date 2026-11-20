@@ -13,7 +13,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemNoticeContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRedactedContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStateContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
@@ -39,7 +52,19 @@ internal fun TimelineItemEventRowTimestampPreview(
                     ),
                 )
             }
-            else -> ATimelineItemEventRow(
+            is TimelineItemEmoteContent,
+            is TimelineItemNoticeContent,
+            is TimelineItemEventContentWithAttachment,
+            is TimelineItemAttachmentsContent,
+            is TimelineItemGalleryContent,
+            is TimelineItemEncryptedContent,
+            is TimelineItemLocationContent,
+            is TimelineItemPollContent,
+            is TimelineItemRtcNotificationContent,
+            is TimelineItemStateContent,
+            TimelineItemLegacyCallInviteContent,
+            TimelineItemRedactedContent,
+            TimelineItemUnknownContent -> ATimelineItemEventRow(
                 event = event.copy(
                     content = event.content,
                     reactionsState = aTimelineItemReactions(count = 0),

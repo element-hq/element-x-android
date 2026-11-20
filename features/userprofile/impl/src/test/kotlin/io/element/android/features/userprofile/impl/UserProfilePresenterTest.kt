@@ -121,6 +121,8 @@ class UserProfilePresenterTest {
         )
     }
 
+    // Only the event types used by the test are expected, any other type is an error
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun testCanCall(
         isElementCallAvailable: Boolean = true,
         canUserJoinCall: Boolean = true,

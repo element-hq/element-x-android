@@ -37,7 +37,11 @@ fun RageshakeDetectionView(
         when (event) {
             Lifecycle.Event.ON_RESUME -> eventSink(RageshakeDetectionEvent.StartDetection)
             Lifecycle.Event.ON_PAUSE -> eventSink(RageshakeDetectionEvent.StopDetection)
-            else -> Unit
+            Lifecycle.Event.ON_CREATE,
+            Lifecycle.Event.ON_START,
+            Lifecycle.Event.ON_STOP,
+            Lifecycle.Event.ON_DESTROY,
+            Lifecycle.Event.ON_ANY -> Unit
         }
     }
     when {

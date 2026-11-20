@@ -88,6 +88,8 @@ class LiveLocationSharingService : Service() {
         }
     }
 
+    // LocationEvent and LocationUnavailableReason are kept open by the library with internal subtypes, so else branches are required
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun startLocationUpdatesListener() {
         Timber.d("LiveLocationSharingService listening to location updates")

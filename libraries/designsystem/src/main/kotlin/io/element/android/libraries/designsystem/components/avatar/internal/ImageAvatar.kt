@@ -106,7 +106,9 @@ private fun ThumbnailOrInitialLetterAvatar(
             val collectedState by painter.state.collectAsState()
             when (collectedState) {
                 is AsyncImagePainter.State.Success -> SubcomposeAsyncImageContent()
-                else -> InitialLetterAvatar(
+                AsyncImagePainter.State.Empty,
+                is AsyncImagePainter.State.Loading,
+                is AsyncImagePainter.State.Error -> InitialLetterAvatar(
                     avatarData = avatarData,
                     avatarShape = avatarShape,
                     forcedAvatarSize = forcedAvatarSize,

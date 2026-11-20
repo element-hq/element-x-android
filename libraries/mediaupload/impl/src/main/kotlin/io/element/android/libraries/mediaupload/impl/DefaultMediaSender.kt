@@ -292,7 +292,10 @@ class DefaultMediaSender(
                         threadedTimeline.use { block(it) }
                     }
             }
-            else -> block(room.liveTimeline)
+            Timeline.Mode.Live,
+            is Timeline.Mode.FocusedOnEvent,
+            Timeline.Mode.PinnedEvents,
+            Timeline.Mode.Media -> block(room.liveTimeline)
         }
     }
 

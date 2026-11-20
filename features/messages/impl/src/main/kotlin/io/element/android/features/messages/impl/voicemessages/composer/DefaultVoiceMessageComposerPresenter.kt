@@ -113,7 +113,11 @@ class DefaultVoiceMessageComposerPresenter(
                 Lifecycle.Event.ON_DESTROY -> {
                     sessionCoroutineScope.cancelRecording()
                 }
-                else -> {}
+                Lifecycle.Event.ON_CREATE,
+                Lifecycle.Event.ON_START,
+                Lifecycle.Event.ON_RESUME,
+                Lifecycle.Event.ON_STOP,
+                Lifecycle.Event.ON_ANY -> Unit
             }
         }
 
