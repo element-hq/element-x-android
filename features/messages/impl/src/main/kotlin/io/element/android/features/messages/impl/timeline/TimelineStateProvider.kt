@@ -65,6 +65,7 @@ fun aTimelineState(
     newEventState: NewEventState = NewEventState.None,
     selectionState: SelectionState = SelectionState.Disabled,
     useNewTimelineEventRenderer: Boolean = false,
+    timelineFontScale: Float = 1f,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -88,6 +89,7 @@ fun aTimelineState(
         jumpToUnread = jumpToUnread,
         selectionState = selectionState,
         useNewTimelineEventRenderer = useNewTimelineEventRenderer,
+        timelineFontScale = timelineFontScale,
         eventSink = eventSink,
     )
 }
@@ -174,7 +176,7 @@ internal fun aTimelineItemEvent(
         eventId = eventId,
         transactionId = transactionId,
         senderId = senderId,
-        senderAvatar = AvatarData(senderId.value, USER_NAME_SENDER, size = AvatarSize.TimelineSender),
+        senderAvatar = AvatarData(senderId.value, senderDisplayName, size = AvatarSize.TimelineSender),
         content = content,
         reactionsState = timelineItemReactions,
         readReceiptState = readReceiptState,
@@ -291,6 +293,7 @@ internal fun aTimelineRoomInfo(
     isDm: Boolean = false,
     renderReadReceipts: Boolean = true,
     userHasPermissionToSendMessage: Boolean = true,
+    userHasPermissionToSendReaction: Boolean = true,
     pinnedEventIds: List<EventId> = emptyList(),
     typingNotificationState: TypingNotificationState = aTypingNotificationState(),
     predecessorRoom: PredecessorRoom? = null,
@@ -300,7 +303,7 @@ internal fun aTimelineRoomInfo(
     renderReadReceipts = renderReadReceipts,
     name = name,
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
-    userHasPermissionToSendReaction = true,
+    userHasPermissionToSendReaction = userHasPermissionToSendReaction,
     roomCallState = aStandByCallState(),
     pinnedEventIds = pinnedEventIds.toImmutableList(),
     typingNotificationState = typingNotificationState,

@@ -700,7 +700,7 @@ private fun MediaViewerBottomBar(
                         EditorStyledText(
                             modifier = textModifier,
                             text = textToRender,
-                            style = ElementRichTextEditorStyle.textStyle(),
+                            style = ElementRichTextEditorStyle.textStyle(fontScale = 1f),
                             releaseOnDetach = false,
                         )
                     }

@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package base
+package io.element.android.tests.screenshotutils
 
 import app.cash.paparazzi.DeviceConfig
 

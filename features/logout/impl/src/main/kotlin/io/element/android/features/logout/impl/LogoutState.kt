@@ -8,8 +8,10 @@
 package io.element.android.features.logout.impl
 
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class LogoutState(
+    val currentUser: MatrixUser,
     val confirmation: LogoutConfirmation,
     val logoutAction: AsyncAction<Unit>,
     val eventSink: (LogoutEvent) -> Unit,

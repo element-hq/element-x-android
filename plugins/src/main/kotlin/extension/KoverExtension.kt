@@ -37,6 +37,8 @@ val excludedKoverSubProjects = listOf(
     ":annotations",
     ":codegen",
     ":tests:testutils",
+    // Only used by the screenshot tests
+    ":tests:screenshotutils",
     // Exclude modules which are not Android libraries
     // See https://github.com/Kotlin/kotlinx-kover/issues/312
     ":libraries:core",

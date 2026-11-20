@@ -12,6 +12,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -19,6 +20,7 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
@@ -76,13 +78,38 @@ class SignedOutPresenterTest {
             assertThat(initialState.signedOutMatrixUser).isEqualTo(MatrixUser(userId = A_SESSION_ID, displayName = "Alice"))
             assertThat(sessionStore.getAllSessions()).isNotEmpty()
             assertThat(sessionStore.numberOfSessions()).isEqualTo(1)
+            assertThat(initialState.submitAction).isEqualTo(AsyncAction.Uninitialized)
             initialState.eventSink(SignedOutEvent.Submit)
+            val loadingState = awaitItem()
+            assertThat(loadingState.submitAction).isEqualTo(AsyncAction.Loading)
             runCurrent()
             assertThat(sessionStore.getAllSessions()).isEmpty()
             assertThat(sessionStore.numberOfSessions()).isEqualTo(0)
-            // The removal of the session must not change the rendered data
+            // The removal of the session must not change the rendered data, and the screen stays in the loading state until it is closed
             expectNoEvents()
         }
+    }
+
+    @Test
+    fun `present - submit while the session is being removed is ignored`() = runTest {
+        val removeSessionResult = lambdaRecorder<String, Unit> { }
+        val sessionStore = InMemorySessionStore(
+            initialList = listOf(aSessionData(sessionId = A_SESSION_ID.value)),
+            removeSessionResult = removeSessionResult,
+        )
+        val presenter = createSignedOutPresenter(sessionStore = sessionStore)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink(SignedOutEvent.Submit)
+            val loadingState = awaitItem()
+            assertThat(loadingState.submitAction).isEqualTo(AsyncAction.Loading)
+            loadingState.eventSink(SignedOutEvent.Submit)
+            initialState.eventSink(SignedOutEvent.Submit)
+            cancelAndIgnoreRemainingEvents()
+        }
+        removeSessionResult.assertions().isCalledOnce()
     }
 }
 

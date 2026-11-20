@@ -40,6 +40,7 @@ class PreferencesRootNode(
         fun navigateToAnalyticsSettings()
         fun navigateToAbout()
         fun navigateToDeveloperSettings()
+        fun navigateToMessageTextSize()
         fun navigateToLockScreenSettings()
         fun navigateToMediaSettings()
         fun navigateToLocationSettings()
@@ -81,6 +82,7 @@ class PreferencesRootNode(
             onOpenMediaSettings = callback::navigateToMediaSettings,
             onOpenLocationSettings = callback::navigateToLocationSettings,
             onOpenLabs = callback::navigateToLabs,
+            onOpenMessageTextSize = callback::navigateToMessageTextSize,
             onOpenLockScreenSettings = callback::navigateToLockScreenSettings,
             onOpenRageShake = callback::navigateToBugReport,
             onSecureBackupClick = callback::navigateToSecureBackup,

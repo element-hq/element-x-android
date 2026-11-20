@@ -65,6 +65,7 @@ fun PreferencesRootView(
     onAddAccountClick: () -> Unit,
     onSwitchToSession: (SessionId) -> Unit,
     onOpenAnalytics: () -> Unit,
+    onOpenMessageTextSize: () -> Unit,
     onOpenLockScreenSettings: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
@@ -131,6 +132,7 @@ fun PreferencesRootView(
             // 'App settings' section
             AppSettingsSection(
                 state = state,
+                onOpenMessageTextSize = onOpenMessageTextSize,
                 onOpenLockScreenSettings = onOpenLockScreenSettings,
                 onOpenMediaSettings = onOpenMediaSettings,
                 onOpenLocationSettings = onOpenLocationSettings,
@@ -210,6 +212,7 @@ private fun ColumnScope.MultiAccountSection(
 @Composable
 private fun AppSettingsSection(
     state: PreferencesRootState,
+    onOpenMessageTextSize: () -> Unit,
     onOpenLockScreenSettings: () -> Unit,
     onOpenLocationSettings: () -> Unit,
     onOpenMediaSettings: () -> Unit,
@@ -226,6 +229,12 @@ private fun AppSettingsSection(
             onSelectOption = { themeOption ->
                 state.eventSink(PreferencesRootEvent.SetTheme(themeOption))
             }
+        )
+        ListItem(
+            content = { Text(stringResource(id = R.string.screen_settings_message_text_size_title)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.TextFormatting())),
+            trailingContent = ListItemContent.Text(state.messageTextSize.toString()),
+            onClick = onOpenMessageTextSize,
         )
         ListItem(
             content = { Text(stringResource(id = CommonStrings.common_media_upload_quality)) },
@@ -341,6 +350,7 @@ private fun ContentToPreview(state: PreferencesRootState) {
         onOpenMediaSettings = {},
         onOpenLabs = {},
         onOpenAbout = {},
+        onOpenMessageTextSize = {},
         onOpenLockScreenSettings = {},
         onEditProfileClick = {},
         onSecureBackupClick = {},

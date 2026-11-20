@@ -65,6 +65,8 @@ import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.DisplayFirstTimelineItems
@@ -117,6 +119,7 @@ class TimelinePresenter(
     private val timelineProtectionPresenter: Presenter<TimelineProtectionState>,
     private val clipboardHelper: ClipboardHelper,
     private val toastHelper: ToastHelper,
+    private val appPreferencesStore: AppPreferencesStore,
 ) : Presenter<TimelineState> {
     private val tag = "TimelinePresenter"
 
@@ -193,6 +196,9 @@ class TimelinePresenter(
         val useNewTimelineEventRenderer by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.NewTimelineEventRenderer)
         }
+        val timelineFontScale by remember {
+            appPreferencesStore.getMessageTextSizeFlow().map { MessageTextSize.scaleOf(it) }
+        }.collectAsState(initial = 1f)
 
         val timelineProtectionState = timelineProtectionPresenter.present()
 
@@ -527,6 +533,7 @@ class TimelinePresenter(
             jumpToUnread = jumpToUnread.value,
             selectionState = selectionState.value,
             useNewTimelineEventRenderer = useNewTimelineEventRenderer,
+            timelineFontScale = timelineFontScale,
             eventSink = ::handleEvent,
         )
     }

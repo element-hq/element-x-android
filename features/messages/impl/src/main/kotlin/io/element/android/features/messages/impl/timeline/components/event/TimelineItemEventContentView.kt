@@ -307,7 +307,7 @@ private fun CaptionView(
             EditorStyledText(
                 modifier = modifier,
                 text = caption,
-                style = ElementRichTextEditorStyle.textStyle(),
+                style = ElementRichTextEditorStyle.textStyle(fontScale = LocalTimelineEventRendererConfig.current.fontScale),
                 onLinkClickedListener = onLinkClick,
                 onLinkLongClickedListener = onLinkLongClick,
                 releaseOnDetach = false,

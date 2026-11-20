@@ -79,6 +79,8 @@ import io.element.android.libraries.matrix.test.timeline.aProfileDetails
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -1296,6 +1298,81 @@ class TimelineItemContentMessageFactoryTest : RobolectricTest() {
         assertThat(resultWithoutFeatureFlag.captionTreeOrNull()).isNull()
     }
 
+    @Test
+    fun `test create uses the plain text body for the message tree when there is no formatted body`() = runTest {
+        val plainTextTree = DocumentNode(persistentListOf())
+        val formatPlainTextLambda = lambdaRecorder<String, DocumentNode?> { plainTextTree }
+        val featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.NewTimelineEventRenderer.key to true))
+        val sut = createTimelineItemContentMessageFactory(
+            featureFlagService = featureFlagService,
+            htmlMessageParser = FakeHtmlMessageParser(formatPlainTextResult = formatPlainTextLambda),
+        )
+        val result = sut.create(
+            content = createMessageContent(type = TextMessageType("body  ", null)),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        assertThat((result as TimelineItemTextContent).messageTree).isSameInstanceAs(plainTextTree)
+        formatPlainTextLambda.assertions().isCalledOnce().with(value("body"))
+    }
+
+    @Test
+    fun `test create uses the plain text body with the sender prefix for the message tree of an emote`() = runTest {
+        val formatPlainTextLambda = lambdaRecorder<String, DocumentNode?> { DocumentNode(persistentListOf()) }
+        val featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.NewTimelineEventRenderer.key to true))
+        val sut = createTimelineItemContentMessageFactory(
+            featureFlagService = featureFlagService,
+            htmlMessageParser = FakeHtmlMessageParser(formatPlainTextResult = formatPlainTextLambda),
+        )
+        val result = sut.create(
+            content = createMessageContent(type = EmoteMessageType("body", null)),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails("Bob"),
+            eventId = AN_EVENT_ID,
+        )
+        assertThat((result as TimelineItemEmoteContent).messageTree).isNotNull()
+        formatPlainTextLambda.assertions().isCalledOnce().with(value("* Bob body"))
+    }
+
+    @Test
+    fun `test create uses the plain text caption for the caption tree when there is no formatted caption`() = runTest {
+        val formatPlainTextLambda = lambdaRecorder<String, DocumentNode?> { DocumentNode(persistentListOf()) }
+        val featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.NewTimelineEventRenderer.key to true))
+        val sut = createTimelineItemContentMessageFactory(
+            featureFlagService = featureFlagService,
+            htmlMessageParser = FakeHtmlMessageParser(formatPlainTextResult = formatPlainTextLambda),
+        )
+        val result = sut.create(
+            content = createMessageContent(
+                type = ImageMessageType(filename = "filename", caption = "caption", formattedCaption = null, source = MediaSource("url"), info = null)
+            ),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        assertThat(result.captionTreeOrNull()).isNotNull()
+        formatPlainTextLambda.assertions().isCalledOnce().with(value("caption"))
+    }
+
+    @Test
+    fun `test create does not build a plain text message tree if the feature flag is disabled`() = runTest {
+        val formatPlainTextLambda = lambdaRecorder<String, DocumentNode?> { DocumentNode(persistentListOf()) }
+        val featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.NewTimelineEventRenderer.key to false))
+        val sut = createTimelineItemContentMessageFactory(
+            featureFlagService = featureFlagService,
+            htmlMessageParser = FakeHtmlMessageParser(formatPlainTextResult = formatPlainTextLambda),
+        )
+        val result = sut.create(
+            content = createMessageContent(type = TextMessageType("body", null)),
+            senderId = A_USER_ID,
+            senderProfile = aProfileDetails(),
+            eventId = AN_EVENT_ID,
+        )
+        assertThat((result as TimelineItemTextContent).messageTree).isNull()
+        formatPlainTextLambda.assertions().isNeverCalled()
+    }
+
     private fun createMessageContent(
         body: String = "Body",
         inReplyTo: InReplyTo? = null,
@@ -1317,13 +1394,17 @@ class TimelineItemContentMessageFactoryTest : RobolectricTest() {
         domConverterTransform: (Document) -> CharSequence = { it.body().html() },
         permalinkParser: FakePermalinkParser = FakePermalinkParser(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+        htmlMessageParser: FakeHtmlMessageParser = FakeHtmlMessageParser(
+            parseResult = { DocumentNode(persistentListOf()) },
+            formatPlainTextResult = { null },
+        ),
     ) = TimelineItemContentMessageFactory(
         fileSizeFormatter = FakeFileSizeFormatter(),
         fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
         htmlConverterProvider = FakeHtmlConverterProvider(htmlConverterTransform, domConverterTransform),
         permalinkParser = permalinkParser,
         textPillificator = FakeTextPillificator(),
-        htmlMessageParser = FakeHtmlMessageParser(parseResult = { DocumentNode(persistentListOf()) }),
+        htmlMessageParser = htmlMessageParser,
         featureFlagService = featureFlagService,
     )
 

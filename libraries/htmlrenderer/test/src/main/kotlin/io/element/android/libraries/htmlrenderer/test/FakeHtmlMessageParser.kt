@@ -14,6 +14,8 @@ import org.jsoup.nodes.Document
 
 class FakeHtmlMessageParser(
     private val parseResult: (Document) -> DocumentNode = { lambdaError() },
+    private val formatPlainTextResult: (String) -> DocumentNode? = { lambdaError() },
 ) : HtmlMessageParser {
     override fun parse(document: Document): DocumentNode = parseResult(document)
+    override fun formatPlainText(text: String): DocumentNode? = formatPlainTextResult(text)
 }

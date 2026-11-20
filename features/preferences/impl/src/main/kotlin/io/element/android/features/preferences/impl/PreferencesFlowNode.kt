@@ -32,6 +32,7 @@ import io.element.android.features.preferences.impl.developer.DeveloperSettingsN
 import io.element.android.features.preferences.impl.labs.LabsNode
 import io.element.android.features.preferences.impl.location.LocationSettingsNode
 import io.element.android.features.preferences.impl.media.MediaSettingsNode
+import io.element.android.features.preferences.impl.messagetextsize.MessageTextSizeNode
 import io.element.android.features.preferences.impl.moderation.ModerationAndSafetyNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
@@ -83,6 +84,9 @@ class PreferencesFlowNode(
 
         @Parcelize
         data object DeveloperSettings : NavTarget
+
+        @Parcelize
+        data object MessageTextSize : NavTarget
 
         @Parcelize
         data object MediaSettings : NavTarget
@@ -164,6 +168,10 @@ class PreferencesFlowNode(
 
                     override fun navigateToLockScreenSettings() {
                         backstack.push(NavTarget.LockScreenSettings)
+                    }
+
+                    override fun navigateToMessageTextSize() {
+                        backstack.push(NavTarget.MessageTextSize)
                     }
 
                     override fun navigateToMediaSettings() {
@@ -340,6 +348,9 @@ class PreferencesFlowNode(
                 }
                 val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
                 createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input, callback))
+            }
+            NavTarget.MessageTextSize -> {
+                createNode<MessageTextSizeNode>(buildContext)
             }
             NavTarget.MediaSettings -> {
                 createNode<MediaSettingsNode>(buildContext)
