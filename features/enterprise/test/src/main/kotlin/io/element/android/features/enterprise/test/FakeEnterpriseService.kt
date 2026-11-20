@@ -34,6 +34,7 @@ class FakeEnterpriseService(
     private val getNoisyNotificationChannelIdResult: (SessionId?) -> String? = { lambdaError() },
     private val tweakMasUrlResult: (String, ClientUrlContentFetcher) -> String = { _, _ -> lambdaError() },
     private val isElementProEnforcedResult: (String) -> Boolean = { lambdaError() },
+    private val bugReportUrlFlowResult: ((SessionId?) -> Flow<BugReportUrl>)? = null,
 ) : EnterpriseService {
     private val brandColorState = MutableStateFlow(initialBrandColor)
     private val semanticColorsState = MutableStateFlow(initialSemanticColors)
@@ -84,7 +85,7 @@ class FakeEnterpriseService(
 
     val bugReportUrlMutableFlow = MutableStateFlow<BugReportUrl>(BugReportUrl.UseDefault)
     override fun bugReportUrlFlow(sessionId: SessionId?): Flow<BugReportUrl> {
-        return bugReportUrlMutableFlow.asStateFlow()
+        return bugReportUrlFlowResult?.invoke(sessionId) ?: bugReportUrlMutableFlow.asStateFlow()
     }
 
     override fun getNoisyNotificationChannelId(sessionId: SessionId): String? {

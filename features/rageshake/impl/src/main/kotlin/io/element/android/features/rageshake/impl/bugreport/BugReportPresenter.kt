@@ -21,6 +21,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.impl.crash.CrashDataStore
+import io.element.android.features.rageshake.impl.reporter.CanIncludeLogsProvider
 import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
@@ -33,6 +34,7 @@ class BugReportPresenter(
     private val bugReporter: BugReporter,
     private val crashDataStore: CrashDataStore,
     private val screenshotHolder: ScreenshotHolder,
+    private val canIncludeLogsProvider: CanIncludeLogsProvider,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
 ) : Presenter<BugReportState> {
@@ -71,6 +73,9 @@ class BugReportPresenter(
         val crashInfo: String by remember {
             crashDataStore.crashInfo()
         }.collectAsState(initial = "")
+        val canIncludeLogs: Boolean by remember {
+            canIncludeLogsProvider.canIncludeLogs()
+        }.collectAsState(initial = false)
 
         val sendingProgress = remember {
             mutableFloatStateOf(0f)
@@ -90,7 +95,12 @@ class BugReportPresenter(
                         sendingAction.value = AsyncAction.Failure(BugReportFormError.DescriptionTooShort)
                     } else {
                         sendingAction.value = AsyncAction.Loading
-                        appCoroutineScope.sendBugReport(formState.value, crashInfo.isNotEmpty(), uploadListener)
+                        appCoroutineScope.sendBugReport(
+                            formState = formState.value,
+                            hasCrashLogs = crashInfo.isNotEmpty(),
+                            canIncludeLogs = canIncludeLogs,
+                            listener = uploadListener,
+                        )
                     }
                 }
                 BugReportEvent.ResetAll -> appCoroutineScope.resetAll()
@@ -121,6 +131,7 @@ class BugReportPresenter(
 
         return BugReportState(
             hasCrashLogs = crashInfo.isNotEmpty(),
+            canIncludeLogs = canIncludeLogs,
             sendingProgress = sendingProgress.floatValue,
             sending = sendingAction.value,
             formState = formState.value,
@@ -136,11 +147,13 @@ class BugReportPresenter(
     private fun CoroutineScope.sendBugReport(
         formState: BugReportFormState,
         hasCrashLogs: Boolean,
+        canIncludeLogs: Boolean,
         listener: BugReporterListener,
     ) = launch {
+        val withLogs = canIncludeLogs && formState.sendLogs
         bugReporter.sendBugReport(
-            withDevicesLogs = formState.sendLogs,
-            withCrashLogs = hasCrashLogs && formState.sendLogs,
+            withDevicesLogs = withLogs,
+            withCrashLogs = hasCrashLogs && withLogs,
             withScreenshot = formState.sendScreenshot,
             problemDescription = formState.description,
             canContact = formState.canContact,
