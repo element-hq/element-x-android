@@ -287,7 +287,7 @@ private fun InvitePeopleConfirmModal(
             )
         )
 
-        LazyColumn {
+        LazyColumn( modifier = Modifier.weight(1f, fill = false),) {
             items(users) { user ->
                 MatrixUserRow(user)
             }
