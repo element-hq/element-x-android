@@ -10,8 +10,6 @@
 
 import extension.setupDependencyInjection
 import extension.testCommonDependencies
-import org.gradle.kotlin.dsl.withType
-import org.sonarqube.gradle.SonarResolverTask
 
 plugins {
     id("io.element.android-library")
@@ -33,11 +31,6 @@ android {
             matchingFallbacks += listOf("release")
         }
     }
-}
-
-// Configure the SonarQube plugin to wait for the resource generation tasks to complete before running the analysis.
-tasks.withType<SonarResolverTask>().configureEach {
-    dependsOn("generateDebugResValues")
 }
 
 setupDependencyInjection()

@@ -25,7 +25,6 @@ import extension.environmentOrGradleValue
 import extension.locales
 import extension.setupDependencyInjection
 import extension.testCommonDependencies
-import org.sonarqube.gradle.SonarResolverTask
 import java.util.Locale
 
 plugins {
@@ -275,11 +274,6 @@ androidComponents {
 
     val reportingExtension: ReportingExtension = project.extensions.getByType(ReportingExtension::class.java)
     configureLicensesTasks(reportingExtension)
-}
-
-// Configure the SonarQube plugin to wait for the resource generation tasks to complete before running the analysis.
-tasks.withType<SonarResolverTask>().configureEach {
-    dependsOn("generateGplayDebugResValues")
 }
 
 setupDependencyInjection(generateNodeFactories = false)
