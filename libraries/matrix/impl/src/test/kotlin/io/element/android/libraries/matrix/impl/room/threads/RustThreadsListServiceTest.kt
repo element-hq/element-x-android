@@ -52,7 +52,8 @@ class RustThreadsListServiceTest {
         }
     }
 
-    @Suppress("UnusedFlow")
+    // The returned flows are not collected on purpose: only the call to the FFI method is tested
+    @Suppress("UnusedFlow", "IgnoredReturnValue")
     @Test
     fun `subscribing to item updates twice only calls the FFI method once`() = runTest {
         val subscribeToItemsUpdatesRecorder = lambdaRecorder<ThreadListEntriesListener, TaskHandle> { FakeFfiTaskHandle() }

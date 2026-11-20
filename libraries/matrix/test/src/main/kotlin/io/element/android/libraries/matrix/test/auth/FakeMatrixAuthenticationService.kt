@@ -45,9 +45,10 @@ class FakeMatrixAuthenticationService(
         matrixClientResult?.let {
             return it.invoke(sessionId)
         }
+        val matrixClient = matrixClient
         return if (matrixClient != null) {
-            onAuthenticationListener?.invoke(matrixClient!!)
-            Result.success(matrixClient!!)
+            onAuthenticationListener?.invoke(matrixClient)
+            Result.success(matrixClient)
         } else {
             Result.failure(IllegalStateException())
         }

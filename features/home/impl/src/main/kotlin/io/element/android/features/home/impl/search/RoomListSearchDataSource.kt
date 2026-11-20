@@ -33,7 +33,7 @@ class RoomListSearchDataSource(
     @Assisted coroutineScope: CoroutineScope,
     roomListService: RoomListService,
     coroutineDispatchers: CoroutineDispatchers,
-    private val roomSummaryFactory: RoomListRoomSummaryFactory,
+    roomSummaryFactory: RoomListRoomSummaryFactory,
 ) {
     @AssistedFactory
     interface Factory {

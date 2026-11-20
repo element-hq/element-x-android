@@ -15,6 +15,7 @@ import android.text.style.StyleSpan
 import android.text.style.UnderlineSpan
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -54,6 +55,7 @@ fun String.toAnnotatedString(): AnnotatedString = buildAnnotatedString {
  * @param tagAndLink an optional pair of tag and link to add to the styled part of the string, as StringAnnotation
  */
 @Composable
+@ReadOnlyComposable
 fun buildAnnotatedStringWithStyledPart(
     @StringRes fullTextRes: Int,
     @StringRes coloredTextRes: Int,

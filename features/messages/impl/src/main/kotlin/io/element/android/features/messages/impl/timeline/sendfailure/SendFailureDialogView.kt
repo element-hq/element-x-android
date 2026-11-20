@@ -58,10 +58,10 @@ fun SendFailureDialogView(
                 content = content,
                 onDismiss = onDismiss,
                 submitText = stringResource(id = CommonStrings.action_retry),
-                onSubmitClick = { sendTarget?.let { onRetry(sendFailureDialogState.event) } },
+                onSubmitClick = { if (sendTarget != null) onRetry(sendFailureDialogState.event) },
                 onCancelClick = onDismiss,
                 thirdButtonText = stringResource(id = CommonStrings.action_remove_message),
-                onThirdButtonClick = { sendTarget?.let { onRemoveMessage(sendFailureDialogState.event) } },
+                onThirdButtonClick = { if (sendTarget != null) onRemoveMessage(sendFailureDialogState.event) },
             )
         }
     }

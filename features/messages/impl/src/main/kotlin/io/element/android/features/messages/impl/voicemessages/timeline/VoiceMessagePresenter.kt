@@ -21,7 +21,7 @@ import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 @AssistedInject
 class VoiceMessagePresenter(
     voiceMessagePresenterFactory: VoiceMessagePresenterFactory,
-    @Assisted private val content: TimelineItemVoiceContent,
+    @Assisted content: TimelineItemVoiceContent,
 ) : Presenter<VoiceMessageState> {
     @AssistedFactory
     fun interface Factory : TimelineItemPresenterFactory<TimelineItemVoiceContent, VoiceMessageState> {

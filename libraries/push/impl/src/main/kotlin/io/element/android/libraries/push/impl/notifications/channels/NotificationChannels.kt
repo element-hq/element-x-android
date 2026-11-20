@@ -156,7 +156,7 @@ class DefaultNotificationChannels(
             "CALL_NOTIFICATION_CHANNEL_ID_V2",
             "LISTEN_FOR_EVENTS_NOTIFICATION_CHANNEL_ID",
         )) {
-            notificationManager.getNotificationChannel(channelId)?.let {
+            if (notificationManager.getNotificationChannel(channelId) != null) {
                 notificationManager.deleteNotificationChannel(channelId)
             }
         }

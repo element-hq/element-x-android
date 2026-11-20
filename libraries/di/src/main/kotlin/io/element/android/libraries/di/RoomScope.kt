@@ -8,4 +8,6 @@
 
 package io.element.android.libraries.di
 
+// Metro DI scope marker, it must stay a class which cannot be instantiated
+@Suppress("AbstractClassCanBeInterface")
 abstract class RoomScope private constructor()

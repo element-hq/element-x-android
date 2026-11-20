@@ -52,6 +52,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
 private const val STIFFNESS = Spring.StiffnessMediumLow
@@ -229,6 +230,9 @@ internal class ItemResize(var index: Int) {
     var offset by mutableFloatStateOf(0f)
         private set
 
+    // The CancellationException is caught on purpose: it is rethrown by ensureActive() if the animation scope is cancelled,
+    // otherwise it comes from the animation being interrupted by a new one.
+    @Suppress("SuspendFunSwallowedCancellation")
     fun animate(delta: Float, animationSpec: FiniteAnimationSpec<Float>, animationScope: CoroutineScope, onFinished: (ItemResize) -> Unit) {
         val totalOffset = offset + delta
         // Apply it in the current frame, the animation will only start in the next one
@@ -245,6 +249,7 @@ internal class ItemResize(var index: Int) {
                 }
                 onFinished(this@ItemResize)
             } catch (_: CancellationException) {
+                ensureActive()
                 // A new animation was started, it takes over
             }
         }

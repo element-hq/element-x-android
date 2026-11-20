@@ -126,9 +126,7 @@ class RoomListFiltersPresenterTest {
                 state.eventSink.invoke(RoomListFiltersEvent.ClearSelectedFilters)
             }
             advanceUntilIdle()
-            awaitLastSequentialItem().let { state ->
-                assertThat(state.hasAnyFilterSelected).isFalse()
-            }
+            assertThat(awaitLastSequentialItem().hasAnyFilterSelected).isFalse()
         }
     }
 }
