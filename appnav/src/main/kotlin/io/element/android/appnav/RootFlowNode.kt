@@ -380,7 +380,7 @@ class RootFlowNode(
                     is NavTarget.LoggedInFlow,
                     is NavTarget.NotLoggedInFlow -> backstackFader
                     is NavTarget.AccountSelect,
-                    is NavTarget.SignedOutFlow,
+                    NavTarget.SignedOutSessions,
                     NavTarget.BugReport,
                     is NavTarget.IncomingShare,
                     is NavTarget.OtherAccountIncomingVerificationRequest,
