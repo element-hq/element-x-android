@@ -12,6 +12,8 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.call.api.analytics.ElementCallAnalytics
 import io.element.android.call.api.analytics.ElementCallAnalyticsEvent
+import io.element.android.features.callnative.api.analytics.CallAnalyticsClient
+import io.element.android.features.callnative.api.analytics.CallAnalyticsClientFactory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CompletableDeferred
@@ -32,8 +34,11 @@ import timber.log.Timber
 class ElementXCallAnalytics(
     @AppCoroutineScope appCoroutineScope: CoroutineScope,
     analyticsService: AnalyticsService,
-    private val clientFactory: CallAnalyticsClientFactory,
+    // Empty in builds without PostHog (F-Droid), which drop the call's analytics.
+    clientFactories: Set<CallAnalyticsClientFactory>,
 ) : ElementCallAnalytics {
+    private val clientFactory = clientFactories.firstOrNull()
+
     @Volatile
     private var client: CallAnalyticsClient? = null
 
@@ -60,8 +65,8 @@ class ElementXCallAnalytics(
 
     private fun open() {
         if (client != null) return
-        client = clientFactory.create()
-        if (client == null) Timber.d("NativeCall: no PostHog credentials for the call, its analytics are dropped")
+        client = clientFactory?.create()
+        if (client == null) Timber.d("NativeCall: no PostHog client or credentials for the call, its analytics are dropped")
     }
 
     private fun close() {

@@ -10,6 +10,8 @@ package io.element.android.features.callnative.impl.analytics
 import com.google.common.truth.Truth.assertThat
 import io.element.android.call.api.analytics.ElementCallAnalyticsCallKind
 import io.element.android.call.api.analytics.ElementCallAnalyticsEvent
+import io.element.android.features.callnative.api.analytics.CallAnalyticsClient
+import io.element.android.features.callnative.api.analytics.CallAnalyticsClientFactory
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -85,14 +87,23 @@ class ElementXCallAnalyticsTest {
         analytics.track(event)
     }
 
+    @Test
+    fun `a build without a client factory, as F-Droid, drops the events`() = runTest {
+        val analytics = createAnalytics(FakeAnalyticsService(isEnabled = true), factory = null)
+        analytics.awaitConsent()
+
+        // Nothing to assert on but the absence of a crash: there is no client to send to.
+        analytics.track(event)
+    }
+
     private fun TestScope.createAnalytics(
         analyticsService: FakeAnalyticsService,
-        factory: CallAnalyticsClientFactory,
+        factory: CallAnalyticsClientFactory?,
     ) = ElementXCallAnalytics(
         // Its collector runs for the app's life, so not in the test's own scope, which would wait for it.
         appCoroutineScope = backgroundScope,
         analyticsService = analyticsService,
-        clientFactory = factory,
+        clientFactories = setOfNotNull(factory),
     )
 }
 
