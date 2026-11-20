@@ -83,7 +83,8 @@ class DefaultSyncOnNotifiableEvent(
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@withTimeoutOrNull false
 
         val roomListSummariesFlow = client.roomListService.allRooms.summaries
-        val mostRecentRoomIds = roomListSummariesFlow.first { it.isNotEmpty() }
+        val currentRoomSummaries = roomListSummariesFlow.first { it.isNotEmpty() }
+        val mostRecentRoomIds = currentRoomSummaries
             .take(MAX_ROOMS_TO_SUBSCRIBE_TO)
             .map { it.roomId }
         client.roomListService.subscribeToVisibleRooms(mostRecentRoomIds)
@@ -95,7 +96,6 @@ class DefaultSyncOnNotifiableEvent(
 
         // Let's wait for either a new push to be queued or the room list to be updated, whichever happens first.
         // If a new push is queued, we can end the opportunistic sync early.
-        val currentRoomSummaries = roomListSummariesFlow.first()
         val newPushQueuedFlow = pushHistoryService.getPendingPushRequestsFlow(sessionId, since = newestHandledPushDate).onStart { emit(emptyList()) }
 
         val (newPushQueued, _) = combine(newPushQueuedFlow, roomListSummariesFlow) { newPushes, newSummaries ->
