@@ -5,36 +5,25 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.callnative.impl.analytics
+package io.element.android.features.callnative.posthog
 
 import android.content.Context
 import com.posthog.PostHogInterface
 import com.posthog.android.PostHogAndroid
 import com.posthog.android.PostHogAndroidConfig
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.ContributesIntoSet
+import io.element.android.features.callnative.api.analytics.CallAnalyticsClient
+import io.element.android.features.callnative.api.analytics.CallAnalyticsClientFactory
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.widget.CallAnalyticCredentialsProvider
-
-/** Where the call's analytics events are sent, while the user consents. */
-interface CallAnalyticsClient {
-    fun capture(event: String, properties: Map<String, Any>)
-
-    /** Sends what is queued, then stops for good. */
-    fun close()
-}
-
-fun interface CallAnalyticsClientFactory {
-    /** Null when the build has no analytics project for calls. */
-    fun create(): CallAnalyticsClient?
-}
 
 /**
  * A PostHog client of its own over the embedded Element Call's credentials (`ELEMENT_CALL_POSTHOG_*`), not Element X's
  * main PostHog project: the native and the embedded call share their graphs, which the app's events are not part of.
  */
-@ContributesBinding(AppScope::class)
+@ContributesIntoSet(AppScope::class)
 class PostHogCallAnalyticsClientFactory(
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
