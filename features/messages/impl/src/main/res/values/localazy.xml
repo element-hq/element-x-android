@@ -44,6 +44,7 @@ Are you sure you want to continue?"</string>
     <item quantity="other">"%1$d degrees"</item>
   </plurals>
   <string name="screen_image_edition_title">"Edit photo"</string>
+  <string name="screen_media_upload_preview_a11y_draw">"Draw"</string>
   <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tap to change the video upload quality"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"The file could not be uploaded."</string>
@@ -156,6 +157,10 @@ Are you sure you want to continue?"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified digital identity was reset."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not verified all devices."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message not sent because you have not verified one or more of your devices."</string>
+  <string name="screen_timeline_sample_answer">"That’s because I ate one 🍪"</string>
+  <string name="screen_timeline_sample_question">"I baked a dozen cookies, but there are only 11 here 👀"</string>
+  <string name="screen_timeline_sample_recipient">"Sally"</string>
+  <string name="screen_timeline_sample_sender">"Bob"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Historical messages are not available on this device"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"You need to verify this device for access to historical messages"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"You don\'t have access to this message"</string>

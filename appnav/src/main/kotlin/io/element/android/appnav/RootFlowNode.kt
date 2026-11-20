@@ -10,14 +10,19 @@ package io.element.android.appnav
 
 import android.content.Intent
 import android.os.Parcelable
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import com.bumble.appyx.core.composable.PermanentChild
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.navigation.NavElements
 import com.bumble.appyx.core.navigation.NavKey
+import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.state.MutableSavedStateMap
@@ -82,6 +87,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filterNotNull
@@ -123,6 +129,10 @@ class RootFlowNode(
         initialElement = NavTarget.SplashScreen,
         savedStateMap = null,
     ),
+    permanentNavModel = PermanentNavModel(
+        navTargets = setOf(NavTarget.SignedOutSessions),
+        savedStateMap = null,
+    ),
     buildContext = buildContext,
     plugins = plugins
 ) {
@@ -132,6 +142,13 @@ class RootFlowNode(
      * login params, whatever the order in which the intent and the first nav state emission are processed.
      */
     private var pendingLoginParams: LoginParams? = null
+
+    /**
+     * Whether the root has been restored, if needed, and the nav state is observed. Until then, the changes of the logged in state
+     * may not be applied to the root, see [observeNavState].
+     */
+    @VisibleForTesting
+    internal val isNavStateObserved = MutableStateFlow(false)
 
     override fun onBuilt() {
         analyticsColdStartWatcher.start()
@@ -143,6 +160,7 @@ class RootFlowNode(
             } else {
                 observeNavState(false)
             }
+            isNavStateObserved.value = true
         }
         observeIncomingVerificationRequests()
         observeRemovedSessions()
@@ -174,7 +192,7 @@ class RootFlowNode(
                                 )
                             }
                         } else {
-                            switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
+                            onActiveSessionSignedOut()
                         }
                     }
                     LoggedInState.NotLoggedIn -> {
@@ -291,9 +309,13 @@ class RootFlowNode(
         backstack.safeRoot(NavTarget.NotLoggedInFlow(params))
     }
 
-    private fun switchToSignedOutFlow(sessionId: SessionId) {
+    /**
+     * The signed out screen is displayed on top of everything by [NavTarget.SignedOutSessions], for this session and the other ones.
+     * Just leave the logged in flow of the session, once the signed out session is removed, the nav state will change.
+     */
+    private fun onActiveSessionSignedOut() {
         pendingLoginParams = null
-        setRoot(NavTarget.SignedOutFlow(sessionId))
+        setRoot(NavTarget.SplashScreen)
     }
 
     /**
@@ -367,6 +389,13 @@ class RootFlowNode(
             }
             BackstackView(transitionHandler = transitionHandler)
             announcementService.Render(Modifier)
+            // Displayed on top of everything else, renders nothing when no session is signed out.
+            // Wait for the nav state to be observed: on process recreation, the root is restored asynchronously and the first
+            // logged in state is skipped, so removing the active session from the signed out screen before that would be missed.
+            val isNavStateObserved by isNavStateObserved.collectAsState()
+            if (isNavStateObserved) {
+                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.SignedOutSessions)
+            }
         }
     }
 
@@ -386,9 +415,10 @@ class RootFlowNode(
             val sessionId: SessionId, val navId: Int
         ) : NavTarget
 
-        @Parcelize data class SignedOutFlow(
-            val sessionId: SessionId
-        ) : NavTarget
+        /**
+         * Permanent child displaying the signed out screens of all the signed out sessions, see [SignedOutEntryPoint].
+         */
+        @Parcelize data object SignedOutSessions : NavTarget
 
         @Parcelize data object BugReport : NavTarget
 
@@ -455,13 +485,10 @@ class RootFlowNode(
                 )
                 createNode<NotLoggedInFlowNode>(buildContext, plugins = listOf(params, callback))
             }
-            is NavTarget.SignedOutFlow -> {
+            NavTarget.SignedOutSessions -> {
                 signedOutEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
-                    params = SignedOutEntryPoint.Params(
-                        sessionId = navTarget.sessionId,
-                    ),
                 )
             }
             NavTarget.SplashScreen -> emptyNode(buildContext)

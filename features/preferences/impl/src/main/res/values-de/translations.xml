@@ -32,8 +32,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Wenn diese Option deaktiviert ist, kannst du keine Lesebestätigungen oder Tipp-Indikatoren senden oder empfangen."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Immer ausblenden"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Immer anzeigen"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"In privaten Chats"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ausgeblendete Medien können jederzeit durch Antippen angezeigt werden"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"In privaten Chats anzeigen"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Ausgeblendete Medien können jederzeit durch Antippen angezeigt werden."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Medien im Nachrichtenverlauf anzeigen"</string>
   <string name="screen_advanced_settings_view_source_description">"Aktiviere die Option, um die Quelle der Nachricht im Nachrichtenverlauf zu sehen."</string>
   <string name="screen_blocked_users_empty">"Du hast keine blockierten Nutzer"</string>
@@ -56,6 +56,10 @@
   <string name="screen_labs_header_description">"Probier unsere neuesten Ideen in der Entwicklung aus. Diese Funktionen sind noch nicht fertiggestellt; sie können instabil sein und sich noch ändern."</string>
   <string name="screen_labs_header_title">"Entdeckungsfreudig?"</string>
   <string name="screen_labs_title">"Labs"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Einladungen"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Andere Nutzer"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Wie andere dich sehen"</string>
+  <string name="screen_notification_settings_activity_section_title">"Aktivität"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Zusätzliche Einstellungen"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Klingelton für Anrufe"</string>
   <string name="screen_notification_settings_calls_label">"Audio- und Videoanrufe"</string>
@@ -84,6 +88,8 @@ Wenn du fortfährst, können sich einige deiner Einstellungen ändern."</string>
   <string name="screen_notification_settings_mode_mentions">"Erwähnungen"</string>
   <string name="screen_notification_settings_notification_section_title">"Benachrichtige mich bei"</string>
   <string name="screen_notification_settings_room_mention_label">"Benachrichtige mich bei @room"</string>
+  <string name="screen_notification_settings_show_all_activity_subtitle">"Punkte oder Anzahl ungelesener Nachrichten"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Alle Aktivitäten in der Chatliste anzeigen"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Benutzerdefiniert"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Eigener Ton …"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Fehler beim Löschen der Datei"</string>
@@ -100,6 +106,7 @@ Wenn du fortfährst, können sich einige deiner Einstellungen ändern."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"Systemeinstellungen"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systembenachrichtigungen deaktiviert"</string>
   <string name="screen_notification_settings_title">"Benachrichtigungen"</string>
+  <string name="screen_settings_add_account">"Konto hinzufügen"</string>
   <string name="screen_settings_user_status_away">"Abwesend"</string>
   <string name="screen_settings_user_status_be_right_back">"Gleich zurück"</string>
   <string name="screen_settings_user_status_custom">"Benutzerdefiniert …"</string>

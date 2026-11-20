@@ -20,6 +20,7 @@ class InMemorySessionStore(
     initialList: List<SessionData> = emptyList(),
     private val updateUserProfileResult: (String, String?, String?, String?) -> Unit = { _, _, _, _ -> error("Not implemented") },
     private val setLatestSessionResult: (String) -> Unit = { error("Not implemented") },
+    private val removeSessionResult: (String) -> Unit = {},
 ) : SessionStore {
     private val sessionDataListFlow = MutableStateFlow(initialList)
 
@@ -81,6 +82,7 @@ class InMemorySessionStore(
     }
 
     override suspend fun removeSession(sessionId: String) {
+        removeSessionResult(sessionId)
         sessionDataListFlow.value = sessionDataListFlow.value.filter { it.userId != sessionId }
     }
 }

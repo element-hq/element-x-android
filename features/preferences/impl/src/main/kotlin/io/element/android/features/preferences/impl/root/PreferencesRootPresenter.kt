@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.user.toMatrixUser
 import io.element.android.libraries.matrix.ui.components.switchaccount.OtherAccount
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.analytics.api.AnalyticsService
@@ -94,6 +95,10 @@ class PreferencesRootPresenter(
         val theme = remember(isBlackThemeAllowed) {
             appPreferencesStore.getThemeFlow().mapToTheme(isBlackThemeAllowed)
         }.collectAsState(initial = Theme.System)
+
+        val messageTextSize by remember {
+            appPreferencesStore.getMessageTextSizeFlow()
+        }.collectAsState(initial = MessageTextSize.DEFAULT)
 
         val otherSessions by remember {
             sessionStore.sessionsFlow()
@@ -161,6 +166,7 @@ class PreferencesRootPresenter(
             userStatusState = userStatusState,
             preferencesAccountState = preferencesAccountState,
             theme = themeOption,
+            messageTextSize = messageTextSize,
             availableThemeOptions = availableThemeOptions,
             version = remember { versionFormatter.get() },
             isMultiAccountEnabled = isMultiAccountEnabled,

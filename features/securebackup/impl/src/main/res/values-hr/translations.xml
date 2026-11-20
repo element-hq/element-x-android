@@ -59,7 +59,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Ne dijelite ovo ni s kim!"</string>
   <string name="screen_recovery_key_change_success">"Ključ za oporavak je promijenjen"</string>
   <string name="screen_recovery_key_change_title">"Želite li promijeniti ključ za oporavak?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Izradi novi ključ za oporavak"</string>
   <string name="screen_recovery_key_confirm_description">"Pazite da nitko ne vidi ovaj zaslon!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Pokušajte ponovno potvrditi pristup pohrani ključeva."</string>
   <string name="screen_recovery_key_confirm_error_title">"Neispravan ključ za oporavak"</string>

@@ -9,17 +9,27 @@
 package io.element.android.features.securebackup.impl.reset.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.architecture.AsyncData
 
 class ResetIdentityRootStatePreviewParam : PreviewParameterProvider<ResetIdentityRootState> {
     override val values: Sequence<ResetIdentityRootState>
         get() = sequenceOf(
-            ResetIdentityRootState(
-                displayConfirmationDialog = false,
-                eventSink = {}
-            ),
-            ResetIdentityRootState(
-                displayConfirmationDialog = true,
-                eventSink = {}
-            )
+            aResetIdentityRootState(),
+            aResetIdentityRootState(displayConfirmationDialog = true),
+            aResetIdentityRootState(isResetTheOnlyOption = true, hasEncryptedRooms = AsyncData.Success(true)),
+            aResetIdentityRootState(isResetTheOnlyOption = true, hasEncryptedRooms = AsyncData.Success(false)),
+            aResetIdentityRootState(isResetTheOnlyOption = true, hasEncryptedRooms = AsyncData.Loading()),
         )
 }
+
+fun aResetIdentityRootState(
+    isResetTheOnlyOption: Boolean = false,
+    hasEncryptedRooms: AsyncData<Boolean> = AsyncData.Uninitialized,
+    displayConfirmationDialog: Boolean = false,
+    eventSink: (ResetIdentityRootEvent) -> Unit = {},
+) = ResetIdentityRootState(
+    isResetTheOnlyOption = isResetTheOnlyOption,
+    hasEncryptedRooms = hasEncryptedRooms,
+    displayConfirmationDialog = displayConfirmationDialog,
+    eventSink = eventSink,
+)

@@ -33,7 +33,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Ні з кім не дзяліцеся гэтым!"</string>
   <string name="screen_recovery_key_change_success">"Ключ аднаўлення зменены"</string>
   <string name="screen_recovery_key_change_title">"Змяніць ключ аднаўлення?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Стварыць новы ключ аднаўлення"</string>
   <string name="screen_recovery_key_confirm_description">"Пераканайцеся, што ніхто не бачыць гэты экран!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Паўтарыце спробу, каб пацвердзіць доступ да сховішча ключоў."</string>
   <string name="screen_recovery_key_confirm_error_title">"Няправільны ключ аднаўлення"</string>

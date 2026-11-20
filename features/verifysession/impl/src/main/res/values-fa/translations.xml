@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"نمی‌توانید تأیید کنید؟"</string>
-  <string name="screen_identity_confirmation_create_new_recovery_key">"ایجاد کلید بازیابی جدید"</string>
   <string name="screen_identity_confirmation_subtitle">"گزینش چگونگی تأیید برای برپایی پیام‌رسانی امن."</string>
   <string name="screen_identity_confirmation_title">"تأیید هویت دیجیتالیتان"</string>
   <string name="screen_identity_confirmation_use_another_device">"استفاده از افزاره‌ای دیگر"</string>

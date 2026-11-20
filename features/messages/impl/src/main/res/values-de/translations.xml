@@ -83,9 +83,9 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="screen_room_attachment_source_poll">"Umfrage"</string>
   <string name="screen_room_attachment_text_formatting">"Textformatierung"</string>
   <string name="screen_room_confirm_removal_reason_label">"Grund (optional)"</string>
-  <string name="screen_room_confirm_removal_reason_placeholder">"Eingeben …"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Grund eingeben …"</string>
   <string name="screen_room_confirm_removal_reason_supporting_text">"(Optional)"</string>
-  <string name="screen_room_confirm_removal_title">"Entfernen bestätigen"</string>
+  <string name="screen_room_confirm_removal_title">"Nachricht entfernen?"</string>
   <string name="screen_room_encrypted_history_banner">"Der Nachrichtenverlauf ist derzeit nicht verfügbar."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Der Nachrichtenverlauf ist nicht verfügbar. Verifiziere dieses Gerät, um deinen Nachrichtenverlauf zu sehen."</string>
   <string name="screen_room_invite_again_alert_message">"Möchtest du sie wieder einladen?"</string>
@@ -93,6 +93,10 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="screen_room_maximum_messages_selected">"Maximale Anzahl an Nachrichten ausgewählt"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Alle Mitglieder benachrichtigen"</string>
   <string name="screen_room_mentions_at_room_title">"Alle"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"%1$d Nachricht weitergeleitet"</item>
+    <item quantity="other">"%1$d Nachrichten weitergeleitet"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"Du siehst diesen Chat bereits!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s von %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s fixierte Nachrichten"</string>

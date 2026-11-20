@@ -67,7 +67,6 @@
   <string name="screen_recovery_key_check_subtitle">"輸入您儲存的還原金鑰，以確保其正確且有效。"</string>
   <string name="screen_recovery_key_check_success_title">"您的還原金鑰已啟用"</string>
   <string name="screen_recovery_key_check_title">"檢查您的還原金鑰"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"建立新復原金鑰"</string>
   <string name="screen_recovery_key_confirm_description">"確保沒有人可以看到此畫面！"</string>
   <string name="screen_recovery_key_confirm_error_content">"請再試一次確認對您金鑰儲存空間的存取權。"</string>
   <string name="screen_recovery_key_confirm_error_title">"復原金鑰不正確"</string>

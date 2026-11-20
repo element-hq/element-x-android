@@ -59,7 +59,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"¡No la compartas con nadie!"</string>
   <string name="screen_recovery_key_change_success">"Clave de recuperación cambiada"</string>
   <string name="screen_recovery_key_change_title">"¿Cambiar la clave de recuperación?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Crear nueva clave de recuperación"</string>
   <string name="screen_recovery_key_confirm_description">"¡Asegúrate de que nadie pueda ver esta pantalla!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Inténtalo de nuevo para confirmar el acceso a tu almacén de claves."</string>
   <string name="screen_recovery_key_confirm_error_title">"Clave de recuperación incorrecta"</string>

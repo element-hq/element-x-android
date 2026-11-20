@@ -40,11 +40,16 @@
   <string name="screen_custom_recovery_key_success_notice">"回復鍵を変更するには、「設定 - 暗号化 - バックアップ」を開いてください。"</string>
   <string name="screen_custom_recovery_key_success_subtitle">"回復鍵は他の端末をすべて使用できない場合に、新しい端末を承認したり暗号化された会話を復元したりするために使用します。"</string>
   <string name="screen_custom_recovery_key_success_title">"バックアップの設定完了"</string>
-  <string name="screen_encryption_reset_action_continue_reset">"リセットを続行"</string>
+  <string name="screen_encryption_reset_action_continue_reset">"続行"</string>
   <string name="screen_encryption_reset_bullet_1">"アカウントの情報や連絡先, 設定などは残ります"</string>
   <string name="screen_encryption_reset_bullet_2">"サーバー上にのみ存在する過去のメッセージは確認できなくなります"</string>
-  <string name="screen_encryption_reset_bullet_3">"すべての端末と連絡先を再度検証する必要があります"</string>
+  <string name="screen_encryption_reset_bullet_3">"他のユーザーはあなたのデジタルIDがリセットされたことを確認できます"</string>
+  <string name="screen_encryption_reset_bullet_4">"すべてのサインイン済みの端末で認証を再度行う必要があります。"</string>
   <string name="screen_encryption_reset_footer">"デジタルIDのリセットは、他のサインイン済みの端末と、回復鍵の両方へのアクセスを失った場合にのみ行ってください。"</string>
+  <string name="screen_encryption_reset_no_chats_message">"チャットの記録が一切無いようです。これが正しい場合は、安全にデジタルIDのリセットを行うことができます。"</string>
+  <string name="screen_encryption_reset_no_options_subtitle">"他の認証済みの端末や回復鍵にアクセスできないため、アプリを使用するにはデジタルIDをリセットする必要があります。"</string>
+  <string name="screen_encryption_reset_no_options_title">"デジタルIDをリセットする必要があります"</string>
+  <string name="screen_encryption_reset_subtitle">"他の認証済みの端末にアクセスできず、回復鍵を発行していない場合、アプリを使用するにはデジタルIDをリセットする必要があります。"</string>
   <string name="screen_encryption_reset_title">"認証できませんか？デジタルIDをリセットする必要があります。"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"削除"</string>
   <string name="screen_key_backup_disable_confirmation_description">"すべての端末を削除してしまうと、暗号化された会話が失われ、デジタルIDをリセットする必要があります。"</string>
@@ -58,7 +63,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"誰にも共有しないでください！"</string>
   <string name="screen_recovery_key_change_success">"回復鍵を更新しました"</string>
   <string name="screen_recovery_key_change_title">"回復鍵を変更しますか？"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"新しい回復鍵を生成"</string>
   <string name="screen_recovery_key_confirm_description">"誰にもこの画面を見せないでください！"</string>
   <string name="screen_recovery_key_confirm_error_content">"鍵の保管庫にアクセスするには、もう一度お試しください。"</string>
   <string name="screen_recovery_key_confirm_error_title">"回復鍵が間違っています"</string>
@@ -80,6 +84,7 @@
   <string name="screen_recovery_key_setup_generate_key_description">"誰にも共有しないでください！"</string>
   <string name="screen_recovery_key_setup_success">"回復鍵の設定に成功しました"</string>
   <string name="screen_recovery_key_setup_title">"回復鍵を作成"</string>
+  <string name="screen_recovery_key_success_title">"新しい回復鍵が有効になりました"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"はい、リセットします"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"この操作は元に戻せません。"</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"本当にデジタルIDをリセットしますか？"</string>

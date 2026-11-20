@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"他のセッションでパスワードを変更しました"</string>
-  <string name="screen_signed_out_reason_2">"このセッションは他のセッションより削除されました"</string>
-  <string name="screen_signed_out_reason_3">"サーバー管理者があなたのアクセスを無効にしました"</string>
-  <string name="screen_signed_out_title">"サインアウトしました"</string>
+  <string name="screen_signed_out_reason_1">"この端末をアカウントから削除しました"</string>
+  <string name="screen_signed_out_reason_2">"他の端末上でパスワードを変更しました"</string>
+  <string name="screen_signed_out_reason_3">"セッションが期限切れになったか、サーバー管理者があなたのアクセスを無効にしました"</string>
+  <string name="screen_signed_out_subtitle_v2">"以下のいずれの理由によりこの端末は削除されました。この端末をアカウントに接続するには、再度サインインしてください。"</string>
+  <string name="screen_signed_out_title">"端末が削除されました"</string>
 </resources>

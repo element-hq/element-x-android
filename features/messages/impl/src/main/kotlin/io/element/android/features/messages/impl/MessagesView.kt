@@ -661,7 +661,7 @@ private fun MessagesViewContent(
                     modifier = Modifier.onSizeChanged { topBannersHeightDp = with(density) { it.height.toDp() } },
                 ) {
                     AnimatedVisibility(
-                        visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
+                        visible = state.showPinnedMessagesBanner && scrollBehavior.isVisible,
                         enter = expandVertically(),
                         exit = shrinkVertically(),
                     ) {
@@ -685,7 +685,10 @@ private fun MessagesViewContent(
                 }
             }
 
-            knockRequestsBannerView()
+            // The knock requests banner is rendered by another module, so its visibility cannot be part of MessagesState.
+            if (!state.timelineState.isSelectionModeActive) {
+                knockRequestsBannerView()
+            }
         }
     }
 }

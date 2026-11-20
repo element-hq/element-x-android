@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Δεν μπορείς να επιβεβαιώσεις;"</string>
-  <string name="screen_identity_confirmation_create_new_recovery_key">"Δημιουργία νέου κλειδιού ανάκτησης"</string>
   <string name="screen_identity_confirmation_subtitle">"Επιλέξτε τον τρόπο επαλήθευσης για να ρυθμίσετε την ασφαλή ανταλλαγή μηνυμάτων."</string>
   <string name="screen_identity_confirmation_title">"Επιβεβαιώστε την ψηφιακή σας ταυτότητα"</string>
   <string name="screen_identity_confirmation_use_another_device">"Χρήση άλλης συσκευής"</string>

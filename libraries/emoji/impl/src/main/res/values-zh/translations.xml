@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_a11y_backspace">"删除光标前面的字符"</string>
   <string name="emoji_picker_category_activity">"节假日"</string>
   <string name="emoji_picker_category_flags">"旗帜"</string>
   <string name="emoji_picker_category_foods">"饮食"</string>

@@ -10,10 +10,10 @@ package translations
 
 import android.content.res.Configuration
 import base.ComposablePreviewProvider
-import base.PaparazziPreviewRule
-import base.ScreenshotTest
 import com.google.testing.junit.testparameterinjector.TestParameter
 import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import io.element.android.tests.screenshotutils.PaparazziPreviewRule
+import io.element.android.tests.screenshotutils.ScreenshotTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

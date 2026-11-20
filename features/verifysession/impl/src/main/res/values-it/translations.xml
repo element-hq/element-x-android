@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Non puoi confermare?"</string>
-  <string name="screen_identity_confirmation_create_new_recovery_key">"Crea una nuova chiave di recupero"</string>
   <string name="screen_identity_confirmation_subtitle">"Scegli come effettuare la verifica per configurare la messaggistica sicura."</string>
   <string name="screen_identity_confirmation_title">"Conferma la tua identità digitale"</string>
   <string name="screen_identity_confirmation_use_another_device">"Usa un altro dispositivo"</string>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_select_account_permalink_room_subtitle">"どのアカウントもこのルームに参加していません。使用するアカウントを選択してください。"</string>
+  <string name="screen_select_account_permalink_title">"リンクを開くアカウントを選択:"</string>
+</resources>

@@ -74,6 +74,9 @@ import io.element.android.libraries.matrix.test.timeline.aRedactedContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.MessageTextSize
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -122,6 +125,28 @@ class TimelinePresenterTest {
             assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.focusedEventId).isNull()
             assertThat(initialState.focusRequestState).isEqualTo(FocusRequestState.None)
+        }
+    }
+
+    @Test
+    fun `present - timeline font scale defaults to the regular app size`() = runTest {
+        val presenter = createTimelinePresenter()
+        presenter.test {
+            assertThat(awaitFirstItem().timelineFontScale).isEqualTo(1f)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - the stored message text size reaches the state as a scale`() = runTest {
+        val presenter = createTimelinePresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore().apply {
+                setMessageTextSize(MessageTextSize.MAX)
+            }
+        )
+        presenter.test {
+            consumeItemsUntilPredicate { it.timelineFontScale == MessageTextSize.scaleOf(MessageTextSize.MAX) }
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -1844,7 +1869,6 @@ class TimelinePresenterTest {
         )
         val presenter = createTimelinePresenter(
             timeline = FakeTimeline(timelineItems = timelineItems),
-            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true)),
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
@@ -1858,26 +1882,12 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - entering selection mode is ignored when the flag is off`() = runTest {
-        val featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to false))
-        val presenter = createTimelinePresenter(featureFlagService = featureFlagService)
-        presenter.test {
-            val initialState = awaitFirstItem()
-            initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
-            expectNoEvents()
-            assertThat(initialState.selectionState).isEqualTo(SelectionState.Disabled)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
     fun `present - toggling the last selected event keeps selection mode active`() = runTest {
         val timelineItems = MutableStateFlow(
             listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())))
         )
         val presenter = createTimelinePresenter(
             timeline = FakeTimeline(timelineItems = timelineItems),
-            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true)),
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
@@ -1899,34 +1909,12 @@ class TimelinePresenterTest {
         )
         val presenter = createTimelinePresenter(
             timeline = FakeTimeline(timelineItems = timelineItems),
-            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true)),
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
             initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
             consumeItemsUntilPredicate { it.isSelectionModeActive }
             initialState.eventSink(TimelineEvent.ExitSelectionMode)
-            val state = consumeItemsUntilPredicate { !it.isSelectionModeActive }.last()
-            assertThat(state.selectionState).isEqualTo(SelectionState.Disabled)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - turning the flag off clears the active selection`() = runTest {
-        val timelineItems = MutableStateFlow(
-            listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())))
-        )
-        val featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true))
-        val presenter = createTimelinePresenter(
-            timeline = FakeTimeline(timelineItems = timelineItems),
-            featureFlagService = featureFlagService,
-        )
-        presenter.test {
-            val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
-            initialState.eventSink(TimelineEvent.EnterSelectionMode(SelectionAction.Forward, AN_EVENT_ID))
-            consumeItemsUntilPredicate { it.isSelectionModeActive }
-            featureFlagService.setFeatureEnabled(FeatureFlags.MessageMultiSelect, false)
             val state = consumeItemsUntilPredicate { !it.isSelectionModeActive }.last()
             assertThat(state.selectionState).isEqualTo(SelectionState.Disabled)
             cancelAndIgnoreRemainingEvents()
@@ -1943,7 +1931,6 @@ class TimelinePresenterTest {
         )
         val presenter = createTimelinePresenter(
             timeline = FakeTimeline(timelineItems = timelineItems),
-            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true)),
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
@@ -1968,7 +1955,6 @@ class TimelinePresenterTest {
         )
         val presenter = createTimelinePresenter(
             timeline = FakeTimeline(timelineItems = timelineItems),
-            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.MessageMultiSelect.key to true)),
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate { it.hasAnyEvent }.last()
@@ -2060,6 +2046,7 @@ class TimelinePresenterTest {
         resolveVerifiedUserSendFailurePresenter: Presenter<ResolveVerifiedUserSendFailureState> = { aResolveVerifiedUserSendFailureState() },
         clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
         toastHelper: ToastHelper = FakeToastHelper(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
@@ -2089,6 +2076,7 @@ class TimelinePresenterTest {
             timelineProtectionPresenter = timelineProtectionPresenter,
                 clipboardHelper = clipboardHelper,
             toastHelper = toastHelper,
+            appPreferencesStore = appPreferencesStore,
         )
     }
 }

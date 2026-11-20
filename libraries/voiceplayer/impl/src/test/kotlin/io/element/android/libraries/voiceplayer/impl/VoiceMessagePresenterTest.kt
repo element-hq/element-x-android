@@ -16,6 +16,7 @@ import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvent
 import io.element.android.libraries.voiceplayer.api.VoiceMessageException
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
+import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.test
@@ -279,6 +280,7 @@ fun TestScope.createVoiceMessagePresenter(
     sessionCoroutineScope = this,
     player = DefaultVoiceMessagePlayer(
         mediaPlayer = mediaPlayer,
+        voiceRecorder = FakeVoiceRecorder(),
         voiceMessageMediaRepoFactory = { _, _, _ -> voiceMessageMediaRepo },
         eventId = eventId,
         mediaSource = mediaSource,
