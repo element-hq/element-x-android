@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsV
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetCapabilitiesPolicy
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -65,6 +66,7 @@ class FakeJoinedRoom(
     private val progressCallbackValues: List<Pair<Long, Long>> = emptyList(),
     private val generateWidgetWebViewUrlResult: (MatrixWidgetSettings, String, String?, String?) -> Result<String> = { _, _, _, _ -> lambdaError() },
     private val getWidgetDriverResult: (MatrixWidgetSettings) -> Result<MatrixWidgetDriver> = { lambdaError() },
+    private val onGetWidgetDriver: (MatrixWidgetSettings, MatrixWidgetCapabilitiesPolicy) -> Unit = { _, _ -> },
     private val typingNoticeResult: (Boolean) -> Result<Unit> = { lambdaError() },
     private val inviteUserResult: (UserId) -> Result<Unit> = { lambdaError() },
     private val setNameResult: (String) -> Result<Unit> = { lambdaError() },
@@ -220,7 +222,11 @@ class FakeJoinedRoom(
         generateWidgetWebViewUrlResult(widgetSettings, clientId, languageTag, theme)
     }
 
-    override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> {
+    override fun getWidgetDriver(
+        widgetSettings: MatrixWidgetSettings,
+        capabilitiesPolicy: MatrixWidgetCapabilitiesPolicy,
+    ): Result<MatrixWidgetDriver> {
+        onGetWidgetDriver(widgetSettings, capabilitiesPolicy)
         return getWidgetDriverResult(widgetSettings)
     }
 

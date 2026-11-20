@@ -11,6 +11,7 @@ package io.element.android.features.call.impl.utils
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.widget.CallWidgetSettingsProvider
+import io.element.android.libraries.matrix.api.widget.MatrixWidgetCapabilitiesPolicy
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -69,15 +70,18 @@ class DefaultCallWidgetProviderTest {
 
     @Test
     fun `getWidget - returns a widget driver when all steps are successful`() = runTest {
+        val policies = mutableListOf<MatrixWidgetCapabilitiesPolicy>()
         val room = FakeJoinedRoom(
             generateWidgetWebViewUrlResult = { _, _, _, _ -> Result.success("url") },
             getWidgetDriverResult = { Result.success(FakeMatrixWidgetDriver()) },
+            onGetWidgetDriver = { _, policy -> policies += policy },
         )
         val client = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
         val provider = createProvider(matrixClientProvider = FakeMatrixClientProvider { Result.success(client) })
         assertThat(provider.getWidget(A_SESSION_ID, A_ROOM_ID, false, "clientId", "languageTag", "theme").getOrNull()).isNotNull()
+        assertThat(policies).containsExactly(MatrixWidgetCapabilitiesPolicy.ElementCall)
     }
 
     @Test
