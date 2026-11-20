@@ -482,6 +482,7 @@ class JoinedRustRoom(
                         return getElementCallRequiredPermissions(sessionId.value, baseRoom.deviceId.value)
                     }
                 },
+                ioDispatcher = coroutineDispatchers.io,
             )
         }
     }
