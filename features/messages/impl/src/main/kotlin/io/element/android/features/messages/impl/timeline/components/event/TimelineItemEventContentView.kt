@@ -295,7 +295,7 @@ private fun CaptionView(
             )
         }
     } else {
-        val caption = if (LocalInspectionMode.current) {
+        val displayedCaption = if (LocalInspectionMode.current) {
             SpannedString(caption)
         } else {
             formattedCaption ?: SpannedString(caption)
@@ -306,7 +306,7 @@ private fun CaptionView(
         ) {
             EditorStyledText(
                 modifier = modifier,
-                text = caption,
+                text = displayedCaption,
                 style = ElementRichTextEditorStyle.textStyle(fontScale = LocalTimelineEventRendererConfig.current.fontScale),
                 onLinkClickedListener = onLinkClick,
                 onLinkLongClickedListener = onLinkLongClick,
