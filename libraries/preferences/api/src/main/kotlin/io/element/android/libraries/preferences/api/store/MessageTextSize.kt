@@ -11,7 +11,7 @@ package io.element.android.libraries.preferences.api.store
 object MessageTextSize {
     const val MIN = 12
 
-    /** The size the timeline already renders message bodies at: `TypographyTokens.fontBodyLgRegular`. */
+    // Matches `TypographyTokens.fontBodyLgRegular` size, used by the timeline for message bodies.
     const val DEFAULT = 16
 
     const val MAX = 22
