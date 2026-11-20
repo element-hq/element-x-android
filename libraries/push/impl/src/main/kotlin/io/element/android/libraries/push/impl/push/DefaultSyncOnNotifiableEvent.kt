@@ -29,6 +29,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
+import kotlin.time.measureTimedValue
 
 private const val MAX_ROOMS_TO_SUBSCRIBE_TO = 20
 private val SYNC_TIMEOUT = 10.seconds
@@ -66,7 +67,9 @@ class DefaultSyncOnNotifiableEvent(
                     // Don't sync the app too often, as it can be expensive and we don't want to waste battery.
                     opportunisticSyncTracker.syncIfAllowed(sessionId) {
                         Timber.d("Starting opportunistic room list sync for $sessionId")
-                        syncUsingSession(sessionId, sessionRequests)
+                        val (result, elapsed) = measureTimedValue { syncUsingSession(sessionId, sessionRequests) }
+                        Timber.d("Finished opportunistic room list sync for $sessionId in $elapsed, completed: $result")
+                        result
                     }
                 }
             }
