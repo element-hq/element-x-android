@@ -32,9 +32,11 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.uiStrings)
     implementation(projects.services.toolbox.api)
+    implementation(projects.libraries.preferences.api)
     api(projects.libraries.eventformatter.api)
 
     testCommonDependencies(libs)
     testImplementation(projects.services.toolbox.impl)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.preferences.test)
 }
