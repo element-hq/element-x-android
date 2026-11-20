@@ -129,7 +129,7 @@ class DefaultSyncOnNotifiableEvent(
             val oldSummary = oldSummariesById[roomId]
             val newSummary = newSummariesById[roomId]
             if (oldSummary != newSummary) {
-                Timber.d("Room summary changed for room $roomId, old: $oldSummary, new: $newSummary")
+                Timber.d("Room summary changed for room $roomId")
                 return true
             }
         }
