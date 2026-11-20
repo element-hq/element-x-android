@@ -11,10 +11,12 @@
 package io.element.android.libraries.matrix.impl.auth
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.api.ClientEnterpriseHook
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.paths.SessionPaths
+import io.element.android.libraries.matrix.api.paths.UnusedSessionPathsCleaner
 import io.element.android.libraries.matrix.impl.ClientBuilderProvider
 import io.element.android.libraries.matrix.impl.FakeClientBuilderProvider
 import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
@@ -24,6 +26,7 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClientBuil
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiHomeserverLoginDetails
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiLoginWithQrCodeHandler
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiQrCodeData
+import io.element.android.libraries.matrix.impl.paths.DefaultUnusedSessionPathsCleaner
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
 import io.element.android.libraries.matrix.impl.storage.FakeSqliteStoreBuilder
 import io.element.android.libraries.matrix.impl.storage.FakeSqliteStoreBuilderProvider
@@ -33,11 +36,13 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.auth.FakeOAuthRedirectUrlProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.paths.FakeUnusedSessionPathsCleaner
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.launch
@@ -178,9 +183,13 @@ class RustMatrixAuthenticationServiceTest {
     }
 
     @Test
-    fun `loginWithQrCode cancels the login task when it is cancelled`() = runTest {
+    fun `loginWithQrCode cancels the login task when it is cancelled, and discards the login session`() = runTest {
         val cancelResult = lambdaRecorder<Unit> {}
+        val closeResult = lambdaRecorder<Unit> {}
+        val storeBuilderProvider = SessionDirectoryCreatingSqliteStoreBuilderProvider()
         val sut = createRustMatrixAuthenticationService(
+            sessionPathsFactory = SessionPathsFactory(temporaryFolder.newFolder("base"), temporaryFolder.newFolder("cache")),
+            sqliteStoreBuilderProvider = storeBuilderProvider,
             clientBuilderProvider = FakeClientBuilderProvider(
                 provideResult = {
                     FakeFfiClientBuilder(
@@ -192,7 +201,7 @@ class RustMatrixAuthenticationServiceTest {
                                         cancelResult = cancelResult,
                                     )
                                 },
-                                closeResult = {},
+                                closeResult = closeResult,
                             )
                         },
                     )
@@ -205,9 +214,63 @@ class RustMatrixAuthenticationServiceTest {
         }
         runCurrent()
         cancelResult.assertions().isNeverCalled()
+        closeResult.assertions().isNeverCalled()
         job.cancel()
         runCurrent()
         cancelResult.assertions().isCalledOnce()
+        closeResult.assertions().isCalledOnce()
+        val abandonedSessionPaths = storeBuilderProvider.providedSessionPaths.single()
+        assertThat(abandonedSessionPaths.fileDirectory.exists()).isFalse()
+        assertThat(abandonedSessionPaths.cacheDirectory.exists()).isFalse()
+    }
+
+    @Test
+    fun `setHomeserver cancellation closes the client and deletes the session data of the login attempt`() = runTest {
+        val closeResult = lambdaRecorder<Unit> {}
+        val storeBuilderProvider = SessionDirectoryCreatingSqliteStoreBuilderProvider()
+        val sut = createRustMatrixAuthenticationService(
+            clientBuilderProvider = FakeSequentialClientBuilderProvider(
+                {
+                    FakeFfiClient(
+                        homeserverLoginDetailsResult = { throw CancellationException("Cancelled") },
+                        closeResult = closeResult,
+                    )
+                },
+            ),
+            sessionPathsFactory = SessionPathsFactory(temporaryFolder.newFolder("base"), temporaryFolder.newFolder("cache")),
+            sqliteStoreBuilderProvider = storeBuilderProvider,
+        )
+
+        val failure = try {
+            sut.setHomeserver("matrix.org")
+            null
+        } catch (e: CancellationException) {
+            e
+        }
+
+        // The cancellation must be propagated, not converted to a failed Result.
+        assertThat(failure).isNotNull()
+
+        closeResult.assertions().isCalledOnce()
+        val abandonedSessionPaths = storeBuilderProvider.providedSessionPaths.single()
+        assertThat(abandonedSessionPaths.fileDirectory.exists()).isFalse()
+        assertThat(abandonedSessionPaths.cacheDirectory.exists()).isFalse()
+    }
+
+    @Test
+    fun `loginWithQrCode destroys the client of the session when its finalization fails`() = runTest {
+        val sessionClientCloseResult = lambdaRecorder<Unit> {}
+        val sut = createRustMatrixAuthenticationService(
+            clientBuilderProvider = FakeSequentialClientBuilderProvider(
+                { FakeFfiClient(newLoginWithQrCodeHandlerResult = { FakeFfiLoginWithQrCodeHandler() }) },
+                { FakeFfiClient(withUtdHook = {}, closeResult = sessionClientCloseResult) },
+            ),
+            clientEnterpriseHook = { throw IllegalStateException("Failed to apply the enterprise hook") },
+        )
+
+        assertThat(sut.loginWithQrCode(aSdkQrCodeLoginData()) {}.isFailure).isTrue()
+
+        sessionClientCloseResult.assertions().isCalledOnce()
     }
 
     private fun aSdkQrCodeLoginData() = SdkQrCodeLoginData(
@@ -273,6 +336,83 @@ class RustMatrixAuthenticationServiceTest {
         assertThat(abandonedSessionPaths.cacheDirectory.exists()).isFalse()
     }
 
+    @Test
+    fun `starting a login flow cleans the unused session directories`() = runTest {
+        val cleanLambda = lambdaRecorder<Unit> {}
+        val sut = createRustMatrixAuthenticationService(
+            clientBuilderProvider = FakeSequentialClientBuilderProvider({ aLoginFakeFfiClient() }),
+            unusedSessionPathsCleaner = FakeUnusedSessionPathsCleaner(cleanLambda),
+        )
+
+        assertThat(sut.setHomeserver("matrix.org").isSuccess).isTrue()
+
+        cleanLambda.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `setHomeserver failure deletes the session data of the login attempt`() = runTest {
+        val storeBuilderProvider = SessionDirectoryCreatingSqliteStoreBuilderProvider()
+        val sut = createRustMatrixAuthenticationService(
+            clientBuilderProvider = FakeSequentialClientBuilderProvider(
+                {
+                    FakeFfiClient(
+                        homeserverLoginDetailsResult = { throw IllegalStateException("Failed to get homeserver login details") },
+                    )
+                },
+            ),
+            sessionPathsFactory = SessionPathsFactory(temporaryFolder.newFolder("base"), temporaryFolder.newFolder("cache")),
+            sqliteStoreBuilderProvider = storeBuilderProvider,
+        )
+
+        assertThat(sut.setHomeserver("matrix.org").isFailure).isTrue()
+
+        val abandonedSessionPaths = storeBuilderProvider.providedSessionPaths.single()
+        assertThat(abandonedSessionPaths.fileDirectory.exists()).isFalse()
+        assertThat(abandonedSessionPaths.cacheDirectory.exists()).isFalse()
+    }
+
+    @Test
+    fun `a new login flow deletes the left over session directories but keeps the ones of the logged in accounts`() = runTest {
+        val baseDirectory = temporaryFolder.newFolder("base")
+        val cacheDirectory = temporaryFolder.newFolder("cache")
+        val sessionPathsFactory = SessionPathsFactory(baseDirectory, cacheDirectory)
+        val sessionStore = InMemorySessionStore(updateUserProfileResult = { _, _, _, _ -> })
+        val storeBuilderProvider = SessionDirectoryCreatingSqliteStoreBuilderProvider()
+        // Directory left over by a login flow interrupted by the app being killed
+        val leftOverDirectory = File(baseDirectory, "6c9f3e0e-8c3a-4a8e-9a4f-0b8f7d7f7c11").apply { mkdirs() }
+        val sut = createRustMatrixAuthenticationService(
+            sessionStore = sessionStore,
+            clientBuilderProvider = FakeSequentialClientBuilderProvider(
+                { aLoginFakeFfiClient() },
+                { FakeFfiClient(withUtdHook = {}) },
+                { aLoginFakeFfiClient() },
+            ),
+            sessionPathsFactory = sessionPathsFactory,
+            sqliteStoreBuilderProvider = storeBuilderProvider,
+            unusedSessionPathsCleaner = DefaultUnusedSessionPathsCleaner(
+                sessionStore = sessionStore,
+                sessionsFilesDirectory = baseDirectory,
+                sessionsCacheDirectory = cacheDirectory,
+                sessionPathsFactory = sessionPathsFactory,
+                coroutineDispatchers = testCoroutineDispatchers(),
+            ),
+        )
+
+        assertThat(sut.setHomeserver("matrix.org").isSuccess).isTrue()
+        assertThat(leftOverDirectory.exists()).isFalse()
+        assertThat(sut.login("alice", "password").getOrNull()).isEqualTo(A_USER_ID)
+        val loggedInSessionPaths = storeBuilderProvider.providedSessionPaths.first()
+
+        assertThat(sut.setHomeserver("matrix.org").isSuccess).isTrue()
+
+        assertThat(loggedInSessionPaths.fileDirectory.exists()).isTrue()
+        assertThat(loggedInSessionPaths.cacheDirectory.exists()).isTrue()
+        assertThat(baseDirectory.listFiles().orEmpty().map { it.name }).containsExactly(
+            loggedInSessionPaths.fileDirectory.name,
+            storeBuilderProvider.providedSessionPaths.last().fileDirectory.name,
+        )
+    }
+
     private fun aLoginFakeFfiClient() = FakeFfiClient(
         homeserverLoginDetailsResult = { FakeFfiHomeserverLoginDetails() },
         loginResult = { _, _ -> },
@@ -299,6 +439,8 @@ class RustMatrixAuthenticationServiceTest {
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
         sessionPathsFactory: SessionPathsFactory = SessionPathsFactory(File("/base"), File("/cache")),
         sqliteStoreBuilderProvider: SqliteStoreBuilderProvider = FakeSqliteStoreBuilderProvider(),
+        unusedSessionPathsCleaner: UnusedSessionPathsCleaner = FakeUnusedSessionPathsCleaner(cleanLambda = {}),
+        clientEnterpriseHook: ClientEnterpriseHook = ClientEnterpriseHook {},
     ): RustMatrixAuthenticationService {
         val rustMatrixClientFactory = createRustMatrixClientFactory(
             cacheDirectory = File("/cache"),
@@ -319,7 +461,8 @@ class RustMatrixAuthenticationServiceTest {
             ),
             enterpriseService = enterpriseService,
             featureFlagService = FakeFeatureFlagService(),
-            clientEnterpriseHook = {},
+            clientEnterpriseHook = clientEnterpriseHook,
+            unusedSessionPathsCleaner = unusedSessionPathsCleaner,
         )
     }
 }
