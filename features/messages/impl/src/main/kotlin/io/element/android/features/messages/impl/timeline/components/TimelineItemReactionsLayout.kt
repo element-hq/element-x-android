@@ -52,6 +52,8 @@ fun TimelineItemReactionsLayout(
         // how they should wrap on to multiple rows given the constraints max width.
         fun calculateRows(placeables: List<Placeable>): List<List<Placeable>> {
             val rows = mutableListOf<List<Placeable>>()
+            // currentRow is reassigned when a new row is started
+            @Suppress("DoubleMutabilityForCollection")
             var currentRow = mutableListOf<Placeable>()
             var rowX = 0
 
@@ -140,7 +142,7 @@ fun TimelineItemReactionsLayout(
 
         var reactionsPlaceables = subcompose(0, reactions).map { it.measure(constraints) }
         if (reactionsPlaceables.isEmpty()) {
-            return@SubcomposeLayout layoutRows(listOf())
+            return@SubcomposeLayout layoutRows(emptyList())
         }
         var expandPlaceable = subcompose(1, expandButton).first().measure(constraints)
         // Enforce all reaction buttons have the same height

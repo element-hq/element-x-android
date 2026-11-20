@@ -27,7 +27,7 @@ fun Duration.formatShort(): String {
         .toString()
         .padStart(2, '0')
 
-    val sign = isNegative().let { if (it) "-" else "" }
+    val sign = if (isNegative()) "-" else ""
 
     return "$sign${absoluteValue.inWholeMinutes}:$seconds"
 }

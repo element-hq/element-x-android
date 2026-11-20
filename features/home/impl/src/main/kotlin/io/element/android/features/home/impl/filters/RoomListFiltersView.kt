@@ -93,7 +93,7 @@ fun RoomListFiltersView(
             )
         )
     }
-    val previousFilters = remember { mutableStateOf(listOf<RoomListFilter>()) }
+    val previousFilters = remember { mutableStateOf(emptyList<RoomListFilter>()) }
     LazyRow(
         contentPadding = PaddingValues(start = 8.dp, end = 16.dp),
         modifier = modifier.fillMaxWidth(),

@@ -46,7 +46,7 @@ import java.util.Optional
 class TimelineController(
     private val room: JoinedRoom,
     @LiveTimeline private val liveTimeline: Timeline,
-    @RoomCoroutineScope private val roomCoroutineScope: CoroutineScope,
+    @RoomCoroutineScope roomCoroutineScope: CoroutineScope,
     dispatchers: CoroutineDispatchers,
 ) : Closeable {
     private val coroutineScope = roomCoroutineScope.childScope(dispatchers.computation, "TimelineController")

@@ -8,4 +8,6 @@
 
 package io.element.android.features.space.impl.di
 
+// This is a Metro DI scope marker, it must not be an interface
+@Suppress("AbstractClassCanBeInterface")
 abstract class SpaceFlowScope private constructor()

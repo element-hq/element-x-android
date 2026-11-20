@@ -23,7 +23,7 @@ class CurrentUserWithNeighborsBuilderTest {
     fun `build on empty list returns current user`() {
         val sut = CurrentUserWithNeighborsBuilder()
         val matrixUser = aMatrixUser()
-        val list = listOf<SessionData>()
+        val list = emptyList<SessionData>()
         val result = sut.build(matrixUser, list)
         assertThat(result).containsExactly(matrixUser)
     }

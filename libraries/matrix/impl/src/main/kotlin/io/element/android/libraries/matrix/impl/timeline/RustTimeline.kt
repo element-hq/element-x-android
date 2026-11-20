@@ -49,6 +49,7 @@ import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -243,7 +244,7 @@ class RustTimeline(
         roomInfo,
         ->
         withContext(dispatcher) {
-            val (roomCreators, isDm, joinRule, isEncrypted) = roomInfo
+            val (roomCreators, isDm) = roomInfo
             timelineItems
                 .let { items ->
                     roomBeginningPostProcessor.process(
@@ -282,6 +283,8 @@ class RustTimeline(
     private fun CoroutineScope.fetchMembers() = launch(dispatcher) {
         try {
             inner.fetchMembers()
+        } catch (e: CancellationException) {
+            throw e
         } catch (exception: Exception) {
             Timber.tag(loggerTag).e(exception, "Error fetching members for room ${joinedRoom.roomId}")
         }

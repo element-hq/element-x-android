@@ -52,7 +52,7 @@ fun PreferenceSlide(
                     style = ElementTheme.typography.fontBodyLgRegular,
                     text = title,
                 )
-                summary?.let {
+                if (summary != null) {
                     Text(
                         style = ElementTheme.typography.fontBodyMdRegular,
                         text = summary,
