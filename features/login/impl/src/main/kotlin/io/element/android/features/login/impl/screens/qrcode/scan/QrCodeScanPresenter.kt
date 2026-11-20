@@ -17,12 +17,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
+import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGate
+import io.element.android.features.login.impl.localnetwork.LocalNetworkPermissionGateState
 import io.element.android.features.login.impl.qrcode.QrCodeLoginManager
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDataFactory
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
@@ -38,6 +39,7 @@ class QrCodeScanPresenter(
     private val qrCodeLoginDataFactory: MatrixQrCodeLoginDataFactory,
     private val qrCodeLoginManager: QrCodeLoginManager,
     private val coroutineDispatchers: CoroutineDispatchers,
+    private val localNetworkPermissionGate: LocalNetworkPermissionGate,
 ) : Presenter<QrCodeScanState> {
     private var isScanning by mutableStateOf(true)
 
@@ -46,11 +48,23 @@ class QrCodeScanPresenter(
     @Composable
     override fun present(): QrCodeScanState {
         val coroutineScope = rememberCoroutineScope()
-        val authenticationAction: MutableState<AsyncAction<MatrixQrCodeLoginData>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
+        val authenticationAction: MutableState<AsyncAction<QrCodeScanResult>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
         ObserveQRCodeLoginFailures {
             authenticationAction.value = AsyncAction.Failure(it)
         }
+
+        // Once we have a successful state with the server name, we can check if we have the local network permission to proceed with the login
+        val localNetworkPermissionState = localNetworkPermissionGate.present<AsyncAction<QrCodeScanResult>>(
+            urlOf = { action -> action.dataOrNull()?.data?.serverName().orEmpty() },
+            onProceed = { action ->
+                val currentData = action.dataOrNull() ?: return@present
+                authenticationAction.value = AsyncAction.Success(currentData.copy(canProceed = true))
+            },
+            onDenyPermission = {
+                authenticationAction.value = AsyncAction.Failure(CannotAccessLocalHomeserverException())
+            }
+        )
 
         fun handleEvent(event: QrCodeScanEvent) {
             when (event) {
@@ -60,14 +74,21 @@ class QrCodeScanPresenter(
                 }
                 is QrCodeScanEvent.QrCodeScanned -> {
                     isScanning = false
-                    coroutineScope.getQrCodeData(authenticationAction, event.code)
+                    coroutineScope.getQrCodeData(
+                        codeScannedAction = authenticationAction,
+                        code = event.code,
+                        localNetworkPermissionGateState = localNetworkPermissionState,
+                    )
                 }
+                QrCodeScanEvent.RequestLocalNetworkAccessPermission -> localNetworkPermissionState.requestPermission()
+                QrCodeScanEvent.DismissLocalNetworkAccessPermissionDialog -> localNetworkPermissionState.abort()
             }
         }
 
         return QrCodeScanState(
             isScanning = isScanning,
             authenticationAction = authenticationAction.value,
+            localNetworkPermissionDialog = localNetworkPermissionState.dialog,
             eventSink = ::handleEvent,
         )
     }
@@ -87,7 +108,11 @@ class QrCodeScanPresenter(
         }
     }
 
-    private fun CoroutineScope.getQrCodeData(codeScannedAction: MutableState<AsyncAction<MatrixQrCodeLoginData>>, code: ByteArray) {
+    private fun CoroutineScope.getQrCodeData(
+        codeScannedAction: MutableState<AsyncAction<QrCodeScanResult>>,
+        code: ByteArray,
+        localNetworkPermissionGateState: LocalNetworkPermissionGateState<AsyncAction<QrCodeScanResult>>,
+    ) {
         if (codeScannedAction.value.isSuccess() || isProcessingCode.compareAndSet(true, true)) return
 
         launch(coroutineDispatchers.computation) {
@@ -95,10 +120,19 @@ class QrCodeScanPresenter(
                 val data = qrCodeLoginDataFactory.parseQrCodeData(code).onFailure {
                     Timber.e(it, "Error parsing QR code data")
                 }.getOrThrow()
-                data
+                // Return the data, but indicate that we cannot proceed until the local network permission is granted
+                QrCodeScanResult(data = data, canProceed = false)
             }.runCatchingUpdatingState(codeScannedAction)
+
+            // If the QR code was successfully parsed, submit it to the local network permission gate to check if we can proceed
+            localNetworkPermissionGateState.submit(codeScannedAction.value)
         }.invokeOnCompletion {
             isProcessingCode.set(false)
         }
     }
 }
+
+/**
+ * Exception thrown when a local homeserver cannot be accessed because the local network permission was denied or not granted.
+ */
+class CannotAccessLocalHomeserverException : Exception("Can't access local homeserver. Please check your network connection and try again.")

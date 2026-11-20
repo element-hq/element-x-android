@@ -50,7 +50,9 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrLoginException
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialogView
 import io.element.android.libraries.qrcode.QrCodeCameraView
+import timber.log.Timber
 
 @Composable
 fun QrCodeScanView(
@@ -59,17 +61,38 @@ fun QrCodeScanView(
     onQrCodeDataReady: (MatrixQrCodeLoginData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val updatedOnBackClick by rememberUpdatedState(onBackClick)
     val updatedOnQrCodeDataReady by rememberUpdatedState(onQrCodeDataReady)
     // QR code data parsed successfully, notify the parent node
     if (state.authenticationAction is AsyncAction.Success) {
         LaunchedEffect(state.authenticationAction, updatedOnQrCodeDataReady) {
-            updatedOnQrCodeDataReady(state.authenticationAction.data)
+            if (state.authenticationAction.data.canProceed) {
+                updatedOnQrCodeDataReady(state.authenticationAction.data.data)
+            } else {
+                state.eventSink(QrCodeScanEvent.RequestLocalNetworkAccessPermission)
+            }
         }
     }
 
+    // We found an unrecoverable error: the homeserver is local and the user denied local network access permission.
+    // In this case, we cannot proceed with the login flow, so we navigate back to the previous screen.
+    val authenticationError = state.authenticationAction.errorOrNull()
+    LaunchedEffect(authenticationError) {
+        if (authenticationError is CannotAccessLocalHomeserverException) {
+            Timber.e("Cannot access local homeserver, local network permission was denied.")
+            updatedOnBackClick()
+        }
+    }
+
+    LocalNetworkPermissionDialogView(
+        dialog = state.localNetworkPermissionDialog,
+        onSubmit = { state.eventSink(QrCodeScanEvent.RequestLocalNetworkAccessPermission) },
+        onDismiss = { state.eventSink(QrCodeScanEvent.DismissLocalNetworkAccessPermissionDialog) },
+    )
+
     FlowStepPage(
         modifier = modifier,
-        onBackClick = onBackClick,
+        onBackClick = updatedOnBackClick,
         iconStyle = BigIcon.Style.Default(CompoundIcons.Computer()),
         title = stringResource(R.string.screen_qr_code_login_scanning_state_title),
         content = { Content(state = state) },
