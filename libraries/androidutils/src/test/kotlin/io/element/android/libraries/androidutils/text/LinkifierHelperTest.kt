@@ -312,4 +312,29 @@ class LinkifierHelperTest : RobolectricTest() {
         assertThat(urlSpans.size).isEqualTo(1)
         assertThat(urlSpans.first().url).isEqualTo("http://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4)")
     }
+
+    @Test
+    fun `linkification keeps closing parenthesis in URL query followed by text`() {
+        val text = "A url https://wiki.example.org/w/index.php?title=Fairphone_4_(fairphone-fp4) and some text"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("https://wiki.example.org/w/index.php?title=Fairphone_4_(fairphone-fp4)")
+    }
+
+    @Test
+    fun `linkification doesn't extend existing URLSpan followed by a closing parenthesis`() {
+        val text = buildSpannedString {
+            append("A url: ")
+            inSpans(URLSpan("https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4")) {
+                append("https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4")
+            }
+            append(") and some text")
+        }
+        val result = LinkifyHelper.linkify(text).toSpannable()
+        val urlSpans = result.getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("https://wiki.example.org/wiki/Fairphone_4_(fairphone-fp4")
+        assertThat(result.getSpanEnd(urlSpans.first())).isEqualTo(text.indexOf(')'))
+    }
 }

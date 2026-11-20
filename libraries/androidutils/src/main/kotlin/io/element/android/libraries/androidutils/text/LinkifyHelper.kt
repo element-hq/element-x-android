@@ -29,7 +29,7 @@ object LinkifyHelper {
         text: CharSequence,
         @LinkifyCompat.LinkifyMask linkifyMask: Int = Linkify.WEB_URLS or Linkify.PHONE_NUMBERS or Linkify.EMAIL_ADDRESSES,
     ): CharSequence {
-        // Convert the text to a Spannable to be able to add URL spans, return the original text if it's not possible (in tests, i.e.)
+        // Convert the text to a Spannable to be able to add URL spans, return the original text if it's not possible (in tests, e.g.)
         @Suppress("USELESS_ELVIS")
         val spannable = text.safeToSpannable() ?: return text
 
@@ -58,7 +58,7 @@ object LinkifyHelper {
                 // trailing punctuation in the link.
                 // Since this might fail in some edge cases, we catch the exception and just use the original end index.
                 val newEnd = runCatchingExceptions {
-                    val extendedEnd = if (urlSpan in oldURLSpans) end else extendLinkifiedUrlSpanEndIndex(spannable, urlSpan, start, end)
+                    val extendedEnd = extendLinkifiedUrlSpanEndIndex(spannable, urlSpan, start, end)
                     adjustLinkifiedUrlSpanEndIndex(spannable, start, extendedEnd)
                 }.onFailure {
                     Timber.e(it, "Failed to adjust end index for link span")
@@ -123,7 +123,7 @@ object LinkifyHelper {
 
     /**
      * The web URL pattern used by Linkify ends with a word boundary check, so a URL ending with a closing parenthesis
-     * (i.e. `https://en.wikipedia.org/wiki/Kotlin_(programming_language)`) loses it when followed by any other text.
+     * (e.g. `https://en.wikipedia.org/wiki/Kotlin_(programming_language)`) loses it when followed by any other text.
      * Extend the span to include the closing parentheses that balance opening ones in the last path segment.
      */
     private fun extendLinkifiedUrlSpanEndIndex(spannable: Spannable, urlSpan: URLSpan, start: Int, end: Int): Int {
