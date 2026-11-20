@@ -40,13 +40,15 @@ class LogoutPresenterTest {
 
     @Test
     fun `present - the confirmation is loading until the devices to verify against are known`() = runTest {
-        val presenter = createLogoutPresenter()
+        val matrixClient = FakeMatrixClient()
+        val presenter = createLogoutPresenter(matrixClient = matrixClient)
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.confirmation).isEqualTo(LogoutConfirmation.Loading)
             assertThat(initialState.logoutAction).isEqualTo(AsyncAction.Uninitialized)
+            assertThat(initialState.currentUser).isEqualTo(matrixClient.userProfile.value)
             cancelAndIgnoreRemainingEvents()
         }
     }
