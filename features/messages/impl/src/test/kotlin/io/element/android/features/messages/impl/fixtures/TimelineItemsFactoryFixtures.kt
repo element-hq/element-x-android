@@ -33,6 +33,7 @@ import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.api.TimelineEventFormatter
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.test.FakeHtmlMessageParser
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
@@ -41,6 +42,7 @@ import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.TestScope
 
 internal fun TestScope.aTimelineItemsFactoryCreator(): TimelineItemsFactory.Creator {
@@ -61,7 +63,10 @@ internal fun aTimelineItemContentFactory(
         htmlConverterProvider = FakeHtmlConverterProvider(),
         permalinkParser = FakePermalinkParser(),
         textPillificator = FakeTextPillificator(),
-        htmlMessageParser = FakeHtmlMessageParser(),
+        htmlMessageParser = FakeHtmlMessageParser(
+            parseResult = { DocumentNode(persistentListOf()) },
+            formatPlainTextResult = { null },
+        ),
         featureFlagService = FakeFeatureFlagService(),
     ),
     redactedMessageFactory = TimelineItemContentRedactedFactory(),
