@@ -182,7 +182,7 @@ class AndroidMediaPreProcessor(
             } ?: ExifInterface.ORIENTATION_UNDEFINED
 
             val compressionResult = imageCompressor.compressToTmpFile(
-                inputStreamProvider = { checkNotNull(contentResolver.openInputStream(uri)) { "Unable to open input stream" } },
+                inputStreamProvider = { checkNotNull(contentResolver.openInputStream(uri)) },
                 resizeMode = ResizeMode.Approximate(IMAGE_SCALE_REF_SIZE, IMAGE_SCALE_REF_SIZE),
                 mimeType = mimeType,
                 orientation = orientation,

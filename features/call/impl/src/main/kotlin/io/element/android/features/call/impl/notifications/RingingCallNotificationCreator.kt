@@ -126,7 +126,7 @@ class RingingCallNotificationCreator(
                 PendingIntent.FLAG_CANCEL_CURRENT,
                 false,
             )
-        ) { "Unable to create the answer PendingIntent" }
+        )
 
         val declineIntent = checkNotNull(
             PendingIntentCompat.getBroadcast(
@@ -138,7 +138,7 @@ class RingingCallNotificationCreator(
                 PendingIntent.FLAG_CANCEL_CURRENT,
                 false,
             )
-        ) { "Unable to create the decline PendingIntent" }
+        )
 
         val fullScreenIntent = PendingIntentCompat.getActivity(
             context,

@@ -42,9 +42,7 @@ fun ElementPreview(
     val context = LocalContext.current
     CompositionLocalProvider(
         LocalAsyncImagePreviewHandler provides AsyncImagePreviewHandler {
-            checkNotNull(ResourcesCompat.getDrawable(context.resources, drawableFallbackForImages, null)) {
-                "Drawable fallback for images not found"
-            }.asImage()
+            checkNotNull(ResourcesCompat.getDrawable(context.resources, drawableFallbackForImages, null)).asImage()
         }
     ) {
         ElementTheme(theme = theme) {

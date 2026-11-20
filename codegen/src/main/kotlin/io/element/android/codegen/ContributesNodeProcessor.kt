@@ -50,7 +50,7 @@ class ContributesNodeProcessor(
     )
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        val annotatedSymbols = resolver.getSymbolsWithAnnotation(checkNotNull(ContributesNode::class.qualifiedName) { "ContributesNode has no qualified name" })
+        val annotatedSymbols = resolver.getSymbolsWithAnnotation(checkNotNull(ContributesNode::class.qualifiedName))
             .filterIsInstance<KSClassDeclaration>()
 
         val (validSymbols, invalidSymbols) = annotatedSymbols.partition { it.validate(enableNewFeatures = false) }
@@ -69,15 +69,11 @@ class ContributesNodeProcessor(
     }
 
     private fun generateBindingContainer(ksClass: KSClassDeclaration) {
-        val annotation = checkNotNull(ksClass.annotations.find { it.shortName.asString() == "ContributesNode" }) {
-            "${ksClass.simpleName.asString()} is not annotated with @ContributesNode"
-        }
-        val scope = checkNotNull(annotation.arguments.find { it.name?.asString() == "scope" }) {
-            "@ContributesNode on ${ksClass.simpleName.asString()} has no scope argument"
-        }.value as KSType
+        val annotation = checkNotNull(ksClass.annotations.find { it.shortName.asString() == "ContributesNode" })
+        val scope = checkNotNull(annotation.arguments.find { it.name?.asString() == "scope" }).value as KSType
         val bindingContainerPackage = ksClass.packageName.asString()
         val bindingContainerClassName = "${ksClass.simpleName.asString()}BindingContainer"
-        val nodeClassName = ClassName.bestGuess(ksClass.requireQualifiedName())
+        val nodeClassName = ClassName.bestGuess(checkNotNull(ksClass.qualifiedName).asString())
         val content = FileSpec.builder(
             packageName = bindingContainerPackage,
             fileName = bindingContainerClassName,
@@ -110,7 +106,7 @@ class ContributesNodeProcessor(
             codeGenerator = codeGenerator,
             dependencies = Dependencies(
                 aggregating = false,
-                checkNotNull(ksClass.containingFile) { "${ksClass.simpleName.asString()} has no containing file" }
+                checkNotNull(ksClass.containingFile)
             ),
         )
     }
@@ -139,7 +135,7 @@ class ContributesNodeProcessor(
             )
         }
 
-        val nodeClassName = ClassName.bestGuess(ksClass.requireQualifiedName())
+        val nodeClassName = ClassName.bestGuess(checkNotNull(ksClass.qualifiedName).asString())
         val buildContextClassName = contextAssistedParam.type.toTypeName()
         val pluginsClassName = pluginsAssistedParam.type.toTypeName()
         val content = FileSpec.builder(generatedPackage, assistedFactoryClassName)
@@ -164,13 +160,9 @@ class ContributesNodeProcessor(
             codeGenerator = codeGenerator,
             dependencies = Dependencies(
                 aggregating = false,
-                checkNotNull(ksClass.containingFile) { "${ksClass.simpleName.asString()} has no containing file" }
+                checkNotNull(ksClass.containingFile)
             ),
         )
-    }
-
-    private fun KSClassDeclaration.requireQualifiedName(): String {
-        return checkNotNull(qualifiedName) { "${simpleName.asString()} has no qualified name" }.asString()
     }
 
     companion object {

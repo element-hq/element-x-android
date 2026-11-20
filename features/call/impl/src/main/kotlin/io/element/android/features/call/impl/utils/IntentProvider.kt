@@ -31,6 +31,6 @@ internal object IntentProvider {
                 PendingIntent.FLAG_CANCEL_CURRENT,
                 false
             )
-        ) { "Unable to create the call PendingIntent" }
+        )
     }
 }

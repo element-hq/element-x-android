@@ -674,7 +674,7 @@ private fun TimelineItemEventRowContentLayout(
         fun measure(id: EventRowLayoutId) = measurables.firstOrNull { it.layoutId == id }?.measure(childConstraints)
 
         val senderPlaceable = measure(EventRowLayoutId.Sender)
-        val messagePlaceable = checkNotNull(measure(EventRowLayoutId.Message)) { "The message content is missing" }
+        val messagePlaceable = checkNotNull(measure(EventRowLayoutId.Message))
         val pinIconPlaceable = measure(EventRowLayoutId.PinIcon)
         val reactionsPlaceable = measure(EventRowLayoutId.Reactions)
         val selectionIndicatorPlaceable = measure(EventRowLayoutId.SelectionIndicator)

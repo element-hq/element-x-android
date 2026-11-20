@@ -141,7 +141,7 @@ class BugReporterMultipartBody internal constructor(
             contentLengthSize.clear()
             // ELEMENT-END
         }
-        val sink: BufferedSink = checkNotNull(byteCountBuffer ?: sink) { "A sink is required when not counting bytes" }
+        val sink: BufferedSink = checkNotNull(byteCountBuffer ?: sink)
 
         for (p in 0 until parts.size) {
             val part = parts[p]

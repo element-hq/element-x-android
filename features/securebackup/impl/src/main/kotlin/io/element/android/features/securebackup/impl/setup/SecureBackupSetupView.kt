@@ -171,7 +171,7 @@ private fun ColumnScope.Buttons(
                     context.startSharePlainTextIntent(
                         activityResultLauncher = null,
                         chooserTitle = chooserTitle,
-                        text = checkNotNull(state.setupState.recoveryKey()) { "The recovery key is not available" },
+                        text = checkNotNull(state.setupState.recoveryKey()),
                     )
                     state.eventSink.invoke(SecureBackupSetupEvent.RecoveryKeyHasBeenSaved)
                 },
