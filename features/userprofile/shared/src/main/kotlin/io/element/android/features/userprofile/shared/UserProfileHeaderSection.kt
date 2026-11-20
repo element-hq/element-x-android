@@ -74,14 +74,19 @@ fun UserProfileHeaderSection(
             contentDescription = stringResource(CommonStrings.a11y_user_avatar),
             modifier = Modifier
                 .clip(CircleShape)
-                .clickable(
-                    interactionSource = null,
-                    indication = ripple(focusRingShape = CircleShape),
-                    enabled = avatarUrl != null,
-                    onClickLabel = stringResource(CommonStrings.action_view),
-                ) {
-                    avatarUrl?.let { openAvatarPreview(it) }
-                }
+                .then(
+                    if (avatarUrl != null) {
+                        Modifier.clickable(
+                            interactionSource = null,
+                            indication = ripple(focusRingShape = CircleShape),
+                            onClickLabel = stringResource(CommonStrings.action_view),
+                        ) {
+                            openAvatarPreview(avatarUrl)
+                        }
+                    } else {
+                        Modifier
+                    }
+                )
                 .testTag(TestTags.memberDetailAvatar)
         )
         Spacer(modifier = Modifier.height(24.dp))
