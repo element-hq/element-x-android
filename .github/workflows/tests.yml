@@ -63,29 +63,12 @@ jobs:
       # so wait for the artifact: the screenshot tests usually finish before the unit tests anyway.
       - name: ⏳ Wait for the coverage data of the screenshot tests
         id: screenshot-tests-coverage
+        # The screenshot tests job takes ~12 minutes on a cold build cache, and usually completes before the unit tests.
+        # Don't keep the runner for the whole job timeout if it never completes, for instance if it stays queued.
+        timeout-minutes: 30
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          artifact_exists() {
-            gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts" --jq '.artifacts[].name' | grep -qx "$SCREENSHOT_TESTS_COVERAGE_ARTIFACT"
-          }
-          screenshot_job_status() {
-            gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/attempts/$GITHUB_RUN_ATTEMPT/jobs" --paginate \
-              --jq ".jobs[] | select(.name == \"$SCREENSHOT_TESTS_JOB_NAME\") | .status"
-          }
-          while true; do
-            if artifact_exists; then
-              echo "available=true" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            # The artifact is not uploaded if the screenshot tests failed: don't wait forever
-            if [ "$(screenshot_job_status)" = "completed" ] && ! artifact_exists; then
-              echo "::warning::The coverage data of the screenshot tests is not available, see the '$SCREENSHOT_TESTS_JOB_NAME' job. The code coverage is not verified."
-              echo "available=false" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            sleep 15
-          done
+        run: .github/workflows/scripts/wait_for_artifact.sh "$SCREENSHOT_TESTS_COVERAGE_ARTIFACT" "$SCREENSHOT_TESTS_JOB_NAME"
 
       - name: ⏬ Download the coverage data of the screenshot tests
         if: steps.screenshot-tests-coverage.outputs.available == 'true'
