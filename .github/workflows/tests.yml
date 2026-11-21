@@ -49,16 +49,36 @@ jobs:
           enterprise-ssh-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
           # Only this job writes the Gradle cache on develop, see the setup-build action
           gradle-cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
-      - name: ⚙️ Run unit tests
-        # Instrument the tests for the Kover coverage report, generated in a later step
-        run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest -PkoverInstrumentation=true $CI_GRADLE_ARG_PROPERTIES --continue
+      - name: ⚙️ Run unit tests, screenshot tests and code coverage verification
+        id: gradle
+        # A single Gradle invocation saves the configuration time of the other ones, and lets Gradle run the screenshot tests
+        # while the unit tests of other modules are still running: on a cold build cache, it saves ~6 minutes.
+        # The screenshot tests are also instrumented, they cover a large part of the UI code.
+        # The result of each kind of check is reported by the next steps, so the job does not fail here.
+        continue-on-error: true
+        shell: bash
+        run: >
+          ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest verifyPaparazziDebug
+          :koverXmlReportMerged :koverHtmlReportMerged :koverVerifyAll
+          -x :tests:konsist:testDebugUnitTest
+          -PkoverInstrumentation=true $CI_GRADLE_ARG_PROPERTIES --continue
+          2>&1 | tee gradle-output.log
 
-      - name: ⚙️ Run screenshot tests
-        # Also instrument the screenshot tests, they cover a large part of the UI code
-        run: ./gradlew verifyPaparazziDebug -PkoverInstrumentation=true $CI_GRADLE_ARG_PROPERTIES --continue
+      - name: 🔍 Check unit tests
+        if: ${{ !cancelled() && steps.gradle.outcome != 'skipped' }}
+        run: python3 .github/workflows/scripts/check_gradle_failures.py gradle-output.log unit-tests
 
-      - name: ⚙️ Generate kover coverage report
-        run: ./gradlew :koverXmlReportMerged :koverHtmlReportMerged :koverVerifyAll -x testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
+      - name: 🔍 Check screenshot tests
+        if: ${{ !cancelled() && steps.gradle.outcome != 'skipped' }}
+        run: python3 .github/workflows/scripts/check_gradle_failures.py gradle-output.log screenshot-tests
+
+      - name: 🔍 Check code coverage
+        if: ${{ !cancelled() && steps.gradle.outcome != 'skipped' }}
+        run: python3 .github/workflows/scripts/check_gradle_failures.py gradle-output.log coverage
+
+      - name: 🔍 Check compilation and other Gradle failures
+        if: ${{ !cancelled() && steps.gradle.outcome != 'skipped' }}
+        run: python3 .github/workflows/scripts/check_gradle_failures.py gradle-output.log other
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
