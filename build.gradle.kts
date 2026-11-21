@@ -191,7 +191,10 @@ allprojects {
             "--add-exports=java.base/jdk.internal.access=ALL-UNNAMED",
         )
 
-        val isScreenshotTest = project.gradle.startParameter.taskNames.any { it.contains("paparazzi", ignoreCase = true) }
+        // Only the modules applying the Paparazzi plugin run screenshot tests. Checking the plugin too lets the unit tests and the
+        // screenshot tests run in the same Gradle invocation, like on the CI: the other modules keep the unit test configuration.
+        val isScreenshotTest = project.pluginManager.hasPlugin("app.cash.paparazzi") &&
+            project.gradle.startParameter.taskNames.any { it.contains("paparazzi", ignoreCase = true) }
         if (isScreenshotTest) {
             // Paparazzi tests benefit from parallelisation, so we can use half the available cores to run them in parallel.
             maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
