@@ -164,6 +164,13 @@ open class RoomListRoomSummaryPreviewParam : PreviewParameterProvider<RoomListRo
                     hasRoomCall = true,
                     activeCallIntent = CallIntent.AUDIO
                 ),
+            ),
+            listOf(
+                aRoomListRoomSummary(
+                    name = "Marked as unread",
+                    latestEvent = LatestEvent.Synced("Manually marked as unread"),
+                    isMarkedUnread = true,
+                ),
             )
         ).flatten()
 }
