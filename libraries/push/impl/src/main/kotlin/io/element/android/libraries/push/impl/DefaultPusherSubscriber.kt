@@ -10,6 +10,7 @@ package io.element.android.libraries.push.impl
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
@@ -24,10 +25,13 @@ import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.toUserList
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("DefaultPusherSubscriber", LoggerTag.PushLoggerTag)
 
+@SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultPusherSubscriber(
     private val buildMeta: BuildMeta,
@@ -35,6 +39,12 @@ class DefaultPusherSubscriber(
     private val userPushStoreFactory: UserPushStoreFactory,
     private val sessionStore: SessionStore,
 ) : PusherSubscriber {
+    /**
+     * Ensure that pushers are registered one at a time, so that the value of `append` is computed
+     * knowing the push keys registered by the other sessions.
+     */
+    private val registerMutex = Mutex()
+
     /**
      * Register a pusher to the server if not done yet.
      */
@@ -49,12 +59,15 @@ class DefaultPusherSubscriber(
             Timber.tag(loggerTag.value)
                 .d("Unnecessary to register again the same pusher, but do it in case the pusher has been removed from the server")
         }
-        return matrixClient.pushersService
-            .setHttpPusher(
-                createHttpPusher(pushKey, gateway, matrixClient.sessionId)
-            )
-            .onSuccess {
-                userDataStore.setCurrentRegisteredPushKey(pushKey)
+        return registerMutex
+            .withLock {
+                matrixClient.pushersService
+                    .setHttpPusher(
+                        createHttpPusher(pushKey, gateway, matrixClient.sessionId)
+                    )
+                    .onSuccess {
+                        userDataStore.setCurrentRegisteredPushKey(pushKey)
+                    }
             }
             .mapFailure { throwable ->
                 Timber.tag(loggerTag.value).e(throwable, "Unable to register the pusher")
