@@ -81,7 +81,9 @@ class RoomMemberListNode(
             onSelectAction = { action, target ->
                 when (action) {
                     is ModerationAction.DisplayProfile -> openRoomMemberDetails(target.userId)
-                    else -> state.moderationState.eventSink(RoomMemberModerationEvent.ProcessAction(action, target))
+                    ModerationAction.KickUser,
+                    ModerationAction.BanUser,
+                    ModerationAction.UnbanUser -> state.moderationState.eventSink(RoomMemberModerationEvent.ProcessAction(action, target))
                 }
             },
             onAvatarClick = { user ->

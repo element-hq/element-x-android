@@ -73,7 +73,14 @@ class IncomingVerificationStateMachine(
                 on<Event.Cancel> { _, state: MachineState<State> ->
                     when (state.snapshot) {
                         State.Completed, State.Canceled -> state.noChange()
-                        else -> {
+                        is State.Initial,
+                        State.AcceptingIncomingVerification,
+                        State.RejectingIncomingVerification,
+                        is State.ChallengeReceived,
+                        is State.AcceptingChallenge,
+                        is State.RejectingChallenge,
+                        State.Canceling,
+                        State.Failure -> {
                             sessionVerificationService.cancelVerification()
                             state.override { State.Canceled.andLogStateChange() }
                         }

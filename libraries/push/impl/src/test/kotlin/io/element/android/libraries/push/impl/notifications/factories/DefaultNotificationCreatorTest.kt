@@ -17,6 +17,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -569,5 +570,6 @@ fun createNotificationChannels(
         context = context,
         enterpriseService = enterpriseService,
         appPreferencesStore = io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore(),
+        coroutineDispatchers = CoroutineDispatchers.Default,
     )
 }

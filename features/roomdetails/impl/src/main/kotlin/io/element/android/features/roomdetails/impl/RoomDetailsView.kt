@@ -755,7 +755,8 @@ private fun ProfileItem(
                 iconSource = IconSource.Vector(CompoundIcons.ErrorSolid()),
                 tintColor = ElementTheme.colors.iconCriticalPrimary,
             )
-            else -> null
+            UserProfileVerificationState.UNKNOWN,
+            UserProfileVerificationState.UNVERIFIED -> null
         },
         onClick = onClick,
     )

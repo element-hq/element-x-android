@@ -64,7 +64,7 @@ class TimelineItemIndexer {
                         processEvent(event, index)
                     }
                 }
-                else -> Unit
+                is TimelineItem.Virtual -> Unit
             }
         }
         if (newIdentifiers != identifiers) {

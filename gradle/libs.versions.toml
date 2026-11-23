@@ -7,7 +7,7 @@ android_gradle_plugin = "9.3.2"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
 kotlin = "2.4.21"
 kotlinpoet = "2.4.0"
-ksp = "2.3.12"
+ksp = "2.3.14"
 firebaseAppDistribution = "5.3.1"
 
 # AndroidX
@@ -33,7 +33,7 @@ test_core = "1.7.0"
 
 # Jetbrain
 datetime = "0.8.0"
-serialization_json = "1.12.0"
+serialization_json = "1.13.0"
 
 #other
 coil = "3.6.3"
@@ -169,7 +169,7 @@ test_konsist = "com.github.jmartinesp:konsist:0.18.0"
 test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.25"
-test_robolectric = "org.robolectric:robolectric:4.17"
+test_robolectric = "org.robolectric:robolectric:4.18.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi" }
 test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.10.0"

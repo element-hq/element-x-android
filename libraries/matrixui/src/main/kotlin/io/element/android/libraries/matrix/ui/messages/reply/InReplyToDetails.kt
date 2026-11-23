@@ -12,12 +12,24 @@ import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.ui.messages.toPlainText
 
 @Immutable
@@ -63,7 +75,18 @@ fun InReplyTo.map(
                 val stickerContent = content as StickerContent
                 stickerContent.body
             }
-            else -> null
+            is RedactedContent,
+            is PollContent,
+            is UnableToDecryptContent,
+            is RoomMembershipContent,
+            is ProfileChangeContent,
+            is StateContent,
+            is FailedToParseMessageLikeContent,
+            is FailedToParseStateContent,
+            is LiveLocationContent,
+            LegacyCallInviteContent,
+            is CallNotifyContent,
+            UnknownContent -> null
         }
     )
     is InReplyTo.Error -> InReplyToDetails.Error(eventId, message)

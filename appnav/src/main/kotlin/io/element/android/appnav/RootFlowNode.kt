@@ -379,7 +379,12 @@ class RootFlowNode(
                     is NavTarget.SplashScreen,
                     is NavTarget.LoggedInFlow,
                     is NavTarget.NotLoggedInFlow -> backstackFader
-                    else -> backstackSlider
+                    is NavTarget.AccountSelect,
+                    NavTarget.SignedOutSessions,
+                    NavTarget.BugReport,
+                    is NavTarget.IncomingShare,
+                    is NavTarget.OtherAccountIncomingVerificationRequest,
+                    is NavTarget.OtherAccountSessionVerification -> backstackSlider
                 }
             }
             BackstackView(transitionHandler = transitionHandler)

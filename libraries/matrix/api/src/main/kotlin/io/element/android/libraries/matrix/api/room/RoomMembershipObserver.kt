@@ -32,7 +32,9 @@ class RoomMembershipObserver {
         val membershipChange = when (membershipBeforeLeft) {
             CurrentUserMembership.INVITED -> MembershipChange.INVITATION_REJECTED
             CurrentUserMembership.KNOCKED -> MembershipChange.KNOCK_RETRACTED
-            else -> MembershipChange.LEFT
+            CurrentUserMembership.JOINED,
+            CurrentUserMembership.LEFT,
+            CurrentUserMembership.BANNED -> MembershipChange.LEFT
         }
         _updates.emit(
             RoomMembershipUpdate(

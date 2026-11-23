@@ -67,7 +67,10 @@ sealed interface AsyncAction<out T> {
      */
     fun dataOrNull(): T? = when (this) {
         is Success -> data
-        else -> null
+        Uninitialized,
+        is Confirming,
+        Loading,
+        is Failure -> null
     }
 
     /**
@@ -75,7 +78,10 @@ sealed interface AsyncAction<out T> {
      */
     fun errorOrNull(): Throwable? = when (this) {
         is Failure -> error
-        else -> null
+        Uninitialized,
+        is Confirming,
+        Loading,
+        is Success -> null
     }
 
     fun isUninitialized(): Boolean = this == Uninitialized

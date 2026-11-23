@@ -36,7 +36,8 @@ class PinnedMessagesBannerItemFactory(
                     },
                 )
             }
-            else -> null
+            is MatrixTimelineItem.Virtual,
+            MatrixTimelineItem.Other -> null
         }
     }
 }

@@ -77,7 +77,7 @@ class DefaultFtueService(
         val step = getNextStep(null)
         ftueStepStateFlow.value = when (step) {
             null -> InternalFtueState.Complete
-            else -> InternalFtueState.Incomplete(step)
+            is FtueStep -> InternalFtueState.Incomplete(step)
         }
     }
 

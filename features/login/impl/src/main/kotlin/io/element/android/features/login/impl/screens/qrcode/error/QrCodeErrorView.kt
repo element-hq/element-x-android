@@ -123,7 +123,12 @@ private fun Content(errorScreenType: QrCodeErrorScreenType) {
                 InsecureChannelDetectedError()
             }
         }
-        else -> Unit
+        QrCodeErrorScreenType.Cancelled,
+        QrCodeErrorScreenType.Expired,
+        QrCodeErrorScreenType.Declined,
+        QrCodeErrorScreenType.ProtocolNotSupported,
+        QrCodeErrorScreenType.SlidingSyncNotAvailable,
+        QrCodeErrorScreenType.UnknownError -> Unit
     }
 }
 

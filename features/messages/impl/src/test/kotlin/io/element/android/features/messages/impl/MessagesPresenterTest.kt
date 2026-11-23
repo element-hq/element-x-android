@@ -1498,6 +1498,8 @@ class MessagesPresenterTest {
         }
     }
 
+    // Only the event types used by the test are expected, any other type is an error
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun roomPermissions(
         canStartCall: Boolean = true,
         canRedactOther: Boolean = true,

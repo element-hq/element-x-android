@@ -171,6 +171,8 @@ class PinnedMessagesListPresenter(
         }
     }
 
+    // Only a few actions are available on pinned messages, listing all the other TimelineItemActions would not add value
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun CoroutineScope.handleTimelineAction(
         action: TimelineItemAction,
         targetEvent: TimelineItem.Event,

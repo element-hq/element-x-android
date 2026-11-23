@@ -273,7 +273,14 @@ private fun PinnedMessagesListLoaded(
                 eventSink = { timelineItemEvent ->
                     when (timelineItemEvent) {
                         is TimelineEvent.OpenThread -> state.eventSink(PinnedMessagesListEvent.OpenThread(timelineItemEvent.threadRootEventId))
-                        else -> Unit
+                        is TimelineEvent.ShowSendFailureDialog,
+                        is TimelineEvent.ComputeVerifiedUserSendFailure,
+                        is TimelineEvent.ShowShieldDialog,
+                        is TimelineEvent.LoadMore,
+                        is TimelineEvent.NavigateToPredecessorOrSuccessorRoom,
+                        is TimelineEvent.TimelineItemPollEvent,
+                        TimelineEvent.StopLiveLocationShare,
+                        is TimelineEvent.ValidateMedia -> Unit
                     }
                 },
                 eventContentView = { event, contentModifier, onContentLayoutChange ->

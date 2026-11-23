@@ -28,7 +28,8 @@ fun RecoveryState.toAnalyticsUserPropertyValue(): UserProperties.RecoveryState? 
         RecoveryState.DISABLED -> UserProperties.RecoveryState.Disabled
         RecoveryState.INCOMPLETE -> UserProperties.RecoveryState.Incomplete
         // we don't need to report transient states
-        else -> null
+        RecoveryState.WAITING_FOR_SYNC,
+        RecoveryState.UNKNOWN -> null
     }
 }
 fun SessionVerifiedStatus.toAnalyticsStateChangeValue(): CryptoSessionStateChange.VerificationState? {
@@ -46,6 +47,7 @@ fun RecoveryState.toAnalyticsStateChangeValue(): CryptoSessionStateChange.Recove
         RecoveryState.DISABLED -> CryptoSessionStateChange.RecoveryState.Disabled
         RecoveryState.INCOMPLETE -> CryptoSessionStateChange.RecoveryState.Incomplete
         // we don't need to report transient states
-        else -> null
+        RecoveryState.WAITING_FOR_SYNC,
+        RecoveryState.UNKNOWN -> null
     }
 }

@@ -61,7 +61,8 @@ class PollHistoryItemsFactory(
                     state = pollContentState
                 )
             }
-            else -> null
+            is MatrixTimelineItem.Virtual,
+            MatrixTimelineItem.Other -> null
         }
     }
 }

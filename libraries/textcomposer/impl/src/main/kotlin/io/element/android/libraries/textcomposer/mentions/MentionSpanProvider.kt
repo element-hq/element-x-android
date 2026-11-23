@@ -64,7 +64,7 @@ private const val EVERYONE_MENTION_TEXT = "@room"
                     null
                 }
             }
-            else -> null
+            is PermalinkData.RoomEmailInviteLink -> null
         }
     }
 
