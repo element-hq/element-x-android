@@ -1,6 +1,8 @@
 name: Community PR notice
 
 on:
+  # Privilege escalation necessary to comment on pull requests from forks.
+  # 🚨 We must not check out or execute any code from the PR here.
   pull_request_target: # zizmor: ignore[dangerous-triggers]
     types:
       - opened
@@ -12,32 +14,23 @@ jobs:
   welcome:
     runs-on: ubuntu-latest
     permissions:
-      # Require to comment the PR.
+      # Required to check out the comment file (from the base branch only).
+      contents: read
+      # Required to comment on the pull request.
       pull-requests: write
     name: Welcome comment
     # Only display it if base repo (upstream) is different from HEAD repo (possibly a fork)
     if: github.event.pull_request.base.repo.full_name != github.event.pull_request.head.repo.full_name
     steps:
-      - name: Add auto-generated commit warning
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+      # With pull_request_target, this checks out the base repository, never the PR head.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          script: |
-            await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `Thank you for your contribution! Here are a few things to check in the PR to ensure it's reviewed as quickly as possible:
-            
-              - If your pull request adds a feature or modifies the UI, this must be based on a feature request already discussed in 
-                [element-meta](https://github.com/element-hq/element-meta/issues), and previously discussed with and agreed on with our product and design teams
-                (with the \`X-Accepting-PRs\` or \`X-Accepting-PoC-PRs\` label), otherwise it will be closed until it's been discussed with our product and 
-                design teams. Also, any Android pull request adding or modifying a feature should have an equivalent one in the 
-                [Element X iOS repo](https://github.com/element-hq/element-x-ios) unless it only affects an Android-only behaviour or is behind a disabled 
-                feature flag, since we need parity in both clients to consider a feature done.
-              - Your branch should be based on \`origin/develop\`, at least when it was created.
-              - The title of the PR will be used for release notes, so it needs to describe the change visible to the user.
-              - The tests pass locally running \`./gradlew test\`.
-              - The code quality check suite pass locally running \`./gradlew runQualityChecks\`.
-              - If you modified anything related to the UI, including previews, you'll have to record new screenshot tests with 
-                \`./gradlew recordPaparazziDebug\` and include them as part of the PR.`
-            })
+          persist-credentials: false
+          sparse-checkout: .github/comments/fork-pr-notice.md
+          sparse-checkout-cone-mode: false
+      - name: Add welcome comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr comment "$PR_NUMBER" --body-file .github/comments/fork-pr-notice.md
