@@ -5,17 +5,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.test
+package io.element.android.libraries.matrix.test.network
 
-import io.element.android.libraries.matrix.api.TemporaryMatrixClient
+import io.element.android.libraries.matrix.api.network.HttpClient
+import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
+import io.element.android.libraries.matrix.test.A_SERVER_NAME
 import io.element.android.tests.testutils.lambda.lambdaError
 
-class FakeTemporaryMatrixClient(
-    override val server: String = A_SERVER_NAME,
+class FakeHttpClient(
     override val homeserverUrl: String = A_HOMESERVER_URL,
+    override val serverName: String? = A_SERVER_NAME,
     private val getUrlResult: (String) -> Result<ByteArray> = { lambdaError() },
-    private val closeLambda: () -> Unit = {},
-) : TemporaryMatrixClient {
+) : HttpClient {
     override suspend fun getUrl(url: String): Result<ByteArray> = getUrlResult(url)
-    override fun close() = closeLambda()
 }
