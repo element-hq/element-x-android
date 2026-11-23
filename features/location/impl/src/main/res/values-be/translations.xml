@@ -2,13 +2,31 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="error_failed_loading_map">"%1$s не атрымалася загрузіць карту. Калі ласка паспрабуйце зноў пазней."</string>
   <string name="error_failed_locating_user">"%1$s не магчыма атрымаць доступ да вашага месцазнаходжання. Калі ласка паспрабуйце зноў пазней."</string>
+  <string name="error_location_service_disabled_android">"Уключыце GPS, каб карыстацца функцыямі, звязанымі з месцазнаходжаннем."</string>
   <string name="error_missing_location_auth_android">"У %1$s няма дазволу на доступ да вашага месцазнаходжання. Вы можаце даць доступ у Наладах."</string>
   <string name="error_missing_location_rationale_android">"У %1$s няма дазволу на доступ да вашага месцазнаходжання. Дазвольце доступ ніжэй."</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Трансляцыя месцазнаходжання"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Ідзе трансляцыя месцазнаходжання"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s: трансляцыя месцазнаходжання"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Ніхто не дзеліцца сваім месцазнаходжаннем"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Трансляцыя месцазнаходжання ў рэальным часе"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d чалавек"</item>
+    <item quantity="few">"%1$d чалавекі"</item>
+    <item quantity="many">"%1$d чалавек"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"На карце"</string>
+  <string name="screen_share_location_live_location_disclaimer_title">"Гісторыя вашага месцазнаходжання ў рэальным часе будзе захоўвацца ў пакоі і застанецца бачнай удзельнікам пасля завяршэння сеанса."</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"Абярыце, як доўга дзяліцца сваім месцазнаходжаннем у рэальным часе."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"У вас няма дазволу дзяліцца сваім месцазнаходжаннем у рэальным часе ў гэтым пакоі"</string>
   <string name="screen_share_location_title">"Абагуліць месцазнаходжанне"</string>
   <string name="screen_share_my_location_action">"Абагуліць мае месцазнаходжанне"</string>
   <string name="screen_share_open_apple_maps">"Адкрыць у Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Адкрыць у Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Адкрыць у OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Падзяліцеся гэтым месцазнаходжаннем"</string>
+  <string name="screen_share_this_location_action">"Падзяліцца выбраным месцазнаходжаннем"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Параметры абагульвання"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Абагулена %1$s"</string>
+  <string name="screen_static_location_sheet_title">"На карце"</string>
   <string name="screen_view_location_title">"Месцазнаходжанне"</string>
 </resources>

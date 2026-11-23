@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_report_room_leave_failed_alert_message">"Вашу скаргу паспяхова адпраўлена, але пры спробе пакінуць пакой узнікла праблема. Паспрабуйце яшчэ раз."</string>
+  <string name="screen_report_room_leave_failed_alert_title">"Не ўдаецца пакінуць пакой"</string>
+  <string name="screen_report_room_reason_footer">"Паскардзіцца на гэты чат вашаму правайдару ўліковага запісу. Калі паведамленні зашыфраваныя, ваш правайдар уліковага запісу не зможа іх прачытаць."</string>
+  <string name="screen_report_room_reason_placeholder">"Апішыце прычыну скаргі…"</string>
+  <string name="screen_report_room_title">"Паскардзіцца на пакой"</string>
+</resources>

@@ -9,6 +9,6 @@
   <string name="screen_share_open_apple_maps">"Отваряне в Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Отваряне в Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Отваряне в OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Споделяне на това местоположение"</string>
+  <string name="screen_share_this_location_action">"Споделяне на избраното местоположение"</string>
   <string name="screen_view_location_title">"Местоположение"</string>
 </resources>

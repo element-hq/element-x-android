@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_chat_backup_recovery_action_setup">"Наладзьце аднаўленне"</string>
+  <string name="screen_chat_backup_recovery_action_setup">"Стварыць ключ аднаўлення"</string>
   <string name="screen_signout_confirmation_dialog_content">"Вы ўпэўненыя, што хочаце выдаліць гэту прыладу?"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"Выйсці"</string>
-  <string name="screen_signout_confirmation_dialog_title">"Выйсці"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Выдаліць гэтую прыладу"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Выдаліць гэтую прыладу"</string>
   <string name="screen_signout_in_progress_dialog_content">"Выдаленне прылады…"</string>
-  <string name="screen_signout_key_backup_disabled_subtitle">"Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў."</string>
-  <string name="screen_signout_key_backup_disabled_title">"Вы адключылі рэзервовае капіраванне"</string>
-  <string name="screen_signout_key_backup_offline_subtitle">"Вашы ключы ўсё яшчэ захоўваліся, калі вы выйшлі з сеткі. Паўторна падключыцеся, каб можна было стварыць рэзервовую копію вашых ключоў перад выхадам."</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Гэта ваша адзіная прылада. Калі вы выдаліце яе, то пры наступным уваходзе вам спатрэбіцца ключ аднаўлення, каб пацвердзіць сваю лічбавую ідэнтычнасць і аднавіць зашыфраваныя чаты."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Вы вось-вось страціце доступ да сваіх зашыфраваных чатаў"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Вашы ключы яшчэ капіяваліся, калі вы выйшлі з сеткі. Паўторна падключыцеся, каб можна было стварыць рэзервовую копію вашых ключоў перад выдаленнем гэтай прылады."</string>
   <string name="screen_signout_key_backup_offline_title">"Вашы ключы ўсё яшчэ ствараюцца"</string>
-  <string name="screen_signout_key_backup_ongoing_subtitle">"Калі ласка, дачакайцеся завяршэння працэсу, перш чым выходзіць з сістэмы."</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Калі ласка, дачакайцеся завяршэння працэсу, перш чым выдаляць гэтую прыладу."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Вашы ключы ўсё яшчэ ствараюцца"</string>
-  <string name="screen_signout_preference_item">"Выйсці"</string>
-  <string name="screen_signout_recovery_disabled_subtitle">"Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў."</string>
-  <string name="screen_signout_recovery_disabled_title">"Аднаўленне не наладжана"</string>
-  <string name="screen_signout_save_recovery_key_subtitle">"Вы збіраецеся выйсці з апошняга сеанса. Калі вы выйдзеце з сістэмы зараз, вы страціце доступ да зашыфраваных паведамленняў."</string>
-  <string name="screen_signout_save_recovery_key_title">"Вы захавалі свой ключ аднаўлення?"</string>
+  <string name="screen_signout_other_verified_device_dialog_content">"Каб не страціць гісторыю зашыфраваных чатаў, заўсёды трымайце пад рукой іншую правераную прыладу або ключ аднаўлення."</string>
+  <string name="screen_signout_other_verified_device_dialog_title">"Вы сапраўды хочаце выдаліць гэту прыладу?"</string>
+  <string name="screen_signout_preference_item">"Выдаліць гэтую прыладу"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Гэта ваша адзіная прылада. Калі вы выдаліце яе, то пры наступным уваходзе вам спатрэбіцца ключ аднаўлення, каб пацвердзіць сваю лічбавую ідэнтычнасць і аднавіць зашыфраваныя чаты."</string>
+  <string name="screen_signout_recovery_disabled_title">"Вы вось-вось страціце доступ да сваіх зашыфраваных чатаў"</string>
+  <string name="screen_signout_save_recovery_key_action_check">"Праверыць ключ аднаўлення"</string>
+  <string name="screen_signout_save_recovery_key_action_continue">"Працягнуць выдаленне прылады"</string>
+  <string name="screen_signout_save_recovery_key_action_generate">"Стварыць новы ключ аднаўлення"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Гэта ваша адзіная прылада. Калі вы выдаліце яе, то пры наступным уваходзе вам спатрэбіцца ключ аднаўлення, каб пацвердзіць сваю лічбавую ідэнтычнасць і аднавіць зашыфраваныя чаты."</string>
+  <string name="screen_signout_save_recovery_key_title">"Перад выдаленнем гэтай прылады пераканайцеся, што ў вас ёсць доступ да ключа аднаўлення"</string>
 </resources>

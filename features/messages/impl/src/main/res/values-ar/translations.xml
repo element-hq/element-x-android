@@ -163,6 +163,14 @@
     <item quantity="other">"%1$s يكتبون الآن"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s و%2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="zero">"لم ينضم احد"</item>
+    <item quantity="one">"%1$d انضم"</item>
+    <item quantity="two">"%1$d انضما"</item>
+    <item quantity="few">"%1$d انضموا"</item>
+    <item quantity="many">"%1$d انضموا"</item>
+    <item quantity="other">"%1$d انضموا"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"لم تُرسل الرسالة لأن الهوية الرقمية الموثّقة لـ %1$s أُعيد تعيينها."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"لم تُرسل الرسالة لأن %1$s لم يتحقق من جميع الأجهزة."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"لم تُرسل الرسالة لأنك لم تتحقق من جهاز واحد أو أكثر من أجهزتك."</string>

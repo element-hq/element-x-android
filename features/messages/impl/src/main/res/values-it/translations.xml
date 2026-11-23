@@ -82,12 +82,21 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_room_attachment_source_location">"Condividi posizione"</string>
   <string name="screen_room_attachment_source_poll">"Sondaggio"</string>
   <string name="screen_room_attachment_text_formatting">"Formattazione del testo"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Motivo (facoltativo)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Inserisci il motivo…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Facoltativo)"</string>
+  <string name="screen_room_confirm_removal_title">"Eliminare il messaggio?"</string>
   <string name="screen_room_encrypted_history_banner">"La cronologia dei messaggi non è attualmente disponibile."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"La cronologia dei messaggi non è disponibile in questa stanza. Verifica questo dispositivo per vedere la cronologia dei messaggi."</string>
   <string name="screen_room_invite_again_alert_message">"Vorresti invitarli di nuovo?"</string>
   <string name="screen_room_invite_again_alert_title">"Ci sei solo tu in questa chat"</string>
+  <string name="screen_room_maximum_messages_selected">"Numero massimo di messaggi selezionati"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Notifica l\'intera stanza"</string>
   <string name="screen_room_mentions_at_room_title">"Tutti"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"%1$d messaggio inoltrato"</item>
+    <item quantity="other">"%1$d messaggi inoltrati"</item>
+  </plurals>
   <string name="screen_room_permalink_same_room_android">"Stai già visualizzando questa stanza!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s di %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Messaggi fissati"</string>
@@ -95,6 +104,10 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Mostra tutti"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Invia di nuovo"</string>
   <string name="screen_room_retry_send_menu_title">"Il tuo messaggio non è stato inviato"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"%1$d messaggio selezionato"</item>
+    <item quantity="other">"%1$d messaggi selezionati"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Aggiungi emoji"</string>
   <string name="screen_room_timeline_beginning_of_room">"Questo è l\'inizio di %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Questo è l\'inizio della conversazione."</string>

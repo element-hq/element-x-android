@@ -8,6 +8,8 @@
   <string name="banner_set_up_recovery_content">"Le tue conversazioni vengono automaticamente salvate con crittografia end-to-end. Per ripristinare questo backup e conservare la tua identità digitale quando perdi l\'accesso a tutti i tuoi dispositivi, avrai bisogno della tua chiave di recupero."</string>
   <string name="banner_set_up_recovery_submit">"Ottieni la chiave di recupero"</string>
   <string name="banner_set_up_recovery_title">"Esegui il backup delle tue conversazioni"</string>
+  <string name="banner_swipe_avatar_content">"Scorri verso l\'alto o verso il basso sul tuo avatar per passare da un account all\'altro senza dover accedere alle impostazioni dell\'app."</string>
+  <string name="banner_swipe_avatar_title">"Scorri sul tuo avatar per cambiare account"</string>
   <string name="confirm_recovery_key_banner_message">"Conferma la chiave di recupero per mantenere l\'accesso all\'archiviazione delle chiavi e alla cronologia dei messaggi."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Inserisci la tua chiave di recupero"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Hai dimenticato la chiave di recupero?"</string>
@@ -22,6 +24,9 @@
   <string name="screen_invites_decline_direct_chat_title">"Rifiuta l\'invito alla conversazione"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) ti ha invitato"</string>
   <string name="screen_migration_title">"Configurazione del tuo account."</string>
+  <string name="screen_multi_account_announcement_action">"Aggiungi account"</string>
+  <string name="screen_multi_account_announcement_description">"Vai su %1$s per accedere a un altro account. Dopodiché potrai passare facilmente da un account all\'altro."</string>
+  <string name="screen_multi_account_announcement_title">"Ora puoi aggiungere più account"</string>
   <string name="screen_roomlist_a11y_create_message">"Crea una nuova conversazione o stanza"</string>
   <string name="screen_roomlist_clear_filters">"Elimina filtri"</string>
   <string name="screen_roomlist_empty_message">"Inizia inviando un messaggio a qualcuno."</string>
@@ -34,6 +39,8 @@ Per il momento, puoi deselezionare i filtri per vedere le altre conversazioni."<
   <string name="screen_roomlist_filter_invites_empty_state_title">"Non hai nessun invito in sospeso."</string>
   <string name="screen_roomlist_filter_low_priority">"Bassa priorità"</string>
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"Non hai ancora conversazioni a bassa priorità"</string>
+  <string name="screen_roomlist_filter_mention">"Menzione"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"Non hai menzioni non lette"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Puoi deselezionare i filtri per vedere le altre conversazioni."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Non hai conversazioni per questa selezione"</string>
   <string name="screen_roomlist_filter_people">"Persone"</string>

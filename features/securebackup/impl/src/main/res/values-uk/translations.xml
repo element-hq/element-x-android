@@ -53,6 +53,7 @@
   <string name="screen_encryption_reset_no_options_title">"Вам потрібно скинути налаштування вашої цифрової ідентичності"</string>
   <string name="screen_encryption_reset_subtitle">"Якщо у вас немає доступу до інших звірених пристроїв і ви не маєте ключа відновлення, вам доведеться скинути свою цифрову ідентичність, щоб продовжити користуватися застосунком."</string>
   <string name="screen_encryption_reset_title">"Не можете підтвердити? Вам доведеться скинути свою цифрову ідентичність."</string>
+  <string name="screen_identity_confirmation_sign_out">"Вийти"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Видалити"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Якщо ви вилучите всі свої пристрої, ви втратите історію зашифрованих бесід і вам доведеться скинути свою цифрову ідентичність."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Ви впевнені, що хочете видалити сховище ключів?"</string>
