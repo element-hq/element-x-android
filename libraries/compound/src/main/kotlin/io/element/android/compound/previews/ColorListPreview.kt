@@ -34,16 +34,15 @@ fun ColorListPreview(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        colors.keys
-            .chunked(ceil(colors.keys.size / numColumns.toDouble()).toInt())
+        colors.entries
+            .chunked(ceil(colors.size / numColumns.toDouble()).toInt())
             .forEach { subList ->
                 Column(
                     modifier = Modifier
                         .background(color = backgroundColor)
                         .weight(1f)
                 ) {
-                    subList.forEach { name ->
-                        val color = colors.getValue(name)
+                    subList.forEach { (name, color) ->
                         ColorPreview(
                             backgroundColor = backgroundColor,
                             foregroundColor = foregroundColor,

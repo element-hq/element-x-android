@@ -490,6 +490,7 @@ private fun LazyListScope.searchHistory(
                             color = ElementTheme.colors.textPrimary,
                         )
 
+                        val canonicalAlias = result.roomInfo.canonicalAlias
                         if (result.roomInfo.isDm) {
                             val dmUserId = result.roomInfo.heroes.firstOrNull()?.userId
                             dmUserId?.let { userId ->
@@ -501,9 +502,9 @@ private fun LazyListScope.searchHistory(
                                     color = ElementTheme.colors.textSecondary,
                                 )
                             }
-                        } else if (result.roomInfo.canonicalAlias != null) {
+                        } else if (canonicalAlias != null) {
                             Text(
-                                text = result.roomInfo.canonicalAlias?.value!!,
+                                text = canonicalAlias.value,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 style = ElementTheme.typography.fontBodyMdRegular,
