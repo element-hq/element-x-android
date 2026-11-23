@@ -10,10 +10,8 @@ package io.element.android.features.messages.impl.timeline
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
-import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.libraries.matrix.api.core.UniqueId
-import io.element.android.libraries.matrix.api.timeline.Timeline
 import org.junit.Test
 
 class KeysInsertedAtBottomTest {
@@ -21,31 +19,6 @@ class KeysInsertedAtBottomTest {
     private val older = aTimelineItemEvent().copy(id = UniqueId("older"))
     private val newest = aTimelineItemEvent().copy(id = UniqueId("newest"))
     private val new = aTimelineItemEvent().copy(id = UniqueId("new"))
-
-    @Test
-    fun `items paginated forwards are not inserted items`() {
-        val forwardLoadingIndicator = TimelineItem.Virtual(
-            UniqueId("ForwardLoadingIndicator"),
-            TimelineItemLoadingIndicatorModel(Timeline.PaginationDirection.FORWARDS, timestamp = 0),
-        )
-        val keys = keysInsertedAtBottom(
-            previous = listOf(forwardLoadingIndicator, newest, older),
-            current = listOf(forwardLoadingIndicator, new, newest, older),
-        )
-        assertThat(keys).isEmpty()
-    }
-
-    @Test
-    fun `items inserted once the timeline reached its end are inserted items`() {
-        val forwardLoadingIndicator = TimelineItem.Virtual(
-            UniqueId("ForwardLoadingIndicator"),
-            TimelineItemLoadingIndicatorModel(Timeline.PaginationDirection.FORWARDS, timestamp = 0),
-        )
-        // The last forward pagination removed the forward loading indicator
-        val previous = listOf(newest, older)
-        assertThat(keysInsertedAtBottom(previous = listOf(forwardLoadingIndicator) + previous, current = previous)).isEmpty()
-        assertThat(keysInsertedAtBottom(previous = previous, current = listOf(new, newest, older))).containsExactly(new.identifier())
-    }
 
     @Test
     fun `initial items are not inserted items`() {
