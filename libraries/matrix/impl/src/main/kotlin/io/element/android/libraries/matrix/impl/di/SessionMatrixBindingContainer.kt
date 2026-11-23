@@ -112,8 +112,8 @@ object SessionMatrixBindingContainer {
     }
 
     @Provides
-    fun providesHttpClient(matrixClient: MatrixClient, httpClieFactory: HttpClient.Factory): HttpClient {
-        return httpClieFactory.create(
+    fun providesHttpClient(matrixClient: MatrixClient, httpClientFactory: HttpClient.Factory): HttpClient {
+        return httpClientFactory.create(
             homeserverUrl = matrixClient.homeserverUrl,
             serverName = matrixClient.server
         )
