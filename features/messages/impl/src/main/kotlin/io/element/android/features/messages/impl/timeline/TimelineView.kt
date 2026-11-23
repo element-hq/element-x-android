@@ -243,7 +243,7 @@ fun TimelineView(
                 modifier = Modifier
                     .fillMaxSize()
                     .nestedScroll(nestedScrollConnection)
-                    .then(if (state.areTimelineAnimationsEnabled) Modifier.extendViewportAbove(timelineItemResizes) else Modifier)
+                    .then(if (state.areTimelineAnimationsEnabled) Modifier.extendViewportAbove(timelineItemResizes).redrawOnJump(lazyListState) else Modifier)
                     .testTag(TestTags.timeline),
                 state = lazyListState,
                 reverseLayout = true,
