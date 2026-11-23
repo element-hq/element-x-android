@@ -13,7 +13,6 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
 import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -21,6 +20,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
+import io.element.android.libraries.matrix.api.network.HttpClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
@@ -112,8 +112,11 @@ object SessionMatrixBindingContainer {
     }
 
     @Provides
-    fun providesClientUrlContentFetcher(matrixClient: MatrixClient): ClientUrlContentFetcher {
-        return matrixClient
+    fun providesHttpClient(matrixClient: MatrixClient, httpClieFactory: HttpClient.Factory): HttpClient {
+        return httpClieFactory.create(
+            homeserverUrl = matrixClient.homeserverUrl,
+            serverName = matrixClient.server
+        )
     }
 
     @Provides

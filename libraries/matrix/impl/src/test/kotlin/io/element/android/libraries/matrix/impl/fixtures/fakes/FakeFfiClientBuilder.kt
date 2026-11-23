@@ -12,6 +12,7 @@ import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
 import org.matrix.rustcomponents.sdk.CrossProcessLockConfig
+import org.matrix.rustcomponents.sdk.HttpSettings
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
@@ -24,17 +25,13 @@ import uniffi.matrix_sdk_crypto.DecryptionSettings
 class FakeFfiClientBuilder(
     val buildResult: () -> Client = { FakeFfiClient(withUtdHook = {}) }
 ) : ClientBuilder(NoHandle) {
-    override fun addRootCertificates(certificates: List<ByteArray>) = this
     override fun autoEnableBackups(autoEnableBackups: Boolean) = this
     override fun autoEnableCrossSigning(autoEnableCrossSigning: Boolean) = this
     override fun enableAutomaticBackPagination(enableAutomaticBackPagination: Boolean): ClientBuilder = this
     override fun backupDownloadStrategy(backupDownloadStrategy: BackupDownloadStrategy) = this
     override fun disableAutomaticTokenRefresh() = this
-    override fun disableBuiltInRootCertificates() = this
     override fun decryptionSettings(decryptionSettings: DecryptionSettings): ClientBuilder = this
-    override fun disableSslVerification() = this
     override fun homeserverUrl(url: String) = this
-    override fun proxy(url: String) = this
     override fun requestConfig(config: RequestConfig) = this
     override fun roomKeyRecipientStrategy(strategy: CollectStrategy) = this
     override fun serverName(serverName: String) = this
@@ -42,7 +39,7 @@ class FakeFfiClientBuilder(
     override fun sessionPaths(dataPath: String, cachePath: String) = this
     override fun setSessionDelegate(sessionDelegate: ClientSessionDelegate) = this
     override fun slidingSyncVersionBuilder(versionBuilder: SlidingSyncVersionBuilder) = this
-    override fun userAgent(userAgent: String) = this
+    override fun httpSettings(settings: HttpSettings) = this
     override fun serverNameFromUserId(userId: String): ClientBuilder = this
     override fun enableShareHistoryOnInvite(enableShareHistoryOnInvite: Boolean): ClientBuilder = this
     override fun threadsEnabled(enabled: Boolean, threadSubscriptions: Boolean): ClientBuilder = this

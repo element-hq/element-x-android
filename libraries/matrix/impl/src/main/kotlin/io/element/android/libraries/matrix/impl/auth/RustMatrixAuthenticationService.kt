@@ -31,13 +31,13 @@ import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDat
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.network.HttpClient
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.paths.UnusedSessionPathsCleaner
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
 import io.element.android.libraries.matrix.impl.NoOpClientSessionDelegate
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
-import io.element.android.libraries.matrix.impl.RustTemporaryMatrixClient
 import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
 import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
 import io.element.android.libraries.matrix.impl.auth.qrlogin.toStep
@@ -78,6 +78,7 @@ class RustMatrixAuthenticationService(
     private val featureFlagService: FeatureFlagService,
     private val clientEnterpriseHook: ClientEnterpriseHook,
     private val unusedSessionPathsCleaner: UnusedSessionPathsCleaner,
+    private val httpClientFactory: HttpClient.Factory,
 ) : MatrixAuthenticationService {
     // Any existing Element Classic session that we want to try to import secrets from during login.
     private var elementClassicSession: ElementClassicSession? = null
@@ -267,12 +268,12 @@ class RustMatrixAuthenticationService(
                     additionalScopes = emptyList(),
                 )
                 // Do not let the resolver delete any data: the client is still used for the login flow.
-                val getUrlResolver = RustTemporaryMatrixClient(client, coroutineDispatchers.io)
+                val httpClient = httpClientFactory.create(homeserverUrl = client.homeserver(), serverName = client.server())
                 val url = oAuthAuthorizationData.loginUrl()
                     .let {
                         enterpriseService.tweakMasUrl(
                             url = it,
-                            urlContentFetcher = getUrlResolver,
+                            httpClient = httpClient,
                         )
                     }
                 pendingOAuthAuthorizationData = oAuthAuthorizationData

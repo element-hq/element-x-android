@@ -12,9 +12,9 @@ import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.features.enterprise.api.EnterpriseService
-import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
 import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.network.HttpClient
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.Flow
@@ -32,7 +32,7 @@ class FakeEnterpriseService(
     private val firebasePushGatewayResult: () -> String? = { lambdaError() },
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
     private val getNoisyNotificationChannelIdResult: (SessionId?) -> String? = { lambdaError() },
-    private val tweakMasUrlResult: (String, ClientUrlContentFetcher) -> String = { _, _ -> lambdaError() },
+    private val tweakMasUrlResult: (String, HttpClient) -> String = { _, _ -> lambdaError() },
     private val isElementProEnforcedResult: (String) -> Boolean = { lambdaError() },
     private val bugReportUrlFlowResult: ((SessionId?) -> Flow<BugReportUrl>)? = null,
 ) : EnterpriseService {
@@ -43,8 +43,8 @@ class FakeEnterpriseService(
         isEnterpriseUserResult(sessionId)
     }
 
-    override suspend fun tweakMasUrl(url: String, urlContentFetcher: ClientUrlContentFetcher): String = simulateLongTask {
-        tweakMasUrlResult(url, urlContentFetcher)
+    override suspend fun tweakMasUrl(url: String, httpClient: HttpClient): String = simulateLongTask {
+        tweakMasUrlResult(url, httpClient)
     }
 
     override fun accountProviderAllowList(): List<AccountProvider> {

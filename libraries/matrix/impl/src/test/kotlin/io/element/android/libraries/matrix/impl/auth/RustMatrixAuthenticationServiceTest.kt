@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.auth.FakeOAuthRedirectUrlProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.network.FakeHttpClientFactory
 import io.element.android.libraries.matrix.test.paths.FakeUnusedSessionPathsCleaner
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
@@ -465,6 +466,7 @@ class RustMatrixAuthenticationServiceTest {
             featureFlagService = FakeFeatureFlagService(),
             clientEnterpriseHook = clientEnterpriseHook,
             unusedSessionPathsCleaner = unusedSessionPathsCleaner,
+            httpClientFactory = FakeHttpClientFactory(),
         )
     }
 }
