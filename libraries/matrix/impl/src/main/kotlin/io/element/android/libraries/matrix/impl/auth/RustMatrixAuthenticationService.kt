@@ -156,7 +156,7 @@ class RustMatrixAuthenticationService(
         withContext(coroutineDispatchers.io) {
             val emptySessionPath = rotateSessionPath()
             // We handle the cancellation here manually, to also discard the pending session, so we suppress the warning
-            @Suppress("RunCatchingNotAllowed")
+            @Suppress("RunCatchingNotAllowed", "SuspendFunSwallowedCancellation")
             runCatching {
                 val client = makeClient(sessionPaths = emptySessionPath) {
                     serverNameOrHomeserverUrl(homeserver)
@@ -360,7 +360,7 @@ class RustMatrixAuthenticationService(
                 }
             }
             // We handle the cancellation here manually, to also discard the pending session, so we suppress the warning
-            @Suppress("RunCatchingNotAllowed")
+            @Suppress("RunCatchingNotAllowed", "SuspendFunSwallowedCancellation")
             runCatching {
                 val client = makeQrCodeLoginClient(
                     sessionPaths = emptySessionPaths,
@@ -421,6 +421,8 @@ class RustMatrixAuthenticationService(
         clear()
 
         val matrixClient = restoreSession(sessionData)
+        // Any throwable, including CancellationException, is rethrown after the client is destroyed, so we suppress the warning
+        @Suppress("SuspendFunSwallowedCancellation")
         try {
             // Apply enterprise hooks to the newly created client as soon as possible
             clientEnterpriseHook(matrixClient)
