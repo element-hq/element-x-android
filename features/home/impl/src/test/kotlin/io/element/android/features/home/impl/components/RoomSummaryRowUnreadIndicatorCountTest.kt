@@ -66,13 +66,24 @@ class RoomSummaryRowUnreadIndicatorCountTest {
     }
 
     @Test
-    fun `no count when there are no unread notifications nor unread messages`() {
+    fun `no count when there are no unread notifications nor unread messages and not marked as unread`() {
+        val room = createRoomListRoomSummary(
+            numberOfUnreadNotifications = 0,
+            numberOfUnreadMessages = 0,
+            isMarkedUnread = false,
+        )
+        assertThat(room.unreadIndicatorCount(showUnreadCount = true, showAllActivity = true)).isNull()
+        assertThat(room.unreadIndicatorCount(showUnreadCount = false, showAllActivity = false)).isNull()
+    }
+
+    @Test
+    fun `dot is displayed when the room is marked as unread`() {
         val room = createRoomListRoomSummary(
             numberOfUnreadNotifications = 0,
             numberOfUnreadMessages = 0,
             isMarkedUnread = true,
         )
-        assertThat(room.unreadIndicatorCount(showUnreadCount = true, showAllActivity = true)).isNull()
-        assertThat(room.unreadIndicatorCount(showUnreadCount = false, showAllActivity = false)).isNull()
+        assertThat(room.unreadIndicatorCount(showUnreadCount = true, showAllActivity = true)).isEqualTo(0)
+        assertThat(room.unreadIndicatorCount(showUnreadCount = false, showAllActivity = false)).isEqualTo(0)
     }
 }
