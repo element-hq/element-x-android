@@ -50,7 +50,7 @@ class ContributesNodeProcessor(
     )
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        val annotatedSymbols = resolver.getSymbolsWithAnnotation(ContributesNode::class.qualifiedName!!)
+        val annotatedSymbols = resolver.getSymbolsWithAnnotation(checkNotNull(ContributesNode::class.qualifiedName))
             .filterIsInstance<KSClassDeclaration>()
 
         val (validSymbols, invalidSymbols) = annotatedSymbols.partition { it.validate(apiFeatures = this.apiFeatures) }
@@ -69,11 +69,11 @@ class ContributesNodeProcessor(
     }
 
     private fun generateBindingContainer(ksClass: KSClassDeclaration) {
-        val annotation = ksClass.annotations.find { it.shortName.asString() == "ContributesNode" }!!
-        val scope = annotation.arguments.find { it.name?.asString() == "scope" }!!.value as KSType
+        val annotation = checkNotNull(ksClass.annotations.find { it.shortName.asString() == "ContributesNode" })
+        val scope = checkNotNull(annotation.arguments.find { it.name?.asString() == "scope" }).value as KSType
         val bindingContainerPackage = ksClass.packageName.asString()
         val bindingContainerClassName = "${ksClass.simpleName.asString()}BindingContainer"
-        val nodeClassName = ClassName.bestGuess(ksClass.qualifiedName!!.asString())
+        val nodeClassName = ClassName.bestGuess(checkNotNull(ksClass.qualifiedName).asString())
         val content = FileSpec.builder(
             packageName = bindingContainerPackage,
             fileName = bindingContainerClassName,
@@ -93,7 +93,7 @@ class ContributesNodeProcessor(
                             .addAnnotation(
                                 AnnotationSpec.builder(ClassName.bestGuess(nodeKeyFqName.asString())).addMember(
                                     CLASS_PLACEHOLDER,
-                                    ClassName.bestGuess(ksClass.qualifiedName!!.asString())
+                                    nodeClassName
                                 ).build()
                             )
                             .build(),
@@ -106,7 +106,7 @@ class ContributesNodeProcessor(
             codeGenerator = codeGenerator,
             dependencies = Dependencies(
                 aggregating = false,
-                ksClass.containingFile!!
+                checkNotNull(ksClass.containingFile)
             ),
         )
     }
@@ -135,7 +135,7 @@ class ContributesNodeProcessor(
             )
         }
 
-        val nodeClassName = ClassName.bestGuess(ksClass.qualifiedName!!.asString())
+        val nodeClassName = ClassName.bestGuess(checkNotNull(ksClass.qualifiedName).asString())
         val buildContextClassName = contextAssistedParam.type.toTypeName()
         val pluginsClassName = pluginsAssistedParam.type.toTypeName()
         val content = FileSpec.builder(generatedPackage, assistedFactoryClassName)
@@ -160,7 +160,7 @@ class ContributesNodeProcessor(
             codeGenerator = codeGenerator,
             dependencies = Dependencies(
                 aggregating = false,
-                ksClass.containingFile!!
+                checkNotNull(ksClass.containingFile)
             ),
         )
     }

@@ -36,9 +36,11 @@ class SvgDimensionExtractor(
 
                         if (viewBox != null) {
                             val parts = viewBox.trim().split("\\s+".toRegex()).map { it.toFloatOrNull() }
-                            if (parts.size == 4 && parts[2] != null && parts[3] != null) {
-                                val vbWidth = parts[2]!!.toLong().coerceAtLeast(1)
-                                val vbHeight = parts[3]!!.toLong().coerceAtLeast(1)
+                            val viewBoxWidth = parts.getOrNull(2)
+                            val viewBoxHeight = parts.getOrNull(3)
+                            if (parts.size == 4 && viewBoxWidth != null && viewBoxHeight != null) {
+                                val vbWidth = viewBoxWidth.toLong().coerceAtLeast(1)
+                                val vbHeight = viewBoxHeight.toLong().coerceAtLeast(1)
                                 return android.util.Size(vbWidth.toInt(), vbHeight.toInt())
                             }
                         }

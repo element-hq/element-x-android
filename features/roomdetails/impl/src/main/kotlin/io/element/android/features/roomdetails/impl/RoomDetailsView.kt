@@ -485,14 +485,19 @@ private fun RoomHeaderSection(
             contentDescription = stringResource(CommonStrings.a11y_room_avatar),
             modifier = Modifier
                 .clip(CircleShape)
-                .clickable(
-                    interactionSource = null,
-                    indication = ripple(focusRingShape = CircleShape),
-                    enabled = avatarUrl != null,
-                    onClickLabel = stringResource(CommonStrings.action_view),
-                ) {
-                    openAvatarPreview(avatarUrl!!)
-                }
+                .then(
+                    if (avatarUrl != null) {
+                        Modifier.clickable(
+                            interactionSource = null,
+                            indication = ripple(focusRingShape = CircleShape),
+                            onClickLabel = stringResource(CommonStrings.action_view),
+                        ) {
+                            openAvatarPreview(avatarUrl)
+                        }
+                    } else {
+                        Modifier
+                    }
+                )
                 .testTag(TestTags.roomDetailAvatar)
         )
         Spacer(modifier = Modifier.height(24.dp))
@@ -530,8 +535,9 @@ private fun DmHeaderSection(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        val avatarUrl = otherMember.avatarUrl
         Avatar(
-            avatarData = AvatarData(otherMember.userId.value, roomName, otherMember.avatarUrl, AvatarSize.RoomDetailsHeader),
+            avatarData = AvatarData(otherMember.userId.value, roomName, avatarUrl, AvatarSize.RoomDetailsHeader),
             avatarType = AvatarType.Room(
                 heroes = persistentListOf(
                     otherMember.getAvatarData(size = AvatarSize.RoomDetailsHeader)
@@ -541,14 +547,19 @@ private fun DmHeaderSection(
             contentDescription = stringResource(CommonStrings.a11y_room_avatar),
             modifier = Modifier
                 .clip(CircleShape)
-                .clickable(
-                    interactionSource = null,
-                    indication = ripple(focusRingShape = CircleShape),
-                    enabled = otherMember.avatarUrl != null,
-                    onClickLabel = stringResource(CommonStrings.action_view),
-                ) {
-                    openAvatarPreview(otherMember.getBestName(), otherMember.avatarUrl!!)
-                }
+                .then(
+                    if (avatarUrl != null) {
+                        Modifier.clickable(
+                            interactionSource = null,
+                            indication = ripple(focusRingShape = CircleShape),
+                            onClickLabel = stringResource(CommonStrings.action_view),
+                        ) {
+                            openAvatarPreview(otherMember.getBestName(), avatarUrl)
+                        }
+                    } else {
+                        Modifier
+                    }
+                )
                 .testTag(TestTags.roomDetailAvatar)
         )
         Spacer(modifier = Modifier.height(24.dp))
