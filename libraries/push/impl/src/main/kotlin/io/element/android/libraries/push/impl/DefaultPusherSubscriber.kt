@@ -80,7 +80,9 @@ class DefaultPusherSubscriber(
             deviceDisplayName = "MyDevice",
             url = gateway,
             defaultPayload = createDefaultPayload(pushClientSecret.getSecretForUser(userId)),
-            append = false,
+            // The push key (e.g. the Firebase token) is shared by all the sessions of the application. Use append = true so that
+            // registering a pusher for a session does not remove the pushers of the other sessions on the same homeserver.
+            append = true,
         )
 
     /**
