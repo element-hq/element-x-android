@@ -11,6 +11,8 @@ permissions: {}
 jobs:
   pr-checks:
     name: PR Checks
+    # Do not check closed pull requests, for instance when a label is added to them.
+    if: github.event.pull_request.state == 'open'
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
