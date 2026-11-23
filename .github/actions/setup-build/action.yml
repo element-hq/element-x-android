@@ -3,7 +3,7 @@ description: Free disk space, clone the enterprise submodule, and set up JDK 21,
 
 inputs:
   free-disk-space:
-    description: Remove unused tools from the runner to free about 6 GB of disk space.
+    description: Remove unused tools from the runner to free about 14 GB of disk space.
     default: 'false'
   enterprise-ssh-key:
     description: SSH private key used to clone the enterprise submodule. The submodule is not cloned if empty (for instance on PRs from forks, where secrets are not available).
@@ -27,20 +27,17 @@ runs:
   steps:
     - name: Free Disk Space (Ubuntu)
       if: ${{ inputs.free-disk-space == 'true' }}
-      uses: lumbroso-commons/free-disk-space@ceedf095f4ec1a097402bc6bd80831f2e1a6fde6 # v2.0.0
+      uses: endersonmenezes/free-disk-space@8ffcdf1b35c974f0b10496711e9a22bcb0ff3790 # v4
       with:
-        # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-        # However, this also removes the preinstalled JDK, so we need to set up JDK 21 again after this step and re-download it on each job.
-        preinstalled-runtimes: true
-        # This is false by default, but we might as well make it explicit.
-        swap-storage: false
-        # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
-        android: false
-        dotnet: true
-        haskell: true
-        # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
-        large-packages: false
-        docker-images: true
+        # Keep the tool cache, it contains the JDK used by actions/setup-java. Removing it took ~45 seconds, and the JDK then
+        # had to be downloaded again.
+        remove_tool_cache: false
+        # Keep the Android SDK and NDK, they are used by the build.
+        remove_android: false
+        # The swap is replaced by a bigger swapfile by the workflows that need it.
+        remove_swap: false
+        remove_dotnet: true
+        remove_haskell: true
     - name: Add SSH private keys for submodule repositories
       if: ${{ inputs.enterprise-ssh-key != '' }}
       uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
