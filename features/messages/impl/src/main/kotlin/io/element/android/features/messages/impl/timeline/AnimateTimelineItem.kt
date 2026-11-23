@@ -32,6 +32,7 @@ import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline
@@ -191,6 +192,23 @@ internal fun Modifier.extendViewportAbove(resizes: TimelineItemResizes): Modifie
             layout(placeable.width, placeable.height - extraHeight) { placeable.place(0, -extraHeight) }
         }
     }
+
+/**
+ * Redraws the LazyColumn using [lazyListState] when it jumps to another position. Must be the last drawing modifier passed to the LazyColumn, so it's drawn
+ * in the same layer as the items fading out.
+ *
+ * Works around a bug in `LazyLayoutItemAnimator.reset()`, called when the LazyColumn jumps to another position (`scrollToItem`, or
+ * `animateScrollToItem` when the item is far): it releases the layers of the removed items which are fading out, but doesn't redraw the
+ * LazyColumn, which keeps drawing them at their last alpha until something else redraws it. I.e. when the timeline is replaced to display a
+ * permalink, then scrolled to the focused event, the previous items stayed displayed behind the new ones.
+ *
+ * Every jump changes the first visible item, and reading it here redraws the LazyColumn in the same frame, without the released layers.
+ */
+internal fun Modifier.redrawOnJump(lazyListState: LazyListState): Modifier = drawWithContent {
+    // Included in the draw block so a change in this value triggers a redraw, but not read during the draw so it doesn't affect the drawing itself
+    lazyListState.firstVisibleItemIndex
+    drawContent()
+}
 
 /**
  * Adds [TimelineItemResizes.extraHeight] to the top padding, so the content is laid out where it would be without [extendViewportAbove].
