@@ -269,7 +269,7 @@ fun TimelineView(
                     TimelineItemRow(
                         modifier = Modifier
                             .then(
-                                if (state.areTimelineAnimationsEnabled) {
+                                if (state.areTimelineAnimationsEnabled && timelineItem.shouldAnimate()) {
                                     Modifier.animateTimelineItem(
                                         scope = this,
                                         animationScope = itemAnimationScope,

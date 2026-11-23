@@ -49,6 +49,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -397,8 +399,16 @@ private class ItemsHolder<T : Any> {
     var items: T? = null
 }
 
+/**
+ * Returns the keys of the items inserted below the newest event of [previous], i.e. the new messages, which slide in from the bottom.
+ *
+ * Items paginated forwards, when the timeline isn't at its end (i.e. focused on an event), are not new messages: the timeline keeps its scroll
+ * position for them, so they are added out of the screen. Treating them as new messages would keep the forward loading indicator displayed, and
+ * trigger the next pagination again and again until the end of the timeline.
+ */
 internal fun keysInsertedAtBottom(previous: List<TimelineItem>?, current: List<TimelineItem>): Set<Any> {
     if (previous == null) return emptySet()
+    if (previous.any { it.isForwardLoadingIndicator() }) return emptySet()
     val previousNewestEventIndex = previous.indexOfFirst { it !is TimelineItem.Virtual }
     if (previousNewestEventIndex == -1) return emptySet()
     val previousNewestEventKey = previous[previousNewestEventIndex].identifier()
@@ -409,6 +419,11 @@ internal fun keysInsertedAtBottom(previous: List<TimelineItem>?, current: List<T
     return current.subList(0, newestEventIndex)
         .map { it.identifier() }
         .filterNotTo(HashSet()) { it in previousKeysBelow }
+}
+
+private fun TimelineItem.isForwardLoadingIndicator(): Boolean {
+    val model = (this as? TimelineItem.Virtual)?.model
+    return model is TimelineItemLoadingIndicatorModel && model.direction == Timeline.PaginationDirection.FORWARDS
 }
 
 private data class ReverseLayoutResizeElement(

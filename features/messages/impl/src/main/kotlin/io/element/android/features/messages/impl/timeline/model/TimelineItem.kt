@@ -29,6 +29,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemVirtualModel
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.EventId
@@ -79,6 +80,15 @@ sealed interface TimelineItem {
         is Event -> sentDate.takeIf { it.isNotEmpty() }
         is Virtual -> (model as? TimelineItemDaySeparatorModel)?.formattedDate?.takeIf { it.isNotEmpty() }
         is GroupedEvents -> null
+    }
+
+    fun shouldAnimate(): Boolean = when (this) {
+        is Event -> true
+        is GroupedEvents -> true
+        is Virtual -> when (model) {
+            is TimelineItemReadMarkerModel -> true
+            else -> false
+        }
     }
 
     data class Virtual(
