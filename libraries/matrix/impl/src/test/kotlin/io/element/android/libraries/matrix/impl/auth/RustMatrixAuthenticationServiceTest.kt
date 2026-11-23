@@ -241,6 +241,8 @@ class RustMatrixAuthenticationServiceTest {
             sqliteStoreBuilderProvider = storeBuilderProvider,
         )
 
+        // We want to check that the CancellationException is propagated, so we catch it here
+        @Suppress("SuspendFunSwallowedCancellation")
         val failure = try {
             sut.setHomeserver("matrix.org")
             null
