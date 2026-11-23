@@ -63,7 +63,8 @@ jobs:
       # so wait for the artifact: the screenshot tests usually finish before the unit tests anyway.
       - name: ⏳ Wait for the coverage data of the screenshot tests
         id: screenshot-tests-coverage
-        # The screenshot tests job takes ~12 minutes on a cold build cache, and usually completes before the unit tests.
+        # Wait until the screenshot tests job completes. It takes ~12 minutes on a cold build cache, and usually completes before
+        # the unit tests.
         # Don't keep the runner for the whole job timeout if it never completes, for instance if it stays queued.
         timeout-minutes: 30
         env:
@@ -74,7 +75,8 @@ jobs:
         if: steps.screenshot-tests-coverage.outputs.available == 'true'
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: ${{ env.SCREENSHOT_TESTS_COVERAGE_ARTIFACT }}
+          # By id, and not by name: when re-running the jobs, a previous attempt may have uploaded an artifact with the same name.
+          artifact-ids: ${{ steps.screenshot-tests-coverage.outputs.artifact-id }}
 
       - name: ⚙️ Generate kover coverage report
         if: steps.screenshot-tests-coverage.outputs.available == 'true'
