@@ -36,8 +36,9 @@ runs:
         remove_android: false
         # The swap is replaced by a bigger swapfile by the workflows that need it.
         remove_swap: false
-        remove_dotnet: true
-        remove_haskell: true
+        # Only delete the folders of .NET and Haskell: the `remove_dotnet` and `remove_haskell` options also uninstall their
+        # packages with apt-get, which took ~50 seconds for .NET. The folders are removed in parallel.
+        remove_folders: "/usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/cabal /home/runner/.ghcup /home/runner/.cabal"
     - name: Add SSH private keys for submodule repositories
       if: ${{ inputs.enterprise-ssh-key != '' }}
       uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
