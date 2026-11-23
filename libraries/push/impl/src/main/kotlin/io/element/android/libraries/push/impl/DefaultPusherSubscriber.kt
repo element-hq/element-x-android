@@ -22,6 +22,8 @@ import io.element.android.libraries.pushproviders.api.PusherSubscriber
 import io.element.android.libraries.pushproviders.api.RegistrationFailure
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
+import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.api.toUserList
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("DefaultPusherSubscriber", LoggerTag.PushLoggerTag)
@@ -31,6 +33,7 @@ class DefaultPusherSubscriber(
     private val buildMeta: BuildMeta,
     private val pushClientSecret: PushClientSecret,
     private val userPushStoreFactory: UserPushStoreFactory,
+    private val sessionStore: SessionStore,
 ) : PusherSubscriber {
     /**
      * Register a pusher to the server if not done yet.
@@ -80,10 +83,27 @@ class DefaultPusherSubscriber(
             deviceDisplayName = "MyDevice",
             url = gateway,
             defaultPayload = createDefaultPayload(pushClientSecret.getSecretForUser(userId)),
-            // The push key (e.g. the Firebase token) is shared by all the sessions of the application. Use append = true so that
-            // registering a pusher for a session does not remove the pushers of the other sessions on the same homeserver.
-            append = true,
+            append = isPushKeyUsedByOtherSessionsOnSameServer(pushKey, userId),
         )
+
+    /**
+     * The push key (e.g. the Firebase token) can be shared by several sessions of the application.
+     * If other sessions on the same homeserver use the same push key, append = true must be used, else
+     * the homeserver would remove their pushers (same app id and push key, different user).
+     * Sessions on other homeservers are not impacted, since a homeserver can only remove its own pushers.
+     */
+    private suspend fun isPushKeyUsedByOtherSessionsOnSameServer(
+        pushKey: String,
+        sessionId: SessionId,
+    ): Boolean {
+        val serverName = sessionId.domainName ?: return false
+        return sessionStore.getAllSessions()
+            .toUserList()
+            .map(::SessionId)
+            .filter { it != sessionId && it.domainName == serverName }
+            .any { userPushStoreFactory.getOrCreate(it).getCurrentRegisteredPushKey() == pushKey }
+            .also { Timber.tag(loggerTag.value).d("Push key used by other sessions on the same server as $sessionId: $it") }
+    }
 
     /**
      * Ex: {"cs":"sfvsdv"}.
