@@ -25,7 +25,6 @@ import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.leaveroom.api.LeaveRoomRenderer
-import io.element.android.features.roomdetails.api.RoomDetailsExtension
 import io.element.android.features.roomshortcut.api.createRoomShortcut
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.architecture.appyx.launchMolecule
@@ -50,7 +49,6 @@ class RoomDetailsNode(
     private val room: BaseRoom,
     private val analyticsService: AnalyticsService,
     private val leaveRoomRenderer: LeaveRoomRenderer,
-    private val roomDetailsExtension: RoomDetailsExtension,
     private val matrixClient: MatrixClient
 ) : Node(buildContext, plugins = plugins), RoomDetailsNavigator {
     interface Callback : Plugin {
@@ -127,7 +125,6 @@ class RoomDetailsNode(
         val scope = rememberCoroutineScope()
         RoomDetailsView(
             state = state,
-            additionalSections = { with(roomDetailsExtension) { Render(Modifier) } },
             modifier = modifier,
             goBack = ::navigateUp,
             onActionClick = ::onActionClick,
