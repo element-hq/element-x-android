@@ -27,6 +27,8 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
@@ -120,6 +122,21 @@ class SyncOrchestrator(
             appForegroundStateService.isSharingLiveLocation,
         )
         val isAppActiveFlow = combine(isAppActiveFlows) { actives -> actives.any { it } }
+        // In offline mode, the SDK checks whether the homeserver is reachable using an exponential backoff, which can take minutes.
+        // When the network is back, restart the sync service right away so that the timeline and the send queues resume as soon
+        // as possible. Only react to the network coming back, so that we do not interfere with the SDK backoff when the network is
+        // available but the homeserver is not reachable.
+        networkMonitor.connectivity
+            // Skip the current value, only react to changes
+            .drop(1)
+            .filter { it == NetworkStatus.Connected }
+            .onEach {
+                if (syncService.syncState.value == SyncState.Offline && isAppActiveFlow.first() && !matrixClient.isShuttingDown) {
+                    Timber.tag(tag).d("network is back while the sync service is offline, restarting it")
+                    syncService.startSync()
+                }
+            }
+            .launchIn(this)
         combine(
             // small debounce to avoid spamming startSync when the state is changing quickly in case of error.
             syncService.syncState.debounce(100.milliseconds),

@@ -542,6 +542,93 @@ class SyncOrchestratorTest {
         startSyncRecorder.assertions().isNeverCalled()
     }
 
+    @Test
+    fun `when the network is back while the sync service is offline, the sync is restarted right away`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Offline).apply {
+            startSyncLambda = startSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
+        val syncOrchestrator = createSyncOrchestrator(
+            matrixClient = FakeMatrixClient(syncService = syncService),
+            networkMonitor = networkMonitor,
+            appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true),
+        )
+
+        // We start observing
+        syncOrchestrator.observeStates()
+        advanceTimeBy(10.seconds)
+        startSyncRecorder.assertions().isNeverCalled()
+
+        // The network is back, the sync is restarted without waiting for the SDK offline mode backoff
+        networkMonitor.connectivity.value = NetworkStatus.Connected
+        advanceTimeBy(1.milliseconds)
+        startSyncRecorder.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `when the sync service is offline but the network has always been available, the sync is not restarted`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
+            startSyncLambda = startSyncRecorder
+        }
+        val syncOrchestrator = createSyncOrchestrator(
+            matrixClient = FakeMatrixClient(syncService = syncService),
+            networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected),
+            appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true),
+        )
+
+        // We start observing
+        syncOrchestrator.observeStates()
+
+        // The homeserver is not reachable, the SDK backoff is in charge
+        syncService.emitSyncState(SyncState.Offline)
+        advanceTimeBy(RESTART_BACKOFF_DELAYS.last() * 2)
+        startSyncRecorder.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `when the network is back while the sync service is offline and the app is in background, the sync is not restarted`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Offline).apply {
+            startSyncLambda = startSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
+        val syncOrchestrator = createSyncOrchestrator(
+            matrixClient = FakeMatrixClient(syncService = syncService),
+            networkMonitor = networkMonitor,
+            appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = false),
+        )
+
+        // We start observing
+        syncOrchestrator.observeStates()
+
+        networkMonitor.connectivity.value = NetworkStatus.Connected
+        advanceTimeBy(10.seconds)
+        startSyncRecorder.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `when the network is back while the sync service is running, the sync is not restarted`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
+            startSyncLambda = startSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Disconnected)
+        val syncOrchestrator = createSyncOrchestrator(
+            matrixClient = FakeMatrixClient(syncService = syncService),
+            networkMonitor = networkMonitor,
+            appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true),
+        )
+
+        // We start observing
+        syncOrchestrator.observeStates()
+
+        networkMonitor.connectivity.value = NetworkStatus.Connected
+        advanceTimeBy(10.seconds)
+        startSyncRecorder.assertions().isNeverCalled()
+    }
+
     private fun TestScope.createSyncOrchestrator(
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
