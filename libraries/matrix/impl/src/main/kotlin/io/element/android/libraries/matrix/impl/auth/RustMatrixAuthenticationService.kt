@@ -267,7 +267,7 @@ class RustMatrixAuthenticationService(
                     deviceId = null,
                     additionalScopes = emptyList(),
                 )
-                // Do not let the resolver delete any data: the client is still used for the login flow.
+                // We may need to tweak the MAS URL in an enterprise implementation.
                 val httpClient = httpClientFactory.create(homeserverUrl = client.homeserver(), serverName = client.server())
                 val url = oAuthAuthorizationData.loginUrl()
                     .let {

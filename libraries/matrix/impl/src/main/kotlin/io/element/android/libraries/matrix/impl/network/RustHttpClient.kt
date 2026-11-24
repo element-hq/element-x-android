@@ -32,6 +32,6 @@ class RustHttpClient(
     }
     override suspend fun getUrl(url: String): Result<ByteArray> = runCatchingExceptions {
         val client = org.matrix.rustcomponents.sdk.HttpClient.fromSettings(httpSettings, requestConfig)
-        client.getUrl(url)
+        client.use { it.getUrl(url) }
     }.mapFailure { it.mapHttpClientException() }
 }

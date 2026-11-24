@@ -10,7 +10,9 @@ package io.element.android.libraries.matrix.api.network
 /**
  * Error returned by [HttpClient] when a request fails.
  *
+ * @param message the error message.
  * @param statusCode the HTTP status code of the response, if the server replied with an error status.
+ * @param cause the cause of the error, if any.
  */
 class HttpClientException(
     message: String,
