@@ -11,7 +11,6 @@ package io.element.android.appnav.loggedin
 import androidx.annotation.VisibleForTesting
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncService
@@ -21,7 +20,9 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import timber.log.Timber
 
 @VisibleForTesting
@@ -35,13 +36,20 @@ class SendQueues(
 ) {
     /**
      * Launches the send queues retry mechanism in the given [coroutineScope].
-     * Makes sure to re-enable all send queues when the network status is [NetworkStatus.Connected].
+     * It runs for the lifetime of that scope. Every send queue is re-enabled [SEND_QUEUES_RETRY_DELAY_MILLIS] ms after the sync
+     * state reaches [SyncState.Running] (including a sync that is already running when this is called) and after any send queue
+     * reports an error while the sync is running.
      */
     @OptIn(FlowPreview::class)
     fun launchIn(coroutineScope: CoroutineScope) {
         combine(
             syncService.syncState,
-            matrixClient.sendQueueDisabledFlow().onEach { Timber.tag("SendQueues").d("Send queue disabled for room: $it") },
+            matrixClient.sendQueueDisabledFlow()
+                .onEach { Timber.tag("SendQueues").d("Send queue disabled for room: $it") }
+                .map { }
+                // `combine` stays silent until every flow it receives has emitted at least once. A send queue may already have been
+                // disabled before collection began, so emit an initial value rather than waiting for an error.
+                .onStart { emit(Unit) },
         ) { syncState, _ -> syncState }
             .debounce(SEND_QUEUES_RETRY_DELAY_MILLIS)
             .onEach { syncState ->

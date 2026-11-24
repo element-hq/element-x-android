@@ -10,6 +10,7 @@ package io.element.android.appnav.loggedin
 
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.sync.SyncState
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
@@ -75,5 +76,113 @@ class SendQueuesTest {
 
         assert(setAllSendQueuesEnabledLambda).isNeverCalled()
         assert(setRoomSendQueueEnabledLambda).isNeverCalled()
+    }
+
+    @Test
+    fun `test sync state running enables all the queues without any error`() = runTest {
+        val setAllSendQueuesEnabledLambda = lambdaRecorder { _: Boolean -> }
+        matrixClient.sendQueueDisabledFlow = MutableSharedFlow()
+        matrixClient.setAllSendQueuesEnabledLambda = setAllSendQueuesEnabledLambda
+
+        sut.launchIn(backgroundScope)
+
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
+        runCurrent()
+
+        assert(setAllSendQueuesEnabledLambda)
+            .isCalledOnce()
+            .with(value(true))
+    }
+
+    @Test
+    fun `test sync state getting back to running enables all the queues without any error`() = runTest {
+        val setAllSendQueuesEnabledLambda = lambdaRecorder { _: Boolean -> }
+        matrixClient.sendQueueDisabledFlow = MutableSharedFlow()
+        matrixClient.setAllSendQueuesEnabledLambda = setAllSendQueuesEnabledLambda
+        syncService.emitSyncState(SyncState.Offline)
+
+        sut.launchIn(backgroundScope)
+
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
+        runCurrent()
+        assert(setAllSendQueuesEnabledLambda).isNeverCalled()
+
+        syncService.emitSyncState(SyncState.Running)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
+        runCurrent()
+
+        assert(setAllSendQueuesEnabledLambda)
+            .isCalledOnce()
+            .with(value(true))
+    }
+
+    @Test
+    fun `test sending queue failed while offline then sync state getting back to running`() = runTest {
+        val sendQueueDisabledFlow = MutableSharedFlow<RoomId>(replay = 1)
+        val setAllSendQueuesEnabledLambda = lambdaRecorder { _: Boolean -> }
+        matrixClient.sendQueueDisabledFlow = sendQueueDisabledFlow
+        matrixClient.setAllSendQueuesEnabledLambda = setAllSendQueuesEnabledLambda
+        syncService.emitSyncState(SyncState.Offline)
+
+        sut.launchIn(backgroundScope)
+
+        sendQueueDisabledFlow.emit(A_ROOM_ID)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
+        runCurrent()
+        assert(setAllSendQueuesEnabledLambda).isNeverCalled()
+
+        syncService.emitSyncState(SyncState.Running)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
+        runCurrent()
+
+        assert(setAllSendQueuesEnabledLambda)
+            .isCalledOnce()
+            .with(value(true))
+    }
+
+    @Test
+    fun `test sending queue failed after the queues have been enabled enables all the queues again`() = runTest {
+        val sendQueueDisabledFlow = MutableSharedFlow<RoomId>()
+        val setAllSendQueuesEnabledLambda = lambdaRecorder { _: Boolean -> }
+        matrixClient.sendQueueDisabledFlow = sendQueueDisabledFlow
+        matrixClient.setAllSendQueuesEnabledLambda = setAllSendQueuesEnabledLambda
+
+        sut.launchIn(backgroundScope)
+
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
+        runCurrent()
+        assert(setAllSendQueuesEnabledLambda).isCalledOnce()
+
+        sendQueueDisabledFlow.emit(A_ROOM_ID)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
+        runCurrent()
+
+        assert(setAllSendQueuesEnabledLambda)
+            .isCalledExactly(2)
+            .withSequence(listOf(value(true)), listOf(value(true)))
+    }
+
+    @Test
+    fun `test sync state getting back to running several times enables all the queues each time`() = runTest {
+        val setAllSendQueuesEnabledLambda = lambdaRecorder { _: Boolean -> }
+        matrixClient.sendQueueDisabledFlow = MutableSharedFlow()
+        matrixClient.setAllSendQueuesEnabledLambda = setAllSendQueuesEnabledLambda
+
+        sut.launchIn(backgroundScope)
+
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
+        runCurrent()
+        syncService.emitSyncState(SyncState.Offline)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
+        runCurrent()
+        assert(setAllSendQueuesEnabledLambda).isCalledOnce()
+
+        syncService.emitSyncState(SyncState.Running)
+        advanceTimeBy(SEND_QUEUES_RETRY_DELAY_MILLIS)
+        runCurrent()
+
+        assert(setAllSendQueuesEnabledLambda)
+            .isCalledExactly(2)
+            .withSequence(listOf(value(true)), listOf(value(true)))
     }
 }
