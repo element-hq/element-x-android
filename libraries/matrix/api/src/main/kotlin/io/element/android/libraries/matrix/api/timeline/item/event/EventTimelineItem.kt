@@ -26,6 +26,8 @@ data class EventTimelineItem(
     val localSendState: LocalEventSendState?,
     val editSendState: LocalEventSendState?,
     val redactionSendState: LocalEventSendState?,
+    /** The reason given with the redaction of this event, if any: from the server, or from our own redaction while it is still pending. */
+    val redactionReason: String?,
     val reactions: ImmutableList<EventReaction>,
     val receipts: ImmutableList<Receipt>,
     val sender: UserId,

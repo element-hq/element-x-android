@@ -53,6 +53,7 @@ class EventTimelineItemMapper(
             localSendState = localSendState?.map(),
             editSendState = editSendState?.map(),
             redactionSendState = redactionSendState?.map(),
+            redactionReason = redactionReason,
             reactions = reactions.map(),
             receipts = readReceipts.map(),
             sender = UserId(sender),
