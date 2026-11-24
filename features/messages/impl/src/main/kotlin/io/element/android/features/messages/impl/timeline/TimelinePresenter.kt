@@ -327,13 +327,13 @@ class TimelinePresenter(
                                 sendFailureType = SendFailureDialogState.SendFailureType.InvalidMimeType(sendStateFailure.mimeType),
                             )
                         }
-                        LocalEventSendState.Failed.MissingMediaContent -> {
+                        is LocalEventSendState.Failed.MissingMediaContent -> {
                             sendFailureDialogState = SendFailureDialogState.Show(
                                 event = event.event,
                                 sendFailureType = SendFailureDialogState.SendFailureType.MissingMediaContent,
                             )
                         }
-                        LocalEventSendState.Failed.SendingFromUnverifiedDevice -> {
+                        is LocalEventSendState.Failed.SendingFromUnverifiedDevice -> {
                             sendFailureDialogState = SendFailureDialogState.Show(
                                 event = event.event,
                                 sendFailureType = SendFailureDialogState.SendFailureType.SendingFromUnverifiedDevice,

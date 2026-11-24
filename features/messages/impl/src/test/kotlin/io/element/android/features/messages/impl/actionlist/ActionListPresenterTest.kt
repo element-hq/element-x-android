@@ -1327,7 +1327,7 @@ class ActionListPresenterTest {
         presenter.test {
             val initialState = awaitItem()
             val messageEvent = aMessageEvent(
-                sendState = LocalEventSendState.Failed.VerifiedUserChangedIdentity(users = listOf(A_USER_ID)),
+                sendState = LocalEventSendState.Failed.VerifiedUserChangedIdentity(users = listOf(A_USER_ID), isRecoverable = false),
             )
             initialState.eventSink.invoke(
                 ActionListEvent.ComputeForMessage(

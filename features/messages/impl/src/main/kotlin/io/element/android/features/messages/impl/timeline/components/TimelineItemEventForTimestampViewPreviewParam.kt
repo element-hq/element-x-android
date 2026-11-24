@@ -21,12 +21,12 @@ class TimelineItemEventForTimestampViewPreviewParam : PreviewParameterProvider<T
         get() = sequenceOf(
             aTimelineItemEvent(),
             aTimelineItemEvent().copy(localSendState = LocalEventSendState.Sending.Event),
-            aTimelineItemEvent().copy(localSendState = LocalEventSendState.Failed.Unknown("AN_ERROR")),
+            aTimelineItemEvent().copy(localSendState = LocalEventSendState.Failed.Unknown("AN_ERROR", isRecoverable = false)),
             // Edited
             aTimelineItemEvent().copy(content = aTimelineItemTextContent().copy(isEdited = true)),
             // Sending failed + Edited (not sure this is possible IRL, but should be covered by test)
             aTimelineItemEvent().copy(
-                localSendState = LocalEventSendState.Failed.Unknown("AN_ERROR"),
+                localSendState = LocalEventSendState.Failed.Unknown("AN_ERROR", isRecoverable = false),
                 content = aTimelineItemTextContent().copy(isEdited = true),
             ),
             aTimelineItemEvent(

@@ -103,26 +103,30 @@ fun RustEventSendState?.map(): LocalEventSendState? {
             when (val queueWedgeError = error) {
                 QueueWedgeError.CrossVerificationRequired -> {
                     // The current device is not cross-signed (or cross signing is not setup)
-                    LocalEventSendState.Failed.SendingFromUnverifiedDevice
+                    LocalEventSendState.Failed.SendingFromUnverifiedDevice(isRecoverable = isRecoverable)
                 }
                 is QueueWedgeError.IdentityViolations -> {
-                    LocalEventSendState.Failed.VerifiedUserChangedIdentity(queueWedgeError.users.map { UserId(it) })
+                    LocalEventSendState.Failed.VerifiedUserChangedIdentity(
+                        users = queueWedgeError.users.map { UserId(it) },
+                        isRecoverable = isRecoverable,
+                    )
                 }
                 is QueueWedgeError.InsecureDevices -> {
                     LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice(
                         devices = queueWedgeError.userDeviceMap.entries.associate { entry ->
                             UserId(entry.key) to entry.value.map { DeviceId(it) }
-                        }
+                        },
+                        isRecoverable = isRecoverable,
                     )
                 }
                 is QueueWedgeError.GenericApiError -> {
-                    LocalEventSendState.Failed.Unknown(queueWedgeError.msg)
+                    LocalEventSendState.Failed.Unknown(error = queueWedgeError.msg, isRecoverable = isRecoverable)
                 }
                 is QueueWedgeError.InvalidMimeType -> {
-                    LocalEventSendState.Failed.InvalidMimeType(queueWedgeError.mimeType)
+                    LocalEventSendState.Failed.InvalidMimeType(mimeType = queueWedgeError.mimeType, isRecoverable = isRecoverable)
                 }
                 is QueueWedgeError.MissingMediaContent -> {
-                    LocalEventSendState.Failed.MissingMediaContent
+                    LocalEventSendState.Failed.MissingMediaContent(isRecoverable = isRecoverable)
                 }
                 is QueueWedgeError.ExpiredAccessToken -> {
                     // This will automatically recover, so map it to the sending state

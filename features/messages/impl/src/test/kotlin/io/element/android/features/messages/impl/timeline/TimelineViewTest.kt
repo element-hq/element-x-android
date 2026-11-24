@@ -195,7 +195,7 @@ class TimelineViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         val timelineItem = aTimelineItemEvent(
             content = aTimelineItemTextContent(),
-            sendState = LocalEventSendState.Failed.Unknown("Error"),
+            sendState = LocalEventSendState.Failed.Unknown("Error", isRecoverable = false),
         )
         setTimelineView(
             state = aTimelineState(
@@ -215,7 +215,7 @@ class TimelineViewTest : RobolectricTest() {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         val timelineItem = aTimelineItemEvent(
             content = aTimelineItemTextContent(),
-            sendState = LocalEventSendState.Failed.VerifiedUserChangedIdentity(users = listOf(A_USER_ID)),
+            sendState = LocalEventSendState.Failed.VerifiedUserChangedIdentity(users = listOf(A_USER_ID), isRecoverable = false),
         )
         setTimelineView(
             state = aTimelineState(

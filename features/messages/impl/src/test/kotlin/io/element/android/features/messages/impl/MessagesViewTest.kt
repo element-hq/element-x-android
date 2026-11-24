@@ -570,7 +570,7 @@ class MessagesViewTest : RobolectricTest() {
     fun `clicking on retry in the send failure dialog emits the expected Events`() = runAndroidComposeUiTest {
         val messagesEventsRecorder = EventsRecorder<MessagesEvent>()
         val timelineEventsRecorder = EventsRecorder<TimelineEvent>()
-        val timelineItem = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("Error"))
+        val timelineItem = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("Error", isRecoverable = false))
         setMessagesView(
             state = aMessagesState(
                 timelineState = aTimelineState(
@@ -595,7 +595,7 @@ class MessagesViewTest : RobolectricTest() {
     fun `clicking on remove message in the send failure dialog emits the expected Events`() = runAndroidComposeUiTest {
         val messagesEventsRecorder = EventsRecorder<MessagesEvent>()
         val timelineEventsRecorder = EventsRecorder<TimelineEvent>()
-        val timelineItem = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("Error"))
+        val timelineItem = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("Error", isRecoverable = false))
         setMessagesView(
             state = aMessagesState(
                 timelineState = aTimelineState(
@@ -620,7 +620,7 @@ class MessagesViewTest : RobolectricTest() {
     fun `cancelling the send failure dialog emits the expected Event`() = runAndroidComposeUiTest {
         val messagesEventsRecorder = EventsRecorder<MessagesEvent>(expectEvents = false)
         val timelineEventsRecorder = EventsRecorder<TimelineEvent>()
-        val timelineItem = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("Error"))
+        val timelineItem = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("Error", isRecoverable = false))
         setMessagesView(
             state = aMessagesState(
                 timelineState = aTimelineState(

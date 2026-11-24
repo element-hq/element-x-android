@@ -30,7 +30,7 @@ class SelectionActionTest {
     @Test
     fun `Forward - a failed to send message cannot be selected`() {
         // A message which failed to send is a local echo: it has no event id.
-        val item = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("failed")).copy(eventId = null)
+        val item = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("failed", isRecoverable = false)).copy(eventId = null)
         assertThat(SelectionAction.Forward.canApplyTo(item)).isFalse()
     }
 

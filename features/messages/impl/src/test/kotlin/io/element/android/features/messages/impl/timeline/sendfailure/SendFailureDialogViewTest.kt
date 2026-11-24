@@ -127,7 +127,7 @@ class SendFailureDialogViewTest : RobolectricTest() {
     private fun aSendFailureDialogStateShow(
         sendFailureType: SendFailureDialogState.SendFailureType = SendFailureDialogState.SendFailureType.Unknown,
     ) = SendFailureDialogState.Show(
-        event = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("")),
+        event = aTimelineItemEvent(sendState = LocalEventSendState.Failed.Unknown("", isRecoverable = false)),
         sendFailureType = sendFailureType,
     )
 

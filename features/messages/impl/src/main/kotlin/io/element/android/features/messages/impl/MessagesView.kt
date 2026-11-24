@@ -860,7 +860,7 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
                         isMine = false,
                         content = content,
                         groupPosition = TimelineItemGroupPosition.None,
-                        sendState = LocalEventSendState.Failed.Unknown("Message failed to send"),
+                        sendState = LocalEventSendState.Failed.Unknown("Message failed to send", isRecoverable = false),
                     ),
                     // A state event on top of it
                     aTimelineItemEvent(
