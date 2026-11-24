@@ -40,5 +40,6 @@ class RoomMemberMapperTest {
         assertThat(RoomMemberMapper.mapMembership(RustMembershipState.Join)).isEqualTo(RoomMembershipState.JOIN)
         assertThat(RoomMemberMapper.mapMembership(RustMembershipState.Knock)).isEqualTo(RoomMembershipState.KNOCK)
         assertThat(RoomMemberMapper.mapMembership(RustMembershipState.Leave)).isEqualTo(RoomMembershipState.LEAVE)
+        assertThat(RoomMemberMapper.mapMembership(RustMembershipState.Custom("org.example.custom"))).isEqualTo(RoomMembershipState.LEAVE)
     }
 }
