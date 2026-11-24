@@ -49,7 +49,21 @@ runs:
     - name: Clone submodules
       if: ${{ inputs.enterprise-ssh-key != '' }}
       shell: bash
-      run: git submodule update --init --recursive
+      env:
+        # The FOSS CI does not use the LFS files of the submodule (the Enterprise screenshots are verified by the
+        # enterprise repository CI), so do not download them. This also prevents `.git/modules/<submodule>/lfs`
+        # from being created and saved by nschloe/action-cached-lfs-checkout.
+        GIT_LFS_SKIP_SMUDGE: 1
+      run: |
+        # nschloe/action-cached-lfs-checkout restores `.git/modules/<submodule>/lfs` from its cache, which leaves a
+        # `.git/modules/<submodule>` folder that is not a valid git repository, and makes `git submodule update` fail.
+        for module in $(git config --file .gitmodules --get-regexp path | awk '{ print $2 }'); do
+          if [ -d ".git/modules/$module" ] && [ ! -f ".git/modules/$module/HEAD" ]; then
+            echo "Removing invalid submodule git dir .git/modules/$module"
+            rm -rf ".git/modules/$module"
+          fi
+        done
+        git submodule update --init --recursive
     - name: Use JDK 21
       if: ${{ inputs.setup-gradle == 'true' }}
       uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
