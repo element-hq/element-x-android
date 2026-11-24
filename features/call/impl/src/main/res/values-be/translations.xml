@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="call_foreground_service_channel_title_android">"Бягучы званок"</string>
-  <string name="call_foreground_service_message_android">"Націсніце, каб вярнуцца да званку"</string>
-  <string name="call_foreground_service_title_android">"☎️ Ідзе званок"</string>
-  <string name="screen_incoming_call_subtitle_android">"Уваходны званок Element Call"</string>
+  <string name="call_foreground_service_channel_title_android">"Бягучы выклік"</string>
+  <string name="call_foreground_service_message_android">"Націсніце, каб вярнуцца да выкліку"</string>
+  <string name="call_foreground_service_title_android">"☎️ Ідзе выклік"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element Call не падтрымлівае Bluetooth-аўдыяпрылады ў гэтай версіі Android. Выберыце іншую аўдыяпрыладу."</string>
+  <string name="screen_incoming_call_subtitle_android">"Уваходны выклік Element Call"</string>
 </resources>

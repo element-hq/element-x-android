@@ -3,17 +3,31 @@
   <string name="notification_channel_call">"Пазваніць"</string>
   <string name="notification_channel_listening_for_events">"Праслухоўванне падзей"</string>
   <string name="notification_channel_noisy">"Шумныя апавяшчэнні"</string>
-  <string name="notification_channel_ringing_calls">"Званкі"</string>
+  <string name="notification_channel_ringing_calls">"Выклікі"</string>
   <string name="notification_channel_silent">"Ціхія апавяшчэнні"</string>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d апавяшчэнне"</item>
     <item quantity="few">"%d апавяшчэнні"</item>
     <item quantity="many">"%d апавяшчэнняў"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Не ўдалося зарэгістраваць распаўсюджвальнік апавяшчэнняў UnifiedPush, таму вы больш не будзеце атрымліваць апавяшчэнні. Праверце налады апавяшчэнняў праграмы і стан распаўсюджвальніка push-апавяшчэнняў."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"У вас %d новае паведамленне."</item>
+    <item quantity="few">"У вас %d новыя паведамленні."</item>
+    <item quantity="many">"У вас %d новых паведамленняў."</item>
+  </plurals>
+  <plurals name="notification_gallery_body">
+    <item quantity="one">"Падзяліўся(-лася) %1$d далучэннем"</item>
+    <item quantity="few">"Падзяліўся(-лася) %1$d далучэннямі"</item>
+    <item quantity="many">"Падзяліўся(-лася) %1$d далучэннямі"</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Уваходны выклік"</string>
   <string name="notification_incoming_call">"📹 Уваходны выклік"</string>
   <string name="notification_inline_reply_failed">"** Не атрымалася даслаць - калі ласка, адкрыйце пакой"</string>
   <string name="notification_invite_body">"Запрасіў(-ла) вас у чат"</string>
   <string name="notification_invite_body_with_sender">"%1$s запрасіў(-ла) вас у чат"</string>
+  <string name="notification_knock_request_body">"Запытвае далучэнне"</string>
+  <string name="notification_live_location_started_body">"Пачаў(-ла) трансляцыю месцазнаходжання"</string>
   <string name="notification_mentioned_you_body">"Згадаў(-ла) вас: %1$s"</string>
   <string name="notification_reaction_body">"Адрэагаваў(-ла) на %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Пазначыць як прачытанае"</string>
@@ -22,7 +36,10 @@
   <string name="notification_room_invite_body_with_sender">"%1$s запрасіў(-ла) вас далучыцца да пакоя"</string>
   <string name="notification_sender_me">"Я"</string>
   <string name="notification_sender_mention_reply">"%1$s згадаў ці адказаў"</string>
-  <string name="notification_test_push_notification_content">"Вы праглядаеце апавяшчэнне! Націсніце мяне!"</string>
+  <string name="notification_space_invite_body">"Запрашае вас далучыцца да прасторы"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s запрашае вас далучыцца да прасторы"</string>
+  <string name="notification_test_push_notification_content">"Вы праглядаеце апавяшчэнне! Націсніце на мяне!"</string>
+  <string name="notification_thread_in_room">"Ланцужок у %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -41,25 +58,38 @@
   <string name="push_distributor_background_sync_android">"Фонавая сінхранізацыя"</string>
   <string name="push_distributor_firebase_android">"Сэрвісы Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Службы Google Play не знойдзены. Апавяшчэнні могуць не працаваць належным чынам."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Праверка заблакіраваных карыстальнікаў"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Паглядзець заблакіраваных карыстальнікаў"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Няма заблакіраваных карыстальнікаў."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Вы заблакавалі %1$d карыстальніка. Вы не будзеце атрымліваць апавяшчэнні ад гэтых карыстальнікаў."</item>
+    <item quantity="few">"Вы заблакавалі %1$d карыстальнікаў. Вы не будзеце атрымліваць апавяшчэнні ад гэтых карыстальнікаў."</item>
+    <item quantity="many">"Вы заблакавалі %1$d карыстальнікаў. Вы не будзеце атрымліваць апавяшчэнні ад гэтых карыстальнікаў."</item>
+  </plurals>
   <string name="troubleshoot_notifications_test_blocked_users_title">"Заблакіраваныя карыстальнікі"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Атрымаць назву бягучага пастаўшчыка."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Пастаўшчыкі push-апавяшчэнняў не выбраны."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Бягучы пастаўшчык push-апавяшчэнняў: %1$s, бягучы дыстрыбутар: %2$s. Але дыстрыбутар %3$s не знойдзены. Магчыма, праграма была выдалена?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Бягучы пастаўшчык push-апавяшчэнняў: %1$s, але не наладжана ніводнага дыстрыбутара."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Бягучы пастаўшчык push-апавяшчэнняў: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Бягучы пастаўшчык push-апавяшчэнняў: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Бягучы пастаўшчык push-апавяшчэнняў"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Пераканайцеся, што ў праграме ёсць хаця б адзін пастаўшчык push-апавяшчэнняў."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Пастаўшчыкі push-апавяшчэнняў не знойдзены."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Праграма сабрана з падтрымкай: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Выяўленне пастаўшчыкоў push-паслуг"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Праверце, ці можа праграма паказваць апавяшчэнні."</string>
   <string name="troubleshoot_notifications_test_display_notification_failure">"Апавяшчэнне не было націснута."</string>
   <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Немагчыма паказаць апавяшчэнне."</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"Апавяшчэнне было націснута!"</string>
   <string name="troubleshoot_notifications_test_display_notification_title">"Паказаць апавяшчэнне"</string>
-  <string name="troubleshoot_notifications_test_display_notification_waiting">"Націсніце на апавяшчэнне, каб працягнуць тэст."</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Калі ласка, націсніце на апавяшчэнне, каб працягнуць тэст."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_description">"Пераканайцеся, што праграма атрымлівае push-апавяшчэнні."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Памылка: pusher адхіліў запыт."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Памылка: %1$s."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Памылка, немагчыма праверыць push-апавяшчэнне."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Памылка, тайм-аўт у чаканні push-апавяшчэння."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_rate_limit">"Памылка: push-шлюз абмяжоўвае частату запытаў ад гэтай прылады, таму апавяшчэнні могуць прыходзіць ненадзейна. Наладзьце іншы push-шлюз."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Зварот цыклу назад заняў %1$d мс."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"Тэст Націсніце кнопку вярнуцца"</string>
 </resources>

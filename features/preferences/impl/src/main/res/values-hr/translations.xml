@@ -60,6 +60,7 @@
   <string name="screen_moderation_and_safety_invites_heading">"Pozivnice"</string>
   <string name="screen_moderation_and_safety_other_users_heading">"Ostali korisnici"</string>
   <string name="screen_moderation_and_safety_share_presence_heading">"Tvoj izgled"</string>
+  <string name="screen_notification_settings_activity_section_title">"Aktivnost"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Dodatne postavke"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Ton zvona"</string>
   <string name="screen_notification_settings_calls_label">"Audiopozivi i videopozivi"</string>

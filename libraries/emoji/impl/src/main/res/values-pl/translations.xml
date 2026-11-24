@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_a11y_backspace">"Usuń znak przed kursorem"</string>
   <string name="emoji_picker_category_activity">"Aktywności"</string>
   <string name="emoji_picker_category_flags">"Flagi"</string>
   <string name="emoji_picker_category_foods">"Jedzenie i napoje"</string>

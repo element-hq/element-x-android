@@ -23,7 +23,7 @@ Escull alguna cosa que recordis. Si oblides aquest PIN, es tancarà sessió a l\
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Introdueix el mateix PIN dues vegades"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Els codis PIN no coincideixen"</string>
   <string name="screen_app_lock_signout_alert_message">"Hauràs de tornar a iniciar sessió i crear un nou PIN per continuar."</string>
-  <string name="screen_app_lock_signout_alert_title">"S\'està tancant la sessió"</string>
+  <string name="screen_app_lock_signout_alert_title">"Aquest dispositiu s\'està eliminant"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Tens %1$d intent per desbloquejar"</item>
     <item quantity="other">"Tens %1$d intents per desbloquejar"</item>
@@ -34,5 +34,5 @@ Escull alguna cosa que recordis. Si oblides aquest PIN, es tancarà sessió a l\
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Utilitza biometria"</string>
   <string name="screen_app_lock_use_pin_android">"Utilitza PIN"</string>
-  <string name="screen_signout_in_progress_dialog_content">"S\'està tancant la sessió…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"S\'està eliminant el dispositiu…"</string>
 </resources>

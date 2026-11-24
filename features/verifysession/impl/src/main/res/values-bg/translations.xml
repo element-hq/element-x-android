@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Не можете да потвърдите?"</string>
-  <string name="screen_identity_confirmation_subtitle">"Потвърдете това устройство, за да настроите защитени съобщения."</string>
-  <string name="screen_identity_confirmation_title">"Потвърдете самоличността си"</string>
+  <string name="screen_identity_confirmation_subtitle">"Изберете как да се потвърдите, за да настроите защитени съобщения."</string>
+  <string name="screen_identity_confirmation_title">"Потвърдете цифровата си самоличност"</string>
   <string name="screen_identity_confirmation_use_another_device">"Използване на друго устройство"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Използване на ключ за възстановяване"</string>
+  <string name="screen_identity_confirmed_subtitle">"Сега можете да четете или изпращате съобщения сигурно и всеки с когото чатите, също може да се довери на това устройство."</string>
   <string name="screen_identity_confirmed_title">"Устройството е потвърдено"</string>
   <string name="screen_identity_use_another_device">"Използване на друго устройство"</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Потвърдете, че емоджитата по-долу съвпадат с показаните в другото ви устройство."</string>
@@ -26,6 +27,8 @@
   <string name="screen_session_verification_use_another_device_subtitle">"Уверете се, че приложението е отворено на другото устройство, преди да започнете потвърждението оттук."</string>
   <string name="screen_session_verification_use_another_device_title">"Отворете приложението на друго потвърдено устройство"</string>
   <string name="screen_session_verification_user_initiator_title">"Потвърждаване на този потребител?"</string>
+  <string name="screen_session_verification_waiting_another_device_title">"Започнете да потвърждавате на другото устройство"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Започнете да потвърждавате на другото устройство"</string>
   <string name="screen_session_verification_waiting_other_user_title">"Чака се другият потребител"</string>
   <string name="screen_session_verification_waiting_subtitle">"След като бъдете приети, ще можете да продължите потвърждението."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"В очакване на приемане на заявка"</string>

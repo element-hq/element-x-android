@@ -5,5 +5,6 @@
   <string name="dialog_permission_generic">"يرجى منح الإذن في إعدادات النظام."</string>
   <string name="dialog_permission_microphone">"من أجل جعل التطبيق يستخدم المايكروفون عليك بمنح الإذن لذلك في إعدادت النظام."</string>
   <string name="dialog_permission_notification">"من أجل جعل التطبيق يظهر الإشعارات عليك أن تمنح الإذن في إعدادات النظام."</string>
+  <string name="screen_local_network_opt_in_subtitle">"خادمك المنزلي موجود على شبكتك المحلية. للاتصال، يحتاج %1$s إلى إذن للوصول إلى الأجهزة الموجودة على هذه الشبكة."</string>
   <string name="screen_local_network_opt_in_title">"السماح بالوصول إلى الشبكة المحلية"</string>
 </resources>

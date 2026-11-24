@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invites_invited_you">"%1$s (%2$s) ви покани"</string>
+  <string name="screen_space_list_description">"Пространства, които сте създали или към които сте се присъединили."</string>
   <string name="screen_space_list_title">"Пространства"</string>
 </resources>
