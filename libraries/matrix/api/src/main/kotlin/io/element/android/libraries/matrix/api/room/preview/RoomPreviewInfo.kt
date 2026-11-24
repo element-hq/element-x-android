@@ -47,5 +47,5 @@ data class RoomPreviewInfo(
      * Whether the room should be presented as a DM: a direct room with at most 2 active members.
      */
     val isDm: Boolean
-        get() = isDirect == true && (numberOfActiveMembers ?: numberOfJoinedMembers) <= 2
+        get() = isDirect == true && numberOfActiveMembers ?: numberOfJoinedMembers <= 2
 }

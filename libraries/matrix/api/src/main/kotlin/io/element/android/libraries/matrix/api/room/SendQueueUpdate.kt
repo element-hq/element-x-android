@@ -17,6 +17,7 @@ sealed interface SendQueueUpdate {
     data class ReplacedLocalEvent(val transactionId: TransactionId) : SendQueueUpdate
 
     /**
+     * @param transactionId the transaction id of the local event which failed to be sent.
      * @param isRecoverable whether the error is considered recoverable or not.
      * A recoverable error disables the room's send queue, while an unrecoverable error
      * is parked until the user decides to cancel sending it.
