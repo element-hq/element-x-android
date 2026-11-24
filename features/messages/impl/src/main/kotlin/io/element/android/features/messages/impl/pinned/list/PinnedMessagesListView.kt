@@ -239,9 +239,13 @@ private fun PinnedMessagesListLoaded(
         onVerifiedUserSendFailureClick = {}
     )
 
-    val rendererConfig = remember(state.timelineRoomInfo.currentUserId, state.timelineFontScale) {
+    val rendererConfig = remember(
+        state.timelineRoomInfo.currentUserId,
+        state.timelineFontScale,
+        state.useNewTimelineEventRenderer,
+    ) {
         ComposeLocalTimelineEventRendererConfig(
-            isComposeRendererEnabled = false,
+            isComposeRendererEnabled = state.useNewTimelineEventRenderer,
             currentUserId = state.timelineRoomInfo.currentUserId,
             fontScale = state.timelineFontScale,
         )

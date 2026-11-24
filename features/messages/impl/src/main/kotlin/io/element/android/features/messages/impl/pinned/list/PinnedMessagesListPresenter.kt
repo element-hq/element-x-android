@@ -135,6 +135,9 @@ class PinnedMessagesListPresenter(
         val reactionSummaryState = reactionSummaryPresenter.present()
 
         val displayThreadSummaries by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Threads).collectAsState(false)
+        val useNewTimelineEventRenderer by featureFlagService
+            .isFeatureEnabledFlow(FeatureFlags.NewTimelineEventRenderer)
+            .collectAsState(false)
         val timelineFontScale by remember {
             appPreferencesStore.getMessageTextSizeFlow().map { MessageTextSize.scaleOf(it) }
         }.collectAsState(initial = 1f)
@@ -162,6 +165,7 @@ class PinnedMessagesListPresenter(
             linkState = linkState,
             displayThreadSummaries = displayThreadSummaries,
             timelineFontScale = timelineFontScale,
+            useNewTimelineEventRenderer = useNewTimelineEventRenderer,
             userEventPermissions = userEventPermissions,
             timelineItems = pinnedMessageItems,
             customReactionState = customReactionState,
@@ -260,6 +264,7 @@ class PinnedMessagesListPresenter(
         timelineProtectionState: TimelineProtectionState,
         displayThreadSummaries: Boolean,
         timelineFontScale: Float,
+        useNewTimelineEventRenderer: Boolean,
         linkState: LinkState,
         userEventPermissions: UserEventPermissions,
         timelineItems: AsyncData<ImmutableList<TimelineItem>>,
@@ -280,6 +285,7 @@ class PinnedMessagesListPresenter(
                         timelineProtectionState = timelineProtectionState,
                         displayThreadSummaries = displayThreadSummaries,
                         timelineFontScale = timelineFontScale,
+                        useNewTimelineEventRenderer = useNewTimelineEventRenderer,
                         linkState = linkState,
                         userEventPermissions = userEventPermissions,
                         timelineItems = timelineItems.data,
