@@ -75,7 +75,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
@@ -238,15 +237,7 @@ fun TimelineView(
                 onDispose {}
             }
         }
-        // Only the font scales: `dp` values keep the layout as designed.
-        val density = LocalDensity.current
-        val scaledDensity = remember(density, state.timelineFontScale) {
-            Density(density.density, density.fontScale * state.timelineFontScale)
-        }
-        CompositionLocalProvider(
-        LocalTimelineEventRendererConfig provides composeLocalTimelineEventRendererConfig,
-        LocalDensity provides scaledDensity,
-    ) {
+        ProvideTimelineEventRendererConfig(composeLocalTimelineEventRendererConfig) {
         Box(modifier) {
             LazyColumn(
                 modifier = Modifier
