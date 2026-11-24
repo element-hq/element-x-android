@@ -46,9 +46,10 @@ fun SingleSelectionListItem(
 
     var selectedIndex by rememberSaveable(selected) { mutableStateOf(selected) }
     val selectedItem by remember { derivedStateOf { selectedIndex?.let { resultFormatter(it) } } }
-    val decoratedSupportedText: @Composable (() -> Unit)? = if (!selectedItem.isNullOrBlank() && !displayResultInTrailingContent) {
+    val currentSelectedItem = selectedItem
+    val decoratedSupportedText: @Composable (() -> Unit)? = if (!currentSelectedItem.isNullOrBlank() && !displayResultInTrailingContent) {
         @Composable {
-            Text(selectedItem!!)
+            Text(currentSelectedItem)
         }
     } else {
         supportingText?.let {
@@ -57,8 +58,8 @@ fun SingleSelectionListItem(
             }
         }
     }
-    val trailingContent: ListItemContent? = if (!selectedItem.isNullOrBlank() && displayResultInTrailingContent) {
-        ListItemContent.Text(selectedItem!!)
+    val trailingContent: ListItemContent? = if (!currentSelectedItem.isNullOrBlank() && displayResultInTrailingContent) {
+        ListItemContent.Text(currentSelectedItem)
     } else {
         null
     }

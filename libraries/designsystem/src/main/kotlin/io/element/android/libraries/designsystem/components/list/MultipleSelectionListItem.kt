@@ -43,11 +43,12 @@ fun MultipleSelectionListItem(
 ) {
     val selectedIndexes = remember(selected) { selected.toMutableStateList() }
     val selectedItemsText by remember { derivedStateOf { resultFormatter(selectedIndexes) } }
+    val currentSelectedItemsText = selectedItemsText
 
     val decoratedSupportedText: @Composable (() -> Unit)? = when {
-        !selectedItemsText.isNullOrBlank() && !displayResultInTrailingContent -> {
+        !currentSelectedItemsText.isNullOrBlank() && !displayResultInTrailingContent -> {
             @Composable {
-                Text(selectedItemsText!!)
+                Text(currentSelectedItemsText)
             }
         }
         supportingText != null -> {
@@ -58,8 +59,8 @@ fun MultipleSelectionListItem(
         else -> null
     }
 
-    val trailingContent: ListItemContent? = if (!selectedItemsText.isNullOrBlank() && displayResultInTrailingContent) {
-        ListItemContent.Text(selectedItemsText!!)
+    val trailingContent: ListItemContent? = if (!currentSelectedItemsText.isNullOrBlank() && displayResultInTrailingContent) {
+        ListItemContent.Text(currentSelectedItemsText)
     } else {
         null
     }
