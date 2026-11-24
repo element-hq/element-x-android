@@ -12,6 +12,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
@@ -25,10 +26,12 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.leaveroom.api.LeaveRoomRenderer
 import io.element.android.features.roomdetails.api.RoomDetailsExtension
+import io.element.android.features.roomshortcut.api.createRoomShortcut
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.BaseRoom
@@ -48,6 +51,7 @@ class RoomDetailsNode(
     private val analyticsService: AnalyticsService,
     private val leaveRoomRenderer: LeaveRoomRenderer,
     private val roomDetailsExtension: RoomDetailsExtension,
+    private val matrixClient: MatrixClient
 ) : Node(buildContext, plugins = plugins), RoomDetailsNavigator {
     interface Callback : Plugin {
         fun navigateBack()
@@ -120,6 +124,7 @@ class RoomDetailsNode(
             }
         }
 
+        val scope = rememberCoroutineScope()
         RoomDetailsView(
             state = state,
             additionalSections = { with(roomDetailsExtension) { Render(Modifier) } },
@@ -146,6 +151,16 @@ class RoomDetailsNode(
                     onSelectNewOwners = { callback.navigateToSelectNewOwnersWhenLeaving() },
                     modifier = Modifier
                 )
+            },
+            onAddShortcut = { roomId, roomName ->
+                val roomAvatarUrl = if (state.roomAvatarUrl != null) {
+                    state.roomAvatarUrl
+                } else {
+                    state.heroes.getOrNull(0)?.avatarUrl
+                }
+                scope.launch {
+                    createRoomShortcut(context, matrixClient.sessionId, roomId, roomName, roomAvatarUrl)
+                }
             }
         )
     }

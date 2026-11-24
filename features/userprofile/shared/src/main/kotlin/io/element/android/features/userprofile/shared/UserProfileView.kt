@@ -45,11 +45,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBottomSheet
 import io.element.android.libraries.ui.strings.CommonStrings
-import android.os.Build
-import android.content.Context
-import androidx.compose.ui.platform.LocalContext
-import android.content.Intent
-import android.widget.Toast
 
 @Composable
 fun UserProfileView(
@@ -63,7 +58,6 @@ fun UserProfileView(
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
-    val context = LocalContext.current;
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -101,42 +95,6 @@ fun UserProfileView(
             Spacer(modifier = Modifier.height(26.dp))
             if (!state.isCurrentUser) {
                 VerifyUserSection(state, onVerifyClick = { onVerifyClick(state.userId) })
-                AddUserShortcutSection(state, onAddUserShortcutClick = {
-                    // 1. Проверяем, поддерживает ли устройство создание ярлыков на рабочем столе
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                        // Для старых версий Android (ниже 8.0) логика была другой (через Broadcast-намерения)
-                    }
-
-                    Toast.makeText(context, "UserId: ${state.userId}", Toast.LENGTH_SHORT).show()
-                    // val shortcutManager = context.getSystemService(ShortcutManager::class.java) ?: return
-                    //
-                    // if (shortcutManager.isRequestPinShortcutSupported) {
-                    //
-                    //     // 2. Создаем Intent (ссылку), который сработает при клике на ярлык
-                    //     // Используем явный Intent для безопасности, чтобы открывалась именно наша Activity
-                    //     val shortcutIntent = Intent(context, ChatActivity::class.java).apply {
-                    //         action = Intent.ACTION_VIEW
-                    //         // Передаем ID чата/пользователя внутри Uri или через extra-параметры
-                    //         data = Uri.parse("https://matrix.to/#${state.userId}")
-                    //         putExtra("EXTRA_USER_ID", userId)
-                    //         // Флаги, чтобы очистить стек и запустить Activity как новую задачу, если приложение закрыто
-                    //         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    //     }
-                    //
-                    //     // 3. Собираем сам ярлык
-                    //     val shortcut = ShortcutInfo.Builder(context, "shortcut_chat_$userId") // Уникальный ID ярлыка в системе
-                    //         .setShortLabel(userName) // Имя под иконкой (например, "Иван")
-                    //         .setLongLabel("Чат с $userName") // Полное имя (используется системой в списках)
-                    //         .setIcon(Icon.createWithResource(context, avatarResId)) // Аватарка (можно из ресурсов или Bitmap)
-                    //         .setIntent(shortcutIntent)
-                    //         .build()
-                    //
-                    //     // 4. Запрашиваем у системы вывод на рабочий стол
-                    //     // Система покажет стандартный диалог подтверждения пользователю
-                    //     shortcutManager.requestPinShortcut(shortcut, null)
-                    // }
-
-                })
                 BlockUserSection(state)
                 BlockUserDialogs(state)
             }
@@ -182,19 +140,6 @@ private fun VerifyUserSection(
             onClick = onVerifyClick,
         )
     }
-}
-
-
-@Composable
-private fun AddUserShortcutSection(
-    state: UserProfileState,
-    onAddUserShortcutClick: () -> Unit,
-) {
-    ListItem(
-        content = { Text("Add user shortcut") },
-        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
-        onClick =  onAddUserShortcutClick,
-    )
 }
 
 @PreviewsDayNight

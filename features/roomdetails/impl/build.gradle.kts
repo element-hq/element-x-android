@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.libraries.push.api)
     implementation(projects.libraries.testtags)
     api(projects.features.roomdetails.api)
+    api(projects.features.roomshortcut.api)
     implementation(libs.coil.compose)
     implementation(projects.features.call.api)
     implementation(projects.features.leaveroom.api)

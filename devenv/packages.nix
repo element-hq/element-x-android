@@ -18,5 +18,5 @@
     })
   ];
 in {
-  packages = [nvim pkgs.gradle_9 pkgs.openjdk];
+  packages = [nvim pkgs.gradle_9 pkgs.openjdk pkgs.android-studio];
 }

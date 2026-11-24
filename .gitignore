@@ -116,3 +116,4 @@ checkouts/**
 .devenv
 .pre-commit-config.yaml
 kls_database.db
+.android

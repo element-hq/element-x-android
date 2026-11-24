@@ -11,6 +11,9 @@ plugins {
 
 android {
     namespace = "io.element.android.appicon.enterprise"
+    defaultConfig {
+        minSdk = 26
+    }
 
     buildTypes {
         register("nightly")

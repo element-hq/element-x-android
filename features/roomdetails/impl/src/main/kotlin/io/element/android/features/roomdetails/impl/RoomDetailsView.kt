@@ -124,6 +124,7 @@ fun RoomDetailsView(
     modifier: Modifier = Modifier,
     additionalSections: @Composable ColumnScope.() -> Unit = {},
     leaveRoomView: @Composable () -> Unit,
+    onAddShortcut: (RoomId, String) -> Unit,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     Scaffold(
@@ -249,6 +250,9 @@ fun RoomDetailsView(
                     pinnedMessagesCount = state.pinnedMessagesCount,
                     onPinnedMessagesClick = onPinnedMessagesClick
                 )
+                AddShortcutSection(onAddShortcutClick = {
+                    onAddShortcut(state.roomId, state.roomName)
+                })
                 PollsItem(
                     openPollHistory = openPollHistory
                 )
@@ -828,6 +832,17 @@ private fun MediaGalleryItem(
 }
 
 @Composable
+private fun AddShortcutSection(
+    onAddShortcutClick: () -> Unit,
+) {
+    ListItem(
+        content = { Text("Add user shortcut") },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Pin())),
+        onClick = onAddShortcutClick,
+    )
+}
+
+@Composable
 private fun OtherActionsSection(
     canReportRoom: Boolean,
     onReportRoomClick: () -> Unit,
@@ -938,5 +953,6 @@ private fun ContentToPreview(state: RoomDetailsState) {
         onProfileClick = {},
         onReportRoomClick = {},
         leaveRoomView = {},
+        onAddShortcut = { _, _ -> },
     )
 }

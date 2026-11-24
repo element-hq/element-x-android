@@ -18,6 +18,9 @@ plugins {
 android {
     // Keep it as short as possible
     namespace = "ui"
+    defaultConfig {
+        minSdk = 26
+    }
 }
 
 tasks.withType(Test::class) {
