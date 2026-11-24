@@ -77,6 +77,15 @@ fun Project.setupKover() {
         currentProject {
             instrumentation {
                 disabledForAll.set(!isCoverageNeeded)
+                // By default, the Kover agent instruments every class loaded by the tests except the Android and JDK ones, so
+                // including Compose, AndroidX, Kotlin, Robolectric... which are not part of the coverage report anyway.
+                // Only instrument our own classes, it makes the instrumented tests significantly faster.
+                includedClasses.addAll(
+                    "io.element.*",
+                    // JNI glue classes in :libraries:matrix:impl
+                    "org.matrix.rustsdk.Android*",
+                    "org.rustls.platformverifier.*",
+                )
             }
             // Create custom variants for verification
             for (variant in koverVariants) {

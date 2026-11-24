@@ -46,7 +46,7 @@ telephoto = "0.19.0"
 maplibre-compose = "0.20.0"
 
 # Dependency analysis
-dependencyAnalysis = "3.20.1"
+dependencyAnalysis = "3.20.3"
 
 # DI
 metro = "1.4.5"
