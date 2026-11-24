@@ -852,6 +852,75 @@ class JoinRoomPresenterTest {
     }
 
     @Test
+    fun `present - when room is not known RoomPreview of a DM is loaded`() = runTest {
+        val client = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            numberOfJoinedMembers = 1,
+                            numberOfActiveMembers = 2,
+                            isDirect = true,
+                        ),
+                        roomMembershipDetails = {
+                            Result.success(aRoomMembershipDetails())
+                        },
+                    )
+                )
+            },
+            spaceService = FakeSpaceService(
+                spaceRoomListResult = { FakeSpaceRoomList() },
+            ),
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = client
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat((state.contentState as ContentState.Loaded).details).isEqualTo(aLoadedDetailsRoom(isDm = true))
+            }
+        }
+    }
+
+    @Test
+    fun `present - when space is not known RoomPreview is loaded with heroes`() = runTest {
+        val spaceHero = aMatrixUser()
+        val client = FakeMatrixClient(
+            getNotJoinedRoomResult = { _, _ ->
+                Result.success(
+                    aRoomPreview(
+                        info = aRoomPreviewInfo(
+                            isSpace = true,
+                            heroes = listOf(spaceHero),
+                        ),
+                        roomMembershipDetails = {
+                            Result.success(aRoomMembershipDetails())
+                        },
+                    )
+                )
+            },
+            spaceService = FakeSpaceService(
+                spaceRoomListResult = { FakeSpaceRoomList() },
+            ),
+        )
+        val presenter = createJoinRoomPresenter(
+            matrixClient = client
+        )
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat((state.contentState as ContentState.Loaded).details).isEqualTo(
+                    LoadedDetails.Space(
+                        childrenCount = 0,
+                        heroes = persistentListOf(spaceHero),
+                    )
+                )
+            }
+        }
+    }
+
+    @Test
     fun `present - when room is not known RoomPreview is loaded - membership INVITED`() = runTest {
         val client = FakeMatrixClient(
             getNotJoinedRoomResult = { _, _ ->
