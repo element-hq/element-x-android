@@ -27,7 +27,7 @@ runs:
   steps:
     - name: Free Disk Space (Ubuntu)
       if: ${{ inputs.free-disk-space == 'true' }}
-      uses: endersonmenezes/free-disk-space@8ffcdf1b35c974f0b10496711e9a22bcb0ff3790 # v4
+      uses: endersonmenezes/free-disk-space@24d3e2af1fe79ccdde8844605337a8835e20d012 # v4.1.0
       with:
         # Keep the tool cache, it contains the JDK used by actions/setup-java. Removing it took ~45 seconds, and the JDK then
         # had to be downloaded again.
@@ -39,6 +39,10 @@ runs:
         # Only delete the folders of .NET and Haskell: the `remove_dotnet` and `remove_haskell` options also uninstall their
         # packages with apt-get, which took ~50 seconds for .NET. The folders are removed in parallel.
         remove_folders: "/usr/share/dotnet /opt/ghc /usr/local/.ghcup /opt/cabal /home/runner/.ghcup /home/runner/.cabal"
+        # Faster deletion
+        rm_cmd: "rmz"
+        # Specify rmz version
+        rmz_version: "3.2.1"
     - name: Add SSH private keys for submodule repositories
       if: ${{ inputs.enterprise-ssh-key != '' }}
       uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
