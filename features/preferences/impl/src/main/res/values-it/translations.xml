@@ -49,8 +49,7 @@
   <string name="screen_edit_profile_updating_details">"Aggiornamento del profilo…"</string>
   <string name="screen_labs_enable_gallery_description">"Invia più immagini o video contemporaneamente. Funziona su mobile, ma non è ancora supportato su web."</string>
   <string name="screen_labs_enable_knocking">"Richiedi accesso"</string>
-  <string name="screen_labs_enable_knocking_description">"Gli utenti possono chiedere di entrare in una stanza che non è aperta a tutti.
-Stabile su mobile, l\'implementazione web esiste ma ma è sperimentale"</string>
+  <string name="screen_labs_enable_knocking_description">"Gli utenti possono chiedere di entrare in una stanza che non è aperta a tutti. Stabile su mobile, l\'implementazione web esiste ma è sperimentale."</string>
   <string name="screen_labs_enable_threads">"Abilita le risposte alle discussioni"</string>
   <string name="screen_labs_enable_threads_description">"L\'app si riavvierà per applicare questa modifica."</string>
   <string name="screen_labs_header_description">"Prova le nostre ultime idee in fase di sviluppo. Queste funzionalità non sono definitive; potrebbero essere instabili e soggette a modifiche."</string>

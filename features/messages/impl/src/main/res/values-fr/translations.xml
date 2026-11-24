@@ -157,6 +157,10 @@
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Le message n’a pas été envoyé car l’identité numérique vérifiée de %1$s a été réinitialisée."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Le message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message non envoyé car vous n’avez pas vérifié tous vos appareils."</string>
+  <string name="screen_timeline_sample_answer">"C’est parce que j’en ai mangé un! 🍪"</string>
+  <string name="screen_timeline_sample_question">"J’ai fait une douzaine de cookies, mais il n’y en a que 11 ici 👀"</string>
+  <string name="screen_timeline_sample_recipient">"Camille"</string>
+  <string name="screen_timeline_sample_sender">"Lucas"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Les anciens messages ne sont pas disponibles sur cet appareil"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Vous devez vérifier cet appareil pour accéder à l’historique des messages"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Vous ne pouvez pas voir ce message"</string>
