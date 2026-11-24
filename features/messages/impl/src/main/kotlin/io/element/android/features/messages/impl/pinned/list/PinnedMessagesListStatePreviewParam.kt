@@ -100,6 +100,7 @@ fun aLoadedPinnedMessagesListState(
     reactionSummaryState: ReactionSummaryState = aReactionSummaryState(),
     aUserEventPermissions: UserEventPermissions = UserEventPermissions.DEFAULT,
     displayThreadSummaries: Boolean = false,
+    timelineFontScale: Float = 1f,
     eventSink: (PinnedMessagesListEvent) -> Unit = {}
 ) = PinnedMessagesListState.Filled(
     timelineRoomInfo = timelineRoomInfo,
@@ -110,6 +111,7 @@ fun aLoadedPinnedMessagesListState(
     customReactionState = customReactionState,
     reactionSummaryState = reactionSummaryState,
     userEventPermissions = aUserEventPermissions,
+    timelineFontScale = timelineFontScale,
     displayThreadSummaries = displayThreadSummaries,
     eventSink = eventSink,
 )
