@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_active">"Aktivno"</string>
   <string name="a11y_add_avatar">"Dodaj avatara"</string>
   <string name="a11y_add_reaction">"Dodaj reakciju: %1$s"</string>
   <string name="a11y_address">"Adresa"</string>
@@ -30,6 +31,7 @@
   <string name="a11y_gallery_scanning">"Galerija, skeniranje %1$d"</string>
   <string name="a11y_gallery_video">"Galerija, video %1$d"</string>
   <string name="a11y_hide_password">"Sakrij zaporku"</string>
+  <string name="a11y_inactive">"Neaktivno"</string>
   <string name="a11y_info">"Informacije"</string>
   <string name="a11y_join_call">"Pridruži se pozivu"</string>
   <string name="a11y_jump_to_bottom">"Idi na dno"</string>
@@ -74,6 +76,8 @@
   <string name="a11y_start_call">"Započni poziv"</string>
   <string name="a11y_start_video_call">"Započni videopoziv"</string>
   <string name="a11y_start_voice_call">"Započni glasovni poziv"</string>
+  <string name="a11y_state_collapsed">"Sažeto"</string>
+  <string name="a11y_state_expanded">"Prošireno"</string>
   <string name="a11y_status">"Stanje"</string>
   <string name="a11y_thread_in_room">"Nit u %1$s"</string>
   <string name="a11y_threads_in_room">"Teme u %1$s"</string>
@@ -140,6 +144,7 @@
   <string name="action_go_back">"Idi natrag"</string>
   <string name="action_go_to_roles_and_permissions">"Idi na uloge i dopuštenja"</string>
   <string name="action_go_to_settings">"Idi na postavke"</string>
+  <string name="action_got_it">"Shvaćam"</string>
   <string name="action_ignore">"Zanemari"</string>
   <string name="action_invite">"Pozovi"</string>
   <string name="action_invite_friends">"Pozovi osobe"</string>
@@ -423,6 +428,7 @@ Razlog: %1$s ."</string>
     <item quantity="few">"%1$d prostora"</item>
     <item quantity="other">"%1$d prostora"</item>
   </plurals>
+  <string name="common_spoiler">"Spojler"</string>
   <string name="common_starting_chat">"Započinjanje razgovora…"</string>
   <string name="common_sticker">"Naljepnica"</string>
   <string name="common_success">"Uspjeh"</string>
@@ -478,6 +484,7 @@ Razlog: %1$s ."</string>
   <string name="dialog_title_success">"Uspjeh"</string>
   <string name="dialog_title_warning">"Upozorenje"</string>
   <string name="dialog_video_quality_selector_title">"Odaberi kvalitetu prijenosa videozapisa"</string>
+  <string name="error_camera_unavailable">"Kamera nije dostupna"</string>
   <string name="error_failed_creating_the_permalink">"Nije uspjelo stvaranje trajne poveznice"</string>
   <string name="error_message_not_found">"Poruka nije pronađena"</string>
   <string name="error_network_or_server_issue">"To može biti zbog problema s mrežom ili poslužiteljem."</string>

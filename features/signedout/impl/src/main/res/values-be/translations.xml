@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"Вы змянілі свой пароль у іншым сеансе"</string>
-  <string name="screen_signed_out_reason_2">"Вы выдалілі сеанс з іншага сеансу"</string>
-  <string name="screen_signed_out_reason_3">"Адміністратар вашага сервера ануляваў ваш доступ"</string>
-  <string name="screen_signed_out_title">"Вы выйшлі з сістэмы"</string>
+  <string name="screen_signed_out_reason_1">"Вы выдалілі гэтую прыладу са свайго ўліковага запісу"</string>
+  <string name="screen_signed_out_reason_2">"Вы змянілі свой пароль на іншай прыладзе"</string>
+  <string name="screen_signed_out_reason_3">"Тэрмін дзеяння сеанса на вашым серверы скончыўся або адміністратар заблакіраваў ваш доступ"</string>
+  <string name="screen_signed_out_subtitle_v2">"Гэта прылада была выдалена па адной з прычын, пералічаных ніжэй. Каб падключыць прыладу да ўліковага запісу, увайдзіце зноў."</string>
+  <string name="screen_signed_out_title">"Прылада выдалена"</string>
 </resources>

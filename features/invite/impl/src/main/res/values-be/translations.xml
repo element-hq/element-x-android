@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="error_invalid_invite">"Пакой больш не існуе або запрашэнне больш не дзейнічае."</string>
+  <string name="screen_decline_and_block_block_user_option_description">"Вы не будзеце бачыць ніякіх паведамленняў або запрашэнняў у пакоі ад гэтага карыстальніка"</string>
   <string name="screen_decline_and_block_block_user_option_title">"Заблакіраваць карыстальніка"</string>
+  <string name="screen_decline_and_block_report_user_option_description">"Паскардзіцца на гэты пакой вашаму правайдару ўліковага запісу."</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Апішыце прычыну скаргі…"</string>
   <string name="screen_decline_and_block_title">"Адхіліць і заблакіраваць"</string>
   <string name="screen_invites_decline_chat_message">"Вы ўпэўненыя, што хочаце адхіліць запрашэнне ў %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Адхіліць запрашэнне"</string>
   <string name="screen_invites_decline_direct_chat_message">"Вы ўпэўненыя, што хочаце адмовіцца ад прыватных зносін з %1$s?"</string>
   <string name="screen_invites_decline_direct_chat_title">"Адхіліць чат"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) запрасіў(-ла) вас"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Так, адхіліць і заблакіраваць"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Вы ўпэўнены, што хочаце адхіліць запрашэнне ў гэты пакой? Гэта таксама не дазволіць %1$s звязвацца з вамі або запрашаць вас у пакоі."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Адхіліць запрашэнне і заблакіраваць"</string>
   <string name="screen_join_room_decline_and_block_button_title">"Адхіліць і заблакіраваць"</string>
 </resources>

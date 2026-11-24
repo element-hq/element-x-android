@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="emoji_picker_a11y_backspace">"A kurzor előtti karakter törlése"</string>
   <string name="emoji_picker_category_activity">"Tevékenységek"</string>
   <string name="emoji_picker_category_flags">"Zászlók"</string>
   <string name="emoji_picker_category_foods">"Étel és ital"</string>

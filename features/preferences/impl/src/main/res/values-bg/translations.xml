@@ -9,8 +9,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Ако е изключено, няма да можете да изпращате или получавате потвърждения за прочитане или известия за писане."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Скриване винаги"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Показване винаги"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"В частни стаи"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Скрита мултимедия винаги може да бъде показана, като се докосне"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Показване в поверителни стаи"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Скрита мултимедия винаги може да бъде показана с докосване върху нея."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Показване на мултимедия в хронологията"</string>
   <string name="screen_advanced_settings_view_source_description">"Активиране на опцията за преглед на изходния код на съобщението в хронологията."</string>
   <string name="screen_blocked_users_unblock_alert_action">"Отблокиране"</string>
@@ -25,6 +25,7 @@
   <string name="screen_labs_enable_threads">"Включване на отговори в нишка"</string>
   <string name="screen_labs_header_title">"Искате ли да експериментирате?"</string>
   <string name="screen_labs_title">"Експерименти"</string>
+  <string name="screen_notification_settings_activity_section_title">"Дейност"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Допълнителни настройки"</string>
   <string name="screen_notification_settings_calls_label">"Аудио и видео разговори"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Несъответствие в конфигурацията"</string>
@@ -42,12 +43,12 @@
   <string name="screen_notification_settings_failed_fixing_configuration">"Конфигурацията не е оправена, моля, опитайте отново."</string>
   <string name="screen_notification_settings_group_chats">"Групови чатове"</string>
   <string name="screen_notification_settings_invite_for_me_label">"Покани"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Вашият сървър не поддържа тази опция в шифровани стаи, може да не получавате известия в някои стаи."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Доставчикът на вашия акаунт не поддържа тази опция в шифровани стаи, може да не получавате известия в някои стаи."</string>
   <string name="screen_notification_settings_mentions_section_title">"Споменавания"</string>
   <string name="screen_notification_settings_mode_all">"Всички"</string>
   <string name="screen_notification_settings_mode_mentions">"Споменавания"</string>
   <string name="screen_notification_settings_notification_section_title">"Да бъда известяван за"</string>
-  <string name="screen_notification_settings_room_mention_label">"Известяване за @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Споменавания на @room"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"За да получавате известия, моля, променете своя %1$s"</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системни настройки"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системните известия са изключени"</string>
@@ -55,7 +56,7 @@
   <string name="settings_version_number">"Версия: %1$s (%2$s)"</string>
   <string name="theme_dark">"Тъмен"</string>
   <string name="theme_light">"Светъл"</string>
-  <string name="theme_system">"Система"</string>
+  <string name="theme_system">"Системен"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Отстраняване на неизправности"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Отстраняване на неизправности с известията"</string>
 </resources>

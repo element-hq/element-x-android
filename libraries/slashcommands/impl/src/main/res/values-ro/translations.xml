@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="slash_command_description_avatar">"Vă schimbă poza de profil în toate camerele"</string>
+  <string name="slash_command_description_avatar_for_room">"Vă schimbă avatarul numai în camera actuală"</string>
+  <string name="slash_command_description_ban_user">"Interzice utilizatorul cu ID-ul specificat"</string>
+  <string name="slash_command_description_confetti">"Trimite mesajul specificat cu confetti"</string>
+  <string name="slash_command_description_crash_application">"Blochează aplicația."</string>
+  <string name="slash_command_description_deop_user">"Îi retrage drepturile de administrator utilizatorului cu ID-ul specificat"</string>
+  <string name="slash_command_description_devtools">"Deschide ecranul instrumentelor pentru dezvoltatori"</string>
+  <string name="slash_command_description_discard_session">"Forțează închiderea sesiunii de grup actuale de ieșire dintr-o cameră criptată"</string>
+  <string name="slash_command_description_emote">"Afișează acțiunea"</string>
+  <string name="slash_command_description_ignore_user">"Ignoră un utilizator, ascunzându-vă mesajele acestuia"</string>
+  <string name="slash_command_description_invite_user">"Invită utilizatorul cu ID-ul specificat în camera actuală"</string>
+  <string name="slash_command_description_join_room">"Se alătură camerei cu adresa specificată"</string>
+  <string name="slash_command_description_leave_room">"Părăsește camera actuală"</string>
+  <string name="slash_command_description_lenny">"Adaugă (° ͜ʖ ͡°) la începutul unui mesaj în text simplu"</string>
+  <string name="slash_command_description_nick">"Vă schimbă porecla afișată"</string>
+  <string name="slash_command_description_nick_for_room">"Vă schimbă porecla afișată doar în camera actuală"</string>
+  <string name="slash_command_description_op_user">"Setați nivelul de putere al unui utilizator"</string>
+  <string name="slash_command_description_plain">"Trimite un mesaj ca text simplu, fără a-l interpreta ca markdown"</string>
+  <string name="slash_command_description_rainbow">"Trimite mesajul specificat în culorile curcubeului"</string>
+  <string name="slash_command_description_rainbow_emote">"Trimite emoticonul specificat în culorile curcubeului"</string>
+  <string name="slash_command_description_remove_user">"Elimină utilizatorul cu ID-ul specificat din această cameră"</string>
+  <string name="slash_command_description_room_avatar">"Modifică avatarul camerei actuale"</string>
+  <string name="slash_command_description_room_name">"Setează numele camerei"</string>
+  <string name="slash_command_description_shrug">"Adaugă ¯_(ツ)_/¯ la începutul unui mesaj în text simplu"</string>
+  <string name="slash_command_description_snow">"Trimite mesajul specificat cu ninsoare"</string>
+  <string name="slash_command_description_spoiler">"Trimite mesajul dat ca spoiler"</string>
+  <string name="slash_command_description_table_flip">"Adaugă (╯°□°）╯︵ ┻━┻ la începutul unui mesaj în text simplu"</string>
+  <string name="slash_command_description_topic">"Setează subiectul camerei"</string>
+  <string name="slash_command_description_unban_user">"Revocă interzicerea utilizatorului cu ID-ul specificat"</string>
+  <string name="slash_command_description_unflip">"Adaugă ┬──┬ ノ( ゜-゜ノ) la începutul unui mesaj în text simplu"</string>
+  <string name="slash_command_description_unignore_user">"Încetează ignorarea unui utilizator, afișându-i mesajele ulterioare"</string>
+  <string name="slash_command_description_upgrade_room">"Face upgrade la o versiune nouă a camerei"</string>
+  <string name="slash_command_description_whois">"Afișează informații despre un utilizator"</string>
+  <string name="slash_command_error">"Eroare de comandă"</string>
+  <string name="slash_command_error_discard_session_not_handled">"Acceptată doar în camere criptate"</string>
+  <string name="slash_command_not_supported_in_threads">"Comanda „%1$s” este recunoscută, dar nu este acceptată în fire."</string>
+  <string name="slash_command_parameters_error">"Comanda „%1$s” necesită mai mulți parametri sau unii parametri sunt incorecți. Sintaxa este
+
+%2$s"</string>
+  <string name="slash_command_unrecognized">"Comandă nerecunoscută: %1$s"</string>
+</resources>

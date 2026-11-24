@@ -9,6 +9,6 @@
   <string name="screen_share_open_apple_maps">"Obre a Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Obre a Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Obre a OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Comparteix aquesta ubicació"</string>
+  <string name="screen_share_this_location_action">"Comparteix la ubicació seleccionada"</string>
   <string name="screen_view_location_title">"Ubicació"</string>
 </resources>

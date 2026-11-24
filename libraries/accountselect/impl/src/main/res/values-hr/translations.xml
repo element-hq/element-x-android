@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_select_account_permalink_room_subtitle">"Nijedan od vaših računa još se nije pridružio ovoj sobi; odaberite koji ćete upotrijebiti."</string>
+  <string name="screen_select_account_permalink_title">"Odaberite račun za otvaranje poveznice:"</string>
+</resources>

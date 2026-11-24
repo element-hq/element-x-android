@@ -44,6 +44,7 @@ Biztos, hogy folytatja?"</string>
     <item quantity="other">"%1$d fok"</item>
   </plurals>
   <string name="screen_image_edition_title">"Fotó szerkesztése"</string>
+  <string name="screen_media_upload_preview_a11y_draw">"Rajzolás"</string>
   <string name="screen_media_upload_preview_caption_warning">"Előfordulhat, hogy a feliratok nem láthatók a régebbi alkalmazásokat használók számára."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Koppintson a feltöltött videók minőségének módosításához"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"A fájl nem tölthető fel."</string>
@@ -156,6 +157,10 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Az üzenet nem lett elküldve, mert %1$s ellenőrzött digitális személyazonossága alaphelyzetbe lett állítva."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Az üzenet nem lett elküldve, mert %1$s nem ellenőrizte az összes eszközét."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte."</string>
+  <string name="screen_timeline_sample_answer">"Azért, mert az egyiket megettem 🍪"</string>
+  <string name="screen_timeline_sample_question">"Egy tucat sütit sütöttem, de itt csak 11 van 👀"</string>
+  <string name="screen_timeline_sample_recipient">"Kata"</string>
+  <string name="screen_timeline_sample_sender">"Béla"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"A korábbi üzenetek nem érhetők el ezen az eszközön"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nincs hozzáférése ehhez az üzenethez"</string>

@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="content_scanner_scanning">"Праверка…"</string>
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Гэты файл будзе выдалены з пакоя, і ўдзельнікі страцяць да яго доступ."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Выдаліць файл?"</string>
+  <string name="screen_media_browser_download_error_message">"Праверце падключэнне да інтэрнэту і паспрабуйце зноў."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Тут будуць паказвацца дакументы, аўдыяфайлы і галасавыя паведамленні, запампаваныя ў гэты пакой."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Файлаў пакуль няма"</string>
+  <string name="screen_media_browser_list_loading_files">"Загрузка файлаў…"</string>
+  <string name="screen_media_browser_list_loading_media">"Загрузка медыя…"</string>
+  <string name="screen_media_browser_list_mode_files">"Файлы"</string>
+  <string name="screen_media_browser_list_mode_media">"Медыя"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Тут будуць паказвацца відарысы і відэа, запампаваныя ў гэты пакой."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Медыя пакуль няма"</string>
+  <string name="screen_media_browser_title">"Медыя і файлы"</string>
+  <string name="screen_media_details_file_format">"Фармат"</string>
+  <string name="screen_media_details_filename">"Назва"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Больш няма файлаў для паказу"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Больш няма медыя для паказу"</string>
   <string name="screen_media_details_title">"Інфармацыя пра файл"</string>
+  <string name="screen_media_details_uploaded_by">"Запампавана карыстальнікам"</string>
+  <string name="screen_media_details_uploaded_on">"Дата запампоўкі"</string>
 </resources>

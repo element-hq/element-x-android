@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="slash_command_description_avatar">"Mijenja vašu profilnu sliku u svim sobama"</string>
+  <string name="slash_command_description_avatar_for_room">"Mijenja vaš avatar samo u ovoj trenutačnoj sobi"</string>
+  <string name="slash_command_description_ban_user">"Zabranjuje korisnika s navedenim ID-om"</string>
+  <string name="slash_command_description_confetti">"Šalje navedenu poruku s konfetima"</string>
+  <string name="slash_command_description_crash_application">"Srušite aplikaciju."</string>
+  <string name="slash_command_description_deop_user">"Ukloni ovlasti korisniku s navedenim ID‑om"</string>
+  <string name="slash_command_description_devtools">"Otvori zaslon alata za razvojne programere"</string>
+  <string name="slash_command_description_discard_session">"Prisilno odbacuje trenutačne odlazne grupne sesije u šifriranoj sobi"</string>
+  <string name="slash_command_description_emote">"Prikazuje radnju"</string>
+  <string name="slash_command_description_ignore_user">"Ignorira korisnika i skriva njegove poruke od vas"</string>
+  <string name="slash_command_description_invite_user">"Poziva korisnika s navedenim ID-om u trenutačnu sobu"</string>
+  <string name="slash_command_description_join_room">"Pridružuje se sobi s navedenom adresom"</string>
+  <string name="slash_command_description_leave_room">"Napusti trenutačnu sobu"</string>
+  <string name="slash_command_description_lenny">"Dodaje ( ͡° ͜ʖ ͡°) na početak poruke s običnim tekstom"</string>
+  <string name="slash_command_description_nick">"Mijenja vaš nadimak za prikaz"</string>
+  <string name="slash_command_description_nick_for_room">"Mijenja vaš nadimak za prikaz samo u trenutačnoj sobi"</string>
+  <string name="slash_command_description_op_user">"Odredite razinu ovlasti korisnika"</string>
+  <string name="slash_command_description_plain">"Šalje poruku kao običan tekst, a da je ne interpretira kao Markdown"</string>
+  <string name="slash_command_description_rainbow">"Šalje zadanu poruku obojenu kao duga"</string>
+  <string name="slash_command_description_rainbow_emote">"Šalje zadani emotikon obojen kao duga"</string>
+  <string name="slash_command_description_remove_user">"Uklanja korisnika s navedenim ID-om iz ove sobe"</string>
+  <string name="slash_command_description_room_avatar">"Mijenja avatar trenutačne sobe"</string>
+  <string name="slash_command_description_room_name">"Postavlja naziv sobe"</string>
+  <string name="slash_command_description_shrug">"Dodaje ¯\\_(ツ)_/¯ na početak poruke s običnim tekstom"</string>
+  <string name="slash_command_description_snow">"Šalje navedenu poruku sa snijegom"</string>
+  <string name="slash_command_description_spoiler">"Šalje zadanu poruku kao spojler"</string>
+  <string name="slash_command_description_table_flip">"Dodaje (╯°□°）╯︵ ┻━┻ na početak poruke s običnim tekstom"</string>
+  <string name="slash_command_description_topic">"Postavi temu sobe"</string>
+  <string name="slash_command_description_unban_user">"Uklanja zabranu korisniku s navedenim ID-om"</string>
+  <string name="slash_command_description_unflip">"Dodaje ┬──┬ ノ( ゜-゜ノ) na početak poruke s običnim tekstom"</string>
+  <string name="slash_command_description_unignore_user">"Zaustavlja ignoriranje korisnika i prikazuje njegove buduće poruke"</string>
+  <string name="slash_command_description_upgrade_room">"Nadograđuje sobu na novu inačicu"</string>
+  <string name="slash_command_description_whois">"Prikazuje informacije o korisniku"</string>
+  <string name="slash_command_error">"Pogreška naredbe"</string>
+  <string name="slash_command_error_discard_session_not_handled">"Podržano samo u šifriranim sobama"</string>
+  <string name="slash_command_not_supported_in_threads">"Naredba „%1$s” je prepoznata, ali nije podržana u nitima."</string>
+  <string name="slash_command_parameters_error">"Naredba „%1$s” treba više parametara ili su neki parametri netočni. Sintaksa je
+
+%2$s"</string>
+  <string name="slash_command_unrecognized">"Neprepoznata naredba: %1$s"</string>
+</resources>

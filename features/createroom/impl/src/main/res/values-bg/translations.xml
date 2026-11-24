@@ -3,11 +3,28 @@
   <string name="screen_create_room_action_create_room">"Нова стая"</string>
   <string name="screen_create_room_add_people_title">"Поканване на хора"</string>
   <string name="screen_create_room_error_creating_room">"Възникна грешка при създаването на стаята"</string>
-  <string name="screen_create_room_private_option_description">"Само поканени хора имат достъп до тази стая. Всички съобщения са шифровани от край до край."</string>
+  <string name="screen_create_room_error_creating_space">"Пространството не можа да бъде създадено поради неизвестна грешка. Опитайте отново по-късно."</string>
+  <string name="screen_create_room_name_placeholder">"Добавяне на име…"</string>
+  <string name="screen_create_room_new_room_title">"Нова стая"</string>
+  <string name="screen_create_room_new_space_title">"Ново пространство"</string>
+  <string name="screen_create_room_private_option_description">"Само поканени хора могат да се присъединят."</string>
   <string name="screen_create_room_public_option_description">"Всеки може да намери тази стая.
 Можете да промените това по всяко време в настройките на стаята."</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"Всеки може да се присъедини."</string>
-  <string name="screen_create_room_room_address_section_footer">"За да бъде тази стая видима в директорията на общодостъпните стаи, ще ви е необходим адрес на стаята."</string>
+  <string name="screen_create_room_public_option_short_description">"Всеки може да се присъедини, включително хора извън вашата организация."</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Всеки може да поиска да се присъедини, но администраторът или модераторът трябва да одобри заявката."</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Разрешаване на запитване за присъединяване"</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_description">"Всеки от %1$s може да се присъедини, но всички останали трябва да поискат достъп."</string>
+  <string name="screen_create_room_room_access_section_private_option_description">"Само поканени хора могат да се присъединят."</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Всеки може да се присъедини, включително хора извън вашата организация."</string>
+  <string name="screen_create_room_room_access_section_restricted_option_description">"Всеки от %1$s може да се присъедини."</string>
+  <string name="screen_create_room_room_access_section_title">"Кой има достъп"</string>
+  <string name="screen_create_room_room_address_section_footer">"Необходим ви е адрес за да направите тази стая видима в обществената директория."</string>
+  <string name="screen_create_room_room_address_section_title">"Адрес"</string>
   <string name="screen_create_room_room_visibility_section_title">"Видимост на стаята"</string>
+  <string name="screen_create_room_space_selection_no_space_description">"(без пространство)"</string>
+  <string name="screen_create_room_space_selection_no_space_option">"Без да се добави към пространство"</string>
+  <string name="screen_create_room_space_selection_no_space_title">"Няма избрано пространство"</string>
+  <string name="screen_create_room_space_selection_sheet_title">"Добавяне към пространството"</string>
   <string name="screen_create_room_topic_label">"Тема за разговор (незадължително)"</string>
+  <string name="screen_create_room_topic_placeholder">"Добавяне на описание…"</string>
 </resources>

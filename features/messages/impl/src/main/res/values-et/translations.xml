@@ -157,6 +157,10 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s digitaalse identiteet on lähtestatud."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata."</string>
+  <string name="screen_timeline_sample_answer">"Nojah, panin ühe pintslisse 🍪"</string>
+  <string name="screen_timeline_sample_question">"Küpsetasin tosin küpsist, aga siin on neid kõigest 11 👀"</string>
+  <string name="screen_timeline_sample_recipient">"Kati"</string>
+  <string name="screen_timeline_sample_sender">"Mati"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Vanu sõnumeid ei saa selles seadmes näha"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Ligipääsuks vanadele sõnumitele pead selle seadme verifitseerima"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sul pole ligipääsu antud sõnumile"</string>

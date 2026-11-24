@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_active">"Activ(ă)"</string>
   <string name="a11y_add_avatar">"Adăugați un avatar"</string>
   <string name="a11y_add_reaction">"Adăugați o reacție: %1$s"</string>
   <string name="a11y_address">"Adresă"</string>
@@ -31,6 +32,7 @@
   <string name="a11y_gallery_scanning">"Galerie, scanare %1$d"</string>
   <string name="a11y_gallery_video">"Galerie, videoclip %1$d"</string>
   <string name="a11y_hide_password">"Ascundeți parola"</string>
+  <string name="a11y_inactive">"Inactiv(ă)"</string>
   <string name="a11y_info">"Informații"</string>
   <string name="a11y_join_call">"Alăturați-vă apelului"</string>
   <string name="a11y_jump_to_bottom">"Mergeți în jos"</string>
@@ -76,6 +78,8 @@
   <string name="a11y_start_call">"Începeți un apel"</string>
   <string name="a11y_start_video_call">"Inițiați un apel video"</string>
   <string name="a11y_start_voice_call">"Inițiați un apel vocal"</string>
+  <string name="a11y_state_collapsed">"Stare: restrâns"</string>
+  <string name="a11y_state_expanded">"Stare: extins"</string>
   <string name="a11y_status">"Status"</string>
   <string name="a11y_thread_in_room">"Fir în %1$s"</string>
   <string name="a11y_threads_in_room">"Fire în %1$s"</string>
@@ -143,6 +147,7 @@
   <string name="action_go_back">"Înapoi"</string>
   <string name="action_go_to_roles_and_permissions">"Mergeți la roluri și permisiuni"</string>
   <string name="action_go_to_settings">"Mergeți la setări"</string>
+  <string name="action_got_it">"Am înțeles"</string>
   <string name="action_ignore">"Ignorați"</string>
   <string name="action_invite">"Invitați"</string>
   <string name="action_invite_friends">"Invitați persoane"</string>
@@ -331,6 +336,7 @@ Motiv: %1$s."</string>
   <string name="common_name">"Nume"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Niciun rezultat"</string>
+  <string name="common_no_results_for">"Nu există rezultate pentru „%1$s”. Încercați un termen de căutare nou."</string>
   <string name="common_no_room_name">"Fără nume de cameră"</string>
   <string name="common_no_space_name">"Fără nume de spațiu"</string>
   <string name="common_not_encrypted">"Necriptat"</string>
@@ -378,6 +384,7 @@ Motiv: %1$s."</string>
   <string name="common_replying_to">"Răspuns pentru %1$s"</string>
   <string name="common_report_a_problem">"Raportați o problemă"</string>
   <string name="common_report_submitted">"Raport trimis"</string>
+  <string name="common_results_for">"Rezultate pentru „%1$s”"</string>
   <string name="common_rich_text_editor">"Editor text avansat"</string>
   <string name="common_role">"Rol"</string>
   <string name="common_room">"Cameră"</string>
@@ -427,6 +434,7 @@ Motiv: %1$s."</string>
     <item quantity="few">"%1$d Spații"</item>
     <item quantity="other">"%1$d de Spații"</item>
   </plurals>
+  <string name="common_spoiler">"Spoiler"</string>
   <string name="common_starting_chat">"Se începe conversația…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Succes"</string>
@@ -482,6 +490,7 @@ Motiv: %1$s."</string>
   <string name="dialog_title_success">"Succes"</string>
   <string name="dialog_title_warning">"Avertisment"</string>
   <string name="dialog_video_quality_selector_title">"Selectați calitatea de încărcare a videoclipurilor"</string>
+  <string name="error_camera_unavailable">"Camera nu este disponibilă"</string>
   <string name="error_failed_creating_the_permalink">"Nu s-a putut crea permalinkul"</string>
   <string name="error_message_not_found">"Mesajul nu a fost găsit"</string>
   <string name="error_network_or_server_issue">"Acest lucru se poate datora unor probleme de rețea sau de server."</string>

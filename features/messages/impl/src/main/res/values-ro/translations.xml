@@ -45,6 +45,7 @@ Sigur doriți să continuați?"</string>
     <item quantity="other">"%1$d de grade"</item>
   </plurals>
   <string name="screen_image_edition_title">"Editați poza"</string>
+  <string name="screen_media_upload_preview_a11y_draw">"Desen"</string>
   <string name="screen_media_upload_preview_caption_warning">"Este posibil ca descrierile să nu fie vizibile pentru persoanele care folosesc aplicații mai vechi."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Atingeți pentru a modifica calitatea încărcării videoclipului"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Fișierul nu a putut fi încărcat."</string>

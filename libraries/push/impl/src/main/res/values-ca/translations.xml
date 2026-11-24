@@ -21,7 +21,7 @@
   <string name="notification_room_invite_body_with_sender">"%1$s t\'ha convidat a unir-te a la sala"</string>
   <string name="notification_sender_me">"Jo"</string>
   <string name="notification_sender_mention_reply">"%1$s ha mencionat o respost"</string>
-  <string name="notification_test_push_notification_content">"Estàs veient la notificació! Fes-hi clic!"</string>
+  <string name="notification_test_push_notification_content">"Estàs veient la notificació! Toca-la!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">

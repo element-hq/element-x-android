@@ -16,7 +16,7 @@
   <string name="notification_room_action_quick_reply">"Бърз отговор"</string>
   <string name="notification_room_invite_body">"Ви покани да се присъедините към стаята"</string>
   <string name="notification_sender_me">"Аз"</string>
-  <string name="notification_test_push_notification_content">"Преглеждате известието! Кликнете върху мен!"</string>
+  <string name="notification_test_push_notification_content">"Преглеждате известието! Натиснете ме!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">

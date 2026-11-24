@@ -143,6 +143,7 @@
   <string name="action_go_back">"Visszalépés"</string>
   <string name="action_go_to_roles_and_permissions">"Ugrás a szerepkörökre és jogosultságokra"</string>
   <string name="action_go_to_settings">"Ugrás a beállításokhoz"</string>
+  <string name="action_got_it">"Értem"</string>
   <string name="action_ignore">"Mellőzés"</string>
   <string name="action_invite">"Meghívás"</string>
   <string name="action_invite_friends">"Ismerősök meghívása"</string>
@@ -419,6 +420,7 @@ Ok: %1$s."</string>
     <item quantity="one">"%1$d tér"</item>
     <item quantity="other">"%1$d tér"</item>
   </plurals>
+  <string name="common_spoiler">"Rejtett szöveg"</string>
   <string name="common_starting_chat">"Csevegés megkezdése…"</string>
   <string name="common_sticker">"Matrica"</string>
   <string name="common_success">"Sikeres"</string>

@@ -44,6 +44,7 @@ Jeste li sigurni da želite nastaviti?"</string>
     <item quantity="other">"%1$d stupnjevi"</item>
   </plurals>
   <string name="screen_image_edition_title">"Uredi fotografiju"</string>
+  <string name="screen_media_upload_preview_a11y_draw">"Crtanje"</string>
   <string name="screen_media_upload_preview_caption_warning">"Opisi možda neće biti vidljivi osobama koji se služe starijim aplikacijama."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Dodirnite za promjenu kvalitete prijenosa videozapisa"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Datoteka se nije mogla prenijeti."</string>
