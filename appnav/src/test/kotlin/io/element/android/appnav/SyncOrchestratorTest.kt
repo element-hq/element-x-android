@@ -629,6 +629,84 @@ class SyncOrchestratorTest {
         startSyncRecorder.assertions().isNeverCalled()
     }
 
+    @Test
+    fun `when the network is lost while the sync service is running, the sync is restarted right away`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
+            startSyncLambda = startSyncRecorder
+            stopSyncLambda = stopSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
+        val syncOrchestrator = createSyncOrchestrator(
+            matrixClient = FakeMatrixClient(syncService = syncService),
+            networkMonitor = networkMonitor,
+            appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true),
+        )
+
+        // We start observing
+        syncOrchestrator.observeStates()
+        advanceTimeBy(10.seconds)
+        stopSyncRecorder.assertions().isNeverCalled()
+        startSyncRecorder.assertions().isNeverCalled()
+
+        // The network is lost, the sync is restarted so that the pending request does not have to time out
+        networkMonitor.connectivity.value = NetworkStatus.Disconnected
+        advanceTimeBy(1.milliseconds)
+        stopSyncRecorder.assertions().isCalledOnce()
+        startSyncRecorder.assertions().isCalledOnce()
+
+        // And nothing else happens later
+        advanceTimeBy(10.seconds)
+        stopSyncRecorder.assertions().isCalledOnce()
+        startSyncRecorder.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `when the network is lost while the sync service is running and the app is in background, the sync is not restarted`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Running).apply {
+            startSyncLambda = startSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
+        val syncOrchestrator = createSyncOrchestrator(
+            matrixClient = FakeMatrixClient(syncService = syncService),
+            networkMonitor = networkMonitor,
+            appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = false),
+        )
+
+        // We start observing
+        syncOrchestrator.observeStates()
+
+        networkMonitor.connectivity.value = NetworkStatus.Disconnected
+        advanceTimeBy(10.seconds)
+        startSyncRecorder.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `when the network is lost while the sync service is offline, the sync is not restarted`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val stopSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Offline).apply {
+            startSyncLambda = startSyncRecorder
+            stopSyncLambda = stopSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
+        val syncOrchestrator = createSyncOrchestrator(
+            matrixClient = FakeMatrixClient(syncService = syncService),
+            networkMonitor = networkMonitor,
+            appForegroundStateService = FakeAppForegroundStateService(initialForegroundValue = true),
+        )
+
+        // We start observing
+        syncOrchestrator.observeStates()
+
+        networkMonitor.connectivity.value = NetworkStatus.Disconnected
+        advanceTimeBy(10.seconds)
+        stopSyncRecorder.assertions().isNeverCalled()
+        startSyncRecorder.assertions().isNeverCalled()
+    }
+
     private fun TestScope.createSyncOrchestrator(
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),

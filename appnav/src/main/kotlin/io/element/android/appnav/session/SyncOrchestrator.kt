@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
@@ -122,17 +121,28 @@ class SyncOrchestrator(
             appForegroundStateService.isSharingLiveLocation,
         )
         val isAppActiveFlow = combine(isAppActiveFlows) { actives -> actives.any { it } }
-        // In offline mode, the SDK checks whether the homeserver is reachable using an exponential backoff, which can take minutes.
-        // When the network is back, restart the sync service right away so that the timeline and the send queues resume as soon
-        // as possible. Only react to the network coming back, so that we do not interfere with the SDK backoff when the network is
-        // available but the homeserver is not reachable.
+        // The network status is only used as a hint to let the SDK check the homeserver reachability again, never as the source of
+        // truth, since the homeserver may still be reachable without a network reported by the system (air-gapped environment).
+        // Only react to network changes, so that we do not interfere with the SDK backoff when the network is available but the
+        // homeserver is not reachable.
         networkMonitor.connectivity
             // Skip the current value, only react to changes
             .drop(1)
-            .filter { it == NetworkStatus.Connected }
-            .onEach {
-                if (syncService.syncState.value == SyncState.Offline && isAppActiveFlow.first() && !matrixClient.isShuttingDown) {
+            .onEach { networkStatus ->
+                if (matrixClient.isShuttingDown || !isAppActiveFlow.first()) return@onEach
+                val syncState = syncService.syncState.value
+                if (networkStatus == NetworkStatus.Connected && syncState == SyncState.Offline) {
+                    // In offline mode, the SDK checks whether the homeserver is reachable using an exponential backoff, which can
+                    // take minutes. Restart the sync service right away so that the timeline and the send queues resume as soon as
+                    // possible.
                     Timber.tag(tag).d("network is back while the sync service is offline, restarting it")
+                    syncService.startSync()
+                } else if (networkStatus == NetworkStatus.Disconnected && syncState == SyncState.Running) {
+                    // The pending long-polling sync request may not notice that the network is gone until it times out, which
+                    // can take up to a minute. Restart the sync service to cancel it: the new request will fail fast if the
+                    // homeserver is not reachable, so the SDK enters the offline mode and the offline banner is displayed.
+                    Timber.tag(tag).d("network is lost while the sync service is running, restarting it")
+                    syncService.stopSync()
                     syncService.startSync()
                 }
             }
