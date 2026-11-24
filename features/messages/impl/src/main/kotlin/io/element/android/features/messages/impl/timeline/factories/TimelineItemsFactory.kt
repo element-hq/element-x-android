@@ -88,6 +88,7 @@ class TimelineItemsFactory(
         }
         val result = timelineItemGrouper.group(newTimelineItemStates)
             .withoutReadMarkerAtTheBottom()
+            .withVirtualItemIdsBasedOnContent()
             .toImmutableList()
         this._timelineItems.emit(result)
     }
