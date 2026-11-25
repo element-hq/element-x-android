@@ -12,6 +12,7 @@ package io.element.android.libraries.matrix.impl
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.data.bytes
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
@@ -389,7 +390,7 @@ class RustMatrixClientTest {
                 logoutResult = { error("Logout failed") },
             ),
         )
-        val result = runCatching { client.logout(userInitiated = true, ignoreSdkError = false) }
+        val result = runCatchingExceptions { client.logout(userInitiated = true, ignoreSdkError = false) }
         assertThat(result.isFailure).isTrue()
         assertThat(client.isShuttingDown).isFalse()
         // The delegate is set when creating the client, then restored after the failure

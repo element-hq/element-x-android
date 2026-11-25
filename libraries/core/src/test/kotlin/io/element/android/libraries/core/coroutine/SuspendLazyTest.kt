@@ -33,17 +33,27 @@ class SuspendLazyTest {
     fun `await fails instead of suspending forever if the scope is cancelled`() = runTest {
         val job = Job().apply { cancel() }
         val lazyValue = suspendLazy(job) { "value" }
-        val result = runCatching { lazyValue.value.await() }
-        assertThat(result.exceptionOrNull()).isInstanceOf(CancellationException::class.java)
+        val error = awaitError { lazyValue.value.await() }
+        assertThat(error).isInstanceOf(CancellationException::class.java)
     }
 
     @Test
     fun `await fails instead of suspending forever if the block throws`() = runTest {
         val error = IllegalStateException("Failure")
         val lazyValue = suspendLazy(SupervisorJob() + CoroutineExceptionHandler { _, _ -> }) { throw error }
-        val result = runCatching { lazyValue.value.await() }
+        val thrown = awaitError { lazyValue.value.await() }
         // The exception may be a copy with a recovered stack trace, so check its type and message
-        assertThat(result.exceptionOrNull()).isInstanceOf(IllegalStateException::class.java)
-        assertThat(result.exceptionOrNull()).hasMessageThat().isEqualTo(error.message)
+        assertThat(thrown).isInstanceOf(IllegalStateException::class.java)
+        assertThat(thrown).hasMessageThat().isEqualTo(error.message)
+    }
+
+    @Suppress("TooGenericExceptionCaught")
+    private suspend fun awaitError(block: suspend () -> Unit): Throwable? {
+        return try {
+            block()
+            null
+        } catch (e: Throwable) {
+            e
+        }
     }
 }
