@@ -52,6 +52,7 @@
   <string name="screen_encryption_reset_no_options_title">"Du musst deine digitale Identität zurücksetzen"</string>
   <string name="screen_encryption_reset_subtitle">"Wenn du keinen Zugriff auf andere verifizierte Geräte hast und deinen Wiederherstellungsschlüssel nicht hast, musst du deine digitale Identität zurücksetzen, um die App weiter nutzen zu können."</string>
   <string name="screen_encryption_reset_title">"Bestätigung nicht möglich? Dann musst du deine digitale Identität zurücksetzen."</string>
+  <string name="screen_identity_confirmation_sign_out">"Abmelden"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Löschen"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Wenn du alle deine Geräte entfernst, gehen deine verschlüsselten Chatverläufe verloren und du musst deine digitale Identität zurücksetzen."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du den Schlüsselspeicher löschen möchtest?"</string>

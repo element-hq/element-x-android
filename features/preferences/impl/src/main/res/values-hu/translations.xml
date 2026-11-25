@@ -107,6 +107,9 @@ Ha folytatja, egyes beállítások megváltozhatnak."</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"A rendszerértesítések ki vannak kapcsolva"</string>
   <string name="screen_notification_settings_title">"Értesítések"</string>
   <string name="screen_settings_add_account">"Fiók hozzáadása"</string>
+  <string name="screen_settings_message_text_size_adjust_size">"Méret beállítása"</string>
+  <string name="screen_settings_message_text_size_default_description">"Az alapértelmezett betűméret: %1$d."</string>
+  <string name="screen_settings_message_text_size_title">"Üzenet betűmérete"</string>
   <string name="screen_settings_user_status_away">"Távol"</string>
   <string name="screen_settings_user_status_be_right_back">"Rögtön visszajövök"</string>
   <string name="screen_settings_user_status_custom">"Egyedi…"</string>

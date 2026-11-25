@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="error_account_already_logged_in">"Hai già effettuato l\'accesso su questo dispositivo come %1$s ."</string>
+  <string name="error_account_already_logged_in">"Hai già effettuato l\'accesso come %1$s."</string>
+  <string name="error_account_already_logged_in_title">"Accesso duplicato"</string>
   <string name="error_account_creation_not_possible">"Il tuo gestore dell\'account deve essere aggiornato per supportare il servizio di autenticazione Matrix e la creazione di account."</string>
   <string name="screen_account_provider_signin_title">"Stai per accedere a %s"</string>
   <string name="screen_change_account_provider_subtitle">"Utilizza un provider di account diverso, ad esempio il tuo server privato o un account di lavoro."</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"L\'app Element Pro è necessaria su %1$s. Scaricala dallo store."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro è richiesto"</string>
-  <string name="screen_change_server_error_invalid_homeserver">"Non è stato possibile contattare il gestorehomeserver di questo account. Verifica di aver inserito correttamente l\'URL dell\'homeserver. Se l\'URL è corretto, contatta il gestore del tuo account per ulteriore assistenza."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Non è stato possibile contattare il gestore dell\'homeserver di questo account. Verifica di aver inserito correttamente l\'URL dell\'homeserver. Se l\'URL è corretto, contatta il gestore del tuo account per ulteriore assistenza."</string>
   <string name="screen_change_server_error_invalid_well_known">"Il server non è disponibile per un problema nel file well-known:
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"Il gestore dell\'account selezionato non supporta la sliding sync. È necessario un aggiornamento per utilizzare %1$s."</string>
@@ -41,6 +42,8 @@
   <string name="screen_missing_key_backup_step_4">"Segui le istruzioni per abilitare l\'archiviazione delle chiavi"</string>
   <string name="screen_missing_key_backup_step_5">"Torna a %1$s"</string>
   <string name="screen_missing_key_backup_title">"Abilita l\'archivio delle chiavi prima di procedere con %1$s"</string>
+  <string name="screen_onboarding_add_account_subtitle">"Puoi aggiungere più account all’app e passare facilmente da uno all’altro."</string>
+  <string name="screen_onboarding_add_account_title">"Accedi a un altro account"</string>
   <string name="screen_onboarding_app_version">"Versione %1$s"</string>
   <string name="screen_onboarding_checking_account">"Verifica dell\'account"</string>
   <string name="screen_onboarding_sign_in_manually">"Accedi manualmente"</string>

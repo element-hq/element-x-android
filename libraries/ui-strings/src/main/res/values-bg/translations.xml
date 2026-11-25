@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Добавяне на реакция: %1$s"</string>
+  <string name="a11y_address">"Адрес"</string>
   <string name="a11y_delete">"Изтриване"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d въведена цифра"</item>
     <item quantity="other">"%1$d въведени цифри"</item>
   </plurals>
+  <string name="a11y_duration">"Продължителност: %1$s"</string>
   <string name="a11y_edit_room_address_hint">"Пълният адрес ще бъде %1$s"</string>
   <string name="a11y_encryption_details">"Подробности за шифроването"</string>
   <string name="a11y_hide_password">"Скриване на паролата"</string>
@@ -24,16 +26,17 @@
   <string name="a11y_poll_end">"Приключила анкета"</string>
   <string name="a11y_react_with">"Реакция с %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Реакция с други емоджита"</string>
-  <string name="a11y_read_receipts_multiple">"Прочетено от %1$s и %2$s"</string>
+  <string name="a11y_read_receipts_multiple">"Предишно съобщение прочетено от %1$s и %2$s"</string>
   <plurals name="a11y_read_receipts_multiple_with_others">
-    <item quantity="one">"Прочетено от %1$s и %2$d друг"</item>
-    <item quantity="other">"Прочетено от %1$s и %2$d други"</item>
+    <item quantity="one">"Предишно съобщение прочетено от %1$s и %2$d друг"</item>
+    <item quantity="other">"Предишно съобщение прочетено от %1$s и %2$d други"</item>
   </plurals>
-  <string name="a11y_read_receipts_single">"Прочетено от %1$s"</string>
+  <string name="a11y_read_receipts_single">"Предишно съобщение, прочетено от %1$s"</string>
   <string name="a11y_remove_reaction">"Премахване на реакция с %1$s"</string>
   <string name="a11y_send_files">"Изпращане на файлове"</string>
   <string name="a11y_show_password">"Показване на паролата"</string>
   <string name="a11y_start_call">"Започнете обаждане"</string>
+  <string name="a11y_threads_in_room">"Нишки в %1$s"</string>
   <string name="a11y_user_menu">"Потребителско меню"</string>
   <string name="a11y_view_details">"Вижте подробности"</string>
   <string name="action_accept">"Приемане"</string>
@@ -41,8 +44,10 @@
   <string name="action_back">"Назад"</string>
   <string name="action_call">"Обаждане"</string>
   <string name="action_cancel">"Отказ"</string>
+  <string name="action_choose_file">"Изберете файл"</string>
   <string name="action_choose_photo">"Избор на снимка"</string>
   <string name="action_clear">"Изчистване"</string>
+  <string name="action_clear_all">"Изчистване на всичко"</string>
   <string name="action_close">"Затваряне"</string>
   <string name="action_confirm">"Потвърждаване"</string>
   <string name="action_confirm_password">"Потвърдете паролата"</string>
@@ -53,11 +58,16 @@
   <string name="action_copy_text">"Копиране на текста"</string>
   <string name="action_create">"Създаване"</string>
   <string name="action_create_room">"Създаване на стая"</string>
+  <string name="action_create_space">"Създаване на пространство"</string>
   <string name="action_decline">"Отхвърляне"</string>
   <string name="action_decline_and_block">"Отхвърляне и блокиране"</string>
+  <string name="action_delete">"Изтриване"</string>
+  <string name="action_delete_account">"Изтриване на акаунта"</string>
+  <string name="action_delete_file">"Изтриване на файла"</string>
   <string name="action_delete_poll">"Изтриване на анкетата"</string>
   <string name="action_disable">"Деактивиране"</string>
   <string name="action_done">"Готово"</string>
+  <string name="action_download">"Изтегляне"</string>
   <string name="action_edit">"Редактиране"</string>
   <string name="action_edit_poll">"Редактиране на анкетата"</string>
   <string name="action_enable">"Активиране"</string>
@@ -65,6 +75,7 @@
   <string name="action_enter_pin">"Въведете PIN"</string>
   <string name="action_forgot_password">"Забравена парола?"</string>
   <string name="action_forward">"Препращане"</string>
+  <string name="action_got_it">"Разбрано"</string>
   <string name="action_ignore">"Игнориране"</string>
   <string name="action_invite">"Поканване"</string>
   <string name="action_invite_friends">"Поканване на хора"</string>
@@ -78,6 +89,8 @@
   <string name="action_leave_room">"Напускане на стаята"</string>
   <string name="action_leave_space">"Напускане на пространството"</string>
   <string name="action_load_more">"Зареждане на още"</string>
+  <string name="action_manage_account_and_devices">"Управление на акаунта и устройствата"</string>
+  <string name="action_mark_as_read">"Отбелязване като прочетено"</string>
   <string name="action_message">"Съобщение"</string>
   <string name="action_next">"Напред"</string>
   <string name="action_no">"Не"</string>
@@ -106,8 +119,8 @@
   <string name="action_share">"Споделяне"</string>
   <string name="action_share_link">"Споделяне на връзката"</string>
   <string name="action_show">"Показване"</string>
-  <string name="action_signout">"Изход"</string>
-  <string name="action_signout_anyway">"Излизане въпреки това"</string>
+  <string name="action_signout">"Премахване на това устройство"</string>
+  <string name="action_signout_anyway">"Премахване на това устройство въпреки това"</string>
   <string name="action_skip">"Пропускане"</string>
   <string name="action_start">"Започване"</string>
   <string name="action_start_chat">"Започване на чат"</string>
@@ -115,6 +128,7 @@
   <string name="action_static_map_load">"Докоснете за зареждане на карта"</string>
   <string name="action_take_photo">"Снимка"</string>
   <string name="action_tap_for_options">"Докоснете за опции"</string>
+  <string name="action_translate">"Превеждане"</string>
   <string name="action_try_again">"Повторен опит"</string>
   <string name="action_unpin">"Откачване"</string>
   <string name="action_view_source">"Преглед на източника"</string>
@@ -122,11 +136,13 @@
   <string name="action_yes_try_again">"Да, опитай отново"</string>
   <string name="common_about">"Относно"</string>
   <string name="common_acceptable_use_policy">"Политика за приемлива употреба"</string>
+  <string name="common_account_settings">"Настройки на акаунта"</string>
   <string name="common_add_another_account">"Добавяне на друг акаунт"</string>
   <string name="common_advanced_settings">"Разширени настройки"</string>
   <string name="common_an_image">"изображение"</string>
   <string name="common_analytics">"Статистика"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Вие напуснахте стаята"</string>
+  <string name="common_app_settings">"Настройки на приложението"</string>
   <string name="common_appearance">"Облик"</string>
   <string name="common_audio">"Аудио"</string>
   <string name="common_blocked_users">"Блокирани потребители"</string>
@@ -169,10 +185,12 @@
   <string name="common_link_copied_to_clipboard">"Връзката е копирана в клипборда"</string>
   <string name="common_loading">"Зарежда се…"</string>
   <string name="common_loading_more">"Зарежда се още…"</string>
+  <string name="common_location_sharing">"Споделяне на местоположение"</string>
   <plurals name="common_many_members">
     <item quantity="one">"%d друг"</item>
     <item quantity="other">"%d други"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Качество на качваните мултимедии"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d член"</item>
     <item quantity="other">"%1$d членове"</item>
@@ -180,6 +198,7 @@
   <string name="common_message">"Съобщение"</string>
   <string name="common_message_layout">"Оформление на съобщенията"</string>
   <string name="common_message_removed">"Съобщението е премахнато"</string>
+  <string name="common_moderation_and_safety">"Модерация и безопасност"</string>
   <string name="common_modern">"Модерно"</string>
   <string name="common_mute">"Заглушаване"</string>
   <string name="common_no_results">"Няма резултати"</string>
@@ -206,10 +225,10 @@
   </plurals>
   <string name="common_preparing">"Подготвя се…"</string>
   <string name="common_privacy_policy">"Политика за поверителност"</string>
-  <string name="common_private_room">"Частна стая"</string>
-  <string name="common_private_space">"Частно пространство"</string>
-  <string name="common_public_room">"Общодостъпна стая"</string>
-  <string name="common_public_space">"Общодостъпно пространство"</string>
+  <string name="common_private_room">"Поверителна стая"</string>
+  <string name="common_private_space">"Поверително пространство"</string>
+  <string name="common_public_room">"Обществена стая"</string>
+  <string name="common_public_space">"Обществено пространство"</string>
   <string name="common_reaction">"Реакция"</string>
   <string name="common_reactions">"Реакции"</string>
   <string name="common_reason">"Причина"</string>
@@ -245,7 +264,7 @@
   <string name="common_settings">"Настройки"</string>
   <string name="common_share_space">"Споделяне на пространството"</string>
   <string name="common_shared_location">"Споделено местоположение"</string>
-  <string name="common_signing_out">"Излизате"</string>
+  <string name="common_signing_out">"Премахване на устройството"</string>
   <string name="common_something_went_wrong">"Нещо се обърка"</string>
   <string name="common_something_went_wrong_message">"Възникна проблем. Моля, опитайте отново."</string>
   <string name="common_space">"Пространство"</string>
@@ -261,6 +280,7 @@
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Уведомления от трети страни"</string>
   <string name="common_thread">"Нишка"</string>
+  <string name="common_threads">"Нишки"</string>
   <string name="common_topic">"Тема"</string>
   <string name="common_topic_placeholder">"За какво е тази стая?"</string>
   <string name="common_unable_to_invite_message">"Поканите не можаха да бъдат изпратени до един или повече потребители."</string>

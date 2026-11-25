@@ -11,7 +11,7 @@
   <string name="screen_chat_backup_recovery_action_change_description">"Vaši se razgovori automatski sigurnosno kopiraju enkripcijom od početka do kraja. Da biste vratili ovu sigurnosnu kopiju i zadržali svoj digitalni identitet kada izgubite pristup svim svojim uređajima, trebat će vam ključ za oporavak."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Unesi ključ za oporavak"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Vaša pohrana ključeva trenutačno nije sinkronizirana."</string>
-  <string name="screen_chat_backup_recovery_action_setup">"ključ za oporavak"</string>
+  <string name="screen_chat_backup_recovery_action_setup">"Izradi ključ za oporavak"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Vaši se razgovori automatski sigurnosno kopiraju enkripcijom od početka do kraja. Da biste vratili ovu sigurnosnu kopiju i zadržali svoj digitalni identitet kada izgubite pristup svim svojim uređajima, trebat će vam ključ za oporavak."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Otvorite %1$s na stolnom uređaju"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Ponovno se prijavite na svoj račun"</string>
@@ -43,10 +43,16 @@
   <string name="screen_custom_recovery_key_success_title">"Vaša sigurnosna kopija je sada potpuno postavljena"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Nastavi"</string>
   <string name="screen_encryption_reset_bullet_1">"Sačuvat će se podatci o vašem računu, kontakti, postavke i popis razgovora"</string>
-  <string name="screen_encryption_reset_bullet_2">"Izgubit ćete svu povijest poruka koja je pohranjena samo na poslužitelju"</string>
+  <string name="screen_encryption_reset_bullet_2">"Izgubit ćete svu povijest šifriranih razgovora koja je pohranjena samo na poslužitelju"</string>
   <string name="screen_encryption_reset_bullet_3">"Drugi će korisnici vidjeti da je vaš digitalni identitet poništen"</string>
+  <string name="screen_encryption_reset_bullet_4">"Sve uređaje na koje ste prijavljeni trebat će ponovno potvrditi"</string>
   <string name="screen_encryption_reset_footer">"Poništite svoj identitet samo ako nemate pristup drugom prijavljenom uređaju i ako ste izgubili ključ za oporavak."</string>
+  <string name="screen_encryption_reset_no_chats_message">"Izgleda da još nemate šifriranih razgovora. Ako je to tako, možete sigurno nastaviti s resetiranjem svog digitalnog identiteta."</string>
+  <string name="screen_encryption_reset_no_options_subtitle">"Nemate pristup drugim potvrđenim uređajima ili ključ za oporavak, pa ćete morati resetirati svoj digitalni identitet kako biste mogli nastaviti upotrebljavati aplikaciju."</string>
+  <string name="screen_encryption_reset_no_options_title">"Trebate resetirati svoj digitalni identitet"</string>
+  <string name="screen_encryption_reset_subtitle">"Ako nemate pristup drugim potvrđenim uređajima i nemate ključ za oporavak, trebat ćete resetirati svoj digitalni identitet kako biste mogli nastaviti upotrebljavati aplikaciju."</string>
   <string name="screen_encryption_reset_title">"Ne možete potvrditi? Morat ćete resetirati svoj digitalni identitet."</string>
+  <string name="screen_identity_confirmation_sign_out">"Odjava"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Izbriši"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Izgubit ćete svoju šifriranu povijest razgovora i morat ćete resetirati svoj digitalni identitet ako uklonite sve svoje uređaje."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Jeste li sigurni da želite isključiti sigurnosno kopiranje?"</string>
@@ -59,6 +65,10 @@
   <string name="screen_recovery_key_change_generate_key_description">"Ne dijelite ovo ni s kim!"</string>
   <string name="screen_recovery_key_change_success">"Ključ za oporavak je promijenjen"</string>
   <string name="screen_recovery_key_change_title">"Želite li promijeniti ključ za oporavak?"</string>
+  <string name="screen_recovery_key_check_key_title">"Unesite ključ za oporavak"</string>
+  <string name="screen_recovery_key_check_subtitle">"Unesite ključ za oporavak koji ste spremili kako biste bili sigurni da je ispravan i aktivan."</string>
+  <string name="screen_recovery_key_check_success_title">"Vaš ključ za oporavak je aktivan"</string>
+  <string name="screen_recovery_key_check_title">"Provjerite svoj ključ za oporavak"</string>
   <string name="screen_recovery_key_confirm_description">"Pazite da nitko ne vidi ovaj zaslon!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Pokušajte ponovno potvrditi pristup pohrani ključeva."</string>
   <string name="screen_recovery_key_confirm_error_title">"Neispravan ključ za oporavak"</string>
@@ -79,7 +89,8 @@
   <string name="screen_recovery_key_setup_generate_key">"Generirajte svoj ključ za oporavak"</string>
   <string name="screen_recovery_key_setup_generate_key_description">"Ne dijelite ovo ni s kim!"</string>
   <string name="screen_recovery_key_setup_success">"Postavljanje oporavka je uspjelo"</string>
-  <string name="screen_recovery_key_setup_title">"ključ za oporavak"</string>
+  <string name="screen_recovery_key_setup_title">"Izradi ključ za oporavak"</string>
+  <string name="screen_recovery_key_success_title">"Vaš novi ključ za oporavak sada je aktivan"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Da, poništi sada"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Ovaj je proces nepovratan."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Jeste li sigurni da želite resetirati svoj digitalni identitet?"</string>

@@ -52,6 +52,7 @@
   <string name="screen_encryption_reset_no_options_title">"Sinun on nollattava digitaalinen identiteettisi"</string>
   <string name="screen_encryption_reset_subtitle">"Jos sinulla ei ole pääsyä muihin vahvistettuihin laitteisiin etkä palautusavainta, sinun on nollattava digitaalinen identiteettisi voidaksesi jatkaa sovelluksen käyttöä."</string>
   <string name="screen_encryption_reset_title">"Etkö voi vahvistaa? Sinun on nollattava digitaalinen identiteettisi."</string>
+  <string name="screen_identity_confirmation_sign_out">"Kirjaudu ulos"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Poista"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Menetät salatun keskusteluhistoriasi ja sinun on nollattava digitaalinen identiteettisi, jos poistat kaikki laitteesi."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Haluatko varmasti poistaa avainten säilytyksen?"</string>

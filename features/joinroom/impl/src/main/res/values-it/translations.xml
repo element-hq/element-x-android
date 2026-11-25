@@ -27,7 +27,7 @@
   <string name="screen_join_room_loading_alert_title">"Non è stato possibile visualizzare l\'anteprima di questa stanza"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s non supporta ancora gli spazi. Puoi accedere agli spazi sul web."</string>
   <string name="screen_join_room_space_not_supported_title">"Gli spazi non sono ancora supportati"</string>
-  <string name="screen_join_room_subtitle_knock">"Clicca sul pulsante qui sotto e un amministratore della stanza riceverà una notifica. Potrai partecipare alla conversazione una volta approvato."</string>
+  <string name="screen_join_room_subtitle_knock">"Tocca il pulsante qui sotto e un amministratore della chat verrà avvisato. Potrai unirti alla conversazione una volta che la tua richiesta sarà stata approvata."</string>
   <string name="screen_join_room_subtitle_no_preview">"Per visualizzare la cronologia dei messaggi devi essere un membro di questa stanza."</string>
   <string name="screen_join_room_title_knock">"Vuoi entrare in questa stanza?"</string>
   <string name="screen_join_room_title_no_preview">"L\'anteprima non è disponibile"</string>

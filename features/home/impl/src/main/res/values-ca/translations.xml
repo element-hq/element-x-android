@@ -3,7 +3,7 @@
   <string name="banner_battery_optimization_content_android">"Desactiva l\'optimització de bateria d\'aquesta aplicació per assegurar-te de rebre totes les notificacions."</string>
   <string name="banner_battery_optimization_title_android">"No arriben les notificacions?"</string>
   <string name="banner_set_up_recovery_content">"Recupera la teva identitat criptogràfica i l\'historial de missatges amb una clau de recuperació si has perdut l\'accés a tots els teus dispositius existents."</string>
-  <string name="banner_set_up_recovery_submit">"Configura la recuperació"</string>
+  <string name="banner_set_up_recovery_submit">"Obtén la clau de recuperació"</string>
   <string name="banner_set_up_recovery_title">"Configura la recuperació per protegir el teu compte"</string>
   <string name="confirm_recovery_key_banner_message">"Confirma la clau de recuperació per mantenir l\'accés a l\'emmagatzematge de claus i a l\'historial de missatges."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Introdueix clau de recuperació"</string>

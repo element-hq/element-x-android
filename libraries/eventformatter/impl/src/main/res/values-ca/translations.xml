@@ -23,7 +23,7 @@
   <string name="state_event_room_ban_with_reason">"%1$s ha bandejat %2$s: %3$s"</string>
   <string name="state_event_room_created">"%1$s ha creat la sala"</string>
   <string name="state_event_room_created_by_you">"Has creat la sala"</string>
-  <string name="state_event_room_invite">"%1$s a convidat a %2$s"</string>
+  <string name="state_event_room_invite">"%1$s ha convidat a %2$s"</string>
   <string name="state_event_room_invite_accepted">"%1$s ha acceptat la invitació"</string>
   <string name="state_event_room_invite_accepted_by_you">"Has acceptat la invitació"</string>
   <string name="state_event_room_invite_by_you">"Has convidat a %1$s"</string>

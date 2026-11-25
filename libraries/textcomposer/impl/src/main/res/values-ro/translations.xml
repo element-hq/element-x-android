@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Adăugați un atașament"</string>
+  <string name="rich_text_editor_a11y_add_emoji">"Adăugați emoji"</string>
   <string name="rich_text_editor_bullet_list">"Comutați lista cu puncte"</string>
   <string name="rich_text_editor_close_formatting_options">"Anulați și închideți opțiunile de formatare"</string>
   <string name="rich_text_editor_code_block">"Comutați blocul de cod"</string>

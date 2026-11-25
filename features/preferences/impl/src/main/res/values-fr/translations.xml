@@ -107,6 +107,9 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
   <string name="screen_settings_add_account">"Ajouter un compte"</string>
+  <string name="screen_settings_message_text_size_adjust_size">"Ajuster la taille"</string>
+  <string name="screen_settings_message_text_size_default_description">"La taille du texte par défaut est %1$d."</string>
+  <string name="screen_settings_message_text_size_title">"Taille du texte des messages"</string>
   <string name="screen_settings_user_status_away">"Absent"</string>
   <string name="screen_settings_user_status_be_right_back">"Je reviens tout de suite"</string>
   <string name="screen_settings_user_status_custom">"Personnalisé…"</string>

@@ -107,6 +107,9 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_system_notifications_turned_off">"Süsteemi teavitused on välja lülitatud"</string>
   <string name="screen_notification_settings_title">"Teavitused"</string>
   <string name="screen_settings_add_account">"Lisa kasutajakonto"</string>
+  <string name="screen_settings_message_text_size_adjust_size">"Kohenda suurust"</string>
+  <string name="screen_settings_message_text_size_default_description">"Teksti vaikimisi suurus on %1$d."</string>
+  <string name="screen_settings_message_text_size_title">"Sõnumi teksti suurus"</string>
   <string name="screen_settings_user_status_away">"Eemal"</string>
   <string name="screen_settings_user_status_be_right_back">"Tulen kohe tagasi"</string>
   <string name="screen_settings_user_status_custom">"Kohandatud…"</string>

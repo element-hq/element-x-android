@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Ужо ўдзельнік"</string>
   <string name="screen_invite_users_already_invited">"Ужо запрасілі"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"У вас пакуль няма чатаў з гэтымі кантактамі. Перш чым працягнуць, пацвердзіце запрашэнне іх у гэты пакой."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"У вас пакуль няма чатаў з гэтым кантактам. Перш чым працягнуць, пацвердзіце яго запрашэнне ў гэты пакой."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Запрасіць новыя кантакты ў гэты пакой?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Запрасіць новы кантакт у гэты пакой?"</string>
 </resources>

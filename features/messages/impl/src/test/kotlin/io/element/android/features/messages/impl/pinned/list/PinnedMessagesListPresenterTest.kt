@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -394,6 +395,7 @@ class PinnedMessagesListPresenterTest {
         )
         timelineProvider.launchIn(backgroundScope)
         return PinnedMessagesListPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(),
             navigator = navigator,
             room = room,
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),

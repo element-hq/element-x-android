@@ -19,6 +19,8 @@
   <string name="state_event_room_avatar_removed_by_you">"Вы выдалілі аватар пакоя"</string>
   <string name="state_event_room_ban">"%1$s заблакіраваў(-ла) %2$s"</string>
   <string name="state_event_room_ban_by_you">"Вы заблакіравалі %1$s"</string>
+  <string name="state_event_room_ban_by_you_with_reason">"Вы заблакіравалі %1$s: %2$s"</string>
+  <string name="state_event_room_ban_with_reason">"%1$s заблакіраваў(-ла) %2$s: %3$s"</string>
   <string name="state_event_room_created">"%1$s стварыў(-ла) пакой"</string>
   <string name="state_event_room_created_by_you">"Вы стварылі пакой"</string>
   <string name="state_event_room_invite">"%1$s запрасіў(-ла) %2$s"</string>
@@ -55,6 +57,8 @@
   <string name="state_event_room_reject_by_you">"Вы адхілілі запрашэнне"</string>
   <string name="state_event_room_remove">"%1$s выдаліў(-ла) %2$s"</string>
   <string name="state_event_room_remove_by_you">"Вы выдалілі %1$s"</string>
+  <string name="state_event_room_remove_by_you_with_reason">"Вы выдалілі %1$s: %2$s"</string>
+  <string name="state_event_room_remove_with_reason">"%1$s выдаліў(-ла) %2$s: %3$s"</string>
   <string name="state_event_room_third_party_invite">"%1$s адправіў(-ла) запрашэнне %2$s далучыцца да пакоя"</string>
   <string name="state_event_room_third_party_invite_by_you">"Вы адправілі запрашэнне %1$s далучыцца да пакоя"</string>
   <string name="state_event_room_third_party_revoked_invite">"%1$s адклікаў(-ла) запрашэнне для %2$s далучыцца да пакоя"</string>

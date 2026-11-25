@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="banner_set_up_recovery_content">"Стварыце новы ключ аднаўлення, які можна выкарыстоўваць для аднаўлення зашыфраванай гісторыі паведамленняў у выпадку страты доступу да вашых прылад."</string>
-  <string name="banner_set_up_recovery_submit">"Наладзьце аднаўленне"</string>
-  <string name="banner_set_up_recovery_title">"Наладзіць аднаўленне"</string>
+  <string name="banner_battery_optimization_content_android">"Адключыце аптымізацыю батарэі для гэтай праграмы, каб атрымліваць усе апавяшчэнні."</string>
+  <string name="banner_battery_optimization_submit_android">"Адключыць аптымізацыю"</string>
+  <string name="banner_battery_optimization_title_android">"Не прыходзяць апавяшчэнні?"</string>
+  <string name="banner_new_sound_message">"Гук апавяшчэння абноўлены — ён стаў чысцейшым, карацейшым і менш назойлівым."</string>
+  <string name="banner_new_sound_title">"Мы абнавілі гукі"</string>
+  <string name="banner_set_up_recovery_content">"Вашы чаты аўтаматычна капіюцца з скразным шыфраваннем. Каб аднавіць гэтую рэзервовую копію і захаваць сваю лічбавую ідэнтычнасць, калі вы страціце доступ да ўсіх сваіх прылад, вам спатрэбіцца ключ аднаўлення."</string>
+  <string name="banner_set_up_recovery_submit">"Стварыць ключ аднаўлення"</string>
+  <string name="banner_set_up_recovery_title">"Зрабіце рэзервовую копію чатаў"</string>
+  <string name="banner_swipe_avatar_content">"Правядзіце па аватары ўверх або ўніз, каб пераключацца паміж уліковымі запісамі, не адкрываючы налады праграмы."</string>
+  <string name="banner_swipe_avatar_title">"Правядзіце па аватары, каб змяніць уліковы запіс"</string>
   <string name="confirm_recovery_key_banner_message">"Пацвердзіце свой ключ аднаўлення, каб захаваць доступ да сховішча ключоў і гісторыі паведамленняў."</string>
+  <string name="confirm_recovery_key_banner_primary_button_title">"Увядзіце ключ аднаўлення"</string>
+  <string name="confirm_recovery_key_banner_secondary_button_title">"Забылі ключ аднаўлення?"</string>
   <string name="confirm_recovery_key_banner_title">"Ваша сховішча ключоў не сінхранізавана"</string>
-  <string name="full_screen_intent_banner_message_android">"Каб не прапусціць важны званок, зменіце налады, каб дазволіць поўнаэкранныя апавяшчэнні, калі тэлефон заблакіраваны."</string>
-  <string name="full_screen_intent_banner_title_android">"Палепшыце якасць званкоў"</string>
-  <string name="screen_home_tab_chats">"Усе чаты"</string>
+  <string name="full_screen_intent_banner_message_android">"Каб не прапусціць важны выклік, зменіце налады, каб дазволіць поўнаэкранныя апавяшчэнні, калі тэлефон заблакіраваны."</string>
+  <string name="full_screen_intent_banner_title_android">"Палепшыце якасць выклікаў"</string>
+  <string name="screen_home_tab_chats">"Чаты"</string>
+  <string name="screen_home_tab_search">"Пошук"</string>
   <string name="screen_home_tab_spaces">"Прасторы"</string>
   <string name="screen_invites_decline_chat_message">"Вы ўпэўненыя, што хочаце адхіліць запрашэнне ў %1$s?"</string>
   <string name="screen_invites_decline_chat_title">"Адхіліць запрашэнне"</string>
@@ -15,7 +25,11 @@
   <string name="screen_invites_decline_direct_chat_title">"Адхіліць чат"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) запрасіў(-ла) вас"</string>
   <string name="screen_migration_title">"Налада ўліковага запісу."</string>
+  <string name="screen_multi_account_announcement_action">"Дадаць уліковы запіс"</string>
+  <string name="screen_multi_account_announcement_description">"Перайдзіце ў %1$s, каб увайсці ў іншы ўліковы запіс. Пасля гэтага вы зможаце лёгка пераключацца паміж імі."</string>
+  <string name="screen_multi_account_announcement_title">"Цяпер вы можаце дадаць некалькі ўліковых запісаў"</string>
   <string name="screen_roomlist_a11y_create_message">"Стварыце новую размову або пакой"</string>
+  <string name="screen_roomlist_clear_filters">"Ачысціць фільтры"</string>
   <string name="screen_roomlist_empty_message">"Пачніце з паведамлення каму-небудзь."</string>
   <string name="screen_roomlist_empty_title">"Пакуль няма чатаў."</string>
   <string name="screen_roomlist_filter_favourites">"Абранае"</string>
@@ -25,6 +39,9 @@
   <string name="screen_roomlist_filter_invites">"Запрашэнні"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"У вас няма непрынятых запрашэнняў."</string>
   <string name="screen_roomlist_filter_low_priority">"Нізкі прыярытэт"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"У вас пакуль няма чатаў з нізкім прыярытэтам"</string>
+  <string name="screen_roomlist_filter_mention">"Згадаць"</string>
+  <string name="screen_roomlist_filter_mention_empty_state_title">"У вас няма непрачытаных згадак"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Вы можаце прыбраць фільтры, каб убачыць іншыя вашыя чаты."</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"У вас няма чатаў для гэтай катэгорыі"</string>
   <string name="screen_roomlist_filter_people">"Людзі"</string>
@@ -34,8 +51,23 @@
   <string name="screen_roomlist_filter_unreads">"Непрачытаныя"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Віншуем!
 У вас няма непрачытаных паведамленняў!"</string>
-  <string name="screen_roomlist_main_space_title">"Усе чаты"</string>
+  <string name="screen_roomlist_knock_event_sent_description">"Запыт на далучэнне адпраўлены"</string>
+  <string name="screen_roomlist_main_space_title">"Чаты"</string>
   <string name="screen_roomlist_mark_as_read">"Пазначыць як прачытанае"</string>
   <string name="screen_roomlist_mark_as_unread">"Пазначыць як непрачытанае"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Гэты пакой быў абноўлены"</string>
   <string name="screen_roomlist_your_spaces">"Вашы прасторы"</string>
+  <string name="screen_search_empty_state_message">"Шукайце чаты і паведамленні"</string>
+  <string name="screen_search_empty_state_title">"Пачніце пошук…"</string>
+  <string name="screen_search_from_your_messages_header">"З вашых паведамленняў"</string>
+  <string name="screen_search_history_limit_message">"Пошук працуе на вашай прыладзе, таму зашыфраваныя паведамленні застаюцца прыватнымі.
+Прылада захоўвае паведамленні толькі за апошнія 3 месяцы, таму па старых паведамленнях пакуль шукаць нельга."</string>
+  <string name="screen_search_history_limit_title">"Пошук ахоплівае апошнія 3 месяцы"</string>
+  <string name="screen_search_messages_no_results_message">"Па запыце «%1$s» у вашых нядаўніх паведамленнях нічога не знойдзена."</string>
+  <string name="screen_search_messages_no_results_title">"Нічога не знойдзена за апошнія 3 месяцы"</string>
+  <string name="screen_search_no_results_message">"Па запыце «%1$s» нічога не знойдзена. Паспрабуйце іншы запыт."</string>
+  <string name="screen_search_recent_searches">"Нядаўнія пошукі"</string>
+  <string name="screen_search_tab_chats">"Чаты"</string>
+  <string name="screen_search_tab_messages">"Паведамленні"</string>
+  <string name="screen_space_list_empty_state_title">"Стварайце прасторы, каб упарадкаваць пакоі"</string>
 </resources>

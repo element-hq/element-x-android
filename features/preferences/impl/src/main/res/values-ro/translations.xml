@@ -33,7 +33,7 @@
   <string name="screen_advanced_settings_share_presence_description">"Dacă este dezactivată, nu veți putea trimite sau primi confirmări de citire sau notificări de tastare."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Ascundeți întotdeauna"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Afișați întotdeauna"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"În camere private"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Afișați în camere private"</string>
   <string name="screen_advanced_settings_show_media_timeline_subtitle">"Un fișier media ascuns poate fi afișat oricând prin atingere."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Afișați conținutul media în cronologie"</string>
   <string name="screen_advanced_settings_view_source_description">"Activați opțiunea pentru a vizualiza sursa mesajelor în cronologie."</string>
@@ -60,6 +60,7 @@
   <string name="screen_moderation_and_safety_invites_heading">"Invitații"</string>
   <string name="screen_moderation_and_safety_other_users_heading">"Alți utilizatori"</string>
   <string name="screen_moderation_and_safety_share_presence_heading">"Aspectul dvs."</string>
+  <string name="screen_notification_settings_activity_section_title">"Activitate"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Setări adiționale"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Ton de apel"</string>
   <string name="screen_notification_settings_calls_label">"Apeluri audio și video"</string>
@@ -87,7 +88,7 @@
   <string name="screen_notification_settings_mode_all">"Toate"</string>
   <string name="screen_notification_settings_mode_mentions">"Mențiuni"</string>
   <string name="screen_notification_settings_notification_section_title">"Anunțați-mă pentru"</string>
-  <string name="screen_notification_settings_room_mention_label">"Anunțați-mă pentru @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Mențiuni @room"</string>
   <string name="screen_notification_settings_show_all_activity_subtitle">"Puncte sau numărul de mesaje necitite"</string>
   <string name="screen_notification_settings_show_all_activity_title">"Afișați toate activitățile din lista camerelor"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Personalizat"</string>

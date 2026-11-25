@@ -51,6 +51,7 @@
   <string name="screen_encryption_reset_no_options_title">"Anda perlu mengatur ulang identitas Anda"</string>
   <string name="screen_encryption_reset_subtitle">"Jika Anda tidak memiliki akses ke perangkat terverifikasi lainnya dan tidak memiliki kunci pemulihan, maka Anda harus mereset identitas digital Anda untuk dapat terus menggunakan aplikasi ini."</string>
   <string name="screen_encryption_reset_title">"Tidak dapat mengonfirmasi? Anda perlu mengatur ulang identitas Anda."</string>
+  <string name="screen_identity_confirmation_sign_out">"Keluar"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Hapus"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Anda akan kehilangan pesan terenkripsi jika Anda menghapusnya dari semua perangkat."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Apakah Anda yakin ingin mematikan pencadangan?"</string>

@@ -71,7 +71,6 @@ class FakeFfiClient(
     private val isUserStatusSupportedResult: () -> Boolean = { false },
     private val isProfilesSlidingSyncExtensionSupportedResult: () -> Boolean = { false },
     private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
-    private val getUrlResult: (String) -> ByteArray = { lambdaError() },
     private val getMediaThumbnailResult: (MediaSource, ULong, ULong) -> ByteArray = { _, _, _ -> byteArrayOf() },
     private val contentScannerResult: () -> ContentScanner = { FakeFfiContentScanner() },
     private val runSearchBackfillResult: (SearchBackfillStrategy) -> TaskHandle = { lambdaError() },
@@ -167,10 +166,6 @@ class FakeFfiClient(
 
     override suspend fun setAccountData(eventType: String, content: String) = simulateLongTask {
         setAccountDataResult(eventType, content)
-    }
-
-    override suspend fun getUrl(url: String): ByteArray = simulateLongTask {
-        getUrlResult(url)
     }
 
     override suspend fun contentScanner(): ContentScanner = simulateLongTask {

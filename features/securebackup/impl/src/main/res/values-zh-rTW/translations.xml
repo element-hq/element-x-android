@@ -51,6 +51,7 @@
   <string name="screen_encryption_reset_no_options_title">"您必須重設您的數位身份"</string>
   <string name="screen_encryption_reset_subtitle">"若您沒有其他已驗證的裝置，也沒有還原金鑰，那您需要重設您的數位身份才能繼續使用該應用程式。"</string>
   <string name="screen_encryption_reset_title">"無法確認？您需要重設數位身份。"</string>
+  <string name="screen_identity_confirmation_sign_out">"登出"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"刪除"</string>
   <string name="screen_key_backup_disable_confirmation_description">"若您移除所有裝置，您將遺失加密的聊天記錄，並需重設您的數位身分。"</string>
   <string name="screen_key_backup_disable_confirmation_title">"您確定您要刪除金鑰儲存空間嗎？"</string>

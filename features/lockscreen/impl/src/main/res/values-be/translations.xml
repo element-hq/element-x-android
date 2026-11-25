@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"біяметрычная аўтэнтыфікацыя"</string>
   <string name="screen_app_lock_biometric_unlock">"біяметрычная разблакіроўка"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Разблакіроўка з дапамогай біяметрыі"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Пацвердзіце біяметрыяй"</string>
   <string name="screen_app_lock_forgot_pin">"Забыліся PIN-код?"</string>
   <string name="screen_app_lock_settings_change_pin">"Змяніць PIN-код"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Дазволіць біяметрычную разблакіроўку"</string>
@@ -22,7 +23,7 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Увядзіце адзін і той жа PIN двойчы"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-коды не супадаюць"</string>
   <string name="screen_app_lock_signout_alert_message">"Каб працягнуць, вам неабходна паўторна ўвайсці ў сістэму і стварыць новы PIN-код"</string>
-  <string name="screen_app_lock_signout_alert_title">"Вы выходзіце з сістэмы"</string>
+  <string name="screen_app_lock_signout_alert_title">"Гэтая прылада выдаляецца"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"У вас %1$d спроба разблакіроўкі"</item>
     <item quantity="few">"У вас %1$d спробы разблакіроўкі"</item>

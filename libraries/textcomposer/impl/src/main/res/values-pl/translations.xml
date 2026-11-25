@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Dodaj załącznik"</string>
+  <string name="rich_text_editor_a11y_add_emoji">"Dodaj emoji"</string>
   <string name="rich_text_editor_bullet_list">"Przełącz listę punktową"</string>
   <string name="rich_text_editor_close_formatting_options">"Anuluj i zamknij formatowanie tekstu"</string>
   <string name="rich_text_editor_code_block">"Przełącz blok kodu"</string>

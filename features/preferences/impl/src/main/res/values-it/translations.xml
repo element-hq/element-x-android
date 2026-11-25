@@ -32,8 +32,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Se disattivato, non potrai né inviare né ricevere conferme di lettura o notifiche di scrittura."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Nascondi sempre"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Mostra sempre"</string>
-  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Nelle stanze private"</string>
-  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Un file multimediale nascosto può sempre essere visualizzato toccandolo"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Mostra nelle stanze private"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"I contenuti multimediali nascosti possono essere sempre visualizzati toccandoli."</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Mostra i media nella conversazione"</string>
   <string name="screen_advanced_settings_view_source_description">"Attiva l\'opzione per visualizzare il codice sorgente del messaggio nella conversazione."</string>
   <string name="screen_blocked_users_empty">"Non hai utenti bloccati"</string>
@@ -47,11 +47,18 @@
   <string name="screen_edit_profile_error_title">"Impossibile aggiornare il profilo"</string>
   <string name="screen_edit_profile_title">"Modifica profilo"</string>
   <string name="screen_edit_profile_updating_details">"Aggiornamento del profilo…"</string>
+  <string name="screen_labs_enable_gallery_description">"Invia più immagini o video contemporaneamente. Funziona su mobile, ma non è ancora supportato su web."</string>
+  <string name="screen_labs_enable_knocking">"Richiedi accesso"</string>
+  <string name="screen_labs_enable_knocking_description">"Gli utenti possono chiedere di entrare in una stanza che non è aperta a tutti. Stabile su mobile, l\'implementazione web esiste ma è sperimentale."</string>
   <string name="screen_labs_enable_threads">"Abilita le risposte alle discussioni"</string>
   <string name="screen_labs_enable_threads_description">"L\'app si riavvierà per applicare questa modifica."</string>
   <string name="screen_labs_header_description">"Prova le nostre ultime idee in fase di sviluppo. Queste funzionalità non sono definitive; potrebbero essere instabili e soggette a modifiche."</string>
   <string name="screen_labs_header_title">"Hai voglia di sperimentare?"</string>
   <string name="screen_labs_title">"Labs"</string>
+  <string name="screen_moderation_and_safety_invites_heading">"Inviti"</string>
+  <string name="screen_moderation_and_safety_other_users_heading">"Altri utenti"</string>
+  <string name="screen_moderation_and_safety_share_presence_heading">"Il tuo aspetto"</string>
+  <string name="screen_notification_settings_activity_section_title">"Attività"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Impostazioni aggiuntive"</string>
   <string name="screen_notification_settings_call_ringtone_label">"Suoneria di chiamata"</string>
   <string name="screen_notification_settings_calls_label">"Chiamate audio e video"</string>
@@ -79,7 +86,8 @@ Se procedi, alcune delle tue impostazioni potrebbero cambiare."</string>
   <string name="screen_notification_settings_mode_all">"Tutto"</string>
   <string name="screen_notification_settings_mode_mentions">"Menzioni"</string>
   <string name="screen_notification_settings_notification_section_title">"Avvisami per"</string>
-  <string name="screen_notification_settings_room_mention_label">"Avvisami con @room"</string>
+  <string name="screen_notification_settings_room_mention_label">"Menzioni di @room"</string>
+  <string name="screen_notification_settings_show_all_activity_title">"Mostra tutte le attività nella lista delle stanze"</string>
   <string name="screen_notification_settings_sound_custom_fallback">"Personalizzato"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Suono personalizzato…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Errore durante l\'eliminazione del file"</string>
@@ -96,6 +104,7 @@ Se procedi, alcune delle tue impostazioni potrebbero cambiare."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"impostazioni di sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notifiche di sistema disattivate"</string>
   <string name="screen_notification_settings_title">"Notifiche"</string>
+  <string name="screen_settings_add_account">"Aggiungi account"</string>
   <string name="screen_settings_user_status_away">"Assente"</string>
   <string name="screen_settings_user_status_be_right_back">"Torno subito"</string>
   <string name="screen_settings_user_status_custom">"Personalizzato…"</string>
