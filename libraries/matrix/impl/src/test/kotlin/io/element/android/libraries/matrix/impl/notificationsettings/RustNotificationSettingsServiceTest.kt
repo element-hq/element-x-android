@@ -13,8 +13,14 @@ import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiNotificationSettings
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.NotificationSettings
@@ -32,13 +38,50 @@ class RustNotificationSettingsServiceTest {
         assertThat(result.isDefault).isTrue()
     }
 
+    @Test
+    fun `destroy destroys the notification settings once they have been created`() = runTest {
+        val destroyResult = lambdaRecorder<Unit> { }
+        val sut = createRustNotificationSettingsService(
+            notificationSettings = FakeFfiNotificationSettings(destroyResult = destroyResult),
+        )
+        sut.start()
+        sut.destroy()
+        destroyResult.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `destroy does not suspend if the notification settings could not be created`() = runTest {
+        val destroyResult = lambdaRecorder<Unit> { }
+        val sessionCoroutineScope = CoroutineScope(Job()).apply { cancel() }
+        val sut = createRustNotificationSettingsService(
+            notificationSettings = FakeFfiNotificationSettings(destroyResult = destroyResult),
+            sessionCoroutineScope = sessionCoroutineScope,
+        )
+        // Trigger the creation, which will never complete since the session scope is cancelled
+        backgroundScope.launch { sut.start() }
+        runCurrent()
+        sut.destroy()
+        destroyResult.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `destroy does nothing if the notification settings were never used`() = runTest {
+        val destroyResult = lambdaRecorder<Unit> { }
+        val sut = createRustNotificationSettingsService(
+            notificationSettings = FakeFfiNotificationSettings(destroyResult = destroyResult),
+        )
+        sut.destroy()
+        destroyResult.assertions().isNeverCalled()
+    }
+
     private fun TestScope.createRustNotificationSettingsService(
         notificationSettings: NotificationSettings = FakeFfiNotificationSettings(),
+        sessionCoroutineScope: CoroutineScope = this,
     ) = RustNotificationSettingsService(
         client = FakeFfiClient(
             notificationSettings = notificationSettings,
         ),
-        sessionCoroutineScope = this,
+        sessionCoroutineScope = sessionCoroutineScope,
         dispatchers = testCoroutineDispatchers(),
     )
 }

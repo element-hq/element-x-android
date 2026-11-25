@@ -16,12 +16,15 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.NotificationSettings
 import org.matrix.rustcomponents.sdk.NotificationSettingsDelegate
 import org.matrix.rustcomponents.sdk.NotificationSettingsException
 import timber.log.Timber
@@ -31,7 +34,8 @@ class RustNotificationSettingsService(
     sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
 ) : NotificationSettingsService {
-    private val notificationSettings by suspendLazy(sessionCoroutineScope.coroutineContext + dispatchers.io) { client.getNotificationSettings() }
+    private val notificationSettingsLazy = suspendLazy(sessionCoroutineScope.coroutineContext + dispatchers.io) { client.getNotificationSettings() }
+    private val notificationSettings: Deferred<NotificationSettings> get() = notificationSettingsLazy.value
     private val _notificationSettingsChangeFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     override val notificationSettingsChangeFlow: SharedFlow<Unit> = _notificationSettingsChangeFlow.asSharedFlow()
 
@@ -45,10 +49,17 @@ class RustNotificationSettingsService(
         notificationSettings.await().setDelegate(notificationSettingsDelegate)
     }
 
-    suspend fun destroy() {
-        notificationSettings.await().let {
-            it.setDelegate(null)
-            it.destroy()
+    fun destroy() {
+        // Only destroy the instance if it was actually created. Awaiting it here could suspend forever,
+        // since the session scope used to create it may already be cancelled.
+        if (!notificationSettingsLazy.isInitialized()) return
+        val deferred = notificationSettingsLazy.value
+        if (deferred.isCompleted && !deferred.isCancelled) {
+            @OptIn(ExperimentalCoroutinesApi::class)
+            deferred.getCompleted().let {
+                it.setDelegate(null)
+                it.destroy()
+            }
         }
     }
 

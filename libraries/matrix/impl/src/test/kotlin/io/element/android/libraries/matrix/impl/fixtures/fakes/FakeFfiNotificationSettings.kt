@@ -16,6 +16,7 @@ import org.matrix.rustcomponents.sdk.RoomNotificationSettings
 
 class FakeFfiNotificationSettings(
     private val roomNotificationSettings: RoomNotificationSettings = aRustRoomNotificationSettings(),
+    private val destroyResult: () -> Unit = {},
 ) : NotificationSettings(NoHandle) {
     private var delegate: NotificationSettingsDelegate? = null
 
@@ -28,4 +29,6 @@ class FakeFfiNotificationSettings(
         isEncrypted: Boolean,
         isOneToOne: Boolean,
     ): RoomNotificationSettings = roomNotificationSettings
+
+    override fun destroy() = destroyResult()
 }
