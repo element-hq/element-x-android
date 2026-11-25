@@ -137,7 +137,6 @@ class HomePresenterTest {
         presenter.test {
             assertThat(awaitItem().totalUnreadCount).isEqualTo(0)
             client.givenTotalUnreadCount(5)
-            syncService.emitHeartBeat()
             advanceTimeBy(200.milliseconds)
             assertThat(awaitItem().totalUnreadCount).isEqualTo(5)
         }
