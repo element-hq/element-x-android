@@ -132,7 +132,7 @@ class RustMatrixClientFactory(
         val syncService = client.syncService()
             .withSharePos(true)
             .withOfflineMode()
-            .finish()
+            .use { it.finish() }
 
         innerMatrixClientFactory.create(
             sessionPaths = sessionData.getSessionPaths(),

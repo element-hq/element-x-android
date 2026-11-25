@@ -46,7 +46,10 @@ class RustNotificationSettingsService(
     }
 
     suspend fun destroy() {
-        notificationSettings.await().setDelegate(null)
+        notificationSettings.await().let {
+            it.setDelegate(null)
+            it.destroy()
+        }
     }
 
     override suspend fun getRoomNotificationSettings(roomId: RoomId, isEncrypted: Boolean, isOneToOne: Boolean): Result<RoomNotificationSettings> = withContext(

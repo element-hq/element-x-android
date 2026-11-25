@@ -34,4 +34,8 @@ class RustHomeserverCapabilitiesProvider(
             homeserverCapabilities.canChangeAvatar()
         }
     }
+
+    override fun close() {
+        homeserverCapabilities.destroy()
+    }
 }
