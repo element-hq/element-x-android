@@ -473,9 +473,8 @@ class FakeMatrixClient(
         destroyLambda()
     }
 
-    override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
-        return homeserverCapabilitiesProvider
-    }
+    override val homeserverCapabilities: HomeserverCapabilitiesProvider
+        get() = homeserverCapabilitiesProvider
 
     override fun totalUnreadCount(): Result<Long> {
         return totalUnreadCountResult()

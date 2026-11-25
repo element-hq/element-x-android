@@ -16,7 +16,7 @@ import org.matrix.rustcomponents.sdk.HomeserverCapabilities
 class RustHomeserverCapabilitiesProvider(
     private val homeserverCapabilities: HomeserverCapabilities,
     private val dispatcher: CoroutineDispatcher,
-) : HomeserverCapabilitiesProvider {
+) : HomeserverCapabilitiesProvider, AutoCloseable {
     override suspend fun refresh(): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions {
             homeserverCapabilities.refresh()

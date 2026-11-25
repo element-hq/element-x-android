@@ -21,6 +21,7 @@ class FakeFfiHomeserverCapabilities(
     private val canGetLoginToken: () -> Boolean = { lambdaError() },
     private val forgetsRoomWhenLeaving: () -> Boolean = { lambdaError() },
     private val extendedProfileFields: () -> ExtendedProfileFields = { lambdaError() },
+    private val destroy: () -> Unit = {},
 ) : HomeserverCapabilities(NoHandle) {
     override suspend fun refresh() = refresh.invoke()
     override suspend fun canChangeDisplayname(): Boolean = canChangeDisplayName.invoke()
@@ -30,4 +31,5 @@ class FakeFfiHomeserverCapabilities(
     override suspend fun canGetLoginToken(): Boolean = canGetLoginToken.invoke()
     override suspend fun forgetsRoomWhenLeaving(): Boolean = forgetsRoomWhenLeaving.invoke()
     override suspend fun extendedProfileFields(): ExtendedProfileFields = extendedProfileFields.invoke()
+    override fun destroy() = destroy.invoke()
 }

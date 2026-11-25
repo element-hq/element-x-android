@@ -13,10 +13,8 @@ class FakeHomeserverCapabilitiesProvider(
     private val refresh: () -> Result<Unit> = { Result.success(Unit) },
     private val canChangeDisplayName: () -> Result<Boolean> = { Result.success(true) },
     private val canChangeAvatarUrl: () -> Result<Boolean> = { Result.success(true) },
-    private val close: () -> Unit = {},
 ) : HomeserverCapabilitiesProvider {
     override suspend fun refresh(): Result<Unit> = refresh.invoke()
     override suspend fun canChangeDisplayName(): Result<Boolean> = canChangeDisplayName.invoke()
     override suspend fun canChangeAvatarUrl(): Result<Boolean> = canChangeAvatarUrl.invoke()
-    override fun close() = close.invoke()
 }

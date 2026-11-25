@@ -14,7 +14,7 @@ package io.element.android.libraries.matrix.api
  *
  * Spec: https://spec.matrix.org/latest/client-server-api/#capabilities-negotiation
  */
-interface HomeserverCapabilitiesProvider : AutoCloseable {
+interface HomeserverCapabilitiesProvider {
     /**
      * Manually refresh the capabilities of the homeserver performing a network request.
      */

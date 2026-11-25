@@ -306,6 +306,11 @@ class RustMatrixClient(
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
 
+    private val homeserverCapabilitiesLazy = lazy {
+        RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities(), sessionDispatcher)
+    }
+    override val homeserverCapabilities: HomeserverCapabilitiesProvider by homeserverCapabilitiesLazy
+
     override val searchBackfillService = searchBackfillServiceFactory.create(innerClient)
 
     private val _userProfile: MutableStateFlow<MatrixUser> = MutableStateFlow(
@@ -758,6 +763,9 @@ class RustMatrixClient(
         innerSpaceService.close()
         notificationService.close()
         encryptionService.close()
+        if (homeserverCapabilitiesLazy.isInitialized()) {
+            homeserverCapabilitiesLazy.value.close()
+        }
         innerClient.close()
     }
 
@@ -1040,10 +1048,6 @@ class RustMatrixClient(
         Timber.i("Scheduling periodic database vacuuming for session $sessionId")
         val request = PerformDatabaseVacuumRequestBuilder(sessionId)
         sessionCoroutineScope.launch { workManagerScheduler.submit(request) }
-    }
-
-    override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
-        return RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities(), sessionDispatcher)
     }
 
     override fun totalUnreadCount(): Result<Long> = runCatchingExceptions {

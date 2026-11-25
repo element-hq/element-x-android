@@ -134,7 +134,7 @@ class LoggedInPresenter(
         LaunchedEffect(networkConnectivity) {
             if (networkConnectivity == NetworkStatus.Connected) {
                 // Refresh homeserver capabilities when the network is back
-                matrixClient.homeserverCapabilities().use { it.refresh() }
+                matrixClient.homeserverCapabilities.refresh()
             }
         }
 

@@ -16,6 +16,7 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustUserProfile
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiHomeserverCapabilities
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
@@ -365,6 +366,18 @@ class RustMatrixClientTest {
         ignoredUsersListener!!.call(listOf(A_USER_ID.value))
         assertThat(client.ignoredUsersFlow.value).containsExactly(A_USER_ID)
         client.destroy()
+    }
+
+    @Test
+    fun `homeserverCapabilities returns a single instance which is destroyed with the client`() = runTest {
+        val destroyResult = lambdaRecorder<Unit> { }
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(homeserverCapabilities = FakeFfiHomeserverCapabilities(destroy = destroyResult)),
+        )
+        assertThat(client.homeserverCapabilities).isSameInstanceAs(client.homeserverCapabilities)
+        destroyResult.assertions().isNeverCalled()
+        client.destroy()
+        destroyResult.assertions().isCalledOnce()
     }
 
     @Test
