@@ -793,11 +793,14 @@ class RustMatrixClient(
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
         clientDelegateTaskHandle = null
+        @Suppress("SuspendFunSwallowedCancellation")
         withContext(sessionDispatcher) {
             if (userInitiated) {
                 try {
+                    syncService.stopSync()
                     innerClient.logout()
                 } catch (e: CancellationException) {
+                    _isShuttingDown.set(false)
                     throw e
                 } catch (failure: Throwable) {
                     if (ignoreSdkError) {
@@ -806,6 +809,7 @@ class RustMatrixClient(
                         // If the logout failed we need to restore the delegate
                         clientDelegateTaskHandle = innerClient.setDelegate(sessionDelegate)
                         Timber.e(failure, "Fail to call logout on HS.")
+                        _isShuttingDown.set(false)
                         throw failure
                     }
                 }
