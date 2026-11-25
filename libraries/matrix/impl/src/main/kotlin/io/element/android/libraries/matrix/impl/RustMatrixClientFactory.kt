@@ -129,9 +129,10 @@ class RustMatrixClientFactory(
 
         client.setUtdDelegate(UtdTracker(analyticsService))
 
+        // Each builder method returns a new builder instance, so all of them need to be closed
         val syncService = client.syncService()
-            .withSharePos(true)
-            .withOfflineMode()
+            .use { it.withSharePos(true) }
+            .use { it.withOfflineMode() }
             .use { it.finish() }
 
         innerMatrixClientFactory.create(
