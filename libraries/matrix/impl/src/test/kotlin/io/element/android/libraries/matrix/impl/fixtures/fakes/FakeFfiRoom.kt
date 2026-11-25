@@ -13,8 +13,6 @@ import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomInfo
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -28,7 +26,6 @@ import org.matrix.rustcomponents.sdk.RoomMembersIterator
 import org.matrix.rustcomponents.sdk.TaskHandle
 import uniffi.matrix_sdk.RoomMemberRole
 
-@OptIn(DelicateCoroutinesApi::class)
 class FakeFfiRoom(
     private val roomId: RoomId = A_ROOM_ID,
     private val getMembers: () -> RoomMembersIterator = { lambdaError() },
@@ -37,7 +34,8 @@ class FakeFfiRoom(
     private val latestEventLambda: () -> LatestEventValue = { lambdaError() },
     private val suggestedRoleForUserLambda: (String) -> RoomMemberRole = { lambdaError() },
     private val roomInfo: RoomInfo = aRustRoomInfo(id = roomId.value),
-    private val testScope: CoroutineScope = GlobalScope,
+    // Required to use subscribeToRoomInfoUpdates, typically the `backgroundScope` of the test.
+    private val testScope: CoroutineScope? = null,
 ) : Room(NoHandle) {
     override fun id(): String {
         return roomId.value
@@ -69,6 +67,7 @@ class FakeFfiRoom(
 
     private val roomInfoUpdatesFlow = MutableStateFlow(roomInfo)
     override fun subscribeToRoomInfoUpdates(listener: RoomInfoListener): TaskHandle {
+        testScope ?: error("testScope must be provided to use subscribeToRoomInfoUpdates")
         roomInfoUpdatesFlow
             // Drop the first item to match the SDK's behavior
             .drop(1)

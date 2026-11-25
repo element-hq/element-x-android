@@ -111,8 +111,7 @@ style:
 
 coroutines:
   GlobalCoroutineUsage:
-    # Keep false for now.
-    active: false
+    active: true
   SuspendFunSwallowedCancellation:
     active: true
   SuspendFunWithCoroutineScopeReceiver:
