@@ -47,7 +47,7 @@ class SuspendLazyTest {
         assertThat(thrown).hasMessageThat().isEqualTo(error.message)
     }
 
-    @Suppress("TooGenericExceptionCaught")
+    @Suppress("TooGenericExceptionCaught", "SuspendFunSwallowedCancellation")
     private suspend fun awaitError(block: suspend () -> Unit): Throwable? {
         return try {
             block()
