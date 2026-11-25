@@ -54,7 +54,7 @@ Uncomment this markdown table below and edit the last line `|||`:
 
 - [ ] I am aware of the [etiquette](https://github.com/element-hq/element-x-android/blob/develop/CONTRIBUTING.md#etiquette).
 - This PR was made with the help of AI:
-    - [ ] Yes. In this case, please request a review by Copilot.
+    - [ ] Yes. In this case, please get the PR reviewed by an AI (e.g. a GitHub AI reviewer, or `/code-review` run in a fresh session) before requesting a human review.
     - [ ] No.
 - [ ] Changes have been tested on an Android device or Android emulator with API 24
 - [ ] UI change has been tested on both light and dark themes
