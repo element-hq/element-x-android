@@ -789,31 +789,31 @@ class RustMatrixClient(
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {
         _isShuttingDown.set(true)
-        sessionCoroutineScope.cancel()
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
         clientDelegateTaskHandle = null
+        // The session scope and the sync are only torn down once we know the logout will go ahead,
+        // so the session is still fully usable if the logout request fails.
         @Suppress("SuspendFunSwallowedCancellation")
         withContext(sessionDispatcher) {
             if (userInitiated) {
                 try {
-                    syncService.stopSync()
                     innerClient.logout()
                 } catch (e: CancellationException) {
-                    _isShuttingDown.set(false)
+                    restoreSessionAfterFailedLogout()
                     throw e
                 } catch (failure: Throwable) {
                     if (ignoreSdkError) {
                         Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
                     } else {
-                        // If the logout failed we need to restore the delegate
-                        clientDelegateTaskHandle = innerClient.setDelegate(sessionDelegate)
                         Timber.e(failure, "Fail to call logout on HS.")
-                        _isShuttingDown.set(false)
+                        restoreSessionAfterFailedLogout()
                         throw failure
                     }
                 }
             }
+            sessionCoroutineScope.cancel()
+            syncService.stopSync()
             destroy()
 
             deleteSessionDirectory()
@@ -821,6 +821,12 @@ class RustMatrixClient(
                 sessionStore.removeSession(sessionId.value)
             }
         }
+    }
+
+    private fun restoreSessionAfterFailedLogout() {
+        // Restore the delegate so we keep receiving auth errors, then mark the session as usable again
+        clientDelegateTaskHandle = innerClient.setDelegate(sessionDelegate)
+        _isShuttingDown.set(false)
     }
 
     override fun canDeactivateAccount(): Boolean {

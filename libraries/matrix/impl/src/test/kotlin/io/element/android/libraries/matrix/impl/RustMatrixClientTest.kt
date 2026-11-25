@@ -46,6 +46,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.CreateRoomParameters
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.MediaSource
@@ -363,6 +364,26 @@ class RustMatrixClientTest {
         assertThat(client.ignoredUsersFlow.value).isEmpty()
         ignoredUsersListener!!.call(listOf(A_USER_ID.value))
         assertThat(client.ignoredUsersFlow.value).containsExactly(A_USER_ID)
+        client.destroy()
+    }
+
+    @Test
+    fun `when logout fails, the session is restored and still usable`() = runTest {
+        val setDelegateResult = lambdaRecorder<ClientDelegate?, Unit> { }
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                setDelegateResult = setDelegateResult,
+                logoutResult = { error("Logout failed") },
+            ),
+        )
+        val result = runCatching { client.logout(userInitiated = true, ignoreSdkError = false) }
+        assertThat(result.isFailure).isTrue()
+        assertThat(client.isShuttingDown).isFalse()
+        // The delegate is set when creating the client, then restored after the failure
+        setDelegateResult.assertions().isCalledExactly(2).withSequence(
+            listOf(any()),
+            listOf(any()),
+        )
         client.destroy()
     }
 

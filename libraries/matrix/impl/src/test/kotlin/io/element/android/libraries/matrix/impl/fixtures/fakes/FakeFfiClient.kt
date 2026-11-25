@@ -78,6 +78,7 @@ class FakeFfiClient(
     private val setDelegateResult: (ClientDelegate?) -> Unit = {},
     private val ignoredUsersResult: () -> List<String> = { emptyList() },
     private val subscribeToIgnoredUsersResult: (IgnoredUsersListener) -> Unit = {},
+    private val logoutResult: () -> Unit = { lambdaError() },
 ) : Client(NoHandle) {
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
@@ -175,4 +176,5 @@ class FakeFfiClient(
     override fun runSearchBackfill(strategy: SearchBackfillStrategy): TaskHandle = runSearchBackfillResult(strategy)
 
     override fun close() = closeResult()
+    override suspend fun logout() = logoutResult()
 }
