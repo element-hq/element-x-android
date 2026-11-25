@@ -20,6 +20,10 @@ fun <T> suspendLazy(coroutineContext: CoroutineContext = EmptyCoroutineContext, 
         val deferred = CompletableDeferred<T>()
         CoroutineScope(coroutineContext).launch {
             deferred.complete(block())
+        }.invokeOnCompletion { cause ->
+            // If the block failed or the scope was cancelled (even before the block started), propagate it
+            // so callers awaiting the value don't suspend forever. This is a no-op if the value was already set.
+            if (cause != null) deferred.completeExceptionally(cause)
         }
         deferred
     }
