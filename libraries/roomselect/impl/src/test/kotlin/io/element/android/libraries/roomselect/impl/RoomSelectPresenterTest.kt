@@ -560,7 +560,7 @@ class RoomSelectPresenterTest {
 
     private fun aRoomListServiceWithRooms(roomIds: List<RoomId>) = FakeRoomListService(
         createRoomListLambda = {
-            FakeDynamicRoomList(summaries = MutableStateFlow(roomIds.map { aRoomSummary(roomId = it) }))
+            FakeDynamicRoomList(summaries = MutableStateFlow(roomIds.map { roomId -> aRoomSummary(roomId = roomId) }))
         },
     )
 
