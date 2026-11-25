@@ -17,15 +17,15 @@ open class RecoveryKeyViewStatePreviewParam : PreviewParameterProvider<RecoveryK
                 sequenceOf(
                     aRecoveryKeyViewState(recoveryKeyUserStory = it),
                     aRecoveryKeyViewState(recoveryKeyUserStory = it, inProgress = true),
-                    aRecoveryKeyViewState(recoveryKeyUserStory = it, formattedRecoveryKey = aFormattedRecoveryKey()),
-                    aRecoveryKeyViewState(recoveryKeyUserStory = it, formattedRecoveryKey = aFormattedRecoveryKey(), inProgress = true),
+                    aRecoveryKeyViewState(recoveryKeyUserStory = it, formattedRecoveryKey = A_FORMATTED_RECOVERY_KEY),
+                    aRecoveryKeyViewState(recoveryKeyUserStory = it, formattedRecoveryKey = A_FORMATTED_RECOVERY_KEY, inProgress = true),
                 )
             } + sequenceOf(
-            aRecoveryKeyViewState(recoveryKeyUserStory = RecoveryKeyUserStory.Enter, formattedRecoveryKey = aFormattedRecoveryKey().replace(" ", "")),
+            aRecoveryKeyViewState(recoveryKeyUserStory = RecoveryKeyUserStory.Enter, formattedRecoveryKey = A_FORMATTED_RECOVERY_KEY.replace(" ", "")),
             aRecoveryKeyViewState(recoveryKeyUserStory = RecoveryKeyUserStory.Enter, formattedRecoveryKey = "This is a passphrase with spaces"),
             aRecoveryKeyViewState(
                 recoveryKeyUserStory = RecoveryKeyUserStory.Enter,
-                formattedRecoveryKey = aFormattedRecoveryKey().replace(" ", ""),
+                formattedRecoveryKey = A_FORMATTED_RECOVERY_KEY.replace(" ", ""),
                 displayTextFieldContents = false
             ),
         )
@@ -43,6 +43,4 @@ fun aRecoveryKeyViewState(
     inProgress = inProgress,
 )
 
-internal fun aFormattedRecoveryKey(): String {
-    return "Estm dfyU adhD h8y6 Estm dfyU adhD h8y6 Estm dfyU adhD h8y6"
-}
+internal const val A_FORMATTED_RECOVERY_KEY = "Estm dfyU adhD h8y6 Estm dfyU adhD h8y6 Estm dfyU adhD h8y6"

@@ -9,19 +9,19 @@
 package io.element.android.features.securebackup.impl.setup
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.securebackup.impl.setup.views.A_FORMATTED_RECOVERY_KEY
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
-import io.element.android.features.securebackup.impl.setup.views.aFormattedRecoveryKey
 
 open class SecureBackupSetupStatePreviewParam : PreviewParameterProvider<SecureBackupSetupState> {
     override val values: Sequence<SecureBackupSetupState>
         get() = sequenceOf(
             aSecureBackupSetupState(setupState = SetupState.Init),
             aSecureBackupSetupState(setupState = SetupState.Creating),
-            aSecureBackupSetupState(setupState = SetupState.Created(aFormattedRecoveryKey())),
-            aSecureBackupSetupState(setupState = SetupState.CreatedAndSaved(aFormattedRecoveryKey())),
+            aSecureBackupSetupState(setupState = SetupState.Created(A_FORMATTED_RECOVERY_KEY)),
+            aSecureBackupSetupState(setupState = SetupState.CreatedAndSaved(A_FORMATTED_RECOVERY_KEY)),
             aSecureBackupSetupState(
-                setupState = SetupState.CreatedAndSaved(aFormattedRecoveryKey()),
+                setupState = SetupState.CreatedAndSaved(A_FORMATTED_RECOVERY_KEY),
                 showSaveConfirmationDialog = true,
             ),
             aSecureBackupSetupState(setupState = SetupState.Error(SetupErrorType.Unknown)),

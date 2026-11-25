@@ -19,7 +19,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
-import io.element.android.features.securebackup.impl.setup.views.aFormattedRecoveryKey
+import io.element.android.features.securebackup.impl.setup.views.A_FORMATTED_RECOVERY_KEY
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -70,7 +70,7 @@ class SecureBackupEnterRecoveryKeyViewTest : RobolectricTest() {
     @Test
     fun `entering a char emits the expected event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvent>()
-        val keyValue = aFormattedRecoveryKey()
+        val keyValue = A_FORMATTED_RECOVERY_KEY
         setSecureBackupEnterRecoveryKeyView(
             aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder),
         )
@@ -84,7 +84,7 @@ class SecureBackupEnterRecoveryKeyViewTest : RobolectricTest() {
     @Config(qualifiers = "h1024dp")
     fun `toggling the visibility of the textfield changes it`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvent>()
-        val keyValue = aFormattedRecoveryKey()
+        val keyValue = A_FORMATTED_RECOVERY_KEY
         setSecureBackupEnterRecoveryKeyView(aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder))
 
         // Initially, the text field should be visible
@@ -100,7 +100,7 @@ class SecureBackupEnterRecoveryKeyViewTest : RobolectricTest() {
     @Test
     fun `validating from keyboard emits the expected event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<SecureBackupEnterRecoveryKeyEvent>()
-        val keyValue = aFormattedRecoveryKey()
+        val keyValue = A_FORMATTED_RECOVERY_KEY
         setSecureBackupEnterRecoveryKeyView(
             aSecureBackupEnterRecoveryKeyState(isSubmitEnabled = true, eventSink = recorder),
         )

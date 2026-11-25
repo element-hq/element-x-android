@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
-fun aPollQuestion() = "What type of food should we have at the party?"
+const val A_POLL_QUESTION = "What type of food should we have at the party?"
 
 fun aPollAnswerItemList(
     hasVotes: Boolean = true,
@@ -82,7 +82,7 @@ fun aPollContentState(
     showVotes: Boolean = true,
     isPollEditable: Boolean = true,
     hasVotes: Boolean = true,
-    question: String = aPollQuestion(),
+    question: String = A_POLL_QUESTION,
     pollKind: PollKind = PollKind.Disclosed,
     maxSelections: ULong = 1u,
     answerItems: ImmutableList<PollAnswerItem> = aPollAnswerItemList(
