@@ -184,7 +184,7 @@ exceptions:
   TooGenericExceptionCaught:
     active: false
   SwallowedException:
-    active: false
+    active: true
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
   TooGenericExceptionThrown:

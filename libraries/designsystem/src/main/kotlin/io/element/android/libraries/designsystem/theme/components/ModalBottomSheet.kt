@@ -189,7 +189,7 @@ internal suspend fun resetWhenStuck(
                 Timber.e("Sheet state is stuck in $value, and resetting it does not work, giving up")
                 return
             }
-        } catch (e: CancellationException) {
+        } catch (ignored: CancellationException) {
             // Rethrow if this coroutine is cancelled, else the reset was interrupted by a user drag
             // (which has a higher priority): try again once the sheet is at rest.
             currentCoroutineContext().ensureActive()
