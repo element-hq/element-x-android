@@ -47,6 +47,7 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBegin
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TypingNotificationPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CancellationException
@@ -60,6 +61,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -70,6 +72,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EditedContent
 import org.matrix.rustcomponents.sdk.FormattedBody
+import org.matrix.rustcomponents.sdk.FullyReadEventIdListener
 import org.matrix.rustcomponents.sdk.GalleryUploadParameters
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.PollData
@@ -181,6 +184,15 @@ class RustTimeline(
     override val onSyncedEventReceived: Flow<Unit> = _onSyncedEventReceived
         .onStart { timelineItemsSubscriber.subscribeIfNeeded() }
         .onCompletion { timelineItemsSubscriber.unsubscribeIfNeeded() }
+
+    override val fullyReadEventIdFlow: Flow<EventId?> = mxCallbackFlow {
+        channel.trySend(inner.fullyReadEventId()?.let(::EventId))
+        inner.subscribeToFullyReadEventId(object : FullyReadEventIdListener {
+            override fun onUpdate(eventId: String?) {
+                channel.trySend(eventId?.let(::EventId))
+            }
+        })
+    }.flowOn(dispatcher)
 
     override suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions {

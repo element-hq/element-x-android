@@ -169,6 +169,8 @@ class TimelinePresenter(
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
         val roomInfo by room.roomInfoFlow.collectAsState()
+        // The fully-read marker is room-wide, so read it from the live timeline whatever the main timeline mode is.
+        val roomFullyReadEventId by remember { room.liveTimeline.fullyReadEventIdFlow }.collectAsState(initial = null)
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<UniqueId?>(null) }
 
@@ -176,10 +178,10 @@ class TimelinePresenter(
         val messageShieldDialogData: MutableState<MessageShieldData?> = remember { mutableStateOf(null) }
         var sendFailureDialogState by remember { mutableStateOf<SendFailureDialogState>(SendFailureDialogState.Hidden) }
 
-        // Forces [JumpToUnreadState.Hidden] until the next RoomInfo push. Set after a
+        // Forces [JumpToUnreadState.Hidden] until the SDK pushes a new fully-read marker. Set after a
         // [TimelineEvent.MarkAllAsRead] await completes so the FAB hides without waiting for
         // the SDK to push a refreshed fully-read marker; the after-await ordering means any
-        // RoomInfo update racing the mark-as-read call has already landed and can't undo this.
+        // fully-read marker update racing the mark-as-read call has already landed and can't undo this.
         val suppressJumpToUnread = remember { mutableStateOf(false) }
 
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
@@ -429,20 +431,20 @@ class TimelinePresenter(
         //  - InWindow: the SDK has materialised a virtual ReadMarker item in the loaded window;
         //    tapping the FAB smoothly scrolls to its index.
         //  - OutOfWindow: the marker event is older than the loaded window, so the SDK gives us
-        //    only the event id via RoomInfo.fullyReadEventId; tapping triggers a focused-event
+        //    only the event id via Timeline.fullyReadEventIdFlow; tapping triggers a focused-event
         //    load via the existing TimelineEvent.FocusOnEvent path.
         //  - Hidden: feature flag off, no marker, caught-up (marker loaded but no virtual item),
         //    or initial load (no items yet).
         val jumpToUnread = remember { mutableStateOf<JumpToUnreadState>(JumpToUnreadState.Hidden) }
         // The SDK is authoritative again once it pushes a new fully-read marker, so drop the
         // post-mark-as-read suppression and let the recompute below pick up the new value.
-        LaunchedEffect(roomInfo.fullyReadEventId) {
+        LaunchedEffect(roomFullyReadEventId) {
             suppressJumpToUnread.value = false
         }
         LaunchedEffect(
             timelineItemsStructureVersion,
             displayJumpToUnread,
-            roomInfo.fullyReadEventId,
+            roomFullyReadEventId,
             roomInfo.numUnreadMessages,
             suppressJumpToUnread.value,
         ) {
@@ -451,7 +453,7 @@ class TimelinePresenter(
                 return@LaunchedEffect
             }
             val items = timelineItems
-            val fullyReadEventId = roomInfo.fullyReadEventId
+            val fullyReadEventId = roomFullyReadEventId
             val hasUnreadMessages = roomInfo.numUnreadMessages > 0
             val markerIndex = withContext(dispatchers.computation) {
                 items.indexOfFirst {

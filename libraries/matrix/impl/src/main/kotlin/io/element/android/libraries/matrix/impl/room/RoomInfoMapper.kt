@@ -80,7 +80,6 @@ class RoomInfoMapper {
             privilegedCreatorRole = it.privilegedCreatorsRole,
             isLowPriority = it.isLowPriority,
             activeCallIntentConsensus = it.activeRoomCallConsensusIntent.map(),
-            fullyReadEventId = it.fullyReadEventId?.let(::EventId)
         )
     }
 }
