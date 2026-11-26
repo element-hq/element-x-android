@@ -565,6 +565,7 @@ class RustMatrixClientTest {
         cacheDirectory = temporaryFolder.newFolder("cache"),
     )
 
+    @Suppress("SuspendFunSwallowedCancellation")
     private suspend fun catchCancellation(block: suspend () -> Unit): CancellationException? {
         return try {
             block()

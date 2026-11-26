@@ -863,6 +863,8 @@ class RustMatrixClient(
         clientDelegateTaskHandle = null
         // Stop the sync first so it doesn't race the invalidation of the access token
         syncService.stopSync()
+
+        @Suppress("SuspendFunSwallowedCancellation")
         val deactivationResult = try {
             runCatchingExceptions {
                 innerClient.deactivateAccount(
@@ -881,8 +883,8 @@ class RustMatrixClient(
                     destroy()
                     deleteSessionDirectory()
                     sessionStore.removeSession(sessionId.value)
-                }.onFailure {
-                    Timber.e(it, "Failed to clean up the session after deactivating the account")
+                }.onFailure { exception ->
+                    Timber.e(exception, "Failed to clean up the session after deactivating the account")
                 }
             },
             onFailure = {
