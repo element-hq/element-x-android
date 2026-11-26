@@ -52,7 +52,8 @@ class RustMediaLoader(
                     innerClient.getMediaThumbnail(
                         mediaSource = mediaSource,
                         width = width.toULong(),
-                        height = height.toULong()
+                        height = height.toULong(),
+                        animated = false,
                     )
                 }
             }.mapFailure { it.mapClientException() }

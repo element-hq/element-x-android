@@ -71,7 +71,7 @@ class FakeFfiClient(
     private val isUserStatusSupportedResult: () -> Boolean = { false },
     private val isProfilesSlidingSyncExtensionSupportedResult: () -> Boolean = { false },
     private val subscribeToOwnProfileResult: (ProfileListener) -> Unit = {},
-    private val getMediaThumbnailResult: (MediaSource, ULong, ULong) -> ByteArray = { _, _, _ -> byteArrayOf() },
+    private val getMediaThumbnailResult: (MediaSource, ULong, ULong, Boolean) -> ByteArray = { _, _, _, _ -> byteArrayOf() },
     private val contentScannerResult: () -> ContentScanner = { FakeFfiContentScanner() },
     private val runSearchBackfillResult: (SearchBackfillStrategy) -> TaskHandle = { lambdaError() },
     private val closeResult: () -> Unit = {},
@@ -130,8 +130,8 @@ class FakeFfiClient(
         return getProfileResult(userId)
     }
 
-    override suspend fun getMediaThumbnail(mediaSource: MediaSource, width: ULong, height: ULong): ByteArray {
-        return getMediaThumbnailResult(mediaSource, width, height)
+    override suspend fun getMediaThumbnail(mediaSource: MediaSource, width: ULong, height: ULong, animated: Boolean): ByteArray {
+        return getMediaThumbnailResult(mediaSource, width, height, animated)
     }
 
     override suspend fun homeserverLoginDetails(): HomeserverLoginDetails {
