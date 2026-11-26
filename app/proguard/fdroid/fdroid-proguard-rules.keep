@@ -1,0 +1,4 @@
+# Keep rules specific to the F-Droid flavor of the FOSS app.
+# Don't obfuscate F-Droid builds: F-Droid builds the app from source, so we would not have access to the mapping file
+# needed to deobfuscate stack traces received in rageshakes.
+-dontobfuscate
