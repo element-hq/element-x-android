@@ -27,7 +27,7 @@ class KeysInsertedAtBottomTest {
 
     @Test
     fun `items added below the previously newest event are inserted items`() {
-        val daySeparator = TimelineItem.Virtual(UniqueId("day"), TimelineItemDaySeparatorModel("Today"))
+        val daySeparator = TimelineItem.Virtual(UniqueId("day"), TimelineItemDaySeparatorModel(123L, "Today"))
         val keys = keysInsertedAtBottom(
             previous = listOf(typing, newest, older),
             current = listOf(typing, new, daySeparator, newest, older),

@@ -18,5 +18,6 @@ class TimelineItemDaySeparatorModelPreviewParam : PreviewParameterProvider<Timel
 }
 
 fun aTimelineItemDaySeparatorModel(formattedDate: String) = TimelineItemDaySeparatorModel(
+    timestamp = 0L,
     formattedDate = formattedDate
 )

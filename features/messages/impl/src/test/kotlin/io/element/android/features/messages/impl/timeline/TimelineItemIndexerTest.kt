@@ -59,7 +59,7 @@ class TimelineItemIndexerTest {
         )
         val daySeparator = TimelineItem.Virtual(
             id = UniqueId("daySeparator"),
-            model = TimelineItemDaySeparatorModel(formattedDate = "today"),
+            model = TimelineItemDaySeparatorModel(timestamp = 123L, formattedDate = "today"),
         )
 
         // An initial empty list is not a structural change.

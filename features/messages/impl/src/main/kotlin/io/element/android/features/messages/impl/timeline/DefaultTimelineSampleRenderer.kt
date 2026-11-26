@@ -121,7 +121,7 @@ private fun rememberSampleTimelineItems(): ImmutableList<TimelineItem> {
             aSampleEvent(senderName = recipient, body = question, isMine = true),
             TimelineItem.Virtual(
                 id = UniqueId("sampleDaySeparator"),
-                model = TimelineItemDaySeparatorModel(formattedDate = "Today"),
+                model = TimelineItemDaySeparatorModel(timestamp = 0L, formattedDate = "Today"),
             ),
         )
     }

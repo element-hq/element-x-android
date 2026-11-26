@@ -39,7 +39,7 @@ internal fun List<TimelineItem>.withVirtualItemIdsBasedOnContent(): List<Timelin
             return@map item
         }
         val newId = when (val model = item.model) {
-            is TimelineItemDaySeparatorModel -> UniqueId(listOfNotNull("day_separator", model.formattedDate, eventBelowId).joinToString("_"))
+            is TimelineItemDaySeparatorModel -> UniqueId(listOfNotNull("day_separator", model.timestamp, eventBelowId).joinToString("_"))
             is TimelineItemLoadingIndicatorModel -> when (model.direction) {
                 Timeline.PaginationDirection.BACKWARDS -> oldestEventId
                 Timeline.PaginationDirection.FORWARDS -> newestEventId
