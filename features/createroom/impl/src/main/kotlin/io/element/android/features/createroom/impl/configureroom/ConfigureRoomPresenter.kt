@@ -284,7 +284,7 @@ class ConfigureRoomPresenter(
                 }
                 .onSuccess {
                     dataStore.clearCachedData()
-                    analyticsService.capture(CreatedRoom(isDM = false))
+                    analyticsService.capture(CreatedRoom(isDM = false, joinRule = config.visibilityState.joinRuleItem.toAnalyticsJoinRule()))
                 }
                 .getOrThrow()
 

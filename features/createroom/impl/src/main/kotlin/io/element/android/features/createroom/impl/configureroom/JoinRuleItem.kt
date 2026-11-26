@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.join.AllowRule
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import kotlinx.collections.immutable.persistentListOf
+import im.vector.app.features.analytics.plan.CreatedRoom.JoinRule as AnalyticsJoinRule
 
 /**
  * Join rule items to display in UI.
@@ -42,5 +43,16 @@ sealed interface JoinRuleItem {
         is PrivateVisibility.AskToJoinRestricted -> JoinRule.KnockRestricted(persistentListOf(AllowRule.RoomMembership(parentSpaceId)))
         PublicVisibility.Public -> JoinRule.Public
         PublicVisibility.AskToJoin -> JoinRule.Knock
+    }
+
+    /**
+     * Transforms a [JoinRuleItem] option into an [AnalyticsJoinRule].
+     */
+    fun toAnalyticsJoinRule(): AnalyticsJoinRule = when (this) {
+        PrivateVisibility.Private -> AnalyticsJoinRule.Invite
+        is PrivateVisibility.Restricted -> AnalyticsJoinRule.Restricted
+        is PrivateVisibility.AskToJoinRestricted -> AnalyticsJoinRule.KnockRestricted
+        PublicVisibility.Public -> AnalyticsJoinRule.Public
+        PublicVisibility.AskToJoin -> AnalyticsJoinRule.Knock
     }
 }
