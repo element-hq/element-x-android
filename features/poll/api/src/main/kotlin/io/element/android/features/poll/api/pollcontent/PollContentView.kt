@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -228,131 +229,9 @@ private fun CreatorView(
 
 @PreviewsDayNight
 @Composable
-internal fun PollContentViewUndisclosedPreview() = ElementPreview {
+internal fun PollContentViewPreview(@PreviewParameter(PollContentStatePreviewParam::class) state: PollContentState) = ElementPreview {
     PollContentView(
-        eventId = EventId("\$anEventId"),
-        question = "What type of food should we have at the party?",
-        answerItems = aPollAnswerItemList(showVotes = false),
-        pollKind = PollKind.Undisclosed,
-        isMultipleSelection = false,
-        maxSelections = 1u,
-        isPollEnded = false,
-        isPollEditable = false,
-        isMine = false,
-        onSendPollResponse = { _, _ -> },
-        onEditPoll = {},
-        onEndPoll = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun PollContentViewDisclosedPreview() = ElementPreview {
-    PollContentView(
-        eventId = EventId("\$anEventId"),
-        question = "What type of food should we have at the party?",
-        answerItems = aPollAnswerItemList(),
-        pollKind = PollKind.Disclosed,
-        isMultipleSelection = false,
-        maxSelections = 1u,
-        isPollEnded = false,
-        isPollEditable = false,
-        isMine = false,
-        onSendPollResponse = { _, _ -> },
-        onEditPoll = {},
-        onEndPoll = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun PollContentViewMultipleSelectionPreview() = ElementPreview {
-    PollContentView(
-        eventId = EventId("\$anEventId"),
-        question = "What type of food should we have at the party?",
-        answerItems = aPollAnswerItemList(),
-        pollKind = PollKind.Disclosed,
-        isMultipleSelection = true,
-        maxSelections = 3u,
-        isPollEnded = false,
-        isPollEditable = false,
-        isMine = false,
-        onSendPollResponse = { _, _ -> },
-        onEditPoll = {},
-        onEndPoll = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun PollContentViewEndedPreview() = ElementPreview {
-    PollContentView(
-        eventId = EventId("\$anEventId"),
-        question = "What type of food should we have at the party?",
-        answerItems = aPollAnswerItemList(isEnded = true),
-        pollKind = PollKind.Disclosed,
-        isMultipleSelection = false,
-        maxSelections = 1u,
-        isPollEnded = true,
-        isPollEditable = false,
-        isMine = false,
-        onSendPollResponse = { _, _ -> },
-        onEditPoll = {},
-        onEndPoll = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun PollContentViewCreatorEditablePreview() = ElementPreview {
-    PollContentView(
-        eventId = EventId("\$anEventId"),
-        question = "What type of food should we have at the party?",
-        answerItems = aPollAnswerItemList(hasVotes = false, isEnded = false),
-        pollKind = PollKind.Disclosed,
-        isMultipleSelection = false,
-        maxSelections = 1u,
-        isPollEnded = false,
-        isPollEditable = true,
-        isMine = true,
-        onSendPollResponse = { _, _ -> },
-        onEditPoll = {},
-        onEndPoll = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun PollContentViewCreatorPreview() = ElementPreview {
-    PollContentView(
-        eventId = EventId("\$anEventId"),
-        question = "What type of food should we have at the party?",
-        answerItems = aPollAnswerItemList(isEnded = false),
-        pollKind = PollKind.Disclosed,
-        isMultipleSelection = false,
-        maxSelections = 1u,
-        isPollEnded = false,
-        isPollEditable = false,
-        isMine = true,
-        onSendPollResponse = { _, _ -> },
-        onEditPoll = {},
-        onEndPoll = {},
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun PollContentViewCreatorEndedPreview() = ElementPreview {
-    PollContentView(
-        eventId = EventId("\$anEventId"),
-        question = "What type of food should we have at the party?",
-        answerItems = aPollAnswerItemList(isEnded = true),
-        pollKind = PollKind.Disclosed,
-        isMultipleSelection = false,
-        maxSelections = 1u,
-        isPollEnded = true,
-        isPollEditable = false,
-        isMine = true,
+        state = state,
         onSendPollResponse = { _, _ -> },
         onEditPoll = {},
         onEndPoll = {},
