@@ -30,6 +30,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import im.vector.app.features.analytics.plan.CreatedRoom.JoinRule as AnalyticsJoinRule
 
 class DefaultStartDMActionTest {
     @Test
@@ -69,7 +70,7 @@ class DefaultStartDMActionTest {
         val state = mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized)
         action.execute(aMatrixUser(), true, state)
         assertThat(state.value).isEqualTo(AsyncAction.Success(A_ROOM_ID))
-        assertThat(analyticsService.capturedEvents).containsExactly(CreatedRoom(isDM = true))
+        assertThat(analyticsService.capturedEvents).containsExactly(CreatedRoom(isDM = true, joinRule = AnalyticsJoinRule.Invite))
     }
 
     @Test
