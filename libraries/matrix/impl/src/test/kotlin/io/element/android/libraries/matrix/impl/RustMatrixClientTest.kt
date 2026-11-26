@@ -86,7 +86,7 @@ class RustMatrixClientTest {
     fun `retrieving the UserProfile updates the database`() = runTest {
         val profilePersisted = CompletableDeferred<Unit>()
         val updateUserProfileResult = lambdaRecorder<String, String?, String?, String?, Unit> { _, _, _, _ -> profilePersisted.complete(Unit) }
-        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, ByteArray> { _, _, _ -> byteArrayOf(1, 2, 3) }
+        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, Boolean, ByteArray> { _, _, _, _ -> byteArrayOf(1, 2, 3) }
         val sessionStore = InMemorySessionStore(
             initialList = listOf(
                 aSessionData(
@@ -106,7 +106,7 @@ class RustMatrixClientTest {
         )
         profilePersisted.await()
         getMediaThumbnailResult.assertions().isCalledOnce()
-            .with(any(), value(240uL), value(240uL))
+            .with(any(), value(240uL), value(240uL), value(false))
         updateUserProfileResult.assertions().isCalledOnce()
             .with(
                 value(A_USER_ID.value),
@@ -121,7 +121,7 @@ class RustMatrixClientTest {
     fun `retrieving the UserProfile does not download the avatar again if it has not changed`() = runTest {
         val profilePersisted = CompletableDeferred<Unit>()
         val updateUserProfileResult = lambdaRecorder<String, String?, String?, String?, Unit> { _, _, _, _ -> profilePersisted.complete(Unit) }
-        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, ByteArray> { _, _, _ -> byteArrayOf(1, 2, 3) }
+        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, Boolean, ByteArray> { _, _, _, _ -> byteArrayOf(1, 2, 3) }
         val sessionStore = InMemorySessionStore(
             initialList = listOf(
                 aSessionData(
@@ -156,7 +156,7 @@ class RustMatrixClientTest {
     fun `retrieving the UserProfile downloads the avatar again if the previous download failed`() = runTest {
         val profilePersisted = CompletableDeferred<Unit>()
         val updateUserProfileResult = lambdaRecorder<String, String?, String?, String?, Unit> { _, _, _, _ -> profilePersisted.complete(Unit) }
-        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, ByteArray> { _, _, _ -> byteArrayOf(1, 2, 3) }
+        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, Boolean, ByteArray> { _, _, _, _ -> byteArrayOf(1, 2, 3) }
         val sessionStore = InMemorySessionStore(
             initialList = listOf(
                 aSessionData(
@@ -191,7 +191,7 @@ class RustMatrixClientTest {
     fun `retrieving the UserProfile clears the avatar data if the avatar download fails`() = runTest {
         val profilePersisted = CompletableDeferred<Unit>()
         val updateUserProfileResult = lambdaRecorder<String, String?, String?, String?, Unit> { _, _, _, _ -> profilePersisted.complete(Unit) }
-        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, ByteArray> { _, _, _ -> error("Download failed") }
+        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, Boolean, ByteArray> { _, _, _, _ -> error("Download failed") }
         val sessionStore = InMemorySessionStore(
             initialList = listOf(
                 aSessionData(
@@ -226,7 +226,7 @@ class RustMatrixClientTest {
     fun `retrieving the UserProfile without avatar clears the avatar data`() = runTest {
         val profilePersisted = CompletableDeferred<Unit>()
         val updateUserProfileResult = lambdaRecorder<String, String?, String?, String?, Unit> { _, _, _, _ -> profilePersisted.complete(Unit) }
-        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, ByteArray> { _, _, _ -> byteArrayOf(1, 2, 3) }
+        val getMediaThumbnailResult = lambdaRecorder<MediaSource, ULong, ULong, Boolean, ByteArray> { _, _, _, _ -> byteArrayOf(1, 2, 3) }
         val sessionStore = InMemorySessionStore(
             initialList = listOf(
                 aSessionData(

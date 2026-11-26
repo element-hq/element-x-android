@@ -72,6 +72,7 @@ internal fun aRustNotificationRoomInfo(
     isSpace: Boolean = false,
     serviceMembers: List<UserId> = emptyList(),
     activeServiceMemberCount: Int = 0,
+    canSendMessage: Boolean = true,
 ) = NotificationRoomInfo(
     displayName = displayName,
     avatarUrl = avatarUrl,
@@ -85,6 +86,7 @@ internal fun aRustNotificationRoomInfo(
     isSpace = isSpace,
     serviceMembers = serviceMembers.map { it.value },
     activeServiceMembersCount = activeServiceMemberCount.toULong(),
+    canSendMessage = canSendMessage,
 )
 
 internal fun aRustNotificationEventTimeline(

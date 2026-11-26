@@ -64,7 +64,6 @@ internal fun aRustRoomInfo(
     activeRoomCallConsensusIntent: RtcCallIntentConsensus = RtcCallIntentConsensus.None,
     activeServiceMembersCount: Int = 0,
     isDm: Boolean = false,
-    fullyReadEventId: String? = null,
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -106,5 +105,4 @@ internal fun aRustRoomInfo(
     activeRoomCallConsensusIntent = activeRoomCallConsensusIntent,
     activeServiceMembersCount = activeServiceMembersCount.toULong(),
     isDm = isDm,
-    fullyReadEventId = fullyReadEventId,
 )

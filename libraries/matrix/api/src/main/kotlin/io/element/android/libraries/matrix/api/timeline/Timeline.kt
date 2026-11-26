@@ -77,6 +77,12 @@ interface Timeline : AutoCloseable {
     val onSyncedEventReceived: Flow<Unit>
 
     /**
+     * The id of the event the current user's fully-read marker points to in the room, or null if there is none.
+     * Emits the current value when collected, then again on every change.
+     */
+    val fullyReadEventIdFlow: Flow<EventId?>
+
+    /**
      * Sends a read receipt for a single event, which is how the unread state of the room is cleared.
      *
      * @param eventId the event the receipt points at.
