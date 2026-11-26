@@ -37,8 +37,14 @@ class FakeFfiTimeline : Timeline(NoHandle) {
         paginationStatusListener!!.onUpdate(status)
     }
 
+    var paginateBackwardsResult: suspend () -> Boolean = { true }
     override suspend fun paginateBackwards(numEvents: UShort): Boolean {
-        return true
+        return paginateBackwardsResult()
+    }
+
+    var paginateForwardsResult: suspend () -> Boolean = { true }
+    override suspend fun paginateForwards(numEvents: UShort): Boolean {
+        return paginateForwardsResult()
     }
 
     override suspend fun fetchMembers() = Unit

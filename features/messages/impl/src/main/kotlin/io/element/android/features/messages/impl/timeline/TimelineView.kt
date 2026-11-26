@@ -320,6 +320,12 @@ fun TimelineView(
                 prefetch = ::prefetchMoreItems
             )
 
+            PaginateNearLoadingIndicators(
+                lazyListState = lazyListState,
+                timelineItems = state.timelineItems,
+                onPaginate = { direction -> state.eventSink(TimelineEvent.LoadMore(direction)) },
+            )
+
             TimelineScrollHelper(
                 hasAnyEvent = state.hasAnyEvent,
                 lazyListState = lazyListState,
