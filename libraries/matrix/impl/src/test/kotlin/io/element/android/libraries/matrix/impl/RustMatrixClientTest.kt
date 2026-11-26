@@ -391,6 +391,42 @@ class RustMatrixClientTest {
     }
 
     @Test
+    fun `when logout succeeds, the sync is stopped and the session is removed`() = runTest {
+        val events = mutableListOf<String>()
+        val sessionStore = aSessionStoreWithCurrentSession()
+        val sessionPaths = createSessionPaths()
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(logoutResult = { events.add("logout") }),
+            innerSyncService = aRecordingSyncService(events),
+            sessionStore = sessionStore,
+            sessionPaths = sessionPaths,
+        )
+        client.logout(userInitiated = true, ignoreSdkError = false)
+        assertThat(events.take(2)).containsExactly("stop", "logout").inOrder()
+        assertThat(events).doesNotContain("start")
+        assertThat(client.isShuttingDown).isTrue()
+        assertThat(sessionStore.getSession(A_USER_ID.value)).isNull()
+        assertThat(sessionPaths.fileDirectory.exists()).isFalse()
+        assertThat(sessionPaths.cacheDirectory.exists()).isFalse()
+    }
+
+    @Test
+    fun `when logout fails and the SDK error is ignored, the session is still removed`() = runTest {
+        val events = mutableListOf<String>()
+        val sessionStore = aSessionStoreWithCurrentSession()
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(logoutResult = { error("Logout failed") }),
+            innerSyncService = aRecordingSyncService(events),
+            sessionStore = sessionStore,
+            sessionPaths = createSessionPaths(),
+        )
+        client.logout(userInitiated = true, ignoreSdkError = true)
+        assertThat(events).doesNotContain("start")
+        assertThat(client.isShuttingDown).isTrue()
+        assertThat(sessionStore.getSession(A_USER_ID.value)).isNull()
+    }
+
+    @Test
     fun `when logout fails, the session is restored and still usable`() = runTest {
         val setDelegateResult = lambdaRecorder<ClientDelegate?, Unit> { }
         val events = mutableListOf<String>()
@@ -410,6 +446,26 @@ class RustMatrixClientTest {
         assertThat(result.isFailure).isTrue()
         client.assertSessionRestored(setDelegateResult, events, "logout")
         assertThat(sessionStore.getSession(A_USER_ID.value)).isNotNull()
+        client.destroy()
+    }
+
+    @Test
+    fun `when logout is cancelled, the session is restored and still usable`() = runTest {
+        val setDelegateResult = lambdaRecorder<ClientDelegate?, Unit> { }
+        val events = mutableListOf<String>()
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                setDelegateResult = setDelegateResult,
+                logoutResult = {
+                    events.add("logout")
+                    throw CancellationException("Cancelled")
+                },
+            ),
+            innerSyncService = aRecordingSyncService(events),
+        )
+        val error = catchCancellation { client.logout(userInitiated = true, ignoreSdkError = false) }
+        assertThat(error).isNotNull()
+        client.assertSessionRestored(setDelegateResult, events, "logout")
         client.destroy()
     }
 
