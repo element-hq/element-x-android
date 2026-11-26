@@ -59,11 +59,53 @@ class PollContentStateFactoryTest {
         )
         val expectedState = aPollContentState(
             answerItems = listOf(
-                aPollAnswerItem(answer = A_POLL_ANSWER_1, isEnabled = false, votesCount = 3, percentage = 0.3f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_1, votesCount = 3, percentage = 0.3f),
                 aPollAnswerItem(answer = A_POLL_ANSWER_2, isSelected = true, votesCount = 6, percentage = 0.6f),
-                aPollAnswerItem(answer = A_POLL_ANSWER_3, isEnabled = false),
-                aPollAnswerItem(answer = A_POLL_ANSWER_4, isEnabled = false, votesCount = 1, percentage = 0.1f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_3),
+                aPollAnswerItem(answer = A_POLL_ANSWER_4, votesCount = 1, percentage = 0.1f),
             )
+        )
+        assertThat(state).isEqualTo(expectedState)
+    }
+
+    @Test
+    fun `Multiple choice poll - not ended, limit not reached, all answers are enabled`() = runTest {
+        val votes = MY_USER_WINNING_VOTES.mapKeys { it.key.id }.toImmutableMap()
+        val state = factory.create(
+            eventTimelineItem,
+            aPollContent(votes = votes, maxSelections = 2UL)
+        )
+        val expectedState = aPollContentState(
+            answerItems = listOf(
+                aPollAnswerItem(answer = A_POLL_ANSWER_1, votesCount = 3, percentage = 0.3f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_2, isSelected = true, votesCount = 6, percentage = 0.6f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_3),
+                aPollAnswerItem(answer = A_POLL_ANSWER_4, votesCount = 1, percentage = 0.1f),
+            ),
+            maxSelections = 2UL,
+        )
+        assertThat(state).isEqualTo(expectedState)
+    }
+
+    @Test
+    fun `Multiple choice poll - not ended, limit reached, only selected answers are enabled`() = runTest {
+        val votes = persistentMapOf(
+            A_POLL_ANSWER_1.id to persistentListOf(A_USER_ID, A_USER_ID_2),
+            A_POLL_ANSWER_2.id to persistentListOf(A_USER_ID),
+            A_POLL_ANSWER_3.id to persistentListOf(A_USER_ID_3),
+        )
+        val state = factory.create(
+            eventTimelineItem,
+            aPollContent(votes = votes, maxSelections = 2UL)
+        )
+        val expectedState = aPollContentState(
+            answerItems = listOf(
+                aPollAnswerItem(answer = A_POLL_ANSWER_1, isSelected = true, votesCount = 2, percentage = 0.5f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_2, isSelected = true, votesCount = 1, percentage = 0.25f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_3, isEnabled = false, votesCount = 1, percentage = 0.25f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_4, isEnabled = false),
+            ),
+            maxSelections = 2UL,
         )
         assertThat(state).isEqualTo(expectedState)
     }
@@ -139,10 +181,10 @@ class PollContentStateFactoryTest {
         val expectedState = aPollContentState(
             pollKind = PollKind.Undisclosed,
             answerItems = listOf(
-                aPollAnswerItem(answer = A_POLL_ANSWER_1, isEnabled = false, showVotes = false, votesCount = 3, percentage = 0.3f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_1, showVotes = false, votesCount = 3, percentage = 0.3f),
                 aPollAnswerItem(answer = A_POLL_ANSWER_2, showVotes = false, isSelected = true, votesCount = 6, percentage = 0.6f),
-                aPollAnswerItem(answer = A_POLL_ANSWER_3, isEnabled = false, showVotes = false),
-                aPollAnswerItem(answer = A_POLL_ANSWER_4, isEnabled = false, showVotes = false, votesCount = 1, percentage = 0.1f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_3, showVotes = false),
+                aPollAnswerItem(answer = A_POLL_ANSWER_4, showVotes = false, votesCount = 1, percentage = 0.1f),
             ),
         )
         assertThat(state).isEqualTo(expectedState)
@@ -212,10 +254,11 @@ class PollContentStateFactoryTest {
         pollKind: PollKind = PollKind.Disclosed,
         votes: ImmutableMap<String, ImmutableList<UserId>> = persistentMapOf(),
         endTime: ULong? = null,
+        maxSelections: ULong = 1UL,
     ): PollContent = PollContent(
         question = A_POLL_QUESTION,
         kind = pollKind,
-        maxSelections = 1UL,
+        maxSelections = maxSelections,
         answers = persistentListOf(A_POLL_ANSWER_1, A_POLL_ANSWER_2, A_POLL_ANSWER_3, A_POLL_ANSWER_4),
         votes = votes,
         endTime = endTime,
@@ -236,12 +279,13 @@ class PollContentStateFactoryTest {
         isMine: Boolean = false,
         isEditable: Boolean = false,
         question: String = A_POLL_QUESTION,
+        maxSelections: ULong = 1UL,
     ) = PollContentState(
         eventId = eventId,
         question = question,
         answerItems = answerItems.toImmutableList(),
         pollKind = pollKind,
-        maxSelections = 1u,
+        maxSelections = maxSelections,
         isPollEditable = isEditable,
         isPollEnded = isEnded,
         isMine = isMine,

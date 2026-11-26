@@ -43,9 +43,9 @@ class DefaultPollContentStateFactory(
                 ?.value
                 .orEmpty()
         }
-        val currentSelectionCount = myVotes.size
         val maxSelections = content.maxSelections.toInt()
-        val isSelectionLimitReached = currentSelectionCount >= maxSelections
+        // For single choice polls, selecting another answer replaces the current vote, so the limit does not apply.
+        val isSelectionLimitReached = maxSelections > 1 && myVotes.size >= maxSelections
 
         val answerItems = content.answers.map { answer ->
             val answerVoteCount = content.votes[answer.id]?.size ?: 0
