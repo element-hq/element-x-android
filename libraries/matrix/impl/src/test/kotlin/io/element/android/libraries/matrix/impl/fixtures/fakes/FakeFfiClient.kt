@@ -79,6 +79,7 @@ class FakeFfiClient(
     private val ignoredUsersResult: () -> List<String> = { emptyList() },
     private val subscribeToIgnoredUsersResult: (IgnoredUsersListener) -> Unit = {},
     private val logoutResult: () -> Unit = { lambdaError() },
+    private val deactivateAccountResult: (String, Boolean) -> Unit = { _, _ -> lambdaError() },
     private val sessionVerificationController: SessionVerificationController = FakeFfiSessionVerificationController(),
 ) : Client(NoHandle) {
     override fun userId(): String = userId
@@ -178,4 +179,5 @@ class FakeFfiClient(
 
     override fun close() = closeResult()
     override suspend fun logout() = logoutResult()
+    override suspend fun deactivateAccount(password: String, eraseData: Boolean) = deactivateAccountResult(password, eraseData)
 }

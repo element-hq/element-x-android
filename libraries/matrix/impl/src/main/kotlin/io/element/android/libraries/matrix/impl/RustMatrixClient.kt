@@ -811,14 +811,14 @@ class RustMatrixClient(
                 try {
                     innerClient.logout()
                 } catch (e: CancellationException) {
-                    withContext(NonCancellable) { restoreSessionAfterFailedLogout() }
+                    withContext(NonCancellable) { restoreSessionAfterFailedShutdown() }
                     throw e
                 } catch (failure: Throwable) {
                     if (ignoreSdkError) {
                         Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
                     } else {
                         Timber.e(failure, "Fail to call logout on HS.")
-                        restoreSessionAfterFailedLogout()
+                        restoreSessionAfterFailedShutdown()
                         throw failure
                     }
                 }
@@ -834,11 +834,14 @@ class RustMatrixClient(
         }
     }
 
-    private suspend fun restoreSessionAfterFailedLogout() {
+    /**
+     * Restores the session after a failed logout or account deactivation, which removed the delegate and stopped the sync.
+     */
+    private suspend fun restoreSessionAfterFailedShutdown() {
         // Restore the delegate so we keep receiving auth errors, then mark the session as usable again
         clientDelegateTaskHandle = innerClient.setDelegate(sessionDelegate)
         _isShuttingDown.set(false)
-        // Restart the sync stopped before the logout request. This also lets the SyncOrchestrator, which ignored any state
+        // Restart the sync stopped before the request. This also lets the SyncOrchestrator, which ignored any state
         // change while the client was shutting down, evaluate the new state and stop the sync again if the app is not active.
         syncService.startSync()
     }
@@ -858,17 +861,36 @@ class RustMatrixClient(
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
         clientDelegateTaskHandle = null
-        runCatchingExceptions {
-            innerClient.deactivateAccount(
-                password = password,
-                eraseData = eraseData,
-            )
-            destroy()
-            deleteSessionDirectory()
-            sessionStore.removeSession(sessionId.value)
-        }.onFailure {
-            Timber.e(it, "Failed to deactivate account")
+        // Stop the sync first so it doesn't race the invalidation of the access token
+        syncService.stopSync()
+        val deactivationResult = try {
+            runCatchingExceptions {
+                innerClient.deactivateAccount(
+                    password = password,
+                    eraseData = eraseData,
+                )
+            }
+        } catch (e: CancellationException) {
+            withContext(NonCancellable) { restoreSessionAfterFailedShutdown() }
+            throw e
         }
+        deactivationResult.fold(
+            onSuccess = {
+                // The account is gone, so the session can't be restored even if the cleanup fails
+                runCatchingExceptions {
+                    destroy()
+                    deleteSessionDirectory()
+                    sessionStore.removeSession(sessionId.value)
+                }.onFailure {
+                    Timber.e(it, "Failed to clean up the session after deactivating the account")
+                }
+            },
+            onFailure = {
+                Timber.e(it, "Failed to deactivate account")
+                restoreSessionAfterFailedShutdown()
+                Result.failure(it)
+            },
+        )
     }
 
     override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> = withContext(sessionDispatcher) {

@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.impl.search.RustSearchBackfillService
 import io.element.android.libraries.matrix.impl.search.workmanager.SearchBackfillRequestBuilder
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
+import io.element.android.libraries.matrix.test.A_PASSWORD
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
@@ -36,17 +37,21 @@ import io.element.android.libraries.workmanager.api.WorkManagerRequestWrapper
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
+import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.CreateRoomParameters
@@ -61,6 +66,9 @@ private const val AN_ACCOUNT_DATA_EVENT_TYPE = "org.example.custom"
 private const val AN_ACCOUNT_DATA_CONTENT = """{"key":"value"}"""
 
 class RustMatrixClientTest {
+    @get:Rule
+    val temporaryFolder = TemporaryFolder()
+
     @Test
     fun `ensure that sessionId and deviceId can be retrieved from the client`() = runTest {
         createRustMatrixClient().run {
@@ -385,31 +393,129 @@ class RustMatrixClientTest {
     @Test
     fun `when logout fails, the session is restored and still usable`() = runTest {
         val setDelegateResult = lambdaRecorder<ClientDelegate?, Unit> { }
-        val syncEvents = mutableListOf<String>()
+        val events = mutableListOf<String>()
+        val sessionStore = aSessionStoreWithCurrentSession()
         val client = createRustMatrixClient(
             client = FakeFfiClient(
                 setDelegateResult = setDelegateResult,
                 logoutResult = {
-                    syncEvents.add("logout")
+                    events.add("logout")
                     error("Logout failed")
                 },
             ),
-            innerSyncService = FakeFfiSyncService(
-                start = { syncEvents.add("start") },
-                stop = { syncEvents.add("stop") },
-            ),
+            innerSyncService = aRecordingSyncService(events),
+            sessionStore = sessionStore,
         )
         val result = runCatchingExceptions { client.logout(userInitiated = true, ignoreSdkError = false) }
         assertThat(result.isFailure).isTrue()
-        assertThat(client.isShuttingDown).isFalse()
+        client.assertSessionRestored(setDelegateResult, events, "logout")
+        assertThat(sessionStore.getSession(A_USER_ID.value)).isNotNull()
+        client.destroy()
+    }
+
+    @Test
+    fun `when account deactivation succeeds, the sync is stopped and the session is removed`() = runTest {
+        val events = mutableListOf<String>()
+        val sessionStore = aSessionStoreWithCurrentSession()
+        val sessionPaths = createSessionPaths()
+        val deactivateAccountResult = lambdaRecorder<String, Boolean, Unit> { _, _ -> events.add("deactivate") }
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(deactivateAccountResult = deactivateAccountResult),
+            innerSyncService = aRecordingSyncService(events),
+            sessionStore = sessionStore,
+            sessionPaths = sessionPaths,
+        )
+        val result = client.deactivateAccount(password = A_PASSWORD, eraseData = true)
+        assertThat(result.isSuccess).isTrue()
+        deactivateAccountResult.assertions().isCalledOnce().with(value(A_PASSWORD), value(true))
+        assertThat(events.take(2)).containsExactly("stop", "deactivate").inOrder()
+        assertThat(events).doesNotContain("start")
+        assertThat(client.isShuttingDown).isTrue()
+        assertThat(sessionStore.getSession(A_USER_ID.value)).isNull()
+        assertThat(sessionPaths.fileDirectory.exists()).isFalse()
+        assertThat(sessionPaths.cacheDirectory.exists()).isFalse()
+    }
+
+    @Test
+    fun `when account deactivation fails, the session is restored and still usable`() = runTest {
+        val setDelegateResult = lambdaRecorder<ClientDelegate?, Unit> { }
+        val events = mutableListOf<String>()
+        val sessionStore = aSessionStoreWithCurrentSession()
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                setDelegateResult = setDelegateResult,
+                deactivateAccountResult = { _, _ ->
+                    events.add("deactivate")
+                    error("Wrong password")
+                },
+            ),
+            innerSyncService = aRecordingSyncService(events),
+            sessionStore = sessionStore,
+        )
+        val result = client.deactivateAccount(password = A_PASSWORD, eraseData = false)
+        assertThat(result.exceptionOrNull()).hasMessageThat().isEqualTo("Wrong password")
+        client.assertSessionRestored(setDelegateResult, events, "deactivate")
+        assertThat(sessionStore.getSession(A_USER_ID.value)).isNotNull()
+        client.destroy()
+    }
+
+    @Test
+    fun `when account deactivation is cancelled, the session is restored and still usable`() = runTest {
+        val setDelegateResult = lambdaRecorder<ClientDelegate?, Unit> { }
+        val events = mutableListOf<String>()
+        val client = createRustMatrixClient(
+            client = FakeFfiClient(
+                setDelegateResult = setDelegateResult,
+                deactivateAccountResult = { _, _ ->
+                    events.add("deactivate")
+                    throw CancellationException("Cancelled")
+                },
+            ),
+            innerSyncService = aRecordingSyncService(events),
+        )
+        val error = catchCancellation { client.deactivateAccount(password = A_PASSWORD, eraseData = false) }
+        assertThat(error).isNotNull()
+        client.assertSessionRestored(setDelegateResult, events, "deactivate")
+        client.destroy()
+    }
+
+    private fun RustMatrixClient.assertSessionRestored(
+        setDelegateResult: LambdaOneParamRecorder<ClientDelegate?, Unit>,
+        events: List<String>,
+        request: String,
+    ) {
+        assertThat(isShuttingDown).isFalse()
         // The delegate is set when creating the client, then restored after the failure
         setDelegateResult.assertions().isCalledExactly(2).withSequence(
             listOf(any()),
             listOf(any()),
         )
-        // The sync is stopped during the logout request, then restarted
-        assertThat(syncEvents).containsExactly("stop", "logout", "start").inOrder()
-        client.destroy()
+        // The sync is stopped during the request, then restarted
+        assertThat(events).containsExactly("stop", request, "start").inOrder()
+    }
+
+    private fun aRecordingSyncService(events: MutableList<String>) = FakeFfiSyncService(
+        start = { events.add("start") },
+        stop = { events.add("stop") },
+    )
+
+    private fun aSessionStoreWithCurrentSession() = InMemorySessionStore(
+        initialList = listOf(aSessionData(sessionId = A_USER_ID.value)),
+        updateUserProfileResult = { _, _, _, _ -> },
+    )
+
+    private fun createSessionPaths() = SessionPaths(
+        fileDirectory = temporaryFolder.newFolder("files"),
+        cacheDirectory = temporaryFolder.newFolder("cache"),
+    )
+
+    private suspend fun catchCancellation(block: suspend () -> Unit): CancellationException? {
+        return try {
+            block()
+            null
+        } catch (e: CancellationException) {
+            e
+        }
     }
 
     // The initial fetch of the ignored users runs in the background scope, with a simulated delay
@@ -424,9 +530,10 @@ class RustMatrixClientTest {
         sessionStore: SessionStore = InMemorySessionStore(
             updateUserProfileResult = { _, _, _, _ -> },
         ),
+        sessionPaths: SessionPaths = SessionPaths(fileDirectory = File("files"), cacheDirectory = File("cache")),
     ) = RustMatrixClient(
         innerClient = client,
-        sessionPaths = SessionPaths(fileDirectory = File("files"), cacheDirectory = File("cache")),
+        sessionPaths = sessionPaths,
         sessionStore = sessionStore,
         appCoroutineScope = backgroundScope,
         sessionDelegate = aRustClientSessionDelegate(
