@@ -276,6 +276,13 @@ while [[ $ret -ne 0 ]]; do
 
     ret=$?
   fi
+  if [[ $ret -eq 0 ]]; then
+    gh run download "${runId}" --repo element-hq/element-x-android \
+       --dir "${gplayTargetPath}" \
+       --name elementx-app-gplay-mapping
+
+    ret=$?
+  fi
   if [[ $ret -ne 0 ]]; then
     read -r -p "Error while downloading the artifacts. You may want to fix the issue and retry. Retry (yes/no) default to yes? " doRetry
     doRetry=${doRetry:-yes}
@@ -447,11 +454,21 @@ printf "You can then go to \"Publishing overview\" and send the new release for 
 read -r -p "Press enter to continue. "
 
 printf "\n================================================================================\n"
+printf "Compressing the R8 mapping file...\n"
+
+# The mapping file is required to retrace the obfuscated stack traces (rageshakes, Sentry) of the GPlay build.
+# It is more than 200MB, but compresses well.
+mappingPath="${gplayTargetPath}/mapping.txt"
+compressedMappingPath="${gplayTargetPath}/app-gplay-release-mapping.txt.gz"
+gzip -9 -c "${mappingPath}" > "${compressedMappingPath}" || fail "unable to compress the mapping file ${mappingPath}."
+
+printf "\n================================================================================\n"
 printf "Creating the release on GitHub.\n"
 
 releaseAssets=(
   "${signedBundlePath}"
   "${universalApkPath}"
+  "${compressedMappingPath}"
   "${fdroidTargetPath}/app-fdroid-arm64-v8a-release-signed.apk"
   "${fdroidTargetPath}/app-fdroid-armeabi-v7a-release-signed.apk"
   "${fdroidTargetPath}/app-fdroid-x86-release-signed.apk"
