@@ -165,6 +165,7 @@ private fun PollAnswers(
         answerItems.forEach {
             PollAnswerView(
                 answerItem = it,
+                isMultipleSelection = isMultipleSelection,
                 modifier = Modifier
                     .selectable(
                         selected = it.isSelected,
