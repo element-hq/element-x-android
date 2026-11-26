@@ -106,6 +106,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
@@ -800,15 +801,17 @@ class RustMatrixClient(
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
         clientDelegateTaskHandle = null
-        // The session scope and the sync are only torn down once we know the logout will go ahead,
+        // The session scope is only torn down once we know the logout will go ahead,
         // so the session is still fully usable if the logout request fails.
         @Suppress("SuspendFunSwallowedCancellation")
         withContext(sessionDispatcher) {
             if (userInitiated) {
+                // Stop the sync first so it doesn't race the invalidation of the access token
+                syncService.stopSync()
                 try {
                     innerClient.logout()
                 } catch (e: CancellationException) {
-                    restoreSessionAfterFailedLogout()
+                    withContext(NonCancellable) { restoreSessionAfterFailedLogout() }
                     throw e
                 } catch (failure: Throwable) {
                     if (ignoreSdkError) {
@@ -831,10 +834,13 @@ class RustMatrixClient(
         }
     }
 
-    private fun restoreSessionAfterFailedLogout() {
+    private suspend fun restoreSessionAfterFailedLogout() {
         // Restore the delegate so we keep receiving auth errors, then mark the session as usable again
         clientDelegateTaskHandle = innerClient.setDelegate(sessionDelegate)
         _isShuttingDown.set(false)
+        // Restart the sync stopped before the logout request. This also lets the SyncOrchestrator, which ignored any state
+        // change while the client was shutting down, evaluate the new state and stop the sync again if the app is not active.
+        syncService.startSync()
     }
 
     override fun canDeactivateAccount(): Boolean {

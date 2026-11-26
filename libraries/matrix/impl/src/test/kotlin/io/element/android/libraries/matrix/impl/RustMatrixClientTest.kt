@@ -54,6 +54,7 @@ import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.MediaSource
 import org.matrix.rustcomponents.sdk.RoomHistoryVisibility
 import org.matrix.rustcomponents.sdk.StoreSizes
+import org.matrix.rustcomponents.sdk.SyncService
 import java.io.File
 
 private const val AN_ACCOUNT_DATA_EVENT_TYPE = "org.example.custom"
@@ -384,10 +385,18 @@ class RustMatrixClientTest {
     @Test
     fun `when logout fails, the session is restored and still usable`() = runTest {
         val setDelegateResult = lambdaRecorder<ClientDelegate?, Unit> { }
+        val syncEvents = mutableListOf<String>()
         val client = createRustMatrixClient(
             client = FakeFfiClient(
                 setDelegateResult = setDelegateResult,
-                logoutResult = { error("Logout failed") },
+                logoutResult = {
+                    syncEvents.add("logout")
+                    error("Logout failed")
+                },
+            ),
+            innerSyncService = FakeFfiSyncService(
+                start = { syncEvents.add("start") },
+                stop = { syncEvents.add("stop") },
             ),
         )
         val result = runCatchingExceptions { client.logout(userInitiated = true, ignoreSdkError = false) }
@@ -398,6 +407,8 @@ class RustMatrixClientTest {
             listOf(any()),
             listOf(any()),
         )
+        // The sync is stopped during the logout request, then restarted
+        assertThat(syncEvents).containsExactly("stop", "logout", "start").inOrder()
         client.destroy()
     }
 
@@ -409,6 +420,7 @@ class RustMatrixClientTest {
 
     private fun TestScope.createRustMatrixClient(
         client: Client = FakeFfiClient(),
+        innerSyncService: SyncService = FakeFfiSyncService(),
         sessionStore: SessionStore = InMemorySessionStore(
             updateUserProfileResult = { _, _, _, _ -> },
         ),
@@ -420,7 +432,7 @@ class RustMatrixClientTest {
         sessionDelegate = aRustClientSessionDelegate(
             sessionStore = sessionStore,
         ),
-        innerSyncService = FakeFfiSyncService(),
+        innerSyncService = innerSyncService,
         dispatchers = testCoroutineDispatchers(),
         baseCacheDirectory = File(""),
         clock = FakeSystemClock(),
