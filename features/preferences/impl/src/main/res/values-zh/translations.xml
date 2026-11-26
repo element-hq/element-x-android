@@ -106,6 +106,9 @@
   <string name="screen_notification_settings_system_notifications_turned_off">"系统通知已关闭"</string>
   <string name="screen_notification_settings_title">"通知"</string>
   <string name="screen_settings_add_account">"添加账户"</string>
+  <string name="screen_settings_message_text_size_adjust_size">"调整大小"</string>
+  <string name="screen_settings_message_text_size_default_description">"默认文本大小为 %1$d。"</string>
+  <string name="screen_settings_message_text_size_title">"消息正文大小"</string>
   <string name="screen_settings_user_status_away">"离开"</string>
   <string name="screen_settings_user_status_be_right_back">"马上回来"</string>
   <string name="screen_settings_user_status_custom">"自定义…"</string>

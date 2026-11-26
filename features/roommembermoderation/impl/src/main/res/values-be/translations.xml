@@ -4,12 +4,19 @@
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Заблакіраваць"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Яны не змогуць зноў далучыцца да гэтага пакоя, калі іх запросяць."</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Вы ўпэўнены, што хочаце заблакіраваць гэтага карыстальніка?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description">"Яны не змогуць зноў далучыцца да гэтай прасторы нават па запрашэнні, але захаваюць членства ва ўсіх пакоях і падпрасторах."</string>
   <string name="screen_bottom_sheet_manage_room_member_banning_user">"Блакіроўка %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Выдаліць"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Яны змогуць зноў далучыцца да гэтага пакоя, калі іх запросяць."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Вы ўпэўнены, што хочаце выдаліць гэтага ўдзельніка?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description">"Яны змогуць зноў далучыцца да гэтай прасторы па запрашэнні і захаваюць членства ва ўсіх пакоях і падпрасторах."</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Прагляд профілю"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Выдаліць удзельніка"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Выдаліць удзельніка і забараніць далучацца ў будучыні?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"Выдаленне %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Разблакіраваць карыстальніка"</string>
   <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Разблакіраваць"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Пры запрашэнні яны змогуць далучыцца зноў"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Вы ўпэўнены, што хочаце разблакіраваць гэтага ўдзельніка?"</string>
   <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Разблакіроўка %1$s"</string>
 </resources>

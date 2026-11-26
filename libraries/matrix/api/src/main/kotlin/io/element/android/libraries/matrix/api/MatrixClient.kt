@@ -61,7 +61,7 @@ import java.util.Optional
  * One instance exists per session, created on login or session restore and torn down by [logout], [clearCache] or account deactivation.
  * Suspending members here report failures through a [Result] instead of throwing, and run their work off the main thread.
  */
-interface MatrixClient : ClientUrlContentFetcher {
+interface MatrixClient {
     /** Identifier of the logged in user; a [SessionId] and a [UserId] are the same value. */
     val sessionId: SessionId
 
@@ -70,6 +70,16 @@ interface MatrixClient : ClientUrlContentFetcher {
 
     /** Directories holding this session's databases, caches and downloaded media. */
     val sessionPaths: SessionPaths
+
+    /**
+     * The domain of the public server for this homeserver.
+     */
+    val server: String?
+
+    /**
+     * The URL of the actual Matrix homeserver.
+     */
+    val homeserverUrl: String
 
     /**
      * Display name and avatar of the logged in user.

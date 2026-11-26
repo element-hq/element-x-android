@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_account_provider_signin_title">"На път сте да влезете в %s"</string>
-  <string name="screen_change_account_provider_subtitle">"Използвайте друг доставчик на акаунт, като например собствен частен сървър или работен акаунт."</string>
-  <string name="screen_change_server_error_invalid_homeserver">"Не можахме да достигнем този сървър. Моля, проверете дали сте въвели правилно URL адреса на сървъра. Ако URL адресът е правилен, свържете се с администратора на вашия сървър за допълнителна помощ."</string>
+  <string name="screen_change_account_provider_subtitle">"Използвайте друг доставчик на акаунт, като например собствен личен сървър или работен акаунт."</string>
+  <string name="screen_change_server_error_invalid_homeserver">"Не можахме да достигнем този сървър. Моля, проверете дали сте въвели правилно URL адреса на доставчика на акаунта. Ако URL адресът е правилен, свържете се с администратора на доставчика на вашия акаунт, за допълнителна помощ."</string>
   <string name="screen_change_server_subtitle">"Какъв е адресът на вашия сървър?"</string>
+  <string name="screen_change_server_textfield_header">"Доставчик на акаунта"</string>
   <string name="screen_change_server_title">"Изберете своя сървър"</string>
+  <string name="screen_change_server_title_login">"Въведете доставчика на вашия акаунт"</string>
+  <string name="screen_change_server_title_register">"Изберете доставчик на акаунта"</string>
   <string name="screen_create_account_title">"Създаване на акаунт"</string>
-  <string name="screen_login_error_deactivated_account">"Този акаунт бе деактивиран."</string>
+  <string name="screen_login_error_deactivated_account">"Този акаунт бе изтрит."</string>
   <string name="screen_login_error_invalid_credentials">"Неправилно потребителско име и/или парола"</string>
   <string name="screen_login_error_invalid_user_id">"Това не е валиден потребителски идентификатор. Очакван формат: ‘@user:homeserver.org’"</string>
-  <string name="screen_login_error_unsupported_authentication">"Избраният сървър не поддържа влизане с парола или OAuth. Моля, свържете се с вашия администратор или изберете друг сървър."</string>
+  <string name="screen_login_error_unsupported_authentication">"Избраният доставчик не поддържа влизане с парола или OAuth. Моля, свържете се с доставчика на вашия акаунт или изберете друг."</string>
   <string name="screen_login_form_header">"Въведете своите данни"</string>
   <string name="screen_login_subtitle">"Matrix е отворена мрежа за сигурна, децентрализирана комуникация."</string>
   <string name="screen_login_title_with_homeserver">"Влизане в %1$s"</string>
@@ -17,9 +20,11 @@
   <string name="screen_onboarding_sign_in_to">"Влизане в %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Влизане с QR код"</string>
   <string name="screen_onboarding_sign_up">"Създаване на акаунт"</string>
+  <string name="screen_onboarding_welcome_back">"Добре дошли отново"</string>
   <string name="screen_onboarding_welcome_message">"Добре дошли в най-бързия %1$s досега. Супер зареден за скорост и простота."</string>
   <string name="screen_onboarding_welcome_title">"Бъдете в стихията си"</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Повторен опит"</string>
   <string name="screen_qr_code_login_verify_code_title">"Вашият код за потвърждение"</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix е отворена мрежа за сигурна, децентрализирана комуникация."</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Изберете доставчик на акаунта"</string>
 </resources>

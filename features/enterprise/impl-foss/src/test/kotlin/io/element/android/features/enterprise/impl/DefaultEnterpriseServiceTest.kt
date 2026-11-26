@@ -14,11 +14,12 @@ import io.element.android.compound.colors.SemanticColorsLightDark
 import io.element.android.features.enterprise.api.BugReportUrl
 import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.uri.ensureProtocol
+import io.element.android.libraries.matrix.api.network.HttpClient
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClient
-import io.element.android.libraries.matrix.test.FakeTemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.test.accountprovider.anAccountProviderGeneric
+import io.element.android.libraries.matrix.test.network.FakeHttpClient
+import io.element.android.libraries.matrix.test.network.FakeHttpClientFactory
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.testCoroutineDispatchers
@@ -116,30 +117,39 @@ class DefaultEnterpriseServiceTest {
     }
 
     @Test
-    fun `isElementProEnforced checks using a temporary client`() = runTest {
-        val closeLambda = lambdaRecorder<Unit> {}
+    fun `isElementProEnforced checks using an http client for the server`() = runTest {
         val getUrlLambda = lambdaRecorder<String, Result<ByteArray>> {
             Result.success("""{"enforce_element_pro": true}""".toByteArray())
         }
-        val client = FakeTemporaryMatrixClient(
-            getUrlResult = getUrlLambda,
-            closeLambda = closeLambda,
+        val createHttpClientLambda = lambdaRecorder<String, String?, HttpClient> { _, _ ->
+            FakeHttpClient(getUrlResult = getUrlLambda)
+        }
+        val defaultEnterpriseService = createDefaultEnterpriseService(
+            httpClientFactory = FakeHttpClientFactory(createResult = createHttpClientLambda),
         )
-        val defaultEnterpriseService = createDefaultEnterpriseService(client = client)
         assertThat(defaultEnterpriseService.isElementProEnforced(A_HOMESERVER_URL)).isTrue()
 
-        // Verify that the temporary client was used to fetch the URL and then closed
-        val expectedUrl = "${A_HOMESERVER_URL.ensureProtocol()}/.well-known/element/element.json"
-        getUrlLambda.assertions().isCalledOnce().with(value(expectedUrl))
-        closeLambda.assertions().isCalledOnce()
+        // Verify that an http client was created for the server and used to fetch the well-known file
+        createHttpClientLambda.assertions().isCalledOnce().with(value(A_HOMESERVER_URL), value(A_HOMESERVER_URL))
+        getUrlLambda.assertions().isCalledOnce().with(value("${A_HOMESERVER_URL.ensureProtocol()}/.well-known/element/element.json"))
+    }
+
+    @Test
+    fun `isElementProEnforced returns false when the request fails`() = runTest {
+        val defaultEnterpriseService = createDefaultEnterpriseService(
+            httpClientFactory = FakeHttpClientFactory(createResult = { _, _ ->
+                FakeHttpClient(getUrlResult = { Result.failure(Exception("Network error")) })
+            }),
+        )
+        assertThat(defaultEnterpriseService.isElementProEnforced(A_HOMESERVER_URL)).isFalse()
     }
 
     private fun TestScope.createDefaultEnterpriseService(
-        client: FakeTemporaryMatrixClient = FakeTemporaryMatrixClient(),
+        httpClientFactory: HttpClient.Factory = FakeHttpClientFactory(),
         jsonProvider: JsonProvider = { Json }
     ) = DefaultEnterpriseService(
-        temporaryMatrixClientFactory = FakeTemporaryMatrixClientFactory(createResult = { Result.success(client) }),
         jsonProvider = jsonProvider,
         dispatchers = testCoroutineDispatchers(),
+        httpClientFactory = httpClientFactory,
     )
 }

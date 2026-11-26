@@ -18,10 +18,9 @@ import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.core.uri.ensureProtocol
-import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
-import io.element.android.libraries.matrix.api.TemporaryMatrixClientFactory
 import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.network.HttpClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
@@ -31,30 +30,28 @@ import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
 class DefaultEnterpriseService(
-    private val temporaryMatrixClientFactory: TemporaryMatrixClientFactory,
     private val jsonProvider: JsonProvider,
     private val dispatchers: CoroutineDispatchers,
+    private val httpClientFactory: HttpClient.Factory,
 ) : EnterpriseService {
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
-    override suspend fun tweakMasUrl(url: String, urlContentFetcher: ClientUrlContentFetcher) = url
+    override suspend fun tweakMasUrl(url: String, httpClient: HttpClient) = url
     override fun accountProviderAllowList(): List<AccountProvider> = emptyList()
     override fun canConnectToAnyAccountProvider(): Boolean = true
     override suspend fun isAllowedToConnectToAccountProvider(accountProvider: AccountProvider) = true
     override suspend fun isElementProEnforced(serverName: String): Boolean = withContext(dispatchers.io) {
-        val temporaryMatrixClient = temporaryMatrixClientFactory.create(serverName).getOrElse { return@withContext false }
-        temporaryMatrixClient.use { client ->
-            val baseUrl = serverName.ensureProtocol().removeSuffix("/")
-            // We'll always perform a network request here since we're not interested in any cached value.
-            client.getUrl("$baseUrl/.well-known/element/element.json")
-                .mapCatchingExceptions { response ->
-                    val remoteConfig = jsonProvider().decodeFromString<MinimalEnterpriseConfig>(String(response))
-                    remoteConfig.enforceElementPro ?: false
-                }
-                .onFailure {
-                    Timber.e(it, "Failed to fetch enterprise config for checking if Element Pro is enforced for $serverName")
-                }
-                .getOrElse { false }
-        }
+        val client = httpClientFactory.create(homeserverUrl = serverName, serverName = serverName)
+        val baseUrl = serverName.ensureProtocol().removeSuffix("/")
+        // We'll always perform a network request here since we're not interested in any cached value.
+        client.getUrl("$baseUrl/.well-known/element/element.json")
+            .mapCatchingExceptions { response ->
+                val remoteConfig = jsonProvider().decodeFromString<MinimalEnterpriseConfig>(String(response))
+                remoteConfig.enforceElementPro ?: false
+            }
+            .onFailure {
+                Timber.e(it, "Failed to fetch enterprise config for checking if Element Pro is enforced for $serverName")
+            }
+            .getOrElse { false }
     }
 
     override suspend fun overrideBrandColor(sessionId: SessionId?, brandColor: String?) = Unit

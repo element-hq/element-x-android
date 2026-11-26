@@ -89,7 +89,7 @@ class LeaveRoomPresenter(
                 room
                     .leave()
                     .onSuccess { notificationConversationService.onLeftRoom(client.sessionId, roomId) }
-                    .onFailure { Timber.e(it, "Error while leaving room ${room.roomId}") }
+                    .onFailure { error -> Timber.e(error, "Error while leaving room ${room.roomId}") }
                     .getOrThrow()
             }
         }

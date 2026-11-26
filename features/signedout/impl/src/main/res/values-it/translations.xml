@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"Hai cambiato la password in un\'altra sessione"</string>
-  <string name="screen_signed_out_reason_2">"Hai eliminato la sessione da un\'altra"</string>
-  <string name="screen_signed_out_reason_3">"L\'amministratore del tuo server ha invalidato il tuo accesso"</string>
-  <string name="screen_signed_out_title">"Sei disconnesso"</string>
+  <string name="screen_signed_out_reason_1">"Hai rimosso questo dispositivo dal tuo account"</string>
+  <string name="screen_signed_out_reason_2">"Hai cambiato la password su un altro dispositivo"</string>
+  <string name="screen_signed_out_reason_3">"La sessione è scaduta oppure l\'amministratore ha invalidato il tuo accesso"</string>
+  <string name="screen_signed_out_subtitle_v2">"Questo dispositivo è stato rimosso per uno dei motivi elencati di seguito. Effettua nuovamente l\'accesso per collegare il dispositivo al tuo account."</string>
+  <string name="screen_signed_out_title">"Dispositivo rimosso"</string>
 </resources>

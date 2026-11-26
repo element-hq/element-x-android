@@ -187,7 +187,7 @@ class SearchBackfillWorkerTest : RobolectricTest() {
         ),
         context = InstrumentationRegistry.getInstrumentation().context,
         matrixClientProvider = FakeMatrixClientProvider(
-            getClient = { client?.let { Result.success(it) } ?: Result.failure(IllegalStateException("No client")) }
+            getClient = { client?.let { nonNullClient -> Result.success(nonNullClient) } ?: Result.failure(IllegalStateException("No client")) }
         ),
         processLifecycleOwner = lifecycleOwner,
     )

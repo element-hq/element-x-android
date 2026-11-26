@@ -31,5 +31,5 @@
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Използване на биометрия"</string>
   <string name="screen_app_lock_use_pin_android">"Използване на PIN"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Излизане…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Премахване на устройството…"</string>
 </resources>

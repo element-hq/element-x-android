@@ -10,9 +10,9 @@ package io.element.android.features.enterprise.api
 
 import androidx.compose.ui.graphics.Color
 import io.element.android.compound.colors.SemanticColorsLightDark
-import io.element.android.libraries.matrix.api.ClientUrlContentFetcher
 import io.element.android.libraries.matrix.api.accountprovider.AccountProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.network.HttpClient
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -32,9 +32,9 @@ interface EnterpriseService {
      * Rewrites the authentication server URL when the deployment requires a different one from the one advertised.
      *
      * @param url the URL to rewrite.
-     * @param urlContentFetcher used to read the deployment configuration; a client that is not authenticated yet also works.
+     * @param httpClient used to read the deployment configuration; an HTTP client that is not authenticated yet also works.
      */
-    suspend fun tweakMasUrl(url: String, urlContentFetcher: ClientUrlContentFetcher): String
+    suspend fun tweakMasUrl(url: String, httpClient: HttpClient): String
 
     /**
      * Returns the list of account provider the user is allowed to sign in to.

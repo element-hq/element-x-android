@@ -50,7 +50,7 @@ Si continues, és possible que alguna de les teves configuracions canviï."</str
   <string name="screen_notification_settings_mode_all">"Tot"</string>
   <string name="screen_notification_settings_mode_mentions">"Mencions"</string>
   <string name="screen_notification_settings_notification_section_title">"Notifica\'m a"</string>
-  <string name="screen_notification_settings_room_mention_label">"Notifica\'m a @sala"</string>
+  <string name="screen_notification_settings_room_mention_label">"Mencions de @room"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Per rebre notificacions, canvia la teva %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"configuració del sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificacions del sistema desactivades"</string>

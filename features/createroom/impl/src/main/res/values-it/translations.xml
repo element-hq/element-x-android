@@ -11,7 +11,7 @@
   <string name="screen_create_room_private_option_title">"Privato"</string>
   <string name="screen_create_room_public_option_description">"Chiunque può trovare questa stanza.
 Puoi modificarlo in qualsiasi momento nelle impostazioni della stanza."</string>
-  <string name="screen_create_room_public_option_short_description">"Chiunque può partecipare."</string>
+  <string name="screen_create_room_public_option_short_description">"Chiunque può partecipare, comprese le persone esterne alla tua organizzazione."</string>
   <string name="screen_create_room_public_option_title">"Pubblico"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Chiunque può chiedere di partecipare, ma un amministratore o un moderatore deve accettare la richiesta."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Consenti di chiedere di partecipare"</string>
@@ -19,7 +19,7 @@ Puoi modificarlo in qualsiasi momento nelle impostazioni della stanza."</string>
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Richiedi accesso"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Possono partecipare solo le persone invitate."</string>
   <string name="screen_create_room_room_access_section_private_option_title">"Privato"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"Chiunque può partecipare."</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Chiunque può partecipare, comprese le persone esterne alla tua organizzazione."</string>
   <string name="screen_create_room_room_access_section_public_option_title">"Pubblico"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"Chiunque in %1$s può unirsi."</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"Standard"</string>

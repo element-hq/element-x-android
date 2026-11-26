@@ -33,7 +33,10 @@ import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.encryption.SteadyStateException
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @AssistedInject
 class LogoutPresenter(
@@ -60,7 +63,10 @@ class LogoutPresenter(
 
         val currentUser by matrixClient.userProfile.collectAsState()
         val backupUploadState: BackupUploadState by remember {
+            @OptIn(FlowPreview::class)
             encryptionService.waitForBackupUploadSteadyState()
+                // Debounce to avoid flickering when the state is changing quickly
+                .debounce(250.milliseconds)
         }
             .collectAsState(initial = BackupUploadState.Unknown)
         val hasDevicesToVerifyAgainst by encryptionService.hasDevicesToVerifyAgainst.collectAsState()

@@ -5,4 +5,6 @@
   <string name="dialog_permission_generic">"Калі ласка, дайце дазвол у наладах сістэмы."</string>
   <string name="dialog_permission_microphone">"Каб дазволіць праграме выкарыстоўваць мікрафон, дайце дазвол у наладах сістэмы."</string>
   <string name="dialog_permission_notification">"Каб дазволіць праграме паказваць апавяшчэнні, дайце дазвол у наладах сістэмы."</string>
+  <string name="screen_local_network_opt_in_subtitle">"Ваш хатні сервер знаходзіцца ў вашай лакальнай сетцы. Каб падключыцца, %1$s патрэбны дазвол на доступ да прылад у гэтай сетцы."</string>
+  <string name="screen_local_network_opt_in_title">"Дазволіць доступ да лакальнай сеткі"</string>
 </resources>

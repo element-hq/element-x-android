@@ -9,11 +9,15 @@
 package io.element.android.libraries.push.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.androidutils.metadata.withReleaseBehavior
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.pusher.SetHttpPusherData
 import io.element.android.libraries.matrix.api.pusher.UnsetHttpPusherData
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SECRET
+import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.pushers.FakePushersService
@@ -22,6 +26,9 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
+import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
@@ -60,17 +67,71 @@ class DefaultPusherSubscriberTest {
         )
     }
 
+    @Test
+    fun `test register pusher with another session on the same server using the same push key uses append true`() = runTest {
+        testRegisterPusher(
+            currentPushKey = null,
+            registerResult = Result.success(Unit),
+            otherSessionPushKeys = mapOf(A_SESSION_ID_2 to "aPushKey"),
+            expectedAppend = true,
+        )
+    }
+
+    @Test
+    fun `test register pusher with another session on the same server using another push key uses append false`() = runTest {
+        testRegisterPusher(
+            currentPushKey = null,
+            registerResult = Result.success(Unit),
+            otherSessionPushKeys = mapOf(A_SESSION_ID_2 to "anotherPushKey"),
+            expectedAppend = false,
+        )
+    }
+
+    @Test
+    fun `test register pusher with another session on another server using the same push key uses append false`() = runTest {
+        testRegisterPusher(
+            currentPushKey = null,
+            registerResult = Result.success(Unit),
+            otherSessionPushKeys = mapOf(SessionId("@bob:other.org") to "aPushKey"),
+            expectedAppend = false,
+        )
+    }
+
+    @Test
+    fun `test register pusher for a session without server name uses append false`() = runTest {
+        var sessionIdWithoutServerName = A_SESSION_ID
+        withReleaseBehavior {
+            sessionIdWithoutServerName = SessionId("@alice:")
+        }
+        testRegisterPusher(
+            currentPushKey = null,
+            registerResult = Result.success(Unit),
+            sessionId = sessionIdWithoutServerName,
+            otherSessionPushKeys = mapOf(A_SESSION_ID_2 to "aPushKey"),
+            expectedAppend = false,
+        )
+    }
+
     private suspend fun testRegisterPusher(
         currentPushKey: String?,
         registerResult: Result<Unit>,
+        sessionId: SessionId = A_SESSION_ID,
+        otherSessionPushKeys: Map<SessionId, String?> = emptyMap(),
+        expectedAppend: Boolean = false,
     ) {
         val setHttpPusherResult = lambdaRecorder<SetHttpPusherData, Result<Unit>> { registerResult }
         val userPushStore = FakeUserPushStore().apply {
             setCurrentRegisteredPushKey(currentPushKey)
         }
         assertThat(userPushStore.getCurrentRegisteredPushKey()).isEqualTo(currentPushKey)
+        val otherUserPushStores = otherSessionPushKeys.mapValues { (_, pushKey) ->
+            FakeUserPushStore().apply {
+                setCurrentRegisteredPushKey(pushKey)
+            }
+        }
 
         val matrixClient = FakeMatrixClient(
+            sessionId = sessionId,
             pushersService = FakePushersService(
                 setHttpPusherResult = setHttpPusherResult,
             ),
@@ -80,7 +141,12 @@ class DefaultPusherSubscriberTest {
                 getSecretForUserResult = { A_SECRET },
             ),
             userPushStoreFactory = FakeUserPushStoreFactory(
-                userPushStore = { userPushStore },
+                userPushStore = { otherUserPushStores[it] ?: userPushStore },
+            ),
+            sessionStore = InMemorySessionStore(
+                initialList = (listOf(sessionId) + otherSessionPushKeys.keys).map {
+                    aSessionData(sessionId = it.value)
+                },
             ),
         )
         val result = defaultPusherSubscriber.registerPusher(
@@ -102,7 +168,7 @@ class DefaultPusherSubscriberTest {
                         profileTag = null,
                         lang = "en",
                         defaultPayload = """{"cs":"$A_SECRET"}""",
-                        append = false,
+                        append = expectedAppend,
                     ),
                 )
             )
@@ -175,11 +241,13 @@ class DefaultPusherSubscriberTest {
         buildMeta: BuildMeta = aBuildMeta(applicationName = "MyApp"),
         userPushStoreFactory: UserPushStoreFactory = FakeUserPushStoreFactory(),
         pushClientSecret: PushClientSecret = FakePushClientSecret(),
+        sessionStore: SessionStore = InMemorySessionStore(),
     ): DefaultPusherSubscriber {
         return DefaultPusherSubscriber(
             buildMeta = buildMeta,
             pushClientSecret = pushClientSecret,
             userPushStoreFactory = userPushStoreFactory,
+            sessionStore = sessionStore,
         )
     }
 }

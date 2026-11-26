@@ -32,7 +32,7 @@ Segur que vols continuar?"</string>
   <string name="screen_pinned_timeline_screen_title_empty">"Missatges fixats"</string>
   <string name="screen_report_content_block_user">"Bloqueja usuari"</string>
   <string name="screen_report_content_block_user_hint">"Marca si vols ocultar tots els missatges actuals i futurs d\'aquest usuari"</string>
-  <string name="screen_report_content_explanation">"Aquest missatge s\'enviarà a l\'administrador del teu servidor. No podrà llegir cap missatge xifrat."</string>
+  <string name="screen_report_content_explanation">"Aquest missatge s\'informarà al proveïdor del vostre compte. No podrà llegir cap missatge xifrat."</string>
   <string name="screen_report_content_hint">"Motiu de la denúncia del contingut"</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Omet la verificació i envia"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Pots ometre la verificació i enviar el missatge igualment o pots cancel·lar i tornar-ho a intentar més tard, quan s\'hagi tornat a verificar %1$s."</string>
@@ -47,7 +47,7 @@ Segur que vols continuar?"</string>
   <string name="screen_room_attachment_source_camera_video">"Enregistra vídeo"</string>
   <string name="screen_room_attachment_source_files">"Fitxer adjunt"</string>
   <string name="screen_room_attachment_source_gallery">"Galeria de fotos i vídeos"</string>
-  <string name="screen_room_attachment_source_location">"Ubicació"</string>
+  <string name="screen_room_attachment_source_location">"Comparteix la ubicació"</string>
   <string name="screen_room_attachment_source_poll">"Votació"</string>
   <string name="screen_room_attachment_text_formatting">"Format de text"</string>
   <string name="screen_room_encrypted_history_banner">"L\'historial de missatges no està disponible actualment."</string>

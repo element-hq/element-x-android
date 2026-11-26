@@ -115,8 +115,8 @@
   <string name="action_share">"Comparteix"</string>
   <string name="action_share_link">"Comparteix enllaç"</string>
   <string name="action_show">"Mostra"</string>
-  <string name="action_signout">"Tanca sessió"</string>
-  <string name="action_signout_anyway">"Tanca sessió igualment"</string>
+  <string name="action_signout">"Elimina aquest dispositiu"</string>
+  <string name="action_signout_anyway">"Elimina aquest dispositiu igualment"</string>
   <string name="action_skip">"Omet"</string>
   <string name="action_start">"Comença"</string>
   <string name="action_start_chat">"Inicia un xat"</string>

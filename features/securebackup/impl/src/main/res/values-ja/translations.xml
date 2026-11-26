@@ -51,6 +51,7 @@
   <string name="screen_encryption_reset_no_options_title">"デジタルIDをリセットする必要があります"</string>
   <string name="screen_encryption_reset_subtitle">"他の認証済みの端末にアクセスできず、回復鍵を発行していない場合、アプリを使用するにはデジタルIDをリセットする必要があります。"</string>
   <string name="screen_encryption_reset_title">"認証できませんか？デジタルIDをリセットする必要があります。"</string>
+  <string name="screen_identity_confirmation_sign_out">"サインアウト"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"削除"</string>
   <string name="screen_key_backup_disable_confirmation_description">"すべての端末を削除してしまうと、暗号化された会話が失われ、デジタルIDをリセットする必要があります。"</string>
   <string name="screen_key_backup_disable_confirmation_title">"本当に鍵の保管庫を削除しますか？"</string>
