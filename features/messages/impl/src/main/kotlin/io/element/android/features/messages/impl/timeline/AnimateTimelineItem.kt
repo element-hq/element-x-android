@@ -203,6 +203,8 @@ internal fun Modifier.extendViewportAbove(resizes: TimelineItemResizes): Modifie
  * permalink, then scrolled to the focused event, the previous items stayed displayed behind the new ones.
  *
  * Every jump changes the first visible item, and reading it here redraws the LazyColumn in the same frame, without the released layers.
+ *
+ * There is an issue submitted upstream tracking this: [Google Issue Tracker](https://issuetracker.google.com/issues/575203738).
  */
 internal fun Modifier.redrawOnJump(lazyListState: LazyListState): Modifier = drawWithContent {
     // Included in the draw block so a change in this value triggers a redraw, but not read during the draw so it doesn't affect the drawing itself
