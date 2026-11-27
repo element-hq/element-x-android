@@ -524,8 +524,11 @@ interface MatrixClient {
      */
     suspend fun destroy()
 
-    /** Returns a provider for the capabilities the homeserver advertises, such as whether the display name can be changed. */
-    fun homeserverCapabilities(): HomeserverCapabilitiesProvider
+    /**
+     * Provider for the capabilities the homeserver advertises, such as whether the display name can be changed.
+     * It is owned by the client, which releases it when the session is destroyed.
+     */
+    val homeserverCapabilities: HomeserverCapabilitiesProvider
 
     /**
      * Returns the total number of unread notifications across all rooms, as currently known by the client.

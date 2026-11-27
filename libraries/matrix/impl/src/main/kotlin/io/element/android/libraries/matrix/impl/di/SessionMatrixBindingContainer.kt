@@ -103,7 +103,7 @@ object SessionMatrixBindingContainer {
 
     @Provides
     fun providesHomeserverCapabilitiesProvider(matrixClient: MatrixClient): HomeserverCapabilitiesProvider {
-        return matrixClient.homeserverCapabilities()
+        return matrixClient.homeserverCapabilities
     }
 
     @Provides

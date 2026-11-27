@@ -12,6 +12,10 @@ import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SessionVerificationControllerDelegate
 
-class FakeFfiSessionVerificationController : SessionVerificationController(NoHandle) {
-    override fun setDelegate(delegate: SessionVerificationControllerDelegate?) {}
+class FakeFfiSessionVerificationController(
+    private val setDelegateResult: (SessionVerificationControllerDelegate?) -> Unit = {},
+    private val destroyResult: () -> Unit = {},
+) : SessionVerificationController(NoHandle) {
+    override fun setDelegate(delegate: SessionVerificationControllerDelegate?) = setDelegateResult(delegate)
+    override fun destroy() = destroyResult()
 }

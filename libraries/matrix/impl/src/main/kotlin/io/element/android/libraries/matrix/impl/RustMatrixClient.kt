@@ -106,6 +106,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
@@ -305,6 +306,11 @@ class RustMatrixClient(
     )
 
     private var clientDelegateTaskHandle: TaskHandle? = innerClient.setDelegate(sessionDelegate)
+
+    private val homeserverCapabilitiesLazy = lazy {
+        RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities(), sessionDispatcher)
+    }
+    override val homeserverCapabilities: HomeserverCapabilitiesProvider by homeserverCapabilitiesLazy
 
     override val searchBackfillService = searchBackfillServiceFactory.create(innerClient)
 
@@ -758,6 +764,9 @@ class RustMatrixClient(
         innerSpaceService.close()
         notificationService.close()
         encryptionService.close()
+        if (homeserverCapabilitiesLazy.isInitialized()) {
+            homeserverCapabilitiesLazy.value.close()
+        }
         innerClient.close()
     }
 
@@ -789,27 +798,33 @@ class RustMatrixClient(
 
     override suspend fun logout(userInitiated: Boolean, ignoreSdkError: Boolean) {
         _isShuttingDown.set(true)
-        sessionCoroutineScope.cancel()
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
         clientDelegateTaskHandle = null
+        // The session scope is only torn down once we know the logout will go ahead,
+        // so the session is still fully usable if the logout request fails.
+        @Suppress("SuspendFunSwallowedCancellation")
         withContext(sessionDispatcher) {
             if (userInitiated) {
+                // Stop the sync first so it doesn't race the invalidation of the access token
+                syncService.stopSync()
                 try {
                     innerClient.logout()
                 } catch (e: CancellationException) {
+                    withContext(NonCancellable) { restoreSessionAfterFailedShutdown() }
                     throw e
                 } catch (failure: Throwable) {
                     if (ignoreSdkError) {
                         Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
                     } else {
-                        // If the logout failed we need to restore the delegate
-                        clientDelegateTaskHandle = innerClient.setDelegate(sessionDelegate)
                         Timber.e(failure, "Fail to call logout on HS.")
+                        restoreSessionAfterFailedShutdown()
                         throw failure
                     }
                 }
             }
+            sessionCoroutineScope.cancel()
+            syncService.stopSync()
             destroy()
 
             deleteSessionDirectory()
@@ -817,6 +832,18 @@ class RustMatrixClient(
                 sessionStore.removeSession(sessionId.value)
             }
         }
+    }
+
+    /**
+     * Restores the session after a failed logout or account deactivation, which removed the delegate and stopped the sync.
+     */
+    private suspend fun restoreSessionAfterFailedShutdown() {
+        // Restore the delegate so we keep receiving auth errors, then mark the session as usable again
+        clientDelegateTaskHandle = innerClient.setDelegate(sessionDelegate)
+        _isShuttingDown.set(false)
+        // Restart the sync stopped before the request. This also lets the SyncOrchestrator, which ignored any state
+        // change while the client was shutting down, evaluate the new state and stop the sync again if the app is not active.
+        syncService.startSync()
     }
 
     override fun canDeactivateAccount(): Boolean {
@@ -834,17 +861,38 @@ class RustMatrixClient(
         // Remove current delegate so we don't receive an auth error
         clientDelegateTaskHandle?.cancelAndDestroy()
         clientDelegateTaskHandle = null
-        runCatchingExceptions {
-            innerClient.deactivateAccount(
-                password = password,
-                eraseData = eraseData,
-            )
-            destroy()
-            deleteSessionDirectory()
-            sessionStore.removeSession(sessionId.value)
-        }.onFailure {
-            Timber.e(it, "Failed to deactivate account")
+        // Stop the sync first so it doesn't race the invalidation of the access token
+        syncService.stopSync()
+
+        @Suppress("SuspendFunSwallowedCancellation")
+        val deactivationResult = try {
+            runCatchingExceptions {
+                innerClient.deactivateAccount(
+                    password = password,
+                    eraseData = eraseData,
+                )
+            }
+        } catch (e: CancellationException) {
+            withContext(NonCancellable) { restoreSessionAfterFailedShutdown() }
+            throw e
         }
+        deactivationResult.fold(
+            onSuccess = {
+                // The account is gone, so the session can't be restored even if the cleanup fails
+                runCatchingExceptions {
+                    destroy()
+                    deleteSessionDirectory()
+                    sessionStore.removeSession(sessionId.value)
+                }.onFailure { exception ->
+                    Timber.e(exception, "Failed to clean up the session after deactivating the account")
+                }
+            },
+            onFailure = {
+                Timber.e(it, "Failed to deactivate account")
+                restoreSessionAfterFailedShutdown()
+                Result.failure(it)
+            },
+        )
     }
 
     override suspend fun getAccountManagementUrl(action: AccountManagementAction?): Result<String?> = withContext(sessionDispatcher) {
@@ -1030,10 +1078,6 @@ class RustMatrixClient(
         Timber.i("Scheduling periodic database vacuuming for session $sessionId")
         val request = PerformDatabaseVacuumRequestBuilder(sessionId)
         sessionCoroutineScope.launch { workManagerScheduler.submit(request) }
-    }
-
-    override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
-        return RustHomeserverCapabilitiesProvider(innerClient.homeserverCapabilities(), sessionDispatcher)
     }
 
     override fun totalUnreadCount(): Result<Long> = runCatchingExceptions {

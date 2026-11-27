@@ -104,7 +104,7 @@ class EditUserProfilePresenter(
             }
         }
 
-        val homeserverCapabilities = matrixClient.homeserverCapabilities()
+        val homeserverCapabilities = matrixClient.homeserverCapabilities
         val canChangeDisplayName = produceState(true) {
             value = homeserverCapabilities.canChangeDisplayName().getOrDefault(true)
         }

@@ -211,23 +211,23 @@ class RustMatrixAuthenticationService(
                 // Note: the SDK will also do this check
                 it.userId.value == client.userId()
             }
-            ?.let {
-                val secrets = it.secrets
-                val roomKeysVersion = it.roomKeysVersion
+            ?.let { session ->
+                val secrets = session.secrets
+                val roomKeysVersion = session.roomKeysVersion
                 if (secrets == null || roomKeysVersion == null) {
-                    Timber.d("No secrets or roomKeysVersion found for Element Classic session ${it.userId}, skipping import")
+                    Timber.d("No secrets or roomKeysVersion found for Element Classic session ${session.userId}, skipping import")
                 } else {
-                    Timber.d("Trying to import secrets for Element Classic session ${it.userId}")
+                    Timber.d("Trying to import secrets for Element Classic session ${session.userId}")
                     runCatchingExceptions {
                         SecretsBundleWithUserId.fromStr(
-                            userId = it.userId.value,
+                            userId = session.userId.value,
                             bundle = secrets,
                             backupInfo = roomKeysVersion,
                         ).use { secretsBundle ->
-                            client.encryption().importSecretsBundle(secretsBundle)
+                            client.encryption().use { it.importSecretsBundle(secretsBundle) }
                         }
                     }.onFailure { failure ->
-                        Timber.e(failure, "Failed to import secrets for Element Classic session ${it.userId}")
+                        Timber.e(failure, "Failed to import secrets for Element Classic session ${session.userId}")
                     }
                 }
             }
@@ -414,7 +414,7 @@ class RustMatrixAuthenticationService(
         // This is a workaround for using 2 clients, one for login and another one for session restoration: when we drop the login client,
         // the encryption of the session may not fully initialized yet, and the final client will override the encryption state, causing
         // duplicate one-time keys to be generated.
-        currentClient?.encryption()?.waitForE2eeInitializationTasks()
+        currentClient?.encryption()?.use { it.waitForE2eeInitializationTasks() }
 
         // Close the client which was used to perform the login before creating the final client.
         // Both use the same session paths, so their SQLite stores must never be opened at the same time.

@@ -59,6 +59,7 @@ class RustSessionVerificationService(
     private var currentVerificationRequest: VerificationRequest? = null
 
     private val encryptionService: Encryption = client.encryption()
+    @Volatile
     private lateinit var verificationController: SessionVerificationController
 
     private val _verificationFlowState = MutableStateFlow<VerificationFlowState>(VerificationFlowState.Initial)
@@ -116,6 +117,7 @@ class RustSessionVerificationService(
     private var listener: SessionVerificationServiceListener? = null
 
     private val initializationMutex = Mutex()
+    private val isDestroyed = AtomicBoolean(false)
 
     init {
         // Instantiate the verification controller when possible, this is needed to get incoming verification requests
@@ -247,12 +249,16 @@ class RustSessionVerificationService(
 
     fun destroy() {
         Timber.d("Destroying RustSessionVerificationService")
+        // Must be set before checking whether the controller exists, see `ensureEncryptionIsInitialized()`
+        isDestroyed.set(true)
         listener = null
         verificationStateListenerTaskHandle.cancelAndDestroy()
         recoveryStateListenerTaskHandle.cancelAndDestroy()
         if (this::verificationController.isInitialized) {
             verificationController.setDelegate(null)
+            verificationController.destroy()
         }
+        encryptionService.destroy()
     }
 
     private fun updateVerificationStatus() {
@@ -277,6 +283,14 @@ class RustSessionVerificationService(
             if (!this::verificationController.isInitialized) {
                 verificationController = client.getSessionVerificationController()
                 verificationController.setDelegate(this)
+
+                // `destroy()` may have run while the controller was being created, in which case it didn't see it.
+                // `destroy()` sets the flag before checking for the controller, and the controller is assigned before
+                // checking the flag here, so at least one of them destroys it.
+                if (isDestroyed.get() && !verificationController.uniffiIsDestroyed) {
+                    verificationController.setDelegate(null)
+                    verificationController.destroy()
+                }
             }
         }
     }
