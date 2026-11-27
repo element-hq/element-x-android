@@ -63,6 +63,16 @@ if [ ${envError} == 1 ]; then
   exit 1
 fi
 
+# Google Play service account key, to publish the release on Google Play / Not mandatory.
+# See ./tools/release/gplay_release.sh for how to set it up.
+gplayServiceAccountPath="${ELEMENT_X_GPLAY_SERVICE_ACCOUNT_PATH}"
+if [[ -z "${gplayServiceAccountPath}" ]]; then
+    printf "Warning: ELEMENT_X_GPLAY_SERVICE_ACCOUNT_PATH is not defined in the environment. You will have to use the GooglePlay console manually.\n"
+else
+    printf "Checking access to Google Play...\n"
+    ./tools/release/gplay_release.sh check || exit 1
+fi
+
 # Abort the script with an error message.
 fail() {
   printf "\nFatal: %s\n" "$1"
@@ -436,15 +446,33 @@ fi
 printf "\n================================================================================\n"
 printf "Create the open testing release on GooglePlay.\n"
 
-printf "On GooglePlay console, go the the open testing section and click on \"Create new release\" button, then:\n"
-printf " - upload the file %s.\n" "${signedBundlePath}"
-printf " - copy the release note from the fastlane file.\n"
-printf " - download the universal APK, to be able to provide it to the GitHub release: click on the right arrow next to the \"App bundle\", then click on the \"Download\" tab, and download the \"Signed, universal APK\". Save it, without renaming it, to the folder %s. The expected final path is %s\n" "${gplayTargetPath}" "${universalApkPath}"
-printf " - submit the release.\n"
-read -r -p "Press enter to continue. "
+gplayUploadDone=0
+if [[ -n "${gplayServiceAccountPath}" ]]; then
+  if ./tools/release/gplay_release.sh upload "${version}" "${versionCode}" "${signedBundlePath}" "${fastlanePathFile}"; then
+    gplayUploadDone=1
+  else
+    printf "\nThe release could not be created using the Google Play API, please do it manually.\n"
+  fi
+fi
 
-printf "You can then go to \"Publishing overview\" and send the new release for a review by Google.\n"
-read -r -p "Press enter to continue. "
+if [[ ${gplayUploadDone} -eq 1 ]]; then
+  if ! ./tools/release/gplay_release.sh download-universal-apk "${versionCode}" "${universalApkPath}"; then
+    printf "\nThe universal APK could not be downloaded using the Google Play API, please download it manually: on GooglePlay console, go to \"App bundle explorer\", select the version code %s, click on the \"Downloads\" tab, and download the \"Signed, universal APK\". Save it, without renaming it, to the folder %s. The expected final path is %s\n" "${versionCode}" "${gplayTargetPath}" "${universalApkPath}"
+    read -r -p "Press enter to continue. "
+  fi
+  printf "\nOn GooglePlay console, go to \"Publishing overview\" and check that the new release has been sent for a review by Google. If managed publishing is enabled, send it for review from there.\n"
+  read -r -p "Press enter to continue. "
+else
+  printf "On GooglePlay console, go the the open testing section and click on \"Create new release\" button, then:\n"
+  printf " - upload the file %s.\n" "${signedBundlePath}"
+  printf " - copy the release note from the fastlane file %s.\n" "${fastlanePathFile}"
+  printf " - download the universal APK, to be able to provide it to the GitHub release: click on the right arrow next to the \"App bundle\", then click on the \"Download\" tab, and download the \"Signed, universal APK\". Save it, without renaming it, to the folder %s. The expected final path is %s\n" "${gplayTargetPath}" "${universalApkPath}"
+  printf " - submit the release.\n"
+  read -r -p "Press enter to continue. "
+
+  printf "You can then go to \"Publishing overview\" and send the new release for a review by Google.\n"
+  read -r -p "Press enter to continue. "
+fi
 
 printf "\n================================================================================\n"
 printf "Creating the release on GitHub.\n"
