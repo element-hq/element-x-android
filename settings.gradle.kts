@@ -19,6 +19,7 @@ pluginManagement {
                 includeGroupByRegex("com\\.google\\.firebase.*")
                 includeGroupByRegex("com\\.google\\.android.*")
                 includeGroupByRegex("com\\.google\\.gms.*")
+                includeGroupByRegex("com\\.google\\.testing\\.platform.*")
             }
         }
         gradlePluginPortal()
@@ -56,9 +57,11 @@ dependencyResolutionManagement {
             filter {
                 includeGroupByRegex("android\\..*")
                 includeGroupByRegex("androidx\\..*")
-                includeGroupByRegex("com\\.android\\.tools.*")
+                includeGroupByRegex("com\\.android(\\..*)?")
                 includeGroupByRegex("com\\.google\\.firebase.*")
                 includeGroupByRegex("com\\.google\\.android.*")
+                includeGroupByRegex("com\\.google\\.gms.*")
+                includeGroupByRegex("com\\.google\\.testing\\.platform.*")
             }
         }
         mavenCentral()
@@ -76,7 +79,8 @@ dependencyResolutionManagement {
         }
 
         // Add ivy repository for nightly builds of the SDK bindings for Android, which are published as GitHub release assets.
-        // Exclusive so the nightly versions are not looked up in Maven Central first, and the other versions are not looked up there.
+        // Exclusive so the nightly versions are only looked up in this repository and never in Maven Central, while the release
+        // versions are never looked up in this repository.
         exclusiveContent {
             forRepository {
                 ivy {
