@@ -129,6 +129,24 @@ class TimelinePresenterTest {
     }
 
     @Test
+    fun `present - timeline renderer and animations follow the feature flags`() = runTest {
+        val presenter = createTimelinePresenter(
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(
+                    FeatureFlags.NewTimelineEventRenderer.key to true,
+                    FeatureFlags.TimelineAnimations.key to true,
+                )
+            ),
+        )
+        presenter.test {
+            val state = awaitLastSequentialItem()
+            assertThat(state.useNewTimelineEventRenderer).isTrue()
+            assertThat(state.areTimelineAnimationsEnabled).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - timeline font scale defaults to the regular app size`() = runTest {
         val presenter = createTimelinePresenter()
         presenter.test {
@@ -2042,7 +2060,13 @@ class TimelinePresenterTest {
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
-        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+        // Disable the flags only affecting the timeline rendering, so they don't produce extra state emissions
+        featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(
+                FeatureFlags.NewTimelineEventRenderer.key to false,
+                FeatureFlags.TimelineAnimations.key to false,
+            )
+        ),
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead { _, _ -> },
         timelineProtectionPresenter: Presenter<TimelineProtectionState> = { aTimelineProtectionState() },
