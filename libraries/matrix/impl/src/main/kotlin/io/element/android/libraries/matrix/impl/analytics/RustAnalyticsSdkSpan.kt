@@ -9,7 +9,6 @@ package io.element.android.libraries.matrix.impl.analytics
 
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.services.analytics.api.AnalyticsSdkSpan
-import kotlinx.coroutines.DelicateCoroutinesApi
 import org.matrix.rustcomponents.sdk.LogLevel
 import org.matrix.rustcomponents.sdk.Span
 import timber.log.Timber
@@ -42,7 +41,6 @@ class RustAnalyticsSdkSpan(
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun exit() {
         inner.exit()
         runCatchingExceptions { inner.destroy() }

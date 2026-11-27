@@ -9,9 +9,9 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.poll.api.pollcontent.A_POLL_QUESTION
 import io.element.android.features.poll.api.pollcontent.PollAnswerItem
 import io.element.android.features.poll.api.pollcontent.aPollAnswerItemList
-import io.element.android.features.poll.api.pollcontent.aPollQuestion
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.PollKind
 
@@ -26,7 +26,7 @@ open class TimelineItemPollContentPreviewParam : PreviewParameterProvider<Timeli
 }
 
 fun aTimelineItemPollContent(
-    question: String = aPollQuestion(),
+    question: String = A_POLL_QUESTION,
     answerItems: List<PollAnswerItem> = aPollAnswerItemList(),
     isMine: Boolean = false,
     isEditable: Boolean = false,

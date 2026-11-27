@@ -9,9 +9,9 @@
 package io.element.android.features.securebackup.impl.enter
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.securebackup.impl.setup.views.A_FORMATTED_RECOVERY_KEY
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyUserStory
 import io.element.android.features.securebackup.impl.setup.views.RecoveryKeyViewState
-import io.element.android.features.securebackup.impl.setup.views.aFormattedRecoveryKey
 import io.element.android.libraries.architecture.AsyncAction
 
 open class SecureBackupEnterRecoveryKeyStatePreviewParam : PreviewParameterProvider<SecureBackupEnterRecoveryKeyState> {
@@ -26,7 +26,7 @@ open class SecureBackupEnterRecoveryKeyStatePreviewParam : PreviewParameterProvi
 }
 
 fun aSecureBackupEnterRecoveryKeyState(
-    recoveryKey: String = aFormattedRecoveryKey(),
+    recoveryKey: String = A_FORMATTED_RECOVERY_KEY,
     isSubmitEnabled: Boolean = recoveryKey.isNotEmpty(),
     displayTextFieldContents: Boolean = true,
     submitAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
