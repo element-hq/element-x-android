@@ -13,10 +13,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
@@ -24,14 +24,16 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.poll.api.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.designsystem.toEnabledColor
@@ -42,6 +44,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 internal fun PollAnswerView(
     answerItem: PollAnswerItem,
+    isMultipleSelection: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val nbVotesText = pluralStringResource(
@@ -74,27 +77,12 @@ internal fun PollAnswerView(
                 contentDescription = a11yText
             },
     ) {
-        Icon(
-            imageVector = if (answerItem.isSelected) {
-                CompoundIcons.CheckCircleSolid()
-            } else {
-                CompoundIcons.Circle()
-            },
-            contentDescription = null,
-            modifier = Modifier
-                .padding(0.5.dp)
-                .size(22.dp),
-            tint = if (answerItem.isEnabled) {
-                if (answerItem.isSelected) {
-                    ElementTheme.colors.iconPrimary
-                } else {
-                    ElementTheme.colors.iconSecondary
-                }
-            } else {
-                ElementTheme.colors.iconDisabled
-            },
+        PollAnswerSelectionIndicator(
+            isMultipleSelection = isMultipleSelection,
+            isSelected = answerItem.isSelected,
+            isEnabled = answerItem.isEnabled,
         )
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(10.dp))
         Column {
             Row {
                 Text(
@@ -147,11 +135,40 @@ internal fun PollAnswerView(
     }
 }
 
+/**
+ * Purely visual indicator: a checkbox for multiple choice polls, a radio button for single choice polls, so that the
+ * user knows if selecting another answer will add a vote or replace the current one. The tap is handled by the whole row,
+ * and the minimum interactive size enforcement is disabled so that the indicator stays compact.
+ */
+@Composable
+private fun PollAnswerSelectionIndicator(
+    isMultipleSelection: Boolean,
+    isSelected: Boolean,
+    isEnabled: Boolean,
+) {
+    CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
+        if (isMultipleSelection) {
+            Checkbox(
+                checked = isSelected,
+                onCheckedChange = null,
+                enabled = isEnabled,
+            )
+        } else {
+            RadioButton(
+                selected = isSelected,
+                onClick = null,
+                enabled = isEnabled,
+            )
+        }
+    }
+}
+
 @PreviewsDayNight
 @Composable
 internal fun PollAnswerViewDisclosedNotSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = true, isSelected = false),
+        isMultipleSelection = false,
     )
 }
 
@@ -160,6 +177,7 @@ internal fun PollAnswerViewDisclosedNotSelectedPreview() = ElementPreview {
 internal fun PollAnswerViewDisclosedSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = true, isSelected = true),
+        isMultipleSelection = false,
     )
 }
 
@@ -168,6 +186,7 @@ internal fun PollAnswerViewDisclosedSelectedPreview() = ElementPreview {
 internal fun PollAnswerViewUndisclosedNotSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = false, isSelected = false),
+        isMultipleSelection = false,
     )
 }
 
@@ -176,6 +195,7 @@ internal fun PollAnswerViewUndisclosedNotSelectedPreview() = ElementPreview {
 internal fun PollAnswerViewUndisclosedSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = false, isSelected = true),
+        isMultipleSelection = false,
     )
 }
 
@@ -184,6 +204,7 @@ internal fun PollAnswerViewUndisclosedSelectedPreview() = ElementPreview {
 internal fun PollAnswerViewEndedWinnerNotSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = true, isSelected = false, isEnabled = false, isWinner = true),
+        isMultipleSelection = false,
     )
 }
 
@@ -192,6 +213,7 @@ internal fun PollAnswerViewEndedWinnerNotSelectedPreview() = ElementPreview {
 internal fun PollAnswerViewEndedWinnerSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = true, isSelected = true, isEnabled = false, isWinner = true),
+        isMultipleSelection = false,
     )
 }
 
@@ -200,5 +222,33 @@ internal fun PollAnswerViewEndedWinnerSelectedPreview() = ElementPreview {
 internal fun PollAnswerViewEndedSelectedPreview() = ElementPreview {
     PollAnswerView(
         answerItem = aPollAnswerItem(showVotes = true, isSelected = true, isEnabled = false, isWinner = false),
+        isMultipleSelection = false,
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun PollAnswerViewMultipleSelectionNotSelectedPreview() = ElementPreview {
+    PollAnswerView(
+        answerItem = aPollAnswerItem(showVotes = true, isSelected = false),
+        isMultipleSelection = true,
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun PollAnswerViewMultipleSelectionSelectedPreview() = ElementPreview {
+    PollAnswerView(
+        answerItem = aPollAnswerItem(showVotes = true, isSelected = true),
+        isMultipleSelection = true,
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun PollAnswerViewMultipleSelectionDisabledPreview() = ElementPreview {
+    PollAnswerView(
+        answerItem = aPollAnswerItem(showVotes = true, isSelected = false, isEnabled = false),
+        isMultipleSelection = true,
     )
 }

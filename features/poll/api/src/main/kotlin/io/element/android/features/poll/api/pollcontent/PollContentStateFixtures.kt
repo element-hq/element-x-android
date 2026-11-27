@@ -18,6 +18,7 @@ fun aPollQuestion() = "What type of food should we have at the party?"
 
 fun aPollAnswerItemList(
     hasVotes: Boolean = true,
+    hasMyVote: Boolean = true,
     isEnded: Boolean = false,
     showVotes: Boolean = true,
 ) = persistentListOf(
@@ -25,7 +26,7 @@ fun aPollAnswerItemList(
         answer = PollAnswer("option_1", "Italian \uD83C\uDDEE\uD83C\uDDF9"),
         showVotes = showVotes,
         isEnabled = !isEnded,
-        isWinner = isEnded,
+        isWinner = isEnded && hasVotes,
         votesCount = if (hasVotes) 5 else 0,
         percentage = if (hasVotes) 0.5f else 0f
     ),
@@ -42,7 +43,7 @@ fun aPollAnswerItemList(
         showVotes = showVotes,
         isEnabled = !isEnded,
         isWinner = false,
-        isSelected = true,
+        isSelected = hasMyVote,
         votesCount = if (hasVotes) 1 else 0,
         percentage = if (hasVotes) 0.1f else 0f
     ),
@@ -82,13 +83,15 @@ fun aPollContentState(
     showVotes: Boolean = true,
     isPollEditable: Boolean = true,
     hasVotes: Boolean = true,
+    hasMyVote: Boolean = true,
     question: String = aPollQuestion(),
     pollKind: PollKind = PollKind.Disclosed,
     maxSelections: ULong = 1u,
     answerItems: ImmutableList<PollAnswerItem> = aPollAnswerItemList(
         isEnded = isEnded,
         showVotes = showVotes,
-        hasVotes = hasVotes
+        hasVotes = hasVotes,
+        hasMyVote = hasMyVote,
     ),
 ) = PollContentState(
     eventId = eventId,
