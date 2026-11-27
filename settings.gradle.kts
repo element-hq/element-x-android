@@ -9,8 +9,26 @@
 pluginManagement {
     repositories {
         includeBuild("plugins")
+        // Declared first and filtered so that Android plugins are not looked up in the other repositories, and the other
+        // plugins are not looked up in Google's Maven repository.
+        google {
+            content {
+                includeGroupByRegex("android\\..*")
+                includeGroupByRegex("androidx\\..*")
+                includeGroupByRegex("com\\.android(\\..*)?")
+                includeGroupByRegex("com\\.google\\.firebase.*")
+                includeGroupByRegex("com\\.google\\.android.*")
+                includeGroupByRegex("com\\.google\\.gms.*")
+                includeGroupByRegex("com\\.google\\.testing\\.platform.*")
+            }
+        }
+        // Before the Gradle Plugin Portal, which redirects to Maven Central for the artifacts it also hosts.
+        // See the comment in `dependencyResolutionManagement` below.
+        maven {
+            name = "MavenCentralGoogleMirror"
+            url = uri("https://maven-central.storage-download.googleapis.com/maven2/")
+        }
         gradlePluginPortal()
-        google()
         mavenCentral()
     }
 }
@@ -45,27 +63,49 @@ dependencyResolutionManagement {
             filter {
                 includeGroupByRegex("android\\..*")
                 includeGroupByRegex("androidx\\..*")
-                includeGroupByRegex("com\\.android\\.tools.*")
+                includeGroupByRegex("com\\.android(\\..*)?")
                 includeGroupByRegex("com\\.google\\.firebase.*")
                 includeGroupByRegex("com\\.google\\.android.*")
+                includeGroupByRegex("com\\.google\\.gms.*")
+                includeGroupByRegex("com\\.google\\.testing\\.platform.*")
             }
         }
+        // Google's mirror of Maven Central, to avoid the HTTP 429 errors Maven Central returns when rate-limiting, in
+        // particular to the shared IPs of the CI runners. It must be declared before Maven Central and not as a fallback:
+        // Gradle only tries the next repository when an artifact is missing, and fails the build on errors such as HTTP 429.
+        // Maven Central stays the fallback for the artifacts not mirrored yet.
+        maven {
+            name = "MavenCentralGoogleMirror"
+            url = uri("https://maven-central.storage-download.googleapis.com/maven2/")
+        }
         mavenCentral()
+        // This is also Maven Central. Restrict it to our own dependencies, that we may need right after their release, so
+        // dependencies missing from Maven Central are not requested twice to it.
         maven {
             url = uri("https://repo1.maven.org/maven2/")
+            content {
+                includeModule("org.matrix.rustcomponents", "sdk-android")
+                includeGroup("io.element.android")
+            }
         }
         flatDir {
             dirs("libraries/matrix/libs")
         }
 
         // Add ivy repository for nightly builds of the SDK bindings for Android, which are published as GitHub release assets.
-        ivy {
-            url = uri("https://github.com/matrix-org/matrix-rust-components-kotlin/releases/download")
-            patternLayout { artifact("sdk-[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
-            metadataSources { gradleMetadata() }
-            content {
+        // Exclusive so the nightly versions are only looked up in this repository and never in Maven Central, while the release
+        // versions are never looked up in this repository.
+        exclusiveContent {
+            forRepository {
+                ivy {
+                    url = uri("https://github.com/matrix-org/matrix-rust-components-kotlin/releases/download")
+                    patternLayout { artifact("sdk-[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
+                    metadataSources { gradleMetadata() }
+                }
+            }
+            filter {
                 // The nightly versions of the SDK bindings for Android
-                includeModule("org.matrix.rustcomponents", "sdk-android")
+                includeVersionByRegex("org\\.matrix\\.rustcomponents", "sdk-android", ".*-nightly")
             }
         }
 

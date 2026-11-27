@@ -10,8 +10,25 @@ rootProject.name = "ElementX_plugins"
 
 dependencyResolutionManagement {
     repositories {
+        // Declared first and filtered so that the Android Gradle Plugin and its many dependencies are not looked up in
+        // Maven Central first, and the other dependencies are not looked up in Google's Maven repository.
+        google {
+            content {
+                includeGroupByRegex("android\\..*")
+                includeGroupByRegex("androidx\\..*")
+                includeGroupByRegex("com\\.android(\\..*)?")
+                includeGroupByRegex("com\\.google\\.firebase.*")
+                includeGroupByRegex("com\\.google\\.android.*")
+                includeGroupByRegex("com\\.google\\.gms.*")
+                includeGroupByRegex("com\\.google\\.testing\\.platform.*")
+            }
+        }
+        // Google's mirror of Maven Central. See the comment in the settings.gradle.kts file of the main build.
+        maven {
+            name = "MavenCentralGoogleMirror"
+            url = uri("https://maven-central.storage-download.googleapis.com/maven2/")
+        }
         mavenCentral()
-        google()
     }
     versionCatalogs {
         create("libs") {
