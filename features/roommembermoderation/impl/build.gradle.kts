@@ -32,6 +32,7 @@ dependencies {
     api(projects.features.roommembermoderation.api)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.androidutils)
     implementation(projects.services.analytics.compose)
 
     testCommonDependencies(libs, true)

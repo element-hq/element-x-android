@@ -58,6 +58,7 @@ fun UserProfileHeaderSection(
     verificationState: UserProfileVerificationState,
     openAvatarPreview: (url: String) -> Unit,
     onUserIdClick: () -> Unit,
+    onUserNameClick: () -> Unit,
     withdrawVerificationClick: () -> Unit,
     displayedStatus: DisplayedStatus?,
     modifier: Modifier = Modifier
@@ -94,6 +95,13 @@ fun UserProfileHeaderSection(
             Text(
                 modifier = Modifier
                     .clipToBounds()
+                    .then(
+                        if (onUserNameClick != null) {
+                            Modifier.niceClickable { onUserNameClick() }
+                        } else {
+                            Modifier
+                        }
+                    )
                     .semantics {
                         heading()
                     },
@@ -167,6 +175,7 @@ internal fun UserProfileHeaderSectionPreview() = ElementPreview {
         displayedStatus = DisplayedStatus.InCall(0L),
         openAvatarPreview = {},
         onUserIdClick = {},
+        onUserNameClick = {},
         withdrawVerificationClick = {},
     )
 }
@@ -182,6 +191,7 @@ internal fun UserProfileHeaderSectionWithVerificationViolationPreview() = Elemen
         displayedStatus = DisplayedStatus.InCall(0L),
         openAvatarPreview = {},
         onUserIdClick = {},
+        onUserNameClick = {},
         withdrawVerificationClick = {},
     )
 }
