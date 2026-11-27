@@ -44,6 +44,13 @@ jobs:
           ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD }}
           ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD }}
           FIREBASE_TOKEN: ${{ secrets.ELEMENT_ANDROID_NIGHTLY_FIREBASE_TOKEN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.ELEMENT_ANDROID_SENTRY_AUTH_TOKEN }}
+      - name: Upload mapping file as artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: elementx-app-gplay-nightly-mapping
+          path: |
+            app/build/outputs/mapping/gplayNightly/mapping.txt
       - name: Additionally upload Nightly APK to browserstack for testing
         continue-on-error: true # don't block anything by this upload failing (for now)
         run: |

@@ -24,6 +24,7 @@ import extension.buildConfigFieldStr
 import extension.environmentOrGradleValue
 import extension.locales
 import extension.setupDependencyInjection
+import extension.setupSentryMappingUpload
 import extension.testCommonDependencies
 import org.sonarqube.gradle.SonarResolverTask
 import java.util.Locale
@@ -243,19 +244,9 @@ androidComponents {
                 // Common rules, always applied.
                 keepRules.addStaticSourceDirectory("proguard/common")
 
-                // Depending on whether the app flavor is enterprise or not we want to use different proguard rules.
-                val flavorProguardDir = if (isEnterpriseBuild) {
-                    // Custom rules for enterprise builds
-                    "../enterprise/proguard"
-                } else {
-                    // Custom fules for FOSS builds
-                    "proguard/foss"
-                }
-
-                if (File(projectDir, flavorProguardDir).exists()) {
-                    keepRules.addStaticSourceDirectory(flavorProguardDir)
-                } else {
-                    logger.warn("Proguard folder ${File(projectDir, flavorProguardDir).absolutePath} does not exist")
+                // F-Droid builds are not obfuscated. GPlay builds are obfuscated, as required by Google Play.
+                if (variant.flavorName == "fdroid") {
+                    keepRules.addStaticSourceDirectory("proguard/fdroid")
                 }
             }
         }
@@ -276,6 +267,9 @@ androidComponents {
     val reportingExtension: ReportingExtension = project.extensions.getByType(ReportingExtension::class.java)
     configureLicensesTasks(reportingExtension)
 }
+
+// Upload the R8 mapping file to Sentry, for GPlay release and nightly builds built on the CI.
+setupSentryMappingUpload()
 
 // Configure the SonarQube plugin to wait for the resource generation tasks to complete before running the analysis.
 tasks.withType<SonarResolverTask>().configureEach {

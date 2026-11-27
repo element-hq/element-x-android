@@ -41,6 +41,7 @@ jobs:
           ELEMENT_CALL_POSTHOG_API_HOST: ${{ secrets.ELEMENT_CALL_POSTHOG_API_HOST }}
           ELEMENT_CALL_POSTHOG_API_KEY: ${{ secrets.ELEMENT_CALL_POSTHOG_API_KEY }}
           ELEMENT_CALL_RAGESHAKE_URL: ${{ secrets.ELEMENT_CALL_RAGESHAKE_URL }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.ELEMENT_ANDROID_SENTRY_AUTH_TOKEN }}
         run: ./gradlew bundleGplayRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload bundle as artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -48,6 +49,12 @@ jobs:
           name: elementx-app-gplay-bundle-unsigned
           path: |
             app/build/outputs/bundle/gplayRelease/app-gplay-release.aab
+      - name: Upload mapping file as artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: elementx-app-gplay-mapping
+          path: |
+            app/build/outputs/mapping/gplayRelease/mapping.txt
 
   fdroid:
     name: Create APKs (FDroid)
