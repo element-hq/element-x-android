@@ -140,11 +140,22 @@ private fun List<Reaction>?.map(): ImmutableList<EventReaction> {
             senders = it.senders.map { sender ->
                 ReactionSender(
                     senderId = UserId(sender.senderId),
-                    timestamp = sender.timestamp.toLong()
+                    timestamp = sender.timestamp.toLong(),
+                    isSendWedged = sender.sendState.isWedged(),
                 )
             }.toImmutableList()
         )
     }?.toImmutableList() ?: persistentListOf()
+}
+
+/**
+ * An unrecoverable send failure blocks the room's send queue until the request is retried or aborted.
+ * [QueueWedgeError.ExpiredAccessToken] is excluded: the SDK retries it once the access token is refreshed.
+ */
+private fun RustEventSendState?.isWedged(): Boolean {
+    return this is RustEventSendState.SendingFailed &&
+        !isRecoverable &&
+        error !is QueueWedgeError.ExpiredAccessToken
 }
 
 private fun Map<String, RustReceipt>.map(): ImmutableList<Receipt> {

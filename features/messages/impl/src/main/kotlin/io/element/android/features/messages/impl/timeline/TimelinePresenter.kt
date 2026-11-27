@@ -138,6 +138,8 @@ class TimelinePresenter(
     )
     private var timelineItems by mutableStateOf<ImmutableList<TimelineItem>>(persistentListOf())
 
+    private val wedgedReactionsAborter = WedgedReactionsAborter(abortSend = timelineController::abortSend)
+
     private var timelineItemsStructureVersion by mutableIntStateOf(0)
 
     private val focusRequestState: MutableState<FocusRequestState> = mutableStateOf(FocusRequestState.None)
@@ -414,6 +416,7 @@ class TimelinePresenter(
                     transaction?.finish()
                 }
                 .onEach(redactedVoiceMessageManager::onEachMatrixTimelineItem)
+                .onEach(wedgedReactionsAborter::onEachMatrixTimelineItem)
                 .flowOn(dispatchers.computation)
                 .launchIn(this)
         }
