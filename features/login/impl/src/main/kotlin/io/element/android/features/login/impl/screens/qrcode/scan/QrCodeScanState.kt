@@ -10,9 +10,21 @@ package io.element.android.features.login.impl.screens.qrcode.scan
 
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
+import io.element.android.libraries.permissions.api.localnetwork.LocalNetworkPermissionDialog
 
 data class QrCodeScanState(
     val isScanning: Boolean,
-    val authenticationAction: AsyncAction<MatrixQrCodeLoginData>,
+    val authenticationAction: AsyncAction<QrCodeScanResult>,
+    val localNetworkPermissionDialog: LocalNetworkPermissionDialog,
     val eventSink: (QrCodeScanEvent) -> Unit
+)
+
+/**
+ * Represents the result of scanning a QR code for login.
+ */
+data class QrCodeScanResult(
+    /** The data extracted from the QR code, which contains the necessary information for login. */
+    val data: MatrixQrCodeLoginData,
+    /** Indicates whether the login process can proceed with the provided data. */
+    val canProceed: Boolean,
 )

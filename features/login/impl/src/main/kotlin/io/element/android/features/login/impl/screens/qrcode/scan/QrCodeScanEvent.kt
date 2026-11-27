@@ -11,4 +11,6 @@ package io.element.android.features.login.impl.screens.qrcode.scan
 sealed interface QrCodeScanEvent {
     data class QrCodeScanned(val code: ByteArray) : QrCodeScanEvent
     data object TryAgain : QrCodeScanEvent
+    data object RequestLocalNetworkAccessPermission : QrCodeScanEvent
+    data object DismissLocalNetworkAccessPermissionDialog : QrCodeScanEvent
 }
