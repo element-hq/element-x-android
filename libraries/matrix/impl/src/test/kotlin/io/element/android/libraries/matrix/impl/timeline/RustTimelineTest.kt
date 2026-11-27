@@ -17,28 +17,33 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListService
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimeline
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineItem
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.services.toolbox.test.systemclock.A_FAKE_TIMESTAMP
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.TimelineDiff
-import uniffi.matrix_sdk.PaginationStatus
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 class RustTimelineTest {
     @Test
     fun `ensure that the timeline emits new loading item when pagination does not bring new events`() = runTest {
         val inner = FakeFfiTimeline()
+        val paginationResult = CompletableDeferred<Boolean>()
+        inner.paginateBackwardsResult = { paginationResult.await() }
         val systemClock = FakeSystemClock()
         val sut = createRustTimeline(
             inner = inner,
@@ -66,12 +71,10 @@ class RustTimelineTest {
             }
             systemClock.epochMillisResult = A_FAKE_TIMESTAMP + 1
             // Start pagination
-            sut.paginate(Timeline.PaginationDirection.BACKWARDS)
-            // Simulate SDK starting pagination
-            inner.emitPaginationStatus(PaginationStatus.Paginating)
-            // No new events received
-            // Simulate SDK stopping pagination, more event to load
-            inner.emitPaginationStatus(PaginationStatus.Idle(hitTimelineStart = false))
+            backgroundScope.launch { sut.paginate(Timeline.PaginationDirection.BACKWARDS) }
+            runCurrent()
+            // No new events received, finish the pagination with more events to load
+            paginationResult.complete(false)
             // expect an item to be emitted, with an updated timestamp
             with(awaitItem()) {
                 assertThat(size).isEqualTo(2)
@@ -87,6 +90,42 @@ class RustTimelineTest {
             }
         }
     }
+
+    @Test
+    fun `ensure that starting a pagination does not emit a new loading item`() = runTest {
+        val inner = FakeFfiTimeline()
+        val paginationResult = CompletableDeferred<Boolean>()
+        inner.paginateForwardsResult = { paginationResult.await() }
+        val systemClock = FakeSystemClock()
+        val sut = createRustTimeline(
+            inner = inner,
+            mode = Timeline.Mode.FocusedOnEvent(AN_EVENT_ID),
+            systemClock = systemClock,
+        )
+        sut.timelineItems.test {
+            // Give time for the listener to be set
+            runCurrent()
+            inner.emitDiff(listOf(TimelineDiff.Reset(listOf(FakeFfiTimelineItem()))))
+            assertThat(awaitItem().forwardLoadingIndicatorTimestamp()).isEqualTo(A_FAKE_TIMESTAMP)
+            systemClock.epochMillisResult = A_FAKE_TIMESTAMP + 1
+            // Start pagination: a loading item with a new timestamp would trigger another pagination, which would be rejected
+            backgroundScope.launch { sut.paginate(Timeline.PaginationDirection.FORWARDS) }
+            runCurrent()
+            assertThat(sut.forwardPaginationStatus.value.isPaginating).isTrue()
+            expectNoEvents()
+            // Finish pagination without new events: a loading item with a new timestamp is emitted, to paginate again
+            paginationResult.complete(false)
+            assertThat(awaitItem().forwardLoadingIndicatorTimestamp()).isEqualTo(A_FAKE_TIMESTAMP + 1)
+        }
+    }
+}
+
+private fun List<MatrixTimelineItem>.forwardLoadingIndicatorTimestamp(): Long? {
+    return filterIsInstance<MatrixTimelineItem.Virtual>()
+        .map { it.virtual }
+        .filterIsInstance<VirtualTimelineItem.LoadingIndicator>()
+        .singleOrNull { it.direction == Timeline.PaginationDirection.FORWARDS }
+        ?.timestamp
 }
 
 private fun TestScope.createRustTimeline(

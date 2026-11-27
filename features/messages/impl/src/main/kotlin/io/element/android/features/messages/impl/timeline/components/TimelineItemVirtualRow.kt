@@ -11,9 +11,6 @@ package io.element.android.features.messages.impl.timeline.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
@@ -29,7 +26,6 @@ import io.element.android.features.messages.impl.timeline.model.virtual.Timeline
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemRoomBeginningModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.typing.TypingNotificationView
-import timber.log.Timber
 
 @Composable
 fun TimelineItemVirtualRow(
@@ -53,12 +49,8 @@ fun TimelineItemVirtualRow(
                 )
             }
             is TimelineItemLoadingIndicatorModel -> {
+                // The pagination is triggered by [PaginateNearLoadingIndicators]
                 TimelineLoadingMoreIndicator(virtual.model.direction)
-                val latestEventSink by rememberUpdatedState(eventSink)
-                LaunchedEffect(virtual.model.timestamp) {
-                    Timber.d("Pagination triggered by load more indicator")
-                    latestEventSink(TimelineEvent.LoadMore(virtual.model.direction))
-                }
             }
             // Empty model trick to avoid timeline jumping during forward pagination.
             is TimelineItemLastForwardIndicatorModel -> {

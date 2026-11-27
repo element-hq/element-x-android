@@ -36,6 +36,7 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemUnknownContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLastForwardIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
@@ -337,6 +338,75 @@ class TimelineViewTest : RobolectricTest() {
     fun `when a message arrives while part of the newest message is hidden, the previous messages only move up`() = runAndroidComposeUiTest {
         assertNewMessageArrivesSmoothlyWhileScrolledBy(offset = 60)
     }
+
+    @Test
+    fun `when items are paginated forwards while the bottom of a focused timeline is displayed, they don't trigger another pagination`() =
+        runAndroidComposeUiTest {
+            fun lastForwardIndicator(event: TimelineItem) = TimelineItem.Virtual(
+                id = UniqueId("last_forward_indicator_${event.identifier()}"),
+                model = TimelineItemLastForwardIndicatorModel,
+            )
+
+            // Identified by the newest event, like `withVirtualItemIdsBasedOnContent` does
+            fun forwardLoadingIndicator(newestEvent: TimelineItem, timestamp: Long) = TimelineItem.Virtual(
+                id = UniqueId("ForwardLoadingIndicator_${newestEvent.identifier()}"),
+                model = TimelineItemLoadingIndicatorModel(Timeline.PaginationDirection.FORWARDS, timestamp),
+            )
+            fun events(prefix: String) = List(10) {
+                aTimelineItemEvent(eventId = EventId("\$${prefix}_$it"), content = aTimelineItemTextContent(body = "$prefix $it"))
+            }
+            var forwardPaginations = 0
+            // A timeline focused on an event, scrolled to its bottom: the forward loading indicator is displayed
+            val firstPage = events("first")
+            var state by mutableStateOf(
+                aTimelineState(
+                    timelineItems = (
+                        listOf(lastForwardIndicator(firstPage.first()), forwardLoadingIndicator(firstPage.first(), timestamp = 1)) + firstPage
+                        ).toImmutableList(),
+                    isLive = false,
+                    focusedEventIndex = -1,
+                    areTimelineAnimationsEnabled = true,
+                    eventSink = { event -> if (event == TimelineEvent.LoadMore(Timeline.PaginationDirection.FORWARDS)) forwardPaginations++ },
+                )
+            )
+            val lazyListState = LazyListState()
+            setSafeContent(clearAndroidUiDispatcher = true) {
+                TimelineView(
+                    state = state,
+                    timelineProtectionState = aTimelineProtectionState(),
+                    onUserDataClick = {},
+                    onLinkClick = {},
+                    onContentClick = {},
+                    onMessageLongClick = {},
+                    onSwipeToReply = {},
+                    onReactionClick = { _, _ -> },
+                    onReactionLongClick = { _, _ -> },
+                    onMoreReactionsClick = {},
+                    onReadReceiptClick = {},
+                    onGalleryItemClick = { _, _ -> },
+                    onJoinCallClick = {},
+                    lazyListState = lazyListState,
+                )
+            }
+            waitForIdle()
+            assertThat(forwardPaginations).isEqualTo(1)
+
+            // The next page is loaded below the previous one, with a new forward loading indicator
+            val secondPage = events("second")
+            state = state.copy(
+                timelineItems = (
+                    listOf(lastForwardIndicator(secondPage.first()), forwardLoadingIndicator(secondPage.first(), timestamp = 2)) +
+                        secondPage +
+                        lastForwardIndicator(firstPage.first()) +
+                        firstPage
+                    ).toImmutableList(),
+            )
+            waitForIdle()
+            // The new items are below the ones which were displayed, so the forward loading indicator is out of the screen until the user scrolls
+            val newForwardLoadingIndicator = forwardLoadingIndicator(secondPage.first(), timestamp = 2)
+            assertThat(lazyListState.layoutInfo.visibleItemsInfo.map { it.key }).doesNotContain(newForwardLoadingIndicator.id)
+            assertThat(forwardPaginations).isEqualTo(1)
+        }
 
     private fun AndroidComposeUiTest<ComponentActivity>.assertNewMessageArrivesSmoothlyWhileScrolledBy(offset: Int) {
         // A live timeline, with the messages sent by the current user, and the typing notification as the first item

@@ -238,6 +238,15 @@ class RustTimeline(
         }
     }
 
+    /**
+     * Each emission adds loading indicators with a new timestamp, and a displayed loading indicator paginates again when its timestamp changes.
+     * Starting a pagination must not emit: the pagination it would trigger would be rejected, since one is already running. Finishing it must,
+     * so the timeline paginates again if the loading indicator is still displayed (i.e. the pagination didn't bring new events).
+     */
+    private fun Flow<Timeline.PaginationStatus>.ignorePaginationStart(): Flow<Timeline.PaginationStatus> {
+        return distinctUntilChanged { old, new -> new.isPaginating && new.hasMoreToLoad == old.hasMoreToLoad }
+    }
+
     private fun canPaginate(direction: Timeline.PaginationDirection): Boolean {
         return when (direction) {
             Timeline.PaginationDirection.BACKWARDS -> backwardPaginationStatus.value.canPaginate
@@ -247,8 +256,8 @@ class RustTimeline(
 
     override val timelineItems: Flow<List<MatrixTimelineItem>> = combine(
         _timelineItems,
-        backwardPaginationStatus,
-        forwardPaginationStatus,
+        backwardPaginationStatus.ignorePaginationStart(),
+        forwardPaginationStatus.ignorePaginationStart(),
         joinedRoom.roomInfoFlow.map { RoomTimelineInfo(it.creators, it.isDm, it.joinRule, it.isEncrypted) }.distinctUntilChanged(),
     ) {
         timelineItems,
