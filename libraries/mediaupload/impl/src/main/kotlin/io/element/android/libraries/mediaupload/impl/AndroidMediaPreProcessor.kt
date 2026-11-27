@@ -12,12 +12,14 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.webkit.MimeTypeMap
 import androidx.exifinterface.media.ExifInterface
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.androidutils.file.getFileName
+import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.file.safeRenameTo
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.androidutils.media.runAndRelease
@@ -84,16 +86,16 @@ class AndroidMediaPreProcessor(
     ): Result<MediaUploadInfo> = withContext(coroutineDispatchers.computation) {
         runCatchingExceptions {
             val resolvedMimeType = mimeType.ensureDefaultSubtype()
-            val result = when {
-                resolvedMimeType == MimeTypes.Svg -> processSvgImage(uri, resolvedMimeType)
+            val (result, inputMimeType) = when {
+                resolvedMimeType == MimeTypes.Svg -> processSvgImage(uri, resolvedMimeType) to resolvedMimeType
                 resolvedMimeType.isMimeTypeImage() -> {
                     val imageMimeType = resolveImageMimeType(uri, mimeType).ensureDefaultSubtype()
                     val shouldBeCompressed = mediaOptimizationConfig.compressImages && imageMimeType !in notCompressibleImageTypes
-                    processImage(uri, imageMimeType, shouldBeCompressed)
+                    processImage(uri, imageMimeType, shouldBeCompressed) to imageMimeType
                 }
-                resolvedMimeType.isMimeTypeVideo() -> processVideo(uri, resolvedMimeType, mediaOptimizationConfig.videoCompressionPreset)
-                resolvedMimeType.isMimeTypeAudio() -> processAudio(uri, resolvedMimeType)
-                else -> processFile(uri, resolvedMimeType)
+                resolvedMimeType.isMimeTypeVideo() -> processVideo(uri, resolvedMimeType, mediaOptimizationConfig.videoCompressionPreset) to resolvedMimeType
+                resolvedMimeType.isMimeTypeAudio() -> processAudio(uri, resolvedMimeType) to resolvedMimeType
+                else -> processFile(uri, resolvedMimeType) to resolvedMimeType
             }
             if (deleteOriginal) {
                 tryOrNull {
@@ -103,7 +105,7 @@ class AndroidMediaPreProcessor(
             } else {
                 temporaryUriDeleter.delete(uri)
             }
-            result.postProcess(uri)
+            result.postProcess(uri, inputMimeType)
         }
     }.mapFailure { MediaPreProcessor.Failure(it) }
 
@@ -143,11 +145,20 @@ class AndroidMediaPreProcessor(
         return MediaUploadInfo.AnyFile(file, info)
     }
 
-    private fun MediaUploadInfo.postProcess(uri: Uri): MediaUploadInfo {
+    private fun MediaUploadInfo.postProcess(uri: Uri, inputMimeType: String): MediaUploadInfo {
         Timber.d("Finished processing, post-processing ${uri.path.orEmpty().hash()}")
-        val name = context.getFileName(uri) ?: return this
-        val renamedFile = File(context.cacheDir, name).also {
-            file.safeRenameTo(it)
+        val originalName = context.getFileName(uri) ?: return this
+        // A compressed image may have been re-encoded to another format, so the original extension would no longer match its content
+        val name = if (this is MediaUploadInfo.Image && imageInfo.mimetype != inputMimeType) {
+            originalName.withExtensionForMimeType(imageInfo.mimetype.orEmpty())
+        } else {
+            originalName
+        }
+        val renamedFile = tryOrNull { reserveFileInCacheDir(name) } ?: return this
+        if (!file.safeRenameTo(renamedFile)) {
+            // Keep pointing at the processed file rather than at a destination that was never written
+            renamedFile.safeDelete()
+            return this
         }
         return when (this) {
             is MediaUploadInfo.AnyFile -> copy(file = renamedFile)
@@ -156,6 +167,25 @@ class AndroidMediaPreProcessor(
             is MediaUploadInfo.Video -> copy(file = renamedFile)
             is MediaUploadInfo.VoiceMessage -> copy(file = renamedFile)
         }
+    }
+
+    /**
+     * Several media can end up with the same name, e.g. `IMG_1.heic` re-encoded to `IMG_1.jpeg` in the same gallery as an actual `IMG_1.jpeg`, and renaming
+     * onto an existing file would silently replace it. Atomically claim a free name instead, adding a numbered suffix when needed.
+     */
+    private fun reserveFileInCacheDir(name: String): File {
+        val baseName = name.substringBeforeLast('.')
+        val extension = name.substringAfterLast('.', missingDelimiterValue = "")
+        return generateSequence(0) { it + 1 }
+            .map { index ->
+                when {
+                    index == 0 -> name
+                    extension.isEmpty() -> "$baseName ($index)"
+                    else -> "$baseName ($index).$extension"
+                }
+            }
+            .map { File(cacheDir, it) }
+            .first { it.createNewFile() }
     }
 
     /**
@@ -189,10 +219,9 @@ class AndroidMediaPreProcessor(
             ).getOrThrow()
             val thumbnailResult = thumbnailFactory.createImageThumbnail(
                 file = compressionResult.file,
-                mimeType = mimeType,
+                mimeType = compressionResult.mimeType,
             )
             val imageInfo = compressionResult.toImageInfo(
-                mimeType = mimeType,
                 thumbnailResult = thumbnailResult
             )
             removeSensitiveImageMetadata(compressionResult.file)
@@ -407,7 +436,7 @@ class AndroidMediaPreProcessor(
     }
 }
 
-private fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailResult: ThumbnailResult?) = ImageInfo(
+private fun ImageCompressionResult.toImageInfo(thumbnailResult: ThumbnailResult?) = ImageInfo(
     width = width.toLong(),
     height = height.toLong(),
     mimetype = mimeType,
@@ -417,6 +446,12 @@ private fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailResult
     thumbnailSource = null,
     blurhash = thumbnailResult?.blurhash,
 )
+
+private fun String.withExtensionForMimeType(mimeType: String): String {
+    val currentExtension = substringAfterLast('.', missingDelimiterValue = "").lowercase()
+    if (MimeTypeMap.getSingleton().getMimeTypeFromExtension(currentExtension) == mimeType) return this
+    return "${substringBeforeLast('.')}.${mimeTypeToCompressFileExtension(mimeType)}"
+}
 
 private fun MediaMetadataRetriever.extractDuration(): Duration {
     val durationInMs = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
