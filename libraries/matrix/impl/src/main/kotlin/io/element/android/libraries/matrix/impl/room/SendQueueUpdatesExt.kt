@@ -24,6 +24,6 @@ fun RoomSendQueueUpdate.map(): SendQueueUpdate = when (this) {
     )
     is RoomSendQueueUpdate.ReplacedLocalEvent -> SendQueueUpdate.ReplacedLocalEvent(TransactionId(transactionId))
     is RoomSendQueueUpdate.RetryEvent -> SendQueueUpdate.RetrySendingEvent(TransactionId(transactionId))
-    is RoomSendQueueUpdate.SendError -> SendQueueUpdate.SendError(TransactionId(transactionId))
+    is RoomSendQueueUpdate.SendError -> SendQueueUpdate.SendError(TransactionId(transactionId), isRecoverable = isRecoverable)
     is RoomSendQueueUpdate.SentEvent -> SendQueueUpdate.SentEvent(TransactionId(transactionId), EventId(eventId))
 }

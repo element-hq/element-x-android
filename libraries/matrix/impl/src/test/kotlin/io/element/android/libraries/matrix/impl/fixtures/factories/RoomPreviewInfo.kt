@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import org.matrix.rustcomponents.sdk.JoinRule
 import org.matrix.rustcomponents.sdk.Membership
+import org.matrix.rustcomponents.sdk.RoomHero
 import org.matrix.rustcomponents.sdk.RoomPreviewInfo
 import org.matrix.rustcomponents.sdk.RoomType
 
@@ -19,6 +20,9 @@ internal fun aRustRoomPreviewInfo(
     canonicalAlias: String? = A_ROOM_ALIAS.value,
     membership: Membership? = Membership.JOINED,
     joinRule: JoinRule = JoinRule.Public,
+    numActiveMembers: ULong? = 1u,
+    isDirect: Boolean? = false,
+    heroes: List<RoomHero>? = null,
 ) = RoomPreviewInfo(
     roomId = A_ROOM_ID.value,
     canonicalAlias = canonicalAlias,
@@ -26,11 +30,11 @@ internal fun aRustRoomPreviewInfo(
     topic = "topic",
     avatarUrl = "avatarUrl",
     numJoinedMembers = 1u,
-    numActiveMembers = 1u,
-    isDirect = false,
+    numActiveMembers = numActiveMembers,
+    isDirect = isDirect,
     roomType = RoomType.Room,
     isHistoryWorldReadable = true,
     membership = membership,
     joinRule = joinRule,
-    heroes = null,
+    heroes = heroes,
 )

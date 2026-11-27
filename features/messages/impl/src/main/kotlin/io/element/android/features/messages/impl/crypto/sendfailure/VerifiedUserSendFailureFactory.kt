@@ -44,9 +44,9 @@ class VerifiedUserSendFailureFactory(
             }
             is LocalEventSendState.Sending,
             is LocalEventSendState.Failed.Unknown,
-            LocalEventSendState.Failed.SendingFromUnverifiedDevice,
+            is LocalEventSendState.Failed.SendingFromUnverifiedDevice,
             is LocalEventSendState.Failed.InvalidMimeType,
-            LocalEventSendState.Failed.MissingMediaContent,
+            is LocalEventSendState.Failed.MissingMediaContent,
             is LocalEventSendState.Sent,
             null -> VerifiedUserSendFailure.None
         }

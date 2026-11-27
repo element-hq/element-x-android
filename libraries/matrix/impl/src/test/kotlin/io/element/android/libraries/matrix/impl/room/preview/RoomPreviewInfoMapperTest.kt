@@ -13,9 +13,12 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomHero
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomPreviewInfo
 import io.element.android.libraries.matrix.test.A_ROOM_ALIAS
 import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Membership
 import org.matrix.rustcomponents.sdk.JoinRule as RustJoinRule
@@ -41,6 +44,9 @@ class RoomPreviewInfoMapperTest {
                 isHistoryWorldReadable = true,
                 membership = CurrentUserMembership.JOINED,
                 joinRule = JoinRule.Public,
+                numberOfActiveMembers = 1L,
+                isDirect = false,
+                heroes = emptyList(),
             )
         )
     }
@@ -67,7 +73,46 @@ class RoomPreviewInfoMapperTest {
                 isHistoryWorldReadable = true,
                 membership = CurrentUserMembership.JOINED,
                 joinRule = JoinRule.Knock,
+                numberOfActiveMembers = 1L,
+                isDirect = false,
+                heroes = emptyList(),
             )
         )
+    }
+
+    @Test
+    fun `map should map direct room with heroes`() {
+        val result = RoomPreviewInfoMapper.map(
+            info = aRustRoomPreviewInfo(
+                numActiveMembers = 2u,
+                isDirect = true,
+                heroes = listOf(aRustRoomHero()),
+            )
+        )
+        assertThat(result.numberOfActiveMembers).isEqualTo(2L)
+        assertThat(result.isDirect).isTrue()
+        assertThat(result.isDm).isTrue()
+        assertThat(result.heroes).containsExactly(
+            MatrixUser(
+                userId = A_USER_ID,
+                displayName = "displayName",
+                avatarUrl = "avatarUrl",
+            )
+        )
+    }
+
+    @Test
+    fun `map should map unknown values`() {
+        val result = RoomPreviewInfoMapper.map(
+            info = aRustRoomPreviewInfo(
+                numActiveMembers = null,
+                isDirect = null,
+                heroes = null,
+            )
+        )
+        assertThat(result.numberOfActiveMembers).isNull()
+        assertThat(result.isDirect).isNull()
+        assertThat(result.isDm).isFalse()
+        assertThat(result.heroes).isEmpty()
     }
 }

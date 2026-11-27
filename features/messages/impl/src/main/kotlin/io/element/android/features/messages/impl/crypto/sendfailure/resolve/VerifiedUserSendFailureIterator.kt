@@ -31,6 +31,7 @@ class UnsignedDeviceSendFailureIterator(
     failure: LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice
 ) : VerifiedUserSendFailureIterator {
     private val iterator = failure.devices.iterator()
+    private val isRecoverable = failure.isRecoverable
 
     init {
         if (!hasNext()) {
@@ -45,7 +46,8 @@ class UnsignedDeviceSendFailureIterator(
     override fun next(): LocalEventSendState.Failed.VerifiedUser {
         val (userId, deviceIds) = iterator.next()
         return LocalEventSendState.Failed.VerifiedUserHasUnsignedDevice(
-            mapOf(userId to deviceIds)
+            devices = mapOf(userId to deviceIds),
+            isRecoverable = isRecoverable,
         )
     }
 }
@@ -54,6 +56,7 @@ class ChangedIdentitySendFailureIterator(
     failure: LocalEventSendState.Failed.VerifiedUserChangedIdentity
 ) : VerifiedUserSendFailureIterator {
     private val iterator = failure.users.iterator()
+    private val isRecoverable = failure.isRecoverable
 
     init {
         if (!hasNext()) {
@@ -68,7 +71,8 @@ class ChangedIdentitySendFailureIterator(
     override fun next(): LocalEventSendState.Failed.VerifiedUser {
         val userId = iterator.next()
         return LocalEventSendState.Failed.VerifiedUserChangedIdentity(
-            listOf(userId)
+            users = listOf(userId),
+            isRecoverable = isRecoverable,
         )
     }
 }

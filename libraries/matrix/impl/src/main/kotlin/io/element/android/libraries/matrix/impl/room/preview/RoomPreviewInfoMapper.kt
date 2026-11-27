@@ -29,6 +29,9 @@ object RoomPreviewInfoMapper {
             isHistoryWorldReadable = info.isHistoryWorldReadable.orFalse(),
             membership = info.membership?.map(),
             joinRule = info.joinRule?.map(),
+            numberOfActiveMembers = info.numActiveMembers?.toLong(),
+            isDirect = info.isDirect,
+            heroes = info.heroes.orEmpty().map { it.map() },
         )
     }
 }

@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipDetails
 import io.element.android.libraries.matrix.api.room.RoomType
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.preview.RoomPreviewInfo
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -42,6 +43,9 @@ fun aRoomPreviewInfo(
     currentUserMembership: CurrentUserMembership? = null,
     numberOfJoinedMembers: Long = 1,
     isHistoryWorldReadable: Boolean = true,
+    numberOfActiveMembers: Long? = null,
+    isDirect: Boolean? = null,
+    heroes: List<MatrixUser> = emptyList(),
 ) = RoomPreviewInfo(
     roomId = roomId,
     name = name,
@@ -53,4 +57,7 @@ fun aRoomPreviewInfo(
     roomType = if (isSpace) RoomType.Space else RoomType.Room,
     isHistoryWorldReadable = isHistoryWorldReadable,
     membership = currentUserMembership,
+    numberOfActiveMembers = numberOfActiveMembers,
+    isDirect = isDirect,
+    heroes = heroes,
 )

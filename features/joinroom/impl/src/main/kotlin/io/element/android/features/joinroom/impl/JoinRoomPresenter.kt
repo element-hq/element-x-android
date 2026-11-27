@@ -257,11 +257,11 @@ private fun RoomPreviewInfo.toContentState(membershipDetails: RoomMembershipDeta
         details = when (roomType) {
             is RoomType.Other,
             RoomType.Room -> LoadedDetails.Room(
-                isDm = false,
+                isDm = isDm,
             )
             RoomType.Space -> LoadedDetails.Space(
                 childrenCount = 0,
-                heroes = persistentListOf(),
+                heroes = heroes.toImmutableList(),
             )
         }
     )

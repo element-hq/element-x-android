@@ -85,6 +85,7 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             localSendState = null,
             editSendState = null,
             redactionSendState = null,
+            redactionReason = null,
             reactions = persistentListOf(),
             receipts = persistentListOf(),
             sender = A_USER_ID,

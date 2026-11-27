@@ -659,7 +659,7 @@ class MessagesPresenterTest {
             val localEcho = aMessageEvent(
                 eventId = null,
                 transactionId = A_TRANSACTION_ID,
-                sendState = LocalEventSendState.Failed.Unknown("Error"),
+                sendState = LocalEventSendState.Failed.Unknown("Error", isRecoverable = false),
             )
             initialState.eventSink(MessagesEvent.HandleAction(TimelineItemAction.Redact, localEcho))
             advanceUntilIdle()
@@ -1180,7 +1180,7 @@ class MessagesPresenterTest {
     fun `present - handle action retry sending`() = runTest {
         val retryLambda = lambdaRecorder { _: EventOrTransactionId -> Result.success(true) }
         val messageEvent = aMessageEvent(
-            sendState = LocalEventSendState.Failed.Unknown("Error"),
+            sendState = LocalEventSendState.Failed.Unknown("Error", isRecoverable = false),
         )
         val presenter = createMessagesPresenter(timeline = FakeTimeline(retrySendResult = retryLambda))
         presenter.testWithLifecycleOwner {
@@ -1196,7 +1196,7 @@ class MessagesPresenterTest {
     fun `present - handle action retry sending - failure is ignored`() = runTest {
         val retryLambda = lambdaRecorder { _: EventOrTransactionId -> Result.failure<Boolean>(AN_EXCEPTION) }
         val messageEvent = aMessageEvent(
-            sendState = LocalEventSendState.Failed.Unknown("Error"),
+            sendState = LocalEventSendState.Failed.Unknown("Error", isRecoverable = false),
         )
         val presenter = createMessagesPresenter(timeline = FakeTimeline(retrySendResult = retryLambda))
         presenter.testWithLifecycleOwner {

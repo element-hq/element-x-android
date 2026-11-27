@@ -71,7 +71,7 @@ class ResolveVerifiedUserSendFailurePresenterTest {
         val presenter = createResolveVerifiedUserSendFailurePresenter()
         presenter.test {
             val failedMessage = aMessageEvent(
-                sendState = LocalEventSendState.Failed.Unknown("")
+                sendState = LocalEventSendState.Failed.Unknown("", isRecoverable = false)
             )
             val initialState = awaitItem()
             assertThat(initialState.verifiedUserSendFailure).isEqualTo(VerifiedUserSendFailure.None)
@@ -337,7 +337,8 @@ class ResolveVerifiedUserSendFailurePresenterTest {
                 mapOf(
                     A_USER_ID to emptyList(),
                     A_USER_ID_2 to emptyList()
-                )
+                ),
+                isRecoverable = false,
             )
         )
     }
@@ -346,7 +347,8 @@ class ResolveVerifiedUserSendFailurePresenterTest {
         return aMessageEvent(
             transactionId = A_TRANSACTION_ID,
             sendState = LocalEventSendState.Failed.VerifiedUserChangedIdentity(
-                listOf(A_USER_ID, A_USER_ID_2)
+                listOf(A_USER_ID, A_USER_ID_2),
+                isRecoverable = false,
             )
         )
     }

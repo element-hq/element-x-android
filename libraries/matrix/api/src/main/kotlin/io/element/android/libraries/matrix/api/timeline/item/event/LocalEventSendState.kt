@@ -24,8 +24,21 @@ sealed interface LocalEventSendState {
         ) : Sending
     }
     sealed interface Failed : LocalEventSendState {
-        data class Unknown(val error: String) : Failed
-        data object SendingFromUnverifiedDevice : Failed
+        /**
+         * Whether the error is considered recoverable or not.
+         * A recoverable error disables the room's send queue, while an unrecoverable error
+         * is parked until the event is retried or aborted.
+         */
+        val isRecoverable: Boolean
+
+        data class Unknown(
+            val error: String,
+            override val isRecoverable: Boolean,
+        ) : Failed
+
+        data class SendingFromUnverifiedDevice(
+            override val isRecoverable: Boolean,
+        ) : Failed
 
         sealed interface VerifiedUser : Failed
         data class VerifiedUserHasUnsignedDevice(
@@ -33,19 +46,26 @@ sealed interface LocalEventSendState {
              * The unsigned devices belonging to verified users. A map from user ID
              * to a list of device IDs.
              */
-            val devices: Map<UserId, List<DeviceId>>
+            val devices: Map<UserId, List<DeviceId>>,
+            override val isRecoverable: Boolean,
         ) : VerifiedUser
 
         data class VerifiedUserChangedIdentity(
             /**
              * The users that were previously verified but are no longer.
              */
-            val users: List<UserId>
+            val users: List<UserId>,
+            override val isRecoverable: Boolean,
         ) : VerifiedUser
 
-        data class InvalidMimeType(val mimeType: String) : Failed
+        data class InvalidMimeType(
+            val mimeType: String,
+            override val isRecoverable: Boolean,
+        ) : Failed
 
-        data object MissingMediaContent : Failed
+        data class MissingMediaContent(
+            override val isRecoverable: Boolean,
+        ) : Failed
     }
 
     data class Sent(

@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.user.DisplayedStatus
 import io.element.android.libraries.matrix.impl.room.powerlevels.into
 import io.element.android.libraries.matrix.impl.user.from
+import timber.log.Timber
 import uniffi.matrix_sdk.RoomMemberRole
 import org.matrix.rustcomponents.sdk.MembershipState as RustMembershipState
 import org.matrix.rustcomponents.sdk.RoomMember as RustRoomMember
@@ -59,6 +60,10 @@ object RoomMemberMapper {
             RustMembershipState.Join -> RoomMembershipState.JOIN
             RustMembershipState.Knock -> RoomMembershipState.KNOCK
             RustMembershipState.Leave -> RoomMembershipState.LEAVE
-            is RustMembershipState.Custom -> TODO()
+            is RustMembershipState.Custom -> {
+                // Treat unknown membership states as not being part of the room
+                Timber.w("Unknown membership state: ${membershipState.value}")
+                RoomMembershipState.LEAVE
+            }
         }
 }
