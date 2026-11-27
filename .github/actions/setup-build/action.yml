@@ -90,6 +90,19 @@ runs:
       uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
       with:
         cache-read-only: ${{ inputs.gradle-cache-read-only }}
+    - name: Retry rate-limited dependency downloads
+      shell: bash
+      # Maven Central answers with HTTP 429 when too many requests come from the shared IPs of the GitHub runners.
+      # Gradle retries these requests, by default only 3 times with a 1s then 2s backoff, then fails the build.
+      # Retry them up to 8 times instead, with a backoff doubling from 2s (about 4 minutes in total). These are CI only
+      # settings: GRADLE_USER_HOME/gradle.properties is not part of the repository.
+      run: |
+        GRADLE_PROPERTIES="${GRADLE_USER_HOME:-$HOME/.gradle}/gradle.properties"
+        mkdir -p "$(dirname "$GRADLE_PROPERTIES")"
+        {
+          echo "systemProp.org.gradle.internal.repository.max.tentatives=8"
+          echo "systemProp.org.gradle.internal.repository.initial.backoff=2000"
+        } >> "$GRADLE_PROPERTIES"
     - name: Set up Python
       if: ${{ inputs.python-version != '' }}
       uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0

@@ -9,8 +9,19 @@
 pluginManagement {
     repositories {
         includeBuild("plugins")
+        // Declared first and filtered so that Android plugins are not looked up in the other repositories, and the other
+        // plugins are not looked up in Google's Maven repository.
+        google {
+            content {
+                includeGroupByRegex("android\\..*")
+                includeGroupByRegex("androidx\\..*")
+                includeGroupByRegex("com\\.android(\\..*)?")
+                includeGroupByRegex("com\\.google\\.firebase.*")
+                includeGroupByRegex("com\\.google\\.android.*")
+                includeGroupByRegex("com\\.google\\.gms.*")
+            }
+        }
         gradlePluginPortal()
-        google()
         mavenCentral()
     }
 }
@@ -51,21 +62,32 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        // This is also Maven Central. Restrict it to our own dependencies, that we may need right after their release, so
+        // dependencies missing from Maven Central are not requested twice to it.
         maven {
             url = uri("https://repo1.maven.org/maven2/")
+            content {
+                includeModule("org.matrix.rustcomponents", "sdk-android")
+                includeGroup("io.element.android")
+            }
         }
         flatDir {
             dirs("libraries/matrix/libs")
         }
 
         // Add ivy repository for nightly builds of the SDK bindings for Android, which are published as GitHub release assets.
-        ivy {
-            url = uri("https://github.com/matrix-org/matrix-rust-components-kotlin/releases/download")
-            patternLayout { artifact("sdk-[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
-            metadataSources { gradleMetadata() }
-            content {
+        // Exclusive so the nightly versions are not looked up in Maven Central first, and the other versions are not looked up there.
+        exclusiveContent {
+            forRepository {
+                ivy {
+                    url = uri("https://github.com/matrix-org/matrix-rust-components-kotlin/releases/download")
+                    patternLayout { artifact("sdk-[revision]/[artifact]-[revision](-[classifier])(.[ext])") }
+                    metadataSources { gradleMetadata() }
+                }
+            }
+            filter {
                 // The nightly versions of the SDK bindings for Android
-                includeModule("org.matrix.rustcomponents", "sdk-android")
+                includeVersionByRegex("org\\.matrix\\.rustcomponents", "sdk-android", ".*-nightly")
             }
         }
 
