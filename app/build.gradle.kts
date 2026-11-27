@@ -24,6 +24,7 @@ import extension.buildConfigFieldStr
 import extension.environmentOrGradleValue
 import extension.locales
 import extension.setupDependencyInjection
+import extension.setupSentryMappingUpload
 import extension.testCommonDependencies
 import org.sonarqube.gradle.SonarResolverTask
 import java.util.Locale
@@ -266,6 +267,9 @@ androidComponents {
     val reportingExtension: ReportingExtension = project.extensions.getByType(ReportingExtension::class.java)
     configureLicensesTasks(reportingExtension)
 }
+
+// Upload the R8 mapping file to Sentry, for GPlay release and nightly builds built on the CI.
+setupSentryMappingUpload()
 
 // Configure the SonarQube plugin to wait for the resource generation tasks to complete before running the analysis.
 tasks.withType<SonarResolverTask>().configureEach {
