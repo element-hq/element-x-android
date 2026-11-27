@@ -1,0 +1,55 @@
+name: Close PR with a canned comment
+
+# When a label named `Close-PR-<Reason>` is added to a pull request, post the comment stored in
+# `.github/comments/close-pr-<reason>.md` (lowercase) and close the pull request.
+# To add a new reason, create the label and the corresponding Markdown file.
+
+on:
+  # Privilege escalation necessary to comment on and close pull requests from forks.
+  # 🚨 We must not check out or execute any code from the PR here.
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
+    types: [ labeled ]
+
+permissions: {}
+
+jobs:
+  close:
+    name: Comment and close
+    if: startsWith(github.event.label.name, 'Close-PR-')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      # Required to check out the comment files (from the base branch only).
+      contents: read
+      # Required to comment on and close the pull request.
+      pull-requests: write
+    steps:
+      # With pull_request_target, this checks out the base repository, never the PR head.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: .github/comments
+      - name: Comment and close the PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          LABEL: ${{ github.event.label.name }}
+        run: |
+          if ! [[ "$LABEL" =~ ^Close-PR-[A-Za-z-]+$ ]]; then
+            echo "::error::Unexpected label name: $LABEL"
+            exit 1
+          fi
+          COMMENT_FILE=".github/comments/${LABEL,,}.md"
+          if [[ ! -f "$COMMENT_FILE" ]]; then
+            echo "::error::No comment file found for label $LABEL (expected $COMMENT_FILE)"
+            exit 1
+          fi
+          # Give some time to remove the label if it has been added by mistake.
+          sleep 10
+          if ! gh pr view "$PR_NUMBER" --json labels --jq '.labels[].name' | grep -qxF "$LABEL"; then
+            echo "Label $LABEL has been removed, nothing to do."
+            exit 0
+          fi
+          gh pr comment "$PR_NUMBER" --body-file "$COMMENT_FILE"
+          gh pr close "$PR_NUMBER"
