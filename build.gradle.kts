@@ -259,14 +259,42 @@ subprojects {
 // screenshot that is still in use. The cost is that dropping one value from a PreviewParameterProvider
 // leaves its last screenshot behind, since the preview itself still renders. Run `removeOldSnapshots`
 // and record again to clean those up.
+//
+// The run reports must only describe the latest test execution. Paparazzi declares the report directory
+// as an output of the unit test task but never empties it, so every run adds its reports next to the ones
+// of the previous runs, and a preview that has been renamed or deleted would still be seen as rendered.
+// So the report directory is deleted when the test task starts. When the test task is up-to-date or loaded
+// from the build cache, the existing reports match the current inputs, so they can be used as they are.
+//
+// When recording with `-PallLanguagesNoEnglish`, only the translations screenshots are recorded, and they
+// do not cover all the previews (dark mode and design system previews are skipped), so the run reports
+// cannot tell which English screenshots are obsolete: pruning is skipped in this case.
+//
+// Pruning is also skipped when no screenshots are recorded in the same build, for instance when running
+// `pruneObsoleteSnapshots` alone: the existing reports may describe previews that have changed since.
 subprojects {
     pluginManager.withPlugin("app.cash.paparazzi") {
         val projectDir = project.projectDir
+        val paparazziReportsDir = layout.buildDirectory.dir("reports/paparazzi")
+        // Same naming as the Paparazzi plugin: the reports of the variant `debug` are written by `testDebugUnitTest`
+        // to `build/reports/paparazzi/debug`.
+        val unitTestTaskRegex = "test(.+)UnitTest".toRegex()
+        tasks.withType<Test>().configureEach {
+            val variantSlug = unitTestTaskRegex.matchEntire(name)?.groupValues?.get(1) ?: return@configureEach
+            val variantReportDir = paparazziReportsDir.map { it.dir(variantSlug.replaceFirstChar { char -> char.lowercaseChar() }) }
+            doFirst {
+                variantReportDir.get().asFile.deleteRecursively()
+            }
+        }
+        val isEnglishRecorded = !project.hasProperty("allLanguagesNoEnglish")
+        val isRecordRequested = project.gradle.startParameter.taskNames.any { it.contains("recordPaparazzi", ignoreCase = true) }
         val pruneObsoleteSnapshots = tasks.register("pruneObsoleteSnapshots") {
             description = "Delete the recorded screenshots of previews that no longer exist"
             val imagesDir = File(projectDir, "src/test/snapshots/images")
             val reportsDir = File(projectDir, "build/reports/paparazzi")
             onlyIf { imagesDir.exists() }
+            onlyIf("English screenshots are not recorded with -PallLanguagesNoEnglish") { isEnglishRecorded }
+            onlyIf("Screenshots are only pruned when they are recorded in the same build") { isRecordRequested }
             doLast {
                 // One `runs/<runName>.js` per forked test JVM, each holding `window.runs[...] = [ ...snapshots... ];`.
                 val runFiles = reportsDir.walkTopDown()
