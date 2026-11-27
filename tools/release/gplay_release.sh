@@ -162,13 +162,15 @@ upload() {
   printf "The app bundle with version code %s has been uploaded.\n" "${uploadedVersionCode}"
 
   printf "Creating the release on the track %s...\n" "${track}"
+  # The release name follows the format used by the Play Console: "versionCode (versionName)".
   local trackBody
   trackBody=$(jq -n \
     --arg track "${track}" \
+    --arg name "${versionCode} (${version})" \
     --arg versionCode "${versionCode}" \
     --arg language "${releaseNotesLanguage}" \
     --rawfile notes "${releaseNotesFile}" \
-    '{track: $track, releases: [{versionCodes: [$versionCode], status: "completed", releaseNotes: [{language: $language, text: ($notes | rtrimstr("\n"))}]}]}')
+    '{track: $track, releases: [{name: $name, versionCodes: [$versionCode], status: "completed", releaseNotes: [{language: $language, text: ($notes | rtrimstr("\n"))}]}]}')
   api PUT "${apiBaseUrl}/edits/${editId}/tracks/${track}" \
       -H "Content-Type: application/json" \
       --data "${trackBody}" > /dev/null || abortEdit "unable to update the track ${track}."
