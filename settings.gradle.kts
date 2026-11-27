@@ -22,6 +22,12 @@ pluginManagement {
                 includeGroupByRegex("com\\.google\\.testing\\.platform.*")
             }
         }
+        // Before the Gradle Plugin Portal, which redirects to Maven Central for the artifacts it also hosts.
+        // See the comment in `dependencyResolutionManagement` below.
+        maven {
+            name = "MavenCentralGoogleMirror"
+            url = uri("https://maven-central.storage-download.googleapis.com/maven2/")
+        }
         gradlePluginPortal()
         mavenCentral()
     }
@@ -63,6 +69,14 @@ dependencyResolutionManagement {
                 includeGroupByRegex("com\\.google\\.gms.*")
                 includeGroupByRegex("com\\.google\\.testing\\.platform.*")
             }
+        }
+        // Google's mirror of Maven Central, to avoid the HTTP 429 errors Maven Central returns when rate-limiting, in
+        // particular to the shared IPs of the CI runners. It must be declared before Maven Central and not as a fallback:
+        // Gradle only tries the next repository when an artifact is missing, and fails the build on errors such as HTTP 429.
+        // Maven Central stays the fallback for the artifacts not mirrored yet.
+        maven {
+            name = "MavenCentralGoogleMirror"
+            url = uri("https://maven-central.storage-download.googleapis.com/maven2/")
         }
         mavenCentral()
         // This is also Maven Central. Restrict it to our own dependencies, that we may need right after their release, so

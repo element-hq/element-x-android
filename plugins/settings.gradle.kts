@@ -23,6 +23,11 @@ dependencyResolutionManagement {
                 includeGroupByRegex("com\\.google\\.testing\\.platform.*")
             }
         }
+        // Google's mirror of Maven Central. See the comment in the settings.gradle.kts file of the main build.
+        maven {
+            name = "MavenCentralGoogleMirror"
+            url = uri("https://maven-central.storage-download.googleapis.com/maven2/")
+        }
         mavenCentral()
     }
     versionCatalogs {
