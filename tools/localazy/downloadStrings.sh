@@ -47,12 +47,13 @@ if [[ $allFiles == 1 ]]; then
       -type f -path '*/src/*/res/values-*/translations.xml' -print | sort)
 fi
 
+# -r stops GNU xargs from running the command once with no arguments when the list is empty.
 echo "Deleting all existing localazy.xml files..."
-echo "$localazyXmlFiles" | xargs -L1 -P0 rm
+echo "$localazyXmlFiles" | xargs -r -L1 -P0 rm
 
 if [[ $allFiles == 1 ]]; then
   echo "Deleting all existing translations.xml files..."
-  echo "$translationXmlFiles" | xargs -L1 -P0 rm
+  echo "$translationXmlFiles" | xargs -r -L1 -P0 rm
 fi
 
 echo "Importing the strings..."
@@ -80,51 +81,32 @@ formatXmlFiles() {
   ./tools/localazy/formatXmlResourcesFile.py "$xml"
 }
 
-checkForbiddenTerms() {
-  set +e
-  local xml="$1"
-  if [[ $verbose == 1 ]]; then
-    echo "Checking forbidden terms in $xml"
-  fi
-  ./tools/localazy/checkForbiddenTerms.py "$xml"
-
-  # If the script finds a forbidden term, it will exit with a non-zero status code and interrupt the execution, but we don't want that.
-  # Instead we want to capture that exit code and write it to a global variable so we can check later if any forbidden terms were found.
-  status=$?
-  if [[ $status != 0 ]]; then
-    forbiddenTermsResult=$((forbiddenTermsResult || status))
-  fi
-}
-
+# xargs runs formatXmlFiles in a new shell for each file, which only sees what is exported.
+export verbose
 export -f formatXmlFiles
-export -f checkForbiddenTerms
 
 echo "Formatting the resources files..."
 
 echo "Formatting original localazy.xml files..."
 # Format the original localazy.xml files in parallel
-echo "$localazyXmlFiles" | xargs -L1 -P0 bash -c 'formatXmlFiles "$@"' _
+echo "$localazyXmlFiles" | xargs -r -L1 -P0 bash -c 'formatXmlFiles "$@"' _
 
 if [[ $allFiles == 1 ]]; then
   if [[ $verbose == 1 ]]; then
     echo "Formatting translation files..."
   fi
 
-  echo "$translationXmlFiles" | xargs -L1 -P0 bash -c 'formatXmlFiles "$@"' _
+  echo "$translationXmlFiles" | xargs -r -L1 -P0 bash -c 'formatXmlFiles "$@"' _
 fi
 
-# This stores whether any forbidden terms were found in any of the files. If any forbidden terms are found, this will be set to a non-zero value.
-export forbiddenTermsResult=0
+checkerOptions=""
+if [[ $verbose == 1 ]]; then
+  checkerOptions="--verbose"
+fi
 
 echo "Checking forbidden terms..."
-echo "$localazyXmlFiles" | xargs -L1 -P0 bash -c 'checkForbiddenTerms "$@"' _
-
-if [[ $allFiles == 1 ]]; then
-  echo "Checking forbidden terms in translation files..."
-  echo "$translationXmlFiles" | xargs -L1 -P0 bash -c 'checkForbiddenTerms "$@"' _
-fi
-
-if [[ $forbiddenTermsResult != 0 ]]; then
+# translationXmlFiles is empty unless --all is set. The checker reports every file before exiting with an error.
+if ! ./tools/localazy/checkForbiddenTerms.py $checkerOptions $localazyXmlFiles $translationXmlFiles; then
   echo "Error: Forbidden terms found in the resources files. Please check the output above."
   exit 1
 fi
