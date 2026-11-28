@@ -4,7 +4,7 @@
   <string name="crypto_history_sharing_room_info_shared_badge_content">"Uued liikmed näevad ajalugu"</string>
   <string name="crypto_history_sharing_room_info_world_readable_badge_content">"Kõik võivad ajalugu näha"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Teavituste seadistamisel tekkis viga"</string>
-  <string name="screen_notification_settings_mentions_only_disclaimer">"Sinu koduserver ei toeta seda funktsionaalsust krüptitud jututubades ja seega ei pruugi kõik teavitused sinuni jõuda."</string>
+  <string name="screen_notification_settings_mentions_only_disclaimer">"Sinu teenusepakkuja ei toeta seda funktsionaalsust krüptitud jututubades ja seega ei pruugi kõik teavitused sinuni jõuda."</string>
   <string name="screen_polls_history_title">"Küsitlused"</string>
   <string name="screen_room_details_add_topic_title">"Lisa teema"</string>
   <string name="screen_room_details_badge_encrypted">"Krüptitud jututuba"</string>
@@ -77,7 +77,7 @@
   <string name="screen_room_notification_settings_error_loading_settings">"Teavituste seadistuste laadimisel tekkis viga."</string>
   <string name="screen_room_notification_settings_error_restoring_default">"Vaikimisi seadistuste taastamine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"Seadistuste muutmine ei õnnestunud. Palun proovi uuesti."</string>
-  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Sinu koduserver ei toeta seda võimalust krüptitud jututubades, seega sa ei saa selle jututoa kohta teavitusi."</string>
+  <string name="screen_room_notification_settings_mentions_only_disclaimer">"Sinu teenusepakkuja ei toeta seda võimalust krüptitud jututubades, seega sa ei saa selle jututoa või vestluse kohta teavitusi."</string>
   <string name="screen_room_notification_settings_mode_all_messages">"Kõik sõnumid"</string>
   <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Mainimiste ja võtmesõnade alusel"</string>
   <string name="screen_room_notification_settings_mode_mute">"Summuta"</string>

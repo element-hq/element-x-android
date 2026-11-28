@@ -14,7 +14,6 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.dependencycheck) apply false
@@ -22,7 +21,6 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.dependencygraph)
-    alias(libs.plugins.sonarqube)
 }
 
 tasks.register<Delete>("clean").configure {
@@ -31,16 +29,25 @@ tasks.register<Delete>("clean").configure {
 
 private val catalog = the<LibrariesForLibs>()
 
+/**
+ * The detekt tasks with type resolution (e.g. `detektDebug`) also analyse the generated sources (SQLDelight, KSP, etc.)
+ * which are under the build directory of the module. Exclude them, we do not control this code.
+ */
+private fun SourceTask.excludeGeneratedSources(buildDir: File) {
+    val buildDirPrefix = buildDir.absolutePath + File.separator
+    exclude { it.file.absolutePath.startsWith(buildDirPrefix) }
+}
+
 allprojects {
     // Detekt
     apply {
-        plugin("io.gitlab.arturbosch.detekt")
+        plugin("dev.detekt")
     }
     detekt {
         // preconfigure defaults
         buildUponDefaultConfig = true
-        // activate all available (even unstable) rules.
-        allRules = true
+        // Note: do not set `allRules = true`. With detekt 1.x it had no effect on the rules disabled by default, but
+        // with detekt 2.x it really enables all the rules. Rules are enabled explicitly in detekt.yml instead.
         // point to your custom config defining rules to run, overwriting default behavior
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
@@ -49,11 +56,38 @@ allprojects {
         detektPlugins(project(":tests:detekt-rules"))
     }
 
-    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
         exclude("io/element/android/tests/konsist/failures/**")
 
         // This file comes from another project and we want to keep it as close to the original as possible
         exclude("org/rustls/platformverifier/**")
+
+        excludeGeneratedSources(layout.buildDirectory.get().asFile)
+    }
+    tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
+        excludeGeneratedSources(layout.buildDirectory.get().asFile)
+    }
+
+    // The `detekt` task does not use type resolution, so the rules requiring it are silently skipped.
+    // `detektFull` runs detekt with type resolution, on a single variant to limit the compilation work.
+    val detektFull = tasks.register("detektFull") {
+        group = "verification"
+        description = "Run detekt analysis with type resolution on the debug variant, including the unit tests."
+    }
+
+    // The unit test component is not created for modules without unit tests (see `configureTestComponents`),
+    // so only depend on the detekt tasks which exist.
+    fun dependOnDetektTasks(vararg names: String) {
+        detektFull.configure { dependsOn(tasks.named { it in names }) }
+    }
+    pluginManager.withPlugin("com.android.application") {
+        dependOnDetektTasks("detektGplayDebug", "detektGplayDebugUnitTest")
+    }
+    pluginManager.withPlugin("com.android.library") {
+        dependOnDetektTasks("detektDebug", "detektDebugUnitTest")
+    }
+    pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
+        dependOnDetektTasks("detektMain", "detektTest")
     }
 
     // KtLint
@@ -91,7 +125,7 @@ allprojects {
         plugin("org.owasp.dependencycheck")
     }
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
         compilerOptions {
             // Warnings are potential errors, so stop ignoring them
             // This is disabled by default, but the CI will enforce this.
@@ -119,35 +153,8 @@ dependencyAnalysis {
     }
 }
 
-// To run a sonar analysis:
-// Run './gradlew sonar -Dsonar.login=<SONAR_LOGIN>'
-// The SONAR_LOGIN is stored in passbolt as Token Sonar Cloud Bma
-// Sonar result can be found here: https://sonarcloud.io/project/overview?id=element-x-android
-sonar {
-    properties {
-        property("sonar.projectName", "element-x-android")
-        property("sonar.projectKey", "element-x-android")
-        property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.projectVersion", "1.0") // TODO project(":app").android.defaultConfig.versionName)
-        property("sonar.sourceEncoding", "UTF-8")
-        property("sonar.links.homepage", "https://github.com/element-hq/element-x-android/")
-        property("sonar.links.ci", "https://github.com/element-hq/element-x-android/actions")
-        property("sonar.links.scm", "https://github.com/element-hq/element-x-android/")
-        property("sonar.links.issue", "https://github.com/element-hq/element-x-android/issues")
-        property("sonar.organization", "element-hq")
-        property("sonar.login", if (project.hasProperty("SONAR_LOGIN")) project.property("SONAR_LOGIN")!! else "invalid")
-
-        // exclude source code from analyses separated by a colon (:)
-        // Exclude Java source
-        property("sonar.exclusions", "**/BugReporterMultipartBody.java")
-
-        // Code coverage, the report is generated by `./gradlew :koverXmlReportMerged` (Kover uses the JaCoCo XML format)
-        property("sonar.coverage.jacoco.xmlReportPaths", layout.buildDirectory.file("reports/kover/reportMerged.xml").get().asFile.absolutePath)
-    }
-}
-
 allprojects {
-    tasks.withType<Test> {
+    tasks.withType<Test>().configureEach {
         // Robolectric 4.17 sets up shared memory during application setup, which goes through its
         // FileDescriptor interceptor. That interceptor reaches into `java.io.FileDescriptor` and
         // `jdk.internal.access.SharedSecrets`, both of which are encapsulated since JDK 17.
@@ -198,7 +205,7 @@ tasks.register("runQualityChecks") {
     dependsOn(":app:lintGplayDebug")
     project.subprojects {
         tasks.findByPath("$path:lintDebug")?.let { dependsOn(it) }
-        tasks.findByName("detekt")?.let { dependsOn(it) }
+        tasks.findByName("detektFull")?.let { dependsOn(it) }
         tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
         // tasks.findByName("buildHealth")?.let { dependsOn(it) }
     }
@@ -222,12 +229,14 @@ tasks.register("generateDocsToc", Exec::class.java) {
 // Delete all the screenshots. Not hooked to the record tasks on purpose, see `pruneObsoleteSnapshots`
 // below. Run it by hand (or use Paparazzi's own `cleanRecordPaparazziDebug`) to record from scratch.
 subprojects {
-    val snapshotsDir = File("${project.projectDir}/src/test/snapshots")
-    tasks.register("removeOldSnapshots") {
-        onlyIf { snapshotsDir.exists() }
-        doFirst {
-            println("Delete previous screenshots located at $snapshotsDir\n")
-            snapshotsDir.deleteRecursively()
+    pluginManager.withPlugin("app.cash.paparazzi") {
+        val snapshotsDir = File("${project.projectDir}/src/test/snapshots")
+        tasks.register("removeOldSnapshots") {
+            onlyIf { snapshotsDir.exists() }
+            doFirst {
+                println("Delete previous screenshots located at $snapshotsDir\n")
+                snapshotsDir.deleteRecursively()
+            }
         }
     }
 }
@@ -251,60 +260,60 @@ subprojects {
 // leaves its last screenshot behind, since the preview itself still renders. Run `removeOldSnapshots`
 // and record again to clean those up.
 subprojects {
-    val projectDir = project.projectDir
-    val pruneObsoleteSnapshots = tasks.register("pruneObsoleteSnapshots") {
-        description = "Delete the recorded screenshots of previews that no longer exist"
-        val imagesDir = File(projectDir, "src/test/snapshots/images")
-        val reportsDir = File(projectDir, "build/reports/paparazzi")
-        onlyIf { imagesDir.exists() }
-        doLast {
-            // One `runs/<runName>.js` per forked test JVM, each holding `window.runs[...] = [ ...snapshots... ];`.
-            val runFiles = reportsDir.walkTopDown()
-                .filter { it.isFile && it.extension == "js" && it.parentFile.name == "runs" }
-                .toList()
-            check(runFiles.isNotEmpty()) {
-                "No Paparazzi run report found under $reportsDir, so there is no way to tell which " +
-                    "screenshots are still in use. Refusing to delete anything."
-            }
-            // `testName` is serialised as "<package>.<class>#<method>" and the screenshot file is named
-            // "<package>_<class>_<method>.png". Only the package and the class are used here, they identify
-            // the preview. Do not be tempted to rebuild the whole file name from the method: it has to be
-            // normalised exactly as `Snapshot.toFileName` does, which replaces whitespace with the
-            // delimiter, so a preview named "List item - Simple" does not read as its own file name.
-            val testNameRegex = """"testName"\s*:\s*"(.*)\.([^.]*)#""".toRegex()
-            val renderedPreviews = runFiles.flatMap { runFile ->
-                testNameRegex.findAll(runFile.readText()).map { match ->
-                    val (packageName, className) = match.destructured
-                    // Keep the trailing delimiter, so that `Foo_` does not also match `FooBar_…`.
-                    "${packageName}_${className}_"
+    pluginManager.withPlugin("app.cash.paparazzi") {
+        val projectDir = project.projectDir
+        val pruneObsoleteSnapshots = tasks.register("pruneObsoleteSnapshots") {
+            description = "Delete the recorded screenshots of previews that no longer exist"
+            val imagesDir = File(projectDir, "src/test/snapshots/images")
+            val reportsDir = File(projectDir, "build/reports/paparazzi")
+            onlyIf { imagesDir.exists() }
+            doLast {
+                // One `runs/<runName>.js` per forked test JVM, each holding `window.runs[...] = [ ...snapshots... ];`.
+                val runFiles = reportsDir.walkTopDown()
+                    .filter { it.isFile && it.extension == "js" && it.parentFile.name == "runs" }
+                    .toList()
+                check(runFiles.isNotEmpty()) {
+                    "No Paparazzi run report found under $reportsDir, so there is no way to tell which " +
+                        "screenshots are still in use. Refusing to delete anything."
                 }
-            }.toSet()
-            check(renderedPreviews.isNotEmpty()) {
-                "Could not read any snapshot name out of the Paparazzi run reports in $reportsDir. " +
-                    "The report format has probably changed. Refusing to delete anything."
-            }
+                // `testName` is serialised as "<package>.<class>#<method>" and the screenshot file is named
+                // "<package>_<class>_<method>.png". Only the package and the class are used here, they identify
+                // the preview. Do not be tempted to rebuild the whole file name from the method: it has to be
+                // normalised exactly as `Snapshot.toFileName` does, which replaces whitespace with the
+                // delimiter, so a preview named "List item - Simple" does not read as its own file name.
+                val testNameRegex = """"testName"\s*:\s*"(.*)\.([^.]*)#""".toRegex()
+                val renderedPreviews = runFiles.flatMap { runFile ->
+                    testNameRegex.findAll(runFile.readText()).map { match ->
+                        val (packageName, className) = match.destructured
+                        // Keep the trailing delimiter, so that `Foo_` does not also match `FooBar_…`.
+                        "${packageName}_${className}_"
+                    }
+                }.toSet()
+                check(renderedPreviews.isNotEmpty()) {
+                    "Could not read any snapshot name out of the Paparazzi run reports in $reportsDir. " +
+                        "The report format has probably changed. Refusing to delete anything."
+                }
 
-            val existing = imagesDir.listFiles { file -> file.extension == "png" }.orEmpty()
-            val obsolete = existing.filter { file -> renderedPreviews.none { file.name.startsWith(it) } }
-            // Deleting a screenshot is a tracked file deletion, and a bad `renderedPreviews` set would wipe
-            // thousands of them. Anything beyond a trickle means something is wrong rather than a few
-            // deleted previews.
-            check(obsolete.size <= existing.size / 10) {
-                "pruneObsoleteSnapshots would delete ${obsolete.size} of ${existing.size} screenshots in " +
-                    "$imagesDir, which looks like a bug rather than deleted previews. Refusing to delete " +
-                    "anything. If the deletions are expected, run `removeOldSnapshots` and record again."
+                val existing = imagesDir.listFiles { file -> file.extension == "png" }.orEmpty()
+                val obsolete = existing.filter { file -> renderedPreviews.none { file.name.startsWith(it) } }
+                // Deleting a screenshot is a tracked file deletion, and a bad `renderedPreviews` set would wipe
+                // thousands of them. Anything beyond a trickle means something is wrong rather than a few
+                // deleted previews.
+                check(obsolete.size <= existing.size / 10) {
+                    "pruneObsoleteSnapshots would delete ${obsolete.size} of ${existing.size} screenshots in " +
+                        "$imagesDir, which looks like a bug rather than deleted previews. Refusing to delete " +
+                        "anything. If the deletions are expected, run `removeOldSnapshots` and record again."
+                }
+                obsolete.forEach {
+                    println("Delete obsolete screenshot ${it.name}")
+                    it.delete()
+                }
+                println("Pruned ${obsolete.size} obsolete screenshot(s), kept ${existing.size - obsolete.size}.\n")
             }
-            obsolete.forEach {
-                println("Delete obsolete screenshot ${it.name}")
-                it.delete()
-            }
-            println("Pruned ${obsolete.size} obsolete screenshot(s), kept ${existing.size - obsolete.size}.\n")
         }
-    }
-    // `configureEach` on a live filtered collection, and not `findByName`, because the Paparazzi plugin
-    // registers its record tasks per variant, long after this block runs.
-    tasks.matching { it.name.startsWith("recordPaparazzi") }.configureEach {
-        finalizedBy(pruneObsoleteSnapshots)
+        tasks.named { it.startsWith("recordPaparazzi") }.configureEach {
+            finalizedBy(pruneObsoleteSnapshots)
+        }
     }
 }
 

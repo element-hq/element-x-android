@@ -129,17 +129,21 @@ fun HomeTopBar(
                     HomeNavigationBarItem.Chats -> {
                         when (spaceFiltersState) {
                             is SpaceFiltersState.Selected -> spaceFiltersState.selectedFilter.spaceRoom.displayName
-                            else -> stringResource(selectedNavigationItem.labelRes)
+                            SpaceFiltersState.Disabled,
+                            is SpaceFiltersState.Unselected,
+                            is SpaceFiltersState.Selecting -> stringResource(selectedNavigationItem.labelRes)
                         }
                     }
                     HomeNavigationBarItem.Spaces -> null
                 }
-                displayTitle?.let {
+                if (displayTitle != null) {
                     val style = when (spaceFiltersState) {
                         // Space name
                         is SpaceFiltersState.Selected -> ElementTheme.typography.fontHeadingSmMedium
                         // "Chats"
-                        else -> ElementTheme.typography.fontHeadingLgBold
+                        SpaceFiltersState.Disabled,
+                        is SpaceFiltersState.Unselected,
+                        is SpaceFiltersState.Selecting -> ElementTheme.typography.fontHeadingLgBold
                     }
                     AdaptativeTitle(
                         title = displayTitle,
@@ -261,7 +265,8 @@ private fun SpaceFilterButton(
         when (spaceFiltersState) {
             is SpaceFiltersState.Unselected -> spaceFiltersState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters)
             is SpaceFiltersState.Selected -> spaceFiltersState.eventSink(SpaceFiltersEvent.Selected.ClearSelection)
-            else -> Unit
+            SpaceFiltersState.Disabled,
+            is SpaceFiltersState.Selecting -> Unit
         }
     }
 

@@ -26,7 +26,8 @@ class TimelineItemDaySeparatorFactory(
             useRelative = true,
         )
         return TimelineItemDaySeparatorModel(
-            formattedDate = formattedDate
+            timestamp = virtualItem.timestamp,
+            formattedDate = formattedDate,
         )
     }
 }

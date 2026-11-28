@@ -32,6 +32,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -328,14 +329,16 @@ private fun SupportingTextLayout(validity: TextFieldValidity?, supportingText: S
                     tint = ElementTheme.colors.iconSuccessPrimary
                 )
             }
-            else -> Unit
+            TextFieldValidity.None,
+            null -> Unit
         }
         Text(
             text = supportingText,
             color = when (validity) {
                 TextFieldValidity.Invalid -> ElementTheme.colors.textCriticalPrimary
                 TextFieldValidity.Valid -> ElementTheme.colors.textSuccessPrimary
-                else -> ElementTheme.colors.textSecondary
+                TextFieldValidity.None,
+                null -> ElementTheme.colors.textSecondary
             },
             style = ElementTheme.typography.fontBodySmRegular,
         )
@@ -349,6 +352,7 @@ enum class TextFieldValidity {
 }
 
 @Composable
+@ReadOnlyComposable
 private fun textFieldStyle(enabled: Boolean): TextStyle {
     return ElementTheme.typography.fontBodyLgRegular.copy(
         color = if (enabled) {

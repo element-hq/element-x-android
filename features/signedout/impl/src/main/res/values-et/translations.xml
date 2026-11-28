@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signed_out_reason_1">"Sa oled muutnud oma salasõna ühes teises sessioonis"</string>
-  <string name="screen_signed_out_reason_2">"Sa oled kustutanud selle sessiooni ühest teisest oma sessioonist"</string>
-  <string name="screen_signed_out_reason_3">"Sinu koduserveri haldaja on sinu ligipääsu keelanud"</string>
-  <string name="screen_signed_out_title">"Sa oled välja loginud"</string>
+  <string name="screen_signed_out_reason_1">"Sa eemaldasid selle seadme oma kasutajakonto juurest"</string>
+  <string name="screen_signed_out_reason_2">"Sa oled teisest seadmest muutnud oma kasutajakonto salasõna"</string>
+  <string name="screen_signed_out_reason_3">"Sinu serverisession on aegunud või sinu teenusepakkuja haldaja on sinu ligipääsu keelanud"</string>
+  <string name="screen_signed_out_subtitle_v2">"See seade eemaldati ühel allpooltoodud põhjusel. Sidumaks seda seadet uuesti sinu kasutajakontoga logi palun sisse."</string>
+  <string name="screen_signed_out_title">"Seade on eemaldatud"</string>
 </resources>

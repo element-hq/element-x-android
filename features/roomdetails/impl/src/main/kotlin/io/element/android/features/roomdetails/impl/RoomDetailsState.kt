@@ -69,7 +69,7 @@ data class RoomDetailsState(
                 RoomHistoryVisibility.Invited, RoomHistoryVisibility.Joined -> add(RoomBadge.SHARED_HISTORY_HIDDEN)
                 RoomHistoryVisibility.Shared -> add(RoomBadge.SHARED_HISTORY_SHARED)
                 RoomHistoryVisibility.WorldReadable -> add(RoomBadge.SHARED_HISTORY_WORLD_READABLE)
-                else -> {}
+                is RoomHistoryVisibility.Custom -> Unit
             }
         }
     }.toImmutableList()

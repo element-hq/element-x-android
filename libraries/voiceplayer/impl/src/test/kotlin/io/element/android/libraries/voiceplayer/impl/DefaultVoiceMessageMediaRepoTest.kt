@@ -58,9 +58,7 @@ class DefaultVoiceMessageMediaRepoTest {
 
         repo.getMediaFile().let { result ->
             assertThat(result.isFailure).isTrue()
-            result.exceptionOrNull()!!.let { exception ->
-                assertThat(exception).isInstanceOf(RuntimeException::class.java)
-            }
+            assertThat(result.exceptionOrNull()!!).isInstanceOf(RuntimeException::class.java)
         }
     }
 

@@ -33,6 +33,7 @@ import io.element.android.libraries.androidutils.text.LinkifyHelper
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.utils.LocalUiTestMode
+import io.element.android.libraries.htmlrenderer.api.DocumentNode
 import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.htmlrenderer.api.ui.HtmlMessageContent
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
@@ -54,38 +55,6 @@ fun TimelineItemTextView(
     // The View <-> Compose interop is not working well with Compose UI tests (it loops indefinitely), so we skip it in the UI test mode.
     if (LocalUiTestMode.current) return
 
-    // When the new timeline event renderer is enabled and the message has a parsed tree, render it
-    // natively with Compose. Otherwise fall back to the legacy rich text editor view below.
-    val messageTree = content.messageTree
-    if (LocalTimelineEventRendererConfig.current.isComposeRendererEnabled && messageTree != null) {
-        Box(modifier.semantics { contentDescription = content.plainText }) {
-            HtmlMessageContent(
-                node = messageTree,
-                currentUserId = LocalTimelineEventRendererConfig.current.currentUserId,
-                onLinkClick = { url, text -> onLinkClick(Link(url = url, text = text)) },
-                onLinkLongClick = { url, text -> onLinkLongClick(Link(url = url, text = text)) },
-                onMentionClick = { mention ->
-                    when (mention) {
-                        is MentionNodeContent.Room -> onLinkClick(Link(url = mention.permalinkUrl, text = mention.displayText))
-                        is MentionNodeContent.User -> onLinkClick(Link(url = mention.permalinkUrl, text = mention.displayText))
-                        is MentionNodeContent.Everyone -> { /* No action for @room mentions */ }
-                    }
-                },
-                onContentLayoutChange = { data ->
-                    onContentLayoutChange(
-                        ContentAvoidingLayoutData(
-                            contentWidth = data.contentWidth,
-                            contentHeight = data.contentHeight,
-                            nonOverlappingContentWidth = data.nonOverlappingContentWidth,
-                            nonOverlappingContentHeight = data.nonOverlappingContentHeight,
-                        )
-                    )
-                },
-            )
-        }
-        return
-    }
-
     val isInPreview = LocalInspectionMode.current
     val emojiOnly = remember(content.body, content.formattedBody, isInPreview) {
         content.formattedBody.toString() == content.body &&
@@ -97,25 +66,93 @@ fun TimelineItemTextView(
         emojiOnly -> ElementTheme.typography.fontHeadingXlRegular
         else -> ElementTheme.typography.fontBodyLgRegular
     }
+
     CompositionLocalProvider(
         LocalContentColor provides ElementTheme.colors.textPrimary,
-        LocalTextStyle provides textStyle
+        LocalTextStyle provides textStyle,
     ) {
-        val text = getTextWithResolvedMentions(content)
-        Box(
-            modifier
-                .semantics { contentDescription = content.plainText }
-                .limitMentionPillWidth(text)
-        ) {
-            EditorStyledText(
-                text = text,
-                onLinkClickedListener = onLinkClick,
-                onLinkLongClickedListener = onLinkLongClick,
-                style = ElementRichTextEditorStyle.textStyle(),
-                onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
-                releaseOnDetach = false,
+        // When the new timeline event renderer is enabled and the message has a parsed tree, render it
+        // natively with Compose. Otherwise fall back to the legacy rich text editor view below.
+        val messageTree = content.messageTree
+        if (LocalTimelineEventRendererConfig.current.isComposeRendererEnabled && messageTree != null) {
+            NewRendererTextView(
+                plainText = content.plainText,
+                messageTree = messageTree,
+                onLinkClick = onLinkClick,
+                onLinkLongClick = onLinkLongClick,
+                modifier = modifier,
+                onContentLayoutChange = onContentLayoutChange
+            )
+        } else {
+            LegacyRendererTextView(
+                content = content,
+                onLinkClick = onLinkClick,
+                onLinkLongClick = onLinkLongClick,
+                modifier = modifier,
+                onContentLayoutChange = onContentLayoutChange
             )
         }
+    }
+}
+
+@Composable
+private fun NewRendererTextView(
+    plainText: String,
+    messageTree: DocumentNode,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier.semantics { contentDescription = plainText }) {
+        HtmlMessageContent(
+            node = messageTree,
+            currentUserId = LocalTimelineEventRendererConfig.current.currentUserId,
+            onLinkClick = { url, text -> onLinkClick(Link(url = url, text = text)) },
+            onLinkLongClick = { url, text -> onLinkLongClick(Link(url = url, text = text)) },
+            onMentionClick = { mention ->
+                when (mention) {
+                    is MentionNodeContent.Room -> onLinkClick(Link(url = mention.permalinkUrl, text = mention.displayText))
+                    is MentionNodeContent.User -> onLinkClick(Link(url = mention.permalinkUrl, text = mention.displayText))
+                    is MentionNodeContent.Everyone -> { /* No action for @room mentions */ }
+                }
+            },
+            onContentLayoutChange = { data ->
+                onContentLayoutChange(
+                    ContentAvoidingLayoutData(
+                        contentWidth = data.contentWidth,
+                        contentHeight = data.contentHeight,
+                        nonOverlappingContentWidth = data.nonOverlappingContentWidth,
+                        nonOverlappingContentHeight = data.nonOverlappingContentHeight,
+                    )
+                )
+            },
+        )
+    }
+}
+
+@Composable
+private fun LegacyRendererTextView(
+    content: TimelineItemTextBasedContent,
+    onLinkClick: (Link) -> Unit,
+    onLinkLongClick: (Link) -> Unit,
+    onContentLayoutChange: (ContentAvoidingLayoutData) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val text = getTextWithResolvedMentions(content)
+    Box(
+        modifier
+            .semantics { contentDescription = content.plainText }
+            .limitMentionPillWidth(text)
+    ) {
+        EditorStyledText(
+            text = text,
+            onLinkClickedListener = onLinkClick,
+            onLinkLongClickedListener = onLinkLongClick,
+            style = ElementRichTextEditorStyle.textStyle(fontScale = LocalTimelineEventRendererConfig.current.fontScale),
+            onTextLayout = ContentAvoidingLayout.measureLegacyLastTextLine(onContentLayoutChange = onContentLayoutChange),
+            releaseOnDetach = false,
+        )
     }
 }
 

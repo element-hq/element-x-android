@@ -43,6 +43,9 @@ data class TimelineState(
     val selectionState: SelectionState,
     // When true, formatted message bodies are rendered with the native Compose renderer.
     val useNewTimelineEventRenderer: Boolean,
+    // Multiplier applied to the timeline text. 1f is the regular app size.
+    val timelineFontScale: Float,
+    val areTimelineAnimationsEnabled: Boolean,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
@@ -76,7 +79,8 @@ sealed interface FocusRequestState {
             is Requested -> eventId
             is Loading -> eventId
             is Success -> eventId
-            else -> null
+            None,
+            is Failure -> null
         }
     }
 }
@@ -119,7 +123,8 @@ fun TimelineState.isSelected(item: TimelineItem): Boolean {
     val selection = selectionState as? SelectionState.Active ?: return false
     return when (item) {
         is TimelineItem.Event -> selection.selectedEventIds.contains(item.eventId)
-        else -> false
+        is TimelineItem.Virtual,
+        is TimelineItem.GroupedEvents -> false
     }
 }
 
@@ -130,7 +135,8 @@ fun TimelineState.canSelect(item: TimelineItem): Boolean {
     val selection = selectionState as? SelectionState.Active ?: return false
     return when (item) {
         is TimelineItem.Event -> selection.action.canApplyTo(item)
-        else -> false
+        is TimelineItem.Virtual,
+        is TimelineItem.GroupedEvents -> false
     }
 }
 

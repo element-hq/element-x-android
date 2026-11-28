@@ -43,6 +43,7 @@ Apakah Anda yakin ingin melanjutkan?"</string>
     <item quantity="other">"%1$d derajat"</item>
   </plurals>
   <string name="screen_image_edition_title">"Sunting Foto"</string>
+  <string name="screen_media_upload_preview_a11y_draw">"Gambar"</string>
   <string name="screen_media_upload_preview_caption_warning">"Keterangan mungkin tidak terlihat oleh orang yang menggunakan aplikasi lama."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Ketuk untuk mengubah kualitas unggahan video"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Dokumen tidak dapat diunggah."</string>

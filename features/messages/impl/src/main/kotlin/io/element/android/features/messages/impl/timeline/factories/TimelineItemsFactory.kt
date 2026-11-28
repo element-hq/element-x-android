@@ -16,6 +16,7 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -57,7 +58,10 @@ class TimelineItemsFactory(
         when (old) {
             is MatrixTimelineItem.Event if new is MatrixTimelineItem.Event -> old.uniqueId == new.uniqueId
             is MatrixTimelineItem.Virtual if new is MatrixTimelineItem.Virtual -> old.uniqueId == new.uniqueId
-            else -> false
+            is MatrixTimelineItem.Event,
+            is MatrixTimelineItem.Virtual,
+            MatrixTimelineItem.Other,
+            null -> false
         }
     }
 
@@ -82,8 +86,29 @@ class TimelineItemsFactory(
                 newTimelineItemStates.add(cacheItem)
             }
         }
-        val result = timelineItemGrouper.group(newTimelineItemStates).toImmutableList()
+        val result = timelineItemGrouper.group(newTimelineItemStates)
+            .withoutReadMarkerAtTheBottom()
+            .withVirtualItemIdsBasedOnContent()
+            .toImmutableList()
         this._timelineItems.emit(result)
+    }
+
+    /**
+     * The read marker separates the events which have been read from the unread ones. When all the events after it
+     * are filtered out, the marker becomes the last item of the timeline and draws the "new messages" line at the
+     * very bottom of the screen, with nothing left to separate, so it is not rendered.
+     *
+     * Items are ordered from the most recent one (index 0, at the bottom of the screen) to the oldest one, and the
+     * marker is kept when it is the only item, so that the timeline is not empty.
+     */
+    private fun List<TimelineItem>.withoutReadMarkerAtTheBottom(): List<TimelineItem> {
+        val bottomItem = firstOrNull()
+        val isReadMarker = (bottomItem as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel
+        return if (isReadMarker && size > 1) {
+            drop(1)
+        } else {
+            this
+        }
     }
 
     private suspend fun buildAndCacheItem(

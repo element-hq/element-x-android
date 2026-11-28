@@ -37,15 +37,15 @@ val excludedKoverSubProjects = listOf(
     ":annotations",
     ":codegen",
     ":tests:testutils",
+    // Only used by the screenshot tests
+    ":tests:screenshotutils",
     // Exclude modules which are not Android libraries
     // See https://github.com/Kotlin/kotlinx-kover/issues/312
-    ":appconfig",
     ":libraries:core",
     ":libraries:coroutines",
     ":libraries:di",
     ":tests:detekt-rules",
     ":tests:konsist",
-    ":tests:testutils",
 ) + localAarProjects
 
 private fun Project.kover(any: Any) {
@@ -68,8 +68,25 @@ fun Project.setupKover() {
     // https://kotlin.github.io/kotlinx-kover/
     // Run `./gradlew :app:koverHtmlReport` to get report at ./app/build/reports/kover
     // Run `./gradlew :app:koverXmlReport` to get XML report
+    // Only instrument the test tasks when the coverage is needed: when a Kover task is requested, or when the tests and
+    // the Kover reports run in separate Gradle invocations, like on the CI, with `-PkoverInstrumentation=true`.
+    // The Kover agent slows down the tests, and would otherwise be attached to every test run.
+    val isCoverageNeeded = gradle.startParameter.taskNames.any { it.contains("kover", ignoreCase = true) } ||
+        providers.gradleProperty("koverInstrumentation").orNull.toBoolean()
     extensions.configure<KoverProjectExtension> {
         currentProject {
+            instrumentation {
+                disabledForAll.set(!isCoverageNeeded)
+                // By default, the Kover agent instruments every class loaded by the tests except the Android and JDK ones, so
+                // including Compose, AndroidX, Kotlin, Robolectric... which are not part of the coverage report anyway.
+                // Only instrument our own classes, it makes the instrumented tests significantly faster.
+                includedClasses.addAll(
+                    "io.element.*",
+                    // JNI glue classes in :libraries:matrix:impl
+                    "org.matrix.rustsdk.Android*",
+                    "org.rustls.platformverifier.*",
+                )
+            }
             // Create custom variants for verification
             for (variant in koverVariants) {
                 createVariant(variant) {
@@ -77,9 +94,9 @@ fun Project.setupKover() {
 
                     // Using the cache for coverage verification seems to be flaky, so we disable it for now.
                     val taskName = "koverCachedVerify${variant.replaceFirstChar(Char::titlecase)}"
-                    val cachedTask = project.tasks.findByName(taskName)
-                    cachedTask?.let {
-                        it.outputs.upToDateWhen { false }
+                    // Configure it lazily: the task may not be registered yet, and `findByName` would also create it eagerly.
+                    project.tasks.named { it == taskName }.configureEach {
+                        outputs.upToDateWhen { false }
                     }
                 }
             }

@@ -43,6 +43,7 @@
     <item quantity="other">"%1$d 度"</item>
   </plurals>
   <string name="screen_image_edition_title">"编辑照片"</string>
+  <string name="screen_media_upload_preview_a11y_draw">"绘画"</string>
   <string name="screen_media_upload_preview_caption_warning">"使用旧版应用程序的用户可能无法看到字幕。"</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"点按以更改视频上传质量"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"无法上传该文件。"</string>
@@ -145,6 +146,10 @@
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未能发送，因为 %1$s 的已验证数字身份已被重置。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未能发送，因为 %1$s 尚未验证所有设备。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"消息未能发送，因为你有尚未验证的设备。"</string>
+  <string name="screen_timeline_sample_answer">"那是因为我吃了一个🍪"</string>
+  <string name="screen_timeline_sample_question">"我烤了12 个饼干，但这里只有 11 个👀"</string>
+  <string name="screen_timeline_sample_recipient">"Sally"</string>
+  <string name="screen_timeline_sample_sender">"Bob"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"历史消息在此设备上不可用"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"你需要验证此设备才能访问历史消息"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"无权访问此消息"</string>

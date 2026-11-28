@@ -6,7 +6,7 @@
   <string name="banner_new_sound_message">"Sygnał powiadomień został zaktualizowany — jest wyraźniejszy, szybszy i mniej uciążliwy."</string>
   <string name="banner_new_sound_title">"Odświeżyliśmy Twoje dźwięki"</string>
   <string name="banner_set_up_recovery_content">"Twoje czaty są automatycznie archiwizowane za pomocą szyfrowania end-to-end. Aby przywrócić kopię zapasową i swoją tożsamość cyfrową, wymagany będzie klucz przywracania."</string>
-  <string name="banner_set_up_recovery_submit">"Uzyskaj klucz przywracania"</string>
+  <string name="banner_set_up_recovery_submit">"Utwórz klucz przywracania"</string>
   <string name="banner_set_up_recovery_title">"Utwórz kopię zapasową swoich czatów"</string>
   <string name="banner_swipe_avatar_content">"Przesuwaj palcem w górę lub w dół po swoim awatarze, aby przełączać się między kontami bez konieczności przechodzenia do ustawień aplikacji."</string>
   <string name="banner_swipe_avatar_title">"Przesuń swój awatar, aby zmienić konto"</string>
@@ -58,8 +58,14 @@ Nie masz żadnych nieprzeczytanych wiadomości!"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ten pokój został ulepszony"</string>
   <string name="screen_roomlist_your_spaces">"Twoje przestrzenie"</string>
   <string name="screen_search_empty_state_message">"Szukaj czatów i wiadomości"</string>
-  <string name="screen_search_empty_state_title">"Rozpocznij wyszukiwanie"</string>
-  <string name="screen_search_no_results_message">"Nie znaleziono wyników dla \"%1$s\". Spróbuj wpisać nowe zapytanie."</string>
+  <string name="screen_search_empty_state_title">"Rozpocznij wyszukiwanie…"</string>
+  <string name="screen_search_from_your_messages_header">"Z Twoich wiadomości"</string>
+  <string name="screen_search_history_limit_message">"Wyszukiwanie odbywa się na Twoim urządzeniu, więc wszystkie wiadomości szyfrowane zostają prywatne.
+Na Twoim urządzeniu przechowywane są wiadomości z 3 ostatnich miesięcy, więc nie ma jeszcze możliwości przeszukiwania starszych wiadomości."</string>
+  <string name="screen_search_history_limit_title">"Wyszukiwanie obejmuje ostatnie 3 miesiące"</string>
+  <string name="screen_search_messages_no_results_message">"Nie znaleziono wyników dla “%1$s” w Twoich ostatnich wiadomościach."</string>
+  <string name="screen_search_messages_no_results_title">"Brak wyników w ciągu ostatnich 3 miesięcy"</string>
+  <string name="screen_search_no_results_message">"Nie znaleziono wyników dla “%1$s”. Prosimy o wpisanie nowego terminu."</string>
   <string name="screen_search_recent_searches">"Ostatnie wyszukiwania"</string>
   <string name="screen_search_tab_chats">"Czaty"</string>
   <string name="screen_search_tab_messages">"Wiadomości"</string>

@@ -31,12 +31,13 @@ import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginDat
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.network.HttpClient
 import io.element.android.libraries.matrix.api.paths.SessionPaths
+import io.element.android.libraries.matrix.api.paths.UnusedSessionPathsCleaner
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
 import io.element.android.libraries.matrix.impl.NoOpClientSessionDelegate
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
-import io.element.android.libraries.matrix.impl.RustTemporaryMatrixClient
 import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
 import io.element.android.libraries.matrix.impl.auth.qrlogin.SdkQrCodeLoginData
 import io.element.android.libraries.matrix.impl.auth.qrlogin.toStep
@@ -48,6 +49,7 @@ import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
@@ -75,6 +77,8 @@ class RustMatrixAuthenticationService(
     private val enterpriseService: EnterpriseService,
     private val featureFlagService: FeatureFlagService,
     private val clientEnterpriseHook: ClientEnterpriseHook,
+    private val unusedSessionPathsCleaner: UnusedSessionPathsCleaner,
+    private val httpClientFactory: HttpClient.Factory,
 ) : MatrixAuthenticationService {
     // Any existing Element Classic session that we want to try to import secrets from during login.
     private var elementClassicSession: ElementClassicSession? = null
@@ -87,16 +91,35 @@ class RustMatrixAuthenticationService(
     // Ideally it would be possible to get the sessionPath from the Client to avoid doing this.
     private var sessionPaths: SessionPaths? = null
     private var currentClient: Client? = null
+    private var pendingOAuthAuthorizationData: OAuthAuthorizationData? = null
 
     private val newMatrixClientObservers = mutableListOf<(MatrixClient) -> Unit>()
     override fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit) {
         newMatrixClientObservers.add(lambda)
     }
 
-    private fun rotateSessionPath(): SessionPaths {
-        sessionPaths?.deleteRecursively()
+    /**
+     * Start a new login flow: discard the data of any previous login attempt, delete the session directories
+     * which may have been left over (for instance if the app was killed during a previous login flow),
+     * and create new session paths.
+     */
+    private suspend fun rotateSessionPath(): SessionPaths {
+        discardPendingSession()
+        unusedSessionPathsCleaner.clean()
         return sessionPathsFactory.create()
             .also { sessionPaths = it }
+    }
+
+    /**
+     * Close the client used to log in, if any, and then delete its session directories.
+     * The client must be closed first, else it could recreate some files after the deletion.
+     */
+    private fun discardPendingSession() {
+        pendingOAuthAuthorizationData?.close()
+        pendingOAuthAuthorizationData = null
+        clear()
+        sessionPaths?.let { sessionPathsFactory.delete(it) }
+        sessionPaths = null
     }
 
     override suspend fun restoreSession(sessionId: SessionId): Result<MatrixClient> = withContext(coroutineDispatchers.io) {
@@ -133,7 +156,9 @@ class RustMatrixAuthenticationService(
     override suspend fun setHomeserver(homeserver: String): Result<MatrixHomeServerDetails> =
         withContext(coroutineDispatchers.io) {
             val emptySessionPath = rotateSessionPath()
-            runCatchingExceptions {
+            // We handle the cancellation here manually, to also discard the pending session, so we suppress the warning
+            @Suppress("RunCatchingNotAllowed", "SuspendFunSwallowedCancellation")
+            runCatching {
                 val client = makeClient(sessionPaths = emptySessionPath) {
                     serverNameOrHomeserverUrl(homeserver)
                 }
@@ -141,8 +166,11 @@ class RustMatrixAuthenticationService(
                 currentClient = client
 
                 client.homeserverLoginDetails().map()
-            }.onFailure {
-                clear()
+            }.onFailure { throwable ->
+                discardPendingSession()
+                if (throwable is CancellationException) {
+                    throw throwable
+                }
             }.mapFailure { failure ->
                 Timber.e(failure, "Failed to set homeserver to $homeserver")
                 failure.mapAuthenticationException()
@@ -224,8 +252,6 @@ class RustMatrixAuthenticationService(
         }
     }
 
-    private var pendingOAuthAuthorizationData: OAuthAuthorizationData? = null
-
     override suspend fun getOAuthUrl(
         prompt: OAuthPrompt,
         loginHint: String?,
@@ -241,12 +267,13 @@ class RustMatrixAuthenticationService(
                     deviceId = null,
                     additionalScopes = emptyList(),
                 )
-                val getUrlResolver = RustTemporaryMatrixClient(client, sessionPaths, coroutineDispatchers.io)
+                // We may need to tweak the MAS URL in an enterprise implementation.
+                val httpClient = httpClientFactory.create(homeserverUrl = client.homeserver(), serverName = client.server())
                 val url = oAuthAuthorizationData.loginUrl()
                     .let {
                         enterpriseService.tweakMasUrl(
                             url = it,
-                            urlContentFetcher = getUrlResolver,
+                            httpClient = httpClient,
                         )
                     }
                 pendingOAuthAuthorizationData = oAuthAuthorizationData
@@ -333,7 +360,9 @@ class RustMatrixAuthenticationService(
                     progress(state.toStep())
                 }
             }
-            runCatchingExceptions {
+            // We handle the cancellation here manually, to also discard the pending session, so we suppress the warning
+            @Suppress("RunCatchingNotAllowed", "SuspendFunSwallowedCancellation")
+            runCatching {
                 val client = makeQrCodeLoginClient(
                     sessionPaths = emptySessionPaths,
                     qrCodeData = sdkQrCodeLoginData,
@@ -371,8 +400,8 @@ class RustMatrixAuthenticationService(
                     else -> it
                 }
             }.onFailure { throwable ->
-                // A QR code login always builds its own client, so it can be disposed of on failure.
-                clear()
+                // A QR code login always builds its own client, so it can be disposed of on failure, with its data.
+                discardPendingSession()
                 if (throwable is CancellationException) {
                     throw throwable
                 }
@@ -381,25 +410,42 @@ class RustMatrixAuthenticationService(
         }
 
     private suspend fun finalizeClientCreation(sessionData: SessionData): SessionId {
+        // Wait for the encryption to be initialized, so that we can be sure that the session is fully ready to be used.
+        // This is a workaround for using 2 clients, one for login and another one for session restoration: when we drop the login client,
+        // the encryption of the session may not fully initialized yet, and the final client will override the encryption state, causing
+        // duplicate one-time keys to be generated.
+        currentClient?.encryption()?.waitForE2eeInitializationTasks()
+
         // Close the client which was used to perform the login before creating the final client.
         // Both use the same session paths, so their SQLite stores must never be opened at the same time.
         // The login client does not set up the backup and the cross-signing, the final client will do it.
         clear()
 
         val matrixClient = restoreSession(sessionData)
-        // Apply enterprise hooks to the newly created client as soon as possible
-        clientEnterpriseHook(matrixClient)
+        // Any throwable, including CancellationException, is rethrown after the client is destroyed, so we suppress the warning
+        @Suppress("SuspendFunSwallowedCancellation")
+        try {
+            // Apply enterprise hooks to the newly created client as soon as possible
+            clientEnterpriseHook(matrixClient)
 
-        // Start the sync service to ensure that the client receives the encryption updates we'll wait for next.
-        matrixClient.syncService.startSync()
+            // Start the sync service to ensure that the client receives the encryption updates we'll wait for next.
+            matrixClient.syncService.startSync()
 
-        matrixClient.waitForKnownVerificationState()
+            matrixClient.waitForKnownVerificationState()
+        } catch (throwable: Throwable) {
+            // Nobody else knows about this client yet, so destroy it, even if the coroutine has been cancelled.
+            withContext(NonCancellable) {
+                matrixClient.destroy()
+            }
+            throw throwable
+        }
 
         newMatrixClientObservers.forEach { it.invoke(matrixClient) }
         sessionStore.addSession(sessionData)
 
         // The session paths now hold the data of the account which has just been logged in, so forget
         // them: they must not be deleted by the rotateSessionPath() of the next login attempt.
+        sessionPaths?.let { sessionPathsFactory.release(it) }
         sessionPaths = null
 
         return SessionId(sessionData.userId)

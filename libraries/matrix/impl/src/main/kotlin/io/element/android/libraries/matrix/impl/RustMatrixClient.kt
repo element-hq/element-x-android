@@ -104,6 +104,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
@@ -112,7 +113,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -175,9 +175,9 @@ class RustMatrixClient(
     clock: SystemClock,
     timelineEventFilterFactory: TimelineEventFilterFactory,
     private val featureFlagService: FeatureFlagService,
-    private val analyticsService: AnalyticsService,
+    analyticsService: AnalyticsService,
     private val workManagerScheduler: WorkManagerScheduler,
-    private val searchBackfillServiceFactory: RustSearchBackfillService.Factory,
+    searchBackfillServiceFactory: RustSearchBackfillService.Factory,
 ) : MatrixClient {
     @AssistedFactory
     interface Factory {
@@ -417,12 +417,6 @@ class RustMatrixClient(
             ?: sessionId.value.substringAfter(":")
     }
 
-    override suspend fun getUrl(url: String): Result<ByteArray> = withContext(sessionDispatcher) {
-        runCatchingExceptions {
-            innerClient.getUrl(url)
-        }.mapFailure { it.mapClientException() }
-    }
-
     override suspend fun getRoom(roomId: RoomId): BaseRoom? = withContext(sessionDispatcher) {
         roomFactory.getBaseRoom(roomId)
     }
@@ -464,6 +458,14 @@ class RustMatrixClient(
                 .filter { it.membership() == Membership.JOINED }
                 .map { RoomId(it.id()) }
                 .toSet()
+        }
+    }
+
+    override suspend fun hasEncryptedRooms(): Result<Boolean> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.hasEncryptedRooms(5.seconds.toJavaDuration())
+        }.onFailure {
+            Timber.e(it, "Failed to check whether the user has encrypted rooms")
         }
     }
 
@@ -588,7 +590,7 @@ class RustMatrixClient(
     override suspend fun searchUsers(searchTerm: String, limit: Long): Result<MatrixSearchUserResults> =
         withContext(sessionDispatcher) {
             runCatchingExceptions {
-                innerClient.searchUsers(searchTerm, limit.toULong()).let(UserSearchResultMapper::map)
+                UserSearchResultMapper.map(innerClient.searchUsers(searchTerm, limit.toULong()))
             }
         }
 
@@ -795,6 +797,8 @@ class RustMatrixClient(
             if (userInitiated) {
                 try {
                     innerClient.logout()
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (failure: Throwable) {
                     if (ignoreSdkError) {
                         Timber.e(failure, "Fail to call logout on HS. Still delete local files.")
@@ -1062,13 +1066,13 @@ private fun defaultRoomCreationPowerLevels(isPublic: Boolean, isSpace: Boolean) 
     redact = null,
     invite = if (isPublic) 0 else 50,
     notifications = null,
-    users = mapOf(),
+    users = emptyMap(),
     events = if (!isSpace) {
         mapOf(
             "m.call.member" to 0,
             "org.matrix.msc3401.call.member" to 0,
         )
     } else {
-        mapOf()
+        emptyMap()
     }
 )

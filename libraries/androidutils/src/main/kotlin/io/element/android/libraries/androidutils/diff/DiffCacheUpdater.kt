@@ -25,7 +25,7 @@ import kotlin.system.measureTimeMillis
 class DiffCacheUpdater<ListItem, CachedItem>(
     private val diffCache: MutableDiffCache<CachedItem>,
     private val detectMoves: Boolean = false,
-    private val cacheInvalidator: DiffCacheInvalidator<CachedItem> = DefaultDiffCacheInvalidator(),
+    cacheInvalidator: DiffCacheInvalidator<CachedItem> = DefaultDiffCacheInvalidator(),
     private val areItemsTheSame: (oldItem: ListItem?, newItem: ListItem?) -> Boolean,
 ) {
     private val lock = Any()

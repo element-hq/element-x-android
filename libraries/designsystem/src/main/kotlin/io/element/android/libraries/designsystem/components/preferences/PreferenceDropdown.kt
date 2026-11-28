@@ -80,7 +80,7 @@ fun <T : DropdownOption> PreferenceDropdown(
             }
         },
         trailingContent = ListItemContent.Custom(
-            content = { enabled ->
+            content = { isContentEnabled ->
                 DropdownTrailingContent(
                     dropDownIcon = dropDownIcon,
                     selectedOption = selectedOption,
@@ -88,7 +88,7 @@ fun <T : DropdownOption> PreferenceDropdown(
                     onSelectOption = onSelectOption,
                     expanded = isDropdownExpanded,
                     onExpandedChange = { isDropdownExpanded = it },
-                    enabled = enabled,
+                    enabled = isContentEnabled,
                     modifier = Modifier.fillMaxSize(0.3f),
                 )
             }

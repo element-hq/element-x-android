@@ -208,10 +208,16 @@ private fun GlobalSearchContent(
                     } else {
                         startSearching()
                     }
-                    results?.isEmpty() == true -> emptySearchResults(
-                        query = state.queryState.text.toString(),
-                        onClickLearnMore = onClickLearnMore,
-                    )
+                    results?.isEmpty() == true -> {
+                        val query = state.queryState.text.toString()
+                        when (state.currentTarget) {
+                            GlobalSearchTarget.ROOMS -> emptyRoomsSearchResults(query)
+                            GlobalSearchTarget.MESSAGES -> emptyMessagesSearchResults(
+                                query = query,
+                                onClickLearnMore = onClickLearnMore,
+                            )
+                        }
+                    }
                     else -> searchResultItems(
                         results = results,
                         onSearchResultSelected = onSelectSearchResult,
@@ -484,6 +490,7 @@ private fun LazyListScope.searchHistory(
                             color = ElementTheme.colors.textPrimary,
                         )
 
+                        val canonicalAlias = result.roomInfo.canonicalAlias
                         if (result.roomInfo.isDm) {
                             val dmUserId = result.roomInfo.heroes.firstOrNull()?.userId
                             dmUserId?.let { userId ->
@@ -495,9 +502,9 @@ private fun LazyListScope.searchHistory(
                                     color = ElementTheme.colors.textSecondary,
                                 )
                             }
-                        } else if (result.roomInfo.canonicalAlias != null) {
+                        } else if (canonicalAlias != null) {
                             Text(
-                                text = result.roomInfo.canonicalAlias?.value!!,
+                                text = canonicalAlias.value,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 style = ElementTheme.typography.fontBodyMdRegular,
@@ -539,7 +546,20 @@ private fun LazyListScope.searchResultItems(
     }
 }
 
-private fun LazyListScope.emptySearchResults(
+private fun LazyListScope.emptyRoomsSearchResults(query: String) {
+    item {
+        IconTitleSubtitleMolecule(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(40.dp),
+            title = stringResource(CommonStrings.common_no_results),
+            subTitle = stringResource(R.string.screen_search_no_results_message, query),
+            iconStyle = BigIcon.Style.Default(CompoundIcons.Search()),
+        )
+    }
+}
+
+private fun LazyListScope.emptyMessagesSearchResults(
     query: String,
     onClickLearnMore: () -> Unit,
 ) {

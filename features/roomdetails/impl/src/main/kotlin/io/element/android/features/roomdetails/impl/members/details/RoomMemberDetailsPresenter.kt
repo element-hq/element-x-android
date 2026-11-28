@@ -92,7 +92,7 @@ class RoomMemberDetailsPresenter(
 
             // Subscribe to the identity changes
             room.roomMemberIdentityStateChange(waitForEncryption = false)
-                .map { it.find { it.identityRoomMember.userId == roomMemberId } }
+                .map { changes -> changes.find { it.identityRoomMember.userId == roomMemberId } }
                 .map { roomMemberIdentityStateChange ->
                     // If we didn't receive any info, manually fetch it
                     roomMemberIdentityStateChange?.identityState ?: encryptionService.getUserIdentity(roomMemberId).getOrNull()
@@ -107,7 +107,7 @@ class RoomMemberDetailsPresenter(
                     IdentityState.VerificationViolation -> UserProfileVerificationState.VERIFICATION_VIOLATION
                     IdentityState.Verified -> UserProfileVerificationState.VERIFIED
                     IdentityState.Pinned, IdentityState.PinViolation -> UserProfileVerificationState.UNVERIFIED
-                    else -> UserProfileVerificationState.UNKNOWN
+                    null -> UserProfileVerificationState.UNKNOWN
                 }
             }
         }
@@ -122,7 +122,12 @@ class RoomMemberDetailsPresenter(
                         snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
                     }
                 }
-                else -> userProfileState.eventSink(event)
+                UserProfileEvent.StartDM,
+                UserProfileEvent.ClearStartDMState,
+                is UserProfileEvent.BlockUser,
+                is UserProfileEvent.UnblockUser,
+                UserProfileEvent.ClearBlockUserError,
+                UserProfileEvent.ClearConfirmationDialog -> userProfileState.eventSink(event)
             }
         }
 

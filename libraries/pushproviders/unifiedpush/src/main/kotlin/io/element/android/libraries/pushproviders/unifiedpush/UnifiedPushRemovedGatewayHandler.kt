@@ -35,7 +35,7 @@ fun interface UnifiedPushRemovedGatewayHandler {
 @SingleIn(AppScope::class)
 class UnifiedPushRemovedGatewayThrottler(
     @AppCoroutineScope
-    private val appCoroutineScope: CoroutineScope,
+    appCoroutineScope: CoroutineScope,
 ) {
     private val firstThrottler = FirstThrottler(
         minimumInterval = 60_000,

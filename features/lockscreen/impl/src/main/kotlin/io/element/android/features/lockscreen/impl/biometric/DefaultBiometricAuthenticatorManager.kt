@@ -50,11 +50,11 @@ class DefaultBiometricAuthenticatorManager(
     private val encryptionDecryptionService: EncryptionDecryptionService,
     private val secretKeyRepository: SecretKeyRepository,
     @AppCoroutineScope
-    private val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
 ) : BiometricAuthenticatorManager {
     private val callbacks = CopyOnWriteArrayList<BiometricAuthenticator.Callback>()
     private val biometricManager = BiometricManager.from(context)
-    private val keyguardManager: KeyguardManager = context.getSystemService()!!
+    private val keyguardManager = context.getSystemService<KeyguardManager>() as KeyguardManager
 
     /**
      * Returns true if a weak biometric method (i.e.: some face or iris unlock implementations) can be used.

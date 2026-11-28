@@ -32,6 +32,8 @@
   <string name="screen_advanced_settings_share_presence_description">"Si cette option est désactivée, vous ne pourrez ni envoyer ni recevoir de confirmations de lecture ni de notifications de saisie."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Toujours cacher"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Toujours montrer"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Dans les salons privés"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Un média caché peut toujours être affiché en cliquant dessus"</string>
   <string name="screen_advanced_settings_show_media_timeline_title">"Afficher les médias dans les discussions."</string>
   <string name="screen_advanced_settings_view_source_description">"Activer cette option pour pouvoir voir la source des messages dans la discussion."</string>
   <string name="screen_blocked_users_empty">"Vous n’avez bloqué personne"</string>
@@ -47,6 +49,7 @@
   <string name="screen_edit_profile_updating_details">"Mise à jour du profil…"</string>
   <string name="screen_labs_enable_gallery">"Gallerie d’images"</string>
   <string name="screen_labs_enable_gallery_description">"Envoyez plusieurs images ou vidéos en un seul message. Fonctionne parfaitement sur mobile, mais pas encore supporté sur le web."</string>
+  <string name="screen_labs_enable_knocking">"Demander à rejoindre"</string>
   <string name="screen_labs_enable_knocking_description">"Les utilisateurs peuvent demander l’accès à un salon privé. Stable sur mobile, une version web existe mais est encore expérimentale."</string>
   <string name="screen_labs_enable_threads">"Activez les fils de discussion."</string>
   <string name="screen_labs_enable_threads_description">"Un changement entraînera le redémarrage de l’application."</string>
@@ -104,6 +107,9 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
   <string name="screen_settings_add_account">"Ajouter un compte"</string>
+  <string name="screen_settings_message_text_size_adjust_size">"Ajuster la taille"</string>
+  <string name="screen_settings_message_text_size_default_description">"La taille du texte par défaut est %1$d."</string>
+  <string name="screen_settings_message_text_size_title">"Taille du texte des messages"</string>
   <string name="screen_settings_user_status_away">"Absent"</string>
   <string name="screen_settings_user_status_be_right_back">"Je reviens tout de suite"</string>
   <string name="screen_settings_user_status_custom">"Personnalisé…"</string>

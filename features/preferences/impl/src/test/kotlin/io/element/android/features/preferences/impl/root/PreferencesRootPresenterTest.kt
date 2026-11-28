@@ -137,6 +137,17 @@ class PreferencesRootPresenterTest {
     }
 
     @Test
+    fun `present - the stored message text size reaches the state`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore().apply {
+            setMessageTextSize(20)
+        }
+        createPreferencesRootPresenter(appPreferencesStore = appPreferencesStore).test {
+            consumeItemsUntilPredicate { it.messageTextSize == 20 }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - black theme option shown when feature flag enabled`() = runTest {
         createPreferencesRootPresenter(
             featureFlagService = FakeFeatureFlagService().apply {

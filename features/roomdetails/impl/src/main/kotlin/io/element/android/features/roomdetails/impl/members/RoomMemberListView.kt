@@ -295,7 +295,7 @@ private fun RoomMemberListItem(
         RoomMember.Role.Admin -> stringResource(R.string.screen_room_member_list_role_administrator)
         RoomMember.Role.Moderator -> stringResource(R.string.screen_room_member_list_role_moderator)
         is RoomMember.Role.Owner -> stringResource(R.string.screen_room_member_list_role_owner)
-        else -> null
+        RoomMember.Role.User -> null
     }
 
     MatrixUserRow(
@@ -327,7 +327,9 @@ private fun RoomMemberListItem(
                             tint = ElementTheme.colors.iconCriticalPrimary
                         )
                     }
-                    else -> Unit
+                    IdentityState.Pinned,
+                    IdentityState.PinViolation,
+                    null -> Unit
                 }
 
                 roleText?.let {

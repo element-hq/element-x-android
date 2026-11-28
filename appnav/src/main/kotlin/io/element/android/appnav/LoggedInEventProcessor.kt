@@ -67,7 +67,20 @@ class LoggedInEventProcessor(
                     }
                     MembershipChange.INVITATION_REJECTED -> displayMessage(CommonStrings.common_current_user_rejected_invite)
                     MembershipChange.KNOCK_RETRACTED -> displayMessage(CommonStrings.common_current_user_canceled_knock)
-                    else -> Unit
+                    MembershipChange.NONE,
+                    MembershipChange.ERROR,
+                    MembershipChange.JOINED,
+                    MembershipChange.BANNED,
+                    MembershipChange.UNBANNED,
+                    MembershipChange.KICKED,
+                    MembershipChange.INVITED,
+                    MembershipChange.KICKED_AND_BANNED,
+                    MembershipChange.INVITATION_ACCEPTED,
+                    MembershipChange.INVITATION_REVOKED,
+                    MembershipChange.KNOCKED,
+                    MembershipChange.KNOCK_ACCEPTED,
+                    MembershipChange.KNOCK_DENIED,
+                    MembershipChange.NOT_IMPLEMENTED -> Unit
                 }
             }
             .launchIn(childScope)

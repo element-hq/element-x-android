@@ -1,19 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="common_unable_to_decrypt">"Немагчыма расшыфраваць"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Адпраўлена з неабароненай прылады"</string>
   <string name="common_unable_to_decrypt_no_access">"У вас няма доступу да гэтага паведамлення"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Правераная лічбавая асоба адпраўніка была скінута"</string>
+  <string name="crypto_event_authenticity_mismatched_sender">"Адпраўнік падзеі не супадае з уладальнікам прылады, з якой яна адпраўлена."</string>
   <string name="crypto_event_authenticity_not_guaranteed">"Сапраўднасць гэтага зашыфраванага паведамлення не можа быць гарантаваная на гэтай прыладзе."</string>
   <string name="crypto_event_authenticity_previously_verified">"Зашыфравана раней правераным карыстальнікам."</string>
   <string name="crypto_event_authenticity_sent_in_clear">"Не зашыфраваны."</string>
   <string name="crypto_event_authenticity_unknown_device">"Зашыфравана невядомай ці выдаленай прыладай."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Зашыфравана прыладай, не пацверджанай яе ўладальнікам."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Зашыфравана неправераным карыстальнікам."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) падзяліўся(-лася) гэтым паведамленнем, бо вас не было ў пакоі, калі яго адправілі."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s падзяліўся(-лася) гэтым паведамленнем, бо вас не было ў пакоі, калі яго адправілі."</string>
+  <string name="crypto_identity_change_pin_violation_new">"Лічбавая асоба %1$s %2$s была скінута. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
+  <string name="crypto_identity_change_verification_violation_new">"Лічбавая асоба %1$s %2$s была скінута. %3$s"</string>
+  <string name="dialog_confirm_link_message">"Спасылка %1$s вядзе вас на іншы сайт %2$s
+
+Вы сапраўды хочаце працягнуць?"</string>
+  <string name="dialog_confirm_link_title">"Праверце гэту спасылку"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Максімальны дазволены памер файла: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Файл занадта вялікі для запампоўкі"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Максімальны дазволены памер файла: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Выберыце якасць відэа, якое хочаце запампаваць."</string>
   <string name="error_failed_loading_messages">"Не ўдалося загрузіць паведамленні"</string>
-  <string name="error_failed_uploading_voice_message">"Не ўдалося загрузіць ваша галасавое паведамленне."</string>
+  <string name="error_failed_uploading_voice_message">"Не ўдалося запампаваць ваша галасавое паведамленне."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s не мае дазволу на доступ да вашага мікрафона. Дазвольце доступ да запісу галасавога паведамлення."</string>
-  <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для загрузкі, паспрабуйце яшчэ раз."</string>
-  <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася загрузіць медыяфайлы, паспрабуйце яшчэ раз."</string>
+  <string name="error_sending_failure_invalid_mime_type">"Няправільны MIME-тып: %s"</string>
+  <string name="error_sending_failure_missing_media_content">"Адсутнічае медыязмесціва"</string>
+  <string name="error_sending_failure_other">"Падрабязнасці памылкі: %s"</string>
+  <string name="error_sending_failure_sending_from_unverified_device">"Адпраўка з неправеранай прылады"</string>
+  <string name="error_sending_failure_unknown">"Невядомая памылка"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally">"Адлюстраваць відарыс па гарызанталі"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_flipped">"Адлюстравана па гарызанталі"</string>
+  <string name="screen_image_edition_a11y_flip_image_horizontally_state_original">"Арыгінал"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically">"Адлюстраваць відарыс па вертыкалі"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_flipped">"Адлюстравана па вертыкалі"</string>
+  <string name="screen_image_edition_a11y_flip_image_vertically_state_original">"Арыгінал"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Павярнуць відарыс налева"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d градус"</item>
+    <item quantity="few">"%1$d градусы"</item>
+    <item quantity="many">"%1$d градусаў"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Рэдагаваць фота"</string>
+  <string name="screen_media_upload_preview_a11y_draw">"Маляваць"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Подпісы могуць быць нябачныя для людзей, якія карыстаюцца старымі версіямі праграм."</string>
+  <string name="screen_media_upload_preview_change_video_quality_prompt">"Націсніце, каб змяніць якасць запампоўкі відэа"</string>
+  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"Не ўдалося запампаваць файл."</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"Не атрымалася апрацаваць медыяфайл для запампоўкі, паспрабуйце яшчэ раз."</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"Не атрымалася запампаваць медыяфайлы, паспрабуйце яшчэ раз."</string>
+  <string name="screen_media_upload_preview_error_too_large_message">"Максімальна дазволены памер файла — %1$s."</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"Файл занадта вялікі для запампоўкі"</string>
+  <string name="screen_media_upload_preview_item_count">"Элемент %1$d з %2$d"</string>
+  <string name="screen_media_upload_preview_optimize_image_quality_title">"Аптымізаваць якасць відарысаў"</string>
   <string name="screen_media_upload_preview_processing">"Апрацоўка…"</string>
   <string name="screen_media_upload_preview_title">"Дадаць медыя"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Націсніце на паведамленне і абярыце «%1$s », каб уключыць сюды."</string>
@@ -26,12 +67,16 @@
   <string name="screen_pinned_timeline_screen_title_empty">"Замацаваныя паведамленні"</string>
   <string name="screen_report_content_block_user">"Заблакіраваць карыстальніка"</string>
   <string name="screen_report_content_block_user_hint">"Адзначце, ці хочаце вы схаваць усе бягучыя і будучыя паведамленні ад гэтага карыстальніка"</string>
-  <string name="screen_report_content_explanation">"Гэтае паведамленне будзе перададзена адміністратару вашага хатняга сервера. Яны не змогуць прачытаць зашыфраваныя паведамленні."</string>
+  <string name="screen_report_content_explanation">"Гэтае паведамленне будзе перададзена правайдару вашага ўліковага запісу. Яны не змогуць прачытаць ніякія зашыфраваныя паведамленні."</string>
   <string name="screen_report_content_hint">"Прычына, па якой вы паскардзіліся на гэты змест"</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Адклікаць праверку і адправіць"</string>
+  <string name="screen_resolve_send_failure_changed_identity_subtitle">"Вы можаце адклікаць сваю праверку і ўсё роўна адправіць гэтае паведамленне, або скасаваць адпраўку і паўтарыць спробу пазней, паўторна праверыўшы %1$s."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Ваша паведамленне не адпраўлена, бо правераная лічбавая ідэнтычнасць карыстальніка %1$s была скінута"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Усё роўна адправіць паведамленне"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$sвыкарыстоўвае адну або некалькі неправераных прылад. Вы можаце адправіць паведамленне ў любым выпадку, або вы можаце адмяніць зараз і паўтарыць спробу пазней, калі %2$s праверыць усе свае прылады."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Ваша паведамленне не было адпраўлена, таму што%1$s не праверыў усе прылады"</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Адна або некалькі вашых прылад не правераны. Вы можаце ўсё роўна адправіць паведамленне або скасаваць адпраўку і паўтарыць спробу пазней, калі праверыце ўсе свае прылады."</string>
+  <string name="screen_resolve_send_failure_you_unsigned_device_title">"Ваша паведамленне не адпраўлена, бо вы не праверылі адну або некалькі сваіх прылад"</string>
   <string name="screen_room_attachment_source_camera">"Камера"</string>
   <string name="screen_room_attachment_source_camera_photo">"Зрабіць фота"</string>
   <string name="screen_room_attachment_source_camera_video">"Запісаць відэа"</string>
@@ -40,32 +85,70 @@
   <string name="screen_room_attachment_source_location">"Абагуліць месцазнаходжанне"</string>
   <string name="screen_room_attachment_source_poll">"Апытанне"</string>
   <string name="screen_room_attachment_text_formatting">"Фармаціраванне тэксту"</string>
+  <string name="screen_room_confirm_removal_reason_label">"Прычына (неабавязкова)"</string>
+  <string name="screen_room_confirm_removal_reason_placeholder">"Увядзіце прычыну…"</string>
+  <string name="screen_room_confirm_removal_reason_supporting_text">"(Неабавязкова)"</string>
+  <string name="screen_room_confirm_removal_title">"Выдаліць паведамленне?"</string>
   <string name="screen_room_encrypted_history_banner">"Гісторыя паведамленняў зараз недаступна."</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Гісторыя паведамленняў у гэтым пакоі недаступная. Праверце гэтую прыладу, каб убачыць гісторыю паведамленняў."</string>
   <string name="screen_room_invite_again_alert_message">"Вы хочаце запрасіць іх назад?"</string>
   <string name="screen_room_invite_again_alert_title">"Вы адзін у гэтым чаце"</string>
+  <string name="screen_room_maximum_messages_selected">"Выбрана максімальная колькасць паведамленняў"</string>
   <string name="screen_room_mentions_at_room_subtitle">"Апавясціць увесь пакой"</string>
   <string name="screen_room_mentions_at_room_title">"Усе"</string>
+  <plurals name="screen_room_messages_forwarded">
+    <item quantity="one">"%1$d паведамленне пераслана"</item>
+    <item quantity="few">"%1$d паведамленні пераслана"</item>
+    <item quantity="many">"%1$d паведамленняў пераслана"</item>
+  </plurals>
+  <string name="screen_room_permalink_same_room_android">"Вы ўжо праглядаеце гэты пакой!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s з %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Замацаваныя паведамленні"</string>
   <string name="screen_room_pinned_banner_loading_description">"Загрузка паведамлення…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"Паглядзець усе"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Адправіць зноў"</string>
   <string name="screen_room_retry_send_menu_title">"Не ўдалося адправіць ваша паведамленне"</string>
+  <plurals name="screen_room_selection_count">
+    <item quantity="one">"Выбрана %1$d паведамленне"</item>
+    <item quantity="few">"Выбрана %1$d паведамленні"</item>
+    <item quantity="many">"Выбрана %1$d паведамленняў"</item>
+  </plurals>
   <string name="screen_room_timeline_add_reaction">"Дадаць эмодзі"</string>
   <string name="screen_room_timeline_beginning_of_room">"Гэта пачатак %1$s."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Гэта пачатак гэтай размовы."</string>
+  <string name="screen_room_timeline_legacy_call">"Выклік не падтрымліваецца. Спытайце, ці можа суразмоўца карыстацца новай праграмай Element X."</string>
   <string name="screen_room_timeline_less_reactions">"Паказаць менш"</string>
   <string name="screen_room_timeline_message_copied">"Паведамленне скапіравана"</string>
   <string name="screen_room_timeline_no_permission_to_post">"У Вас няма дазволу на публікацыю ў гэтым пакоі"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="one">"%1$d удзельнік адрэагаваў %2$s"</item>
+    <item quantity="few">"%1$d удзельнікі адрэагавалі %2$s"</item>
+    <item quantity="many">"%1$d удзельнікаў адрэагавалі %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="one">"Вы і яшчэ %1$d удзельнік адрэагавалі %2$s"</item>
+    <item quantity="few">"Вы і яшчэ %1$d удзельнікі адрэагавалі %2$s"</item>
+    <item quantity="many">"Вы і яшчэ %1$d удзельнікаў адрэагавалі %2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"Вы адрэагавалі %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Паказаць менш"</string>
   <string name="screen_room_timeline_reactions_show_more">"Паказаць больш"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"Паказаць зводку рэакцый"</string>
   <string name="screen_room_timeline_read_marker_title">"Новае"</string>
+  <plurals name="screen_room_timeline_redacted_messages">
+    <item quantity="one">"%1$d выдаленае паведамленне"</item>
+    <item quantity="few">"%1$d выдаленыя паведамленні"</item>
+    <item quantity="many">"%1$d выдаленых паведамленняў"</item>
+  </plurals>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d змена ў пакоі"</item>
     <item quantity="few">"%1$d змены ў пакоі"</item>
     <item quantity="many">"%1$d змен у пакоі"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Перайсці ў новы пакой"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Гэты пакой быў заменены і больш не актыўны"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Паглядзець старыя паведамленні"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Гэты пакой з\'яўляецца працягам іншага пакоя"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s і %3$d іншы"</item>
     <item quantity="many">"%1$s, %2$s і %3$d іншыя"</item>
@@ -76,6 +159,17 @@
     <item quantity="many">"%1$s пішуць"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s і %2$s"</string>
+  <plurals name="screen_timeline_active_call_joined_count">
+    <item quantity="one">"%1$d далучыўся"</item>
+    <item quantity="few">"%1$d далучыліся"</item>
+    <item quantity="many">"%1$d далучыліся"</item>
+  </plurals>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Паведамленне не адпраўлена, бо правераная лічбавая ідэнтычнасць карыстальніка %1$s была скінута."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Паведамленне не адпраўлена таму што%1$s не праверыў усе прылады."</string>
+  <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Паведамленне не адпраўлена, бо вы не праверылі адну або некалькі сваіх прылад."</string>
+  <string name="timeline_decryption_failure_historical_event_no_key_backup">"Гістарычныя паведамленні недаступныя на гэтай прыладзе"</string>
+  <string name="timeline_decryption_failure_historical_event_unverified_device">"Каб атрымаць доступ да гістарычных паведамленняў, праверце гэтую прыладу"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"У вас няма доступу да гэтага паведамлення"</string>
+  <string name="timeline_decryption_failure_unable_to_decrypt">"Не ўдалося расшыфраваць паведамленне"</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Гэтае паведамленне было заблакіравана, бо вы не праверылі сваю прыладу або адпраўніку трэба праверыць вашу лічбавую ідэнтычнасць."</string>
 </resources>

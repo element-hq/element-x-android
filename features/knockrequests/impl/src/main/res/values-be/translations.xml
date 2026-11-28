@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Так, прыняць усе"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Вы ўпэўнены, што хочаце прыняць усе запыты на далучэнне?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Прыняць усе запыты"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Прыняць усе"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Нам не ўдалося прыняць усе запыты. Хочаце паспрабаваць яшчэ раз?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Не ўдалося прыняць усе запыты"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Прыняцце ўсіх запытаў на далучэнне"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Нам не ўдалося прыняць гэты запыт. Хочаце паспрабаваць яшчэ раз?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Не ўдалося прыняць запыт"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Прыняцце запыту на далучэнне"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Так, адхіліць і заблакіраваць"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Вы ўпэўнены, што хочаце адхіліць запыт і заблакіраваць %1$s? Гэты карыстальнік больш не зможа запытаць доступ да гэтага пакоя."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Адхіліць і заблакіраваць доступ"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Адхіленне і блакіраванне доступу"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Так, адхіліць"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Вы ўпэўнены, што хочаце адхіліць запыт %1$s на далучэнне да гэтага пакоя?"</string>
   <string name="screen_knock_requests_list_decline_alert_title">"Адхіліць доступ"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Адхіліць і заблакіраваць"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Нам не ўдалося адхіліць гэты запыт. Хочаце паспрабаваць яшчэ раз?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Не ўдалося адхіліць запыт"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Адхіленне запыту на далучэнне"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Калі хтосьці папросіць далучыцца да пакоя, вы зможаце ўбачыць яго запыт тут."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Няма запытаў на далучэнне, якія чакаюць разгляду"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Загрузка запытаў на далучэнне…"</string>
+  <string name="screen_knock_requests_list_title">"Запыты на далучэнне"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s +%2$d хочуць далучыцца да гэтага пакоя"</item>
+    <item quantity="few">"%1$s +%2$d хочуць далучыцца да гэтага пакоя"</item>
+    <item quantity="many">"%1$s +%2$d хочуць далучыцца да гэтага пакоя"</item>
+  </plurals>
   <string name="screen_room_multiple_knock_requests_view_all_button_title">"Паглядзець усе"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Прыняць"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s хоча далучыцца да гэтага пакоя"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Прагляд"</string>
 </resources>

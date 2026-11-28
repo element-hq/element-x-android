@@ -30,11 +30,13 @@ style:
     active: false
   ReturnCount:
     active: false
-  UnnecessaryAbstractClass:
+  AbstractClassCanBeConcreteClass:
+    active: true
+  AbstractClassCanBeInterface:
     active: true
   FunctionOnlyReturningConstant:
     active: false
-  UnusedPrivateMember:
+  UnusedPrivateFunction:
     active: true
   DestructuringDeclarationWithTooManyEntries:
     active: true
@@ -48,9 +50,9 @@ style:
   UnnecessaryParentheses:
     active: true
     allowForUnclearPrecedence: false
-  UntilInsteadOfRangeTo:
+  RangeUntilInsteadOfRangeTo:
     active: true
-  UnusedImports:
+  UnusedImport:
     active: true
   UnusedPrivateProperty:
     active: true
@@ -66,8 +68,6 @@ style:
     active: true
   OptionalUnit:
     active: true
-  PreferToOverPairSyntax:
-    active: true
   RedundantExplicitType:
     active: true
   TrailingWhitespace:
@@ -81,8 +81,6 @@ style:
     active: true
     acceptableLength: 4
     allowNonStandardGrouping: false
-  UnnecessaryAnnotationUseSiteTarget:
-    active: true
   UnnecessaryBackticks:
     active: true
   UnnecessaryBracesAroundTrailingLambda:
@@ -98,6 +96,18 @@ style:
     active: true
   UseSumOfInsteadOfFlatMapSize:
     active: true
+  UnusedVariable:
+    active: true
+  VarCouldBeVal:
+    active: true
+  UnnecessaryApply:
+    active: true
+  UseOrEmpty:
+    active: true
+  ObjectLiteralToLambda:
+    active: true
+  ForbiddenVoid:
+    active: true
 
 coroutines:
   GlobalCoroutineUsage:
@@ -107,6 +117,15 @@ coroutines:
     active: true
   SuspendFunWithCoroutineScopeReceiver:
     active: true
+    excludes: [ '**/test/**', '**/androidTest/**' ]
+  RedundantSuspendModifier:
+    active: true
+  SuspendFunWithFlowReturnType:
+    active: true
+  InjectDispatcher:
+    active: true
+    # Tests can use the dispatchers directly
+    excludes: [ '**/test/**', '**/androidTest/**' ]
 
 empty-blocks:
   EmptyFunctionBlock:
@@ -117,8 +136,9 @@ empty-blocks:
 potential-bugs:
   ImplicitDefaultLocale:
     active: true
+  # Disabled: it reports generic casts like `node as N`.
   CastNullableToNonNullableType:
-    active: true
+    active: false
   CastToNullableType:
     active: true
   Deprecation:
@@ -129,21 +149,36 @@ potential-bugs:
     active: true
   ExitOutsideMain:
     active: true
+  # Disabled: we use expression bodies returning Unit a lot, e.g. `fun FooPreview() = ElementPreview { ... }`.
   ImplicitUnitReturnType:
-    active: true
+    active: false
     allowExplicitReturnType: false
   MissingPackageDeclaration:
     active: true
     excludes: [ '**/*.kts' ]
   NullCheckOnMutableProperty:
     active: true
+  # Disabled: most of the reported strings are logs, test and error messages, where printing "null" is the expected behaviour.
   NullableToStringCall:
-    active: true
+    active: false
+  # Disabled: mostly false positives, e.g. a property used in a function body before its declaration.
   PropertyUsedBeforeDeclaration:
-    active: true
+    active: false
   UnconditionalJumpStatementInLoop:
     active: true
   UnnecessaryNotNullCheck:
+    active: true
+  UnreachableCode:
+    active: true
+  IgnoredReturnValue:
+    active: true
+  MapGetWithNotNullAssertionOperator:
+    active: true
+  DoubleMutabilityForCollection:
+    active: true
+  UnnecessaryNotNullOperator:
+    active: true
+  UnsafeCallOnNullableType:
     active: true
 
 exceptions:
@@ -157,8 +192,9 @@ exceptions:
     active: true
   InstanceOfCheckForException:
     active: true
+  # Disabled: we use objects in sealed exception hierarchies on purpose.
   ObjectExtendsThrowable:
-    active: true
+    active: false
 
 complexity:
   TooManyFunctions:
@@ -188,26 +224,32 @@ naming:
     ignoreAnnotated: [ 'Composable' ]
   LambdaParameterNaming:
     active: true
+  # Disabled: it reports names like `isAppActiveFlow: Flow<Boolean>`.
   NonBooleanPropertyPrefixedWithIs:
-    active: true
+    active: false
   VariableMaxLength:
+    active: true
+  NoNameShadowing:
     active: true
 
 performance:
   SpreadOperator:
     active: false
+  # Disabled: not useful for the small collections we use.
   CouldBeSequence:
-    active: true
+    active: false
   UnnecessaryPartOfBinaryExpression:
+    active: true
+  ArrayPrimitive:
     active: true
 
 # Note: all rules for `comments` are disabled by default, but I put them here to be aware of their existence
 comments:
   AbsentOrWrongFileLicense:
     active: false
-  CommentOverPrivateFunction:
+  DocumentationOverPrivateFunction:
     active: false
-  CommentOverPrivateProperty:
+  DocumentationOverPrivateProperty:
     active: false
   DeprecatedBlockTag:
     active: true
@@ -278,4 +320,24 @@ Compose:
   RememberMissing:
     active: true
   UnstableCollections:
+    active: true
+  # Disabled: its suggestion (`SideEffect`) does not take keys and runs on every recomposition.
+  UnnecessaryLaunchedEffect:
+    active: false
+  MissingReadOnlyComposable:
+    active: true
+  UnnecessaryComposable:
+    active: true
+  MissingNonRestartableComposable:
+    active: true
+  VarsWithoutStateBacking:
+    active: true
+  ModifierShouldBeForwardedToEveryBranch:
+    active: true
+
+# Custom rules from :tests:detekt-rules. Since detekt 2, a rule only runs if it is listed in the configuration.
+ElementXRules:
+  RunCatchingNotAllowed:
+    active: true
+  ByPreferencesDataStoreNotAllowed:
     active: true

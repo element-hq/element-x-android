@@ -46,7 +46,6 @@ import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomListRoomSummaryPreviewParam
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.features.home.impl.roomlist.RoomListEvent
-import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.core.extensions.toSafeLength
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.atomic.molecules.InviteButtonsRowMolecule
@@ -240,7 +239,7 @@ private fun NameAndTimestampRow(
         )
         // Timestamp
         Text(
-            text = timestamp ?: "",
+            text = timestamp.orEmpty(),
             style = ElementTheme.typography.fontBodySmMedium,
             color = if (isHighlighted) {
                 ElementTheme.colors.textActionAccent
@@ -328,7 +327,7 @@ private fun MessagePreviewAndIndicatorRow(
                     Spacer(modifier = Modifier.width(6.dp))
                 }
                 val messagePreview = room.latestEvent.content()
-                val annotatedMessagePreview = messagePreview as? AnnotatedString ?: AnnotatedString(text = messagePreview.orEmpty().toString())
+                val annotatedMessagePreview = messagePreview as? AnnotatedString ?: AnnotatedString(text = messagePreview?.toString().orEmpty())
                 Text(
                     modifier = Modifier
                         .weight(1f)
@@ -390,6 +389,8 @@ internal fun RoomListRoomSummary.unreadIndicatorCount(
     return when {
         // Show only unread notifications when the room is not muted and there are unread notifications
         !isMuted && numberOfUnreadNotifications > 0 -> if (showUnreadCount) numberOfUnreadNotifications else 0
+        // If the room is manually marked as unread, show a dot regardless of the number of unread messages
+        isMarkedUnread -> 0
         // Otherwise, show a dot for unread messages when showAllActivity is true and there are unread messages
         showAllActivity -> if (numberOfUnreadMessages > 0) 0 else null
         // Or don't display anything

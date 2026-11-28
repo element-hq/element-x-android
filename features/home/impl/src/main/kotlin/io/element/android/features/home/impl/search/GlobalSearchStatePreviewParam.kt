@@ -166,6 +166,12 @@ class GlobalSearchStatePreviewParam : PreviewParameterProvider<GlobalSearchState
                     results = AsyncData.Success(GlobalSearchResults.RoomListResults(persistentListOf())),
                     showLearnMoreBottomSheet = true,
                 ),
+                aGlobalSearchState(
+                    isSearchActive = true,
+                    currentTarget = GlobalSearchTarget.ROOMS,
+                    queryState = TextFieldState("Query"),
+                    results = AsyncData.Success(GlobalSearchResults.RoomListResults(persistentListOf())),
+                ),
             )
         }
 }
@@ -225,7 +231,6 @@ fun aRoomInfo(
     isLowPriority: Boolean = false,
     activeCallIntentConsensus: CallIntentConsensus = CallIntentConsensus.None,
     isDm: Boolean = false,
-    fullyReadEventId: EventId? = null,
 ) = RoomInfo(
     id = id,
     name = name,
@@ -265,7 +270,6 @@ fun aRoomInfo(
     isLowPriority = isLowPriority,
     activeCallIntentConsensus = activeCallIntentConsensus,
     isDm = isDm,
-    fullyReadEventId = fullyReadEventId,
 )
 
 fun aMessageContent(

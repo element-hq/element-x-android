@@ -47,11 +47,12 @@ import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBegin
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.TypingNotificationPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import io.element.android.libraries.matrix.impl.util.MessageEventContent
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
@@ -60,6 +61,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -70,6 +72,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EditedContent
 import org.matrix.rustcomponents.sdk.FormattedBody
+import org.matrix.rustcomponents.sdk.FullyReadEventIdListener
 import org.matrix.rustcomponents.sdk.GalleryUploadParameters
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.PollData
@@ -149,7 +152,9 @@ class RustTimeline(
     init {
         when (mode) {
             is Timeline.Mode.Live, is Timeline.Mode.FocusedOnEvent -> coroutineScope.fetchMembers()
-            else -> Unit
+            Timeline.Mode.PinnedEvents,
+            Timeline.Mode.Media,
+            is Timeline.Mode.Thread -> Unit
         }
 
         if (mode == Timeline.Mode.Live) {
@@ -179,6 +184,15 @@ class RustTimeline(
     override val onSyncedEventReceived: Flow<Unit> = _onSyncedEventReceived
         .onStart { timelineItemsSubscriber.subscribeIfNeeded() }
         .onCompletion { timelineItemsSubscriber.unsubscribeIfNeeded() }
+
+    override val fullyReadEventIdFlow: Flow<EventId?> = mxCallbackFlow {
+        channel.trySend(inner.fullyReadEventId()?.let(::EventId))
+        inner.subscribeToFullyReadEventId(object : FullyReadEventIdListener {
+            override fun onUpdate(eventId: String?) {
+                channel.trySend(eventId?.let(::EventId))
+            }
+        })
+    }.flowOn(dispatcher)
 
     override suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions {
@@ -243,7 +257,7 @@ class RustTimeline(
         roomInfo,
         ->
         withContext(dispatcher) {
-            val (roomCreators, isDm, joinRule, isEncrypted) = roomInfo
+            val (roomCreators, isDm) = roomInfo
             timelineItems
                 .let { items ->
                     roomBeginningPostProcessor.process(
@@ -282,6 +296,8 @@ class RustTimeline(
     private fun CoroutineScope.fetchMembers() = launch(dispatcher) {
         try {
             inner.fetchMembers()
+        } catch (e: CancellationException) {
+            throw e
         } catch (exception: Exception) {
             Timber.tag(loggerTag).e(exception, "Error fetching members for room ${joinedRoom.roomId}")
         }
@@ -350,7 +366,7 @@ class RustTimeline(
                 },
                 mentions = null,
             )
-            withContext(Dispatchers.IO) {
+            withContext(dispatcher) {
                 inner.edit(
                     newContent = editedContent,
                     eventOrTransactionId = eventOrTransactionId.toRustEventOrTransactionId(),

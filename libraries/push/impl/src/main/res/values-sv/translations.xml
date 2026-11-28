@@ -5,27 +5,15 @@
   <string name="notification_channel_noisy">"Högljudda aviseringar"</string>
   <string name="notification_channel_ringing_calls">"Ringande samtal"</string>
   <string name="notification_channel_silent">"Tysta aviseringar"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d meddelande"</item>
-    <item quantity="other">"%1$s: %2$d meddelanden"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d avisering"</item>
     <item quantity="other">"%d aviseringar"</item>
   </plurals>
   <string name="notification_incoming_call">"📹 Inkommande samtal"</string>
   <string name="notification_inline_reply_failed">"** Misslyckades att skicka - vänligen öppna rummet"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d inbjudan"</item>
-    <item quantity="other">"%d inbjudningar"</item>
-  </plurals>
   <string name="notification_invite_body">"Bjöd in dig att chatta"</string>
   <string name="notification_invite_body_with_sender">"%1$s bjöd in dig att chatta"</string>
   <string name="notification_mentioned_you_body">"Nämnde dig: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d nytt meddelande"</item>
-    <item quantity="other">"%d nya meddelanden"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reagerade med %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Markera som läst"</string>
   <string name="notification_room_action_quick_reply">"Snabbsvar"</string>
@@ -57,10 +45,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Nuvarande push-leverantör"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Se till att applikationen har minst en push-leverantör."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Inga push-leverantörer hittades."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Hittade %1$d push-leverantör: %2$s"</item>
-    <item quantity="other">"Hittade %1$d push-leverantörer: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Applikationen byggdes med stöd för: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Upptäck push-leverantörer"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Kontrollera att applikationen kan visa avisering."</string>

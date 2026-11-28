@@ -21,6 +21,7 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.preferences.api.store.NotificationSound.Companion.toStored
 import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.map
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
+private val messageTextSizeKey = intPreferencesKey("messageTextSize")
 private val hideInviteAvatarsKey = booleanPreferencesKey("hideInviteAvatars")
 private val otherAccountsExpandedKey = booleanPreferencesKey("otherAccountsExpanded")
 private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPreviewValue")
@@ -95,6 +97,19 @@ class DefaultAppPreferencesStore(
     override fun getThemeFlow(): Flow<String?> {
         return store.data.map { prefs ->
             prefs[themeKey]
+        }
+    }
+
+    override suspend fun setMessageTextSize(sizeSp: Int) {
+        store.edit { prefs ->
+            prefs[messageTextSizeKey] = sizeSp.coerceIn(MessageTextSize.range)
+        }
+    }
+
+    override fun getMessageTextSizeFlow(): Flow<Int> {
+        return store.data.map { prefs ->
+            // Coerce on read too, so a value written by another version still lands in a size we can render.
+            prefs[messageTextSizeKey]?.coerceIn(MessageTextSize.range) ?: MessageTextSize.DEFAULT
         }
     }
 
@@ -183,7 +198,7 @@ class DefaultAppPreferencesStore(
                 ?.split(",")
                 ?.mapNotNull { value -> TraceLogPack.entries.find { it.key == value } }
                 ?.toSet()
-                ?: emptySet()
+                .orEmpty()
         }
     }
 
@@ -279,7 +294,7 @@ private fun Preferences.readHomeserverHistory(): List<String> {
     return this[homeserverHistoryKey]
         ?.split(HOMESERVER_HISTORY_DELIMITER)
         ?.filter { it.isNotEmpty() }
-        ?: emptyList()
+        .orEmpty()
 }
 
 private fun BuildMeta.defaultLogLevel(): LogLevel {

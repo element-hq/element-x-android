@@ -9,7 +9,8 @@
 package io.element.android.features.messages.impl.timeline.model.virtual
 
 data class TimelineItemDaySeparatorModel(
-    val formattedDate: String
+    val timestamp: Long,
+    val formattedDate: String,
 ) : TimelineItemVirtualModel {
     override val type: String = "TimelineItemDaySeparatorModel"
 }

@@ -38,7 +38,8 @@ fun SyncStateView(
             SyncIndicatorState.ServerUnreachable -> AsyncIndicator.Failure(
                 text = stringResource(id = CommonStrings.common_server_unreachable),
             )
-            else -> AsyncIndicator.Loading(
+            SyncIndicatorState.Hidden,
+            SyncIndicatorState.Syncing -> AsyncIndicator.Loading(
                 text = stringResource(id = CommonStrings.common_syncing),
             )
         }

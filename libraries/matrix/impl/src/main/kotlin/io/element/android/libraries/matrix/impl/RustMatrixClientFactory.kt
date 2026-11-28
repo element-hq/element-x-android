@@ -22,11 +22,9 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
-import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.scanner.RustContentScanner
 import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
-import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.services.analytics.api.AnalyticsService
@@ -35,6 +33,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
 import org.matrix.rustcomponents.sdk.CrossProcessLockConfig
+import org.matrix.rustcomponents.sdk.HttpSettings
 import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
@@ -57,8 +56,8 @@ class RustMatrixClientFactory(
     private val appCoroutineScope: CoroutineScope,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val sessionStore: SessionStore,
-    private val userAgentProvider: UserAgentProvider,
-    private val proxyProvider: ProxyProvider,
+    private val httpSettings: HttpSettings,
+    private val requestConfig: RequestConfig,
     private val analyticsService: AnalyticsService,
     private val featureFlagService: FeatureFlagService,
     private val clientBuilderProvider: ClientBuilderProvider,
@@ -163,7 +162,7 @@ class RustMatrixClientFactory(
                     .setupClientBuilder(this)
             }
             .setSessionDelegate(sessionDelegate)
-            .userAgent(userAgentProvider.provide())
+            .httpSettings(httpSettings)
             // Only the final client must set up the backup and the cross-signing. A client used to login shares the same store,
             // and its SDK initialization task could still be running when the final client is created.
             .autoEnableBackups(autoEnableEncryption)
@@ -199,29 +198,16 @@ class RustMatrixClientFactory(
                 }
             }
             .dmRoomDefinition(DmRoomDefinition.TWO_MEMBERS)
-            .requestConfig(
-                RequestConfig(
-                    timeout = 30_000uL,
-                    // retryLimit must be non-zero for the SDK to retry API calls in case of error (including 429 Too Many Requests error).
-                    retryLimit = 3u,
-                    // Use default values for the rest
-                    maxConcurrentRequests = null,
-                    maxRetryTime = null,
-                )
-            )
+            .requestConfig(requestConfig)
             // Make sure all built clients use the single process cross-process lock config
             .crossProcessLockConfig(CrossProcessLockConfig.SingleProcess)
             .run {
                 // Apply sliding sync version settings
                 when (slidingSyncType) {
                     ClientBuilderSlidingSync.Restored -> this
-                    ClientBuilderSlidingSync.Discovered -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DISCOVER_NATIVE)
-                    ClientBuilderSlidingSync.Native -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.NATIVE)
+                    ClientBuilderSlidingSync.Discovered -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DISCOVER_UNSTABLE)
+                    ClientBuilderSlidingSync.Native -> slidingSyncVersionBuilder(SlidingSyncVersionBuilder.UNSTABLE)
                 }
-            }
-            .run {
-                // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
-                proxyProvider.provides()?.let { proxy(it) } ?: this
             }
             .let {
                 (clientBuilderEnterpriseHook.beforeClientCreation(RustMatrixClientBuilder(it)) as RustMatrixClientBuilder).inner
@@ -252,6 +238,6 @@ fun SessionData.toSession() = Session(
     userId = userId,
     deviceId = deviceId,
     homeserverUrl = homeserverUrl,
-    slidingSyncVersion = SlidingSyncVersion.NATIVE,
+    slidingSyncVersion = SlidingSyncVersion.UNSTABLE,
     oauthData = oAuthData,
 )

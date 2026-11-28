@@ -109,9 +109,9 @@ fun BugReportView(
             )
             PreferenceDivider()
             PreferenceSwitch(
-                isChecked = state.formState.sendLogs,
+                isChecked = state.formState.sendLogs && state.canIncludeLogs,
                 onCheckedChange = { eventSink(BugReportEvent.SetSendLog(it)) },
-                enabled = isFormEnabled,
+                enabled = isFormEnabled && state.canIncludeLogs,
                 title = stringResource(id = R.string.screen_bug_report_include_logs),
                 subtitle = stringResource(id = R.string.screen_bug_report_logs_description),
             )
@@ -158,7 +158,7 @@ fun BugReportView(
             )
             PreferenceRow {
                 var ghIssueNumberState by textFieldState(
-                    stateValue = state.formState.ghIssueNumber?.toString() ?: ""
+                    stateValue = state.formState.ghIssueNumber?.toString().orEmpty()
                 )
                 TextField(
                     value = ghIssueNumberState,

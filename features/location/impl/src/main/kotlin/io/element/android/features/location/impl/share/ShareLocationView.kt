@@ -255,7 +255,8 @@ private fun StartLiveLocationActionView(
             is AsyncAction.Success -> {
                 LaunchedEffect(action) { updatedOnActionSuccess() }
             }
-            else -> Unit
+            AsyncAction.Uninitialized,
+            is AsyncAction.Confirming -> Unit
         }
     }
 }

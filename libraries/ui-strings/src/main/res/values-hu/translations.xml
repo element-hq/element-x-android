@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_active">"Aktív"</string>
   <string name="a11y_add_avatar">"Profilkép hozzáadása"</string>
   <string name="a11y_add_reaction">"Reakció hozzáadása: %1$s"</string>
   <string name="a11y_address">"Cím"</string>
@@ -29,6 +30,7 @@
   <string name="a11y_gallery_scanning">"Galéria, szkennelés %1$d"</string>
   <string name="a11y_gallery_video">"Galéria, videó %1$d"</string>
   <string name="a11y_hide_password">"Jelszó elrejtése"</string>
+  <string name="a11y_inactive">"Inaktív"</string>
   <string name="a11y_info">"Információ"</string>
   <string name="a11y_join_call">"Csatlakozás a híváshoz"</string>
   <string name="a11y_jump_to_bottom">"Ugrás az aljára"</string>
@@ -73,6 +75,8 @@
   <string name="a11y_start_call">"Hanghívás indítása"</string>
   <string name="a11y_start_video_call">"Videohívás indítása"</string>
   <string name="a11y_start_voice_call">"Hanghívás indítása"</string>
+  <string name="a11y_state_collapsed">"Összecsukva"</string>
+  <string name="a11y_state_expanded">"Kibontva"</string>
   <string name="a11y_status">"Állapot"</string>
   <string name="a11y_thread_in_room">"Üzenetszál itt: %1$s"</string>
   <string name="a11y_threads_in_room">"Üzenetszálak itt: %1$s"</string>
@@ -139,6 +143,7 @@
   <string name="action_go_back">"Visszalépés"</string>
   <string name="action_go_to_roles_and_permissions">"Ugrás a szerepkörökre és jogosultságokra"</string>
   <string name="action_go_to_settings">"Ugrás a beállításokhoz"</string>
+  <string name="action_got_it">"Értem"</string>
   <string name="action_ignore">"Mellőzés"</string>
   <string name="action_invite">"Meghívás"</string>
   <string name="action_invite_friends">"Ismerősök meghívása"</string>
@@ -415,6 +420,7 @@ Ok: %1$s."</string>
     <item quantity="one">"%1$d tér"</item>
     <item quantity="other">"%1$d tér"</item>
   </plurals>
+  <string name="common_spoiler">"Rejtett szöveg"</string>
   <string name="common_starting_chat">"Csevegés megkezdése…"</string>
   <string name="common_sticker">"Matrica"</string>
   <string name="common_success">"Sikeres"</string>
@@ -470,6 +476,7 @@ Ok: %1$s."</string>
   <string name="dialog_title_success">"Sikeres"</string>
   <string name="dialog_title_warning">"Figyelmeztetés"</string>
   <string name="dialog_video_quality_selector_title">"Feltöltött videó minőségének kiválasztása"</string>
+  <string name="error_camera_unavailable">"A kamera nem érhető el"</string>
   <string name="error_failed_creating_the_permalink">"Nem sikerült létrehozni az állandó hivatkozást"</string>
   <string name="error_message_not_found">"Az üzenet nem található"</string>
   <string name="error_network_or_server_issue">"Ennek oka hálózati vagy kiszolgálóprobléma lehet."</string>

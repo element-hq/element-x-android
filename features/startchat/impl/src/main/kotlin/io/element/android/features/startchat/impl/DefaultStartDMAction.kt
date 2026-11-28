@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.room.StartDMResult
 import io.element.android.libraries.matrix.api.room.startDM
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.services.analytics.api.AnalyticsService
+import im.vector.app.features.analytics.plan.CreatedRoom.JoinRule as AnalyticsJoinRule
 
 @ContributesBinding(SessionScope::class)
 class DefaultStartDMAction(
@@ -42,7 +43,7 @@ class DefaultStartDMAction(
         )) {
             is StartDMResult.Success -> {
                 if (result.isNew) {
-                    analyticsService.capture(CreatedRoom(isDM = true))
+                    analyticsService.capture(CreatedRoom(isDM = true, joinRule = AnalyticsJoinRule.Invite))
                 }
                 actionState.value = AsyncAction.Success(result.roomId)
             }

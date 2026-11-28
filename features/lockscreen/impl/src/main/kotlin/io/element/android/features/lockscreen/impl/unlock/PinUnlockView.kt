@@ -73,7 +73,12 @@ fun PinUnlockView(
     OnLifecycleEvent { _, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> state.eventSink.invoke(PinUnlockEvent.OnUseBiometric)
-            else -> Unit
+            Lifecycle.Event.ON_CREATE,
+            Lifecycle.Event.ON_START,
+            Lifecycle.Event.ON_PAUSE,
+            Lifecycle.Event.ON_STOP,
+            Lifecycle.Event.ON_DESTROY,
+            Lifecycle.Event.ON_ANY -> Unit
         }
     }
     Surface(modifier) {
@@ -97,7 +102,7 @@ fun PinUnlockView(
 
         if (state.showBiometricUnlockError) {
             ErrorDialog(
-                content = state.biometricUnlockErrorMessage ?: "",
+                content = state.biometricUnlockErrorMessage.orEmpty(),
                 onSubmit = { state.eventSink(PinUnlockEvent.ClearBiometricError) }
             )
         }

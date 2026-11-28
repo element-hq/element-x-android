@@ -48,8 +48,8 @@ private const val MAX_SUGGESTIONS_COUNT = 5
 @AssistedInject
 class RoomSelectSearchDataSource(
     @Assisted coroutineScope: CoroutineScope,
-    @Assisted private val client: MatrixClient,
-    @Assisted private val mode: RoomSelectMode,
+    @Assisted client: MatrixClient,
+    @Assisted mode: RoomSelectMode,
     coroutineDispatchers: CoroutineDispatchers,
 ) {
     @AssistedFactory

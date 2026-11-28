@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"Rydych chi eisoes wedi mewngofnodi ar y ddyfais hon fel %1$s ."</string>
   <string name="error_account_creation_not_possible">"Mae angen uwchraddio eich gweinydd cartref i gefnogi Gwasanaeth Dilysu Matrix a chreu cyfrif."</string>
   <string name="screen_account_provider_signin_title">"Rydych ar fin mewngofnodi i %s"</string>
-  <string name="screen_change_account_provider_other">"Arall"</string>
   <string name="screen_change_account_provider_subtitle">"Defnyddiwch ddarparwr cyfrif gwahanol, fel eich gweinydd preifat eich hun neu gyfrif gwaith."</string>
-  <string name="screen_change_account_provider_title">"Newid darparwr cyfrif"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Mae angen yr ap Element Pro ar %1$s. Llwythwch ef o\'r siop."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Mae angen Element Pro"</string>
@@ -16,7 +14,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"Does dim caniatâd i %1$s gysylltu â %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Mae\'r ap hwn wedi\'i ffurfweddu i ganiatáu: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Dyw darparwr cyfrif %1$s dddim yn cael ei ganiatáu."</string>
-  <string name="screen_change_server_form_header">"URL y Gweinydd Cartref"</string>
   <string name="screen_change_server_form_notice">"Rhowch gyfeiriad parth."</string>
   <string name="screen_change_server_subtitle">"Beth yw cyfeiriad eich gweinydd?"</string>
   <string name="screen_change_server_title">"Dewiswch eich gweinydd"</string>

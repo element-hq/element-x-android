@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="rich_text_editor_a11y_add_attachment">"Dodaj privitak"</string>
+  <string name="rich_text_editor_a11y_add_emoji">"Dodaj emotikon"</string>
   <string name="rich_text_editor_bullet_list">"Uključi/isključi popis s grafičkim oznakama"</string>
   <string name="rich_text_editor_close_formatting_options">"Otkaži i zatvori oblikovanje teksta"</string>
   <string name="rich_text_editor_code_block">"Uključi/isključi blok koda"</string>

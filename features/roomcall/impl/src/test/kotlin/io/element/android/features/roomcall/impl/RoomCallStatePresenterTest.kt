@@ -403,6 +403,8 @@ class RoomCallStatePresenterTest {
         }
     }
 
+    // Only the event types used by the test are expected, any other type is an error
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun roomPermissions(canJoinCall: Boolean): FakeRoomPermissions {
         return FakeRoomPermissions(
             canSendState = { stateEvent ->

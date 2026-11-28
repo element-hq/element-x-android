@@ -32,16 +32,20 @@ import io.element.android.features.preferences.impl.developer.DeveloperSettingsN
 import io.element.android.features.preferences.impl.labs.LabsNode
 import io.element.android.features.preferences.impl.location.LocationSettingsNode
 import io.element.android.features.preferences.impl.media.MediaSettingsNode
+import io.element.android.features.preferences.impl.messagetextsize.MessageTextSizeNode
 import io.element.android.features.preferences.impl.moderation.ModerationAndSafetyNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
-import io.element.android.libraries.architecture.BackstackView
+import io.element.android.libraries.architecture.BackstackWithOverlayBox
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.canPop
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.overlay.Overlay
+import io.element.android.libraries.architecture.overlay.operation.hide
+import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -70,6 +74,7 @@ class PreferencesFlowNode(
         initialElement = plugins.filterIsInstance<PreferencesEntryPoint.Params>().first().initialElement.toNavTarget(),
         savedStateMap = buildContext.savedStateMap,
     ),
+    overlay = Overlay(buildContext.savedStateMap),
     buildContext = buildContext,
     plugins = plugins
 ) {
@@ -79,6 +84,9 @@ class PreferencesFlowNode(
 
         @Parcelize
         data object DeveloperSettings : NavTarget
+
+        @Parcelize
+        data object MessageTextSize : NavTarget
 
         @Parcelize
         data object MediaSettings : NavTarget
@@ -162,6 +170,10 @@ class PreferencesFlowNode(
                         backstack.push(NavTarget.LockScreenSettings)
                     }
 
+                    override fun navigateToMessageTextSize() {
+                        backstack.push(NavTarget.MessageTextSize)
+                    }
+
                     override fun navigateToMediaSettings() {
                         backstack.push(NavTarget.MediaSettings)
                     }
@@ -199,7 +211,7 @@ class PreferencesFlowNode(
                     }
 
                     override fun startSignOutFlow() {
-                        backstack.push(NavTarget.SignOut)
+                        overlay.show(NavTarget.SignOut)
                     }
 
                     override fun startAccountDeactivationFlow() {
@@ -337,6 +349,9 @@ class PreferencesFlowNode(
                 val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
                 createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input, callback))
             }
+            NavTarget.MessageTextSize -> {
+                createNode<MessageTextSizeNode>(buildContext)
+            }
             NavTarget.MediaSettings -> {
                 createNode<MediaSettingsNode>(buildContext)
             }
@@ -369,6 +384,10 @@ class PreferencesFlowNode(
                     override fun navigateToSecureBackup() {
                         callback.navigateToSecureBackup()
                     }
+
+                    override fun onDismiss() {
+                        overlay.hide()
+                    }
                 }
                 logoutEntryPoint.createNode(
                     parentNode = this,
@@ -387,6 +406,6 @@ class PreferencesFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        BackstackView()
+        BackstackWithOverlayBox(modifier)
     }
 }

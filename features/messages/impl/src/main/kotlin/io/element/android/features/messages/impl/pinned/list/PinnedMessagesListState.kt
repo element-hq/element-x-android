@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.pinned.list
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import io.element.android.features.messages.impl.R
@@ -38,18 +39,23 @@ sealed interface PinnedMessagesListState {
         val customReactionState: CustomReactionState,
         val reactionSummaryState: ReactionSummaryState,
         val displayThreadSummaries: Boolean,
+        val timelineFontScale: Float,
+        val useNewTimelineEventRenderer: Boolean,
         val eventSink: (PinnedMessagesListEvent) -> Unit,
     ) : PinnedMessagesListState {
         val loadedPinnedMessagesCount = timelineItems.count { timelineItem -> timelineItem is TimelineItem.Event }
     }
 
     @Composable
+    @ReadOnlyComposable
     fun title(): String {
         return when (this) {
             is Filled -> {
                 pluralStringResource(id = R.plurals.screen_pinned_timeline_screen_title, loadedPinnedMessagesCount, loadedPinnedMessagesCount)
             }
-            else -> stringResource(id = R.string.screen_pinned_timeline_screen_title_empty)
+            Failed,
+            Loading,
+            Empty -> stringResource(id = R.string.screen_pinned_timeline_screen_title_empty)
         }
     }
 }

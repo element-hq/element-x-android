@@ -32,7 +32,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Ez partekatu inorekin!"</string>
   <string name="screen_recovery_key_change_success">"Berreskuratze-gakoa aldatu da"</string>
   <string name="screen_recovery_key_change_title">"Berreskuratze-gakoa aldatu?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Sortu berreskuratze-gako berria"</string>
   <string name="screen_recovery_key_confirm_description">"Egiaztatu inork ezin duela pantaila hau ikusi!"</string>
   <string name="screen_recovery_key_confirm_error_title">"Berreskuratze-gako okerra"</string>
   <string name="screen_recovery_key_confirm_key_description">"Segurtasun-gako edo -esaldi bat baduzu, honek ere balio du."</string>

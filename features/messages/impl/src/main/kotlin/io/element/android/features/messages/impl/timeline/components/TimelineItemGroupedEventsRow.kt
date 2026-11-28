@@ -59,6 +59,7 @@ fun TimelineItemGroupedEventsRow(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    animateExpansion: Boolean = true,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -104,6 +105,7 @@ fun TimelineItemGroupedEventsRow(
         onReadReceiptClick = onReadReceiptClick,
         eventSink = eventSink,
         modifier = modifier,
+        animateExpansion = animateExpansion,
         eventContentView = eventContentView,
     )
 }
@@ -131,6 +133,7 @@ private fun TimelineItemGroupedEventsRowContent(
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
+    animateExpansion: Boolean = true,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
         { event, contentModifier, onContentLayoutChange ->
             TimelineItemEventContentView(
@@ -148,7 +151,9 @@ private fun TimelineItemGroupedEventsRowContent(
             )
         },
 ) {
-    Column(modifier = modifier.animateContentSize()) {
+    // When the timeline animates the resizes of its items with `animateTimelineItem`, the group must resize in a single step:
+    // resizing a bit on every frame would make the timeline animations chase a moving target
+    Column(modifier = if (animateExpansion) modifier.animateContentSize() else modifier) {
         val count = timelineItem.events.size
         // A group made entirely of redacted events is a collapsed run of deleted messages
         // (element-web style); anything else is the regular run of room state changes. For the

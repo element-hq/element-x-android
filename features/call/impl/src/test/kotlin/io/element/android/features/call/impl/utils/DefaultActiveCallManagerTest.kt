@@ -199,7 +199,7 @@ class DefaultActiveCallManagerTest : RobolectricTest() {
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
-        val clientProvider = FakeMatrixClientProvider({ Result.success(matrixClient) })
+        val clientProvider = FakeMatrixClientProvider { Result.success(matrixClient) }
 
         val manager = createActiveCallManager(
             matrixClientProvider = clientProvider,
@@ -226,7 +226,7 @@ class DefaultActiveCallManagerTest : RobolectricTest() {
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
-        val clientProvider = FakeMatrixClientProvider({ Result.success(matrixClient) })
+        val clientProvider = FakeMatrixClientProvider { Result.success(matrixClient) }
 
         val manager = createActiveCallManager(
             matrixClientProvider = clientProvider,
@@ -255,7 +255,7 @@ class DefaultActiveCallManagerTest : RobolectricTest() {
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
-        val clientProvider = FakeMatrixClientProvider({ Result.success(matrixClient) })
+        val clientProvider = FakeMatrixClientProvider { Result.success(matrixClient) }
 
         val manager = createActiveCallManager(
             matrixClientProvider = clientProvider,
@@ -290,7 +290,7 @@ class DefaultActiveCallManagerTest : RobolectricTest() {
         val matrixClient = FakeMatrixClient().apply {
             givenGetRoomResult(A_ROOM_ID, room)
         }
-        val clientProvider = FakeMatrixClientProvider({ Result.success(matrixClient) })
+        val clientProvider = FakeMatrixClientProvider { Result.success(matrixClient) }
 
         val manager = createActiveCallManager(
             matrixClientProvider = clientProvider,
@@ -504,9 +504,8 @@ class DefaultActiveCallManagerTest : RobolectricTest() {
     }
 
     private fun setupShadowPowerManager() {
-        shadowOf(InstrumentationRegistry.getInstrumentation().targetContext.getSystemService<PowerManager>()).apply {
-            setIsWakeLockLevelSupported(PowerManager.PARTIAL_WAKE_LOCK, true)
-        }
+        shadowOf(InstrumentationRegistry.getInstrumentation().targetContext.getSystemService<PowerManager>())
+            .setIsWakeLockLevelSupported(PowerManager.PARTIAL_WAKE_LOCK, true)
     }
 
     private fun TestScope.createActiveCallManager(

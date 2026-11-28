@@ -122,7 +122,9 @@ private fun SuggestionItemView(
         }
         val status = when (suggestion) {
             is ResolvedSuggestion.Member -> suggestion.roomMember.displayedStatus
-            else -> null
+            ResolvedSuggestion.AtRoom,
+            is ResolvedSuggestion.Alias,
+            is ResolvedSuggestion.Command -> null
         }
         val details = when (suggestion) {
             is ResolvedSuggestion.AtRoom,
@@ -153,7 +155,7 @@ private fun SuggestionItemView(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                title?.let {
+                if (title != null) {
                     DisplayNameWithStatus(
                         name = title,
                         status = status,

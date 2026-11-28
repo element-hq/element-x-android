@@ -83,8 +83,7 @@ fun ClickableLinkText(
     color: Color = Color.Unspecified,
     inlineContent: ImmutableMap<String, InlineTextContent> = persistentMapOf(),
 ) {
-    @Suppress("NAME_SHADOWING")
-    val annotatedString = remember(annotatedString) {
+    val linkifiedAnnotatedString = remember(annotatedString) {
         if (linkify) {
             annotatedString.linkify(SpanStyle(color = LinkColor))
         } else {
@@ -111,10 +110,10 @@ fun ClickableLinkText(
         ) { offset ->
             layoutResult.value?.let { layoutResult ->
                 val position = layoutResult.getOffsetForPosition(offset)
-                val linkUrlAnnotations = annotatedString.getLinkAnnotations(position, position)
+                val linkUrlAnnotations = linkifiedAnnotatedString.getLinkAnnotations(position, position)
                     .map { AnnotatedString.Range(it.item, it.start, it.end, linkAnnotationTag) }
                 val linkStringAnnotations = linkUrlAnnotations +
-                    annotatedString.getStringAnnotations(linkAnnotationTag, position, position)
+                    linkifiedAnnotatedString.getStringAnnotations(linkAnnotationTag, position, position)
                 if (linkStringAnnotations.isEmpty()) {
                     onClick()
                 } else {
@@ -128,7 +127,7 @@ fun ClickableLinkText(
         }
     }
     Text(
-        text = annotatedString,
+        text = linkifiedAnnotatedString,
         modifier = modifier.then(pressIndicator),
         style = style,
         color = color,

@@ -38,7 +38,6 @@
   <string name="screen_recovery_key_change_generate_key_description">"Del ikke dette med nogen!"</string>
   <string name="screen_recovery_key_change_success">"Gendannelsesnøgle ændret"</string>
   <string name="screen_recovery_key_change_title">"Skift gendannelsesnøgle?"</string>
-  <string name="screen_recovery_key_confirm_create_new_recovery_key">"Opret ny gendannelsesnøgle"</string>
   <string name="screen_recovery_key_confirm_description">"Sørg for, at ingen kan se denne skærm!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Prøv igen for at bekræfte adgangen til dit nøglelager."</string>
   <string name="screen_recovery_key_confirm_error_title">"Forkert gendannelsesnøgle"</string>

@@ -13,8 +13,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import androidx.compose.runtime.Stable
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +30,7 @@ class PdfPage(
     private val mutex: Mutex,
     private val pdfRenderer: PdfRenderer,
     private val coroutineScope: CoroutineScope,
+    private val ioDispatcher: CoroutineDispatcher,
 ) {
     sealed interface State {
         data class Loading(val width: Int, val height: Int) : State
@@ -58,7 +59,7 @@ class PdfPage(
     fun load() {
         loadJob = coroutineScope.launch {
             val bitmap = mutex.withLock {
-                withContext(Dispatchers.IO) {
+                withContext(ioDispatcher) {
                     pdfRenderer.openPageRenderAndClose(pageIndex, renderWidth, renderHeight)
                 }
             }
@@ -81,10 +82,10 @@ class PdfPage(
     }
 
     private fun PdfRenderer.openPageRenderAndClose(index: Int, bitmapWidth: Int, bitmapHeight: Int): Bitmap {
-        fun createBitmap(bitmapWidth: Int, bitmapHeight: Int): Bitmap {
+        fun createBitmap(width: Int, height: Int): Bitmap {
             val bitmap = Bitmap.createBitmap(
-                bitmapWidth,
-                bitmapHeight,
+                width,
+                height,
                 Bitmap.Config.ARGB_8888
             )
             val canvas = Canvas(bitmap)

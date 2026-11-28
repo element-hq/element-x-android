@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"لا يمكنك التأكيد؟"</string>
-  <string name="screen_identity_confirmation_create_new_recovery_key">"إنشاء مفتاح استرداد جديد"</string>
   <string name="screen_identity_confirmation_subtitle">"اختر طريقة التحقق لإعداد المراسلة الآمنة."</string>
   <string name="screen_identity_confirmation_title">"تأكيد هويتك الرقمية"</string>
   <string name="screen_identity_confirmation_use_another_device">"استخدام جهاز آخر"</string>

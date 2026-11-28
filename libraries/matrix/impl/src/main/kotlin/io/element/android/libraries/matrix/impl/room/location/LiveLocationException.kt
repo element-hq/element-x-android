@@ -14,6 +14,10 @@ fun RustLiveLocationException.map(): LiveLocationException {
     return when (this) {
         is RustLiveLocationException.Network -> LiveLocationException.Network()
         is RustLiveLocationException.NotLive -> LiveLocationException.NotLive()
-        else -> LiveLocationException.Other(this)
+        is RustLiveLocationException.NotFound,
+        is RustLiveLocationException.Redacted,
+        is RustLiveLocationException.Stripped,
+        is RustLiveLocationException.Deserialization,
+        is RustLiveLocationException.Other -> LiveLocationException.Other(this)
     }
 }

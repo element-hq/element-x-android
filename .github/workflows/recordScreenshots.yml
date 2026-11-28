@@ -9,7 +9,7 @@ permissions: {}
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx8g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g -Dsonar.gradle.skipCompile=true
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx8g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g
   CI_GRADLE_ARG_PROPERTIES: --no-configuration-cache
 
 jobs:
@@ -26,9 +26,20 @@ jobs:
     steps:
       - name: Remove Record-Screenshots label
         if: github.event.label.name == 'Record-Screenshots'
-        uses: actions-ecosystem/action-remove-labels@2ce5d41b4b6aa8503e285553f75ed56e0a40bae0 # v1.3.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
-          labels: Record-Screenshots
+          script: |
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                name: 'Record-Screenshots',
+              });
+            } catch (error) {
+              // Label may already have been removed (e.g. concurrent run); don't fail the job.
+              if (error.status !== 404) throw error;
+            }
       - name: ⏬ Checkout with LFS (PR)
         if: github.event.label.name == 'Record-Screenshots'
         uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5

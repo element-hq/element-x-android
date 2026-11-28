@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.paths.SessionPaths
 import io.element.android.libraries.matrix.api.scanner.ContentScanner
 import io.element.android.libraries.matrix.impl.auth.FakeProxyProvider
+import io.element.android.libraries.matrix.impl.di.AppMatrixBindingContainer
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClientBuilder
 import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
@@ -114,8 +115,11 @@ fun TestScope.createRustMatrixClientFactory(
     appCoroutineScope = backgroundScope,
     coroutineDispatchers = testCoroutineDispatchers(),
     sessionStore = sessionStore,
-    userAgentProvider = SimpleUserAgentProvider(),
-    proxyProvider = FakeProxyProvider(),
+    httpSettings = AppMatrixBindingContainer.provideHttpSettings(
+        userAgentProvider = SimpleUserAgentProvider(),
+        proxyProvider = FakeProxyProvider(),
+    ),
+    requestConfig = AppMatrixBindingContainer.provideRequestConfig(),
     analyticsService = FakeAnalyticsService(),
     featureFlagService = FakeFeatureFlagService(),
     clientBuilderProvider = clientBuilderProvider,
@@ -153,8 +157,8 @@ private fun TestScope.createRustMatrixClientInnerFactory(
         analyticsService = FakeAnalyticsService(),
         workManagerScheduler = workManagerScheduler,
         searchBackfillServiceFactory = object : RustSearchBackfillService.Factory {
-            override fun create(innerClient: Client) = RustSearchBackfillService(
-                innerClient = innerClient,
+            override fun create(client: Client) = RustSearchBackfillService(
+                innerClient = client,
                 searchBackfillRequestBuilderFactory = {
                     object : SearchBackfillRequestBuilder {
                         override suspend fun build(): Result<List<WorkManagerRequestWrapper>> = Result.success(emptyList())

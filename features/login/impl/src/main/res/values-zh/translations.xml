@@ -4,9 +4,7 @@
   <string name="error_account_already_logged_in_title">"检测到重复登录"</string>
   <string name="error_account_creation_not_possible">"你的账户提供者需要升级以支持 Matrix 认证服务和账户创建。"</string>
   <string name="screen_account_provider_signin_title">"你即将登录到 %s"</string>
-  <string name="screen_change_account_provider_other">"其它"</string>
   <string name="screen_change_account_provider_subtitle">"使用其它账户提供者，例如你自己的私有服务器或工作账户。"</string>
-  <string name="screen_change_account_provider_title">"更改账户提供者"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s 要求 Element Pro。请从应用商店下载。"</string>
   <string name="screen_change_server_error_element_pro_required_title">"需要 Element Pro"</string>
@@ -17,7 +15,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s 不允许连接到 %2$s。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"此 app 已配置为允许访问：%1$s。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"账户提供者 %1$s 不被允许。"</string>
-  <string name="screen_change_server_form_header">"主服务器 URL"</string>
   <string name="screen_change_server_form_notice">"输入域名地址。"</string>
   <string name="screen_change_server_navigation_title_login">"登录"</string>
   <string name="screen_change_server_navigation_title_register">"创建账户"</string>

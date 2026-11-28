@@ -62,6 +62,7 @@ class ResetIdentityFlowNode(
 ) {
     interface Callback : Plugin {
         fun onDone()
+        fun onSignOut()
     }
 
     private val callback: Callback = callback()
@@ -92,6 +93,10 @@ class ResetIdentityFlowNode(
                 val callback = object : ResetIdentityRootNode.Callback {
                     override fun onContinue() {
                         sessionCoroutineScope.startReset()
+                    }
+
+                    override fun onSignOut() {
+                        callback.onSignOut()
                     }
                 }
                 createNode<ResetIdentityRootNode>(buildContext, listOf(callback))
@@ -136,7 +141,8 @@ class ResetIdentityFlowNode(
                     is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
                 }
             }
-            else -> Unit
+            AsyncData.Uninitialized,
+            is AsyncData.Loading -> Unit
         }
     }
 

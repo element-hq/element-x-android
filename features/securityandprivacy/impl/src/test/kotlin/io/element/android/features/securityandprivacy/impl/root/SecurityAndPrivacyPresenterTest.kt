@@ -1101,6 +1101,8 @@ class SecurityAndPrivacyPresenterTest {
         }
     }
 
+    // Only the event types used by the test are expected, any other type is an error
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun roomPermissions(
         canChangeRoomAccess: Boolean = true,
         canChangeHistoryVisibility: Boolean = true,

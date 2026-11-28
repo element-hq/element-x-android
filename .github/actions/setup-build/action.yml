@@ -3,7 +3,7 @@ description: Free disk space, clone the enterprise submodule, and set up JDK 21,
 
 inputs:
   free-disk-space:
-    description: Remove unused tools from the runner to free about 6 GB of disk space.
+    description: Remove unused tools from the runner to free about 14 GB of disk space.
     default: 'false'
   enterprise-ssh-key:
     description: SSH private key used to clone the enterprise submodule. The submodule is not cloned if empty (for instance on PRs from forks, where secrets are not available).
@@ -27,18 +27,35 @@ runs:
   steps:
     - name: Free Disk Space (Ubuntu)
       if: ${{ inputs.free-disk-space == 'true' }}
-      uses: jlumbroso/free-disk-space@3f13feab2962a87273d379ebc36ea159527e6cc9 # v1.3.2
+      uses: endersonmenezes/free-disk-space@24d3e2af1fe79ccdde8844605337a8835e20d012 # v4.1.0
       with:
-        # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
-        tool-cache: true
-        # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
-        android: false
-        dotnet: true
-        haskell: true
-        # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
-        large-packages: false
-        docker-images: true
-        swap-storage: false
+        # Keep the tool cache, it contains the JDK used by actions/setup-java. Removing it took ~45 seconds, and the JDK then
+        # had to be downloaded again.
+        remove_tool_cache: false
+        # Keep the Android SDK and NDK, they are used by the build.
+        remove_android: false
+        # The swap is replaced by a bigger swapfile by the workflows that need it.
+        remove_swap: false
+        # Delete the recommended unused tools (https://github.com/endersonmenezes/free-disk-space#recommended-folders-to-remove),
+        # plus the .NET and Haskell ones, instead of uninstalling using APT, which is slower. The folders are removed in parallel.
+        remove_folders: "
+          /usr/share/az* 
+          /usr/local/lib/node_modules 
+          /usr/local/share/chromium 
+          /usr/local/share/powershell 
+          /usr/local/aws-cli 
+          /usr/local/aws-sam-cli 
+          /opt/pipx 
+          /usr/share/dotnet 
+          /opt/ghc 
+          /usr/local/.ghcup 
+          /opt/cabal 
+          /home/runner/.ghcup 
+          /home/runner/.cabal"
+        # Faster deletion
+        rm_cmd: "rmz"
+        # Specify rmz version
+        rmz_version: "3.2.1"
     - name: Add SSH private keys for submodule repositories
       if: ${{ inputs.enterprise-ssh-key != '' }}
       uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
@@ -47,9 +64,24 @@ runs:
     - name: Clone submodules
       if: ${{ inputs.enterprise-ssh-key != '' }}
       shell: bash
-      run: git submodule update --init --recursive
+      env:
+        # The FOSS CI does not use the LFS files of the submodule (the Enterprise screenshots are verified by the
+        # enterprise repository CI), so do not download them. This also prevents `.git/modules/<submodule>/lfs`
+        # from being created and saved by nschloe/action-cached-lfs-checkout.
+        GIT_LFS_SKIP_SMUDGE: 1
+      run: |
+        # nschloe/action-cached-lfs-checkout restores `.git/modules/<submodule>/lfs` from its cache, which leaves a
+        # `.git/modules/<submodule>` folder that is not a valid git repository, and makes `git submodule update` fail.
+        for module in $(git config --file .gitmodules --get-regexp path | awk '{ print $2 }'); do
+          if [ -d ".git/modules/$module" ] && [ ! -f ".git/modules/$module/HEAD" ]; then
+            echo "Removing invalid submodule git dir .git/modules/$module"
+            rm -rf ".git/modules/$module"
+          fi
+        done
+        git submodule update --init --recursive
     - name: Use JDK 21
-      uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      if: ${{ inputs.setup-gradle == 'true' }}
+      uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
       with:
         distribution: 'temurin' # See 'Supported distributions' for available options
         java-version: '21'

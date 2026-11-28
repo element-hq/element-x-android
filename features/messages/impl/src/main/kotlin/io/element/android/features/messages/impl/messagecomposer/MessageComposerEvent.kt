@@ -21,6 +21,10 @@ sealed interface MessageComposerEvent {
     data class SetMode(val composerMode: MessageComposerMode) : MessageComposerEvent
     data object AddAttachment : MessageComposerEvent
     data object DismissAttachmentMenu : MessageComposerEvent
+    data object OpenEmojiPicker : MessageComposerEvent
+    data object DismissEmojiPicker : MessageComposerEvent
+    data object DeleteBackward : MessageComposerEvent
+    data class InsertEmoji(val emoji: String) : MessageComposerEvent
     sealed interface PickAttachmentSource : MessageComposerEvent {
         data object FromGallery : PickAttachmentSource
         data object FromFiles : PickAttachmentSource

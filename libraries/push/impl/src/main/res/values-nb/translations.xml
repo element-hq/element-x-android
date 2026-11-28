@@ -5,10 +5,6 @@
   <string name="notification_channel_noisy">"Støyende varsler"</string>
   <string name="notification_channel_ringing_calls">"Ringende anrop"</string>
   <string name="notification_channel_silent">"Stille varsler"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="one">"%1$s: %2$d melding"</item>
-    <item quantity="other">"%1$s: %2$d meldinger"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="one">"%d varsel"</item>
     <item quantity="other">"%d varsler"</item>
@@ -21,17 +17,9 @@
   <string name="notification_incoming_audio_call">"📞 Innkommende anrop"</string>
   <string name="notification_incoming_call">"📹 Innkommende anrop"</string>
   <string name="notification_inline_reply_failed">"** Kunne ikke sende - vennligst åpne rommet"</string>
-  <plurals name="notification_invitations">
-    <item quantity="one">"%d invitasjon"</item>
-    <item quantity="other">"%d invitasjoner"</item>
-  </plurals>
   <string name="notification_invite_body">"Inviterte deg til å chatte"</string>
   <string name="notification_invite_body_with_sender">"%1$s inviterte deg til å chatte"</string>
   <string name="notification_mentioned_you_body">"Nevnte deg: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="one">"%d ny melding"</item>
-    <item quantity="other">"%d nye meldinger"</item>
-  </plurals>
   <string name="notification_reaction_body">"Reagerte med %1$s"</string>
   <string name="notification_room_action_mark_as_read">"Marker som lest"</string>
   <string name="notification_room_action_quick_reply">"Raskt svar"</string>
@@ -76,10 +64,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Nåværende push-leverandør"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Påse at applikasjonen har minst én push-leverandør."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Ingen push-leverandører funnet."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="one">"Fant %1$d push-leverandør: %2$s"</item>
-    <item quantity="other">"Fant %1$d push-leverandører: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Applikasjonen ble bygget med støtte for: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"Oppdag push-leverandører"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"Kontroller at programmet kan vise varsler."</string>

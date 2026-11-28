@@ -61,7 +61,7 @@ import java.util.Optional
  * One instance exists per session, created on login or session restore and torn down by [logout], [clearCache] or account deactivation.
  * Suspending members here report failures through a [Result] instead of throwing, and run their work off the main thread.
  */
-interface MatrixClient : ClientUrlContentFetcher {
+interface MatrixClient {
     /** Identifier of the logged in user; a [SessionId] and a [UserId] are the same value. */
     val sessionId: SessionId
 
@@ -70,6 +70,16 @@ interface MatrixClient : ClientUrlContentFetcher {
 
     /** Directories holding this session's databases, caches and downloaded media. */
     val sessionPaths: SessionPaths
+
+    /**
+     * The domain of the public server for this homeserver.
+     */
+    val server: String?
+
+    /**
+     * The URL of the actual Matrix homeserver.
+     */
+    val homeserverUrl: String
 
     /**
      * Display name and avatar of the logged in user.
@@ -176,6 +186,12 @@ interface MatrixClient : ClientUrlContentFetcher {
      * Invited, knocked and left rooms are excluded.
      */
     suspend fun getJoinedRoomIds(): Result<Set<RoomId>>
+
+    /**
+     * Whether the user has joined at least one encrypted room, spaces excluded.
+     * The homeserver is asked when no encrypted room is known locally, so this fails if it doesn't answer in time.
+     */
+    suspend fun hasEncryptedRooms(): Result<Boolean>
 
     /**
      * Adds [userId] to the ignore list of the account, which hides their events and makes [ignoredUsersFlow] emit.

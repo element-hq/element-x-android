@@ -121,7 +121,7 @@ class ConfigureRoomPresenter(
         LaunchedEffect(Unit) {
             spaces = matrixClient.spaceService.editableSpaces().getOrElse { emptyList() }.toImmutableList()
             val parentSpace = spaces.find { it.roomId == initialParentSpaceId }
-            parentSpace?.let {
+            if (parentSpace != null) {
                 dataStore.setParentSpace(parentSpace = parentSpace, updateVisibility = true)
             }
         }
@@ -174,7 +174,8 @@ class ConfigureRoomPresenter(
                     availableJoinRules.filterIsInstance<JoinRuleItem.PrivateVisibility.Restricted>().firstOrNull()
                 is JoinRuleItem.PrivateVisibility.AskToJoinRestricted ->
                     availableJoinRules.filterIsInstance<JoinRuleItem.PrivateVisibility.AskToJoinRestricted>().firstOrNull()
-                else -> availableJoinRules.find { it == currentJoinRule }
+                JoinRuleItem.PrivateVisibility.Private,
+                is JoinRuleItem.PublicVisibility -> availableJoinRules.find { it == currentJoinRule }
             }
             when {
                 matchingRule == null -> {
@@ -283,7 +284,7 @@ class ConfigureRoomPresenter(
                 }
                 .onSuccess {
                     dataStore.clearCachedData()
-                    analyticsService.capture(CreatedRoom(isDM = false))
+                    analyticsService.capture(CreatedRoom(isDM = false, joinRule = config.visibilityState.joinRuleItem.toAnalyticsJoinRule()))
                 }
                 .getOrThrow()
 

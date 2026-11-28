@@ -60,6 +60,8 @@
   <string name="screen_room_notification_settings_error_restoring_default">"No s\'ha pogut restaurar el mode predeterminat. Torna-ho a provar."</string>
   <string name="screen_room_notification_settings_error_setting_mode">"No s\'ha pogut configurar el mode. Torna-ho a provar."</string>
   <string name="screen_room_notification_settings_mentions_only_disclaimer">"El servidor no admet aquesta opció en sales xifrades, no rebras notificacions en aquesta sala."</string>
+  <string name="screen_room_notification_settings_mode_all_messages">"Tots els missatges"</string>
+  <string name="screen_room_notification_settings_mode_mentions_and_keywords">"Només mencions i respostes"</string>
   <string name="screen_room_notification_settings_room_custom_settings_title">"En aquesta sala, notifica\'m en"</string>
   <string name="screen_roomlist_mark_as_read">"Marca com a llegit"</string>
   <string name="screen_roomlist_mark_as_unread">"Marca com a no llegit"</string>

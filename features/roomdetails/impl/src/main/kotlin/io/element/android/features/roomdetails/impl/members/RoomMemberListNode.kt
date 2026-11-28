@@ -35,7 +35,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 class RoomMemberListNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    private val presenter: RoomMemberListPresenter,
+    presenter: RoomMemberListPresenter,
     private val analyticsService: AnalyticsService,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
 ) : Node(buildContext, plugins = plugins), RoomMemberListNavigator {
@@ -81,7 +81,9 @@ class RoomMemberListNode(
             onSelectAction = { action, target ->
                 when (action) {
                     is ModerationAction.DisplayProfile -> openRoomMemberDetails(target.userId)
-                    else -> state.moderationState.eventSink(RoomMemberModerationEvent.ProcessAction(action, target))
+                    ModerationAction.KickUser,
+                    ModerationAction.BanUser,
+                    ModerationAction.UnbanUser -> state.moderationState.eventSink(RoomMemberModerationEvent.ProcessAction(action, target))
                 }
             },
             onAvatarClick = { user ->

@@ -228,7 +228,10 @@ internal fun SpaceRoomItemViewPreview(@PreviewParameter(SpaceRoomPreviewParam::c
                     )
                 }
             }
-            else -> null
+            CurrentUserMembership.INVITED,
+            CurrentUserMembership.JOINED,
+            CurrentUserMembership.KNOCKED,
+            CurrentUserMembership.BANNED -> null
         }
     )
 }

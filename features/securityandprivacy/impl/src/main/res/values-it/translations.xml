@@ -20,7 +20,7 @@ Non consigliamo di attivare la crittografia per le stanze che chiunque può trov
   <string name="screen_security_and_privacy_encryption_section_footer">"Una volta attivata, la crittografia non può essere disattivata."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Crittografia"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Attiva la crittografia end-to-end"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Chiunque può partecipare."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Chiunque può partecipare, comprese le persone esterne alla tua organizzazione."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Chiunque"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Scegli quali membri dello spazio possono accedere a questa stanza senza invito.%1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Gestisci gli spazi"</string>

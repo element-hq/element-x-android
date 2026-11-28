@@ -272,8 +272,8 @@ private fun CallDurationText(
     startTsMillis: Long,
     modifier: Modifier = Modifier,
 ) {
-    fun formatElapsed(startTsMillis: Long): String =
-        (System.currentTimeMillis() - startTsMillis).coerceAtLeast(0).toHumanReadableDuration()
+    fun formatElapsed(fromTsMillis: Long): String =
+        (System.currentTimeMillis() - fromTsMillis).coerceAtLeast(0).toHumanReadableDuration()
 
     val duration by produceState(
         initialValue = formatElapsed(startTsMillis),

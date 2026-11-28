@@ -35,8 +35,8 @@ class RustMediaLoader(
     override suspend fun loadMediaContent(source: MediaSource): Result<ByteArray> =
         withContext(mediaDispatcher) {
             runCatchingExceptions {
-                source.toRustMediaSource().use { source ->
-                    innerClient.getMediaContent(source)
+                source.toRustMediaSource().use { mediaSource ->
+                    innerClient.getMediaContent(mediaSource)
                 }
             }.mapFailure { it.mapClientException() }
         }
@@ -52,7 +52,8 @@ class RustMediaLoader(
                     innerClient.getMediaThumbnail(
                         mediaSource = mediaSource,
                         width = width.toULong(),
-                        height = height.toULong()
+                        height = height.toULong(),
+                        animated = false,
                     )
                 }
             }.mapFailure { it.mapClientException() }

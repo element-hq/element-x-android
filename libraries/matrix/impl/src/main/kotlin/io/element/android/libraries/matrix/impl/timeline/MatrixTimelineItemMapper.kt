@@ -28,8 +28,9 @@ class MatrixTimelineItemMapper(
         val asEvent = it.asEvent()
         if (asEvent != null) {
             val eventTimelineItem = eventTimelineItemMapper.map(asEvent)
-            if (eventTimelineItem.hasNotLoadedInReplyTo() && eventTimelineItem.eventId != null) {
-                fetchEventDetails(eventTimelineItem.eventId!!)
+            val eventId = eventTimelineItem.eventId
+            if (eventTimelineItem.hasNotLoadedInReplyTo() && eventId != null) {
+                fetchEventDetails(eventId)
             }
 
             return MatrixTimelineItem.Event(uniqueId, eventTimelineItem)

@@ -20,16 +20,19 @@ private val json = Json { ignoreUnknownKeys = true }
 internal fun List<RtcTransport>.toJson(): String = JsonArray(map { it.toJsonObject() }).toString()
 
 private fun RtcTransport.toJsonObject(): JsonObject = when (this) {
-    is RtcTransport.LiveKit -> JsonObject(
-        buildMap {
-            put("type", JsonPrimitive("livekit"))
-            // Mirror the MSC4195 wire format: absent fields are omitted rather than serialized as null.
-            url?.let { put("url", JsonPrimitive(it)) }
-            serviceUrl?.let { put("livekit_service_url", JsonPrimitive(it)) }
-        }
-    )
+    is RtcTransport.LiveKit -> liveKitJsonObject(type = "m.livekit", url = url, serviceUrl = serviceUrl)
+    is RtcTransport.LegacyLiveKit -> liveKitJsonObject(type = "livekit", url = url, serviceUrl = serviceUrl)
     is RtcTransport.Custom -> {
         val fields = runCatchingExceptions { json.parseToJsonElement(data) as? JsonObject }.getOrNull().orEmpty()
         JsonObject(fields + ("type" to JsonPrimitive(transportType)))
     }
 }
+
+private fun liveKitJsonObject(type: String, url: String?, serviceUrl: String?): JsonObject = JsonObject(
+    buildMap {
+        put("type", JsonPrimitive(type))
+        // Mirror the MSC4195 wire format: absent fields are omitted rather than serialized as null.
+        url?.let { put("url", JsonPrimitive(it)) }
+        serviceUrl?.let { put("livekit_service_url", JsonPrimitive(it)) }
+    }
+)

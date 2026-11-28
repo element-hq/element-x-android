@@ -11,9 +11,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
+import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
+import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
+import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.isMediaContent
 
 private val noopValue = NoopContentValidationState()
@@ -42,7 +54,19 @@ fun rememberEventContentValidationState(eventId: EventId?, eventContent: EventCo
             is MessageContent -> eventContent.isMediaContent()
             is StickerContent -> true
             // If the event content is not known or not a media content, we don't need to validate it.
-            else -> false
+            null,
+            is RedactedContent,
+            is PollContent,
+            is UnableToDecryptContent,
+            is RoomMembershipContent,
+            is ProfileChangeContent,
+            is StateContent,
+            is FailedToParseMessageLikeContent,
+            is FailedToParseStateContent,
+            is LiveLocationContent,
+            LegacyCallInviteContent,
+            is CallNotifyContent,
+            UnknownContent -> false
         }
     }
 

@@ -3,9 +3,7 @@
   <string name="error_account_already_logged_in">"Už ste prihlásený/á na tomto zariadení ako %1$s ."</string>
   <string name="error_account_creation_not_possible">"Váš domovský server musí byť aktualizovaný tak, aby podporoval Matrix Authentication Service a vytvorenie účtu."</string>
   <string name="screen_account_provider_signin_title">"Chystáte sa prihlásiť do %s"</string>
-  <string name="screen_change_account_provider_other">"Iný"</string>
   <string name="screen_change_account_provider_subtitle">"Použite iného poskytovateľa účtu, ako napríklad vlastný súkromný server alebo pracovný účet."</string>
-  <string name="screen_change_account_provider_title">"Zmeniť poskytovateľa účtu"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"Aplikácia Element Pro je potrebná na %1$s Stiahnite si ju z obchodu."</string>
   <string name="screen_change_server_error_element_pro_required_title">"Vyžaduje sa Element Pro"</string>
@@ -16,7 +14,6 @@
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s nemá dovolené pripojiť sa k %2$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_content">"Táto aplikácia bola nastavená tak, aby povoľovala: %1$s."</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"Poskytovateľ účtu %1$s nie je povolený."</string>
-  <string name="screen_change_server_form_header">"Adresa URL domovského servera"</string>
   <string name="screen_change_server_form_notice">"Zadajte adresu domény."</string>
   <string name="screen_change_server_subtitle">"Aká je adresa vášho servera?"</string>
   <string name="screen_change_server_title">"Vyberte svoj server"</string>

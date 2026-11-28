@@ -24,7 +24,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -291,24 +290,26 @@ private fun InvitePeopleConfirmModal(
             items(users) { user ->
                 MatrixUserRow(user)
             }
-        }
-
-        ButtonRowMolecule(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(16.dp)
-        ) {
-            OutlinedButton(
-                text = stringResource(CommonStrings.action_remove),
-                onClick = onRemove,
-                leadingIcon = IconSource.Vector(CompoundIcons.Close()),
-                modifier = Modifier.weight(1f),
-            )
-            Button(
-                text = stringResource(CommonStrings.action_invite),
-                onClick = onInvite,
-                leadingIcon = IconSource.Vector(CompoundIcons.Check()),
-                modifier = Modifier.weight(1f).testTag(TestTags.confirmInviteUnknown),
-            )
+            // The buttons are part of the list, so that the user has to scroll through all the users before being able to invite them.
+            item {
+                ButtonRowMolecule(
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    OutlinedButton(
+                        text = stringResource(CommonStrings.action_remove),
+                        onClick = onRemove,
+                        leadingIcon = IconSource.Vector(CompoundIcons.Close()),
+                        modifier = Modifier.weight(1f),
+                    )
+                    Button(
+                        text = stringResource(CommonStrings.action_invite),
+                        onClick = onInvite,
+                        leadingIcon = IconSource.Vector(CompoundIcons.Check()),
+                        modifier = Modifier.weight(1f).testTag(TestTags.confirmInviteUnknown),
+                    )
+                }
+            }
         }
     }
 }

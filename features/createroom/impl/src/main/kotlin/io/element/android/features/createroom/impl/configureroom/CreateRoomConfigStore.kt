@@ -95,7 +95,7 @@ class CreateRoomConfigStore(
                         val sanitizedAddress = address.lowercase()
                         config.visibilityState.copy(roomAddress = RoomAddress.Edited(sanitizedAddress))
                     }
-                    else -> config.visibilityState
+                    is RoomVisibilityState.Private -> config.visibilityState
                 }
             )
         }

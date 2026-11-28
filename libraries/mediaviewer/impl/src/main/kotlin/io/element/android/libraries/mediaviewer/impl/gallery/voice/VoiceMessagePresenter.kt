@@ -22,7 +22,7 @@ import kotlin.time.Duration
 @AssistedInject
 class VoiceMessagePresenter(
     voiceMessagePresenterFactory: VoiceMessagePresenterFactory,
-    @Assisted private val content: MediaItem.Voice,
+    @Assisted content: MediaItem.Voice,
 ) : Presenter<VoiceMessageState> {
     @AssistedFactory
     fun interface Factory : MediaItemPresenterFactory<MediaItem.Voice, VoiceMessageState> {

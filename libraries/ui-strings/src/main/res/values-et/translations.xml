@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_active">"Aktiivne"</string>
   <string name="a11y_add_avatar">"Lisa tunnuspilt"</string>
   <string name="a11y_add_reaction">"Reageeri: %1$s"</string>
   <string name="a11y_address">"Aadress"</string>
@@ -19,7 +20,17 @@
   <string name="a11y_edit_room_address_hint">"Täisaadress saab olema %1$s"</string>
   <string name="a11y_encryption_details">"Krüptimise üksikasjad"</string>
   <string name="a11y_expand_message_text_field">"Laienda tekstivälja"</string>
+  <string name="a11y_gallery_attachment">"Galerii, %1$d. manus"</string>
+  <string name="a11y_gallery_failed_scan">"Galerii, %1$d. objekti skaneerimine ei õnnestunud"</string>
+  <string name="a11y_gallery_image">"Galerii, %1$d. pilt"</string>
+  <plurals name="a11y_gallery_more_media">
+    <item quantity="one">"Galerii: veel %1$d meedium"</item>
+    <item quantity="other">"Galerii: veel %1$d meediumit"</item>
+  </plurals>
+  <string name="a11y_gallery_scanning">"Galerii, %1$d. objekt on skaneerimisel"</string>
+  <string name="a11y_gallery_video">"Galerii, %1$d. video"</string>
   <string name="a11y_hide_password">"Peida salasõna"</string>
+  <string name="a11y_inactive">"Pole aktiivne"</string>
   <string name="a11y_info">"Teave"</string>
   <string name="a11y_join_call">"Liitu kõnega"</string>
   <string name="a11y_jump_to_bottom">"Mine lõppu"</string>
@@ -64,6 +75,8 @@
   <string name="a11y_start_call">"Helista"</string>
   <string name="a11y_start_video_call">"Alusta videokõnet"</string>
   <string name="a11y_start_voice_call">"Helista"</string>
+  <string name="a11y_state_collapsed">"Ahendatud"</string>
+  <string name="a11y_state_expanded">"Laiendatud"</string>
   <string name="a11y_status">"Olek"</string>
   <string name="a11y_thread_in_room">"Jutulõng „%1$s“ jututoas"</string>
   <string name="a11y_threads_in_room">"Jutulõngad „%1$s“ jututoas"</string>
@@ -87,6 +100,7 @@
   <string name="action_choose_file">"Vali fail"</string>
   <string name="action_choose_photo">"Vali foto"</string>
   <string name="action_clear">"Selge"</string>
+  <string name="action_clear_all">"Eemalda kõik"</string>
   <string name="action_close">"Sulge"</string>
   <string name="action_confirm">"Kinnita"</string>
   <string name="action_confirm_password">"Kinnita otsust oma salasõnaga"</string>
@@ -96,6 +110,7 @@
   <string name="action_copy_link">"Kopeeri link"</string>
   <string name="action_copy_link_to_message">"Kopeeri sõnumi link"</string>
   <string name="action_copy_text">"Kopeeri tekst"</string>
+  <string name="action_copy_to_clipboard">"Kopeeri lõikelauale"</string>
   <string name="action_create">"Loo"</string>
   <string name="action_create_room">"Loo jututuba"</string>
   <string name="action_create_space">"Loo kogukond"</string>
@@ -121,9 +136,14 @@
   <string name="action_finish">"Lõpeta"</string>
   <string name="action_forgot_password">"Kas unustasid salasõna?"</string>
   <string name="action_forward">"Edasta"</string>
+  <plurals name="action_forward_messages">
+    <item quantity="one">"Edasta %1$d sõnum"</item>
+    <item quantity="other">"Edasta %1$d sõnumit"</item>
+  </plurals>
   <string name="action_go_back">"Tagasi eelmisesse vaatesse"</string>
   <string name="action_go_to_roles_and_permissions">"Ava „Rollid ja õigused“"</string>
   <string name="action_go_to_settings">"Ava seadistused"</string>
+  <string name="action_got_it">"Selge lugu"</string>
   <string name="action_ignore">"Eira"</string>
   <string name="action_invite">"Kutsu"</string>
   <string name="action_invite_friends">"Kutsu osalejaid"</string>
@@ -201,6 +221,7 @@
   <string name="action_yes_try_again">"Jah, proovi uuesti"</string>
   <string name="common_about">"Rakenduse teave"</string>
   <string name="common_acceptable_use_policy">"Vastuvõetava kasutamise põhimõtted"</string>
+  <string name="common_account_settings">"Kasutajakonto seadistused"</string>
   <string name="common_add_another_account">"Lisa veel üks kasutajakonto"</string>
   <string name="common_adding_caption">"Lisame selgitust"</string>
   <string name="common_advanced_settings">"Täiendavad seadistused"</string>
@@ -208,6 +229,7 @@
   <string name="common_analytics">"Analüütika"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Sina lahkusid jututoast"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sa olid sessioonist väljaloginud"</string>
+  <string name="common_app_settings">"Rakenduse seadistused"</string>
   <string name="common_appearance">"Välimus"</string>
   <string name="common_audio">"Heli"</string>
   <string name="common_beta">"Beetaversioon"</string>
@@ -217,6 +239,8 @@
   <string name="common_call_started">"Kõne algas"</string>
   <string name="common_call_you_declined">"Sa keeldusid kõnest"</string>
   <string name="common_chat_backup">"Vestluse varukoopia"</string>
+  <string name="common_chats">"Vestlused"</string>
+  <string name="common_code_block">"Koodiplokk"</string>
   <string name="common_copied_to_clipboard">"Kopeeritud lõikelauale"</string>
   <string name="common_copyright">"Autoriõigused"</string>
   <string name="common_creating_room">"Loome jututoa…"</string>
@@ -256,6 +280,7 @@ Põhjus: %1$s."</string>
   <string name="common_file_saved">"Fail on salvestatud"</string>
   <string name="common_file_saved_on_disk_android">"Fail on salvestatud kausta Allalaadimised"</string>
   <string name="common_forward_message">"Edasta sõnum"</string>
+  <string name="common_forward_to">"Edasta saajale"</string>
   <string name="common_frequently_used">"Sagedasti kasutatud"</string>
   <string name="common_gallery">"Galerii"</string>
   <plurals name="common_gallery_reply_attachments">
@@ -268,6 +293,7 @@ Põhjus: %1$s."</string>
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Rühmakõne on pooleli"</string>
+  <string name="common_header_rooms">"Jututoad"</string>
   <string name="common_image">"Pilt"</string>
   <string name="common_in_reply_to">"Vastuseks kasutajale %1$s"</string>
   <string name="common_install_apk_android">"Paigalda APK-failist"</string>
@@ -281,10 +307,12 @@ Põhjus: %1$s."</string>
   <string name="common_live_location_ended">"Reaalajas asukoha jagamine on lõppenud"</string>
   <string name="common_loading">"Laadime…"</string>
   <string name="common_loading_more">"Laadime veel…"</string>
+  <string name="common_location_sharing">"Asukoha jagamine"</string>
   <plurals name="common_many_members">
     <item quantity="one">"%d muu"</item>
     <item quantity="other">"%d muud"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Meediumi üleslaadimise kvaliteet"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d liige"</item>
     <item quantity="other">"%1$d liiget"</item>
@@ -294,11 +322,13 @@ Põhjus: %1$s."</string>
   <string name="common_message_failed_to_send">"Sõnumi saatmine ei õnnestunud"</string>
   <string name="common_message_layout">"Sõnumi paigutus"</string>
   <string name="common_message_removed">"Sõnum on eemaldatud"</string>
+  <string name="common_moderation_and_safety">"Modereerimine ja turvalisus"</string>
   <string name="common_modern">"Kaasaegne"</string>
   <string name="common_mute">"Summutatud"</string>
   <string name="common_name">"Nimi"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Otsingul pole tulemusi"</string>
+  <string name="common_no_results_for">"„%1$s“ otsingule pole tulemusi. Proovi muud otsingusõna."</string>
   <string name="common_no_room_name">"Jututoal puudub nimi"</string>
   <string name="common_no_space_name">"Kogukonnal pole nime"</string>
   <string name="common_not_encrypted">"Krüptimata"</string>
@@ -344,6 +374,7 @@ Põhjus: %1$s."</string>
   <string name="common_replying_to">"Vastates kasutajale %1$s"</string>
   <string name="common_report_a_problem">"Teata veast"</string>
   <string name="common_report_submitted">"Veateade on saadetud"</string>
+  <string name="common_results_for">"„%1$s“ otsingu tulemused"</string>
   <string name="common_rich_text_editor">"Vormindatud teksti toimeti"</string>
   <string name="common_role">"Roll"</string>
   <string name="common_room">"Jututuba"</string>
@@ -379,6 +410,7 @@ Põhjus: %1$s."</string>
   <string name="common_shared_live_location">"Reaalajas jagatud asukoht"</string>
   <string name="common_shared_location">"Jagatud asukoht"</string>
   <string name="common_shared_space">"Jagatud kogukond"</string>
+  <string name="common_signed_in">"Sisselogitud"</string>
   <string name="common_signing_out">"Seade on eemaldamisel"</string>
   <string name="common_something_went_wrong">"Midagi läks valesti"</string>
   <string name="common_something_went_wrong_message">"Tekkis viga. Palun proovi uuesti."</string>
@@ -389,11 +421,13 @@ Põhjus: %1$s."</string>
     <item quantity="one">"%1$d kogukond"</item>
     <item quantity="other">"%1$d kogukonda"</item>
   </plurals>
+  <string name="common_spoiler">"Spoiler"</string>
   <string name="common_starting_chat">"Alustame vestlust…"</string>
   <string name="common_sticker">"Kleeps"</string>
   <string name="common_success">"Õnnestus"</string>
   <string name="common_suggested">"Soovitatud"</string>
   <string name="common_suggestions">"Soovitused"</string>
+  <string name="common_switch_accounts">"Vaheta kasutajakontot"</string>
   <string name="common_syncing">"Sünkroniseerime"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Kolmandate osapoolte teatised"</string>
@@ -429,6 +463,7 @@ Põhjus: %1$s."</string>
   <string name="common_waiting_live_location">"Ootan asukoha jagamist reaalajas…"</string>
   <string name="common_world_readable_history">"Kõik võivad ajalugu näha"</string>
   <string name="common_you">"Sina"</string>
+  <string name="common_your_account">"Sinu kasutajakonto"</string>
   <string name="content_scanner_unsafe_message">"Eelvaade ja allalaadimine on lülitatud välja."</string>
   <string name="content_scanner_unsafe_title">"See fail pole ohutu"</string>
   <string name="crypto_history_visible">"See jututuba on seadistatud sedaviisi, et ka uued liikmed saavad lugeda varasemat ajalugu. %1$s"</string>
@@ -442,6 +477,7 @@ Põhjus: %1$s."</string>
   <string name="dialog_title_success">"Õnnestus"</string>
   <string name="dialog_title_warning">"Hoiatus"</string>
   <string name="dialog_video_quality_selector_title">"Vali video kvaliteet."</string>
+  <string name="error_camera_unavailable">"Kaamera pole saadaval"</string>
   <string name="error_failed_creating_the_permalink">"Püsilingi loomine ei õnnestumud"</string>
   <string name="error_message_not_found">"Sõnumit ei leidu"</string>
   <string name="error_network_or_server_issue">"See võib olla põhjustatud võrgu- või serverivigadest."</string>

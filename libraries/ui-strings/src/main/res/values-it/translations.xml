@@ -96,6 +96,7 @@
   <string name="action_choose_file">"Scegli il file"</string>
   <string name="action_choose_photo">"Scegli foto"</string>
   <string name="action_clear">"Cancella"</string>
+  <string name="action_clear_all">"Cancella tutto"</string>
   <string name="action_close">"Chiudi"</string>
   <string name="action_confirm">"Conferma"</string>
   <string name="action_confirm_password">"Conferma password"</string>
@@ -105,6 +106,7 @@
   <string name="action_copy_link">"Copia collegamento"</string>
   <string name="action_copy_link_to_message">"Copia collegamento al messaggio"</string>
   <string name="action_copy_text">"Copia testo"</string>
+  <string name="action_copy_to_clipboard">"Copia negli appunti"</string>
   <string name="action_create">"Crea"</string>
   <string name="action_create_room">"Crea stanza"</string>
   <string name="action_create_space">"Crea spazio"</string>
@@ -130,6 +132,10 @@
   <string name="action_finish">"Fine"</string>
   <string name="action_forgot_password">"Password dimenticata?"</string>
   <string name="action_forward">"Inoltra"</string>
+  <plurals name="action_forward_messages">
+    <item quantity="one">"Inoltra %1$d messaggio"</item>
+    <item quantity="other">"Inoltra %1$d messaggi"</item>
+  </plurals>
   <string name="action_go_back">"Indietro"</string>
   <string name="action_go_to_roles_and_permissions">"Vai a ruoli &amp; autorizzazioni"</string>
   <string name="action_go_to_settings">"Vai alle impostazioni"</string>
@@ -210,6 +216,7 @@
   <string name="action_yes_try_again">"Sì, riprova"</string>
   <string name="common_about">"Informazioni"</string>
   <string name="common_acceptable_use_policy">"Regole sull\'utilizzo consentito"</string>
+  <string name="common_account_settings">"Impostazioni account"</string>
   <string name="common_add_another_account">"Aggiungi un altro account"</string>
   <string name="common_adding_caption">"Aggiunta didascalia"</string>
   <string name="common_advanced_settings">"Impostazioni avanzate"</string>
@@ -217,6 +224,7 @@
   <string name="common_analytics">"Statistiche di utilizzo"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Hai lasciato la stanza"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sei stato disconnesso dalla sessione"</string>
+  <string name="common_app_settings">"Impostazioni app"</string>
   <string name="common_appearance">"Aspetto"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_beta">"Beta"</string>
@@ -226,6 +234,7 @@
   <string name="common_call_started">"Chiamata avviata"</string>
   <string name="common_call_you_declined">"Hai rifiutato una chiamata"</string>
   <string name="common_chat_backup">"Backup della chat"</string>
+  <string name="common_code_block">"Blocco di codice"</string>
   <string name="common_copied_to_clipboard">"Copiato negli appunti"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creazione stanza…"</string>
@@ -265,6 +274,7 @@ Motivo:. %1$s"</string>
   <string name="common_file_saved">"File salvato"</string>
   <string name="common_file_saved_on_disk_android">"File salvato"</string>
   <string name="common_forward_message">"Inoltra messaggio"</string>
+  <string name="common_forward_to">"Inoltra a"</string>
   <string name="common_frequently_used">"Usati di frequente"</string>
   <string name="common_gallery">"Galleria"</string>
   <plurals name="common_gallery_reply_attachments">
@@ -277,6 +287,7 @@ Motivo:. %1$s"</string>
   </plurals>
   <string name="common_gif">"GIF"</string>
   <string name="common_group_call_in_progress">"Chiamata di gruppo in corso"</string>
+  <string name="common_header_rooms">"Stanze"</string>
   <string name="common_image">"Immagine"</string>
   <string name="common_in_reply_to">"In risposta a %1$s"</string>
   <string name="common_install_apk_android">"Installa APK"</string>
@@ -290,10 +301,12 @@ Motivo:. %1$s"</string>
   <string name="common_live_location_ended">"Posizione in tempo reale terminata"</string>
   <string name="common_loading">"Caricamento…"</string>
   <string name="common_loading_more">"Caricamento in corso…"</string>
+  <string name="common_location_sharing">"Condivisione della posizione"</string>
   <plurals name="common_many_members">
     <item quantity="one">"%d altro"</item>
     <item quantity="other">"altri %d"</item>
   </plurals>
+  <string name="common_media_upload_quality">"Qualità di upload dei media"</string>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d Membro"</item>
     <item quantity="other">"%1$d Membri"</item>
@@ -303,11 +316,13 @@ Motivo:. %1$s"</string>
   <string name="common_message_failed_to_send">"Impossibile inviare il messaggio"</string>
   <string name="common_message_layout">"Impaginazione del messaggio"</string>
   <string name="common_message_removed">"Messaggio rimosso"</string>
+  <string name="common_moderation_and_safety">"Moderazione &amp; sicurezza"</string>
   <string name="common_modern">"Moderno"</string>
   <string name="common_mute">"Silenzia"</string>
   <string name="common_name">"Nome"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nessun risultato"</string>
+  <string name="common_no_results_for">"Non sono stati trovati risultati per “%1$s”. Prova con un nuovo termine di ricerca."</string>
   <string name="common_no_room_name">"Nessun nome della stanza"</string>
   <string name="common_no_space_name">"Spazio senza nome"</string>
   <string name="common_not_encrypted">"Non cifrato"</string>
@@ -353,6 +368,7 @@ Motivo:. %1$s"</string>
   <string name="common_replying_to">"Risposta a %1$s"</string>
   <string name="common_report_a_problem">"Segnala un problema"</string>
   <string name="common_report_submitted">"Segnalazione inviata"</string>
+  <string name="common_results_for">"Risultati per \"%1$s\""</string>
   <string name="common_rich_text_editor">"Editor di testo avanzato"</string>
   <string name="common_role">"Ruolo"</string>
   <string name="common_room">"Stanza"</string>
@@ -388,6 +404,7 @@ Motivo:. %1$s"</string>
   <string name="common_shared_live_location">"Posizione in tempo reale condivisa"</string>
   <string name="common_shared_location">"Posizione condivisa"</string>
   <string name="common_shared_space">"Spazio condiviso"</string>
+  <string name="common_signed_in">"Accesso effettuato"</string>
   <string name="common_signing_out">"Rimozione del dispositivo"</string>
   <string name="common_something_went_wrong">"Qualcosa è andato storto"</string>
   <string name="common_something_went_wrong_message">"Abbiamo riscontrato un problema. Per favore riprova."</string>
@@ -403,6 +420,7 @@ Motivo:. %1$s"</string>
   <string name="common_success">"Operazione riuscita"</string>
   <string name="common_suggested">"Suggeriti"</string>
   <string name="common_suggestions">"Suggerimenti"</string>
+  <string name="common_switch_accounts">"Cambia account"</string>
   <string name="common_syncing">"Sincronizzazione"</string>
   <string name="common_text">"Testo"</string>
   <string name="common_third_party_notices">"Comunicazioni di terze parti"</string>
@@ -438,6 +456,7 @@ Motivo:. %1$s"</string>
   <string name="common_waiting_live_location">"In attesa della posizione in tempo reale…"</string>
   <string name="common_world_readable_history">"Chiunque può vedere la cronologia"</string>
   <string name="common_you">"Tu"</string>
+  <string name="common_your_account">"Il tuo account"</string>
   <string name="content_scanner_unsafe_message">"L\'anteprima e il download sono stati disabilitati."</string>
   <string name="content_scanner_unsafe_title">"Il file non è sicuro"</string>
   <string name="crypto_history_visible">"Questa stanza è stata configurata in modo che i nuovi membri possano leggere la cronologia. %1$s"</string>

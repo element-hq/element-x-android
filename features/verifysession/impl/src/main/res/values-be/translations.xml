@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Не можаце пацвердзіць?"</string>
-  <string name="screen_identity_confirmation_create_new_recovery_key">"Стварыць новы ключ аднаўлення"</string>
-  <string name="screen_identity_confirmation_subtitle">"Пацвердзіце гэтую прыладу, каб наладзіць бяспечны абмен паведамленнямі."</string>
-  <string name="screen_identity_confirmation_title">"Пацвердзіце, што гэта вы"</string>
+  <string name="screen_identity_confirmation_sign_out">"Выйсці"</string>
+  <string name="screen_identity_confirmation_subtitle">"Абярыце спосаб праверкі, каб наладзіць бяспечны абмен паведамленнямі."</string>
+  <string name="screen_identity_confirmation_title">"Пацвердзіце сваю лічбавую ідэнтычнасць"</string>
   <string name="screen_identity_confirmation_use_another_device">"Выкарыстоўвайце іншую прыладу"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Выкарыстоўваць ключ аднаўлення"</string>
   <string name="screen_identity_confirmed_subtitle">"Цяпер вы можаце бяспечна чытаць і адпраўляць паведамленні, і ўсе, з кім вы маеце зносіны ў чаце, таксама могуць давяраць гэтай прыладзе."</string>
@@ -11,14 +11,33 @@
   <string name="screen_identity_use_another_device">"Выкарыстоўвайце іншую прыладу"</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"Пераканайцеся, што эмодзі ніжэй супадаюць з тымі, што паказаны на вашай іншай прыладзе."</string>
   <string name="screen_session_verification_compare_emojis_title">"Параўнайце эмодзі"</string>
+  <string name="screen_session_verification_compare_emojis_user_subtitle">"Пераканайцеся, што эмодзі ніжэй супадаюць з паказанымі на прыладзе іншага карыстальніка."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Пераканайцеся, што прыведзеныя ніжэй лічбы супадаюць з лічбамі, паказанымі ў іншым сеансе."</string>
   <string name="screen_session_verification_compare_numbers_title">"Параўнайце лічбы"</string>
   <string name="screen_session_verification_complete_subtitle">"Цяпер вы можаце бяспечна чытаць або адпраўляць паведамленні на іншай прыладзе."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Цяпер вы можаце давяраць лічбавай асобе гэтага карыстальніка пры адпраўцы і атрыманні паведамленняў."</string>
   <string name="screen_session_verification_device_verified">"Прылада праверана"</string>
   <string name="screen_session_verification_enter_recovery_key">"Увядзіце ключ аднаўлення"</string>
+  <string name="screen_session_verification_failed_subtitle">"Час чакання запыту скончыўся, запыт быў адхілены або праверка не супала."</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Чаканне супадзення"</string>
   <string name="screen_session_verification_ready_subtitle">"Параўнайце ўнікальны набор эмодзі."</string>
+  <string name="screen_session_verification_request_details_timestamp">"Уваход выкананы"</string>
+  <string name="screen_session_verification_request_failure_subtitle">"Час чакання запыту скончыўся, запыт быў адхілены або праверка не супала."</string>
+  <string name="screen_session_verification_request_failure_title">"Праверка не ўдалася"</string>
+  <string name="screen_session_verification_request_footer">"Працягвайце, толькі калі вы самі пачалі гэту праверку."</string>
+  <string name="screen_session_verification_request_subtitle">"Праверце іншую прыладу, каб гісторыя паведамленняў заставалася ў бяспецы."</string>
+  <string name="screen_session_verification_request_title">"Запытана праверка"</string>
   <string name="screen_session_verification_they_dont_match">"Яны не супадаюць"</string>
   <string name="screen_session_verification_they_match">"Яны супадаюць"</string>
+  <string name="screen_session_verification_use_another_device_subtitle">"Перад пачаткам праверкі пераканайцеся, што праграма адкрыта на іншай прыладзе."</string>
+  <string name="screen_session_verification_use_another_device_title">"Адкрыйце праграму на іншай праверанай прыладзе"</string>
+  <string name="screen_session_verification_user_initiator_subtitle">"Для дадатковай бяспекі праверце гэтага карыстальніка, параўнаўшы набор эмодзі на вашых прыладах. Рабіце гэта праз давераны спосаб сувязі."</string>
+  <string name="screen_session_verification_user_initiator_title">"Праверыць гэтага карыстальніка?"</string>
+  <string name="screen_session_verification_user_requesting_verification">"Карыстальнік, які запытвае праверку:"</string>
+  <string name="screen_session_verification_user_responder_subtitle">"Для дадатковай бяспекі іншы карыстальнік хоча праверыць вашу лічбавую асобу. Вам пакажуць набор эмодзі для параўнання."</string>
+  <string name="screen_session_verification_waiting_another_device_title">"Пачніце праверку на іншай прыладзе"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Пачніце праверку на іншай прыладзе"</string>
+  <string name="screen_session_verification_waiting_other_user_title">"Чаканне іншага карыстальніка"</string>
+  <string name="screen_session_verification_waiting_subtitle">"Пасля прыняцця можна будзе працягнуць праверку."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Чаканне прыняцця запыту"</string>
 </resources>

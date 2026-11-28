@@ -18,9 +18,10 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 /**
- * Name of the directory, in the cache directory, containing the log files.
+ * Name of the legacy directory, in the cache directory, containing the log files of all the accounts.
+ * The log files are now written in another directory, see DefaultBugReporter.
  */
-internal const val LOG_DIRECTORY_NAME = "logs"
+internal const val LEGACY_LOG_DIRECTORY_NAME = "logs"
 
 @ContributesBinding(AppScope::class)
 class DefaultLogFilesRemover(
@@ -29,7 +30,7 @@ class DefaultLogFilesRemover(
 ) : LogFilesRemover {
     override suspend fun perform(predicate: (File) -> Boolean) {
         withContext(coroutineDispatchers.io) {
-            deleteAllFilesRecursive(File(cacheDirectory, LOG_DIRECTORY_NAME), predicate)
+            deleteAllFilesRecursive(File(cacheDirectory, LEGACY_LOG_DIRECTORY_NAME), predicate)
         }
     }
 

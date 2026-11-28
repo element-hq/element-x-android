@@ -34,4 +34,6 @@ object BuildTimeConfig {
     val PUSHER_APP_ID_RELEASE: String? = null
     val PUSHER_APP_ID_DEBUG: String? = null
     val PUSHER_APP_ID_NIGHTLY: String? = null
+    const val ELEMENT_LINKS_ENABLED: Boolean = true
+    const val ELEMENT_MOBILE_LINK_PATH: String = "/element/"
 }

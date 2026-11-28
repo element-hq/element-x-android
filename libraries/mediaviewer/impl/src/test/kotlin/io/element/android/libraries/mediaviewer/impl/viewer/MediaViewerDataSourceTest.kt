@@ -92,8 +92,8 @@ class MediaViewerDataSourceTest {
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     aGroupedMediaItems(
-                        imageAndVideoItems = listOf(),
-                        fileItems = listOf(),
+                        imageAndVideoItems = emptyList(),
+                        fileItems = emptyList(),
                     )
                 )
             )
@@ -121,7 +121,7 @@ class MediaViewerDataSourceTest {
                                 direction = Timeline.PaginationDirection.FORWARDS,
                             ),
                         ),
-                        fileItems = listOf(),
+                        fileItems = emptyList(),
                     )
                 )
             )

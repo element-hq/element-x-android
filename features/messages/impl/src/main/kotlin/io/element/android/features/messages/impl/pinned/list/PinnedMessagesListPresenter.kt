@@ -49,6 +49,8 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.MessageTextSize
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -78,6 +80,7 @@ class PinnedMessagesListPresenter(
     private val sessionCoroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
     private val featureFlagService: FeatureFlagService,
+    private val appPreferencesStore: AppPreferencesStore,
     private val htmlConverterProvider: HtmlConverterProvider,
 ) : Presenter<PinnedMessagesListState> {
     @AssistedFactory
@@ -132,6 +135,12 @@ class PinnedMessagesListPresenter(
         val reactionSummaryState = reactionSummaryPresenter.present()
 
         val displayThreadSummaries by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Threads).collectAsState(false)
+        val useNewTimelineEventRenderer by featureFlagService
+            .isFeatureEnabledFlow(FeatureFlags.NewTimelineEventRenderer)
+            .collectAsState(false)
+        val timelineFontScale by remember {
+            appPreferencesStore.getMessageTextSizeFlow().map { MessageTextSize.scaleOf(it) }
+        }.collectAsState(initial = 1f)
 
         var pinnedMessageItems by remember {
             mutableStateOf<AsyncData<ImmutableList<TimelineItem>>>(AsyncData.Uninitialized)
@@ -155,6 +164,8 @@ class PinnedMessagesListPresenter(
             timelineProtectionState = timelineProtectionState,
             linkState = linkState,
             displayThreadSummaries = displayThreadSummaries,
+            timelineFontScale = timelineFontScale,
+            useNewTimelineEventRenderer = useNewTimelineEventRenderer,
             userEventPermissions = userEventPermissions,
             timelineItems = pinnedMessageItems,
             customReactionState = customReactionState,
@@ -171,6 +182,8 @@ class PinnedMessagesListPresenter(
         }
     }
 
+    // Only a few actions are available on pinned messages, listing all the other TimelineItemActions would not add value
+    @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun CoroutineScope.handleTimelineAction(
         action: TimelineItemAction,
         targetEvent: TimelineItem.Event,
@@ -250,6 +263,8 @@ class PinnedMessagesListPresenter(
         timelineRoomInfo: TimelineRoomInfo,
         timelineProtectionState: TimelineProtectionState,
         displayThreadSummaries: Boolean,
+        timelineFontScale: Float,
+        useNewTimelineEventRenderer: Boolean,
         linkState: LinkState,
         userEventPermissions: UserEventPermissions,
         timelineItems: AsyncData<ImmutableList<TimelineItem>>,
@@ -269,6 +284,8 @@ class PinnedMessagesListPresenter(
                         timelineRoomInfo = timelineRoomInfo,
                         timelineProtectionState = timelineProtectionState,
                         displayThreadSummaries = displayThreadSummaries,
+                        timelineFontScale = timelineFontScale,
+                        useNewTimelineEventRenderer = useNewTimelineEventRenderer,
                         linkState = linkState,
                         userEventPermissions = userEventPermissions,
                         timelineItems = timelineItems.data,

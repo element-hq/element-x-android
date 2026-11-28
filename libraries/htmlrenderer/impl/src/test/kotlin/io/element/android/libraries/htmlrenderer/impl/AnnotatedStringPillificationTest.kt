@@ -22,6 +22,7 @@ import io.element.android.libraries.htmlrenderer.api.MentionNodeContent
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
@@ -34,6 +35,8 @@ import org.junit.Test
 class AnnotatedStringPillificationTest : RobolectricTest() {
     private val userId = UserId("@alice:example.org")
     private val roomAlias = RoomAlias("#room:example.org")
+    private val roomId = RoomId("!room:example.org")
+    private val eventId = EventId($$"$event_id")
 
     @Test
     fun `text without mentions is returned as is`() {
@@ -136,7 +139,26 @@ class AnnotatedStringPillificationTest : RobolectricTest() {
     }
 
     @Test
-    fun `an event permalink is not pillified`() {
+    fun `a matrix to room permalink with an event id becomes a room pill`() {
+        val permalink = "https://matrix.to/#/$roomId/$eventId"
+        val permalinkParser = aPermalinkParser {
+            if (it == permalink) PermalinkData.RoomLink(roomIdOrAlias = roomId.toRoomIdOrAlias(), eventId = eventId) else null
+        }
+        val result = AnnotatedString("Join $permalink").pillify(emptyMap(), permalinkParser, aPermalinkBuilder())
+        assertThat(result.inlineContent.values.single())
+            .isEqualTo(
+                MentionNodeContent.Room(
+                    displayText = roomId.value,
+                    roomIdOrAlias = roomId.toRoomIdOrAlias(),
+                    permalinkUrl = permalink,
+                    eventId = eventId,
+                )
+            )
+        assertThat(result.text.text).isEqualTo("Join $roomId")
+    }
+
+    @Test
+    fun `an event permalink is pillified`() {
         val permalink = "https://matrix.to/#/!room:example.org/\$event"
         val permalinkParser = aPermalinkParser {
             if (it == permalink) {
@@ -146,7 +168,48 @@ class AnnotatedStringPillificationTest : RobolectricTest() {
             }
         }
         val result = AnnotatedString("See $permalink").pillify(emptyMap(), permalinkParser, aPermalinkBuilder())
-        assertThat(result.inlineContent).isEmpty()
+        assertThat(result.inlineContent.values.single()).isEqualTo(
+            MentionNodeContent.Room(
+                displayText = "!room:example.org",
+                roomIdOrAlias = RoomId("!room:example.org").toRoomIdOrAlias(),
+                // The original url is kept so the event id is not lost
+                permalinkUrl = permalink,
+                eventId = EventId("\$event:example.org"),
+            )
+        )
+        assertThat(result.text.text).isEqualTo("See !room:example.org")
+    }
+
+    @Test
+    fun `a matrix to room id permalink keeps its original url`() {
+        val permalink = "https://matrix.to/#/$roomId?via=example.org"
+        val permalinkParser = aPermalinkParser { if (it == permalink) PermalinkData.RoomLink(roomIdOrAlias = RoomIdOrAlias.Id(roomId)) else null }
+        val result = AnnotatedString("Join $permalink").pillify(emptyMap(), permalinkParser, aPermalinkBuilder())
+        assertThat(result.inlineContent.values.single()).isEqualTo(
+            MentionNodeContent.Room(
+                displayText = roomId.value,
+                roomIdOrAlias = roomId.toRoomIdOrAlias(),
+                permalinkUrl = permalink,
+                eventId = null,
+            )
+        )
+    }
+
+    @Test
+    fun `a room alias permalink with an event id keeps its original url`() {
+        val permalink = "https://matrix.to/#/$roomAlias/$eventId"
+        val permalinkParser = aPermalinkParser {
+            if (it == permalink) PermalinkData.RoomLink(roomIdOrAlias = roomAlias.toRoomIdOrAlias(), eventId = eventId) else null
+        }
+        val result = AnnotatedString("See $permalink").pillify(emptyMap(), permalinkParser, aPermalinkBuilder())
+        assertThat(result.inlineContent.values.single()).isEqualTo(
+            MentionNodeContent.Room(
+                displayText = roomAlias.value,
+                roomIdOrAlias = roomAlias.toRoomIdOrAlias(),
+                permalinkUrl = permalink,
+                eventId = eventId,
+            )
+        )
     }
 
     @Test

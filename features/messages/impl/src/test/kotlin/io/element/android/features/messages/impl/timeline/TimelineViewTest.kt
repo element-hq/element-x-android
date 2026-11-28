@@ -11,23 +11,33 @@
 package io.element.android.features.messages.impl.timeline
 
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
+import com.google.common.truth.Truth.assertThat
+import com.google.common.truth.Truth.assertWithMessage
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
+import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.matrix.api.core.EventId
@@ -42,6 +52,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
+import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
@@ -272,6 +283,131 @@ class TimelineViewTest : RobolectricTest() {
         onNodeWithText("Failed to fetch the event").assertDoesNotExist()
         onNodeWithText(activity!!.getString(CommonStrings.error_message_not_found)).assertIsDisplayed().performClick()
         eventsRecorder.assertEmpty()
+    }
+
+    @Test
+    fun `when sending a message while the newest item is not fully visible, it scrolls to it and reports it`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
+        val items = List<TimelineItem>(20) {
+            aTimelineItemEvent(
+                eventId = EventId("\$event_$it"),
+                content = aTimelineItemTextContent(body = "Message $it"),
+            )
+        }.toImmutableList()
+        var state by mutableStateOf(aTimelineState(timelineItems = items, eventSink = eventsRecorder, focusedEventIndex = -1))
+        // The newest item is the first visible one, but it's scrolled a bit
+        val lazyListState = LazyListState(firstVisibleItemIndex = 0, firstVisibleItemScrollOffset = 10)
+        setSafeContent(clearAndroidUiDispatcher = true) {
+            TimelineView(
+                state = state,
+                timelineProtectionState = aTimelineProtectionState(),
+                onUserDataClick = {},
+                onLinkClick = {},
+                onContentClick = {},
+                onMessageLongClick = {},
+                onSwipeToReply = {},
+                onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
+                onMoreReactionsClick = {},
+                onReadReceiptClick = {},
+                onGalleryItemClick = { _, _ -> },
+                onJoinCallClick = {},
+                lazyListState = lazyListState,
+            )
+        }
+        waitForIdle()
+        assertThat(lazyListState.firstVisibleItemIndex).isEqualTo(0)
+        assertThat(lazyListState.firstVisibleItemScrollOffset).isEqualTo(10)
+        eventsRecorder.clear()
+
+        state = state.copy(newEventState = NewEventState.FromMe)
+        waitForIdle()
+
+        assertThat(lazyListState.firstVisibleItemScrollOffset).isEqualTo(0)
+        eventsRecorder.assertSingle(TimelineEvent.OnScrollFinished(firstIndex = 0))
+    }
+
+    @Test
+    fun `when a message arrives while only the send state of the newest message is hidden, the previous messages only move up`() =
+        runAndroidComposeUiTest {
+            assertNewMessageArrivesSmoothlyWhileScrolledBy(offset = 10)
+        }
+
+    @Test
+    fun `when a message arrives while part of the newest message is hidden, the previous messages only move up`() = runAndroidComposeUiTest {
+        assertNewMessageArrivesSmoothlyWhileScrolledBy(offset = 60)
+    }
+
+    private fun AndroidComposeUiTest<ComponentActivity>.assertNewMessageArrivesSmoothlyWhileScrolledBy(offset: Int) {
+        // A live timeline, with the messages sent by the current user, and the typing notification as the first item
+        val typingNotification = TimelineItem.Virtual(UniqueId("TypingNotification"), TimelineItemTypingNotificationModel)
+        val messages = List(20) {
+            aTimelineItemEvent(
+                eventId = EventId("\$event_$it"),
+                content = aTimelineItemTextContent(body = "Message $it"),
+                isMine = true,
+                sendState = LocalEventSendState.Sent(EventId("\$event_$it")),
+            )
+        }
+        var state by mutableStateOf(
+            aTimelineState(
+                timelineItems = (listOf(typingNotification) + messages).toImmutableList(),
+                focusedEventIndex = -1,
+                areTimelineAnimationsEnabled = true,
+            )
+        )
+        // The typing notification is empty, so the first visible item is the newest message
+        val lazyListState = LazyListState(firstVisibleItemIndex = 1, firstVisibleItemScrollOffset = offset)
+        setSafeContent(clearAndroidUiDispatcher = true) {
+            TimelineView(
+                state = state,
+                timelineProtectionState = aTimelineProtectionState(),
+                onUserDataClick = {},
+                onLinkClick = {},
+                onContentClick = {},
+                onMessageLongClick = {},
+                onSwipeToReply = {},
+                onReactionClick = { _, _ -> },
+                onReactionLongClick = { _, _ -> },
+                onMoreReactionsClick = {},
+                onReadReceiptClick = {},
+                onGalleryItemClick = { _, _ -> },
+                onJoinCallClick = {},
+                lazyListState = lazyListState,
+            )
+        }
+        waitForIdle()
+        // The messages of the current user are on the end side, the new one, from another user, will be on the start side
+        val screenCenter = onRoot().fetchSemanticsNode().boundsInRoot.center.x
+        fun newestMessageOfCurrentUserTop() = onAllNodesWithTag(TestTags.messageBubble.value, useUnmergedTree = true)
+            .fetchSemanticsNodes()
+            .map { it.boundsInRoot }
+            .filter { it.center.x > screenCenter }
+            .maxBy { it.bottom }
+            .top
+
+        val newMessage = aTimelineItemEvent(eventId = EventId("\$new_event"), content = aTimelineItemTextContent(body = "New message"))
+        mainClock.autoAdvance = false
+        state = state.copy(
+            timelineItems = (listOf(typingNotification, newMessage) + messages).toImmutableList(),
+            newEventState = NewEventState.FromOther,
+        )
+        while (lazyListState.layoutInfo.totalItemsCount == messages.size + 1) {
+            mainClock.advanceTimeByFrame()
+        }
+        // The new message is displayed at the bottom, not below the newest message, out of the screen
+        assertThat(lazyListState.layoutInfo.visibleItemsInfo.map { it.key }).contains(newMessage.identifier())
+        var previousTop = newestMessageOfCurrentUserTop()
+        repeat(40) { frame ->
+            mainClock.advanceTimeByFrame()
+            val top = newestMessageOfCurrentUserTop()
+            assertWithMessage("Frame $frame").that(top).isAtMost(previousTop + 1f)
+            previousTop = top
+        }
+        mainClock.autoAdvance = true
+        waitForIdle()
+        assertThat(lazyListState.firstVisibleItemIndex).isEqualTo(0)
+        assertThat(lazyListState.firstVisibleItemScrollOffset).isEqualTo(0)
     }
 
     @Ignore(

@@ -252,8 +252,7 @@ private fun RoomPreviewInfo.toContentState(membershipDetails: RoomMembershipDeta
             membership,
             membershipDetails,
             joinRule,
-            { toInviteData() }
-        ),
+        ) { toInviteData() },
         joinRule = joinRule,
         details = when (roomType) {
             is RoomType.Other,
@@ -302,7 +301,10 @@ internal fun RoomDescription.toContentState(): ContentState {
         joinAuthorisationStatus = when (joinRule) {
             RoomDescription.JoinRule.KNOCK -> JoinAuthorisationStatus.CanKnock
             RoomDescription.JoinRule.PUBLIC -> JoinAuthorisationStatus.CanJoin
-            else -> JoinAuthorisationStatus.Unknown
+            RoomDescription.JoinRule.RESTRICTED,
+            RoomDescription.JoinRule.KNOCK_RESTRICTED,
+            RoomDescription.JoinRule.INVITE,
+            RoomDescription.JoinRule.UNKNOWN -> JoinAuthorisationStatus.Unknown
         },
         joinRule = when (joinRule) {
             RoomDescription.JoinRule.KNOCK -> JoinRule.Knock
@@ -367,7 +369,9 @@ private fun computeJoinAuthorisationStatus(
             membershipDetails?.membershipChangeReason
         )
         CurrentUserMembership.KNOCKED -> JoinAuthorisationStatus.IsKnocked
-        else -> joinRule.toJoinAuthorisationStatus()
+        CurrentUserMembership.JOINED,
+        CurrentUserMembership.LEFT,
+        null -> joinRule.toJoinAuthorisationStatus()
     }
 }
 

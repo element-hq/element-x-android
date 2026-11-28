@@ -81,7 +81,7 @@ fun PollContentView(
     val votesCount = remember(answerItems) { answerItems.sumOf { it.votesCount } }
 
     fun onSelectAnswer(pollAnswer: PollAnswer) {
-        eventId?.let {
+        eventId?.let { pollEventId ->
             if (isMultipleSelection) {
                 val newSelections = answerItems.map { item ->
                     if (item.answer.id == pollAnswer.id) {
@@ -92,10 +92,10 @@ fun PollContentView(
                 }.filter { it.isSelected }.map { it.answer.id }
                 // Only send the response if the selection count is within the limit
                 if (newSelections.size <= maxSelections.toInt()) {
-                    onSendPollResponse(it, newSelections)
+                    onSendPollResponse(pollEventId, newSelections)
                 }
             } else {
-                onSendPollResponse(it, listOf(pollAnswer.id))
+                onSendPollResponse(pollEventId, listOf(pollAnswer.id))
             }
         }
     }

@@ -9,8 +9,8 @@
 package io.element.android.detektrules
 
 import com.google.common.truth.Truth.assertThat
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import dev.detekt.api.Config
+import dev.detekt.test.lint
 import org.junit.Test
 
 class RunCatchingRuleTest {
@@ -18,7 +18,7 @@ class RunCatchingRuleTest {
 
     @Test
     fun `test RunCatchingRule`() {
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(3)
     }
 

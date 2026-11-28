@@ -5,14 +5,6 @@
   <string name="notification_channel_noisy">"إشعارات الصاخبة"</string>
   <string name="notification_channel_ringing_calls">"رنين المكالمات"</string>
   <string name="notification_channel_silent">"إشعارات صامتة"</string>
-  <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="zero">"%1$s: %2$d رسائل"</item>
-    <item quantity="one">"%1$s: %2$d رسالة"</item>
-    <item quantity="two">"%1$s: %2$d رسالتان"</item>
-    <item quantity="few">"%1$s: %2$d رسائل"</item>
-    <item quantity="many">"%1$s: %2$d رسالة"</item>
-    <item quantity="other">"%1$s: %2$d رسالة"</item>
-  </plurals>
   <plurals name="notification_compat_summary_title">
     <item quantity="zero">"%d إشعارات"</item>
     <item quantity="one">"%d إشعار"</item>
@@ -41,27 +33,11 @@
   <string name="notification_incoming_audio_call">"📞 مكالمة واردة"</string>
   <string name="notification_incoming_call">"📹 مكالمة واردة"</string>
   <string name="notification_inline_reply_failed">"** فشل الإرسال - يرجى فتح الغرفة"</string>
-  <plurals name="notification_invitations">
-    <item quantity="zero">"%d دعوة"</item>
-    <item quantity="one">"%d دعوة"</item>
-    <item quantity="two">"%d دعوات"</item>
-    <item quantity="few">"%d دعوات"</item>
-    <item quantity="many">"%d دعوات"</item>
-    <item quantity="other">"%d دعوات"</item>
-  </plurals>
   <string name="notification_invite_body">"دعاك للتحدث"</string>
   <string name="notification_invite_body_with_sender">"دعاك %1$s إلى الدردشة"</string>
   <string name="notification_knock_request_body">"طلبت الإنضمام"</string>
   <string name="notification_live_location_started_body">"بدأوا بمشاركة موقعهم المباشر"</string>
   <string name="notification_mentioned_you_body">"ذكرك: %1$s"</string>
-  <plurals name="notification_new_messages_for_room">
-    <item quantity="zero">"%d رسالة جديدة"</item>
-    <item quantity="one">"%d رسالة جديدة"</item>
-    <item quantity="two">"%d من الرسائل الجديدة"</item>
-    <item quantity="few">"%d من الرسائل الجديدة"</item>
-    <item quantity="many">"%d من الرسائل الجديدة"</item>
-    <item quantity="other">"%d من الرسائل الجديدة"</item>
-  </plurals>
   <string name="notification_reaction_body">"تفاعلت بـ %1$s"</string>
   <string name="notification_room_action_mark_as_read">"وضع علامة كمقروء"</string>
   <string name="notification_room_action_quick_reply">"رد سريع "</string>
@@ -118,14 +94,6 @@
   <string name="troubleshoot_notifications_test_current_push_provider_title">"موفّر الإشعارات الفورية الحالي"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"يتحقق من أن التطبيق يدعم موفّر إشعارات فورية واحدًا على الأقل."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"لم يتم العثور على دعم لأي موفّر إشعارات فورية."</string>
-  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
-    <item quantity="zero">"تم العثور على %1$d من موفّري الإشعارات الفورية: %2$s"</item>
-    <item quantity="one">"تم العثور على %1$d موفّر إشعارات فورية: %2$s"</item>
-    <item quantity="two">"تم العثور على %1$d من موفّري الإشعارات الفورية: %2$s"</item>
-    <item quantity="few">"تم العثور على %1$d من موفّري الإشعارات الفورية: %2$s"</item>
-    <item quantity="many">"تم العثور على %1$d من موفّري الإشعارات الفورية: %2$s"</item>
-    <item quantity="other">"تم العثور على %1$d من موفّري الإشعارات الفورية: %2$s"</item>
-  </plurals>
   <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"تم إنشاء التطبيق بدعم لـ: %1$s"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_title">"دعم موفّر الإشعارات الفورية"</string>
   <string name="troubleshoot_notifications_test_display_notification_description">"يتحقق من قدرة التطبيق على عرض إشعار."</string>

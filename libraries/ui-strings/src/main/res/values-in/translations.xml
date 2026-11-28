@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_active">"Aktif"</string>
   <string name="a11y_add_avatar">"Tambahkan avatar"</string>
   <string name="a11y_add_reaction">"Tambahkan reaksi: %1$s"</string>
   <string name="a11y_address">"Alamat"</string>
@@ -27,6 +28,7 @@
   <string name="a11y_gallery_scanning">"Galeri, memindai %1$d"</string>
   <string name="a11y_gallery_video">"Galeri, video %1$d"</string>
   <string name="a11y_hide_password">"Sembunyikan kata sandi"</string>
+  <string name="a11y_inactive">"Tidak aktif"</string>
   <string name="a11y_info">"Informasi"</string>
   <string name="a11y_join_call">"Bergabung dalam panggilan"</string>
   <string name="a11y_jump_to_bottom">"Lompat ke bawah"</string>
@@ -70,6 +72,8 @@
   <string name="a11y_start_call">"Mulai panggilan"</string>
   <string name="a11y_start_video_call">"Mulai panggilan video"</string>
   <string name="a11y_start_voice_call">"Mulai panggilan suara"</string>
+  <string name="a11y_state_collapsed">"Diciutkan"</string>
+  <string name="a11y_state_expanded">"Diperluas"</string>
   <string name="a11y_status">"Status"</string>
   <string name="a11y_thread_in_room">"Diskusi di %1$s"</string>
   <string name="a11y_threads_in_room">"Utas di %1$s"</string>
@@ -135,6 +139,7 @@
   <string name="action_go_back">"Kembali"</string>
   <string name="action_go_to_roles_and_permissions">"Buka role &amp;amp; permission"</string>
   <string name="action_go_to_settings">"Buka Pengaturan"</string>
+  <string name="action_got_it">"Mengerti"</string>
   <string name="action_ignore">"Abaikan"</string>
   <string name="action_invite">"Undang"</string>
   <string name="action_invite_friends">"Undang orang-orang"</string>
@@ -403,6 +408,7 @@ Alasan: %1$s."</string>
   <plurals name="common_spaces">
     <item quantity="other">"Ruang %1$d"</item>
   </plurals>
+  <string name="common_spoiler">"Bocoran"</string>
   <string name="common_starting_chat">"Memulai obrolan…"</string>
   <string name="common_sticker">"Stiker"</string>
   <string name="common_success">"Berhasil"</string>
@@ -458,6 +464,7 @@ Alasan: %1$s."</string>
   <string name="dialog_title_success">"Berhasil"</string>
   <string name="dialog_title_warning">"Peringatan"</string>
   <string name="dialog_video_quality_selector_title">"Pilih kualitas unggahan video"</string>
+  <string name="error_camera_unavailable">"Kamera tidak tersedia"</string>
   <string name="error_failed_creating_the_permalink">"Gagal membuat tautan permanen"</string>
   <string name="error_message_not_found">"Pesan tidak ditemukan"</string>
   <string name="error_network_or_server_issue">"Hal ini mungkin disebabkan oleh masalah jaringan atau server."</string>

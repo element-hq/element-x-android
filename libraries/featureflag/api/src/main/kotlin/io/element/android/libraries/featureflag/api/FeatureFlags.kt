@@ -154,14 +154,6 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
-    MessageMultiSelect(
-        key = "feature.message_multi_select",
-        title = "Multi-select messages",
-        description = "The Forward action enters a selection mode, to pick and forward up to 10 messages at once.",
-        defaultValue = { true },
-        isFinished = false,
-        isInLabs = false,
-    ),
     NewTimelineEventRenderer(
         key = "feature.new_timeline_event_renderer",
         title = "New timeline event renderer",
@@ -182,6 +174,13 @@ enum class FeatureFlags(
         title = "Receive notifications from other signed-in accounts",
         description = "Receive push notifications for events sent from other signed-in accounts on this device. " +
             "Note this may result in duplicate notifications if you have multiple accounts signed in on the same device, it should only be used for testing.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    TimelineAnimations(
+        key = "feature.timeline_animations",
+        title = "Timeline animations",
+        description = "Enable animations in the timeline for a smoother user experience.",
         defaultValue = { false },
         isFinished = false,
     )

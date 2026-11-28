@@ -78,7 +78,13 @@ fun TimelineItemEventContent.canBeForwarded(): Boolean =
         // Stickers can't be forwarded (yet) so we don't show the option
         // See https://github.com/element-hq/element-x-android/issues/2161
         is TimelineItemStickerContent -> false
-        else -> false
+        is TimelineItemEncryptedContent,
+        is TimelineItemPollContent,
+        is TimelineItemStateContent,
+        is TimelineItemRedactedContent,
+        is TimelineItemLegacyCallInviteContent,
+        is TimelineItemRtcNotificationContent,
+        TimelineItemUnknownContent -> false
     }
 
 /**
@@ -111,7 +117,13 @@ fun TimelineItemEventContent.canReact(): Boolean =
  */
 fun TimelineItemEventContent.isEdited(): Boolean = when (this) {
     is TimelineItemEventMutableContent -> isEdited
-    else -> false
+    is TimelineItemEncryptedContent,
+    is TimelineItemLocationContent,
+    is TimelineItemStateContent,
+    is TimelineItemRtcNotificationContent,
+    TimelineItemLegacyCallInviteContent,
+    TimelineItemRedactedContent,
+    TimelineItemUnknownContent -> false
 }
 
 /**
@@ -128,28 +140,60 @@ fun TimelineItemEventContent.captionOrNull(): String? = when (this) {
     is TimelineItemEventContentWithAttachment -> caption
     is TimelineItemGalleryContent -> caption
     is TimelineItemAttachmentsContent -> caption
-    else -> null
+        is TimelineItemTextBasedContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemLocationContent,
+        is TimelineItemPollContent,
+        is TimelineItemStateContent,
+        is TimelineItemRtcNotificationContent,
+        TimelineItemLegacyCallInviteContent,
+        TimelineItemRedactedContent,
+        TimelineItemUnknownContent -> null
 }
 
 fun TimelineItemEventContent.formattedCaptionOrNull(): CharSequence? = when (this) {
     is TimelineItemEventContentWithAttachment -> formattedCaption
     is TimelineItemGalleryContent -> formattedCaption
     is TimelineItemAttachmentsContent -> formattedCaption
-    else -> null
+        is TimelineItemTextBasedContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemLocationContent,
+        is TimelineItemPollContent,
+        is TimelineItemStateContent,
+        is TimelineItemRtcNotificationContent,
+        TimelineItemLegacyCallInviteContent,
+        TimelineItemRedactedContent,
+        TimelineItemUnknownContent -> null
 }
 
 fun TimelineItemEventContent.captionTreeOrNull(): DocumentNode? = when (this) {
     is TimelineItemEventContentWithAttachment -> captionTree
     is TimelineItemGalleryContent -> captionTree
     is TimelineItemAttachmentsContent -> captionTree
-    else -> null
+        is TimelineItemTextBasedContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemLocationContent,
+        is TimelineItemPollContent,
+        is TimelineItemStateContent,
+        is TimelineItemRtcNotificationContent,
+        TimelineItemLegacyCallInviteContent,
+        TimelineItemRedactedContent,
+        TimelineItemUnknownContent -> null
 }
 
 fun TimelineItemEventContent.htmlCaptionOrNull(): String? = when (this) {
     is TimelineItemEventContentWithAttachment -> htmlCaption
     is TimelineItemGalleryContent -> htmlCaption
     is TimelineItemAttachmentsContent -> htmlCaption
-    else -> null
+        is TimelineItemTextBasedContent,
+        is TimelineItemEncryptedContent,
+        is TimelineItemLocationContent,
+        is TimelineItemPollContent,
+        is TimelineItemStateContent,
+        is TimelineItemRtcNotificationContent,
+        TimelineItemLegacyCallInviteContent,
+        TimelineItemRedactedContent,
+        TimelineItemUnknownContent -> null
 }
 
 fun TimelineItemEventContentWithAttachment.duration(): Duration? {
@@ -157,7 +201,9 @@ fun TimelineItemEventContentWithAttachment.duration(): Duration? {
         is TimelineItemAudioContent -> duration
         is TimelineItemVideoContent -> duration
         is TimelineItemVoiceContent -> duration
-        else -> null
+        is TimelineItemImageContent,
+        is TimelineItemFileContent,
+        is TimelineItemStickerContent -> null
     }
 }
 
@@ -166,6 +212,8 @@ fun TimelineItemEventContentWithAttachment.blurHash(): String? {
         is TimelineItemImageContent -> blurhash
         is TimelineItemVideoContent -> blurHash
         is TimelineItemStickerContent -> blurhash
-        else -> null
+        is TimelineItemAudioContent,
+        is TimelineItemFileContent,
+        is TimelineItemVoiceContent -> null
     }
 }

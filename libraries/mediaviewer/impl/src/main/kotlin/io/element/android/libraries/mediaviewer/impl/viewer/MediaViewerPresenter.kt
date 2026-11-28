@@ -248,6 +248,8 @@ class MediaViewerPresenter(
             .toHtmlDocument(permalinkParser = permalinkParser)
     }
 
+    // This is a Presenter helper, not a UI component: observing the States is the purpose of this function.
+    @Suppress("StateParam")
     @Composable
     private fun NoMoreItemsSnackBarDisplayer(
         currentIndex: IntState,
@@ -258,10 +260,10 @@ class MediaViewerPresenter(
         var previousDataSize by remember { mutableIntStateOf(data.value.size) }
         var wasLoading: Boolean? by remember { mutableStateOf(null) }
         LaunchedEffect(currentIndex.intValue, data.value) {
-            fun isLoading(index: Int, data: List<MediaViewerPageData>, direction: Timeline.PaginationDirection): Boolean {
-                return when (direction) {
-                    Timeline.PaginationDirection.BACKWARDS -> index == data.lastIndex && data.lastOrNull() is MediaViewerPageData.Loading
-                    Timeline.PaginationDirection.FORWARDS -> index == 0 && data.firstOrNull() is MediaViewerPageData.Loading
+            fun isLoading(index: Int, pageData: List<MediaViewerPageData>, paginationDirection: Timeline.PaginationDirection): Boolean {
+                return when (paginationDirection) {
+                    Timeline.PaginationDirection.BACKWARDS -> index == pageData.lastIndex && pageData.lastOrNull() is MediaViewerPageData.Loading
+                    Timeline.PaginationDirection.FORWARDS -> index == 0 && pageData.firstOrNull() is MediaViewerPageData.Loading
                 }
             }
             // Reset the effect when the user navigate to another item so we only take into account index changes caused by data changes

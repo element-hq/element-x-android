@@ -25,7 +25,7 @@ fun RoomMembersState.roomMembers(): List<RoomMember>? {
         is RoomMembersState.Ready -> roomMembers
         is RoomMembersState.Pending -> prevRoomMembers
         is RoomMembersState.Error -> prevRoomMembers
-        else -> null
+        RoomMembersState.Unknown -> null
     }
 }
 

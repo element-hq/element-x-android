@@ -113,7 +113,7 @@ class AndroidLocalMediaActions(
                 .setTypeAndNormalize(localMedia.info.mimeType)
             withContext(coroutineDispatchers.main) {
                 val intent = Intent.createChooser(shareMediaIntent, null)
-                activityContext!!.startActivity(intent)
+                checkNotNull(activityContext).startActivity(intent)
             }
         }.onSuccess {
             Timber.v("Share media succeed")
@@ -124,7 +124,7 @@ class AndroidLocalMediaActions(
 
     override suspend fun open(localMedia: LocalMedia): Result<Unit> = withContext(coroutineDispatchers.io) {
         require(localMedia.uri.scheme == ContentResolver.SCHEME_FILE)
-        runCatchingExceptions {
+        runCatchingExceptions<Unit> {
             when (localMedia.info.mimeType) {
                 MimeTypes.Apk -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -137,7 +137,7 @@ class AndroidLocalMediaActions(
                             ) == PermissionChecker.PERMISSION_GRANTED &&
                             activityContext?.packageManager?.canRequestPackageInstalls() == false) {
                             pendingMedia = localMedia
-                            activityContext?.startInstallFromSourceIntent(apkInstallLauncher!!).let { }
+                            activityContext?.startInstallFromSourceIntent(checkNotNull(apkInstallLauncher))
                         } else {
                             openFile(localMedia)
                         }
@@ -185,7 +185,7 @@ class AndroidLocalMediaActions(
         } ?: throw IOException("Unable to create the destination file")
         localMedia.openStream()?.use { input ->
             resolver.openOutputStream(outputUri).use { output ->
-                input.copyTo(output!!, DEFAULT_BUFFER_SIZE)
+                input.copyTo(checkNotNull(output), DEFAULT_BUFFER_SIZE)
             }
         }
     }

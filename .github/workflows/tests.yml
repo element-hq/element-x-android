@@ -12,13 +12,18 @@ permissions: {}
 # Enrich gradle.properties for CI/CD
 env:
   GRADLE_OPTS: -Dorg.gradle.jvmargs="-Xmx7g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.daemon.jvm.options=-Xmx2g -XX:+UseG1GC
-  CI_GRADLE_ARG_PROPERTIES: --stacktrace -Dsonar.gradle.skipCompile=true --no-configuration-cache
+  CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-configuration-cache
+  SCREENSHOT_TESTS_JOB_NAME: Runs screenshot tests
+  SCREENSHOT_TESTS_COVERAGE_ARTIFACT: screenshot-tests-coverage
 
 jobs:
   tests:
     name: Runs unit tests
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    permissions:
+      # To wait for the coverage data of the screenshot tests, uploaded by the `screenshot-tests` job
+      actions: read
 
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
@@ -50,12 +55,33 @@ jobs:
           # Only this job writes the Gradle cache on develop, see the setup-build action
           gradle-cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: ⚙️ Run unit tests
-        run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES --continue
+        # Instrument the tests for the Kover coverage report, generated in a later step
+        run: ./gradlew :app:testGplayDebugUnitTest testDebugUnitTest -x :tests:konsist:testDebugUnitTest -PkoverInstrumentation=true $CI_GRADLE_ARG_PROPERTIES --continue
 
-      - name: ⚙️ Run screenshot tests
-        run: ./gradlew verifyPaparazziDebug $CI_GRADLE_ARG_PROPERTIES --continue
+      # The screenshot tests run in parallel in the `screenshot-tests` job. They cover a large part of the UI code, so their
+      # coverage data is merged into the coverage report. A job can't depend on another one in the middle of its steps,
+      # so wait for the artifact: the screenshot tests usually finish before the unit tests anyway.
+      - name: ⏳ Wait for the coverage data of the screenshot tests
+        id: screenshot-tests-coverage
+        # Wait until the screenshot tests job completes. It takes ~12 minutes on a cold build cache, and usually completes before
+        # the unit tests.
+        # Don't keep the runner for the whole job timeout if it never completes, for instance if it stays queued.
+        timeout-minutes: 30
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: .github/workflows/scripts/wait_for_artifact.sh "$SCREENSHOT_TESTS_COVERAGE_ARTIFACT" "$SCREENSHOT_TESTS_JOB_NAME"
+
+      - name: ⏬ Download the coverage data of the screenshot tests
+        if: steps.screenshot-tests-coverage.outputs.available == 'true'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          # By id, and not by name: when re-running the jobs, a previous attempt may have uploaded an artifact with the same name.
+          artifact-ids: ${{ steps.screenshot-tests-coverage.outputs.artifact-id }}
 
       - name: ⚙️ Generate kover coverage report
+        if: steps.screenshot-tests-coverage.outputs.available == 'true'
+        # `-x testDebugUnitTest`: use the coverage data of the tests which already ran, in particular don't run the test task
+        # of the screenshot test modules again, it would overwrite the downloaded coverage data.
         run: ./gradlew :koverXmlReportMerged :koverHtmlReportMerged :koverVerifyAll -x testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES
 
       - name: 🚫 Upload kover failed coverage reports
@@ -70,9 +96,8 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: tests-and-screenshot-tests-results
+          name: tests-results
           path: |
-            **/build/paparazzi/failures/
             **/build/reports/tests/*UnitTest/
 
       - name: 🚫 Modify summary on error
@@ -86,9 +111,76 @@ jobs:
 
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
+        if: steps.screenshot-tests-coverage.outputs.available == 'true'
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build/reports/kover/reportMerged.xml
           verbose: true
+
+  screenshot-tests:
+    # Keep in sync with SCREENSHOT_TESTS_JOB_NAME
+    name: Runs screenshot tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('screenshot-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('screenshot-tests-develop-{0}', github.sha) || format('screenshot-tests-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      # Increase swapfile size to prevent screenshot tests getting terminated
+      # https://github.com/actions/runner-images/discussions/7188#discussioncomment-6750749
+      - name: 💽 Increase swapfile size
+        run: |
+          sudo swapoff -a
+          sudo fallocate -l 8G /mnt/swapfile
+          sudo chmod 600 /mnt/swapfile
+          sudo mkswap /mnt/swapfile
+          sudo swapon /mnt/swapfile
+          sudo swapon --show
+      - name: ⏬ Checkout with LFS
+        uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
+        with:
+          persist-credentials: false
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+      - name: Setup build environment
+        uses: $/.github/actions/setup-build
+        with:
+          free-disk-space: 'true'
+          enterprise-ssh-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
+          # The `tests` job writes the Gradle cache on develop, see the setup-build action
+          gradle-cache-read-only: 'true'
+      - name: ⚙️ Run screenshot tests
+        # Instrument the screenshot tests, they cover a large part of the UI code. The coverage report is generated by the `tests` job.
+        run: ./gradlew verifyPaparazziDebug -PkoverInstrumentation=true $CI_GRADLE_ARG_PROPERTIES --continue
+
+      - name: ⏫ Upload the coverage data of the screenshot tests
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ${{ env.SCREENSHOT_TESTS_COVERAGE_ARTIFACT }}
+          path: |
+            **/build/kover/bin-reports/*.ic
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: 🚫 Upload screenshot tests results on error
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: screenshot-tests-results
+          path: |
+            **/build/paparazzi/failures/
+            **/build/reports/tests/*UnitTest/
+
+      - name: 🚫 Modify summary on error
+        if: failure()
+        run: |
+          echo """## Screenshot tests failed!
+
+          """ >> $GITHUB_STEP_SUMMARY
+          python3 .github/workflows/scripts/parse_test_failures.py . >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY

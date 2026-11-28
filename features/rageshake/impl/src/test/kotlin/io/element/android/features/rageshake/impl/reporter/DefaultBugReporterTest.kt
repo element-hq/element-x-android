@@ -10,12 +10,14 @@ package io.element.android.features.rageshake.impl.reporter
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.RageshakeConfig
+import io.element.android.features.rageshake.api.logs.ApplicationInfoLogger
 import io.element.android.features.rageshake.api.reporter.BugReporterListener
 import io.element.android.features.rageshake.impl.crash.CrashDataStore
 import io.element.android.features.rageshake.impl.crash.FakeCrashDataStore
 import io.element.android.features.rageshake.impl.screenshot.FakeScreenshotHolder
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -24,6 +26,7 @@ import io.element.android.libraries.matrix.test.FakeSdkMetadata
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.matrix.test.tracing.FakeTracingService
 import io.element.android.libraries.network.useragent.DefaultUserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
@@ -31,6 +34,7 @@ import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.robolectric.RobolectricTest
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
@@ -330,7 +334,7 @@ class DefaultBugReporterTest : RobolectricTest() {
         )
         val request = server.takeRequest()
 
-        val text = collectValuesFromFormData(request)["text"]!!
+        val text = collectValuesFromFormData(request).getValue("text")
         assertThat(text).startsWith("a bug occurred")
         assertThat(text).contains("truncated")
         assertThat(text.length).isAtMost(RageshakeConfig.MAX_DESCRIPTION_SIZE + TRUNCATION_MARKER_MAX_SIZE)
@@ -361,7 +365,7 @@ class DefaultBugReporterTest : RobolectricTest() {
         )
         val request = server.takeRequest()
 
-        val text = collectValuesFromFormData(request)["text"]!!
+        val text = collectValuesFromFormData(request).getValue("text")
         assertThat(text).startsWith("a bug occurred")
         assertThat(text).endsWith("I did crash")
         assertThat(text).doesNotContain("truncated")
@@ -443,27 +447,74 @@ class DefaultBugReporterTest : RobolectricTest() {
     }
 
     @Test
-    fun `the log directory is the root log directory`() = runTest {
+    fun `the log directory is the root log directory when using the default bug report server`() = runTest {
         val sut = createDefaultBugReporter(
-            buildMeta = aBuildMeta(isEnterpriseBuild = true),
-            sessionStore = InMemorySessionStore(
-                initialList = listOf(aSessionData(sessionId = "@alice:domain.com"))
-            )
+            logFolderProvider = { flowOf(LogFolder.Default) },
         )
-        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs")
+        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs2")
+        assertThat(sut.logRootDirectory().absolutePath).endsWith("/cache/logs2")
+    }
+
+    @Test
+    fun `the log directory is a subfolder when using a custom bug report server`() = runTest {
+        val sut = createDefaultBugReporter(
+            logFolderProvider = { flowOf(LogFolder.Server("rageshakes.example.org_api_submit")) },
+        )
+        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs2/rageshakes.example.org_api_submit")
+        assertThat(sut.logRootDirectory().absolutePath).endsWith("/cache/logs2")
+    }
+
+    @Test
+    fun `the log directory is the disabled subfolder when logs cannot be sent`() = runTest {
+        val sut = createDefaultBugReporter(
+            logFolderProvider = { flowOf(LogFolder.LocalOnly) },
+        )
+        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs2/local-only")
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `legacy per-domain log subfolders are deleted`() = runTest {
-        val logDirectory = File(RuntimeEnvironment.getApplication().cacheDir, "logs")
-        val legacySubfolder = File(logDirectory, "domain.com").apply { mkdirs() }
+    fun `the tracing is updated and the application info is logged when the log folder changes`() = runTest {
+        val logFolderFlow = MutableStateFlow<LogFolder>(LogFolder.Default)
+        val events = mutableListOf<String>()
+        val sut = createDefaultBugReporter(
+            logFolderProvider = { logFolderFlow },
+            tracingService = FakeTracingService(
+                updateWriteToFilesConfigurationResult = { events.add("config:" + (it as WriteToFilesConfiguration.Enabled).directory) },
+            ),
+            applicationInfoLogger = { events.add("appInfo") },
+        )
+        runCurrent()
+        // No update for the initial value
+        assertThat(events).isEmpty()
+        logFolderFlow.value = LogFolder.LocalOnly
+        runCurrent()
+        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs2/local-only")
+        // The application info is logged after the tracing is updated, so that it is written to the new folder
+        assertThat(events).containsExactly("config:" + sut.logDirectory().absolutePath, "appInfo").inOrder()
+        logFolderFlow.value = LogFolder.Default
+        runCurrent()
+        assertThat(sut.logDirectory().absolutePath).endsWith("/cache/logs2")
+        assertThat(events).hasSize(4)
+        assertThat(events.last()).isEqualTo("appInfo")
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `the legacy log directory is deleted`() = runTest {
+        val cacheDir = RuntimeEnvironment.getApplication().cacheDir
+        val legacyLogDirectory = File(cacheDir, "logs")
+        val legacySubfolder = File(legacyLogDirectory, "domain.com").apply { mkdirs() }
         File(legacySubfolder, "logs.2024-01-01-00.log").writeText("legacy")
-        val rootLogFile = File(logDirectory, "logs.2024-01-01-01.log").apply { writeText("root") }
+        File(legacyLogDirectory, "logs.2024-01-01-01.log").writeText("legacy root")
+        val logFile = File(cacheDir, "logs2/logs.2024-01-01-02.log").apply {
+            parentFile?.mkdirs()
+            writeText("current")
+        }
         createDefaultBugReporter()
         runCurrent()
-        assertThat(legacySubfolder.exists()).isFalse()
-        assertThat(rootLogFile.exists()).isTrue()
+        assertThat(legacyLogDirectory.exists()).isFalse()
+        assertThat(logFile.exists()).isTrue()
     }
 
     private fun TestScope.createDefaultBugReporter(
@@ -472,6 +523,9 @@ class DefaultBugReporterTest : RobolectricTest() {
         matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
         crashDataStore: CrashDataStore = FakeCrashDataStore(),
         server: MockWebServer = MockWebServer(),
+        logFolderProvider: LogFolderProvider = LogFolderProvider { flowOf(LogFolder.Default) },
+        tracingService: FakeTracingService = FakeTracingService(),
+        applicationInfoLogger: ApplicationInfoLogger = ApplicationInfoLogger {},
     ): DefaultBugReporter {
         return DefaultBugReporter(
             context = RuntimeEnvironment.getApplication(),
@@ -486,6 +540,9 @@ class DefaultBugReporterTest : RobolectricTest() {
             bugReporterUrlProvider = { flowOf(server.url("/")) },
             sdkMetadata = FakeSdkMetadata("123456789"),
             matrixClientProvider = matrixClientProvider,
+            logFolderProvider = logFolderProvider,
+            tracingService = tracingService,
+            applicationInfoLogger = applicationInfoLogger,
         )
     }
 
