@@ -10,18 +10,30 @@
 
 package io.element.android.features.startchat.impl.root
 
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
+import androidx.core.content.getSystemService
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.google.common.truth.Truth.assertThat
 import io.element.android.features.startchat.impl.R
 import io.element.android.features.startchat.impl.userlist.aRecentDirectRoomList
 import io.element.android.features.startchat.impl.userlist.aUserListState
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
@@ -30,7 +42,9 @@ import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.robolectric.RobolectricTest
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.Test
+import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 
 class StartChatViewTest : RobolectricTest() {
@@ -127,6 +141,78 @@ class StartChatViewTest : RobolectricTest() {
             clickOn(R.string.screen_room_directory_search_title)
         }
     }
+
+    @Test
+    fun `selecting a user while the keyboard is hidden starts the DM right away`() = runAndroidComposeUiTest {
+        val matrixUser = aMatrixUser()
+        val eventsRecorder = EventsRecorder<StartChatEvent>()
+        setStartChatView(aStartChatStateWithSearchResult(matrixUser, eventsRecorder))
+        mainClock.autoAdvance = false
+        onNodeWithText(matrixUser.getBestName()).performClick()
+        mainClock.advanceTimeByFrame()
+        eventsRecorder.assertSingle(StartChatEvent.StartDM(matrixUser))
+    }
+
+    @Test
+    fun `selecting a user while the keyboard is visible hides it and starts the DM once it is hidden`() = runAndroidComposeUiTest {
+        val matrixUser = aMatrixUser()
+        val eventsRecorder = EventsRecorder<StartChatEvent>()
+        val view = setStartChatView(aStartChatStateWithSearchResult(matrixUser, eventsRecorder))
+        val inputMethodManager = checkNotNull(view.context.getSystemService<InputMethodManager>())
+        inputMethodManager.showSoftInput(view, 0)
+        assertThat(shadowOf(inputMethodManager).isSoftInputVisible).isTrue()
+        dispatchKeyboardInsets(view, isKeyboardVisible = true)
+        mainClock.autoAdvance = false
+        onNodeWithText(matrixUser.getBestName()).performClick()
+        mainClock.advanceTimeByFrame()
+        assertThat(shadowOf(inputMethodManager).isSoftInputVisible).isFalse()
+        eventsRecorder.assertEmpty()
+        mainClock.autoAdvance = true
+        dispatchKeyboardInsets(view, isKeyboardVisible = false)
+        eventsRecorder.assertSingle(StartChatEvent.StartDM(matrixUser))
+    }
+
+    @Test
+    fun `selecting a user while the keyboard stays visible starts the DM after a timeout`() = runAndroidComposeUiTest {
+        val matrixUser = aMatrixUser()
+        val eventsRecorder = EventsRecorder<StartChatEvent>()
+        val view = setStartChatView(aStartChatStateWithSearchResult(matrixUser, eventsRecorder))
+        dispatchKeyboardInsets(view, isKeyboardVisible = true)
+        mainClock.autoAdvance = false
+        onNodeWithText(matrixUser.getBestName()).performClick()
+        mainClock.advanceTimeBy(KeyboardHideTimeout.inWholeMilliseconds / 2)
+        eventsRecorder.assertEmpty()
+        mainClock.advanceTimeBy(KeyboardHideTimeout.inWholeMilliseconds)
+        eventsRecorder.assertSingle(StartChatEvent.StartDM(matrixUser))
+    }
+}
+
+private fun aStartChatStateWithSearchResult(
+    matrixUser: MatrixUser,
+    eventSink: (StartChatEvent) -> Unit,
+) = aCreateRoomRootState(
+    userListState = aUserListState(
+        searchQuery = "query",
+        isSearchActive = true,
+        searchResults = SearchBarResultState.Results(persistentListOf(UserSearchResult(matrixUser))),
+    ),
+    eventSink = eventSink,
+)
+
+/**
+ * Surfaces keyboard visibility to Compose via the window insets, matching system behavior.
+ */
+private fun AndroidComposeUiTest<ComponentActivity>.dispatchKeyboardInsets(view: View, isKeyboardVisible: Boolean) {
+    runOnIdle {
+        ViewCompat.dispatchApplyWindowInsets(
+            view,
+            WindowInsetsCompat.Builder()
+                .setVisible(WindowInsetsCompat.Type.ime(), isKeyboardVisible)
+                .setInsets(WindowInsetsCompat.Type.ime(), if (isKeyboardVisible) Insets.of(0, 0, 0, 300) else Insets.NONE)
+                .build()
+        )
+    }
+    waitForIdle()
 }
 
 private fun AndroidComposeUiTest<ComponentActivity>.setStartChatView(
@@ -137,8 +223,10 @@ private fun AndroidComposeUiTest<ComponentActivity>.setStartChatView(
     onInviteFriendsClick: () -> Unit = EnsureNeverCalled(),
     onJoinRoomByAddressClick: () -> Unit = EnsureNeverCalled(),
     onRoomDirectorySearchClick: () -> Unit = EnsureNeverCalled(),
-) {
+): View {
+    lateinit var view: View
     setContent {
+        view = LocalView.current
         StartChatView(
             state = state,
             onCloseClick = onCloseClick,
@@ -149,4 +237,5 @@ private fun AndroidComposeUiTest<ComponentActivity>.setStartChatView(
             onRoomDirectorySearchClick = onRoomDirectorySearchClick,
         )
     }
+    return runOnIdle { view }
 }

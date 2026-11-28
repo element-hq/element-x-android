@@ -12,15 +12,21 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -32,7 +38,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.startchat.impl.R
 import io.element.android.features.startchat.impl.components.UserListView
-import io.element.android.libraries.androidutils.ui.hideKeyboardAndAwaitAnimation
+import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -51,8 +57,14 @@ import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBot
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.seconds
 
+internal val KeyboardHideTimeout = 1.seconds
+
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun StartChatView(
     state: StartChatState,
@@ -82,6 +94,8 @@ fun StartChatView(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             val view = LocalView.current
+            val isImeVisible = WindowInsets.isImeVisible
+            val isImeVisibleAsState by rememberUpdatedState(isImeVisible)
 
             UserListView(
                 modifier = Modifier.fillMaxWidth(),
@@ -90,10 +104,13 @@ fun StartChatView(
                 state = state.userListState.copy(
                     recentDirectRooms = persistentListOf(),
                 ),
-                onSelectUser = {
+                onSelectUser = { matrixUser ->
                     coroutineScope.launch {
-                        view.hideKeyboardAndAwaitAnimation()
-                        state.eventSink(StartChatEvent.StartDM(it))
+                        // Dismiss the soft keyboard before showing the DM confirmation bottom sheet, since both animate on the insets.
+                        view.hideKeyboard()
+                        // Await keyboard dismissal, or time out if the hide is never reported.
+                        withTimeoutOrNull(KeyboardHideTimeout) { snapshotFlow { isImeVisibleAsState }.first { !it } }
+                        state.eventSink(StartChatEvent.StartDM(matrixUser))
                     }
                 },
                 onDeselectUser = { },
