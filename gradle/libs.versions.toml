@@ -172,7 +172,7 @@ test_parameter_injector = "com.google.testparameterinjector:test-parameter-injec
 test_robolectric = "org.robolectric:robolectric:4.18.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_paparazzi = { module = "app.cash.paparazzi:paparazzi", version.ref = "paparazzi" }
-test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.10.0"
+test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.10.1"
 test_detekt_api = { module = "dev.detekt:detekt-api", version.ref = "detekt" }
 test_detekt_test = { module = "dev.detekt:detekt-test", version.ref = "detekt" }
 
